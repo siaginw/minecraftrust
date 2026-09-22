@@ -1,0 +1,74 @@
+# M-CK4.2 — REAL NETTY EXECUTOR OWNERSHIP (RustFrameHandler)
+schema_version: 1
+date: "2026-09-22"
+binary:
+  dll_sha256: c10ddca1ce3c82255e78154fde657408e82fa354707bc5174deb5b0a6cb62d2c
+  dll_abs_path: D:\minecraftrust\target\release\rustcraft_ffi.dll
+  source: Rust side UNCHANGED this checkpoint (all ownership work is Java-side); DLL rebuilt-identical
+  java: Temurin jdk-8.0.504.1-hotspot
+netty_reference:
+  version: "4.1.9.Final (bundled, unshaded, in third_party_reference/minecraft/minecraft_server.1.12.2.srg.jar; Version.identify())"
+  evidence:
+    - "EmbeddedEventLoop.inEventLoop()/inEventLoop(Thread): unconditional iconst_1 — permissive; an EmbeddedChannel's own loop CANNOT back an ownership claim"
+    - "DefaultChannelPipeline.addLast(EventExecutorGroup,String,ChannelHandler): newContext->childExecutor(group)==group.next() (real single-thread executor); handlerAdded marshaled via ctx.executor().execute(DefaultChannelPipeline$3) when executor.inEventLoop()==false"
+    - "AbstractChannelHandlerContext.invokeWrite/invokeXxx: uniform executor().inEventLoop() gate with executor.execute(...) marshaling"
+    - "NetworkManager.func_179289_a(int): iflt -> remove('decompress')+remove('compress') for negative threshold — disabled contract = compression handlers ABSENT, not installed-with-negative-threshold"
+    - "NettyVarint21FrameEncoder.encode: varIntSize(readableBytes)>3 -> IllegalArgumentException('unable to fit <n> into 3')"
+    - "DefaultChannelPipeline.destroyDown: handlerRemoved marshaled onto the CONTEXT's executor when the removing thread is not in it"
+implementation: >
+  Ownership bound to the CHANNEL EXECUTOR captured in handlerAdded (ctx.executor()) —
+  no caller-captured owner exists, so a pre-attachment or unexpected first caller can
+  never claim ownership. Pre-attachment setThreshold = plain configuration on any
+  thread (binds nothing). Post-attachment synchronous setThreshold requires the REAL
+  membership check ownerExecutor.inEventLoop() — off-owner calls REJECTED
+  (IllegalStateException); the explicit queued form updateThresholdAsync(int) returns
+  a CompletableFuture acknowledged after the update runs on the owning executor.
+  ORDERING CLAIM limited to the executor contract: one handler -> one single-thread
+  executor -> FIFO task queue, so encodes, queued updates, and the marshaled free run
+  in submission order; NOTHING is implied between unrelated racing submissions.
+  encode defensively re-checks membership (one inEventLoop() call per encode —
+  measured as part of arm C in the benchmark).
+netty_4_1_9_close_finding: >
+  PROBE-VERIFIED: in Netty 4.1.9 a channel CLOSE alone NEVER invokes handlerRemoved
+  for a handler bound to a FOREIGN executor (close + runPendingTasks + executor
+  drain left the native context live: frees=0, ctx live). Explicit pipeline.remove
+  DOES marshal handlerRemoved onto the owning executor. FIX: dual cleanup —
+  close(ChannelHandlerContext,ChannelPromise) (outbound close propagates tail->head
+  through the pipeline, so the hook fires for foreign-bound handlers) AND
+  handlerRemoved (explicit removal/replacement, the NetworkManager path), both
+  funneling into one CAS-guarded exactly-once free; off-owner free is enqueued on
+  the owning executor BEHIND already-submitted encodes (never frees a context with
+  queued work), with inline fallback if the executor rejects. MessageToByteEncoder
+  is outbound-only (no channelInactive available) — close() is the correct
+  outbound-side lifecycle hook.
+gates_15_15: >
+  g1 configure on thread A + attach/encode on real executor B (encode thread proven
+  == executor thread, != caller); g2 wrong-thread sync setThreshold REJECTED with a
+  CONTROL pair proving the gate discriminates (the same call on an EmbeddedChannel-
+  bound handler succeeds — permissive loop — so embedded membership alone is not
+  evidence); g3 ordered write/update/write: f1 compressed, f2 passthrough (dataLen=0
+  proves the 64-update applied first), f3 disabled (no dataLen), exact token sequence
+  256,64,-1; g4 off-owner sync REJECTED + queued update ACKed and applied ON the
+  owner thread (lastUpdateThread == executor thread); g4-neg token-swap control;
+  g5a close with an encode QUEUED behind a blocked executor: FIFO guarantees write
+  then free, free EXACTLY ONCE, ctx dead; g5b BOTH removal modes (explicit
+  pipeline.remove AND channel close) free exactly once after completed work; g5c
+  post-removal native use returns null; g6 two channels on one group: different
+  thresholds, different live native ctx, independent frees; g7 simulated creation
+  failure (package-private property-immune seam; the real frameCreate==0 path is
+  handled by the same code): deterministic EncoderException('creation failed at
+  attach'), no NPE, removal still frees exactly once.
+invariants_and_controls: >
+  Every gate names its invariant and outcome in the assertion text. Negative
+  controls: g2-control (permissive-loop acceptance contrast), g4-neg (token
+  sequence-swap detection), g5 exactly-once free counts (0 or 2 would fail),
+  MCK4Validation's retained-output negative control retained green under the new
+  ownership contract.
+regressions: "MCK42OwnershipGates 15/15; MCK42FrameBoundaryGates 11/11; MCK4Validation 20/20; M53FrameOracle 25/25; M52CompressionTests 26/26; M4AuthoritativeTest 59/59 (fail-closed green); compression 14/14; native-chunk 10/10"
+supersession: >
+  MCK41Gates.java DELETED: its 5 cases (pre-attach setup, on-owner order tokens,
+  off-owner rejection, marshaled update, handlerRemoved free, encode-after-close)
+  are absorbed into MCK42OwnershipGates under the REAL executor contract. The
+  setOwnerExecutorForTests/setOwnerExecutorForTestsPost arbitrary-executor seams are
+  REMOVED from the handler — test helpers no longer bypass production ownership.
+classification: NETTY_OWNERSHIP_REAL_EXECUTOR_VALIDATED

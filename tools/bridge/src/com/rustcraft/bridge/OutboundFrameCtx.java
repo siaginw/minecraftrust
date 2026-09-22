@@ -82,6 +82,16 @@ public final class OutboundFrameCtx {
      *  field, set only by test code in this package. */
     int testForceFirstCapacity = -1;
 
+    /** M-CK4.2 N-shot injection seam (offline tests ONLY): when > 0, the next
+     *  testForceCapacityTimes frameEncode calls (INCLUDING the retry inside
+     *  the same frame() call) are invoked with output capacity
+     *  min(cap, testForceCapacityValue). Used to exercise the SECOND capacity
+     *  failure: the one-retry ceiling must terminate the call with null
+     *  instead of looping. Same rules as testForceFirstCapacity —
+     *  package-private, property-immune, real JNI path. */
+    int testForceCapacityTimes = 0;
+    int testForceCapacityValue = 64;
+
     public byte[] frame(byte[] body, int threshold) {
         long h = handle.get();
         if (h == 0) return null;
@@ -104,6 +114,12 @@ public final class OutboundFrameCtx {
                     // call regardless of the (larger) retained buffer size
                     actualOutCap = Math.min(cap, testForceFirstCapacity);
                     testForceFirstCapacity = -1;    // one-shot
+                } else if (testForceCapacityTimes > 0) {
+                    // N-shot injection: repeat the real insufficient-capacity
+                    // failure across the retry so the one-retry ceiling is
+                    // exercised by a SECOND real failure, not by inspection
+                    actualOutCap = Math.min(cap, testForceCapacityValue);
+                    testForceCapacityTimes--;
                 } else {
                     actualOutCap = cap;
                 }
