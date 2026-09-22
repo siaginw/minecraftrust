@@ -1,0 +1,46 @@
+# M-CK2 — OFFLINE RUST PACKET/COMPRESSION OPTIMIZATION
+schema_version: 1
+date: "2026-09-22"
+builds: {dll: db2a0ad1b13d3843bfd5f576a040f7deceafac973fe80d0c0bc5146050ad82b2}
+scope: "IMMUTABLE-INPUT COMPONENT MEASUREMENTS ONLY. Live capture/synchronization/refresh/cache-hit economics EXCLUDED and BLOCKED (issue #1 OPEN; production tryEncode fail-closed unchanged)."
+bottleneck: >
+  CONFIRMED IN INTEGRATION CODE (CompressionCtx.compress — the wrapper the
+  production NativeCompressionEncoder handler invokes): per-call
+  allocateDirect x2 (~16 us of ~45.5 us total = 35%), reflective address
+  Method lookup per call, and a byte-by-byte output copy loop.
+  (Plaintext heap-array prep in the encoder handler sits OUTSIDE the measured
+  compress interval in both arms — complete-path arms below start from
+  payload-in-hand, symmetric.)
+research_ledger:
+  - {source: "Velocity native (velocity-native repo, zlib via JNI/JNR)", url: "https://github.com/PaperMC/velocity-native", license: "GPL-3.0 (reference only, not adopted)", technique: "per-context native zlib with reused native buffers", applicability: "high", risk: "none (not adopted)", decision: "REJECTED for this pass — directive forbids backend/dependency changes; pattern validated our per-context scratch reuse instead"}
+  - {source: "Netty ByteBuf / direct-buffer lifetime docs (netty 4.1 Buffer docs, PoolArena design)", url: "https://netty.io/wiki/using-the-new-buffer.html / new-and-noteworthy-4-0.html", license: "Apache-2.0 docs", technique: "pool/reuse direct buffers; avoid per-message allocation; strong ownership during native calls", applicability: "high", risk: "retained memory per context", decision: "ADOPTED (Change A) with checked growth + retention tracking + documented reclamation caveat"}
+  - {source: "JDK ByteBuffer API (bulk get, absolute ops)", url: "https://docs.oracle.com/javase/8/docs/api/java/nio/ByteBuffer.html", license: "Oracle docs", technique: "bulk relative get instead of per-byte loop", applicability: "direct", risk: "none", decision: "ADOPTED (Change B)"}
+changes:
+  A_reusable_scratch: "per-instance direct in/out scratch, grown on demand, retained for context lifetime; addresses re-resolved from strong refs each call (growth-safe); single-owner contract documented (one channel/event loop, matching production wiring); counters allocEvents/growEvents/retainedApprox"
+  B_bulk_copy: "scratchOut.position(0).get(res,0,n) replaces the byte-by-byte loop"
+  C_address_cache: "reflective address Method cached once (static volatile)"
+  unchanged: "zlib backend, level, stream-reset behavior, threshold semantics, framing, unsupported-packet policy; result remains a fresh caller-owned heap byte[] (no zero-total-allocation claim)"
+correctness: "M52CompressionTests 26/26: sizes 0..64KB incl threshold-adjacent+incompressible; grow/shrink reuse (bounded allocs, not per-packet); independent concurrent contexts clean; insufficient-capacity negative code -> retry+reset ok; use-after-close null + double-free CAS-safe; retained-A-unchanged-while-B-produced (independent decode); ZERO allocateDirect across 500 warm packets (instrumented counter); deliberate-corruption negative control FAILS verification as required"
+benchmark: >
+  3 fresh JVMs, identical fixture (real synced-chunk payload 31,008 B,
+  javaPayload mask=31), alternated arms, results consumed; individual runs:
+  JVM1: java 82.35 / base 45.68 / opt 29.54 us mean (opt=0.647x base, 0.359x java)
+  JVM2: java 81.62 / base 43.76 / opt 27.73 us (0.634x base, 0.340x java)
+  JVM3: java 81.99 / base 44.23 / opt 27.62 us (0.624x base, 0.337x java)
+  p50s: java ~81 / base ~43-45 / opt ~27-29 us. p99: java ~100 / base ~65
+  / opt ~31-41 us. Parity (independent inflate, all JVMs): EQUAL.
+  Alloc/copy: warm path 0 allocateDirect events/500 packets (vs 2/call
+  baseline); retained scratch 62,057 B per context (2 allocs + 1 growth
+  event at the 31KB fixture); bulk copy replaces 31K per-byte reads.
+  NOT MEASURED: heap alloc of the result array (kept by contract), GC,
+  encoder-handler plaintext prep (outside compress interval, symmetric).
+headroom: "remaining: result-array allocation (caller contract), address() reflection (could be MethodHandle/intrinsics), single remaining native copy of input into scratch (zero-copy handoff would need encoder->compressor co-design)"
+classification: OFFLINE_OPTIMIZATION_VALIDATED
+README_corrections_applied: >
+  (A) 1.53x row re-scoped to M3W5 BASE-TERRAIN PLACEMENT (Java 23.95us vs
+  Rust 15.69us, offline component benchmark) — not a live density speedup;
+  M3W4 density result kept separate. (B) M2CP compression-throughput row
+  corrected to ~2.26x (57.5->129.7 MB/s, Revelation) with the separate 39.9%
+  Netty-worker CPU reduction stated as its own figure and the compressed-size
+  tradeoff attached to that same study. Public-checkout integrity 'verified'
+  claim removed (checker relies on intentionally local-only artifacts).
