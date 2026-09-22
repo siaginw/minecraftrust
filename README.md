@@ -56,10 +56,10 @@ Windows x64 dev box, JDK 8 (Temurin 8.0.504), Rust release. Kernel/offline scope
 
 | Operation | Java ref | Rust | Scope / caveats | Artifact |
 |---|---|---|---|---|
-| Worldgen density field (n=1) | 1× | **1.53×** | live SHADOW kernel, bit-exact | `machine/M3W5-*` |
+| Base-terrain placement (M3W5 kernel) | 23.95 µs | **15.69 µs (1.53×)** | offline component benchmark, bit-exact | `machine/M3W5-*` |
 | Optimized worldgen noise (n=1) | 1× | **+5.6%** | offline 240-chunk, bit-exact | `machine/M3W4-n1-results.yaml` |
 | Chunk-packet encode (31 KB, cached palette) | ~7.2 µs ctor | **~1.0 µs** | warm cache vs offline-corpus Java ctor; NOT a like-for-like claim vs full Java construction under load | `machine/M43-*-results.yaml` |
-| Outbound compression (network worker CPU) | 1× | **~2.3×** | live Target A network thread; size +1.5–2.4% | `machine/M2CP-perf-results.yaml` |
+| Compression throughput (M2CP, Revelation) | 57.5 MB/s | **129.7 MB/s (~2.26×)** | same study: separate Netty-worker CPU reduction 39.9%; compressed size +1.5–2.4% | `machine/M2CP-perf-results.yaml` |
 | Section refresh transfer | — | 12 KB in ~2.7 µs | offline, immutable input | `docs/research/m4-1-refresh-design.md` |
 
 Not claimed: whole-server TPS multipliers, zero bugs, universal compatibility, or % completion. Combined-path optimization headroom is open (cached-encode vs rebuild cost, worker CPU vs ServerThread time are kept distinct in the cited reports).
@@ -80,9 +80,12 @@ Requirements: Rust stable (MSVC), JDK 8, Python 3, Windows x64 (tested). Minecra
 # From a clean public checkout (verified):
 cargo build --release -p ffi          # Rust core + FFI DLL
 cargo test -p native-chunk            # standalone Rust unit tests (10 tests)
-python tools/verify_evidence_integrity.py   # tracked-artifact + provenance checks
 
-# Requires the private research environment (Minecraft/Forge jars, built bridge):
+# Also verified in the research environment (requires Minecraft/Forge jars,
+# built bridge, and locally-retained evidence artifacts):
+python tools/verify_evidence_integrity.py   # checker relies on intentionally
+#    local-only raw artifacts — NOT runnable green from the public checkout
+bash tools/build-coremod.sh           # bridge/coremod jar (needs external jars)
 bash tools/build-coremod.sh           # bridge/coremod jar (needs external jars)
 # Java offline oracle suites (M4PacketParityHarness, M4ValidatorBoundary,
 # M4LifecycleCases, M4AuthoritativeTest, ...) require the external jars and
