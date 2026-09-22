@@ -27,7 +27,7 @@ foreach ($p in $KnownPaths) {
 }
 
 if (-not $Java8Home) {
-    Write-Error "[Hermes] Java 8 JDK home not found. Set JAVA8_HOME."
+    Write-Error "[RustCraft] Java 8 JDK home not found. Set JAVA8_HOME."
     exit 1
 }
 

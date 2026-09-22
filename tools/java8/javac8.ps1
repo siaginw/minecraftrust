@@ -25,7 +25,7 @@ foreach ($p in $KnownPaths) {
 }
 
 if (-not $Javac8Bin) {
-    Write-Error "[Hermes] javac 8 executable not found. Set JAVA8_HOME."
+    Write-Error "[RustCraft] javac 8 executable not found. Set JAVA8_HOME."
     exit 1
 }
 

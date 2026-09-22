@@ -20,13 +20,13 @@ codegraph version
 # Output: 1.6.0
 ```
 
-## 3. Hermes Integration
-Hermes Agent was configured using the official auto-wiring command:
+## 3. RustCraft Integration
+development tooling was configured using the official auto-wiring command:
 ```bash
-codegraph install --target hermes --yes
+codegraph install --target RustCraft --yes
 ```
 
-This updated the active profile configuration at `C:\Users\Siagi\AppData\Local\hermes\profiles\rustdev\config.yaml` with the following MCP server entry:
+This updated the active profile configuration at `C:\Users\Siagi\AppData\Local\RustCraft\profiles\rustdev\config.yaml` with the following MCP server entry:
 ```yaml
 mcp_servers:
   codegraph:
@@ -40,11 +40,11 @@ mcp_servers:
 
 platform_toolsets:
   cli:
-    - hermes-cli
+    - RustCraft-cli
     - mcp-codegraph
 ```
 
-In the current session, direct CLI integration is fully functional via `codegraph` commands; full MCP tool injection takes effect upon restarting the Hermes agent session.
+In the current session, direct CLI integration is fully functional via `codegraph` commands; full MCP tool injection takes effect upon restarting the development tooling session.
 
 ## 4. Repository Initialization
 Initialized the repository graph from the project root (`D:\minecraftrust`):

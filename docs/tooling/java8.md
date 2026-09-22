@@ -3,7 +3,7 @@
 ## 1. Overview & Distribution
 Minecraft 1.12.2 and Forge 14.23.5.x are pinned to Java 8 (JVM target 1.8). Modern Java versions (such as Java 21 and Java 25 present on this machine) cause bytecode incompatibility, security manager deprecations, LaunchWrapper classloader failures, and ForgeGradle 2.3 build failures.
 
-To preserve modern tooling for Hermes while ensuring 100% compatibility for reference Minecraft/Forge code, Java 8 is installed **side-by-side**. It is NOT set as the machine-wide default.
+To preserve modern tooling for RustCraft while ensuring 100% compatibility for reference Minecraft/Forge code, Java 8 is installed **side-by-side**. It is NOT set as the machine-wide default.
 
 - **Distribution:** Eclipse Temurin JDK with Hotspot 8 (Adoptium)
 - **Exact Version:** `8.0.504.1` (build `1.8.0_504-b01`)
@@ -52,4 +52,4 @@ javac 1.8.0_504
 | **Parity Benchmark Server Runs** | **Java 8 (Temurin 8)** | Ensures accurate baseline match with historical Forge performance |
 | **Rust Crates / Cargo** | **Rust 1.94.0** | Independent of Java version |
 | **CodeGraph / Node CLI** | **Node.js v22.23.2** | Independent of Java version |
-| **Hermes Agent Runtime** | **Python 3.11 / System** | Independent of Java version |
+| **development tooling Runtime** | **Python 3.11 / System** | Independent of Java version |

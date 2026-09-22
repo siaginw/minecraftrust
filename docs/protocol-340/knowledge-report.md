@@ -65,7 +65,7 @@ USES_DATATYPE, …), tooling commands, embedding guidance (prefer source symbols
 currently has zero vanilla-protocol concepts — greenfield seed.
 
 ## I. Protocol skill
-`C:/Users/Siagi/.zcode/skills/minecraft-rust/protocol-340-forge-network/SKILL.md`
+`local research notes (protocol-340-forge-network)`
 — target version, evidence hierarchy, doc map, CodeGraph usage, Forge diffs,
 parity methodology, never-rules.
 
@@ -169,6 +169,6 @@ This task built only the knowledge layer. Do not begin the rewrite without that 
 - `docs/protocol-340/external-implementations.md`
 - `docs/protocol-340/codegraph-relationships.md`
 - `docs/protocol-340/README.md` (index)
-- Skill: `C:/Users/Siagi/.zcode/skills/minecraft-rust/protocol-340-forge-network/SKILL.md`
+- Skill: `local research notes (protocol-340-forge-network)`
 
 No changes to `crates/*`, `tools/*`, or production protocol behavior.

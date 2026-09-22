@@ -1,4 +1,4 @@
-# Hermes Minecraft 1.12.2 Rust Server Foundation
+# RustCraft Minecraft 1.12.2 Rust Server Foundation
 
 ## Project Goal
 
@@ -58,16 +58,15 @@ Avoid:
 - `09_CODE_GRAPH_AND_REPO_NAVIGATION.md`
 - `10_DOCUMENTATION_SYSTEM.md`
 - `11_INITIAL_REPO_SKELETON.md`
-- `12_BOOTSTRAP_PROMPT_FOR_HERMES.md`
 - `machine/ownership_manifest.example.yaml`
 - `machine/subsystem_status.example.yaml`
 
-## v2 Hermes Bootstrap Additions
+## v2 RustCraft Bootstrap Additions
 
-This bundle adds the real Hermes project brain (`.hermes.md`), a first-run `BOOTSTRAP_PROMPT.md`, project-local skills under `.hermes/skills/`, CodeGraph setup guidance, Graphy evaluation guidance, live ownership/status/gate manifests, `.gitignore`, and the intended project directory skeleton.
+This bundle adds the real RustCraft project brain (`.RustCraft.md`), a first-run `BOOTSTRAP_PROMPT.md`, project-local skills under `.RustCraft/skills/`, CodeGraph setup guidance, Graphy evaluation guidance, live ownership/status/gate manifests, `.gitignore`, and the intended project directory skeleton.
 
 Recommended use:
 1. Extract into the project root.
-2. Open the project root in Hermes Desktop.
-3. Send Hermes the contents of `BOOTSTRAP_PROMPT.md`.
+2. Open the project root in RustCraft Desktop.
+3. Send RustCraft the contents of `BOOTSTRAP_PROMPT.md`.
 4. Review the Bootstrap Report before authorizing P0 research or implementation.

@@ -63,7 +63,7 @@ Minecraft 1.12.2 code exists across three distinct naming layers:
 | **Crash Reports / Stack Traces** | SRG or Obfuscated | `at net.minecraft.world.WorldServer.func_72835_b(WorldServer.java:234)` |
 | **Our Rust Core Engine** | Mapped / Canonical concepts | Translates to `WorldServer::tick()` |
 
-## 4. Resolution Rules for Hermes Research
+## 4. Resolution Rules for RustCraft Research
 When investigating bug reports, mod decompilations, or stack traces:
 1. If an identifier starts with `func_`, search `third_party_reference/mappings/export/methods.csv` to find its human-readable MCP name and documentation.
 2. If an identifier starts with `field_`, search `third_party_reference/mappings/export/fields.csv`.

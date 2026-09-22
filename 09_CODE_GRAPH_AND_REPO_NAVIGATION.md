@@ -2,9 +2,9 @@
 
 ## Goal
 
-Hermes should not rely on grep alone for a project this large.
+RustCraft should not rely on grep alone for a project this large.
 
-The agent should maintain a searchable model of:
+the developer should maintain a searchable model of:
 - symbols
 - references
 - call relationships
@@ -26,7 +26,7 @@ Desired capabilities:
 - dependency graph
 - changed-files impact analysis
 - cross-repo navigation if possible
-- MCP or CLI access from Hermes
+- MCP or CLI access from RustCraft
 
 ## Required Agent Behavior
 

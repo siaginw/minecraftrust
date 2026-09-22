@@ -26,13 +26,13 @@ This evaluation examines whether adding Graphy alongside CodeGraph provides suff
 - **Rust Support:** Graphy is written in Rust, leveraging tree-sitter-rust and Rayon for fast multi-threaded parsing.
 - **Java Support:** Supports Java via tree-sitter-java grammar. Deep type hierarchy resolution can be augmented with `--lsp`, which introduces language-server daemon dependencies.
 
-### B. Hermes / MCP Compatibility
+### B. RustCraft / MCP Compatibility
 - Compatible with stdio MCP (`graphy serve`).
-- Can be registered in Hermes `mcp_servers` configuration.
+- Can be registered in RustCraft `mcp_servers` configuration.
 
 ### C. Maintenance Status & Ecosystem Maturity
 - **Graphy:** Version 1.0.0 on crates.io, ~100 lifetime downloads, nascent project with single primary maintainer.
-- **CodeGraph:** Actively maintained, version 1.6.0 on npm, officially integrated installer for Hermes Agent, mature test suite, stable SQLite WAL backend.
+- **CodeGraph:** Actively maintained, version 1.6.0 on npm, officially integrated installer for development tooling, mature test suite, stable SQLite WAL backend.
 
 ### D. Overhead and Resource Footprint
 - **CodeGraph:** Extremely lightweight (indexed repository in 445ms, 0.34MB SQLite file, zero background daemons required for CLI operation).

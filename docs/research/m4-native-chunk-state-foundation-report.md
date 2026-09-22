@@ -3,7 +3,7 @@
 **Status:** COMPLETE / VALIDATED IN LIVE SHADOW  
 **Target:** Clean Forge 1.12.2 (Build 14.23.5.2860) — Target A  
 **Date:** 2026-09-21  
-**Steward:** Hermes Engineering Steward  
+**Steward:** RustCraft Engineering Steward  
 
 ---
 
@@ -355,7 +355,7 @@ worldgen.transformCount=1 status=SHADOW_HOOK_INSTALLED
 ## Section S: Sibling Project Boundaries & Licensing Compliance
 
 - **GPL Cleanliness**: No Oxide code or GPL assets were copied into the codebase. All designs were clean-room synthesized against Minecraft 1.12.2 protocol specifications.
-- **Sibling Repositories**: Protected repository `D:/nw-server` was completely untouched; working copy `D:/nwserverhermes` was respected.
+- **Sibling Repositories**: Protected repository `D:/nw-server` was completely untouched; its working copy was respected.
 
 ---
 
