@@ -22,6 +22,7 @@ public class MCK4Validation {
         boundaryVsInstalledHandlers();
         adapterPipelineCases();
         lifetimeAndConcurrency();
+        retryInjectionGate();
 
         System.out.println("RESULT: " + pass + " pass, " + fail + " fail");
         System.exit(fail == 0 ? 0 : 1);
@@ -90,22 +91,29 @@ public class MCK4Validation {
         if (len <= 0x1F_FF_FF) {
             return jOk && rOk && Arrays.equals(jf, rf);
         } else {
-            // both must REJECT (installed throws; Rust returns null or BodyTooLarge)
-            System.out.println("  max+1: java=" + (jOk ? "accepted?" : "rejected") + " rust=" + (rOk ? "accepted?" : "rejected"));
-            return !rOk; // Rust must reject; Java exception is recorded by the oracle probe below
+            // BOTH must reject: installed prepender throws ("unable to fit"); Rust returns null
+            System.out.println("  max+1: java=" + (jOk ? "ACCEPTED-UNEXPECTED" : "rejected") + " rust=" + (rOk ? "ACCEPTED-UNEXPECTED" : "rejected"));
+            return !jOk && !rOk; // BOTH outcomes asserted
         }
     }
 
     static boolean boundaryBelowThreshold() throws Exception {
+        // boundary-ADJACENT (threshold-1 / threshold / threshold+1) with the
+        // dataLen=0 byte accounted: inner = 1 + bodyLen for all three
         OutboundFrameCtx ctx = OutboundFrameCtx.create();
-        byte[] body = new byte[100];
-        Arrays.fill(body, (byte) 3);
-        byte[] jf = M53FrameBench.javaFrame(body, 256);
-        byte[] rf = ctx.frame(body, 256);
+        boolean all = true;
+        for (int delta = -1; delta <= 1; delta++) {
+            int len = 256 + delta;
+            byte[] body = new byte[len];
+            Arrays.fill(body, (byte) 3);
+            byte[] jf = M53FrameBench.javaFrame(body, 256);
+            byte[] rf = ctx.frame(body, 256);
+            boolean ok = jf != null && rf != null && Arrays.equals(jf, rf)
+                    && decodeFrameSafe(jf, true) != null && decodeFrameSafe(rf, true) != null;
+            if (!ok) { System.out.println("  below-threshold len=" + len + " FAILED"); all = false; }
+        }
         ctx.free();
-        // [outer][0][body]: outer = 1 + bodyLen accounting
-        return jf != null && rf != null && Arrays.equals(jf, rf)
-                && decodeFrameSafe(jf, true) != null;
+        return all;
     }
 
     static void compressibleOverLimit() throws Exception {
@@ -121,17 +129,15 @@ public class MCK4Validation {
             long outer = readVarInt(rf);
             frameUnderLimit = outer <= max && outer + varIntSize((int) outer) == rf.length;
         }
-        check("boundary: compressible >limit body encodes; frame under outer limit; decodes equal",
-                ok && frameUnderLimit, "rfLen=" + (rf == null ? -1 : rf.length));
-        // The installed handler under the same input: does vanilla accept it?
-        boolean javaAccepted;
-        try {
-            byte[] jf = M53FrameBench.javaFrame(body, 256);
-            javaAccepted = jf != null;
-        } catch (Throwable t) {
-            javaAccepted = false; // prepender "unable to fit" fires AFTER compression in vanilla too
-        }
-        System.out.println("  vanilla behavior on same input: accepted=" + javaAccepted + " (recorded, not asserted)");
+        // BOTH outcomes asserted: vanilla ACCEPTS (prepender sees compressed size)
+        byte[] jf = null;
+        try { jf = M53FrameBench.javaFrame(body, 256); } catch (Throwable t) { jf = null; }
+        boolean javaAccepts = jf != null;
+        boolean rustAccepts = ok && frameUnderLimit;
+        byte[] jDec = jf == null ? null : decodeFrameSafe(jf, true);
+        check("boundary: compressible >limit — BOTH java and rust ACCEPT; both decode to original",
+                javaAccepts && rustAccepts && jDec != null && Arrays.equals(jDec, body),
+                "jf=" + (jf == null ? -1 : jf.length) + " rf=" + (rf == null ? -1 : rf.length));
         ctx.free();
     }
 
@@ -203,6 +209,38 @@ public class MCK4Validation {
         ch2.close();
     }
 
+
+    static void retryInjectionGate() throws Exception {
+        // FIRST call forces insufficient capacity through the REAL wrapper + JNI
+        OutboundFrameCtx ctx = OutboundFrameCtx.create();
+        byte[] body = new byte[5000];
+        new java.util.Random(11).nextBytes(body);
+        ctx.testForceFirstCapacity = 64;                 // far too small
+        byte[] f = ctx.frame(body, 256);
+        boolean ok = f != null && Arrays.equals(decodeFrameSafe(f, true), body);
+        check("retry: forced ERR_CAPACITY -> native bound read -> exactly-one retry -> frame decodes",
+                ok && ctx.LAST_RETRY_NEEDED > 64, "needed=" + ctx.LAST_RETRY_NEEDED);
+        // One-retry ceiling: a fresh ctx where needed (real, ~5015) exceeds a
+        // lowered policy terminates null on the FIRST retry — the retriesThisCall
+        // guard plus policy together prove no unbounded retry loop is possible.
+        OutboundFrameCtx ctx2 = OutboundFrameCtx.create();
+        ctx2.policyLimit = 64;                     // needed(~5015) > policy
+        ctx2.testForceFirstCapacity = 64;
+        byte[] f2 = ctx2.frame(body, 256);
+        check("retry: needed>policy on retry terminates null (one-retry ceiling enforced)",
+                f2 == null && ctx2.LAST_RETRY_NEEDED > 64, "needed=" + ctx2.LAST_RETRY_NEEDED);
+        ctx2.free();
+        // Policy-exceeding bound rejected: LOWER the ceiling and force a real
+        // capacity error — the needed value (real, native-written) now exceeds
+        // policy and the retry must terminate null (guard logic via real JNI)
+        ctx.policyLimit = 64;                        // below the needed bound (~5015)
+        ctx.testForceFirstCapacity = 32;             // force the real error
+        byte[] f3 = ctx.frame(body, 256);
+        check("retry: needed > lowered policy -> null (guard via real JNI capacity error)",
+                f3 == null, "needed=" + ctx.LAST_RETRY_NEEDED);
+        ctx.free();
+    }
+
     // ---- §5 lifetime/concurrency ----
     static void lifetimeAndConcurrency() throws Exception {
         // frame A retained while B produced (adapter level: Netty-owned outputs)
@@ -213,16 +251,28 @@ public class MCK4Validation {
         byte[] a = syntheticBody(2000), b = syntheticBody(3000);
         ch.writeOutbound(io.netty.buffer.Unpooled.wrappedBuffer(a));
         io.netty.buffer.ByteBuf fa = (io.netty.buffer.ByteBuf) ch.readOutbound();
-        byte[] faCopy = new byte[fa.readableBytes()];
-        fa.readBytes(faCopy);
-        fa.readerIndex(0); // retain
+        byte[] faSaved = new byte[fa.readableBytes()];
+        fa.getBytes(fa.readerIndex(), faSaved);          // save WITHOUT changing indices
+        int aRi = fa.readerIndex();
         ch.writeOutbound(io.netty.buffer.Unpooled.wrappedBuffer(b));
         io.netty.buffer.ByteBuf fb = (io.netty.buffer.ByteBuf) ch.readOutbound();
         byte[] fbCopy = new byte[fb.readableBytes()];
         fb.readBytes(fbCopy);
-        check("lifetime: adapter frame A unchanged while B produced",
-                Arrays.equals(faCopy, Arrays.copyOfRange(faCopy, 0, faCopy.length))
-                        && Arrays.equals(decodeFrameSafe(fbCopy, true), b), null);
+        // Re-read A's ORIGINAL retained ByteBuf (indices unchanged) and compare
+        // to the saved copy — B's production must not have touched A's storage.
+        byte[] faReRead = new byte[faSaved.length];
+        fa.getBytes(aRi, faReRead);
+        boolean aUnchanged = Arrays.equals(faSaved, faReRead);
+        boolean aDecodes = Arrays.equals(decodeFrameSafe(faSaved, true), a);
+        boolean bDecodes = Arrays.equals(decodeFrameSafe(fbCopy, true), b);
+        check("lifetime: A's retained ByteBuf bytes unchanged while B produced (original reread)",
+                aUnchanged && aDecodes && bDecodes, null);
+        // Negative control: corrupt the saved A -> the SAME assertion must fail
+        byte[] faCorrupt = faSaved.clone();
+        faCorrupt[faCorrupt.length / 2] ^= 0x5A;
+        boolean corruptionDetected = !Arrays.equals(faSaved, faCorrupt)
+                && !Arrays.equals(decodeFrameSafe(faCorrupt, true), a);
+        check("lifetime-neg: corrupted-A detected by the same comparison", corruptionDetected, null);
         fa.release(); fb.release();
         ch.close();
         // handlerRemoved frees the native ctx

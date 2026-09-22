@@ -67,6 +67,21 @@ public final class OutboundFrameCtx {
      * Encodes one complete frame from the immutable body. Returns the frame
      * bytes (caller-owned) or null on any error (caller falls back).
      */
+    /** Per-context retry-result direct buffer (i32 native-order). Per-context
+     *  under the single-owner contract — no thread-idiosyncratic init, no
+     *  disconnected int[] side channel. Cleared before EVERY native call. */
+    private ByteBuffer retryResult = ByteBuffer.allocateDirect(4).order(ByteOrder.nativeOrder());
+
+    /** Explicit one-retry limit state. */
+    private int retriesThisCall;
+
+    /** M-CK4.1 injection seam (offline tests ONLY): when > 0, the first
+     *  frameEncode of the next frame() call is invoked with exactly this
+     *  output capacity (forcing a real ERR_CAPACITY through the real JNI
+     *  path). Cannot be activated by any runtime property — package-private
+     *  field, set only by test code in this package. */
+    int testForceFirstCapacity = -1;
+
     public byte[] frame(byte[] body, int threshold) {
         long h = handle.get();
         if (h == 0) return null;
@@ -79,17 +94,28 @@ public final class OutboundFrameCtx {
             inBuf.clear();
             inBuf.put(body).flip();
 
-            int retry = 0;
+            retriesThisCall = 0;
             while (true) {
                 int bound = maxOutputLen(body.length) + 16;
                 int cap = Math.max(outBuf == null ? 0 : outBuf.capacity(), bound);
+                int actualOutCap;                   // capacity actually handed to native
+                if (testForceFirstCapacity > 0) {
+                    // injection: real insufficient capacity through the real JNI
+                    // call regardless of the (larger) retained buffer size
+                    actualOutCap = Math.min(cap, testForceFirstCapacity);
+                    testForceFirstCapacity = -1;    // one-shot
+                } else {
+                    actualOutCap = cap;
+                }
                 if (outBuf == null || outBuf.capacity() < cap) {
                     outBuf = ByteBuffer.allocateDirect(cap).order(ByteOrder.nativeOrder());
                     GROW_EVENTS.incrementAndGet();
                 }
+                retryResult.clear();                // cleared before EVERY native op
+                retryResult.putInt(0, 0);
                 FRAME_OPS.incrementAndGet();
-                int n = frameEncode(h, address(inBuf), body.length, address(outBuf), outBuf.capacity(),
-                        threshold, RETRY_BB_TL.get() == null ? 0 : address(RETRY_BB_TL.get()));
+                int n = frameEncode(h, address(inBuf), body.length, address(outBuf), actualOutCap,
+                        threshold, address(retryResult));
                 if (n > 0) {
                     LAST_ERR = 0;
                     RETAINED_APPROX = (inBuf == null ? 0 : inBuf.capacity()) + outBuf.capacity();
@@ -100,12 +126,23 @@ public final class OutboundFrameCtx {
                 }
                 LAST_ERR = n;
                 if (n == ERR_CAPACITY) {
+                    if (retriesThisCall >= 1) return null;   // EXACTLY one retry, then terminate
+                    retriesThisCall++;
+                    int needed = retryResult.getInt(0);       // the actual native-written i32, native order
+                    LAST_RETRY_NEEDED = needed;               // observable even when guards reject
+                    // Reject invalid bounds and resource-policy violations. POLICY
+                    // (16 MiB) is a resource ceiling, DISTINCT from the 3-byte
+                    // wire-format limit enforced in Rust. needed must also exceed
+                    // the capacity that just failed, else the native bound is
+                    // nonsensical.
+                    if (needed <= 0 || needed <= actualOutCap) return null;
+                    if (needed > policyLimit) return null;
                     RETRY_EVENTS.incrementAndGet();
-                    int needed = RETRY_INT_TL.get()[0];
-                    if (needed <= 0 || needed > (1 << 24)) return null; // refuse unbounded retry
-                    outBuf = ByteBuffer.allocateDirect(needed).order(ByteOrder.nativeOrder());
-                    GROW_EVENTS.incrementAndGet();
-                    continue; // exactly one retry loop; a second capacity error returns via needed check
+                    if (needed > outBuf.capacity()) {
+                        outBuf = ByteBuffer.allocateDirect(needed).order(ByteOrder.nativeOrder());
+                        GROW_EVENTS.incrementAndGet();
+                    } // else: the retained buffer already suffices — retry at full capacity
+                    continue;
                 }
                 return null; // backend/too-large/invalid/closed: no partial output
             }
@@ -114,9 +151,14 @@ public final class OutboundFrameCtx {
         }
     }
 
-    private static final ThreadLocal<ByteBuffer> RETRY_BB_TL = new ThreadLocal<>();
-    private static final ThreadLocal<int[]> RETRY_INT_TL = ThreadLocal.withInitial(() -> new int[1]);
-    static { try { RETRY_BB_TL.set(ByteBuffer.allocateDirect(4).order(ByteOrder.nativeOrder())); } catch (Throwable ignore) { } }
+    /** Test observability: the needed value read from the native-written i32
+     *  on the last capacity retry (-1 = none). */
+    public volatile int LAST_RETRY_NEEDED = -1;
+
+    /** Resource-policy ceiling for retry allocation (distinct from wire limits).
+     *  Instance field: offline tests may LOWER it to exercise the guard via a
+     *  real JNI capacity error; production default 16 MiB. */
+    int policyLimit = 16 << 20;
 
     static int maxOutputLen(int n) { return n + (n / 8192 + 2) * 5 + 16; }
 

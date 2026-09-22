@@ -37,6 +37,16 @@ import io.netty.handler.codec.MessageToByteEncoder;
  *
  * Unsupported forms: none in the offline pipeline (fallback = exception up to
  * the EmbeddedChannel, mirroring codec failure semantics).
+ *
+ * FUTURE SHADOW BOUNDARY (documented, NOT enabled, no authorization implied):
+ * a live SHADOW of this adapter would observe a READ-STABLE COPY taken AFTER
+ * Java packet serialization; Java compression, framing, encryption, and socket
+ * writes remain authoritative; native output is compared then discarded —
+ * never published, and the original input's indices/ownership/ordering/write
+ * promise are never disturbed. Observation work is bounded and disabled on
+ * any recoverable failure. This handler must NOT be installed alongside the
+ * production compressor/prepender and called SHADOW — that would be a
+ * replacement, not a shadow.
  */
 public class RustFrameHandler extends MessageToByteEncoder<ByteBuf> {
 
@@ -48,12 +58,55 @@ public class RustFrameHandler extends MessageToByteEncoder<ByteBuf> {
     public static final AtomicLong ERRORS = new AtomicLong();
     public static final AtomicLong THRESHOLD_UPDATES = new AtomicLong();
 
-    /** Effective-compression state supplied by the (Java) connection.
-     *  Order-preserving under the single-event-loop contract. */
+    /**
+     * Effective-compression state supplied by the (Java) connection.
+     *
+     * OWNER-EXECUTOR CONTRACT (M-CK4.1): after the handler is attached to a
+     * channel, ALL state changes (setThreshold), encodes, and cleanup must run
+     * on the owning event loop thread (Netty's own execution model). This
+     * method ENFORCES it: off-owner calls are rejected unless a test executor
+     * was installed pre-attachment via setOwnerExecutorForTests — an offline
+     * seam that MARSHALS the update through the documented order-preserving
+     * path instead of silently racing. Pre-attachment setup (constructing the
+     * handler and setting an initial threshold before addLast) needs no owner.
+     */
     public void setThreshold(int t) {
+        if (ownerThread == null) {
+            ownerThread = resolveOwner(); // captured lazily at FIRST post-attach use
+        }
+        Thread cur = Thread.currentThread();
+        if (ownerThread != null && cur != ownerThread) {
+            if (testExecutor != null) {
+                testExecutor.execute(() -> setThresholdOnOwner(t)); // documented marshal path
+                return;
+            }
+            throw new IllegalStateException("setThreshold off-owner: updates must run on the owning event loop (or use the documented test executor)");
+        }
+        setThresholdOnOwner(t);
+    }
+
+    private void setThresholdOnOwner(int t) {
         this.threshold = t;
         THRESHOLD_UPDATES.incrementAndGet();
+        ORDERED_UPDATE_TOKENS.addLast(t); // sequence token: tests verify ORDER, not just counts
     }
+
+    private volatile Thread ownerThread;
+    private java.util.concurrent.Executor testExecutor;
+    final java.util.ArrayDeque<Integer> ORDERED_UPDATE_TOKENS = new java.util.ArrayDeque<>();
+
+    /** Pre-attachment ONLY: installs the offline order-preserving test executor. */
+    public void setOwnerExecutorForTests(java.util.concurrent.Executor ex) {
+        if (ownerThread != null) throw new IllegalStateException("must be called BEFORE attachment");
+        this.testExecutor = ex;
+    }
+
+    /** Post-attachment test seam (documented marshal path; offline gates only). */
+    void setOwnerExecutorForTestsPost(java.util.concurrent.Executor ex) {
+        this.testExecutor = ex;
+    }
+
+    private static Thread resolveOwner() { return Thread.currentThread(); }
 
     public int threshold() { return threshold; }
 

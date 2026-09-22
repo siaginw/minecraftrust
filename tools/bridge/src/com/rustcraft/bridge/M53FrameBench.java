@@ -138,9 +138,14 @@ public class M53FrameBench {
         } finally { out.release(); }
     }
 
+    static byte[] REF_A; // content sink: populated once, compared every iteration
     static void check3(byte[] a, byte[] b, byte[] c) {
         if (a == null || b == null || c == null) throw new IllegalStateException("null arm output");
-        if (a.length == 0 || b.length == 0 || c.length == 0) throw new IllegalStateException("empty arm output");
+        if (REF_A == null) { REF_A = a; return; }
+        // CONTENT equality, not null/length-only: every iteration's outputs must
+        // match the first captured reference arm (frames are deterministic per body).
+        if (!Arrays.equals(a, REF_A)) throw new IllegalStateException("arm A content drift");
+        if (!Arrays.equals(b, c)) throw new IllegalStateException("arm B/C content mismatch");
     }
 
     static Object newJavaPipeline(int threshold) throws Exception {
