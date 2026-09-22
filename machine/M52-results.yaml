@@ -1,0 +1,49 @@
+# M5.2 — FINAL LIGHT FRESHNESS / NETWORK READINESS REPORT
+schema_version: 1
+date: "2026-09-21"
+run: M5-20260921-235750 (both subsystems ON_EXPERIMENTAL in disposable run; repo defaults OFF)
+builds: {dll: db2a0ad1b13d3843, coremod: c16ab264ecf6aee7}
+A_design: >
+  Light is its own freshness domain: FFI 320 getSectionLight reads native light
+  per section; BOTH the transmit path and the comparator compare live Java
+  nibble arrays (block AND sky separately) vs native at packet time for every
+  mask section. Transmit: stale => coarse refreshOneSection push + recheck +
+  RE-ENCODE (payload regenerated post-refresh); still stale => Java fallback.
+  Comparator: stale => SKIP. No per-nibble JNI. All prior guards unchanged.
+B_offline: >
+  25/25 authoritative (5 new light-domain cases: initial non-default light;
+  direct sky write w/ unchanged version; direct block-light write; comparator
+  clean after coarse refresh; semantic equality vs real Java packet after all
+  light churn). Race regression now also tolerates+counts vanilla's own
+  thread-unsafe ctor under concurrent mutation (expected torn class). Battery:
+  7/7 deferred, 19/19 lifecycle, 8/8 parity, 16/16 boundary, 10/10 Rust.
+C_workload: "bounded walk + settle hold + commanded block/light mutations"
+D_block_guard: "version guard live; pending-work fallback 401 (correct strict fallbacks); 0 stale acceptances"
+E_biome: "2 re-pushes live; 0 biome mismatches"
+F_sky: "0 refresh events needed live (settle window); comparator caught 1 light race -> SKIP"
+G_block_light: "0 refresh events needed live; 0 light fallbacks"
+H_native_authored: 496 (vs 35 in M5.1, 1 in M5 — light domain + settle workload)
+I_gate_b: "1,571 completed independent comparisons, ALL PASSED"
+J_errors: >
+  0 semantic mismatches; 0 exceptions in comparator/verifier paths compared;
+  26 native_errors = the auth-sample pending builder's off-thread ctor NPEs
+  (quiescentRef — known thread-confined, caught, counted, produced 0 samples in
+  every campaign; same disable-as-dead pattern applies as the sweep).
+K_client: "bot 30 teleports, 0 decode/decompression errors, clean session"
+L_cleanup: "427 chunks removed in-JVM -> 0 chunks/0 bytes; compressor ctx 1/1 balanced"
+M_profiling: "not yet profiled (correctness milestone); candidate remains per-call direct-buffer alloc in ctx.compress"
+N_headroom: "OPTIMIZATION_NOT_EXHAUSTED — scratch reuse, zero-copy encode->compress handoff queued"
+O_classification: FURTHER_INVESTIGATION
+  reason: >
+    All M1_NATIVE_PACKET_READY_TARGETA criteria are met EXCEPT 'no active
+    validator exceptions': the auth-sample pending builder (dead-weight path,
+    0 samples ever) still emits caught NPEs off-thread. Disable it (same
+    pattern as the sweep), one offline battery pass, and the classification
+    stands ready without a new live campaign being strictly required — though
+    one clean re-run is the honest final proof.
+P_next: >
+  (1) Disable the auth-sample pending builder (dead path). (2) One bounded
+  re-run (expect: 0 native_errors, everything else unchanged). (3) Then
+  M1_NATIVE_PACKET_READY_TARGETA + NATIVE_NETWORK_READY_TARGETA. (4) Then the
+  Revelation combined SHADOW ladder, operator-gated. Profiling/optimization of
+  the combined path follows the standing rubric before any performance claim.

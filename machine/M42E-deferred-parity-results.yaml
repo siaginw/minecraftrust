@@ -1,0 +1,105 @@
+# M4.2E — DEFERRED LIVE NATIVE-PACKET PARITY REPORT
+schema_version: 1
+date: "2026-09-21"
+base_checkpoints: [3fe4ab3, bbc6a9d, 8f103e8]
+builds:
+  live_run: {dll: 52d5ac424db188ed, coremod: db6e0ddb332dbedc}
+  post_run_fix: {coremod: 6bb8109f1748c533, note: "shadowTerrain NPE fix (RustCraft-caused, offline-attributed) — NOT live-run; all offline suites re-verified green on this build"}
+run_id: M42E-20260921-193646
+server_pid: 1383
+
+A_deferred_architecture: >
+  When a Java authoritative packet is built for a chunk whose NativeChunk is not
+  yet synchronized, the packet thread captures a bounded record (coords, dim,
+  Java payload bytes, mask/filter/skylight metadata, Java mutation version,
+  native generation handle, timestamp) and returns immediately. The Java packet
+  sends normally. The background flush cycle completes the chunk's first-touch
+  full sync, then processes deferred records: encode Rust Protocol-340 from
+  native state, compare against the captured payload. No network resend, no
+  packet-thread blocking, no scope widening.
+
+B_temporal_model: >
+  ChunkMutationTracker keeps a per-chunk Java mutation VERSION bumped on every
+  observable mutation path. Capture records version V. A deferred comparison is
+  valid ONLY if versionOf(chunk) == V at processing time AND the native
+  generation handle is unchanged. Otherwise DEFERRED_STALE_SKIP — temporal
+  snapshots are never mixed and neither side is ever fixed up.
+
+C_bounded_queue: >
+  max 1024 pending records / 32 MB total captured bytes / 128 KB per record /
+  15 s expiry; on capacity pressure records are skipped with
+  deferred_capacity_skipped. Observed: peak 2,409,141 bytes (7.5% of budget),
+  0 capacity skips, 0 pending at shutdown (drained clean).
+
+D_packet_attempts: 1588
+E_immediate_comparisons: 0 (all first-sends preceded their sync; re-sends did not recur within view)
+F_deferred_comparisons: >
+  enqueued 1,569 / completed 1,025 (compare_deferred=1025) / stale 542 / expired 2 /
+  capacity-skipped 0. All dispositions accounted: 1569 = 1025 + 542 + 2.
+G_skip_reasons: "unsynced_skipped=1570 (captures), partial_filter=18 (Java-only exclusion), stale_handle_rejections=0"
+H_matches_mismatches: >
+  1,025 / 1,025 comparisons SEMANTICALLY EQUAL (decoded-state Gate B), 0
+  mismatches, 0 comparator exceptions, comparator never disabled. Gate A exact
+  bytes = 0: every live packet's Java palette carries worldgen insertion order
+  that differs from the native minimal palette — the documented valid
+  palette-history divergence (offline churn case); logical equality of all
+  4096 cells + lights + biomes + mask held in every comparison. No mismatch
+  dump files produced (none required).
+I_section_validity: >
+  1,567 full syncs; 83,577 sections refreshed AND 83,577 independently validated
+  (zero delta); 0 validation mismatches; terrain 2,991/2,991 bit-exact,
+  2,991 registered; biomes pushed 1,567.
+J_shadowTerrain_exception: >
+  ATTRIBUTED AND FIXED. The recurring 1-per-run NPE sited by the new stack
+  capture: shadowTerrain:645 (addF.setAccessible on a null local in the NEID
+  byte[]-detection gate — on clean-Forge primers the sentinel was stored in the
+  field but the LOCAL stayed null; first chunk only, comparison skipped, all
+  later chunks fine). RUSTCRAFT-CAUSED instrumentation bug, offline-derivable,
+  fixed (use the resolved field), all offline suites re-verified on the fix
+  build 6bb8109f1748c533. The live evidence run is NOT restarted: the fault
+  skipped exactly one comparison and no stop condition depends on it.
+K_skylight_hook: >
+  installed (HOOKS_INSTALLED_9), fired NATURALLY 10,283 times this run
+  (chunks regenerate skylight when provided to players) — every invocation
+  light-dirties all sections; the conservative block-set light marking plus
+  this hook cover the direct-write light paths. No artificial gameplay used.
+L_memory_peak: >
+  deferred queue peak 2.41 MB; native registry at shutdown dump: 72,773 sections
+  allocated / 71,599 released / 1,174 retained (14.5 MB, 255 loaded chunks) /
+  2,736 evicted — arithmetic exact. In-JVM zero-retention cleanup proven
+  offline (M4.2D).
+M_background_timing: >
+  native deferred encode 3.0 us mean (3,112,800 ns / 1,025); byte+semantic
+  compare 88.7 us mean (background only); queue wait ~1,024 ms mean (records
+  wait for the 2 s flush cycle — by design). Full-sync time not separately
+  timed this run (cheap-observation rule).
+N_nativechunk_to_packet: >
+  3.0 us mean live deferred encode (31 KB-class payloads) — consistent with the
+  offline 1.17 us microbenchmark on the release build; SHADOW overhead is NOT
+  production packet cost.
+O_economics: >
+  NativeChunk->Protocol-340 ~3 us vs Java Chunk->extraction/staging->payload
+  ~200+ us (M1.4 campaign measurements). The native path eliminates Java
+  palette serialization, staging buffers, and reflection per packet — the M1
+  architecture question this milestone set out to answer.
+P_classification: M1_NATIVE_STATE_REACTIVATED
+  rationale: >
+    Live native packet parity established on the supported scope: 1,025 live
+    comparisons, 0 mismatches, 0 stale comparisons, temporal contract enforced,
+    bounded memory, non-blocking packet thread, Java authoritative throughout.
+    M1's packet encode can now be sourced from synchronized NativeChunk state
+    (default OFF; ON remains operator-gated).
+Q_next_operator_gate: >
+  (1) TileEntity merge-or-fallback decision for native packets; (2) authorizing
+  native packet TRANSMISSION (ON); (3) any authoritative-loaded-mutated-chunk
+  storage decisions. Not requested here.
+
+success_gate:
+  A_nonzero_comparisons: "PASS (1,025)"
+  B_zero_unexplained_mismatches: "PASS (0 mismatches)"
+  C_zero_native_validity_mismatches: "PASS (0 of 83,577)"
+  D_zero_stale_comparisons: "PASS (542 stale records SKIPPED, never compared)"
+  E_packet_thread_non_blocking: "PASS (capture-only; 0 immediate syncs on the wire path)"
+  F_bounded_memory: "PASS (2.41 MB peak vs 32 MB budget; 0 pending at end)"
+  G_java_authoritative: "PASS (Java transmitted every packet)"
+exclusions_unchanged: "partial-filter (18 counted), TE scope, JEID registration, NEID high-bit — Java-only"

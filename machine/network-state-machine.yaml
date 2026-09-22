@@ -1,0 +1,102 @@
+# Minecraft 1.12.2 connection state transitions and packet mapping.
+# Source: EnumConnectionState.java, NetHandlerHandshakeTCP.java, NetHandlerLoginServer.java,
+# NetHandlerPlayServer.java, NetworkDispatcher.java.
+
+spec_version: "1.0.0"
+
+states:
+  HANDSHAKING:
+    id: -1
+    initial: true
+    serverbound:
+      0x00: {packet: C00Handshake, thread: NETTY_IO, transitions: true}
+    clientbound: {}
+    transitions_from_c00handshake:
+      requested_state_1_STATUS:
+        target: STATUS
+        net_handler: NetHandlerStatusServer
+        trigger: "C00Handshake.getRequestedState() == EnumConnectionState.STATUS"
+      requested_state_2_LOGIN:
+        target: LOGIN
+        net_handler: NetHandlerLoginServer
+        trigger: "C00Handshake.getRequestedState() == EnumConnectionState.LOGIN"
+        version_checks:
+          protocol_gt_340: "disconnect: multiplayer.disconnect.outdated_server (SPacketDisconnect)"
+          protocol_lt_340: "disconnect: multiplayer.disconnect.outdated_client (SPacketDisconnect)"
+          protocol_eq_340: "advance to LOGIN"
+        forge_marker_side_effect:
+          marker: "\0FML\0"
+          detection: "C00Handshake.ip contains '\\0FML\\0'"
+          action: "manager.channel().attr(NetworkRegistry.FML_MARKER).set(true); stripped from host"
+
+  STATUS:
+    id: 1
+    terminal: true  # closed by server after pong
+    serverbound:
+      0x00: {packet: CPacketServerQuery, thread: NETTY_IO, reply: SPacketServerInfo}
+      0x01: {packet: CPacketPing, thread: NETTY_IO, reply: SPacketPong, closes_channel: true}
+    clientbound:
+      0x00: {packet: SPacketServerInfo}
+      0x01: {packet: SPacketPong}
+    disconnect_behavior: "closes channel after SPacketPong with EXIT_MESSAGE"
+
+  LOGIN:
+    id: 2
+    serverbound:
+      0x00: {packet: CPacketLoginStart, thread: NETTY_IO, transitions: true}
+      0x01: {packet: CPacketEncryptionResponse, thread: NETTY_IO, validates_nonce: true}
+    clientbound:
+      0x00: {packet: SPacketDisconnect}
+      0x01: {packet: SPacketEncryptionRequest}
+      0x02: {packet: SPacketLoginSuccess}
+      0x03: {packet: SPacketEnableCompression}
+    substates_in_nethandlerloginserver:
+      HELLO: "waiting for CPacketLoginStart"
+      KEY: "sent SPacketEncryptionRequest, waiting for CPacketEncryptionResponse"
+      AUTHENTICATING: "asynchronous Mojang session server check in User Authenticator #N"
+      READY_TO_ACCEPT: "update() tick on SERVER_THREAD calls tryAcceptPlayer()"
+      DELAY_ACCEPT: "player with same UUID already logged in; waiting for player clear"
+      ACCEPTED: "sent SPacketEnableCompression + SPacketLoginSuccess, init connection to player"
+    transition_to_play:
+      initiator: "PlayerList.initializeConnectionToPlayer"
+      side_effect: "manager.setConnectionState(EnumConnectionState.PLAY); attaches NetHandlerPlayServer"
+
+  PLAY:
+    id: 0
+    serverbound:
+      total_registered: 31
+      thread_default: "SERVER_THREAD (via PacketThreadUtil.checkThreadAndEnqueue)"
+      notable:
+        0x00: CPacketConfirmTeleport
+        0x01: CPacketTabComplete
+        0x02: CPacketChatMessage
+        0x03: CPacketClientStatus
+        0x04: CPacketClientSettings
+        0x05: CPacketConfirmTransaction
+        0x09: CPacketCustomPayload   # max 32767 bytes; handled on SERVER_THREAD
+        0x0B: CPacketKeepAlive
+        0x0C: CPacketPlayer
+        0x0D: CPacketPlayer.Position
+        0x0E: CPacketPlayer.PositionRotation
+        0x0F: CPacketPlayer.Rotation
+        0x10: CPacketVehicleMove
+        0x13: CPacketPlayerAbilities
+        0x14: CPacketPlayerDigging
+        0x15: CPacketEntityAction
+        0x1F: CPacketHeldItemChange
+        0x20: CPacketCreativeInventoryAction
+    clientbound:
+      total_registered: 80
+      notable:
+        0x00: SPacketSpawnObject
+        0x0B: SPacketBlockChange
+        0x18: SPacketCustomPayload   # max 1048576 bytes
+        0x1F: SPacketKeepAlive
+        0x20: SPacketChunkData       # serialized on SERVER_THREAD or packet thread
+        0x23: SPacketJoinGame
+        0x26: SPacketPlayerPosLook
+        0x46: SPacketTimeUpdate
+
+forge_fml_substate_machine:
+  parent_state: "PLAY (FML handshake runs inside PLAY state before SPacketJoinGame)"
+  states: [START, HELLO, WAITINGCACK, MODLISTACK, WAITINGACK, COMPLETE, DONE, ERROR]

@@ -1,0 +1,99 @@
+# M1G focused pass results (operator authorization 2026-09-19):
+# small-packet selection cost + reproducible tail investigation.
+# class: DERIVED_FROM_MEASURED unless noted. Raw artifacts committed under
+# machine/raw/M1G-*; provenance ids M1G-PREGATE / M1G-DET-DIAGNOSIS /
+# M1G-TARGET-A-REVALIDATION / M1G-PARITY-SPOT.
+schema_version: 1
+milestone: M1G
+date: "2026-09-19"
+
+frozen_comparison:
+  rule_unchanged: "M1_NATIVE_MIN_WIRE_BYTES = 8192 (untouched; no thresholds changed)"
+  gates: "GATE-PERF-SERVER / GATE-PERF-ALLOC / GATE-PERF-REGRESS remain OPEN"
+  prior_results_untouched: >
+    machine/raw/M1F-tail-j{1..4}.csv and M14R2 artifacts are byte-identical to
+    their committed versions (an incidental overwrite by the driver was reverted
+    from git; the driver is now prefix-parameterized, OUT_PREFIX env).
+  tail_finding_restated: >
+    The pooled p99 worsening did NOT replicate (4 fresh JVMs, balanced order:
+    native pooled eligible p99 better in all four). det5 worsened in 4/4 JVMs
+    and remains unresolved; det1 worsened in 3/4 JVMs in M1F and 1/4 in M1G
+    (intermittent). No fixture-name exclusions were introduced anywhere.
+
+pre_staging_gate:
+  change: >
+    NativeChunkPacket.executeNativePopulation now computes a provably-safe
+    UPPER bound on wire size from O(1)-per-section Java metadata (palette bits
+    via cached field read; storage word count via BitArray.func_188143_a()
+    length; light-array presence; TE-map emptiness). If the bound is below
+    8192 the packet is guaranteed ineligible, so staging and predictOutputLen
+    are skipped entirely and the constructor body runs the Java path.
+    Any surprise (TileEntities present, nulls, unknown layout) returns
+    Long.MAX_VALUE and falls through to the UNCHANGED staging+predict path.
+    Routing-only change: byte semantics identical by construction (a skipped
+    packet is one the exact gate would skip); the exact predictOutputLen gate
+    still governs everything that passes the bound.
+  production_argument: >
+    Every vanilla-written section carries a 2048-byte block-light array plus
+    >=2048 bytes of 4-bit storage, so >=2 written sections always exceed 8192;
+    the only production-relevant ineligible classes are 0- and 1-written-section
+    packets, exactly the classes the bound catches. Multi-section-but-small
+    packets (offline fixtures with absent light arrays) still take the full
+    staging+predict path - reported, not hidden.
+  cost: "pre-gate itself ~0.1-0.2 us p50 offline; live 486 packets averaged 1.7 us incl. JIT warmup (m1_pregate_ns)"
+
+selection_cost_before_after: # SCOPE-SELECT p50 minus pure-JAVA p50, per fixture, mean of 4 JVMs
+  det0_319B:        {before_us: 0.67, after_us: 0.58, note: "0 written sections; staging was already trivial; residual = ctor shell + pre-gate"}
+  det2_4133B:       {before_us: 0.68, after_us: 0.17}
+  bnd_k1a_4645B:    {before_us: 0.62, after_us: 0.12}
+  bnd_k1b_5157B:    {before_us: 0.73, after_us: -0.08, note: "within noise of pure Java"}
+  det3_4640B:       {before_us: 0.57, after_us: 0.95, note: "2 written lit sections exceed any safe sub-8192 bound; unchanged full path (offline-only class)"}
+  verdict: "1-written-section selection penalty eliminated (~0.6-0.7 -> ~0.1 us); complete Java-selected path measured incl. all eligibility checks"
+
+det5_det1_diagnosis:
+  method: >
+    DetFixtureDiagnosis (diagnostic instrumentation, separate from acceptance
+    timing): 20k trials per fixture per handoff mode; per-trial phase deltas
+    from the bridge's stage/predict/alloc/jni/acquire counters; wall-clock ms
+    per trial correlated with -verbose:gc + PrintGCApplicationStoppedTime.
+  structure:
+    det5: "mask 0xf0, 4 written sections, all empty-flag (refCount 0) uniform bits=4 words=256, lights present, 0 TEs, 16419 B"
+    det1: "mask 0xffff full, 8 written sections alternating with sentinels, bits 4/5/6 mixed, lights present, 0 TEs, 38312 B"
+  findings:
+    supported: >
+      The tail is concentrated in the heap byte[] allocation phase of
+      HANDOFF-A: worst-20 trials dominated by alloc (det5 11/20, det1 16/20);
+      alloc p99 4.3/9.3 us vs p50 0.8/1.2 us. JNI/critical-section p99 is
+      FLAT (<=1.1 us) - GetPrimitiveArrayCritical hold is exonerated. Stage
+      p99 mildly elevated (2.1/3.6 us).
+    supported_not_gc: >
+      NOT stop-the-world GC: only 3-5 GCs per 20k trials, each sub-millisecond;
+      with corrected time-base correlation, det5 worst-alloc trials followed a
+      logged GC/stop event 1/25 (det1 12/25, weak). Calling this 'GC noise'
+      is NOT supported; the allocation-phase slow path (e.g. TLAB boundary)
+      is the supported localization, not a proven microarchitectural cause.
+    unresolved: >
+      The precise cause of the alloc-phase p99 elevation and of rare ~2 ms
+      alloc outliers (not matching any logged GC/safepoint) remains UNKNOWN.
+      Retained as an OPEN regression risk. No correction made: any fix (e.g.
+      payload pooling) would alter the HANDOFF-A design and is out of scope.
+      Handoff-0 comparison shows a different worst-phase profile (worst trials
+      unattributed to any counterized phase), consistent with a distinct
+      copy-path mechanism.
+  m1g_reproduction: "det5 still worse at p99 in 4/4 study JVMs; det1 in 1/4 (intermittent)"
+
+revalidation:
+  parity_spot: "9277 fixtures, 0 divergences (414 gate-routed Java fallbacks - byte-identical; historical 0-fallback runs predate the gate)"
+  nonvanilla_fallback_test: "12/12 PASS on the pre-gate build"
+  target_a_shadow_live: "972/972 shadow comparisons, 0 mismatches, 0 fallbacks (12 bot sessions, new coremod jar)"
+  target_a_onexp_live: "486 native packets, 0 fallbacks, 0 java-path, 0 client decode errors; m1_native_pregate_skipped=0 in this traffic (static-world bot sessions generate no sub-8192 packets - live skip coverage zero; skip behavior validated offline)"
+  tail_study: "4 fresh JVMs, balanced order, 34 fixtures: eligible p50 reduction +28.8/+31.0/+33.9/+29.8 %, p99 better in 4/4; routing decisions unchanged vs frozen run"
+  binaries: "DLL 02c722de UNCHANGED (bit-identical rebuild verified earlier); new coremod jar 9343412e (validation build; campaign jars c9120858 untouched in B/C/D)"
+claim_scope_qualifications:
+  - "Offline packet-path microbenchmarks only; no whole-server MSPT/TPS/GC inference."
+  - "No production activation; default remains OFF."
+  - "Pre-gate safety is argued from an upper bound plus 9277-fixture parity + live SHADOW parity; it cannot route a >=8192-byte packet to Java unless the bound is wrong, which parity evidence contradicts."
+gate_status:
+  GATE-PERF-SERVER: "OPEN"
+  GATE-PERF-ALLOC: "OPEN (the det5/det1 allocation-tail finding is directly relevant to it)"
+  GATE-PERF-REGRESS: "OPEN"

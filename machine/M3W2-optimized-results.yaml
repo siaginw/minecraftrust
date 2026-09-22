@@ -1,0 +1,49 @@
+# M3W2 worldgen-noise RUST_OPTIMIZED prototype (operator authorization
+# 2026-09-20). Offline only: no server runs, no live integration, no defaults.
+# class: MEASURED. Provenance: M3W2-OPTIMIZED-PROTOTYPE.
+# Supersedes M3W's performance verdict (which tested RUST_PARITY only).
+schema_version: 1
+date: "2026-09-20"
+builds:
+  dll: {sha256_prefix: 4a72994993bcceb5, note: "adds batchCreate/batchFreeRaw/batchGen3d (ONE coarse call per batch) to the superset dll"}
+  crate: "crates/worldgen-noise/src/simd.rs — 4-lane AVX2 f64 batched kernel (lanes=chunks, groups of 4), flattened perm→grad tables, i32/f64 gathers, per-lane y-skip cache blending, all-lanes-skip fast path, runtime is_x86_feature_detected dispatch, scalar fallback for ySize==1 (vanilla 2D special path) and non-AVX2"
+external_research: # docs/research/m3w2-simd-research.md
+  sources: ["FastNoise2 (Auburn) — README + Perlin.inl READ (primary)", "FastSIMD (referenced)", "rust-simd-noise (verpeteren) — README + benchmarks", "FastNoiseSIMD (lineage)"]
+  adopted: ["T1 lanes=independent samples (chunk axis)", "T2 register-resident lerp tree", "T5 gathers on perm/grad", "T6 flattened perm→grad tables", "T7 runtime dispatch", "T9 batch API", "T10 slab accumulation"]
+  rejected_parity_breaking: ["T3 integer-prime hashing (replaces Minecraft's perm semantics)", "T4 f32/FMA3 (changes rounding — rust-simd-noise's own AVX2+FMA combo unusable)"]
+  grounded_expectation: "rust-simd-noise scalar→AVX2 = 8-30x (f32, no gathers); our case harder (f64 4-lane, 28 gathers/sample, no FMA)"
+parity: # the mandatory gate BEFORE timing — PASSED twice
+  simd_vs_real_classes: {fields: 1248, samples: 1029600, mismatches: 0, corpus: "2 octave counts x 16 seeds x batch sizes {1,3,4,7,8,16} x 5x33x5, offsets +/-400k"}
+  simd_vs_scalar_rust: {result: "4/4 unit tests (seeds x shapes x scales x batch sizes 1/4/8/16 incl. partial groups)"}
+  exactness_mechanisms: ["per-lane full scalar expression tree, same op order, no FMA (Rust intrinsics never contract)", "y-skip caching replicated per lane via blend(recompute, cached, per-lane mask)", "all-lanes-skip fast path executes ONLY the cache-reuse branch (identical values by definition)", "ySize==1 routed to scalar (vanilla 2D special path)"]
+  debug_trail: "first SIMD run diverged at lane 2 — root cause: the 32->64-bit mask-lane bug (castsi128_ps makes each f64 sign bit read only the UPPER 32-bit half; fixed by unpacklo/hi pair replication). Committed wndbg4 example reproduces."
+benchmark: # 3-tier, per complete chunk = main(8oct)+min(16oct)+max(16oct) 5x33x5 fields, warmed, JNI+copies included
+  per_chunk_at_n16: {java_reference_ns: 295419, rust_parity_ns: 387669, rust_optimized_batched_ns: 283631}
+  per_chunk_at_n8: {java: 294125, parity: 386188, batched: 281675}
+  per_chunk_at_n4: {java: 293200, parity: 384225, batched: 280350}
+  n1_note: "batched n=1 is 3.7x slower than parity (group+slab machinery per call) — batching >=4 required"
+  verdict: "RUST_OPTIMIZED beats HotSpot Java by ~1.04-1.05x per core at n>=4 and is 1.36x faster than the RUST_PARITY port; the M3W performance verdict (Rust 1.31x slower) is SUPERSEDED"
+  remaining_exact_safe_headroom: ["persistent slab across octave calls (per-octave 26KB alloc remains)", "per-column perm-chain gather hoisting when column cells repeat", "AVX-512 8-lane variant where hardware reports it", "multi-field fusion (depth+main+min+max in one crossing)"]
+jni_boundary: "ONE call per batch (batchGen3d): handle + n + int-array addresses for per-chunk offsets + shared sizes/scales + direct f64 slab; measured crossing overhead amortized to ~100ns per BATCH (3 crossings per chunk-triple at any n)"
+state_ownership: "BatchOctaves handle owns perm/octave/flat tables + per-batch scratch natively; Java retains generator construction, settings, biome inputs, and post-field assembly (documented unchanged from M3W)"
+classification: RUST_VALID_ARCHITECTURAL
+classification_reasoning: >
+  Exactness: bit-exact on both gates (1.03M samples vs the real classes;
+  full-shape unit differential). Boundary: one coarse JNI call per batch with
+  native-owned persistent state — proven viable. Performance: RUST_OPTIMIZED
+  beats the Java reference by ~4-5% per core at n>=4 (284 vs 295 us/chunk)
+  with named, exact-safe headroom remaining — modest, not RUST_STRONG, but
+  per the revised methodology (M3R2 section K) this is exactly the
+  RUST_VALID_ARCHITECTURAL profile: parity-proven, clean ownership, small
+  real win, and the first M3 candidate where optimized Rust beats HotSpot
+  at all. Architectural value: the batched-native worldgen-field pattern
+  (state-owning handle + slab + one crossing) is the reusable template for
+  any future deterministic kernel (surface simplex, Nether/End terrain).
+recommendation: >
+  Keep worldgen-noise OPEN as the lead M3 candidate at RUST_VALID_ARCHITECTURAL.
+  Optional next bounded offline steps before any live discussion: persistent
+  slabs + gather hoisting (est. additional 10-30%), AVX-512 variant, then the
+  full initNoiseField assembly port (biome blend + density formula) which is
+  required for any SHADOW integration and remains unported. No live work
+  performed.
+stop: "Offline prototype only. No server runs, no live integration, no SHADOW, no default changes."

@@ -1,0 +1,69 @@
+# M3 Worldgen live shadow on SevTech: Ages 3.2.3 (Target D).
+# Operator authorization 2026-09-20.
+# class: MEASURED. Provenance: M3WG-SEV-LIVE-SHADOW.
+# NO authoritative Rust worldgen output, no live default changes.
+# M1 parked/OFF, M2-C READY_OPTIONAL/OFF.
+schema_version: 1
+date: "2026-09-20"
+target: "SevTech: Ages 3.2.3 (Target D, Forge 14.23.5.2860-universal, 262 mods)"
+builds:
+  dll: {sha256_prefix: 6db38f407a197cf2, note: "wnoise JNI exports with bridge name shims (Java_com_rustcraft_bridge_WorldgenShadow_*)"}
+  coremod: {sha256_prefix: b79a89edc82edd0d, note: "WorldgenShadow adapter with explicit classifications + WorldgenShadowTransformer"}
+workload:
+  world: "disposable copied server (machine/targetD/shadow-run) with deleted world/ for 100% fresh generation"
+  mode: "SHADOW (-Dminecraftrust.worldgen_shadow=SHADOW)"
+  bot: "perfbotb TP walk (108 hops across coords -21,419.5 to +21,180.5 X and -12,583.5 to +12,976.5 Z, crossing zero)"
+  duration_s: 450
+shadow_results:
+  calls: 52908
+  eligible: 52908
+  ineligible_disabled: 0
+  ineligible_class: 0
+  ineligible_fields: 0
+  ineligible_noctx: 0
+  native_errors: 0
+  fields_compared: 52908
+  doubles_compared: 43649100
+  matches: 52908
+  mismatches: 0
+  first_mismatch: "none"
+  last_error: "none"
+  ctx_created: 2
+  ctx_freed: 2
+  clean_shutdown_balanced: true
+classifications:
+  classified_vanilla_overworld: 52908
+  classified_custom_generator: 0
+  classified_transform_conflict: 0
+  classified_unsupported_state: 0
+  observed_generators:
+    net.minecraft.world.gen.ChunkGeneratorOverworld: 52908
+  observed_dimensions:
+    "0": 52908
+performance_observation:
+  rust_ns_total: 16116983800
+  avg_ns_per_field: 304622
+  note: "live SHADOW includes Rust compute + JNI round-trip + 825 bitwise double comparisons; informational only"
+stop_conditions_check:
+  mismatch_threshold: "0 mismatches (observed: 0) — CLEAR"
+  native_crashes: "0 crashes (observed: 0) — CLEAR"
+  leak_threshold: "ctx_created == ctx_freed (2 == 2) — CLEAR"
+  server_generation_errors: "0 chunk generation errors — CLEAR"
+  generator_ineligibility: "52908/52908 eligible vanilla Overworld — CLEAR"
+  clean_shutdown: "server stopped cleanly, world saved, hook flushed — CLEAR"
+mod_observations:
+  streams: "Streams mod generates custom river curves and surface water flow during chunk decoration; initNoiseField terrain density baseline remains 100% bit-exact"
+  reccomplex: "Recurrent Complex generates structure templates on populated chunks; does not modify base density field"
+  geolosys: "Geolosys replaces vanilla ore generation during chunk population; density field unaffected"
+  sponge_astralsorcery_foamfix: "Extensive mixins and ASM transforms across 262 mods preserved vanilla ChunkGeneratorOverworld.func_185978_a contract without conflict"
+classification: RUST_VALID_ARCHITECTURAL
+recommendation: COMPLETE_M3_SHADOW_LADDER
+reasoning: >
+  Live SHADOW integration on SevTech: Ages 3.2.3 (262 mods, Forge 14.23.5.2860) demonstrated
+  100% bit-exact parity across 52,908 freshly generated chunk density fields (43,649,100 doubles
+  compared, 0 mismatches, 0 native errors, 0 leaks). Two ChunkGeneratorOverworld instances
+  were initialized and balanced (ctx_created=2, ctx_freed=2) on shutdown. Exploration covered
+  coordinates from -21,419 to +21,180 X and -12,583 to +12,976 Z crossing zero.
+  All M3 worldgen SHADOW rungs (Target A clean Forge, Target C Revelation, Target D SevTech)
+  are now 100% complete and verified with ZERO mismatches.
+  Authoritative Rust worldgen output remains strictly DISABLED.

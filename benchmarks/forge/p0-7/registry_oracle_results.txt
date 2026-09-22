@@ -1,0 +1,8 @@
+TEST 1 [Basic Registration & Numeric ID]: PASS | ID1: 0, ID2: 1
+TEST 2 [Duplicate Name Rejection]: PASS | Threw Exception: true
+TEST 3 [Registry Freeze Immutability]: PASS | Post-freeze registration rejected: true
+TEST 4 [Alias Remapping]: PASS | Alias resolved to correct target: true
+TEST 5 [Removed Entry Missing Mapping]: PASS | Name query null: true, ID query null: true
+TEST 6 [Dummy Entry Reservation]: PASS | Dummy registered without active value
+TEST 7 [Snapshot Generation & Numeric ID Persistence]: PASS | Snapshot ID A: 0, ID B: 1
+TEST 8 [Substitution / Override Capability]: PASS | Registry configured with allowModification: true, Original ID: 0

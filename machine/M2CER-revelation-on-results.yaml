@@ -1,0 +1,83 @@
+# M2CER Revelation ON_EXPERIMENTAL bounded campaign (operator authorization
+# 2026-09-20). FTB Revelation 3.4.0 / Target C ONLY — Rust-compressed
+# outbound bytes AUTHORITATIVE on a real modpack for the first time.
+# M1 parked/OFF throughout (native_chunk_packet=OFF); M2-PERSIST parked;
+# SevTech NOT touched (operator stop boundary honored).
+# class: MEASURED. Provenance: M2CER-REVELATION-ON.
+# Primarily a correctness/compatibility run: NO TPS/MSPT/whole-server claim
+# (directive 8); network-worker observations only.
+schema_version: 1
+date: "2026-09-20"
+target:
+  pack: "FTB Revelation 3.4.0 (existing known-good install/world/config; mod contents NOT altered)"
+  forge: "14.23.5.2846 (pack-official)"
+  java: "Temurin jdk-8.0.504.1-hotspot"
+  mods: 193 (FoamFix + Phosphor)
+  port: 25567
+builds:
+  dll: {sha256_prefix: 0acb7469a74d9531, note: "unchanged since M2.0 (superset; no native change)"}
+  coremod: {sha256_prefix: c975fc1c81aed912, note: "same jar as M2CE Target A (native-first ON + 6 counters); supersedes 3297b2f9 on C; OFF/SHADOW semantics byte-identical to the M2CC-campaign build"}
+rig_evolution: # setup failure preserved (M2J precedent)
+  attempt_1: "PRESERVED as *-failed1 artifacts: clients connected Done+2s and were rejected ('Server is still starting!') while FML post-Done init (railcraft loot, Actually Additions WorldData, dims) completed; a fast-failed client exits 0, which the first driver wrongly treated as success. NO server correctness fault; zero M2C counters moved (no eligible traffic)."
+  fix: "attempt-2 driver adds 30s settle + real-login probe retry + per-phase transcript validation (session count, 0 errors, chunk volume). First probe accepted at Done+43s on both runs."
+run_1_normal: # machine/targetC/server/run-mcer-c-on1.log; launch 14:50:45, stop 15:06:45 (window 960s)
+  workload: "M2CC-mirrored: 1 login-readiness probe + perfbotb corridor walk (97 hops x 40 blocks, 400s, ping-pong span 600 on the pre-generated corridor) + 25 sequential login/logout sessions (8s hold)"
+  m2c_native_packets: 91955
+  m2c_native_bytes_tx_plaintext: 1535230301
+  m2c_bytes_rust_compressed: 210441980
+  m2c_bytes_java: 0
+  compressed_size_ratio: "13.7% of plaintext (7.3:1)"
+  fallbacks: {total: 0, noctx: 0, native: 0}
+  contexts: {created: 27, freed: 27}
+  on_verify: {checks: 341, matches: 341, mismatches: 0}
+  threshold: {runtime: 256, changes: 0}
+  transform: "nmCompression.transformCount=1 TRANSFORMED_SUCCESS"
+  client: {walk: "33,669 chunks / 417,155 frames / 97 hops / 0 errors", sessions: "25/25 logins, 11,025 chunks, 103,803 frames, 0 errors"}
+  leak_events: 0
+run_2_paranoid: # machine/targetC/server/run-mcer-c-on2.log; launch ~15:07:40, stop 15:14:26 (window 400s), -Dio.netty.leakDetection.level=paranoid
+  workload: "1 login-readiness probe + 10 sequential login/logout sessions (8s hold)"
+  m2c_native_packets: 10329
+  m2c_native_bytes_tx_plaintext: 178447785
+  m2c_bytes_rust_compressed: 26575745
+  compressed_size_ratio: "14.9% of plaintext (6.7:1)"
+  fallbacks: {total: 0, noctx: 0, native: 0}
+  contexts: {created: 11, freed: 11}
+  on_verify: {checks: 33, matches: 33, mismatches: 0}
+  threshold: {runtime: 256, changes: 0}
+  transform: TRANSFORMED_SUCCESS
+  client: {sessions: "10/10 logins, 4,410 chunks, 39,880 frames, 0 errors"}
+  leak_events: {count: 1, attribution: "ElecCore WindowManager pack baseline — stack fully elec332.core.* (WindowManager.onPlayerConnected -> DefaultSimpleNetworkHandler -> ElecByteBufImpl writeNBT), ZERO m2c/rustcraft/native-compression frames; fourth independent confirmation (M1J, M1H x2, M2CC). Full stack preserved in run log."}
+campaign_totals:
+  native_packets_actually_transmitted: 102284
+  native_plaintext_bytes: 1713678086
+  native_compressed_bytes: 237017725
+  compressed_size_ratio_total: "13.8% of plaintext"
+  client_decode_errors: 0
+  malformed_compressed_frames: 0
+  native_crashes: 0
+  lifecycle_faults: 0
+  threshold_failures: 0
+  compression_pipeline_conflicts: 0
+  fallbacks: 0
+  contexts: "38/38 balanced (27/27 + 11/11)"
+  sampled_verification: "374 checks / 374 matches / 0 mismatches (per-channel 1-in-256; concentrated in the walk channel)"
+  stop_conditions: NONE_TRIGGERED
+compatibility_notes:
+  - "No mod occupies the vanilla compress seam (transform installs the encoder; no mod handler conflict on 193 mods incl. ElecCore's OWN channel, which is independent of the vanilla 'compress' slot)"
+  - "NEID class-patching (SPacketBlockAction seen in log) coexists with the encoder — NEID transformers touch packet classes, not the Netty pipeline"
+  - "clean shutdown both runs: stop sequence, shutdown dumps written, contexts balanced, no zombie JVM (driver kills only the Target-C server JVM by command-line marker)"
+network_worker_observation_only: # NOT a perf claim
+  rust_complete_path: {run_1: "11.044 s total for 1.535 GB plaintext (~139 MB/s)", run_2: "1.521 s for 178 MB (~117 MB/s)"}
+  note: "complete path incl. direct-buffer copies + JNI + zlib-rs level 6; no Java arm exists in ON mode by design — a matched throughput comparison is future work, not this run"
+recommendation: APPROVE_SEVTECH_ON_EXPERIMENTAL
+recommendation_reasoning: >
+  Revelation ON_EXPERIMENTAL passed every directive gate: 102,284
+  Rust-compressed packets authoritative on a 193-mod pack (1.71 GB
+  plaintext, 13.8% compressed ratio), 0 fallbacks, 0 client decode
+  errors over 560,838 frames, contexts balanced 38/38, 0 threshold
+  failures, 0 pipeline conflicts, sampled verification 374/374, and the
+  only paranoid leak is the independently-established ElecCore baseline
+  with zero M2C frames in its stack. M2CC already validated SevTech
+  SHADOW (45,454/45,454) on the same DLL; SevTech ON_EXPERIMENTAL is the
+  natural final rung of the ladder before any ON-by-default discussion.
+next_bounded_milestone: "Operator decision: SevTech (Target D) ON_EXPERIMENTAL bounded run, same shape (readiness-gated driver, normal + paranoid). STOP honored: no SevTech ON run performed in this campaign."

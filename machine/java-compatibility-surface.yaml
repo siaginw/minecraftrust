@@ -1,0 +1,44 @@
+version: 1
+subsystem: java_compatibility_surface
+
+reference_identity:
+  pointer_comparison: "acmp_eq (==)"
+  rule: "Canonical singletons must be preserved for all Block, Item, Biome, Enchantment objects"
+  proxy_wrappers_allowed: false
+  reason: "Mods rely on pointer equality (stack.getItem() == Items.IRON_INGOT) and IdentityHashMap"
+
+reflection_mechanisms:
+  helper_class: "net.minecraftforge.fml.common.ObfuscationReflectionHelper"
+  name_formats:
+    - MCP (deobfuscated)
+    - SRG (Searge numeric IDs, e.g. func_76597_o, field_76652_q)
+    - Notch (obfuscated single/double-letter names in production server jar)
+  caching_behavior: "Mods cache java.lang.reflect.Field and Method during static initialization"
+  breaking_hazard: "Removing or changing field types throws NoSuchFieldError or ClassCastException"
+
+access_transformers:
+  directive_file: "META-INF/*_at.cfg"
+  manifest_attribute: "FMLAT"
+  operations:
+    - public
+    - protected
+    - default
+    - private
+    - strip_final (-f)
+    - add_final (+f)
+  high_risk_targets:
+    - "net.minecraft.world.chunk.Chunk field_76652_q (storageArrays)"
+    - "net.minecraft.world.chunk.storage.ExtendedBlockStorage field_177488_d (data)"
+    - "net.minecraft.world.World field_72996_f (loadedEntityList)"
+    - "net.minecraft.world.World field_147482_g (loadedTileEntityList)"
+
+object_holder_injection:
+  annotation: "net.minecraftforge.fml.common.registry.GameRegistry.ObjectHolder"
+  field_modifiers: "public static final"
+  mutation_mechanism: "Clears Modifier.FINAL bitmask via reflection; injects live registry delegates"
+  invalidation_trigger: "Registry substitution or world ID remap"
+
+coremod_injection_points:
+  mechanism: "net.minecraft.launchwrapper.IClassTransformer"
+  pipeline_stage: "Memory bytecode modification prior to defineClass"
+  native_rule: "Underlying Java method signatures must remain intact to serve as injection targets"

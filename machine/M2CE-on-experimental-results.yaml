@@ -1,0 +1,84 @@
+# M2CE bounded ON_EXPERIMENTAL live transmission (operator authorization
+# 2026-09-20). Clean Forge Target A ONLY. Rust-compressed outbound bytes were
+# AUTHORITATIVE on the wire for the first time. M1 parked/OFF throughout
+# (native_chunk_packet=OFF in both runs); M2-PERSIST parked. No Revelation or
+# SevTech ON run was performed (explicit operator stop boundary).
+# class: MEASURED. Provenance: M2CE-ON-EXPERIMENTAL.
+# THIS RUN ESTABLISHES LIVE TRANSMISSION CORRECTNESS ONLY - no TPS/MSPT/
+# whole-server performance claim (network-worker compression throughput is a
+# separate future measurement; directive 8).
+schema_version: 1
+date: "2026-09-20"
+builds:
+  dll: {sha256_prefix: 0acb7469a74d9531, note: "unchanged from M2C/M2CC (superset; no native code change this milestone)"}
+  coremod: {sha256_prefix: c975fc1c81aed912, note: "ON_EXPERIMENTAL native-first encode (no per-packet dual compression) + 6 new counters in BOTH periodic and shutdown dumps"}
+  delta_from_3297b2f9: "Java-only: ON branch reordered to native-first, added m2c_native_bytes_tx / m2c_fallback_noctx / m2c_fallback_native / m2c_on_verify_{checks,matches,mismatches}; OFF/SHADOW branches byte-identical semantics; transformer untouched"}
+offline_regression: # machine/raw/M2CE-offline-on.txt, regenerated against final jar c975fc1c
+  verdict: PASS_32_OF_32
+  counters_observed: {native_packets: 2143, native_bytes_tx: 32373956, fallback_noctx: 0, fallback_native: 0, on_verify: "1/1/0 (per-channel 1-in-256 sampling)"}
+target_fixture_changes: # committed drift, all precedent-backed
+  allow_flight: "false -> true (M1I TP-mode precedent: avoids vanilla floating kick for the opped TP bot)"
+  ops_json: "added m2cebot level 4 (offline UUID b1937677-02ce-3ad7-b497-9e1d5d69f9c4) so /tp chat commands work without RCON"
+  world_playerdata: "natural drift: 25 label-hash bot players + m2cebot; region files extended by 73-hops teleport walk (fresh-terrain worldgen)"
+run_1_normal: # machine/targetA/run-m2ce-on1.log, ON_EXPERIMENTAL, window 1200s
+  workload: "1 TP-streaming session (m2cebot, 73 hops x 64 blocks over 240s, fresh terrain) + 25 sequential login/logout sessions (25s hold)"
+  m2c_native_packets: 4426
+  m2c_native_bytes_tx_plaintext: 134439285
+  m2c_bytes_rust_compressed: 12184336
+  m2c_bytes_java: 0
+  fallbacks: {total: 0, noctx: 0, native: 0}
+  contexts: {created: 26, freed: 26}
+  on_verify: {checks: 8, matches: 8, mismatches: 0}
+  transform: "nmCompression.transformCount=1 TRANSFORMED_SUCCESS"
+  client: {sessions: 26, errors: 0, frames_decoded: 35756, chunk_packets: 4190, walk_hops: 73, kicks: 0 (clean 'Disconnected' at deadline)}
+run_2_paranoid: # machine/targetA/run-m2ce-on2.log, ON_EXPERIMENTAL + io.netty.leakDetection.level=paranoid
+  workload: "10 sequential login/logout sessions (25s hold)"
+  m2c_native_packets: 900
+  m2c_native_bytes_tx_plaintext: 25933896
+  m2c_bytes_rust_compressed: 2382696
+  fallbacks: {total: 0, noctx: 0, native: 0}
+  contexts: {created: 10, freed: 10}
+  on_verify: {checks: 0, matches: 0, mismatches: 0, note: "per-channel 1-in-256 sampling never fires at ~90 eligible packets/session; all samples concentrated in run 1's walk channel by design"}
+  leak_events: 0
+  transform: TRANSFORMED_SUCCESS
+  client: {sessions: 10, errors: 0, frames_decoded: 1720, chunk_packets: 810}
+campaign_totals:
+  native_packets_transmitted: 5326
+  native_plaintext_bytes: 160373181
+  native_compressed_bytes: 14567032
+  client_decode_errors: 0
+  malformed_frames: 0
+  native_crashes: 0
+  lifecycle_faults: 0
+  m2c_attributable_leaks: 0
+  fallbacks: 0
+  contexts: "36/36 balanced (26/26 + 10/10)"
+  sampled_verification: "8 checks / 8 matches / 0 mismatches"
+  threshold: "256 (network-compression-threshold=256; m2c_threshold_changes=0 in both runs; sub-threshold framing via vanilla super() exercised by keepalive/chat-sized frames each session)"
+stop_conditions: NONE_TRIGGERED
+attribution_notes:
+  - "server-side 'connection forcibly closed / aborted' IOExceptions (4 in run1, 1 in run2) are the bot harness closing sockets at session deadline - identical pattern present in the M2C SHADOW baseline logs (2 per run) where the wire was 100% Java; all client transcripts show errors=0 with full frame decode, so these are not decode errors and not M2-C-attributable"
+  - "m1_java_packets_transmitted=4190 in run 1 matches the client-side chunk count exactly: M1 stayed OFF, vanilla constructed every SPacketChunkData; M2C owned only the compression transform of the eligible frames"
+timing_observability_only: # NOT a performance claim; no Java arm exists in ON mode by design (directive 5)
+  rust_complete_path_ns: {run_1: 834734100, run_2: 153430700}
+  note: "~6.2 MB/s plaintext through the full path (direct-buffer copies + JNI + zlib-rs); a Java-vs-Rust throughput comparison requires the separate matched microbench, not this correctness run"
+client_correctness_coverage: # directive 3
+  successful_login: "36/36 (full FML|HS handshake, fml_ack3=2 per session)"
+  compression_negotiation: "per-session LOGIN set-threshold accepted; every subsequent frame inflated client-side (zlib) - a corrupt Rust stream would raise immediately"
+  chunk_streaming: "5000 chunk packets decoded; walk session streamed 2165 chunks across 73 fresh-terrain teleports"
+  repeated_sessions: 36
+  disconnect_reconnect: "35 sequential reconnects after the walk session"
+  clean_shutdown: "both servers stopped via 'stop': save sequence, shutdown dump, ctx freed, exit 0; no zombie JVM remained (operator's unrelated gradle/gametest JVMs untouched - targeted kill by command-line marker only)"
+recommendation: APPROVE_REVELATION_ON_EXPERIMENTAL
+recommendation_reasoning: >
+  Every directive gate passed on clean Forge Target A: 5,326 Rust-compressed
+  packets were the authoritative wire bytes (160.4 MB plaintext), 0 fallbacks
+  with the full fallback ladder armed, 0 client decode errors over 37,476
+  frames, 0 native errors/crashes, contexts balanced 36/36, 0 leaks under
+  paranoid Netty detection, sampled transmit-side inflate verification 8/8.
+  M2CC already established modpack SHADOW parity (146,259/146,259) on the
+  same dll and the Java-only jar delta. The remaining risk before pack ON is
+  mod-interaction at the compress seam on Revelation, which SHADOW already
+  showed unoccupied. Bounded Revelation ON_EXPERIMENTAL is the natural next
+  operator gate; SevTech after it.
+next_bounded_milestone: "Operator decision: Revelation ON_EXPERIMENTAL (bounded, same counter set + paranoid arm), then SevTech. STOP honored: no modpack ON run performed in this campaign."

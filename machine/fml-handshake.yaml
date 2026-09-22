@@ -1,0 +1,76 @@
+# Forge 14.23.5.2860 FML handshake state machine specification.
+# Source: FMLHandshakeServerState.java, FMLHandshakeClientState.java,
+# NetworkDispatcher.java, FMLHandshakeCodec.java, FMLHandshakeMessage.java.
+
+spec_version: "1.0.0"
+
+handshake_channel: "FML|HS"
+transport_layer: "CustomPayload packet over PLAY state (channel attr protocol=PLAY)"
+clientbound_wrapper: "SPacketCustomPayload('FML|HS', payload)"
+serverbound_wrapper: "CPacketCustomPayload('FML|HS', payload)"
+
+discriminators:
+  0: {class: FMLHandshakeMessage.ServerHello, direction: CLIENTBOUND}
+  1: {class: FMLHandshakeMessage.ClientHello, direction: SERVERBOUND}
+  2: {class: FMLHandshakeMessage.ModList, direction: BIDIRECTIONAL}
+  3: {class: FMLHandshakeMessage.RegistryData, direction: CLIENTBOUND}
+  255: {class: FMLHandshakeMessage.HandshakeAck, direction: BIDIRECTIONAL, wire_byte: -1}
+  254: {class: FMLHandshakeMessage.HandshakeReset, direction: BIDIRECTIONAL, wire_byte: -2}
+
+server_sequence:
+  1_start:
+    server_state: START
+    action: "serverInitiateHandshake() -> creates NetHandlerPlayServer, sets state to HELLO"
+    sends:
+      - packet: "FMLProxyPacket('REGISTER', channels=['FML|HS', 'FML', 'FML|MP', ...])"
+      - packet: "ServerHello(protocol=2, overrideDimension=player_dim)"
+    next_state: HELLO
+
+  2_hello:
+    server_state: HELLO
+    awaits:
+      - "ClientHello(protocol=2)"
+      - "ModList(clientMods=[modid@version, ...])"
+    action:
+      - "FMLNetworkHandler.checkModList(clientMods, Side.CLIENT)"
+      - "If rejected: transition to ERROR, rejectHandshake(rejection_reason)"
+      - "If accepted: transition to WAITINGCACK, send ModList(activeModList)"
+    next_state: WAITINGCACK
+
+  3_waiting_client_ack:
+    server_state: WAITINGCACK
+    awaits: "HandshakeAck(phase=2) from client (Client confirms ModList)"
+    action:
+      - "If !isLocal: takeSnapshot(false) of RegistryManager.ACTIVE"
+      - "Stream RegistryData packets: one per registry (blocks, items, potions, biomes, etc.)"
+      - "Each RegistryData carries (hasMore, name, idMap, dummied, overrides)"
+      - "Send HandshakeAck(phase=3) to client"
+      - "NetworkRegistry.fireNetworkHandshake(dispatcher, Side.SERVER)"
+    next_state: COMPLETE
+
+  4_complete:
+    server_state: COMPLETE
+    awaits: "HandshakeAck(phase=3) from client (Client confirms RegistryData injected)"
+    action:
+      - "Send HandshakeAck(phase=4) to client"
+      - "Fire CompleteHandshake(Side.SERVER) event"
+      - "Transition to DONE"
+    next_state: DONE
+
+  5_done:
+    server_state: DONE
+    action: "NetworkDispatcher transitions to CONNECTED, PlayerList.initializeConnectionToPlayer completes, SPacketJoinGame sent"
+
+vanilla_client_fallback:
+  trigger: "C00Handshake lacks \\0FML\\0 marker"
+  check: "NetworkRegistry.INSTANCE.isVanillaAccepted(Side.CLIENT)"
+  if_accepted: "Logs 'Connection received without FML marker, assuming vanilla'; completes as ConnectionType.VANILLA; skips FML|HS entirely"
+  if_rejected: "Rejects connection with disconnect message showing required client mods"
+
+mod_list_negotiation_rules:
+  checker_types:
+    IgnoredChecker: "acceptableRemoteVersions='*' -> always accepts"
+    DefaultNetworkChecker: "checks remoteVersions.get(modId) against acceptableRange or container.getVersion()"
+    MethodNetworkChecker: "calls @NetworkCheckHandler method on mod instance"
+  missing_mods: "client missing a required server mod -> handshake rejected with rejection string"
+  extra_mods: "client has extra client-only mods -> accepted if server doesn't require them"

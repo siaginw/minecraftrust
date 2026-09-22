@@ -1,0 +1,21 @@
+[package]
+name = "ffi"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[lib]
+name = "rustcraft_ffi"
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+compression = { workspace = true }
+core-types = { workspace = true }
+contracts = { workspace = true }
+metrics = { workspace = true }
+chunk-packet = { workspace = true }
+spawn-index = { workspace = true }
+spatial-index = { workspace = true }
+worldgen-noise = { workspace = true }
+native-chunk = { workspace = true }
+

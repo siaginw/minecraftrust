@@ -1,0 +1,208 @@
+# Minecraft 1.12.2 / Forge 14.23.5.2860 Steady-State Tick Pipeline Specification
+schema_version: "1.0.0"
+runtime_target:
+  game_version: "1.12.2"
+  forge_version: "14.23.5.2860"
+  commit_sha: "d3f01843f7e7a4f613b5e8113d381fd8747b4343"
+
+loop_timing:
+  target_tick_ms: 50
+  target_tps: 20.0
+  time_source: "System.currentTimeMillis()"
+  catchup_clamp_ms: 2000
+  catchup_max_ticks_per_burst: 40
+  inter_tick_sleep_min_ms: 1
+  sleeping_fast_path:
+    condition: "this.worlds[0].areAllPlayersAsleep()"
+    behavior: "Executes 1 tick, resets accumulator to 0ms immediately"
+
+server_tick_phases:
+  - phase_id: "PRE_SERVER_TICK"
+    class: "net.minecraftforge.fml.common.FMLCommonHandler"
+    method: "onPreServerTick()"
+    forge_event: "net.minecraftforge.fml.common.gameevent.TickEvent$ServerTickEvent(Phase.START)"
+    thread: "Server thread"
+    profiler_section: null
+
+  - phase_id: "TICK_COUNTER_INCREMENT"
+    class: "net.minecraft.server.MinecraftServer"
+    field_mutation: "this.tickCounter++"
+    thread: "Server thread"
+    profiler_section: null
+
+  - phase_id: "CHUNK_IO_EXECUTOR_DRAIN"
+    class: "net.minecraftforge.common.chunkio.ChunkIOExecutor"
+    method: "tick()"
+    thread: "Server thread"
+    profiler_section: "levels"
+    description: "Polls completed async chunk loads and binds them into ChunkProviderServer"
+
+  - phase_id: "SCHEDULED_TASKS_DRAIN"
+    class: "net.minecraft.server.MinecraftServer"
+    field: "this.futureTaskQueue"
+    method: "synchronized (this.futureTaskQueue) { Util.runTask(task, LOGGER) }"
+    thread: "Server thread"
+    profiler_section: "jobs"
+    empirical_profile_pct: 0.22
+    description: "Drains cross-thread packet handlers dispatched via PacketThreadUtil and async mod callbacks"
+
+  - phase_id: "DIMENSION_ITERATION"
+    class: "net.minecraft.server.MinecraftServer"
+    iterator_source: "net.minecraftforge.common.DimensionManager.getIDs(this.tickCounter % 200 == 0)"
+    thread: "Server thread"
+    profiler_section: "levels"
+    empirical_profile_pct: 94.51
+    per_dimension_steps:
+      - step_id: "TIME_DIFFICULTY_SYNC"
+        condition: "this.tickCounter % 20 == 0"
+        packet: "SPacketTimeUpdate"
+      - step_id: "PRE_WORLD_TICK"
+        forge_event: "net.minecraftforge.fml.common.gameevent.TickEvent$WorldTickEvent(Side.SERVER, Phase.START, worldserver)"
+      - step_id: "WORLD_SERVER_TICK"
+        method: "WorldServer.tick()"
+      - step_id: "WORLD_UPDATE_ENTITIES"
+        method: "WorldServer.updateEntities()"
+      - step_id: "POST_WORLD_TICK"
+        forge_event: "net.minecraftforge.fml.common.gameevent.TickEvent$WorldTickEvent(Side.SERVER, Phase.END, worldserver)"
+      - step_id: "ENTITY_TRACKER_TICK"
+        method: "EntityTracker.tick()"
+        profiler_section: "tracker"
+        empirical_profile_pct: 3.10
+
+  - phase_id: "FORGE_DIMENSION_UNLOAD"
+    class: "net.minecraftforge.common.DimensionManager"
+    method: "unloadWorlds(this.worldTickTimes)"
+    thread: "Server thread"
+    profiler_section: "dim_unloading"
+    empirical_profile_pct: 0.55
+
+  - phase_id: "NETWORK_SYSTEM_DRAIN"
+    class: "net.minecraft.network.NetworkSystem"
+    method: "networkTick()"
+    thread: "Server thread"
+    profiler_section: "connection"
+    empirical_profile_pct: 0.29
+    description: "Iterates active NetworkManager channels and processes direct packet queues"
+
+  - phase_id: "PLAYER_LIST_TICK"
+    class: "net.minecraft.server.management.PlayerList"
+    method: "onTick()"
+    thread: "Server thread"
+    profiler_section: "players"
+    empirical_profile_pct: 1.66
+    description: "Updates ping timers, issues KeepAlive packets every 40 ticks, verifies disconnect timeouts"
+
+  - phase_id: "COMMAND_FUNCTIONS"
+    class: "net.minecraft.advancements.FunctionManager"
+    method: "update()"
+    thread: "Server thread"
+    profiler_section: "commandFunctions"
+    empirical_profile_pct: 0.40
+
+  - phase_id: "TICKABLES_UPDATE"
+    class: "net.minecraft.server.MinecraftServer"
+    method: "for (ITickable t : this.tickables) t.update()"
+    thread: "Server thread"
+    profiler_section: "tickables"
+    empirical_profile_pct: 0.06
+
+  - phase_id: "POST_SERVER_TICK"
+    class: "net.minecraftforge.fml.common.FMLCommonHandler"
+    method: "onPostServerTick()"
+    forge_event: "net.minecraftforge.fml.common.gameevent.TickEvent$ServerTickEvent(Phase.END)"
+    thread: "Server thread"
+    profiler_section: null
+
+world_tick_subphases:
+  - subphase: "WEATHER_UPDATE"
+    method: "World.updateWeather()"
+    mutates: ["cleanWeatherTime", "rainTime", "thunderTime", "prevRainingStrength", "rainingStrength"]
+  - subphase: "HARDCORE_CHECK"
+    condition: "this.worldInfo.isHardcoreModeEnabled()"
+    action: "set difficulty to HARD"
+  - subphase: "BIOME_CACHE_CLEANUP"
+    method: "BiomeProvider.cleanupCache()"
+  - subphase: "SLEEPING_CHECK"
+    condition: "this.areAllPlayersAsleep()"
+    action: "Advance time to sunrise if doDaylightCycle; wakeAllPlayers()"
+  - subphase: "MOB_SPAWNER"
+    profiler_section: "mobSpawner"
+    method: "WorldEntitySpawner.findChunksForSpawning()"
+    empirical_profile_pct: 0.33
+  - subphase: "CHUNK_SOURCE_TICK"
+    profiler_section: "chunkSource"
+    method: "ChunkProviderServer.tick()"
+    empirical_profile_pct: 1.54
+    action: "Drains droppedChunksSet, serializes unloaded chunks to disk"
+  - subphase: "SKYLIGHT_SUBTRACTED"
+    method: "calculateSkylightSubtracted(1.0F)"
+  - subphase: "WORLD_TIME_INCREMENT"
+    actions:
+      - "setWorldTotalTime(totalTime + 1L)"
+      - "if (doDaylightCycle) setWorldTime(worldTime + 1L)"
+  - subphase: "SCHEDULED_BLOCK_TICKS"
+    profiler_section: "tickPending"
+    method: "WorldServer.tickUpdates(false)"
+    empirical_profile_pct: 25.93
+    hard_cap: 65536
+  - subphase: "RANDOM_BLOCK_TICKS"
+    profiler_section: "tickBlocks"
+    method: "WorldServer.updateBlocks()"
+    empirical_profile_pct: 6.38
+    actions:
+      - "playerCheckLight()"
+      - "iterate chunks within 128 blocks of players"
+      - "enqueueRelightChecks()"
+      - "thunder and lightning roll (1/100,000)"
+      - "ice and snow precipitation roll (1/16)"
+      - "random block ticks: randomTickSpeed (default 3) blocks per non-empty ExtendedBlockStorage"
+  - subphase: "PLAYER_CHUNK_MAP_TICK"
+    profiler_section: "chunkMap"
+    method: "PlayerChunkMap.tick()"
+    empirical_profile_pct: 0.62
+    action: "Transmits block updates and chunk payloads to clients"
+  - subphase: "VILLAGE_TICK"
+    profiler_section: "village"
+    methods:
+      - "VillageCollection.tick()"
+      - "VillageSiege.tick()"
+    empirical_profile_pct: 0.76
+  - subphase: "PORTAL_FORCER_CLEANUP"
+    profiler_section: "portalForcer"
+    method: "Teleporter.removeStalePortalLocations()"
+    empirical_profile_pct: 0.21
+  - subphase: "BLOCK_EVENT_QUEUE_SEND"
+    method: "WorldServer.sendQueuedBlockEvents()"
+    action: "Drains blockEventQueue, broadcasts SPacketBlockAction"
+
+entity_tick_subphases:
+  - subphase: "WEATHER_EFFECTS"
+    collection: "this.weatherEffects"
+    action: "Ticks lightning bolts"
+  - subphase: "PLAYERS"
+    collection: "this.playerEntities"
+    method: "this.updateEntity(player)"
+    forge_events:
+      pre: "TickEvent$PlayerTickEvent(Phase.START, player)"
+      post: "TickEvent$PlayerTickEvent(Phase.END, player)"
+  - subphase: "REGULAR_ENTITIES"
+    collection: "this.loadedEntityList"
+    iteration_method: "indexed loop (int i = 0; i < loadedEntityList.size(); i++)"
+    profiler_section: "entities.regular"
+    empirical_profile_pct: 44.00
+    subcomponents:
+      move: 8.51
+      ai: 3.28
+      travel: 2.53
+      livingBaseTick: 1.55
+      unspecified: 17.09
+  - subphase: "TILE_ENTITIES"
+    collection: "this.tickableTileEntities"
+    iteration_method: "Iterator over tickableTileEntities with processingLoadedTiles = true"
+    profiler_section: "entities.blockEntities"
+    empirical_profile_pct: 1.04
+    forge_invalidation_handling: "Defer invalidation to end of iteration to prevent concurrent modification"
+  - subphase: "TILE_ENTITY_QUEUES"
+    actions:
+      - "Drains tileEntitiesToBeRemoved: calls onChunkUnload(), removes from loadedTileEntityList"
+      - "Drains addedTileEntityList: binds to chunk, registers into tickableTileEntities and loadedTileEntityList"

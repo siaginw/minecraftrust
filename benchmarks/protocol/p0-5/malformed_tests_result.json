@@ -1,0 +1,182 @@
+[
+  {
+    "test": "varint_over_5_bytes",
+    "description": "VarInt encoded with 6 bytes",
+    "pipeline_phase": "SPLITTER",
+    "rejected": true,
+    "channel_closed": true,
+    "response_frames": 0,
+    "disconnect_message": null,
+    "status": "REJECTED"
+  },
+  {
+    "test": "frame_len_wider_than_21bit",
+    "description": "Frame length encoded with 4 continuation bytes",
+    "pipeline_phase": "SPLITTER",
+    "rejected": true,
+    "channel_closed": true,
+    "response_frames": 0,
+    "disconnect_message": null,
+    "status": "REJECTED"
+  },
+  {
+    "test": "truncated_frame",
+    "description": "Length header declares 50 bytes but only 5 sent",
+    "pipeline_phase": "SPLITTER",
+    "rejected": true,
+    "channel_closed": false,
+    "response_frames": 0,
+    "disconnect_message": null,
+    "status": "ACCEPTED"
+  },
+  {
+    "test": "zero_length_frame",
+    "description": "Frame with length 0",
+    "pipeline_phase": "SPLITTER",
+    "rejected": true,
+    "channel_closed": false,
+    "response_frames": 0,
+    "disconnect_message": null,
+    "status": "ACCEPTED"
+  },
+  {
+    "test": "multiple_frames_batch",
+    "description": "Handshake and StatusRequest in single buffer",
+    "pipeline_phase": "SPLITTER/DECODER",
+    "rejected": false,
+    "channel_closed": false,
+    "response_frames": 1,
+    "disconnect_message": "\u0002{\"description\":{\"text\":\"A Minecraft Server\"},\"players\":{\"max\":1,\"online\":0},\"ve",
+    "status": "ACCEPTED"
+  },
+  {
+    "test": "fragmented_frame_re\u0e34\u0e14 reassembly",
+    "description": "Valid frame sent 1 byte at a time",
+    "pipeline_phase": "SPLITTER",
+    "rejected": false,
+    "channel_closed": false,
+    "response_frames": 1,
+    "disconnect_message": null,
+    "status": "ACCEPTED"
+  },
+  {
+    "test": "unknown_packet_id_handshake",
+    "description": "Packet ID 0x7F in HANDSHAKING state",
+    "pipeline_phase": "DECODER",
+    "rejected": true,
+    "channel_closed": true,
+    "response_frames": 0,
+    "disconnect_message": null,
+    "status": "REJECTED"
+  },
+  {
+    "test": "wrong_state_packet",
+    "description": "CPacketChatMessage (ID 0x02) in HANDSHAKING state",
+    "pipeline_phase": "DECODER",
+    "rejected": true,
+    "channel_closed": true,
+    "response_frames": 0,
+    "disconnect_message": null,
+    "status": "REJECTED"
+  },
+  {
+    "test": "trailing_unexpected_bytes",
+    "description": "Packet contains extra unread bytes past fields",
+    "pipeline_phase": "DECODER",
+    "rejected": true,
+    "channel_closed": true,
+    "response_frames": 0,
+    "disconnect_message": null,
+    "status": "REJECTED"
+  },
+  {
+    "test": "oversized_string",
+    "description": "Host string > 32767 UTF-8 bytes",
+    "pipeline_phase": "DECODER",
+    "rejected": true,
+    "channel_closed": true,
+    "response_frames": 0,
+    "disconnect_message": null,
+    "status": "REJECTED"
+  },
+  {
+    "test": "malformed_utf8",
+    "description": "Non-UTF-8 bytes in PacketBuffer.readString",
+    "pipeline_phase": "DECODER",
+    "rejected": true,
+    "channel_closed": false,
+    "response_frames": 0,
+    "disconnect_message": null,
+    "status": "ACCEPTED"
+  },
+  {
+    "test": "outdated_client_proto",
+    "description": "Protocol version 100 < 340",
+    "pipeline_phase": "LOGIN_HANDLER",
+    "rejected": true,
+    "channel_closed": true,
+    "response_frames": 1,
+    "disconnect_message": "H{\"translate\":\"multiplayer.disconnect.outdated_client\",\"with\":[\"1.12.2\"]}",
+    "status": "REJECTED"
+  },
+  {
+    "test": "outdated_server_proto",
+    "description": "Protocol version 500 > 340",
+    "pipeline_phase": "LOGIN_HANDLER",
+    "rejected": true,
+    "channel_closed": true,
+    "response_frames": 1,
+    "disconnect_message": "H{\"translate\":\"multiplayer.disconnect.outdated_server\",\"with\":[\"1.12.2\"]}",
+    "status": "REJECTED"
+  },
+  {
+    "test": "compressed_below_threshold",
+    "description": "Uncompressed size declared < threshold (30 < 256)",
+    "pipeline_phase": "DECOMPRESS",
+    "rejected": true,
+    "channel_closed": true,
+    "response_frames": 0,
+    "disconnect_message": null,
+    "status": "REJECTED"
+  },
+  {
+    "test": "decompressed_size_over_2mib",
+    "description": "Uncompressed size declared > 2097152 bytes",
+    "pipeline_phase": "DECOMPRESS",
+    "rejected": true,
+    "channel_closed": true,
+    "response_frames": 0,
+    "disconnect_message": null,
+    "status": "REJECTED"
+  },
+  {
+    "test": "invalid_zlib_stream",
+    "description": "Corrupted zlib header/checksum",
+    "pipeline_phase": "DECOMPRESS",
+    "rejected": true,
+    "channel_closed": true,
+    "response_frames": 0,
+    "disconnect_message": null,
+    "status": "REJECTED"
+  },
+  {
+    "test": "oversized_custom_payload",
+    "description": "CPacketCustomPayload exceeding 32767 bytes",
+    "pipeline_phase": "PACKET_DECODER",
+    "rejected": true,
+    "channel_closed": true,
+    "response_frames": 0,
+    "disconnect_message": null,
+    "status": "REJECTED"
+  },
+  {
+    "test": "invalid_fml_discriminator",
+    "description": "FML|HS message with unknown discriminator 0x63",
+    "pipeline_phase": "FML_DISPATCHER",
+    "rejected": true,
+    "channel_closed": true,
+    "response_frames": 0,
+    "disconnect_message": null,
+    "status": "REJECTED"
+  }
+]

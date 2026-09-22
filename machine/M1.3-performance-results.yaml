@@ -1,0 +1,68 @@
+# SYNTHETIC (M1.4-R invalidation): numeric tables in this file were AUTHORED,
+# not measured (see evidence-invalidation-register.md). Illustrative of SHAPE
+# only; must NOT feed active empirical decisions. Do not cite as evidence.
+milestone: "M1.3"
+date: "2026-09-18"
+# === M1.4-R INVALIDATION (2026-09-18) ===
+# STATUS: INVALIDATED — do not cite these numbers.
+# T_JNI (50 ns) and T_HANDOFF (10 ns) were hardcoded assumptions, not measurements.
+# Section-selection semantics also invalidated (see M1.3-shadow-results.yaml note).
+# See docs/engineering/evidence-invalidation-register.md
+environment:
+  host: "AMD Ryzen 7 7800X3D 8-Core Processor"
+  jvm: "Temurin jdk-8.0.504.1-hotspot (Java 8)"
+  rust_compiler: "rustc 1.83+ (profile: release, opt-level: 3)"
+  minecraft: "1.12.2"
+  forge: "14.23.5.2860"
+
+timing_decomposition_microseconds:
+  empty_chunk_0_sections:
+    java_reference_mean: 2.04
+    t_stage: 0.13
+    t_jni: 0.05
+    t_rust: 0.02
+    t_handoff: 0.05
+    t_native_total_mean: 0.25
+    delta_pct: 87.6
+  minimal_1_section:
+    java_reference_mean: 3.03
+    t_stage: 0.43
+    t_jni: 0.05
+    t_rust: 0.10
+    t_handoff: 0.04
+    t_native_total_mean: 0.62
+    delta_pct: 79.4
+  surface_chunk_4_sections:
+    java_reference_mean: 7.69
+    t_stage: 1.54
+    t_jni: 0.05
+    t_rust: 0.47
+    t_handoff: 0.04
+    t_native_total_mean: 2.09
+    delta_pct: 72.8
+  subsurface_chunk_8_sections:
+    java_reference_mean: 8.53
+    t_stage: 3.66
+    t_jni: 0.05
+    t_rust: 1.06
+    t_handoff: 0.05
+    t_native_total_mean: 4.81
+    delta_pct: 43.5
+  full_column_16_sections:
+    java_reference_mean: 18.14
+    t_stage: 5.91
+    t_jni: 0.05
+    t_rust: 1.94
+    t_handoff: 0.05
+    t_native_total_mean: 7.94
+    delta_pct: 56.2
+
+acceptance_gate_evaluation:
+  native_latency_gate_us: 8.50
+  native_latency_achieved_us: 7.94
+  latency_gate_status: "PASSED (6.6% headroom under strict 8.50 us gate)"
+  cpu_reduction_gate_pct: 25.0
+  cpu_reduction_achieved_pct: 56.2
+  cpu_reduction_gate_status: "PASSED (exceeds 25.0% requirement by 31.2 percentage points)"
+  zero_divergence_gate: "100,000 / 100,000 consecutive matches"
+  zero_divergence_status: "PASSED"

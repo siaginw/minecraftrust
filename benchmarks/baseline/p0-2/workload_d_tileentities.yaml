@@ -1,0 +1,33 @@
+workload_name: workload_d_tileentities
+server_type: forge_14.23.5.2860
+duration_s: 20
+time_span_ms: 20000
+tick_span: 400
+measured_tps: 20.0
+mean_mspt: 50.0
+gc_stats:
+  young_gcs: 12
+  young_pause_ms: 69.41
+  full_gcs: 2
+  full_pause_ms: 75.45
+  total_pause_ms: 144.86
+top_subsystems:
+  levels: 96.79
+  world: 92.06
+  entities: 78.9
+  regular: 61.87
+  tick: 60.14
+  ai: 17.33
+  newAi: 17.23
+  blockEntities: 16.44
+  navigation: 7.79
+  goalSelector: 7.45
+  pathfind: 5.92
+  minecraft:hopper: 5.66
+  tickBlocks: 4.8
+  pollingChunks: 4.09
+  entityBaseTick: 3.88
+artifacts:
+  profile_dump: workload_d_tileentities_profile.txt
+  jfr_recording: workload_d_tileentities.jfr
+  gc_log: workload_d_tileentities_gc.log

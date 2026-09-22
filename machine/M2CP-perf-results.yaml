@@ -1,0 +1,75 @@
+# M2CP matched OFF/ON performance + production-readiness study (operator
+# authorization 2026-09-20 — the FINAL bounded M2-C study). FTB Revelation
+# 3.4.0 / Target C. 6 fresh-JVM runs strictly alternating OFF_MEASURE,ON x3.
+# class: MEASURED. Provenance: M2CP-MATCHED-PERF.
+# Scope: network-worker compression path ONLY. NO TPS/MSPT claim (directive 3:
+# MSPT recorded as non-primary and NOT resolved by this experiment).
+schema_version: 1
+date: "2026-09-20"
+target:
+  pack: "FTB Revelation 3.4.0 (existing install/world/config unaltered)"
+  forge: "14.23.5.2846"
+  java: "Temurin jdk-8.0.504.1-hotspot"
+  mods: 193 (FoamFix + Phosphor)
+  jvm_flags_both_arms: "-Xms6G -Xmx6G -XX:+PrintGCDetails -XX:+PrintGCDateStamps -XX:+PrintGCApplicationStoppedTime -Xloggc:gc-<label>.log; only -Dminecraftrust.native_compress differs"
+builds:
+  dll: {sha256_prefix: 0acb7469a74d9531, note: "unchanged since M2.0"}
+  coremod: {sha256_prefix: 981354f5c4de1d96, note: "MEASUREMENT build: adds OFF_MEASURE mode (vanilla-authoritative wire + nanoTime brackets), ON timing span extended to include framing (sampled verify outside span), m2c_java_packets counter, Netty-Server-IO thread CPU dump (one-shot, shutdown+periodic). OFF/SHADOW wire semantics unchanged; offline 33/33 incl. new OFF_MEASURE vanilla-identity test (wire bytes BYTE-IDENTICAL to pure vanilla, ctx delta 0)."}
+measurement_design:
+  java_arm: "OFF_MEASURE: encoder installed (transform success) but super.encode() produces the authoritative vanilla bytes; eligible packets bracketed with System.nanoTime -> m2c_java_ns/m2c_bytes_java/m2c_java_packets. No native context ever created (ctx 0/0 in all 3 OFF runs)."
+  rust_arm: "ON_EXPERIMENTAL: native authoritative; m2c_rust_ns spans JNI compress + framing writes (sampled 1-in-256 verify OUTSIDE the span)."
+  span_asymmetry_note: "m2c_java_ns brackets super.encode() INCLUDING its internal plaintext copy; m2c_rust_ns excludes the shared msg.getBytes() copy (which vanilla does not need). Residual asymmetry = one ~30KB memcpy per packet (~1-3 us vs ~140-310 us span, <1%). Bias direction: slightly favors Rust; effect below noise."
+  no_dual_compression: "OFF runs pure Java, ON runs pure Rust (bytes_java=0 in ON runs; native_packets=0 in OFF runs). Verified in every shutdown dump."
+workload: "Per run: fresh JVM -> boot (~105s) -> settle 30s -> login probe -> perfbotb corridor walk 400s (97 hops x 40 blocks, ping-pong span 600, view-distance 10, threshold 256). Windows 580s, stop-tail 45s, targeted JVM kill between runs. Client decode 0 errors in all 6 runs (4,423,684 frames total)."
+workload_matching_limitation: "the walk advances perfbotb's saved position between runs, so each run streams a slightly different fresh-vs-cached chunk mix (first run 33,770 chunks vs 32.2-32.5k later); volume/compressibility matched within single-digit percent and the alternating order neutralizes drift. Quark cascading-worldgen warnings appear on ServerThread in some runs equally by mechanism; MSPT (non-primary) shows no arm difference."
+per_run: # from shutdown dumps + periodic snapshots + GC logs + transcripts (tools/m2cp_analyze.py)
+  m2cp-c-o1: {arm: OFF_MEASURE, eligible: 68851, plain_MB: 1228.3, comp_MB: 163.7, ratio_pct: 13.3, mb_per_s: 3.1, us_per_pkt: 310.4, compress_MBp_s: 57.5, compress_s: 21.4, netty_cpu_s: 33.0, gc_young: 87, gc_full: 5, gc_pause_ms: 2466.2, mspt_mean: 8.2, chunks: 33770, hops: 97, client_errors: 0}
+  m2cp-c-n1: {arm: ON, eligible: 65052, plain_MB: 1220.6, comp_MB: 177.5, ratio_pct: 14.5, mb_per_s: 3.1, us_per_pkt: 141.2, compress_MBp_s: 132.9, compress_s: 9.2, netty_cpu_s: 19.8, gc_young: 94, gc_full: 5, gc_pause_ms: 2588.5, mspt_mean: 11.4, chunks: 32248, hops: 97, client_errors: 0}
+  m2cp-c-o2: {arm: OFF_MEASURE, eligible: 65032, plain_MB: 1120.2, comp_MB: 153.7, ratio_pct: 13.7, mb_per_s: 2.8, us_per_pkt: 297.3, compress_MBp_s: 57.9, compress_s: 19.3, netty_cpu_s: 32.3, gc_young: 96, gc_full: 5, gc_pause_ms: 2577.5, mspt_mean: 13.7, chunks: 32234, hops: 97, client_errors: 0}
+  m2cp-c-n2: {arm: ON, eligible: 65313, plain_MB: 1188.0, comp_MB: 164.0, ratio_pct: 13.8, mb_per_s: 3.0, us_per_pkt: 140.7, compress_MBp_s: 129.3, compress_s: 9.2, netty_cpu_s: 22.0, gc_young: 99, gc_full: 5, gc_pause_ms: 2712.2, mspt_mean: 14.2, chunks: 32380, hops: 97, client_errors: 0}
+  m2cp-c-o3: {arm: OFF_MEASURE, eligible: 65414, plain_MB: 1200.0, comp_MB: 166.0, ratio_pct: 13.8, mb_per_s: 3.0, us_per_pkt: 325.1, compress_MBp_s: 56.4, compress_s: 21.3, netty_cpu_s: 32.9, gc_young: 94, gc_full: 5, gc_pause_ms: 2593.8, mspt_mean: 13.1, chunks: 32519, hops: 97, client_errors: 0}
+  m2cp-c-n3: {arm: ON, eligible: 65347, plain_MB: 1085.5, comp_MB: 150.3, ratio_pct: 13.8, mb_per_s: 2.7, us_per_pkt: 128.1, compress_MBp_s: 129.7, compress_s: 8.4, netty_cpu_s: 16.2, gc_young: 91, gc_full: 5, gc_pause_ms: 2590.8, mspt_mean: 13.3, chunks: 32537, hops: 97, client_errors: 0}
+per_arm_medians: # n=3 per arm; ranges in per_run above; no outliers dropped
+  eligible_packets: {OFF: 65414, ON: 65313}
+  plaintext_MB: {OFF: 1200.0, ON: 1188.0, rel: "-1.0% (workload-matched)"}
+  per_packet_us: {OFF: 310.4 "range 297.3-325.1", ON: 140.7 "range 128.1-141.2", rel: "-54.7%", note: "NON-OVERLAPPING ranges 3v3; Rust ~2.2x faster per packet"}
+  compression_throughput_MBp_s: {OFF: 57.5 "range 56.4-57.9", ON: 129.7 "range 129.3-132.9", rel: "+125.6%", note: "NON-OVERLAPPING ranges 3v3"}
+  total_compress_s_per_400s_walk: {OFF: 21.3 "range 19.3-21.4", ON: 9.2 "range 8.4-9.2", rel: "-56.8%"}
+  netty_worker_cpu_s: {OFF: 32.9 "range 32.3-33.0 (4 threads)", ON: 19.8 "range 16.2-22.0", rel: "-39.9%", note: "independent process-level metric corroborates; includes all worker duties"}
+  compressed_ratio_pct: {OFF: 13.7 "range 13.3-13.8", ON: 13.8 "range 13.8-14.5", rel: "+1.0%"}
+  gc: {young_OFF: "94 (87-96)", young_ON: "94 (91-99)", full: "5 in EVERY run (boot metadata GCs)", pause_ms_OFF: "2577.5 (2466-2594)", pause_ms_ON: "2590.8 (2589-2712)", rel: "+0.5%", verdict: "no GC asymmetry"}
+  mspt_mean_ms_NON_PRIMARY: {OFF: 13.1 "range 8.2-13.7", ON: 13.3 "range 11.4-14.2", rel: "+1.7%", verdict: "RANGES FULLY OVERLAP - NO MSPT DIFFERENCE RESOLVED (expected: compression is off-ServerThread; no claim made). Whole-run cumulative incl. boot/idle phases."}
+size_tradeoff:
+  extra_wire_bytes: "ON ratio 13.8 vs OFF 13.7 per matched plaintext = +0.7-1.2% of compressed volume; ~+1.2 MB per 1.2 GB streamed (+0.10% of plaintext). Worst single run (n1): ratio 14.5 (+5.8% vs OFF median) - reported, not averaged away."
+  cpu_saved: "median -12.1 s compression CPU per 400 s walk window; Netty worker total -13.1 s (-39.9%) across 4 worker threads."
+  verdict: "at this workload's 3.0 MB/s plaintext streaming rate the bandwidth cost is negligible (~+5 KB/s wire) while worker CPU drops by double digits of seconds per walk window; per-byte advantage (2.26x) scales linearly with player count/traffic."
+leak_observation: "1 UNTRACED leak event in run n2 (default SIMPLE leak detection - no stack recoverable). Frequency matches the 4x-established ElecCore baseline on this pack (~1 per 10 logins; M2CC/M2CER paranoid stacks were 100% elec332.* with ZERO m2c frames). Not attributable to M2-C by any available evidence; NOT stack-proven in this run (paranoid-level was not used - these are perf runs, not correctness runs)."
+production_readiness_audit: # from code + prior campaign evidence; no redesign needed
+  default_off: "VERIFIED: property default 'OFF' -> transformer DISABLED_BY_PROPERTY (byte-identical NetworkManager); live OFF run in M2C had all counters zero."
+  property_handling: "VERIFIED: -Dminecraftrust.native_compress={OFF,SHADOW,ON_EXPERIMENTAL}; AUDIT NOTE: an UNKNOWN value transforms the class but encode() falls through to SHADOW semantics (Java-authoritative wire + native compare) - SAFE degradation (never ON), surprising but acceptable for experimental."
+  missing_dll_fallback: "VERIFIED (code + offline G): CompressionCtx.LOADED=false -> super.encode() for every packet even with property ON; wire stays vanilla."
+  unsupported_architecture: "VERIFIED (code): System.loadLibrary failure of any kind -> LOADED=false -> same vanilla path."
+  native_load_failure: "VERIFIED (code): caught Throwable in static loader; same path."
+  unexpected_mod_handler: "VERIFIED (code + live C/D): transformer rewrites only the vanilla construction inside the one method referencing the 'compress' LDC; a pre-existing mod handler is never replaced (vanilla func_179299_a branch unchanged). No mod occupies the seam on Revelation or SevTech."
+  shutdown_cleanup: "VERIFIED: handlerRemoved frees ctx exactly once (AtomicLong CAS); balanced in ALL runs ever (this study 2/2 per ON run; 100/100 across A/C/D campaigns)."
+  reconnect_lifecycle: "VERIFIED: 60+ sequential bot sessions across campaigns + this study's alternating fresh-JVM runs."
+  error_logging_rate: "VERIFIED N/A-BY-DESIGN: native errors increment AtomicLong counters only, zero per-event logging -> no log-spam vector; counters dumped periodically (10s) and at shutdown."
+final_classification: READY_OPTIONAL
+final_classification_reasoning: >
+  Correctness is complete (ladder: offline 33/33; SHADOW 146,259/146,259 on
+  packs; ON across A/C/D with 139,530 packets, 0 M2C-attributable faults,
+  contexts 100/100; this study adds 195,712 more native packets, 0 fallbacks,
+  0 decode errors over 4.42M frames). Matched performance now provides a
+  real, consistent network-worker benefit: 2.26x compression throughput
+  (non-overlapping 3v3), -56.8% compression CPU, -39.9% Netty worker CPU,
+  at +0.7-1.2% wire bytes - a decisively favorable tradeoff at any realistic
+  streaming rate. GC and MSPT show no arm difference (MSPT unresolved, not
+  claimed). Classification A: READY_OPTIONAL. Default-ON is NOT decided
+  here (operator explicitly deferred it).
+remaining_limitations:
+  - "all traffic is protocol-bot; no real human-client gameplay evidence"
+  - "n=3 per arm, single machine, single pack (Revelation) for the perf arm; SevTech/Target-A perf not re-measured (correctness-holding by ladder)"
+  - "walk-window streaming rate ~3.0 MB/s plaintext; the 2.26x per-byte advantage is measured, but absolute CPU savings scale with traffic"
+  - "timing-span asymmetry: rust_ns excludes the shared plaintext copy java_ns includes (<1% effect, favors Rust; documented above)"
+  - "the 1 untraced leak event in n2 could not be stack-attributed (SIMPLE detection); attribution rests on frequency + 4 prior traced baselines"
+next_step: "Operator decision only: optional-enable rollout policy / default-ON discussion (NOT this milestone). No further M2-C campaigns authorized."

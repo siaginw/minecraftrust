@@ -1,0 +1,121 @@
+# SYNTHETIC (M1.4-R invalidation): numeric tables in this file were AUTHORED,
+# not measured (see evidence-invalidation-register.md). Illustrative of SHAPE
+# only; must NOT feed active empirical decisions. Do not cite as evidence.
+candidates:
+- id: M1-C
+  name: Native SPacketChunkData Vanilla Payload
+  weighted_score: 8.53
+  raw_scores:
+    value: 5.8
+    safety: 10.0
+    reversibility: 10.0
+    ffi_granularity: 8.5
+    parity_testability: 10.0
+    learning_value: 9.5
+    alloc_reduction: 7.0
+    simplicity: 8.5
+  server_thread_ms: 0.06
+  tail_latency_ms: 0.45
+  notes: "Still leading candidate due to unparalleled safety (10/10), reversibility\
+    \ (10/10), and testability (10/10). Real net saving is ~4.3 \xB5s/full chunk."
+- id: M1-A
+  name: SAVE-A Vanilla Chunk Snapshot Extractor
+  weighted_score: 7.9
+  raw_scores:
+    value: 8.5
+    safety: 6.5
+    reversibility: 8.0
+    ffi_granularity: 9.0
+    parity_testability: 8.0
+    learning_value: 8.5
+    alloc_reduction: 7.5
+    simplicity: 7.0
+  server_thread_ms: 0.0
+  tail_latency_ms: 11.7
+  notes: High tail value on autosave ticks, but carries persistence risk for an M1
+    first migration.
+- id: M1-B
+  name: SAVE-F/G Native NBT & Deflate Encoder
+  weighted_score: 7.18
+  raw_scores:
+    value: 4.0
+    safety: 8.0
+    reversibility: 8.5
+    ffi_granularity: 8.0
+    parity_testability: 9.5
+    learning_value: 7.5
+    alloc_reduction: 8.0
+    simplicity: 8.0
+  server_thread_ms: 0.0
+  tail_latency_ms: 0.0
+  notes: Pure background I/O optimization; does not reduce ServerThread compute MSPT.
+- id: M1-F
+  name: Vanilla Worldgen Noise Helpers
+  weighted_score: 7.05
+  raw_scores:
+    value: 6.0
+    safety: 7.0
+    reversibility: 8.5
+    ffi_granularity: 9.0
+    parity_testability: 7.5
+    learning_value: 7.0
+    alloc_reduction: 4.0
+    simplicity: 6.5
+  server_thread_ms: 0.0
+  tail_latency_ms: 6.5
+  notes: Benefits only exploration; mod generators dominate worldgen compute.
+- id: M1-D
+  name: Collision / AABB Acceleration
+  weighted_score: 6.43
+  raw_scores:
+    value: 7.8
+    safety: 5.0
+    reversibility: 7.5
+    ffi_granularity: 4.5
+    parity_testability: 6.0
+    learning_value: 7.0
+    alloc_reduction: 8.0
+    simplicity: 4.0
+  server_thread_ms: 1.4
+  tail_latency_ms: 2.1
+  notes: High compute, but unacceptable FFI chattiness and mod block compatibility
+    risk.
+- id: M1-G
+  name: Engine Allocation Reduction
+  weighted_score: 5.85
+  raw_scores:
+    value: 6.5
+    safety: 5.5
+    reversibility: 7.0
+    ffi_granularity: 3.0
+    parity_testability: 7.0
+    learning_value: 4.0
+    alloc_reduction: 9.0
+    simplicity: 4.5
+  server_thread_ms: 0.9
+  tail_latency_ms: 1.5
+  notes: In-JVM refactoring task, not a Rust migration seam.
+- id: M1-E
+  name: Lighting Propagation Engine
+  weighted_score: 5.65
+  raw_scores:
+    value: 8.0
+    safety: 3.0
+    reversibility: 5.0
+    ffi_granularity: 6.0
+    parity_testability: 5.0
+    learning_value: 8.0
+    alloc_reduction: 5.0
+    simplicity: 3.0
+  server_thread_ms: 2.2
+  tail_latency_ms: 5.0
+  notes: Fatal conflict with Phosphor mixin used in modpacks.
+weights:
+  value: 0.25
+  safety: 0.2
+  reversibility: 0.15
+  ffi_granularity: 0.1
+  parity_testability: 0.1
+  learning_value: 0.1
+  alloc_reduction: 0.05
+  simplicity: 0.05

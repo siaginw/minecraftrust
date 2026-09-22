@@ -1,0 +1,31 @@
+# M5.5 — FAST REVELATION GATE-B CLOSURE REPORT
+schema_version: 1
+date: "2026-09-22"
+run: m55rev-shadow (short 400s rig, small-span repeat-hops bot; Java transmits)
+builds: {dll: db2a0ad1b13d3843, coremod: locked-comparator build}
+A_harness: "stability-window comparator (locked coarse light refresh + re-check under per-chunk lock) + small-span repeat-hop rig for resend churn; offline battery green (34/34,7/7,19/19,8/8,16/16) pre-run"
+B_fixtures: "not separately captured (budget; the rig validates live state directly)"
+C_offline: "all active suites green pre-launch"
+D_duration: "~400s vs ~700s prior (43% shorter)"
+E_stable_chunks: "5,734 registered, terrain bit-exact; 350,129 sections validated"
+F_gate_b: "attempted 1, completed 1 — the rig triggered almost no full-chunk packet constructions for the comparator (bot view-churn pattern insufficient)"
+G_stale_skips: "0 light skips (locked mode armed); 0 partial-filter this run"
+H_mutation_cases: "fluid environment naturally present (see mismatch)"
+I_mismatches: >
+  ONE preserved event: cx=-3 cz=-2 section 1 cell 189 gid 145(flowing_water m1)
+  vs 129(water m1), mutGen==snapGen==318, refreshBefore=1. Candidate: fluid
+  settle racing the comparator capture (flowing->source transition in the
+  javaPayload-vs-refresh window; same torn-read family). STOP honored;
+  campaign ended at the event.
+J_m2c: "5,319/5,319 SHADOW compressions matched, 0 errors"
+K_cleanup: "912 chunks removed -> 0 bytes in-JVM"
+L_classification: FURTHER_INVESTIGATION
+  reason: "Gate-B completed = 1 (rig under-triggered resends) AND one unexplained-class mismatch preserved; both need the same next step"
+M_next: >
+  (1) Fix the rig: force resends via view-distance toggling or bot
+  re-login loops (the constructor path needs real resend pressure). (2) Wrap
+  the comparator's state freshness (like light) around BLOCK states too:
+  re-extract the differing section live under the chunk lock before declaring
+  a mismatch — turning fluid-settle races into stale-skips. (3) Re-run short.
+  Time-saved note: this failure cost 400s to find; the old method cost ~700s+
+  per iteration.

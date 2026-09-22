@@ -1,0 +1,94 @@
+# M2J offline attribution pass (operator authorization 2026-09-20).
+# Offline only: existing JFR (M2J-jfr1), logs, jars, javap on installed
+# Forge/NEID/SRG reference jars. No reruns, no implementation.
+# class: DERIVED_FROM_MEASURED. Provenance: M2J-ATTRIBUTION.
+schema_version: 1
+
+capture_boundaries:
+  successful_run: {winpid: 112960, recording: "06:35:48..06:42:47 local (420s, duration-config 480s)", workload: "settle 06:36:31 -> stream end 06:39:02 (bot 8764 chunks/251MB)", self_stop: "06:42:48 (piped stop at boot+420s)"}
+  failed_launches_world_effects: >
+    attempts 1-2: JVM never initialized (flag error), zero disk access.
+    attempt-4 (orphan, killed): preserved log contains NO 'Done' and NO
+    save lines - it never ticked; no world writes. attempt-3 (zombie,
+    killed ~6:25, log overwritten and lost): UNKNOWN - it ran ~4.5min
+    with no players; the 6000-tick autosave period (~300s) makes a
+    no-player spawn-area autosave possible but unverifiable. Content
+    effects of any such save would be nil (no players), but this is
+    marked UNKNOWN rather than claimed.
+  save_separation_in_recovery: >
+    SEPARATED by timestamp binning: (1) PLAYER-DISCONNECT CHUNK-UNLOAD
+    SAVE 06:39:02-06:40:00 = ~190 write-path samples (the recovery write
+    burst previously attributed to 'autosave'); (2) PERIODIC AUTOSAVE
+    ~06:40:40-06:41:40 = ~8 samples (negligible BECAUSE the unload pass
+    had just flushed dirty chunks; periodicity itself is inferred from
+    the 6000-tick timer, not separately logged); (3) SHUTDOWN SAVE at
+    06:42:48+ = UNDER-CAPTURED (recording ends at JVM exit). No claim of
+    periodic-autosave cost is made beyond the ~8-sample blip.
+
+mapping_verifications:
+  chunk_func_186032_a: "CORRECTED: returns IBlockState(int,int,int) = Chunk.getBlockState int-overload, NOT setBlockState (that is func_177436_a). The exploratory 'setBlockState 9.3%' was a mis-mapping; corrected streaming self-leader: getBlockState(int,int,int) 7.6%."
+  setBlockState_beneath_getBlockState: "EXPLAINED AWAY: the stack was getBlockState(BlockPos) [func_177435_g] calling getBlockState(x,y,z) [func_186032_a] - a normal vanilla overload chain, verified by javap descriptors. NOT an NEID artifact."
+  blockcallbacks: "net.minecraftforge.registries.GameData$BlockCallbacks$1 extends GameData$ClearableObjectIntIdentityMap with get(awt=IBlockState)->int and a(Object)->int (javap, Forge 2860 jar): it is the blockstate->numeric-id REGISTRY MAP. Its cost = id translation during palette serialization/deserialization, on both save and load paths. func_148747_b is the SRG name of the getId method."
+  neid: "NotEnoughIDs-1.5.4.4.jar confirmed installed; javap shows Hooks.blockStateContainer_setDataFromNBT / blockStateContainer_getDataForNBT / chunkPrimer hooks - injected around section (de)serialization. NEID frames appear in REAL load stacks (55 samples on the Chunk I/O Executor thread), but NO evidence was found that NEID causes the getBlockState cluster; the transformation overlap on that cluster is disproven by the descriptor check. NEID merely hooks the section NBT path."
+
+chunk_load_decomposition: # presence buckets, ServerThread unless noted; self vs presence kept distinct above
+  serverthread_streaming: {state_to_id_map: 126, palette_section_rebuild: 38, chunk_nbt_read_driver: 24, forge_chunkio_callback: 15, te_entity_load: 5, nbt_binary_read: 3, decompress: 1}
+  serverthread_recovery: {state_to_id_map: 198, palette_section_rebuild: 23, forge_chunkio_callback: 29, save_path_unload_burst: 190, chunk_nbt_read_driver: 8, nbt_binary_read: 4}
+  chunk_io_executor_thread_async_n297: {intidentityhashbimap_get_self: 151, neid_setDataFromNBT_self: 55, ebs_write_self: 48, palette_self: 21, roots: "AnvilChunkLoader.read x111 / ChunkIOProvider.run x103 / palette id->state x65"}
+  waiting_vs_execution: "all bucketed samples STATE_RUNNABLE (execution); ServerThread sync-chunk-load waiting does not appear as ExecutionSamples by construction - JFR wait events were not enabled, so wait share is UNKNOWN"
+  allocation_siting: >
+    Class-only allocation events CANNOT establish call sites. The earlier
+    'char[]/byte[] consistent with NBT' association is WITHDRAWN as
+    unsupported; only thread+class attribution stands (ServerThread leads
+    event share; char[] 23.1%/byte[] 11.6% of ServerThread samples).
+
+h1_reassessment_native_nbt_decoder:
+  would_replace: "binary NBT parsing + inflation: measured at 3+1 samples on ServerThread (streaming) plus an unquantified fraction of the async Chunk I/O thread's parse; SMALL."
+  would_not_replace: >
+    ~92% of the observed load-path cost is Java object/state
+    reconstruction that must remain Java: state<->id registry translation
+    (BlockCallbacks/IntIdentityHashBiMap, engine+Forge invariant),
+    palette/section materialization into Java IBlockState graphs, NEID's
+    injected section hooks, TE/entity read, Forge ChunkIO callbacks.
+    A native decoder that emits a Java NBT tree ADDS a conversion copy
+    and leaves all of that in place; a decoder that populates sections
+    directly bypasses NEID/mod hooks (compatibility risk, not just
+    speed). Read-side risk confirmed: incorrectly loaded state can later
+    be saved (persisting corruption).
+  verdict: "the recording does NOT isolate a meaningful removable cost for a native NBT decoder on this workload. H1 deprioritized."
+h2_reassessment_blockstate_cluster:
+  observed: >
+    World.getBlockState -> Chunk.getBlockState read cluster = 11.1%
+    stack presence streaming (253/296 via World.func_180495_p), engine
+    code, no mod transformation involved; state->id map is the largest
+    single transversal cost across ALL phases (stream 126 + recovery 198
+    + async thread 151 self).
+  removable: >
+    Not by native migration (reads are engine behavior; must stay
+    observable to mods). The state->id map cost is a plausible JAVA-side
+    candidate (cache/tune ClearableObjectIntIdentityMap lookups on the
+    save/load paths) - an engine-patch-scale change, not an FFI migration.
+decision_table:
+  - id: H1-native-chunk-NBT-decode
+    observed: "ServerThread: nbt-binary-read 3, decompress 1 (streaming); async thread parse unquantified; dominated instead by state->id (324) + palette/rebuild (61)"
+    thread: ServerThread + Chunk I/O Executor
+    removable: "small: binary parse only"
+    risks: "HIGH (disk-format on write; NEID hooks + persisted-corruption on read)"
+    missing_evidence: "async-thread parse/copy split; save-path on a dirty-world workload"
+    verdict: DEPRIORITIZED
+  - id: H2-blockstate-read-and-id-map
+    observed: "getBlockState cluster 11.1% presence (engine read path); state->id map ~3.5% self streaming + dominant on save/load"
+    thread: ServerThread (all phases)
+    removable: "possible Java-side map/cache optimization; NOT an FFI migration"
+    risks: "engine patch behavior changes observable to mods; id-map is a Forge registry invariant"
+    missing_evidence: "caller census above World.getBlockState; a dirty-world save capture"
+    verdict: JAVA_SIDE_CANDIDATE_NOT_NATIVE
+  - id: H3-tinkers-recipe-hotloop
+    observed: "12.6% stack presence streaming; mod-owned"
+    verdict: OUT_OF_SCOPE_FOR_NATIVE (unchanged)
+recommended_next_action: >
+  No native M2 candidate is supported by this recording. If M2 proceeds,
+  re-scope discovery: capture ONE dirty-world save workload (running
+  tech/factory) to quantify the save-path state->id cost and the async
+  load thread's parse share before selecting; otherwise park M2 candidate
+  search until a real production-style workload is profiled.

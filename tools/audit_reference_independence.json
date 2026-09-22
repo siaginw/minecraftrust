@@ -1,0 +1,115 @@
+[
+  {
+    "caller": "reference",
+    "caller_method": "encodeJavaReference",
+    "caller_location": "tools/bridge/src/com/rustcraft/bridge/NativeChunkPacket.java:656",
+    "shared_method": "vanillaWritesSection",
+    "shared_method_location": "tools/bridge/src/com/rustcraft/bridge/NativeChunkPacket.java:533-538",
+    "parity_sensitive_decision": "Section inclusion: ebs != Chunk.field_186036_a && (!fullChunk || !ebs.func_76663_a()) && (filter & 1<<i) != 0. Decides which sections appear in the reference payload bytes.",
+    "also_used_by": [
+      "native: populateStagingBuffer (line 572)",
+      "native: computeEffectiveMask (line 544)"
+    ],
+    "risk": "COMMON_ROOT: if this predicate deviates from vanilla SPacketChunkData.extractChunkData, BOTH reference and native payloads drop/add the same sections. Byte-compare parity passes while both differ from real vanilla."
+  },
+  {
+    "caller": "native",
+    "caller_method": "populateStagingBuffer",
+    "caller_location": "tools/bridge/src/com/rustcraft/bridge/NativeChunkPacket.java:572",
+    "shared_method": "vanillaWritesSection",
+    "shared_method_location": "tools/bridge/src/com/rustcraft/bridge/NativeChunkPacket.java:533-538",
+    "parity_sensitive_decision": "Section inclusion: identical predicate selects which sections are staged for Rust encode_sections(). Same helper instance as the reference encoder uses.",
+    "also_used_by": [
+      "reference: encodeJavaReference (line 656)",
+      "native: computeEffectiveMask (line 544)"
+    ],
+    "risk": "COMMON_ROOT with reference path: single implementation decides both encoders' section sets; oracle differential tests cannot detect a wrong predicate, only reference-vs-native disagreement, which is impossible by construction."
+  },
+  {
+    "caller": "native",
+    "caller_method": "computeEffectiveMask",
+    "caller_location": "tools/bridge/src/com/rustcraft/bridge/NativeChunkPacket.java:544",
+    "shared_method": "vanillaWritesSection",
+    "shared_method_location": "tools/bridge/src/com/rustcraft/bridge/NativeChunkPacket.java:533-538",
+    "parity_sensitive_decision": "Effective mask: accumulates one bit per section for which vanillaWritesSection returns true. This mask becomes the on-wire availableSections value.",
+    "also_used_by": [
+      "reference: encodeJavaReference (line 656)",
+      "native: populateStagingBuffer (line 572)"
+    ],
+    "risk": "COMMON_ROOT: mask derived from same predicate as reference section selection. A predicate bug corrupts payload and mask consistently."
+  },
+  {
+    "caller": "native",
+    "caller_method": "populateStagingBuffer",
+    "caller_location": "tools/bridge/src/com/rustcraft/bridge/NativeChunkPacket.java:559",
+    "shared_method": "computeEffectiveMask",
+    "shared_method_location": "tools/bridge/src/com/rustcraft/bridge/NativeChunkPacket.java:540-547",
+    "parity_sensitive_decision": "Effective wire mask written into staging header (offset 2-3) that Rust encode_sections trusts: crates/chunk-packet/src/lib.rs:73 reads it and lib.rs:81 only validates section_count == popcount(mask) — internal consistency, not vanilla correctness. Rust emits this mask as the packet's primary bit mask.",
+    "also_used_by": [
+      "native: executeNativePopulation (line 464)"
+    ],
+    "risk": "UNTESTED_AXIS: encodeJavaReference produces payload bytes only, never a mask. No oracle fixture, fuzzer, or shadow compare validates the mask against vanilla constructor behavior (vanilla computes availableSections incrementally during write). Mask correctness rests entirely on the shared vanillaWritesSection predicate."
+  },
+  {
+    "caller": "native",
+    "caller_method": "executeNativePopulation",
+    "caller_location": "tools/bridge/src/com/rustcraft/bridge/NativeChunkPacket.java:464",
+    "shared_method": "computeEffectiveMask",
+    "shared_method_location": "tools/bridge/src/com/rustcraft/bridge/NativeChunkPacket.java:540-547",
+    "parity_sensitive_decision": "Sets SPacketChunkData.field_186948_c (availableSections wire field) via computeEffectiveMask — the mask clients use to parse the payload. Must equal vanilla's constructor-computed mask, but no reference-side counterpart exists to compare against.",
+    "also_used_by": [
+      "native: populateStagingBuffer (line 559)"
+    ],
+    "risk": "UNTESTED_AXIS + COMMON_ROOT: mask field set by same helper chain used for staging; if predicate wrong, mask and payload agree with each other but both are wrong vs vanilla. Shadow mode (runShadowOnPacket, comparePayloads) compares payload bytes only — mask never checked."
+  },
+  {
+    "caller": "native",
+    "caller_method": "populateStagingBuffer",
+    "caller_location": "tools/bridge/src/com/rustcraft/bridge/NativeChunkPacket.java:580",
+    "shared_method": "extractVanillaSection",
+    "shared_method_location": "tools/bridge/src/com/rustcraft/bridge/NativeChunkPacket.java:595-635",
+    "parity_sensitive_decision": "Palette behavior: bits < 9 -> linear/hash-map palette entries staged (count + state IDs via Block.field_176229_d mapping); bits >= 9 -> global palette, palette_count=0. Also reads storage words, palette layout via reflection (fieldBits/fieldPalette/fieldLinearArraySize/fieldLinearStates/fieldHashMapMap).",
+    "also_used_by": [],
+    "risk": "NOT_SHARED (native-only) — reference encoder delegates to vanilla BlockStateContainer.func_186009_b(pb) (line 657). This is the one genuinely independent decision point: reference uses live vanilla serializer, native uses reflection extraction. Oracle byte-compare is meaningful here. Residual risk: state-ID mapping (Block.field_176229_d.func_148747_b) shared assumptions with vanilla write path; unknown palette layout throws -> fallback, so no silent divergence."
+  },
+  {
+    "caller": "both (duplicated inline condition, not a shared method)",
+    "caller_method": "encodeJavaReference:659 vs populateStagingBuffer:583",
+    "caller_location": "tools/bridge/src/com/rustcraft/bridge/NativeChunkPacket.java:659 and :583",
+    "shared_method": "(inline) skyLightPresent && ebs.func_76671_l() != null",
+    "shared_method_location": "duplicated expression",
+    "parity_sensitive_decision": "Sky light array inclusion per section. Both encoders use the identical null-guarded condition.",
+    "also_used_by": [],
+    "risk": "COMMON_MODE_COPY: vanilla 1.12.2 extractChunkData writes skylight when flag set WITHOUT a null check (func_76671_l() called directly). Both bridge paths add the same null guard: if vanilla would NPE/crash-or-write-default on null skylight, bridge paths silently omit 2048 bytes in both encoders — parity passes, wire format deviates."
+  },
+  {
+    "caller": "both (duplicated inline condition, not a shared method)",
+    "caller_method": "encodeJavaReference:664 vs populateStagingBuffer:589",
+    "caller_location": "tools/bridge/src/com/rustcraft/bridge/NativeChunkPacket.java:664 and :589",
+    "shared_method": "(inline) fullChunk && biomes != null",
+    "shared_method_location": "duplicated expression",
+    "parity_sensitive_decision": "Biome array inclusion (256 bytes appended when fullChunk). Both encoders use identical condition.",
+    "also_used_by": [],
+    "risk": "COMMON_MODE_COPY: vanilla writes getBiomeArray() when fullChunk with no null guard (array is never null from a real Chunk). Same-expression duplication means a wrong biome gating rule passes parity in both directions. Also Rust encode_sections (lib.rs:204) hardcodes 256-byte biome copy on full_chunk — size assumption shared, never differentially tested against a null/short biomes array."
+  },
+  {
+    "caller": "both (duplicated inline call sequence, not a shared method)",
+    "caller_method": "encodeJavaReference:658 vs populateStagingBuffer:582",
+    "caller_location": "tools/bridge/src/com/rustcraft/bridge/NativeChunkPacket.java:658 and :582",
+    "shared_method": "(inline) ebs.func_76661_k().func_177481_a() unconditional block-light write",
+    "shared_method_location": "duplicated expression",
+    "parity_sensitive_decision": "Block light array inclusion: always written for every selected section, no null guard on either path.",
+    "also_used_by": [],
+    "risk": "COMMON_MODE_COPY + Rust hard requirement: crates/chunk-packet/src/lib.rs:178-186 requires exactly 2048 bytes block light per section (MissingLightArray error). If vanilla ever permits null block light (skips write), both Java paths would NPE identically or both write — no differential signal. 2048 constant duplicated across Java staging and Rust parser."
+  },
+  {
+    "caller": "native (upstream input shared with reference calls)",
+    "caller_method": "runShadowOnPacket:322-331 / executeNativePopulation:400-408 / oracle harnesses",
+    "caller_location": "tools/bridge/src/com/rustcraft/bridge/NativeChunkPacket.java:322-331, 400-408; tools/chunk-packet-oracle/src/com/rustcraft/oracle/ChunkPacketOracle.java:228-236, 309-316",
+    "shared_method": "(shared inputs) fullChunk = (filter == 65535), skyLight derivation, biomes = chunk.func_76605_m(), mask",
+    "shared_method_location": "caller-side precomputation",
+    "parity_sensitive_decision": "fullChunk equality threshold (filter == 65535) and skyLight provider check computed once and fed to BOTH encodeJavaReference and populateStagingBuffer in shadow mode and in every oracle fixture/fuzz case.",
+    "also_used_by": [],
+    "risk": "SHARED_INPUTS: identical inputs to both encoders is intended for differential testing, but fullChunk=(filter==65535) is itself a parity-sensitive decision not validated against vanilla (vanilla uses changedSectionFilter == 65535 too, but any misreading of edge semantics is invisible: both encoders receive the same boolean)."
+  }
+]

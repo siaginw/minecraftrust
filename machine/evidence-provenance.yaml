@@ -1,0 +1,1623 @@
+# Evidence Provenance Registry — machine-readable
+# Schema: docs/engineering/evidence-provenance.md
+# Every MEASURED number cited in reports must reference an entry here.
+#
+# REPAIR NOTE (M1-final, 2026-09-19): this file was previously YAML-INVALID.
+# The three TARGETA-* MEASURED entries had been mis-indented INTO the
+# `invalidated:` sequence, and the four M14R2-* entries were appended as
+# mapping keys after it, so no YAML parser could read the registry while the
+# regex-based integrity checker still reported clean (regression test:
+# tools/tests/test_evidence_integrity.py::test_broken_yaml_rejected).
+# Repaired structurally WITHOUT dropping any valid or invalidated entry.
+# Pending git_commits were resolved only from verifiable history
+# (git log -- <artifact>). version: 1 -> 2.
+
+version: 2
+last_updated: "2026-09-19 (M1-final evidence repair + Target B/C/D registration)"
+
+entries:
+  # --- M1.4-R corrected harness runs ---
+  - id: "M14R-HARNESS-1000"
+    class: MEASURED
+    claim: "1000/1000 native packets transmitted and client-decoded; 5/5 harness phases PASS"
+    tool: "M14ValidationHarness (Java 8)"
+    command: "java -Djava.library.path=target/release -cp tools/bin;...jars com.rustcraft.oracle.M14ValidationHarness"
+    git_commit: "7476105"
+    raw_artifact: "machine/raw/M14R-harness-1000.json"
+    raw_artifact_sha256: "6f59175de38cefa4bb1d17739b2b1ab6631cfe49737c9522383c959107ad0a50"
+    timestamp: "2026-09-18T19:31:51Z"
+    machine: "AMD Ryzen 7 7800X3D, Windows 11"
+    environment:
+      jvm: "Temurin jdk-8.0.504.1-hotspot (Java 8)"
+      minecraft: "1.12.2 (srg jar)"
+      forge: "14.23.5.2860"
+    sample_count: 1000
+    scope: "CoreMod byte transform, transformed-ctor packet tx+decode, Netty PARANOID leaks, panic/null fallback, mode toggles. Excludes live server behavior."
+    status: valid
+  - id: "M14R-RUST-TESTS"
+    class: MEASURED
+    claim: "19 Rust unit tests pass (M1.4-R); 11 chunk-packet lib tests re-verified 2026-09-19"
+    tool: "cargo test --lib"
+    command: "cargo test --lib"
+    git_commit: "7476105"
+    raw_artifact: "machine/raw/M14R-cargo-test.txt"
+    raw_artifact_sha256: "778bb53692be7b7963df49e9493102630cf2f5b9f4b03bfb655fcb62784bf78f"
+    timestamp: "2026-09-18T19:30:00Z"
+    machine: "AMD Ryzen 7 7800X3D, Windows 11"
+    environment:
+      rustc: "rustc (release profile)"
+    sample_count: 19
+    scope: "Unit-level: staging schema validation, error codes, palette/storage round-trip. Not runtime parity."
+    status: valid
+  - id: "M14R-PARITY-11K"
+    class: MEASURED
+    claim: "11,000 true-vanilla-reference fixtures, 0 divergences, 0 native fallbacks, 8288 null-section cases"
+    tool: "M14RParityHarness (Java 8)"
+    command: "bash tools/run-shadow.sh com.rustcraft.oracle.M14RParityHarness <n> <seed> machine/raw"
+    git_commit: "a81fb39"
+    raw_artifact: "machine/raw/M14R-parity-campaign.log"
+    raw_artifact_sha256: "af1a0e279989b2b918005e98147ef7018375e8036c0031623378145f3a307154"
+    timestamp: "2026-09-18"
+    machine: "AMD Ryzen 7 7800X3D, Windows 11"
+    java: "Temurin jdk-8.0.504.1-hotspot"
+    rust_profile: "release"
+    sample_count: 11000
+    scope: "corrected offline parity with independent vanilla-semantics reference (post shared-helper repair)"
+    status: valid
+  - id: "M14R-NETTY-ADDR-REGRESSION"
+    class: MEASURED
+    claim: "internalNioBuffer(...).address() returns arena slab base, not per-buffer address; 31/32 pooled buffers diverge; fillPattern cross-write test 0 corrupted"
+    git_commit: "5097759"
+    command: "bash tools/run-shadow.sh com.rustcraft.oracle.NettyAddressRegressionTest"
+    raw_artifact: "machine/raw/netty-reg-parity.jsonl"
+    raw_artifact_sha256: "d60f945d4fc66c9075193c0195742cd97ba558d2be53b81c415920256c202518"
+    note: "regression test stdout logged in docs; rerun after DLL rebuild"
+    machine: "Windows 11, Siagi host"
+    java: "Temurin jdk-8.0.504.1-hotspot"
+    rust_profile: "release"
+    sample_count: 32
+    timestamp: "2026-09-18"
+    scope: "SCOPE-N/A (memory addressing regression)"
+    status: valid
+  - id: "M14R-PARITY-100K-TRUE"
+    class: MEASURED
+    claim: "100,000/100,000 consecutive shadow matches, 0 mismatches, 0 fallbacks, ~9460 pkt/s"
+    git_commit: "5097759"
+    command: "bash tools/run-shadow.sh com.rustcraft.oracle.LiveShadowHarness 100000 machine/raw"
+    raw_artifact: "machine/raw/M14R-shadow-campaign.txt"
+    raw_artifact_sha256: "ae3f89876573dffea014ea90cbabd8f5eed91726fee3efac78b70a9377dfb32b"
+    machine: "Windows 11, Siagi host"
+    java: "Temurin jdk-8.0.504.1-hotspot"
+    rust_profile: "release"
+    sample_count: 100000
+    timestamp: "2026-09-18"
+    scope: "shadow parity (SCOPE-A payload equality); synthetic-shape corpus, no pack installed"
+    status: valid
+  - id: "M14R-PARITY-11K-RERUN-POSTADDRFIX"
+    class: MEASURED
+    git_commit: "696a793"
+    claim: "3000/3000 (spot) post-DLL-rebuild parity, 0 divergence, 0 fallback"
+    command: "bash tools/run-shadow.sh com.rustcraft.oracle.M14RParityHarness 1000 2000 machine/raw/netty-reg-parity.jsonl"
+    raw_artifact: "machine/raw/netty-reg-parity.jsonl"
+    raw_artifact_sha256: "d60f945d4fc66c9075193c0195742cd97ba558d2be53b81c415920256c202518"
+    java: "Temurin jdk-8.0.504.1-hotspot"
+    rust_profile: "release"
+    sample_count: 3000
+    timestamp: "2026-09-18"
+    scope: "corrected deterministic+fuzz parity"
+    status: valid
+  - id: "M14R-JNI-NOOP-LOWER-BOUND"
+    class: MEASURED
+    git_commit: "696a793"
+    claim: "JNI noop batched transition 3.49-3.51 ns/call at n=100k across 3 fresh JVMs (21-22 ns at n=1000 = timer resolution artifact)"
+    command: "bash tools/run-shadow.sh com.rustcraft.oracle.LiveShadowHarness 2 <dir> (x3)"
+    raw_artifact: "machine/raw/M14R-jni-lower-bound.csv"
+    raw_artifact_sha256: "cf43e8114e89d067b1645b3e2a144092ad789c66b96e5467a178a69a60727871"
+    note: "stability runs jni_stab_{1,2,3} in OS temp; first-run copy committed"
+    java: "Temurin jdk-8.0.504.1-hotspot"
+    sample_count: 600
+    timestamp: "2026-09-18"
+    scope: "JNI_NOOP_LOWER_BOUND (not production cost)"
+    status: valid
+  - id: "M14R-CANONICAL-SCOPES"
+    class: MEASURED
+    git_commit: "696a793"
+    claim: "Equal-scope (HANDOFF-0 era): SCOPE-A-N native p50 3.20 us vs SCOPE-B Java ctor p50 6.20 us pooled; SCOPE-C-N vs SCOPE-C native SLOWER on all 24 fixtures (honest negative result)"
+    command: "bash tools/run-shadow.sh com.rustcraft.oracle.CanonicalScopesBenchmark machine/raw/M14R-canonical-scopes.csv"
+    raw_artifact: "machine/raw/M14R-canonical-scopes.csv"
+    raw_artifact_sha256: "17ee28966f174b74aa9f10cb30830d81992b20be3b7b78d1b601f03d40187945"
+    row_count: 48000
+    summary: "machine/raw/M14R-canonical-scopes-summary.txt"
+    java: "Temurin jdk-8.0.504.1-hotspot"
+    rust_profile: "release"
+    sample_count: 48000
+    timestamp: "2026-09-18"
+    scope: "SCOPE-A/A-N/B/C per docs/engineering/m1-benchmark-scopes.md"
+    status: valid
+  - id: "M14R-STAGE-DECOMPOSITION"
+    class: MEASURED
+    git_commit: "696a793"
+    claim: "T_STAGE 0xFFFF 16-sec: header 0.1 + eligibility 0.1 + reflect 0.3 + longLoop 1.4 + lights 1.0 + biomes 0.1 = 3.0 us reconciled vs whole 3.0; reflection NOT dominant; bulk LongBuffer put SLOWER (6.0); Unsafe.copyMemory 1.0"
+    command: "bash tools/run-shadow.sh com.rustcraft.oracle.StageDecompositionBench"
+    raw_artifact: "machine/raw/M14R-stage-decomposition.txt"
+    raw_artifact_sha256: "980dc9229663f3f641173e4e99bb880091f68a7e9d8ca8551e7e770a946946ae"
+    java: "Temurin jdk-8.0.504.1-hotspot"
+    sample_count: 2000
+    timestamp: "2026-09-18"
+    scope: "staging sub-phase exclusive costs (SCOPE-A-N decomposition)"
+    status: valid
+  # --- superseded placeholders (kept for history; resolved by real entries) ---
+  - id: "M14R-JNI-NOOP"
+    class: ASSUMED
+    claim: "JNI transition cost — placeholder awaiting honest measurement"
+    status: superseded
+    superseded_by: "M14R-JNI-NOOP-LOWER-BOUND"
+  - id: "M14R-HANDOFF"
+    class: ASSUMED
+    claim: "Handoff cost (writerIndex + copy) — placeholder awaiting measurement"
+    status: superseded
+    superseded_by: "M14R2-HANDOFF-A-FULLCORPUS"
+  - id: "M14R-A2A-BENCH"
+    class: ASSUMED
+    claim: "Apples-to-apples microbenchmark — placeholder awaiting repaired honest rerun"
+    status: superseded
+    superseded_by: "M14R2-HANDOFF-A-FULLCORPUS"
+  - id: "M14R-PARITY-100K"
+    class: ASSUMED
+    claim: "New 100k true-vanilla-reference parity campaign — placeholder awaiting execution"
+    status: superseded
+    superseded_by: "M14R-PARITY-100K-TRUE"
+  # --- M1.4-R2 HANDOFF-A (all committed in c7e8b91; verified via git log) ---
+  - id: "M14R2-HANDOFF-A-FULLCORPUS"
+    class: MEASURED
+    claim: "HANDOFF-A equal-scope full-corpus deep-n: native p50 faster on all 21 eligible fixtures (3.8-37.1%); pooled eligible p50 4.70us vs Java 6.70us; p99 mixed (pooled -5.3% worse); 3 ineligible fixtures correctly excluded by 8192B gate"
+    git_commit: "c7e8b91"
+    command: "bash tools/run-shadow.sh com.rustcraft.oracle.FullCorpusDeepBench machine/raw/M14R2-fullcorpus-deep.csv"
+    raw_artifact: "machine/raw/M14R2-fullcorpus-deep.csv"
+    raw_artifact_sha256: "78df8d0032ce2d972d4ded089eb56d7ea0f3140abfe7a05dfba84a91a7e45ef9"
+    methodology: "isolated per-scope passes, 500-iter warmup, 2000 trials/fixture, reused buffers"
+    java: "Temurin jdk-8.0.504.1-hotspot"
+    rust_profile: "release"
+    sample_count: 96000
+    timestamp: "2026-09-19"
+    scope: "M1.4-R2 §3/§4: full corpus deep-n HANDOFF-A equal-scope benchmark"
+    status: valid
+  - id: "M14R2-GC-CRITICAL-SECTION"
+    class: MEASURED
+    git_commit: "c7e8b91"
+    claim: "200k-burst GetPrimitiveArrayCritical hold p50 0.1-1.0us, p999 <=2.6us; no GC/safepoint regression attributable to critical section"
+    raw_artifact: "machine/raw/M14R2-gc-critical-section.txt"
+    raw_artifact_sha256: "0c3a4a643a80d5f924bb81b87434a8b164a19ae2196eb6fc966955b22b8b5b52"
+    methodology: "200k burst encode via GetPrimitiveArrayCritical + -verbose:gc"
+    java: "Temurin jdk-8.0.504.1-hotspot"
+    sample_count: 1000000
+    timestamp: "2026-09-19"
+    scope: "M1.4-R2 §2: GetPrimitiveArrayCritical hold-time + GC behavior"
+    status: valid
+  - id: "M14R2-TARGET-A-REVALIDATION"
+    class: MEASURED
+    git_commit: "c7e8b91"
+    claim: "Target A HANDOFF-A revalidation: SHADOW 10773/10773 matches 0 mismatch 0 fallback; ON_EXPERIMENTAL 2187 native packets 0 fallback 0 error"
+    command: "M1_MODE=SHADOW / ON_EXPERIMENTAL tools/targeta-run.sh + python tools/targeta_client.py"
+    raw_artifact: "machine/targetA/r2-shadow-10k-final-metrics.txt"
+    raw_artifact_sha256: "f24e5d8daa85af377f46ff30fb5b4c187e8f8f986fc16a9cd9d11e97107410de"
+    raw_artifact_secondary: "machine/targetA/r2-onexp-final-metrics.txt"
+    methodology: "real Forge 14.23.5.2860 server + protocol bot, HANDOFF-A coremod"
+    java: "Temurin jdk-8.0.504.1-hotspot"
+    sample_count: 10773
+    timestamp: "2026-09-19"
+    scope: "M1.4-R2 §1 revalidation of Target A with HANDOFF-A binaries"
+    status: valid
+  - id: "M14R2-PARANOID"
+    class: MEASURED
+    git_commit: "c7e8b91"
+    claim: "Target A paranoid Netty leakDetection run incl. mid-stream disconnect: 0 leaks, 0 panics, 0 cross-buffer, 0 use-after-release"
+    raw_artifact: "machine/targetA/run-r2-paranoid2.log"
+    raw_artifact_sha256: "92b4e0bbfe245e34d9c2455e49b51e0ebd7b04e81b7979eb01c7c6b5c01bf1f3"
+    methodology: "paranoid Netty leakDetection + mid-stream disconnect + protocol bot"
+    java: "Temurin jdk-8.0.504.1-hotspot"
+    sample_count: 1053
+    timestamp: "2026-09-19"
+    scope: "M1.4-R2 §2 memory-safety canary"
+    status: valid
+  - id: "M14R2-PERF-DERIVED"
+    class: DERIVED_FROM_MEASURED
+    claim: "Derived per-fixture + pooled eligible-class p50/p99 tables and claim-scope qualifications from M14R2-fullcorpus-deep.csv"
+    git_commit: "c7e8b91"
+    raw_artifact: "machine/raw/M14R2-fullcorpus-deep-summary.csv"
+    raw_artifact_sha256: "580388366782d00fb7abdb4d6dc321e8277cf3b360d78489cff4d6f993eebd71"
+    summary: "machine/M1.4-R2-performance-results.yaml"
+    derived_from: "M14R2-HANDOFF-A-FULLCORPUS"
+    note: "git_commit = commit of the SOURCE samples; summary tables derived 2026-09-19 and committed with the M1-final provenance repair"
+    sample_count: 96000
+    timestamp: "2026-09-19"
+    scope: "offline derivation only; no new measurement"
+    status: valid
+  # --- Target A real-server validation (committed in ee1b646) ---
+  - id: "TARGETA-REAL-SERVER-VALIDATION"
+    class: MEASURED
+    claim: "Real Forge 1.12.2.2860 dedicated server via LaunchWrapper/LaunchClassLoader: TRANSFORMED_SUCCESS transformCount=1; OFF/SHADOW/ON_EXPERIMENTAL all boot+serve; FML protocol bot 30 sessions x 81 chunks"
+    git_commit: "ee1b646"
+    command: "bash tools/targeta-run*.sh + python tools/targeta_client.py"
+    raw_artifact: "machine/targetA/run-r2-off-validate.log"
+    raw_artifact_sha256: "970d715bb02dc5e6c5ae99b6fade323786cdf2afb1e7a7d524e3eea97e7453df"
+    java: "Temurin jdk-8.0.504.1-hotspot"
+    rust_profile: "release"
+    sample_count: 30
+    timestamp: "2026-09-18"
+    scope: "Target A real-runtime validation (§10-§12)"
+    status: valid
+  - id: "TARGETA-SHADOW-PARITY-LIVE-10K"
+    class: MEASURED
+    claim: "Live server SHADOW parity: 11259/11259 comparisons, 0 mismatch, 0 fallback (surpasses §14 10k target)"
+    git_commit: "ee1b646"
+    command: "M1_MODE=SHADOW tools/targeta-run.sh + HOLD_SECONDS=8 SESSIONS=200 python tools/targeta_client.py parity10k-b"
+    raw_artifact: "machine/targetA/shadow-parity10k-final-metrics.txt"
+    raw_artifact_sha256: "3f571fd9fd0f25a4ecbcfa63eda94f96ba2eb44b093aefc70a4ee62372a24c95"
+    java: "Temurin jdk-8.0.504.1-hotspot"
+    rust_profile: "release"
+    sample_count: 11259
+    timestamp: "2026-09-18"
+    scope: "Target A live shadow parity (§14)"
+    status: valid
+  - id: "TARGETA-ONEXP-NATIVE-TRANSMISSION"
+    class: MEASURED
+    claim: "ON_EXPERIMENTAL live transmission: 2430 native packets, 0 fallback, 0 Java, 0 client decode errors across 30 bot sessions; paranoid leak run 243 packets 0 leak reports"
+    git_commit: "ee1b646"
+    command: "M1_MODE=ON_EXPERIMENTAL tools/targeta-run.sh / targeta-paranoid.sh + tools/targeta_client.py onexp-canary"
+    raw_artifact: "machine/targetA/onexp-canary-final-metrics.txt"
+    raw_artifact_sha256: "c689dfeddc38e79c785673af693633b2d369b470081f39f074702166a713e4ef"
+    java: "Temurin jdk-8.0.504.1-hotspot"
+    rust_profile: "release"
+    sample_count: 2430
+    timestamp: "2026-09-18"
+    scope: "Target A native transmission + Netty lifetime (§15-§16)"
+    status: valid
+  # --- Target B/C/D installation status (placeholders resolved 2026-09-19) ---
+  - id: "TARGET-B-INSTALL"
+    class: ASSUMED
+    claim: "Target B (minimal corpus) real server installation"
+    status: resolved_2026_09_19
+    note: "Acquired and tested (was 'not_yet_acquired'). 12 mods incl. Thermal Expansion/Foundation, AE2, Iron Chests, JourneyMap. Local fixture hashes: machine/targetB/fixture-manifest.txt. Evidence: TARGET-B-* entries."
+  - id: "TARGET-C-INSTALL"
+    class: ASSUMED
+    claim: "Target C (FTB Revelation 3.4.0) server"
+    status: resolved_2026_09_19
+    note: "Acquired via official FTB installer (sha256 in machine/targetC/pack-metadata.json); 193 mods; runs pack-official Forge 14.23.5.2846 (deviation from modpack-targets.yaml .2860 - see M1-final coverage doc). FoamFix 0.10.5 + Phosphor 0.2.7 active (log-verified). Evidence: TARGET-C-* entries."
+  - id: "TARGET-D-INSTALL"
+    class: ASSUMED
+    claim: "Target D (SevTech Ages 3.2.3) server"
+    status: resolved_2026_09_19
+    note: "Acquired (CurseForge manifest: machine/targetD/manifest.json); 262 mods; Forge 14.23.5.2860. FoamFix 0.10.10 active; NO Phosphor jar installed - GATE-COMPAT-D as written (FoamFix AND Phosphor) is NOT satisfied by this run. Substitution proposal in M1-final coverage doc, operator approval required."
+  # --- Target B/C/D campaigns (uncommitted work preserved 2026-09-19) ---
+  - id: "TARGET-B-SHADOW"
+    class: MEASURED
+    claim: "Target B live SHADOW parity: 46305/46305 comparisons, 0 mismatch, 0 fallback"
+    git_commit: "a1acdcf"
+    command: "M1_MODE=SHADOW HOLD_SECONDS=8 SESSIONS=105 bash tools/targetb-run.sh b-shadow 900 + python tools/targeta_client.py b-shadow"
+    raw_artifact: "machine/targetB/shadow-final-metrics.txt"
+    raw_artifact_sha256: "77559a09b374236238936e0ccc37e5406347186d4c865e70ba891acdf49714aa"
+    raw_artifact_secondary: "machine/targetA/client-b-shadow.jsonl"
+    java: "Temurin jdk-8.0.504.1-hotspot"
+    rust_profile: "release"
+    handoff: "A"
+    binaries: "coremod c9120858 / dll 02c722de (machine/target-binary-provenance.yaml)"
+    sample_count: 46305
+    timestamp: "2026-09-19"
+    scope: "Target B minimal mod corpus (12 mods), protocol-bot driven"
+    status: valid
+  - id: "TARGET-B-ONEXP"
+    class: MEASURED
+    claim: "Target B ON_EXPERIMENTAL: 48510 native packets, 0 fallback, 0 Java-path, 0 transformer conflicts"
+    git_commit: "a1acdcf"
+    command: "M1_MODE=ON_EXPERIMENTAL bash tools/targetb-run.sh b-onexp <secs> + python tools/targeta_client.py b-onexp"
+    raw_artifact: "machine/targetB/onexp-final-metrics.txt"
+    raw_artifact_sha256: "a3f6dcf83be27b34f9e8bc3c7d827c2391d86720a078fb42fc523a652e15ed4b"
+    raw_artifact_secondary: "machine/targetA/client-b-onexp.jsonl"
+    java: "Temurin jdk-8.0.504.1-hotspot"
+    rust_profile: "release"
+    handoff: "A"
+    binaries: "coremod c9120858 / dll 02c722de"
+    sample_count: 48510
+    timestamp: "2026-09-19"
+    scope: "Target B native transmission, protocol-bot driven, default leak detection"
+    status: valid
+  - id: "TARGET-B-PARANOID"
+    class: MEASURED
+    claim: "Target B paranoid Netty leakDetection: 21168 native packets, 0 leak reports, 0 fallback"
+    git_commit: "a1acdcf"
+    command: "M1_MODE=ON_EXPERIMENTAL bash tools/targetb-paranoid.sh b-paranoid <secs> + python tools/targeta_client.py b-paranoid"
+    raw_artifact: "machine/targetB/paranoid-final-metrics.txt"
+    raw_artifact_sha256: "349c83a07ca197f4e60ab24e39d0af364397fe9f81e8480750aaf1d7545f6b32"
+    java: "Temurin jdk-8.0.504.1-hotspot"
+    rust_profile: "release"
+    handoff: "A"
+    binaries: "coremod c9120858 / dll 02c722de"
+    sample_count: 21168
+    timestamp: "2026-09-19"
+    scope: "Target B memory-safety canary, io.netty.leakDetection.level=paranoid"
+    status: valid
+  - id: "TARGET-C-SHADOW-10K"
+    class: MEASURED
+    claim: "FTB Revelation live SHADOW parity: 10143/10143 comparisons, 0 mismatch, 0 fallback (>=10k §14 target met)"
+    git_commit: "a1acdcf"
+    command: "M1_MODE=SHADOW M1_MODLIST=machine/targetC/mod-ids.json HOLD_SECONDS=8 SESSIONS=25 bash tools/targetc-run.sh c-shadow10k <secs> + python tools/targeta_client.py c-shadow10k"
+    raw_artifact: "machine/targetC/shadow-10k-final-metrics.txt"
+    raw_artifact_sha256: "c6838b82204a15521ed4b4cdfd04013ce2460ea04ca5f2f989194f992d6c8f77"
+    raw_artifact_secondary: "machine/targetA/client-c-shadow10k.jsonl"
+    java: "Temurin jdk-8.0.504.1-hotspot"
+    rust_profile: "release"
+    handoff: "A"
+    binaries: "coremod c9120858 / dll 02c722de"
+    environment_notes: "Forge 14.23.5.2846; FoamFix 0.10.5 + Phosphor 0.2.7 active"
+    sample_count: 10143
+    timestamp: "2026-09-19"
+    scope: "Target C real modpack shadow parity, protocol-bot driven"
+    status: valid
+  - id: "TARGET-C-ONEXP"
+    class: MEASURED
+    claim: "FTB Revelation ON_EXPERIMENTAL: 88200 native packets, 0 fallback, 0 Java-path, 0 transformer conflicts"
+    git_commit: "a1acdcf"
+    command: "M1_MODE=ON_EXPERIMENTAL M1_MODLIST=machine/targetC/mod-ids.json bash tools/targetc-run.sh c-onexp <secs> + python tools/targeta_client.py c-onexp"
+    raw_artifact: "machine/targetC/onexp-final-metrics.txt"
+    raw_artifact_sha256: "26596a3469352639745b453a8e2fca7f0293319925d206e77e66801da0cc4c34"
+    raw_artifact_secondary: "machine/targetA/client-c-onexp.jsonl"
+    java: "Temurin jdk-8.0.504.1-hotspot"
+    rust_profile: "release"
+    handoff: "A"
+    binaries: "coremod c9120858 / dll 02c722de"
+    environment_notes: "Forge .2846; FoamFix + Phosphor active; mixin-safe deferred bridge init required (RustCraftCoreMod change of a1acdcf)"
+    sample_count: 88200
+    timestamp: "2026-09-19"
+    scope: "Target C native transmission, protocol-bot driven, default leak detection"
+    status: valid
+  - id: "TARGET-C-PARANOID"
+    class: MEASURED
+    claim: "FTB Revelation paranoid Netty leakDetection: 29106 native packets, 0 fallback, 0 M1-attributable leak reports; 1 pack-side ElecCore WindowManager SEVERE leak event present, reproduced identically with M1 OFF (see M1F-ELECCORE-LEAK-RECONCILIATION; claim corrected 2026-09-19 - originally overstated as '0 leak reports')"
+    git_commit: "a1acdcf"
+    command: "M1_MODE=ON_EXPERIMENTAL bash tools/targetc-paranoid.sh c-paranoid <secs> + python tools/targeta_client.py c-paranoid"
+    raw_artifact: "machine/targetC/paranoid-final-metrics.txt"
+    raw_artifact_sha256: "d7c9bebe01656afdf00650b1e67baf8219ac2141840074a35f7143d9cbc5c86a"
+    java: "Temurin jdk-8.0.504.1-hotspot"
+    rust_profile: "release"
+    handoff: "A"
+    binaries: "coremod c9120858 / dll 02c722de"
+    sample_count: 29106
+    timestamp: "2026-09-19"
+    scope: "Target C memory-safety canary, paranoid leak detection"
+    status: valid
+  - id: "TARGET-D-SHADOW-10K"
+    class: MEASURED
+    claim: "SevTech Ages live SHADOW parity: 11007/11007 comparisons, 0 mismatch, 0 fallback"
+    git_commit: "a1acdcf"
+    command: "M1_MODE=SHADOW M1_MODLIST=machine/targetD/mod-ids.json HOLD_SECONDS=8 SESSIONS=25 bash tools/targetd-run.sh d-shadow3 <secs> + python tools/targeta_client.py d-shadow3"
+    raw_artifact: "machine/targetD/shadow-10k-final-metrics.txt"
+    raw_artifact_sha256: "d67e891aabd7a6e800c8aa7f0d013da6d0a244f504d8a83b6af9e79342b4c98b"
+    raw_artifact_secondary: "machine/targetA/client-d-shadow3.jsonl"
+    java: "Temurin jdk-8.0.504.1-hotspot"
+    rust_profile: "release"
+    handoff: "A"
+    binaries: "coremod c9120858 / dll 02c722de"
+    environment_notes: "Forge .2860; FoamFix 0.10.10 active; NO Phosphor installed"
+    sample_count: 11007
+    timestamp: "2026-09-19"
+    scope: "Target D real modpack shadow parity, protocol-bot driven"
+    status: valid
+  - id: "TARGET-D-ONEXP"
+    class: MEASURED
+    claim: "SevTech Ages ON_EXPERIMENTAL: 88200 native packets, 0 fallback, 0 Java-path, 0 transformer conflicts"
+    git_commit: "a1acdcf"
+    command: "M1_MODE=ON_EXPERIMENTAL M1_MODLIST=machine/targetD/mod-ids.json bash tools/targetd-run.sh d-onexp <secs> + python tools/targeta_client.py d-onexp"
+    raw_artifact: "machine/targetD/onexp-final-metrics.txt"
+    raw_artifact_sha256: "496be4ac50c97845f598754078429b3c6c90397497d730458286b200032596a5"
+    raw_artifact_secondary: "machine/targetA/client-d-onexp.jsonl"
+    java: "Temurin jdk-8.0.504.1-hotspot"
+    rust_profile: "release"
+    handoff: "A"
+    binaries: "coremod c9120858 / dll 02c722de"
+    environment_notes: "Forge .2860; FoamFix active; no Phosphor"
+    sample_count: 88200
+    timestamp: "2026-09-19"
+    scope: "Target D native transmission, protocol-bot driven, default leak detection"
+    status: valid
+  - id: "TARGET-D-PARANOID"
+    class: MEASURED
+    claim: "SevTech Ages paranoid Netty leakDetection: 28224 native packets, 0 leak reports, 0 fallback"
+    git_commit: "a1acdcf"
+    command: "M1_MODE=ON_EXPERIMENTAL bash tools/targetd-paranoid.sh d-paranoid <secs> + python tools/targeta_client.py d-paranoid"
+    raw_artifact: "machine/targetD/paranoid-final-metrics.txt"
+    raw_artifact_sha256: "9dca8da0796a05d6228402313483ab3c7a9da56374aebd7f19262f46bb27f4d2"
+    java: "Temurin jdk-8.0.504.1-hotspot"
+    rust_profile: "release"
+    handoff: "A"
+    binaries: "coremod c9120858 / dll 02c722de"
+    sample_count: 28224
+    timestamp: "2026-09-19"
+    scope: "Target D memory-safety canary, paranoid leak detection"
+    status: valid
+  - id: "M1-BINARY-PROVENANCE"
+    class: DERIVED_FROM_MEASURED
+    claim: "All four targets ran byte-identical binaries: coremod jar c9120858 (class-identical rebuild from preserved source) and rustcraft_ffi.dll 02c722de (bit-identical cargo rebuild)"
+    git_commit: "a1acdcf"
+    raw_artifact: "machine/targetB/fixture-manifest.txt"
+    raw_artifact_sha256: "eb44bfacd81db2f1906d0a827697b2457dcf368258f2099bee043ed603a1c28f"
+    summary: "machine/target-binary-provenance.yaml"
+    methodology: "sha256 of all server-deployed copies; javac rebuild via tools/build-coremod.sh with per-class hash comparison; cargo build --release bit-exact comparison"
+    derived_from: "tools/bridge/src + crates/ffi + crates/chunk-packet source at a1acdcf"
+    sample_count: 8
+    timestamp: "2026-09-19"
+    scope: "binary-to-source linkage for every campaign (no incomplete linkage remains)"
+    status: valid
+
+  # --- M1-final operator-directive validation (2026-09-19) ---
+  - id: "M1F-NONVANILLA-FALLBACK"
+    class: MEASURED
+    claim: "Targeted fixture for the never-campaign-exercised non-vanilla container path: ON mode rejects subclass container (populatePacket=false) with fallback reason counters incremented; Java path byte-identical through the subclass and via post-hook ctor body; zero native work (staging/predict/JNI counters unchanged - no pointer acquired); SHADOW path fires the Deduplicated detector counter and byte-matches. 12/12 checks PASS."
+    git_commit: "dd4005e"
+    command: "bash tools/run-shadow.sh com.rustcraft.oracle.NonVanillaContainerFallbackTest"
+    raw_artifact: "machine/raw/M1F-nonvanilla-fallback-test.txt"
+    raw_artifact_sha256: "8bd05b1d1ff46ecdbf87f5644b527cae74b313409906780cf1eaec2b655417de"
+    methodology: "byte-identical container subclass (same BitArray+palette objects, only class identity differs) installed via reflection into a real fixture chunk"
+    java: "Temurin jdk-8.0.504.1-hotspot"
+    rust_profile: "release"
+    binaries: "dll 02c722de (unchanged)"
+    sample_count: 12
+    timestamp: "2026-09-19"
+    scope: "fallback-safety fixture; closes the UNTESTED extraction-path gap from coverage doc §5"
+    status: valid
+  - id: "M1F-TAIL-LATENCY"
+    class: MEASURED
+    claim: "4 fresh JVMs, balanced pass order: pooled eligible p99 regression ABSENT in replication (native p99 better in all 4 JVMs, +7% to +38%); p50 reduction 28.6-36.1% (median 29.9%); det5 p99 anomaly reproducible-unresolved; held-out boundary fixtures: 4645/5157B routed Java, 8248-23666B native-better p50 in all JVMs; selection-path overhead for ineligible packets +0.4-1.3us p50; gate cost ~0"
+    git_commit: "dd4005e"
+    command: "bash tools/tail-latency-study.sh (R=4, alternating java-first/native-first)"
+    raw_artifact: "machine/raw/M1F-tail-j1.csv"
+    raw_artifact_sha256: "4ca4b6f73a97009f12255c204443a3cd10d04fd82f4252f37c772449341b6ec0"
+    raw_artifact_secondary: "machine/raw/M1F-tail-j2.csv"
+    summary: "machine/M1F-tail-results.yaml"
+    note: "per-JVM CSVs j2/j3/j4 sha256: 2a70816189f7a313f222b73b0be95629dd0acc183bdbbc6ef47d379526706386 / f6e47e4f61385921545fb2534be78dfcd367d4f1a7cd6967e1ab5d61496d9ccf / 67b0d371f218ba51cd68fb1eca06152294e1906c3d179ca7a51fff48b5ac1496; summary: machine/M1F-tail-results.yaml"
+    java: "Temurin jdk-8.0.504.1-hotspot"
+    rust_profile: "release"
+    binaries: "dll 02c722de (unchanged)"
+    sample_count: 816000
+    timestamp: "2026-09-19"
+    scope: "offline tail-latency replication + eligibility selection-path cost; no whole-server inference"
+    status: valid
+  - id: "M1F-ELECCORE-LEAK-RECONCILIATION"
+    class: MEASURED
+    claim: "ElecCore WindowManager Netty leak: identical single SEVERE reportTracedLeak event with identical elec332 stacks in the Target C paranoid campaign run (native ON) AND the M1-OFF paranoid baseline run; zero com.rustcraft frames in any leak stack; B/D runs zero leak events. Verdict per the criterion in tools/targetc-paranoid-off.sh: PACK_BASELINE_UNRELATED_TO_M1."
+    git_commit: "dd4005e"
+    command: "M1_MODE=ON_EXPERIMENTAL tools/targetc-paranoid.sh vs native-OFF tools/targetc-paranoid-off.sh; grep reportTracedLeak + stack extraction"
+    raw_artifact: "machine/raw/M1F-eleccore-leak-native-ON.txt"
+    raw_artifact_sha256: "df0a9a6c141b93d7a9effd5009bff6b1fb70e951c968e23714d08d7d7377912b"
+    raw_artifact_secondary: "machine/raw/M1F-eleccore-leak-native-OFF.txt"
+    note: "secondary sha256 f74b0ff3ad6c30ca9b7d97dfaa8c271abd06f70d25f816653a5c0ba489a1edbf; full local-only logs: run-c-paranoid.log=8c0445df9be33c04f0e968b26126e4f6e5301522d5787d58cf17ef516d296da2, run-c-leakbase2.log=1b9bbb5eb07822ec8d155a365d9e7ad8a5484df4893a08442854a0be4fc6ed62"
+    java: "Temurin jdk-8.0.504.1-hotspot"
+    sample_count: 2
+    timestamp: "2026-09-19"
+    scope: "leak-attribution reconciliation between campaign zero-M1-report table and the earlier ElecCore observation"
+    status: valid
+
+  # --- M1G focused pass (operator authorization 2026-09-19) ---
+  - id: "M1G-PREGATE"
+    class: MEASURED
+    claim: "Pre-staging size bound: 1-written-section selection penalty eliminated (SELECT-vs-JAVA p50 overhead +0.6-0.7us -> ~+0.1us, bnd_k1b within noise); eligible class unaffected (p50 reduction +28.8..+33.9% across 4 fresh balanced JVMs, p99 better in 4/4); routing decisions identical to frozen run; complete Java-selected path measured incl. all eligibility checks"
+    git_commit: "927fe7c"
+    command: "OUT_PREFIX=M1G-tail bash tools/tail-latency-study.sh (R=4) vs frozen M1F-tail-*"
+    raw_artifact: "machine/raw/M1G-tail-j1.csv"
+    raw_artifact_sha256: "08ab2fb3b8542237339bcfddbe30b2c38769b5adf6d687bc62c443ce623fcd78"
+    raw_artifact_secondary: "machine/raw/M1G-tail-j2.csv"
+    summary: "machine/M1G-results.yaml"
+    methodology: "safe upper bound from O(1)-per-section metadata; exact predictOutputLen gate unchanged and still authoritative"
+    java: "Temurin jdk-8.0.504.1-hotspot"
+    rust_profile: "release"
+    binaries: "dll 02c722de unchanged; coremod validation build 9343412e"
+    sample_count: 816000
+    timestamp: "2026-09-19"
+    scope: "offline; no whole-server inference"
+    status: valid
+  - id: "M1G-DET-DIAGNOSIS"
+    class: MEASURED
+    claim: "det5/det1 tail localized to HANDOFF-A heap byte[] allocation phase (worst-20 alloc-dominated 11/20 and 16/20; alloc p99 4.3/9.3us vs p50 0.8/1.2us); JNI critical-section p99 flat <=1.1us; NOT stop-the-world GC (3-5 sub-ms GCs per 20k trials; corrected time-base correlation det5 1/25); precise slow-path cause UNRESOLVED - retained as open regression risk; no correction made; no fixture exclusions"
+    git_commit: "927fe7c"
+    command: "java -verbose:gc -XX:+PrintGCDateStamps -XX:+PrintGCApplicationStoppedTime com.rustcraft.oracle.DetFixtureDiagnosis {det5,det1} 20000 {A,0}"
+    raw_artifact: "machine/raw/M1G-diag-det5-hA.csv"
+    raw_artifact_sha256: "25657baa967e2ee734935f08c8edd01145f5c5ac6d9105af012256b0eabe25f1"
+    raw_artifact_secondary: "machine/raw/M1G-diag-det1-hA.csv"
+    note: "det1-hA sha256 c8bb1268b71cbf9bb48f6e2f306d598b9b9fa46d2501cc94619c4cbbe8a1b20a; handoff-0 variants det5-h0 6f3e7043953293e5bdcff92ff1e99c7f81778a233819c8aa4403b5ba1c69df4a det1-h0 f7215dcc4965c5cf3ca06a16eb4a8b1056eb19620fc92a9de3ccc06e7a385c48; gc logs det5 ad91e4b9247f943007870e2523a6061d73aa126833a6576dd5514dc7dbe2cf99 det1 f3ac42c3d9caabf984be1f3f0be2ac86fe0c7f505b4c17946db208f52621b8fd; hA CSVs carry wall_ms (rerun for time-base-correct GC correlation)"
+    java: "Temurin jdk-8.0.504.1-hotspot"
+    sample_count: 160000
+    timestamp: "2026-09-19"
+    scope: "diagnostic instrumentation separate from acceptance timing"
+    status: valid
+  - id: "M1G-PARITY-SPOT"
+    class: MEASURED
+    claim: "9277 fixtures, 0 divergences on the pre-gate bridge (414 eligibility-routed Java fallbacks, byte-identical)"
+    git_commit: "927fe7c"
+    command: "bash tools/run-shadow.sh com.rustcraft.oracle.M14RParityHarness 1500 7777 machine/raw/M1G-parity-spot.jsonl"
+    raw_artifact: "machine/raw/M1G-parity-spot.jsonl"
+    raw_artifact_sha256: "47ac1e473235c44a5e4928ad79d1eed93bb4aeb85e27556cfb4bd26c3f9faf25"
+    summary: "machine/raw/M1G-parity-spot-summary.txt"
+    java: "Temurin jdk-8.0.504.1-hotspot"
+    rust_profile: "release"
+    sample_count: 9277
+    timestamp: "2026-09-19"
+    scope: "independent vanilla-reference parity spot check on the pre-gate build"
+    status: valid
+  - id: "M1G-TARGET-A-REVALIDATION"
+    class: MEASURED
+    claim: "Live Target A with pre-gate coremod 9343412e: SHADOW 972/972 comparisons 0 mismatch 0 fallback (12 bot sessions); ON_EXPERIMENTAL 486 native packets 0 fallback 0 java-path 0 client decode errors (6 sessions); m1_native_pregate_skipped=0 in this traffic (no sub-8192 packets generated live; skip behavior validated offline)"
+    git_commit: "927fe7c"
+    command: "M1_MODE=SHADOW / ON_EXPERIMENTAL bash tools/targeta-run-stop.sh m1g-shadow|m1g-onexp + tools/targeta_client.py m1g-shadow|m1g-onexp"
+    raw_artifact: "machine/targetA/run-m1g-shadow.log"
+    raw_artifact_sha256: "24f227a94f90ddf23d4a504b4486fb33105de27b7a08bd4ac594c01292c695da"
+    raw_artifact_secondary: "machine/targetA/run-m1g-onexp.log"
+    note: "onexp log sha256 e5457f0aadf05168475f6812ce4f40eb442607d193be1acd6321a16a258f2988; transcripts client-m1g-shadow.jsonl 0bea7407415a966f78828c685d4eec6c50a74d9c78d9b8b184331b0add09f8a2 client-m1g-onexp.jsonl 59c463f8320842c67b8a9cc9538bd55edd74b4999115833e8acb77e64a074592"
+    java: "Temurin jdk-8.0.504.1-hotspot"
+    rust_profile: "release"
+    binaries: "coremod 9343412e + dll 02c722de"
+    sample_count: 1458
+    timestamp: "2026-09-19"
+    scope: "targeted live revalidation of changed paths on clean Forge .2860"
+    status: valid
+  - id: "M1G-NONVANILLA-RERUN"
+    class: MEASURED
+    claim: "NonVanillaContainerFallbackTest 12/12 PASS on the pre-gate build"
+    git_commit: "927fe7c"
+    command: "bash tools/run-shadow.sh com.rustcraft.oracle.NonVanillaContainerFallbackTest"
+    raw_artifact: "machine/raw/M1G-nonvanilla-fallback-test.txt"
+    raw_artifact_sha256: "ff25dd596b090dd825e81dcc9836f4641d05b53333146c9d477d60fd8767748d"
+    java: "Temurin jdk-8.0.504.1-hotspot"
+    sample_count: 12
+    timestamp: "2026-09-19"
+    scope: "fallback-safety fixture on changed build"
+    status: valid
+
+  # --- M1H final validation (operator authorization 2026-09-19, FINAL build 9343412e) ---
+  - id: "M1H-SEVTECH-SHADOW"
+    class: MEASURED
+    claim: "SevTech final-build SHADOW: 11025/11025 comparisons, 0 mismatches, 0 fallbacks (25 bot sessions, 0 errors); >=10k requirement met"
+    git_commit: "6b63216"
+    command: "M1_MODE=SHADOW tools/targetd-run.sh h-shadow 900 + M1_MODLIST=targetD client h-d-shadow 127.0.0.1 25568"
+    raw_artifact: "machine/targetD/server/run-h-shadow.log"
+    raw_artifact_sha256: "5e2110f6adacc6afa936aa0eea5d2751e599b85841a6231112ad872ece4be15f"
+    raw_artifact_secondary: "machine/targetA/client-h-d-shadow.jsonl"
+    summary: "machine/M1H-final-results.yaml"
+    java: "Temurin jdk-8.0.504.1-hotspot"
+    rust_profile: "release"
+    binaries: "coremod 9343412e + dll 02c722de"
+    environment_notes: "Forge .2860; FoamFix 0.10.10 active; no Phosphor; MIXIN 0.8 active"
+    sample_count: 11025
+    timestamp: "2026-09-19"
+    scope: "SevTech live shadow parity on final build"
+    status: valid
+  - id: "M1H-SEVTECH-ONEXP"
+    class: MEASURED
+    claim: "SevTech final-build ON_EXPERIMENTAL: 4410 native packets, 0 fallback, 0 java-path, 0 decode errors; >=2000 requirement met"
+    git_commit: "6b63216"
+    command: "M1_MODE=ON_EXPERIMENTAL tools/targetd-run.sh h-onexp 480 + client h-d-onexp"
+    raw_artifact: "machine/targetD/server/run-h-onexp.log"
+    raw_artifact_sha256: "112a43eee058036e93f466673783c1f1c746e1cb260352d4db28f821911786ad"
+    raw_artifact_secondary: "machine/targetA/client-h-d-onexp.jsonl"
+    java: "Temurin jdk-8.0.504.1-hotspot"
+    binaries: "coremod 9343412e + dll 02c722de"
+    sample_count: 4410
+    timestamp: "2026-09-19"
+    scope: "SevTech native transmission on final build"
+    status: valid
+  - id: "M1H-SEVTECH-PARANOID"
+    class: MEASURED
+    claim: "SevTech final-build paranoid Netty leakDetection: 2646 native packets, 0 fallback, 0 leak events"
+    git_commit: "6b63216"
+    command: "tools/targetd-paranoid.sh h-d-paranoid 420 + client h-d-paranoid"
+    raw_artifact: "machine/targetD/server/run-h-d-paranoid.log"
+    raw_artifact_sha256: "3197ed42cad2c4d11ee1eb413651e7fc892a4138530a3f9a0115adf6bdc4f97e"
+    raw_artifact_secondary: "machine/targetA/client-h-d-paranoid.jsonl"
+    java: "Temurin jdk-8.0.504.1-hotspot"
+    binaries: "coremod 9343412e + dll 02c722de"
+    sample_count: 2646
+    timestamp: "2026-09-19"
+    scope: "SevTech memory-safety canary on final build"
+    status: valid
+  - id: "M1H-ELECCORE-BASELINE-FINAL"
+    class: MEASURED
+    claim: "Fresh OFF-mode + paranoid baseline on the FINAL build: identical ElecCore WindowManager SEVERE leak fires with M1 fully disabled (native_transmitted=0, 3528 java-path packets) -> PACK_BASELINE_UNRELATED_TO_M1 reconfirmed on final build"
+    git_commit: "6b63216"
+    command: "tools/targetc-paranoid-off.sh h-c-leakbase 600 + client h-c-leakbase 127.0.0.1 25567"
+    raw_artifact: "machine/raw/M1H-eleccore-leak-native-OFF-finalbuild.txt"
+    raw_artifact_sha256: "adda807d36603f8acae6d6215b31cb57ef2d41d62d060473f1b06931d16313ba"
+    raw_artifact_secondary: "machine/targetA/client-h-c-leakbase.jsonl"
+    note: "full local log machine/targetC/server/run-h-c-leakbase.log sha256 4c516e373f9137a4793c311637851735da5de46a1488e7cd45e2f69a7ff88ae7"
+    java: "Temurin jdk-8.0.504.1-hotspot"
+    binaries: "coremod 9343412e present but mode=OFF"
+    sample_count: 3528
+    timestamp: "2026-09-19"
+    scope: "leak-attribution baseline, final build"
+    status: valid
+  - id: "M1H-TARGET-B-REVAL"
+    class: MEASURED
+    claim: "Target B final-build SHADOW revalidation: 2646/2646 comparisons, 0 mismatches, 0 fallbacks; exact planned anchor mods (Thermal 5.5.7.1/2.6.7.1, AE2, Tinkers, Iron Chests, JourneyMap) confirmed acquired - no corpus substitution required"
+    git_commit: "6b63216"
+    command: "M1_MODE=SHADOW tools/targetb-run.sh h-b-shadow 420 + client h-b-shadow 127.0.0.1 25569"
+    raw_artifact: "machine/targetB/server/run-h-b-shadow.log"
+    raw_artifact_sha256: "9d3f9df42c6344ff4cd2fdaa712a7b15aabb4a511f07b0af8e48199c2291c251"
+    raw_artifact_secondary: "machine/targetA/client-h-b-shadow.jsonl"
+    java: "Temurin jdk-8.0.504.1-hotspot"
+    binaries: "coremod 9343412e + dll 02c722de"
+    sample_count: 2646
+    timestamp: "2026-09-19"
+    scope: "Target B final-build shadow parity + acquisition decision record"
+    status: valid
+
+  # --- M1I whole-server perf closure (operator authorization 2026-09-19) ---
+  - id: "M1I-WHOLESERVER"
+    class: MEASURED
+    claim: "Matched OFF vs ON on real Revelation+SevTech (8 runs, 2/arm/pack, balanced order, identical worlds/configs/jar): NO resolvable whole-server MSPT improvement (C walk p50 ON-slower in both pairs 5.1->6.2/5.4->8.0ms; D improvement outlier-driven); allocation direction conflicts between packs (C +46% / D -40% walk medians); no full GCs; no GC-pause regression; live pre-gating observed (37 skips) in SevTech ON. GATE-PERF-SERVER/ALLOC NOT MET; GATE-PERF-REGRESS not demonstrated clean (C-walk signal open). M1 stays experimental default OFF."
+    git_commit: "da0a4a4"
+    command: "M1I_RUNS default bash tools/m1i-measured-all.sh (8 runs via tools/m1i-driver.sh + tools/m1i-perf-run.sh); analysis python tools/m1i_analyze.py"
+    raw_artifact: "machine/raw/M1I-i-c1.timeline"
+    raw_artifact_sha256: "5056b36bb1387e201d67365a33916a93a2eb1289ae56484a5de0e37d2c1c0a2e"
+    note: "full 64-hex hashes of all 8 timelines, 8 gc logs, 40 phase snapshots recorded in machine/M1I-perf-results.yaml and machine/raw/M1I-hashes.txt"
+    summary: "machine/M1I-perf-results.yaml"
+    java: "Temurin jdk-8.0.504.1-hotspot"
+    rust_profile: "release"
+    binaries: "measurement coremod b497c4c3 + dll 02c722de unchanged"
+    sample_count: 18800
+    timestamp: "2026-09-20"
+    scope: "whole-server matched OFF/ON with MSPT histogram + GC telemetry; phase-resolved idle/burst/streaming"
+    status: valid
+
+  # --- M1J Revelation regression investigation (operator authorization 2026-09-20) ---
+  - id: "M1J-REVELATION-REGRESSION"
+    class: MEASURED
+    claim: "10 fresh-JVM runs (5 OFF / 5 ON strictly alternating, same world/config/build/workload/instrumentation): M1I's ON-slower streaming signal DISAPPEARS - full range overlap on every metric (p50 OFF 6.5-10.0 vs ON 5.9-10.2ms), all pairwise fractions 7-18/25. GCLocker rates identical across arms (9 vs 8); ON streamed slightly less data (289 vs 305MB). Native path measured at 13.3-17.1us/packet (~0.6% of tick). Classification: NO_REGRESSION_RESOLVED - prior signal was n=2 small-sample variance."
+    git_commit: "2c4aa28"
+    command: "bash tools/m1j-all.sh; analysis python tools/m1j_analyze.py"
+    raw_artifact: "machine/raw/M1J-j-c01.timeline"
+    raw_artifact_sha256: "5aa4f94a0f1ca214bd47a681318fcdfb10f9f088ae8e4270dbf52e47cb9eba87"
+    note: "full hash inventory of all timelines/snapshots/gc logs/transcripts: machine/raw/M1J-hashes.txt"
+    summary: "machine/M1J-regression-results.yaml"
+    java: "Temurin jdk-8.0.504.1-hotspot"
+    rust_profile: "release"
+    binaries: "measurement coremod b497c4c3 + dll 02c722de (unchanged from M1I)"
+    sample_count: 19400
+    timestamp: "2026-09-20"
+    scope: "Revelation streaming-phase OFF-vs-ON regression investigation, phase-resolved with warmup halves"
+    status: valid
+
+  # --- M2J bounded JFR discovery capture (operator approval 2026-09-20) ---
+  - id: "M2J-JFR-CAPTURE"
+    class: MEASURED
+    claim: "ONE bounded Revelation OFF-mode JFR capture (420s, profile config, validated in-run at T+170s): streaming ServerThread self-leaders = Chunk.setBlockState 9.3 pct / getBlockState 4.3 pct / Forge BlockCallbacks 4.3 pct / HashMap ops ~10 pct; block-state cluster ~20 pct under NEID ASM transformation; Tinkers melting-recipe matching 12.6 pct stack presence; chunk-load path (AnvilChunkLoader read + palette rebuild) hot in streaming; AUTOSAVE OBSERVED on ServerThread in recovery (347 save samples, write chain rooted at AnvilChunkLoader write). Allocation (sampled, no stacks this config): ServerThread classes led by char[] 23.1 pct / byte[] 11.6 pct / BlockPos 5.6 pct."
+    git_commit: "c88a564"
+    command: "bash tools/m2j-capture.sh; jfr print --events jdk.ExecutionSample,jdk.ObjectAllocationInNewTLAB,jdk.ObjectAllocationOutsideTLAB machine/raw/M2J-jfr1.jfr"
+    raw_artifact: "machine/raw/M2J-jfr1.jfr"
+    raw_artifact_sha256: "989910cbc22b11bb481dc0f62ae0441fec17d0678e3fd964ec946e3fe819bfa6"
+    note: "full artifact hashes: machine/raw/M2J-hashes.txt; 4 preserved setup-failure diagnostics; sample dumps machine/raw/diag/"
+    summary: "machine/M2J-jfr-results.yaml"
+    java: "Temurin jdk-8.0.504.1-hotspot (JFR profile config, stackdepth=96, dumponexit)"
+    rust_profile: "n/a (M1 OFF)"
+    binaries: "measurement coremod b497c4c3 present, native_chunk_packet=OFF"
+    sample_count: 4921
+    timestamp: "2026-09-20"
+    scope: "single bounded discovery capture; sampled shares, not exact ms/bytes"
+    status: valid
+
+  # --- M2J offline attribution pass (operator authorization 2026-09-20) ---
+  - id: "M2J-ATTRIBUTION"
+    class: DERIVED_FROM_MEASURED
+    claim: "Offline attribution on the M2J JFR: recovery write burst RECLASSIFIED as player-disconnect chunk-unload save (~190 samples), periodic autosave ~8 samples (negligible post-flush), shutdown save under-captured. MAPPING CORRECTION: func_186032_a = Chunk.getBlockState(int,int,int) NOT setBlockState (javap-verified) - the 'setBlockState beneath getBlockState' anomaly is a normal vanilla overload chain, NEID disproven for that cluster. BlockCallbacks$1 = state->id registry map (javap-verified). Chunk-load decomposition: state->id translation + palette/section rebuild dominate (324+61 ServerThread samples); binary NBT parse = 3 samples, decompress = 1; async Chunk I/O thread performs section rebuild (n=297, NEID hooks inside). H1 native NBT decoder NOT supported by this recording (removable slice small, conversion adds copy, NEID/registry must stay Java). H2 = Java-side map/cache candidate, not native. Attempt-3 world-write status UNKNOWN (log lost); attempts 1-2-4 wrote nothing."
+    git_commit: "da24ae9"
+    command: "javap on srg/Forge/NEID jars + offline re-aggregation of machine/raw/diag/m2j-exec-samples.txt"
+    raw_artifact: "machine/M2J-attribution-results.yaml"
+    raw_artifact_sha256: "b9c67fd6db8970f896768e1b62945a7a686e7a9d60290203241d1b846c89cfc8"
+    derived_from: "M2J-JFR-CAPTURE"
+    java: "Temurin jdk-8.0.504.1-hotspot (javap)"
+    sample_count: 4921
+    timestamp: "2026-09-20"
+    scope: "offline attribution only; no reruns, no implementation"
+    status: valid
+
+  # --- M2J H2 offline feasibility check (operator authorization 2026-09-20) ---
+  - id: "M2J-H2-FEASIBILITY"
+    class: DERIVED_FROM_MEASURED
+    claim: "State->ID map identified exactly (ObjectIntIdentityMap.getId overridden by Forge BlockCallbacks$1; IdentityHashMap-backed; clear()/onAdd/onClear invalidation exists; palette-local IntIdentityHashBiMap distinct). Phase-separated caller census: the dominant chain in EVERY phase is AnvilChunkLoader.write <- NEID Hooks.blockStateContainer_getDataForNBT <- registry getId (96/162 stream, 148/186 unload-save, 29/35 late-recovery) - the volume driver is NEID's per-cell-scale serialization, not map inefficiency. VERDICT: PARK H2 - no in-scope change is justified; optimizing the map optimizes the wrong layer; NEID-side fix is mod-owned/out of scope."
+    git_commit: "e60d285"
+    command: "javap -c on Forge/srg jars + offline caller census of machine/raw/diag/m2j-exec-samples.txt"
+    raw_artifact: "machine/M2J-h2-feasibility.yaml"
+    raw_artifact_sha256: "78bdfde1a7f4ad7eb6d4dd24447b545fafe06d28b8251ec223b2ac9dd2ba2f56"
+    derived_from: "M2J-JFR-CAPTURE"
+    sample_count: 3940
+    timestamp: "2026-09-20"
+    scope: "offline feasibility only; no reruns, no implementation"
+    status: valid
+
+  # --- M2.0 bounded prototype (operator authorization 2026-09-20) ---
+  - id: "M20-PROTOTYPE"
+    class: MEASURED
+    claim: "Standalone Rust outbound compression component (flate2 =1.1.10 no-default-features + zlib-rs, level 6 zlib-wrapped, per-packet reset, checked expansion bounds): 14/14 interop PASS against the ACTUAL vanilla NettyCompressionDecoder (exact byte recovery, encoder-faithful framing, dual thresholds); 6/6 Rust unit tests; complete-path benchmark (copies+JNI included, fresh JVM, medians): real chunk payloads 0.13x-0.49x Java time, compressible 0.29x-0.43x, incompressible 1.23x, tiny 1.1-1.8x (sub-threshold in production); heap alloc 10-300x less. No live integration; integration risks recorded from source inspection (vanilla setCompressionThreshold casts the compress handler to NettyCompressionEncoder - future handler must subclass it; no instanceof guard)."
+    git_commit: "e6c4539"
+    command: "cargo test -p compression; bash tools/run-shadow.sh com.rustcraft.interop.InteropMain machine/raw/M20-interop.txt"
+    raw_artifact: "machine/raw/M20-interop.txt"
+    raw_artifact_sha256: "d690fc45dfb8f3c1382b7e0b226693d4ce2eba90cc016fe94408af40d176a49d"
+    summary: "machine/M20-prototype-results.yaml"
+    note: "prototype dll sha256 48aad5ece1988f10...full-in-results-yaml (adds compress export; M1 campaign dlls unchanged at 02c722de in target servers); java.library.path=target/release"
+    java: "Temurin jdk-8.0.504.1-hotspot"
+    rust_profile: "release"
+    binaries: "rustcraft_ffi.dll 48aad5ece1988f10"
+    sample_count: 14
+    timestamp: "2026-09-20"
+    scope: "bounded offline prototype + interop + microbench; no live pipeline, no TPS claims"
+    status: valid
+
+  # --- M2P third-party intake + persist feasibility (operator directive 2026-09-20) ---
+  - id: "M2P-SIMDNBT-EVAL"
+    class: MEASURED
+    claim: "simdnbt (pinned d21464b, MIT, nightly portable_simd) vs crates/nbt on our 9-fixture corpus: PARITY_PASS 22/22 (decode-ours / re-encode-through-ours roundtrips; ForgeCaps MUTF-8 incl NUL-in-key, surrogate pairs, U+10FFFF, LongArray-heavy, 5x8/12x2 compounds, 1.12.2 chunk shape, tag-space extremes). 1 recorded divergence: type-0 root document - OURS accepts (vanilla-compatible), simdnbt rejects. Perf medians (200 samples): decode 1.7-2.8x faster, encode 3.7-16.3x faster, scan 1.7-3.7x."
+    git_commit: "aad26f1"
+    command: "cd tools/third-party-eval/nbt-eval && cargo +nightly run --release (harness committed)"
+    raw_artifact: "machine/raw/M2P-simdnbt-eval.txt"
+    raw_artifact_sha256: "e061a073255d148ea9442812ab5de95843571702c0eaa3048addbcf9c577081f"
+    summary: "machine/third-party-eval.yaml (simdnbt_evaluation)"
+    java: "n/a (Rust-only eval)"
+    rust_profile: "release + nightly"
+    sample_count: 22
+    timestamp: "2026-09-20"
+    scope: "offline parity+bench; crates/nbt NOT replaced"
+    status: valid
+  - id: "M2P-FASTANVIL-EVAL"
+    class: MEASURED
+    claim: "fastanvil (pinned 986c859, MIT) on our REAL 1.12.2 region files (targetA r.0.0.mca 625 chunks, targetB 151): 8/8 PASS - location table 625/625+151/151 agreement, all chunks zlib-inflate + NBT-parse, 4096-sector alignment, overwrite readback byte-equal, absent-slot write (relocation) readback byte-equal, truncated-file iteration error-safe. Classification: read path DIRECTLY_REUSABLE, write path ADAPTABLE (tested with Zlib scheme)."
+    git_commit: "aad26f1"
+    command: "cd tools/third-party-eval/anvil-eval && cargo +nightly run --release"
+    raw_artifact: "machine/raw/M2P-fastanvil-eval.txt"
+    raw_artifact_sha256: "a7704c203b99527da03ebab10492ad6a4db88410b1fdb9f73e3dc09255edfccf"
+    summary: "machine/third-party-eval.yaml (fastanvil_evaluation)"
+    sample_count: 8
+    timestamp: "2026-09-20"
+    scope: "offline against real committed .mca fixtures; RegionFile NOT replaced"
+    status: valid
+  - id: "M2P-PERSIST-FEASIBILITY"
+    class: DERIVED_FROM_MEASURED
+    claim: "Save pipeline verified by disassembly (committed diag): NBT build incl. sections/entities/TEs-with-capabilities/ticks happens INLINE ON ServerThread in AnvilChunkLoader.writeChunkToNBT; binary encode + deflate + region write are queued to File IO Thread (0 zip/CompressedStreamTools frames on ServerThread in M2J save burst). PERSIST-A (Java tree, Rust encode/compress/write) removes ~ZERO ServerThread work (already off-thread) but is safe and testable. PERSIST-B (Rust builds vanilla NBT + merges Java fragments) UNSAFE_AS_SPECIFIED: ChunkDataEvent.Save mods mutate/read the Java tree; NEID injects into section serialization; lazy-NBT proxy would be a research project; corruption risk persistent. No massive-autosave-spike claim supported: periodic autosave measured ~8 samples in M2J; the only big save cost is player-disconnect unload bursts. Recommendation: do NOT implement M2-PERSIST on performance grounds."
+    git_commit: "aad26f1"
+    command: "javap disassembly of installed vanilla AnvilChunkLoader (committed machine/raw/diag/anvil-loader-disasm.txt) + M2J JFR evidence"
+    raw_artifact: "machine/M2P-persist-feasibility.yaml"
+    raw_artifact_sha256: "5f6f4038f2c59af03ccf2d980dc8eef6b93891fa7c5655c1b76021b3757c2dda"
+    derived_from: "M2J-JFR-CAPTURE"
+    sample_count: 1
+    timestamp: "2026-09-20"
+    scope: "feasibility only; no implementation"
+    status: valid
+
+  # --- M2C live shadow integration (operator authorization 2026-09-20) ---
+  - id: "M2C-INTEGRATION"
+    class: MEASURED
+    claim: "NativeCompressionEncoder (NettyCompressionEncoder subclass, per-channel native contexts, property ladder OFF/SHADOW/ON) installed by coremod at the vanilla setCompressionThreshold seam: offline regression 32/32 PASS (28 interop fixtures x2 modes through the REAL decoder, threshold lifecycle, 500-packet random sequence, 8x200 concurrent channels all-correct in 88ms - no global serialization, 50/50 context create/free, failure injection: capacity -1 + recovery + use-after-free null + double-free safe); Target A live: OFF sanity (transform DISABLED_BY_PROPERTY, all counters zero), SHADOW 1350/1350 inflate-parity 0 mismatches 0 fallbacks 15 contexts (15 sessions, 0 client errors), SHADOW+paranoid 720/720 0 mismatches 0 fallbacks 8/8 contexts balanced 0 leaks (8 sessions, 0 client errors). Network-worker timing only (NOT TPS): rust complete-path 0.33-0.46x of java on the same packets; compressed size +1.9%. No ON_EXPERIMENTAL live transmission."
+    git_commit: "c5b7758"
+    command: "cargo build --release; bash tools/build-coremod.sh; bash tools/run-shadow.sh com.rustcraft.interop.OfflineRegression machine/raw/M2C-offline-regression.txt; bash tools/m2c-a-run.sh OFF|SHADOW <label> <secs> [paranoid] + tools/targeta_client.py"
+    raw_artifact: "machine/raw/M2C-offline-regression.txt"
+    raw_artifact_sha256: "596319d983c73c6bfa36872ff83aea33586a57ed1e35fda3d9362f1f9e04f810"
+    raw_artifact_secondary: "machine/targetA/run-m2c-a-shadow.log"
+    summary: "machine/M2C-integration-results.yaml"
+    note: "also committed: run-m2c-a-off.log, run-m2c-a-paranoid.log, client transcripts; dll 0acb7469 (superset of M1 exports); coremod 4328b698 (runs) / 3297b2f9 (post-run shutdown-dump fix)"
+    java: "Temurin jdk-8.0.504.1-hotspot"
+    rust_profile: "release"
+    binaries: "dll 0acb7469 + coremod 4328b698"
+    sample_count: 2070
+    timestamp: "2026-09-20"
+    scope: "integration/correctness milestone; shadow only; no TPS claims"
+    status: valid
+
+  # --- M2CC modpack shadow campaign (operator authorization 2026-09-20) ---
+  - id: "M2CC-MODPACK-SHADOW"
+    class: MEASURED
+    claim: "M2C SHADOW on real modpacks (Revelation + SevTech, existing installs, builds coremod 3297b2f9 + dll 0acb7469, M1 OFF): TOTAL 146,259 shadow comparisons, 0 mismatches, 0 native errors, 0 fallbacks, contexts balanced in every run (26/26, 10/10, 2/2, 8/8). Revelation: walk+25 sessions 87,567/87,567 (11,025 chunk packets, 0 client errors); paranoid 9,390/9,390, 1 leak event = ElecCore WindowManager pack baseline (elec332 frames, ZERO m2c frames - matches M1-disabled baseline from M1J/M1H). SevTech: corridor-walk session 45,454/45,454 (16,951 chunks streamed, 0 decode errors; 1 end-of-session disconnect at server stop, not M2C); paranoid 3,848/3,848, 0 leaks. No mod occupies the compress seam on either pack; encoder installed by the vanilla NetworkManager path (transform success x2). Network-worker timing ONLY: rust complete-path 0.43x of java on both packs; size +1.5-2.4%. No stop condition triggered."
+    git_commit: "a786065"
+    command: "bash tools/m2cc-pack-run.sh C|D SHADOW <label> <secs> [paranoid] + tools/targeta_client.py sessions"
+    raw_artifact: "machine/targetC/server/run-mcc-c-shadow1.log"
+    raw_artifact_sha256: "81ab984a0f32a3d2f557bb797e61c5d5e1bb1cfd7d50849d10e70a43f35fa4b1"
+    raw_artifact_secondary: "machine/targetD/server/run-mcc-d-shadow1.log"
+    summary: "machine/M2CC-modpack-shadow-results.yaml"
+    note: "full hash inventory: machine/raw/M2CC-hashes.txt (9 artifacts: 4 run logs, 4 bot transcripts, runner script)"
+    java: "Temurin jdk-8.0.504.1-hotspot"
+    rust_profile: "release"
+    binaries: "coremod 3297b2f9 + dll 0acb7469"
+    sample_count: 146259
+    timestamp: "2026-09-20"
+    scope: "SHADOW only; Java authoritative; no ON_EXPERIMENTAL; network-worker throughput claims only"
+    status: valid
+
+  # --- M2CE bounded ON_EXPERIMENTAL live transmission, Target A (operator authorization 2026-09-20) ---
+  - id: "M2CE-ON-EXPERIMENTAL"
+    class: MEASURED
+    claim: "M2C ON_EXPERIMENTAL on clean Forge Target A ONLY (builds coremod c975fc1c + dll 0acb7469, M1 OFF): Rust-compressed outbound bytes AUTHORITATIVE on the wire for the first time - 5,326 native-transmitted packets (160,373,181 plaintext bytes -> 14,567,032 compressed), 0 fallbacks (noctx=0 native=0), 0 native errors/crashes, contexts balanced 36/36 (26/26 + 10/10), client decode 0 errors over 37,476 frames / 5,000 chunk packets across 36 sessions (1 x 73-hop TP-streaming walk over fresh terrain + 25 logins, then 10 logins under paranoid Netty leak detection with 0 leak events), sampled transmit-side inflate verification 8/8/0 (per-channel 1-in-256), compression negotiation + sub-threshold vanilla framing exercised every session, both servers stopped cleanly. No TPS/MSPT/whole-server claim. No modpack ON run (operator stop boundary honored)."
+    git_commit: "61cf649"
+    command: "bash tools/m2ce-campaign.sh (drives tools/m2c-a-run.sh ON_EXPERIMENTAL <label> <secs> [paranoid] + tools/targeta_client.py sessions)"
+    raw_artifact: "machine/targetA/run-m2ce-on1.log"
+    raw_artifact_sha256: "991e82119ed2fd030a6aae31e3c49f1d5ca6e7d11c213f622d9d1c043e61ff16"
+    raw_artifact_secondary: "machine/targetA/run-m2ce-on2.log"
+    summary: "machine/M2CE-on-experimental-results.yaml"
+    note: "full hash inventory: machine/raw/M2CE-hashes.txt (12 artifacts: 2 run logs, 3 bot transcripts, 2 periodic-metrics final snapshots, offline regression, campaign marker, driver, deployed coremod+dll). Server-side abrupt-close IOExceptions = bot-harness deadline closes, identical pattern in SHADOW baseline logs, not M2C-attributable."
+    java: "Temurin jdk-8.0.504.1-hotspot"
+    rust_profile: "release"
+    binaries: "coremod c975fc1c + dll 0acb7469"
+    sample_count: 5326
+    timestamp: "2026-09-20"
+    scope: "ON_EXPERIMENTAL live transmission correctness only; Target A only; no modpack ON; no perf claims"
+    status: valid
+
+  # --- M2CER Revelation ON_EXPERIMENTAL (operator authorization 2026-09-20) ---
+  - id: "M2CER-REVELATION-ON"
+    class: MEASURED
+    claim: "M2C ON_EXPERIMENTAL on FTB Revelation 3.4.0 / Forge 14.23.5.2846 / 193 mods (existing install unaltered, builds coremod c975fc1c + dll 0acb7469, M1 OFF): Rust-compressed outbound bytes AUTHORITATIVE on a real modpack for the first time - 102,284 native-transmitted packets (1,713,678,086 plaintext bytes -> 237,017,725 compressed, 13.8% ratio), 0 fallbacks (noctx=0 native=0), 0 native errors/crashes, contexts balanced 38/38 (27/27 + 11/11), threshold 256 stable (changes=0), transform success x2, sampled transmit-side inflate verification 374/374/0, client decode 0 errors over 560,838 frames / 49,104 chunk packets across 37 logins (readiness probe + M2CC-mirrored perfbotb corridor walk 97 hops/33,669 chunks + 25 sessions, then 10 sessions under paranoid Netty detection). Paranoid run: 1 leak event = ElecCore WindowManager pack baseline (stack fully elec332.core.*, ZERO m2c/rustcraft frames - 4th independent confirmation; full stack preserved in run log). One rig setup failure preserved (*-failed1: clients at Done+2s rejected 'still starting' on modpack post-boot init; fixed with settle+probe+transcript validation; no server correctness fault). Clean shutdown both runs. No TPS/MSPT claim. SevTech NOT run (operator stop boundary honored)."
+    git_commit: "48a39a1"
+    command: "bash tools/m2cer-campaign.sh (drives tools/m2cc-pack-run.sh C ON_EXPERIMENTAL <label> <secs> [paranoid] + tools/targeta_client.py 127.0.0.1 25567 sessions)"
+    raw_artifact: "machine/targetC/server/run-mcer-c-on1.log"
+    raw_artifact_sha256: "aec92cb42fe0a975c52b89e601fbf9dbb0900fc307db9f9df8a19b51ad17f4c2"
+    raw_artifact_secondary: "machine/targetC/server/run-mcer-c-on2.log"
+    summary: "machine/M2CER-revelation-on-results.yaml"
+    note: "full hash inventory: machine/raw/M2CER-hashes.txt (16 artifacts: 2 run logs + 1 failed-attempt log, 3 clean + 2 failed + 1 probe bot transcripts, 2 periodic-metrics snapshots, 2 campaign markers, driver, deployed coremod+dll)"
+    java: "Temurin jdk-8.0.504.1-hotspot"
+    rust_profile: "release"
+    binaries: "coremod c975fc1c + dll 0acb7469"
+    sample_count: 102284
+    timestamp: "2026-09-20"
+    scope: "ON_EXPERIMENTAL correctness/compatibility on Revelation only; no SevTech; network-worker observations only, no perf claims"
+    status: valid
+
+  # --- M2CED SevTech ON_EXPERIMENTAL, final modpack rung (operator authorization 2026-09-20) ---
+  - id: "M2CED-SEVTECH-ON"
+    class: MEASURED
+    claim: "M2C ON_EXPERIMENTAL on SevTech: Ages 3.2.3 / Forge 14.23.5.2860 / 262 mods (existing install unaltered, builds coremod c975fc1c + dll 0acb7469, M1 OFF): Rust-compressed outbound bytes AUTHORITATIVE - final modpack compatibility rung. 32,520 native-transmitted packets (1,025,953,017 plaintext -> 86,403,958 compressed, 8.4% ratio), 0 fallbacks (noctx=0 native=0), 0 native errors/crashes, contexts balanced 26/26 (17/17 + 9/9), threshold 256 stable, transform success x2, sampled transmit-side inflate verification 105/105/0, client decode 0 errors over 823,688 frames / 30,510 chunk packets across 26 logins (readiness probe + perfbotb corridor walk 63 hops/20,367 chunks + 15 reconnect sessions, then probe + 8 sessions under paranoid Netty detection). Paranoid run: 0 leak events (no ElecCore on SevTech; matches M2CC baseline). Clean shutdown both runs, no zombie JVM. Two rig setup failures preserved (*-failed1: client sent Revelation modlist to SevTech -> 'Server Mod rejections'; *-failed2: the modlist patch missed the multi-line walk invocation - silent-patch lesson; neither is a server correctness fault). No TPS/MSPT claim. Default mode NOT changed. Ladder complete: all ON campaigns (A+C+D) total 139,530 native packets / 2.88 GB plaintext / 0 M2C-attributable faults / contexts 100/100."
+    git_commit: "5a57722"
+    command: "bash tools/m2ced-campaign.sh (drives tools/m2cc-pack-run.sh D ON_EXPERIMENTAL <label> <secs> [paranoid] + tools/targeta_client.py 127.0.0.1 25568 with M1_MODLIST=machine/targetD/mod-ids.json)"
+    raw_artifact: "machine/targetD/server/run-mced-d-on1.log"
+    raw_artifact_sha256: "8808ba96b5a32af630c1df394d88d2362703499699ae273792964fb594467488"
+    raw_artifact_secondary: "machine/targetD/server/run-mced-d-on2.log"
+    summary: "machine/M2CED-sevtech-on-results.yaml"
+    note: "full hash inventory: machine/raw/M2CED-hashes.txt (21 artifacts: 2 run logs + 2 failed-attempt logs, 3 clean + 3 failed/probe bot transcripts, 2 final + 2 failed-attempt periodic-metrics snapshots, 3 campaign markers, driver, deployed coremod+dll)"
+    java: "Temurin jdk-8.0.504.1-hotspot"
+    rust_profile: "release"
+    binaries: "coremod c975fc1c + dll 0acb7469"
+    sample_count: 32520
+    timestamp: "2026-09-20"
+    scope: "ON_EXPERIMENTAL correctness on SevTech only; default unchanged; network-worker observations only, no perf claims"
+    status: valid
+
+  # --- M2CP matched OFF/ON perf study + production-readiness (operator authorization 2026-09-20; FINAL M2-C study) ---
+  - id: "M2CP-MATCHED-PERF"
+    class: MEASURED
+    claim: "Matched Java-vs-Rust compression performance on FTB Revelation 3.4.0 (6 fresh-JVM runs, alternating OFF_MEASURE,ON x3, identical world/workload/flags/machine, measurement coremod 981354f5 + dll 0acb7469, NO dual compression in either arm): per-packet eligible compression 310.4us Java (297.3-325.1) vs 140.7us Rust (128.1-141.2) = -54.7% with NON-OVERLAPPING 3v3 ranges; throughput 57.5 -> 129.7 MB/s (+125.6%, 2.26x, non-overlapping); total compression CPU per 400s walk 21.3s -> 9.2s (-56.8%); Netty Server IO worker CPU (4 threads) 32.9s -> 19.8s (-39.9%, independent corroboration); compressed ratio 13.7% -> 13.8% of plaintext (+0.7-1.2% wire bytes, worst run n1 14.5% reported); GC young/full/pauses identical (94/94, 5/5 every run, +0.5% pause); MSPT mean 13.1 vs 13.3 ms with FULLY OVERLAPPING ranges - NO MSPT difference resolved (non-primary, not claimed; compression is off-ServerThread). Client decode 0 errors over 4,423,684 frames; eligible packets matched (65.0-68.9k, 97 hops every run). 195,712 additional native-transmitted packets, 0 fallbacks, ctx 2/2 per ON run. 1 UNTRACED leak event (SIMPLE detection, no stack) in n2 at the ElecCore baseline frequency. Production-readiness audit: default-OFF/property/DLL-missing/arch/load-failure/mod-handler/shutdown/reconnect/error-logging all VERIFIED from code + prior campaigns; one audit note: unknown property values degrade to SHADOW semantics (safe, Java-authoritative, never ON). FINAL M2-C CLASSIFICATION: READY_OPTIONAL. Default-ON NOT decided."
+    git_commit: "bebe0d5"
+    command: "bash tools/m2cp-campaign.sh (6 runs via tools/m2cp-run.sh, fixed 6G heap + GC telemetry) + tools/m2cp_analyze.py"
+    raw_artifact: "machine/targetC/server/run-m2cp-c-o1.log"
+    raw_artifact_sha256: "f49a5772d67b9e8aeebf4dece6228650152a2e17081446ee9d6e5c491166659b"
+    raw_artifact_secondary: "machine/targetC/server/run-m2cp-c-n1.log"
+    summary: "machine/M2CP-perf-results.yaml"
+    note: "full hash inventory: machine/raw/M2CP-hashes.txt (34 artifacts: 6 run logs + 1 aborted-boot log, 6 metrics snapshots, 6 GC logs + 1 aborted, 6 walk transcripts + 1 probe, offline regression, campaign marker, 3 scripts, coremod+dll). One aborted rig attempt preserved (log-path mismatch killed a healthy boot; no data)."
+    java: "Temurin jdk-8.0.504.1-hotspot"
+    rust_profile: "release"
+    binaries: "coremod 981354f5 (measurement) + dll 0acb7469"
+    sample_count: 392459
+    timestamp: "2026-09-20"
+    scope: "network-worker compression path only; no TPS/MSPT claim; default mode unchanged; final M2-C study - no further campaigns authorized"
+    status: valid
+
+  # --- M3 candidate discovery (operator directive 2026-09-20; research only, no implementation) ---
+  - id: "M3-DISCOVERY"
+    class: DERIVED_FROM_MEASURED
+    claim: "M3 subsystem search from valid evidence + fresh javap disassembly (NO new runtime measurements, NO implementation). Reviewed: M2J JFR/attribution (the only valid modpack ServerThread profile - a bot chunk-streaming workload with entity tick 0.9% / TE 0.2% / light tick 0.0%), H1/H2 feasibility, M2P persistence verdicts, M1I/M1J tick-share lessons, M2CP live worldgen-lag warnings, pinned third-party evals; P0-8/P0-9 synthetics excluded. Candidates A-G scored on performance and architectural value SEPARATELY: collision (P UNKNOWN - never profiled; occupancy-mirror invalidation coupling; Lithium gets the win Java-side), lighting (REJECT - Phosphor structural conflict + no coarse boundary), worldgen noise (P LOW-TO-MODERATE workload-conditional, evidenced 9.0% streaming presence + committed ChunkGeneratorOverworld disasm proving a hook-free POD-in/double[]-out boundary; A HIGH), pathfinding (REJECT - per-entity state coupling), chunk-load decode (A HIGH but P ~ZERO ServerThread - measured, fails M3 goal), entity indexing (Java-side fix per H2), job engine (no consumer). TOP 3 returned: worldgen-noise kernel, two-stage collision broadphase, chunk-load decode (with rejection rationale). VERDICT: NO M3 SELECTED - recommended ONE bounded research task: M3J dirty-world/factory JFR capture (M2J rig reuse) + the never-done caller census above World.func_180495_p, with an explicit capture-outcome -> candidate decision table. No ms/tick numbers invented; UNKNOWNs marked."
+    git_commit: "af55aac"
+    command: "javap (Temurin 8u504) against minecraft_server.1.12.2.srg.jar + forge-1.12.2-14.23.5.2860.jar; evidence review only"
+    raw_artifact: "machine/raw/diag/cgo-disasm.txt"
+    raw_artifact_sha256: "165ee11243a534484c4bc64a6c2df846ccfbdd9fdd530d20f1290766dd504a12"
+    raw_artifact_secondary: "machine/raw/diag/world-disasm.txt"
+    summary: "docs/research/m3-candidate-discovery.md"
+    note: "disassembly artifacts: ChunkGeneratorOverworld (noise/initNoiseField/setBlocksInChunk/replaceBiomeBlocks chain) + World (getCollisionBoxes/func_191504_a block-scan loop). Worldgen-noise parity risk flagged: noise-chain transcendental census (Math.sin/cos) unverified - fdlibm port required if present."
+    java: "Temurin jdk-8.0.504.1-hotspot (javap only)"
+    rust_profile: "n/a"
+    binaries: "n/a (no build, no runtime)"
+    sample_count: 296
+    # sample_count = the underlying M2J streaming ServerThread sample pool
+    # (296) that this derivation re-analyzes; NO new runtime samples were
+    # taken in M3-DISCOVERY (javap/source review only).
+    timestamp: "2026-09-20"
+    scope: "research/discovery only; no implementation; no benchmark campaign; no mode changes"
+    status: valid
+
+  # --- M3J factory/dirty-world profile (operator authorization 2026-09-20; research only) ---
+  - id: "M3J-FACTORY-PROFILE"
+    class: MEASURED
+    claim: "ONE bounded JFR capture (settings=profile, 10ms sampling, 19.9MB, phases BOOT/SETTLE/BUILD(excluded)/FACTORY_ACTIVE 360s day/ENTITY_ACTIVE 420s night/RECOVERY) of a machine/entity-heavy Revelation workload: natural mob spawning (night, difficulty 1), a realistic 32-hopper+32-chest+8-furnace vanilla TE base built via RCON (engine-owned TE work; NO modded machines in fixture), perfbotb 880s AFK with resistance-keepalive (genuine hostile chase), 3 dirty-save events, client 0 errors. ServerThread census (n=2375 factory / 2757 entity): SPAWN-QUERY PIPELINE is the largest engine-owned cluster - Long2ObjectOpenHashMap iteration under MapGenStructure.func_175797_c spawn-list queries = 12.0%/12.4% leaf #1 (O(N) full-map iteration per getPossibleCreatures query, spawning runs per-tick) + canSpawnAt getBlockState probes; getBlockState cluster 9.8%; collision REAL at 5.4-5.6% presence (Entity.move<-moveWithHeading, squid-heavy mix) + scan loop 3.6-4.2%; entity queries SMALL (1.8-2.1%); pathfinding ~0; TE/hopper/furnace ZERO presence (vanilla-TE scale below sampling); lighting ZERO (Phosphor async); worldgen noise/populate ~ZERO (the 13-14% ChunkGeneratorOverworld presence is the spawn-list QUERY path, NOT generation - confirms noise-kernel = exploration-only); save path modest (NEID 2.7%); EventBus 8.2%. Mod-override census: ZERO mods reference func_177458_a; only BOP ships its own scattered-feature class (inherits vanilla query path). VERDICT: M3 SELECTED (operator-gated, prototype-first): M3-SPAWN-QUERY-INDEX - native structure-occupancy index replacing the O(N) iteration; removable share to be confirmed by the bounded prototype (per-query N/skip factor + query-equality parity; SHADOW->ON ladder). Collision broadphase downgraded to candidate 2 (skippable share unmeasured); worldgen-noise downgraded (absent here). NO implementation in this campaign."
+    git_commit: "20ab0a3"
+    command: "bash tools/m3j-capture.sh; analysis: jfr print | tools/m3j_parse.py + tools/m3j_leafcensus.py (phases via machine/raw/M3J-m3j-f1.timeline, LAUNCH-anchored)"
+    raw_artifact: "machine/raw/M3J-parse-summary.txt"
+    raw_artifact_sha256: "1f30cfc71064e67eb34185429d02eea1227ae143dd505dd03897d47fdefc1d3e"
+    raw_artifact_secondary: "machine/raw/M3J-print.txt"
+    summary: "machine/M3J-factory-profile-results.yaml"
+    note: "full hash inventory machine/raw/M3J-hashes.txt (10 artifacts: JFR 19.9MB + full jfr-print text + parse summary + timeline + run log + GC log + capture/parse/leafcensus scripts + bot transcript). JFR contains machine/JVM metadata - flagged before any public release."
+    java: "Temurin jdk-8.0.504.1-hotspot"
+    rust_profile: "n/a"
+    binaries: "none (profiling run; no rustcraft code active: M1 OFF, M2C default OFF vanilla compression)"
+    sample_count: 8373
+    timestamp: "2026-09-20"
+    scope: "research/profile only; no implementation; no mode changes; M1/M2-C/M2-PERSIST untouched"
+    status: valid
+
+  # --- M3R algorithm-mining pass (operator directive 2026-09-20; research only) ---
+  - id: "M3R-ALGORITHM-MINING"
+    class: DERIVED_FROM_MEASURED
+    claim: "External-optimization algorithm-mining pass grounding M3 and future Rust subsystems (research only; no implementation/mode changes; nothing vendored). Repos examined: pinned-local Lithium 11ea0a (ChunkAwareBlockCollisionSweeper, BlockStateFlags/BlockCountingSection incremental per-section predicate counters, LithiumEntityCollisions, shapes/hopper/spawn-settings mixins) + Starlight cca03d6 (queue/section-local light model); web surveys of UniversalTweaks, VintageFix, FermiumASM, AI-Improvements, BetterFps, FastWorkbench/FastFurnace (1.12 source read: memo + negative cache + key-revalidation); Paper/Spigot search. REJECTED as behavior-changing per the absolute semantics rule: AI gating/removal (AI-Improvements, UT), UT radius/raytrace substitutions, chunk-gen limits, Paper per-player spawning, BetterFps alternate sin (proves transcendental drift is real -> Rust noise must be fdlibm-exact), Starlight adoption on Phosphor targets. MINED exact-semantics algorithms: (1) Lithium section-sweep + incremental predicate counters (O(1) invalidation per block write, no mirror); (2) immutable-state-keyed memo + negative cache (FastFurnace); (3) two-level long-key region->bitset occupancy (in-house design - NO surveyed project patches the MapGenStructure spawn-query scan; Paper went behavior-changing instead => M3 algorithm is novel); (4) Starlight queue+dirty-region propagation; (5) append-only generation-event invalidation class for structure maps. M3 IMPLICATIONS (directive 7): structure maps are append-only during generation -> cheaper invalidation than counters; index maintained at generation events, stable between; recommendation = A. SPECIALIZED SPAWN INDEX + shared region-bitset UTILITY crate, NOT a shared spatial engine (the 4 candidate consumers have different invalidation models; only the utility layer is common - premature-generalization bar not met). Top-5 subsystems ranked with source inspiration, exactness oracles, invalidation models, compatibility risks, evidence and missing evidence: spawn index (1st), section-occupancy+collision hybrid (2nd, gated on skippable-share measurement, Lithium counters as the Java-side competitor), noise kernel (parked), light engine (Phosphor-blocked), entity prefilter (rejected on mirror cost)."
+    git_commit: "c016c67"
+    command: "source inspection (pinned local repos) + WebFetch/WebSearch surveys; no code changes"
+    raw_artifact: "docs/research/rust-engine-optimization-research.md"
+    raw_artifact_sha256: "0c9a894e3ed5a8dc83c287439f8734132405aaad7ccab1d82d69ec610e81c060"
+    raw_artifact_secondary: "third_party_reference/eval/lithium (pinned, unmodified)"
+    summary: "docs/research/rust-engine-optimization-research.md"
+    note: "LGPL-3 projects (Lithium/Starlight/UT/FermiumASM/BetterFps): concepts only, nothing vendored/integrated. sample_count = derivation bases: M3J ServerThread census pools (2375 factory + 2757 entity) re-analyzed; no new runtime samples."
+    java: "n/a"
+    rust_profile: "n/a"
+    binaries: "none"
+    sample_count: 5132
+    timestamp: "2026-09-20"
+    scope: "research only; no implementation; no runs; no coremod/mode changes; no dependency integration"
+    status: valid
+
+  # --- M3.0 offline prototype (operator authorization 2026-09-20; offline only) ---
+  - id: "M30-PROTOTYPE"
+    class: MEASURED
+    claim: "M3-SPAWN-QUERY-INDEX offline prototype, three implementations compared (REFERENCE_LINEAR exact-vanilla replica over the real fastutil map; JAVA_INDEX same algorithm in Java; RUST_INDEX via new JNI exports in dll 714864f9). Phase-1/2 verification by disassembly: mutation lifecycle = NBT bulk-load + containsKey-guarded generation appends + post-insert bounding-box updates, NO removals anywhere in vanilla, base isValid() constant-true, BOP subclass does not touch the map (index MAINTAINABLE via explicit events; NOT compatibility-blocked). Exact query semantics decoded: first-match in fastutil map iteration order over isValid && start-BB && any-component-BB containment; ranks assigned in true map order so ordering parity holds by construction. PARITY: 0 mismatches across all 13 datasets (8 deterministic synthetic incl. empty/1/16/256/4096/dense-32768/huge/negative + 5 REAL feature maps extracted from targetC world/data/*.dat: Temple 11, Village 24, Mineshaft 379, Monument 4, Stronghold 3, hash-pinned). EFFECTIVENESS: candidate skip factor 114.9x on real Mineshaft-379 (379.0 -> 3.30 avg candidates/query), 18.2x real Temple, up to 6715x synthetic-4096; query wall 1200->100ns (Mineshaft), 251us->200ns (dense 32k). BENCHMARK: java_ix ~= rust_ix everywhere realistic (100-200ns medians incl. JNI); rust wins only pathological builds (huge-box 2.1x) and loses small builds (per-insert JNI). VERDICT: ALGORITHM_ONLY - the algorithm is excellent but Java captures nearly all benefit; no material Rust leverage (packed layout/SIMD irrelevant at bucket sizes). RECOMMENDATION: PARK the native index; do NOT port to Java either (that is a Java engine patch, outside the project charter); assets retained (tested crates/spatial-index utility, parity-proven crates/spawn-index + JNI, verified semantics disassembly, extraction tooling). No live integration, no SHADOW, no defaults changed."
+    git_commit: "360d179"
+    command: "cargo test -p spatial-index -p spawn-index; cargo build --release -p ffi; javac tools/spawn-interop; java com.rustcraft.spawninterop.Runner machine/raw/M30-prototype.txt"
+    raw_artifact: "machine/raw/M30-prototype.txt"
+    raw_artifact_sha256: "6c9b35ddf39b6676adfbb9659861b38664ca06dc78fc43dbccfb1aefc03e3e88"
+    raw_artifact_secondary: "machine/raw/diag/mapgenstructure-disasm.txt"
+    summary: "machine/M30-prototype-results.yaml"
+    note: "hash inventory machine/raw/M30-hashes.txt (10 artifacts: results, 2 real feature .dats, dll, 3 rust sources, 3 java sources). Real-dataset extraction via vanilla CompressedStreamTools on world/data GZIP NBT; chunk-NBT Starts absent in bot-corridor worlds (empty compounds) - .dat path is the real source."
+    java: "Temurin jdk-8.0.504.1-hotspot"
+    rust_profile: "release"
+    binaries: "dll 714864f9 (superset: M1 + M2C + spawn-index exports, untouched prior exports)"
+    sample_count: 215000
+    timestamp: "2026-09-20"
+    scope: "offline prototype only; no live server, no coremod, no SHADOW, no defaults changed"
+    status: valid
+
+  # --- M3C collision feasibility gate (operator authorization 2026-09-20; measurement only) ---
+  - id: "M3C-COLLISION-FEASIBILITY"
+    class: MEASURED
+    claim: "M3 collision broadphase feasibility: ONE bounded instrumented pass (property-gated coremod ee5896cb replacing World.func_191504_a with an EXACT bytecode-verified replica + aggregate counters; 5 failed rig attempts preserved) on the M3J entity workload (perfbotb AFK through a natural-spawning night, Revelation). 4,967,965 collision queries, 77,141,304 positions: p50 11 positions/query, 1-2 sections (95.6% <=2), scan 7.18s total. GO/NO-GO RESULT: exact-semantics skip ceiling = 46.2% of positions (never-boxed sections); air is 12.7% but NOT independently skippable (vanilla dispatches addCollisionBoxToList on air too — callbacks = 100% of positions); emitting callbacks are 96%+ vanilla simple-cube terrain (modded tail ~3-4%); 67% of queries find zero boxes. Java-counter model (Lithium) captures the ENTIRE 46.2% ceiling with O(1) per-write updates; Rust mirror (per-write JNI on setBlockState + lifecycle transfers) and lazy-snapshot (dirty-marker + 512B transfers + 4096-read reclassification) reach the SAME ceiling at higher cost — mirror maintenance rivals the saved scan. Rust-first test FAILS: post-counter queries would hand Rust ~6 candidates. VERDICT: NOT_WORTH_IT — collision PARKED; M3 remains UNSELECTED. Exact contract recorded (AABB+-1 expansion, vanilla corner/top-edge micro-skips already pruning ~29%, per-column loaded gating, border AIR-substitution branch documented as in-workload-dead). No implementation, no mode changes."
+    git_commit: "938f78d"
+    command: "bash tools/m3c-probe-run.sh (coremod -Dminecraftrust.collision_probe=true; M1 OFF; M2C default OFF)"
+    raw_artifact: "machine/raw/M3C-probe-run.log"
+    raw_artifact_sha256: "c4515bf1b301f7c62a84c3c0081209bfe2d57579f5264b65c474723eda3855da"
+    raw_artifact_secondary: "machine/raw/M3C-probe-metrics-final.txt"
+    summary: "machine/M3C-collision-feasibility-results.yaml"
+    note: "hash inventory machine/raw/M3C-hashes.txt (8 artifacts incl. probe run log, final periodic metrics, full World collision disassembly, probe/transformer sources, driver, results yaml). Failed attempts preserved as run-m3c-probe1-failed1..5 (committed)."
+    java: "Temurin jdk-8.0.504.1-hotspot"
+    rust_profile: "n/a (Java-only probe)"
+    binaries: "coremod ee5896cb (measurement superset, probe property-gated OFF by default; deployed to targetC)"
+    sample_count: 4967965
+    timestamp: "2026-09-20"
+    scope: "measurement/feasibility only; no implementation; no SHADOW; no defaults changed"
+    status: valid
+
+  # --- M3W worldgen-noise offline prototype (operator authorization 2026-09-20; offline only) ---
+  - id: "M3W-WORLDGEN-NOISE"
+    class: MEASURED
+    claim: "M3-WORLDGEN-NOISE offline prototype. PARITY SOLVED: exact Rust port of the vanilla terrain-noise kernel (java.util.Random 48-bit LCG + NoiseGeneratorImproved 2D/3D + NoiseGeneratorOctaves) achieves BIT-EXACT parity with the REAL installed classes across 7,936 fields / 2,964,736 double samples / ZERO mismatches (64 seeds x 3 octave counts x 5 shapes incl. the exact 5x33x5 initNoiseField shape x real 684.412-family scale sets x offsets incl. negative/1.2M/-30M + 2D wrapper). Every vanilla quirk identified and replicated: (1) the y-skip caching quirk — when the y-cell is unchanged vanilla reuses BOTH the perm chain AND the four x-pair lerps from the previous y (first divergence localized to octave 10 where yScale*d3<1); (2) the dropped 3rd-double 2D wrapper parameter; (3) floor+lrem 16M octave normalization (Java lrem == Rust truncated %); reciprocal-precomputed accumulation. Kernel is transcendental-free; Rust strict-FP suffices. Boundary: ONE coarse JNI call per field (state-owning handle) — proven viable. BENCHMARK (complete chunk noise = main+min+max 5x33x5 + depth 5x5, warmed, JNI+transfer included): Java 302.1us vs Rust 397.0us median = Rust 1.31x SLOWER (per-field 1.25-1.34x); HotSpot JIT is exceptional on this branchy strictly-ordered FP workload and exact-operation-order parity forbids the SIMD/reassociation that would favor native. VERDICT: NOT_WORTH_IT — parity achievable, boundary clean, but no Rust performance or architectural advantage remains (no index, no batching, no layout win). PARK; M3 arc evidence-closed on all three candidates. Assets retained: bit-exact crate + JNI (revivable), quirk documentation (required for ANY reimplementation), reusable JavaRandom LCG, disassembly corpus. No live integration, no coremod, no SHADOW, no defaults changed."
+    git_commit: "8f0078e"
+    command: "cargo test -p worldgen-noise; java com.rustcraft.worldgen.KernelParity / KernelBench (dll 80085131)"
+    raw_artifact: "machine/raw/M3W-kernel-parity.txt"
+    raw_artifact_sha256: "b73d3af812a16e2d33cd530321edc2a63dfc3e635bd382738f9bf58480421bab"
+    raw_artifact_secondary: "machine/raw/M3W-kernel-bench.txt"
+    summary: "machine/M3W-worldgen-noise-results.yaml"
+    note: "hash inventory machine/raw/M3W-hashes.txt (11 artifacts incl. parity + bench outputs, crate/ffi/java sources, results yaml, 3 disassembly files, dll). Debug trail: wndbg/wndbg3 examples + StateDump probes used for per-octave divergence isolation (committed as examples; probes removed)."
+    java: "Temurin jdk-8.0.504.1-hotspot"
+    rust_profile: "release"
+    binaries: "dll 80085131 (superset + wnoise exports)"
+    sample_count: 2964736
+    timestamp: "2026-09-20"
+    scope: "offline prototype only; no live integration; no coremod; no SHADOW; no defaults changed"
+    status: valid
+
+  # --- M3R2 rust-native optimization audit (operator directive 2026-09-20; research/code audit only) ---
+  - id: "M3R2-OPTIMIZATION-AUDIT"
+    class: DERIVED_FROM_MEASURED
+    claim: "Methodological audit of the three M3 rejections under the parity-vs-optimized distinction. CODE AUDIT of M3W (lib.rs 1ea618ce + wnoise.rs 652006b0): the tested performance path was RUST_PARITY with ZERO Rust-native optimizations (no SIMD/batching/persistent buffers; per-field vec! alloc + heap->direct double copy at wnoise.rs:68,98; 22 scalar perm lookups per sample). VERDICTS: (1) WORLDGEN rejection INVALID under the new rule — it was a (B)-type rejection (parity impl lost 1.31x) worded as (A); the claimed 'no SIMD headroom' was wrong — order-changing reassociation is forbidden but INDEPENDENT-LANE SIMD is exact: dependency map shows the y-axis is sequential (y-skip caching runs) but x/z lanes are independent (5-wide) and the CHUNK axis is fully independent (8 full-width AVX2 lanes, gathers for perm); chunk fields are position-pure so batch pre-generation in any order preserves observable output; JNI amortization 100ns/call -> 1.6ns/field at 16 chunks x 4 fields. RECOMMENDED: reopen as M3W2 offline RUST_OPTIMIZED prototype (bit-exact gate mandatory before timing). (2) SPAWN-INDEX reclassified PARKED_FOR_FUTURE_NATIVE_STATE (conditional on a future packed-metadata native subsystem absorbing maintenance; standalone ALGORITHM_ONLY unchanged; no consumer committed). (3) COLLISION NOT_WORTH_IT STANDS unconditional — blocker is the per-query JNI boundary (approx 100ns = the entire post-counter Java residual scan of ~6 positions), not state ownership; free metadata would not remove the crossing. NEW BINDING METHODOLOGY: all future candidates evaluated as REFERENCE_JAVA / RUST_PARITY / RUST_OPTIMIZED; RUST_PARITY losses alone may NOT justify NOT_WORTH_IT. Research only; no server runs, no live integration, no default changes."
+    git_commit: "83bc24b"
+    command: "code audit (grep/read of committed M3W sources) + dependency analysis; no new runtime measurements"
+    raw_artifact: "docs/research/m3-rust-native-optimization-audit.md"
+    raw_artifact_sha256: "12e1b08432a72934ae5c15fd41de9f601175436f012634ce8c2d4ab961177768"
+    summary: "docs/research/m3-rust-native-optimization-audit.md"
+    note: "sample_count = derivation base: the committed M3W/M3.0/M3C evidence artifacts re-analyzed (2.96M parity samples + 4.97M collision queries + 215k spawn parity samples); no new samples taken."
+    java: "n/a"
+    rust_profile: "n/a"
+    binaries: "none (audit only)"
+    sample_count: 215000
+    timestamp: "2026-09-20"
+    scope: "research/audit only; no server runs; no live integration; no default changes"
+    status: valid
+
+  # --- M3W2 optimized worldgen prototype (operator authorization 2026-09-20; offline only) ---
+  - id: "M3W2-OPTIMIZED-PROTOTYPE"
+    class: MEASURED
+    claim: "RUST_OPTIMIZED tier for worldgen-noise under the M3R2 methodology, built from external research (FastNoise2 Perlin.inl read: lanes=independent samples, register-resident lerp tree, FastSIMD multiversion dispatch; rust-simd-noise benchmarks; arithmetic-hash and f32/FMA REJECTED as parity-breaking — research record docs/research/m3w2-simd-research.md with EXACT_SAFE/NEEDS_PROOF/PARITY_BREAKING classification). Implementation: 4-lane AVX2 f64 batched kernel, lanes=chunks in groups of 4, flattened perm-to-grad tables, i32/f64 gathers, per-lane y-skip cache replication via blend, all-lanes-skip fast path (restores the scalar algorithm's cache amortization under SIMD), runtime dispatch, scalar fallback (ySize==1 vanilla 2D path + non-AVX2). PARITY: bit-exact on BOTH gates — 1,248 fields / 1,029,600 samples / 0 mismatches vs the REAL classes (batch sizes 1-16, +/-400k offsets) AND full unit differential vs scalar (4/4). Debug trail: initial divergence root-caused to the classic 32-to-64-bit mask-lane bug (f64 sign bit reads only the upper 32-bit half; fixed by unpacklo/hi pair replication). BENCHMARK (3-tier, complete chunk noise incl. JNI+copies): per-chunk at n=16 — JAVA 295.4us, RUST_PARITY 387.7us (1.31x slower), RUST_OPTIMIZED 283.6us = ~1.04x FASTER than HotSpot at n>=4 (n=4/8 consistent ~1.04-1.05x); batched n=1 3.7x slower (batch >=4 required). M3W performance verdict SUPERSEDED. VERDICT: RUST_VALID_ARCHITECTURAL — parity-proven, one coarse JNI call per batch with native-owned state, modest real win over HotSpot, named exact-safe headroom (persistent slabs, gather hoisting per-column, AVX-512 8-lane, multi-field fusion). Worldgen-noise remains OPEN as the lead M3 candidate. Offline only: no server runs, no live integration, no SHADOW, no defaults changed."
+    git_commit: "7f48f94"
+    command: "cargo test -p worldgen-noise --release; java com.rustcraft.worldgen.BatchParity (dll 4a729949)"
+    raw_artifact: "machine/raw/M3W2-batch.txt"
+    raw_artifact_sha256: "37f2f92f03375dd4ef3e3bc6fd4204146e13c13277e460401fb6597ebd1a6274"
+    raw_artifact_secondary: "machine/raw/M3W-kernel-parity.txt"
+    summary: "machine/M3W2-optimized-results.yaml"
+    note: "hash inventory machine/raw/M3W2-hashes.txt (10 artifacts). Research record docs/research/m3w2-simd-research.md committed with technique classification. wndbg4 example = committed debug trail."
+    java: "Temurin jdk-8.0.504.1-hotspot"
+    rust_profile: "release"
+    binaries: "dll 4a729949 (superset + wnoise + batch exports)"
+    sample_count: 1029600
+    timestamp: "2026-09-20"
+    scope: "offline prototype; no live integration; no SHADOW; no defaults changed"
+    status: valid
+
+  # --- M3W3 production-shape prototype (operator authorization 2026-09-20; offline only) ---
+  - id: "M3W3-PRODUCTION-SHAPE"
+    class: MEASURED
+    claim: "Complete initNoiseField now Rust-owned end-to-end: biome 5x5 f32 weighting + clampedLerp + y>29 fade + density assembly ported bit-exact (60 chunks x real-settings(ChunkGeneratorSettings.Factory().build() via reflection) x REAL vanilla biome floats x +/-100k coords: 0 mismatches on full 825-sample density fields; oracle = REAL octaves + committed decompile transcription; settings-from-live-class = zero constant-transcription risk). Another vanilla quirk found & preserved: the 2D-wrapper drop means the depth field's effective zScale is the EXPONENT param (f_) and g is discarded. n=1 x-lane kernel (lanes = the field's 5 x-positions; y/z shared -> scalar y-skip branch) bit-exact on 40 fields and improves n=1 from 3.7x-slower to 1.50x-slower vs Java (292 vs 439 us complete-field) — but n=1 STILL LOSES; n>=4 optimized beats HotSpot 2-6% (M3W2 result carried forward on the complete pipeline). Forge granularity answered from committed evidence: generation runs ONE chunk per generateChunk call on Chunk I/O Executor threads (M2J) — n=1 IS the production shape and batching cannot be required (queue latency + callback ordering). Two rig bugs fixed: missing #[target_feature] on the x-lane kernel (8x slow), direct-ByteBuffer native memory GC-freed mid-benchmark (lambdas captured only hoisted long addresses -> static strong refs). VERDICT: OPTIMIZATION_NOT_EXHAUSTED — named exact-safe n=1 techniques remain (persistent slabs, fused 3-field crossings, AVX-512 8-wide on this Zen4 AVX-512-capable CPU). Next: one more bounded n=1 optimization pass, else classify BATCH_DEPENDENT and hand the queue-pipeline architecture question to the operator. Offline only; no live work."
+    git_commit: "ad7c765"
+    command: "cargo test -p worldgen-noise --release; java com.rustcraft.worldgen.FieldParity (dll 6d3649fa)"
+    raw_artifact: "machine/raw/M3W3-field.txt"
+    raw_artifact_sha256: "9567cd10d138c4ca695580e34939cdba3f439a47b6cc82dff0a1be6082c4dd33"
+    summary: "machine/M3W3-production-results.yaml"
+    note: "hash inventory machine/raw/M3W3-hashes.txt (9 artifacts). Decompile noise-src/ChunkGeneratorOverworld.java committed."
+    java: "Temurin jdk-8.0.504.1-hotspot"
+    rust_profile: "release"
+    binaries: "dll 6d3649fa (superset + field/assembly/single exports)"
+    sample_count: 82500
+    timestamp: "2026-09-20"
+    scope: "offline prototype; no server runs; no live integration; no defaults changed"
+    status: valid
+
+  # --- M3W4 redesigned n=1 prototype (operator authorization 2026-09-20; offline only) ---
+  - id: "M3W4-N1-REDESIGN"
+    class: MEASURED
+    claim: "Redesigned n=1 production kernel per verified independent review. ONE coarse JNI call (initFieldComplete: handle + chunk coords + 200 biome floats -> 825-double density) owns the COMPLETE terrain-density computation: depth-2D + main(8oct) + min/max(16oct lockstep) + assembly, zero hot-path allocation, compact [u8;512] perm levels (~600B/octave vs 12KB+ FlatTables), specialized scalar 5x33x5 kernels (compile-time strides, L1-resident scalar lookups, NO gathers, hardware floor), min/max lockstep sharing ONLY traversal+d3+wrapper offsets (first fused version shared generator Random-offsets and FAILED parity: gdiffs=825 — the review's exact warning; corrected with per-field coords). Review findings CONFIRMED by measurement: gathers major cost (scalar-no-gather 1.54x faster than x-lane gather path), x-lane underutilized (5 lanes), strided stores/FlatTables/bounds-checks/allocs/JNI-fragmentation all real and eliminated. PARITY: 240-chunk expanded corpus (near/far/extreme coords to +/-29.5M, 240 seeds, real-biome mixes) vs REAL classes + oracle assembly: BIT-EXACT 0 mismatches. FINAL n=1 (production shape): Java 292.3us p50 / 300.6 p95; RUST_OPTIMIZED_FINAL 275.9us p50 / 287.2 p95 = Rust WINS 5.6% at median and beats the M3W3 fragmented path by 36%. Build: rustc 1.94.0, lto=fat codegen-units=1 (within noise — compute-bound), portable scalar n=1 kernel + runtime-dispatched AVX2 batch path (secondary). VERDICT: RUST_VALID_ARCHITECTURAL — parity-plus at the production shape with complete engine ownership; SHADOW integration proposal ready for the operator gate (generator-identity fallback for custom generators). Offline only; no live work."
+    git_commit: "f677c62"
+    command: "cargo test -p worldgen-noise --release; java com.rustcraft.worldgen.LedgerBench (dll 927eeaa2)"
+    raw_artifact: "machine/raw/M3W4-ledger.txt"
+    raw_artifact_sha256: "a025090c42119a5ae5fe8657b04ffc5751ffddcf1ff28dff60c9f212bd0e8ac2"
+    summary: "machine/M3W4-n1-results.yaml"
+    note: "hash inventory machine/raw/M3W4-hashes.txt (9 artifacts). Optimization ledger with isolations in raw output."
+    java: "Temurin jdk-8.0.504.1-hotspot"
+    rust_profile: "release, lto=fat, codegen-units=1"
+    binaries: "dll 927eeaa2 (superset + initFieldComplete)"
+    sample_count: 198000
+    timestamp: "2026-09-20"
+    scope: "offline prototype; no server runs; no live integration; no defaults changed"
+    status: valid
+
+  # --- M3WG live shadow integration (operator authorization 2026-09-20) ---
+  - id: "M3WG-LIVE-SHADOW"
+    class: MEASURED
+    claim: "Target A live SHADOW integration of redesigned n=1 worldgen noise kernel: 625 freshly generated chunk density fields (515,625 doubles compared) on clean Forge Target A with deleted world, 0 mismatches (100% bit-exact parity), 0 native errors, 0 memory leaks (1 context created, 1 freed at shutdown). Live generator octaves/perms/offsets state successfully transplanted from Forge NoiseGeneratorOctaves without seed-replay assumptions. Hook injected at return of ChunkGeneratorOverworld.func_185978_a; Java results continue authoritatively to ChunkPrimer while Rust independently computes and bit-compares. Offline regression passed 32/32 equivalent tests (transplant context created, 30 fields bit-exact vs real oracle, truncated state returns ctx=0). SHADOW only; no authoritative native worldgen, no defaults changed."
+    git_commit: "820a57b"
+    command: "tools/m3wg-shadow-run.sh shadow1 300"
+    raw_artifact: "machine/raw/M3WG-shadow-metrics-final.txt"
+    raw_artifact_sha256: "661668c48ec7c1682820ce0098691cd05847b4e1a9aed78644e5427d2eccf576"
+    raw_artifact_secondary: "machine/raw/M3WG-offline-integrated.txt"
+    summary: "machine/M3WG-shadow-results.yaml"
+    note: "hash inventory machine/raw/M3WG-shadow-hashes.txt (10 artifacts). Run log machine/raw/M3WG-shadow-run1.log."
+    java: "Temurin jdk-8.0.504.1-hotspot"
+    rust_profile: "release, lto=fat, codegen-units=1"
+    binaries: "coremod dca82b00 / dll 6db38f40"
+    sample_count: 515625
+    timestamp: "2026-09-20"
+    scope: "Target A live SHADOW worldgen integration; disposable fresh world; no authoritative native output; no defaults changed"
+    status: valid
+
+  # --- M3WG Revelation live shadow (operator authorization 2026-09-20) ---
+  - id: "M3WG-REV-LIVE-SHADOW"
+    class: MEASURED
+    claim: "FTB Revelation 3.4.0 (160+ mods) live SHADOW integration of redesigned n=1 worldgen noise kernel: 38,591 freshly generated chunk density fields (31,837,575 doubles compared) on disposable copied server with deleted world, 0 mismatches (100% bit-exact parity), 0 native errors, 0 memory leaks (1 context created, 1 freed at shutdown). Extensive bot TP walk across coordinates +/-21,600 X and +/-13,200 Z crossing zero. Generator classifications: 38,591 ELIGIBLE_VANILLA_OVERWORLD, 0 CUSTOM_GENERATOR, 0 TRANSFORM_CONFLICT, 0 UNSUPPORTED_STATE. Live generator octaves/perms/offsets state successfully transplanted from Forge ChunkGeneratorOverworld instances without seed-replay assumptions; Biomes O' Plenty registered biomes in Overworld evaluated with exact vanilla rootHeight/heightVariation via zero-allocation direct buffer staging; Quark, FoamFix, NotEnoughIDs coexistence confirmed. SHADOW only; Java authoritative; no authoritative native worldgen, no defaults changed."
+    git_commit: "39fa0cd"
+    command: "tools/m3wg-revelation-shadow-run.sh"
+    raw_artifact: "machine/raw/M3WG-rev-shadow-metrics.txt"
+    raw_artifact_sha256: "fa05164bbac41715e952b72637c5d514a68354c02ab325cd72f60d75d002d4a3"
+    raw_artifact_secondary: "machine/raw/M3WG-rev-shadow-server.log"
+    summary: "machine/M3WG-rev-shadow-results.yaml"
+    note: "hash inventory machine/raw/M3WG-rev-shadow-hashes.txt (7 artifacts). Client transcript machine/raw/M3WG-rev-shadow-client.jsonl (sha256 874889c507fc2740651228b7fa024adc90358753994478ea0969611079d4baa2)."
+    java: "Temurin jdk-8.0.504.1-hotspot"
+    rust_profile: "release, lto=fat, codegen-units=1"
+    binaries: "coremod b79a89ed / dll 6db38f40"
+    sample_count: 31837575
+    timestamp: "2026-09-20"
+    scope: "FTB Revelation live SHADOW worldgen integration; disposable fresh world; no authoritative native output; no defaults changed"
+    status: valid
+
+  # --- M3WG SevTech live shadow (operator authorization 2026-09-20) ---
+  - id: "M3WG-SEV-LIVE-SHADOW"
+    class: MEASURED
+    claim: "SevTech: Ages 3.2.3 (262 mods, Forge 14.23.5.2860) live SHADOW integration of redesigned n=1 worldgen noise kernel: 52,908 freshly generated chunk density fields (43,649,100 doubles compared) on disposable copied server with deleted world, 0 mismatches (100% bit-exact parity), 0 native errors, 0 memory leaks (2 contexts created, 2 freed at shutdown). Bot TP walk across coordinates -21,419 to +21,180 X and -12,583 to +12,976 Z crossing zero. Generator classifications: 52,908 ELIGIBLE_VANILLA_OVERWORLD, 0 CUSTOM_GENERATOR, 0 TRANSFORM_CONFLICT, 0 UNSUPPORTED_STATE. Live generator octaves/perms/offsets state successfully transplanted from Forge ChunkGeneratorOverworld instances; Streams, Recurrent Complex, Geolosys, Sponge/AstralSorcery/FoamFix coexistence confirmed. SHADOW only; Java authoritative; no authoritative native worldgen, no defaults changed. Complete M3 worldgen SHADOW ladder across Target A, Target C, Target D verified."
+    git_commit: "47564b3"
+    command: "tools/m3wg-sevtech-shadow-run.sh"
+    raw_artifact: "machine/raw/M3WG-sev-shadow-metrics.txt"
+    raw_artifact_sha256: "6e53db96247bb1441f7f79753850abe287f2c0b668a0bda0eda02c8496350979"
+    raw_artifact_secondary: "machine/raw/M3WG-sev-shadow-server.log"
+    summary: "machine/M3WG-sev-shadow-results.yaml"
+    note: "hash inventory machine/raw/M3WG-sev-shadow-hashes.txt (3 artifacts). Client transcript machine/raw/M3WG-sev-shadow-client.jsonl (sha256 726155720c56ac4ed6a749344bb60bf9954705dc57834f0d909164c1fb2572f9). Server log sha256 4694dca27bc2d3c2ed536c8b6f193fcca5f8e5fb7a1e7f39b1d59238a2bf0b80."
+    java: "Temurin jdk-8.0.504.1-hotspot"
+    rust_profile: "release, lto=fat, codegen-units=1"
+    binaries: "coremod b79a89ed / dll 6db38f40"
+    sample_count: 43649100
+    timestamp: "2026-09-20"
+    scope: "SevTech: Ages live SHADOW worldgen integration; disposable fresh world; no authoritative native output; no defaults changed"
+    status: valid
+
+  # --- M3WG clean forge authoritative on_experimental (operator authorization 2026-09-20) ---
+  - id: "M3WG-AUTH-TARGETA"
+    class: MEASURED
+    claim: "Clean Forge Target A (forge-1.12.2-14.23.5.2860) first AUTHORITATIVE Rust execution for M3 worldgen density field (ChunkGeneratorOverworld.func_185978_a): 9,492 live density fields natively generated and committed (100% Java noise bypass, 0 fallbacks, 0 errors, balanced lifecycle 1/1 context). Twin-World Generated-Chunk Oracle across 9,492 common chunks (189,997,056 blocks) between World J (OFF_MEASURE reference) and World R (ON_EXPERIMENTAL Rust authoritative) with identical seed 123456789 and 110-hop deterministic exploration: 100.00% bit-exact bedrock match at Y=0 (2,429,952 / 2,429,952 blocks), 100.00% biome match (9,492 / 9,492 chunks), 97.02% heightmap match (9,209 / 9,492 chunks); 100% of chunk differences isolated to asynchronous chunk population passes (ores, trees, grass, liquid spread) from PRNG sequencing across chunk loader threads; 0 base terrain contour mismatches. Timing: Java 335.4us vs Rust 352.8us (total authoritative hook 366.2us, 13.4us JNI+copy overhead). Clean shutdown both runs."
+    git_commit: "e1e08de"
+    command: "tools/m3wg-authoritative-campaign.sh"
+    raw_artifact: "machine/raw/M3WG-auth-targeta-worldr-metrics.txt"
+    raw_artifact_sha256: "259dc0a5ae6911c118658a50697f75c89227e073672c9c4c89dbeca6dac63760"
+    raw_artifact_secondary: "machine/raw/M3WG-auth-targeta-chunk-parity.txt"
+    summary: "machine/M3WG-auth-targeta-results.yaml"
+    note: "full hash inventory machine/raw/M3WG-auth-targeta-hashes.txt (7 artifacts: World J & R metrics, server logs, client transcripts, chunk parity report). Client transcripts confirm 5,595 chunks / 168,499,876 bytes received each run with 0 client decode errors across 42,372 frames."
+    java: "Temurin jdk-8.0.504.1-hotspot"
+    rust_profile: "release, lto=fat, codegen-units=1"
+    binaries: "coremod a50b665a / dll 6db38f40"
+    sample_count: 9492
+    timestamp: "2026-09-20"
+    scope: "Clean Forge Target A live authoritative worldgen; twin-world generated-chunk parity oracle; default mode unchanged"
+    status: valid
+  - id: "M3WG-HARDENING-TARGETA"
+    class: MEASURED
+    claim: "M3 Target-A authoritative hardening gate. PRE-POPULATION TERRAIN ORACLE at func_185977_a (setBlocksInChunk) RETURN — after density consumed into base terrain, before MapGen/population: twin World J (OFF_MEASURE) vs World R (ON_EXPERIMENTAL), seed 123456789, exact 110-hop corpus, same Forge/JVM/config. JAVA_PRE_POP == RUST_PRE_POP for 9491/9491 target chunks (100.00%), 0 coord-only diffs, 0 hash mismatches, no silent intersection. POST-POPULATION world (secondary evidence) 9491 common chunks: 5908 identical / 3583 mismatched / 80,831 of 190,001,152 blocks — attributed to decoration/population nondeterminism, NOT base terrain. Live authoritative profile (Rust, 9491 calls, 0 errors, 0 fallbacks, ctx 1:1 lifecycle): stage p50/p95/p99 ns ELIG 6800/17700/28800, BIOME 500/2000/10100, JNI kernel 286500/436400/496700, COMMIT 400/1600/4500; mean full hook 318.6us < Java reference 339.7us. Offline kernel identity on same 6db38f40 DLL: LedgerBench n=1 L0 Java 294.3us / L2 Rust 278.3us median, ONE-CALL PARITY BIT-EXACT (240 chunks, 0 mismatches), INTEGRATED REGRESSION PASS — no kernel regression vs M3W4; prior live Rust-slower was noisier aggregate, staged profile shows Rust net-faster live. Classification PASS."
+    git_commit: "67dc21b"
+    command: "tools/m3wg-hardening-campaign.sh"
+    raw_artifact: "machine/raw/hardening/hardening-worldr-metrics.txt"
+    raw_artifact_sha256: "44654ec854e27639d8a949aa3b1c2fd1683cfac697183091fa2d591a184ed4ca"
+    raw_artifact_secondary: "machine/raw/hardening/hardening-worldj-metrics.txt"
+    summary: "machine/M3WG-hardening-results.yaml"
+    note: "full hash inventory machine/raw/hardening/* (7 artifacts incl. both prepop oracles 9491 lines each, prepop/postpop comparisons, LedgerBench 6db38f40, client transcripts; prepop worldj/worldr both bb94cd74). LedgerBench offline file machine/raw/hardening/ledger-6db38f40.txt (fe38154c) confirms kernel bit-exact parity + no build regression."
+    java: "Temurin jdk-8.0.504.1-hotspot"
+    rust_profile: "release, lto=fat, codegen-units=1"
+    binaries: "coremod a50b665a / dll 6db38f40"
+    sample_count: 9491
+    timestamp: "2026-09-21"
+    scope: "Clean Forge Target A live authoritative worldgen pre-population terrain oracle; stage profiling; kernel build identity; default mode unchanged"
+    status: valid
+  - id: "M3WG-REVELATION-AUTH"
+    class: MEASURED
+    claim: "Revelation authoritative: twin-world pre-population oracle (OFF_MEASURE vs ON_EXPERIMENTAL, seed 123456789, same 140-hop corpus, Forge 14.23.5.2846). Pre-pop base terrain: JAVA_PRE_POP == RUST_PRE_POP on 38,395/38,395 common chunks (100%), 0 hash mismatches. Coordinate-only diffs 1280 J-only / 1511 R-only attributed to Quark cascading worldgen loading boundary chunks at different wall-clock times — NOT density parity failures. Authoritative safety: 39,906 calls, 39,906 eligible, 39,906 native_auth, 0 native_errors, 0 fallbacks, ctx 1:1 balanced. Live profile: Rust full hook 331.7us mean (kernel p50 288.5us, ELIG 9.3us, BIOME 1.2us, COMMIT 0.5us) < Java ref 344.3us mean. Classification: PASS."
+    git_commit: "cd34ce7"
+    command: "tools/m3wg-revelation-auth-campaign.sh"
+    raw_artifact: "machine/raw/rev-auth/rev-auth-worldr-metrics.txt"
+    raw_artifact_sha256: "00c2511c559a5cd3345b2d7b0a2df0c6d9cb95e57a28fb3e9acf646c6ab85a7a"
+    raw_artifact_secondary: "machine/raw/rev-auth/rev-auth-worldj-metrics.txt"
+    summary: "machine/M3WG-rev-auth-results.yaml"
+    note: "full hash inventory machine/raw/rev-auth/* (5 artifacts incl. both prepop oracles 39675/39906 lines, prepop comparison, client transcripts; worldj-prepop 24cfae94, worldr-prepop b745f707)."
+    java: "Temurin jdk-8.0.504.1-hotspot"
+    rust_profile: "release, lto=fat, codegen-units=1"
+    binaries: "coremod a50b665a / dll 6db38f40"
+    sample_count: 39906
+    timestamp: "2026-09-21"
+    scope: "FTB Revelation 3.4.0 authoritative worldgen density; pre-population terrain oracle; stage profiling; default mode unchanged"
+    status: valid
+  - id: "M3WG-SEVTECH-AUTH"
+    class: MEASURED
+    claim: "SevTech authoritative: twin-world pre-population oracle (OFF_MEASURE vs ON_EXPERIMENTAL, seed 123456789, same 140-hop corpus, Forge 14.23.5.2860). Pre-pop base terrain: JAVA_PRE_POP == RUST_PRE_POP on 39,765/39,765 common chunks (100%), 0 hash mismatches. Coordinate-only diffs 5,256 J-only / 3,019 R-only attributed to SevTech mod cascading worldgen loading boundary chunks at different times — NOT density parity failures. Authoritative safety: 51,131 calls, 51,131 eligible, 51,131 native_auth, 0 native_errors, 0 fallbacks, ctx 2:2 balanced. Live profile: Rust full hook 389.1us mean (kernel p50 298.9us, ELIG 12.1us, BIOME 1.6us, COMMIT 0.5us) vs Java ref 349.1us mean. Kernel comparable; slightly higher integration in dense mod biome space. Classification: PASS."
+    git_commit: "cd34ce7"
+    command: "tools/m3wg-sevtech-auth-campaign.sh"
+    raw_artifact: "machine/raw/sev-auth/sev-auth-worldr-metrics.txt"
+    raw_artifact_sha256: "d0d5440f9672a765981f416c63852161852c9246230d1d7c6949a71dc3606e9c"
+    raw_artifact_secondary: "machine/raw/sev-auth/sev-auth-worldj-metrics.txt"
+    summary: "machine/M3WG-sev-auth-results.yaml"
+    note: "full hash inventory machine/raw/sev-auth/* (5 artifacts incl. both prepop oracles 45021/42784 lines, prepop comparison, client transcripts; worldj-prepop 875c3642, worldr-prepop 56a8bcee)."
+    java: "Temurin jdk-8.0.504.1-hotspot"
+    rust_profile: "release, lto=fat, codegen-units=1"
+    binaries: "coremod a50b665a / dll 6db38f40"
+    sample_count: 51131
+    timestamp: "2026-09-21"
+    scope: "SevTech: Ages 3.2.3 authoritative worldgen density; pre-population terrain oracle; stage profiling; default mode unchanged"
+    status: valid
+
+  # --- M4.1/M4.2A/M4.2B native-chunk foundation (2026-09-21) ---
+
+  - id: "M41-GENERATIVE-PALETTE"
+    class: MEASURED
+    claim: "M4.1 generalized NativeSection (all 1.12.2 palette modes), 26/26 byte-exact vs real BlockStateContainer.write offline; Target A 2,931/2,931 and Revelation 35,660/35,660 live SHADOW terrain-exact with 3 consumers per chunk; SevTech field kernel 56,949/56,949 bit-exact; M1 direct encode 1.17us/31KB. SevTech terrain diagnosis later corrected by M42A evidence (comparator artifact)."
+    git_commit: "08fa2e6"
+    command: "tools/m4-shadow-run.sh, tools/m4-pack-shadow-run.sh, offline harnesses"
+    raw_artifact: "machine/raw/m4-rev-shadow-metrics.txt"
+    raw_artifact_sha256: "577e0e07d679c8613a46ed9adf71db481f15395ae8e36742f7ab4acfc7af8d23"
+    summary: "machine/M41-modpack-shadow-results.yaml"
+    java: "Temurin jdk-8.0.504.1-hotspot"
+    rust_profile: "release"
+    binaries: "dll 6efe026329380865 + coremod 5e97c320e119d740 (fixed builds)"
+    sample_count: 41490
+    timestamp: "2026-09-21"
+    scope: "SHADOW only; no transmission; no authoritative state"
+    status: valid
+
+  - id: "M42A-REPRESENTATION"
+    class: MEASURED
+    claim: "M4.2A: SevTech divergence = JEID intData comparator artifact (installed-jar decompile + logical re-probe 37,483/37,483); state widths explicit (vanilla gap-legacy u16 / NEID gated / JEID probe-only); global bits 32-nlz(size-1) pow-2-proven; dimension-scoped keys; live mutation coherency 20,177 refreshes / 20,158 decoder-validated / 0 mismatches / 2,721 evictions."
+    git_commit: "cbf34f4"
+    command: "tools/m4-pack-shadow-run.sh D, tools/m42-coherency-run.sh"
+    raw_artifact: "machine/raw/M42-coherency-metrics.txt"
+    raw_artifact_sha256: "048dc00fa72f1f582b4aa04b183f0458ec0f4abac5a777a46d4d00f19b9ddd23"
+    summary: "machine/M42A-representation-results.yaml"
+    java: "Temurin jdk-8.0.504.1-hotspot"
+    rust_profile: "release"
+    binaries: "dll 7412ee3fa33416ef-era coremod 66505f3067a3cb68-era (see yaml)"
+    sample_count: 37483
+    timestamp: "2026-09-21"
+    scope: "SHADOW only; hooks default OFF; no transmission"
+    status: valid
+
+  - id: "M42B-PACKET-PARITY"
+    class: MEASURED
+    claim: "M4.2B: offline REAL-SPacketChunkData parity 8/8 Gate B decoded-state equal + 7/8 Gate A exact bytes (churn = valid palette-history divergence) across base/mutation/light/transition/TE/empty cases; live comparator stopped by design on first mismatch (biome[0] zero-biome ingestion hole), root-caused, regression-reproduced offline (negative control + setBiomes fix)."
+    git_commit: "2f9475c"
+    command: "tools/bridge M4PacketParityHarness + tools/m42b-run.sh"
+    raw_artifact: "machine/raw/M42B-20260921-172503-metrics.txt"
+    raw_artifact_sha256: "2aa92657f13ca2ef8db2ec7b0253ae9f6ed6f46df782267813e6bfd50b43bcd1"
+    summary: "machine/M42B-packet-parity-results.yaml"
+    java: "Temurin jdk-8.0.504.1-hotspot"
+    rust_profile: "release"
+    binaries: "run build pre-fix; fix build coremod 66505f3067a3cb68"
+    sample_count: 8
+    timestamp: "2026-09-21"
+    scope: "SHADOW only; Java packets transmitted; comparator read-only; stop-on-mismatch honored"
+    status: valid
+
+  - id: "M42C-FIXEDBUILD"
+    class: MEASURED
+    claim: "M4.2C fixed-build live confirmation: preflight offline suite 8/8 Gate B + 7/8 Gate A + biome/skyLight negative controls + first-touch full-sync positive via the actual refreshChunkNow entry; live run M42C-20260921-184024 stopped BY DESIGN on first comparator mismatch with full context dump (skyLight stale-default on never-mutated sections); root-caused, fixed (first-touch full sync), regression-proven offline; exception class behind the 7/54-section validation deltas sited (decodeEquals biome-tail overrun) and fixed."
+    git_commit: "210efcc"
+    command: "tools/m42c-run.sh + tools/bridge M4PacketParityHarness"
+    raw_artifact: "machine/raw/M42C-20260921-184024-metrics.txt"
+    raw_artifact_sha256: "e5dd3f781dd1f28a9c31dbe23e814fd2e38d13ec950340e8f13fa27cdffda3ca"
+    summary: "machine/M42C-fixedbuild-results.yaml"
+    java: "Temurin jdk-8.0.504.1-hotspot"
+    rust_profile: "release"
+    binaries: "run: dll 8b05c4ccd66653ad + coremod 66505f3067a3cb68; final fix: coremod 0cc9a09206f8b6e7 (not live-run)"
+    sample_count: 2991
+    timestamp: "2026-09-21"
+    scope: "SHADOW only; Java transmits; stop-and-preserve honored; no rerun after fixes"
+    status: valid
+
+  - id: "M42D-SNAPSHOT-VALIDITY"
+    class: MEASURED
+    claim: "M4.2D complete snapshot validity: component-tracked contract (sections/biomes separate; skylight-regen hook; block sets conservatively light-dirty all sections after offline catch of relightBlock direct writes); mask-driven validator with 16/16 boundary tests; 19/19 required offline cases via actual entrypoints incl. in-JVM cleanup (retained 0, repeat-safe); live run M42D-20260921-191652: 2,992/2,992 terrain, 1,567 full syncs, 172,230 sections refreshed AND validated 0 mismatch, comparator 0 compared / 1,595 skips all explained (unsynced-at-first-send timing, 25 partial-filter), 2,720 evictions exact."
+    git_commit: "3fe4ab3"
+    command: "tools/m42d-run.sh + offline suites (M4PacketParityHarness, M4ValidatorBoundary, M4LifecycleCases)"
+    raw_artifact: "machine/raw/M42D-20260921-191652-metrics.txt"
+    raw_artifact_sha256: "33f81a4b2ac36ae08a8ac50fd8d80b3b0f44c5fad00e4e68de16defc37ffaa09"
+    summary: "machine/M42D-snapshot-validity-results.yaml"
+    java: "Temurin jdk-8.0.504.1-hotspot"
+    rust_profile: "release"
+    binaries: "dll 52d5ac424db188ed + coremod e63bbfda1b08dfa7 (run); a354a2ec224b529c polish not live-run"
+    sample_count: 172230
+    timestamp: "2026-09-21"
+    scope: "SHADOW only; Java transmits; validity engine live-proven; comparator coverage 0 with all skips explained; no retry"
+    status: valid
+
+  - id: "M42E-DEFERRED-PARITY"
+    class: MEASURED
+    claim: "M4.2E deferred live packet parity: 1,588 packets attempted, 1,025 deferred comparisons ALL decoded-state equal, 0 mismatches, 542 stale SKIPPED (temporal contract enforced), 0 stale comparisons, bounded queue (peak 2.41MB/32MB, 0 pending at end), packet thread non-blocking, Java authoritative; 1,567 full syncs, 83,577 sections refreshed AND validated 0 delta; skylight hook fired naturally 10,283x; recurring shadowTerrain NPE attributed (RustCraft NEID-gate null local) and fixed offline. Classification M1_NATIVE_STATE_REACTIVATED (default OFF)."
+    git_commit: "4474b00"
+    command: "tools/m42e-run.sh + offline M4DeferredTest 7/7 + all suites"
+    raw_artifact: "machine/raw/M42E-20260921-193646-metrics.txt"
+    raw_artifact_sha256: "3b12caba3c917845c97f4f2c666cba0bec76d4b8fd8ea0720a596f52afaf30b5"
+    summary: "machine/M42E-deferred-parity-results.yaml"
+    java: "Temurin jdk-8.0.504.1-hotspot"
+    rust_profile: "release"
+    binaries: "run: dll 52d5ac424db188ed + coremod db6e0ddb332dbedc; NPE fix coremod 6bb8109f1748c533 not live-run"
+    sample_count: 1025
+    timestamp: "2026-09-21"
+    scope: "SHADOW only; Java transmits; deferred comparison background-only; no rerun after offline-attributed fix"
+    status: valid
+
+  - id: "M43-AUTHORITATIVE-PACKET"
+    class: MEASURED
+    claim: "M4.3 authoritative native packet payload (clean Forge Target A): 121 Rust-authored Protocol-340 packets (3.8MB) transmitted to the protocol bot with 0 decode errors and clean session end; 1,473 fallbacks all with counted reasons; 213 comparator checks all equal (121 gate-A tautological, 63 deferred java-vs-native = independent evidence); 0 mismatches; 0 stale transmitted; offline 13/13 + full battery; matched perf Java 7.15us vs native 1.05us (6.8x); post-cleanup proven live (259 removed -> 0 retained). Classification M1_NATIVE_PACKET_AUTHORITATIVE_TARGETA."
+    git_commit: "a7e5937"
+    command: "tools/m43-run.sh + offline M4AuthoritativeTest + M4PacketPerfStudy"
+    raw_artifact: "machine/raw/M43-20260921-202701-metrics.txt"
+    raw_artifact_sha256: "50f088669c087e51eb4fc7f120139716a3dabd0c813c45e2a9e38b14de9abcb0"
+    raw_artifact_secondary: "machine/raw/M43-20260921-201617-metrics.txt"
+    summary: "machine/M43-authoritative-packet-results.yaml"
+    java: "Temurin jdk-8.0.504.1-hotspot"
+    rust_profile: "release"
+    binaries: "dll 52d5ac424db188ed + coremod 521770da724d9121 (run2); 3c94197864937c06 polish not live-run"
+    sample_count: 121
+    timestamp: "2026-09-21"
+    scope: "Target A only; defaults OFF; M2-C OFF; Java shell/TE/compression; no modpack ON"
+    status: valid
+
+  - id: "M43B-READINESS-STOP"
+    class: MEASURED
+    claim: "M4.3B readiness arc: not_synced eliminated (workers+fast extractor 0.46ms/chunk), native 191/run, hit rate 11.9%, verifier architecture complete offline but workload-starved live; STOP on ONE unexplained single-cell semantic mismatch (cx=-19 cz=4 granite-vs-stone, full dump preserved); comparator self-disabled; no rerun; classification withheld pending root-cause."
+    git_commit: "f1e70c9"
+    command: "tools/m43-run.sh x4 + offline suites"
+    raw_artifact: "machine/raw/M43-20260921-213123-metrics.txt"
+    raw_artifact_sha256: "f852102c2de355720a86fbe8dee57bedadc6d3a1c3809a1be45d90bf0f78ace5"
+    summary: "machine/M43B-readiness-results.yaml"
+    java: "Temurin jdk-8.0.504.1-hotspot"
+    rust_profile: "release"
+    binaries: "dll 52d5ac424db188ed + coremod be8f445f70ba3509 (final run)"
+    sample_count: 191
+    timestamp: "2026-09-21"
+    scope: "Target A; defaults OFF; M2-C OFF; stop-and-preserve honored"
+    status: valid
+
+  - id: "M43C-ROOTCAUSE"
+    class: MEASURED
+    claim: "M4.3C root-cause: dual-path verify caught the divergence in vivo twice; both dumps prove the fast extractor math correct — the entry class is worker-thread extraction concurrent with server-thread population (torn reads) PLUS a second unobservable write (surface pass writes biome bytes directly into the array). Fixes: quiescence version guard on eligibility, packet-thread biome freshness check (FFI 319), guard re-arm, dual-verify re-read stability; offline 29/29 parity + full battery; NOT live-validated (no-rerun). Recommendation: further investigation + one final SHADOW confirmation before authority."
+    git_commit: "beb4dba"
+    command: "offline M4ExtractorParity + 2 diagnostic live runs"
+    raw_artifact: "machine/raw/M43-20260921-220828-metrics.txt"
+    raw_artifact_sha256: "ba31c3c9d00d31089cd61dd739e1ee4868526ed562c551fa3ff561be8b925d98"
+    summary: "machine/M43C-rootcause-results.yaml"
+    java: "Temurin jdk-8.0.504.1-hotspot"
+    rust_profile: "release"
+    binaries: "dll bfcd9c0861843624 + coremod 5d62a6c8e64cd682 (fix build, not live-run)"
+    sample_count: 483
+    timestamp: "2026-09-21"
+    scope: "diagnostic; defaults OFF; no authority; stop-and-preserve honored"
+    status: valid
+
+  - id: "M43D-CONFIRMATION"
+    class: MEASURED
+    claim: "M4.3D final snapshot confirmation (SHADOW-only): 345/345 independent live Gate-B packet comparisons passed (real Java payloads vs NativeChunk encodes); quiescent sweep retired (thread-confined ctor, 483 recorded NPEs); one biome[0] event root-caused as cross-thread world-gen biome writes (hook-impossible; versions never move); guard re-armed 32,725x; memory 258/17.1MB -> 0/0/0 after in-JVM cleanup. Classification: FURTHER_INVESTIGATION (one designed fix + one clean run from READY)."
+    git_commit: "cdd954e"
+    command: "tools/m43d-run.sh + offline suites"
+    raw_artifact: "machine/raw/M43D-20260921-223356-metrics.txt"
+    raw_artifact_sha256: "814c4268520cc6c2c60e10d1436fe8805f1d4c85edb89929cec46c1f8ad2894f"
+    summary: "machine/M43D-confirmation-results.yaml"
+    java: "Temurin jdk-8.0.504.1-hotspot"
+    rust_profile: "release"
+    binaries: "dll bfcd9c0861843624 + coremod dfb5a18cb7160725"
+    sample_count: 345
+    timestamp: "2026-09-21"
+    scope: "SHADOW only; Java transmits; no authority; no M2-C; stop-and-preserve honored"
+    status: valid
+
+  - id: "M43E-READY"
+    class: MEASURED
+    claim: "M4.3E final readiness: biome freshness proven live (2 re-pushes, 0 biome mismatches); 1,572/1,572 independent Gate-B comparisons passed, 0 mismatches, 0 stale acceptances; cleanup 273->0 bytes in-JVM; all 627 native_errors attributed to the retired sweep (caught, non-corrupting). Classification M1_NATIVE_PACKET_READY_TARGETA."
+    git_commit: "fdd3b98"
+    command: "tools/m43d-run.sh + offline suites (16/16,29/29,7/7,19/19,8/8,16/16,10/10)"
+    raw_artifact: "machine/raw/M43D-20260921-224956-metrics.txt"
+    raw_artifact_sha256: "73b1bbe114ef7b70a9aaf3800e49e5087e6b33395c97b8b72c111e158d27f1c5"
+    summary: "machine/M43E-readiness-results.yaml"
+    java: "Temurin jdk-8.0.504.1-hotspot"
+    rust_profile: "release"
+    binaries: "dll bfcd9c0861843624 + coremod e2cd8b612ed59d35"
+    sample_count: 1572
+    timestamp: "2026-09-21"
+    scope: "SHADOW only; Java transmits; READY classification; no transmission; defaults OFF"
+    status: valid
+
+  - id: "M5-COMBINED-NETWORK"
+    class: MEASURED
+    claim: "M5 combined native networking first live: offline full-pipeline oracle ALL PASS (Java SPacketChunkData+JDK deflate vs NativeChunk+Rust encode+M2-C compress, inflated and independently decoded, semantic equality); live Target A: 1,612 Rust-compressed packets transmitted 48.3MB->4.3MB (11.1x), 0 compress fallbacks/errors, ctx 1/1 balanced, client 0 decode errors, registry cleanup 272->0 bytes; M1 native-authored transmitted=1 (guard strict); ONE shadow-comparator race event (torn-read class, not transmitted-stale) -> stop honored, FURTHER_INVESTIGATION."
+    git_commit: "eaf5ed6"
+    command: "tools/m5-run.sh + M5PipelineOracle offline"
+    raw_artifact: "machine/raw/M5-20260921-231904-metrics.txt"
+    raw_artifact_sha256: "e5100da6836acbac03026c7314356100bf5cff52363fe1fb96fbd4d4daac33de"
+    summary: "machine/M5-combined-results.yaml"
+    java: "Temurin jdk-8.0.504.1-hotspot"
+    rust_profile: "release"
+    binaries: "dll bfcd9c0861843624"
+    sample_count: 1612
+    timestamp: "2026-09-21"
+    scope: "Target A only; both subsystems ON_EXPERIMENTAL in run; defaults OFF in repo; no modpack"
+    status: valid
+
+  - id: "M51-FINAL-CONFIRM"
+    class: MEASURED
+    claim: "M5.1: comparator ctor-entry version guard (stale-skips not mismatches; deterministic concurrent race regression 0 mismatches); sweep retired; 35 native-authored packets live (vs 1), 1,614 native-compressed 0 errors, 164 Gate-B comparisons 163 equal; ONE event preserved revealing a NEW third unobservable-write class (incremental skylight writes nibbles directly — version never moves; same fix pattern as biomes, not patched in-campaign); cleanup 257->0. FURTHER_INVESTIGATION."
+    git_commit: "b9571ee"
+    command: "tools/m5-run.sh + offline battery (20/20,7/7,19/19,8/8,16/16,29/29,121/121,10/10)"
+    raw_artifact: "machine/raw/M5-20260921-233744-metrics.txt"
+    raw_artifact_sha256: "26c0d57934fd3f259e3150bb419f1445783371698432f7b59315127d799a4e8c"
+    summary: "machine/M51-results.yaml"
+    java: "Temurin jdk-8.0.504.1-hotspot"
+    rust_profile: "release"
+    binaries: "dll bfcd9c0861843624 + coremod 5dbde6db36973ac3"
+    sample_count: 164
+    timestamp: "2026-09-21"
+    scope: "Target A; defaults OFF in repo; stop honored; no patch-and-rerun"
+    status: valid
+
+  - id: "M52-LIGHT-CLOSURE"
+    class: MEASURED
+    claim: "M5.2 light-freshness closure: 496 native-authored packets live (vs 35), 1,571/1,571 independent Gate-B comparisons passed, 0 mismatches, 0 stale acceptances, comparator caught 1 light race as SKIP, 2 biome re-pushes, client 0 decode errors, cleanup 427->0 bytes, ctx 1/1; 26 native_errors = dead auth-sample builder's caught off-thread ctor NPEs (disable pending). FURTHER_INVESTIGATION pending that disable + one clean re-run."
+    git_commit: "9c70497"
+    command: "tools/m5-run.sh + offline battery (25/25,7/7,19/19,8/8,16/16,10/10)"
+    raw_artifact: "machine/raw/M5-20260921-235750-metrics.txt"
+    raw_artifact_sha256: "846bd1aea9eece1af341a683257d12f89794b0a3e25c492df46575a243575fde"
+    summary: "machine/M52-results.yaml"
+    java: "Temurin jdk-8.0.504.1-hotspot"
+    rust_profile: "release"
+    binaries: "dll db2a0ad1b13d3843 + coremod c16ab264ecf6aee7"
+    sample_count: 1571
+    timestamp: "2026-09-21"
+    scope: "Target A; defaults OFF in repo; stop honored"
+    status: valid
+
+  - id: "M53-READY"
+    class: MEASURED
+    claim: "M5.3: dead auth-sample builder removed (both ends, canary-asserted); battery 27/27 x3; live confirmation 355 native-authored, 1,572/1,572 Gate-B ALL PASSED, 0 mismatches, 0 validator/comparator exceptions, biome 3 re-pushes, M2-C 1,599 compressed 0 errors ctx 1/1, client 0 decode errors, cleanup 257->0 bytes. One caught maintenance error (pushBiomes shared-buffer race, non-validating, correctness guarded by packet-time freshness). Classification NATIVE_NETWORK_READY_TARGETA."
+    git_commit: "22c742a"
+    command: "tools/m5-run.sh + offline battery"
+    raw_artifact: "machine/raw/M5-20260922-072952-metrics.txt"
+    raw_artifact_sha256: "8622b4bb17f4d644cf1f431f1292cd26cfc469369f335711f1f64af38c02a960"
+    summary: "machine/M53-results.yaml"
+    java: "Temurin jdk-8.0.504.1-hotspot"
+    rust_profile: "release"
+    binaries: "dll db2a0ad1b13d3843 + coremod 27fbc41f46dbb361"
+    sample_count: 1572
+    timestamp: "2026-09-22"
+    scope: "Target A; defaults OFF in repo; READY classification"
+    status: valid
+
+  - id: "M54REV-SHADOW"
+    class: MEASURED
+    claim: "M5.4 Revelation combined SHADOW: pushBiomes ThreadLocal fix (2-worker regression); terrain 28,661/28,661 bit-exact; 1,892,651 sections validated 0 mismatch; M2-C SHADOW compression 34,165/34,165 matches 0 mismatches; light-freshness guard skipped 15,574 packet comparisons (0 completed Gate-B — guard working as designed under modded light churn); client 0 decode errors (108 teleports); cleanup 805->0 bytes; 0 native/validator/compression errors. FURTHER_INVESTIGATION (pack-appropriate verifier window needed)."
+    git_commit: "ae8a8da"
+    command: "tools/m54rev-run.sh C 680"
+    raw_artifact: "machine/raw/m54rev-shadow-metrics.txt"
+    raw_artifact_sha256: "3888ddde23fb1f3d1237a35c7eb6262c77752cbe282cbfeefb7fd0388a1b4640"
+    summary: "machine/M54REV-results.yaml"
+    java: "Temurin jdk-8.0.504.1-hotspot"
+    rust_profile: "release"
+    binaries: "dll db2a0ad1b13d3843 + coremod aacf8f155f4085c3"
+    sample_count: 34165
+    timestamp: "2026-09-22"
+    scope: "Revelation SHADOW only; Java transmits; no native transmission on pack"
+    status: valid
+
+  - id: "M55-FAST-RIG"
+    class: MEASURED
+    claim: "M5.5 fast rig: locked stability-window comparator (offline battery green); short 400s Revelation run: 5,734 terrain-exact, 350k sections validated, 5,319/5,319 compress shadows, cleanup 912->0; Gate-B completed=1 (rig under-triggered resends); ONE preserved mismatch (fluid flowing-vs-source settle race, versions equal). FURTHER_INVESTIGATION."
+    git_commit: "d724c6a"
+    command: "tools/m55rev-run.sh C 400"
+    raw_artifact: "machine/raw/m55rev-shadow-metrics.txt"
+    raw_artifact_sha256: "be7c37eb5ba6ef263602054d3a02e127829017e834ecd087dff25cbef4bb2ac3"
+    summary: "machine/M55-results.yaml"
+    java: "Temurin jdk-8.0.504.1-hotspot"
+    rust_profile: "release"
+    binaries: "dll db2a0ad1b13d3843"
+    sample_count: 5319
+    timestamp: "2026-09-22"
+    scope: "Revelation SHADOW only; stop honored at first mismatch"
+    status: valid
+
+  - id: "M56-FAST-GATEB"
+    class: MEASURED
+    claim: "M5.6: block-state freshness domain added (before/after logical fingerprints); fluid event root-caused as capture-window race on a HOOKED path (not unobservable); reconnect rig documented a hard ceiling (packet constructed once per chunk-entry — 1 Gate-B despite 8 sessions); ONE REAL mask-coverage mismatch preserved (java=31 native=15: native all-air release vs Java empty-but-present storage presence) — stop honored; 50,392/50,392 compress shadows; cleanup 594->0. FURTHER_INVESTIGATION."
+    git_commit: "d004a0f"
+    command: "tools/m56rev-run.sh C 600"
+    raw_artifact: "machine/raw/m56rev-shadow-metrics.txt"
+    raw_artifact_sha256: "11a271177adfadb2b91bcc4a50223a852e3ed396c9bc86ea369f1d4e5ff614c9"
+    summary: "machine/M56-results.yaml"
+    java: "Temurin jdk-8.0.504.1-hotspot"
+    rust_profile: "release"
+    binaries: "dll db2a0ad1b13d3843"
+    sample_count: 50392
+    timestamp: "2026-09-22"
+    scope: "Revelation SHADOW only; stop honored at real mismatch"
+    status: valid
+
+  - id: "M57-MASK-CONTRACT"
+    class: MEASURED
+    claim: "M5.7 offline mask-contract repair: native mask rule PROVEN correct against real SPacketChunkData across absent/present-empty/nonempty/transition/partial shapes (37/37); live java=31/native=15 event re-classified as capture-window (comparator ordering let mask divergence bypass the stability gate — fixed: mask divergence now requires stable Java state to be a mismatch); packets_seen audited (ctor-return count) with split entry/full counters; test-only resend driver added (live wiring PENDING). No campaign run."
+    git_commit: "96a630a"
+    command: "offline suites only (no server)"
+    raw_artifact: "machine/M57-results.yaml"
+    raw_artifact_sha256: "721f862505d391ac23775ff9e02c351863927806358d0d128163ab1e7b3d1095"
+    summary: "machine/M57-results.yaml"
+    java: "Temurin jdk-8.0.504.1-hotspot"
+    rust_profile: "release"
+    binaries: "dll db2a0ad1b13d3843"
+    sample_count: 37
+    timestamp: "2026-09-22"
+    scope: "offline debugging + test infrastructure only; no campaign; no transmission"
+    status: valid
+
+  - id: "M58-DRIVER-CAPTURE"
+    class: MEASURED
+    claim: "M5.8: test-only resend driver (FML server-owner context, real ctor, ordinary send, split counters, live canary armed behind property but NOT run); immutable entry-capture comparator interval; 3/4 deterministic capture tests pass (stable/mid-capture-rejected/post-mutation-fresh); case (4) corrupted-native-real-failure test hits an undiagnosed ctor IllegalArgumentException — open test defect. No campaign; no transmission."
+    git_commit: "254a527"
+    command: "offline suites only"
+    raw_artifact: "machine/M58-results.yaml"
+    raw_artifact_sha256: "cedce5e4eb141c93fa5b3b70d2fd8eb850f3bd4423040760ad904a4fbd01541b"
+    summary: "machine/M58-results.yaml"
+    java: "Temurin jdk-8.0.504.1-hotspot"
+    rust_profile: "release"
+    binaries: "dll db2a0ad1b13d3843"
+    sample_count: 3
+    timestamp: "2026-09-22"
+    scope: "offline driver + capture tests; canary blocked on case 4"
+    status: valid
+
+  - id: "M58R-NEGCTL-CANARY"
+    class: MEASURED
+    claim: "M5.8-R: case-4 exception = test arity bug (missing 65535), fixed; negative control now REAL_MISMATCH->restored MATCH with java bytes asserted unchanged (43/43); one-shot canary live: 3 executed, ctor+comparator chain proven (full_ctor=2, compared=2), send accessor wrong (func_184164_z), ONE new TE/modded-gid mismatch preserved (76916 vs 11380) — stop honored; M2-C 44,121/44,121; cleanup 623->0."
+    git_commit: "924ead6"
+    command: "offline suites + tools/m58rev-run.sh C 400"
+    raw_artifact: "machine/raw/m58r-canary1-metrics.txt"
+    raw_artifact_sha256: "06faec90d000443db454c9da9d1b61e379b2e18fd7ea9ac79d68222e632135dc"
+    summary: "machine/M58R-results.yaml"
+    java: "Temurin jdk-8.0.504.1-hotspot"
+    rust_profile: "release"
+    binaries: "dll db2a0ad1b13d3843"
+    sample_count: 2
+    timestamp: "2026-09-22"
+    scope: "offline repair + canary boot; stop honored at first mismatch"
+    status: valid
+
+  - id: "M58R2-TRUNCATION"
+    class: MEASURED
+    claim: "M5.8-R2: truncation edge TRACED to the u16 CharBuffer staging in section refresh (76916->11380 at cb.put); width guards added (refresh reject + chunk invalidate + comparator UNSUPPORTED_HIGH_ID_SKIP before narrowed comparison); driver accessor fixed via verified playerEntities field_73010_j; 47/47 synthetic+real regressions; battery green. Offline only."
+    git_commit: "42cc43b"
+    command: "offline suites only"
+    raw_artifact: "machine/M58R2-results.yaml"
+    raw_artifact_sha256: "f506d043a65012f40bd18c8e63f8067cdc8f7f35d1e0f3f5ef0f8c0af4002270"
+    summary: "machine/M58R2-results.yaml"
+    java: "Temurin jdk-8.0.504.1-hotspot"
+    rust_profile: "release"
+    binaries: "dll db2a0ad1b13d3843"
+    sample_count: 47
+    timestamp: "2026-09-22"
+    scope: "offline diagnosis + repair; no boot; no transmission"
+    status: valid
+
+  - id: "M58R3-CANARY2"
+    class: MEASURED
+    claim: "M5.8-R3: rejection safety 51/51 (invalidate/fresh-re-arm proven); canary: send accessor wrong AGAIN (field_73010_j NoSuchField — guess, process defect logged); ctor/comparator chain fired; ONE NEW stable-state mask divergence preserved (java=63 native=31, stability gate passed, cx=6 cz=4) — genuine native mask semantics issue on Revelation; stop honored."
+    git_commit: "396a235"
+    command: "tools/m58rev-run.sh C 400"
+    raw_artifact: "machine/raw/m58rev-shadow-metrics.txt"
+    raw_artifact_sha256: "a9d46033bb3961526a5d511cd48de58ff68d951c4e0403efb501a66e439b52b0"
+    summary: "machine/M58R3-results.yaml"
+    java: "Temurin jdk-8.0.504.1-hotspot"
+    rust_profile: "release"
+    binaries: "dll db2a0ad1b13d3843... coremod 0803b6d65794b92de... (full digests in summary)"
+    sample_count: 1
+    timestamp: "2026-09-22"
+    scope: "canary boot; stop honored at stable-state mask divergence"
+    status: valid
+
+  - id: "M58HOLD-PRECONDITIONS"
+    class: MEASURED
+    claim: "M5.8-HOLD offline preconditions: CAPTURE_UNSAFE declared for cross-thread biome/light (ownership documented; consumers Java-only); unknown/unregistered states now REJECT via -1 sentinel riding the width guard (54/54 tests); section-5 event preserved MASK_MISMATCH_OBSERVED ROOT_CAUSE_UNRESOLVED with unknowns listed; player accessor javap-verified field_73010_i. No server boot."
+    git_commit: "b88907b"
+    command: "offline suites only"
+    raw_artifact: "machine/M58HOLD-results.yaml"
+    raw_artifact_sha256: "96bfd0b90fb439323d8a1f6d69ecaecc1307db37ab8a4553a55f6941ef16c5e8"
+    summary: "machine/M58HOLD-results.yaml"
+    java: "Temurin jdk-8.0.504.1-hotspot"
+    rust_profile: "release"
+    binaries: "dll db2a0ad1b13d3843..."
+    sample_count: 54
+    timestamp: "2026-09-22"
+    scope: "offline only; no boot; no transmission"
+    status: valid
+
+invalidated:
+  - id: "M13-PARITY-100K"
+    reason: "Shared incorrect section-selection semantics between reference and native"
+    artifact: "machine/M1.3-shadow-results.yaml"
+  - id: "M13-TIMING-DECOMPOSED"
+    reason: "Hardcoded T_JNI=50ns / T_HANDOFF=10ns assumptions"
+    artifact: "machine/M1.3-performance-results.yaml"
+  - id: "P08-TARGET-BCD"
+    reason: "Synthetic tables; no real pack installations existed"
+    artifact: "tools/run-p08-benchmarks.py"
+  - id: "P09-SCORING-INPUTS"
+    reason: "Derived from invalidated P0-8 synthetic data"
+    artifact: "machine/performance-baselines.yaml"
+

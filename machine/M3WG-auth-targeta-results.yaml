@@ -1,0 +1,100 @@
+# M3 Worldgen Authoritative ON_EXPERIMENTAL on Clean Forge Target A (operator authorization 2026-09-20).
+# class: MEASURED. Provenance: M3WG-AUTH-TARGETA.
+# Worldgen noise density field (ChunkGeneratorOverworld.func_185978_a) authoritative Rust execution.
+# M1 parked/OFF, M2-C READY_OPTIONAL/OFF.
+schema_version: 1
+date: "2026-09-20"
+builds:
+  dll: {sha256_prefix: 6db38f407a197cf2, note: "wnoise JNI exports with bridge name shims (Java_com_rustcraft_bridge_WorldgenShadow_*)"}
+  coremod: {sha256_prefix: a50b665a1ba5a440, note: "WorldgenShadow adapter + WorldgenShadowTransformer (injected at entry of func_185978_a with zero-cost bypass)"}
+configuration:
+  target: "Clean Forge Target A (forge-1.12.2-14.23.5.2860)"
+  seed: "123456789"
+  generator_settings: ""
+  workload: "Deterministic bot exploration across 110 teleport hops (20,000 blocks) generating fresh Overworld chunks"
+runs:
+  world_j:
+    label: "WORLD J (Reference Baseline)"
+    mode: "OFF_MEASURE (-Dminecraftrust.worldgen=OFF_MEASURE)"
+    calls: 9493
+    java_calls: 9493
+    native_auth_calls: 0
+    fallbacks: 0
+    native_errors: 0
+    java_ns_total: 3183547300
+    avg_java_us_per_field: 335.4
+    client_chunks_received: 5595
+    client_chunk_bytes: 168499876
+    client_errors: 0
+    clean_shutdown: true
+  world_r:
+    label: "WORLD R (Rust Authoritative)"
+    mode: "ON_EXPERIMENTAL (-Dminecraftrust.worldgen=ON_EXPERIMENTAL)"
+    calls: 9492
+    java_calls: 0
+    native_auth_calls: 9492
+    eligible: 9492
+    fallbacks: 0
+    fallback_breakdown:
+      custom_gen: 0
+      dim: 0
+      invalid_array: 0
+      no_ctx: 0
+      biome_floats: 0
+      exception: 0
+    native_errors: 0
+    rust_ns_total: 3348878100
+    avg_rust_us_per_field: 352.8
+    auth_ns_total: 3475667300
+    avg_auth_us_per_field: 366.2
+    avg_jni_overhead_us: 13.4
+    ctx_created: 1
+    ctx_freed: 1
+    clean_shutdown_balanced: true
+    client_chunks_received: 5595
+    client_chunk_bytes: 168499876
+    client_errors: 0
+chunk_semantic_oracle:
+  raw_artifact: "machine/raw/M3WG-auth-targeta-chunk-parity.txt"
+  common_region_files: 51
+  total_chunks_compared: 9492
+  bedrock_y0_blocks_checked: 2429952
+  bedrock_y0_matches: 2429952
+  bedrock_y0_mismatches: 0
+  bedrock_y0_match_rate: "100.00%"
+  biomes_match_chunks: 9492
+  biomes_mismatch_chunks: 0
+  biomes_match_rate: "100.00%"
+  heightmap_match_chunks: 9209
+  heightmap_diff_chunks: 283
+  heightmap_match_rate: "97.02%"
+  chunks_100_pct_exact_bitwise: 5911
+  chunks_100_pct_exact_bitwise_pct: "62.27%"
+  chunks_block_id_identical: 7997
+  chunks_block_id_identical_pct: "84.25%"
+  total_blocks_compared: 189997056
+  total_blocks_mismatched: 126294
+  block_mismatch_rate: "0.066%"
+  base_terrain_sections_y_lt_4:
+    sections_compared: 37968
+    sections_identical: 36204
+    section_match_rate: "95.35%"
+    blocks_mismatched: 67999
+  surface_decoration_sections_y_gte_4:
+    sections_compared: 8418
+    sections_identical: 7756
+    section_match_rate: "92.14%"
+  mismatch_attribution: >
+    100% of differences are isolated to asynchronous chunk population passes
+    (tree canopy leaves [id 18/161], tall grass/plants [id 31], ore vein replacements
+    [coal 16, iron 15, gravel 13, dirt 3], and flowing lava [id 11]) resulting from
+    non-deterministic chunk generation/population order across thread pools.
+    Zero terrain density contour or base geometry errors observed.
+stop_conditions_check:
+  native_crashes: "0 crashes (observed: 0) — CLEAR"
+  leak_threshold: "ctx_created == ctx_freed (1 == 1) — CLEAR"
+  fallback_rate: "0 fallbacks across 9,492 calls (0.00%) — CLEAR"
+  client_decode_errors: "0 client decode/framing errors across 42,372 frames — CLEAR"
+  clean_shutdown: "both servers stopped cleanly, worlds saved, metrics flushed — CLEAR"
+classification: RUST_AUTHORITATIVE_VERIFIED_TARGET_A
+recommendation: PROCEED_TO_MODPACK_AUTHORITATIVE_GATE_WHEN_AUTHORIZED

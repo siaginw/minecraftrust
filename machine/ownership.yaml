@@ -1,0 +1,204 @@
+version: 1
+allowed_states:
+  - JAVA_OWNED
+  - JAVA_OWNED_RUST_ACCELERATED
+  - SHADOW_TESTED
+  - RUST_OWNED_JAVA_VIEW
+  - RUST_OWNED
+  - RETIRED
+
+subsystems:
+  transport_buffers:
+    name: "Network Packet Buffers & Framing"
+    state: JAVA_OWNED
+    owner: "Java (Netty / Minecraft)"
+    read_path: "Java Netty ByteBuf read"
+    write_path: "Java Netty ByteBuf write"
+    serialization_boundary: "Protocol 340 wire encoding"
+    synchronization: "Netty IO threads / Server thread"
+    lifetime: "Connection / Packet lifetime"
+    rollback_behavior: "Vanilla Netty pipeline"
+    benchmark_gate: "micro/packet_buffers"
+    notes: "Target for P1 buffer abstraction and P2 acceleration."
+
+  packet_compression:
+    name: "Packet Compression / Decompression"
+    state: JAVA_OWNED
+    owner: "Java (Netty Deflater/Inflater)"
+    read_path: "Java Netty decompression handler"
+    write_path: "Java Netty compression handler"
+    serialization_boundary: "Zlib / Deflate packet payloads"
+    synchronization: "Netty worker threads"
+    lifetime: "Per packet"
+    rollback_behavior: "Netty standard zlib codec"
+    benchmark_gate: "micro/compression"
+    notes: "P2 acceleration candidate (libdeflater / zlib-ng native)."
+
+  nbt_codec:
+    name: "NBT Codec & Tag Tree"
+    state: JAVA_OWNED
+    owner: "Java (CompressedStreamTools / NBTTagCompound)"
+    read_path: "Java NBTInputStream"
+    write_path: "Java NBTOutputStream"
+    serialization_boundary: "Binary NBT streams"
+    synchronization: "Async chunk IO / Server thread"
+    lifetime: "Chunk save / entity read cycle"
+    rollback_behavior: "Vanilla CompressedStreamTools"
+    benchmark_gate: "micro/nbt"
+    notes: "Must preserve unknown mod tags and capability data identically."
+
+  region_io:
+    name: "Anvil Region File IO (.mca)"
+    state: JAVA_OWNED
+    owner: "Java (RegionFile / RegionFileCache)"
+    read_path: "Java RandomAccessFile / DataInputStream"
+    write_path: "Java RandomAccessFile / DeflaterOutputStream"
+    serialization_boundary: "4096-byte sector header + compressed chunk payloads"
+    synchronization: "Synchronized Java RegionFile lock"
+    lifetime: "Server run / World save"
+    rollback_behavior: "Vanilla RegionFile / AnvilChunkLoader"
+    benchmark_gate: "component/region_io"
+    notes: "Candidate for lock-free / memory-mapped / batch async region writer in P2."
+
+  chunk_storage:
+    name: "Chunk Storage & Block Palettes"
+    state: JAVA_OWNED
+    owner: "Java (net.minecraft.world.chunk.Chunk)"
+    read_path: "ExtendedBlockStorage / BlockStateContainer"
+    write_path: "Chunk.setBlockState"
+    serialization_boundary: "16x16x16 chunk sections"
+    synchronization: "Server tick thread / World locks"
+    lifetime: "Chunk loaded duration"
+    rollback_behavior: "Vanilla Chunk / ExtendedBlockStorage"
+    benchmark_gate: "component/chunk_storage"
+    notes: "P4 native storage ownership target."
+
+  spatial_index:
+    name: "Spatial Entity & TileEntity Query Index"
+    state: JAVA_OWNED
+    owner: "Java (World.loadedEntityList / ClassInheritanceMultiMap)"
+    read_path: "World.getEntitiesWithinAABB"
+    write_path: "World.spawnEntity / removeEntity"
+    serialization_boundary: "World coordinate queries"
+    synchronization: "Server main thread"
+    lifetime: "World lifetime"
+    rollback_behavior: "Vanilla ClassInheritanceMultiMap"
+    benchmark_gate: "component/spatial_query"
+    notes: "P3 candidate for BVH / R-tree acceleration."
+
+  lighting_engine:
+    name: "Block & Sky Light Propagation"
+    state: JAVA_OWNED
+    owner: "Java (World.checkLight / net.minecraft.world.EnumSkyBlock)"
+    read_path: "World.getLight / ExtendedBlockStorage light arrays"
+    write_path: "World.setLightFor"
+    serialization_boundary: "NibbleArray 4-bit light coordinates"
+    synchronization: "Server main thread"
+    lifetime: "World / Chunk lifetime"
+    rollback_behavior: "Vanilla lighting calculator"
+    benchmark_gate: "component/lighting"
+    notes: "P3 candidate. Major bottleneck on world gen and block updates."
+
+  pathfinding:
+    name: "Pathfinding & Navigation Engine"
+    state: JAVA_OWNED
+    owner: "Java (PathNavigate / PathFinder / NodeProcessor)"
+    read_path: "PathNavigate.getPathToXYZ"
+    write_path: "PathNavigate.setPath"
+    serialization_boundary: "Node array / PathPoint"
+    synchronization: "Server thread / Mob tick"
+    lifetime: "Per path calculation"
+    rollback_behavior: "Vanilla PathFinder"
+    benchmark_gate: "component/pathfinding"
+    notes: "P3 candidate. Compute-heavy, zero persistent state."
+
+  entity_simulation:
+    name: "Entity AI & Physics Tick"
+    state: JAVA_OWNED
+    owner: "Java (Entity / EntityLivingBase / EntityLiving)"
+    read_path: "Entity.onUpdate"
+    write_path: "Entity position, motion, health mutation"
+    serialization_boundary: "Entity NBT"
+    synchronization: "WorldServer tick loop"
+    lifetime: "Entity spawn to despawn"
+    rollback_behavior: "Vanilla Entity tick"
+    benchmark_gate: "full_server/entity_tick"
+    notes: "P6 candidate. Highly sensitive to mod hooks and capabilities."
+
+  tile_entity_simulation:
+    name: "TileEntity Tick & Inventory Logic"
+    state: JAVA_OWNED
+    owner: "Java (TileEntity / ITickable)"
+    read_path: "WorldServer.updateEntities -> tickableTileEntities"
+    write_path: "TileEntity state mutations"
+    serialization_boundary: "TileEntity NBT"
+    synchronization: "WorldServer tick loop"
+    lifetime: "Block placement to destruction"
+    rollback_behavior: "Vanilla / Forge TileEntity dispatch"
+    benchmark_gate: "full_server/tile_entity_tick"
+    notes: "Primary load in tech modpacks. High Forge capability interaction."
+
+  block_updates:
+    name: "Block Updates, Scheduled Ticks & Fluids"
+    state: JAVA_OWNED
+    owner: "Java (WorldServer.pendingTickListEntriesTreeSet)"
+    read_path: "WorldServer.tickUpdates"
+    write_path: "World.scheduleUpdate / notifyNeighborsOfStateChange"
+    serialization_boundary: "NextTickListEntry NBT"
+    synchronization: "Server main thread"
+    lifetime: "World lifetime"
+    rollback_behavior: "Vanilla NextTickListEntry scheduler"
+    benchmark_gate: "full_server/scheduled_ticks"
+    notes: "P6 candidate. Preserves redstone and fluid mechanics."
+
+  world_generator:
+    name: "World Generation & Decorators"
+    state: JAVA_OWNED
+    owner: "Java (ChunkGeneratorOverworld / BiomeProvider / IChunkGenerator)"
+    read_path: "IChunkGenerator.generateChunk"
+    write_path: "Chunk primer population"
+    serialization_boundary: "ChunkPrimer / Chunk"
+    synchronization: "Server thread / Chunk provider"
+    lifetime: "Chunk creation"
+    rollback_behavior: "Vanilla ChunkProviderServer"
+    benchmark_gate: "component/worldgen"
+    notes: "Heavy mod integration via GameRegistry and biome decorators."
+
+  forge_runtime_bridge:
+    name: "Forge Runtime Bridge & Mod Hooks"
+    state: JAVA_OWNED
+    owner: "Java (net.minecraftforge.fml / MinecraftForge.EVENT_BUS)"
+    read_path: "Forge event listeners / CapabilityManager"
+    write_path: "Forge event posting / registry entries"
+    serialization_boundary: "Java object handles"
+    synchronization: "Server thread / FML worker pools"
+    lifetime: "JVM process lifetime"
+    rollback_behavior: "Stock Forge 14.23.5.x"
+    benchmark_gate: "full_server/baseline"
+    notes: "Core compatibility layer. Must remain authoritative for mod APIs."
+
+  coremod_asm_adapter:
+    name: "Coremod & Bytecode Transformer Adaptation"
+    state: JAVA_OWNED
+    owner: "Java (net.minecraft.launchwrapper.LaunchClassLoader)"
+    read_path: "IClassTransformer.transform"
+    write_path: "Transformed byte arrays"
+    serialization_boundary: "JVM bytecode"
+    synchronization: "ClassLoader lock"
+    lifetime: "Class loading duration"
+    rollback_behavior: "Vanilla LaunchWrapper"
+    benchmark_gate: "full_server/launch_latency"
+    notes: "Must support popular 1.12.2 coremods (Mixin, SpongeForge, EnderCore, etc.)."
+
+  chunk_packet_encoding:
+    name: "Chunk Packet Wire Encoding (SPacketChunkData)"
+    state: JAVA_OWNED
+    owner: "Java (net.minecraft.network.play.server.SPacketChunkData)"
+    read_path: "Java ExtendedBlockStorage blockstate / light arrays"
+    write_path: "Netty DirectByteBuffer payload"
+    serialization_boundary: "Protocol 340 SPacketChunkData section bit-packing"
+    synchronization: "ServerThread / Netty pipeline"
+    lifetime: "Packet transmission"
+    rollback_behavior: "Vanilla SPacketChunkData constructor"
+    benchmark_gate: "micro/packet_chunkdata"
+    notes: "M1-C candidate. Java remains authoritative; experimental Rust acceleration (HANDOFF-A) validated 2026-09-19 on Targets A/B/C/D in SHADOW/ON_EXPERIMENTAL — see machine/evidence-provenance.yaml (M14R2-*, TARGET-B/C/D-*) and docs/migrations/M1-final-target-coverage.md. Runtime default OFF; production state JAVA_OWNED (validation status tracked separately, not by mutating this state)."

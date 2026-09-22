@@ -1,0 +1,55 @@
+# M2.0 bounded standalone prototype: Rust outbound compression component +
+# offline interoperability tests (operator authorization 2026-09-20).
+# class: MEASURED. Provenance: M20-PROTOTYPE. No live integration performed.
+schema_version: 1
+date: "2026-09-20"
+
+backend:
+  rust: "flate2 =1.1.10, default-features=false, feature zlib-rs -> zlib-rs crate v0.6.8 (pure-Rust zlib; NOT a C zlib-ng wrapper, NOT default miniz_oxide)"
+  verification: "cargo tree shows flate2 with only any_impl,any_zlib,zlib-rs features; committed Cargo.toml/Cargo.lock pin it; BACKEND constant recorded in every harness output"
+  component: "compression::ZlibPacketCompressor (zlib-wrapped stream, level 6 = JDK default, context reset per packet = independent streams, checked bounds incl. incompressible expansion, defined error codes, panic-contained)"
+
+reference_contract_javap_verified:
+  encoder: "net.minecraft.network.NettyCompressionEncoder extends MessageToByteEncoder<ByteBuf>; JDK Deflater() reused with reset per packet; default level (6); zlib-wrapped; input snapshotted per packet; below-threshold frames = varint(0)+raw"
+  decoder: "net.minecraft.network.NettyCompressionDecoder; rejects decompressed size < threshold and > 2097152 (2MiB) - the guard is DECODER-SIDE ONLY; not transplanted to the component"
+  threshold: "configurable at runtime (func_179299_a on encoder, decoder setter too); default 256 comes from server.properties network-compression-threshold; NOT hardcoded in the component"
+  framing: "VarInt(uncompressedSize)+zlib stream, produced by the encoder itself; stays Java in the future integration (component owns only the zlib bytes)"
+
+interoperability_results: # PART A, M20-interop.txt (14/14 PASS)
+  method: "Rust output framed exactly like the reference encoder, decoded by the ACTUAL vanilla NettyCompressionDecoder via Netty EmbeddedChannel (threshold=0 for all, plus threshold=256 for >=256B fixtures); exact byte recovery + successful stream completion required; compressed byte-identity NOT required"
+  fixtures: "empty, single, 255/256/257 (threshold-adjacent), zeros-64k, random-64k-incompressible, semi-256k, zeros-1M, three REAL serialized vanilla SPacketChunkData payloads (oracle corpus det1/det4/det7), repeated-packet-x2 (context reuse), insufficient-capacity (code -1, nothing written)"
+  results: "14/14 PASS; rust-vs-java compressed size delta on real chunk payloads -2%..+0%; worst case semi-256k +88% at 0.7% absolute ratio (level-6 block-split artifact, immaterial)"
+  rust_unit_tests: "6/6 (roundtrips incl. 1MiB, threshold-adjacent, expansion bound, pre-write capacity check with clean-context retry, level bounds)"
+
+benchmark: # PART B: COMPLETE path incl. direct-buffer copies + JNI crossing; fresh JVM; 500 warmup + 1000 trials; medians
+  java_reference: "EXACT vanilla loop reconstructed from javap (reused Deflater, setInput/finish/deflate(8k-drain)/reset, ByteArrayOutputStream output)"
+  findings:
+    - "REAL chunk payloads (9-38KB): rust_vs_java 0.13x-0.49x (native 2.0-7.7x faster end-to-end including copies+crossing)"
+    - "zeros-1M 0.29x, semi-256k 0.32x, zeros-64k 0.43x (compressible workloads)"
+    - "incompressible random-64k: 1.23x (slower - copy tax on full-size output; expected)"
+    - "tiny inputs 1.1-1.8x slower - sub-threshold in production (never compressed)"
+    - "heap allocation per trial: rust 10-300x LESS than Java reference (e.g. 1M zeros: 1.6KB vs 534KB)"
+  scope_limits: "single JVM, offline harness, direct-buffer alloc included in alloc figures; NO TPS/whole-server claim"
+
+buffer_model:
+  java_owns_buffers: "harness (future handler) allocates direct ByteBuffers and passes explicit addresses (long); native side forms slices for the call duration only"
+  typed_binding: "one exported JNI symbol per function (Java_com_rustcraft_interop_CompressionInterop_compressNative); NO JNIEnv function-table offsets; NO GetPrimitiveArrayCritical anywhere in this prototype (M1's critical-section path deliberately not reused here)"
+  cleanup: "context is a global Mutex<ZlibPacketCompressor>; no allocations escape the call; panic-contained (catch_unwind, -2)"
+
+integration_risks_source_inspected: # javap of NetworkManager.setCompressionThreshold (func_179289? / encoder func_179299_a path)
+  seam: "NetworkManager.setCompressionThreshold: pipeline.get(\"compress\") cast-checked; if present -> encoder.func_179299_a(threshold) (runtime threshold update on the EXISTING handler); else pipeline.addBefore(\"encoder\", \"compress\", new NettyCompressionEncoder(threshold))"
+  risks:
+    - "TYPE CHECK: vanilla path does NOT instanceof-check before func_179299_a on the get(\"compress\") result - a replaced handler must BE a NettyCompressionEncoder (subclass) or vanilla crashes on threshold updates; a wrapper must subclass the vanilla class (feature-flagged override of encode)"
+    - "MOD HANDLERS: any mod that has itself replaced/added at 'compress' would be wrapped-over or double-compress; a future integrator must detect non-vanilla handlers at the name and fall back (network-coremod-hazards.md survey)"
+    - "THRESHOLD CHANGES: threshold can change at runtime (setCompressionThreshold) and can be disabled (negative removes the handler entirely via pipeline.remove) - the native path must honor per-call threshold decisions made in Java, which the design already does"
+    - "BUFFER OWNERSHIP: MessageToByteEncoder contract - the inbound msg ByteBuf is released by the framework AFTER encode returns; the output ByteBuf is allocated by allocateBuffer; a native encode must fully finish before returning (no async hold on the input buffer)"
+    - "NAMES DO NOT GUARANTEE COMPATIBILITY: presence of the vanilla name does not prove vanilla behavior - the integrator must verify class identity, not just handler name"
+  none_implemented: "no live integration was performed; risks are from source inspection only"
+
+next_bounded_step_proposed: >
+  A feature-flagged NettyCompressionEncoder SUBCLASS (vanilla class identity
+  preserved for the setCompressionThreshold cast) whose encode() routes to
+  the native component when enabled and calls super.encode() otherwise,
+  installed ONLY via a coremod at the single seam above, with SHADOW mode
+  (compress both ways, transmit Java's output, byte-compare) before any ON
+  mode - the M1 ladder. Requires operator approval; NOT started here.

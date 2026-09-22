@@ -1,0 +1,62 @@
+# M3 WORLDGEN AUTHORITATIVE — FTB Revelation 3.4.0 (Target C) results (2026-09-21)
+# Twin-world pre-population terrain oracle + live authoritative profile.
+# World J (OFF_MEASURE, pure Java) / World R (ON_EXPERIMENTAL, Rust authoritative).
+# Same seed 123456789, same 140-hop/10k-span corpus, same Forge 14.23.5.2846 / JVM / config.
+mode_java: OFF_MEASURE
+mode_rust: ON_EXPERIMENTAL
+seed: 123456789
+dll_hash: 6db38f407a197cf25945fb9b7bdb8a5cbb9788b7abff3f4732a72feecf15f6b4
+pack: "FTB Revelation 3.4.0"
+forge: 14.23.5.2846-universal
+mod_count: 193
+
+prepop_oracle:
+  java_lines: 39675
+  rust_lines: 39906
+  in_both: 38395
+  only_java: 1280
+  only_rust: 1511
+  identical: 38395
+  mismatched: 0
+  identical_pct: 100.0
+  coord_diff_note: "Coordinate-only diffs from Quark cascading worldgen loading boundary chunks at different wall-clock times between the two async runs. Base terrain on every common chunk is 100% identical. NOT density-path parity failures."
+  verdict: "JAVA_PRE_POP == RUST_PRE_POP on all common chunks (38395/38395), zero hash mismatches"
+
+authoritative_safety:
+  calls: 39906
+  eligible: 39906
+  classified_vanilla: 39906
+  classified_custom: 0
+  native_auth: 39906
+  native_errors: 0
+  fallbacks: 0
+  fallback_custom: 0
+  fallback_dim: 0
+  fallback_array: 0
+  fallback_noctx: 0
+  fallback_biomes: 0
+  fallback_exception: 0
+  ctx_created: 1
+  ctx_freed: 1
+  generator: net.minecraft.world.gen.ChunkGeneratorOverworld
+  dimension: "0"
+
+live_profile_rust_stages_ns:  # p50 / p95 / p99
+  elig:   [8000,  17100,  25000]
+  biome:  [1000,  1900,   2900]
+  jni_kernel: [288500, 463300, 517900]
+  commit: [400,   900,    1600]
+mean_us:
+  elig: 9.271
+  biome: 1.242
+  jni_kernel: 319.954
+  commit: 0.454
+  full_hook_auth: 331.7
+java_reference_live:
+  calls: 39675
+  mean_us: 344.324
+  p50_ns: 315800
+  p95_ns: 476300
+  p99_ns: 539400
+
+verdict: "PASS — pre-pop exact parity on common corpus, authoritative safety clean (0 errors/0 fallbacks/balanced 1:1), Rust full hook 331.7us < Java ref 344.3us."

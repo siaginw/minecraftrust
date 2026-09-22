@@ -1,0 +1,81 @@
+# Minecraft 1.12.2 / Forge 14.23.5.x NBT Observable Semantics Manifest
+# Authoritative machine specification of behavioral invariants, limits, and compatibility rules.
+
+specification_version: "1.0.0"
+target_minecraft: "1.12.2"
+target_forge: "14.23.5.2860"
+
+wire_invariants:
+  endianness: "BIG_ENDIAN"
+  type_id_range:
+    min: 0
+    max: 12
+  string_encoding:
+    format: "JAVA_MODIFIED_UTF8"
+    length_prefix: "UINT16_BE"
+    null_byte_sequence: [0xC0, 0x80]
+    supplementary_plane_encoding: "6_BYTE_SURROGATE_PAIRS"
+    max_length_bytes: 65535
+
+recursion_depth_semantics:
+  read_depth_limit: 512
+  read_violation_behavior: "THROW_RUNTIME_EXCEPTION"
+  read_exception_message: "Tried to read NBT tag with too high complexity, depth > 512"
+  java_write_depth_limit: "UNCHECKED"
+  java_write_violation_behavior: "JVM_STACK_OVERFLOW_ERROR"
+  rust_read_depth_limit: 512
+  rust_write_depth_limit: 512
+  rust_violation_behavior: "RETURN_NBT_ERROR_DEPTH_EXCEEDED"
+
+allocation_and_security_limits:
+  disk_storage_tracker: "NBTSizeTracker.INFINITE (No limit)"
+  network_packet_tracker_bytes: 2097152 # 2 MiB
+  network_violation_behavior: "THROW_ENCODER_EXCEPTION_AND_DROP_CHANNEL"
+  array_preallocation_policy: "BOUNDED_BY_REMAINING_SLICE_LENGTH"
+
+compression_matrix:
+  level_dat: "GZIP"
+  player_data: "GZIP"
+  world_saved_data: "GZIP"
+  structure_templates: "GZIP"
+  forced_chunks: "GZIP"
+  region_chunks: "ZLIB_RFC1950_TYPE_2"
+  network_packets: "UNCOMPRESSED_WIRE_BYTES"
+
+compound_api_contracts:
+  missing_numeric_key_default: 0
+  missing_string_key_default: ""
+  missing_byte_array_default: "EMPTY_BYTE_ARRAY (new byte[0])"
+  missing_int_array_default: "EMPTY_INT_ARRAY (new int[0])"
+  missing_compound_default: "EMPTY_COMPOUND (new NBTTagCompound(), NEVER NULL)"
+  missing_list_default: "EMPTY_LIST (new NBTTagList(), NEVER NULL)"
+  type_coercion_numeric_id: 99
+  coercion_types: [1, 2, 3, 4, 5, 6] # Byte, Short, Int, Long, Float, Double
+  key_order_determinism: "NON_DETERMINISTIC (HashMap bucket order)"
+
+list_api_contracts:
+  homogeneous_type_enforced: true
+  empty_list_element_type: 0 # TAG_End
+  mismatch_insertion_behavior: "LOG_WARNING_AND_DISCARD (No throw)"
+  tag_end_insertion_behavior: "LOG_WARNING_AND_DISCARD (No throw)"
+  out_of_bounds_get_behavior: "RETURN_NEW_TAG_END"
+  out_of_bounds_get_compound_behavior: "RETURN_NEW_TAG_COMPOUND"
+  out_of_bounds_get_string_behavior: "RETURN_EMPTY_STRING"
+  non_string_get_string_behavior: "INVOKE_ELEM_TOSTRING"
+
+aliasing_and_lifecycle:
+  tag_insertion_copies_reference: false # Direct reference sharing
+  copy_method_semantic: "RECURSIVE_DEEP_CLONE"
+  array_copy_semantic: "SYSTEM_ARRAYCOPY_CLONE"
+
+forge_compatibility_contracts:
+  chunk_save_event:
+    event_class: "net.minecraftforge.event.world.ChunkDataEvent.Save"
+    event_bus: "MinecraftForge.EVENT_BUS"
+    thread_affinity: "SERVER_MAIN_THREAD"
+    payload_type: "ROOT_TAG_COMPOUND (Contains 'Level')"
+    mutable_access_permitted: true
+    blind_bypass_safe: false # Must dispatch event to prevent mod data loss
+  capability_storage_key: "ForgeCaps"
+  capability_key_format: "<modid>:<capability_id>"
+  unknown_capability_policy: "PRESERVE_VERBATIM"

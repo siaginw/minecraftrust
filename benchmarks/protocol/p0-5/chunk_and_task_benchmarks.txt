@@ -1,0 +1,29 @@
+[07:17:56] [main/INFO]: [STDOUT]: === P0-5 Chunk, Task, and Fan-Out Benchmarks Start ===
+[07:17:56] [main/INFO]: [STDOUT]: 
+--- [BENCH] SPacketChunkData Construction & Serialization ---
+Empty Chunk (0 sections)       | Output:    256 B | Mean:  154.7 ns, p50:   100 ns, p95:   200 ns, p99:   300 ns
+Normal Chunk (4 sections)      | Output:  24856 B | Mean: 1826.3 ns, p50:  1700 ns, p95:  1800 ns, p99:  1900 ns
+Full Chunk (16 sections)       | Output:  98656 B | Mean: 6585.5 ns, p50:  6200 ns, p95:  6400 ns, p99: 11000 ns
+64 TE UpdateTags Serialization                     | Mean: 12289.7 ns | p50:  11400 ns | p95:  15500 ns | p99:  22500 ns (N=10000)
+[07:17:56] [main/INFO]: [STDOUT]: 
+--- [BENCH] Chunk Packet Fan-Out Cost (Netty IO Compression + Encryption) ---
+Fan-Out  1 Recipients                              | Mean: 285748.9 ns | p50: 267600 ns | p95: 287700 ns | p99: 359800 ns (N=2000)
+Fan-Out  5 Recipients                              | Mean: 1366586.1 ns | p50: 1329600 ns | p95: 1719700 ns | p99: 1828100 ns (N=2000)
+Fan-Out 10 Recipients                              | Mean: 2659058.8 ns | p50: 2657000 ns | p95: 2691800 ns | p99: 2758600 ns (N=2000)
+Fan-Out 25 Recipients                              | Mean: 6818578.7 ns | p50: 6715500 ns | p95: 7360600 ns | p99: 8738000 ns (N=2000)
+Fan-Out 50 Recipients                              | Mean: 13975542.5 ns | p50: 13506800 ns | p95: 17064600 ns | p99: 17439700 ns (N=2000)
+[07:18:46] [main/INFO]: [STDOUT]: 
+--- [BENCH] SimpleNetworkWrapper / CustomPayload Double-Copy Overhead ---
+Payload   256 B | Direct:  795.3 ns | FML Double-Copy:  953.8 ns (+ 19.9% overhead)
+Payload  2048 B | Direct:  228.7 ns | FML Double-Copy:  554.8 ns (+142.6% overhead)
+Payload  8192 B | Direct:  408.5 ns | FML Double-Copy: 1603.5 ns (+292.5% overhead)
+Payload 32768 B | Direct: 1110.1 ns | FML Double-Copy: 5557.8 ns (+400.6% overhead)
+[07:18:46] [main/INFO]: [STDOUT]: 
+--- [BENCH] Server-Thread futureTaskQueue Drain Workloads ---
+Workload A: 10 Move tasks (pure field updates)     | Mean:   549.4 ns | p50:    500 ns | p95:   1000 ns | p99:   2900 ns (N=5000)
+Workload B: 50 Move tasks                          | Mean:  1020.7 ns | p50:    900 ns | p95:   1100 ns | p99:   3400 ns (N=5000)
+Workload C: 200 Move tasks (heavy movement)        | Mean:  2032.8 ns | p50:   1600 ns | p95:   4100 ns | p99:   5200 ns (N=5000)
+Workload D: 20 Block Placement / Interaction tasks | Mean:   232.1 ns | p50:    200 ns | p95:    400 ns | p99:    700 ns (N=5000)
+Workload E: 10 Inventory Window Click tasks        | Mean:   124.3 ns | p50:    100 ns | p95:    200 ns | p99:    700 ns (N=5000)
+Workload F: Mixed 50-task tick (35 move, 10 look, 3 block, 2 chat) | Mean:   325.3 ns | p50:    300 ns | p95:    400 ns | p99:    600 ns (N=5000)
+[07:18:46] [main/INFO]: [STDOUT]: === P0-5 Chunk, Task, and Fan-Out Benchmarks Complete ===

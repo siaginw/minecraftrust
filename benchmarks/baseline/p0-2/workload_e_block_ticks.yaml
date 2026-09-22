@@ -1,0 +1,33 @@
+workload_name: workload_e_block_ticks
+server_type: forge_14.23.5.2860
+duration_s: 20
+time_span_ms: 19999
+tick_span: 400
+measured_tps: 20.0
+mean_mspt: 49.998
+gc_stats:
+  young_gcs: 12
+  young_pause_ms: 67.66
+  full_gcs: 2
+  full_pause_ms: 76.44
+  total_pause_ms: 144.1
+top_subsystems:
+  levels: 96.12
+  world: 90.95
+  entities: 75.93
+  regular: 54.96
+  tick: 52.75
+  blockEntities: 20.25
+  minecraft:hopper: 6.77
+  tickBlocks: 6.04
+  pollingChunks: 5.14
+  entityBaseTick: 4.76
+  forcedChunkLoading: 3.83
+  ai: 3.35
+  newAi: 3.22
+  travel: 2.99
+  livingEntityBaseTick: 2.08
+artifacts:
+  profile_dump: workload_e_block_ticks_profile.txt
+  jfr_recording: workload_e_block_ticks.jfr
+  gc_log: workload_e_block_ticks_gc.log

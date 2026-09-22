@@ -1,0 +1,66 @@
+# M3 Worldgen live shadow on FTB Revelation 3.4.0 (Target C).
+# Operator authorization 2026-09-20.
+# class: MEASURED. Provenance: M3WG-REV-LIVE-SHADOW.
+# NO authoritative Rust worldgen output, no live default changes.
+# M1 parked/OFF, M2-C READY_OPTIONAL/OFF.
+schema_version: 1
+date: "2026-09-20"
+target: "FTB Revelation 3.4.0 (Target C, Forge 14.23.5.2846-universal)"
+builds:
+  dll: {sha256_prefix: 6db38f407a197cf2, note: "wnoise JNI exports with bridge name shims (Java_com_rustcraft_bridge_WorldgenShadow_*)"}
+  coremod: {sha256_prefix: b79a89edc82edd0d, note: "WorldgenShadow adapter with explicit classifications + WorldgenShadowTransformer"}
+workload:
+  world: "disposable copied server (machine/targetC/shadow-run) with deleted world/ for 100% fresh generation"
+  mode: "SHADOW (-Dminecraftrust.worldgen_shadow=SHADOW)"
+  bot: "perfbotb TP walk (108 hops across coords +/-21,600 X and +/-13,200 Z, crossing zero)"
+  duration_s: 450
+shadow_results:
+  calls: 38591
+  eligible: 38591
+  ineligible_disabled: 0
+  ineligible_class: 0
+  ineligible_fields: 0
+  ineligible_noctx: 0
+  native_errors: 0
+  fields_compared: 38591
+  doubles_compared: 31837575
+  matches: 38591
+  mismatches: 0
+  first_mismatch: "none"
+  last_error: "none"
+  ctx_created: 1
+  ctx_freed: 1
+  clean_shutdown_balanced: true
+classifications:
+  classified_vanilla_overworld: 38591
+  classified_custom_generator: 0
+  classified_transform_conflict: 0
+  classified_unsupported_state: 0
+  observed_generators:
+    net.minecraft.world.gen.ChunkGeneratorOverworld: 38591
+  observed_dimensions:
+    "0": 38591
+performance_observation:
+  rust_ns_total: 12379206500
+  avg_ns_per_field: 320779
+  note: "live SHADOW includes Rust compute + JNI round-trip + 825 bitwise double comparisons; informational only"
+stop_conditions_check:
+  mismatch_threshold: "0 mismatches (observed: 0) — CLEAR"
+  native_crashes: "0 crashes (observed: 0) — CLEAR"
+  leak_threshold: "ctx_created == ctx_freed (1 == 1) — CLEAR"
+  server_generation_errors: "0 chunk generation errors — CLEAR"
+  generator_ineligibility: "38591/38591 eligible vanilla Overworld — CLEAR"
+  clean_shutdown: "server stopped cleanly, world saved, hook flushed — CLEAR"
+mod_observations:
+  biomes_o_plenty: "level-type=DEFAULT keeps Overworld on ChunkGeneratorOverworld; BOP biomes registered in Biome registry are evaluated with vanilla rootHeight/heightVariation, producing bit-exact density parity"
+  quark: "custom stone/cave/structure generation hooks in chunk population pipeline run on vanilla ChunkPrimer without altering density array"
+  foamfix_notenoughids: "blockstate and block ID transforms operate on palette/storage levels; do not alter initNoiseField density array"
+classification: RUST_VALID_ARCHITECTURAL
+recommendation: PROCEED_TO_SEVTECH_SHADOW_OR_REMAIN_IN_SHADOW
+reasoning: >
+  Live SHADOW integration on FTB Revelation 3.4.0 (160+ mods) demonstrated 100%
+  bit-exact parity across 38,591 freshly generated chunk density fields (31,837,575
+  doubles compared, 0 mismatches, 0 errors, 0 leaks). Generator state was successfully
+  transplanted from Forge ChunkGeneratorOverworld instances across extensive
+  exploration spanning positive, negative, and zero-crossing coordinates.
+  Authoritative Rust worldgen output remains strictly DISABLED.

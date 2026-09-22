@@ -1,0 +1,81 @@
+version: 1
+
+artifacts:
+  minecraft:
+    name: "Minecraft Java Edition Server"
+    version: "1.12.2"
+    protocol_version: 340
+    sha1: "886945bfb2b978778c3a0288fd7fab09d315b25f"
+    url: "https://piston-data.mojang.com/v1/objects/886945bfb2b978778c3a0288fd7fab09d315b25f/server.jar"
+    purpose: "Reference simulation, protocol parity oracle, and behavior baseline"
+    local_path: "third_party_reference/minecraft"
+    redistributable: false
+    license: "Proprietary (Mojang Synergies AB)"
+
+  forge:
+    name: "Minecraft Forge"
+    reference_build: "14.23.5.2860"
+    target_family: "14.23.5.x"
+    recommended_build: "14.23.5.2859"
+    latest_build: "14.23.5.2864"
+    repository: "https://github.com/MinecraftForge/MinecraftForge.git"
+    branch: "1.12.x"
+    tag: "14.23.5.2860"
+    commit: "d3f01843f7e7a4f613b5e8113d381fd8747b4343"
+    commit_identification_evidence: "Commit subject: 'Don't download log4j-slf4j18-impl (#8293)'. Directly matches 14.23.5.2860 changelog entry '1904167+dualspiral: Don't download log4j-slf4j18-impl (#8293)' dated Mon Dec 13 04:36:38 GMT 2021."
+    purpose: "Mod loader lifecycle, event bus, capability system, and Forge API contract reference"
+    local_path: "third_party_reference/forge"
+    redistributable: true
+    license: "LGPL-2.1"
+
+  forgegradle:
+    name: "ForgeGradle"
+    version: "2.3-SNAPSHOT"
+    gradle_wrapper_version: "4.9"
+    maven_coordinate: "net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT"
+    repository: "https://github.com/MinecraftForge/ForgeGradle.git"
+    branch: "FG_2.3"
+    purpose: "Historical workspace generator, deobfuscator, and runtime launch patcher"
+    local_path: "third_party_reference/forgegradle"
+    redistributable: true
+    license: "LGPL-2.1"
+
+  mappings:
+    name: "Mod Coder Pack (MCP) Mappings"
+    channel: "stable"
+    version: "39-1.12"
+    alternate_channel: "snapshot_20171003"
+    source_url: "https://maven.minecraftforge.net/de/oceanlabs/mcp/mcp_stable/39-1.12/mcp_stable-39-1.12.zip"
+    purpose: "Bidirectional translation between Obfuscated, SRG, and MCP human-readable identifiers"
+    local_path: "third_party_reference/mappings"
+    redistributable: true
+    license: "Public MCP License"
+
+  java:
+    name: "Eclipse Temurin OpenJDK"
+    version: "8.0.504.1"
+    build: "1.8.0_504-b01"
+    distribution: "Eclipse Adoptium"
+    purpose: "Executing ForgeGradle 2.3, MCP decompile pipeline, and reference Java server baseline"
+    local_path: "C:\\Program Files\\Eclipse Adoptium\\jdk-8.0.504.1-hotspot"
+    redistributable: true
+    license: "GPLv2 with Classpath Exception"
+
+  rust:
+    name: "Rust Toolchain"
+    channel: "stable"
+    version: "1.94.0"
+    edition: "2021"
+    purpose: "High-performance authoritative server runtime implementation"
+    local_path: "crates/"
+    redistributable: true
+    license: "MIT OR Apache-2.0"
+
+  codegraph:
+    name: "CodeGraph"
+    version: "1.6.0"
+    distribution: "@colbymchenry/codegraph (npm)"
+    purpose: "Primary structural navigation, caller/callee traversal, and blast radius analysis"
+    local_path: ".codegraph/"
+    redistributable: true
+    license: "MIT"

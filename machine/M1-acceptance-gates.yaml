@@ -1,0 +1,80 @@
+gates:
+  correctness:
+  - id: GATE-CORRECT-1
+    name: Exact Wire Parity
+    rule: Native payload bytes must match Java reference output byte-for-byte across
+      100,000 continuous chunk transmissions without a single divergence in SHADOW
+      mode.
+  - id: GATE-CORRECT-2
+    name: TileEntity Sync Preservation
+    rule: Mod TileEntity NBT update tags (EnderIO conduits, AE2 cables, chests) must
+      serialize identically through Java getUpdateTag() without bypass.
+  - id: GATE-CORRECT-3
+    name: Dynamic Palette Width Parity
+    rule: Correctly handles dynamic global and indirect palettes from 4 to 16 bits
+      without bit truncation.
+  - id: GATE-CORRECT-4
+    name: Dimension Skylight Variants
+    rule: Correctly omits skylight nibble array in Nether, End, and non-skylight modded
+      dimensions.
+  property_fuzz:
+  - id: GATE-FUZZ-1
+    name: Empty Chunk Sections
+    rule: Correctly serializes chunks with all-air sections, single non-empty sections,
+      and completely saturated sections.
+  - id: GATE-FUZZ-2
+    name: Negative & High Coordinates
+    rule: Fuzz testing across chunk coordinates X/Z in [-30,000,000..+30,000,000]
+      under fixed PRNG seeds.
+  - id: GATE-FUZZ-3
+    name: Buffer Overflow Guard
+    rule: Under-sized direct buffer must cleanly return error code -2 without memory
+      corruption or segmentation fault.
+  - id: GATE-FUZZ-4
+    name: Max Legal Forge State ID
+    rule: Correctly serializes blockstate IDs up to 65,535 (Block 4095, meta 15).
+  performance:
+  - id: GATE-PERF-MICRO
+    name: End-to-End Microbenchmark Gate
+    rule: "Total native path (staging + JNI + Rust + output wrap) must execute in\
+      \ <=8.5 \xB5s per 16-section chunk AND beat the Java reference measured in the\
+      \ same run (equal-scope, see docs/engineering/m1-benchmark-scopes.md)."
+    reference:
+      provenance_id: M1_MICRO_16_SECTION_CURRENT
+      raw_artifact: machine/raw/M14R-canonical-scopes.csv
+      summary: machine/raw/M14R-canonical-scopes-summary.txt
+      measured: "SCOPE-A-N p50 3.20 \xB5s vs SCOPE-B Java ctor p50 6.20 \xB5s (pooled);\
+        \ per-fixture ratios in summary"
+  - id: GATE-PERF-SERVER
+    name: ServerThread Compute Gate
+    rule: Measurable reduction of at least 0.04 ms ServerThread compute MSPT in Target
+      C steady state and >=0.35 ms during exploration/login bursts (100 chunks/tick).
+  - id: GATE-PERF-ALLOC
+    name: Allocation Reduction Gate
+    rule: Eliminates at least 15.0 MB/s of ephemeral byte[] churn by using pooled
+      off-heap Netty buffers.
+  - id: GATE-PERF-REGRESS
+    name: Zero Regression Gate
+    rule: Zero measurable regression in TPS, wall cadence, or GC pause time across
+      Target A, B, C, and D.
+  compatibility:
+  - id: GATE-COMPAT-A
+    name: Target A Clean Forge
+    rule: 100% pass on clean Forge 14.23.5.2860.
+  - id: GATE-COMPAT-B
+    name: Target B Minimal Corpus
+    rule: 100% pass with Thermal Expansion, AE2, Tinkers, Iron Chests, JourneyMap.
+  - id: GATE-COMPAT-C
+    name: Target C FTB Revelation
+    rule: Zero crashes or client desyncs over 1-hour active server session with 18
+      CoreMods enabled.
+  - id: GATE-COMPAT-D
+    name: Target D SevTech Ages
+    rule: Empirical shadow-mode verification with FoamFix and Phosphor Mixins enabled.
+  rejection_triggers:
+  - Any unhandled Rust panic winding through JNI
+  - Any persistent packet byte divergence in shadow mode
+  - 'Any client kick or ''Internal Exception: io.netty.handler.codec.DecoderException''
+    observed'
+  - Performance gain falling below benchmark noise floor (<0.02 ms delta)
+  - Any memory leak in off-heap Netty ByteBuf handles

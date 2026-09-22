@@ -1,0 +1,36 @@
+# M5.4 — REVELATION COMBINED NETWORKING SHADOW REPORT
+schema_version: 1
+date: "2026-09-22"
+run: m54rev-shadow (Target C, Revelation 3.4.0, Forge 14.23.5.2846; Java transmits; Rust shadow only)
+builds: {dll: db2a0ad1b13d3843, coremod: aacf8f155f4085c3}
+A_pushBiomes: "ThreadLocal buffer replaced the shared static; 2-worker hammer regression added (32->34 case suite); 0 overflow, 0 corruption"
+B_offline: "34/34 authoritative x3, 7/7, 19/19, 8/8, 16/16, 29/29, 121/121, 10/10; dead validators canary-asserted silent"
+C_pack: "Revelation 3.4.0 (Target C, 194 mods incl. NEID 1.5.4.4); NEID high-bit gate active (0 ineligible this run)"
+D_snapshot: "28,661 chunks registered, terrain 28,661/28,661 bit-exact; 28,765 full syncs; 1,892,651 sections refreshed AND validated with 0 validation mismatches"
+E_m1: "native_state=OFF (SHADOW milestone): 0 native-authored (by design); comparator shadow path exercised"
+F_m2c: "SHADOW compression: 34,165/34,165 matches, 0 mismatches, 0 fallbacks — the combined Rust compress validated against Java deflate on live pack traffic"
+G_gate_b: "0 completed packet-level Gate-B comparisons — light-freshness comparator skips dominated (15,574 skips) + 3,392 partial-filter. Section-level semantic validation (1.89M sections, 0 mismatches) carried the correctness evidence instead"
+H_freshness: "light domain live and CONSERVATIVE on the pack: every stale/torn light window became a SKIP, never a mismatch; 0 stale acceptances by construction"
+I_exclusions: "partial-filter 3,392 (Java-only); NEID-high 0 this run; JEID n/a (pack uses NEID); TE scope Java-only"
+J_errors: "0 native errors; 0 validator exceptions; 0 compression errors; 0 client decode errors (bot 108 teleports, clean sessions)"
+K_cleanup: "before: 805 chunks retained at stop; after explicit in-JVM cleanup: 0 chunks / 0 bytes; M2-C ctx balanced"
+L_timing: "low-overhead observation only (correctness milestone)"
+M_headroom: "OPTIMIZATION_NOT_EXHAUSTED unchanged"
+N_classification: FURTHER_INVESTIGATION
+  reason: >
+    All correctness signals are green (0 mismatches ANYWHERE across 34k
+    compressions, 1.89M section validations, 28.6k terrain bit-exacts, clean
+    client, clean lifecycle) — but the success criterion 'completed Gate-B
+    packet comparisons > 0' is unmet: on Revelation the light-freshness guard
+    (correctly) skipped every packet-level comparison because modded lighting
+    keeps live-vs-native light perpetually divergent within the comparator's
+    capture window. The guard is doing its job; the verifier needs a
+    pack-appropriate window (e.g., refresh-then-immediately-compare under the
+    per-chunk lock, or settle-hold sampling) to complete comparisons.
+O_next: >
+  (1) Add a locked-refresh-then-compare mode to the comparator (refresh the
+  chunk under its per-chunk lock, then compare within the same lock — closes
+  the light-churn window deterministically). (2) Offline regression for it.
+  (3) One bounded Revelation SHADOW re-run (expect non-zero Gate-B). (4) Then
+  NATIVE_NETWORK_SHADOW_VALIDATED_REVELATION and the bounded combined-ON
+  decision (operator). pushBiomes fix landed; ThreadLocal retained.

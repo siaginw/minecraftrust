@@ -1,0 +1,24 @@
+# Golden Block State Corpus (Minecraft 1.12.2)
+# format: STATE_NAME | GLOBAL_ID | BLOCK_ID | META
+STATE | BlockAir                  | global_id=    0 | block_id=   0 | meta= 0
+STATE | BlockStone                | global_id=   16 | block_id=   1 | meta= 0
+STATE | BlockDirt                 | global_id=   48 | block_id=   3 | meta= 0
+STATE | BlockGrass                | global_id=   32 | block_id=   2 | meta= 0
+STATE | BlockPlanks               | global_id=   80 | block_id=   5 | meta= 0
+STATE | BlockEmptyDrops           | global_id=  112 | block_id=   7 | meta= 0
+STATE | BlockStaticLiquid         | global_id=  144 | block_id=   9 | meta= 0
+STATE | BlockStaticLiquid         | global_id=  176 | block_id=  11 | meta= 0
+STATE | BlockSand                 | global_id=  192 | block_id=  12 | meta= 0
+STATE | BlockSandStone            | global_id=  384 | block_id=  24 | meta= 0
+STATE | Block                     | global_id=  768 | block_id=  48 | meta= 0
+STATE | BlockChest                | global_id=  866 | block_id=  54 | meta= 2
+STATE | BlockOre                  | global_id=  896 | block_id=  56 | meta= 0
+STATE | BlockTorch                | global_id=  805 | block_id=  50 | meta= 5
+STATE | BlockRedstoneTorch        | global_id= 1221 | block_id=  76 | meta= 5
+
+# PALETTE TRANSITIONS IN BlockStateContainer
+INITIAL: bits=4, palette=BlockStatePaletteLinear
+AFTER 16 STATES: bits=4, palette=BlockStatePaletteLinear
+AFTER 17 STATES (Linear->HashMap): bits=5, palette=BlockStatePaletteHashMap
+AFTER 256 STATES: bits=8, palette=BlockStatePaletteHashMap
+AFTER 257 STATES (HashMap->Global): bits=13, palette=BlockStatePaletteRegistry

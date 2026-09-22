@@ -1,0 +1,55 @@
+# M3J factory/dirty-world profile (operator authorization 2026-09-20).
+# ONE bounded JFR capture of a machine/entity-heavy Revelation workload so M3
+# selection rests on ServerThread evidence. RESEARCH ONLY — no M2/M3
+# implementation, no mode changes. class: MEASURED. Provenance:
+# M3J-FACTORY-PROFILE.
+schema_version: 1
+date: "2026-09-20"
+target: {pack: "FTB Revelation 3.4.0 (existing install)", forge: "14.23.5.2846", java: "Temurin 8u504.1", mods: 193, jfr: "settings=profile, stackdepth=96, dumponexit, duration 1300s"}
+workload_description: # directive 1: natural, no synthetic stress loops
+  phases: "BOOT(70s) SETTLE(30s) BUILD(46s, RCON setblock/fill, EXCLUDED from steady shares) FACTORY_ACTIVE(360s day) ENTITY_ACTIVE(420s night) RECOVERY(100s+)"
+  bot: "perfbotb joined once, 880s hold at its saved position, 0 client errors, clean disconnect inside RECOVERY; kept alive via periodic resistance+regen so hostile chase behavior is genuine"
+  base: "modest realistic vanilla storage/smelting room via RCON at bot position: 32 hoppers over 32 chests, 8 furnaces fueled with coal+iron_ore, 16 cobble item stacks summoned onto the hopper row — ENGINE-owned TE work (directive-8 target); representativeness limit: NO modded machines exist in this fixture (mod-TE share remains unmeasured and out of scope)"
+  entities: "NATURAL spawning only (difficulty 1, spawn-monsters/animals true; /time set night at ENTITY start); observed mix squid-heavy (water near base) + hostiles chasing the bot"
+  saves: "3 save events; dirty chunks from base build + entity movement + item transfers"
+  workload_caveats: "base sat at the frontier of previous walks (border chunks had generated before the windows); single night, single world, n=1"
+phase_sample_counts: # ServerThread execution samples (10ms sampling)
+  BOOT: 1672; SETTLE: 65; BOTJOIN: 230; BUILD: 320; FACTORY_ACTIVE: 2375; ENTITY_ACTIVE: 2757; RECOVERY: 344; TAIL: 158
+caller_census_results: # ServerThread; FACTORY/ENTITY presence (containment, never summed with self)
+  getBlockState_cluster: {factory: "232 (9.8%)", entity: "271 (9.8%)", leaf_split: "429 F/E leaf samples of Chunk.func_186032_a: roots SpawnPlacementType.canSpawnAt 101 / WorldServer.func_72835_b 96 / getCollisionBoxes 94"}
+  getCollisionBoxes_func_184144_a: {factory: "128 (5.4%)", entity: "153 (5.6%)", self: "48+57", callers: "Entity.func_70091_d(move) <- EntityLivingBase.func_191986_a <- mob classes (EntitySquid heavy)"}
+  collision_scan_func_191504_a: {factory: "86 (3.6%)", entity: "117 (4.2%)", note: "PooledMutableBlockPos x getBlockState x callbacks loop"}
+  entity_move_func_70091_d: {factory: "115 (4.8%)", entity: "134 (4.9%)"}
+  entity_tick_func_70636_d: {factory: "141 (5.9%)", entity_present: true, note: "mob AI/physics container"}
+  entity_query_func_72839_b: {factory: "51 (2.1%)", entity: "51 (1.8%)", note: "called from getCollisionBoxes (entity half); combined with func_175674_a iteration leaf (MultitransformedIterator 91 F/E = 1.8%) -> entity scanning is SMALL"}
+  pathfinding: {factory: 2, entity: 3, verdict: "NEGLIGIBLE in this workload (mobs idle/wander/short chases)"}
+  TileEntity_tick_hopper_furnace_TE_list: {presence: "ZERO samples", verdict: "40 vanilla TEs are below sampling threshold; modded-machine share unmeasurable in this fixture"}
+  lighting: {presence: "ZERO samples", verdict: "Phosphor async engine confirmed silent on ServerThread"}
+  worldgen: {noise_populate: "NoiseGenerator ZERO presence; populate 3-4 samples", cgo_presence: "316/391 (13.3%/14.2%) BUT root census shows it is the SPAWN-LIST QUERY path (getPossibleCreatures), NOT generation", verdict: "worldgen generation confirmed ~absent in settled/entity workloads; the M3-discovery noise-kernel stays downgraded to exploration-latency framing"}
+  save_path: {saveChunk: "3-4 presence", writeChunkToNBT: "3-4", neid_hooks: "65/71 (2.7%)", identitymap_leaf: "136 (2.7%) all under NEID getDataForNBT", verdict: "dirty-save cost modest in-window; M2-PERSIST conclusions unchanged (mod-contract-bound)"}
+  forge_eventbus: {factory: "195 (8.2%) presence"}
+new_finding_spawn_query_pipeline: # the largest engine-owned cluster
+  leaf: "it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap$MapIterator.nextEntry = 286/2375 (12.0%) FACTORY + 343/2757 (12.4%) ENTITY — #1 ServerThread leaf in both windows"
+  stack: "WorldEntitySpawner(natural spawning) -> ChunkProviderServer.func_177458_a(getPossibleCreatures) -> ChunkGeneratorOverworld.func_177458_a -> MapGenStructure.func_175797_c -> MapGenScatteredFeature.func_175798_a -> Long2ObjectOpenHashMap VALUE ITERATION over ALL generated structure starts, PER SPAWN-LIST QUERY"
+  mechanism: "O(N) full-map iteration per getPossibleCreatures query (N = structure starts in the loaded area); spawning runs continuously (day passive/squid + night hostiles) so the query rate is per-tick-per-chunk"
+  mod_override_census: "javap/jar scan of all 193 mods: ZERO references to func_177458_a; only BiomesOPlenty ships its own BOPMapGenScatteredFeature (own dimension instances, INHERITS the vanilla query path — an iteration-level seam covers it). Seam compatibility LOW-RISK."
+  value_conditionality: "spawning-active areas only (night/dark/unlit); fully-lit real bases suppress spawning -> cost vanishes there; mob farms keep it maximal"
+allocation_leaders: {note: "class+thread sampled events (config has stacks for SOME events but allocation siting is not claimed); ServerThread F/E leaders mirror M2J: char[], byte[], String, BlockPos, HashMap nodes + AxisAlignedBB visible"}
+decision_answers: # directive 5
+  A_collision: "REAL but modest: getCollisionBoxes 5.4-5.6% presence (+ ~2% of the getBlockState leaf via canSpawnAt/collision roots); two-stage Rust-broadphase question now has evidence but the SKIPPABLE share before Java callbacks is unmeasured — needs offline scan-domain instrumentation"
+  B_entity_queries: "SMALL (1.8-2.1%): a native mirror/index is NOT justified (mirror maintenance ~ query cost)"
+  C_tile_surrounding: "ZERO measurable engine-owned TE-surrounding work at vanilla-TE scale; mod-machine share unmeasurable in fixture (out of scope by directive 8)"
+  D_worldgen: "CONFIRMED ~absent in settled/entity workloads (noise+populate ~0); noise kernel = exploration-latency target only"
+  E_other: "YES — the spawn-query structure-map iteration (12.2%), the single largest engine-owned cluster found; coarse, read-only, callback-free, parity-trivial"
+top3_candidates:
+  1: {name: M3-SPAWN-QUERY-INDEX, what: "native structure-occupancy index (long-keyed chunk->structure-start) replacing the O(N) Long2Object value-iteration inside MapGenStructure spawn-list queries", evidence: "12.2% F/E ServerThread (largest engine-owned cluster); O(N)-per-query mechanism identified; zero mod overrides at the seam", boundary: "input = (chunkX, chunkZ, structure-map contents staged once per worldgen update); output = candidate start IDs; ZERO callbacks inside the query; Java retains SpawnListEntry list objects and all spawning decisions", removable_estimate: "the iteration is ~the whole 12.2% cluster; realistic removable share UNKNOWN until per-query N/skip-factor is measured on real packs (prototype gate)", fallback: "per-generator property gate; miss -> vanilla iteration (identical results)", parity: "query-equality fixtures (same answers as Java for every chunk in generated worlds) + SHADOW ladder (native answers compared, Java authoritative)"}
+  2: {name: M3-COLLISION-BROADPHASE(two-stage per directive 9), evidence: "5.4-5.6% presence now MEASURED; skippable share UNKNOWN (needs func_191504_a domain-size/non-air-rate instrumentation); invalidation-coupling critique from M3-discovery stands; Lithium's Java-side per-state AABB cache is the simpler competitor"}
+  3: {name: M3-WORLDGEN-NOISE-KERNEL, evidence: "downgraded: NoiseGenerator ZERO presence in this workload; exploration-latency framing only; keep parked unless exploration-heavy servers matter"}
+missing_evidence:
+  - "per-query N (structure-start count) and query rate on real packs -> removable-share estimate for candidate 1 (ONE bounded offline/instrumented measurement)"
+  - "collision scan domain size + non-air hit rate -> skippable-share estimate for candidate 2"
+  - "modded-machine (real factory) TE share — unmeasurable in this fixture; out of scope per directive 8 but limits 'real Revelation base' claims"
+  - "single night/single world/squid-heavy mix; spawn-rate conditionality (lit bases suppress the whole pipeline)"
+  - "JFR wait-state share unknown (execution samples only)"
+recommendation: "M3 SELECTED (subject to operator approval of the prototype-first gate): M3-SPAWN-QUERY-INDEX — the only candidate meeting every selection rule with measured evidence (12.2% ServerThread, coarse zero-callback boundary, trivial reversible fallback, clean mod seam). FIRST STEP is a bounded M2.0-style standalone prototype that measures per-query skip factor + query-equality parity; integration only via the established SHADOW->ON_EXPERIMENTAL ladder. NO implementation in this campaign."
+stop: "No implementation performed; no benchmark campaign beyond this capture; no default-mode changes; M1/M2-C/M2-PERSIST states untouched."

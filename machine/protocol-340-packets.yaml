@@ -1,0 +1,999 @@
+# Minecraft 1.12.2 (protocol 340) server packet registry.
+# Generated from reference runtime reflection over EnumConnectionState (forge-2860-compatible vanilla server).
+# Fields: state | direction | id | class | thread_expectation | contains_nbt | variable_size | forge_relevance
+
+registry:
+  protocol_version: 340
+  packets:
+    - state: HANDSHAKING
+      direction: SERVERBOUND
+      id: 0
+      class: net.minecraft.network.handshake.client.C00Handshake
+      thread_expectation: "SERVER_THREAD (via PacketThreadUtil.checkThreadAndEnqueue)"
+      contains_nbt: false
+      variable_size: false
+      forge_relevance: LOW
+    - state: LOGIN
+      direction: CLIENTBOUND
+      id: 0
+      class: net.minecraft.network.login.server.SPacketDisconnect
+      thread_expectation: "NETTY_IO (encode); construction on SERVER_THREAD"
+      contains_nbt: false
+      variable_size: false
+      forge_relevance: LOW
+    - state: LOGIN
+      direction: CLIENTBOUND
+      id: 1
+      class: net.minecraft.network.login.server.SPacketEncryptionRequest
+      thread_expectation: "NETTY_IO (encode); construction on SERVER_THREAD"
+      contains_nbt: false
+      variable_size: false
+      forge_relevance: LOW
+    - state: LOGIN
+      direction: CLIENTBOUND
+      id: 2
+      class: net.minecraft.network.login.server.SPacketLoginSuccess
+      thread_expectation: "NETTY_IO (encode); construction on SERVER_THREAD"
+      contains_nbt: false
+      variable_size: false
+      forge_relevance: LOW
+    - state: LOGIN
+      direction: CLIENTBOUND
+      id: 3
+      class: net.minecraft.network.login.server.SPacketEnableCompression
+      thread_expectation: "NETTY_IO (encode); construction on SERVER_THREAD"
+      contains_nbt: false
+      variable_size: false
+      forge_relevance: LOW
+    - state: LOGIN
+      direction: SERVERBOUND
+      id: 0
+      class: net.minecraft.network.login.client.CPacketLoginStart
+      thread_expectation: "SERVER_THREAD (via PacketThreadUtil.checkThreadAndEnqueue)"
+      contains_nbt: false
+      variable_size: false
+      forge_relevance: LOW
+    - state: LOGIN
+      direction: SERVERBOUND
+      id: 1
+      class: net.minecraft.network.login.client.CPacketEncryptionResponse
+      thread_expectation: "SERVER_THREAD (via PacketThreadUtil.checkThreadAndEnqueue)"
+      contains_nbt: false
+      variable_size: false
+      forge_relevance: LOW
+    - state: PLAY
+      direction: CLIENTBOUND
+      id: 0
+      class: net.minecraft.network.play.server.SPacketSpawnObject
+      thread_expectation: "NETTY_IO (encode); construction on SERVER_THREAD"
+      contains_nbt: false
+      variable_size: false
+      forge_relevance: LOW
+    - state: PLAY
+      direction: CLIENTBOUND
+      id: 10
+      class: net.minecraft.network.play.server.SPacketBlockAction
+      thread_expectation: "NETTY_IO (encode); construction on SERVER_THREAD"
+      contains_nbt: false
+      variable_size: false
+      forge_relevance: LOW
+    - state: PLAY
+      direction: CLIENTBOUND
+      id: 11
+      class: net.minecraft.network.play.server.SPacketBlockChange
+      thread_expectation: "NETTY_IO (encode); construction on SERVER_THREAD"
+      contains_nbt: false
+      variable_size: false
+      forge_relevance: LOW
+    - state: PLAY
+      direction: CLIENTBOUND
+      id: 12
+      class: net.minecraft.network.play.server.SPacketUpdateBossInfo
+      thread_expectation: "NETTY_IO (encode); construction on SERVER_THREAD"
+      contains_nbt: false
+      variable_size: false
+      forge_relevance: LOW
+    - state: PLAY
+      direction: CLIENTBOUND
+      id: 13
+      class: net.minecraft.network.play.server.SPacketServerDifficulty
+      thread_expectation: "NETTY_IO (encode); construction on SERVER_THREAD"
+      contains_nbt: false
+      variable_size: false
+      forge_relevance: LOW
+    - state: PLAY
+      direction: CLIENTBOUND
+      id: 14
+      class: net.minecraft.network.play.server.SPacketTabComplete
+      thread_expectation: "NETTY_IO (encode); construction on SERVER_THREAD"
+      contains_nbt: false
+      variable_size: false
+      forge_relevance: LOW
+    - state: PLAY
+      direction: CLIENTBOUND
+      id: 15
+      class: net.minecraft.network.play.server.SPacketChat
+      thread_expectation: "NETTY_IO (encode); construction on SERVER_THREAD"
+      contains_nbt: false
+      variable_size: true
+      forge_relevance: LOW
+    - state: PLAY
+      direction: CLIENTBOUND
+      id: 16
+      class: net.minecraft.network.play.server.SPacketMultiBlockChange
+      thread_expectation: "NETTY_IO (encode); construction on SERVER_THREAD"
+      contains_nbt: false
+      variable_size: true
+      forge_relevance: LOW
+    - state: PLAY
+      direction: CLIENTBOUND
+      id: 17
+      class: net.minecraft.network.play.server.SPacketConfirmTransaction
+      thread_expectation: "NETTY_IO (encode); construction on SERVER_THREAD"
+      contains_nbt: false
+      variable_size: false
+      forge_relevance: LOW
+    - state: PLAY
+      direction: CLIENTBOUND
+      id: 18
+      class: net.minecraft.network.play.server.SPacketCloseWindow
+      thread_expectation: "NETTY_IO (encode); construction on SERVER_THREAD"
+      contains_nbt: false
+      variable_size: false
+      forge_relevance: LOW
+    - state: PLAY
+      direction: CLIENTBOUND
+      id: 19
+      class: net.minecraft.network.play.server.SPacketOpenWindow
+      thread_expectation: "NETTY_IO (encode); construction on SERVER_THREAD"
+      contains_nbt: true
+      variable_size: false
+      forge_relevance: MEDIUM
+    - state: PLAY
+      direction: CLIENTBOUND
+      id: 1
+      class: net.minecraft.network.play.server.SPacketSpawnExperienceOrb
+      thread_expectation: "NETTY_IO (encode); construction on SERVER_THREAD"
+      contains_nbt: false
+      variable_size: false
+      forge_relevance: LOW
+    - state: PLAY
+      direction: CLIENTBOUND
+      id: 20
+      class: net.minecraft.network.play.server.SPacketWindowItems
+      thread_expectation: "NETTY_IO (encode); construction on SERVER_THREAD"
+      contains_nbt: true
+      variable_size: true
+      forge_relevance: MEDIUM
+    - state: PLAY
+      direction: CLIENTBOUND
+      id: 21
+      class: net.minecraft.network.play.server.SPacketWindowProperty
+      thread_expectation: "NETTY_IO (encode); construction on SERVER_THREAD"
+      contains_nbt: false
+      variable_size: false
+      forge_relevance: LOW
+    - state: PLAY
+      direction: CLIENTBOUND
+      id: 22
+      class: net.minecraft.network.play.server.SPacketSetSlot
+      thread_expectation: "NETTY_IO (encode); construction on SERVER_THREAD"
+      contains_nbt: true
+      variable_size: false
+      forge_relevance: MEDIUM
+    - state: PLAY
+      direction: CLIENTBOUND
+      id: 23
+      class: net.minecraft.network.play.server.SPacketCooldown
+      thread_expectation: "NETTY_IO (encode); construction on SERVER_THREAD"
+      contains_nbt: false
+      variable_size: false
+      forge_relevance: LOW
+    - state: PLAY
+      direction: CLIENTBOUND
+      id: 24
+      class: net.minecraft.network.play.server.SPacketCustomPayload
+      thread_expectation: "NETTY_IO (encode); construction on SERVER_THREAD"
+      contains_nbt: false
+      variable_size: true
+      forge_relevance: HIGH
+    - state: PLAY
+      direction: CLIENTBOUND
+      id: 25
+      class: net.minecraft.network.play.server.SPacketCustomSound
+      thread_expectation: "NETTY_IO (encode); construction on SERVER_THREAD"
+      contains_nbt: false
+      variable_size: true
+      forge_relevance: LOW
+    - state: PLAY
+      direction: CLIENTBOUND
+      id: 26
+      class: net.minecraft.network.play.server.SPacketDisconnect
+      thread_expectation: "NETTY_IO (encode); construction on SERVER_THREAD"
+      contains_nbt: false
+      variable_size: false
+      forge_relevance: LOW
+    - state: PLAY
+      direction: CLIENTBOUND
+      id: 27
+      class: net.minecraft.network.play.server.SPacketEntityStatus
+      thread_expectation: "NETTY_IO (encode); construction on SERVER_THREAD"
+      contains_nbt: false
+      variable_size: false
+      forge_relevance: LOW
+    - state: PLAY
+      direction: CLIENTBOUND
+      id: 28
+      class: net.minecraft.network.play.server.SPacketExplosion
+      thread_expectation: "NETTY_IO (encode); construction on SERVER_THREAD"
+      contains_nbt: true
+      variable_size: true
+      forge_relevance: MEDIUM
+    - state: PLAY
+      direction: CLIENTBOUND
+      id: 29
+      class: net.minecraft.network.play.server.SPacketUnloadChunk
+      thread_expectation: "NETTY_IO (encode); construction on SERVER_THREAD"
+      contains_nbt: false
+      variable_size: false
+      forge_relevance: LOW
+    - state: PLAY
+      direction: CLIENTBOUND
+      id: 2
+      class: net.minecraft.network.play.server.SPacketSpawnGlobalEntity
+      thread_expectation: "NETTY_IO (encode); construction on SERVER_THREAD"
+      contains_nbt: false
+      variable_size: false
+      forge_relevance: LOW
+    - state: PLAY
+      direction: CLIENTBOUND
+      id: 30
+      class: net.minecraft.network.play.server.SPacketChangeGameState
+      thread_expectation: "NETTY_IO (encode); construction on SERVER_THREAD"
+      contains_nbt: false
+      variable_size: false
+      forge_relevance: LOW
+    - state: PLAY
+      direction: CLIENTBOUND
+      id: 31
+      class: net.minecraft.network.play.server.SPacketKeepAlive
+      thread_expectation: "NETTY_IO (encode); construction on SERVER_THREAD"
+      contains_nbt: false
+      variable_size: false
+      forge_relevance: LOW
+    - state: PLAY
+      direction: CLIENTBOUND
+      id: 32
+      class: net.minecraft.network.play.server.SPacketChunkData
+      thread_expectation: "NETTY_IO (encode); construction on SERVER_THREAD"
+      contains_nbt: true
+      variable_size: true
+      forge_relevance: HIGH
+    - state: PLAY
+      direction: CLIENTBOUND
+      id: 33
+      class: net.minecraft.network.play.server.SPacketEffect
+      thread_expectation: "NETTY_IO (encode); construction on SERVER_THREAD"
+      contains_nbt: false
+      variable_size: false
+      forge_relevance: LOW
+    - state: PLAY
+      direction: CLIENTBOUND
+      id: 34
+      class: net.minecraft.network.play.server.SPacketParticles
+      thread_expectation: "NETTY_IO (encode); construction on SERVER_THREAD"
+      contains_nbt: false
+      variable_size: false
+      forge_relevance: LOW
+    - state: PLAY
+      direction: CLIENTBOUND
+      id: 35
+      class: net.minecraft.network.play.server.SPacketJoinGame
+      thread_expectation: "NETTY_IO (encode); construction on SERVER_THREAD"
+      contains_nbt: true
+      variable_size: false
+      forge_relevance: HIGH
+    - state: PLAY
+      direction: CLIENTBOUND
+      id: 36
+      class: net.minecraft.network.play.server.SPacketMaps
+      thread_expectation: "NETTY_IO (encode); construction on SERVER_THREAD"
+      contains_nbt: true
+      variable_size: true
+      forge_relevance: MEDIUM
+    - state: PLAY
+      direction: CLIENTBOUND
+      id: 37
+      class: net.minecraft.network.play.server.SPacketEntity
+      thread_expectation: "NETTY_IO (encode); construction on SERVER_THREAD"
+      contains_nbt: false
+      variable_size: false
+      forge_relevance: LOW
+    - state: PLAY
+      direction: CLIENTBOUND
+      id: 38
+      class: net.minecraft.network.play.server.SPacketEntity$S15PacketEntityRelMove
+      thread_expectation: "NETTY_IO (encode); construction on SERVER_THREAD"
+      contains_nbt: false
+      variable_size: false
+      forge_relevance: LOW
+    - state: PLAY
+      direction: CLIENTBOUND
+      id: 39
+      class: net.minecraft.network.play.server.SPacketEntity$S17PacketEntityLookMove
+      thread_expectation: "NETTY_IO (encode); construction on SERVER_THREAD"
+      contains_nbt: false
+      variable_size: false
+      forge_relevance: LOW
+    - state: PLAY
+      direction: CLIENTBOUND
+      id: 3
+      class: net.minecraft.network.play.server.SPacketSpawnMob
+      thread_expectation: "NETTY_IO (encode); construction on SERVER_THREAD"
+      contains_nbt: false
+      variable_size: false
+      forge_relevance: LOW
+    - state: PLAY
+      direction: CLIENTBOUND
+      id: 40
+      class: net.minecraft.network.play.server.SPacketEntity$S16PacketEntityLook
+      thread_expectation: "NETTY_IO (encode); construction on SERVER_THREAD"
+      contains_nbt: false
+      variable_size: false
+      forge_relevance: LOW
+    - state: PLAY
+      direction: CLIENTBOUND
+      id: 41
+      class: net.minecraft.network.play.server.SPacketMoveVehicle
+      thread_expectation: "NETTY_IO (encode); construction on SERVER_THREAD"
+      contains_nbt: false
+      variable_size: false
+      forge_relevance: LOW
+    - state: PLAY
+      direction: CLIENTBOUND
+      id: 42
+      class: net.minecraft.network.play.server.SPacketSignEditorOpen
+      thread_expectation: "NETTY_IO (encode); construction on SERVER_THREAD"
+      contains_nbt: false
+      variable_size: false
+      forge_relevance: LOW
+    - state: PLAY
+      direction: CLIENTBOUND
+      id: 43
+      class: net.minecraft.network.play.server.SPacketPlaceGhostRecipe
+      thread_expectation: "NETTY_IO (encode); construction on SERVER_THREAD"
+      contains_nbt: false
+      variable_size: false
+      forge_relevance: LOW
+    - state: PLAY
+      direction: CLIENTBOUND
+      id: 44
+      class: net.minecraft.network.play.server.SPacketPlayerAbilities
+      thread_expectation: "NETTY_IO (encode); construction on SERVER_THREAD"
+      contains_nbt: false
+      variable_size: false
+      forge_relevance: LOW
+    - state: PLAY
+      direction: CLIENTBOUND
+      id: 45
+      class: net.minecraft.network.play.server.SPacketCombatEvent
+      thread_expectation: "NETTY_IO (encode); construction on SERVER_THREAD"
+      contains_nbt: false
+      variable_size: false
+      forge_relevance: LOW
+    - state: PLAY
+      direction: CLIENTBOUND
+      id: 46
+      class: net.minecraft.network.play.server.SPacketPlayerListItem
+      thread_expectation: "NETTY_IO (encode); construction on SERVER_THREAD"
+      contains_nbt: true
+      variable_size: true
+      forge_relevance: MEDIUM
+    - state: PLAY
+      direction: CLIENTBOUND
+      id: 47
+      class: net.minecraft.network.play.server.SPacketPlayerPosLook
+      thread_expectation: "NETTY_IO (encode); construction on SERVER_THREAD"
+      contains_nbt: false
+      variable_size: false
+      forge_relevance: LOW
+    - state: PLAY
+      direction: CLIENTBOUND
+      id: 48
+      class: net.minecraft.network.play.server.SPacketUseBed
+      thread_expectation: "NETTY_IO (encode); construction on SERVER_THREAD"
+      contains_nbt: false
+      variable_size: false
+      forge_relevance: LOW
+    - state: PLAY
+      direction: CLIENTBOUND
+      id: 49
+      class: net.minecraft.network.play.server.SPacketRecipeBook
+      thread_expectation: "NETTY_IO (encode); construction on SERVER_THREAD"
+      contains_nbt: false
+      variable_size: false
+      forge_relevance: LOW
+    - state: PLAY
+      direction: CLIENTBOUND
+      id: 4
+      class: net.minecraft.network.play.server.SPacketSpawnPainting
+      thread_expectation: "NETTY_IO (encode); construction on SERVER_THREAD"
+      contains_nbt: false
+      variable_size: false
+      forge_relevance: LOW
+    - state: PLAY
+      direction: CLIENTBOUND
+      id: 50
+      class: net.minecraft.network.play.server.SPacketDestroyEntities
+      thread_expectation: "NETTY_IO (encode); construction on SERVER_THREAD"
+      contains_nbt: false
+      variable_size: true
+      forge_relevance: LOW
+    - state: PLAY
+      direction: CLIENTBOUND
+      id: 51
+      class: net.minecraft.network.play.server.SPacketRemoveEntityEffect
+      thread_expectation: "NETTY_IO (encode); construction on SERVER_THREAD"
+      contains_nbt: false
+      variable_size: false
+      forge_relevance: LOW
+    - state: PLAY
+      direction: CLIENTBOUND
+      id: 52
+      class: net.minecraft.network.play.server.SPacketResourcePackSend
+      thread_expectation: "NETTY_IO (encode); construction on SERVER_THREAD"
+      contains_nbt: false
+      variable_size: false
+      forge_relevance: LOW
+    - state: PLAY
+      direction: CLIENTBOUND
+      id: 53
+      class: net.minecraft.network.play.server.SPacketRespawn
+      thread_expectation: "NETTY_IO (encode); construction on SERVER_THREAD"
+      contains_nbt: false
+      variable_size: false
+      forge_relevance: LOW
+    - state: PLAY
+      direction: CLIENTBOUND
+      id: 54
+      class: net.minecraft.network.play.server.SPacketEntityHeadLook
+      thread_expectation: "NETTY_IO (encode); construction on SERVER_THREAD"
+      contains_nbt: false
+      variable_size: false
+      forge_relevance: LOW
+    - state: PLAY
+      direction: CLIENTBOUND
+      id: 55
+      class: net.minecraft.network.play.server.SPacketSelectAdvancementsTab
+      thread_expectation: "NETTY_IO (encode); construction on SERVER_THREAD"
+      contains_nbt: false
+      variable_size: false
+      forge_relevance: LOW
+    - state: PLAY
+      direction: CLIENTBOUND
+      id: 56
+      class: net.minecraft.network.play.server.SPacketWorldBorder
+      thread_expectation: "NETTY_IO (encode); construction on SERVER_THREAD"
+      contains_nbt: false
+      variable_size: false
+      forge_relevance: LOW
+    - state: PLAY
+      direction: CLIENTBOUND
+      id: 57
+      class: net.minecraft.network.play.server.SPacketCamera
+      thread_expectation: "NETTY_IO (encode); construction on SERVER_THREAD"
+      contains_nbt: false
+      variable_size: false
+      forge_relevance: LOW
+    - state: PLAY
+      direction: CLIENTBOUND
+      id: 58
+      class: net.minecraft.network.play.server.SPacketHeldItemChange
+      thread_expectation: "NETTY_IO (encode); construction on SERVER_THREAD"
+      contains_nbt: false
+      variable_size: false
+      forge_relevance: LOW
+    - state: PLAY
+      direction: CLIENTBOUND
+      id: 59
+      class: net.minecraft.network.play.server.SPacketDisplayObjective
+      thread_expectation: "NETTY_IO (encode); construction on SERVER_THREAD"
+      contains_nbt: false
+      variable_size: false
+      forge_relevance: LOW
+    - state: PLAY
+      direction: CLIENTBOUND
+      id: 5
+      class: net.minecraft.network.play.server.SPacketSpawnPlayer
+      thread_expectation: "NETTY_IO (encode); construction on SERVER_THREAD"
+      contains_nbt: false
+      variable_size: false
+      forge_relevance: LOW
+    - state: PLAY
+      direction: CLIENTBOUND
+      id: 60
+      class: net.minecraft.network.play.server.SPacketEntityMetadata
+      thread_expectation: "NETTY_IO (encode); construction on SERVER_THREAD"
+      contains_nbt: false
+      variable_size: true
+      forge_relevance: LOW
+    - state: PLAY
+      direction: CLIENTBOUND
+      id: 61
+      class: net.minecraft.network.play.server.SPacketEntityAttach
+      thread_expectation: "NETTY_IO (encode); construction on SERVER_THREAD"
+      contains_nbt: false
+      variable_size: false
+      forge_relevance: LOW
+    - state: PLAY
+      direction: CLIENTBOUND
+      id: 62
+      class: net.minecraft.network.play.server.SPacketEntityVelocity
+      thread_expectation: "NETTY_IO (encode); construction on SERVER_THREAD"
+      contains_nbt: false
+      variable_size: false
+      forge_relevance: LOW
+    - state: PLAY
+      direction: CLIENTBOUND
+      id: 63
+      class: net.minecraft.network.play.server.SPacketEntityEquipment
+      thread_expectation: "NETTY_IO (encode); construction on SERVER_THREAD"
+      contains_nbt: true
+      variable_size: false
+      forge_relevance: MEDIUM
+    - state: PLAY
+      direction: CLIENTBOUND
+      id: 64
+      class: net.minecraft.network.play.server.SPacketSetExperience
+      thread_expectation: "NETTY_IO (encode); construction on SERVER_THREAD"
+      contains_nbt: false
+      variable_size: false
+      forge_relevance: LOW
+    - state: PLAY
+      direction: CLIENTBOUND
+      id: 65
+      class: net.minecraft.network.play.server.SPacketUpdateHealth
+      thread_expectation: "NETTY_IO (encode); construction on SERVER_THREAD"
+      contains_nbt: false
+      variable_size: false
+      forge_relevance: LOW
+    - state: PLAY
+      direction: CLIENTBOUND
+      id: 66
+      class: net.minecraft.network.play.server.SPacketScoreboardObjective
+      thread_expectation: "NETTY_IO (encode); construction on SERVER_THREAD"
+      contains_nbt: false
+      variable_size: false
+      forge_relevance: LOW
+    - state: PLAY
+      direction: CLIENTBOUND
+      id: 67
+      class: net.minecraft.network.play.server.SPacketSetPassengers
+      thread_expectation: "NETTY_IO (encode); construction on SERVER_THREAD"
+      contains_nbt: false
+      variable_size: false
+      forge_relevance: LOW
+    - state: PLAY
+      direction: CLIENTBOUND
+      id: 68
+      class: net.minecraft.network.play.server.SPacketTeams
+      thread_expectation: "NETTY_IO (encode); construction on SERVER_THREAD"
+      contains_nbt: false
+      variable_size: true
+      forge_relevance: LOW
+    - state: PLAY
+      direction: CLIENTBOUND
+      id: 69
+      class: net.minecraft.network.play.server.SPacketUpdateScore
+      thread_expectation: "NETTY_IO (encode); construction on SERVER_THREAD"
+      contains_nbt: false
+      variable_size: false
+      forge_relevance: LOW
+    - state: PLAY
+      direction: CLIENTBOUND
+      id: 6
+      class: net.minecraft.network.play.server.SPacketAnimation
+      thread_expectation: "NETTY_IO (encode); construction on SERVER_THREAD"
+      contains_nbt: false
+      variable_size: false
+      forge_relevance: LOW
+    - state: PLAY
+      direction: CLIENTBOUND
+      id: 70
+      class: net.minecraft.network.play.server.SPacketSpawnPosition
+      thread_expectation: "NETTY_IO (encode); construction on SERVER_THREAD"
+      contains_nbt: false
+      variable_size: false
+      forge_relevance: LOW
+    - state: PLAY
+      direction: CLIENTBOUND
+      id: 71
+      class: net.minecraft.network.play.server.SPacketTimeUpdate
+      thread_expectation: "NETTY_IO (encode); construction on SERVER_THREAD"
+      contains_nbt: false
+      variable_size: false
+      forge_relevance: LOW
+    - state: PLAY
+      direction: CLIENTBOUND
+      id: 72
+      class: net.minecraft.network.play.server.SPacketTitle
+      thread_expectation: "NETTY_IO (encode); construction on SERVER_THREAD"
+      contains_nbt: false
+      variable_size: false
+      forge_relevance: LOW
+    - state: PLAY
+      direction: CLIENTBOUND
+      id: 73
+      class: net.minecraft.network.play.server.SPacketSoundEffect
+      thread_expectation: "NETTY_IO (encode); construction on SERVER_THREAD"
+      contains_nbt: false
+      variable_size: false
+      forge_relevance: LOW
+    - state: PLAY
+      direction: CLIENTBOUND
+      id: 74
+      class: net.minecraft.network.play.server.SPacketPlayerListHeaderFooter
+      thread_expectation: "NETTY_IO (encode); construction on SERVER_THREAD"
+      contains_nbt: false
+      variable_size: false
+      forge_relevance: LOW
+    - state: PLAY
+      direction: CLIENTBOUND
+      id: 75
+      class: net.minecraft.network.play.server.SPacketCollectItem
+      thread_expectation: "NETTY_IO (encode); construction on SERVER_THREAD"
+      contains_nbt: false
+      variable_size: false
+      forge_relevance: LOW
+    - state: PLAY
+      direction: CLIENTBOUND
+      id: 76
+      class: net.minecraft.network.play.server.SPacketEntityTeleport
+      thread_expectation: "NETTY_IO (encode); construction on SERVER_THREAD"
+      contains_nbt: false
+      variable_size: false
+      forge_relevance: LOW
+    - state: PLAY
+      direction: CLIENTBOUND
+      id: 77
+      class: net.minecraft.network.play.server.SPacketAdvancementInfo
+      thread_expectation: "NETTY_IO (encode); construction on SERVER_THREAD"
+      contains_nbt: true
+      variable_size: true
+      forge_relevance: MEDIUM
+    - state: PLAY
+      direction: CLIENTBOUND
+      id: 78
+      class: net.minecraft.network.play.server.SPacketEntityProperties
+      thread_expectation: "NETTY_IO (encode); construction on SERVER_THREAD"
+      contains_nbt: false
+      variable_size: true
+      forge_relevance: LOW
+    - state: PLAY
+      direction: CLIENTBOUND
+      id: 79
+      class: net.minecraft.network.play.server.SPacketEntityEffect
+      thread_expectation: "NETTY_IO (encode); construction on SERVER_THREAD"
+      contains_nbt: false
+      variable_size: false
+      forge_relevance: LOW
+    - state: PLAY
+      direction: CLIENTBOUND
+      id: 7
+      class: net.minecraft.network.play.server.SPacketStatistics
+      thread_expectation: "NETTY_IO (encode); construction on SERVER_THREAD"
+      contains_nbt: false
+      variable_size: false
+      forge_relevance: LOW
+    - state: PLAY
+      direction: CLIENTBOUND
+      id: 8
+      class: net.minecraft.network.play.server.SPacketBlockBreakAnim
+      thread_expectation: "NETTY_IO (encode); construction on SERVER_THREAD"
+      contains_nbt: false
+      variable_size: false
+      forge_relevance: LOW
+    - state: PLAY
+      direction: CLIENTBOUND
+      id: 9
+      class: net.minecraft.network.play.server.SPacketUpdateTileEntity
+      thread_expectation: "NETTY_IO (encode); construction on SERVER_THREAD"
+      contains_nbt: true
+      variable_size: false
+      forge_relevance: MEDIUM
+    - state: PLAY
+      direction: SERVERBOUND
+      id: 0
+      class: net.minecraft.network.play.client.CPacketConfirmTeleport
+      thread_expectation: "SERVER_THREAD (via PacketThreadUtil.checkThreadAndEnqueue)"
+      contains_nbt: false
+      variable_size: false
+      forge_relevance: LOW
+    - state: PLAY
+      direction: SERVERBOUND
+      id: 10
+      class: net.minecraft.network.play.client.CPacketUseEntity
+      thread_expectation: "SERVER_THREAD (via PacketThreadUtil.checkThreadAndEnqueue)"
+      contains_nbt: false
+      variable_size: false
+      forge_relevance: LOW
+    - state: PLAY
+      direction: SERVERBOUND
+      id: 11
+      class: net.minecraft.network.play.client.CPacketKeepAlive
+      thread_expectation: "SERVER_THREAD (via PacketThreadUtil.checkThreadAndEnqueue)"
+      contains_nbt: false
+      variable_size: false
+      forge_relevance: LOW
+    - state: PLAY
+      direction: SERVERBOUND
+      id: 12
+      class: net.minecraft.network.play.client.CPacketPlayer
+      thread_expectation: "SERVER_THREAD (via PacketThreadUtil.checkThreadAndEnqueue)"
+      contains_nbt: false
+      variable_size: false
+      forge_relevance: LOW
+    - state: PLAY
+      direction: SERVERBOUND
+      id: 13
+      class: net.minecraft.network.play.client.CPacketPlayer$Position
+      thread_expectation: "SERVER_THREAD (via PacketThreadUtil.checkThreadAndEnqueue)"
+      contains_nbt: false
+      variable_size: false
+      forge_relevance: LOW
+    - state: PLAY
+      direction: SERVERBOUND
+      id: 14
+      class: net.minecraft.network.play.client.CPacketPlayer$PositionRotation
+      thread_expectation: "SERVER_THREAD (via PacketThreadUtil.checkThreadAndEnqueue)"
+      contains_nbt: false
+      variable_size: false
+      forge_relevance: LOW
+    - state: PLAY
+      direction: SERVERBOUND
+      id: 15
+      class: net.minecraft.network.play.client.CPacketPlayer$Rotation
+      thread_expectation: "SERVER_THREAD (via PacketThreadUtil.checkThreadAndEnqueue)"
+      contains_nbt: false
+      variable_size: false
+      forge_relevance: LOW
+    - state: PLAY
+      direction: SERVERBOUND
+      id: 16
+      class: net.minecraft.network.play.client.CPacketVehicleMove
+      thread_expectation: "SERVER_THREAD (via PacketThreadUtil.checkThreadAndEnqueue)"
+      contains_nbt: false
+      variable_size: false
+      forge_relevance: LOW
+    - state: PLAY
+      direction: SERVERBOUND
+      id: 17
+      class: net.minecraft.network.play.client.CPacketSteerBoat
+      thread_expectation: "SERVER_THREAD (via PacketThreadUtil.checkThreadAndEnqueue)"
+      contains_nbt: false
+      variable_size: false
+      forge_relevance: LOW
+    - state: PLAY
+      direction: SERVERBOUND
+      id: 18
+      class: net.minecraft.network.play.client.CPacketPlaceRecipe
+      thread_expectation: "SERVER_THREAD (via PacketThreadUtil.checkThreadAndEnqueue)"
+      contains_nbt: false
+      variable_size: false
+      forge_relevance: LOW
+    - state: PLAY
+      direction: SERVERBOUND
+      id: 19
+      class: net.minecraft.network.play.client.CPacketPlayerAbilities
+      thread_expectation: "SERVER_THREAD (via PacketThreadUtil.checkThreadAndEnqueue)"
+      contains_nbt: false
+      variable_size: false
+      forge_relevance: LOW
+    - state: PLAY
+      direction: SERVERBOUND
+      id: 1
+      class: net.minecraft.network.play.client.CPacketTabComplete
+      thread_expectation: "SERVER_THREAD (via PacketThreadUtil.checkThreadAndEnqueue)"
+      contains_nbt: false
+      variable_size: false
+      forge_relevance: LOW
+    - state: PLAY
+      direction: SERVERBOUND
+      id: 20
+      class: net.minecraft.network.play.client.CPacketPlayerDigging
+      thread_expectation: "SERVER_THREAD (via PacketThreadUtil.checkThreadAndEnqueue)"
+      contains_nbt: false
+      variable_size: false
+      forge_relevance: LOW
+    - state: PLAY
+      direction: SERVERBOUND
+      id: 21
+      class: net.minecraft.network.play.client.CPacketEntityAction
+      thread_expectation: "SERVER_THREAD (via PacketThreadUtil.checkThreadAndEnqueue)"
+      contains_nbt: false
+      variable_size: false
+      forge_relevance: LOW
+    - state: PLAY
+      direction: SERVERBOUND
+      id: 22
+      class: net.minecraft.network.play.client.CPacketInput
+      thread_expectation: "SERVER_THREAD (via PacketThreadUtil.checkThreadAndEnqueue)"
+      contains_nbt: false
+      variable_size: false
+      forge_relevance: LOW
+    - state: PLAY
+      direction: SERVERBOUND
+      id: 23
+      class: net.minecraft.network.play.client.CPacketRecipeInfo
+      thread_expectation: "SERVER_THREAD (via PacketThreadUtil.checkThreadAndEnqueue)"
+      contains_nbt: false
+      variable_size: false
+      forge_relevance: LOW
+    - state: PLAY
+      direction: SERVERBOUND
+      id: 24
+      class: net.minecraft.network.play.client.CPacketResourcePackStatus
+      thread_expectation: "SERVER_THREAD (via PacketThreadUtil.checkThreadAndEnqueue)"
+      contains_nbt: false
+      variable_size: false
+      forge_relevance: LOW
+    - state: PLAY
+      direction: SERVERBOUND
+      id: 25
+      class: net.minecraft.network.play.client.CPacketSeenAdvancements
+      thread_expectation: "SERVER_THREAD (via PacketThreadUtil.checkThreadAndEnqueue)"
+      contains_nbt: false
+      variable_size: false
+      forge_relevance: LOW
+    - state: PLAY
+      direction: SERVERBOUND
+      id: 26
+      class: net.minecraft.network.play.client.CPacketHeldItemChange
+      thread_expectation: "SERVER_THREAD (via PacketThreadUtil.checkThreadAndEnqueue)"
+      contains_nbt: false
+      variable_size: false
+      forge_relevance: LOW
+    - state: PLAY
+      direction: SERVERBOUND
+      id: 27
+      class: net.minecraft.network.play.client.CPacketCreativeInventoryAction
+      thread_expectation: "SERVER_THREAD (via PacketThreadUtil.checkThreadAndEnqueue)"
+      contains_nbt: false
+      variable_size: false
+      forge_relevance: LOW
+    - state: PLAY
+      direction: SERVERBOUND
+      id: 28
+      class: net.minecraft.network.play.client.CPacketUpdateSign
+      thread_expectation: "SERVER_THREAD (via PacketThreadUtil.checkThreadAndEnqueue)"
+      contains_nbt: false
+      variable_size: false
+      forge_relevance: LOW
+    - state: PLAY
+      direction: SERVERBOUND
+      id: 29
+      class: net.minecraft.network.play.client.CPacketAnimation
+      thread_expectation: "SERVER_THREAD (via PacketThreadUtil.checkThreadAndEnqueue)"
+      contains_nbt: false
+      variable_size: false
+      forge_relevance: LOW
+    - state: PLAY
+      direction: SERVERBOUND
+      id: 2
+      class: net.minecraft.network.play.client.CPacketChatMessage
+      thread_expectation: "SERVER_THREAD (via PacketThreadUtil.checkThreadAndEnqueue)"
+      contains_nbt: false
+      variable_size: false
+      forge_relevance: LOW
+    - state: PLAY
+      direction: SERVERBOUND
+      id: 30
+      class: net.minecraft.network.play.client.CPacketSpectate
+      thread_expectation: "SERVER_THREAD (via PacketThreadUtil.checkThreadAndEnqueue)"
+      contains_nbt: false
+      variable_size: false
+      forge_relevance: LOW
+    - state: PLAY
+      direction: SERVERBOUND
+      id: 31
+      class: net.minecraft.network.play.client.CPacketPlayerTryUseItemOnBlock
+      thread_expectation: "SERVER_THREAD (via PacketThreadUtil.checkThreadAndEnqueue)"
+      contains_nbt: false
+      variable_size: false
+      forge_relevance: LOW
+    - state: PLAY
+      direction: SERVERBOUND
+      id: 32
+      class: net.minecraft.network.play.client.CPacketPlayerTryUseItem
+      thread_expectation: "SERVER_THREAD (via PacketThreadUtil.checkThreadAndEnqueue)"
+      contains_nbt: false
+      variable_size: false
+      forge_relevance: LOW
+    - state: PLAY
+      direction: SERVERBOUND
+      id: 3
+      class: net.minecraft.network.play.client.CPacketClientStatus
+      thread_expectation: "SERVER_THREAD (via PacketThreadUtil.checkThreadAndEnqueue)"
+      contains_nbt: false
+      variable_size: false
+      forge_relevance: LOW
+    - state: PLAY
+      direction: SERVERBOUND
+      id: 4
+      class: net.minecraft.network.play.client.CPacketClientSettings
+      thread_expectation: "SERVER_THREAD (via PacketThreadUtil.checkThreadAndEnqueue)"
+      contains_nbt: false
+      variable_size: false
+      forge_relevance: LOW
+    - state: PLAY
+      direction: SERVERBOUND
+      id: 5
+      class: net.minecraft.network.play.client.CPacketConfirmTransaction
+      thread_expectation: "SERVER_THREAD (via PacketThreadUtil.checkThreadAndEnqueue)"
+      contains_nbt: false
+      variable_size: false
+      forge_relevance: LOW
+    - state: PLAY
+      direction: SERVERBOUND
+      id: 6
+      class: net.minecraft.network.play.client.CPacketEnchantItem
+      thread_expectation: "SERVER_THREAD (via PacketThreadUtil.checkThreadAndEnqueue)"
+      contains_nbt: false
+      variable_size: false
+      forge_relevance: LOW
+    - state: PLAY
+      direction: SERVERBOUND
+      id: 7
+      class: net.minecraft.network.play.client.CPacketClickWindow
+      thread_expectation: "SERVER_THREAD (via PacketThreadUtil.checkThreadAndEnqueue)"
+      contains_nbt: false
+      variable_size: false
+      forge_relevance: LOW
+    - state: PLAY
+      direction: SERVERBOUND
+      id: 8
+      class: net.minecraft.network.play.client.CPacketCloseWindow
+      thread_expectation: "SERVER_THREAD (via PacketThreadUtil.checkThreadAndEnqueue)"
+      contains_nbt: false
+      variable_size: false
+      forge_relevance: LOW
+    - state: PLAY
+      direction: SERVERBOUND
+      id: 9
+      class: net.minecraft.network.play.client.CPacketCustomPayload
+      thread_expectation: "SERVER_THREAD (via PacketThreadUtil.checkThreadAndEnqueue)"
+      contains_nbt: false
+      variable_size: true
+      forge_relevance: HIGH
+    - state: STATUS
+      direction: CLIENTBOUND
+      id: 0
+      class: net.minecraft.network.status.server.SPacketServerInfo
+      thread_expectation: "NETTY_IO (encode); construction on SERVER_THREAD"
+      contains_nbt: false
+      variable_size: false
+      forge_relevance: LOW
+    - state: STATUS
+      direction: CLIENTBOUND
+      id: 1
+      class: net.minecraft.network.status.server.SPacketPong
+      thread_expectation: "NETTY_IO (encode); construction on SERVER_THREAD"
+      contains_nbt: false
+      variable_size: false
+      forge_relevance: LOW
+    - state: STATUS
+      direction: SERVERBOUND
+      id: 0
+      class: net.minecraft.network.status.client.CPacketServerQuery
+      thread_expectation: "SERVER_THREAD (via PacketThreadUtil.checkThreadAndEnqueue)"
+      contains_nbt: false
+      variable_size: false
+      forge_relevance: LOW
+    - state: STATUS
+      direction: SERVERBOUND
+      id: 1
+      class: net.minecraft.network.status.client.CPacketPing
+      thread_expectation: "SERVER_THREAD (via PacketThreadUtil.checkThreadAndEnqueue)"
+      contains_nbt: false
+      variable_size: false
+      forge_relevance: LOW

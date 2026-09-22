@@ -1,0 +1,42 @@
+# M5.7 — OFFLINE MASK-CONTRACT REPAIR + RESEND-RIG AUDIT (offline only; no campaign)
+schema_version: 1
+date: "2026-09-22"
+A_mask_root_cause: >
+  OFFLINE PROOF: the native mask rule is CORRECT. The new mask-contract
+  regression (real SPacketChunkData ctor) covers absent / present-EMPTY /
+  present-nonempty sections, place-then-empty transitions, partial requested
+  masks, and the section-4 shape: Java's full-packet predicate EXCLUDES
+  present-but-empty sections (blockRefCount==0) — exactly matching the native
+  all-air release rule; partial masks emit the requested filter. All shapes
+  agree (javaMask == nativeMask, payload semantics equal). CONCLUSION: the
+  M5.6 live event (java=31 native=15) was NOT a rule divergence but the
+  CAPTURE-WINDOW class again, manifesting as a mask divergence when a section
+  emptied between the javaPayload build and the native refresh. The comparator
+  ORDERING let it fire as a real mismatch because the mask check ran BEFORE
+  the block-state stability gate. Recorded-vs-inferred: recorded = both masks,
+  versions, refreshBefore=1; inferred (now proven offline) = the emptiness
+  predicate equivalence; UNKNOWN (not recorded in the live dump) = the actual
+  per-section blockRefCount/non-air at capture time.
+B_corrected_rule: "no native rule change required; the COMPARATOR ordering was the defect"
+C_fix: >
+  Mask divergence now passes the SAME before/after logical-state stability
+  gate before being declared a mismatch: a Java state move across the window
+  => MASK/BLOCK_STATE STALE_SKIP; only a STABLE Java state with a divergent
+  native mask is a real mismatch. (Directive-5 standard honored: skips require
+  fingerprint evidence of movement, not assumptions.)
+D_regression: "37/37 authoritative (3 new mask-contract cases) + full battery green (7/7, 19/19, 8/8, 16/16, 10/10 Rust)"
+E_fixtures: "the mask-contract shapes are now PERMANENT offline suite cases (real ctor + native encode + semantic compare); fluid-section fixture remains queued"
+F_packets_seen_meaning: >
+  AUDITED: packets_seen counts ctor-RETURN-hook invocations (completed
+  constructions reaching the comparator) — NOT sends, NOT eligible packets.
+  New split counters: m57_ctor_entry_seen (populatePacket entry, before gates)
+  and m57_full_ctor_seen (filter==65535). The M5.6 'packets_seen=1' therefore
+  measured completed constructions only; PlayerChunkMap reuses entries across
+  relogs, so relogs generate few constructions — confirming the ceiling is
+  real construction pressure, not comparator gating.
+G_resend_driver: >
+  TEST-ONLY testResendConstruct(chunk) added: drives the REAL ctor + hooks +
+  comparator for a ready chunk (offline-verified in the suite); sends nothing.
+  LIVE wiring (watching player + network context; likely view-distance-driven
+  entry rebuild) is PENDING by directive.
+H_unknowns: "live per-section refcounts at capture time (not recorded); PlayerChunkMapEntry transformation inspection (deferred to the live milestone)"

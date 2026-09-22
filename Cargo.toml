@@ -1,0 +1,47 @@
+[workspace]
+resolver = "2"
+members = [
+    "crates/core-types",
+    "crates/buffers",
+    "crates/transport",
+    "crates/compression",
+    "crates/nbt",
+    "crates/region-io",
+    "crates/contracts",
+    "crates/metrics",
+    "crates/test-support",
+    "crates/ffi",
+    "crates/chunk-packet",
+    "crates/spatial-index",
+    "crates/spawn-index",
+    "crates/worldgen-noise",
+    "crates/protocol",
+    "crates/native-chunk",
+]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2021"
+authors = ["Hermes Engineering Steward"]
+license = "MIT OR Apache-2.0"
+
+[workspace.dependencies]
+spatial-index = { path = "crates/spatial-index" }
+spawn-index = { path = "crates/spawn-index" }
+worldgen-noise = { path = "crates/worldgen-noise" }
+core-types = { path = "crates/core-types" }
+buffers = { path = "crates/buffers" }
+transport = { path = "crates/transport" }
+compression = { path = "crates/compression" }
+nbt = { path = "crates/nbt" }
+region-io = { path = "crates/region-io" }
+contracts = { path = "crates/contracts" }
+metrics = { path = "crates/metrics" }
+test-support = { path = "crates/test-support" }
+chunk-packet = { path = "crates/chunk-packet" }
+protocol = { path = "crates/protocol" }
+native-chunk = { path = "crates/native-chunk" }
+
+[profile.release]
+lto = "fat"
+codegen-units = 1

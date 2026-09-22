@@ -1,0 +1,61 @@
+# M3-WORLDGEN-NOISE offline prototype (operator authorization 2026-09-20).
+# OFFLINE ONLY: no live integration, no coremod, no SHADOW, no defaults.
+# class: MEASURED. Provenance: M3W-WORLDGEN-NOISE.
+schema_version: 1
+date: "2026-09-20"
+builds:
+  dll: {sha256_prefix: 80085131da01a177, note: "adds wnoise JNI exports (create/gen3d/gen2d/freeRaw — ONE coarse call per field) to the superset dll; prior exports untouched"}
+  crate: "crates/worldgen-noise — exact JavaRandom LCG + NoiseGeneratorImproved (2D+3D paths) + NoiseGeneratorOctaves (func_76304_a/76305_a), 3/3 unit tests"
+directive_1_pipeline: # verified by disassembly + decompile cross-check (committed machine/raw/diag/)
+  kernel: "ChunkGeneratorOverworld ctor: one shared Random(seed); Octaves(16), Octaves(16), Octaves(8), Perlin(4), Octaves(10), Octaves(16), Octaves(8) in that exact construction order; initNoiseField calls depth-2D via the 10-then-16... (bytecode-exact call args extracted: depth 2D 5x5 (e/f/g scales), main 3D 5x33x5 with FLOAT-divided scales a/h, b/i, a/j, min/max 3D with RAW coordinateScale/heightScale)"
+  mod_surface: "terrain path = NoiseGeneratorOctaves/Improved only — ZERO Forge hooks inside the kernel; Perlin/Simplex (surface noise) is a SEPARATE path not ported this milestone; no Revelation mod transforms the noise classes (FoamFix splices PropertyEnum only, observed in-run)"
+directive_2_fp_findings: # the exactness contract
+  transcendental_free: "the terrain kernel contains NO sin/cos/sqrt — pure +,-,*,/ + comparisons (grep over full disassembly = 0 hits)"
+  java_random: "48-bit LCG exact (scramble/next/nextInt(bound) rejection path/nextDouble (next(26)<<27 + next(27)) * 2^-53); reference vectors pinned in unit tests + independent python cross-check"
+  quirks_required_for_parity: # each one was a real parity failure until replicated
+    - "y-skip caching: when the y-cell is unchanged within an (x,z) column, vanilla (bytecode 696->981) reuses BOTH the perm chain AND the four x-pair lerps from the previous y sample — a piecewise quirk that IS vanilla semantics (first divergence appeared exactly at octave 10, where yScale*d3 < 1 first makes cells repeat)"
+    - "2D wrapper quirk: func_76305_a pushes its 1st double->xScale and 2nd double->zScale and NEVER passes the 3rd (dropped parameter)"
+    - "octave wrapper: MathHelper.floor-then-Java-lrem(=Rust % truncated) 16M normalization; reciprocal 1.0/noiseScale PREcomputed (not per-sample division)"
+    - "(assembly, documented not yet ported) main-noise scale ratios are computed in FLOAT (fdiv) then widened to double"
+  rust_strict_fp: "Rust f64 is strict IEEE 754 by default (no fast-math, no reassociation, no FMA contraction) — sufficient for bit-exactness"
+directive_3_5_parity: # the milestone's hard gate — PASSED
+  oracle: "the REAL installed NoiseGeneratorOctaves/NoiseGeneratorImproved classes (server srg jar)"
+  corpus: "64 seeds x {16,8,10} octaves x 5 3D-shapes x real scale sets (incl. the exact 5x33x5 initNoiseField shape and 684.412-family scales) x offsets incl. 0, negative, 1.2M, -30M/30M + 2D wrapper fields"
+  result: "7,936 fields / 2,964,736 double samples / ZERO mismatches — BIT-EXACT (Double.doubleToLongBits)"
+  debug_trail: "initial run 4352 field mismatches -> isolated to the y-skip x-lerp caching quirk (fixed) -> 256 remaining isolated to the dropped-2D-param mapping (fixed) -> 0. Per-octave contribution diffing (committed debug examples) localized both bugs in minutes"
+directive_7_8_benchmark: # complete chunk-noise generation (main+min+max 5x33x5 + depth 5x5), warmed, JNI+transfer included
+  java_reference: {chunk_median_ns: 302100, main_8oct_ns: 49800, min_16oct_ns: 121000}
+  rust_via_jni: {chunk_median_ns: 397000, main_8oct_ns: 66700, min_16oct_ns: 161800}
+  verdict_ratio: "Rust = 1.31x SLOWER per chunk (1.25-1.34x per field) including one JNI call + copy per field"
+  analysis: >
+    HotSpot's JIT optimizes this branchy, strictly-ordered FP workload
+    exceptionally well (escape analysis, loop unrolling, inline caches on the
+    grad tables). The Rust port's remaining overhead: per-call Vec allocation
+    + copy (~1-5us of the ~66us field), JNI crossing, and no auto-vectorization
+    headroom because exact operation order forbids reassociation. A
+    hand-tuned Rust variant might approach Java parity, but matching Java is
+    not a Rust value proposition, and the directive's exactness rule
+    eliminates the SIMD paths that would justify native.
+directive_9_state_ownership:
+  model: "clean: Rust handle owns perm tables + octave state per generator instance; ONE coarse call per field; Java retains generator-visible objects. PROVEN VIABLE by the harness."
+  reflection_risk: "ChunkGeneratorOverworld noise fields are PUBLIC (field_185983_b/c/d) — mods CAN replace them (none do on Revelation); integration would require identity checks + fallback. Terrain kernel itself is hook-free."
+directive_10_mod_compat:
+  vanilla_kernel: VANILLA_KERNEL_SAFE (bit-exact port proven; no transforms observed)
+  custom_generators: "BOP dims/RTG-style custom generators = CUSTOM_GENERATOR (remain Java; not accelerated, not broken)"
+  fallback_model: "future integration must detect generator-class identity + fall back automatically (same ladder as M2C)"
+directive_12_reuse: "JavaRandom LCG + the exact-FP discipline are genuinely reusable for ANY deterministic Java kernel (structure placement math, Nether/End terrain, surface simplex); the noise classes themselves are terrain-specific. Real but currently unfunded."
+classification: NOT_WORTH_IT
+classification_reasoning: >
+  Exactness: SOLVED — bit-exact parity across 2.96M samples, with every
+  vanilla quirk (y-skip x-lerp caching, dropped 2D parameter, LCG vectors)
+  identified, replicated, and unit-pinned. Boundary: CLEAN — one coarse JNI
+  call per field, state ownership proven. Performance: NEGATIVE — Rust is
+  1.31x SLOWER than the Java reference through the complete path on this
+  workload; strict operation-order (required for parity) removes the SIMD/
+  reassociation headroom that would favor native. There is no Rust-first
+  advantage left: no index to own, no scanning to batch, no layout win.
+  Per the directive's own rule ("If the result is Java 1.0us vs Rust 0.95us
+  + JNI, Rust is not justified") — and the measured case is worse (Rust
+  1.31x) — this is NOT_WORTH_IT for performance migration.
+recommendation: "PARK worldgen-noise. The M3 arc is now evidence-closed on all three candidates (spawn-query: ALGORITHM_ONLY; collision: NOT_WORTH_IT; worldgen-noise: parity-proven but NOT_WORTH_IT on performance). Durable assets retained: the bit-exact noise crate + JNI surface (revivable if a future native consumer shares the cost), the quirk documentation (y-skip caching, dropped 2D param — required knowledge for ANY reimplementation), JavaRandom LCG (reusable for any deterministic Java kernel), and the full disassembly corpus. M3 remains UNSELECTED; no SHADOW integration."
+stop: "OFFLINE prototype only. No live integration, no coremod, no SHADOW run, no default changes."

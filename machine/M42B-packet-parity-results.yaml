@@ -1,0 +1,73 @@
+# M4.2B — Live native-snapshot packet correctness.
+# class: MEASURED + REAL-IMPLEMENTATION PARITY. Provenance: M42B-PACKET-PARITY.
+# Defaults all OFF; Java authoritative; Java packets the only transmitted output;
+# no authoritative storage/persistence; no modpack campaign; no ON authorization.
+schema_version: 1
+date: "2026-09-21"
+base_checkpoints: [cbf34f4, 4972ff6]
+builds:
+  dll_live_run: {sha256_prefix: 7412ee3fa33416ef}
+  coremod_live_run: {sha256_prefix: 66505f3067a3cb68, note: "includes setBiomes (FFI 316) + biome-push fix + sited error stacks; NOT the build used in the live run below — see live_run note"}
+reconciliation:
+  file: machine/M42B-reconciliation.yaml
+  summary: "3,009/3,019 was cross-run conflation (two fresh worlds); within run 3 exactly 1 NPE-skipped chunk; 20,177-vs-20,158 = 19 validator decode-location errors on legitimately omitted all-air sections (fixed, regression-grounded below)"
+all_air_validator:
+  final_build_result: >
+    Grounded against the REAL packet, not just bytecode: offline case
+    'section-becomes-empty' clears a full section via real Chunk.setBlockState and
+    the REAL SPacketChunkData drops it from the mask identically to the native
+    refresh. Absence is accepted ONLY when Java-side cells are all-air (equivalent
+    to vanilla's isEmpty==blockRefCount==0 omission rule); non-air absence and
+    non-zero-light absence are mismatches.
+offline_real_packet_parity:
+  harness: tools/bridge/src/com/rustcraft/bridge/M4PacketParityHarness.java
+  method: >
+    Builds a REAL Chunk via the real ChunkPrimer path under a minimal concrete
+    World subclass (provider hasSkyLight set as servers do), mutates via real
+    setBlockState/setLightFor, serializes with the actual SPacketChunkData
+    constructor, and compares the native registry encoder after the real refresh
+    pipeline (extract -> refreshSection -> encodePacket).
+  cases: 8
+  gate_b_decoded_state_equal: 8
+  gate_a_exact_bytes: 7
+  gate_a_note: "the non-exact case is 'churn': Java's palette retains stale entries from its mutation history while the native palette is minimal — valid palette divergence, exactly what Gate B exists for. Java insertion history was never altered to manufacture byte equality."
+  coverage: [base-terrain-full, block-mutation, light-only, empty-to-nonempty, nonempty-to-empty, churn, chest-tileentity, section-becomes-empty]
+  te_note: "chest case: TE tags serialize at write time (separate list), NOT in the payload byte[] — payloads compared equal with a TE present; TE packets remain Java-only for any future native path"
+  biome_regression: >
+    Negative control reproduces the live finding deterministically (zero-biome
+    registration detected at biome[0]); positive proves the fix (setBiomes + section
+    refresh -> full equality).
+live_run:
+  run_id: M42B-20260921-172503
+  meta: machine/raw/M42B-20260921-172503-meta.txt (pid + build hashes recorded)
+  workload: "Target A clean Forge, fresh world, worldgen SHADOW + coherency hooks + packet comparator; small-span bot walk + commanded setblock/fill/glowstone mutations near spawn"
+  terrain: "2,982/2,982 bit-exact, 2,982 registered"
+  hooks: "27,306,680 block-sets + light-sets recorded into masks (no per-write JNI)"
+  refresh_coverage: "18,375 sections refreshed; 18,368 decoder-validated; 0 validation mismatches; allocations 15,654 / releases 14,257 / retained 1,397 sections (17.3 MB) / evictions 2,727 (exact arithmetic 15,654-14,257=1,397)"
+  comparator: >
+    STOPPED BY DESIGN on its FIRST comparison: mismatch at biome[0]. Root cause
+    (explained, preserved, regression-reproduced offline): live registration
+    ingests ZERO biomes (biomeAddr=0) and the flush path refreshed sections but
+    never biomes; the offline harness had registered real biomes, masking the
+    gap. Fix in final build: FFI 316 setBiomes + pushBiomes in every refresh pass
+    (independent of pending section work). Live comparator re-validation is
+    deliberately DEFERRED to the next authorized run (stop discipline: one
+    bounded run per checkpoint, no automatic reruns).
+  counters_prove: >
+    comparator pipeline functioned end-to-end before stopping (packets seen,
+    refresh-before-compare, decode-compare, disable-on-mismatch); only 2 packets
+    reached the comparator before disable (both at bot login).
+unsupported_cases_java_only:
+  - partial-filter packets (native encoder emits full-chunk only; live counter m42c_partial_filter_skipped)
+  - TileEntity NBT (Java-owned at write time; TE chunks counted separately if compared)
+  - JEID native registration (probe-only per M4.2A)
+  - NEID high-bit chunks (width gate; m4_neid_width_ineligible)
+snapshot_validity:
+  - "refresh-before-compare is synchronous in the comparator (never compares a stale snapshot)"
+  - "encode -3 (snapshot token rejected) is counted and not compared/published"
+  - "refresh failures skip the comparison (fallback), never silently covered"
+remaining_before_any_native_transmission:
+  - "live comparator re-run on the fixed build (biome push) to green Gate A/B counters"
+  - "site the two low-rate unsited exceptions (1 shadowTerrain NPE / 1 flush AIOOBE per run; stack capture now in final build)"
+  - "TileEntity merge-or-fallback decision for a real native packet path"
+  - "operator ON authorization (explicitly out of scope here)"

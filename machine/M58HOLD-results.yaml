@@ -1,0 +1,45 @@
+# M5.8 HOLD — OFFLINE PRECONDITION REPAIR (blocker checkpoint; NO server boot)
+schema_version: 1
+date: "2026-09-22"
+capture_gate: >
+  CAPTURE_UNSAFE for the cross-thread components — declared, not papered over.
+  Ownership map (supported runtime): blocks + section presence/refcounts +
+  block light + sky light are written on the SERVER thread (fluid ticks,
+  setBlockState, light engine) — an owner-thread capture during packet
+  construction is coherent for these. BIOMES (and incremental light) have
+  PROVEN cross-thread writers (worldgen surface pass writes the array
+  directly from the generator thread — the M4.3D finding; direct nibble
+  writes — M5.1). No writer-participating synchronization boundary exists
+  for them in the installed runtime. Per the directive: affected native
+  consumers stay Java-only (already true: native transmission eligibility
+  requires the packet-time freshness domains, which are CHECKS, not
+  synchronization). Codec-on-fixture correctness (proven) is kept separate
+  from live-cache coherency (guarded, not proven). A narrowly-scoped
+  writer-participating boundary (e.g. a worldgen-completion latch) would
+  require separate approval.
+unknown_state: >
+  All null/unregistered lookups now REJECT: the three extraction sites map
+  unresolved ids to a -1 sentinel that rides the width guard (refresh
+  rejected + chunk invalidated) — never air, never count-reduced, never
+  mask-dropped. Genuine air remains id 0 only; absent sections remain the
+  documented null-storage path. Tests: 54/54 (sentinel never air; guard
+  trips; vanilla counter stays 0).
+section5: >
+  Preserved as MASK_MISMATCH_OBSERVED — ROOT_CAUSE_UNRESOLVED per directive.
+  Recorded: javaMask=63, nativeMask=31, stability gate PASSED, genId=57,
+  mutGen==snapGen. UNKNOWN (not in the dump): requested filter vs full flag
+  at capture, section-5 isEmpty/refcount, full-width states, native cache
+  state, refresh ordering. Offline real-Java regressions for the candidate
+  causes (present-empty, refcount disagreement, unknown-state handling)
+  are GREEN on vanilla — the cause is modpack-specific and needs a captured
+  Revelation fixture (deferred no longer: flagged REQUIRED for the next
+  offline pass). No global presence/emptiness rule was changed.
+accessor: >
+  playerEntities = field_73010_i (javap-verified against the installed
+  SRG-named jar: List<EntityPlayer>; the earlier field_73010_j was wrong).
+  The driver retains the already-selected player; no second lookup. Runtime
+  remapping caveat recorded: the transformed live classloader may differ —
+  offline-transformed-classloader verification not yet performed; delivery
+  remains PENDING.
+battery: "54/54 authoritative + 7/7 deferred, 19/19 lifecycle, 8/8 parity, 16/16 boundary"
+classification: FURTHER_INVESTIGATION (CAPTURE_UNSAFE declared for cross-thread components; consumers Java-only)

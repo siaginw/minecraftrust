@@ -1,0 +1,45 @@
+# M5.1 — FINAL TARGET-A NATIVE NETWORK REPORT
+schema_version: 1
+date: "2026-09-21"
+run: M5-20260921-233744 (both subsystems ON_EXPERIMENTAL in disposable run; repo defaults OFF)
+builds: {dll: bfcd9c0861843624, coremod: 5dbde6db36973ac3}
+A_comparator_fix: >
+  Version captured at constructor ENTRY (populatePacket hook pins it into a
+  WeakHashMap) and re-read after extraction/encode: any move across the whole
+  construction window => STALE_CMP_SKIPPED, never a mismatch. Sweep retired
+  (disabled in-code; historical evidence intact).
+B_offline_race: >
+  Deterministic concurrent-mutator regression (3000 mutations racing 300
+  comparator runs): 0 mismatches, torn captures -> stale-skips, clean after
+  quiescence — 20/20 authoritative. Full battery green: 7/7 deferred, 19/19
+  lifecycle, 8/8 parity, 16/16 boundary, 29/29 extractor, 121/121 pipeline
+  oracle, 10/10 Rust.
+C_workload: "smaller span (400) + long settle hold (380s) — quiescence-friendly"
+D_native_authored: 35 (vs 1 in M5 — the settle window works; still correctness-bounded)
+E_fallback: "pending-work 2; not-synced/unsupported/encode/error all 0"
+F_m2c: "1,614 native-compressed packets, 0 fallbacks, 0 errors, ctx 1/1"
+G_verify: "164 independent Gate-B comparisons, 163 equal, 1 mismatch (below); biome re-push 0 this run"
+H_stale_skips: "comparator stale-skips 0 (versions never moved — see I)"
+I_mismatch: >
+  ONE event preserved: cx=22 cz=26 section 4 skyLight[48], mutGen==snapGen==275,
+  dirtyMask=0. NEW FINDING (third unobservable-write class): incremental
+  skylight updates (relightBlock / light-engine propagation) write light
+  NIBBLES DIRECTLY — not via setLightFor — so no hook fires and the version
+  never moves. Same class as the direct biome writes; the proven fix pattern
+  (packet-time domain freshness check, as biomes) applies directly but was NOT
+  patched in-campaign (stop honored, no patch-and-rerun). NOT transmitted-stale:
+  the 35 native packets passed the version guard against this same blind spot —
+  the transmitted-packet risk is bounded by the same gap and must be closed by
+  the light-freshness check before READY.
+J_client: "bot 30 teleports, 0 decode/decompression errors, clean session"
+K_java_path: "offline oracle (uniform corpus): mean 97.5us p99 162us"
+L_rust_path: "mean 108.0us p99 509us (per-call direct-buffer alloc in ctx.compress) — no win claimed; optimization ladder (scratch reuse, zero-copy handoff) queued per directive 8"
+N_cleanup: "257 chunks removed in-JVM -> 0 bytes; compressor ctx 1/1"
+O_classification: FURTHER_INVESTIGATION
+P_next: >
+  (1) Add packet-time LIGHT freshness domain checks (same pattern as biome:
+  compare live nibble arrays vs native at packet time for the mask's sections;
+  re-push or fall back) on BOTH the transmit path and the comparator.
+  (2) Offline light-race regression. (3) One bounded re-run — expect 0 events.
+  (4) Then NATIVE_NETWORK_READY_TARGETA. (5) Revelation combined ladder
+  (SHADOW first) operator-gated after that.

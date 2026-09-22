@@ -1,0 +1,129 @@
+migration_id: M1
+candidate_id: M1-C
+name: NATIVE SPacketChunkData VANILLA PAYLOAD (Direct Staging Buffer Section Encoding)
+# M1-final (2026-09-19): implemented as experimental acceleration, validated on
+# Targets A/B/C/D (see docs/migrations/M1-final-target-coverage.md). Java remains
+# authoritative; runtime default stays OFF; ownership ladder position:
+# JAVA_OWNED -> SHADOW_TESTED achieved -> JAVA_OWNED_RUST_ACCELERATED demonstrated
+# in ON_EXPERIMENTAL only (not adopted as default).
+status: IMPLEMENTED_EXPERIMENTAL_DEFAULT_OFF
+phase: P0-9
+authoritative_subsystem: chunk_packet_encoding
+target_ownership:
+  initial: JAVA_OWNED
+  validation_phase: SHADOW_TESTED
+  production_target: JAVA_OWNED_RUST_ACCELERATED
+  long_term_future: RUST_OWNED (Deferred to later project phases)
+feature_switch:
+  property: minecraftrust.native_chunk_packet
+  modes:
+  - 'OFF'
+  - SHADOW
+  - 'ON'
+  default: 'OFF'
+scope:
+  in_scope:
+  - 'Java population of thread-local off-heap staging buffer (INPUT-A schema: bitmask,
+    flags, palette, storage words, lights, biomes)'
+  - Native reading of staging buffer and direct write of Protocol 340 SPacketChunkData
+    wire payload
+  - Writing packed section payload directly into Netty PooledByteBufAllocator direct
+    buffer
+  - Deterministic byte-for-byte shadow comparison against Java reference output
+  - Automatic fallback to Java reference constructor on any error or unsupported case
+  out_of_scope:
+  - Replacing Netty transport, channels, or EventLoops
+  - Replacing Java Chunk, ExtendedBlockStorage, or World ownership
+  - Bypassing TileEntity.getUpdateTag() or mod TileEntity packet synchronization
+  - Modifying Forge ChunkWatchEvent.Watch or player tracking dispatch
+  - Replacing deflate compression on Netty IO threads
+ffi_contract:
+  abi_version: 2
+  entry_point: Java_com_rustcraft_bridge_NativeChunkPacket_encodeSections
+  signature: (JJI)I
+  parameters:
+  - name: env
+    type: JNIEnv*
+    desc: JNI environment pointer
+  - name: clazz
+    type: jclass
+    desc: Static class handle
+  - name: staging_buf_address
+    type: jlong
+    desc: Direct memory address of thread-local off-heap staging buffer (INPUT-A)
+  - name: staging_buf_len
+    type: jint
+    desc: Valid bytes in staging buffer
+  - name: output_buf_address
+    type: jlong
+    desc: Direct memory address of Netty pooled DirectByteBuf
+  - name: output_capacity
+    type: jint
+    desc: Capacity of output buffer in bytes (>= 262144)
+  return_value:
+    type: jint
+    semantics: '>0: Bytes written into direct buffer; <0: Error code triggering instant
+      Java fallback'
+  alignment_and_endianness:
+    byte_order: Big-Endian (Standard Minecraft network wire order)
+    alignment: 8-byte word alignment for long array copies
+  error_codes:
+    '0': SUCCESS
+    '-1': NULL_BUFFER_POINTER
+    '-2': OUTPUT_BUFFER_OVERFLOW
+    '-3': INVALID_SECTION_BITMASK
+    '-4': UNSUPPORTED_PALETTE_WIDTH
+    '-5': RUST_PANIC_CAUGHT
+# INVALIDATED (M1.4-R): the per-step µs figures below come from the authored
+# P0-9 decomposition, not measurement (see docs/engineering/evidence-invalidation-register.md).
+# Measured staging/encode costs live in M14R-STAGE-DECOMPOSITION and
+# M14R2-HANDOFF-A-FULLCORPUS provenance entries. Kept for flow shape only.
+memory_flow:
+  step_1: ServerThread identifies dirty chunk sections to send
+  step_2: "ServerThread populates thread-local direct staging buffer [INVALIDATED
+    \xB5s figure] [JAVA_HEAP_COPY to off-heap]"
+  step_3: 'ServerThread calls JNI with staging_buf_address and output_buf_address
+    [ZERO_COPY: borrow addresses]'
+  step_4: "Rust encodes wire VarInts, palette, BitArray, lights, and biomes [INVALIDATED
+    \xB5s figure] [NATIVE_COPY]"
+  step_5: Java updates Netty writerIndex(bytesWritten) and wraps in SPacketChunkData
+    [WRAPPER_ONLY]
+  step_6: Netty pipeline deflates on IO worker thread, writes socket, and releases
+    direct buffer [ZERO_COPY]
+netty_bytebuf_lifecycle:
+  allocator: PooledByteBufAllocator.DEFAULT.directBuffer(capacity)
+  initial_ref_count: 1
+  cleanup_on_success: ReferenceCountUtil.release() invoked by Netty channel pipeline
+    post-write
+  cleanup_on_error: Immediate directBuf.release() in catch block before Java fallback
+    execution
+threading_model:
+  execution_context: Synchronous on ServerThread during packet object instantiation
+  server_thread_duration: "MEASURED post-M1.4-R: 9.19 \xB5s total native (T_Stage\
+    \ 6.59 + T_JniWin 2.09) vs Java custom-encoder ref 7.25 \xB5s \u2014 native SLOWER,\
+    \ gate FAILED (machine/raw/M14R-apples-bench.log)"
+  reference_java_duration: "MEASURED: vanilla ctor+serialize ~72 \xB5s 0xFFFF (machine/raw/shadow_full.log);\
+    \ custom encoder 7.25 \xB5s"
+  net_saving_per_chunk: "HANDOFF-0 (double copy): NEGATIVE (-1.94 \xB5s vs custom encoder
+    ref) as of 2026-09-18 honest run; earlier 4.36 \xB5s claim INVALIDATED (synthetic
+    decomposition). HANDOFF-A (2026-09-19, M14R2-PERF-DERIVED): eligible-class (>=8192 B)
+    pooled p50 6.70 -> 4.70 \xB5s (-29.9%); p99 mixed; ineligible packets routed to Java."
+panic_containment:
+  policy: catch_unwind on all native extern "C" entry points. Rust must NEVER unwind
+    into JVM.
+  on_panic: Catch unwind, log diagnostic error with chunk coordinates, increment metric
+    native_panics, return -5, fall back to Java.
+fallback_design:
+  trigger: Any return code < 0, null direct buffer, or unexpected CoreMod hook
+  action: 'Release directBuf, execute standard Java path: new SPacketChunkData(chunk,
+    primaryBitMask)'
+  diagnostics: Emit WARN log with reason and increment fallback_counter
+shadow_mode_design:
+  active_when: minecraftrust.native_chunk_packet=SHADOW
+  execution:
+  - 1. Java constructs standard SPacketChunkData reference payload into ref_buf
+  - 2. Rust computes native payload into native_buf
+  - '3. JVM executes explicit loop: (ref_len == native_len) && (ref_bytes[i] == native_bytes[i])'
+  - '4. If mismatch: log full structured diagnostic dump with chunk coords, increment
+    shadow_mismatch_counter'
+  - 5. Discard native_buf, transmit ref_buf (Java remains 100% authoritative)

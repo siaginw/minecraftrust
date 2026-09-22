@@ -1,0 +1,18 @@
+java_reference_codec:
+  implementation: "net.minecraft.nbt.CompressedStreamTools (Java 8)"
+  sample_chunks: 847
+  total_uncompressed_mb: 40.55
+  parse_ms:
+    mean: 0.0392
+    p50: 0.0155
+    p95: 0.1614
+    p99: 0.2381
+    max: 0.3486
+  parse_throughput_mb_s: 1221.03
+  serialize_ms:
+    mean: 0.0295
+    p50: 0.0113
+    p95: 0.1128
+    p99: 0.1740
+    max: 0.2462
+  serialize_throughput_mb_s: 1625.13

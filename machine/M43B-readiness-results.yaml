@@ -1,0 +1,113 @@
+# M4.3B — NATIVE PACKET READINESS + INDEPENDENT LIVE VERIFICATION REPORT
+# OUTCOME: STOP-CONDITION FIRED — one unexplained semantic mismatch; campaign
+# halted per directive 13; all evidence preserved; NO rerun after fixes.
+schema_version: 1
+date: "2026-09-21"
+base_checkpoints: [a7e5937, 97ba77d]
+runs:
+  - {id: M43-20260921-205420, note: "readiness v1: not_synced=0 (workers+fast extractor), 135 native; samples NPE (nested ctor)"}
+  - {id: M43-20260921-210617, note: "dirty-refresh events: 251k refreshes, 180 native; nested-ctor NPE persisted"}
+  - {id: M43-20260921-211839, note: "quiescent-verifier v1: 218 native; pairing starved"}
+  - {id: M43-20260921-213123, note: "FINAL: 191 native; STOP — 1 unexplained comparator mismatch (below)"}
+builds:
+  final_run: {dll: 52d5ac424db188ed, coremod: be8f445f70ba3509}
+  post_stop_fix: {coremod: 0e83c90a30f6971c_plus_wiring_fix, note: "comparator-mismatch now ALSO halts native authority (stop-discipline gap found by this event); NOT live-run"}
+
+A_verifier_npe_root_cause: >
+  Sited by stack capture: the sampled Java REFERENCE construction (nested
+  SPacketChunkData on the packet thread) NPE'd at SPacketChunkData ctor line 33
+  (the payload-size/materialization region) — mid-POPULATION chunks carry
+  transient state (e.g. null light arrays during relight) that vanilla itself
+  never serializes: PlayerChunkMap only sends populated chunks, while our
+  native-eligible window can occur mid-generation. Off-thread (flush-thread)
+  construction ALSO fails on quiescent chunks (6 errors) — the constructor is
+  effectively thread-confined. Per the directive, off-thread construction was
+  NOT forced.
+B_verifier_architecture_final: >
+  Quiescence-based deferred reference: native samples record {chunk, version,
+  payload}; when the chunk QUIESCES (version unchanged + zero pending work +
+  synced), the Java reference is built and both payloads verified by independent
+  decode. Live-result: 13 sampled -> 7 stale-skips (temporal guard held:
+  population/light churn kept bumping versions) + 6 thread-confined reference
+  errors + 0 completed. The mechanism is architecturally complete (offline
+  13/13 including a full sample round-trip) but WORKLOAD-STARVED live: this
+  bot workload never lets a sampled chunk quiesce long enough for an
+  independent reference at equal version.
+C_lifecycle_timeline: >
+  Instrumented: onLoad (fires at chunk-add; 2,983-2,987/run) -> requestSync
+  (event-driven, queue) -> sync done. M4.3's misses were NOT event-lateness:
+  they were sync THROUGHPUT (2s cadence x 64/cycle cap). M4.3B workers: 2,985+
+  enqueued == done, 0 dropped, total sync time 1.38s/2,985 chunks = 0.46ms/chunk
+  (fast extractor), queue delay ~0.47ms/chunk. Remaining misses: post-load
+  churn (population + skylight regen fires 10k+/run) keeps chunks dirty at
+  first-send — 1,352-1,437 pending-work fallbacks/run.
+D_earliest_safe_sync_point: >
+  onLoad retained (chunk exists with storages; population continues after and
+  is dirty-tracked). Earlier candidates (post-populate, generateSkylightMap
+  return) are already hooked or tracked; the measured bottleneck was throughput
+  and post-load churn, not event timing.
+E_event_driven_sync: >
+  Implemented: onLoad -> bounded queue (2048) -> 2 dedicated daemon workers ->
+  fullSync marks READY; mutations on synced chunks schedule throttled dirty
+  refreshes (251k served, per-chunk in-flight gate, no queue flooding). No busy
+  polling; periodic flush retained for maintenance only.
+F_rust_generated_retention: >
+  Analysis: registration already retains Rust-authored base terrain;
+  population mutations are dirty-tracked and refresh ONLY dirtied sections +
+  conservative light. With the fast extractor a full resync costs ~0.5ms/chunk,
+  so selective retention buys little now; it remains a documented optimization
+  (the dirty-mask evidence: most sections post-population carry block-dirty=0,
+  light-dirty only).
+G_component_readiness: >
+  Blocks/light/biomes tracked separately (biome pushes are section-free; light
+  rides section refreshes). Native eligibility requires ALL components settled —
+  kept STRICT: light-only pending still falls back (a light-regen window packet
+  would serialize mid-regen light; vanilla avoids that window entirely).
+H_offline_regression: >
+  All green on the final build: authoritative 13/13 (incl. the independent
+  sample round-trip), lifecycle 19/19, deferred 7/7, parity 8/8 + controls,
+  boundary 16/16, Rust 10/10. The fast extractor is exercised by every
+  refresh-dependent case (equality vs the real Java serializer in all of them).
+I_total_live_packets: 1,602 (final run)
+J_native_authoritative: 191 (final; 135/180/218/191 across the readiness arc)
+K_hit_rate: >
+  Final run: 191/1,602 = 11.9% overall (M4.3 baseline 7.6%). not_synced=0
+  across all M4.3B runs (was 1,422). First-send hits remain bounded by
+  CORRECTNESS: active population/skylight churn keeps chunks dirty and the
+  strict eligibility falls back — per directive 8 this is the intended
+  behavior, and the workload (continuous fresh generation) maximizes exactly
+  the window where fallback is correct.
+L_fallback_breakdown: "1,381 pending-work + 29 partial-filter + 0 not-synced/registered/encode/error"
+M_independent_verifier_counts: "attempted 0 completed / 7 stale-skips / 6 thread-confined errors (sampled 13); deferred comparator this run: 3 compared, 2 gate-A (tautological, not claimed), 0 deferred-completed, 1 MISMATCH (below)"
+N_semantic_mismatch: >
+  ONE UNEXPLAINED MISMATCH — the stop event. Full preserved dump:
+  "dim=0 cx=-19 cz=4 mask=31 -> section 1 cell 4 gid 17 vs 16 |
+   filter=65535 javaMask=31 skylight=true genId=231 mutGen=185 snapGen=185
+   dirtyMask=0 refreshBefore=1 TE=false javaLen=31072" (granite vs stone in a
+   single cell; Java payload carries 17, native encode 16). Versions consistent;
+   comparator self-disabled. Root cause NOT established — candidates: (a)
+  fast-extractor palette-decode asymmetry vs the Java serializer under some
+  palette mode; (b) a refresh/extract race between the packet-thread comparator
+  refresh (refreshBefore=1) and the event-driven sync worker's dirty refresh of
+  the same chunk; (c) a same-tick ordering effect between the Java packet body
+  and the return-hook refresh. Offline suites do NOT reproduce it (every
+  extractor path is equality-tested against the real serializer). Process gap
+  found and fixed: the shadow-comparator mismatch did not halt native authority
+  (wiring now does — commit post-run, not live-validated). Per directive 13:
+  campaign stopped, evidence preserved, NO rerun after fixes.
+O_benchmark: "same corpus, same build: Java ctor mean 7.18us (p50 6.20, p95 12.80, p99 14.60) vs native-state encode mean 1.02us (p50 1.00, p95 1.10, p99 1.20); 29.7 MB/s encode"
+P_sync_cost: "0.46ms/chunk full sync (fast extractor; ~25x faster than per-cell reflection), queue delay ~0.47ms/chunk, 0 drops; dirty refreshes event-driven (247k served)"
+Q_refreshed: "251k full+dirty sync events/run; bytes tracked via registry stats (alloc/release exact)"
+R_memory_cleanup: "post-cleanup proven live again in this run-set: chunks removed -> 0 chunks/sections/bytes retained (m1-metrics-postcleanup.txt in run dirs)"
+S_classification: >
+  NOT M1_NATIVE_PACKET_READY_TARGETA — the independent-verification requirement
+  is unmet (0 completed samples; workload-starved) AND one unexplained semantic
+  mismatch stands. M4.3's M1_NATIVE_PACKET_AUTHORITATIVE_TARGETA remains the
+  last clean classification, now with an OPEN mismatch investigation attached.
+T_next_gate: >
+  (1) Root-cause the (−19,4) single-cell mismatch: instrument the fast
+  extractor with a per-cell dual-path (fast vs per-cell) verify at low rate to
+  catch asymmetry in vivo; serialize packet-thread vs worker refreshes of the
+  same chunk (per-chunk lock) to exclude (b). (2) A quiescence-friendly
+  verification workload (settle-hold bot segment) for non-zero independent
+  samples. (3) Only then the combined M1+M2-C gate.

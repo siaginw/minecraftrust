@@ -1,0 +1,25 @@
+# Fixture: verbatim structure of machine/evidence-provenance.yaml as
+# committed 2026-09-18 (YAML-INVALID; passed the old regex-based checker).
+version: 1
+entries:
+  - id: "M14R-HARNESS-1000"
+    class: MEASURED
+    claim: "1000/1000 native packets"
+    git_commit: "7476105"
+    raw_artifact: "machine/raw/M14R-harness-1000.json"
+    timestamp: "2026-09-18T19:31:51Z"
+    sample_count: 1000
+invalidated:
+  - id: "M13-PARITY-100K"
+    reason: "shared semantics"
+    artifact: "machine/M1.3-shadow-results.yaml"
+  - id: "TARGETA-REAL-SERVER-VALIDATION"
+    class: MEASURED
+    claim: "swallowed valid entry"
+    git_commit: "ee1b646"
+    raw_artifact: "machine/targetA/run-r2-off-validate.log"
+    timestamp: "2026-09-18"
+    sample_count: 30
+  M14R2-HANDOFF-A-FULLCORPUS:
+    artifact: "machine/raw/M14R2-fullcorpus-deep.csv"
+    git_commit: "pending"

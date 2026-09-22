@@ -1,0 +1,46 @@
+# M5.6 — REVELATION FAST GATE-B REPORT
+schema_version: 1
+date: "2026-09-22"
+run: m56rev-shadow (reconnect rig 8 sessions; Java transmits)
+builds: {dll: db2a0ad1b13d3843, coremod: block-state-domain build}
+A_fluid_root_cause: >
+  flowing_water(145)->water(129) settle is the vanilla fluid tick path
+  (BlockDynamicLiquid.updateTick -> World.setBlockState -> Chunk.setBlockState,
+  HOOKED — version bumps on it). The M5.5 event is therefore the
+  capture-window race: the packet payload was built pre-settle and the
+  comparator's refresh ran post-settle while the version pin/re-read pair
+  straddled the write — not an unobservable-write class. Safety boundary per
+  directive: packet-time before/after logical-state validation retained.
+B_block_freshness: >
+  BLOCK-STATE domain added to the comparator: logical-state fingerprints
+  (fastExtract over the packet's mask sections) captured BEFORE refresh/encode
+  and AFTER encode; a move => BLOCK_STATE_STALE_SKIP; stable-but-different =>
+  REAL mismatch (stop). Logical states used (transformed path via container
+  getState), not raw backing arrays.
+C_fixtures: deferred (budget)
+D_rig: "8 reconnect sessions into the same settled area (SESSIONS=8, 45s holds)"
+E_duration: "~600s"
+F_sends: "19,633 chunks registered; 1.1M sections validated; packets_seen still 1 — the comparator hook fires per SPacketChunkData CONSTRUCTION and vanilla reuses PlayerChunkMap entries across relogs without reconstructing full packets; the rig generated 50k+ compression shadows but only 1 constructor call for a previously-unknown chunk"
+G_gate_b: "attempted 1, completed 1 — HARD RIG CEILING DOCUMENTED: packet construction happens once per chunk-entry; reconnects alone do not force re-construction"
+H_skips: "light locked-completes 3; block-stale 0; light-stale 0; partial-filter 0"
+I_mismatch: >
+  ONE REAL mismatch preserved: cx=-12 cz=-6 mask differs java=31 native=15
+  (native dropped sections 4 — empty-per-blockRefCount semantics diverged from
+  javaMask), versions equal, refreshBefore=1. STOP honored. This is the first
+  mask-coverage divergence ever observed and is NOT the fluid class — new
+  finding: section-emptiness semantics (Java kept the section; native
+  all-air-release dropped it) — the M4.2D all-air release rule vs vanilla
+  keeping empty-but-present storages in the mask. Root-cause candidate known;
+  fix = native mask must track Java storage presence, not emptiness.
+J_m2c: "50,392/50,392 SHADOW compressions matched, 0 errors"
+K_client: "8 logins, 140 teleports; 1 'connection forcibly closed by remote host' (bot-side TCP teardown mid-rig, not decode; 0 decode/decompress/malformed errors)"
+L_cleanup: "594 chunks removed -> 0 bytes"
+M_classification: FURTHER_INVESTIGATION
+  reason: "Gate-B completed=1 (rig ceiling documented) AND one real mask-coverage mismatch (new, distinct from fluid class) — stop honored"
+N_next: >
+  (1) Fix native mask semantics: emit sections per JAVA storage presence
+  (empty-but-present storages included, matching func_189555_a) — offline
+  regression for presence-vs-emptiness. (2) Rig: force true re-construction
+  (view-distance change triggers PlayerChunkMap entry rebuild). (3) Short
+  re-run. The block-state/light/biome domains all held — zero stale skips
+  leaked and zero validator exceptions.

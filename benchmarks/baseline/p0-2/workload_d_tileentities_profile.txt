@@ -1,0 +1,104 @@
+---- Minecraft Profiler Results ----
+// I'm working as hard as I can!
+
+Time span: 20000 ms
+Tick span: 400 ticks
+// This is approximately 20.00 ticks per second. It should be 20 ticks per second
+
+--- BEGIN PROFILE DUMP ---
+
+[00] levels - 96.79%/96.79%
+[01] |   world - 95.11%/92.06%
+[02] |   |   tick - 96.99%/89.28%
+[03] |   |   |   entities - 88.37%/78.90%
+[04] |   |   |   |   regular - 78.41%/61.87%
+[05] |   |   |   |   |   tick - 97.21%/60.14%
+[06] |   |   |   |   |   |   unspecified - 30.68%/18.45%
+[06] |   |   |   |   |   |   ai - 28.81%/17.33%
+[07] |   |   |   |   |   |   |   newAi - 99.44%/17.23%
+[08] |   |   |   |   |   |   |   |   navigation - 45.21%/7.79%
+[08] |   |   |   |   |   |   |   |   goalSelector - 43.23%/7.45%
+[09] |   |   |   |   |   |   |   |   |   goalSetup - 97.51%/7.26%
+[10] |   |   |   |   |   |   |   |   |   |   pathfind - 81.49%/5.92%
+[10] |   |   |   |   |   |   |   |   |   |   unspecified - 18.51%/1.34%
+[09] |   |   |   |   |   |   |   |   |   unspecified - 1.48%/0.11%
+[09] |   |   |   |   |   |   |   |   |   goalTick - 1.01%/0.08%
+[08] |   |   |   |   |   |   |   |   controls - 5.91%/1.02%
+[09] |   |   |   |   |   |   |   |   |   move - 46.30%/0.47%
+[09] |   |   |   |   |   |   |   |   |   look - 27.99%/0.29%
+[09] |   |   |   |   |   |   |   |   |   unspecified - 19.55%/0.20%
+[09] |   |   |   |   |   |   |   |   |   jump - 6.16%/0.06%
+[08] |   |   |   |   |   |   |   |   unspecified - 2.80%/0.48%
+[08] |   |   |   |   |   |   |   |   targetSelector - 2.09%/0.36%
+[09] |   |   |   |   |   |   |   |   |   goalSetup - 65.77%/0.24%
+[09] |   |   |   |   |   |   |   |   |   unspecified - 34.23%/0.12%
+[08] |   |   |   |   |   |   |   |   sensing - 0.41%/0.07%
+[08] |   |   |   |   |   |   |   |   checkDespawn - 0.24%/0.04%
+[08] |   |   |   |   |   |   |   |   mob tick - 0.11%/0.02%
+[07] |   |   |   |   |   |   |   unspecified - 0.56%/0.10%
+[06] |   |   |   |   |   |   move - 16.61%/9.99%
+[06] |   |   |   |   |   |   rest - 7.86%/4.73%
+[07] |   |   |   |   |   |   |   unspecified - 93.27%/4.41%
+[07] |   |   |   |   |   |   |   chunkCheck - 6.73%/0.32%
+[06] |   |   |   |   |   |   entityBaseTick - 6.45%/3.88%
+[07] |   |   |   |   |   |   |   unspecified - 94.94%/3.68%
+[07] |   |   |   |   |   |   |   portal - 5.06%/0.20%
+[06] |   |   |   |   |   |   travel - 4.81%/2.89%
+[07] |   |   |   |   |   |   |   unspecified - 45.75%/1.32%
+[07] |   |   |   |   |   |   |   rest - 29.48%/0.85%
+[08] |   |   |   |   |   |   |   |   unspecified - 88.68%/0.76%
+[08] |   |   |   |   |   |   |   |   chunkCheck - 11.32%/0.10%
+[07] |   |   |   |   |   |   |   move - 24.78%/0.72%
+[06] |   |   |   |   |   |   livingEntityBaseTick - 2.70%/1.62%
+[06] |   |   |   |   |   |   push - 0.73%/0.44%
+[06] |   |   |   |   |   |   chunkCheck - 0.47%/0.28%
+[06] |   |   |   |   |   |   headTurn - 0.41%/0.25%
+[06] |   |   |   |   |   |   mobBaseTick - 0.16%/0.10%
+[06] |   |   |   |   |   |   looting - 0.11%/0.06%
+[06] |   |   |   |   |   |   rangeChecks - 0.09%/0.06%
+[06] |   |   |   |   |   |   portal - 0.08%/0.05%
+[06] |   |   |   |   |   |   jump - 0.03%/0.02%
+[05] |   |   |   |   |   unspecified - 2.49%/1.54%
+[05] |   |   |   |   |   remove - 0.30%/0.19%
+[04] |   |   |   |   blockEntities - 20.84%/16.44%
+[05] |   |   |   |   |   unspecified - 59.05%/9.71%
+[05] |   |   |   |   |   minecraft:hopper - 34.42%/5.66%
+[05] |   |   |   |   |   minecraft:chest - 5.28%/0.87%
+[05] |   |   |   |   |   minecraft:mob_spawner - 1.25%/0.21%
+[04] |   |   |   |   unspecified - 0.37%/0.29%
+[04] |   |   |   |   remove - 0.30%/0.23%
+[04] |   |   |   |   players - 0.04%/0.03%
+[04] |   |   |   |   pendingBlockEntities - 0.03%/0.02%
+[04] |   |   |   |   global - 0.02%/0.02%
+[03] |   |   |   tickBlocks - 5.37%/4.80%
+[04] |   |   |   |   pollingChunks - 85.34%/4.09%
+[05] |   |   |   |   |   forcedChunkLoading - 74.73%/3.06%
+[05] |   |   |   |   |   unspecified - 19.00%/0.78%
+[05] |   |   |   |   |   regularChunkLoading - 6.27%/0.26%
+[04] |   |   |   |   unspecified - 12.72%/0.61%
+[04] |   |   |   |   playerCheckLight - 1.94%/0.09%
+[03] |   |   |   unspecified - 2.83%/2.53%
+[03] |   |   |   chunkSource - 1.29%/1.16%
+[03] |   |   |   village - 0.64%/0.57%
+[03] |   |   |   tickPending - 0.54%/0.48%
+[04] |   |   |   |   unspecified - 79.49%/0.38%
+[04] |   |   |   |   ticking - 14.54%/0.07%
+[04] |   |   |   |   cleaning - 5.97%/0.03%
+[03] |   |   |   chunkMap - 0.47%/0.42%
+[03] |   |   |   mobSpawner - 0.30%/0.27%
+[03] |   |   |   portalForcer - 0.18%/0.16%
+[02] |   |   tracker - 2.61%/2.40%
+[02] |   |   unspecified - 0.33%/0.30%
+[02] |   |   timeSync - 0.08%/0.07%
+[01] |   unspecified - 4.89%/4.73%
+[00] unspecified - 1.08%/1.08%
+[00] snooper - 0.70%/0.70%
+[00] dim_unloading - 0.46%/0.46%
+[00] commandFunctions - 0.40%/0.40%
+[00] connection - 0.24%/0.24%
+[00] jobs - 0.16%/0.16%
+[00] players - 0.08%/0.08%
+[00] tickables - 0.05%/0.05%
+[00] tallying - 0.04%/0.04%
+--- END PROFILE DUMP ---
+

@@ -1,0 +1,7 @@
+=== M1.3 Decomposed Timing Breakdown (AMD Ryzen 7 7800X3D, Java 8 HotSpot, Rust Release) ===
+Scenario                       | Java Ref   | T_Stage    | T_Jni      | T_Rust     | T_Handoff  | T_NativeTotal | Delta %   
+0 Sections (Empty Chunk)       |    2.09 us |    0.14 us |    0.05 us |    0.03 us |    0.06 us |      0.27 us |   86.9%
+1 Section (Minimal)            |    3.01 us |    0.46 us |    0.05 us |    0.11 us |    0.05 us |      0.67 us |   77.9%
+4 Sections (Surface Chunk)     |    7.36 us |    1.50 us |    0.05 us |    0.47 us |    0.05 us |      2.07 us |   71.9%
+8 Sections (Subsurface Chunk)  |    7.01 us |    2.92 us |    0.05 us |    0.94 us |    0.05 us |      3.96 us |   43.4%
+16 Sections (Full Column)      |   18.19 us |    6.10 us |    0.05 us |    1.95 us |    0.05 us |      8.15 us |   55.2%

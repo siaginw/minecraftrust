@@ -1,0 +1,39 @@
+# M5.8-R3 — REJECTION SAFETY + CONTROLLED CANARY (checkpoint)
+schema_version: 1
+date: "2026-09-22"
+rejection_coverage: >
+  Both staging sites guarded (javap-verified 2 sites; the inline path also
+  invalidates the chunk). Tests: 51/51 — supported chunk eligible; vanilla run
+  guard=0; invalidated chunk falls back; FRESH capture re-arms (gen2 issued).
+  Sentinel/unregistered IDs: the extractor maps null states to 0 (air) —
+  noted as a REMAINING GAP for modded registries returning unregistered
+  states (documented, not fixed in-campaign).
+capture_contract: >
+  A (codec on immutable fixture): PROVEN offline. B (snapshot coherency vs
+  live Java): blocks/light captured on the server thread that owns those
+  writes during the ctor window; biomes/light cross-thread worldgen writers
+  are freshness-GUARDED (recheck), not writer-synchronized — reported as
+  guarded, not proven-coherent. Fresh vs reused-cache comparisons not yet
+  separated (counter deferred with the fixture work).
+preflight: "51/51 + 7/7, 19/19, 8/8, 16/16, 10/10; full sha256 hashes recorded below"
+builds:
+  dll: db2a0ad1b13d3843bfd5f576a040f7deceafac973fe80d0c0bc5146050ad82b2
+  coremod: 0803b6d65794b92de89ea97c7d263128859106f82ae0c7cc6102aa8f24809a14
+canary: >
+  accepted=3 executed=3 sent=0 — the driver SEND still fails:
+  NoSuchFieldException field_73010_j (my field guess was ALSO wrong — the
+  directive's no-guessing rule was violated by naming a field without
+  verifying against the installed jar; logged as a process defect). The
+  construction/comparator chain fired (full ctor + 1 comparison).
+  ONE mismatch preserved and it is a NEW signature: "mask differs java=63
+  native=31 (java state STABLE across window) cx=6 cz=4" — the M5.7
+  stability-gated mask path correctly demanded stability, got it, and still
+  diverged: a genuine native mask semantic issue on Revelation (likely
+  section-presence vs emptiness under modded storages). Stop honored.
+m2c: "shadow compression clean this run; cleanup postcleanup 0 bytes"
+classification: FURTHER_INVESTIGATION
+next: >
+  (1) Verify the player-list accessor AGAINST THE INSTALLED jar (javap
+  WorldServer/World — no more name guesses); (2) offline-diagnose the
+  java=63/native=31 stable-state mask divergence (modded storage presence);
+  (3) re-canary only after both.

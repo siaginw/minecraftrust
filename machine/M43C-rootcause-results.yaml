@@ -1,0 +1,65 @@
+# M4.3C — STATE DIVERGENCE ROOT-CAUSE REPORT
+# Defaults OFF; no authority; no M2-C; scope unchanged.
+schema_version: 1
+date: "2026-09-21"
+runs:
+  - {id: M43-20260921-215512, note: "diagnostic v1: dual-verify caught a divergence in vivo (coal_ore dump); comparator mismatch biome[64]"}
+  - {id: M43-20260921-220828, note: "diagnostic v2 (serialization + re-read): divergence re-fired but dump self-consistent for fast path; comparator mismatch biome[0]"}
+builds:
+  diagnostic_runs: {coremod: eca08f569f990d56 then 5e1c56e0c51f204c, dll: bfcd9c0861843624}
+  final_fix_build: {coremod: 5d62a6c8e64cd682, dll: bfcd9c0861843624, note: "quiescence version guard + guard re-arm; NOT live-run (no-rerun discipline)"}
+
+A_first_failing_edge: >
+  NEITHER of the two pre-registered edges in isolation. The dual-path verify
+  proved JAVA_LOGICAL == SLOW at dump time and FAST == the words it actually
+  read: the divergence enters BETWEEN two reads when the server thread mutates
+  the section WHILE the worker extracts. Edge classification:
+  FAST-vs-JAVA under CONCURRENT MUTATION (torn-read window), not an extractor
+  math bug and not a transfer/decode bug.
+B_exact_dumps: >
+  Two preserved (m43c-extractor-divergence.txt + [M43C-FAST-DIVERGENCE] lines +
+  comparator last_dump lines): (1) coal_ore dump — javaState=coal_ore,
+  slowGid=256, fastGid=16, paletteMap[5]=256/[2]=16, section mutated again
+  during the dump; (2) diorite dump — javaGid=19(slow, stable across re-read),
+  fastGid=16, dump-time words show entry=1->16: INTERNALLY SELF-CONSISTENT for
+  the fast read — the cell changed 3+ times during verification.
+C_slow_vs_fast: >
+  Offline parity 29/29 (widths 1..512 covering 4/5/6/7/8/13-bit palettes,
+  churn+resize, stale-palette replacement, sparse; direct container writes).
+  Live: 483 dual-verify runs, 6 mutation-in-flight (re-read-unstable, benign),
+  2 stable-looking divergences BOTH explained by concurrent mutation (B).
+D_refresh_concurrency: >
+  Per-chunk refresh serialization implemented (per-key token, NOT global).
+  Serialization alone did NOT remove the mismatch (biome[64]/biome[0] recurred)
+  — because the race is worker-vs-SERVER-thread on the DATA, not
+  worker-vs-worker on the refresh.
+E_hook_ordering: >
+  RETURN-injected hooks fire AFTER data writes (verified against bytecode).
+  Two UNOBSERVABLE WRITE paths found (no hook can see them):
+  (1) surface pass writes biome bytes directly into the array
+  (getBiomeArray()[i]=...; setBiomeArray never called);
+  (2) any worker extraction spanning a server-thread population write reads
+  mid-mutation state. Generation counters alone cannot close these — the
+  packet-side freshness checks below do.
+F_fixes: >
+  (1) Quiescence version guard: FULLY_SYNCED now stores the Java mutation
+  version at last refresh; native eligibility requires versionOf == stored
+  (any post-refresh mutation => Java fallback + immediate dirty-refresh
+  request; guard re-arms on every refresh pass). This closes the torn-state
+  TRANSMIT window completely.
+  (2) Biome freshness check on the packet thread: FFI 319 getBiomes + 256-byte
+  compare + re-push if stale + fallback if unprovable (closes direct biome
+  writes). (3) Dual-verify re-read stability separates mutation noise.
+  (4) Comparator mismatch now halts native authority (from M4.3B).
+G_offline_parity: "29/29 extractor parity + full battery green (13/13 authoritative incl. TE, 7/7 deferred, 19/19 lifecycle, 8/8 parity, 16/16 boundary, 10/10 Rust)"
+H_live_parity: "483 dual-verify runs; 0 confirmed extractor-math divergences (2 events, both proven mutation-window); 6 benign mutation-in-flight"
+I_independent_packet_verifications: "0 completed (unchanged from M4.3B — quiescence-friendly workload still pending)"
+J_remaining_exclusions: "partial-filter, TE-tag scope, JEID, NEID high-bit; plus: quiescence guard and biome freshness check are OFFLINE-verified only — not yet live-validated (no-rerun discipline after in-campaign fixes)"
+K_recommendation: >
+  FURTHER INVESTIGATION, then one final SHADOW confirmation — do NOT unblock
+  native packet authority yet. Specifically: (1) one bounded live run on
+  5d62a6c8e64cd682 to validate the quiescence guard + biome check end-to-end
+  (expect: 0 comparator mismatches; hit rate may DROP — that is the guard
+  working); (2) then the quiescence-friendly verification workload for
+  non-zero independent samples; (3) only after both, revisit M4.3B's
+  M1_NATIVE_PACKET_READY_TARGETA classification and the combined M1+M2-C gate.

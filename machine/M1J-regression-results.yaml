@@ -1,0 +1,81 @@
+# M1J Revelation streaming regression investigation (operator authorization).
+# 10 fresh-JVM runs on the SAME Revelation world/config/build (jar b497c4c3,
+# dll 02c722de), strict OFF,ON alternation x5 each, identical TP-hop corridor
+# streaming workload (150s, mid-snapshot at 75s) and identical instrumentation.
+# class: MEASURED. Provenance: M1J-REVELATION-REGRESSION.
+schema_version: 1
+milestone: M1J
+date: "2026-09-20"
+runs: "j-c01..j-c10, odd=OFF even=ON, 00:17-01:33 local, zero failures"
+environment_note: >
+  A time-drift confound is present and handled by the alternating order:
+  runs 7-10 (both arms equally) ran ~2x the allocation rate and p50 of runs
+  1-6 (ambient machine load drift). Alternation keeps the arm comparison
+  balanced; drift inflates within-arm ranges only.
+arm_summary_walk_phase: # median [min..max], ON-better pairs of 25 = Mann-Whitney style
+  p50_ms:          {OFF: "7.7 [6.5..10.0]",  ON: "8.2 [5.9..10.2]",  on_better_pairs: "11/25"}
+  p95_ms:          {OFF: "24.0 [13.8..81.4]", ON: "25.5 [11.8..77.8]", on_better_pairs: "14/25"}
+  p99_ms:          {OFF: "89.5 [69.0..100.3]", ON: "94.5 [67.5..100.2]", on_better_pairs: "16/25"}
+  mean_ms:         {OFF: "9.4 [8.5..17.3]",   ON: "10.7 [7.5..15.3]",  on_better_pairs: "13/25"}
+  over50_count:    {OFF: "40 [35..162]",      ON: "58 [33..141]",      on_better_pairs: "15/25"}
+  young_gc:        {OFF: "11 [10..17]",       ON: "11 [9..24]",        on_better_pairs: "9/25"}
+  alloc_MBps:      {OFF: "106 [98..174]",     ON: "109 [84..234]",     on_better_pairs: "10/25"}
+  gc_pause_ms:     {OFF: "171 [130..374]",    ON: "189 [171..423]",    on_better_pairs: "7/25"}
+  bot_packets:     {OFF: "9076 [8650..9138]", ON: "8843 [7995..9170]", on_better_pairs: "12/25"}
+  bot_MB_streamed: {OFF: "305 [293..332]",    ON: "289 [226..323]",    on_better_pairs: "18/25"}
+  mspt_per_MB:     {OFF: "4.4 [4.3..8.6]",    ON: "5.7 [3.5..10.2]",   on_better_pairs: "11/25"}
+m1_decomposition_on_arm: # per-packet means across the 5 ON runs (cumulative counters / packets)
+  stage_ns: "9.6-11.4 us (dominant native cost; higher than offline corpus ~2.6us because real Revelation sections carry 4-6 bit palettes + lights + biomes)"
+  jni_encode_ns: "2.2-5.4 us"
+  pregate_ns: "~0.5 us"
+  total_native_ns: "13.3-17.1 us/packet"
+  share_of_tick: "59 pkt/s (measured) x 13.3-17.1us = 39-50us/tick = ~0.4-0.5% of the measured 8.5-10.7ms mean tick - consistent with whole-server delta being unresolvable"
+  java_routed: "0-249 packets/run (pregate 0-166): tiny; hook+selection cost on Java-routed packets not separable from noise"
+cause_verdicts:
+  A_selection_staging_overhead: "MEASURED - staging is ~10-11us/packet on real data (not overhead vs Java: it REPLACES Java encoding; offline equal-scope showed native net-cheaper per packet); whole-server effect ~0.6% of tick"
+  B_exact_size_alloc_pressure: "REFUTED - alloc MB/s arm medians 106 vs 109, pairwise 10/25 (coin flip)"
+  C_critical_section_safepoint: "REFUTED - GCLocker-initiated young GCs occur at IDENTICAL rates in both arms (OFF 9, ON 8 across 5 runs each; Netty's own compression critical regions produce them in vanilla too); safepoint stop counts/times similar"
+  D_hook_overhead_java_routed: "NOT ISOLATED, bounded tiny - hook runs in BOTH arms (transformer identical); Java-routed <=249/run in ON; no arm-attributable signal"
+  E_workload_mismatch: "REFUTED as cause of ON-slower - ON streamed slightly LESS (289 vs 305 MB median), which would bias ON favorable"
+  F_jit_warmup: "NO ON-SPECIFIC SIGNATURE - walk1/walk2 split shows no arm-asymmetric warmup; per-packet counter costs stable across all 5 ON runs; login burst warms both arms before streaming"
+statistical_classification: NO_REGRESSION_RESOLVED
+classification_rationale: >
+  The M1I signal (walk p50 non-overlap at n=2/arm: OFF 5.1-5.4 vs ON 6.2-8.0)
+  DISAPPEARS at n=5/arm: ranges fully overlap on every metric (p50 OFF
+  6.5-10.0 vs ON 5.9-10.2) and all pairwise fractions are 7-18 of 25
+  (none approaching the 0/25 or 25/25 a real arm difference would produce
+  at this n; and the pairs are overlap-descriptive, not independent
+  experiments). The earlier non-overlap was small-sample variance.
+  No metric shows a significant ON penalty; the median p50 gap (+0.5ms,
+  6%) is inside the pairwise noise band and the raw medians sit in a
+  drifting environment where within-arm range (6.5-10.0) exceeds the
+  arm gap by 7x.
+final_recommendation: KEEP_EXPERIMENTAL_OFF
+recommendation_detail: >
+  No default-ON: whole-server benefit remains unresolvable (M1I) and M1J
+  establishes NO CLEAR REGRESSION OR IMPROVEMENT in the tested workload.
+  No redesign/reject: the packet-path win is real offline (~30% p50
+  eligible-class), correctness record is 104k+/0 divergence, and the
+  measured cost ceiling is ~0.4-0.5% of the mean tick (arithmetic below).
+  M1 stays a validated, dormant accelerator awaiting a workload where
+  chunk-packet volume makes it matter (or M2 candidate re-ranking).
+statistical_caveats:
+  independence: >
+    The 25 cross-arm pairwise counts are DESCRIPTIVE of range overlap only.
+    They share runs (each of the 10 runs contributes to 5 pairs) and are NOT
+    25 independent experiments; no significance test is claimed from them.
+    The classification rests on full range overlap at n=5/arm plus the
+    disappearance of the n=2 non-overlap, not on pairwise fractions.
+  tick_share_arithmetic: >
+    ~0.4-0.5% of mean tick = 59 packets/s (measured: 8,843 walk-session
+    packets / 150s) x 13.3-17.1 us/packet (measured counter means) / 20
+    ticks/s = 39-50 us per tick, against a measured 8.5-10.7 ms mean
+    streaming tick. Packet frequency is included; the earlier "~0.6%"
+    phrasing in coverage §15 overstated it slightly and is corrected there.
+  time_drift_limitation: >
+    Runs 7-10 (both arms equally) ran ~2x the allocation/p50 of runs 1-6
+    (ambient machine load drift). Alternation balances the arms against
+    drift but does not remove it: all conclusions are limited to the tested
+    workload, machine, and session. det5 remains an unresolved offline
+    finding (allocation-phase tail; M1G); it did not appear distinguishable
+    in these whole-server traces.

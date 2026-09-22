@@ -1,0 +1,73 @@
+# M4.2D — Complete snapshot validity + one bounded live run.
+# class: MEASURED. Provenance: M42D-SNAPSHOT-VALIDITY.
+# Defaults OFF; Java authoritative and transmitting; no native transmission;
+# no modpack/performance campaign; no scope expansion; no ON authorization.
+schema_version: 1
+date: "2026-09-21"
+base_checkpoints: [210efcc, d85fc39, afcd593]
+builds:
+  offline_all_suites: {dll: 52d5ac424db188ed, coremod: e63bbfda1b08dfa7}
+  live_run: {dll: 52d5ac424db188ed, coremod: e63bbfda1b08dfa7}
+  post_run_polish: {coremod: a354a2ec224b529c, note: "skylight-hook counter dump + shadowTerrain stack capture — NOT live-run (no retry per discipline)"}
+
+validity_contract:
+  components: "blocks+light tracked per section; biomes tracked separately (pushable via setBiomes FFI 316, no section work); fullFlag only for identity changes (setStorageArrays)"
+  initial_sync: "explicit first-touch full synchronization (all 16 sections + biomes with validation); weak-keyed so reloaded chunks re-sync; packet path NEVER blocks on extraction — unsynced chunks are requested + skipped, never compared"
+  later_updates:
+    light: "setLightFor hook (per-section bit); generateSkylightMap hook (all sections — skylight regen writes nibbles directly); BLOCK SETS NOW CONSERVATIVELY LIGHT-DIRTY ALL SECTIONS: setBlockState's relightBlock/propagateSkylightOcclusion write light nibbles DIRECTLY (unobservable) — caught offline by the empty->nonempty cycle case (stale section-4 skyLight below a y=200 placement) before any live exposure"
+    biomes: "setBiomeArray -> biome flag -> setBiomes push (no invalidation)"
+    unobservable_paths: "conservative refresh (never silent): DIM_UNKNOWN -> invalidate; skylight regen -> all-light-dirty"
+  registration_time_consumers: "relabeled STRUCTURAL (m4_packet_structural etc.) — they read default light by definition (no Chunk exists at primer stage); packet validity claimed only post-sync by the coherency path"
+
+validator_hardening:
+  parser: "mask-driven with explicit boundaries (parseByMask): exactly popCount(mask) sections ascending, self-bounded, then exactly 256 biome bytes; ANY violation (truncation/leftover/overrun) -> null; absence decided BY THE MASK"
+  boundary_tests: "16/16 (M4ValidatorBoundary): happy path, empty mask biomes-only, empty mask rejects no-biomes, mask omitting present section fails, mask with extra section fails, truncate-after-first fails, truncated-no-biomes fails/passes-without-biomes, truncated-mid-light fails, biome-tail 255/257 fail, null-parse compare errors"
+  consumers_switched: "M4Coherency.decodeEquals + M4PacketCompare now mask-driven; masks compared FIRST (coverage); parse failure = mismatch, never success"
+
+offline_required_cases: # M4LifecycleCases 19/19, actual entrypoints (tracker hook methods = what ASM injects; refreshChunkNow gate; real Chunk mutations; real SPacketChunkData oracle)
+  - "initial sync, no dirty sections, non-default lights/biomes -> equal (also in parity harness no-dirty first-touch case)"
+  - "first packet read + TWO later light-only changes on the SAME chunk -> equal after each (1 section refreshed each)"
+  - "biome-only change via real setBiomeArray + hook -> equal after push, 0 section refreshes"
+  - "empty -> nonempty -> empty section cycle on one chunk -> equal both directions (caught the relightBlock unobservable path before this passed)"
+  - "mutation after refresh before accept: stale DETECTED (negative control), then equal after the refresh gate"
+  - "skylight regen (direct nibble rewrite + hook) -> equal after refresh"
+  - "unload/reload coordinate reuse: gen2 != gen1, findGeneration returns current, encode(gen1) rejected (-2)"
+  - "in-JVM cleanup: shutdownCleanup removes entries, retained 0 chunks/0 bytes, releases == allocations (112/112), repeat safe, stale handles rejected after clear"
+  parity_harness: "8/8 Gate B, 7/8 Gate A (churn = valid divergence); biome + skyLight negative controls; no-dirty first-touch positive"
+  rust_units: "10/10"
+  offline_coverage_gaps_for_live: "none — every required case ran offline; live run needed only for real resend timing"
+
+live_run:
+  run_id: M42D-20260921-191652
+  server_pid: 849
+  workload: "small-span bot walk + commanded block/light mutations incl. light changes AFTER first sync (glowstone place/remove, torch) + empty->nonempty (y=200) + natural unload"
+  terrain: "2,992/2,992 bit-exact, 2,992 registered"
+  hooks_installed: "HOOKS_INSTALLED_9 (skylight-regen hook live; fired 0 times this run — full-sync covers initial regen)"
+  validity_engine: >
+    1,567 first-touch full syncs; 172,230 sections refreshed AND 172,230
+    independently validated — ZERO delta, ZERO mismatches (the conservative
+    light marking validates everything a mutation touches); all-air-absent
+    verdicts 116,178 (the omission rule carrying real load); biomes pushed
+    1,567; refresh never disabled.
+  comparator_counts: >
+    attempted 1,595 / compared 0 / matched 0 / mismatched 0 / skipped 1,595
+    (1,570 unsynced-at-first-send + 25 partial-filter) / stale-rejected 0 /
+    exceptions 0. Every skip explained: packets for a chunk arrive BEFORE its
+    background first-touch sync completes (2s flush cadence vs. first-send
+    timing), and no within-view resend occurred after sync in this run. The
+    validity contract held throughout — nothing unsynced was ever compared.
+  coverage_vs_required:
+    covered_live: [registration, hook recording (29M events), first-touch sync + full validation engine, unload/eviction 2,720==2,720, exclusions counted (partial-filter 25)]
+    not_covered_live: [post-mutation full-chunk packet COMPARISON (timing gap above), stale-rejection event (0 occurrences)]
+  known_recurring: "1 shadowTerrain NPE per run (chunk skipped, comparison counter unaffected) — stack capture added in the post-run polish build for the next run"
+  lifecycle:
+    shutdown_dump: "131,344 sections allocated / 129,868 released / 1,476 retained (18.3 MB, 272 chunks) / 2,720 evicted — arithmetic exact (131,344-129,868=1,476)"
+    post_stop: "process teardown; retained-at-shutdown NOT claimed as shutdown-release. In-JVM explicit cleanup proven separately offline (retained 0 after shutdownCleanup, repeat-safe, stale handles rejected)"
+
+exclusions_unchanged: "partial-filter packets, TE-containing packets, JEID registration, NEID high-bit states — Java-only, counted separately"
+
+next_safe_gate: >
+  One bounded live run with comparison-friendly timing (packet-thread
+  first-touch sync budget OR post-sync resend trigger) to convert the proven
+  validity engine into non-zero live comparison counts; then the TE
+  merge-or-fallback decision; ON authorization remains operator-gated.

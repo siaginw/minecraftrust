@@ -1,0 +1,58 @@
+# M5 — COMBINED NATIVE NETWORKING REPORT
+schema_version: 1
+date: "2026-09-21"
+run: M5-20260921-231904 (Target A, both subsystems ON_EXPERIMENTAL, disposable world, PID in meta)
+builds: {dll: bfcd9c0861843624, coremod: oracle-build (M5PipelineOracle included)}
+A_architecture: >
+  Existing validated pieces composed without new seams: SPacketChunkData
+  constructor hook (populatePacket) writes the Rust-encoded NativeChunk payload
+  into the packet's payload field when the quiescence/biome/eligibility guards
+  pass; the existing Netty compression seam (NetworkManagerCompression
+  Transformer) then applies the M2-C native compressor to whatever bytes the
+  packet carries (Rust- or Java-authored). Java framing/encryption/socket
+  untouched. Fallback = exact Java path with counted reasons on every guard.
+B_offline_oracle: >
+  M5PipelineOracle (24 real chunks): JAVA (real SPacketChunkData -> JDK
+  Deflater zlib) vs RUST (NativeChunk -> Rust encode -> M2-C CompressionCtx),
+  both INFLATED and independently Protocol-340-decoded: semantic equality ALL
+  PASS (mask/states/palette interpretation/packed data/light/biomes/tail).
+  Compressed-size: 744,192 B -> java 2,544 vs rust 2,616 on uniform synthetic
+  terrain. Timing (uniform-terrain corpus, JDK8 offline): A mean 93.7us p99
+  145us; B mean 107.3us p99 510us (B pays per-call direct-buffer alloc in
+  ctx.compress; honest: NOT a win on this corpus — M2C's prior matched win was
+  on production-shaped corpora).
+C_live_counts: "total packet constructions ~1,595; M2-C native-compressed TRANSMITTED 1,612 (includes resends), 48.3MB in -> 4.3MB out (11.1x), 0 compress fallbacks, 0 compress errors, ctx 1/1 balanced; M1 native-authored payloads transmitted: 1 (guard-gated)"
+D_hit_fallback: "M1: eligible 1 / transmitted 1; fallbacks ~0 this run (guards kept nearly everything Java-authored; pending-work class dominated prior runs — correctness-first accepted)"
+E_sampled_verify: "shadow comparator: 2 compared, 1 gate-B equal, 1 MISMATCH (below) — sampled evidence THIN this run"
+F_client: "bot 30 teleports, 0 decode/decompression errors, 0 malformed frames, clean session end — client decoded Rust-compressed wire fine"
+G_J_timing: "encode ~1.0-3.0us (prior matched corpora); compression timing folded into B above"
+K_alloc: "B path: 1 JNI encode + 1 JNI compress + heap copy of payload; A: Java ctor + JDK deflate + buffers"
+L_lifecycle: "NativeChunk registry: 272 chunks -> in-JVM cleanup removed 272 -> 0 chunks/0 bytes (pre-exit); compressor ctx 1 created/1 freed balanced"
+M_errors: >
+  m3wg_native_errors=488: 486 = retired sweep's thread-confined ctor NPEs
+  (known, attributed, non-corrupting); 2 = mutation-in-flight dual-verify
+  observations (benign class). ONE shadow-comparator mismatch:
+  "cx=10 cz=12 mask=255 section 1 cell 46 gid 240 vs 16, mutGen==snapGen==140,
+  dirtyMask=0, refreshBefore=0" — same signature as the M4.3C torn-read class
+  (worker extraction racing server-thread population), NOT a transmitted-stale
+  event (the transmit guard accepted exactly 1 packet; every risky packet fell
+  back). STOP CONDITION HONORED: campaign ended, evidence preserved, no rerun.
+N_exclusions: "partial-filter/TE/JEID/NEID unchanged Java-only"
+O_perf_value: "combined architecture PROVEN live end-to-end; matched-perf claim NOT renewed on this corpus (B slightly slower p99 offline)"
+P_migration_value: "HIGH — two independently validated Rust subsystems composed on the wire with zero new Java-side seams"
+Q_classification: FURTHER_INVESTIGATION
+  reason: >
+    The pipeline ran and the client decoded it cleanly, and NO stale state was
+    transmitted — but the combined NATIVE-AUTHORED sample is 1 packet (thin),
+    and the shadow comparator fired one race-class mismatch event (stop
+    condition). READY requires: (1) one more bounded run with the comparator
+    extraction race hardened the same way the transmit path is (quiescence
+    guard semantics on the comparator's own encode), (2) a non-degenerate
+    native-authored sample count.
+R_next: >
+  (1) Apply the version-guard to the comparator's encode step (skip compare
+  when version moved during capture — same fix pattern as the transmit guard);
+  offline-retest. (2) One bounded re-run (expect: 0 comparator events,
+  native-authored count still correctness-bounded). (3) Then
+  NATIVE_NETWORK_READY_TARGETA. (4) Modpack combined ladder (Revelation
+  SHADOW first) remains operator-gated. Defaults remain OFF everywhere.

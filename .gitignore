@@ -1,0 +1,101 @@
+# Rust build output
+target/
+
+# Gradle / Java build output
+.gradle/
+build/
+out/
+bin/
+*.class
+*.jar
+!tests/**/*.jar
+!fixtures/**/*.jar
+
+# IDE metadata
+.idea/
+.vscode/
+*.iml
+.project
+.classpath
+.settings/
+
+# OS artifacts
+.DS_Store
+Thumbs.db
+
+# Logs and temp files
+logs/
+*.log
+*.log.gz
+tmp/
+temp/
+*.tmp
+.cache/
+*.bin
+*.dll
+*.pdb
+*.lib
+*.exp
+tools/**/bin/
+
+# Profiler output
+profiles/
+profiler-output/
+*.jfr
+*.flamegraph*
+
+# Code intelligence indexes / caches
+.codegraph/
+codegraph.db
+.codegraph*
+.graphy/
+graphy.db
+
+# Third-party local reference downloads & proprietary artifacts
+third_party_reference/minecraft/src/
+third_party_reference/minecraft/*.jar
+third_party_reference/minecraft/work/
+third_party_reference/forge/src/
+third_party_reference/forge/work/
+third_party_reference/forge/server/
+third_party_reference/minecraft/server/
+third_party_reference/mods/*.jar
+third_party_reference/modpacks/instances/
+
+# Secrets and credentials
+.env
+.env.*
+*.pem
+*.key
+*.p12
+*.keystore
+
+# M1-final (2026-09-19): locally-preserved real-server installs, worlds,
+# downloads, and unbounded capture data. Small evidence (metrics, manifests,
+# metadata, bot JSONL) is tracked explicitly; these are not.
+machine/target*/server/
+machine/target*/download/
+machine/target*/shadow-run/
+machine/target*/run-*/
+machine/target*/world-*/
+tools/dist/
+tools/__pycache__/
+fml-hs-capture.txt
+
+# Third-party evaluation checkouts (pinned metadata committed instead; see
+# machine/third-party-eval.yaml)
+third_party_reference/eval/
+machine/targetA/m42-run/
+machine/targetA/M42C-*-run/
+machine/targetA/M42D-*-run/
+machine/targetA/M42E-*-run/
+machine/targetA/M43-*-run/
+machine/targetA/M43-*-run/
+machine/targetA/M43-*-run/
+machine/targetA/M43D-*-run/
+machine/targetA/M43D-*-run/
+machine/targetA/M5-*-run/
+machine/targetA/M5-*-run/
+machine/targetA/M5-*-run/
+machine/targetA/M5-*-run/
+machine/targetC/shadow-run/

@@ -1,0 +1,39 @@
+# M5.8-R2 — STATE-ID TRUNCATION AUDIT + SEND-DRIVER REPAIR (offline only)
+schema_version: 1
+date: "2026-09-22"
+first_truncating_edge: >
+  TRACED: the u16 STAGING EDGE in section refresh — both refreshOneSection and
+  the inline extract stage states through a CharBuffer (char = 16 bits) before
+  the JNI refreshSection call. 76916 -> 11380 == 76916 & 0xFFFF happens exactly
+  at `cb.put(i, (char) g[i])`. Upstream (registry lookup, fast/slow extractors,
+  int[] fingerprints) is full-width; downstream (NativeSection u16 storage) is
+  u16 by design. The comparator's entry capture is full-width int[] — which is
+  WHY the mismatch was DETECTED (full-width java 76916 vs narrowed native 11380).
+repair: >
+  Width guard BEFORE narrowing at both staging sites: any state id >0xFFFF
+  rejects the refresh entirely (counter m58r2_high_id_rejected; the inline path
+  also INVALIDATES the chunk so no falsely-current snapshot survives). The
+  comparator additionally pre-skips any chunk whose entry capture contains a
+  >u16 id (UNSUPPORTED_HIGH_ID_SKIP) BEFORE any comparison against narrowed
+  data. Supported scope: u16 registries only (vanilla + low-ID modded);
+  high-ID support remains future wider-native-state Rust work (documented, not
+  a permanent rejection).
+te_high_id_path: >
+  The TE chunk reached the comparator legitimately (diagnostic coverage is
+  intentionally broader); the failure was the refresh path narrowing its ids.
+  With the guard, TE/high-ID chunks: comparator may inspect (full-width) but
+  native conversion/refresh is rejected and counted — exclusion now happens
+  BEFORE any unsupported native conversion, as required.
+regressions: >
+  47/47 (4 new width cases, SYNTHETIC-labeled: exact 76916-vs-11380 pair,
+  guard arithmetic on >u16 only, low-ID unaffected; real-Java integration:
+  vanilla registry produces no >u16 ids so the guard is a no-op there — proven
+  by every existing real-Java case still passing). Battery: 7/7, 19/19, 8/8,
+  16/16, 10/10.
+driver: >
+  SEND ACCESSOR FIXED WITHOUT GUESSING: WorldServer.playerEntities is field
+  field_73010_j (verified name class, public field — no SRG method guess);
+  the already-selected watching player/connection is retained through the
+  chain. Offline chain (accepted->executed->ctor->comparator) verified; SEND
+  + DELIVERY remain live-only, PENDING separate authorization.
+capture_safety: "unchanged limitation stated: packet-time freshness does not synchronize cross-thread writers; endpoint equality is not proof of no A->B->A"

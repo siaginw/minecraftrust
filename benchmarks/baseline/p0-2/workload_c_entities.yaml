@@ -1,0 +1,33 @@
+workload_name: workload_c_entities
+server_type: forge_14.23.5.2860
+duration_s: 20
+time_span_ms: 20000
+tick_span: 400
+measured_tps: 20.0
+mean_mspt: 50.0
+gc_stats:
+  young_gcs: 12
+  young_pause_ms: 65.44
+  full_gcs: 2
+  full_pause_ms: 76.61
+  total_pause_ms: 142.05
+top_subsystems:
+  levels: 95.52
+  world: 87.3
+  entities: 66.14
+  regular: 63.48
+  tick: 60.0
+  tickBlocks: 8.61
+  pollingChunks: 7.28
+  entityBaseTick: 5.62
+  forcedChunkLoading: 5.37
+  ai: 3.47
+  newAi: 3.31
+  travel: 3.06
+  unspecified: 2.12
+  livingEntityBaseTick: 2.12
+  chunkSource: 2.06
+artifacts:
+  profile_dump: workload_c_entities_profile.txt
+  jfr_recording: workload_c_entities.jfr
+  gc_log: workload_c_entities_gc.log

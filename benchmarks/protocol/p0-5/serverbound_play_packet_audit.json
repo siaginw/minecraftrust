@@ -1,0 +1,299 @@
+[
+  {
+    "id": "0x00",
+    "class": "net.minecraft.network.play.client.CPacketConfirmTeleport",
+    "handler": "processConfirmTeleport",
+    "enqueued": true,
+    "thread": "SERVER_THREAD",
+    "mutation": "world/player/inventory/entity state",
+    "notes": "Enqueued to futureTaskQueue via PacketThreadUtil.checkThreadAndEnqueue."
+  },
+  {
+    "id": "0x01",
+    "class": "net.minecraft.network.play.client.CPacketTabComplete",
+    "handler": "processTabComplete",
+    "enqueued": true,
+    "thread": "SERVER_THREAD",
+    "mutation": "world/player/inventory/entity state",
+    "notes": "Enqueued to futureTaskQueue via PacketThreadUtil.checkThreadAndEnqueue."
+  },
+  {
+    "id": "0x02",
+    "class": "net.minecraft.network.play.client.CPacketChatMessage",
+    "handler": "processChatMessage",
+    "enqueued": true,
+    "thread": "SERVER_THREAD",
+    "mutation": "world/player/inventory/entity state",
+    "notes": "Enqueued to futureTaskQueue via PacketThreadUtil.checkThreadAndEnqueue."
+  },
+  {
+    "id": "0x03",
+    "class": "net.minecraft.network.play.client.CPacketClientStatus",
+    "handler": "processClientStatus",
+    "enqueued": true,
+    "thread": "SERVER_THREAD",
+    "mutation": "world/player/inventory/entity state",
+    "notes": "Enqueued to futureTaskQueue via PacketThreadUtil.checkThreadAndEnqueue."
+  },
+  {
+    "id": "0x04",
+    "class": "net.minecraft.network.play.client.CPacketClientSettings",
+    "handler": "processClientSettings",
+    "enqueued": true,
+    "thread": "SERVER_THREAD",
+    "mutation": "world/player/inventory/entity state",
+    "notes": "Enqueued to futureTaskQueue via PacketThreadUtil.checkThreadAndEnqueue."
+  },
+  {
+    "id": "0x05",
+    "class": "net.minecraft.network.play.client.CPacketConfirmTransaction",
+    "handler": "processConfirmTransaction",
+    "enqueued": true,
+    "thread": "SERVER_THREAD",
+    "mutation": "world/player/inventory/entity state",
+    "notes": "Enqueued to futureTaskQueue via PacketThreadUtil.checkThreadAndEnqueue."
+  },
+  {
+    "id": "0x06",
+    "class": "net.minecraft.network.play.client.CPacketEnchantItem",
+    "handler": "processEnchantItem",
+    "enqueued": true,
+    "thread": "SERVER_THREAD",
+    "mutation": "world/player/inventory/entity state",
+    "notes": "Enqueued to futureTaskQueue via PacketThreadUtil.checkThreadAndEnqueue."
+  },
+  {
+    "id": "0x07",
+    "class": "net.minecraft.network.play.client.CPacketClickWindow",
+    "handler": "processClickWindow",
+    "enqueued": true,
+    "thread": "SERVER_THREAD",
+    "mutation": "world/player/inventory/entity state",
+    "notes": "Enqueued to futureTaskQueue via PacketThreadUtil.checkThreadAndEnqueue."
+  },
+  {
+    "id": "0x08",
+    "class": "net.minecraft.network.play.client.CPacketCloseWindow",
+    "handler": "processCloseWindow",
+    "enqueued": true,
+    "thread": "SERVER_THREAD",
+    "mutation": "world/player/inventory/entity state",
+    "notes": "Enqueued to futureTaskQueue via PacketThreadUtil.checkThreadAndEnqueue."
+  },
+  {
+    "id": "0x09",
+    "class": "net.minecraft.network.play.client.CPacketCustomPayload",
+    "handler": "processCustomPayload",
+    "enqueued": true,
+    "thread": "SERVER_THREAD",
+    "mutation": "world/player/inventory/entity state",
+    "notes": "Enqueued to futureTaskQueue via PacketThreadUtil.checkThreadAndEnqueue."
+  },
+  {
+    "id": "0x0A",
+    "class": "net.minecraft.network.play.client.CPacketUseEntity",
+    "handler": "processUseEntity",
+    "enqueued": true,
+    "thread": "SERVER_THREAD",
+    "mutation": "world/player/inventory/entity state",
+    "notes": "Enqueued to futureTaskQueue via PacketThreadUtil.checkThreadAndEnqueue."
+  },
+  {
+    "id": "0x0B",
+    "class": "net.minecraft.network.play.client.CPacketKeepAlive",
+    "handler": "processKeepAlive",
+    "enqueued": false,
+    "thread": "NETTY_IO",
+    "mutation": "this.player.ping, this.field_194403_g (pending flag)",
+    "notes": "Direct mutation on Netty IO thread. field_194403_g has NO volatile/synchronized modifier in EntityPlayerMP/NetHandlerPlayServer. Potential data race with server thread reading ping."
+  },
+  {
+    "id": "0x0C",
+    "class": "net.minecraft.network.play.client.CPacketPlayer",
+    "handler": "processPlayer",
+    "enqueued": true,
+    "thread": "SERVER_THREAD",
+    "mutation": "world/player/inventory/entity state",
+    "notes": "Enqueued to futureTaskQueue via PacketThreadUtil.checkThreadAndEnqueue."
+  },
+  {
+    "id": "0x0D",
+    "class": "net.minecraft.network.play.client.CPacketPlayer$Position",
+    "handler": "processPlayer",
+    "enqueued": true,
+    "thread": "SERVER_THREAD",
+    "mutation": "world/player/inventory/entity state",
+    "notes": "Enqueued to futureTaskQueue via PacketThreadUtil.checkThreadAndEnqueue."
+  },
+  {
+    "id": "0x0E",
+    "class": "net.minecraft.network.play.client.CPacketPlayer$PositionRotation",
+    "handler": "processPlayer",
+    "enqueued": true,
+    "thread": "SERVER_THREAD",
+    "mutation": "world/player/inventory/entity state",
+    "notes": "Enqueued to futureTaskQueue via PacketThreadUtil.checkThreadAndEnqueue."
+  },
+  {
+    "id": "0x0F",
+    "class": "net.minecraft.network.play.client.CPacketPlayer$Rotation",
+    "handler": "processPlayer",
+    "enqueued": true,
+    "thread": "SERVER_THREAD",
+    "mutation": "world/player/inventory/entity state",
+    "notes": "Enqueued to futureTaskQueue via PacketThreadUtil.checkThreadAndEnqueue."
+  },
+  {
+    "id": "0x10",
+    "class": "net.minecraft.network.play.client.CPacketVehicleMove",
+    "handler": "processVehicleMove",
+    "enqueued": true,
+    "thread": "SERVER_THREAD",
+    "mutation": "world/player/inventory/entity state",
+    "notes": "Enqueued to futureTaskQueue via PacketThreadUtil.checkThreadAndEnqueue."
+  },
+  {
+    "id": "0x11",
+    "class": "net.minecraft.network.play.client.CPacketSteerBoat",
+    "handler": "processSteerBoat",
+    "enqueued": true,
+    "thread": "SERVER_THREAD",
+    "mutation": "world/player/inventory/entity state",
+    "notes": "Enqueued to futureTaskQueue via PacketThreadUtil.checkThreadAndEnqueue."
+  },
+  {
+    "id": "0x12",
+    "class": "net.minecraft.network.play.client.CPacketPlaceRecipe",
+    "handler": "func_194308_a",
+    "enqueued": true,
+    "thread": "SERVER_THREAD",
+    "mutation": "world/player/inventory/entity state",
+    "notes": "Enqueued to futureTaskQueue via PacketThreadUtil.checkThreadAndEnqueue."
+  },
+  {
+    "id": "0x13",
+    "class": "net.minecraft.network.play.client.CPacketPlayerAbilities",
+    "handler": "processPlayerAbilities",
+    "enqueued": true,
+    "thread": "SERVER_THREAD",
+    "mutation": "world/player/inventory/entity state",
+    "notes": "Enqueued to futureTaskQueue via PacketThreadUtil.checkThreadAndEnqueue."
+  },
+  {
+    "id": "0x14",
+    "class": "net.minecraft.network.play.client.CPacketPlayerDigging",
+    "handler": "processPlayerDigging",
+    "enqueued": true,
+    "thread": "SERVER_THREAD",
+    "mutation": "world/player/inventory/entity state",
+    "notes": "Enqueued to futureTaskQueue via PacketThreadUtil.checkThreadAndEnqueue."
+  },
+  {
+    "id": "0x15",
+    "class": "net.minecraft.network.play.client.CPacketEntityAction",
+    "handler": "processEntityAction",
+    "enqueued": true,
+    "thread": "SERVER_THREAD",
+    "mutation": "world/player/inventory/entity state",
+    "notes": "Enqueued to futureTaskQueue via PacketThreadUtil.checkThreadAndEnqueue."
+  },
+  {
+    "id": "0x16",
+    "class": "net.minecraft.network.play.client.CPacketInput",
+    "handler": "processInput",
+    "enqueued": true,
+    "thread": "SERVER_THREAD",
+    "mutation": "world/player/inventory/entity state",
+    "notes": "Enqueued to futureTaskQueue via PacketThreadUtil.checkThreadAndEnqueue."
+  },
+  {
+    "id": "0x17",
+    "class": "net.minecraft.network.play.client.CPacketRecipeInfo",
+    "handler": "handleRecipeBookUpdate",
+    "enqueued": true,
+    "thread": "SERVER_THREAD",
+    "mutation": "world/player/inventory/entity state",
+    "notes": "Enqueued to futureTaskQueue via PacketThreadUtil.checkThreadAndEnqueue."
+  },
+  {
+    "id": "0x18",
+    "class": "net.minecraft.network.play.client.CPacketResourcePackStatus",
+    "handler": "handleResourcePackStatus",
+    "enqueued": false,
+    "thread": "NETTY_IO",
+    "mutation": "none (empty method body on DedicatedServer)",
+    "notes": "NO-OP in vanilla DedicatedServer; returns immediately on IO thread."
+  },
+  {
+    "id": "0x19",
+    "class": "net.minecraft.network.play.client.CPacketSeenAdvancements",
+    "handler": "handleSeenAdvancements",
+    "enqueued": true,
+    "thread": "SERVER_THREAD",
+    "mutation": "world/player/inventory/entity state",
+    "notes": "Enqueued to futureTaskQueue via PacketThreadUtil.checkThreadAndEnqueue."
+  },
+  {
+    "id": "0x1A",
+    "class": "net.minecraft.network.play.client.CPacketHeldItemChange",
+    "handler": "processHeldItemChange",
+    "enqueued": true,
+    "thread": "SERVER_THREAD",
+    "mutation": "world/player/inventory/entity state",
+    "notes": "Enqueued to futureTaskQueue via PacketThreadUtil.checkThreadAndEnqueue."
+  },
+  {
+    "id": "0x1B",
+    "class": "net.minecraft.network.play.client.CPacketCreativeInventoryAction",
+    "handler": "processCreativeInventoryAction",
+    "enqueued": true,
+    "thread": "SERVER_THREAD",
+    "mutation": "world/player/inventory/entity state",
+    "notes": "Enqueued to futureTaskQueue via PacketThreadUtil.checkThreadAndEnqueue."
+  },
+  {
+    "id": "0x1C",
+    "class": "net.minecraft.network.play.client.CPacketUpdateSign",
+    "handler": "processUpdateSign",
+    "enqueued": true,
+    "thread": "SERVER_THREAD",
+    "mutation": "world/player/inventory/entity state",
+    "notes": "Enqueued to futureTaskQueue via PacketThreadUtil.checkThreadAndEnqueue."
+  },
+  {
+    "id": "0x1D",
+    "class": "net.minecraft.network.play.client.CPacketAnimation",
+    "handler": "handleAnimation",
+    "enqueued": true,
+    "thread": "SERVER_THREAD",
+    "mutation": "world/player/inventory/entity state",
+    "notes": "Enqueued to futureTaskQueue via PacketThreadUtil.checkThreadAndEnqueue."
+  },
+  {
+    "id": "0x1E",
+    "class": "net.minecraft.network.play.client.CPacketSpectate",
+    "handler": "handleSpectate",
+    "enqueued": true,
+    "thread": "SERVER_THREAD",
+    "mutation": "world/player/inventory/entity state",
+    "notes": "Enqueued to futureTaskQueue via PacketThreadUtil.checkThreadAndEnqueue."
+  },
+  {
+    "id": "0x1F",
+    "class": "net.minecraft.network.play.client.CPacketPlayerTryUseItemOnBlock",
+    "handler": "processPlayerTryUseItemOnBlock",
+    "enqueued": false,
+    "thread": "SERVER_THREAD",
+    "mutation": "world/player/inventory/entity state",
+    "notes": "Enqueued to futureTaskQueue via PacketThreadUtil.checkThreadAndEnqueue."
+  },
+  {
+    "id": "0x20",
+    "class": "net.minecraft.network.play.client.CPacketPlayerTryUseItem",
+    "handler": "processPlayerTryUseItem",
+    "enqueued": false,
+    "thread": "SERVER_THREAD",
+    "mutation": "world/player/inventory/entity state",
+    "notes": "Enqueued to futureTaskQueue via PacketThreadUtil.checkThreadAndEnqueue."
+  }
+]

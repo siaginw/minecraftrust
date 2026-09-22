@@ -1,0 +1,33 @@
+workload_name: vanilla_idle
+server_type: vanilla_1.12.2
+duration_s: 20
+time_span_ms: 20050
+tick_span: 401
+measured_tps: 20.0
+mean_mspt: 50.0
+gc_stats:
+  young_gcs: 7
+  young_pause_ms: 36.8
+  full_gcs: 1
+  full_pause_ms: 25.17
+  total_pause_ms: 61.97
+top_subsystems:
+  levels: 83.77
+  world: 77.3
+  entities: 32.66
+  regular: 20.93
+  tick: 19.44
+  snooper: 7.39
+  blockEntities: 6.75
+  tickPending: 5.7
+  chunkSource: 5.5
+  tickBlocks: 4.91
+  unspecified: 4.64
+  tracker: 4.21
+  move: 3.67
+  entityBaseTick: 3.15
+  chunkMap: 3.01
+artifacts:
+  profile_dump: vanilla_idle_profile.txt
+  jfr_recording: vanilla_idle.jfr
+  gc_log: vanilla_idle_gc.log

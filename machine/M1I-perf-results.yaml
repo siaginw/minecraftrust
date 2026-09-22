@@ -1,0 +1,80 @@
+# M1I whole-server performance closure (operator authorization 2026-09-19).
+# Matched OFF vs ON_EXPERIMENTAL on real Revelation (C) and SevTech (D)
+# servers: 8 runs (2 per arm per pack), fresh JVMs, balanced order
+# (C: OFF,ON,ON,OFF / D: ON,OFF,OFF,ON), identical worlds/configs/jar,
+# MSPT histogram instrumentation (0.5ms buckets, ServerThread compute ticks),
+# GC telemetry (Parallel GC, 6GB fixed heap), phase-resolved workloads:
+# idle 40s -> login/chunk burst (3 bots) -> teleport-exploration streaming
+# (1 opped bot hopping a pre-generated 600-block corridor, 120s) -> idle 30s.
+# class: MEASURED. Provenance: M1I-WHOLESERVER.
+schema_version: 1
+milestone: M1I
+date: "2026-09-19"
+build: {coremod_sha256: b497c4c3fcaac67900000000000000000000000000000000000000000000000_placeholder, dll_sha256_unchanged: 02c722de}
+methodology_notes:
+  - "MSPT = vanilla tick-time array (ServerThread compute; IO threads excluded by construction), sampled every 5s window into cumulative 0.5ms histograms; per-phase by boundary-snapshot subtraction"
+  - "Teleport-exploration replaces synthetic walking (vanilla server-side movement validation rubber-bands synthetic walking - documented); streaming workload is PlayerChunkMap resend on position change, on a PRE-GENERATED corridor so worldgen does not confound arms. Fresh worldgen A/B on a shared world is impossible (first arm pays it); recorded as a gate limitation"
+  - "Measurement config changes (identical both arms, documented): enable-rcon (driver ops the bot), allow-flight=true, 6GB fixed heap; bot playerdata are disposable"
+  - "SevTech bot playerdata pruned pre-campaign (Prestige boot inflation); C/D fixture manifests regenerated"
+  - "MSPT histogram covers ~50% of ticks (5s-of-10s sampling cadence) - unbiased subsample; n counts are sampled ticks"
+whole_run_mspt: # p50/p95 in ms; over50 = deadline misses in sampled ticks
+  C_OFF_i-c1: {p50: 4.3, p95: 9.4, over50: 25}
+  C_ON__i-c2: {p50: 4.9, p95: 11.7, over50: 26}
+  C_ON__i-c3: {p50: 4.6, p95: 11.0, over50: 32}
+  C_OFF_i-c4: {p50: 4.5, p95: 13.5, over50: 38}
+  D_ON__i-d1: {p50: 6.8, p95: 19.6, over50: 40}
+  D_OFF_i-d2: {p50: 7.7, p95: 67.4, over50: 153}
+  D_OFF_i-d3: {p50: 12.0, p95: 78.7, over50: 204}
+  D_ON__i-d4: {p50: 8.5, p95: 31.6, over50: 85}
+phase_medians_OFF_vs_ON: # median of 2 runs per arm (ranges in raw analyzer output)
+  revelation_C:
+    idle:   {p50_ms: "1.9 -> 1.0", p95_ms: "7.7 -> 7.2", over50: "1 -> 0.5", alloc_MBps: "16 -> 0"}
+    burst:  {p50_ms: "4.0 -> 4.6", p95_ms: "6.1 -> 9.4", over50: "1 -> 3", alloc_MBps: "30 -> 31"}
+    walk:   {p50_ms: "5.3 -> 7.1", p95_ms: "14.0 -> 30.5", over50: "20 -> 37", yGC: "5.5 -> 7.5", alloc_MBps: "62 -> 90"}
+  sevtech_D:
+    idle:   {p50_ms: "1.3 -> 1.5", p95_ms: "3.9 -> 7.3", over50: "0 -> 0.5"}
+    burst:  {p50_ms: "5.6 -> 4.6", p95_ms: "13.1 -> 8.7", over50: "4.5 -> 4.5", alloc_MBps: "48 -> 48"}
+    walk:   {p50_ms: "15.1 -> 12.3", p95_ms: "85.7 -> 41.8", over50: "158 -> 50", yGC: "42.5 -> 26", pauseMs: "0.8 -> 0.5", alloc_MBps: "542 -> 324"}
+findings:
+  no_resolvable_improvement: >
+    Neither pack shows a whole-server MSPT improvement attributable to ON
+    mode above its own run-to-run noise. SevTech's apparent streaming-phase
+    improvement (p50 15.1->12.3ms, GC/alloc halved) is driven by the i-d3 OFF
+    outlier run (85GB allocated, 700MB/s, 177 deadline misses) - the first
+    D pair actually reads ON slightly WORSE (10.5 vs 11.0ms). Revelation's
+    adjacent-pair comparison shows ON consistently ~1-3ms SLOWER at streaming
+    p50 in BOTH pairs (5.1->6.2, 5.4->8.0) - see open signal below.
+  open_signal_C_walk: >
+    Revelation streaming-phase p50 is non-overlapping between arms (OFF
+    5.1-5.4 vs ON 6.2-8.0ms, 2 runs each, adjacent-pair balanced). Candidate
+    causes: per-packet staging+predict cost on C's packet mix; interaction
+    with Phosphor (C is the only Phosphor pack); or residual workload/order
+    variance (walk-phase tails are heavy-tailed: single ON run hit p95 48ms).
+    UNRESOLVED with n=2; flagged as an investigation trigger per project
+    rules, NOT declared a regression.
+  allocation: >
+    No consistent direction: C walk alloc +46% median ON (62->90MB/s, ranges
+    overlap slightly); D walk alloc median lower ON (542->324) but
+    outlier-driven (D OFF range 384-700 vs ON 292-356). The 15MB/s
+    elimination target is not demonstrated anywhere; the offline expectation
+    (native allocates one exact-size byte[] vs vanilla's buffer chain) does
+    not visibly move whole-server allocation at these packet rates because
+    payload bytes are a small share of pack allocation.
+  gc: "Young-GC counts and pause totals track allocation; no full GCs in any measured phase; no GC-pause regression signal beyond allocation noise"
+  live_routing: "ON runs: C native 7690/7648 (100% eligible); D native 7334/7273 with REAL live pre-gating (37 skips i-d1) and 42 Java-routed small packets in i-d1 - production small-packet routing observed live for the first time"
+gate_verdicts:
+  GATE-PERF-SERVER: "NOT MET - measured honestly; no whole-server compute-MSPT improvement resolvable at the 0.04ms steady / 0.35ms burst thresholds (point estimates within noise, C walk signals slightly negative)"
+  GATE-PERF-ALLOC: "NOT MET - no consistent allocation reduction >= 15MB/s; directions conflict between packs"
+  GATE-PERF-REGRESS: "NOT DEMONSTRATED - no confirmed regression, but the Revelation streaming-phase p50 signal (ON slower in both balanced pairs) prevents declaring clean PASS; remains OPEN pending the investigation above"
+final_status: >
+  M1 whole-server gates close MEASURED-BUT-UNFAVORABLE: the packet-path
+  win (~30% p50 on eligible packets, offline-proven) does not translate
+  into resolvable whole-server improvement at realistic packet rates on
+  these packs, and one pack shows an unexplained small streaming-phase
+  cost. M1 remains EXPERIMENTAL, default OFF. Default-enable is NOT
+  supported by this evidence.
+confidences_and_limits:
+  - "n=2 per arm per pack; walk-phase distributions are heavy-tailed; only arm-median statements with explicit ranges are made"
+  - "MSPT subsample ~50% of ticks; percentiles unbiased, counts halved"
+  - "Workloads: idle/burst/streaming (pre-generated corridor); fresh-worldgen A/B not measurable on a shared world - exploration gate aspect remains unexercised"
+  - "det5-style allocation-tail did NOT appear as a distinguishable whole-server signal in these traces (per-tick histogram at 0.5ms granularity cannot isolate it; per the operator directive it was not chased further here)"

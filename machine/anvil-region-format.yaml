@@ -1,0 +1,92 @@
+version: "1.0"
+format: "Anvil Region File (.mca)"
+target: "Minecraft 1.12.2"
+status: "MAPPED"
+
+geometry:
+  chunks_per_region_axis: 32
+  total_chunks_per_region: 1024
+  chunk_blocks_x: 16
+  chunk_blocks_z: 16
+  chunk_height_y: 256
+  sector_size_bytes: 4096
+
+file_layout:
+  header:
+    total_size_bytes: 8192
+    sectors: 2
+    sections:
+      - name: "locations_table"
+        byte_range: "0..4095"
+        entries: 1024
+        entry_size_bytes: 4
+        entry_format:
+          description: "Big-endian 4-byte packed offset and sector count"
+          bit_allocation:
+            sector_offset:
+              bits: "0..23 (upper 3 bytes)"
+              type: "uint24"
+              formula: "raw_value >> 8"
+              unit: "4096-byte sectors from file start"
+            sector_count:
+              bits: "24..31 (lowest byte)"
+              type: "uint8"
+              formula: "raw_value & 0xFF"
+              unit: "4096-byte sectors"
+              max_value: 255
+              max_payload_capacity_bytes: 1044480  # 255 * 4096
+        chunk_indexing_formula:
+          chunk_in_region_x: "chunkX & 31"
+          chunk_in_region_z: "chunkZ & 31"
+          index: "4 * ((chunkX & 31) + (chunkZ & 31) * 32)"
+        special_values:
+          not_generated: "raw_value == 0 (both offset and count are 0)"
+
+      - name: "timestamps_table"
+        byte_range: "4096..8191"
+        entries: 1024
+        entry_size_bytes: 4
+        entry_format:
+          type: "uint32 big-endian"
+          unit: "seconds since UNIX epoch (System.currentTimeMillis() / 1000)"
+        indexing_formula:
+          index: "4096 + 4 * ((chunkX & 31) + (chunkZ & 31) * 32)"
+
+  payload_sectors:
+    start_sector: 2  # Sectors 0 and 1 reserved for header
+    alignment: 4096  # Every chunk starts on a 4096-byte sector boundary
+    structure:
+      - name: "length"
+        bytes: 4
+        type: "uint32 big-endian"
+        description: "Length of following payload in bytes (includes compression_type byte, excludes length field itself)"
+      - name: "compression_type"
+        bytes: 1
+        type: "uint8"
+        allowed_values:
+          1: "GZIP (unused in 1.12.2)"
+          2: "ZLIB (standard in 1.12.2)"
+      - name: "compressed_payload"
+        bytes: "length - 1"
+        type: "zlib byte stream (RFC 1950 / Deflate RFC 1951)"
+        content: "Root NBTTagCompound"
+      - name: "sector_padding"
+        bytes: "4096 * sector_count - (4 + length)"
+        type: "zero-filled padding up to next 4096-byte boundary"
+
+limits_and_hazards:
+  max_sectors_per_chunk: 255
+  max_uncompressed_payload: "Bounded by JVM heap"
+  max_compressed_payload_bytes: 1044476  # 255 * 4096 - 4
+  overflow_behavior:
+    condition: "compressed_payload + 4 > 255 * 4096"
+    vanilla_action: "Silent drop. Chunk is NOT saved to disk; no exception thrown; world data lost on restart."
+  fragmentation:
+    allocation_policy: "First-fit scanning bitset from sector 2 upwards."
+    compaction: "None in vanilla. Region files grow monotonically unless rewritten by external tool."
+  corruption_modes:
+    out_of_bounds_offset: "offset + count > total_file_sectors -> RegionFile returns null -> regenerates"
+    corrupt_zlib_stream: "Inflater throws ZipException -> AnvilChunkLoader catches -> returns null -> regenerates"
+    missing_tag_end: "NBT parser hits EOF -> catches exception -> returns null -> regenerates"
+    overlapping_sectors: "RegionFile bitset tracks multiple claims; overwriting chunk A deallocates shared sector, corrupting chunk B"
+    crash_without_sync: "RandomAccessFile does not invoke fsync(); OS power loss leaves 0-byte header or partial sector"
