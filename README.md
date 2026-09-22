@@ -60,12 +60,3 @@ Avoid:
 - `machine/ownership_manifest.example.yaml`
 - `machine/subsystem_status.example.yaml`
 
-## v2 RustCraft Bootstrap Additions
-
-This bundle adds the real RustCraft project brain (`.RustCraft.md`), a first-run `BOOTSTRAP_PROMPT.md`, project-local skills under `.RustCraft/skills/`, CodeGraph setup guidance, Graphy evaluation guidance, live ownership/status/gate manifests, `.gitignore`, and the intended project directory skeleton.
-
-Recommended use:
-1. Extract into the project root.
-2. Open the project root in RustCraft Desktop.
-3. Send RustCraft the contents of `BOOTSTRAP_PROMPT.md`.
-4. Review the Bootstrap Report before authorizing P0 research or implementation.
