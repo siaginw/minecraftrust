@@ -559,3 +559,71 @@ pub unsafe extern "system" fn Java_com_rustcraft_bridge_NativeChunkBridge_getSec
         }
     }).unwrap_or(-99)
 }
+
+// ====================================================================
+// M-CK3: Rust outbound frame engine (offline; immutable packet bodies)
+// ====================================================================
+
+/// Creates a reusable outbound frame context (threshold supplied per call).
+#[no_mangle]
+pub unsafe extern "system" fn Java_com_rustcraft_bridge_OutboundFrameCtx_frameCreate(
+    _env: *mut c_void,
+    _clazz: *mut c_void,
+) -> i64 {
+    catch_unwind(|| {
+        match compression::frame::OutboundFrameContext::new() {
+            Ok(ctx) => Box::into_raw(Box::new(ctx)) as i64,
+            Err(_) => 0,
+        }
+    }).unwrap_or(0)
+}
+
+/// Frees a frame context (idempotent via caller CAS pattern; 0 is never valid).
+#[no_mangle]
+pub unsafe extern "system" fn Java_com_rustcraft_bridge_OutboundFrameCtx_frameFree(
+    _env: *mut c_void,
+    _clazz: *mut c_void,
+    handle: i64,
+) -> i32 {
+    catch_unwind(|| {
+        if handle == 0 { return 0; }
+        drop(Box::from_raw(handle as *mut compression::frame::OutboundFrameContext));
+        1
+    }).unwrap_or(0)
+}
+
+/// Encodes one complete frame: threshold decision + optional compression +
+/// compression framing + outer length framing, all in Rust.
+/// Returns frame length (>0) or negative FrameError code (-1 capacity: the
+/// SAFE RETRY BOUND is written to retryBoundAddr; -2 backend; -3 too large;
+/// -4 invalid). Partial output is never a completed frame.
+#[no_mangle]
+pub unsafe extern "system" fn Java_com_rustcraft_bridge_OutboundFrameCtx_frameEncode(
+    _env: *mut c_void,
+    _clazz: *mut c_void,
+    handle: i64,
+    in_addr: i64,
+    in_len: i32,
+    out_addr: i64,
+    out_cap: i32,
+    threshold: i32,
+    retry_bound_addr: i64,
+) -> i32 {
+    catch_unwind(|| {
+        if handle == 0 || in_addr == 0 || out_addr == 0 || in_len <= 0 || out_cap <= 0 {
+            return -4;
+        }
+        let ctx = &mut *(handle as *mut compression::frame::OutboundFrameContext);
+        let body = std::slice::from_raw_parts(in_addr as *const u8, in_len as usize);
+        let out = std::slice::from_raw_parts_mut(out_addr as *mut u8, out_cap as usize);
+        match ctx.encode(body, threshold, out) {
+            Ok(n) => n as i32,
+            Err(e) => {
+                if retry_bound_addr != 0 {
+                    *(retry_bound_addr as *mut i32) = e.needed() as i32;
+                }
+                e.as_code()
+            }
+        }
+    }).unwrap_or(-2)
+}

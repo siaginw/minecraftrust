@@ -28,6 +28,11 @@ mkdir -p tools/dist/coremod-build
   tools/bridge/src/com/rustcraft/bridge/M4ExtractorParity.java \
   tools/bridge/src/com/rustcraft/bridge/M5PipelineOracle.java \
   tools/bridge/src/com/rustcraft/bridge/M5ResendDriver.java \
+  tools/bridge/src/com/rustcraft/bridge/M52CompressionBench.java \
+  tools/bridge/src/com/rustcraft/bridge/M52CompressionTests.java \
+  tools/bridge/src/com/rustcraft/bridge/OutboundFrameCtx.java \
+  tools/bridge/src/com/rustcraft/bridge/M53FrameOracle.java \
+  tools/bridge/src/com/rustcraft/bridge/M53FrameBench.java \
   tools/bridge/src/com/rustcraft/coremod/WorldgenShadowTransformer.java
 
 mkdir -p tools/dist/coremod-build/META-INF

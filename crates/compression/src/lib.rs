@@ -13,6 +13,8 @@
 //! `zlib-rs` (zlib-rs crate, pure Rust). Runtime-asserted in tests via
 //! flate2::backend().
 
+pub mod frame;
+
 pub trait Compressor {
     fn compress(&self, input: &[u8], output: &mut Vec<u8>) -> Result<(), &'static str>;
     fn decompress(&self, input: &[u8], output: &mut Vec<u8>) -> Result<(), &'static str>;
