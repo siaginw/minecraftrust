@@ -32,6 +32,7 @@ public final class OutboundFrameCtx {
     private ByteBuffer inBuf, outBuf;
     public static final AtomicLong FRAME_OPS = new AtomicLong();
     public static final AtomicLong RETRY_EVENTS = new AtomicLong();
+    public static volatile int LAST_ERR;
     public static final AtomicLong GROW_EVENTS = new AtomicLong();
     public static volatile long RETAINED_APPROX;
 
@@ -90,12 +91,14 @@ public final class OutboundFrameCtx {
                 int n = frameEncode(h, address(inBuf), body.length, address(outBuf), outBuf.capacity(),
                         threshold, RETRY_BB_TL.get() == null ? 0 : address(RETRY_BB_TL.get()));
                 if (n > 0) {
+                    LAST_ERR = 0;
                     RETAINED_APPROX = (inBuf == null ? 0 : inBuf.capacity()) + outBuf.capacity();
                     byte[] res = new byte[n];
                     outBuf.position(0);
                     outBuf.get(res, 0, n);
                     return res;
                 }
+                LAST_ERR = n;
                 if (n == ERR_CAPACITY) {
                     RETRY_EVENTS.incrementAndGet();
                     int needed = RETRY_INT_TL.get()[0];

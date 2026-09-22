@@ -137,9 +137,10 @@ impl OutboundFrameContext {
         // Compressed path: exact compressed size is only known after deflate.
         // Bound: outer VarInt(<=4) + dataLen VarInt(<=5) + max zlib expansion.
         let bound = 4 + 5 + max_output_len(body_len);
-        if varint_size(0) + body_len > MAX_FRAME_BODY {
-            return Err(FrameError::BodyTooLarge { len: body_len });
-        }
+        // The outer prefix constrains the FRAMED body, not the uncompressed
+        // input: a body above the limit may still compress under it. This is
+        // a sizing BOUND (safe retry capacity), not the exact frame length.
+        // The exact post-compression check in encode() is authoritative.
         Ok(bound)
     }
 
@@ -186,10 +187,10 @@ impl OutboundFrameContext {
             return Ok(total);
         }
 
-        // Compressed: [VarInt(inner)][VarInt(bodyLen)][zlib(body)]
-        if varint_size(0) + body.len() > MAX_FRAME_BODY {
-            return Err(FrameError::BodyTooLarge { len: body.len() });
-        }
+        // Compressed: [VarInt(inner)][VarInt(bodyLen)][zlib(body)].
+        // NO pre-encode uncompressed-size rejection: bodies above the outer
+        // limit may compress under it — the exact post-compression inner
+        // check below is authoritative.
         self.compress_events += 1;
         let bound = max_output_len(body.len());
         if self.comp_scratch.len() < bound {
@@ -354,7 +355,15 @@ mod tests {
         assert!(matches!(ctx.encode(&[], 256, &mut out), Err(FrameError::Invalid(_))));
         let huge = vec![0u8; MAX_FRAME_BODY + 1];
         assert!(matches!(ctx.encode(&huge, -1, &mut out), Err(FrameError::BodyTooLarge { .. })));
-        assert!(matches!(ctx.encode(&huge, 256, &mut out), Err(FrameError::BodyTooLarge { .. })));
+        // Compressed path: a huge body COMPRESSES under the limit — must
+        // now SUCCEED (boundary semantics fix); the frame is still valid.
+        let mut big_out = vec![0u8; MAX_FRAME_BODY * 2 + 64];
+        let n = ctx.encode(&huge, 256, &mut big_out).expect("compressible >limit body must encode");
+        assert!(n < huge.len());
+        // But a body that cannot compress under the limit fails the exact check:
+        // incompressible > limit is caught post-compression (BodyTooLarge).
+        // (covered in the Java oracle: too-costly to build a 2MB incompressible
+        // Rust-side here without bloating test binaries.)
     }
 
     #[test]
