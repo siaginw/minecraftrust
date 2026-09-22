@@ -40,6 +40,7 @@ public final class M4NativeStatePayload {
     public static final AtomicLong FALLBACK_UNSUPPORTED_FILTER = new AtomicLong();
     public static final AtomicLong FALLBACK_ENCODE = new AtomicLong();
     public static final AtomicLong FALLBACK_ERROR = new AtomicLong();
+    public static final AtomicLong FALLBACK_CAPTURE_UNSAFE = new AtomicLong();
     public static final AtomicLong FALLBACK_VERSION_GUARD = new AtomicLong();
     public static final AtomicLong GUARD_ACCEPTED = new AtomicLong();
     public static final AtomicLong SAMPLES_ENQUEUED = new AtomicLong();
@@ -84,7 +85,23 @@ public final class M4NativeStatePayload {
      * (caller runs the untouched Java path). No sync, no waiting, no TE work
      * here — all Java-owned behavior stays in NativeChunkPacket.
      */
+    /** M5.8-HOLD capture-safety contract: the live retained-snapshot
+     *  authoritative path is CAPTURE_UNSAFE (proven cross-thread biome/light
+     *  writers; GitHub issue #1). The PRODUCTION entry is fail-closed until a
+     *  coherent-capture contract lands — no runtime property can waive this. */
     public static byte[] tryEncode(Object chunk, int filter) {
+        FALLBACK_CAPTURE_UNSAFE.incrementAndGet();
+        return null;
+    }
+
+    /** Fixture-scope entry: IMMUTABLE offline inputs only (single-owner test
+     *  fixtures). Package-private and unreachable from any property; production
+     *  callers must use tryEncode (fail-closed). */
+    static byte[] tryEncodeFixture(Object chunk, int filter) {
+        return tryEncodeChecked(chunk, filter);
+    }
+
+    static byte[] tryEncodeChecked(Object chunk, int filter) {
         final Object this_ = M4NativeStatePayload.class; // guard token
         try {
             if ((filter & 0xFFFF) != 0xFFFF) {
@@ -320,6 +337,7 @@ public final class M4NativeStatePayload {
                 + " m43_guard_rejected=" + FALLBACK_VERSION_GUARD.get()
                 + " m52_light_sky_refreshed=" + LIGHT_SKY_REFRESHED.get()
                 + " m52_light_block_refreshed=" + LIGHT_BLOCK_REFRESHED.get()
-                + " m52_light_fallback=" + LIGHT_FALLBACK.get();
+                + " m52_light_fallback=" + LIGHT_FALLBACK.get()
+                + " m58hold_capture_unsafe_fallbacks=" + FALLBACK_CAPTURE_UNSAFE.get();
     }
 }

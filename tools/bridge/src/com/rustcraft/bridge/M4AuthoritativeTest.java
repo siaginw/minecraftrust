@@ -42,6 +42,7 @@ public class M4AuthoritativeTest {
         caseHighIdWidth();
         caseRejectionSafety();
         caseUnknownStateRejection();
+        caseCaptureUnsafeGate();
 
         System.out.println("RESULT: " + pass + " pass, " + fail + " fail");
         System.exit(fail == 0 ? 0 : 1);
@@ -63,7 +64,7 @@ public class M4AuthoritativeTest {
     static void caseEligibleFull() throws Exception {
         Object[] r = synced(100, 1);
         Object chunk = r[0];
-        byte[] payload = M4NativeStatePayload.tryEncode(chunk, 65535);
+        byte[] payload = M4NativeStatePayload.tryEncodeFixture(chunk, 65535);
         check("auth: eligible encode produced", payload != null && payload.length > 0,
                 "len=" + (payload == null ? -1 : payload.length));
         Object pkt = M4PacketParityHarness.packetCtor().newInstance(chunk, 65535);
@@ -81,7 +82,7 @@ public class M4AuthoritativeTest {
 
     static void caseUnsupportedFilter() throws Exception {
         Object[] r = synced(101, 2);
-        byte[] payload = M4NativeStatePayload.tryEncode(r[0], 0x0005); // partial filter
+        byte[] payload = M4NativeStatePayload.tryEncodeFixture(r[0], 0x0005); // partial filter
         check("auth: partial filter falls back", payload == null
                 && M4NativeStatePayload.FALLBACK_UNSUPPORTED_FILTER.get() == 1, null);
         NativeChunkBridge.unload(0, 101, 2);
@@ -90,7 +91,7 @@ public class M4AuthoritativeTest {
     static void caseUnsynced() throws Exception {
         Object[] r = M4PacketParityHarness.baseChunkAndPrimer(102, 3);
         NativeChunkBridge.register(0, 102, 3, addr((java.nio.ByteBuffer) r[1]), 0L);
-        byte[] payload = M4NativeStatePayload.tryEncode(r[0], 65535); // NOT synced
+        byte[] payload = M4NativeStatePayload.tryEncodeFixture(r[0], 65535); // NOT synced
         check("auth: unsynced falls back (no packet-thread sync)", payload == null
                 && M4NativeStatePayload.FALLBACK_NOT_SYNCED.get() == 1, null);
         NativeChunkBridge.unload(0, 102, 3);
@@ -105,7 +106,7 @@ public class M4AuthoritativeTest {
                 Class.forName("net.minecraft.block.state.IBlockState"))
                 .invoke(chunk, pos, M4PacketParityHarness.registryById(M4PacketParityHarness.testGid(3)));
         ChunkMutationTracker.onBlockSet(chunk, pos);       // pending work NOT flushed
-        byte[] payload = M4NativeStatePayload.tryEncode(chunk, 65535);
+        byte[] payload = M4NativeStatePayload.tryEncodeFixture(chunk, 65535);
         check("auth: pending work falls back (never sends stale)", payload == null
                 && (M4NativeStatePayload.FALLBACK_PENDING_WORK.get() >= 1
                         || M4NativeStatePayload.FALLBACK_VERSION_GUARD.get() >= 1), null);
@@ -115,7 +116,7 @@ public class M4AuthoritativeTest {
     static void caseNotRegistered() throws Exception {
         Object[] r = M4PacketParityHarness.baseChunkAndPrimer(104, 5); // never registered
         M4Coherency.refreshChunkNow(r[0]); // sync marks it synced but not registered
-        byte[] payload = M4NativeStatePayload.tryEncode(r[0], 65535);
+        byte[] payload = M4NativeStatePayload.tryEncodeFixture(r[0], 65535);
         check("auth: unregistered falls back", payload == null
                 && M4NativeStatePayload.FALLBACK_NOT_REGISTERED.get() >= 1, null);
     }
@@ -125,7 +126,7 @@ public class M4AuthoritativeTest {
         NativeChunkBridge.unload(0, 105, 6);                        // handle stale
         long gen2 = NativeChunkBridge.register(0, 105, 6, addr(zeroPrimer()), 0L);
         M4Coherency.refreshChunkNow(r[0]);
-        byte[] payload = M4NativeStatePayload.tryEncode(r[0], 65535); // encode under current gen2
+        byte[] payload = M4NativeStatePayload.tryEncodeFixture(r[0], 65535); // encode under current gen2
         check("auth: coordinate reuse uses CURRENT generation (valid encode)", payload != null,
                 "gen2=" + gen2);
         NativeChunkBridge.unload(0, 105, 6);
@@ -153,7 +154,7 @@ public class M4AuthoritativeTest {
         Object teMapObj = chunk.getClass().getMethod("func_177434_r").invoke(chunk);
         ((java.util.Map<Object, Object>) teMapObj).put(pos, te);
         M4Coherency.refreshChunkNow(chunk); // re-gate after TE insertion (consumer gate)
-        byte[] payload = M4NativeStatePayload.tryEncode(chunk, 65535);
+        byte[] payload = M4NativeStatePayload.tryEncodeFixture(chunk, 65535);
         check("auth: TE chunk payload native", payload != null,
                 "notSynced=" + M4NativeStatePayload.FALLBACK_NOT_SYNCED.get()
                 + " pending=" + M4NativeStatePayload.FALLBACK_PENDING_WORK.get());
@@ -165,7 +166,7 @@ public class M4AuthoritativeTest {
                 .getConstructor(Class.forName("net.minecraft.world.chunk.Chunk"), int.class)
                 .newInstance(chunk, 65535);
         boolean handled = NativeChunkPacket.populatePacket(pkt, chunk, 65535);
-        check("auth: populatePacket handles TE chunk (shell + Java TE list)", handled, null);
+        check("auth: TE chunk production entry fail-closed (gate)", !handled, null);
         Field teF = Class.forName("net.minecraft.network.play.server.SPacketChunkData")
                 .getDeclaredField("field_189557_e");
         teF.setAccessible(true);
@@ -180,7 +181,7 @@ public class M4AuthoritativeTest {
         Object chunk = r[0];
         // M5.3: the Gate-B comparator is THE verifier (dead builder retired).
         long c0 = M4PacketCompare.COMPARED.get();
-        byte[] p = M4NativeStatePayload.tryEncode(chunk, 65535);
+        byte[] p = M4NativeStatePayload.tryEncodeFixture(chunk, 65535);
         check("verify: native payload produced", p != null, null);
         Object pk = M4PacketParityHarness.packetCtor().newInstance(chunk, 65535);
         NativeChunkPacket.populatePacket(pk, chunk, 65535); // ctor-entry version pin
@@ -291,7 +292,7 @@ public class M4AuthoritativeTest {
         M4Coherency.refreshChunkNow(chunk); // initial sync: non-default lights (skylight gen ran)
 
         // initial non-default light: tryEncode passes light freshness (eligible)
-        byte[] p1 = M4NativeStatePayload.tryEncode(chunk, 65535);
+        byte[] p1 = M4NativeStatePayload.tryEncodeFixture(chunk, 65535);
         check("light: initial non-default light eligible", p1 != null,
                 "skyRef=" + M4NativeStatePayload.LIGHT_SKY_REFRESHED.get());
 
@@ -301,7 +302,7 @@ public class M4AuthoritativeTest {
         Object slN = storages[2].getClass().getMethod("func_76671_l").invoke(storages[2]);
         byte[] slArr = (byte[]) slN.getClass().getMethod("func_177481_a").invoke(slN);
         java.util.Arrays.fill(slArr, (byte) 9);   // direct write: no hook, no version bump
-        byte[] p2 = M4NativeStatePayload.tryEncode(chunk, 65535);
+        byte[] p2 = M4NativeStatePayload.tryEncodeFixture(chunk, 65535);
         check("light: direct sky write detected+refreshed (still eligible)", p2 != null,
                 "skyRef=" + M4NativeStatePayload.LIGHT_SKY_REFRESHED.get());
 
@@ -317,7 +318,7 @@ public class M4AuthoritativeTest {
         Object blN = storages[1].getClass().getMethod("func_76661_k").invoke(storages[1]);
         byte[] blArr = (byte[]) blN.getClass().getMethod("func_177481_a").invoke(blN);
         java.util.Arrays.fill(blArr, (byte) 5);
-        byte[] p3 = M4NativeStatePayload.tryEncode(chunk, 65535);
+        byte[] p3 = M4NativeStatePayload.tryEncodeFixture(chunk, 65535);
         check("light: direct block-light write handled", p3 != null,
                 "blkRef=" + M4NativeStatePayload.LIGHT_BLOCK_REFRESHED.get());
 
@@ -349,7 +350,7 @@ public class M4AuthoritativeTest {
         check("biomePush: 2-worker hammer, 0 overflow", true, null); // any exception would fail the test
         // biome freshness still holds on all chunks
         for (int i = 0; i < 6; i++) {
-            byte[] p = M4NativeStatePayload.tryEncode(chunks[i], 65535);
+            byte[] p = M4NativeStatePayload.tryEncodeFixture(chunks[i], 65535);
             check("biomePush: chunk " + i + " still eligible", p != null, null);
             NativeChunkBridge.unload(0, cx + i, cz);
         }
@@ -385,7 +386,7 @@ public class M4AuthoritativeTest {
         int nm = NativeChunkBridge.getPrimaryBitMask(0, 150, 15, gen);
         check("mask: java emits (" + Integer.toBinaryString(jm) + ") vs native (" + Integer.toBinaryString(nm) + ")",
                 jm == nm, "javaMask=" + jm + " nativeMask=" + nm);
-        byte[] np = M4NativeStatePayload.tryEncode(chunk, 65535);
+        byte[] np = M4NativeStatePayload.tryEncodeFixture(chunk, 65535);
         if (jm == nm && np != null) {
             M4PacketParityHarness.ParsedJ J = M4PacketParityHarness.parseByMask(jp, jm, true);
             M4PacketParityHarness.ParsedJ N = M4PacketParityHarness.parseByMask(np, jm, true);
@@ -527,7 +528,7 @@ public class M4AuthoritativeTest {
         boolean guardFires = ((76916 & 0xFFFF0000) != 0) && ((11380 & 0xFFFF0000) == 0);
         check("width: guard arithmetic fires on >u16 only", guardFires, null);
         // low-ID section stays eligible (no false rejection)
-        byte[] ok = M4NativeStatePayload.tryEncode(chunk, 65535);
+        byte[] ok = M4NativeStatePayload.tryEncodeFixture(chunk, 65535);
         check("width: low-ID chunk unaffected by guard", ok != null, null);
         NativeChunkBridge.unload(0, cx, cz);
     }
@@ -543,15 +544,15 @@ public class M4AuthoritativeTest {
         Object chunk = r[0];
         NativeChunkBridge.register(0, cx, cz, addr((java.nio.ByteBuffer) r[1]), 0L);
         M4Coherency.refreshChunkNow(chunk);
-        check("reject: supported chunk eligible", M4NativeStatePayload.tryEncode(chunk, 65535) != null, null);
+        check("reject: supported chunk eligible", M4NativeStatePayload.tryEncodeFixture(chunk, 65535) != null, null);
         check("reject: vanilla run keeps guard at 0", M4Coherency.HIGH_ID_REJECTED.get() == 0, null);
         // invalidate => ineligible (no falsely-current snapshot)
         NativeChunkBridge.invalidate(0, cx, cz);
-        check("reject: invalidated chunk falls back", M4NativeStatePayload.tryEncode(chunk, 65535) == null, null);
+        check("reject: invalidated chunk falls back", M4NativeStatePayload.tryEncodeFixture(chunk, 65535) == null, null);
         // re-register + FRESH capture restores eligibility
         long gen2 = NativeChunkBridge.register(0, cx, cz, addr((java.nio.ByteBuffer) r[1]), 0L);
         M4Coherency.refreshChunkNow(chunk);
-        check("reject: fresh capture re-arms", M4NativeStatePayload.tryEncode(chunk, 65535) != null
+        check("reject: fresh capture re-arms", M4NativeStatePayload.tryEncodeFixture(chunk, 65535) != null
                 && gen2 > 0, "gen2=" + gen2);
         NativeChunkBridge.unload(0, cx, cz);
     }
@@ -565,7 +566,7 @@ public class M4AuthoritativeTest {
         Object chunk = r[0];
         long gen = NativeChunkBridge.register(0, cx, cz, addr((java.nio.ByteBuffer) r[1]), 0L);
         M4Coherency.refreshChunkNow(chunk);
-        check("unknown: baseline eligible", M4NativeStatePayload.tryEncode(chunk, 65535) != null, null);
+        check("unknown: baseline eligible", M4NativeStatePayload.tryEncodeFixture(chunk, 65535) != null, null);
         // simulate an unresolved-state refresh via refreshOneSection's guard:
         // craft the bad array path indirectly — verify the guard arithmetic:
         int unresolved = -1;
@@ -575,6 +576,33 @@ public class M4AuthoritativeTest {
         // unresolved palette entries, forcing the slow path which rejects.
         check("unknown: vanilla run keeps rejection counter 0",
                 M4Coherency.UNKNOWN_STATE_REJECTED.get() == 0, null);
+        NativeChunkBridge.unload(0, cx, cz);
+    }
+
+    static void caseCaptureUnsafeGate() throws Exception {
+        int cx = 200, cz = 20;
+        Object[] r = M4PacketParityHarness.baseChunkAndPrimer(cx, cz);
+        Object chunk = r[0];
+        NativeChunkBridge.register(0, cx, cz, addr((java.nio.ByteBuffer) r[1]), 0L);
+        M4Coherency.refreshChunkNow(chunk);
+        long t0 = M4NativeStatePayload.TRANSMITTED.get();
+        long g0 = M4NativeStatePayload.GUARD_ACCEPTED.get();
+        long c0 = M4NativeStatePayload.FALLBACK_CAPTURE_UNSAFE.get();
+        // PRODUCTION entry: fail-closed even though native_state=ON_EXPERIMENTAL
+        check("gate: production tryEncode returns null", M4NativeStatePayload.tryEncode(chunk, 65535) == null, null);
+        check("gate: capture-unsafe fallback counted",
+                M4NativeStatePayload.FALLBACK_CAPTURE_UNSAFE.get() > c0, null);
+        // through populatePacket: Java fallback, packet fields untouched
+        Object pkt = M4PacketParityHarness.packetCtor().newInstance(chunk, 65535);
+        boolean handled = NativeChunkPacket.populatePacket(pkt, chunk, 65535);
+        check("gate: populatePacket falls back to Java", !handled, null);
+        byte[] payload = (byte[]) M4PacketParityHarness.pktPayloadField().get(pkt);
+        check("gate: no native bytes counted (no partial native population)",
+                M4NativeStatePayload.TRANSMITTED.get() == t0
+                && M4NativeStatePayload.GUARD_ACCEPTED.get() == g0, null);
+        // fixture entry still usable
+        check("gate: fixture entry works (immutable scope)",
+                M4NativeStatePayload.tryEncodeFixture(chunk, 65535) != null, null);
         NativeChunkBridge.unload(0, cx, cz);
     }
     static java.nio.ByteBuffer zeroPrimer() {
