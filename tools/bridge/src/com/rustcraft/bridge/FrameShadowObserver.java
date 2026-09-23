@@ -125,6 +125,16 @@ public final class FrameShadowObserver {
     public final AtomicLong SAMPLED_BYTES = new AtomicLong();          // total bytes copied into owned samples
     public final AtomicLong COMPLETED_COMPRESSED = new AtomicLong();   // comparisons where dataLen>0 (inflate path)
     public final AtomicLong COMPLETED_PASSTHROUGH = new AtomicLong();  // comparisons where framing was uncompressed
+    /** Bounded root-cause diagnostics: first N mismatches per observer —
+     *  lengths + packet-id byte + hex heads of captured vs java-decoded body. */
+    final java.util.concurrent.atomic.AtomicInteger diagLeft = new java.util.concurrent.atomic.AtomicInteger(3);
+    public final java.util.List<String> MISMATCH_DIAGNOSTICS = new java.util.concurrent.CopyOnWriteArrayList<>();
+    /** Bounded ordered write-trace (first N events per observer): 'C seq len'
+     *  at capture, 'F len <pendingSeq|- >' at frame-observe — reveals bypassed,
+     *  dropped, or reordered writes in modded pipelines. Property-gated OFF. */
+    public static final boolean TRACE = "true".equalsIgnoreCase(System.getProperty("minecraftrust.frame_shadow.trace", "false"));
+    final java.util.concurrent.atomic.AtomicInteger traceLeft = new java.util.concurrent.atomic.AtomicInteger(40);
+    public final java.util.List<String> WRITE_TRACE = new java.util.concurrent.CopyOnWriteArrayList<>();
     public volatile String disabledReason;                     // set when observer disables itself
 
     // ---- per-channel pairing state ----
@@ -182,6 +192,27 @@ public final class FrameShadowObserver {
      *  inline and the counters are final. (A closeFuture listener would fire
      *  BEFORE teardown frees — wrong lifecycle point.) */
     public static final AtomicLong CHANNELS_CLEAN_CLOSE = new AtomicLong();
+    /** M-CK5-LIVE evidence: the verified pipeline layout (head->tail handler
+     *  names) of the FIRST successfully verified channel, and the layout at
+     *  the most recent fail-closed skip (with its reason) — recorded so
+     *  modded pipelines are documented, never guessed. */
+    public static volatile String PIPELINE_LAYOUT_VERIFIED;
+    public static volatile String PIPELINE_LAYOUT_SKIPPED;
+
+    private static String layout(ChannelPipeline p) {
+        try {
+            String n = String.valueOf(p.names());
+            return n.length() > 400 ? n.substring(0, 400) + "..." : n;
+        } catch (Throwable t) {
+            return "layout-unreadable:" + t;
+        }
+    }
+
+    private static String hex(byte[] b, int n) {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < Math.min(n, b.length); i++) sb.append(String.format("%02x", b[i]));
+        return sb.toString();
+    }
 
     /**
      * M-CK5-LIVE installation for the REAL production pipeline. Positions are
@@ -217,6 +248,7 @@ public final class FrameShadowObserver {
                         + (pipeline.get("encoder") == null ? "encoder " : "")
                         + (pipeline.get("compress") == null ? "compress " : "")
                         + (pipeline.get("prepender") == null ? "prepender" : "");
+                PIPELINE_LAYOUT_SKIPPED = layout(pipeline);
                 return null;
             }
             java.util.List<String> names = pipeline.names(); // head -> tail
@@ -224,16 +256,23 @@ public final class FrameShadowObserver {
             if (!(iPrep >= 0 && iComp > iPrep && iEnc > iComp)) {
                 INSTALL_SKIPPED.incrementAndGet();
                 LAST_SKIP_REASON = "order-verification-failed prep=" + iPrep + " comp=" + iComp + " enc=" + iEnc;
+                PIPELINE_LAYOUT_SKIPPED = layout(pipeline);
                 return null;
             }
             FrameShadowObserver obs = new FrameShadowObserver(pipeline, cfg);
-            pipeline.addBefore("encoder", "mck5-capture", obs.new CaptureHandler());
+            // ORDER: frame-observe FIRST, then capture. If a write slips between
+            // the two installs it is an extra FRAME with no pending (benign,
+            // counted UNPAIRED_FRAME) — the reverse order could orphan a CAPTURE
+            // whose frame is then mis-paired (MCK5LR live-defect class).
             pipeline.addBefore("prepender", "mck5-frame-observe", obs.new FrameObserveHandler());
+            pipeline.addBefore("encoder", "mck5-capture", obs.new CaptureHandler());
             INSTALL_OK.incrementAndGet();
+            if (PIPELINE_LAYOUT_VERIFIED == null) PIPELINE_LAYOUT_VERIFIED = layout(pipeline);
             return obs;
         } catch (Throwable t) {
             INSTALL_SKIPPED.incrementAndGet();
             LAST_SKIP_REASON = "install-exception:" + t;
+            PIPELINE_LAYOUT_SKIPPED = layout(pipeline);
             return null;
         }
     }
@@ -299,6 +338,23 @@ public final class FrameShadowObserver {
             ByteBuf in = (ByteBuf) msg;
             OBSERVED.incrementAndGet();
             long seq = seqGen.incrementAndGet();
+            // PAIRING HARDENING v2 (MCK5LR live defect, both holes): in a
+            // strictly in-order single-owner pipeline, frame(X) is always
+            // observed BEFORE the next message reaches this capture boundary —
+            // for SELECTED and SKIPPED messages alike. Therefore ANY pending
+            // still incomplete at ANY capture event (selected or sampling-
+            // skipped) is provably stale: its frame was dropped/bypassed/
+            // rerouted by a modded pipeline (observed on Forge: the FML|MP
+            // multipart HEADER write vanishing between capture and the
+            // prepender). Retire it as UNPAIRED so no later frame can ever be
+            // absorbed into the wrong sample. (v1 retired only on selected
+            // captures — the sampled-out next message left the stale pending
+            // absorbable, reproduced live at every=2.)
+            Pending stale = pending.getAndSet(null);
+            if (stale != null && !stale.completed) {
+                stale.completed = true;
+                UNPAIRED_CAPTURE.incrementAndGet();
+            }
             boolean selected = cfg.sampleEvery > 0 && seq % cfg.sampleEvery == 0
                     && COMPLETED.get() + countSkipsForBudget() < Long.MAX_VALUE;
             int len = in.readableBytes();
@@ -322,11 +378,10 @@ public final class FrameShadowObserver {
                 return;
             }
             Pending p = new Pending(seq, snapshot, threshold);
-            if (!pending.compareAndSet(null, p)) {   // one outstanding max (sync design)
-                SKIPPED_LIMIT.incrementAndGet();
-                ctx.write(msg, promise);
-                return;
+            if (TRACE && traceLeft.decrementAndGet() >= 0) {
+                WRITE_TRACE.add("C#" + seq + ":" + len);
             }
+            pending.set(p); // stale predecessor already retired above
             SELECTED.incrementAndGet();
             SAMPLED_BYTES.addAndGet(snapshot.length);
             RETAINED_OBSERVATIONS.set(1);
@@ -431,6 +486,9 @@ public final class FrameShadowObserver {
         @Override
         public void write(ChannelHandlerContext ctx, Object msg, ChannelPromise promise) throws Exception {
             Pending p = pending.get();
+            if (TRACE && msg instanceof ByteBuf && traceLeft.decrementAndGet() >= 0) {
+                WRITE_TRACE.add("F:" + ((ByteBuf) msg).readableBytes() + "<-" + (p == null ? "-" : ("#" + p.seq + (p.completed ? "c" : ""))));
+            }
             if (cfg.enabled && !removed && p != null && !p.completed && msg instanceof ByteBuf) {
                 ByteBuf frameBuf = (ByteBuf) msg;
                 int flen = frameBuf.readableBytes();
@@ -530,6 +588,23 @@ public final class FrameShadowObserver {
             if (javaOk && rustOk) MATCHED.incrementAndGet();
             else {
                 MISMATCHED.incrementAndGet();
+                if (!(javaOk && rustOk) && diagLeft.decrementAndGet() >= 0) {
+                    StringBuilder d = new StringBuilder("seq=").append(p.seq)
+                            .append(" thr=").append(p.thresholdAtWrite)
+                            .append(" capLen=").append(original.length)
+                            .append(" frameLen=").append(javaFrame.length)
+                            .append(" jdNull=").append(jd == null)
+                            .append(" jdConsumed=").append(jd != null && jd.consumedExactly)
+                            .append(" jdDataLen=").append(jd == null ? -1 : jd.dataLen)
+                            .append(" jdBodyLen=").append(jd == null ? -1 : jd.body.length);
+                    if (jd != null && jd.body.length > 0 && original.length > 0) {
+                        d.append(" capId=0x").append(Integer.toHexString(original[0] & 0xFF))
+                                .append(" jdId=0x").append(Integer.toHexString(jd.body[0] & 0xFF))
+                                .append(" capHead=").append(hex(original, 16))
+                                .append(" jdHead=").append(hex(jd.body, 16));
+                    }
+                    MISMATCH_DIAGNOSTICS.add(d.toString());
+                }
                 disable(javaOk ? "rust comparison mismatch" : "java frame did not recover the captured body");
             }
             // debug observability (package-private, offline)

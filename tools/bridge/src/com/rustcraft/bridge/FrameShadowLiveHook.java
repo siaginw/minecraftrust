@@ -80,6 +80,29 @@ public final class FrameShadowLiveHook {
         }
     }
 
+    private static String mismatchDiags() {
+        StringBuilder sb = new StringBuilder();
+        for (FrameShadowObserver o : LIVE) {
+            for (String d : o.MISMATCH_DIAGNOSTICS) {
+                if (sb.length() > 0) sb.append(" || ");
+                sb.append(d);
+            }
+        }
+        return sb.length() == 0 ? "none" : sb.toString();
+    }
+
+    private static String writeTraces() {
+        if (!FrameShadowObserver.TRACE) return "off";
+        StringBuilder sb = new StringBuilder();
+        for (FrameShadowObserver o : LIVE) {
+            if (!o.WRITE_TRACE.isEmpty()) {
+                if (sb.length() > 0) sb.append(" | ");
+                sb.append(o.WRITE_TRACE);
+            }
+        }
+        return sb.length() == 0 ? "empty" : sb.toString();
+    }
+
     /** Aggregated dump for the periodic/shutdown metrics files. */
     public static String dumpMetrics() {
         long observed = 0, selected = 0, completed = 0, matched = 0, mismatched = 0;
@@ -123,6 +146,10 @@ public final class FrameShadowLiveHook {
                 + "\nmck5live.ctxCreated=" + created + " ctxFreed=" + freed
                 + " retainedObservations=" + retainedObs + " retainedBytes=" + retainedBytes
                 + " sampledBytes=" + sampledBytes
+                + "\nmck5live.pipelineLayoutVerified=" + FrameShadowObserver.PIPELINE_LAYOUT_VERIFIED
+                + "\nmck5live.pipelineLayoutSkipped=" + FrameShadowObserver.PIPELINE_LAYOUT_SKIPPED
+                + "\nmck5live.mismatchDiagnostics=" + mismatchDiags()
+                + "\nmck5live.writeTrace=" + writeTraces()
                 + "\nmck5live.lastError=" + lastError;
     }
 }

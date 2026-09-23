@@ -54,9 +54,74 @@ public class MCK5ObserverGates {
         observerLifecycleQuiescence();
         handlerQuiescenceRejection();
         liveInstallPositionsAndFailClosed();
+        droppedFramePairingHardening();
 
         System.out.println("RESULT: " + pass + " pass, " + fail + " fail");
         System.exit(fail == 0 ? 0 : 1);
+    }
+
+    /** Regression for the MCK5LR live defect class: on Forge, the FML|MP
+     *  multipart HEADER write was captured but its frame never reached the
+     *  frame observer (dropped/bypassed between capture and the prepender),
+     *  and the NEXT message's frame was then absorbed by the stale pending ->
+     *  false mismatch. Deterministic reproduction: a handler placed tail-most
+     *  swallows the FIRST message's frame entirely. */
+    static void droppedFramePairingHardening() throws Exception {
+        EmbeddedChannel ch = javaPipeline(256);
+        ch.pipeline().addLast("mck5-swallow", new io.netty.channel.ChannelOutboundHandlerAdapter() {
+            boolean swallowed = false;
+            @Override
+            public void write(io.netty.channel.ChannelHandlerContext ctx, Object msg, ChannelPromise promise) throws Exception {
+                if (!swallowed) { swallowed = true; return; } // frame VANISHES (drop)
+                ctx.write(msg, promise);
+            }
+        });
+        FrameShadowObserver obs = FrameShadowObserver.install(ch.pipeline(), onCfg());
+        byte[] first = new byte[2000], second = new byte[3000];
+        new Random(95).nextBytes(first);
+        new Random(96).nextBytes(second);
+        writeTracked(ch, heap(first.clone()));   // captured; frame dropped mid-pipeline
+        Object[] r2 = writeTracked(ch, heap(second.clone()));  // must retire stale pending and MATCH
+        boolean secondOk = r2[0].equals(Boolean.TRUE) && r2[1] instanceof byte[]
+                && Arrays.equals(MCK4Validation.decodeFrameSafe((byte[]) r2[1], true), second);
+        boolean counters = obs.UNPAIRED_CAPTURE.get() == 1 && obs.MISMATCHED.get() == 0
+                && obs.COMPLETED.get() == 1 && obs.MATCHED.get() == 1;
+        check("pairing-hardening: dropped mid-pipeline frame -> stale pending RETIRED as unpaired; next message MATCHES (no mis-pairing)",
+                secondOk && counters, "secondOk=" + secondOk + " unpaired=" + obs.UNPAIRED_CAPTURE.get()
+                        + " mismatch=" + obs.MISMATCHED.get() + " completed=" + obs.COMPLETED.get());
+        obs.uninstall(); ch.close();
+        // v2 hole (reproduced live at every=2): the message AFTER the dropped
+        // frame is SAMPLED OUT — its capture must still retire the stale pending
+        // so the SUBSEQUENT selected message's frame is never absorbed by it.
+        EmbeddedChannel ch2 = javaPipeline(256);
+        ch2.pipeline().addLast("mck5-swallow2", new io.netty.channel.ChannelOutboundHandlerAdapter() {
+            int seen = 0;
+            @Override
+            public void write(io.netty.channel.ChannelHandlerContext ctx, Object msg, ChannelPromise promise) throws Exception {
+                if (++seen == 2) { return; } // drop the SECOND write = the first SELECTED message (every=2 selects even seqs)
+                ctx.write(msg, promise);
+            }
+        });
+        FrameShadowObserver.Config cfg2 = onCfg();
+        cfg2.sampleEvery = 2; // seq1 skipped, seq2 SELECTED (frame dropped), seq3 skipped (must retire), seq4 SELECTED
+        FrameShadowObserver obs2 = FrameShadowObserver.install(ch2.pipeline(), cfg2);
+        byte[][] bodies = { new byte[500], new byte[2000], new byte[700], new byte[3000] };
+        Arrays.fill(bodies[0], (byte) 3);
+        new Random(98).nextBytes(bodies[1]);
+        Arrays.fill(bodies[2], (byte) 5);
+        new Random(99).nextBytes(bodies[3]);
+        writeTracked(ch2, heap(bodies[0].clone())); // seq1: skipped, frame flows
+        writeTracked(ch2, heap(bodies[1].clone())); // seq2: SELECTED, frame DROPPED -> stale pending
+        writeTracked(ch2, heap(bodies[2].clone())); // seq3: SKIPPED — must still retire the stale pending
+        Object[] r4 = writeTracked(ch2, heap(bodies[3].clone())); // seq4: SELECTED; frame must pair with ITSELF
+        boolean fourthOk = r4[0].equals(Boolean.TRUE) && r4[1] instanceof byte[]
+                && Arrays.equals(MCK4Validation.decodeFrameSafe((byte[]) r4[1], true), bodies[3]);
+        boolean counters2 = obs2.UNPAIRED_CAPTURE.get() == 1 && obs2.MISMATCHED.get() == 0
+                && obs2.COMPLETED.get() == 1 && obs2.MATCHED.get() == 1;
+        check("pairing-hardening-v2: sampled-out message after a dropped frame ALSO retires the stale pending; next SELECTED message matches",
+                fourthOk && counters2, "fourthOk=" + fourthOk + " unpaired=" + obs2.UNPAIRED_CAPTURE.get()
+                        + " mismatch=" + obs2.MISMATCHED.get() + " completed=" + obs2.COMPLETED.get());
+        obs2.uninstall(); ch2.close();
     }
 
     static void check(String n, boolean ok, String d) {

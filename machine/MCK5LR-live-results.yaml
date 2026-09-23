@@ -1,0 +1,96 @@
+# M-CK5-LR — FRAME SHADOW OBSERVER LIVE VALIDATION, FTB REVELATION (Target C)
+schema_version: 1
+date: "2026-09-22"
+classification_target: FRAME_SHADOW_OBSERVER_LIVE_VALIDATED_REVELATION
+binary:
+  dll_sha256: c10ddca1ce3c82255e78154fde657408e82fa354707bc5174deb5b0a6cb62d2c
+  coremod_jar_sha256: 8ba8300387936fff306ba3f1b60ed49c69c3fb13e868ebf536fa6efeabd333b8
+  java: Temurin jdk-8.0.504.1-hotspot
+  netty: 4.1.9.Final (bundled); pack-official forge 1.12.2-14.23.5.2846; FTB Revelation 3.4.0 (196 mods, FoamFix+Phosphor)
+environment: "Target C in-place pack server (install/world/config untouched, M2CC practice); offline-mode (no encrypt handler); network-compression-threshold=256; port 25567"
+pipeline_research: >
+  Verified live per channel by NAME before any mutation (liveInstall; fail
+  closed on mismatch). Verified layout (head->tail): [timeout, splitter,
+  decompress, decoder, mck5-frame-observe, prepender, compress, mck5-capture,
+  encoder, packet_handler, TailContext#0] — same semantic order as Target A
+  with no encrypt (offline mode) and no legacy_query; Forge's
+  fml:packet_handler (NetworkDispatcher, addBefore packet_handler per its
+  bytecode) is not present at install time. No mod-added outbound handlers
+  between the observer boundaries. FML|MP multipart (FMLProxyPacket.toMultipart
+  bytecode: payloads >32767 split into SPacketCustomPayload parts on channel
+  FML|MP, first part = [channel][byte][int] header = the observed 20-byte
+  packet) is the modpack-specific traffic class that exposed the pairing defect
+  below.
+defect_found_and_fixed: >
+  LIVE DEFECT (first ever semantic mismatches): Forge drops/bypasses the FML|MP
+  multipart HEADER write between the capture boundary and the prepender (ordered
+  write-trace proof: captured 20-byte header C#12 — [id 0x18]["FML|MP"][channel-
+  string][byte][int], exactly FMLProxyPacket.toMultipart's header per its
+  bytecode — its frame NEVER observed; the next message's 1,048,504-byte data-
+  part frame was then absorbed by the stale pending -> mis-pairing -> mismatch;
+  the observer correctly DISABLED per channel and never counted a false match).
+  ROOT CAUSE (observer): a captured message whose frame never reaches the frame
+  observer left a stale pending that a LATER frame consumed. FIX v1: retire an
+  incomplete pending at the next SELECTED capture + install frame-observe before
+  capture; verified live at every=1 (200/200 matched) — but the definitive
+  campaign at every=2 STILL mismatched (run MCK5LR-20260923-000217, preserved):
+  the next message was SAMPLED OUT, so no capture event fired and the stale
+  pending survived to absorb the next frame. FIX v2 (final): the retirement runs
+  at EVERY capture event, selected or sampling-skipped — in a strictly in-order
+  single-owner pipeline, frame(X) always precedes the NEXT message's arrival at
+  the capture boundary, so ANY pending incomplete at ANY capture is provably
+  stale (retired as UNPAIRED_CAPTURE, never paired). REGRESSIONS:
+  MCK5ObserverGates.droppedFramePairingHardening (selected-next) and ...v2
+  (sampled-out-next) — deterministic mid-pipeline frame swallows; gates 23/23.
+  VERIFIED live at the exact campaign sampling (every=2 boot): 200/200 matched,
+  0 mismatched, unpairedCapture=1 per connection (the FML|MP header, honestly
+  counted), client 10,948 frames decoded with 0 errors.
+campaign:
+  script: tools/mck5lr-run.sh
+  design: "ONE bounded ~13-min run: in-place pack server, readiness-gated logins (modpack login gating), Phase A corridor walk (perfbotb, 60 teleport hops) for chunk + movement + modded payload/TE traffic, console block-mutation batch (block/light/TE updates), Phase B 3 reconnect sessions (perfbota; FML handshake + small packets + disconnect lifecycle); deterministic 1:2 sampling; per-channel maxComparisons 6000; everything else OFF; Java transmits every packet; rust output discarded"
+  run_id: "MCK5LR-20260923-004216 (definitive; artifacts machine/raw/MCK5LR-20260923-004216-{meta,metrics,server.log,client.jsonl,campaign.log})"
+definitive_counters: >
+  mck5live.mode=LIVE hookCalls=5 installOk=5 installSkipped=0 lastSkipReason=null;
+  channels=5 channelsCleanClosed=5; observed=763364 selected=23705 (deterministic
+  1:2 + per-channel maxComparisons=6000; skippedLimit=357976 = the bounded cap,
+  Java unaffected) completed=23700 matched=23700 mismatched=0;
+  completedCompressed=2305 completedUncompressed=21395; unpairedFrame=739659
+  (exactly the sampling-skipped frames) unpairedCapture=5 (exactly the 5
+  connections FML|MP headers - retired, never paired); observerErrors=0
+  disabledObservers=0 disableReasons=none; ALL other skip reasons 0;
+  ctxCreated=5 ctxFreed=5 retainedObservations=0 retainedBytes=0
+  sampledBytes=45923164; mismatchDiagnostics=none; lastError=null;
+  frameShadowHook.transformCount=1 HOOK_INSTALLED x1.
+traffic_coverage: >
+  Phase A corridor walk (perfbotb, 50 teleport hops): 727,933 frames decoded by
+  the client incl. 12,660 chunk packets (402.1 MB) + 4,367 block changes +
+  keepalives + movement + modded custom payloads (e.g. Astral Sorcery sync in
+  the server log); console block/light mutation batch; Phase B 3 reconnect
+  sessions (perfbota): FML handshake + registry multiparts + 441 chunks each.
+  4/4 sessions errors=0. Java transmitted every packet
+  (m1_java_packets_transmitted=14425 on the M1 counter alone).
+non_interference: >
+  Offline differential proof (23/23 gates incl. dropped-frame pairing v1+v2).
+  Live: client decoded ALL traffic with 0 errors across 4 sessions incl. a
+  727,933-frame walk; clean session-end disconnects (last_error=None);
+  observer never disabled nor errored; Java output unaffected (the observer is
+  read-only at both boundaries; the only modded anomaly - the FML|MP header
+  bypass - affected ONLY the observer pairing, never the wire bytes).
+lifecycle_memory: >
+  contexts_created(5) == contexts_freed(5); observer_owned_retained_bytes == 0
+  at final dump; channelsCleanClosed=5 (verified in handlerRemoved after the
+  teardown free); reconnect/disconnect lifecycle exercised 4x; the pack
+  existing install/world/config untouched.
+failures_preserved:
+  - "MCK5LR-20260922-224058: HARNESS DEFECT missing-cd (server launched from repo root). Preserved; fixed."
+  - "MCK5LR-20260922-224533: FIRST LIVE DEFECT - 5 mismatches (java frame did not recover the captured body), one per channel, all at the FML|MP header; observer fail-closed per channel; lifecycle balanced; Java/client unaffected. Root-caused via bounded mismatch diagnostics + ordered write-trace boots."
+  - "MCK5LR-20260923-000217: v1-fix verification run - STILL 5 mismatches because retirement fired only on SELECTED captures and the next message was sampled out at every=2 (IMPLEMENTATION_DEFECT, preserved); led to the v2 fix + second regression."
+  - "MCK5LR-20260923-004216: DEFINITIVE - all criteria met (counters above)."
+server_client_errors: >
+  Server log: 232 Exception/ERROR lines, ALL modpack baseline (gson recipe/item
+  parse errors, BuildCraft facade property warnings, advancement parse errors,
+  FML signature/class-read warnings, and the 2 expected client session-end
+  disconnect IOEs) - zero observer-attributable lines (the only mck5 mentions
+  are the metrics dump itself; observerErrors=0). Client: 4/4 sessions errors=0.
+regressions: "MCK5ObserverGates 23/23 (incl. pairing-hardening v1+v2 regressions); MCK5OptimizationTests 13/13; MCK42OwnershipGates 15/15; MCK42FrameBoundaryGates 11/11; MCK4Validation 20/20; M53FrameOracle 25/25; M52CompressionTests 26/26; M4AuthoritativeTest 59/59; compression 14/14; native-chunk 10/10 (all after the final implementation state)"
+safety: "Java authoritative for every transmitted byte; Rust observer output discarded; defaults OFF (property-gated transformer verified OFF->no transformation); Revelation only (no SevTech); in-place pack data untouched; M1/M2/M5 authority stayed OFF; CAPTURE_UNSAFE gate untouched; issue #1 OPEN"
