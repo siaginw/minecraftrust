@@ -22,13 +22,13 @@ revelation:
     - "A MCK6P-CA-20260923-023755: 13,598 auth pkts (1,878 comp / 11,720 uncomp), 850 cc 0 mism, 0 fb, ctx 2/2; client 8,879 frames 0 errors (harness stop-schedule defect only — session itself clean; preserved)"
     - "B MCK6P-CB-20260923-030407: 32,592 auth (1,882 / 30,710), 2,037 cc 0 mism, 0 fb, ctx 2/2; client 27,118 frames 0 errors (441 chunks, 15 tp hops)"
     - "C MCK6P-CC-20260923-031117: 5 channels, 113,261 auth (4,729 / 108,532), body 83.7MB -> wire 14.6MB, 7,081 cc 0 mism, 0 fb, ctx 5/5; client 106,859 frames 0 errors across 4 sessions"
-  totals: "159,451 rust-authoritative packets (7,489 compressed / 151,962 uncompressed), 9,968 sampled cross-checks 0 mismatches, 0 live fallbacks, contexts 9/9; server errors = Revelation baseline only (gson recipes/BuildCraft/advancements + expected disconnects), zero authority-attributable"
+  totals: "159,451 rust-authoritative packets (8,489 compressed / 150,962 uncompressed), 9,968 sampled cross-checks 0 mismatches, 0 live fallbacks, contexts 9/9; server errors = Revelation baseline only (gson recipes/BuildCraft/advancements + expected disconnects), zero authority-attributable"
   classification: FRAME_ENGINE_AUTHORITATIVE_VALIDATED_REVELATION
 sevtech:
   pack: "SevTech Ages 3.2.3 / Forge 14.23.5.2860 (262 mods), in-place, offline-mode, thr 256"
   phases:
     - "A MCK6P-DA-20260923-032639: 15,797 auth (964 / 14,833), 989 cc 0 mism, 0 fb, ctx 2/2; client 10,387 frames 0 errors (first attempt -032044 preserved: harness negative-sleep stop defect, no session ran)"
-    - "B MCK6P-DB-20260923-033127: 45,911 auth (964 / 44,947), 2,870 cc 0 mism, 0 fb, ctx 2/2; client 41,222 frames 0 errors (441 chunks, 15 tp hops)"
+    - "B MCK6P-DB-20260923-033140: 45,911 auth (964 / 44,947), 2,870 cc 0 mism, 0 fb, ctx 2/2; client 41,222 frames 0 errors (441 chunks, 15 tp hops)"
     - "C MCK6P-DC-20260923-033850: 5 channels, 61,563 auth (2,432 / 59,131), body 80.5MB -> wire 9.6MB, 3,850 cc 0 mism, 0 fb, ctx 5/5; client 56,357 frames 0 errors across 4 sessions (1,765 chunks)"
   totals: "123,271 rust-authoritative packets (4,360 compressed / 118,911 uncompressed), 7,709 sampled cross-checks 0 mismatches, 0 live fallbacks, contexts 9/9; server errors = SevTech baseline only (gson/KleeSlabs/Hunting Dimension + expected disconnects; the only p6bot mentions are normal modded-join INFO from journeymap/antiqueatlas/Waila), zero authority-attributable"
   classification: FRAME_ENGINE_AUTHORITATIVE_VALIDATED_SEVTECH
@@ -41,3 +41,17 @@ failures_preserved:
   - "MCK6P-DA-20260923-032044: HARNESS negative-sleep defect (sleep -9829 -> immediate stop; no session ran). Script fixed; preserved."
 regressions: "No implementation changes; final-build gates re-verified: MCK6AuthorityGates 11/11, MCK5ObserverGates 23/23 (full battery green on this exact jar at M-CK6: 203 Java + 24 Rust)"
 safety: "defaults OFF (explicit ON_EXPERIMENTAL opt-in per run); NativeChunk/m1 counters zero; no world-snapshot work; issue #1 OPEN and untouched; no unrelated migration"
+
+arithmetic_audit_2026_09_23: >
+  CORRECTION (summary-level only; raw run artifacts untouched and were always
+  correct): Revelation compressed total was misprinted 7,489 -> correct
+  8,489 (= 1,878+1,882+4,729); uncompressed 151,962 -> 150,962 (= 11,720+
+  30,710+108,532); both sum to the unchanged 159,451 total. SevTech Phase-B
+  run ID typo 033127 -> 033140. Cross-check grand total across the ladder is
+  18,013 (= Target A 343 + Revelation 9,968 + SevTech 7,709): the previously
+  published Target-A figure 543 contradicted its own raw per-phase artifacts
+  (20+27+296 = 343) and is corrected in MCK6A-auth-results.yaml; the 17,220
+  ladder figure derived from it is likewise corrected to 18,013. Grand
+  authority totals verified: 288,167 packets = 13,395 compressed (546+8,489+
+  4,360) + 274,772 uncompressed (4,899+150,962+118,911). Classifications
+  unchanged.

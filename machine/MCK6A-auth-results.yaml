@@ -46,7 +46,7 @@ live_ladder:
   phaseC: "MCK6A-C-20260923-021420 (confirmation, walk + 3 reconnect sessions on a raised-max-players DISPOSABLE run copy — operator source untouched): 4 channels installOk=4, 4,710 auth packets (366 compressed / 4,344 uncompressed), body 12,478,889 B -> wire 1,404,907 B, 296 crosschecks 0 mismatches, 0 fallbacks of any kind, ctxCreated=4==ctxFreed=4; client 4 sessions / 4,689 frames decoded with 0 errors (324 chunks)."
 mode_default_verification: "minecraftrust.frame_authority default OFF (property-gated; transformer makes ZERO transformations when OFF — verified in the offline transformer probe and by transformCount=0 in prior OFF runs); every campaign launch used the explicit operator opt-in property; M1/M2C/M4 counters all zero in the runs (native_chunk_packet=OFF, native_compress=OFF, frame_shadow=OFF)."
 fallback_results: "LIVE: ZERO fallbacks across all three phases (every eligible write was Rust-authoritative). Fallback behavior itself is deterministically regression-proven offline (byte-identical Java path, spies, no loss/dup)."
-cross_check: "543 sampled post-production cross-checks across the ladder (20+27+296), 0 mismatches — every sampled transmitted Rust frame independently decoded to its original Java-serialized body."
+cross_check: "343 sampled post-production cross-checks across the ladder (20+27+296), 0 mismatches — CORRECTED 2026-09-23: previously misprinted 543, contradicting the per-phase raw artifacts (20+27+296=343) — every sampled transmitted Rust frame independently decoded to its original Java-serialized body."
 loss_duplication_anomalies: >
   Client decoded every session cleanly (0 errors, 0 unexplained disconnects;
   disconnects only at hold-deadline). Frame accounting: e.g. Phase A 314 auth
