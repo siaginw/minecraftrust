@@ -133,6 +133,7 @@ public class RustCraftCoreMod implements IFMLLoadingPlugin {
                         pw.println(com.rustcraft.bridge.NativeChunkPacket.dumpMetrics());
                         pw.println(com.rustcraft.bridge.NativeCompressionEncoder.dumpMetrics());
                         pw.println(com.rustcraft.bridge.FrameShadowLiveHook.dumpMetrics()); // M-CK5 live observer
+                        pw.println(com.rustcraft.bridge.FrameAuthorityHandler.dumpMetrics()); // M-CK6 authority
                         pw.println("frameShadowHook.transformCount=" + com.rustcraft.coremod.FrameShadowHookTransformer.transformCount
                                 + " status=" + com.rustcraft.coremod.FrameShadowHookTransformer.lastStatus);
                         if (com.rustcraft.coremod.WorldCollisionProbeTransformer.transformCount > 0) {
@@ -176,6 +177,7 @@ public class RustCraftCoreMod implements IFMLLoadingPlugin {
                 System.out.println(com.rustcraft.bridge.NativeChunkPacket.dumpMetrics());
                 System.out.println(com.rustcraft.bridge.NativeCompressionEncoder.dumpMetrics());
                 System.out.println(com.rustcraft.bridge.FrameShadowLiveHook.dumpMetrics()); // M-CK5 live observer
+                System.out.println(com.rustcraft.bridge.FrameAuthorityHandler.dumpMetrics()); // M-CK6 authority
                 if (com.rustcraft.coremod.WorldCollisionProbeTransformer.transformCount > 0) {
                     System.out.println(com.rustcraft.bridge.CollisionProbe.dump());
                 }
@@ -189,6 +191,7 @@ public class RustCraftCoreMod implements IFMLLoadingPlugin {
                         pw.println(com.rustcraft.bridge.NativeChunkPacket.dumpMetrics());
                         pw.println(com.rustcraft.bridge.NativeCompressionEncoder.dumpMetrics());
                         pw.println(com.rustcraft.bridge.FrameShadowLiveHook.dumpMetrics()); // M-CK5 live observer
+                        pw.println(com.rustcraft.bridge.FrameAuthorityHandler.dumpMetrics()); // M-CK6 authority
                         pw.println("frameShadowHook.transformCount=" + com.rustcraft.coremod.FrameShadowHookTransformer.transformCount
                                 + " status=" + com.rustcraft.coremod.FrameShadowHookTransformer.lastStatus);
                     if (com.rustcraft.bridge.WorldgenShadow.enabled() || com.rustcraft.coremod.WorldgenShadowTransformer.transformCount > 0) {

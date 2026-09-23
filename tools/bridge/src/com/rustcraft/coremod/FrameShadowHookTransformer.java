@@ -40,7 +40,8 @@ public class FrameShadowHookTransformer implements IClassTransformer {
     private static final String HOOK_DESC = "(Ljava/lang/Object;I)V";
 
     private static final boolean ENABLED =
-            "LIVE".equalsIgnoreCase(System.getProperty("minecraftrust.frame_shadow", "OFF"));
+            "LIVE".equalsIgnoreCase(System.getProperty("minecraftrust.frame_shadow", "OFF"))
+            || !"OFF".equalsIgnoreCase(System.getProperty("minecraftrust.frame_authority", "OFF")); // M-CK6
 
     @Override
     public byte[] transform(String name, String transformedName, byte[] basicClass) {

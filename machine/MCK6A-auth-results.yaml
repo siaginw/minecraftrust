@@ -1,0 +1,69 @@
+# M-CK6 — FRAME ENGINE AUTHORITATIVE, CLEAN FORGE TARGET A
+schema_version: 1
+date: "2026-09-23"
+classification_target: FRAME_ENGINE_AUTHORITATIVE_VALIDATED_TARGETA
+binary:
+  dll_sha256: c10ddca1ce3c82255e78154fde657408e82fa354707bc5174deb5b0a6cb62d2c
+  coremod_jar_sha256: 1d4e55d505a14fb962ae6f867c4582ee98faeb1eb8db62945297fc8a2b9f8bb0
+  java: Temurin jdk-8.0.504.1-hotspot
+  netty: 4.1.9.Final (bundled); forge 1.12.2-14.23.5.2860
+authority_architecture: >
+  FrameAuthorityHandler (new) takes authority ONLY for compression+length
+  framing. Java remains authoritative for packet SERIALIZATION — the canonical
+  Rust input is the complete immutable Java-serialized packet body (packet-ID
+  included), the exact input validated by 53,140 observer-ladder comparisons.
+  Installed by the proven setCompressionThreshold hook under
+  -Dminecraftrust.frame_authority=ON_EXPERIMENTAL (default OFF; transformer
+  inert when OFF). Position addBefore("encoder") — receives the serialized body
+  post-encoder, pre-compressor. COMPLETE-FRAME-OR-NOTHING: the entire Rust
+  frame is built off-pipeline BEFORE any production state is mutated; on
+  success exactly one complete frame is written via the PREPENDER'S OWN
+  context (outbound resumes head-ward of the prepender — the Java compressor
+  and prepender are BYPASSED, spy-proven offline — into the normal downstream
+  path); on ANY failure the original untouched message + promise go through
+  ctx.write() = the byte-identical normal Java path. Fail-closed installation
+  by handler name and verified order; every fallback counted by reason;
+  quiescence-safe context free (the proven protocol). Sampled post-production
+  cross-check (1-in-16): the transmitted frame is independently structural-
+  decoded and compared to the captured original — without re-running Java
+  framing.
+offline_authority_gates: >
+  MCK6AuthorityGates 11/11: authority output decodes to the original body
+  across compressed/at-threshold/passthrough with the correct split and Java
+  codecs BYPASSED (spy counters 0); forced native failure and closing-handler
+  fallbacks BYTE-IDENTICAL to the pure-Java pipeline with the Java codecs
+  exercised; slice indices untouched at fallback; 40 interleaved writes with
+  every-3rd forced failure -> all 40 decode exactly once, no backlog,
+  counters sum to N (no loss/duplication/partial); live threshold update
+  256->4096 flips compressed->passthrough; heap/direct/slice/composite inputs;
+  sampled cross-check catches forced corruption (negative control);
+  missing-prepender and misordered pipelines install NOTHING (fail closed,
+  behavior byte-identical to the bare pipeline); quiescence free after hard
+  executor shutdown.
+live_ladder:
+  phaseA: "MCK6A-A-20260923-014843 (tiny, 1 session 30s): 314 auth packets (90 compressed / 224 uncompressed), 20 crosschecks 0 mismatches, 0 fallbacks, ctx 1/1; client 315 frames 0 errors."
+  phaseB: "MCK6A-B-20260923-015156 (normal, walk 20 hops + mutations): 421 auth packets (90/331), 27 crosschecks 0 mismatches, 0 fallbacks, ctx 1/1; client 422 frames 0 errors (81 chunks, 20 tp hops)."
+  phaseC: "MCK6A-C-20260923-021420 (confirmation, walk + 3 reconnect sessions on a raised-max-players DISPOSABLE run copy — operator source untouched): 4 channels installOk=4, 4,710 auth packets (366 compressed / 4,344 uncompressed), body 12,478,889 B -> wire 1,404,907 B, 296 crosschecks 0 mismatches, 0 fallbacks of any kind, ctxCreated=4==ctxFreed=4; client 4 sessions / 4,689 frames decoded with 0 errors (324 chunks)."
+mode_default_verification: "minecraftrust.frame_authority default OFF (property-gated; transformer makes ZERO transformations when OFF — verified in the offline transformer probe and by transformCount=0 in prior OFF runs); every campaign launch used the explicit operator opt-in property; M1/M2C/M4 counters all zero in the runs (native_chunk_packet=OFF, native_compress=OFF, frame_shadow=OFF)."
+fallback_results: "LIVE: ZERO fallbacks across all three phases (every eligible write was Rust-authoritative). Fallback behavior itself is deterministically regression-proven offline (byte-identical Java path, spies, no loss/dup)."
+cross_check: "543 sampled post-production cross-checks across the ladder (20+27+296), 0 mismatches — every sampled transmitted Rust frame independently decoded to its original Java-serialized body."
+loss_duplication_anomalies: >
+  Client decoded every session cleanly (0 errors, 0 unexplained disconnects;
+  disconnects only at hold-deadline). Frame accounting: e.g. Phase A 314 auth
+  packets vs 315 client frames (the +1 = the pre-install login-compression
+  packet); Phase C 4,710 auth vs 4,689 client frames across 4 sessions
+  (difference = pre-install login-phase frames per channel + in-flight at
+  disconnect). No malformed frames, no partial frames, no duplication
+  (offline interleaved-failure gate proves the invariant deterministically).
+lifecycle_memory: "contexts 1/1, 1/1, 4/4 across the three phases (created==freed); no native/test memory retained; fresh disposable world per run; channel close clean (handlerRemoved + quiescence free)."
+performance_observation: >
+  Correctness gate only. Low-overhead counters: nativeNs per run (e.g. C3:
+  92.8 ms cumulative for 4,710 frames incl. compression of 12.5 MB body to
+  1.4 MB wire); wire/body ratio consistent with zlib level-6 (m1_java counter
+  324 chunk packets). No whole-server performance claim is made from this
+  campaign.
+failures_preserved:
+  - "MCK6A-A-20260923-014443: HARNESS DEFECT — live-list removal before the final dump zeroed the aggregation (the session itself was CLEAN: client 571 frames 0 errors, install verified). Fixed (handlers stay in LIVE); preserved."
+  - "MCK6A-C-20260923-015812 / -020621: Phase C first attempts with a broken second-client branch / max-players=1 rejecting the concurrent sessions (single channel each; runs otherwise clean). Script fixed (explicit Phase-C second client; max-players raised IN THE DISPOSABLE RUN COPY ONLY); both preserved."
+regressions: "MCK6AuthorityGates 11/11; MCK5ObserverGates 23/23; MCK5OptimizationTests 13/13; MCK42OwnershipGates 15/15; MCK42FrameBoundaryGates 11/11; MCK4Validation 20/20; M53FrameOracle 25/25; M52CompressionTests 26/26; M4AuthoritativeTest 59/59 (fail-closed gate green); compression 14/14; native-chunk 10/10 — 203 Java + 24 Rust, all on the final build"
+safety: "Java serialization authoritative throughout (rust never sees a Packet object — only the serialized body); NativeChunk untouched (m1 counters zero); rust frames carried ONLY the framing/compression authority for eligible writes; issue #1 OPEN; no Revelation/SevTech authority; ON_EXPERIMENTAL is NOT default; no Forge observable behavior changed"

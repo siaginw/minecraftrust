@@ -45,7 +45,7 @@ public final class FrameShadowLiveHook {
 
     /** Called (transformer-injected) after NetworkManager.setCompressionThreshold. */
     public static void onCompressionThresholdSet(Object networkManager, int threshold) {
-        if (!ENABLED) return;
+        if (!ENABLED && !FrameAuthorityHandler.ENABLED) return; // M-CK6: also reached for authority mode
         HOOK_CALLS.incrementAndGet();
         try {
             if (threshold < 0) return; // disabled-compression contract: handler absent; not the live target
@@ -60,6 +60,11 @@ public final class FrameShadowLiveHook {
                 lastError = "channel-inactive-at-hook";
                 return;
             }
+            if (FrameAuthorityHandler.ENABLED) {
+                // M-CK6 authority install (fail-closed by name/order verification)
+                FrameAuthorityHandler.liveInstall(ch.pipeline());
+            }
+            if (!ENABLED) return; // authority-only run: no observer
             FrameShadowObserver.Config cfg = new FrameShadowObserver.Config();
             cfg.enabled = true;
             cfg.sampleEvery = Math.max(1, SAMPLE_EVERY);
