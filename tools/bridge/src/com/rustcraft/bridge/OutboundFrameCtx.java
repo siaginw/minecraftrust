@@ -171,10 +171,59 @@ public final class OutboundFrameCtx {
      *  on the last capacity retry (-1 = none). */
     public volatile int LAST_RETRY_NEEDED = -1;
 
+    /** Capacity actually handed to the last frameAddr call (injection-aware) —
+     *  callers validate needed bounds against THIS, not their own view. */
+    volatile int LAST_EFF_CAP;
+
     /** Resource-policy ceiling for retry allocation (distinct from wire limits).
      *  Instance field: offline tests may LOWER it to exercise the guard via a
      *  real JNI capacity error; production default 16 MiB. */
     int policyLimit = 16 << 20;
+
+    /** Instance-level retained Java-side direct scratch (input mirror + output),
+     *  in bytes — the M-CK5 direct-address paths do not touch these buffers. */
+    public long retainedBytes() {
+        return (inBuf == null ? 0 : inBuf.capacity()) + (outBuf == null ? 0 : outBuf.capacity());
+    }
+
+    /**
+     * M-CK5 direct-address primitive (Optimization 1+2 foundation): ONE native
+     * frameEncode call with EXPLICIT caller-provided input/output addresses —
+     * no heap staging, no context scratch, no retry loop. The CALLER owns both
+     * memory regions for the duration of the call (e.g. a direct input ByteBuf
+     * read under the pipeline's synchronous ownership window, and the Netty
+     * output buffer's writable region). On ERR_CAPACITY the native-written
+     * needed bound is exposed via LAST_RETRY_NEEDED; the caller must grow its
+     * output region and RE-ACQUIRE the address (growth may reallocate) — the
+     * same one-retry + policyLimit discipline as frame() is expected.
+     * The offline injection seams apply exactly as in frame(). No Rust-side
+     * change: the FFI already speaks raw addresses.
+     */
+    public int frameAddr(long inAddr, int inLen, int threshold, long outAddr, int outCap) {
+        long h = handle.get();
+        if (h == 0) return ERR_CLOSED;
+        if (inAddr == 0 || inLen <= 0) return ERR_INVALID;
+        try {
+            int effCap = outCap;
+            if (testForceFirstCapacity > 0) {
+                effCap = Math.min(outCap, testForceFirstCapacity);
+                testForceFirstCapacity = -1;    // one-shot, real JNI error path
+            } else if (testForceCapacityTimes > 0) {
+                effCap = Math.min(outCap, testForceCapacityValue);
+                testForceCapacityTimes--;
+            }
+            LAST_EFF_CAP = effCap; // capacity actually handed to native (injection-aware)
+            retryResult.clear();
+            retryResult.putInt(0, 0);
+            FRAME_OPS.incrementAndGet();
+            int n = frameEncode(h, inAddr, inLen, outAddr, effCap, threshold, address(retryResult));
+            LAST_ERR = n > 0 ? 0 : n;
+            if (n == ERR_CAPACITY) LAST_RETRY_NEEDED = retryResult.getInt(0);
+            return n;
+        } catch (Throwable t) {
+            return ERR_BACKEND;
+        }
+    }
 
     static int maxOutputLen(int n) { return n + (n / 8192 + 2) * 5 + 16; }
 

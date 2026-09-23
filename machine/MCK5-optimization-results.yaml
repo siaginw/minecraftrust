@@ -1,0 +1,62 @@
+# M-CK5 — FRAME MEMORY/COPY OPTIMIZATION (Checkpoint C + §6 measurement)
+schema_version: 1
+date: "2026-09-22"
+binary:
+  dll_sha256: c10ddca1ce3c82255e78154fde657408e82fa354707bc5174deb5b0a6cb62d2c
+  note: "NO Rust-side change: the FFI already speaks raw addresses; all optimization work is Java/JNI integration"
+copy_allocation_map_pre_change:
+  adapter_C_legacy: "4 copies + 2 allocs per frame: (1) ByteBuf->heap body[], (2) heap->direct inBuf, (3) native outBuf->heap result[], (4) heap->Netty out; retained: inBuf+outBuf sized by the largest frame (~2.1 MB after 1 MiB traffic)"
+  observer_only: "2 snapshot arrays (sample + java frame) + rust result — REQUIRED for isolation (NOT optimized away)"
+  bench_materialization: "frameOnce output copy — harness-owned, unchanged"
+  rust_scratch: "zlib-rs works in caller buffers (no hidden engine copy); compressor per-context scratch native-side"
+research_ledger:
+  - source: "pinned Velocity (third_party_reference/eval/velocity @ f975230, v4.2.1-SNAPSHOT, GPLv3)"
+    technique: "MoreByteBufUtils.ensureCompatible (native-readable direct input, copy only when incompatible) + VelocityCompressor.deflate(compatibleIn, out) writing compressed output DIRECTLY into the Netty outbound buffer; 2 MiB cap at the encoder (1<<21)"
+    applicability: "exact match for this frame engine's shape"
+    safety: "no semantic change — same wire format, output buffer Netty-owned"
+    decision: ADOPTED (both ideas; caps already exist as the 3-byte VarInt limit)
+  - source: "installed Netty 4.1.9 (bundled, no javadoc) — verified EMPIRICALLY (MCK5OptimizationTests gate 1)"
+    technique: "direct non-composite ByteBuf.nioBuffer(readerIndex, len) returns a DIRECT SHARED view (mutation visible through both) => address+position gives a zero-copy native input; out.nioBuffer(writerIndex, writable) likewise for output"
+    applicability: "direct inputs (production shape — the packet serializer emits allocated buffers); heap/composite fall back"
+    safety: "read window = the synchronous encode call under the pipeline single-owner contract (same window the staging copy used); writer index advanced only after success; address re-acquired after ensureWritable growth"
+    decision: ADOPTED
+  - source: "zlib-rs via flate2 1.1.10 (existing compression crate)"
+    technique: "compress-into-caller-buffer (already the frameEncode contract)"
+    applicability: "no change needed"
+    decision: "RETAINED as-is (no new backend/level — prohibited and unnecessary)"
+optimizations:
+  1_direct_input: "OutboundFrameCtx.frameAddr primitive + RustFrameHandler.encodeDirect: direct non-composite input read natively IN PLACE (no heap staging, no inBuf); heap/composite/unsupported -> COUNTED bounded-copy fallback (FALLBACK_FRAMES)"
+  2_direct_output: "native frame written directly into the Netty-owned out buffer's writable region; out.writerIndex += n ONLY after success; ERR_CAPACITY -> native needed bound -> ensureWritable(needed) -> address RE-ACQUIRED (growth may reallocate); one-retry ceiling + policyLimit preserved; capacity-error leaves the output region untouched (sentinel-proven)"
+  3_scratch_retention: "direct-path traffic retains ZERO Java-side context scratch (inBuf/outBuf untouched); measured large-then-small: direct=0 B vs legacy=2,097,834 B after a 1 MiB frame; legacy fallback retains as before (bounded oversized policy = keep largest, no per-packet churn)"
+correctness_13_13: >
+  netty-primitive (shared direct view, measured); direct==legacy BYTE-IDENTICAL
+  across compressible/incompressible/passthrough/at-threshold/disabled; direct
+  passthrough == installed Java bytes; forced ERR_CAPACITY through frameAddr ->
+  growth -> address re-acquired -> decodes (needed=5015); no-partial (sentinel
+  intact on capacity error; exhausted retry -> exception with NO channel output;
+  ctx still usable after); nonzero readerIndex slice; heap+composite COUNTED
+  fallbacks still decode; freed ctx -> ERR_CLOSED; 2x200 concurrent direct
+  channels; retained-A-while-B; large-then-small retention (0 B vs 2,097,834 B).
+  Validation against the independent Java inflater/decoder throughout (not Rust
+  roundtrips).
+benchmark_3_fresh_jvms_ABCD_BCDA_CDAB:
+  schedule: "8 direct-input payloads: REAL 31k + SYNTHETIC 64/255/257r(below/adjacent) + rep/rnd 64k + rep/rnd 1m; labeled; does NOT model live traffic; validation outside timing every iteration (decode-to-input, within-arm determinism, passthrough cross-arm exact bytes, C==D byte-identical ALWAYS — 0 errors)"
+  aggregate_mean: "B/A=0.718-0.728x C/A=0.719-0.728x D/A=0.704-0.724x D/C=0.979-0.995x"
+  per_payload_representative: "real-31k A 105us -> C 45.7 D 45.4; rep-1m D/A=0.236 D/C=0.847; rnd-1m D/A~0.815 D/C~0.998; rep-64k D/C=0.875"
+  small_payload_tail_anomaly: >
+    syn-64 in the INTERLEAVED 4-arm bench: D p50 == C (3.8-4.1us) but rare ~3ms
+    tails inflate D's mean (84-91us). ISOLATED single-arm probe (4000 iters,
+    machine/raw/MCK5-smallpayload-isolated-probe.txt): D mean 1.06-1.19us vs C
+    2.31-2.48us, ZERO >1ms outliers — the tails are a multi-arm pooled-allocator
+    interaction in the shared bench JVM, not an intrinsic direct-path cost.
+    Reported as-is; not resolved this pass.
+  cold_30reps: "construct: A 848us / B 49us / C 67us / D 34us; first-op: A 486us / B 131us / C 99us / D 82us"
+  allocations_heap_per_iter: "measured via ThreadMXBean (raw files): B/C/D remain ~+33% vs A (fresh result arrays for C; D drops the staging arrays but pays direct-input wrapping; exact per-arm figures in raw outputs)"
+  retained: "C 2,097,834 B java-side scratch; D 0 B; B-arm CompressionCtx ~2,097,818 B; A NOT_MEASURED (JDK internals)"
+  counters: "directFrames=478 fallbackFrames=0 (all-direct schedule), retries=0"
+observer_overhead_separate:
+  method: "SAME installed Java pipeline; states ABSENT / OFF / ON(1:1) / ON(1:4); full schedule; outputs validated identical across states"
+  result: "OFF == ABSENT within noise. ON(1:1) = 1.818-1.831x of Java-pipeline time (matched=440/440 incl. warmup); ON(1:4) = 1.652-1.711x (matched=110). This is the FULL verification shadow (capture copy + frame copy + independent inflate of BOTH java and rust frames) — not mixed with any replacement-adapter speedup."
+disabled_mode: "unchanged M-CK4.2 policy: disabled traffic stays on the Java-only prepender pipeline (C'/A' 3.5-4.8x slower measured M-CK4.2); the Rust disabled-frame implementation remains available for its offline contract tests only"
+classification: FRAME_MEMORY_OPTIMIZATION_VALIDATED
+issue1: "OPEN — unchanged; offline immutable-byte work does not resolve world-snapshot coherency or the historical mask event"

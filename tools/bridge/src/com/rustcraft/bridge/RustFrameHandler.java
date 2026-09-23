@@ -1,7 +1,9 @@
 package com.rustcraft.bridge;
 
+import java.nio.ByteBuffer;
 import java.util.ArrayDeque;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicLong;
 
 import io.netty.buffer.ByteBuf;
@@ -71,13 +73,47 @@ public class RustFrameHandler extends MessageToByteEncoder<ByteBuf> {
     volatile Thread lastUpdateThread;              // test observability: real thread that applied a threshold update
     final AtomicLong FREES = new AtomicLong();     // test observability: free ran exactly once
     private final java.util.concurrent.atomic.AtomicBoolean freed = new java.util.concurrent.atomic.AtomicBoolean();
+    // ---- M-CK5 quiescence protocol (replaces the optimistic inline free after
+    // a rejected executor submission): a free is legal ONLY when removed==true
+    // AND inFlightNative==0; ops increment inFlightNative BEFORE re-checking
+    // removed, so any op that could still use the native context is visible to
+    // cleanup. If work is in flight at free time, the free is DEFERRED to the
+    // completing op's finally-block (which runs on the owning thread). A CAS on
+    // the pointer alone is NOT an in-flight lifetime guarantee.
+    private final java.util.concurrent.atomic.AtomicInteger inFlightNative = new java.util.concurrent.atomic.AtomicInteger();
+    private volatile boolean freeDeferred;
+    private final java.util.concurrent.atomic.AtomicBoolean freeRan = new java.util.concurrent.atomic.AtomicBoolean();
+    /** M-CK5 offline seams: block INSIDE encode while a native op is in flight
+     *  (testEncodeBlockOn), with testEncodeEntered counting down when the
+     *  blocked point is reached — deterministic quiescence/rejection tests.
+     *  Package-private, property-immune. */
+    volatile CountDownLatch testEncodeBlockOn;
+    volatile CountDownLatch testEncodeEntered;
 
     public static final AtomicLong FRAMES = new AtomicLong();
     public static final AtomicLong BYTES_IN = new AtomicLong();
     public static final AtomicLong BYTES_OUT = new AtomicLong();
     public static final AtomicLong ERRORS = new AtomicLong();
     public static final AtomicLong THRESHOLD_UPDATES = new AtomicLong();
+    public static final AtomicLong DIRECT_FRAMES = new AtomicLong();   // M-CK5: direct-address path taken
+    public static final AtomicLong FALLBACK_FRAMES = new AtomicLong(); // M-CK5: bounded-copy fallback taken
     final ArrayDeque<Integer> ORDERED_UPDATE_TOKENS = new ArrayDeque<>(); // sequence tokens: tests verify ORDER
+
+    /**
+     * M-CK5 Optimization 1+2 (arm D; default FALSE = unchanged legacy behavior):
+     * when enabled, encode uses the direct-address paths — a DIRECT input buffer
+     * is read natively in place under the pipeline's synchronous single-owner
+     * window (no heap staging, no context input scratch; heap/composite/unsupported
+     * forms keep the bounded-copy fallback), and the completed frame is written
+     * by native code DIRECTLY into the Netty-owned output buffer's writable
+     * region, with the writer index advanced ONLY after success and the output
+     * address RE-ACQUIRED after any growth (ensureWritable may reallocate).
+     * Technique validated against the pinned Velocity reference (native/src
+     * CompressorUtils + proxy MinecraftCompressorAndLengthEncoder: ensureCompatible
+     * direct-input + deflate into `out`) and Netty 4.1.9 nioBuffer semantics
+     * (verified empirically by MCK5OptimizationTests).
+     */
+    boolean useDirectPaths;
 
     /** M-CK4.2 offline injection seam: simulate native-context creation failure
      *  at attach. Package-private, property-immune — production code paths can
@@ -183,48 +219,147 @@ public class RustFrameHandler extends MessageToByteEncoder<ByteBuf> {
             ERRORS.incrementAndGet();
             throw new IllegalStateException("empty packet body");
         }
-        byte[] body = new byte[len];
-        in.readBytes(body); // one staging copy from ANY ByteBuf form
-        byte[] frame = c.frame(body, threshold);
-        if (frame == null) {
-            ERRORS.incrementAndGet();
-            throw new EncoderException("native frame encode failed (last native code " + OutboundFrameCtx.LAST_ERR + ")");
+        // quiescence protocol: counted BEFORE the removed re-check so cleanup can
+        // never free beneath a dispatched op; native use happens only after both
+        // guards pass inside this counted region.
+        inFlightNative.incrementAndGet();
+        try {
+            if (removed) throw new EncoderException("rust frame encode after handler removal (dispatch raced cleanup)");
+            // M-CK5 arm D: try the direct-address paths FIRST (no heap staging);
+            // heap/composite/unsupported forms return false and take the bounded-copy
+            // fallback below — input indices are never touched by the direct attempt.
+            if (useDirectPaths) {
+                if (encodeDirect(c, in, out, len, threshold)) return;
+                FALLBACK_FRAMES.incrementAndGet();
+            }
+            byte[] body = new byte[len];
+            in.readBytes(body); // one staging copy from ANY ByteBuf form (fallback path)
+            CountDownLatch entered = testEncodeEntered;
+            if (entered != null) { testEncodeEntered = null; entered.countDown(); }
+            CountDownLatch latch = testEncodeBlockOn;
+            if (latch != null) { testEncodeBlockOn = null; try { latch.await(10, java.util.concurrent.TimeUnit.SECONDS); } catch (InterruptedException ie) { } }
+            byte[] frame = c.frame(body, threshold);
+
+            if (frame == null) {
+                ERRORS.incrementAndGet();
+                throw new EncoderException("native frame encode failed (last native code " + OutboundFrameCtx.LAST_ERR + ")");
+            }
+            FRAMES.incrementAndGet();
+            BYTES_IN.addAndGet(len);
+            BYTES_OUT.addAndGet(frame.length);
+            out.writeBytes(frame); // one output copy into Netty-owned buffer
+        } finally {
+            if (inFlightNative.decrementAndGet() == 0 && freeDeferred) freeNow();
         }
-        FRAMES.incrementAndGet();
-        BYTES_IN.addAndGet(len);
-        BYTES_OUT.addAndGet(frame.length);
-        out.writeBytes(frame); // one output copy into Netty-owned buffer
     }
 
     /**
-     * Cleanup is triggered from BOTH handlerRemoved AND channelInactive (Netty
-     * 4.1.9-verified behavior: an explicit pipeline.remove marshals
+     * M-CK5 Optimization 1+2 (must be called INSIDE the in-flight native region):
+     * direct input (a direct, non-composite ByteBuf read natively in place at its
+     * readerIndex — verified shareable via nioBuffer) and native frame output
+     * written directly into the Netty-owned out buffer's writable region. Writer
+     * index advances ONLY after success; after a capacity-driven ensureWritable
+     * the output address is RE-ACQUIRED (growth may reallocate). Returns true if
+     * the frame was produced; false = caller must use the bounded-copy fallback.
+     * Capacity discipline mirrors frame(): exactly one growth retry, needed bound
+     * read from the native-written i32, policyLimit enforced, no partial output.
+     */
+    private boolean encodeDirect(OutboundFrameCtx c, ByteBuf in, ByteBuf out, int len, int threshold) throws Exception {
+        long inAddr;
+        if (in.isDirect() && !(in instanceof io.netty.buffer.CompositeByteBuf)) {
+            ByteBuffer inNio = null;
+            try { inNio = in.nioBuffer(in.readerIndex(), len); } catch (Throwable t) { inNio = null; }
+            if (inNio != null && inNio.isDirect()) inAddr = addressOf(inNio);
+            else return false;
+        } else {
+            return false; // heap/composite/unsupported: bounded-copy fallback
+        }
+        out.ensureWritable(OutboundFrameCtx.maxOutputLen(len) + 16);
+        int attempts = 0;
+        while (true) {
+            ByteBuffer outNio;
+            try { outNio = out.nioBuffer(out.writerIndex(), out.writableBytes()); } catch (Throwable t) { return false; }
+            if (outNio == null || !outNio.isDirect()) return false; // allocator config without direct output: fallback
+            int cap = out.writableBytes();
+            int n = c.frameAddr(inAddr, len, threshold, addressOf(outNio), cap);
+            if (n > 0) {
+                out.writerIndex(out.writerIndex() + n); // advance ONLY after successful completion
+                FRAMES.incrementAndGet();
+                DIRECT_FRAMES.incrementAndGet();
+                BYTES_IN.addAndGet(len);
+                BYTES_OUT.addAndGet(n);
+                return true;
+            }
+            if (n == OutboundFrameCtx.ERR_CAPACITY) {
+                int needed = c.LAST_RETRY_NEEDED;
+                if (needed <= 0 || needed <= c.LAST_EFF_CAP || needed > c.policyLimit) {
+                    ERRORS.incrementAndGet();
+                    throw new EncoderException("direct-path capacity bound rejected: needed=" + needed + " failedCap=" + c.LAST_EFF_CAP);
+                }
+                if (++attempts > 1) { // one-retry ceiling, same discipline as frame()
+                    ERRORS.incrementAndGet();
+                    throw new EncoderException("direct-path capacity retry exhausted");
+                }
+                out.ensureWritable(needed); // may REALLOCATE: address re-acquired at loop top
+                continue;
+            }
+            ERRORS.incrementAndGet();
+            throw new EncoderException("native frame encode failed (direct path, code " + n + ")");
+        }
+    }
+
+    private static volatile java.lang.reflect.Method ADDRESS_OF;
+    private static long addressOf(ByteBuffer direct) throws Exception {
+        java.lang.reflect.Method m = ADDRESS_OF;
+        if (m == null) {
+            m = direct.getClass().getMethod("address");
+            m.setAccessible(true);
+            ADDRESS_OF = m;
+        }
+        return (Long) m.invoke(direct);
+    }
+
+    private void freeNow() {
+        if (freeRan.compareAndSet(false, true)) {
+            OutboundFrameCtx c = ctx;
+            if (c != null) c.free(); // native free is itself idempotent (CAS)
+            FREES.incrementAndGet();
+        }
+    }
+
+    /**
+     * Cleanup is triggered from BOTH handlerRemoved AND the outbound close()
+     * hook (Netty 4.1.9-verified: an explicit pipeline.remove marshals
      * handlerRemoved onto the owning executor, but a channel CLOSE alone never
-     * invokes handlerRemoved for a foreign-executor-bound handler — probe:
-     * close + runPendingTasks + executor drain left the native context live).
-     * Both triggers funnel into this exactly-once (CAS) cleanup: when invoked
-     * off-owner the free is enqueued on the owning executor BEHIND already-
-     * submitted encode tasks (single-thread FIFO), so a live context is never
-     * freed while queued work may still use it; if the executor rejects
-     * (shutdown), the free runs inline rather than leaking.
+     * invokes handlerRemoved for a foreign-executor-bound handler).
+     *
+     * QUIESCENCE CONTRACT (M-CK5): the native context is freed only when
+     * removed==true AND inFlightNative==0. Ops increment inFlightNative BEFORE
+     * re-checking removed, so a dispatched-then-preempted op is visible to
+     * cleanup (which then defers the free to the op's completing finally-block
+     * on the owning thread). If the executor REJECTS the marshaled free while
+     * an op is in flight, the free is deferred the same way — the earlier
+     * inline-free-after-rejection is replaced by this provable protocol; a
+     * rejected executor with inFlight==0 can safely free because removed==true
+     * forces any not-yet-started op to abort before any native use.
      */
     private void cleanupNative(String via) {
         if (!freed.compareAndSet(false, true)) return;
         removed = true;
-        Runnable freeOnce = () -> {
-            OutboundFrameCtx c = ctx;
-            if (c != null) c.free(); // native free is itself idempotent (CAS)
-            FREES.incrementAndGet();
-        };
         EventExecutor owner = ownerExecutor;
         if (owner == null || owner.inEventLoop()) {
-            freeOnce.run();
-        } else {
-            try {
-                owner.execute(freeOnce);
-            } catch (Throwable rejected) {
-                freeOnce.run(); // executor shut down: free inline rather than leak
-            }
+            if (inFlightNative.get() > 0) freeDeferred = true; // completing op frees
+            else freeNow();
+            return;
+        }
+        try {
+            owner.execute(() -> {
+                if (inFlightNative.get() > 0) freeDeferred = true; // single owner thread: its completing op frees
+                else freeNow();
+            });
+        } catch (Throwable rejected) {
+            if (inFlightNative.get() > 0) freeDeferred = true; // in-flight op frees at completion
+            else freeNow(); // no op can start: removed==true aborts entries pre-native
         }
     }
 

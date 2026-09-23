@@ -40,6 +40,10 @@ mkdir -p tools/dist/coremod-build
   tools/bridge/src/com/rustcraft/bridge/MCK42FrameBoundaryGates.java \
   tools/bridge/src/com/rustcraft/bridge/MCK42RustCompressJavaFrameHandler.java \
   tools/bridge/src/com/rustcraft/bridge/MCK42FrameBench.java \
+  tools/bridge/src/com/rustcraft/bridge/FrameShadowObserver.java \
+  tools/bridge/src/com/rustcraft/bridge/MCK5ObserverGates.java \
+  tools/bridge/src/com/rustcraft/bridge/MCK5OptimizationTests.java \
+  tools/bridge/src/com/rustcraft/bridge/MCK5Bench.java \
   tools/bridge/src/com/rustcraft/coremod/WorldgenShadowTransformer.java
 
 mkdir -p tools/dist/coremod-build/META-INF
