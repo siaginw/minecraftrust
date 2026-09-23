@@ -1,0 +1,43 @@
+# M-CK6P — FRAME ENGINE AUTHORITATIVE, MODPACK LADDER (Revelation + SevTech)
+schema_version: 1
+date: "2026-09-23"
+classification_targets: [FRAME_ENGINE_AUTHORITATIVE_VALIDATED_REVELATION, FRAME_ENGINE_AUTHORITATIVE_VALIDATED_SEVTECH]
+binary:
+  dll_sha256: c10ddca1ce3c82255e78154fde657408e82fa354707bc5174deb5b0a6cb62d2c
+  coremod_jar_sha256: 1d4e55d505a14fb962ae6f867c4582ee98faeb1eb8db62945297fc8a2b9f8bb0
+  note: "IDENTICAL build to the accepted M-CK6 Target-A authority campaign — zero implementation changes this checkpoint; new campaign tooling only (tools/mck6pack-run.sh, marker-based PID management)"
+  java: Temurin jdk-8.0.504.1-hotspot
+authority_boundary: "Unchanged from FRAME_ENGINE_AUTHORITATIVE_VALIDATED_TARGETA: Java serialization authoritative; rust owns threshold decision + compression framing + zlib + outer length framing only; complete-frame-or-nothing via the prepender's own context (Java compressor+prepender bypassed); fail-closed to the untouched Java path; quiescence lifecycle; sampled 1/16 post-production cross-check. NativeChunk untouched; issue #1 OPEN."
+pipeline_verification: >
+  Name-verified per channel on both packs (liveInstall; fail closed otherwise):
+  [timeout, splitter, decompress, decoder, prepender, compress, mck5a-authority,
+  encoder, packet_handler, TailContext#0] — identical semantic layout to clean
+  Forge and to the SHADOW ladder; no mod-added handlers between the authority
+  boundaries; FML|MP multipart knowledge from SHADOW irrelevant to authority
+  (the authority handler does not pair — it OWNS the whole frame; bypassed
+  writes never reach it). installSkipped=0 on every channel of every run.
+revelation:
+  pack: "FTB Revelation 3.4.0 / Forge 14.23.5.2846 (196 mods), in-place, offline-mode, thr 256"
+  phases:
+    - "A MCK6P-CA-20260923-023755: 13,598 auth pkts (1,878 comp / 11,720 uncomp), 850 cc 0 mism, 0 fb, ctx 2/2; client 8,879 frames 0 errors (harness stop-schedule defect only — session itself clean; preserved)"
+    - "B MCK6P-CB-20260923-030407: 32,592 auth (1,882 / 30,710), 2,037 cc 0 mism, 0 fb, ctx 2/2; client 27,118 frames 0 errors (441 chunks, 15 tp hops)"
+    - "C MCK6P-CC-20260923-031117: 5 channels, 113,261 auth (4,729 / 108,532), body 83.7MB -> wire 14.6MB, 7,081 cc 0 mism, 0 fb, ctx 5/5; client 106,859 frames 0 errors across 4 sessions"
+  totals: "159,451 rust-authoritative packets (7,489 compressed / 151,962 uncompressed), 9,968 sampled cross-checks 0 mismatches, 0 live fallbacks, contexts 9/9; server errors = Revelation baseline only (gson recipes/BuildCraft/advancements + expected disconnects), zero authority-attributable"
+  classification: FRAME_ENGINE_AUTHORITATIVE_VALIDATED_REVELATION
+sevtech:
+  pack: "SevTech Ages 3.2.3 / Forge 14.23.5.2860 (262 mods), in-place, offline-mode, thr 256"
+  phases:
+    - "A MCK6P-DA-20260923-032639: 15,797 auth (964 / 14,833), 989 cc 0 mism, 0 fb, ctx 2/2; client 10,387 frames 0 errors (first attempt -032044 preserved: harness negative-sleep stop defect, no session ran)"
+    - "B MCK6P-DB-20260923-033127: 45,911 auth (964 / 44,947), 2,870 cc 0 mism, 0 fb, ctx 2/2; client 41,222 frames 0 errors (441 chunks, 15 tp hops)"
+    - "C MCK6P-DC-20260923-033850: 5 channels, 61,563 auth (2,432 / 59,131), body 80.5MB -> wire 9.6MB, 3,850 cc 0 mism, 0 fb, ctx 5/5; client 56,357 frames 0 errors across 4 sessions (1,765 chunks)"
+  totals: "123,271 rust-authoritative packets (4,360 compressed / 118,911 uncompressed), 7,709 sampled cross-checks 0 mismatches, 0 live fallbacks, contexts 9/9; server errors = SevTech baseline only (gson/KleeSlabs/Hunting Dimension + expected disconnects; the only p6bot mentions are normal modded-join INFO from journeymap/antiqueatlas/Waila), zero authority-attributable"
+  classification: FRAME_ENGINE_AUTHORITATIVE_VALIDATED_SEVTECH
+java_fallback: "ZERO live fallbacks across all six pack campaigns (every eligible write rust-authoritative); fallback safety unchanged and regression-proven offline (MCK6AuthorityGates 11/11: byte-identical java path, codec spies, interleaved forced failures no-loss/no-dup/no-partial)"
+client_noninterference: "12 pack client sessions total: 251,418 frames decoded with 0 errors, 0 decompression faults, 0 unexplained disconnects; expected chunk counts (441/join; 1765 in SevTech C); FML handshake/registry/multipart + modded custom payloads all decoded from rust-produced frames"
+lifecycle_memory: "contexts 18/18 across the six pack runs (created==freed); no retained native/test memory; in-place pack installs/worlds/configs untouched beyond the small logged mutation batches"
+performance_observation: "Correctness gate; no perf claims. Observations only: cumulative nativeNs per run recorded (e.g. Rev C 629ms for 113,261 packets incl. 83.7MB->14.6MB compression); wire ratios consistent with zlib-6."
+failures_preserved:
+  - "MCK6P-CA-20260923-023755: HARNESS stop-schedule defect (phase-A sleep 9999; console stop never sent; server killed after the clean session). Session evidence complete; preserved."
+  - "MCK6P-DA-20260923-032044: HARNESS negative-sleep defect (sleep -9829 -> immediate stop; no session ran). Script fixed; preserved."
+regressions: "No implementation changes; final-build gates re-verified: MCK6AuthorityGates 11/11, MCK5ObserverGates 23/23 (full battery green on this exact jar at M-CK6: 203 Java + 24 Rust)"
+safety: "defaults OFF (explicit ON_EXPERIMENTAL opt-in per run); NativeChunk/m1 counters zero; no world-snapshot work; issue #1 OPEN and untouched; no unrelated migration"
