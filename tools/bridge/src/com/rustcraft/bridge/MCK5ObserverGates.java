@@ -53,6 +53,7 @@ public class MCK5ObserverGates {
         retainedAWhileB();
         observerLifecycleQuiescence();
         handlerQuiescenceRejection();
+        liveInstallPositionsAndFailClosed();
 
         System.out.println("RESULT: " + pass + " pass, " + fail + " fail");
         System.exit(fail == 0 ? 0 : 1);
@@ -518,10 +519,68 @@ public class MCK5ObserverGates {
             check("observer-quiescence: executor REJECTION with native op in flight -> free deferred to op completion; exactly-once; no crash",
                     deferredNotFreed && obs2.CTX_FREED.get() == 1 && rejectedNow && !writer.isAlive(),
                     "rejectedImmediately=" + rejectedNow + " freedAfterCompletion=" + obs2.CTX_FREED.get());
-            ch2.close();
+            try { ch2.close(); } catch (Throwable teardown) { /* Netty teardown on a hard-terminated executor; assertions already complete */ }
         } finally {
             group.shutdownGracefully();
         }
+    }
+
+    // ---- LIVE install path: production-shaped names, fail-closed verification, close cleanup ----
+    static void liveInstallPositionsAndFailClosed() throws Exception {
+        // production-shaped pipeline: [prepender, compress, encoder] at the real names
+        // (the "encoder" stand-in serializes nothing — writes at that position already
+        // carry the serialized body, which is exactly what capture must see)
+        io.netty.channel.ChannelHandler noOpEncoder = new io.netty.channel.ChannelOutboundHandlerAdapter();
+        EmbeddedChannel ch = new EmbeddedChannel();
+        Object prep = Class.forName("net.minecraft.network.NettyVarint21FrameEncoder").getDeclaredConstructor().newInstance();
+        ch.pipeline().addLast("prepender", (ChannelHandler) prep);
+        Object comp = Class.forName("net.minecraft.network.NettyCompressionEncoder").getConstructor(int.class).newInstance(256);
+        ch.pipeline().addLast("compress", (ChannelHandler) comp);
+        ch.pipeline().addLast("encoder", noOpEncoder);
+        long ok0 = FrameShadowObserver.INSTALL_OK.get(), skip0 = FrameShadowObserver.INSTALL_SKIPPED.get();
+        FrameShadowObserver obs = FrameShadowObserver.liveInstall(ch.pipeline(), onCfg());
+        byte[] body = new byte[3000];
+        new Random(91).nextBytes(body);
+        writeNoDrain(ch, body.clone());
+        byte[] f = drain(ch);
+        boolean installed = obs != null && FrameShadowObserver.INSTALL_OK.get() == ok0 + 1
+                && f != null && Arrays.equals(MCK4Validation.decodeFrameSafe(f, true), body)
+                && obs.COMPLETED.get() == 1 && obs.MATCHED.get() == 1;
+        // double install skipped
+        FrameShadowObserver again = FrameShadowObserver.liveInstall(ch.pipeline(), onCfg());
+        boolean noDouble = again == null && FrameShadowObserver.INSTALL_SKIPPED.get() == skip0 + 1;
+        // close-based cleanup: handlerRemoved retires + frees exactly once (LIVE lifecycle)
+        ch.close().awaitUninterruptibly();
+        boolean cleaned = obs.CTX_CREATED.get() == 1 && obs.CTX_FREED.get() == 1
+                && obs.RETAINED_OBSERVATIONS.get() == 0 && obs.RETAINED_BYTES.get() == 0;
+        check("live-install: production-shaped [prepender,compress,encoder] -> verified positions; observation matches; double-install skipped; close frees exactly-once with zero retained",
+                installed && noDouble && cleaned,
+                "installed=" + installed + " skipReason=" + FrameShadowObserver.LAST_SKIP_REASON
+                        + " ctx=" + obs.CTX_CREATED.get() + "/" + obs.CTX_FREED.get());
+        // fail-closed negatives: missing prepender / wrong order -> NOTHING installed
+        EmbeddedChannel bad1 = new EmbeddedChannel();
+        Object prep2 = Class.forName("net.minecraft.network.NettyVarint21FrameEncoder").getDeclaredConstructor().newInstance();
+        bad1.pipeline().addLast("prependerX", (ChannelHandler) prep2); // wrong name -> missing "prepender"
+        Object comp2 = Class.forName("net.minecraft.network.NettyCompressionEncoder").getConstructor(int.class).newInstance(256);
+        bad1.pipeline().addLast("compress", (ChannelHandler) comp2);
+        bad1.pipeline().addLast("encoder", new io.netty.channel.ChannelOutboundHandlerAdapter());
+        long skip1 = FrameShadowObserver.INSTALL_SKIPPED.get();
+        boolean fail1 = FrameShadowObserver.liveInstall(bad1.pipeline(), onCfg()) == null
+                && FrameShadowObserver.INSTALL_SKIPPED.get() == skip1 + 1
+                && bad1.pipeline().get("mck5-capture") == null
+                && String.valueOf(FrameShadowObserver.LAST_SKIP_REASON).contains("missing-handler");
+        EmbeddedChannel bad2 = new EmbeddedChannel(); // wrong ORDER: fresh handler instances (not @Sharable)
+        bad2.pipeline().addLast("prepender", (ChannelHandler) Class.forName("net.minecraft.network.NettyVarint21FrameEncoder").getDeclaredConstructor().newInstance());
+        bad2.pipeline().addLast("encoder", new io.netty.channel.ChannelOutboundHandlerAdapter());
+        bad2.pipeline().addLast("compress", (ChannelHandler) Class.forName("net.minecraft.network.NettyCompressionEncoder").getConstructor(int.class).newInstance(256));
+        long skip2 = FrameShadowObserver.INSTALL_SKIPPED.get();
+        boolean fail2 = FrameShadowObserver.liveInstall(bad2.pipeline(), onCfg()) == null
+                && FrameShadowObserver.INSTALL_SKIPPED.get() == skip2 + 1
+                && bad2.pipeline().get("mck5-capture") == null
+                && String.valueOf(FrameShadowObserver.LAST_SKIP_REASON).contains("order-verification-failed");
+        check("live-install-failclosed: missing-prepender and wrong-order pipelines install NOTHING (counted, reason recorded, Java untouched)",
+                fail1 && fail2, "fail1=" + fail1 + " fail2=" + fail2 + " last=" + FrameShadowObserver.LAST_SKIP_REASON);
+        bad1.close(); bad2.close();
     }
 
     // ---- RustFrameHandler quiescence/rejection on a real executor ----
@@ -573,7 +632,7 @@ public class MCK5ObserverGates {
             check("handler-quiescence: executor rejection with encode IN FLIGHT -> free deferred until op completion (never beneath it); exactly-once",
                     enteredOk && notFreedWhileInFlight && h.FREES.get() == 1 && executorRejects,
                     "entered=" + enteredOk + " freesWhileBlocked=" + (notFreedWhileInFlight ? 0 : 1) + " freesAfter=" + h.FREES.get() + " executorRejects=" + executorRejects);
-            ch.close();
+            try { ch.close(); } catch (Throwable teardown) { /* Netty teardown on a hard-terminated executor; assertions already complete */ }
         } finally {
             group.shutdownGracefully();
         }

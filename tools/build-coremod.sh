@@ -41,6 +41,8 @@ mkdir -p tools/dist/coremod-build
   tools/bridge/src/com/rustcraft/bridge/MCK42RustCompressJavaFrameHandler.java \
   tools/bridge/src/com/rustcraft/bridge/MCK42FrameBench.java \
   tools/bridge/src/com/rustcraft/bridge/FrameShadowObserver.java \
+  tools/bridge/src/com/rustcraft/bridge/FrameShadowLiveHook.java \
+  tools/bridge/src/com/rustcraft/coremod/FrameShadowHookTransformer.java \
   tools/bridge/src/com/rustcraft/bridge/MCK5ObserverGates.java \
   tools/bridge/src/com/rustcraft/bridge/MCK5OptimizationTests.java \
   tools/bridge/src/com/rustcraft/bridge/MCK5Bench.java \

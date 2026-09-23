@@ -122,6 +122,9 @@ public final class FrameShadowObserver {
     public final AtomicLong SKIPPED_UNREADABLE_THRESHOLD = new AtomicLong();
     public final AtomicLong SKIPPED_FRAME_ANOMALY = new AtomicLong();  // 1:1 contract violation detected
     public final AtomicLong SKIPPED_STABILITY = new AtomicLong();     // torn-read detector tripped
+    public final AtomicLong SAMPLED_BYTES = new AtomicLong();          // total bytes copied into owned samples
+    public final AtomicLong COMPLETED_COMPRESSED = new AtomicLong();   // comparisons where dataLen>0 (inflate path)
+    public final AtomicLong COMPLETED_PASSTHROUGH = new AtomicLong();  // comparisons where framing was uncompressed
     public volatile String disabledReason;                     // set when observer disables itself
 
     // ---- per-channel pairing state ----
@@ -168,6 +171,93 @@ public final class FrameShadowObserver {
 
     void setEnabled(boolean v) { cfg.enabled = v; }
     void setSampleEvery(int n) { cfg.sampleEvery = n; }
+
+    // ---- M-CK5-LIVE install counters (fail-closed reasons, reported separately) ----
+    public static final AtomicLong INSTALL_OK = new AtomicLong();
+    public static final AtomicLong INSTALL_SKIPPED = new AtomicLong();
+    public static volatile String LAST_SKIP_REASON;
+    /** Live lifecycle verification: incremented in the capture handler's
+     *  handlerRemoved AFTER freeNative() — by then teardown runs on the
+     *  channel's own event loop with no in-flight op, so the free has happened
+     *  inline and the counters are final. (A closeFuture listener would fire
+     *  BEFORE teardown frees — wrong lifecycle point.) */
+    public static final AtomicLong CHANNELS_CLEAN_CLOSE = new AtomicLong();
+
+    /**
+     * M-CK5-LIVE installation for the REAL production pipeline. Positions are
+     * derived from handler NAMES with layout VERIFICATION before any mutation
+     * (never guessed): the installed live pipeline is, head->tail,
+     * [timeout, legacy_query, splitter, (decrypt), decoder, (encrypt),
+     * prepender, compress, encoder, packet_handler] (NetworkSystem$4 addLast
+     * order + NetworkManager addBefore("encoder","compress") /
+     * addBefore("prepender","encrypt") — verified by disassembly).
+     *  - CAPTURE: addBefore("encoder") -> between compress and encoder in list
+     *    order -> outbound traversal (tail->head) sees it AFTER the serializer
+     *    (complete serialized body, packet ID included) and BEFORE compression.
+     *    Robust to extra handlers: strict reverse-list traversal guarantees
+     *    encoder->capture->compress regardless of what sits elsewhere.
+     *  - FRAME-OBSERVE: addBefore("prepender") -> immediately head-ward of the
+     *    prepender -> traversal sees the ACTUAL Java frame AFTER outer framing
+     *    and BEFORE everything head-ward of prepender (including encryption).
+     * FAIL-CLOSED: if the expected handlers are missing or the verified
+     * order (prepender head-ward of compress head-ward of encoder) does not
+     * hold, NOTHING is installed, the skip is counted with a reason, and Java
+     * is untouched. Never double-installs (existing mck5-* names -> skip).
+     */
+    public static FrameShadowObserver liveInstall(ChannelPipeline pipeline, Config cfg) {
+        try {
+            if (pipeline.get("mck5-capture") != null || pipeline.get("mck5-frame-observe") != null) {
+                INSTALL_SKIPPED.incrementAndGet();
+                LAST_SKIP_REASON = "already-installed";
+                return null;
+            }
+            if (pipeline.get("encoder") == null || pipeline.get("compress") == null || pipeline.get("prepender") == null) {
+                INSTALL_SKIPPED.incrementAndGet();
+                LAST_SKIP_REASON = "missing-handler:"
+                        + (pipeline.get("encoder") == null ? "encoder " : "")
+                        + (pipeline.get("compress") == null ? "compress " : "")
+                        + (pipeline.get("prepender") == null ? "prepender" : "");
+                return null;
+            }
+            java.util.List<String> names = pipeline.names(); // head -> tail
+            int iPrep = names.indexOf("prepender"), iComp = names.indexOf("compress"), iEnc = names.indexOf("encoder");
+            if (!(iPrep >= 0 && iComp > iPrep && iEnc > iComp)) {
+                INSTALL_SKIPPED.incrementAndGet();
+                LAST_SKIP_REASON = "order-verification-failed prep=" + iPrep + " comp=" + iComp + " enc=" + iEnc;
+                return null;
+            }
+            FrameShadowObserver obs = new FrameShadowObserver(pipeline, cfg);
+            pipeline.addBefore("encoder", "mck5-capture", obs.new CaptureHandler());
+            pipeline.addBefore("prepender", "mck5-frame-observe", obs.new FrameObserveHandler());
+            INSTALL_OK.incrementAndGet();
+            return obs;
+        } catch (Throwable t) {
+            INSTALL_SKIPPED.incrementAndGet();
+            LAST_SKIP_REASON = "install-exception:" + t;
+            return null;
+        }
+    }
+
+    /** Per-observer state for the live aggregation dump. */
+    public String dumpState() {
+        return "observer[enabled=" + cfg.enabled + " observed=" + OBSERVED.get() + " selected=" + SELECTED.get()
+                + " completed=" + COMPLETED.get() + " completedCompressed=" + COMPLETED_COMPRESSED.get()
+                + " completedUncompressed=" + COMPLETED_PASSTHROUGH.get()
+                + " matched=" + MATCHED.get() + " mismatched=" + MISMATCHED.get()
+                + " unpairedFrame=" + UNPAIRED_FRAME.get() + " unpairedCapture=" + UNPAIRED_CAPTURE.get()
+                + " errors=" + OBSERVER_ERRORS.get() + " skippedOver=" + SKIPPED_OVERSIZE.get()
+                + " skippedEmpty=" + SKIPPED_EMPTY.get() + " skippedLimit=" + SKIPPED_LIMIT.get()
+                + " skippedThreshold=" + SKIPPED_UNREADABLE_THRESHOLD.get() + " frameAnomaly=" + SKIPPED_FRAME_ANOMALY.get()
+                + " stability=" + SKIPPED_STABILITY.get() + " ctxCreated=" + CTX_CREATED.get() + " ctxFreed=" + CTX_FREED.get()
+                + " retainedObs=" + RETAINED_OBSERVATIONS.get() + " retainedBytes=" + RETAINED_BYTES.get()
+                + " sampledBytes=" + SAMPLED_BYTES.get()
+                + " disabledReason=" + disabledReason + "]";
+    }
+
+    /** Aggregate live counters across per-channel observers (hook-side registry). */
+    public long completed() { return COMPLETED.get(); }
+    public long mismatched() { return MISMATCHED.get(); }
+    public long matched() { return MATCHED.get(); }
 
     /**
      * Installs the two observer handlers around the OFFLINE framing pipeline.
@@ -238,6 +328,7 @@ public final class FrameShadowObserver {
                 return;
             }
             SELECTED.incrementAndGet();
+            SAMPLED_BYTES.addAndGet(snapshot.length);
             RETAINED_OBSERVATIONS.set(1);
             RETAINED_BYTES.set(snapshot.length);
             // Retire the sample if its write completes without a frame observation
@@ -264,6 +355,22 @@ public final class FrameShadowObserver {
         public void exceptionCaught(ChannelHandlerContext ctx, Throwable t) throws Exception {
             retireIncompletePending();
             ctx.fireExceptionCaught(t);
+        }
+
+        /** LIVE lifecycle: channels close without an explicit uninstall —
+         *  retire owned data and quiescence-free the native context exactly
+         *  once when the handler leaves the pipeline (idempotent with
+         *  uninstall()). Teardown runs on the channel's own event loop, so the
+         *  inline free completes before this returns; verify the balance HERE
+         *  (the final lifecycle point), not on closeFuture. */
+        @Override
+        public void handlerRemoved(ChannelHandlerContext ctx) throws Exception {
+            removed = true;
+            retireIncompletePending();
+            freeNative();
+            if (CTX_CREATED.get() == CTX_FREED.get() && RETAINED_BYTES.get() == 0) {
+                CHANNELS_CLEAN_CLOSE.incrementAndGet();
+            }
         }
     }
 
@@ -346,6 +453,11 @@ public final class FrameShadowObserver {
             }
             ctx.write(msg, promise); // actual Java frame forwarded UNTOUCHED
         }
+
+        @Override
+        public void handlerRemoved(ChannelHandlerContext ctx) throws Exception {
+            removed = true; // mirror of the capture handler's LIVE lifecycle cleanup
+        }
     }
 
     private void completeObservation(Pending p, byte[] javaFrame) {
@@ -413,6 +525,8 @@ public final class FrameShadowObserver {
                 rustOk = false; // deterministic framing must be byte-exact
             }
             COMPLETED.incrementAndGet();
+            boolean uncompressed = !compressedFraming || jd.dataLen == 0; // passthrough or disabled framing
+            if (uncompressed) COMPLETED_PASSTHROUGH.incrementAndGet(); else COMPLETED_COMPRESSED.incrementAndGet();
             if (javaOk && rustOk) MATCHED.incrementAndGet();
             else {
                 MISMATCHED.incrementAndGet();

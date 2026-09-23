@@ -14,6 +14,7 @@ public class RustCraftCoreMod implements IFMLLoadingPlugin {
         return new String[]{
                 "com.rustcraft.coremod.SPacketChunkDataTransformer",
                 "com.rustcraft.coremod.NetworkManagerCompressionTransformer",
+                "com.rustcraft.coremod.FrameShadowHookTransformer",
                 "com.rustcraft.coremod.WorldCollisionProbeTransformer",
                 "com.rustcraft.coremod.WorldgenShadowTransformer",
                 "com.rustcraft.coremod.ChunkMutationTransformer"
@@ -131,6 +132,9 @@ public class RustCraftCoreMod implements IFMLLoadingPlugin {
                         pw.println("# periodic dump t=" + System.currentTimeMillis());
                         pw.println(com.rustcraft.bridge.NativeChunkPacket.dumpMetrics());
                         pw.println(com.rustcraft.bridge.NativeCompressionEncoder.dumpMetrics());
+                        pw.println(com.rustcraft.bridge.FrameShadowLiveHook.dumpMetrics()); // M-CK5 live observer
+                        pw.println("frameShadowHook.transformCount=" + com.rustcraft.coremod.FrameShadowHookTransformer.transformCount
+                                + " status=" + com.rustcraft.coremod.FrameShadowHookTransformer.lastStatus);
                         if (com.rustcraft.coremod.WorldCollisionProbeTransformer.transformCount > 0) {
                             pw.println(com.rustcraft.bridge.CollisionProbe.dump());
                         }
@@ -171,6 +175,7 @@ public class RustCraftCoreMod implements IFMLLoadingPlugin {
                 System.out.println("[RustCraft] === M1 metrics at shutdown ===");
                 System.out.println(com.rustcraft.bridge.NativeChunkPacket.dumpMetrics());
                 System.out.println(com.rustcraft.bridge.NativeCompressionEncoder.dumpMetrics());
+                System.out.println(com.rustcraft.bridge.FrameShadowLiveHook.dumpMetrics()); // M-CK5 live observer
                 if (com.rustcraft.coremod.WorldCollisionProbeTransformer.transformCount > 0) {
                     System.out.println(com.rustcraft.bridge.CollisionProbe.dump());
                 }
@@ -179,10 +184,13 @@ public class RustCraftCoreMod implements IFMLLoadingPlugin {
                     System.out.println(com.rustcraft.bridge.WorldgenShadow.dumpMetrics());
                     com.rustcraft.bridge.WorldgenShadow.writePrePopFile("m3wg-prepop-" + com.rustcraft.bridge.WorldgenShadow.RUNTIME_MODE + ".txt");
                 }
-                try (java.io.PrintWriter pw = new java.io.PrintWriter(new java.io.File("m1-metrics.txt"), "UTF-8")) {
-                    pw.println("# final shutdown dump t=" + System.currentTimeMillis());
-                    pw.println(com.rustcraft.bridge.NativeChunkPacket.dumpMetrics());
-                    pw.println(com.rustcraft.bridge.NativeCompressionEncoder.dumpMetrics());
+                    try (java.io.PrintWriter pw = new java.io.PrintWriter(new java.io.File("m1-metrics.txt"), "UTF-8")) {
+                        pw.println("# final shutdown dump t=" + System.currentTimeMillis());
+                        pw.println(com.rustcraft.bridge.NativeChunkPacket.dumpMetrics());
+                        pw.println(com.rustcraft.bridge.NativeCompressionEncoder.dumpMetrics());
+                        pw.println(com.rustcraft.bridge.FrameShadowLiveHook.dumpMetrics()); // M-CK5 live observer
+                        pw.println("frameShadowHook.transformCount=" + com.rustcraft.coremod.FrameShadowHookTransformer.transformCount
+                                + " status=" + com.rustcraft.coremod.FrameShadowHookTransformer.lastStatus);
                     if (com.rustcraft.bridge.WorldgenShadow.enabled() || com.rustcraft.coremod.WorldgenShadowTransformer.transformCount > 0) {
                         pw.println(com.rustcraft.bridge.WorldgenShadow.dumpMetrics());
                     }
