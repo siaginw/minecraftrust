@@ -1,6 +1,6 @@
 # Issue #1: real Clean Forge offline fixture replay
 
-The `forge` lane produces schema-v1 `REAL_CLEAN_FORGE_ORACLE` fixtures from
+The `forge` lane produces schema-v1 `REAL_CLEAN_FORGE_ORACLE_ACCEPTED` fixtures from
 actual Minecraft 1.12.2 / Forge 14.23.5.2860 classes after offline FML
 initialization. The oracle exclusively owns its constructed object graph.
 It starts no server, captures no running world's chunks, and grants no native
@@ -10,12 +10,18 @@ importer. See the [capture proof](issue1-clean-forge-capture-proof.md) and
 
 ## Independent comparison
 
-`tools/testing/forge_fixture_replay.py` requires the exact 41 named oracle
+`tools/testing/forge_fixture_replay.py` requires the exact 57 named oracle
 outcomes. An accepted row must contain the owned `RCSNAP01` input, actual
 `SPacketChunkData.func_148840_b` packet body, native payload, packed JNI V2
 result and same-event selected-section tick refcounts. A rejected row must
-contain only its name, explicit rejection status and expected reason.
-Missing, duplicated or unqualified rows cannot pass.
+contain its name, explicit rejection status, expected reason and
+`REAL_CLEAN_FORGE_EXPECTED_REJECTION` kind. The 16 Medium additions also require
+strict publication, scratch-progress, retry and source-witness proof metadata.
+Missing, duplicated or unqualified rows cannot pass. Rejections materialize as
+separate `.rejection.json` records under the capture-rejection schema, with no
+owned transport, successful V2 result, Java packet or native payload. The batch
+receipt retains the generic `REAL_CLEAN_FORGE_ORACLE` kind because it contains
+both accepted and rejected outcomes.
 
 The replay code independently parses the owned input, including every u32
 state before narrowing, section order, non-air counts, mask subset, lifecycle
@@ -87,19 +93,28 @@ python -B tools/testing/forge_fixture_replay.py --runtime-receipt <run>/clean-fo
 Existing output directories are never overwritten. Exit 0 means PASS,
 1 means a semantic failure, and 2 means incomplete evidence. Omitting native
 CLI replay yields `INCOMPLETE` even if the raw payload comparison succeeds.
-Fifteen public unit tests cover truncation, invalid scope/guards, mismatched
+Twenty-one public unit tests cover truncation, invalid scope/guards, mismatched
 headers, missing sections, extended IDs, V2 corruption, light/biome changes,
-registry holes, missing refcounts/rows, artifact tampering and exit mapping.
+registry holes, missing refcounts/rows, artifact tampering, exit mapping,
+rejection publication/progress proofs and accepted-kind runtime provenance.
 Their constructed inputs are test controls, not real Forge evidence.
 
 ## Verified result and limits
 
-Run `20260924T225842Z-forge-c5e54c1b` passed all 41 expected outcomes:
+The accepted Ultra baseline run `20260924T225842Z-forge-c5e54c1b` passed all 41 expected outcomes:
 21 accepted events and 20 explicit safe rejections. All accepted events
 matched semantically, all 21 native CLI replays passed, and all 21 happened
 to match Java bytes exactly. A separate read verified every persisted fixture's
 schema, canonical hash and artifact references, then rehashed all 1,765
 referenced artifacts.
+
+The Medium expansion preserves those 21 accepted inputs and 20 rejection
+cases, and adds 16 distinct rejection records. It does not inflate successful
+fixture counts with retries or negative tests. See the
+[publication contract](issue1-medium-publication-contract.md) for precise fault
+semantics and the [Medium report](issue1-medium-hardening-report.md) for current
+receipts and totals. Historical generic accepted labels remain schema-readable;
+new oracle runs must emit the explicit accepted/rejected kinds.
 
 These fixtures qualify the bounded clean-runtime, exclusive-owned-object
 oracle. They do not prove arbitrary mod writers participate in a capture

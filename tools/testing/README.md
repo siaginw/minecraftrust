@@ -33,7 +33,7 @@ cache (`--locked` is not `--offline`). There is no server startup or live campai
 | `decoder` | The independent Python wire decoder, immutable fixture importer and schema/hash regressions. No native replay or Java/Forge parity claim. |
 | `java-jni` | Release FFI build, standalone Java 8 V2 decoder, retained-handle JNI, owned capture model and owned-snapshot JNI tests. Each main uses a fresh JVM; no Minecraft/Forge classpath. |
 | `fixture` | Explicitly **SYNTHETIC**: Rust structural/V2 regressions, independent decoder regressions and 16 immutable fixtures plus eight rejection scenarios through a freshly built native snapshot CLI. A passing lane covers only these synthetic inputs. Real Forge owned graphs use the separate `forge` lane. |
-| `forge` | Pins the original clean 1.12.2 / Forge 2860 server artifacts, performs actual offline FML load/preinit/init, observes final JVM class definitions, runs the owned real-Chunk oracle, creates local `REAL_CLEAN_FORGE_ORACLE` fixtures, and independently compares Java/native semantics plus native CLI replay. Missing/wrong artifacts produce `INCOMPLETE`, never PASS. No server or live source capture starts. |
+| `forge` | Pins the original clean 1.12.2 / Forge 2860 server artifacts, performs actual offline FML load/preinit/init, observes final JVM class definitions, runs the owned real-Chunk oracle, and independently compares Java/native semantics plus native CLI replay. The 57 named cases produce 21 `REAL_CLEAN_FORGE_ORACLE_ACCEPTED` fixtures and 36 `REAL_CLEAN_FORGE_EXPECTED_REJECTION` records. Missing/wrong artifacts produce `INCOMPLETE`, never PASS. No server or live source capture starts. |
 | `modpack` | **Artifact preflight only.** Missing manifest/files: `NOT_RUN / MISSING_EXTERNAL_ARTIFACT`. Present verified files: `NOT_RUN / NO_QUALIFIED_OFFLINE_REPLAY_HARNESS`. Hash presence never means compatibility passed; qualified replay is future work. |
 | `benchmark` | Explicitly separate: preflights the Forge classpath then runs existing `ForgeBenchmarks`. No benchmarking occurs in correctness lanes. Process completion is not a speedup claim. |
 
@@ -129,6 +129,14 @@ consume each packet exactly. Local receipts, fixture hashes, owned inputs and
 payloads remain under the ignored run directory; proprietary binaries are not
 committed. See the [runtime qualification](../../docs/research/issue1-clean-forge-capture-proof.md)
 and [writer audit](../../docs/research/issue1-clean-forge-writer-audit.md).
+
+The [publication contract](../../docs/research/issue1-medium-publication-contract.md)
+defines the new noncanonical-input and partial-failure controls. Rejection
+records have their own schema and never carry a successful payload or V2 result.
+The focused `audit_medium_capture_faults.py` developer audit is separate from
+normal lanes and from cargo-mutants; it uses disposable source copies and fresh
+qualified JVMs. Use a short Windows output path to accommodate Java 8 class-file
+path limits. Infrastructure failures do not count as caught faults.
 
 The separate **benchmark** lane retains its older classpath-manifest interface,
 `-ForgeClasspathManifest <local-json>`:
