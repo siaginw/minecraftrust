@@ -15,6 +15,18 @@ use crate::registry::{STATS_SECTIONS_ALLOCATED, STATS_SECTIONS_RELEASED};
 pub const CHUNK_PRIMER_SIZE: usize = 65536; // 16 * 16 * 256 u16
 pub const BIOME_ARRAY_SIZE: usize = 256;    // 16 * 16 u8
 
+/// Metadata for one successfully serialized chunk payload.
+///
+/// Consumers must pair these fields with the bytes from that operation, rather
+/// than querying the chunk's current mask or deriving a mask from Java state.
+/// This describes native serialization, not the coherence of a Java capture.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[must_use]
+pub struct PacketEncodeResult {
+    pub bytes_written: usize,
+    pub emitted_mask: u16,
+}
+
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 #[repr(u8)]
 pub enum ChunkLifecycle {
@@ -168,32 +180,53 @@ impl NativeChunk {
 
     /// First Zero-Copy Consumer: Protocol 340 SPacketChunkData payload encoder.
     ///
-    /// Encodes all active sections directly into the packet buffer without Java staging,
-    /// reflection, or unpacking. Uses versioned snapshot model for consistency.
+    /// Encodes exactly the sections selected by `primary_bit_mask` in ascending Y.
+    /// Every selected section must exist; an inconsistent mask is rejected before
+    /// any output is written. Unselected resident sections are not serialized.
+    ///
+    /// On success the result pairs the emitted mask with the byte count (excluding
+    /// the starting offset), and advances `offset` by that count. On error `offset`
+    /// is unchanged and no result is published. A late error may modify scratch
+    /// bytes in `out`; callers must discard that attempt's output on any error.
+    /// Native borrowing/version checks do not establish Java capture coherence.
     pub fn encode_packet_payload(
         &mut self,
         skylight: bool,
         full_chunk: bool,
         out: &mut [u8],
         offset: &mut usize,
-    ) -> Result<usize, &'static str> {
-        let snap = self.begin_snapshot();
+    ) -> Result<PacketEncodeResult, &'static str> {
         let start_pos = *offset;
+        if start_pos > out.len() {
+            return Err("Packet output offset out of bounds");
+        }
+        let selected_mask = self.primary_bit_mask;
+        for s in 0..16 {
+            if (selected_mask & (1u16 << s)) != 0 && self.sections[s].is_none() {
+                return Err("Packet mask selects a missing section");
+            }
+        }
+
+        let snap = self.begin_snapshot();
+        let mut cursor = start_pos;
+        let mut emitted_mask = 0u16;
 
         for s in 0..16 {
-            if (self.primary_bit_mask & (1u16 << s)) != 0 {
-                if let Some(ref mut sec) = self.sections[s] {
-                    sec.encode_wire(out, offset, skylight)?;
-                }
+            let bit = 1u16 << s;
+            if (selected_mask & bit) != 0 {
+                let sec = self.sections[s].as_mut()
+                    .ok_or("Packet mask selects a missing section")?;
+                sec.encode_wire(out, &mut cursor, skylight)?;
+                emitted_mask |= bit;
             }
         }
 
         if full_chunk {
-            if *offset + BIOME_ARRAY_SIZE > out.len() {
+            if out.len() - cursor < BIOME_ARRAY_SIZE {
                 return Err("Output buffer overflow writing biomes");
             }
-            out[*offset..*offset + BIOME_ARRAY_SIZE].copy_from_slice(&self.biomes);
-            *offset += BIOME_ARRAY_SIZE;
+            out[cursor..cursor + BIOME_ARRAY_SIZE].copy_from_slice(&self.biomes);
+            cursor += BIOME_ARRAY_SIZE;
         }
 
         // Validate snapshot consistency
@@ -201,7 +234,12 @@ impl NativeChunk {
             return Err("Snapshot stale: mutation during packet encode");
         }
 
-        Ok(*offset - start_pos)
+        let result = PacketEncodeResult {
+            bytes_written: cursor - start_pos,
+            emitted_mask,
+        };
+        *offset = cursor;
+        Ok(result)
     }
 
     /// Second Consumer Proof A: Spatial metadata & section occupancy summary.

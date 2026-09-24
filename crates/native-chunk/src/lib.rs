@@ -3,7 +3,7 @@ pub mod chunk;
 pub mod registry;
 
 pub use section::{NativeSection, SectionFlags};
-pub use chunk::{NativeChunk, ChunkLifecycle, CHUNK_PRIMER_SIZE, BIOME_ARRAY_SIZE};
+pub use chunk::{NativeChunk, ChunkLifecycle, PacketEncodeResult, CHUNK_PRIMER_SIZE, BIOME_ARRAY_SIZE};
 pub use registry::{ChunkRegistry, ChunkHandle, ChunkKey};
 
 #[cfg(test)]

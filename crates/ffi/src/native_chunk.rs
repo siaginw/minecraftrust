@@ -108,7 +108,13 @@ pub unsafe extern "system" fn Java_com_rustcraft_bridge_NativeChunkBridge_getPri
 /// First Zero-Copy Consumer: Directly encodes Protocol 340 SPacketChunkData payload from NativeChunk.
 ///
 /// Eliminates Java ExtendedBlockStorage extraction, reflection, and staging buffers.
-/// Returns bytes written (>0) on success, or negative error code.
+/// Returns bytes written (zero for an empty non-full payload), or a negative error code.
+///
+/// Legacy length-only ABI: this does not expose PacketEncodeResult.emitted_mask.
+/// A separate mask query is NOT metadata for this encode result. A versioned
+/// combined-result JNI contract and caller migration are required before native
+/// packet authority can be reconsidered; the production CAPTURE_UNSAFE gate stays
+/// closed. See docs/research/issue1-structural-mask-contract.md.
 #[no_mangle]
 pub unsafe extern "system" fn Java_com_rustcraft_bridge_NativeChunkBridge_encodePacketPayload(
     _env: *mut c_void,
@@ -136,7 +142,7 @@ pub unsafe extern "system" fn Java_com_rustcraft_bridge_NativeChunkBridge_encode
             let mut chunk = chunk_arc.write().unwrap();
             let mut offset = 0usize;
             match chunk.encode_packet_payload(skylight != 0, full_chunk != 0, out, &mut offset) {
-                Ok(len) => len as i32,
+                Ok(result) => result.bytes_written as i32,
                 Err(_) => -3, // Overflow or encode error
             }
         } else {
