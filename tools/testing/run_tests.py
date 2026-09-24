@@ -22,6 +22,12 @@ RUST_PUBLIC = [
     ("packet-encode-v2", ["cargo", "test", "--locked", "-p", "ffi", "--test", "packet_encode_v2"]),
     ("packet-encode-contract", ["cargo", "test", "--locked", "-p", "native-chunk", "--test", "packet_encode_contract"]),
     ("packet-encode-v2-unit", ["cargo", "test", "--locked", "-p", "ffi", "--lib", "packet_encode_v2"]),
+    ("packet-snapshot", ["cargo", "test", "--locked", "-p", "native-chunk", "--test", "packet_snapshot"]),
+    ("snapshot-replay-build", ["cargo", "build", "--locked", "-p", "ffi", "--example", "snapshot_replay"]),
+]
+RUST_PROPERTY = [
+    ("property-contract", ["cargo", "test", "--locked", "-p", "native-chunk", "--test", "property_contract"]),
+    ("property-v2", ["cargo", "test", "--locked", "-p", "ffi", "--lib", "packet_encode_v2::properties"]),
 ]
 JAVA_SOURCES = [
     "tools/bridge/src/com/rustcraft/bridge/NativeChunkBridge.java",
@@ -29,7 +35,13 @@ JAVA_SOURCES = [
     "tools/native-chunk-jni-tests/src/com/rustcraft/bridge/PacketEncodeResultV2Test.java",
     "tools/native-chunk-jni-tests/src/com/rustcraft/bridge/NativeChunkJniV2Test.java",
 ]
-JAVA_MAINS = ["com.rustcraft.bridge.PacketEncodeResultV2Test", "com.rustcraft.bridge.NativeChunkJniV2Test"]
+JAVA_SOURCES += [path.relative_to(ROOT).as_posix() for path in sorted((ROOT / "tools/bridge/src/com/rustcraft/bridge/capture").glob("*.java"))]
+JAVA_SOURCES += [
+    "tools/native-chunk-jni-tests/src/com/rustcraft/bridge/capture/SnapshotCaptureTest.java",
+    "tools/native-chunk-jni-tests/src/com/rustcraft/bridge/capture/OwnedSnapshotJniTest.java",
+]
+JAVA_MAINS = ["com.rustcraft.bridge.PacketEncodeResultV2Test", "com.rustcraft.bridge.NativeChunkJniV2Test",
+              "com.rustcraft.bridge.capture.SnapshotCaptureTest", "com.rustcraft.bridge.capture.OwnedSnapshotJniTest"]
 COMPILER_OPTIONS = ["-encoding", "UTF-8", "-source", "8", "-target", "8"]
 EVIDENCE_TESTS = [
     "TestProvenanceValidation.test_broken_yaml_rejected",
@@ -56,6 +68,11 @@ def source_snapshot():
     paths.extend(path for path in (ROOT / "crates").rglob("*") if path.is_file() and path.suffix in (".rs", ".toml"))
     paths.extend(ROOT / source for source in JAVA_SOURCES)
     paths.extend((ROOT / "tools").rglob("*.java"))
+    paths.extend((ROOT / "tools/testing").glob("*.py"))
+    paths.extend((ROOT / "tools/testing").glob("*.rs"))
+    paths.extend(path for path in (ROOT / "tests/fixtures/issue1-capture").rglob("*") if path.is_file())
+    paths.extend(path for path in (ROOT / "tests/fixtures/issue1-properties").rglob("*") if path.is_file())
+    paths.extend((ROOT / "docs/schemas").glob("*.json"))
     paths.extend([ROOT / "tools/run-rustcraft-tests.ps1", Path(__file__), ROOT / "tools/testing/test_runner.py",
                   ROOT / "tools/tests/test_evidence_integrity.py", ROOT / "tools/verify_evidence_integrity.py",
                   ROOT / "tools/tests/fixtures/broken-provenance-2026-09-18.yaml"])
@@ -124,9 +141,15 @@ def lane_inventory(lane):
                           ["tools.tests.test_evidence_integrity." + test for test in EVIDENCE_TESTS]})
     elif lane == "java-jni":
         inventory.append({"id": "ffi-release", "argv": RUST_PUBLIC[3][1]})
+    elif lane == "property":
+        inventory.extend({"id": name, "argv": args, "minimum_test_count": 1} for name, args in RUST_PROPERTY)
     elif lane == "fixture":
-        inventory.extend({"id": name, "argv": args} for name, args in (RUST_PUBLIC[5], RUST_PUBLIC[4]))
-        inventory.append({"id": "forge-event-fixtures", "preflight": "No accepted Forge serialization-event fixture ships in the public checkout."})
+        inventory.extend({"id": name, "argv": args} for name, args in (RUST_PUBLIC[5], RUST_PUBLIC[4], RUST_PUBLIC[8]))
+    if lane in ("public", "fixture", "decoder"):
+        inventory.append({"id": "decoder-regressions", "argv": [sys.executable, "-B", "-m", "unittest", "discover", "-s", "tools/testing", "-p", "test_packet_decoder.py", "-v"]})
+    if lane in ("public", "fixture"):
+        executable = ROOT / "target/debug/examples" / ("snapshot_replay.exe" if os.name == "nt" else "snapshot_replay")
+        inventory.append({"id": "synthetic-fixture-replay", "argv": [sys.executable, "-B", "tools/testing/fixture_replay.py", "--native-replay", str(executable)], "capture_kind": "SYNTHETIC", "requires_success": "snapshot-replay-build"})
     if lane in ("public", "java-jni"):
         inventory.append({"id": "java-v2", "sources": JAVA_SOURCES, "mains": JAVA_MAINS, "fresh_jvm_per_main": True})
     elif lane == "forge":
@@ -154,23 +177,29 @@ class Runner:
         print("[{}] {}{}".format(status, name, ": " + details["reason"] if "reason" in details else ""), flush=True)
         return result
 
-    def command(self, name, argv, cwd=ROOT, expected_oracle_rows=None):
+    def command(self, name, argv, cwd=ROOT, expected_oracle_rows=None, minimum_test_count=None):
         argv = [str(arg) for arg in argv]
         log = self.output / (name + ".log")
         print("[RUN] " + subprocess.list2cmdline(argv), flush=True)
         started = time.monotonic()
         env = dict(os.environ, PYTHONDONTWRITEBYTECODE="1", CARGO_TARGET_DIR=str(ROOT / "target"))
+        env["PROPTEST_CASES"] = str(2048 if self.args.lane == "property" and getattr(self.args, "stress", False) else 64)
         try:
             with log.open("w", encoding="utf-8") as stream:
-                process = subprocess.Popen(argv, cwd=cwd, env=env, stdout=subprocess.PIPE,
-                                           stderr=subprocess.STDOUT, text=True, encoding="utf-8", errors="replace")
-                for line in process.stdout:
-                    stream.write(line)
-                    print(line, end="", flush=True)
-                returncode = process.wait()
-            rows_ok = expected_oracle_rows is None or oracle_rows_pass(log.read_text(encoding="utf-8"), expected_oracle_rows)
-            return self.record(name, "PASS" if returncode == 0 and rows_ok else "FAIL", argv=argv, cwd=str(cwd),
-                               exit_code=returncode, seconds=round(time.monotonic() - started, 3), log=str(log))
+                with subprocess.Popen(argv, cwd=cwd, env=env, stdout=subprocess.PIPE,
+                                      stderr=subprocess.STDOUT, text=True, encoding="utf-8", errors="replace") as process:
+                    for line in process.stdout:
+                        stream.write(line)
+                        print(line, end="", flush=True)
+                    returncode = process.wait()
+            output = log.read_text(encoding="utf-8")
+            rows_ok = expected_oracle_rows is None or oracle_rows_pass(output, expected_oracle_rows)
+            count = sum(int(value) for value in re.findall(r"test result: ok\. (\d+) passed;", output))
+            count_ok = minimum_test_count is None or count >= minimum_test_count
+            return self.record(name, "PASS" if returncode == 0 and rows_ok and count_ok else "FAIL", argv=argv, cwd=str(cwd),
+                               exit_code=returncode, seconds=round(time.monotonic() - started, 3), log=str(log),
+                               minimum_test_count=minimum_test_count, observed_rust_test_count=count,
+                               proptest_cases=int(env["PROPTEST_CASES"]))
         except OSError as error:
             return self.record(name, "NOT_RUN", reason="MISSING_TOOL", detail=str(error), argv=argv, cwd=str(cwd))
 
@@ -260,8 +289,9 @@ class Runner:
         manifest = json.loads(manifest_file.read_text(encoding="utf-8"))
         if manifest.get("schema_version") != 1 or manifest.get("kind") != kind:
             raise ValueError("Expected schema_version=1, kind=" + kind)
-        if manifest.get("minecraft_version") != "1.12.2" or manifest.get("forge_version") != "14.23.5.2860":
-            raise ValueError("Existing offline harness inventory targets Minecraft 1.12.2 / Forge 14.23.5.2860.")
+        versions = ("14.23.5.2860",) if kind == "forge-classpath" else ("14.23.5.2860", "14.23.5.2846")
+        if manifest.get("minecraft_version") != "1.12.2" or manifest.get("forge_version") not in versions:
+            raise ValueError("Unsupported Minecraft/Forge identity for this manifest kind.")
         entries = manifest.get("classpath" if kind == "forge-classpath" else "artifacts")
         if not isinstance(entries, list) or not entries:
             raise MissingPrerequisite("Manifest has no artifact inventory.")
@@ -278,7 +308,7 @@ class Runner:
 
     def run(self):
         lane = self.args.lane
-        if lane in ("public", "java-jni", "fixture"):
+        if lane in ("public", "java-jni", "fixture", "property", "decoder"):
             for item in lane_inventory(lane):
                 if "argv" not in item:
                     continue
@@ -292,16 +322,22 @@ class Runner:
                     except ImportError:
                         self.record(item["id"], "NOT_RUN", reason="MISSING_PREREQUISITE", detail="Existing evidence checker requires PyYAML.")
                         continue
-                self.command(item["id"], item["argv"])
+                required_build = item.get("requires_success")
+                if required_build and not any(result["id"] == required_build and result["status"] == "PASS" for result in self.results):
+                    self.record(item["id"], "NOT_RUN", reason="BUILD_PREREQUISITE_FAILED")
+                    continue
+                argv = item["argv"]
+                if item["id"] == "synthetic-fixture-replay":
+                    argv = [*argv, "--report", str(self.output / "synthetic-fixture-replay.json")]
+                self.command(item["id"], argv, minimum_test_count=item.get("minimum_test_count"))
             if lane in ("public", "java-jni"):
                 built = next(result for result in self.results if result["id"] == "ffi-release")
                 if built["status"] == "PASS":
                     dll = ROOT / "target" / "release" / ("rustcraft_ffi.dll" if os.name == "nt" else "librustcraft_ffi.so")
-                    self.java("java-v2", JAVA_SOURCES, [(JAVA_MAINS[0], []), (JAVA_MAINS[1], [str(dll)])], dll=dll)
+                    self.java("java-v2", JAVA_SOURCES, [(JAVA_MAINS[0], []), (JAVA_MAINS[1], [str(dll)]),
+                                                       (JAVA_MAINS[2], []), (JAVA_MAINS[3], [str(dll)])], dll=dll)
                 else:
                     self.record("java-v2", "NOT_RUN", reason="BUILD_PREREQUISITE_FAILED")
-            else:
-                self.record("forge-event-fixtures", "NOT_RUN", reason="MISSING_EXTERNAL_ARTIFACT", detail="No accepted immutable Forge serialization-event fixture is available; Rust fixtures are synthetic.")
         elif lane in ("forge", "benchmark"):
             try:
                 classpath, manifest = self.checked_manifest(self.args.forge_classpath_manifest, "forge-classpath")
@@ -330,6 +366,7 @@ class Runner:
         status = "FAIL" if "FAIL" in statuses else "INCOMPLETE" if "NOT_RUN" in statuses or not statuses else "PASS"
         source_paths = [ROOT / "tools/run-rustcraft-tests.ps1", Path(__file__)]
         receipt = {"schema_version": 1, "lane": self.args.lane, "status": status, "started_utc": self.started,
+                   "proptest_cases": 2048 if self.args.lane == "property" and getattr(self.args, "stress", False) else 64,
                    "finished_utc": datetime.now(timezone.utc).isoformat(), "inventory": lane_inventory(self.args.lane),
                    "results": self.results, "public_exclusions": EXCLUSIONS if self.args.lane == "public" else [],
                    "runner_sources": [path_identity(path) for path in source_paths],
@@ -343,12 +380,15 @@ class Runner:
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("lane", choices=["public", "java-jni", "fixture", "forge", "modpack", "benchmark"])
+    parser.add_argument("lane", choices=["public", "property", "fixture", "decoder", "java-jni", "forge", "modpack", "benchmark"])
     parser.add_argument("--java-home")
     parser.add_argument("--forge-classpath-manifest")
     parser.add_argument("--modpack-artifact-manifest")
     parser.add_argument("--inventory", action="store_true")
+    parser.add_argument("--stress", action="store_true", help="Property lane only: increase PROPTEST_CASES from 64 to 2048.")
     args = parser.parse_args()
+    if args.stress and args.lane != "property":
+        parser.error("--stress is supported only by the property lane")
     if args.inventory:
         print(json.dumps({"lane": args.lane, "inventory": lane_inventory(args.lane), "public_exclusions": EXCLUSIONS if args.lane == "public" else []}, indent=2))
         return 0

@@ -1,14 +1,17 @@
 # Reproducible bounded test lanes
 
-Run from PowerShell with Rust/Cargo and Python 3.9+ on `PATH`, plus
+Run from PowerShell with Rust/Cargo and Python 3.10+ on `PATH`, plus
 `JAVA8_HOME` or `JAVA_HOME` selecting **JDK 8u504**. `-JavaHome` is an explicit
 override. The runner verifies both `java -version` and `javac -version`.
 It installs nothing and changes no repository settings or production gates.
 
 ```powershell
 tools/run-rustcraft-tests.ps1 public
+tools/run-rustcraft-tests.ps1 property
+tools/run-rustcraft-tests.ps1 property -Stress
 tools/run-rustcraft-tests.ps1 java-jni
 tools/run-rustcraft-tests.ps1 fixture
+tools/run-rustcraft-tests.ps1 decoder
 tools/run-rustcraft-tests.ps1 forge
 tools/run-rustcraft-tests.ps1 modpack
 tools/run-rustcraft-tests.ps1 benchmark
@@ -25,15 +28,17 @@ cache (`--locked` is not `--offline`). There is no server startup or live campai
 
 | Lane | Inventory and boundaries |
 | --- | --- |
-| `public` | All workspace library tests; native-chunk unit/integration tests; protocol tests; release FFI build; explicit `packet_encode_v2` unit and integration reruns plus `packet_encode_contract` integration rerun; runner regressions; five available evidence-checker regressions; standalone Java decoder and actual JNI tests. |
-| `java-jni` | Release FFI build, standalone Java 8 decoder and JNI tests. No Minecraft/Forge classpath. |
-| `fixture` | Deterministic synthetic Rust packet and JNI-export fixture tests. Separately records `NOT_RUN / MISSING_EXTERNAL_ARTIFACT` for accepted Forge event fixtures, which do not exist in this checkout. |
+| `public` | All workspace library tests; native-chunk unit/integration/property tests; protocol tests; release FFI build; explicit V2/structural/snapshot reruns; independent decoder regressions; all synthetic fixtures through the freshly built native CLI; runner regressions; five available evidence-checker regressions; four standalone Java decoder/capture/JNI mains. |
+| `property` | `native-chunk --test property_contract` and `ffi --lib packet_encode_v2::properties`; at least one test must actually execute in each target. 64 generated cases per property normally; optional `-Stress` raises the budget to 2048. |
+| `decoder` | The independent Python wire decoder, immutable fixture importer and schema/hash regressions. No native replay or Java/Forge parity claim. |
+| `java-jni` | Release FFI build, standalone Java 8 V2 decoder, retained-handle JNI, owned capture model and owned-snapshot JNI tests. Each main uses a fresh JVM; no Minecraft/Forge classpath. |
+| `fixture` | Explicitly **SYNTHETIC**: Rust structural/V2 regressions, independent decoder regressions and 16 immutable fixtures plus eight rejection scenarios through a freshly built native snapshot CLI. A passing lane covers only these synthetic inputs. Live Forge captures are a separate unavailable validation stage. |
 | `forge` | Preflights an ordered hashed classpath manifest, then compiles/runs the existing Event, Registry and Capability oracle mains. Missing manifest/jars: `NOT_RUN / MISSING_EXTERNAL_ARTIFACT`. |
 | `modpack` | **Artifact preflight only.** Missing manifest/files: `NOT_RUN / MISSING_EXTERNAL_ARTIFACT`. Present verified files: `NOT_RUN / NO_QUALIFIED_OFFLINE_REPLAY_HARNESS`. Hash presence never means compatibility passed; qualified replay is future work. |
 | `benchmark` | Explicitly separate: preflights the Forge classpath then runs existing `ForgeBenchmarks`. No benchmarking occurs in correctness lanes. Process completion is not a speedup claim. |
 
 `public -Inventory` prints the exact direct commands without executing them.
-The seven Cargo commands are also listed in every public receipt and match the
+The nine Cargo commands are also listed in every public receipt and match the
 direct validation inventory. Existing NBT binary targets reference missing
 `src/bin/bench.rs` and `src/bin/oracle_cli.rs`; therefore the runner uses the
 workspace **library** suite plus available integration targets rather than
@@ -53,8 +58,9 @@ times, source hashes before/after, explicit exclusions and cache decisions.
 Source changes during a run invalidate its result. Exit **0** means every
 inventoried required check passed, **1** means a failure, and **2** means
 `INCOMPLETE` because a required step was `NOT_RUN`. Thus a missing-artifact
-Forge/modpack lane is never a green result. The fixture lane is likewise
-incomplete for real Forge events even when every synthetic check passes.
+Forge/modpack lane is never a green result. The fixture lane can pass only its
+explicit synthetic inventory; that status makes no claim about real Forge
+events. Invoking the fixture importer without native replay returns INCOMPLETE.
 Separate oracle row validation catches legacy Forge mains that print `FAIL`
 but exit zero; it also rejects missing or duplicate assertion rows. These
 preexisting oracles remain limited to their documented test semantics.
@@ -81,7 +87,15 @@ Inputs are rehashed after compilation before publishing a cache entry and
 before/after every JVM execution. A changed DLL or other changed identity
 input invalidates the run; an old hash never labels that run as passing.
 Tests exercise each identity input, damaged outputs and fresh JVM dispatch on
-cache hits. No research frameworks or test dependencies were adopted.
+cache hits. Proptest is now a pinned Rust dev dependency; no Java framework or
+mutation-testing tool has been adopted. Every runner Cargo command sets
+`PROPTEST_CASES=64`, overriding an inherited value for reproducibility. Only
+`property -Stress` sets 2048, and `-Stress` is rejected for other lanes. This is
+a correctness case budget, not a benchmark warmup. A future minimized failure
+must be preserved as an explicit deterministic regression alongside any seed.
+
+See [synthetic fixture and decoder documentation](../../docs/research/issue1-synthetic-fixtures.md)
+for immutable hashes, exact consumption, source independence and maintenance.
 
 ## External artifact preflight
 
@@ -113,6 +127,8 @@ files stay outside tracked evidence.
 
 `-ModpackArtifactManifest <local-json>` accepts the same version fields with
 `kind: "modpack-artifacts"` and `artifacts: [{"path": ..., "sha256": ...}]`.
+The modpack preflight accepts Forge 14.23.5.2846 (Revelation) or 14.23.5.2860
+(SevTech); this does not broaden the existing Forge oracle's qualified target.
 Include the actual ordered mod/coremod/config identity inputs to preflight;
 the receipt preserves the supplied manifest. This performs file/hash presence
 checks only. It does not assert completeness, load a pack, replay coherent

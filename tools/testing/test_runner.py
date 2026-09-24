@@ -160,6 +160,24 @@ class CacheIdentityTests(unittest.TestCase):
 
 
 class LaneTests(unittest.TestCase):
+    def test_source_snapshot_tracks_property_helper_and_concrete_cases(self):
+        with tempfile.TemporaryDirectory() as temporary, patch.object(runner, "ROOT", Path(temporary)):
+            root = Path(temporary)
+            helper = root / "tools/testing/rust_property_support.rs"
+            fixture = root / "tests/fixtures/issue1-properties/example.case"
+            helper.parent.mkdir(parents=True)
+            fixture.parent.mkdir(parents=True)
+            helper.write_text("// property helper\n", encoding="utf-8")
+            fixture.write_text("ISSUE1_PROPERTY_V1\nexample\n1,2,3\n", encoding="utf-8")
+            # The runner itself normally resides under ROOT; replace its path in
+            # this isolated inventory test without reading the real checkout.
+            with patch.object(runner, "__file__", str(helper.parent / "run_tests.py")):
+                before = runner.source_snapshot()
+                self.assertEqual({item["path"] for item in before},
+                                 {helper.relative_to(root).as_posix(), fixture.relative_to(root).as_posix()})
+                fixture.write_text("ISSUE1_PROPERTY_V1\nexample\n4,5,6\n", encoding="utf-8")
+                self.assertNotEqual(before, runner.source_snapshot())
+
     def test_missing_checker_fixture_is_not_a_successful_skipped_unittest(self):
         with tempfile.TemporaryDirectory() as temporary, patch.object(runner, "OUTPUT_ROOT", Path(temporary) / "output"), patch.object(runner, "ROOT", Path(temporary)), patch.object(runner, "source_snapshot", return_value=[]):
             session = runner.Runner(SimpleNamespace(lane="public"))
@@ -184,7 +202,7 @@ class LaneTests(unittest.TestCase):
         self.assertNotIn(("cargo", "test", "--workspace", "--locked"), commands)
 
     def test_benchmark_does_not_enter_correctness_inventory(self):
-        for lane in ("public", "java-jni", "fixture", "forge"):
+        for lane in ("public", "property", "decoder", "java-jni", "fixture", "forge"):
             self.assertNotIn("ForgeBenchmarks", json.dumps(runner.lane_inventory(lane)))
         self.assertIn("ForgeBenchmarks", json.dumps(runner.lane_inventory("benchmark")))
 
@@ -204,6 +222,55 @@ class LaneTests(unittest.TestCase):
                     self.assertEqual("NOT_RUN", session.results[0]["status"])
                     self.assertEqual("MISSING_EXTERNAL_ARTIFACT", session.results[0]["reason"])
                     self.assertEqual(2, session.finish())
+
+    def test_property_lane_has_both_targets_and_rejects_zero_test_success(self):
+        inventory = runner.lane_inventory("property")
+        self.assertEqual([item["argv"] for item in inventory], [argv for _, argv in runner.RUST_PROPERTY])
+        self.assertTrue(all(item["minimum_test_count"] == 1 for item in inventory))
+        with tempfile.TemporaryDirectory() as temporary, patch.object(runner, "OUTPUT_ROOT", Path(temporary)), patch.object(runner, "source_snapshot", return_value=[]):
+            session = runner.Runner(SimpleNamespace(lane="property", stress=False))
+            result = session.command("empty-property", [runner.sys.executable, "-c", "print('test result: ok. 0 passed; 0 failed;')"], minimum_test_count=1)
+            self.assertEqual(result["status"], "FAIL")
+            self.assertEqual(result["observed_rust_test_count"], 0)
+
+    def test_property_stress_changes_only_case_budget(self):
+        with tempfile.TemporaryDirectory() as temporary, patch.object(runner, "OUTPUT_ROOT", Path(temporary)), patch.object(runner, "source_snapshot", return_value=[]):
+            for stress, expected in ((False, 64), (True, 2048)):
+                session = runner.Runner(SimpleNamespace(lane="property", stress=stress))
+                result = session.command("case-budget", [runner.sys.executable, "-c", "import os; print(os.environ['PROPTEST_CASES'])"])
+                self.assertEqual(result["status"], "PASS")
+                self.assertEqual(result["proptest_cases"], expected)
+                self.assertEqual(Path(result["log"]).read_text().strip(), str(expected))
+
+    def test_fixture_lane_is_explicitly_synthetic_and_decoder_is_independent(self):
+        fixture = runner.lane_inventory("fixture")
+        replay = next(item for item in fixture if item["id"] == "synthetic-fixture-replay")
+        self.assertEqual(replay["capture_kind"], "SYNTHETIC")
+        self.assertEqual(replay["requires_success"], "snapshot-replay-build")
+        self.assertFalse(any(item.get("id") == "forge-event-fixtures" for item in fixture))
+        self.assertEqual([item["id"] for item in runner.lane_inventory("decoder")], ["decoder-regressions"])
+
+    def test_failed_native_build_cannot_replay_stale_executable(self):
+        with tempfile.TemporaryDirectory() as temporary, patch.object(runner, "OUTPUT_ROOT", Path(temporary)), patch.object(runner, "source_snapshot", return_value=[]):
+            session = runner.Runner(SimpleNamespace(lane="fixture"))
+            commands = []
+
+            def invoke(name, argv, **kwargs):
+                commands.append(name)
+                return session.record(name, "FAIL" if name == "snapshot-replay-build" else "PASS")
+
+            session.command = invoke
+            session.run()
+            self.assertNotIn("synthetic-fixture-replay", commands)
+            self.assertEqual(session.results[-1]["reason"], "BUILD_PREREQUISITE_FAILED")
+
+    def test_capture_java_sources_and_all_four_mains_are_in_inventory(self):
+        java = next(item for item in runner.lane_inventory("java-jni") if item["id"] == "java-v2")
+        self.assertEqual(len(java["mains"]), 4)
+        self.assertIn("com.rustcraft.bridge.capture.SnapshotCaptureTest", java["mains"])
+        self.assertIn("com.rustcraft.bridge.capture.OwnedSnapshotJniTest", java["mains"])
+        self.assertTrue(java["fresh_jvm_per_main"])
+        self.assertTrue(any(source.endswith("capture/OwnedPacketSnapshot.java") for source in java["sources"]))
 
 
 if __name__ == "__main__":
