@@ -1,0 +1,6 @@
+Version 1: offline deterministic owned-input construction only.
+These inputs do not originate from Minecraft, Forge, Revelation or SevTech.
+All arrays are freshly constructed, then serialized into immutable documents.
+Registry state 0 is air; states 1 through 16383 are synthetic non-air entries.
+No real writer inventory, live ownership or Minecraft byte-parity claim exists.
+Failure scenarios are not successful schema-v1 packet fixture documents.

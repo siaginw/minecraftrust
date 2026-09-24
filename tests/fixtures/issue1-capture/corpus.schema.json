@@ -1,0 +1,13 @@
+{
+  "$schema":"https://json-schema.org/draft/2020-12/schema",
+  "title":"Synthetic capture corpus and negative scenarios v1",
+  "type":"object","additionalProperties":false,
+  "required":["format","version","captureKind","fixtures","rejections","sequences"],
+  "properties":{
+    "format":{"const":"rustcraft-synthetic-capture-corpus"},"version":{"const":1},"captureKind":{"const":"SYNTHETIC"},
+    "fixtures":{"type":"array","minItems":1,"items":{"type":"object","additionalProperties":false,"required":["file","fixtureSha256"],"properties":{"file":{"$ref":"#/$defs/filename"},"fixtureSha256":{"type":"string","pattern":"^[0-9a-f]{64}$"}}}},
+    "rejections":{"type":"array","items":{"type":"object","additionalProperties":false,"required":["name","fixture","changes","expected"],"properties":{"name":{"type":"string","minLength":1},"fixture":{"$ref":"#/$defs/filename"},"changes":{"type":"object","additionalProperties":false,"properties":{"acceptedMask":{"type":"integer","minimum":0,"maximum":65535},"incarnationEnd":{"$ref":"#/$defs/integer"},"firstStateId":{"$ref":"#/$defs/integer"},"storage":{"$ref":"#/$defs/integer"},"epochEnd":{"$ref":"#/$defs/integer"},"captureThread":{"$ref":"#/$defs/integer"},"scope":{"$ref":"#/$defs/integer"},"capacity":{"$ref":"#/$defs/integer"}}},"expected":{"type":"string","pattern":"^FALLBACK_[A-Z_]+$"}}}},
+    "sequences":{"type":"array","items":{"type":"object","additionalProperties":false,"required":["name","fixtures","masks"],"properties":{"name":{"type":"string","minLength":1},"fixtures":{"type":"array","minItems":2,"items":{"$ref":"#/$defs/filename"}},"masks":{"type":"array","minItems":2,"items":{"type":"integer","minimum":0,"maximum":65535}}}}}
+  },
+  "$defs":{"filename":{"type":"string","pattern":"^[a-z0-9-]+\\.fixture\\.json$"},"integer":{"type":"integer","minimum":0,"maximum":4294967295}}
+}

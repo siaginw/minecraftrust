@@ -1,0 +1,5 @@
+# These bytes are identities in immutable SYNTHETIC fixtures. Preserve them on
+# every checkout; never normalize bytes in the fixture hash verifier.
+tools/testing/packet_decoder.py text eol=lf
+tools/testing/generate_synthetic_fixtures.py text eol=lf
+tests/fixtures/issue1-capture/* text eol=lf
