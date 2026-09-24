@@ -200,17 +200,21 @@ impl NativeSection {
     // ============================================================
 
     /// Ensures palette cache is up to date, rebuilding if dirty.
-    fn ensure_palette(&mut self) {
-        if self.palette_cache.is_some() && (self.flags & SectionFlags::PALETTE_DIRTY) == 0 {
+    fn ensure_palette(&mut self, global_bits: Option<u8>) {
+        let compatible_cache = self.palette_cache.as_ref().map(|cache| {
+            global_bits.map(|bits| cache.mode != PaletteMode::Global || cache.bits == bits)
+                .unwrap_or(true)
+        }).unwrap_or(false);
+        if compatible_cache && (self.flags & SectionFlags::PALETTE_DIRTY) == 0 {
             return;
         }
-        self.palette_cache = Some(self.build_local_palette());
+        self.palette_cache = Some(self.build_local_palette(global_bits.unwrap_or_else(global_palette_bits)));
         self.flags &= !SectionFlags::PALETTE_DIRTY;
     }
 
     /// Builds local palette from canonical global states.
     /// Returns None if section is all Air.
-    fn build_local_palette(&self) -> LocalPalette {
+    fn build_local_palette(&self, global_bits: u8) -> LocalPalette {
         // Collect unique global state IDs
         let mut unique_ids = [0u16; 256];
         let mut unique_count = 0usize;
@@ -246,7 +250,7 @@ impl NativeSection {
         } else if palette_len <= (1usize << MAX_LOCAL_BITS) {
             (palette_len.next_power_of_two().trailing_zeros() as u8, PaletteMode::HashMap)
         } else {
-            (global_palette_bits(), PaletteMode::Global)
+            (global_bits, PaletteMode::Global)
         };
 
         // Pack into BitArray matching 1.12.2 wire layout
@@ -341,7 +345,30 @@ impl NativeSection {
         offset: &mut usize,
         skylight: bool,
     ) -> Result<(), &'static str> {
-        self.ensure_palette();
+        self.encode_wire_inner(out, offset, skylight, None)
+    }
+
+    /// Explicit registry width for owned packet snapshots. This never changes
+    /// the legacy process-wide registry setting. The snapshot validates width
+    /// and representability before materializing its private native sections.
+    pub(crate) fn encode_wire_with_global_bits(
+        &mut self,
+        out: &mut [u8],
+        offset: &mut usize,
+        skylight: bool,
+        global_bits: u8,
+    ) -> Result<(), &'static str> {
+        self.encode_wire_inner(out, offset, skylight, Some(global_bits))
+    }
+
+    fn encode_wire_inner(
+        &mut self,
+        out: &mut [u8],
+        offset: &mut usize,
+        skylight: bool,
+        global_bits: Option<u8>,
+    ) -> Result<(), &'static str> {
+        self.ensure_palette(global_bits);
 
         let local_palette = self.palette_cache.as_ref().unwrap();
 

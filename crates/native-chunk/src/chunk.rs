@@ -196,6 +196,28 @@ impl NativeChunk {
         out: &mut [u8],
         offset: &mut usize,
     ) -> Result<PacketEncodeResult, &'static str> {
+        self.encode_packet_payload_inner(skylight, full_chunk, out, offset, None)
+    }
+
+    pub(crate) fn encode_owned_packet_payload(
+        &mut self,
+        skylight: bool,
+        full_chunk: bool,
+        out: &mut [u8],
+        offset: &mut usize,
+        global_bits: u8,
+    ) -> Result<PacketEncodeResult, &'static str> {
+        self.encode_packet_payload_inner(skylight, full_chunk, out, offset, Some(global_bits))
+    }
+
+    fn encode_packet_payload_inner(
+        &mut self,
+        skylight: bool,
+        full_chunk: bool,
+        out: &mut [u8],
+        offset: &mut usize,
+        global_bits: Option<u8>,
+    ) -> Result<PacketEncodeResult, &'static str> {
         let start_pos = *offset;
         if start_pos > out.len() {
             return Err("Packet output offset out of bounds");
@@ -216,7 +238,10 @@ impl NativeChunk {
             if (selected_mask & bit) != 0 {
                 let sec = self.sections[s].as_mut()
                     .ok_or("Packet mask selects a missing section")?;
-                sec.encode_wire(out, &mut cursor, skylight)?;
+                match global_bits {
+                    Some(bits) => sec.encode_wire_with_global_bits(out, &mut cursor, skylight, bits)?,
+                    None => sec.encode_wire(out, &mut cursor, skylight)?,
+                }
                 emitted_mask |= bit;
             }
         }

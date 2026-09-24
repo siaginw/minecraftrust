@@ -12,6 +12,8 @@ mod native_chunk;
 pub use native_chunk::*;
 mod packet_encode_v2;
 pub use packet_encode_v2::*;
+mod owned_snapshot;
+pub use owned_snapshot::*;
 
 #[no_mangle]
 pub extern "C" fn rust_runtime_ping() -> i32 {

@@ -13,6 +13,93 @@ use std::panic::{catch_unwind, UnwindSafe};
 pub const PACKET_V2_SUCCESS_TAG: i64 = 1i64 << 62;
 pub const PACKET_V2_MAX_BYTES: usize = i32::MAX as usize;
 
+#[cfg(test)]
+#[path = "../../../tools/testing/rust_property_support.rs"]
+mod property_support;
+
+#[cfg(test)]
+mod properties {
+    use super::*;
+    use proptest::prelude::*;
+
+    // Independent reference decoder used only for cross-checking the packer;
+    // actual Java malformed decoding is exercised by PacketEncodeResultV2Test.
+    fn decode(raw: i64) -> Option<PacketEncodeResult> {
+        if raw < 0 || raw & PACKET_V2_SUCCESS_TAG == 0 || raw & !0x4000_7fff_ffff_ffff != 0 {
+            return None;
+        }
+        let count = ((raw >> 16) & 0x7fff_ffff) as usize;
+        let mask = (raw & 65535) as u16;
+        if count == 0 && mask != 0 {
+            return None;
+        }
+        Some(PacketEncodeResult {
+            bytes_written: count,
+            emitted_mask: mask,
+        })
+    }
+
+    #[test]
+    fn v2_roundtrip_and_corrupted_reserved_bits() {
+        let strategy = (0u64..=i32::MAX as u64, any::<u16>(), 47u64..62)
+            .prop_map(|(count, mask, bit)| vec![count, mask as u64, bit]);
+        property_support::run("v2_roundtrip", strategy, |v| {
+            prop_assert_eq!(v.len(), 3);
+            let result = PacketEncodeResult {
+                bytes_written: v[0] as usize,
+                emitted_mask: if v[0] == 0 { 0 } else { v[1] as u16 },
+            };
+            let raw = pack_success(result).unwrap();
+            prop_assert_eq!(decode(raw), Some(result));
+            prop_assert_eq!(decode(raw | (1i64 << v[2])), None);
+            prop_assert_eq!(decode(raw & !PACKET_V2_SUCCESS_TAG), None);
+            prop_assert_eq!(decode(raw | i64::MIN), None);
+            prop_assert_eq!(decode(PACKET_V2_SUCCESS_TAG | ((v[1] as i64) | 1)), None);
+            Ok(())
+        });
+    }
+
+    #[test]
+    fn errors_have_no_success_fields_and_retry_is_independent() {
+        let strategy = (1u64..=7, any::<u16>(), 1u64..=i32::MAX as u64)
+            .prop_map(|(error, mask, count)| vec![error, mask as u64, count]);
+        property_support::run("v2_failure_retry", strategy, |v| {
+            prop_assert_eq!(v.len(), 3);
+            let error = match v[0] {
+                1 => PacketEncodeV2Error::InvalidArgument,
+                2 => PacketEncodeV2Error::MissingHandle,
+                3 => PacketEncodeV2Error::StaleGeneration,
+                4 => PacketEncodeV2Error::MissingSelectedSection,
+                5 => PacketEncodeV2Error::OutputCapacity,
+                6 => PacketEncodeV2Error::EncodeFailure,
+                _ => PacketEncodeV2Error::Panic,
+            };
+            prop_assert_eq!(result_boundary(|| Err(error)), -(v[0] as i64));
+            prop_assert_eq!(decode(-(v[0] as i64)), None);
+            let result = PacketEncodeResult {
+                bytes_written: v[2] as usize,
+                emitted_mask: v[1] as u16,
+            };
+            prop_assert_eq!(decode(result_boundary(|| Ok(result))), Some(result));
+            prop_assert_eq!(
+                result_boundary(|| Ok(PacketEncodeResult {
+                    bytes_written: 0,
+                    emitted_mask: (v[1] as u16) | 1
+                })),
+                -6
+            );
+            prop_assert_eq!(
+                result_boundary(|| Ok(PacketEncodeResult {
+                    bytes_written: PACKET_V2_MAX_BYTES + 1,
+                    emitted_mask: v[1] as u16
+                })),
+                -6
+            );
+            Ok(())
+        });
+    }
+}
+
 /// Canonical failure values. They carry no byte-count or emitted-mask fields.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 #[repr(i64)]
@@ -39,7 +126,7 @@ fn pack_success(result: PacketEncodeResult) -> Result<i64, PacketEncodeV2Error> 
         | i64::from(result.emitted_mask))
 }
 
-fn result_boundary<F>(operation: F) -> i64
+pub(crate) fn result_boundary<F>(operation: F) -> i64
 where
     F: FnOnce() -> Result<PacketEncodeResult, PacketEncodeV2Error> + UnwindSafe,
 {
@@ -98,7 +185,10 @@ fn encode_in_registry(
         .map_err(classify_encode_error)
 }
 
-fn checked_output_address(address: i64, capacity: i32) -> Result<usize, PacketEncodeV2Error> {
+pub(crate) fn checked_output_address(
+    address: i64,
+    capacity: i32,
+) -> Result<usize, PacketEncodeV2Error> {
     if address <= 0 || capacity <= 0 {
         return Err(PacketEncodeV2Error::InvalidArgument);
     }
