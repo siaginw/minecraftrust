@@ -1,6 +1,6 @@
 # Reproducible bounded test lanes
 
-Run from PowerShell with Rust/Cargo and Python 3.10+ on `PATH`, plus
+Run from PowerShell with Rust/Cargo and Python 3.11+ on `PATH`, plus
 `JAVA8_HOME` or `JAVA_HOME` selecting **JDK 8u504**. `-JavaHome` is an explicit
 override. The runner verifies both `java -version` and `javac -version`.
 It installs nothing and changes no repository settings or production gates.
@@ -29,11 +29,11 @@ cache (`--locked` is not `--offline`). There is no server startup or live campai
 | Lane | Inventory and boundaries |
 | --- | --- |
 | `public` | All workspace library tests; native-chunk unit/integration/property tests; protocol tests; release FFI build; explicit V2/structural/snapshot reruns; independent decoder regressions; all synthetic fixtures through the freshly built native CLI; runner regressions; five available evidence-checker regressions; four standalone Java decoder/capture/JNI mains. |
-| `property` | `native-chunk --test property_contract` and `ffi --lib packet_encode_v2::properties`; at least one test must actually execute in each target. 64 generated cases per property normally; optional `-Stress` raises the budget to 2048. |
+| `property` | `native-chunk --test property_contract`, `native-chunk --test owned_snapshot_properties` and `ffi --lib packet_encode_v2::properties`; at least one test must actually execute in each target. 64 generated cases per property normally; optional `-Stress` raises the budget to 2048. |
 | `decoder` | The independent Python wire decoder, immutable fixture importer and schema/hash regressions. No native replay or Java/Forge parity claim. |
 | `java-jni` | Release FFI build, standalone Java 8 V2 decoder, retained-handle JNI, owned capture model and owned-snapshot JNI tests. Each main uses a fresh JVM; no Minecraft/Forge classpath. |
-| `fixture` | Explicitly **SYNTHETIC**: Rust structural/V2 regressions, independent decoder regressions and 16 immutable fixtures plus eight rejection scenarios through a freshly built native snapshot CLI. A passing lane covers only these synthetic inputs. Live Forge captures are a separate unavailable validation stage. |
-| `forge` | Preflights an ordered hashed classpath manifest, then compiles/runs the existing Event, Registry and Capability oracle mains. Missing manifest/jars: `NOT_RUN / MISSING_EXTERNAL_ARTIFACT`. |
+| `fixture` | Explicitly **SYNTHETIC**: Rust structural/V2 regressions, independent decoder regressions and 16 immutable fixtures plus eight rejection scenarios through a freshly built native snapshot CLI. A passing lane covers only these synthetic inputs. Real Forge owned graphs use the separate `forge` lane. |
+| `forge` | Pins the original clean 1.12.2 / Forge 2860 server artifacts, performs actual offline FML load/preinit/init, observes final JVM class definitions, runs the owned real-Chunk oracle, creates local `REAL_CLEAN_FORGE_ORACLE` fixtures, and independently compares Java/native semantics plus native CLI replay. Missing/wrong artifacts produce `INCOMPLETE`, never PASS. No server or live source capture starts. |
 | `modpack` | **Artifact preflight only.** Missing manifest/files: `NOT_RUN / MISSING_EXTERNAL_ARTIFACT`. Present verified files: `NOT_RUN / NO_QUALIFIED_OFFLINE_REPLAY_HARNESS`. Hash presence never means compatibility passed; qualified replay is future work. |
 | `benchmark` | Explicitly separate: preflights the Forge classpath then runs existing `ForgeBenchmarks`. No benchmarking occurs in correctness lanes. Process completion is not a speedup claim. |
 
@@ -87,8 +87,10 @@ Inputs are rehashed after compilation before publishing a cache entry and
 before/after every JVM execution. A changed DLL or other changed identity
 input invalidates the run; an old hash never labels that run as passing.
 Tests exercise each identity input, damaged outputs and fresh JVM dispatch on
-cache hits. Proptest is now a pinned Rust dev dependency; no Java framework or
-mutation-testing tool has been adopted. Every runner Cargo command sets
+cache hits. Proptest is a pinned Rust dev dependency. The separate focused
+[cargo-mutants audit](../../docs/research/issue1-focused-guard-audit.md) is an
+isolated developer-tool audit, not a normal runner or production dependency.
+Every runner Cargo command sets
 `PROPTEST_CASES=64`, overriding an inherited value for reproducibility. Only
 `property -Stress` sets 2048, and `-Stress` is rejected for other lanes. This is
 a correctness case budget, not a benchmark warmup. A future minimized failure
@@ -99,8 +101,37 @@ for immutable hashes, exact consumption, source independence and maintenance.
 
 ## External artifact preflight
 
-No artifact manifest is fabricated for this machine. To qualify an existing
-Forge offline harness later, provide `-ForgeClasspathManifest <local-json>`:
+The Clean Forge lane reads `.rustcraft-local/forge-runtime.json` by default,
+or `-ForgeRuntimeManifest <local-json>`. That machine-local file contains paths
+only; expected identities are the reviewed tracked pins in
+`tools/forge-capture/runtime-pins.json`:
+
+```json
+{"schema_version": 1, "server_root": "D:/path/to/clean-forge-2860/server"}
+```
+
+Use the restored original Mojang server jar, installed Forge jar and exact
+dependency tree. The runtime helper verifies all ordered artifact hashes,
+embedded remapping/binpatch data, exact final transformed class hashes,
+registry aliases, initialized built-in mods and applicable listeners. The
+passive observation agent returns null for every transform and records the
+bytes passed to JVM definition after Forge's transforms; it is separately
+identified in receipts. No deobfuscated development jar is substituted.
+
+Every invocation starts fresh qualification and oracle JVMs, even with cached
+compilation. The native DLL hash participates in cache identity and is checked
+before/after execution. Inherited JVM option variables are removed before
+launch and their names recorded in the receipt. Missing files or
+identity mismatch stop with exit 2 / INCOMPLETE and an explicit reason;
+semantic defects fail with exit 1. Successful JVM exit alone is insufficient:
+the independent replay must verify every required accepted/rejected case and
+consume each packet exactly. Local receipts, fixture hashes, owned inputs and
+payloads remain under the ignored run directory; proprietary binaries are not
+committed. See the [runtime qualification](../../docs/research/issue1-clean-forge-capture-proof.md)
+and [writer audit](../../docs/research/issue1-clean-forge-writer-audit.md).
+
+The separate **benchmark** lane retains its older classpath-manifest interface,
+`-ForgeClasspathManifest <local-json>`:
 
 ```json
 {
@@ -128,7 +159,7 @@ files stay outside tracked evidence.
 `-ModpackArtifactManifest <local-json>` accepts the same version fields with
 `kind: "modpack-artifacts"` and `artifacts: [{"path": ..., "sha256": ...}]`.
 The modpack preflight accepts Forge 14.23.5.2846 (Revelation) or 14.23.5.2860
-(SevTech); this does not broaden the existing Forge oracle's qualified target.
+(SevTech); this does not broaden the Clean Forge oracle's qualified target.
 Include the actual ordered mod/coremod/config identity inputs to preflight;
 the receipt preserves the supplied manifest. This performs file/hash presence
 checks only. It does not assert completeness, load a pack, replay coherent

@@ -217,7 +217,8 @@ class LaneTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as temporary, patch.object(runner, "OUTPUT_ROOT", Path(temporary)), patch.object(runner, "source_snapshot", return_value=[]):
             for lane in ("forge", "modpack", "benchmark"):
                 with self.subTest(lane=lane):
-                    session = runner.Runner(SimpleNamespace(lane=lane, forge_classpath_manifest=None, modpack_artifact_manifest=None))
+                    session = runner.Runner(SimpleNamespace(lane=lane, forge_classpath_manifest=None, modpack_artifact_manifest=None,
+                        forge_runtime_manifest=str(Path(temporary) / "missing-forge-runtime.json")))
                     session.run()
                     self.assertEqual("NOT_RUN", session.results[0]["status"])
                     self.assertEqual("MISSING_EXTERNAL_ARTIFACT", session.results[0]["reason"])
@@ -232,6 +233,32 @@ class LaneTests(unittest.TestCase):
             result = session.command("empty-property", [runner.sys.executable, "-c", "print('test result: ok. 0 passed; 0 failed;')"], minimum_test_count=1)
             self.assertEqual(result["status"], "FAIL")
             self.assertEqual(result["observed_rust_test_count"], 0)
+
+    def test_forge_artifact_mismatch_is_incomplete_and_cannot_replay(self):
+        import forge_runtime
+        with tempfile.TemporaryDirectory() as temporary, patch.object(runner, "OUTPUT_ROOT", Path(temporary) / "runs"), patch.object(runner, "source_snapshot", return_value=[]):
+            manifest = Path(temporary) / "runtime.json"
+            manifest.write_text("{}", encoding="utf-8")
+            session = runner.Runner(SimpleNamespace(lane="forge", forge_runtime_manifest=str(manifest)))
+            commands = []
+            session.java_toolchain = lambda: {"java": {"path": str(Path(temporary) / "jdk/bin/java")}}
+            def invoke(name, argv, **kwargs):
+                commands.append(name)
+                return session.record(name, "PASS")
+            session.command = invoke
+            with patch.object(forge_runtime, "execute", return_value={"status":"INCOMPLETE", "reason":"ARTIFACT_MISMATCH"}):
+                session.run()
+            self.assertEqual(session.results[-1]["status"], "NOT_RUN")
+            self.assertEqual(session.results[-1]["reason"], "ARTIFACT_MISMATCH")
+            self.assertNotIn("forge-semantic-replay", commands)
+            self.assertEqual(session.finish(), 2)
+
+    def test_explicit_replay_incomplete_is_not_pass_or_generic_failure(self):
+        with tempfile.TemporaryDirectory() as temporary, patch.object(runner, "OUTPUT_ROOT", Path(temporary)), patch.object(runner, "source_snapshot", return_value=[]):
+            session = runner.Runner(SimpleNamespace(lane="forge"))
+            result = session.command("incomplete-replay", [runner.sys.executable, "-c", "raise SystemExit(2)"], incomplete_exit_code=2)
+            self.assertEqual(result["status"], "NOT_RUN")
+            self.assertEqual(session.finish(), 2)
 
     def test_property_stress_changes_only_case_budget(self):
         with tempfile.TemporaryDirectory() as temporary, patch.object(runner, "OUTPUT_ROOT", Path(temporary)), patch.object(runner, "source_snapshot", return_value=[]):

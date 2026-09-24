@@ -28,6 +28,7 @@ RUST_PUBLIC = [
 RUST_PROPERTY = [
     ("property-contract", ["cargo", "test", "--locked", "-p", "native-chunk", "--test", "property_contract"]),
     ("property-v2", ["cargo", "test", "--locked", "-p", "ffi", "--lib", "packet_encode_v2::properties"]),
+    ("property-owned-snapshot", ["cargo", "test", "--locked", "-p", "native-chunk", "--test", "owned_snapshot_properties"]),
 ]
 JAVA_SOURCES = [
     "tools/bridge/src/com/rustcraft/bridge/NativeChunkBridge.java",
@@ -73,6 +74,7 @@ def source_snapshot():
     paths.extend(path for path in (ROOT / "tests/fixtures/issue1-capture").rglob("*") if path.is_file())
     paths.extend(path for path in (ROOT / "tests/fixtures/issue1-properties").rglob("*") if path.is_file())
     paths.extend((ROOT / "docs/schemas").glob("*.json"))
+    paths.extend((ROOT / "tools/forge-capture").glob("*.json"))
     paths.extend([ROOT / "tools/run-rustcraft-tests.ps1", Path(__file__), ROOT / "tools/testing/test_runner.py",
                   ROOT / "tools/tests/test_evidence_integrity.py", ROOT / "tools/verify_evidence_integrity.py",
                   ROOT / "tools/tests/fixtures/broken-provenance-2026-09-18.yaml"])
@@ -137,6 +139,8 @@ def lane_inventory(lane):
     if lane == "public":
         inventory.extend({"id": name, "argv": args} for name, args in RUST_PUBLIC)
         inventory.append({"id": "runner-regressions", "argv": [sys.executable, "-B", "tools/testing/test_runner.py"]})
+        inventory.append({"id": "forge-runtime-regressions", "argv": [sys.executable, "-B", "tools/testing/test_forge_runtime.py"]})
+        inventory.append({"id": "forge-fixture-regressions", "argv": [sys.executable, "-B", "tools/testing/test_forge_fixture_replay.py"]})
         inventory.append({"id": "evidence-checker-regressions", "argv": [sys.executable, "-B", "-m", "unittest"] +
                           ["tools.tests.test_evidence_integrity." + test for test in EVIDENCE_TESTS]})
     elif lane == "java-jni":
@@ -153,7 +157,7 @@ def lane_inventory(lane):
     if lane in ("public", "java-jni"):
         inventory.append({"id": "java-v2", "sources": JAVA_SOURCES, "mains": JAVA_MAINS, "fresh_jvm_per_main": True})
     elif lane == "forge":
-        inventory.append({"id": "forge-oracles", "mains": ["com.rustcraft.bench.EventOracle", "RegistryOracle", "CapabilityOracle"], "requires": "Ordered, hashed Forge classpath manifest"})
+        inventory.append({"id": "forge-clean-capture", "requires": "Pinned clean Forge runtime manifest", "capture_kind": "REAL_CLEAN_FORGE_ORACLE", "fresh_jvm": True})
     elif lane == "benchmark":
         inventory.append({"id": "forge-benchmark", "mains": ["ForgeBenchmarks"], "requires": "Ordered, hashed Forge classpath manifest", "correctness_claim": False})
     elif lane == "modpack":
@@ -177,7 +181,7 @@ class Runner:
         print("[{}] {}{}".format(status, name, ": " + details["reason"] if "reason" in details else ""), flush=True)
         return result
 
-    def command(self, name, argv, cwd=ROOT, expected_oracle_rows=None, minimum_test_count=None):
+    def command(self, name, argv, cwd=ROOT, expected_oracle_rows=None, minimum_test_count=None, incomplete_exit_code=None):
         argv = [str(arg) for arg in argv]
         log = self.output / (name + ".log")
         print("[RUN] " + subprocess.list2cmdline(argv), flush=True)
@@ -196,7 +200,10 @@ class Runner:
             rows_ok = expected_oracle_rows is None or oracle_rows_pass(output, expected_oracle_rows)
             count = sum(int(value) for value in re.findall(r"test result: ok\. (\d+) passed;", output))
             count_ok = minimum_test_count is None or count >= minimum_test_count
-            return self.record(name, "PASS" if returncode == 0 and rows_ok and count_ok else "FAIL", argv=argv, cwd=str(cwd),
+            status = "PASS" if returncode == 0 and rows_ok and count_ok else "FAIL"
+            if incomplete_exit_code is not None and returncode == incomplete_exit_code:
+                status = "NOT_RUN"
+            return self.record(name, status, argv=argv, cwd=str(cwd),
                                exit_code=returncode, seconds=round(time.monotonic() - started, 3), log=str(log),
                                minimum_test_count=minimum_test_count, observed_rust_test_count=count,
                                proptest_cases=int(env["PROPTEST_CASES"]))
@@ -338,18 +345,16 @@ class Runner:
                                                        (JAVA_MAINS[2], []), (JAVA_MAINS[3], [str(dll)])], dll=dll)
                 else:
                     self.record("java-v2", "NOT_RUN", reason="BUILD_PREREQUISITE_FAILED")
-        elif lane in ("forge", "benchmark"):
+        elif lane == "forge":
+            self.forge_capture()
+        elif lane == "benchmark":
             try:
                 classpath, manifest = self.checked_manifest(self.args.forge_classpath_manifest, "forge-classpath")
                 self.record("forge-artifact-preflight", "PASS", manifest=manifest, artifacts=[path_identity(path) for path in classpath])
             except MissingPrerequisite as error:
                 self.record(lane, "NOT_RUN", reason="MISSING_EXTERNAL_ARTIFACT", detail=str(error))
                 return
-            if lane == "forge":
-                self.java("forge-oracles", ["tools/forge-oracle/src/com/rustcraft/bench/EventOracle.java", "tools/forge-oracle/src/RegistryOracle.java", "tools/forge-oracle/src/CapabilityOracle.java"],
-                          [("com.rustcraft.bench.EventOracle", []), ("RegistryOracle", []), ("CapabilityOracle", [])], classpath=classpath)
-            else:
-                self.java("forge-benchmark", ["tools/forge-bench/src/ForgeBenchmarks.java"], [("ForgeBenchmarks", [])], classpath=classpath)
+            self.java("forge-benchmark", ["tools/forge-bench/src/ForgeBenchmarks.java"], [("ForgeBenchmarks", [])], classpath=classpath)
         elif lane == "modpack":
             try:
                 paths, manifest = self.checked_manifest(self.args.modpack_artifact_manifest, "modpack-artifacts")
@@ -357,6 +362,38 @@ class Runner:
                 self.record("modpack", "NOT_RUN", reason="NO_QUALIFIED_OFFLINE_REPLAY_HARNESS", detail="Artifact hashes do not prove modpack compatibility. Live campaigns are outside this stage.")
             except MissingPrerequisite as error:
                 self.record("modpack", "NOT_RUN", reason="MISSING_EXTERNAL_ARTIFACT", detail=str(error))
+
+    def forge_capture(self):
+        import forge_runtime
+        manifest = getattr(self.args, "forge_runtime_manifest", None) or ROOT / ".rustcraft-local/forge-runtime.json"
+        if not Path(manifest).is_file():
+            self.record("forge-clean-capture", "NOT_RUN", reason="MISSING_EXTERNAL_ARTIFACT", detail=str(manifest))
+            return
+        try:
+            toolchain = self.java_toolchain()
+        except MissingPrerequisite as error:
+            self.record("forge-clean-capture", "NOT_RUN", reason="MISSING_EXTERNAL_ARTIFACT", detail=str(error))
+            return
+        if self.command("ffi-release", RUST_PUBLIC[3][1])["status"] != "PASS":
+            self.record("forge-clean-capture", "NOT_RUN", reason="BUILD_PREREQUISITE_FAILED")
+            return
+        if self.command("snapshot-replay-build", RUST_PUBLIC[8][1])["status"] != "PASS":
+            self.record("forge-clean-capture", "NOT_RUN", reason="BUILD_PREREQUISITE_FAILED")
+            return
+        dll = ROOT / "target/release" / ("rustcraft_ffi.dll" if os.name == "nt" else "librustcraft_ffi.so")
+        runtime_output = self.output / "clean-forge"
+        runtime = forge_runtime.execute(ROOT, runtime_output, Path(toolchain["java"]["path"]).parent.parent,
+                                        dll, Path(manifest), False)
+        status = runtime["status"]
+        self.record("forge-runtime", "NOT_RUN" if status == "INCOMPLETE" else status,
+                    reason=runtime.get("reason", runtime.get("scope", status)),
+                    receipt=str(runtime_output / "forge-runtime-result.json"))
+        if status != "PASS":
+            return
+        executable = ROOT / "target/debug/examples" / ("snapshot_replay.exe" if os.name == "nt" else "snapshot_replay")
+        self.command("forge-semantic-replay", [sys.executable, "-B", "tools/testing/forge_fixture_replay.py",
+            "--runtime-receipt", runtime_output / "forge-runtime-result.json", "--output", self.output / "real-forge-fixtures",
+            "--native-replay", executable], incomplete_exit_code=2)
 
     def finish(self):
         final_sources = source_snapshot()
@@ -383,6 +420,7 @@ def main():
     parser.add_argument("lane", choices=["public", "property", "fixture", "decoder", "java-jni", "forge", "modpack", "benchmark"])
     parser.add_argument("--java-home")
     parser.add_argument("--forge-classpath-manifest")
+    parser.add_argument("--forge-runtime-manifest")
     parser.add_argument("--modpack-artifact-manifest")
     parser.add_argument("--inventory", action="store_true")
     parser.add_argument("--stress", action="store_true", help="Property lane only: increase PROPTEST_CASES from 64 to 2048.")

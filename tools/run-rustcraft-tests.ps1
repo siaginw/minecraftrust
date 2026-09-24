@@ -12,6 +12,7 @@ param(
     [string]$Lane = 'public',
     [string]$JavaHome,
     [string]$ForgeClasspathManifest,
+    [string]$ForgeRuntimeManifest,
     [string]$ModpackArtifactManifest,
     [switch]$Inventory,
     [switch]$Stress
@@ -21,6 +22,7 @@ $ErrorActionPreference = 'Stop'
 $RunnerArgs = @('-B', (Join-Path $PSScriptRoot 'testing/run_tests.py'), $Lane)
 if ($JavaHome) { $RunnerArgs += @('--java-home', $JavaHome) }
 if ($ForgeClasspathManifest) { $RunnerArgs += @('--forge-classpath-manifest', $ForgeClasspathManifest) }
+if ($ForgeRuntimeManifest) { $RunnerArgs += @('--forge-runtime-manifest', $ForgeRuntimeManifest) }
 if ($ModpackArtifactManifest) { $RunnerArgs += @('--modpack-artifact-manifest', $ModpackArtifactManifest) }
 if ($Inventory) { $RunnerArgs += '--inventory' }
 if ($Stress) { $RunnerArgs += '--stress' }
