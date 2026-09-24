@@ -19,6 +19,7 @@ mkdir -p tools/dist/coremod-build
   tools/bridge/src/com/rustcraft/coremod/WorldCollisionProbeTransformer.java \
   tools/bridge/src/com/rustcraft/bridge/WorldgenShadow.java \
   tools/bridge/src/com/rustcraft/bridge/NativeChunkBridge.java   tools/bridge/src/com/rustcraft/bridge/ChunkMutationTracker.java   tools/bridge/src/com/rustcraft/bridge/M4Coherency.java   tools/bridge/src/com/rustcraft/coremod/ChunkMutationTransformer.java   tools/bridge/src/com/rustcraft/bridge/M4PacketParityHarness.java   tools/bridge/src/com/rustcraft/bridge/M4PacketCompare.java \
+  tools/bridge/src/com/rustcraft/bridge/PacketEncodeResultV2.java \
   tools/bridge/src/com/rustcraft/bridge/M4ValidatorBoundary.java \
   tools/bridge/src/com/rustcraft/bridge/M4LifecycleCases.java \
   tools/bridge/src/com/rustcraft/bridge/M4DeferredTest.java \

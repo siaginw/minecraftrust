@@ -82,6 +82,29 @@ public final class NativeChunkBridge {
             byte skylight, byte fullChunk,
             long outputBufAddress, int outputBufCapacity);
 
+    /**
+     * V2 metadata from exactly one native packet serialization. Decode with
+     * PacketEncodeResultV2; never pair its payload with a separate mask query.
+     * Failure invalidates the output scratch buffer. This additive API does not
+     * establish Java capture coherence or enable production packet authority.
+     */
+    public static native long encodePacketPayloadV2(
+            int dim, int cx, int cz, long generationId,
+            byte skylight, byte fullChunk,
+            long outputBufAddress, int outputBufCapacity);
+
+    /** Calls V2 once and decodes only that result, without changing Java metrics. */
+    public static PacketEncodeResultV2 encodePacketV2(
+            int dim, int cx, int cz, long generationId,
+            boolean skylight, boolean fullChunk,
+            long outputBufAddress, int outputBufCapacity) {
+        if (!nativeLoaded) throw new IllegalStateException("Native chunk library unavailable");
+        return PacketEncodeResultV2.decode(encodePacketPayloadV2(
+                dim, cx, cz, generationId,
+                (byte) (skylight ? 1 : 0), (byte) (fullChunk ? 1 : 0),
+                outputBufAddress, outputBufCapacity));
+    }
+
     public static native int getOccupancySummary(int dim, int cx, int cz, long generationId, long outCountAddr);
 
     public static native int stagePersistence(
