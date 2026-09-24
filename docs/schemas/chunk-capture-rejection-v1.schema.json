@@ -1,0 +1,58 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "RustCraft expected Clean Forge capture rejection v1",
+  "description": "Rejection evidence, never an encodable packet fixture. Case-specific outcomes and source witnesses are checked by forge_fixture_replay.py.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["format", "schemaVersion", "fixtureKind", "caseName", "reason", "contractVersion", "productionAuthorityEligible", "publishableResult", "proof", "evidence", "hashes"],
+  "properties": {
+    "format": {"const": "rustcraft-chunk-capture-rejection"},
+    "schemaVersion": {"const": 1},
+    "fixtureKind": {"const": "REAL_CLEAN_FORGE_EXPECTED_REJECTION"},
+    "caseName": {"type": "string", "minLength": 1, "pattern": "^[a-z0-9-]+$"},
+    "reason": {"type": "string", "minLength": 1},
+    "contractVersion": {"const": "clean-forge-exclusive-owned-graph-v1"},
+    "productionAuthorityEligible": {"const": false},
+    "publishableResult": {"const": false},
+    "proof": {"oneOf": [{"type": "null"}, {"$ref": "#/$defs/proof"}]},
+    "evidence": {"type": "array", "minItems": 3, "items": {"$ref": "#/$defs/artifact"}},
+    "hashes": {
+      "type": "object", "additionalProperties": false,
+      "required": ["algorithm", "canonicalization", "fixtureSha256"],
+      "properties": {
+        "algorithm": {"const": "SHA-256"},
+        "canonicalization": {"const": "rustcraft-fixture-json-v1"},
+        "fixtureSha256": {"$ref": "#/$defs/sha256"}
+      }
+    }
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "artifact": {
+      "type": "object", "additionalProperties": false,
+      "required": ["name", "version", "sha256"],
+      "properties": {
+        "name": {"type": "string", "minLength": 1},
+        "version": {"type": "string", "minLength": 1},
+        "sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "proof": {
+      "type": "object", "additionalProperties": false,
+      "required": ["stage", "snapshotPublished", "javaPacketPublished", "nativeCallsDuringFailure", "rejectedTransportDenied", "ownedGraphUnchanged", "existingWorldUntouched", "retryOutcome", "scratchCellsWritten", "ownedGraphBeforeSha256", "ownedGraphAfterSha256"],
+      "properties": {
+        "stage": {"type": "string", "minLength": 1},
+        "snapshotPublished": {"const": false},
+        "javaPacketPublished": {"const": false},
+        "nativeCallsDuringFailure": {"const": 0},
+        "rejectedTransportDenied": {"const": true},
+        "ownedGraphUnchanged": {"type": "boolean"},
+        "existingWorldUntouched": {"const": true},
+        "retryOutcome": {"enum": ["ACCEPTED_AFTER_TRANSIENT_FAILURE", "REJECTED_POISONED_SOURCE", "NOT_ATTEMPTED"]},
+        "scratchCellsWritten": {"type": "integer", "minimum": 0, "maximum": 65536},
+        "ownedGraphBeforeSha256": {"$ref": "#/$defs/sha256"},
+        "ownedGraphAfterSha256": {"$ref": "#/$defs/sha256"}
+      }
+    }
+  }
+}

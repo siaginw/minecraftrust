@@ -21,6 +21,9 @@ from packet_decoder import DecodeError, Reader, decode_packet, unpack_cells
 ROOT = Path(__file__).resolve().parents[2]
 PROFILE = "FORGE_2860_SERVER_TRANSFORMED_FML_INITIALIZED_OFFLINE_V1"
 CONTRACT = "clean-forge-exclusive-owned-graph-v1"
+ACCEPTED_KIND = "REAL_CLEAN_FORGE_ORACLE_ACCEPTED"
+REJECTED_KIND = "REAL_CLEAN_FORGE_EXPECTED_REJECTION"
+REJECTION_SCHEMA = ROOT / "docs/schemas/chunk-capture-rejection-v1.schema.json"
 ACCEPTED = {
     "zero-sections", "one-section", "sparse-high", "terrain-001f", "sky-off",
     "empty-before", "empty-to-nonempty", "nonempty-to-empty", "local-palette-expansion",
@@ -37,6 +40,34 @@ REJECTED = {
     "during-unknown": "FALLBACK_UNKNOWN_WRITER", "during-async": "FALLBACK_ASYNC_WRITER",
     "tile-entity-unqualified": "FALLBACK_TE_UNQUALIFIED", "off-thread": "FALLBACK_OFF_THREAD",
     "native-missing-selected-section": "V2_-4", "native-extended-id": "V2_-6", "native-capacity": "V2_-5",
+}
+HARDENING_REJECTED = {
+    "malformed-state-properties": "FALLBACK_INVALID_STATE_INPUT",
+    "noncanonical-state": "FALLBACK_REGISTRY_GLOBAL_ID_WIDTH",
+    "unsupported-storage-subclass": "FALLBACK_SOURCE_EXCEPTION",
+    "incompatible-registry-width": "FALLBACK_REGISTRY_GLOBAL_ID_WIDTH",
+    "invalid-palette-width": "FALLBACK_INVALID_INPUT",
+    "invalid-request-filter": "FALLBACK_INVALID_INPUT",
+    "failed-scratch-rewrite": "FALLBACK_MUTATION_INCOMPLETE",
+    "failed-inplace-rewrite": "FALLBACK_MUTATION_INCOMPLETE",
+    **{"capture-failure-" + stage: "FALLBACK_SOURCE_EXCEPTION" for stage in
+       ("section-metadata", "logical-conversion", "logical-copy", "block-light", "sky-light", "biome-copy", "end-validation")},
+    "capture-failure-wide-id": "FALLBACK_EXTENDED_ID",
+}
+REJECTED.update(HARDENING_REJECTED)
+REJECTION_PROGRESS = {
+    "malformed-state-properties": ("STATE_PROPERTY_ADMISSION", 0, "NOT_ATTEMPTED"),
+    "noncanonical-state": ("STATE_ADMISSION", 0, "NOT_ATTEMPTED"),
+    "unsupported-storage-subclass": ("STORAGE_ADMISSION", 0, "NOT_ATTEMPTED"),
+    "incompatible-registry-width": ("GLOBAL_WIDTH_ADMISSION", 0, "NOT_ATTEMPTED"),
+    "invalid-palette-width": ("METADATA_ADMISSION", 4096, "NOT_ATTEMPTED"),
+    "invalid-request-filter": ("FILTER_ADMISSION", 4096, "NOT_ATTEMPTED"),
+    "failed-scratch-rewrite": ("TEMPORARY_SECTION_REWRITE", 17, "REJECTED_POISONED_SOURCE"),
+    "failed-inplace-rewrite": ("INPLACE_REWRITE", 17, "REJECTED_POISONED_SOURCE"),
+    **{"capture-failure-" + suffix: (suffix.replace("-", "_").upper(), cells, "ACCEPTED_AFTER_TRANSIENT_FAILURE")
+       for suffix, cells in (("section-metadata", 4096), ("logical-conversion", 17), ("logical-copy", 4096),
+                            ("block-light", 4096), ("sky-light", 4096), ("biome-copy", 4096),
+                            ("end-validation", 4096), ("wide-id", 4096))},
 }
 
 
@@ -182,10 +213,39 @@ def validate_inventory(events):
     require(set(names) == ACCEPTED | set(REJECTED), "missing or unqualified event records")
     for event in events:
         if event["name"] in ACCEPTED:
-            require(event.get("status") == "ACCEPTED_PENDING_INDEPENDENT_COMPARISON", "accepted event status mismatch")
+            require(event.get("status") == "ACCEPTED_PENDING_INDEPENDENT_COMPARISON"
+                    and event.get("fixtureKind") == ACCEPTED_KIND, "accepted event status mismatch")
         else:
-            require(set(event) == {"name", "status", "reason"} and event["status"] == "EXPLICIT_SAFE_REJECTION"
+            expected_keys = {"name", "status", "reason", "fixtureKind"}
+            if event["name"] in HARDENING_REJECTED:
+                expected_keys.add("proof")
+                validate_rejection_proof(event["name"], event.get("proof"))
+            require(set(event) == expected_keys and event["status"] == "EXPLICIT_SAFE_REJECTION"
+                    and event.get("fixtureKind") == REJECTED_KIND
                     and event["reason"] == REJECTED[event["name"]], "incorrect safe rejection or published failure data")
+
+
+def validate_rejection_proof(name, proof):
+    schema = parse_json(REJECTION_SCHEMA.read_bytes())
+    check_schema(proof, schema["$defs"]["proof"], schema)
+    require((proof["stage"], proof["scratchCellsWritten"], proof["retryOutcome"]) == REJECTION_PROGRESS[name],
+            "rejection stage, partial progress or retry outcome differs")
+    changed = name == "failed-inplace-rewrite"
+    require(proof["ownedGraphUnchanged"] is not changed, "unexpected source mutation on rejection")
+    require((proof["ownedGraphBeforeSha256"] == proof["ownedGraphAfterSha256"]) is not changed,
+            "source witness contradicts rejection")
+
+
+def rejection_fixture(event, evidence):
+    value = {"format": "rustcraft-chunk-capture-rejection", "schemaVersion": 1,
+             "fixtureKind": REJECTED_KIND, "caseName": event["name"], "reason": event["reason"],
+             "contractVersion": CONTRACT, "productionAuthorityEligible": False,
+             "publishableResult": False, "proof": copy.deepcopy(event.get("proof")),
+             "evidence": evidence,
+             "hashes": {"algorithm": "SHA-256", "canonicalization": "rustcraft-fixture-json-v1", "fixtureSha256": "0" * 64}}
+    value["hashes"]["fixtureSha256"] = fixture_hash(value)
+    check_schema(value, parse_json(REJECTION_SCHEMA.read_bytes()))
+    return value
 
 
 class Artifacts:
@@ -379,7 +439,13 @@ def execute(root, runtime_receipt_path, output, native_replay=None):
         for event in raw["events"]:
             name = event["name"]
             if name in REJECTED:
-                cases.append(dict(event))
+                value = rejection_fixture(event, metadata["ownershipEvidence"] + [events_ref, metadata["ownershipProtocol"]])
+                path = output / (name + ".rejection.json")
+                path.write_bytes(canonical(value) + b"\n")
+                persisted = parse_json(path.read_bytes())
+                require(fixture_hash(persisted) == persisted["hashes"]["fixtureSha256"], "persisted rejection hash mismatch")
+                artifacts.verify_references(persisted)
+                cases.append(dict(event, fixture=path.name, fixtureSha256=value["hashes"]["fixtureSha256"]))
                 continue
             owned, input_bytes, native, java, packet, decoded, java_decoded = compare_event(event, set(ids))
             require(owned["owner"] == raw["ownerThread"] and owned["bits"] == raw["globalPaletteBits"], "event runtime context differs")
@@ -395,7 +461,7 @@ def execute(root, runtime_receipt_path, output, native_replay=None):
             provenance.update(sequenceId=str(owned["event"]), threadId=str(owned["owner"]), generator=None)
             provenance["ownershipEvidence"] += [events_ref, input_ref, body_ref]
             fixture = {"format": "rustcraft-chunk-packet-fixture", "schemaVersion": 1,
-                       "eventId": name + ":" + str(owned["event"]), "captureKind": "REAL_CLEAN_FORGE_ORACLE",
+                       "eventId": name + ":" + str(owned["event"]), "captureKind": ACCEPTED_KIND,
                        "runtime": copy.deepcopy(metadata["runtime"]), "registry": {"kind": "RUNTIME_EXPORT",
                            "export": registry_ref, "entryCount": len(set(ids)), "globalPaletteBits": owned["bits"]},
                        "chunk": {"dimension": owned["dimension"], "x": owned["x"], "z": owned["z"], "generationId": str(owned["generation"])},
@@ -429,7 +495,7 @@ def execute(root, runtime_receipt_path, output, native_replay=None):
                 compare_decoded(fixture, decode_packet(replay_bytes, mask, owned["full"], owned["sky"], owned["bits"]))
                 replay = True
             accepted += 1
-            cases.append({"name": name, "status": "ACCEPTED_AND_MATCHED", "fixture": path.name,
+            cases.append({"name": name, "status": "ACCEPTED_AND_MATCHED", "fixtureKind": ACCEPTED_KIND, "fixture": path.name,
                           "fixtureSha256": fixture["hashes"]["fixtureSha256"], "sections": len(decoded.sections),
                           "javaBytes": len(java), "nativeBytes": len(native), "exactByteEquality": java == native,
                           "semanticEquality": True, "nativeReplay": replay, "incarnation": str(owned["incarnation"]),
