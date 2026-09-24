@@ -15,6 +15,10 @@ import net.minecraft.world.chunk.*;
 import net.minecraft.world.chunk.storage.ExtendedBlockStorage;
 import io.netty.buffer.Unpooled;
 import java.lang.reflect.Field;
+import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.security.MessageDigest;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -26,6 +30,9 @@ import java.util.concurrent.atomic.AtomicLong;
  */
 final class OwnedForgeCapture implements CaptureSource {
     enum Fault { NONE, STATES, LIGHT, SKY, BIOME, STORAGE, REMOVE, REPLACE, UNLOAD, EXTENDED, UNKNOWN, ASYNC }
+    /** Negative controls confined to extraction scratch; never mutate the graph. */
+    enum ScratchFault { NONE, SECTION_METADATA, LOGICAL_CONVERSION, LOGICAL_COPY,
+        BLOCK_LIGHT, SKY_LIGHT, BIOME_COPY, END_VALIDATION, WIDE_ID }
     private static final AtomicLong IDENTITIES = new AtomicLong();
     private final Thread owner = Thread.currentThread();
     private final OfflineWorld world;
@@ -40,6 +47,10 @@ final class OwnedForgeCapture implements CaptureSource {
     private Fault fault = Fault.NONE;
     private boolean fired;
     private String admissionFailure;
+    private ScratchFault scratchFault = ScratchFault.NONE;
+    private boolean scratchFired;
+    private int scratchReads, scratchCellsWritten, rewriteCellsWritten;
+    private GraphWitness witness;
 
     private static final class OfflineProvider extends WorldProviderSurface {
         OfflineProvider(boolean sky) { field_191067_f = sky; }
@@ -83,28 +94,39 @@ final class OwnedForgeCapture implements CaptureSource {
     private void owner() { if (Thread.currentThread() != owner) throw new IllegalStateException("OFFLINE owner violation"); }
 
     private boolean admitStates(List<IBlockState> states, int count) {
-        if (count < 1 || count > states.size()) {
-            admissionFailure = "FALLBACK_INVALID_STATE_INPUT"; return false;
-        }
+        if (admissionFailure != null) return false;
         // Validate before any actual container setter can discard an unknown
         // palette entry or narrow an ID. Applying the global bound even to local
         // inputs also protects existing global containers during in-place edits.
-        for (int i = 0; i < count; i++) {
-            IBlockState state = states.get(i);
-            int id = Block.field_176229_d.func_148747_b(state);
-            if (state == null || id < 0 || id > 65535
-                    || Block.field_176229_d.func_148745_a(id) != state
-                    || id >= (1 << globalBits)) {
-                admissionFailure = "FALLBACK_REGISTRY_GLOBAL_ID_WIDTH"; return false;
+        try {
+            if (states == null || count < 1 || count > states.size()) {
+                admissionFailure = "FALLBACK_INVALID_STATE_INPUT"; return false;
             }
+            for (int i = 0; i < count; i++) {
+                IBlockState state = states.get(i);
+                int id = Block.field_176229_d.func_148747_b(state);
+                if (state == null || id < 0 || id > 65535
+                        || Block.field_176229_d.func_148745_a(id) != state
+                        || id >= (1 << globalBits)) {
+                    admissionFailure = "FALLBACK_REGISTRY_GLOBAL_ID_WIDTH"; return false;
+                }
+            }
+        } catch (RuntimeException malformed) {
+            // Forge's registry getter can call block metadata accessors. An
+            // ordinarily constructed state lacking required properties can
+            // throw here, before any setter. Preserve an explicit rejection.
+            admissionFailure = "FALLBACK_INVALID_STATE_INPUT"; return false;
         }
         return admissionFailure == null;
     }
 
     private void writeStates(ExtendedBlockStorage section, List<IBlockState> states, int count) {
+        rewriteCellsWritten = 0;
         try {
-            for (int i = 0; i < 4096; i++)
+            for (int i = 0; i < 4096; i++) {
                 section.func_177484_a(i & 15, i >>> 8, (i >>> 4) & 15, states.get(i % count));
+                rewriteCellsWritten++;
+            }
         } catch (RuntimeException failure) {
             // A partially applied rewrite must never become a later success.
             admissionFailure = "FALLBACK_MUTATION_INCOMPLETE";
@@ -129,6 +151,23 @@ final class OwnedForgeCapture implements CaptureSource {
         epoch++;
     }
     void partial(int mask) { owner(); filter = mask; }
+    void unsupportedSectionSubclass() {
+        owner();
+        // Ordinary JVM construction, no reflection corruption or registry edit.
+        chunk.func_76587_i()[0] = new ExtendedBlockStorage(0, world.field_73011_w.func_191066_m()) { };
+        epoch++;
+    }
+    void scratchFault(ScratchFault next) {
+        owner(); scratchFault = next; scratchFired = false;
+        scratchReads = 0; scratchCellsWritten = 0;
+    }
+    int scratchCellsWritten() { return scratchCellsWritten; }
+    int rewriteCellsWritten() { return rewriteCellsWritten; }
+    boolean scratchFired() { return scratchFired; }
+    private void failScratch() {
+        scratchFired = true;
+        throw new IllegalStateException("offline scratch failure: " + scratchFault);
+    }
     void lights(int block, int sky) {
         owner();
         for (ExtendedBlockStorage s : chunk.func_76587_i()) if (s != null) {
@@ -169,6 +208,8 @@ final class OwnedForgeCapture implements CaptureSource {
     public View readView() {
         owner();
         if (!active) throw new IllegalStateException("chunk lifecycle inactive");
+        scratchReads++;
+        if (scratchFault == ScratchFault.END_VALIDATION && scratchReads == 2) failScratch();
         Section[] result = new Section[16];
         ExtendedBlockStorage[] slots = chunk.func_76587_i();
         for (int y = 0; y < 16; y++) {
@@ -188,6 +229,8 @@ final class OwnedForgeCapture implements CaptureSource {
                 if (id < 0 || Block.field_176229_d.func_148745_a(id) != state)
                     throw new IllegalStateException("unresolved logical state");
                 logical[y][i] = id; // Full int retained; no char/u16 staging.
+                scratchCellsWritten++;
+                if (scratchFault == ScratchFault.LOGICAL_CONVERSION && scratchCellsWritten == 17) failScratch();
             }
             if (fault == Fault.EXTENDED) logical[y][0] = 65536L; // negative control only
             int count = ((Integer) field(s, "field_76682_b")).intValue();
@@ -201,6 +244,18 @@ final class OwnedForgeCapture implements CaptureSource {
     }
 
     public void atPhase(Phase phase) {
+        if (!scratchFired) {
+            if ((scratchFault == ScratchFault.SECTION_METADATA && phase == Phase.SECTION_STRUCTURE)
+                    || (scratchFault == ScratchFault.LOGICAL_COPY && phase == Phase.LOGICAL_STATES)
+                    || (scratchFault == ScratchFault.BLOCK_LIGHT && phase == Phase.BLOCK_LIGHT)
+                    || (scratchFault == ScratchFault.SKY_LIGHT && phase == Phase.SKY_LIGHT)
+                    || (scratchFault == ScratchFault.BIOME_COPY && phase == Phase.BIOMES)) failScratch();
+            if (scratchFault == ScratchFault.WIDE_ID && phase == Phase.SELECTION) {
+                // A conversion-only invalid ID is visible before the owned
+                // state clone and its width check. Real EBS states stay intact.
+                logical[0][0] = 65536L; scratchFired = true;
+            }
+        }
         if (phase != Phase.BLOCK_LIGHT || fired) return;
         fired = true;
         ExtendedBlockStorage s = chunk.func_76587_i()[0];
@@ -227,8 +282,15 @@ final class OwnedForgeCapture implements CaptureSource {
             this(rejection, snapshot, packet, null);
         }
         Pair(String rejection, OwnedPacketSnapshot snapshot, byte[] packet, Integer[] tickRefCounts) {
+            if (rejection == null ? snapshot == null || packet == null || tickRefCounts == null
+                    : snapshot != null || packet != null || tickRefCounts != null)
+                throw new IllegalArgumentException("Pair publication must be complete or rejected");
             this.rejection = rejection; this.snapshot = snapshot; this.javaPacket = packet == null ? null : packet.clone();
             this.tickRefCounts = tickRefCounts == null ? null : tickRefCounts.clone();
+        }
+        byte[] transportForEncoding() {
+            if (rejection != null) throw new IllegalStateException("Rejected pair has no encodable snapshot: " + rejection);
+            return snapshot.toTransportBytes();
         }
     }
     Pair capture(long expectedIncarnation, long expectedGeneration) throws Exception {
@@ -257,7 +319,71 @@ final class OwnedForgeCapture implements CaptureSource {
         for(int y=0;y<16;y++) if(tickRefCounts[y]!=null && !tickRefCounts[y].equals(field(chunk.func_76587_i()[y],"field_76683_c")))
             return new Pair("FALLBACK_JAVA_REFERENCE_CHANGED",null,null);
         requireNoListeners();
+        // Final oracle publication follows both complete capture validation and
+        // the same-event Java writer check. A failed attempt returns no Pair data.
         return new Pair(null, owned, wire, tickRefCounts);
+    }
+
+    /** Exact test witness stays private; no live references leave the adapter. */
+    private static final class GraphWitness {
+        final Object[] references;
+        final byte[] contents;
+        GraphWitness(Object[] references, byte[] contents) { this.references = references; this.contents = contents; }
+    }
+    void witnessGraph() { owner(); witness = new GraphWitness(graphReferences(), graphContents()); }
+    boolean witnessedGraphUnchanged() {
+        owner();
+        if (witness == null) throw new IllegalStateException("No graph witness");
+        Object[] now = graphReferences();
+        if (now.length != witness.references.length) return false;
+        for (int i = 0; i < now.length; i++) if (now[i] != witness.references[i]) return false;
+        return Arrays.equals(witness.contents, graphContents());
+    }
+    String witnessedBeforeSha256() { owner(); return digest(witness.contents); }
+    String witnessedAfterSha256() { owner(); return digest(graphContents()); }
+    private Object[] graphReferences() {
+        List<Object> result = new ArrayList<Object>();
+        result.add(chunk); result.add(chunk.func_76587_i()); result.add(chunk.func_76605_m());
+        result.add(chunk.func_177434_r());
+        for (ExtendedBlockStorage s : chunk.func_76587_i()) {
+            result.add(s);
+            if (s != null) {
+                result.add(s.func_186049_g()); result.add(field(s.func_186049_g(), "field_186021_b"));
+                result.add(s.func_76661_k()); result.add(s.func_76661_k().func_177481_a());
+                result.add(s.func_76671_l());
+                result.add(s.func_76671_l() == null ? null : s.func_76671_l().func_177481_a());
+            }
+        }
+        return result.toArray();
+    }
+    private byte[] graphContents() {
+        try {
+            ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+            DataOutputStream out = new DataOutputStream(bytes);
+            out.writeLong(incarnation); out.writeLong(generation); out.writeLong(epoch);
+            out.writeBoolean(active); out.writeInt(filter); out.writeInt(globalBits);
+            out.writeInt(chunk.field_76635_g); out.writeInt(chunk.field_76647_h);
+            out.writeBoolean(world.field_73011_w.func_191066_m());
+            for (ExtendedBlockStorage s : chunk.func_76587_i()) {
+                out.writeBoolean(s != null);
+                if (s == null) continue;
+                out.writeBoolean(s.func_76663_a());
+                out.writeInt((Integer)field(s, "field_76682_b")); out.writeInt((Integer)field(s, "field_76683_c"));
+                for (int i = 0; i < 4096; i++)
+                    out.writeInt(Block.field_176229_d.func_148747_b(s.func_177485_a(i & 15, i >>> 8, (i >>> 4) & 15)));
+                out.write(s.func_76661_k().func_177481_a());
+                if (world.field_73011_w.func_191066_m()) out.write(s.func_76671_l().func_177481_a());
+            }
+            out.write(chunk.func_76605_m()); out.writeInt(chunk.func_177434_r().size());
+            out.flush(); return bytes.toByteArray();
+        } catch (IOException impossible) { throw new IllegalStateException(impossible); }
+    }
+    private static String digest(byte[] bytes) {
+        try {
+            StringBuilder result = new StringBuilder();
+            for (byte b : MessageDigest.getInstance("SHA-256").digest(bytes)) result.append(String.format("%02x", b & 255));
+            return result.toString();
+        } catch (java.security.NoSuchAlgorithmException impossible) { throw new IllegalStateException(impossible); }
     }
 
     private static boolean sameContents(OwnedPacketSnapshot a, OwnedPacketSnapshot b) {

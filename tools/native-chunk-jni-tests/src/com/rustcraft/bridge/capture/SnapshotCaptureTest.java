@@ -21,6 +21,7 @@ public final class SnapshotCaptureTest {
         sourceFailuresAndBusyLease();
         tileEntityBoundary();
         transport();
+        publicationIsAllOrNothing();
         System.out.println("PASS SnapshotCaptureTest groups=" + groups + " checks=" + checks);
     }
 
@@ -288,6 +289,31 @@ public final class SnapshotCaptureTest {
         first[0] = 0;
         check(snapshot.toTransportBytes()[0] == 'R', "transport output owned");
         check(snapshot.incarnation == 9 && snapshot.generation == 11, "incarnation independent of generation");
+        groups++;
+    }
+
+    private static void publicationIsAllOrNothing() {
+        for (final Phase phase : Phase.values()) {
+            if (phase == Phase.POST_TILE_ENTITY_VALIDATION) continue;
+            SyntheticCaptureSource source=source();
+            source.on(phase,new Runnable() { public void run() { throw new IllegalStateException("discard scratch at "+phase); } });
+            Result failed=SnapshotCapture.capture(source,source.ownerContext());
+            reason(failed,Reason.FALLBACK_SOURCE_EXCEPTION);
+            try { failed.snapshot().toTransportBytes(); throw new AssertionError("rejected scratch encoded"); }
+            catch (IllegalStateException expected) { checks++; }
+            source.on(phase,null);
+            Result retry=SnapshotCapture.capture(source,source.ownerContext());
+            check(retry.accepted() && retry.snapshot().acceptedMask==1,"complete fresh retry after "+phase);
+            check(retry.snapshot().toTransportBytes().length>128,"only complete retry encodable");
+        }
+        SyntheticCaptureSource valid=source();
+        OwnedPacketSnapshot complete=SnapshotCapture.capture(valid,valid.ownerContext()).snapshot();
+        try { new Result(Reason.ELIGIBLE,null,"missing completed snapshot",null); throw new AssertionError("empty eligible result"); }
+        catch (IllegalArgumentException expected) { checks++; }
+        try { new Result(Reason.FALLBACK_SOURCE_EXCEPTION,null,"rejected snapshot",complete); throw new AssertionError("rejected result retained data"); }
+        catch (IllegalArgumentException expected) { checks++; }
+        try { new Result(null,null,"missing reason",null); throw new AssertionError("unclassified publication"); }
+        catch (IllegalArgumentException expected) { checks++; }
         groups++;
     }
 

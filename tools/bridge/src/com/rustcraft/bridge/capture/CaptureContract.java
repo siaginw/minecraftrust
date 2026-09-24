@@ -120,6 +120,10 @@ public final class CaptureContract {
         private final OwnedPacketSnapshot snapshot;
 
         Result(Reason reason, Domain domain, String detail, OwnedPacketSnapshot snapshot) {
+            // Publication is all-or-nothing: a rejected capture has no owned
+            // input, and eligibility cannot describe an absent builder result.
+            if (reason == null || (reason == Reason.ELIGIBLE) != (snapshot != null))
+                throw new IllegalArgumentException("Capture result publication invariant");
             this.reason = reason;
             this.domain = domain;
             this.detail = detail;

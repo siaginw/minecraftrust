@@ -108,6 +108,10 @@ public final class SnapshotCapture {
                 fail(Reason.FALLBACK_TE_MUTATION, changed.getMessage());
             }
         }
+        // Publication point: every mutable scratch array above is method-local.
+        // Only after complete end/TE validation may an immutable owned input
+        // become reachable through an eligible Result. Exceptions discard all
+        // partial work; no builder or section array is exposed to the caller.
         return new Result(Reason.ELIGIBLE, null, "qualified offline owned snapshot: " + scope,
                 new OwnedPacketSnapshot(begin, end, context, owned, biomes, mask, te != null, scope));
     }
