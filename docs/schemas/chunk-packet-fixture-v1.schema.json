@@ -9,7 +9,7 @@
     "format": { "const": "rustcraft-chunk-packet-fixture" },
     "schemaVersion": { "const": 1 },
     "eventId": { "type": "string", "minLength": 1, "maxLength": 160, "pattern": "^[A-Za-z0-9._:-]+$" },
-    "captureKind": { "enum": ["SYNTHETIC", "LIVE_FORGE"] },
+    "captureKind": { "enum": ["SYNTHETIC", "LIVE_FORGE", "REAL_CLEAN_FORGE_ORACLE"] },
     "runtime": {
       "type": "object", "additionalProperties": false,
       "required": ["minecraftVersion", "protocolVersion", "forgeVersion", "javaRuntime", "orderedClasspath", "orderedMods", "orderedCoremods", "orderedConfigs"],
@@ -96,7 +96,7 @@
       "else": { "properties": { "sections": { "items": { "if": { "type": "object" }, "then": { "properties": { "skyLight": { "type": "null" } } } } } } }
     },
     {
-      "if": { "properties": { "captureKind": { "const": "LIVE_FORGE" } } },
+      "if": { "properties": { "captureKind": { "enum": ["LIVE_FORGE", "REAL_CLEAN_FORGE_ORACLE"] } } },
       "then": {
         "properties": {
           "runtime": { "properties": { "forgeVersion": { "type": "string", "minLength": 1 }, "javaRuntime": { "type": "string", "minLength": 1 }, "orderedClasspath": { "minItems": 1 } } },
