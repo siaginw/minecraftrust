@@ -37,6 +37,8 @@ public final class CaptureContract {
     }
 
     public enum StorageModel { VANILLA_U16, NEID_HIGH_BYTES, JEID_INT, UNKNOWN }
+    /** Offline provenance scopes, never production publication permits. */
+    public enum Scope { UNSUPPORTED, SYNTHETIC_OFFLINE, REAL_CLEAN_FORGE_ORACLE }
     public enum TileEntityPolicy { UNQUALIFIED, QUALIFIED_READ_ONLY, PARTICIPATING_MUTATION_EPOCH }
 
     /**

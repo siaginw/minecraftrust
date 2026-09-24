@@ -1,4 +1,4 @@
-//! Owned, versioned synthetic packet input. This is not a live capture adapter.
+//! Owned, versioned offline packet input. This is not a live capture adapter.
 //! All states remain u32 until explicit native-width/registry checks succeed.
 use crate::{NativeChunk, NativeSection, PacketEncodeResult};
 use std::collections::BTreeSet;
@@ -44,6 +44,7 @@ impl SnapshotRejection {
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct SnapshotMetadata {
     pub version: u16,
+    pub offline_scope: u8,
     pub dimension: i32,
     pub chunk_x: i32,
     pub chunk_z: i32,
@@ -115,9 +116,10 @@ impl OwnedPacketSnapshot {
         if !(9..=16).contains(&global_palette_bits) {
             return Err(UnsupportedStorage);
         }
-        // Admission is deliberately synthetic-only. This field is not proof
+        // Only synthetic or qualified clean-Forge owned-oracle inputs. Not proof
         // that an arbitrary caller followed the Java writer/lease protocol.
-        if r.u8()? != 1 {
+        let offline_scope = r.u8()?;
+        if offline_scope != 1 && offline_scope != 2 {
             return Err(UnknownWriter);
         }
         if r.u16()? != 0 {
@@ -225,6 +227,7 @@ impl OwnedPacketSnapshot {
         Ok(Self {
             metadata: SnapshotMetadata {
                 version,
+                offline_scope,
                 dimension,
                 chunk_x,
                 chunk_z,

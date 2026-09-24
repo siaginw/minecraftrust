@@ -17,7 +17,7 @@ import com.rustcraft.bridge.capture.CaptureContract.WriterClass;
 /** Owned immutable schema 1 input. No Java live chunk/section/array references. */
 public final class OwnedPacketSnapshot {
     public static final int SCHEMA_VERSION = 1;
-    public static final String SCOPE = "SYNTHETIC_OFFLINE";
+    public final CaptureContract.Scope scope;
     private static final AtomicLong EVENTS = new AtomicLong();
     public final int dimension, chunkX, chunkZ, requestedFilter, acceptedMask;
     public final long incarnation, generation, captureStartGuard, captureEndGuard;
@@ -59,7 +59,8 @@ public final class OwnedPacketSnapshot {
 
     OwnedPacketSnapshot(CaptureSource.View begin, CaptureSource.View end,
                         CaptureContract.Context context, Section[] sections,
-                        byte[] biomes, int acceptedMask, boolean tileEntityRevalidated) {
+                        byte[] biomes, int acceptedMask, boolean tileEntityRevalidated, CaptureContract.Scope scope) {
+        this.scope = scope;
         this.dimension = begin.dimension;
         this.chunkX = begin.chunkX;
         this.chunkZ = begin.chunkZ;
@@ -110,7 +111,7 @@ public final class OwnedPacketSnapshot {
             out.writeByte((fullChunk ? 1 : 0) | (skylight ? 2 : 0));
             out.writeByte(storageModel == StorageModel.VANILLA_U16 ? 1 : 2);
             out.writeByte(globalPaletteBits);
-            out.writeByte(1); // SYNTHETIC_OFFLINE, never an authority permit
+            out.writeByte(scope == CaptureContract.Scope.SYNTHETIC_OFFLINE ? 1 : 2);
             out.writeShort(0);
             out.writeInt(dimension);
             out.writeInt(chunkX);

@@ -100,7 +100,7 @@ mod tests {
 /// Read one RCSNAP01 owned synthetic transport and serialize exactly once.
 /// Success uses the existing V2 bytes/mask tuple; all failure output is scratch.
 /// Rich admission reasons remain available in the Rust snapshot parser. This
-/// export deliberately accepts only SYNTHETIC_OFFLINE transports and grants no
+/// export accepts synthetic and clean-Forge owned-oracle transports and grants no
 /// production eligibility. The scope byte is not authentication or a proof that
 /// an arbitrary caller performed coherent capture.
 ///

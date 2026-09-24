@@ -85,7 +85,7 @@ fn incarnation_epoch_thread_scope_and_storage_guards() {
         (95, 2, SnapshotRejection::ChunkReplaced),
         (79, 1, SnapshotRejection::CaptureChanged),
         (63, 2, SnapshotRejection::OffThread),
-        (13, 2, SnapshotRejection::UnknownWriter),
+        (13, 3, SnapshotRejection::UnknownWriter),
         (11, 3, SnapshotRejection::UnsupportedStorage),
         (12, 8, SnapshotRejection::UnsupportedStorage),
     ] {
@@ -102,6 +102,14 @@ fn incarnation_epoch_thread_scope_and_storage_guards() {
     input[87] = 42;
     input[95] = 42;
     assert!(OwnedPacketSnapshot::from_transport(&input).is_ok());
+    // Both admitted provenance scopes retain their exact value. Neither scope
+    // is a production publication permit or an authenticated ownership proof.
+    for scope in [1, 2] {
+        input[13] = scope;
+        let snapshot = OwnedPacketSnapshot::from_transport(&input).unwrap();
+        assert_eq!(snapshot.metadata().offline_scope, scope);
+        assert_eq!(snapshot.encode(&mut []).unwrap().emitted_mask, 0);
+    }
 }
 
 #[test]

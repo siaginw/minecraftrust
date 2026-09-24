@@ -11,6 +11,9 @@ public interface CaptureSource {
     View readView();
     void atPhase(Phase phase);
     boolean syntheticOfflineScope();
+    default CaptureContract.Scope captureScope() {
+        return syntheticOfflineScope() ? CaptureContract.Scope.SYNTHETIC_OFFLINE : CaptureContract.Scope.UNSUPPORTED;
+    }
 
     final class Section {
         public final Object identity;

@@ -16,8 +16,10 @@ public final class SnapshotCapture {
         if (source == null || context == null) return reject(Reason.FALLBACK_INVALID_INPUT, null, "null input");
         if (Thread.currentThread() != context.canonicalServerThread)
             return reject(Reason.FALLBACK_OFF_THREAD, null, "canonical Thread identity differs");
+        final Scope scope;
         try {
-            if (!source.syntheticOfflineScope())
+            scope = source.captureScope();
+            if (scope != Scope.SYNTHETIC_OFFLINE && scope != Scope.REAL_CLEAN_FORGE_ORACLE)
                 return reject(Reason.FALLBACK_UNSUPPORTED_SCOPE, null, "no qualified live adapter exists");
         } catch (RuntimeException failure) {
             return reject(Reason.FALLBACK_SOURCE_EXCEPTION, null, failure.getClass().getName());
@@ -45,7 +47,7 @@ public final class SnapshotCapture {
         if (participation && !context.lease.tryAcquire())
             return reject(Reason.FALLBACK_MISSING_PARTICIPATION, null, "shared lease is busy; capture did not wait");
         try {
-            return captureHeld(source, context, syntheticTeEffects);
+            return captureHeld(source, context, syntheticTeEffects, scope);
         } catch (Rejected failure) {
             return reject(failure.reason, null, failure.getMessage());
         } catch (RuntimeException failure) {
@@ -55,7 +57,7 @@ public final class SnapshotCapture {
         }
     }
 
-    private static Result captureHeld(CaptureSource source, Context context, Runnable te) {
+    private static Result captureHeld(CaptureSource source, Context context, Runnable te, Scope scope) {
         CaptureSource.View begin = source.readView();
         validateView(begin);
         if (begin.incarnation != context.expectedIncarnation || begin.generation != context.expectedGeneration)
@@ -106,8 +108,8 @@ public final class SnapshotCapture {
                 fail(Reason.FALLBACK_TE_MUTATION, changed.getMessage());
             }
         }
-        return new Result(Reason.ELIGIBLE, null, "qualified synthetic owned snapshot",
-                new OwnedPacketSnapshot(begin, end, context, owned, biomes, mask, te != null));
+        return new Result(Reason.ELIGIBLE, null, "qualified offline owned snapshot: " + scope,
+                new OwnedPacketSnapshot(begin, end, context, owned, biomes, mask, te != null, scope));
     }
 
     private static int select(CaptureSource.View view) {

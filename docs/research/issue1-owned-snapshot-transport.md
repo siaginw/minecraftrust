@@ -1,6 +1,7 @@
 # Owned snapshot transport and property qualification
 
-This input is an additive **offline synthetic** contract. It is not a live
+This input is an additive **offline owned-snapshot** contract with separate
+synthetic and qualified Clean Forge oracle provenance scopes. It is not a live
 Forge adapter, a publication permit, or a replacement for the production gate.
 See [capture contract](issue1-coherent-capture-contract.md) for the writer and
 ServerThread requirements. No existing JNI method or result layout is replaced.
@@ -16,7 +17,7 @@ All multibyte fields are big-endian. Fixed header length is 128 bytes.
 | 10 | u8 | Full-chunk bit 0, skylight bit 1; other bits zero |
 | 11 | u8 | Storage 1 vanilla u16, 2 resolved NEID with zero high plane; other models reject |
 | 12 | u8 | This snapshot's global palette width, 9 through 16 |
-| 13 | u8 | Scope 1 SYNTHETIC_OFFLINE; other scopes reject |
+| 13 | u8 | Scope 1 SYNTHETIC_OFFLINE or 2 REAL_CLEAN_FORGE_ORACLE; other scopes reject |
 | 14 | u16 | Reserved zero |
 | 16, 20, 24 | i32 each | Dimension, chunk X, chunk Z |
 | 28 | u64 | Positive Java-long generation identity |
@@ -31,8 +32,9 @@ After the header comes a u16 section count equal to `popcount(accepted_mask)`.
 Each selected Y appears exactly once in ascending order: u8 Y, u8 reserved zero,
 u16 non-air count, 4096 u32 logical IDs, 2048 block-light bytes, and 2048 sky-light
 bytes if enabled. A full chunk has a 256-byte biome tail. No trailing bytes are
-allowed. This synthetic model identifies logical ID zero as air; a real Forge
-adapter must qualify registry/isAir/refcount semantics before using it.
+allowed. This model identifies logical ID zero as air; the Clean Forge adapter
+qualifies the exact registry, constructor and refcount semantics separately in
+the [offline proof](issue1-clean-forge-capture-proof.md).
 
 IDs remain wide until validation. The present native implementation rejects IDs
 above 65535; global palettes also reject values unrepresentable in their explicit
@@ -76,7 +78,8 @@ The installed normalized package manifest SHA-256 was
 Only `native-chunk` and `ffi` **dev-dependencies** use exact `=1.11.0`, with
 default features disabled and only `std` enabled. Cargo's normal dependency tree
 contains no Proptest dependency. No production dependency, compression backend,
-cargo-mutants installation, process-global setting or runtime default changes.
+process-global setting or runtime default changes are introduced by this
+transport. The later focused cargo-mutants audit is separately documented.
 
 Four properties use independent small models: arbitrary selected/present sparse
 masks and capacities with retries; fill/clear/refresh/encode operation sequences;
