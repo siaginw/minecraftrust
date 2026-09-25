@@ -169,10 +169,12 @@ public class LiveChunkPublicationTransformer implements IClassTransformer {
             case "S03": {
                 // Static (World,II): private-load scope marker + pending/disk provenance.
                 List<AbstractInsnNode> anchors = LiveHookSupport.verifyAnchorsInOrder(mn, hook);
+                // loadChunk__Async(World, int, int) is an INSTANCE method: this=0,
+                // world=1, x=2, z=3.
                 InsnList scopeArgs = new InsnList();
-                scopeArgs.add(new VarInsnNode(Opcodes.ALOAD, 0));
-                scopeArgs.add(new VarInsnNode(Opcodes.ILOAD, 1));
+                scopeArgs.add(new VarInsnNode(Opcodes.ALOAD, 1));
                 scopeArgs.add(new VarInsnNode(Opcodes.ILOAD, 2));
+                scopeArgs.add(new VarInsnNode(Opcodes.ILOAD, 3));
                 mn.instructions.insertBefore(mn.instructions.getFirst(), LiveHookSupport.call("ioPrivateLoadScope",
                         "(Ljava/lang/Object;II)V", scopeArgs));
                 InsnList pending = LiveHookSupport.dup();

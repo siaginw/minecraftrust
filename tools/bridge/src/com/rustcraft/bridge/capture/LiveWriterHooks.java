@@ -1,6 +1,7 @@
 package com.rustcraft.bridge.capture;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -67,13 +68,11 @@ public final class LiveWriterHooks {
     /** Per-thread owner publication scope opened by the qualified provider hooks. */
     private static final class PublicationScope {
         final Object world;
-        final LiveWriterGate.WriteToken writerToken;
         final List<LiveChunkBindings.Publication> publicationsOpened =
                 new ArrayList<LiveChunkBindings.Publication>();
 
-        PublicationScope(Object world, LiveWriterGate.WriteToken writerToken) {
+        PublicationScope(Object world) {
             this.world = world;
-            this.writerToken = writerToken;
         }
     }
 
@@ -107,6 +106,10 @@ public final class LiveWriterHooks {
     /** Production entry: the qualified MinecraftServer.run bootstrap hook. */
     public static void diagnosticSessionStart() {
         if (session != null) return; // one session per JVM; never reset
+        // Install the pinned extractor for the qualified runtime (reflection-only;
+        // no direct Minecraft references in this class or the extractor).
+        LivePacketCapture.installSourceFactory((packet, chunk, filter, binding, gate) ->
+                LiveForgeCaptureSource.forChunk(chunk, binding, gate, filter));
         LiveWriterGate gate = new LiveWriterGate(Thread.currentThread());
         PrivateBuildTickets tickets = new PrivateBuildTickets(gate);
         LiveChunkBindings bindings = new LiveChunkBindings(gate, tickets);
@@ -188,6 +191,26 @@ public final class LiveWriterHooks {
         return false;
     }
 
+    /** Diagnostic receipt accessor: terminal disqualification state, or null when no session. */
+    public static Boolean gateDisqualifiedSafe() {
+        Session s = session;
+        if (s == null) return null;
+        return s.gate.isTerminalDisqualified();
+    }
+
+    public static long writerScopesForReceipt() { return WRITER_SCOPES.get(); }
+
+    public static boolean gateDisqualifiedSafeImpl() {
+        Session s = session;
+        return s != null && s.gate.isTerminalDisqualified();
+    }
+
+    public static String gateDisqualificationReasonSafe() {
+        Session s = session;
+        if (s == null) return null;
+        return String.valueOf(s.gate.disqualificationReason());
+    }
+
     public static PrivateBuildTickets.Ticket activeTicketForTesting() {
         Session s = session;
         if (s == null) return null;
@@ -218,15 +241,104 @@ public final class LiveWriterHooks {
     public static Object writerBegin(Object receiver, String operationId) {
         Session s = session;
         if (s == null) return NOOP_TOKEN;
-        LiveWriterGate.WriteToken token = s.gate.beginWrite(receiver, new Object[] { receiver }, operationId);
-        WRITER_SCOPES.incrementAndGet();
-        return new WriterScope(token);
+        try {
+            LiveWriterGate.WriteToken token = s.gate.beginWrite(receiver, new Object[] { receiver }, operationId);
+            WRITER_SCOPES.incrementAndGet();
+            checkFlip("writerBegin " + operationId);
+            return new WriterScope(token);
+        } catch (LiveWriterGate.ProtocolViolationException violation) {
+            dumpFirstDisqualification("writerBegin " + operationId, violation);
+            throw violation;
+        }
     }
+
+    /** Campaign evidence: the first disqualification's call site (once). */
+    private static volatile boolean disqualificationDumped;
+    private static volatile boolean diagnosticSpammed;
+
+    /**
+     * Campaign evidence: called after every gate interaction; when the terminal
+     * disqualification flipped true across THIS call, the current stack is the
+     * disqualifying call site.
+     */
+    private static void checkFlip(String where) {
+        if (disqualificationDumped) return;
+        Session s = session;
+        if (s == null || !s.gate.isTerminalDisqualified()) return;
+        disqualificationDumped = true;
+        StringBuilder sb = new StringBuilder("[live-capture] DISQUALIFICATION FLIP at " + where
+                + " reason=" + s.gate.disqualificationReason() + System.lineSeparator());
+        for (StackTraceElement e : Thread.currentThread().getStackTrace()) {
+            sb.append("  at ").append(e).append(System.lineSeparator());
+        }
+        System.err.print(sb);
+    }
+
+    private static void dumpFirstDisqualification(String where, Throwable failure) {
+        if (disqualificationDumped) return;
+        disqualificationDumped = true;
+        if (!s(session).gate.isTerminalDisqualified()) return;
+        StringBuilder sb = new StringBuilder("[live-capture] FIRST disqualification at " + where + ": "
+                + failure + System.lineSeparator());
+        for (StackTraceElement e : failure.getStackTrace()) {
+            sb.append("  at ").append(e).append(System.lineSeparator());
+        }
+        System.err.print(sb);
+    }
+
+    private static Session s(Session ignored) { return session; }
 
     public static void writerEnd(Object token, Throwable throwable) {
         if (token == NOOP_TOKEN || !(token instanceof WriterScope)) return;
         WriterScope scope = (WriterScope) token;
+        if (throwable != null) {
+            // Campaign evidence: which qualified writer operation saw a Throwable.
+            System.err.println("[live-capture] writer scope failure: op=" + scope.token.operation
+                    + " -> " + throwable);
+        }
+        diagnoseTokenMismatch(scope.token, scope.token.operation);
         session.gate.endWrite(scope.token, throwable);
+        checkFlip("writerEnd " + scope.token.operation);
+    }
+
+    /**
+     * Campaign evidence: reflectively inspects the gate's thread-local token
+     * stack before an end; when the top is not this token, records the whole
+     * stack contents so the imbalance is preserved before disqualification.
+     */
+    private static void diagnoseTokenMismatch(LiveWriterGate.WriteToken token, String operation) {
+        if (disqualificationDumped) return;
+        try {
+            Class<?> gateClass = LiveWriterGate.class;
+            Field field = gateClass.getDeclaredField("openTokens");
+            field.setAccessible(true);
+            Object localObj = field.get(null);
+            Method get = localObj.getClass().getMethod("get");
+            get.setAccessible(true);
+            Object stack = get.invoke(localObj);
+            if (stack == null) return;
+            List<?> items = new java.util.ArrayList<Object>((java.util.Collection<?>) stack);
+            boolean topMatches = !items.isEmpty() && items.get(items.size() - 1) == token;
+            if (topMatches) return;
+            StringBuilder sb = new StringBuilder("[live-capture] TOKEN MISMATCH before end of "
+                    + operation + System.lineSeparator());
+            sb.append("  expected token: ").append(token).append(System.lineSeparator());
+            sb.append("  gate thread stack (bottom..top):").append(System.lineSeparator());
+            for (Object item : items) {
+                sb.append("    ").append(item).append(System.lineSeparator());
+            }
+            sb.append("  current thread: ").append(Thread.currentThread().getName())
+                    .append(System.lineSeparator());
+            for (StackTraceElement e : Thread.currentThread().getStackTrace()) {
+                sb.append("  at ").append(e).append(System.lineSeparator());
+            }
+            System.err.print(sb);
+        } catch (Throwable diagnosticFailure) {
+            if (!diagnosticSpammed) {
+                diagnosticSpammed = true;
+                System.err.println("[live-capture] token diagnostic unavailable: " + diagnosticFailure);
+            }
+        }
     }
 
     // ------------------------------------------------------------------
@@ -250,6 +362,14 @@ public final class LiveWriterHooks {
         }
         // Owner path: the provisional PUBLISHING binding is created at construction;
         // READY still requires the enclosing publication scope's successful completion.
+        // Chunk(World, ChunkPrimer, x, z) delegates to Chunk(World, x, z): both are
+        // hooked, so the SECOND construction of the same object must not open a
+        // second publication (that would violate the txn LIFO at scope end).
+        LiveChunkBindings.Binding existing = s.bindings.bindingFor(chunk);
+        if (existing != null && (existing.state() == LiveChunkBindings.BindingState.PUBLISHING
+                || existing.state() == LiveChunkBindings.BindingState.READY)) {
+            return; // same incarnation already provisionally published
+        }
         LiveWriterGate.WriteToken writer = s.gate.beginWrite(chunk, new Object[] { chunk },
                 "liveWriter.constructor");
         try {
@@ -259,6 +379,9 @@ public final class LiveWriterHooks {
                 if (scope != null) scope.publicationsOpened.add(outcome.publication());
                 else PENDING_PUBLICATIONS.put(chunk, outcome.publication());
             }
+        } catch (Throwable failure) {
+            dumpFirstDisqualification("ownerChunkConstructed", failure);
+            throw failure;
         } finally {
             s.gate.endWrite(writer, null);
         }
@@ -290,8 +413,13 @@ public final class LiveWriterHooks {
     // Lifecycle retirement (LIFECYCLE_RETIRE)
     // ------------------------------------------------------------------
 
-    /** Injected before the verified unload transition inside ChunkProviderServer.func_73156_b. */
-    public static void retireBeforeUnload(Object provider, Object chunk) {
+    /**
+     * Injected before the verified unload transition inside
+     * ChunkProviderServer.func_73156_b. The first argument is the provider's own
+     * world field (already loaded by the injected getfield); the second is the
+     * exact retiree Chunk. Coordinates are never involved.
+     */
+    public static void retireBeforeUnload(Object world, Object chunk) {
         Session s = session;
         if (s == null) return;
         if (!s.gate.isOwnerUnderGate()) {
@@ -300,34 +428,46 @@ public final class LiveWriterHooks {
             throw new IllegalStateException("retireBeforeUnload outside the owner writer scope");
         }
         RETIRES.incrementAndGet();
-        s.bindings.retire(worldOfProvider(provider), chunk);
+        s.bindings.retire(world, chunk);
+        checkFlip("retireBeforeUnload");
     }
 
     // ------------------------------------------------------------------
     // Owner publication scope (provider operations)
     // ------------------------------------------------------------------
 
+    /**
+     * Opens the owner publication scope. Deliberately does NOT acquire the
+     * writer gate: the enclosing whole-operation writer bracket (injected by
+     * the same transformer) already holds it; a second beginWrite here would
+     * desynchronize the gate's token stack at the nested end calls.
+     */
     public static Object publicationScopeBegin(Object world, String operationId) {
         Session s = session;
         if (s == null) return NOOP_TOKEN;
-        LiveWriterGate.WriteToken writer = s.gate.beginWrite(null, null, operationId);
         s.gate.enterPublication();
-        PublicationScope scope = new PublicationScope(world, writer);
-        scopeStack().push(scope);
-        return new WriterScope(writer);
+        scopeStack().push(new PublicationScope(world));
+        checkFlip("publicationScopeBegin");
+        return PUBLICATION_SCOPE_MARKER;
     }
 
+    /** Marker returned by publicationScopeBegin; the injected end passes it back. */
+    public static final Object PUBLICATION_SCOPE_MARKER = new Object();
+
     public static void publicationScopeEnd(Object token, Throwable throwable) {
-        if (token == NOOP_TOKEN || !(token instanceof WriterScope)) return;
+        if (!(token instanceof WriterScope) && token != PUBLICATION_SCOPE_MARKER) return;
         Session s = session;
-        PublicationScope scope = scopeStack().pop();
+        if (s == null) return;
+        PublicationScope scope = scopeStack().isEmpty() ? null : scopeStack().pop();
         try {
-            for (LiveChunkBindings.Publication publication : scope.publicationsOpened) {
-                s.bindings.finishPublication(publication, throwable);
+            if (scope != null) {
+                for (LiveChunkBindings.Publication publication : scope.publicationsOpened) {
+                    s.bindings.finishPublication(publication, throwable);
+                }
             }
         } finally {
             s.gate.exitPublication();
-            s.gate.endWrite(scope.writerToken, throwable);
+            checkFlip("publicationScopeEnd");
         }
     }
 
@@ -358,6 +498,7 @@ public final class LiveWriterHooks {
                 coords.length > 1 ? coords[1] : 0);
         if (ticket != null) IO_TICKETS.put(task, ticket);
         IO_TASKS.incrementAndGet();
+        checkFlip("ioTaskBegin");
     }
 
     /** Injected before the success-path `ran` putfield (profile BCI 74). */
@@ -383,6 +524,7 @@ public final class LiveWriterHooks {
             if (success) IO_RELEASES_SUCCESS.incrementAndGet();
             else IO_RELEASES_FAILURE.incrementAndGet();
         }
+        checkFlip("ioRelease" + (success ? "Success" : "Failure"));
     }
 
     /** Injected at loadChunk__Async/checkedReadChunkFromNBT__Async entry. */
@@ -457,6 +599,7 @@ public final class LiveWriterHooks {
             return new IoPublicationScope(writer, null, false);
         }
         IO_ADOPTIONS.incrementAndGet();
+        checkFlip("ioPublicationBegin");
         return new IoPublicationScope(writer, publication.publication(), true);
     }
 
@@ -473,6 +616,7 @@ public final class LiveWriterHooks {
             }
         } finally {
             s.gate.endWrite(scope.writerToken, throwable);
+            checkFlip("ioPublicationEnd");
         }
     }
 
@@ -554,12 +698,6 @@ public final class LiveWriterHooks {
         } catch (Throwable failure) {
             throw new IllegalStateException("live writer hook coord read failed", failure);
         }
-    }
-
-    private static Object worldOfProvider(Object provider) {
-        Object world = field(provider, "field_73251_h"); // SRG runtime name of ChunkProviderServer.world
-        if (world == null) throw new IllegalStateException("provider world field unresolved");
-        return world;
     }
 
     /** The pinned 1.12.2 runtime writes DataVersion 1343; deeper verification is the live stage's job. */

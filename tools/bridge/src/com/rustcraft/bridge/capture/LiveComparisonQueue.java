@@ -33,11 +33,23 @@ public final class LiveComparisonQueue {
     private static final AtomicInteger RESERVED = new AtomicInteger();
     private static final AtomicLong RESERVED_BYTES = new AtomicLong();
 
+    /**
+     * Bounded capacity: the accepted offline default is 8 envelopes / 8 MiB; a
+     * live campaign configures a larger bound via properties (still bounded,
+     * still nonblocking — offer never waits).
+     */
+    private static final int CAPACITY =
+            Integer.getInteger("rustcraft.liveShadowQueueCapacity", 8).intValue();
+    private static final long MAX_BYTES =
+            Long.getLong("rustcraft.liveShadowQueueMaxBytes", 8L * 1024 * 1024).longValue();
+
     public static final AtomicLong ENQUEUE_SUCCESSES = new AtomicLong();
     public static final AtomicLong QUEUE_FULL_DROPS = new AtomicLong();
     public static final AtomicLong BYTE_BUDGET_DROPS = new AtomicLong();
     public static final AtomicLong INACTIVE_DROPS = new AtomicLong();
     public static final AtomicLong CONSUMED = new AtomicLong();
+    public static final AtomicLong HIGH_WATER = new AtomicLong();
+    public static final AtomicLong HIGH_WATER_BYTES = new AtomicLong();
 
     private LiveComparisonQueue() { }
 
@@ -52,18 +64,19 @@ public final class LiveComparisonQueue {
             INACTIVE_DROPS.incrementAndGet();
             return new LiveComparisonQueue.OfferResult(false, DropReason.INACTIVE);
         }
-        if (RESERVED.get() >= LivePacketCapture.QUEUE_CAPACITY) {
+        if (RESERVED.get() >= CAPACITY) {
             QUEUE_FULL_DROPS.incrementAndGet();
             return new LiveComparisonQueue.OfferResult(false, DropReason.FULL);
         }
         long reservedBytes = RESERVED_BYTES.addAndGet(bytes);
-        if (reservedBytes > LivePacketCapture.QUEUE_MAX_BYTES) {
+        if (reservedBytes > MAX_BYTES) {
             RESERVED_BYTES.addAndGet(-bytes);
             BYTE_BUDGET_DROPS.incrementAndGet();
             return new LiveComparisonQueue.OfferResult(false, DropReason.BYTES);
         }
         QUEUE.add(sealed);
-        RESERVED.incrementAndGet();
+        long depth = RESERVED.incrementAndGet();
+        LIVE_HIGH_WATER(depth, reservedBytes);
         ENQUEUE_SUCCESSES.incrementAndGet();
         return new LiveComparisonQueue.OfferResult(true, null);
     }
@@ -93,6 +106,19 @@ public final class LiveComparisonQueue {
 
     public static long queuedBytes() {
         return RESERVED_BYTES.get();
+    }
+
+    private static void LIVE_HIGH_WATER(long depth, long bytes) {
+        long seen;
+        do {
+            seen = HIGH_WATER.get();
+            if (depth <= seen) break;
+        } while (!HIGH_WATER.compareAndSet(seen, depth));
+        long seenBytes;
+        do {
+            seenBytes = HIGH_WATER_BYTES.get();
+            if (bytes <= seenBytes) break;
+        } while (!HIGH_WATER_BYTES.compareAndSet(seenBytes, bytes));
     }
 
     /** Session-end clear: only reachable on a fully quiesced diagnostic shutdown. */

@@ -55,6 +55,18 @@ public class RustCraftCoreMod implements IFMLLoadingPlugin {
         // cumulative bucket vector is dumped each cycle so offline analysis
         // can window phases by subtraction. Measurement instrumentation only:
         // it never touches packet processing.
+        // Issue #1 live SHADOW campaign: in-server diagnostic consumer, started
+        // ONLY when -Drustcraft.liveWriterDiagnostic=true (never in production).
+        // Drains the capture queue, replays each sealed scope-3 transport through
+        // the owned Rust ABI, compares, and records evidence. SHADOW ONLY: the
+        // Rust result is recorded and discarded; Java packets are untouched.
+        if (Boolean.getBoolean("rustcraft.liveWriterDiagnostic")) {
+            try {
+                com.rustcraft.bridge.capture.LiveShadowCampaignConsumer.start();
+            } catch (Throwable failure) {
+                System.err.println("[RustCraft] live shadow consumer failed to start: " + failure);
+            }
+        }
         final long[] msptBuckets = new long[201]; // 0.5ms buckets: [0]=<0.25ms ... [200]>=100ms
         final long[] msptMeta = new long[3];      // count, max ns, sum ns
         Thread dumper = new Thread(() -> {

@@ -168,7 +168,7 @@ def expected_groups(hook: dict) -> list:
                         ("invokestatic", FACADE + ".diagnosticSessionEnd"), ("aload", ""), ("athrow", "")]
         return [(start, "begin"), (stop, "end"), (stop_handler, "handler")]
     if hook["id"] == "S03":
-        scope = [("aload", ""), ("iload_1", ""), ("iload_2", ""),
+        scope = [("aload", ""), ("iload_2", ""), ("iload_3", ""),
                  ("invokestatic", FACADE + ".ioPrivateLoadScope")]
         pending = [("dup", ""), ("invokestatic", FACADE + ".ioPendingNbt")]
         disk = [("dup", ""), ("invokestatic", FACADE + ".ioDiskRoot")]

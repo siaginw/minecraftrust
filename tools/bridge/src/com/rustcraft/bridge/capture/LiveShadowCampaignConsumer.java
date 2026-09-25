@@ -1,0 +1,325 @@
+package com.rustcraft.bridge.capture;
+
+import com.rustcraft.bridge.PacketEncodeResultV2;
+import sun.misc.Unsafe;
+
+import java.io.PrintWriter;
+import java.lang.reflect.Field;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Arrays;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * In-server diagnostic consumer for the FIRST bounded Clean Forge live SHADOW
+ * campaign. Started only when -Drustcraft.liveWriterDiagnostic=true (never in
+ * production). Drains the {@link LiveComparisonQueue}, replays each sealed
+ * scope-3 transport through the existing owned Rust ABI, compares against the
+ * SAME Java packet event (mask/length/bytes), and appends one machine-readable
+ * JSONL record per compared event plus a shutdown receipt.
+ *
+ * <p>SHADOW ONLY: the Rust result is recorded and discarded. It never reaches
+ * any wire path and never replaces Java packet content. A mismatch writes the
+ * full event artifact, raises the stop flag, and stops further replay so the
+ * campaign runner can shut the server down with evidence preserved.</p>
+ */
+public final class LiveShadowCampaignConsumer {
+
+    private static final Unsafe MEMORY = unsafe();
+    private static final int NATIVE_CAPACITY = 262144;
+
+    public static final AtomicHolder COMPARED = new AtomicHolder();
+    public static final AtomicHolder MASK_MISMATCH = new AtomicHolder();
+    public static final AtomicHolder LENGTH_MISMATCH = new AtomicHolder();
+    public static final AtomicHolder BYTE_MISMATCH = new AtomicHolder();
+    public static final AtomicHolder REPLAY_FAILURE = new AtomicHolder();
+    public static final AtomicHolder ARTIFACTS = new AtomicHolder();
+
+    /** Simple mutable holder (atomic semantics live in the drain loop thread). */
+    public static final class AtomicHolder {
+        private long value;
+        public long get() { return value; }
+        public void set(long v) { value = v; }
+        public void increment() { value++; }
+    }
+
+    private static volatile boolean started;
+    private static volatile boolean mismatchSeen;
+    private static PrintWriter jsonl;
+    private static Path artifactDir;
+    private static long nativeInput, nativeOutput;
+    private static long startedAtMillis;
+
+    private LiveShadowCampaignConsumer() { }
+
+    /** Starts the consumer; idempotent. Called from the coremod when the diagnostic is on. */
+    public static synchronized void start() {
+        if (started) return;
+        try {
+            String out = System.getProperty("rustcraft.liveShadowOut", "live-shadow-events.jsonl");
+            Path outPath = Paths.get(out).toAbsolutePath();
+            if (outPath.getParent() != null) Files.createDirectories(outPath.getParent());
+            jsonl = new PrintWriter(Files.newBufferedWriter(outPath, StandardCharsets.UTF_8), true);
+            artifactDir = outPath.resolveSibling("mismatch-artifacts");
+            Files.createDirectories(artifactDir);
+            String dll = System.getProperty("rustcraft.liveShadowDll");
+            if (dll == null) throw new IllegalStateException("rustcraft.liveShadowDll required");
+            System.load(Paths.get(dll).toAbsolutePath().normalize().toString());
+            nativeInput = MEMORY.allocateMemory(1024);
+            nativeOutput = MEMORY.allocateMemory(NATIVE_CAPACITY);
+            startedAtMillis = System.currentTimeMillis();
+            started = true;
+            Thread watchdog = new Thread(new Runnable() {
+                @Override public void run() {
+                    // Campaign evidence: when the gate first disqualifies, capture
+                    // every live thread's stack so the disqualifying call site is
+                    // preserved even if Forge swallows the protocol exception.
+                    while (!LiveWriterHooks.gateDisqualifiedSafeImpl()) {
+                        try { Thread.sleep(25); } catch (InterruptedException i) { return; }
+                    }
+                    StringBuilder sb = new StringBuilder("[live-capture] DISQUALIFICATION WATCHDOG"
+                            + System.lineSeparator());
+                    for (Map.Entry<Thread, StackTraceElement[]> entry :
+                            Thread.getAllStackTraces().entrySet()) {
+                        sb.append("THREAD ").append(entry.getKey().getName())
+                                .append(System.lineSeparator());
+                        for (StackTraceElement e : entry.getValue()) {
+                            sb.append("  at ").append(e).append(System.lineSeparator());
+                        }
+                    }
+                    try {
+                        Files.write(Paths.get(System.getProperty("rustcraft.liveShadowOut",
+                                "live-shadow-events.jsonl")).toAbsolutePath()
+                                .resolveSibling("disqualification-threads.txt"),
+                                sb.toString().getBytes(StandardCharsets.UTF_8));
+                    } catch (Throwable failure) {
+                        System.err.print(sb);
+                    }
+                }
+            }, "rustcraft-live-shadow-watchdog");
+            watchdog.setDaemon(true);
+            watchdog.start();
+            Thread thread = new Thread(new Runnable() {
+                @Override public void run() { loop(); }
+            }, "rustcraft-live-shadow-consumer");
+            thread.setDaemon(true);
+            thread.start();
+            Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
+                @Override public void run() { writeReceipt(); }
+            }, "rustcraft-live-shadow-receipt"));
+            System.out.println("[live-capture] consumer started; out=" + outPath);
+        } catch (Throwable failure) {
+            System.err.println("[live-capture] consumer FAILED to start: " + failure);
+            started = false;
+        }
+    }
+
+    public static boolean isStarted() { return started; }
+
+    public static boolean mismatchSeen() { return mismatchSeen; }
+
+    private static void loop() {
+        while (!mismatchSeen) {
+            List<SealedLiveCapture> drained = LiveComparisonQueue.drain();
+            for (SealedLiveCapture sealed : drained) {
+                compareAndRecord(sealed);
+                if (mismatchSeen) return;
+            }
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException interrupted) {
+                Thread.currentThread().interrupt();
+                return;
+            }
+        }
+    }
+
+    private static void compareAndRecord(SealedLiveCapture sealed) {
+        Map<String, Object> record = new LinkedHashMap<String, Object>();
+        try {
+            byte[] transport = sealed.toTransportBytes();
+            record.put("gateEventId", sealed.gateEventId());
+            record.put("sessionId", sealed.identity().sessionId);
+            record.put("worldId", sealed.identity().worldId);
+            record.put("chunkId", sealed.identity().chunkId);
+            record.put("chunkX", sealed.chunkX());
+            record.put("chunkZ", sealed.chunkZ());
+            record.put("incarnation", sealed.identity().incarnation);
+            record.put("ownedEncodeGeneration", sealed.identity().ownedEncodeGeneration);
+            record.put("requestedFilter", sealed.requestedFilter());
+            record.put("javaMask", sealed.javaMask());
+            record.put("sealedMask", sealed.sealedMask());
+            record.put("fullChunk", sealed.javaFullChunk());
+            record.put("epochStart", sealed.captureEpochStart());
+            record.put("epochEnd", sealed.captureEpochEnd());
+            record.put("bindingRevoked", sealed.identity().ownedEncodeGeneration < 0);
+
+            // Independent Rust replay of the exact scope-3 transport.
+            if (transport.length > NATIVE_CAPACITY) throw new IllegalStateException("transport too large");
+            if (nativeInput != 0) MEMORY.freeMemory(nativeInput);
+            nativeInput = MEMORY.allocateMemory(transport.length);
+            for (int i = 0; i < transport.length; i++) MEMORY.putByte(nativeInput + i, transport[i]);
+            MEMORY.setMemory(nativeOutput, NATIVE_CAPACITY, (byte) 0xCC);
+            long packed = com.rustcraft.bridge.capture.OwnedSnapshotBridge.encodeOwnedV1(
+                    nativeInput, transport.length, nativeOutput, NATIVE_CAPACITY);
+            PacketEncodeResultV2 result = PacketEncodeResultV2.decode(packed);
+            if (!result.isSuccess()) {
+                REPLAY_FAILURE.increment();
+                record.put("rustFailure", String.valueOf(result.failure()));
+                fail("rust replay failed", sealed, record, transport, null, -1);
+                return;
+            }
+            int rustMask = result.emittedMask();
+            int rustLen = result.bytesWritten();
+            byte[] rustBody = new byte[rustLen];
+            for (int i = 0; i < rustLen; i++) rustBody[i] = MEMORY.getByte(nativeOutput + i);
+            byte[] javaBody = sealed.javaPayload();
+
+            boolean maskEqual = rustMask == sealed.javaMask() && rustMask == sealed.sealedMask();
+            boolean lenEqual = rustLen == javaBody.length;
+            boolean byteEqual = Arrays.equals(rustBody, javaBody);
+            record.put("rustMask", rustMask);
+            record.put("rustLen", rustLen);
+            record.put("javaLen", javaBody.length);
+            record.put("maskEqual", maskEqual);
+            record.put("lenEqual", lenEqual);
+            record.put("byteEqual", byteEqual);
+
+            if (!maskEqual) MASK_MISMATCH.increment();
+            if (!lenEqual) LENGTH_MISMATCH.increment();
+            if (!byteEqual) BYTE_MISMATCH.increment();
+            COMPARED.increment();
+
+            synchronized (LiveShadowCampaignConsumer.class) {
+                jsonl.println(json(record));
+                jsonl.flush();
+            }
+            if (!maskEqual || !lenEqual || !byteEqual) {
+                fail("comparison mismatch", sealed, record, transport, rustBody, javaBody.length);
+            }
+        } catch (Throwable failure) {
+            REPLAY_FAILURE.increment();
+            try {
+                fail("replay exception: " + failure, sealed, record, null, null, -1);
+            } catch (Throwable ignored) { }
+        }
+    }
+
+    /** Writes the full mismatch artifact, raises the stop flag, stops replay. */
+    private static void fail(String why, SealedLiveCapture sealed, Map<String, Object> record,
+                             byte[] transport, byte[] rustBody, int javaLen) {
+        mismatchSeen = true;
+        try {
+            ARTIFACTS.increment();
+            Path dir = artifactDir.resolve("event-" + ARTIFACTS.get() + "-" + sealed.gateEventId());
+            Files.createDirectories(dir);
+            if (transport != null) Files.write(dir.resolve("sealed-transport.bin"), transport);
+            byte[] javaBody = sealed.javaPayload();
+            Files.write(dir.resolve("java-body.bin"), javaBody);
+            if (rustBody != null) Files.write(dir.resolve("rust-body.bin"), rustBody);
+            record.put("why", why);
+            record.put("javaLen", javaLen);
+            record.put("javaMask", sealed.javaMask());
+            record.put("chunkX", sealed.chunkX());
+            record.put("chunkZ", sealed.chunkZ());
+            record.put("filter", sealed.requestedFilter());
+            record.put("timestamp", System.currentTimeMillis());
+            Files.write(dir.resolve("meta.json"), json(record).getBytes(StandardCharsets.UTF_8));
+            Files.write(artifactDir.resolveSibling("live-shadow-STOP"), String.valueOf(System.currentTimeMillis()).getBytes(StandardCharsets.UTF_8));
+            synchronized (LiveShadowCampaignConsumer.class) {
+                jsonl.println(json(record));
+                jsonl.flush();
+            }
+            System.err.println("[live-capture] MISMATCH — campaign stop requested: " + why
+                    + " artifact=" + dir);
+        } catch (Throwable failure) {
+            System.err.println("[live-capture] artifact write failed: " + failure);
+        }
+    }
+
+    /** Shutdown receipt: counters + classification input; final call is the runner's. */
+    private static void writeReceipt() {
+        try {
+            Map<String, Object> receipt = new LinkedHashMap<String, Object>();
+            receipt.put("compared", COMPARED.get());
+            receipt.put("maskMismatch", MASK_MISMATCH.get());
+            receipt.put("lengthMismatch", LENGTH_MISMATCH.get());
+            receipt.put("byteMismatch", BYTE_MISMATCH.get());
+            receipt.put("replayFailures", REPLAY_FAILURE.get());
+            receipt.put("artifacts", ARTIFACTS.get());
+            receipt.put("mismatchSeen", mismatchSeen);
+            receipt.put("captured", LivePacketCapture.SEALED.get());
+            receipt.put("admitted", LivePacketCapture.ADMITTED.get());
+            receipt.put("seen", LivePacketCapture.SEEN.get());
+            receipt.put("rejected", LivePacketCapture.REJECTED.get());
+            receipt.put("aborted", LivePacketCapture.ABORTED.get());
+            receipt.put("validationFailed", LivePacketCapture.VALIDATION_FAILED.get());
+            receipt.put("captureBusy", LivePacketCapture.CAPTURE_BUSY.get());
+            receipt.put("unsupported", LivePacketCapture.UNSUPPORTED.get());
+            receipt.put("revokedDropped", LivePacketCapture.REVOKED_DROPPED.get());
+            receipt.put("queueEnqueued", LivePacketCapture.ENQUEUED.get());
+            receipt.put("queueDropped", LivePacketCapture.QUEUE_DROPPED.get());
+            receipt.put("queueHighWater", LiveComparisonQueue.HIGH_WATER.get());
+            receipt.put("queueHighWaterBytes", LiveComparisonQueue.HIGH_WATER_BYTES.get());
+            receipt.put("rejectionReasons", LivePacketCapture.rejectionReasonCounts());
+            receipt.put("gateDisqualified", LiveWriterHooks.gateDisqualifiedSafe());
+            receipt.put("gateDisqualificationReason", LiveWriterHooks.gateDisqualificationReasonSafe());
+            receipt.put("writerScopes", LiveWriterHooks.writerScopesForReceipt());
+            receipt.put("constructedChunks", LiveWriterHooks.CONSTRUCTED_CHUNKS.get());
+            receipt.put("retires", LiveWriterHooks.RETIRES.get());
+            receipt.put("ioTasks", LiveWriterHooks.IO_TASKS.get());
+            receipt.put("ioAdoptions", LiveWriterHooks.IO_ADOPTIONS.get());
+            receipt.put("ioJavaOnly", LiveWriterHooks.IO_JAVA_ONLY.get());
+            receipt.put("packetObservations", LivePacketCapture.SEEN.get());
+            receipt.put("uptimeMillis", System.currentTimeMillis() - startedAtMillis);
+            Path out = Paths.get(System.getProperty("rustcraft.liveShadowOut", "live-shadow-events.jsonl"))
+                    .toAbsolutePath().resolveSibling("live-shadow-receipt.json");
+            Files.write(out, json(receipt).getBytes(StandardCharsets.UTF_8));
+            System.out.println("[live-capture] receipt written: " + out);
+        } catch (Throwable failure) {
+            System.err.println("[live-capture] receipt write failed: " + failure);
+        }
+    }
+
+    private static String json(Map<String, Object> map) {
+        StringBuilder sb = new StringBuilder("{");
+        boolean first = true;
+        for (Map.Entry<String, Object> entry : map.entrySet()) {
+            if (!first) sb.append(',');
+            first = false;
+            Object v = entry.getValue();
+            sb.append('"').append(entry.getKey()).append("\":");
+            if (v instanceof Map) {
+                sb.append(jsonOfMap((Map<?, ?>) v));
+            } else if (v instanceof Boolean || v instanceof Long || v instanceof Integer) {
+                sb.append(v);
+            } else {
+                sb.append('"').append(String.valueOf(v).replace("\\", "\\\\").replace("\"", "\\\"")).append('"');
+            }
+        }
+        return sb.append('}').toString();
+    }
+
+    private static String jsonOfMap(Map<?, ?> map) {
+        StringBuilder sb = new StringBuilder("{");
+        boolean first = true;
+        for (Map.Entry<?, ?> entry : map.entrySet()) {
+            if (!first) sb.append(',');
+            first = false;
+            sb.append('"').append(String.valueOf(entry.getKey())).append("\":").append(entry.getValue());
+        }
+        return sb.append('}').toString();
+    }
+
+    private static Unsafe unsafe() {
+        try {
+            Field f = Unsafe.class.getDeclaredField("theUnsafe");
+            f.setAccessible(true);
+            return (Unsafe) f.get(null);
+        } catch (ReflectiveOperationException error) { throw new ExceptionInInitializerError(error); }
+    }
+}

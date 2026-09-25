@@ -53,6 +53,22 @@ public final class SealedLiveCapture {
 
     public int javaPayloadLength() { return javaPayload.length; }
 
+    /** The requested section filter captured with this event. */
+    public int requestedFilter() { return owned.requestedFilter; }
+
+    /** The sealed capture's own accepted section mask. */
+    public int sealedMask() { return owned.acceptedMask; }
+
+    /** Chunk coordinates as recorded in the owned snapshot (descriptive metadata). */
+    public int chunkX() { return owned.chunkX; }
+
+    public int chunkZ() { return owned.chunkZ; }
+
+    /** Writer-protocol epoch pair captured with the event (begin == end on seal). */
+    public long captureEpochStart() { return owned.captureStartGuard; }
+
+    public long captureEpochEnd() { return owned.captureEndGuard; }
+
     /** Cloned on every read: the sealed bytes are never shared mutable state. */
     public byte[] javaPayload() { return javaPayload.clone(); }
 

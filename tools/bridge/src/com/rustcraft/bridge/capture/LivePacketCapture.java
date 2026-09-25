@@ -96,6 +96,24 @@ public final class LivePacketCapture {
     /** Last begin-time rejection (diagnostic evidence; not synchronization). */
     public static RejectionReason lastRejection() { return lastRejection; }
 
+    private static final java.util.EnumMap<RejectionReason, AtomicLong> REASON_COUNTERS =
+            new java.util.EnumMap<RejectionReason, AtomicLong>(RejectionReason.class);
+    static {
+        for (RejectionReason reason : RejectionReason.values()) {
+            REASON_COUNTERS.put(reason, new AtomicLong());
+        }
+    }
+
+    /** Per-reason rejection counts (diagnostic evidence; every reason kept separate). */
+    public static java.util.Map<RejectionReason, Long> rejectionReasonCounts() {
+        java.util.Map<RejectionReason, Long> snapshot =
+                new java.util.EnumMap<RejectionReason, Long>(RejectionReason.class);
+        for (java.util.Map.Entry<RejectionReason, AtomicLong> entry : REASON_COUNTERS.entrySet()) {
+            snapshot.put(entry.getKey(), entry.getValue().get());
+        }
+        return snapshot;
+    }
+
     public static void installSourceFactory(SourceFactory factory) {
         sourceFactory = factory;
     }
@@ -280,6 +298,7 @@ public final class LivePacketCapture {
     }
 
     private static void classify(RejectionReason reason) {
+        REASON_COUNTERS.get(reason).incrementAndGet();
         switch (reason) {
             case CAPTURE_BUSY: case WRITER_ACTIVE: case PUBLICATION_ACTIVE: case NESTED_CAPTURE:
                 CAPTURE_BUSY.incrementAndGet();
