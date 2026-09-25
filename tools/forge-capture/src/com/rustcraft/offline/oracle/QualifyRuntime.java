@@ -59,6 +59,21 @@ public final class QualifyRuntime {
         "net.minecraft.server.management.PlayerChunkMapEntry"
     };
 
+    /**
+     * Issue #1 live-writer diagnostic: appends the three qualified transformers
+     * AFTER the complete FML chain (they must consume exactly the qualified
+     * post-FML definitions) and before any hooked class is loaded.
+     */
+    private static void registerLiveWriterTransformers() {
+        if (!Boolean.getBoolean("rustcraft.liveWriterDiagnostic")) return;
+        for (String name : new String[] {
+                "com.rustcraft.coremod.LiveChunkOwnershipTransformer",
+                "com.rustcraft.coremod.LiveChunkPublicationTransformer",
+                "com.rustcraft.coremod.SPacketChunkDataTransformer"}) {
+            Launch.classLoader.registerTransformer(name);
+        }
+    }
+
     private static List<String> transformers() {
         List<String> names = new ArrayList<>();
         for (IClassTransformer transformer : Launch.classLoader.getTransformers()) {
@@ -161,6 +176,7 @@ public final class QualifyRuntime {
         if (!transformers().equals(Arrays.asList(TRANSFORMERS))) {
             throw new IllegalStateException("UNQUALIFIED_TRANSFORMER_CHAIN:" + transformers());
         }
+        registerLiveWriterTransformers(); // BEFORE any hooked class can load
         Class.forName("net.minecraft.init.Bootstrap", true, Launch.classLoader)
                 .getMethod("func_151354_b").invoke(null);
         byte[] offlineConfig = Files.readAllBytes(Launch.minecraftHome.toPath().resolve("config/forge.cfg"));

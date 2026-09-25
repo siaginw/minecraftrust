@@ -11,13 +11,18 @@ public class RustCraftCoreMod implements IFMLLoadingPlugin {
 
     @Override
     public String[] getASMTransformerClass() {
+        // Issue #1 live-writer transformers: registered like every other transformer
+        // here, but inert unless -Drustcraft.liveWriterDiagnostic=true (default OFF —
+        // OFF means zero bytecode modification and zero protocol participation).
         return new String[]{
                 "com.rustcraft.coremod.SPacketChunkDataTransformer",
                 "com.rustcraft.coremod.NetworkManagerCompressionTransformer",
                 "com.rustcraft.coremod.FrameShadowHookTransformer",
                 "com.rustcraft.coremod.WorldCollisionProbeTransformer",
                 "com.rustcraft.coremod.WorldgenShadowTransformer",
-                "com.rustcraft.coremod.ChunkMutationTransformer"
+                "com.rustcraft.coremod.ChunkMutationTransformer",
+                "com.rustcraft.coremod.LiveChunkOwnershipTransformer",
+                "com.rustcraft.coremod.LiveChunkPublicationTransformer"
         };
     }
 

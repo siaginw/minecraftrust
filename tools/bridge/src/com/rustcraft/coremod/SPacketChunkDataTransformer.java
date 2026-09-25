@@ -82,6 +82,14 @@ public class SPacketChunkDataTransformer implements IClassTransformer {
             return false;
         }
 
+        // Issue #1 live-writer PACKET_CAPTURE diagnostic branch (S02). Gated on the
+        // same default-OFF option as the ownership/publication transformers; it is
+        // strictly OBSERVATIONAL: no admission, no SnapshotCapture call, no native
+        // output, no skipping of the vanilla body, no alteration of transmitted bytes.
+        if (LiveChunkOwnershipTransformer.enabled()) {
+            injectLiveCaptureObservation(cn, mn);
+        }
+
         // Inject hook at method entry right after super() call:
         // boolean handled = NativeChunkPacket.populatePacket(this, chunkIn, changedSectionFilter);
         // if (handled) return;
@@ -142,5 +150,88 @@ public class SPacketChunkDataTransformer implements IClassTransformer {
             }
         }
         return true;
+    }
+
+    /**
+     * Issue #1 S02 observation branch: entry after Object.&lt;init&gt; (before the
+     * first source read), commit before the normal return, catch-all abort that
+     * rethrows the original Throwable. Inert plumbing only: the facade records
+     * binding-state observations and counters; live admission does not exist in
+     * this stage.
+     */
+    private void injectLiveCaptureObservation(ClassNode cn, MethodNode mn) {
+        // Pre-verification against the qualified profile: the constructor's anchor
+        // instructions must match the committed fingerprints, in order.
+        LiveWriterPlan.Hook hook = null;
+        for (LiveWriterPlan.Hook candidate : LiveWriterPlan.HOOKS) {
+            if ("PACKET".equals(candidate.transformer) && "S02".equals(candidate.id)) {
+                hook = candidate;
+                break;
+            }
+        }
+        if (hook == null) {
+            throw new LiveHookSupport.ProfileFailure("S02 missing from the live writer plan");
+        }
+        List<AbstractInsnNode> anchors = LiveHookSupport.verifyAnchorsInOrder(mn, hook);
+
+        int tokenLocal = mn.maxLocals;
+        mn.maxLocals += 1;
+        int exLocal = mn.maxLocals;
+        mn.maxLocals += 1;
+
+        // Token pre-init BEFORE the try range (never throws; keeps the handler's
+        // merged token local a reference instead of TOP).
+        InsnList preInit = new InsnList();
+        preInit.add(new InsnNode(Opcodes.ACONST_NULL));
+        preInit.add(new VarInsnNode(Opcodes.ASTORE, tokenLocal));
+        mn.instructions.insertBefore(mn.instructions.getFirst(), preInit);
+
+        // Entry (after the super call): observe(this, chunk, filter).
+        InsnList observe = new InsnList();
+        observe.add(new VarInsnNode(Opcodes.ALOAD, 0));
+        observe.add(new VarInsnNode(Opcodes.ALOAD, 1));
+        observe.add(new VarInsnNode(Opcodes.ILOAD, 2));
+        observe.add(new MethodInsnNode(Opcodes.INVOKESTATIC,
+                "com/rustcraft/bridge/capture/LiveWriterHooks", "packetCaptureObserve",
+                "(Ljava/lang/Object;Ljava/lang/Object;I)Ljava/lang/Object;", false));
+        observe.add(new VarInsnNode(Opcodes.ASTORE, tokenLocal));
+        mn.instructions.insert(anchors.get(0) /* Object.<init> at BCI 1 */, observe);
+
+        // Commit before the normal return (BCI 200).
+        for (AbstractInsnNode insn : mn.instructions.toArray()) {
+            if (insn.getOpcode() == Opcodes.RETURN) {
+                InsnList commit = new InsnList();
+                commit.add(new VarInsnNode(Opcodes.ALOAD, 0));
+                commit.add(new VarInsnNode(Opcodes.ALOAD, 1));
+                commit.add(new VarInsnNode(Opcodes.ILOAD, 2));
+                commit.add(new MethodInsnNode(Opcodes.INVOKESTATIC,
+                        "com/rustcraft/bridge/capture/LiveWriterHooks", "packetCaptureCommit",
+                        "(Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;I)V", false));
+                // token first: (token, packet, chunk, filter)
+                InsnList full = new InsnList();
+                full.add(new VarInsnNode(Opcodes.ALOAD, tokenLocal));
+                full.add(commit);
+                mn.instructions.insertBefore(insn, full);
+            }
+        }
+
+        // Catch-all abort + rethrow (the packet constructor must fail exactly as before).
+        org.objectweb.asm.tree.LabelNode tryStart = new org.objectweb.asm.tree.LabelNode();
+        mn.instructions.insert(anchors.get(0), tryStart); // after Object.<init>, before everything else
+        org.objectweb.asm.tree.LabelNode handler = new org.objectweb.asm.tree.LabelNode();
+        InsnList handlerCode = new InsnList();
+        handlerCode.add(new VarInsnNode(Opcodes.ASTORE, exLocal));
+        handlerCode.add(new VarInsnNode(Opcodes.ALOAD, tokenLocal));
+        handlerCode.add(new VarInsnNode(Opcodes.ALOAD, exLocal));
+        handlerCode.add(new MethodInsnNode(Opcodes.INVOKESTATIC,
+                "com/rustcraft/bridge/capture/LiveWriterHooks", "packetCaptureAbort",
+                "(Ljava/lang/Object;Ljava/lang/Throwable;)V", false));
+        handlerCode.add(new VarInsnNode(Opcodes.ALOAD, exLocal));
+        handlerCode.add(new InsnNode(Opcodes.ATHROW));
+        mn.instructions.add(handler);
+        mn.instructions.add(handlerCode);
+        mn.tryCatchBlocks.add(new org.objectweb.asm.tree.TryCatchBlockNode(
+                tryStart, handler, handler, null));
+        lastTransformStatus = "LIVE_OBSERVATION_INSTALLED";
     }
 }
