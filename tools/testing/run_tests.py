@@ -51,6 +51,7 @@ EVIDENCE_TESTS = [
     "TestProvenanceValidation.test_awaiting_status_rejected",
     "TestLiveRegistry.test_broken_fixture_file_rejected",
 ]
+FORGE_RUNTIME = ROOT / ".rustcraft-local/forge-runtime.json"
 EXCLUSIONS = [
     {"scope": "cargo test --workspace (all targets)", "reason": "MISSING_PUBLIC_SOURCE",
      "detail": "crates/nbt/src/bin/bench.rs and oracle_cli.rs are declared but absent; workspace --lib plus available integration targets are explicit."},
@@ -75,6 +76,7 @@ def source_snapshot():
     paths.extend(path for path in (ROOT / "tests/fixtures/issue1-properties").rglob("*") if path.is_file())
     paths.extend((ROOT / "docs/schemas").glob("*.json"))
     paths.extend((ROOT / "tools/forge-capture").glob("*.json"))
+    paths.extend((ROOT / "tools/live-capture").glob("*.json"))
     paths.extend([ROOT / "tools/run-rustcraft-tests.ps1", Path(__file__), ROOT / "tools/testing/test_runner.py",
                   ROOT / "tools/tests/test_evidence_integrity.py", ROOT / "tools/verify_evidence_integrity.py",
                   ROOT / "tools/tests/fixtures/broken-provenance-2026-09-18.yaml"])
@@ -158,6 +160,13 @@ def lane_inventory(lane):
         inventory.append({"id": "java-v2", "sources": JAVA_SOURCES, "mains": JAVA_MAINS, "fresh_jvm_per_main": True})
     elif lane == "forge":
         inventory.append({"id": "forge-clean-capture", "requires": "Pinned clean Forge runtime manifest", "capture_kind": "REAL_CLEAN_FORGE_ORACLE", "fresh_jvm": True})
+    elif lane == "live-profile":
+        inventory.append({"id": "live-profile-negative-controls", "argv": [sys.executable, "-B", "-m", "unittest", "tools.testing.test_live_profile", "-v"]})
+        inventory.append({"id": "ffi-release", "argv": RUST_PUBLIC[3][1]})
+        inventory.append({"id": "live-profile-qualify", "requires": "Pinned clean Forge runtime manifest",
+                          "fresh_jvm": True, "required_hooks_manifest": "tools/live-capture/required-live-writer-hooks.json",
+                          "profile": "tools/live-capture/live-shadow-profile.json",
+                          "arming_rule": "A future live writer protocol may arm only when ALL required hooks are QUALIFIED."})
     elif lane == "benchmark":
         inventory.append({"id": "forge-benchmark", "mains": ["ForgeBenchmarks"], "requires": "Ordered, hashed Forge classpath manifest", "correctness_claim": False})
     elif lane == "modpack":
@@ -347,6 +356,8 @@ class Runner:
                     self.record("java-v2", "NOT_RUN", reason="BUILD_PREREQUISITE_FAILED")
         elif lane == "forge":
             self.forge_capture()
+        elif lane == "live-profile":
+            self.live_profile_lane()
         elif lane == "benchmark":
             try:
                 classpath, manifest = self.checked_manifest(self.args.forge_classpath_manifest, "forge-classpath")
@@ -362,6 +373,30 @@ class Runner:
                 self.record("modpack", "NOT_RUN", reason="NO_QUALIFIED_OFFLINE_REPLAY_HARNESS", detail="Artifact hashes do not prove modpack compatibility. Live campaigns are outside this stage.")
             except MissingPrerequisite as error:
                 self.record("modpack", "NOT_RUN", reason="MISSING_EXTERNAL_ARTIFACT", detail=str(error))
+
+    def live_profile_lane(self):
+        if not Path(FORGE_RUNTIME).is_file():
+            self.record("live-profile-qualify", "NOT_RUN", reason="MISSING_EXTERNAL_ARTIFACT",
+                        detail=str(FORGE_RUNTIME))
+            return
+        try:
+            toolchain = self.java_toolchain()
+        except MissingPrerequisite as error:
+            self.record("live-profile-qualify", "NOT_RUN", reason="MISSING_PREREQUISITE", detail=str(error))
+            return
+        self.command("live-profile-negative-controls",
+                     [sys.executable, "-B", "-m", "unittest", "tools.testing.test_live_profile", "-v"])
+        if self.command("ffi-release", RUST_PUBLIC[3][1])["status"] != "PASS":
+            self.record("live-profile-qualify", "NOT_RUN", reason="BUILD_PREREQUISITE_FAILED")
+            return
+        dll = ROOT / "target/release" / ("rustcraft_ffi.dll" if os.name == "nt" else "librustcraft_ffi.so")
+        java_home = Path(toolchain["java"]["path"]).parent.parent
+        # Exit 2 = wrong/unqualified runtime (UNSUPPORTED_RUNTIME -> INCOMPLETE, never PASS).
+        # Exit 1 = any required hook not QUALIFIED against a valid runtime (FAIL).
+        self.command("live-profile-qualify",
+                     [sys.executable, "-B", "tools/testing/live_profile.py",
+                      "--output", self.output / "live-profile", "--java-home", java_home, "--dll", dll],
+                     incomplete_exit_code=2)
 
     def forge_capture(self):
         import forge_runtime
@@ -417,7 +452,7 @@ class Runner:
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("lane", choices=["public", "property", "fixture", "decoder", "java-jni", "forge", "modpack", "benchmark"])
+    parser.add_argument("lane", choices=["public", "property", "fixture", "decoder", "java-jni", "forge", "live-profile", "modpack", "benchmark"])
     parser.add_argument("--java-home")
     parser.add_argument("--forge-classpath-manifest")
     parser.add_argument("--forge-runtime-manifest")

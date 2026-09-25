@@ -48,7 +48,15 @@ public final class QualifyRuntime {
         "net.minecraft.util.math.BlockPos", "net.minecraft.init.Blocks", "net.minecraft.nbt.NBTTagCompound"
         , "net.minecraftforge.common.ForgeInternalHandler", "net.minecraftforge.common.FarmlandWaterManager",
         "net.minecraftforge.common.ticket.ChunkTicketManager", "net.minecraftforge.common.ticket.AABBTicket",
-        "net.minecraftforge.common.ticket.MultiTicketManager", "net.minecraftforge.common.ticket.SimpleTicket"
+        "net.minecraftforge.common.ticket.MultiTicketManager", "net.minecraftforge.common.ticket.SimpleTicket",
+        // Live-writer profile qualification: the flat generator is never loaded by the
+        // offline FML-initialized profile (no world is created), so its final transformed
+        // definition is forced here without initialization. No static initializer, world,
+        // tick, or generator code executes; the passive observer records the transformed bytes.
+        "net.minecraft.world.gen.ChunkGeneratorFlat",
+        // Same treatment for the packet send-path context classes (no players exist offline).
+        "net.minecraft.server.management.PlayerChunkMap",
+        "net.minecraft.server.management.PlayerChunkMapEntry"
     };
 
     private static List<String> transformers() {
