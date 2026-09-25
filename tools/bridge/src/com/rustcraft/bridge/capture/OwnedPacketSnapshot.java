@@ -111,7 +111,23 @@ public final class OwnedPacketSnapshot {
             out.writeByte((fullChunk ? 1 : 0) | (skylight ? 2 : 0));
             out.writeByte(storageModel == StorageModel.VANILLA_U16 ? 1 : 2);
             out.writeByte(globalPaletteBits);
-            out.writeByte(scope == CaptureContract.Scope.SYNTHETIC_OFFLINE ? 1 : 2);
+            // Exhaustive scope switch: synthetic=1, oracle=2, live-shadow=3.
+            // Anything else is a programming error, never an oracle relabel.
+            final byte scopeVersion;
+            switch (scope) {
+                case SYNTHETIC_OFFLINE:
+                    scopeVersion = 1;
+                    break;
+                case REAL_CLEAN_FORGE_ORACLE:
+                    scopeVersion = 2;
+                    break;
+                case LIVE_SHADOW_OWNED_V1:
+                    scopeVersion = 3;
+                    break;
+                default:
+                    throw new IllegalStateException("Unsupported capture scope: " + scope);
+            }
+            out.writeByte(scopeVersion);
             out.writeShort(0);
             out.writeInt(dimension);
             out.writeInt(chunkX);

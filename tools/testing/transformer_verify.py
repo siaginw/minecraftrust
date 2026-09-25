@@ -147,7 +147,7 @@ def expected_groups(hook: dict) -> list:
         retire = [("aload", ""), ("getfield", "field_73251_h"), ("aload", ""),
                   ("invokestatic", FACADE + ".retireBeforeUnload")]
         return [(begin, "begin"), (end_null, "end"), (handler, "handler"),
-                (retire, "before_anchor")]
+                (retire, "before_anchor", ("invokevirtual", "func_76623_d"))]
 
     if hook["id"] == "W59":
         task = [("aload", ""), ("invokestatic", FACADE + ".ioTaskBegin")]
@@ -188,19 +188,20 @@ def expected_groups(hook: dict) -> list:
             group = [("aload", ""), ("aconst_null", ""), ("invokestatic", FACADE + ".registerNew")]
         return [(group, "once")]
     if kind == "PACKET_CAPTURE":
-        # Entry order: token pre-init, Object.<init>, the legacy populatePacket
-        # early-exit group (m1 native branch), then the live observe group.
-        populate = [("aload", ""), ("aload", ""), ("iload_2", ""),
-                    ("invokestatic", "com/rustcraft/bridge/NativeChunkPacket.populatePacket"),
-                    ("ifeq", "<target>"), ("return", "")]
+        # Diagnostic profile: the legacy populatePacket M1 hook is absent (the live
+        # observation branch replaces it); the observe group follows the super call.
+        # Layout: pre-init, super, then the observe group (the pre-init is a
+        # separate group — it precedes the super call, observe follows it).
         observe = [("aload", ""), ("aload", ""), ("iload_2", ""),
                    ("invokestatic", FACADE + ".packetCaptureObserve"), ("astore", "")]
         commit = [("aload", ""), ("aload", ""), ("aload", ""), ("iload_2", ""),
                   ("invokestatic", FACADE + ".packetCaptureCommit")]
         abort = [("astore", ""), ("aload", ""), ("aload", ""),
                  ("invokestatic", FACADE + ".packetCaptureAbort"), ("aload", ""), ("athrow", "")]
-        return [(pre_init, "once"), (populate, "once"), (observe, "begin"),
-                (commit, "end"), (abort, "handler")]
+        return {"groups": [(pre_init, "once"), (observe, "begin"), (commit, "end"),
+                           (abort, "handler")],
+                "returns_bracketed": 1, "catchalls_added": 1,
+                "absent": [("invokestatic", "NativeChunkPacket.populatePacket")]}
     raise RuntimeError("no injection shape for " + hook["id"])
 
 
@@ -303,14 +304,26 @@ def verify(pre_dir: Path, post_dir: Path, plan: list, javap_exe: Path, profile: 
                 failures.append({"id": hook["id"], "status": "POST_METHOD_MISSING"})
                 continue
             shape = expected_groups(hook)
+            # Normalize shape first (list entries: (g, kind) or (g, kind, anchor)).
+            if isinstance(shape, dict):
+                pairs = shape["groups"]
+                absent = shape.get("absent", [])
+                anchor_entries = [(g, a) for g, kind, a in shape.get("before_anchor", [])]
+            else:
+                pairs = [(g, kind) for g, kind, *_rest in shape]
+                absent = []
+                anchor_entries = [(sh[0], sh[2]) for sh in shape
+                                  if len(sh) == 3 and sh[1] == "before_anchor"]
+            for a_opcode, a_frag in absent:
+                for op, rest in post["instructions"]:
+                    if op == a_opcode and a_frag in rest:
+                        failures.append({"id": hook["id"], "status": "FINGERPRINT_MISMATCH",
+                                         "detail": "legacy hook present in diagnostic profile: " + a_frag})
             return_count = sum(1 for op, _ in pre_seq if op in
                                ("return", "ireturn", "lreturn", "freturn", "dreturn", "areturn"))
-            anchor_checks = [(g, anchor) for g, kind, anchor in
-                             [(g, kind, ("invokevirtual", "func_76623_d")) for g, kind in shape]
-                             if kind == "before_anchor"]
-            ok, detail = group_in_sequences(pre_seq, shape, post["instructions"], return_count)
+            ok, detail = group_in_sequences(pre_seq, pairs, post["instructions"], return_count)
             if ok:
-                for g, anchor in anchor_checks:
+                for g, anchor in anchor_entries:
                     ok, detail = check_before_anchor(post["instructions"], g, anchor)
                     if not ok:
                         break

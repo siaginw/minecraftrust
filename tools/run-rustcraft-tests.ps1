@@ -8,7 +8,7 @@
 #>
 param(
     [Parameter(Position = 0)]
-    [ValidateSet('public', 'property', 'fixture', 'decoder', 'java-jni', 'forge', 'live-profile', 'live-transformer', 'modpack', 'benchmark')]
+    [ValidateSet('public', 'property', 'fixture', 'decoder', 'java-jni', 'forge', 'live-profile', 'live-transformer', 'live-capture', 'modpack', 'benchmark')]
     [string]$Lane = 'public',
     [string]$JavaHome,
     [string]$ForgeClasspathManifest,

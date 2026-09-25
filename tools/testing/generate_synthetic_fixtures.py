@@ -128,7 +128,7 @@ def generate():
         {"name": "jeid-storage", "fixture": "one-section.fixture.json", "changes": {"storage": 3}, "expected": "FALLBACK_UNSUPPORTED_STORAGE"},
         {"name": "changed-epoch", "fixture": "one-section.fixture.json", "changes": {"epochEnd": 1}, "expected": "FALLBACK_CAPTURE_CHANGED"},
         {"name": "off-thread", "fixture": "one-section.fixture.json", "changes": {"captureThread": 2}, "expected": "FALLBACK_OFF_THREAD"},
-        {"name": "unknown-writer-scope", "fixture": "one-section.fixture.json", "changes": {"scope": 2}, "expected": "FALLBACK_UNKNOWN_WRITER"},
+        {"name": "unknown-writer-scope", "fixture": "one-section.fixture.json", "changes": {"scope": 4}, "expected": "FALLBACK_UNKNOWN_WRITER"},
         {"name": "capacity", "fixture": "one-section.fixture.json", "changes": {"capacity": 1}, "expected": "FALLBACK_CAPACITY"},
     ]
     manifest = {"format": "rustcraft-synthetic-capture-corpus", "version": 1, "captureKind": "SYNTHETIC",

@@ -85,7 +85,7 @@ fn incarnation_epoch_thread_scope_and_storage_guards() {
         (95, 2, SnapshotRejection::ChunkReplaced),
         (79, 1, SnapshotRejection::CaptureChanged),
         (63, 2, SnapshotRejection::OffThread),
-        (13, 3, SnapshotRejection::UnknownWriter),
+        (13, 4, SnapshotRejection::UnknownWriter),
         (11, 3, SnapshotRejection::UnsupportedStorage),
         (12, 8, SnapshotRejection::UnsupportedStorage),
     ] {
@@ -102,9 +102,10 @@ fn incarnation_epoch_thread_scope_and_storage_guards() {
     input[87] = 42;
     input[95] = 42;
     assert!(OwnedPacketSnapshot::from_transport(&input).is_ok());
-    // Both admitted provenance scopes retain their exact value. Neither scope
-    // is a production publication permit or an authenticated ownership proof.
-    for scope in [1, 2] {
+    // All three admitted provenance scopes retain their exact value (scope 3
+    // additionally requires vanilla storage and full_chunk == full mask). No
+    // scope is a production publication permit or an authenticated ownership proof.
+    for scope in [1, 2, 3] {
         input[13] = scope;
         let snapshot = OwnedPacketSnapshot::from_transport(&input).unwrap();
         assert_eq!(snapshot.metadata().offline_scope, scope);
@@ -182,4 +183,36 @@ fn refcount_and_section_order_are_checked() {
     let mut input = transport(1, false, false, |_| 1);
     input[130] = 5;
     assert_eq!(error(&input), SnapshotRejection::MaskMismatch);
+}
+
+#[test]
+fn live_shadow_scope_three_is_admitted_with_structural_constraints() {
+    // Scope 3: vanilla storage only and full_chunk == (requested_mask == 0xffff).
+    let mut full = transport(0xffff, true, true, |i| (i % 17 + 1) as u32);
+    full[13] = 3;
+    let snapshot = OwnedPacketSnapshot::from_transport(&full).unwrap();
+    assert_eq!(snapshot.metadata().offline_scope, 3);
+    let mut out = vec![0; 262144];
+    let result = snapshot.encode(&mut out).unwrap();
+    assert_eq!(result.emitted_mask, 0xffff);
+    // A partial filter can never claim a full (or non-full) live packet.
+    let mut partial_full = transport(0x1f, true, true, |i| (i % 17 + 1) as u32);
+    partial_full[13] = 3;
+    assert_eq!(error(&partial_full), SnapshotRejection::MalformedSnapshot);
+    let mut full_partial = transport(0xffff, true, false, |i| (i % 17 + 1) as u32);
+    full_partial[13] = 3;
+    assert_eq!(error(&full_partial), SnapshotRejection::MalformedSnapshot);
+    // Scope 3 admits only the vanilla storage model.
+    let mut neid = transport(0xffff, true, true, |i| (i % 17 + 1) as u32);
+    neid[11] = 2;
+    neid[13] = 3;
+    assert_eq!(error(&neid), SnapshotRejection::UnsupportedStorage);
+    // Scope 3 keeps every existing rejection: extended ids still reject.
+    let mut wide = transport(0xffff, true, true, |i| if i == 0 { 70000 } else { 1 });
+    wide[13] = 3;
+    assert_eq!(error(&wide), SnapshotRejection::ExtendedId);
+    // And a bad scope byte is still refused outright.
+    let mut bad_scope = transport(0xffff, true, true, |i| (i % 17 + 1) as u32);
+    bad_scope[13] = 4;
+    assert_eq!(error(&bad_scope), SnapshotRejection::UnknownWriter);
 }

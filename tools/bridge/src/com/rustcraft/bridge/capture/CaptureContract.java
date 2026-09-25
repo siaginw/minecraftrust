@@ -37,8 +37,12 @@ public final class CaptureContract {
     }
 
     public enum StorageModel { VANILLA_U16, NEID_HIGH_BYTES, JEID_INT, UNKNOWN }
-    /** Offline provenance scopes, never production publication permits. */
-    public enum Scope { UNSUPPORTED, SYNTHETIC_OFFLINE, REAL_CLEAN_FORGE_ORACLE }
+    /**
+     * Provenance scopes, never production publication permits. LIVE_SHADOW_OWNED_V1
+     * marks one sealed live-SHADOW diagnostic capture: admitted through the writer
+     * protocol gate, copied under it, and sealed once. It conveys no authority.
+     */
+    public enum Scope { UNSUPPORTED, SYNTHETIC_OFFLINE, REAL_CLEAN_FORGE_ORACLE, LIVE_SHADOW_OWNED_V1 }
     public enum TileEntityPolicy { UNQUALIFIED, QUALIFIED_READ_ONLY, PARTICIPATING_MUTATION_EPOCH }
 
     /**

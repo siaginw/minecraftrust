@@ -98,17 +98,6 @@ public final class LiveWriterHooks {
         }
     }
 
-    /** Token for the packet-constructor observation (inert; never admission). */
-    public static final class PacketObservation {
-        final boolean bindingWasReady;
-        final boolean bindingWasRevoked;
-
-        PacketObservation(boolean bindingWasReady, boolean bindingWasRevoked) {
-            this.bindingWasReady = bindingWasReady;
-            this.bindingWasRevoked = bindingWasRevoked;
-        }
-    }
-
     private LiveWriterHooks() { }
 
     // ------------------------------------------------------------------
@@ -131,6 +120,7 @@ public final class LiveWriterHooks {
         if (s == null) return;
         try {
             s.gate.shutdownForSessionEnd();
+            LiveComparisonQueue.clearForSessionEnd();
         } catch (IllegalStateException quiesceFailure) {
             // Non-quiesced shutdown is a loud protocol failure, never a silent drop.
             System.err.println("[RustCraft] live writer session shutdown refused: " + quiesceFailure);
@@ -153,11 +143,22 @@ public final class LiveWriterHooks {
         Session s = session;
         if (s == null) return;
         s.gate.shutdownForSessionEnd();
+        LiveComparisonQueue.clearForSessionEnd();
         session = null;
     }
 
     public static boolean sessionEnabled() {
         return session != null;
+    }
+
+    /**
+     * Binds a JNI library to THIS class's loader. The offline diagnostic oracle
+     * runs in a different loader than the bridge classes; JNI resolution is
+     * per-classloader, so the load must happen in a sibling bridge class for
+     * OwnedSnapshotBridge to link its native methods.
+     */
+    public static void loadNativeLibraryForBridge(String path) {
+        System.load(path);
     }
 
     /** Offline-verification accessors (diagnostic only; the live admission stage does not use them). */
@@ -193,7 +194,8 @@ public final class LiveWriterHooks {
         return s.tickets.activeTicketForCurrentThread();
     }
 
-    private static final class Session {
+    /** Package-visible session view for LivePacketCapture (same accepted objects). */
+    static final class Session {
         final LiveWriterGate gate;
         final PrivateBuildTickets tickets;
         final LiveChunkBindings bindings;
@@ -203,6 +205,10 @@ public final class LiveWriterHooks {
             this.tickets = tickets;
             this.bindings = bindings;
         }
+    }
+
+    static Session currentSessionInternal() {
+        return session;
     }
 
     // ------------------------------------------------------------------
@@ -479,24 +485,33 @@ public final class LiveWriterHooks {
     // Packet constructor observation (PACKET_CAPTURE; inert — never admission)
     // ------------------------------------------------------------------
 
+    /**
+     * Constructor-entry capture admission (S02). Delegates to LivePacketCapture;
+     * the returned token is null when the event is Java-only (default OFF,
+     * busy, rejected, unsupported) and the diagnostic observation counter still
+     * moves for evidence.
+     */
     public static Object packetCaptureObserve(Object packet, Object chunk, int filter) {
-        Session s = session;
-        if (s == null) return NOOP_TOKEN;
+        if (session == null) return null;
         PACKET_OBSERVATIONS.incrementAndGet();
-        LiveChunkBindings.Binding binding = s.bindings.bindingFor(chunk);
-        return new PacketObservation(binding != null && binding.state() == LiveChunkBindings.BindingState.READY,
-                binding != null && binding.isRevoked());
+        Object token = LivePacketCapture.begin(packet, chunk, filter);
+        if (token == null) {
+            PACKET_ABORTS.incrementAndGet(); // rejected before admission: Java-only
+            return null;
+        }
+        return token;
     }
 
     public static void packetCaptureCommit(Object token, Object packet, Object chunk, int filter) {
-        if (token == NOOP_TOKEN || !(token instanceof PacketObservation)) return;
+        if (token == null) return;
         PACKET_COMMITS.incrementAndGet();
-        // Deliberately inert: no SnapshotCapture call, no native output, no packet mutation.
+        LivePacketCapture.commit(token, packet, chunk, filter);
     }
 
     public static void packetCaptureAbort(Object token, Throwable throwable) {
-        if (token == NOOP_TOKEN || !(token instanceof PacketObservation)) return;
+        if (token == null) return;
         PACKET_ABORTS.incrementAndGet();
+        LivePacketCapture.abort(token, throwable);
     }
 
     // ------------------------------------------------------------------

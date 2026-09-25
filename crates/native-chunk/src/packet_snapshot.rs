@@ -116,10 +116,12 @@ impl OwnedPacketSnapshot {
         if !(9..=16).contains(&global_palette_bits) {
             return Err(UnsupportedStorage);
         }
-        // Only synthetic or qualified clean-Forge owned-oracle inputs. Not proof
-        // that an arbitrary caller followed the Java writer/lease protocol.
+        // Synthetic, qualified clean-Forge owned-oracle, or sealed live-SHADOW
+        // owned inputs. Scope is provenance, not proof that an arbitrary caller
+        // followed the Java writer/lease protocol; scope 3 carries additional
+        // structural constraints checked below.
         let offline_scope = r.u8()?;
-        if offline_scope != 1 && offline_scope != 2 {
+        if offline_scope != 1 && offline_scope != 2 && offline_scope != 3 {
             return Err(UnknownWriter);
         }
         if r.u16()? != 0 {
@@ -136,6 +138,17 @@ impl OwnedPacketSnapshot {
         let accepted_mask = r.u16()?;
         if accepted_mask & !requested_mask != 0 {
             return Err(MaskMismatch);
+        }
+        // Scope 3 (live shadow) admits only the vanilla storage model and only a
+        // full-chunk packet whose requested mask is exactly the full 0xffff, per
+        // the accepted live-publication contract.
+        if offline_scope == 3 {
+            if storage_model != 1 {
+                return Err(UnsupportedStorage);
+            }
+            if full_chunk != (requested_mask == 0xffff) {
+                return Err(MalformedSnapshot);
+            }
         }
         let event_id = r.u64()?;
         if !positive_java_id(event_id) {

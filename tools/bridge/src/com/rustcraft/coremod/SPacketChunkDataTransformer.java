@@ -93,25 +93,32 @@ public class SPacketChunkDataTransformer implements IClassTransformer {
         // Inject hook at method entry right after super() call:
         // boolean handled = NativeChunkPacket.populatePacket(this, chunkIn, changedSectionFilter);
         // if (handled) return;
+        // In the live-writer diagnostic profile the legacy M1 native-population hook
+        // is replaced by the live observation branch below (the production M1 path
+        // is unchanged: property OFF leaves this injection exactly as before).
+        final boolean liveDiagnostic = LiveChunkOwnershipTransformer.enabled();
 
         InsnList hook = new InsnList();
+
         LabelNode continueOriginal = new LabelNode();
 
         // Load this, chunkIn (var 1), changedSectionFilter (var 2)
         // Descriptor uses Object/Object so it is identical in notch/SRG/MCP runtimes
         // and matches NativeChunkPacket.populatePacket(Object, Object, int).
-        hook.add(new VarInsnNode(Opcodes.ALOAD, 0));
-        hook.add(new VarInsnNode(Opcodes.ALOAD, 1));
-        hook.add(new VarInsnNode(Opcodes.ILOAD, 2));
-        hook.add(new MethodInsnNode(
-                Opcodes.INVOKESTATIC,
-                "com/rustcraft/bridge/NativeChunkPacket",
-                "populatePacket",
-                "(Ljava/lang/Object;Ljava/lang/Object;I)Z",
-                false
-        ));
-        hook.add(new JumpInsnNode(Opcodes.IFEQ, continueOriginal));
-        hook.add(new InsnNode(Opcodes.RETURN));
+        if (!liveDiagnostic) {
+            hook.add(new VarInsnNode(Opcodes.ALOAD, 0));
+            hook.add(new VarInsnNode(Opcodes.ALOAD, 1));
+            hook.add(new VarInsnNode(Opcodes.ILOAD, 2));
+            hook.add(new MethodInsnNode(
+                    Opcodes.INVOKESTATIC,
+                    "com/rustcraft/bridge/NativeChunkPacket",
+                    "populatePacket",
+                    "(Ljava/lang/Object;Ljava/lang/Object;I)Z",
+                    false
+            ));
+            hook.add(new JumpInsnNode(Opcodes.IFEQ, continueOriginal));
+            hook.add(new InsnNode(Opcodes.RETURN));
+        }
         hook.add(continueOriginal);
 
         // Find insertion point after super() call (INVOKESPECIAL java/lang/Object.<init>)

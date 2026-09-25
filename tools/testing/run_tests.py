@@ -167,13 +167,16 @@ def lane_inventory(lane):
                           "fresh_jvm": True, "required_hooks_manifest": "tools/live-capture/required-live-writer-hooks.json",
                           "profile": "tools/live-capture/live-shadow-profile.json",
                           "arming_rule": "A future live writer protocol may arm only when ALL required hooks are QUALIFIED."})
-    elif lane == "live-transformer":
+    elif lane in ("live-transformer", "live-capture"):
         inventory.append({"id": "live-profile-negative-controls", "argv": [sys.executable, "-B", "-m", "unittest", "tools.testing.test_live_profile", "-v"]})
         inventory.append({"id": "ffi-release", "argv": RUST_PUBLIC[3][1]})
         inventory.append({"id": "baseline-profile-verify", "requires": "Pinned clean Forge runtime manifest", "fresh_jvm": True})
         inventory.append({"id": "transformer-runtime", "requires": "Pinned clean Forge runtime manifest + qualified baseline profile", "fresh_jvm": True,
                           "diagnostic_property": "rustcraft.liveWriterDiagnostic (default OFF)"})
         inventory.append({"id": "transformer-verify", "requires": "pre-hook + post-hook transformed dumps", "independent": "javap inspection, not the transformer"})
+        if lane == "live-capture":
+            inventory.append({"id": "capture-groups", "requires": "transformer-runtime receipt",
+                              "checks": ["t7_real_spacket_captured", "t8_native_replay", "t9_java_output_unchanged"]})
     elif lane == "benchmark":
         inventory.append({"id": "forge-benchmark", "mains": ["ForgeBenchmarks"], "requires": "Ordered, hashed Forge classpath manifest", "correctness_claim": False})
     elif lane == "modpack":
@@ -367,6 +370,8 @@ class Runner:
             self.live_profile_lane()
         elif lane == "live-transformer":
             self.live_transformer_lane()
+        elif lane == "live-capture":
+            self.live_transformer_lane(lane_name="live-capture", require_capture_groups=True)
         elif lane == "benchmark":
             try:
                 classpath, manifest = self.checked_manifest(self.args.forge_classpath_manifest, "forge-classpath")
@@ -383,20 +388,21 @@ class Runner:
             except MissingPrerequisite as error:
                 self.record("modpack", "NOT_RUN", reason="MISSING_EXTERNAL_ARTIFACT", detail=str(error))
 
-    def live_transformer_lane(self):
+    def live_transformer_lane(self, lane_name=None, require_capture_groups=False):
+        suffix = "" if lane_name is None else lane_name
         if not Path(FORGE_RUNTIME).is_file():
-            self.record("transformer-runtime", "NOT_RUN", reason="MISSING_EXTERNAL_ARTIFACT",
+            self.record(("transformer-runtime" + suffix), "NOT_RUN", reason="MISSING_EXTERNAL_ARTIFACT",
                         detail=str(FORGE_RUNTIME))
             return
         try:
             toolchain = self.java_toolchain()
         except MissingPrerequisite as error:
-            self.record("transformer-runtime", "NOT_RUN", reason="MISSING_PREREQUISITE", detail=str(error))
+            self.record("transformer-runtime" + suffix, "NOT_RUN", reason="MISSING_PREREQUISITE", detail=str(error))
             return
         self.command("live-profile-negative-controls",
                      [sys.executable, "-B", "-m", "unittest", "tools.testing.test_live_profile", "-v"])
         if self.command("ffi-release", RUST_PUBLIC[3][1])["status"] != "PASS":
-            self.record("transformer-runtime", "NOT_RUN", reason="BUILD_PREREQUISITE_FAILED")
+            self.record("transformer-runtime" + suffix, "NOT_RUN", reason="BUILD_PREREQUISITE_FAILED")
             return
         dll = ROOT / "target/release" / ("rustcraft_ffi.dll" if os.name == "nt" else "librustcraft_ffi.so")
         java_home = Path(toolchain["java"]["path"]).parent.parent
@@ -405,21 +411,33 @@ class Runner:
                         [sys.executable, "-B", "tools/testing/live_profile.py",
                          "--output", baseline, "--java-home", java_home, "--dll", dll],
                         incomplete_exit_code=2)["status"] != "PASS":
-            self.record("transformer-runtime", "NOT_RUN", reason="PROFILE_MISMATCH")
+            self.record("transformer-runtime" + suffix, "NOT_RUN", reason="PROFILE_MISMATCH")
             return
         diagnostic = self.output / "diagnostic"
-        if self.command("transformer-runtime",
+        if self.command("transformer-runtime" + suffix,
                         [sys.executable, "-B", "tools/testing/transformer_runtime.py",
                          "--output", diagnostic, "--java-home", java_home, "--dll", dll],
                         incomplete_exit_code=2)["status"] != "PASS":
-            self.record("transformer-verify", "NOT_RUN", reason="FAIL_CLOSED")
+            self.record("transformer-verify" + suffix, "NOT_RUN", reason="FAIL_CLOSED")
             return
-        self.command("transformer-verify",
+        verified = self.command("transformer-verify" + suffix,
                      [sys.executable, "-B", "tools/testing/transformer_verify.py",
                       "--pre-hook", str(baseline / "qualification" / "transformed"),
                       "--post-hook", str(diagnostic / "live-transformer-jvm" / "transformed"),
                       "--java-home", java_home,
                       "--output", self.output / "transformer-verification.json"])
+        if require_capture_groups:
+            verification = diagnostic / "live-transformer-jvm" / "live-transformer-verification.json"
+            capture_ok = False
+            detail = "verification receipt missing"
+            try:
+                data = json.loads(verification.read_text(encoding="utf-8"))
+                required = ("t7_real_spacket_captured", "t8_native_replay", "t9_java_output_unchanged")
+                capture_ok = data.get("all_groups") == "PASS" and all(k in data for k in required)
+                detail = {k: data.get(k) for k in required}
+            except (OSError, ValueError) as error:
+                detail = str(error)
+            self.record("capture-groups" + suffix, "PASS" if capture_ok else "FAIL", detail=detail)
 
     def live_profile_lane(self):
         if not Path(FORGE_RUNTIME).is_file():
@@ -499,7 +517,7 @@ class Runner:
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("lane", choices=["public", "property", "fixture", "decoder", "java-jni", "forge", "live-profile", "live-transformer", "modpack", "benchmark"])
+    parser.add_argument("lane", choices=["public", "property", "fixture", "decoder", "java-jni", "forge", "live-profile", "live-transformer", "live-capture", "modpack", "benchmark"])
     parser.add_argument("--java-home")
     parser.add_argument("--forge-classpath-manifest")
     parser.add_argument("--forge-runtime-manifest")

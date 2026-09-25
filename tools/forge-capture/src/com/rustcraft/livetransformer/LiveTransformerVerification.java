@@ -1,9 +1,18 @@
 package com.rustcraft.livetransformer;
 
 import com.rustcraft.bridge.capture.LiveChunkBindings;
+import com.rustcraft.bridge.capture.LiveComparisonQueue;
+import com.rustcraft.bridge.capture.LiveForgeCaptureSource;
+import com.rustcraft.bridge.capture.LivePacketCapture;
+import com.rustcraft.bridge.capture.SealedLiveCapture;
 import com.rustcraft.bridge.capture.LiveWriterGate;
 import com.rustcraft.bridge.capture.LiveWriterHooks;
 import com.rustcraft.bridge.capture.PrivateBuildTickets;
+import com.rustcraft.bridge.PacketEncodeResultV2;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
+import net.minecraft.launchwrapper.Launch;
+import sun.misc.Unsafe;
 import com.rustcraft.coremod.LiveChunkOwnershipTransformer;
 import com.rustcraft.coremod.LiveHookSupport;
 import com.rustcraft.coremod.LiveWriterPlan;
@@ -84,6 +93,15 @@ public final class LiveTransformerVerification {
     public static void main(String[] args) throws Exception {
         String preHookDump = System.getProperty("rustcraft.preHookDump");
         if (preHookDump == null) throw new IllegalStateException("rustcraft.preHookDump required");
+        String dllPath = System.getProperty("rustcraft.nativeDll");
+        if (dllPath == null) throw new IllegalStateException("rustcraft.nativeDll required");
+        // Bind the native library to the bridge classes' loader (JNI is per-loader).
+        ClassLoader bridgeLoader = com.rustcraft.bridge.capture.OwnedSnapshotBridge.class.getClassLoader();
+        Class<?> hooks = Class.forName("com.rustcraft.bridge.capture.LiveWriterHooks", true, bridgeLoader);
+        hooks.getMethod("loadNativeLibraryForBridge", String.class)
+                .invoke(null, new java.io.File(dllPath).getCanonicalPath());
+        LivePacketCapture.installSourceFactory((packet, chunk, filter, binding, gate) ->
+                LiveForgeCaptureSource.forChunk(chunk, binding, gate, filter));
 
         negativeControls(preHookDump);
 
@@ -189,6 +207,63 @@ public final class LiveTransformerVerification {
                         + LiveWriterHooks.gateForTesting().publicationDepth());
             }
             RESULT.put("t4_writer_bracket_real_mutation", "PASS (epoch +1, depth balanced)");
+
+            // ---- integration group 5: real SPacket capture + offline native comparison ----
+            // The transformed S02 branch now routes into LivePacketCapture: this
+            // construction is admitted (READY binding), drafted under the held gate,
+            // committed after the Java body, sealed once, and queued for comparison.
+            long queueBefore = LivePacketCapture.ENQUEUED.get();
+            long seenBefore = LivePacketCapture.SEEN.get();
+            long admittedBefore = LivePacketCapture.ADMITTED.get();
+            long rejectedBefore = LivePacketCapture.REJECTED.get();
+            long validationBefore = LivePacketCapture.VALIDATION_FAILED.get();
+            long busyBefore = LivePacketCapture.CAPTURE_BUSY.get();
+            long unsupportedBefore = LivePacketCapture.UNSUPPORTED.get();
+            Object capturedPacket = newChunkPacket(chunk, 0xFFFF);
+            if (LivePacketCapture.ENQUEUED.get() != queueBefore + 1) {
+                throw new AssertionError("real SPacket capture was not enqueued (enqueued "
+                        + (LivePacketCapture.ENQUEUED.get() - queueBefore)
+                        + " seen=" + (LivePacketCapture.SEEN.get() - seenBefore)
+                        + " admitted=" + (LivePacketCapture.ADMITTED.get() - admittedBefore)
+                        + " rejected=" + (LivePacketCapture.REJECTED.get() - rejectedBefore)
+                        + " validation=" + (LivePacketCapture.VALIDATION_FAILED.get() - validationBefore)
+                        + " busy=" + (LivePacketCapture.CAPTURE_BUSY.get() - busyBefore)
+                        + " unsupported=" + (LivePacketCapture.UNSUPPORTED.get() - unsupportedBefore)
+                        + " reason=" + LivePacketCapture.lastRejection() + ")");
+            }
+            SealedLiveCapture sealed = LiveComparisonQueue.drain().get(0);
+            RESULT.put("t7_real_spacket_captured", "PASS (sealed + enqueued through transformed hooks)");
+
+            byte[] transport = sealed.toTransportBytes();
+            if (transport[13] != 3) throw new AssertionError("transport scope != 3");
+            // Offline native replay: the sealed scope-3 transport through the existing
+            // owned ABI; one V2 result; emitted mask must equal the Java packet mask.
+            PacketEncodeResultV2 result = encodeNative(transport);
+            if (!result.isSuccess()) throw new AssertionError("native replay failed: " + result.failure());
+            if (result.emittedMask() != sealed.javaMask()) {
+                throw new AssertionError("mask mismatch: java=" + sealed.javaMask()
+                        + " rust=" + result.emittedMask());
+            }
+            byte[] rustBody = nativeBytes(result.bytesWritten());
+            boolean byteEqual = Arrays.equals(rustBody, sealed.javaPayload());
+            RESULT.put("t8_native_replay", "PASS (mask=" + result.emittedMask()
+                    + " javaLen=" + sealed.javaPayloadLength()
+                    + " rustLen=" + result.bytesWritten() + " byteEqual=" + byteEqual + ")");
+
+            // Java-authoritative output unchanged: rebuild the same packet with the
+            // diagnostic session fully disabled and compare every body byte.
+            LiveWriterHooks.disableForTesting();
+            Object plainPacket = newChunkPacket(chunk, 0xFFFF);
+            if (!Arrays.equals(packetBody(plainPacket), packetBody(capturedPacket))) {
+                throw new AssertionError("captured packet body differs from the Java-authoritative body");
+            }
+            if (byteEqual && !Arrays.equals(rustBody, packetBody(plainPacket))) {
+                throw new AssertionError("native body drifted from the plain rebuild");
+            }
+            RESULT.put("t9_java_output_unchanged", "PASS (captured body == plain rebuild body"
+                    + (byteEqual ? " == native body)" : ")"));
+            LiveWriterHooks.enableForTesting(Thread.currentThread());
+            // end integration group 5
             LiveWriterHooks.disableForTesting(); // success: quiesced shutdown
         } catch (Throwable bodyFailure) {
             // Preserve the body failure while diagnosing the leak.
@@ -274,6 +349,56 @@ public final class LiveTransformerVerification {
             Files.write(Paths.get(outPath), json.getBytes(StandardCharsets.UTF_8));
         }
         System.out.println("RUSTCRAFT_LIVE_TRANSFORMER_VERIFICATION_PASS " + json);
+    }
+
+    private static final Unsafe MEMORY = unsafe();
+    private static final int NATIVE_CAPACITY = 262144;
+    private static long nativeInput, nativeOutput;
+
+    private static Unsafe unsafe() {
+        try {
+            Field f = Unsafe.class.getDeclaredField("theUnsafe");
+            f.setAccessible(true);
+            return (Unsafe) f.get(null);
+        } catch (ReflectiveOperationException error) { throw new ExceptionInInitializerError(error); }
+    }
+
+    /**
+     * Constructs a real transformed SPacketChunkData reflectively: the oracle
+     * class itself stays free of direct Minecraft references so the whole
+     * Minecraft graph resolves only through the LaunchClassLoader.
+     */
+    private static Object newChunkPacket(Object chunk, int filter) throws Exception {
+        Class<?> packetClass = Class.forName(
+                "net.minecraft.network.play.server.SPacketChunkData", true, Launch.classLoader);
+        Constructor<?> ctor = packetClass.getConstructor(
+                Class.forName("net.minecraft.world.chunk.Chunk", true, Launch.classLoader), int.class);
+        return ctor.newInstance(chunk, filter);
+    }
+
+    /** The Java-authoritative chunk body bytes of one constructed packet (clone). */
+    private static byte[] packetBody(Object packet) throws Exception {
+        Field body = packet.getClass().getDeclaredField("field_186949_d");
+        body.setAccessible(true);
+        return ((byte[]) body.get(packet)).clone();
+    }
+
+    private static PacketEncodeResultV2 encodeNative(byte[] transport) {
+        nativeInput = MEMORY.allocateMemory(transport.length);
+        nativeOutput = MEMORY.allocateMemory(NATIVE_CAPACITY);
+        for (int i = 0; i < transport.length; i++) MEMORY.putByte(nativeInput + i, transport[i]);
+        MEMORY.setMemory(nativeOutput, NATIVE_CAPACITY, (byte) 0xCC);
+        return PacketEncodeResultV2.decode(
+                com.rustcraft.bridge.capture.OwnedSnapshotBridge.encodeOwnedV1(
+                        nativeInput, transport.length, nativeOutput, NATIVE_CAPACITY));
+    }
+
+    private static byte[] nativeBytes(int count) {
+        byte[] out = new byte[count];
+        for (int i = 0; i < count; i++) out[i] = MEMORY.getByte(nativeOutput + i);
+        MEMORY.freeMemory(nativeOutput);
+        MEMORY.freeMemory(nativeInput);
+        return out;
     }
 
     // ------------------------------------------------------------------

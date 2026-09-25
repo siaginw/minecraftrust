@@ -5,67 +5,67 @@
   "fixtures": [
     {
       "file": "mask-zero.fixture.json",
-      "fixtureSha256": "25dd043289307459dff9cdae97379f0cd32195ef2431d7fa1584067766da315c"
+      "fixtureSha256": "d1597855c98fb9c7745d31a16fa612068f65e66946d04ccb76119cc063d1a17e"
     },
     {
       "file": "one-section.fixture.json",
-      "fixtureSha256": "57a7bd92eee17e7ebe04cbacae28a626c98be1e7e0f737473c3248717b307ebe"
+      "fixtureSha256": "82bf9b7b2267491a1265eaba665324e0101bf692cc490982f011ed97be4ff65e"
     },
     {
       "file": "sparse-high-sky.fixture.json",
-      "fixtureSha256": "eb024c81286d2ea69528e13c134debd00879f24a47ca28760bd4705c0f502674"
+      "fixtureSha256": "965cecae1953e4b50ca4ba2ae2901091a15a623568467e90b10415dc8ca23555"
     },
     {
       "file": "mask-001f.fixture.json",
-      "fixtureSha256": "5510d0ff5e73af5e93fc8701de80c62bab78194c5b156e6f7a4fcffc7b737000"
+      "fixtureSha256": "31436fbe8d03490efb896ccc4a067ea5e7e4d132367894097eb4d4a6bc6ce486"
     },
     {
       "file": "sparse-8421.fixture.json",
-      "fixtureSha256": "d672c352bc7940b0a1f0107515afeeeb2a3729eb0ec68f07b90c209a05311b58"
+      "fixtureSha256": "eed3303dcc481e1eb233b85fd63aaa56e7eb11af11e5b93dc105e2bfb0cb0ea6"
     },
     {
       "file": "palette-local5.fixture.json",
-      "fixtureSha256": "3d7b19232f6709bd862df1888708d9ed7f824dedf42b94c60230ca266e307dae"
+      "fixtureSha256": "49495cfc3b82aeb4d2b8d87479ea4050f1b054303c334d9589e1027b17d55c42"
     },
     {
       "file": "palette-local8.fixture.json",
-      "fixtureSha256": "cac3ef7734451f790b55cf8604b25adbcc31f309143a4d624173169ccb242a91"
+      "fixtureSha256": "2959471fa0bc20edbdd62a0ca8162d6edb2ac7486f3ed4fb588388b9eb755250"
     },
     {
       "file": "palette-global14.fixture.json",
-      "fixtureSha256": "6e45ce3633195c82a90ec0319d52429caf3cddebad3a535bb4c07cc48ec16974"
+      "fixtureSha256": "9851667d1c068f85562d346b5faf0a4e8de054a9e899f1a266737f8bd59357d2"
     },
     {
       "file": "transition-empty.fixture.json",
-      "fixtureSha256": "c84192ba996ad0eef6333452a3b0e0ecb3ae9db1213c7db80a08229227af84f0"
+      "fixtureSha256": "fe992efde6b56b2713afef655268b9c8adffa02dd6cce09278db0d5fc9f65ba3"
     },
     {
       "file": "transition-nonempty.fixture.json",
-      "fixtureSha256": "c2dbb6becc6004c093e9fa69a0d7753093c7b2926416a83566c6cd70a79472e3"
+      "fixtureSha256": "794820fb199faf801390d97c42b885b589d820777ff4b01667cb24190e4d2be9"
     },
     {
       "file": "transition-cleared.fixture.json",
-      "fixtureSha256": "eb4c0331cbeb072ced893b63e15ad8a477bd46df5947e776b89246a66f188cdf"
+      "fixtureSha256": "0e6d10a1004de565eb5f9e8c70a9399128e84a2abd33d57297d90aa82b10d58a"
     },
     {
       "file": "partial-empty-selected.fixture.json",
-      "fixtureSha256": "67f7e9adfbdb0e5d2a51811bbc2ab83ab91990fdc2661c65c99ebc9e6dac7d39"
+      "fixtureSha256": "442a7b2b7e0cf87a80c3154dd984fbf6ab681f24a17ff849e9eff6a6be2d5ca6"
     },
     {
       "file": "direct-light-before.fixture.json",
-      "fixtureSha256": "f96987db538547270133e8a2fde76c6a5944f1c6f742890c5b8f5ec6c1fc3270"
+      "fixtureSha256": "6694e527d26a2b0a7910f27e94543c6aa3800d54251ad4c2a2c6a9f115471500"
     },
     {
       "file": "direct-light-after.fixture.json",
-      "fixtureSha256": "e231668101ec093abf80b5f16a5f569a7b386782faf0dc139110fe91f2d34d6d"
+      "fixtureSha256": "ab507d3554fb03b1d034512319eec9db6eb30278fbd76aaf4a57ff988f6ee387"
     },
     {
       "file": "biome-before.fixture.json",
-      "fixtureSha256": "cb8f4de324f525e2c79a2b98de7c0d3fe0ccf0237f379a1ea95a12dcd8124e90"
+      "fixtureSha256": "eecbc16a3d7be5a835b4aca3671337e93980e82eb0e69ec008fd2f3485a5ed88"
     },
     {
       "file": "biome-after.fixture.json",
-      "fixtureSha256": "22cef4385f59aad93e63ccef96c69f9e120dee4ac8858a21c3764152f2186f23"
+      "fixtureSha256": "004828806db55e2b352e8a46194b4dc9b65214427f97953388b1b9acbad8ca0b"
     }
   ],
   "rejections": [
@@ -121,7 +121,7 @@
       "name": "unknown-writer-scope",
       "fixture": "one-section.fixture.json",
       "changes": {
-        "scope": 3
+        "scope": 4
       },
       "expected": "FALLBACK_UNKNOWN_WRITER"
     },
