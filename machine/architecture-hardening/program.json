@@ -1,0 +1,430 @@
+{
+  "schema_version": 1,
+  "kind": "ARCHITECTURE_HARDENING_PROGRAM",
+  "baseline": "c4b868db2c9e4b03f745bf93c6ebf4fd8a8519e7",
+  "status": "ACTIVE",
+  "request_sha256": "c050fc42bd71c349b655032dd170ded8c498b8f349d45834344f92c4177ea2d3",
+  "authority": "PRODUCTION_NATIVE_CHUNK_DISABLED",
+  "milestones": [
+    {
+      "id": "H1",
+      "title": "COMPLETE CANONICAL BYTECODE IDENTITY V2",
+      "status": "PENDING",
+      "implementation": [],
+      "validation": [],
+      "evidence": [],
+      "commit": null
+    },
+    {
+      "id": "H2",
+      "title": "MAKE PROFILE QUALIFICATION TRULY GENERIC",
+      "status": "PENDING",
+      "implementation": [],
+      "validation": [],
+      "evidence": [],
+      "commit": null
+    },
+    {
+      "id": "H3",
+      "title": "FIX TELEMETRY",
+      "status": "PENDING",
+      "implementation": [],
+      "validation": [],
+      "evidence": [],
+      "commit": null
+    },
+    {
+      "id": "H4",
+      "title": "FINE-GRAINED NATIVE CAPABILITY MODEL",
+      "status": "PENDING",
+      "implementation": [],
+      "validation": [],
+      "evidence": [],
+      "commit": null
+    },
+    {
+      "id": "H5",
+      "title": "VERSION-NEUTRAL CORE ARCHITECTURE",
+      "status": "PENDING",
+      "implementation": [],
+      "validation": [],
+      "evidence": [],
+      "commit": null
+    },
+    {
+      "id": "H6",
+      "title": "RETAINED NATIVE OWNERSHIP MODEL",
+      "status": "PENDING",
+      "implementation": [],
+      "validation": [],
+      "evidence": [],
+      "commit": null
+    },
+    {
+      "id": "H7",
+      "title": "LOOM MODEL CHECKING",
+      "status": "PENDING",
+      "implementation": [],
+      "validation": [],
+      "evidence": [],
+      "commit": null
+    },
+    {
+      "id": "H8",
+      "title": "SECTION LAYOUT PROTOTYPES",
+      "status": "PENDING",
+      "implementation": [],
+      "validation": [],
+      "evidence": [],
+      "commit": null
+    },
+    {
+      "id": "H9",
+      "title": "NATIVE NBT / REGION PIPELINE",
+      "status": "PENDING",
+      "implementation": [],
+      "validation": [],
+      "evidence": [],
+      "commit": null
+    },
+    {
+      "id": "H10",
+      "title": "WORLDGEN PIPELINE FUSION",
+      "status": "PENDING",
+      "implementation": [],
+      "validation": [],
+      "evidence": [],
+      "commit": null
+    },
+    {
+      "id": "H11",
+      "title": "ENTITY STORAGE EXPERIMENT",
+      "status": "PENDING",
+      "implementation": [],
+      "validation": [],
+      "evidence": [],
+      "commit": null
+    },
+    {
+      "id": "H12",
+      "title": "SEMANTIC SCHEDULER",
+      "status": "PENDING",
+      "implementation": [],
+      "validation": [],
+      "evidence": [],
+      "commit": null
+    },
+    {
+      "id": "H13",
+      "title": "LIGHTING / COLLISION PROTOTYPES",
+      "status": "PENDING",
+      "implementation": [],
+      "validation": [],
+      "evidence": [],
+      "commit": null
+    },
+    {
+      "id": "H14",
+      "title": "PACKET / BUFFER PIPELINE",
+      "status": "PENDING",
+      "implementation": [],
+      "validation": [],
+      "evidence": [],
+      "commit": null
+    },
+    {
+      "id": "H15",
+      "title": "OBSERVABILITY PLATFORM",
+      "status": "PENDING",
+      "implementation": [],
+      "validation": [],
+      "evidence": [],
+      "commit": null
+    },
+    {
+      "id": "H16",
+      "title": "REPRESENTATIVE BENCHMARK MATRIX",
+      "status": "PENDING",
+      "implementation": [],
+      "validation": [],
+      "evidence": [],
+      "commit": null
+    },
+    {
+      "id": "H17",
+      "title": "ALLOCATOR EXPERIMENTS",
+      "status": "PENDING",
+      "implementation": [],
+      "validation": [],
+      "evidence": [],
+      "commit": null
+    },
+    {
+      "id": "H18",
+      "title": "EXTERNAL REPOSITORY / ALGORITHM EXPERIMENTS",
+      "status": "PENDING",
+      "implementation": [],
+      "validation": [],
+      "evidence": [],
+      "commit": null
+    },
+    {
+      "id": "H19",
+      "title": "JVM / JAVA MOD RUNTIME RESEARCH",
+      "status": "PENDING",
+      "implementation": [],
+      "validation": [],
+      "evidence": [],
+      "commit": null
+    },
+    {
+      "id": "H20",
+      "title": "COMPATIBILITY DOMAIN TRANSFER PROTOTYPE",
+      "status": "PENDING",
+      "implementation": [],
+      "validation": [],
+      "evidence": [],
+      "commit": null
+    },
+    {
+      "id": "H21",
+      "title": "EVENT / CAPABILITY FAST PATHS",
+      "status": "PENDING",
+      "implementation": [],
+      "validation": [],
+      "evidence": [],
+      "commit": null
+    },
+    {
+      "id": "H22",
+      "title": "RETENTION / LEAK AUDIT",
+      "status": "PENDING",
+      "implementation": [],
+      "validation": [],
+      "evidence": [],
+      "commit": null
+    },
+    {
+      "id": "H22.5",
+      "title": "Remaining Ultra audit experiments",
+      "status": "PENDING",
+      "implementation": [],
+      "validation": [],
+      "evidence": [],
+      "commit": null,
+      "requirements": [
+        "A: differential first-divergence replay",
+        "B: state-diff execution ADOPT/LIMITED_USE/REJECT",
+        "C: bounded GPU/offline experiment and stop gates",
+        "D: bevy_ecs and Shipyard comparators",
+        "E: JNI/classfile tooling evaluation",
+        "F: concurrency/buffer mechanisms",
+        "G: mmap and sidecar storage",
+        "H: profile-guided hot mod method research",
+        "I: complete external decision ledger"
+      ]
+    },
+    {
+      "id": "H23",
+      "title": "REQUALIFY CLEAN FORGE AND REVELATION UNDER V2",
+      "status": "PENDING",
+      "implementation": [],
+      "validation": [],
+      "evidence": [],
+      "commit": null
+    },
+    {
+      "id": "H24",
+      "title": "RESUME PAUSED REVELATION SHADOW",
+      "status": "PENDING",
+      "implementation": [],
+      "validation": [],
+      "evidence": [],
+      "commit": null
+    },
+    {
+      "id": "H1.1",
+      "title": "CLASS REPRESENTATION",
+      "status": "PENDING",
+      "implementation": [],
+      "validation": [],
+      "evidence": [],
+      "commit": null
+    },
+    {
+      "id": "H1.2",
+      "title": "MUTATION NEGATIVE CONTROLS",
+      "status": "PENDING",
+      "implementation": [],
+      "validation": [],
+      "evidence": [],
+      "commit": null
+    },
+    {
+      "id": "H1.3",
+      "title": "INDEPENDENT CLASSFILE CROSS-CHECK",
+      "status": "PENDING",
+      "implementation": [],
+      "validation": [],
+      "evidence": [],
+      "commit": null
+    },
+    {
+      "id": "H2.1",
+      "title": "EVIDENCE DEPENDENCY GRAPH / CERTIFICATES",
+      "status": "PENDING",
+      "implementation": [],
+      "validation": [],
+      "evidence": [],
+      "commit": null
+    },
+    {
+      "id": "H2.2",
+      "title": "EXTRACTOR SCOPE CORRECTION",
+      "status": "PENDING",
+      "implementation": [],
+      "validation": [],
+      "evidence": [],
+      "commit": null
+    },
+    {
+      "id": "H3.1",
+      "title": "PERFORMANCE CLAIM AUDIT",
+      "status": "PENDING",
+      "implementation": [],
+      "validation": [],
+      "evidence": [],
+      "commit": null
+    },
+    {
+      "id": "H5.1",
+      "title": "1.12.X FAMILY",
+      "status": "PENDING",
+      "implementation": [],
+      "validation": [],
+      "evidence": [],
+      "commit": null
+    },
+    {
+      "id": "H6.1",
+      "title": "GENERATIONAL HANDLES",
+      "status": "PENDING",
+      "implementation": [],
+      "validation": [],
+      "evidence": [],
+      "commit": null
+    },
+    {
+      "id": "H6.2",
+      "title": "NATIVECHUNK VNEXT",
+      "status": "PENDING",
+      "implementation": [],
+      "validation": [],
+      "evidence": [],
+      "commit": null
+    },
+    {
+      "id": "H6.3",
+      "title": "IMMUTABLE GENERATION-TAGGED VIEWS",
+      "status": "PENDING",
+      "implementation": [],
+      "validation": [],
+      "evidence": [],
+      "commit": null
+    },
+    {
+      "id": "H8.1",
+      "title": "GENERATION-KEYED PACKET CACHE",
+      "status": "PENDING",
+      "implementation": [],
+      "validation": [],
+      "evidence": [],
+      "commit": null
+    },
+    {
+      "id": "H19.1",
+      "title": "GUARDED MINECRAFT INTRINSIC",
+      "status": "PENDING",
+      "implementation": [],
+      "validation": [],
+      "evidence": [],
+      "commit": null
+    },
+    {
+      "id": "H19.2",
+      "title": "JAVA OBJECT IDENTITY / NATIVE HANDLE PROTOTYPE",
+      "status": "PENDING",
+      "implementation": [],
+      "validation": [],
+      "evidence": [],
+      "commit": null
+    },
+    {
+      "id": "H19.3",
+      "title": "CUSTOM JVM GO / NO-GO",
+      "status": "PENDING",
+      "implementation": [],
+      "validation": [],
+      "evidence": [],
+      "commit": null
+    },
+    {
+      "id": "H25",
+      "title": "DO NOT ENABLE PRODUCTION AUTHORITY",
+      "status": "PENDING",
+      "implementation": [],
+      "validation": [],
+      "evidence": [],
+      "commit": null
+    },
+    {
+      "id": "H26",
+      "title": "PERFORMANCE ACCEPTANCE RULE",
+      "status": "PENDING",
+      "implementation": [],
+      "validation": [],
+      "evidence": [],
+      "commit": null
+    },
+    {
+      "id": "H27",
+      "title": "LICENSING / PROVENANCE",
+      "status": "PENDING",
+      "implementation": [],
+      "validation": [],
+      "evidence": [],
+      "commit": null
+    },
+    {
+      "id": "H28",
+      "title": "TEMPORARY SCAFFOLD EXIT PLAN",
+      "status": "PENDING",
+      "implementation": [],
+      "validation": [],
+      "evidence": [],
+      "commit": null
+    },
+    {
+      "id": "H29",
+      "title": "COMMIT POLICY",
+      "status": "PENDING",
+      "implementation": [],
+      "validation": [],
+      "evidence": [],
+      "commit": null
+    },
+    {
+      "id": "H30",
+      "title": "CONTINUOUS REGRESSION SAFETY",
+      "status": "PENDING",
+      "implementation": [],
+      "validation": [],
+      "evidence": [],
+      "commit": null
+    }
+  ],
+  "completion_rule": "Every explicit requirement needs current scoped evidence; pending or unverified is not complete.",
+  "amendments": [
+    "docs/engineering/architecture-hardening-h22-5.md"
+  ]
+}
