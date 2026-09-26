@@ -93,6 +93,13 @@ public final class LivePacketCapture {
     private static volatile SourceFactory sourceFactory;
     private static volatile RejectionReason lastRejection;
 
+    public static final java.util.concurrent.atomic.AtomicLong TE_PRESENT_REJECTIONS =
+            new java.util.concurrent.atomic.AtomicLong();
+    private static volatile String lastTeRejection;
+
+    /** Evidence for the last TE_PRESENT rejection (coords + TE map size), or null. */
+    public static String lastTeRejectionEvidence() { return lastTeRejection; }
+
     /** Last begin-time rejection (diagnostic evidence; not synchronization). */
     public static RejectionReason lastRejection() { return lastRejection; }
 
@@ -175,6 +182,9 @@ public final class LivePacketCapture {
         }
         try {
             if (!source.tileEntitiesEmpty()) {
+                TE_PRESENT_REJECTIONS.incrementAndGet();
+                lastTeRejection = "chunk=" + chunk + " coords=" + chunkCoords(chunk)
+                        + " at " + System.currentTimeMillis();
                 REJECTED.incrementAndGet();
                 return rejected(session, RejectionReason.TE_PRESENT,
                         "TE-bearing chunks are Java-only in this profile");
@@ -279,6 +289,24 @@ public final class LivePacketCapture {
             this.session = session;
             this.attempt = attempt;
             this.draft = draft;
+        }
+    }
+
+    /** Descriptive chunk coords via runtime reflection (never used as identity). */
+    private static String chunkCoords(Object chunk) {
+        try {
+            Object world = null;
+            java.lang.reflect.Field wf = chunk.getClass().getDeclaredField("field_76637_e");
+            wf.setAccessible(true);
+            world = wf.get(chunk);
+            java.lang.reflect.Field xf = chunk.getClass().getDeclaredField("field_76635_g");
+            xf.setAccessible(true);
+            java.lang.reflect.Field zf = chunk.getClass().getDeclaredField("field_76647_h");
+            zf.setAccessible(true);
+            return "x=" + xf.getInt(chunk) + " z=" + zf.getInt(chunk)
+                    + (world != null ? " world=" + world.getClass().getSimpleName() : "");
+        } catch (Throwable failure) {
+            return "unavailable";
         }
     }
 

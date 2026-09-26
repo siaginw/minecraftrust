@@ -38,6 +38,7 @@ public final class LiveShadowCampaignConsumer {
     public static final AtomicHolder BYTE_MISMATCH = new AtomicHolder();
     public static final AtomicHolder REPLAY_FAILURE = new AtomicHolder();
     public static final AtomicHolder ARTIFACTS = new AtomicHolder();
+    public static final AtomicHolder IO_ADOPTED_COMPARED = new AtomicHolder();
 
     /** Simple mutable holder (atomic semantics live in the drain loop thread). */
     public static final class AtomicHolder {
@@ -73,6 +74,16 @@ public final class LiveShadowCampaignConsumer {
             nativeOutput = MEMORY.allocateMemory(NATIVE_CAPACITY);
             startedAtMillis = System.currentTimeMillis();
             started = true;
+            if (Boolean.getBoolean("rustcraft.liveShadowDimTest")) {
+                Thread dimTask = new Thread(new Runnable() {
+                    @Override public void run() {
+                        try { Thread.sleep(30_000); } catch (InterruptedException i) { return; }
+                        runDimensionExclusionTask();
+                    }
+                }, "rustcraft-live-shadow-dimtest");
+                dimTask.setDaemon(true);
+                dimTask.start();
+            }
             Thread watchdog = new Thread(new Runnable() {
                 @Override public void run() {
                     // Campaign evidence: when the gate first disqualifies, capture
@@ -122,6 +133,112 @@ public final class LiveShadowCampaignConsumer {
 
     public static boolean mismatchSeen() { return mismatchSeen; }
 
+    /**
+     * Multi-dimension exclusion evidence: obtains the REAL Nether WorldServer from
+     * the live runtime, loads an ACTUAL chunk through its normal provider, and
+     * presents it to the live capture eligibility layer. The qualified surface
+     * profile must fail closed with UNSUPPORTED_WORLD — no sealed capture, no
+     * queue entry, no gate disqualification.
+     */
+    private static void runDimensionExclusionTask() {
+        try {
+            Object fmlHandler = Class.forName("net.minecraftforge.fml.common.FMLCommonHandler")
+                    .getMethod("instance").invoke(null);
+            Object server = fmlHandler.getClass().getMethod("getMinecraftServerInstance")
+                    .invoke(fmlHandler);
+            if (server == null) throw new IllegalStateException("no server instance");
+            Class<?> mcsClass = server.getClass();
+            while (mcsClass != null && !mcsClass.getName().equals("net.minecraft.server.MinecraftServer")) {
+                mcsClass = mcsClass.getSuperclass();
+            }
+            if (mcsClass == null) throw new IllegalStateException("MinecraftServer class not found");
+            // The Nether unloads seconds after boot when no player occupies it,
+            // and dimension (re)creation performs owner-gated writes — running it
+            // on this diagnostic thread would trip OFF_OWNER_PUBLISHED_WRITE and
+            // terminally disqualify the gate. ALL Minecraft work therefore runs
+            // on the canonical owner thread via addScheduledTask; this thread
+            // only waits and then records the evidence.
+            final Object serverRef = server;
+            final String[] worldMeta = new String[2];
+            java.util.concurrent.Callable<Object> ownerWork = new java.util.concurrent.Callable<Object>() {
+                @Override public Object call() throws Exception {
+                    Class<?> dimManager = Class.forName("net.minecraftforge.common.DimensionManager");
+                    Object netherWorld = dimManager.getMethod("getWorld", int.class).invoke(null, -1);
+                    if (netherWorld == null) {
+                        dimManager.getMethod("initDimension", int.class).invoke(null, -1);
+                        netherWorld = dimManager.getMethod("getWorld", int.class).invoke(null, -1);
+                    }
+                    if (netherWorld == null) throw new IllegalStateException("Nether WorldServer is null");
+                    Object provider = null;
+                    for (Field f : netherWorld.getClass().getSuperclass().getDeclaredFields()) {
+                        if (f.getType().getName().endsWith("WorldProvider")) {
+                            f.setAccessible(true);
+                            provider = f.get(netherWorld);
+                            break;
+                        }
+                    }
+                    // Load a real Nether chunk through the normal provider path.
+                    java.lang.reflect.Method getChunk = null;
+                    for (java.lang.reflect.Method m : netherWorld.getClass().getMethods()) {
+                        if (m.getName().equals("func_72964_e") && m.getParameterCount() == 2
+                                && m.getParameterTypes()[0] == int.class && m.getParameterTypes()[1] == int.class) {
+                            getChunk = m;
+                            break;
+                        }
+                    }
+                    if (getChunk == null) throw new IllegalStateException("getChunk accessor not found");
+                    Object netherChunk = getChunk.invoke(netherWorld, 0, 0);
+                    worldMeta[0] = provider == null ? "null" : provider.getClass().getName();
+                    worldMeta[1] = netherChunk == null ? "null" : netherChunk.getClass().getName();
+                    return netherChunk;
+                }
+            };
+            Object netherChunk;
+            try {
+                // ListenableFuture via the JDK Future interface: this class must
+                // stay compilable without the Guava jar on the classpath.
+                java.util.concurrent.Future<Object> future =
+                        (java.util.concurrent.Future<Object>)
+                                mcsClass.getMethod("func_175586_a", java.util.concurrent.Callable.class)
+                                        .invoke(server, ownerWork);
+                netherChunk = future.get();
+            } catch (java.util.concurrent.ExecutionException failure) {
+                throw (Exception) failure.getCause();
+            }
+            String providerClass = worldMeta[0];
+            String chunkClass = worldMeta[1];
+
+            // Present the genuine non-Overworld chunk to the eligibility extractor.
+            com.rustcraft.bridge.capture.LivePacketCapture.SourceFactory factory =
+                    com.rustcraft.bridge.capture.LivePacketCapture.installedSourceFactory();
+            String extraction = "no factory";
+            if (factory != null) {
+                // The binding for a Nether chunk may or may not exist; the extractor
+                // only needs the world/chunk pair to classify the provider.
+                LiveChunkBindings.Binding binding = LiveWriterHooks.bindingsForTesting() == null
+                        ? null : LiveWriterHooks.bindingsForTesting().bindingFor(netherChunk);
+                com.rustcraft.bridge.capture.LiveForgeCaptureSource source =
+                        com.rustcraft.bridge.capture.LiveForgeCaptureSource.forChunk(
+                                netherChunk, binding,
+                                LiveWriterHooks.gateForTesting(), 0xFFFF);
+                extraction = source == null ? "UNSUPPORTED_WORLD (provider not surface)"
+                        : "surface provider accepted (unexpected)";
+            }
+            Map<String, Object> rec = new LinkedHashMap<String, Object>();
+            rec.put("dimension", -1);
+            rec.put("providerClass", providerClass);
+            rec.put("chunkClass", chunkClass);
+            rec.put("extraction", extraction);
+            rec.put("timestamp", System.currentTimeMillis());
+            Path out = Paths.get(System.getProperty("rustcraft.liveShadowOut",
+                    "live-shadow-events.jsonl")).toAbsolutePath().resolveSibling("dimension-exclusion.json");
+            Files.write(out, json(rec).getBytes(StandardCharsets.UTF_8));
+            System.out.println("[live-capture] dimension exclusion evidence: " + json(rec));
+        } catch (Throwable failure) {
+            System.err.println("[live-capture] dimension exclusion task failed: " + failure);
+        }
+    }
+
     private static void loop() {
         while (!mismatchSeen) {
             List<SealedLiveCapture> drained = LiveComparisonQueue.drain();
@@ -157,6 +274,7 @@ public final class LiveShadowCampaignConsumer {
             record.put("epochStart", sealed.captureEpochStart());
             record.put("epochEnd", sealed.captureEpochEnd());
             record.put("bindingRevoked", sealed.identity().ownedEncodeGeneration < 0);
+            record.put("ioAdopted", sealed.ioAdopted());
 
             // Independent Rust replay of the exact scope-3 transport.
             if (transport.length > NATIVE_CAPACITY) throw new IllegalStateException("transport too large");
@@ -182,9 +300,13 @@ public final class LiveShadowCampaignConsumer {
             boolean maskEqual = rustMask == sealed.javaMask() && rustMask == sealed.sealedMask();
             boolean lenEqual = rustLen == javaBody.length;
             boolean byteEqual = Arrays.equals(rustBody, javaBody);
+            if (sealed.ioAdopted() && maskEqual && lenEqual && byteEqual) {
+                IO_ADOPTED_COMPARED.increment();
+            }
             record.put("rustMask", rustMask);
             record.put("rustLen", rustLen);
             record.put("javaLen", javaBody.length);
+            record.put("ioAdopted", sealed.ioAdopted());
             record.put("maskEqual", maskEqual);
             record.put("lenEqual", lenEqual);
             record.put("byteEqual", byteEqual);
@@ -275,6 +397,18 @@ public final class LiveShadowCampaignConsumer {
             receipt.put("ioAdoptions", LiveWriterHooks.IO_ADOPTIONS.get());
             receipt.put("ioJavaOnly", LiveWriterHooks.IO_JAVA_ONLY.get());
             receipt.put("packetObservations", LivePacketCapture.SEEN.get());
+            receipt.put("ioTicketCreated", LiveWriterHooks.IO_TICKET_CREATED.get());
+            receipt.put("ioSealedSuccess", LiveWriterHooks.IO_SEALED_SUCCESS.get());
+            receipt.put("ioSealedFailure", LiveWriterHooks.IO_SEALED_FAILURE.get());
+            receipt.put("ioAcquired", LiveWriterHooks.IO_ACQUIRED.get());
+            receipt.put("ioAdmitted", LiveWriterHooks.IO_ADMITTED.get());
+            receipt.put("ioStale", LiveWriterHooks.IO_STALE.get());
+            receipt.put("ioAdoptedCompared", IO_ADOPTED_COMPARED.get());
+            receipt.put("teRejections", LivePacketCapture.TE_PRESENT_REJECTIONS.get());
+            receipt.put("lastTeRejection", LivePacketCapture.lastTeRejectionEvidence());
+            receipt.put("ioAdoptedCompared", IO_ADOPTED_COMPARED.get());
+            receipt.put("teRejections", LivePacketCapture.TE_PRESENT_REJECTIONS.get());
+            receipt.put("lastTeRejection", LivePacketCapture.lastTeRejectionEvidence());
             receipt.put("uptimeMillis", System.currentTimeMillis() - startedAtMillis);
             Path out = Paths.get(System.getProperty("rustcraft.liveShadowOut", "live-shadow-events.jsonl"))
                     .toAbsolutePath().resolveSibling("live-shadow-receipt.json");

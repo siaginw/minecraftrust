@@ -40,12 +40,131 @@ public final class LiveWriterHooks {
 
     private static volatile Session session;
 
+    // -- single-ticket IO trace (diagnostic JSONL; path from rustcraft.ioTrace) --
+    private static final java.io.PrintWriter IO_TRACE = openIoTrace();
+    private static final AtomicLong IO_TRACE_REGISTERS = new AtomicLong();
+
+    private static java.io.PrintWriter openIoTrace() {
+        String path = System.getProperty("rustcraft.ioTrace");
+        if (path == null) return null;
+        try {
+            java.io.PrintWriter out = new java.io.PrintWriter(
+                    new java.io.FileWriter(path, true), true);
+            out.println("{\"ev\":\"trace_open\",\"buildId\":\""
+                    + jsonEscape(System.getProperty("rustcraft.buildId", "unset")) + "\"}");
+            return out;
+        } catch (Throwable failure) {
+            System.err.println("[live-capture] io trace disabled: " + failure);
+            return null;
+        }
+    }
+
+    private static String jsonEscape(String value) {
+        StringBuilder sb = new StringBuilder(value.length() + 8);
+        for (int i = 0; i < value.length(); i++) {
+            char c = value.charAt(i);
+            if (c == '"' || c == '\\') sb.append('\\').append(c);
+            else if (c < 0x20) sb.append(' ');
+            else sb.append(c);
+        }
+        return sb.toString();
+    }
+
+    /** One compact JSON object per line; null sink = tracing off. */
+    private static synchronized void ioTrace(String event, String detail) {
+        java.io.PrintWriter out = IO_TRACE;
+        if (out == null) return;
+        out.println("{\"ts\":" + System.currentTimeMillis() + ",\"thread\":\""
+                + jsonEscape(Thread.currentThread().getName()) + "\",\"ev\":\"" + jsonEscape(event)
+                + "\",\"d\":\"" + jsonEscape(detail) + "\"}");
+    }
+
+    private static String brief(Object o) {
+        if (o == null) return "null";
+        String n = o.getClass().getSimpleName();
+        return n.isEmpty() ? o.getClass().getName() : n;
+    }
+
+    static {
+        // Campaign build identity: lets the runner prove the loaded jar is the
+        // one it just built (stale-jar guard) without trusting file mtimes.
+        String buildId = System.getProperty("rustcraft.buildId");
+        if (buildId != null) {
+            System.err.println("[live-capture] BUILD_ID " + buildId);
+        }
+    }
+
+    /**
+     * One traced registerNew call site shared by the constructor facades.
+     *
+     * <p>Provenance derivation for NBT primitive arrays: byte[] has no
+     * constructor, so the ownership hooks can never mint its identity at
+     * allocation. On the fresh-disk path the array's provable origin is the
+     * ticket-qualified disk root itself ({@code ioDiskRoot} -> FRESH_DISK_CURRENT
+     * under this same ticket, the accepted positive source event), whose members
+     * are exactly what the loader feeds to NibbleArray([B). The derivation fires
+     * ONLY for an as-yet-unregistered byte[] backing while the active ticket is
+     * source-qualified and untainted; every other case reaches the foundation
+     * unchanged (cross-ticket alias -> ALIASED_BACKING, unknown -> UNKNOWN_BACKING,
+     * unqualified ticket -> taint, fail-closed as before).</p>
+     */
+    private static void tracedRegister(Session s, PrivateBuildTickets.Ticket ticket,
+                                       Object component, Object backing) {
+        if (backing instanceof byte[]
+                && s.tickets.componentRecordFor(backing) == null
+                && ticket.isSourceQualified()) {
+            boolean derived = s.tickets.registerNew(ticket, backing, null);
+            ioTrace("backing_derived", "ticket=" + ticket.ticketId() + " ok=" + derived
+                    + " source=" + ticket.sourceStatus());
+        }
+        Object taintBefore = ticket.taintReason();
+        boolean ok = s.tickets.registerNew(ticket, component, backing);
+        Object taintAfter = ticket.taintReason();
+        // Bounded evidence: every rejected registration and every taint
+        // transition names its component/backing classes (first taint wins,
+        // so this terminates); plus the first 40 clean registrations per JVM
+        // to reconstruct the build order.
+        if (!ok || taintAfter != null) {
+            ioTrace("register", "ticket=" + ticket.ticketId() + " ok=" + ok
+                    + " comp=" + brief(component) + " backing=" + brief(backing)
+                    + " taint=" + taintAfter + " taintChanged=" + (taintBefore != taintAfter));
+        } else if (IO_TRACE_REGISTERS.getAndIncrement() < 40) {
+            ioTrace("register_ok", "ticket=" + ticket.ticketId()
+                    + " comp=" + brief(component) + " backing=" + brief(backing));
+        }
+    }
+
     /** Diagnostic counters (never used as synchronization; never authorizing). */
     public static final AtomicLong WRITER_SCOPES = new AtomicLong();
     public static final AtomicLong CONSTRUCTED_CHUNKS = new AtomicLong();
     public static final AtomicLong REGISTERED_COMPONENTS = new AtomicLong();
     public static final AtomicLong RETIRES = new AtomicLong();
     public static final AtomicLong IO_TASKS = new AtomicLong();
+    public static final AtomicLong IO_TICKET_CREATED = new AtomicLong();
+    public static final AtomicLong IO_SEALED_SUCCESS = new AtomicLong();
+    public static final AtomicLong IO_SEALED_FAILURE = new AtomicLong();
+    public static final AtomicLong IO_STALE = new AtomicLong();
+    public static final AtomicLong IO_ACQUIRED = new AtomicLong();
+    public static final AtomicLong IO_ADMITTED = new AtomicLong();
+    public static final java.util.Map<Long, Boolean> IO_ADOPTED_CHUNK_IDS =
+            new java.util.concurrent.ConcurrentHashMap<Long, Boolean>();
+
+    /** True when the chunk identity was adopted through the live IO-ticket path. */
+    public static boolean isIoAdoptedChunkId(long chunkId) {
+        return IO_ADOPTED_CHUNK_IDS.containsKey(chunkId);
+    }
+
+    /** The binding's chunkId for an adopted chunk object (0 when unbound). */
+    public static long adoptedChunkId(Object chunk) {
+        Session s = session;
+        if (s == null || chunk == null) return 0L;
+        LiveChunkBindings.Binding b = s.bindings.bindingFor(chunk);
+        return b == null ? 0L : b.chunkId();
+    }
+
+    private static long adoptedChunkIdentity(Object chunk) {
+        return adoptedChunkId(chunk);
+    }
     public static final AtomicLong IO_RELEASES_SUCCESS = new AtomicLong();
     public static final AtomicLong IO_RELEASES_FAILURE = new AtomicLong();
     public static final AtomicLong IO_ADOPTIONS = new AtomicLong();
@@ -357,7 +476,7 @@ public final class LiveWriterHooks {
         CONSTRUCTED_CHUNKS.incrementAndGet();
         PrivateBuildTickets.Ticket ticket = s.tickets.activeTicketForCurrentThread();
         if (ticket != null) {
-            s.tickets.registerNew(ticket, chunk, null);
+            tracedRegister(s, ticket, chunk, null);
             return;
         }
         // Owner path: the provisional PUBLISHING binding is created at construction;
@@ -399,7 +518,7 @@ public final class LiveWriterHooks {
         REGISTERED_COMPONENTS.incrementAndGet();
         PrivateBuildTickets.Ticket ticket = s.tickets.activeTicketForCurrentThread();
         if (ticket != null) {
-            s.tickets.registerNew(ticket, component, backing);
+            tracedRegister(s, ticket, component, backing);
             return;
         }
         if (s.gate.isOwnerUnderGate()) {
@@ -496,7 +615,14 @@ public final class LiveWriterHooks {
         PrivateBuildTickets.Ticket ticket = s.tickets.beginIo(provider,
                 IO_LOAD_IDS.incrementAndGet(), world, coords.length > 0 ? coords[0] : 0,
                 coords.length > 1 ? coords[1] : 0);
-        if (ticket != null) IO_TICKETS.put(task, ticket);
+        if (ticket != null) {
+            IO_TICKETS.put(task, ticket);
+            IO_TICKET_CREATED.incrementAndGet();
+            ioTrace("ticket_created", "ticket=" + ticket.ticketId() + " loadId=" + ticket.loadId()
+                    + " chunk=" + ticket.chunkX() + "," + ticket.chunkZ()
+                    + " creator=" + ticket.creator().getName()
+                    + " world=" + brief(ticket.world()));
+        }
         IO_TASKS.incrementAndGet();
         checkFlip("ioTaskBegin");
     }
@@ -521,9 +647,19 @@ public final class LiveWriterHooks {
         }
         boolean sealed = success ? s.tickets.sealSuccess(ticket) : s.tickets.sealFailure(ticket);
         if (sealed) {
-            if (success) IO_RELEASES_SUCCESS.incrementAndGet();
-            else IO_RELEASES_FAILURE.incrementAndGet();
+            if (success) {
+                IO_RELEASES_SUCCESS.incrementAndGet();
+                IO_SEALED_SUCCESS.incrementAndGet();
+            } else {
+                IO_RELEASES_FAILURE.incrementAndGet();
+                IO_SEALED_FAILURE.incrementAndGet();
+            }
+        } else {
+            IO_STALE.incrementAndGet(); // seal rejected: stale/replayed/already-sealed
         }
+        ioTrace("io_sealed", "ticket=" + ticket.ticketId() + " requested=" + (success ? "SUCCESS" : "FAILURE")
+                + " sealed=" + sealed + " state=" + ticket.state() + " consumed=" + ticket.isConsumed()
+                + " source=" + ticket.sourceStatus() + " taint=" + ticket.taintReason());
         checkFlip("ioRelease" + (success ? "Success" : "Failure"));
     }
 
@@ -536,12 +672,17 @@ public final class LiveWriterHooks {
         }
     }
 
-    /** Injected after the pending-map read (profile BCI 17): shared/pending NBT is sticky-ineligible. */
-    public static void ioPendingNbt(Object nbtRoot) {
-        Session s = session;
-        if (s == null) return;
-        PrivateBuildTickets.Ticket ticket = s.tickets.activeTicketForCurrentThread();
-        if (ticket != null) s.tickets.recordSharedRoot(ticket, nbtRoot);
+    /**
+     * Injected after the pending-map read (profile BCI 17). Diagnostic
+     * observation only: does NOT set the ticket source. The authoritative
+     * source comes from ioDiskRoot on the actual disk branch. The shared-
+     * pending NBT semantics are enforced by the accepted Ultra contract at
+     * the admission layer, not by a speculative pre-read hook.
+     */
+    public static void ioPendingNbt(Object pendingResult) {
+        // Diagnostic observation; the shared-pending NBT rejection is handled
+        // by the accepted admission model (ticket source must be FRESH_DISK_CURRENT).
+        ioTrace("pending_observed", "nonNull=" + (pendingResult != null));
     }
 
     /** Injected after the fresh-disk compressed read (profile BCI 59). */
@@ -549,7 +690,18 @@ public final class LiveWriterHooks {
         Session s = session;
         if (s == null) return;
         PrivateBuildTickets.Ticket ticket = s.tickets.activeTicketForCurrentThread();
-        if (ticket != null) s.tickets.recordDiskRoot(ticket, nbtRoot, currentDataVersion(nbtRoot));
+        if (ticket != null) {
+            int dv = dataVersionOf(nbtRoot);
+            Object prev = ticket.sourceStatus();
+            boolean ok = s.tickets.recordDiskRoot(ticket, nbtRoot, dv);
+            ioTrace("disk_root", "ticket=" + ticket.ticketId() + " dv=" + dv
+                    + " prev=" + prev + " new=" + ticket.sourceStatus() + " ok=" + ok
+                    + " taint=" + ticket.taintReason());
+            if (!ok) {
+                System.err.println("[live-capture] recordDiskRoot FAILED: dv=" + dv
+                        + " source=" + ticket.sourceStatus() + " taint=" + ticket.taintReason());
+            }
+        }
     }
 
     /** Marker for the private construction sites (checkedReadChunkFromNBT__Async / func_75823_a). */
@@ -581,24 +733,52 @@ public final class LiveWriterHooks {
         PrivateBuildTickets.Ticket ticket = IO_TICKETS.get(task);
         if (ticket == null) {
             IO_JAVA_ONLY.incrementAndGet();
+            ioTrace("admit_failed", "ticket=null taskOnly=true chunk=" + brief(chunk));
             return new IoPublicationScope(writer, null, false);
         }
+        String ticketId = "ticket=" + ticket.ticketId();
         PrivateBuildTickets.AcquireOutcome acquire = s.tickets.acquireCompletion(ticket);
         if (acquire != PrivateBuildTickets.AcquireOutcome.SUCCESS) {
             IO_JAVA_ONLY.incrementAndGet();
+            if (acquire == PrivateBuildTickets.AcquireOutcome.REPLAYED) IO_STALE.incrementAndGet();
+            ioTrace("acquire", ticketId + " outcome=" + acquire + " state=" + ticket.state()
+                    + " consumed=" + ticket.isConsumed() + " source=" + ticket.sourceStatus()
+                    + " taint=" + ticket.taintReason());
             return new IoPublicationScope(writer, null, false);
         }
+        IO_ACQUIRED.incrementAndGet();
+        ioTrace("acquire", ticketId + " outcome=SUCCESS state=" + ticket.state()
+                + " consumed=" + ticket.isConsumed() + " source=" + ticket.sourceStatus()
+                + " taint=" + ticket.taintReason());
         LiveChunkBindings.Outcome admitted = s.bindings.admitIoTicket(ticket, world, chunk);
         if (!admitted.ok()) {
+            System.err.println("[live-capture] IO ADMISSION FAILED: " + admitted.reason()
+                    + " ticketState=" + ticket.state() + " consumed=" + ticket.isConsumed()
+                    + " source=" + ticket.sourceStatus() + " taint=" + ticket.taintReason()
+                    + " world=" + (world != null ? world.getClass().getSimpleName() : "null")
+                    + " chunkClass=" + (chunk != null ? chunk.getClass().getSimpleName() : "null"));
             IO_JAVA_ONLY.incrementAndGet();
+            ioTrace("admit_failed", ticketId + " reason=" + admitted.reason()
+                    + " state=" + ticket.state() + " consumed=" + ticket.isConsumed()
+                    + " source=" + ticket.sourceStatus() + " taint=" + ticket.taintReason()
+                    + " chunkClass=" + brief(chunk));
             return new IoPublicationScope(writer, null, false);
+        }
+        IO_ADMITTED.incrementAndGet();
+        long adoptedId = adoptedChunkId(chunk);
+        if (adoptedId != 0L) {
+            IO_ADOPTED_CHUNK_IDS.put(adoptedId, Boolean.TRUE);
         }
         LiveChunkBindings.Outcome publication = s.bindings.beginPublication(world, chunk);
         if (!publication.ok()) {
             IO_JAVA_ONLY.incrementAndGet();
+            ioTrace("publication_failed", ticketId + " reason=" + publication.reason()
+                    + " chunkClass=" + brief(chunk));
             return new IoPublicationScope(writer, null, false);
         }
         IO_ADOPTIONS.incrementAndGet();
+        ioTrace("admitted", ticketId + " chunkClass=" + brief(chunk)
+                + " publicationOk=true adoptedId=" + adoptedId);
         checkFlip("ioPublicationBegin");
         return new IoPublicationScope(writer, publication.publication(), true);
     }
@@ -700,8 +880,19 @@ public final class LiveWriterHooks {
         }
     }
 
-    /** The pinned 1.12.2 runtime writes DataVersion 1343; deeper verification is the live stage's job. */
-    private static int currentDataVersion(Object nbtRoot) {
-        return PrivateBuildTickets.CURRENT_DATA_VERSION;
+    /**
+     * Reads the chunk NBT's DataVersion through the runtime class. Absent or
+     * unreadable versions yield 0, which the ticket records as OLD_DATA_VERSION
+     * (fail-closed: the incarnation stays Java-only).
+     */
+    private static int dataVersionOf(Object nbtRoot) {
+        try {
+            java.lang.reflect.Method getInteger = nbtRoot.getClass().getMethod("func_74762_e", String.class);
+            getInteger.setAccessible(true);
+            Integer value = (Integer) getInteger.invoke(nbtRoot, "DataVersion");
+            return value == null ? 0 : value;
+        } catch (Throwable failure) {
+            return 0;
+        }
     }
 }

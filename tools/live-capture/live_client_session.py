@@ -33,7 +33,8 @@ def varint_wrap(n):
 
 
 def run_session(port: int, duration_s: int, move: bool, sink_path: str,
-                out_summary: str, player_name: str = "ProbeBot", spawn_pos=None) -> dict:
+                out_summary: str, player_name: str = "ProbeBot", spawn_pos=None,
+                direction: int = 1) -> dict:
     summary = {"joined": False, "chunkPackets": 0, "keepAlives": 0,
                "teleports": 0, "positionsSent": 0, "errors": [], "frames": 0}
     c = probe.Conn(probe.HOST, port)
@@ -101,9 +102,9 @@ def run_session(port: int, duration_s: int, move: bool, sink_path: str,
                 last_move = time.time()
                 fl(c, pid, p[:8], "PlayerPosLook(confirmed)", "S", sink)
                 continue
-            # movement loop: walk +X so chunk borders stream naturally
+            # movement loop: walk along X so chunk borders stream naturally
             if move and pos is not None and time.time() - last_move >= 1.0:
-                pos["x"] += 8.0  # 8 m/s stays under the vanilla 100-block-squared quick-move check
+                pos["x"] += 8.0 * direction  # 8 m/s stays under the vanilla 100-block-squared quick-move check
                 body = struct.pack(">ddd", pos["x"], pos["y"], pos["z"]) + b"\x00"
                 c.send(SB_PLAYER_POSITION, body)
                 summary["positionsSent"] += 1
@@ -121,11 +122,14 @@ def run_session(port: int, duration_s: int, move: bool, sink_path: str,
 if __name__ == "__main__":
     port = int(sys.argv[1])
     duration = int(sys.argv[2])
-    move = len(sys.argv) > 3 and sys.argv[3] == "move"
+    mode = sys.argv[3] if len(sys.argv) > 3 else "hold"
+    move = mode in ("move", "walkback")
+    direction = -1 if mode == "walkback" else 1
     sink = sys.argv[4] if len(sys.argv) > 4 else "client-session.jsonl"
     out = sys.argv[5] if len(sys.argv) > 5 else "client-session.json"
     spawn = None
     if len(sys.argv) > 6:
         parts = [float(v) for v in sys.argv[6].split(",")]
         spawn = {"x": parts[0], "y": parts[1], "z": parts[2]}
-    print(json.dumps(run_session(port, duration, move, sink, out, spawn_pos=spawn)))
+    print(json.dumps(run_session(port, duration, move, sink, out, spawn_pos=spawn,
+                                 direction=direction)))

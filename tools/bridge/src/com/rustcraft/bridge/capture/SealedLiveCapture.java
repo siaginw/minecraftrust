@@ -75,6 +75,9 @@ public final class SealedLiveCapture {
     /** Owned RCSNAP01 scope-3 transport (big-endian, fully self-contained). */
     public byte[] toTransportBytes() { return owned.toTransportBytes(); }
 
+    /** True when this capture's chunk was adopted through the live IO-ticket path. */
+    public boolean ioAdopted() { return LiveWriterHooks.isIoAdoptedChunkId(identity.chunkId); }
+
     /** Diagnostic equality receipt for comparison records (owned values only). */
     public boolean javaPayloadEquals(byte[] candidate) {
         return Arrays.equals(javaPayload, candidate);

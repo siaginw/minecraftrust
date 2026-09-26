@@ -525,7 +525,14 @@ public final class PrivateBuildTicketsTest {
         }
     }
 
-    /** Existing registry identities are never overwritten as PRIVATE; relabeling attempts taint. */
+    /**
+     * Registration discipline, two tiers. Re-registering the SAME identity under
+     * the SAME BUILDING ticket is an idempotent no-op (Chunk(World, ChunkPrimer,
+     * x, z) delegates to Chunk(World, x, z), and both hooked constructors fire for
+     * one object — nothing is overwritten, so no relabeling occurred). Registering
+     * an identity that is already bound to a DIFFERENT ticket is a relabeling
+     * attempt and taints the impostor ticket only.
+     */
     static void caseDoubleRegistrationTaints() {
         Session session = new Session("ticket-double-register");
         try {
@@ -536,16 +543,42 @@ public final class PrivateBuildTicketsTest {
                 Object component = new Object();
                 check("double-register: first registration accepted",
                         session.tickets.registerNew(t, component, null), null);
-                check("double-register: second registration of the same identity rejected",
-                        !session.tickets.registerNew(t, component, null), null);
+                check("double-register: same-ticket re-registration is idempotent",
+                        session.tickets.registerNew(t, component, null), null);
+                check("double-register: idempotent replay leaves no taint",
+                        t.taintReason() == null, String.valueOf(t.taintReason()));
                 session.tickets.sealSuccess(t);
                 return t;
             });
-            check("double-register: relabeling attempt tainted the ticket",
-                    ticket.taintReason() == PrivateBuildTickets.TaintReason.EXISTING_IDENTITY_RELABELED,
+            check("double-register: idempotent ticket sealed clean and qualified",
+                    ticket.taintReason() == null
+                            && ticket.state() == PrivateBuildTickets.TicketState.SEALED_SUCCESS
+                            && ticket.isSourceQualified(),
                     String.valueOf(ticket.taintReason()));
         } finally {
             session.close();
+        }
+        Session second = new Session("ticket-relabel");
+        try {
+            final Object identity = new Object();
+            LiveProtocolTestSupport.inWorker("builder", () -> {
+                Ticket t = second.tickets.beginIo(second.provider, 82L, second.world, 0, 5);
+                second.tickets.registerNew(t, identity, null);
+                second.tickets.sealSuccess(t);
+                return t;
+            });
+            Ticket impostor = LiveProtocolTestSupport.inWorker("imposter", () -> {
+                Ticket t = second.tickets.beginIo(second.provider, 83L, second.world, 0, 6);
+                check("double-register: cross-ticket registration refused",
+                        !second.tickets.registerNew(t, identity, null), null);
+                second.tickets.sealSuccess(t); // taint bars qualification, not sealing
+                return t;
+            });
+            check("double-register: cross-ticket relabel attempt tainted the impostor ticket",
+                    impostor.taintReason() == PrivateBuildTickets.TaintReason.EXISTING_IDENTITY_RELABELED,
+                    String.valueOf(impostor.taintReason()));
+        } finally {
+            second.close();
         }
     }
 

@@ -355,7 +355,18 @@ public final class PrivateBuildTickets {
                 gate.disqualify(LiveWriterGate.DisqualificationReason.RESOURCE_LIMIT);
                 return false;
             }
-            if (components.containsKey(component)) {
+            ComponentRecord existing = components.get(component);
+            if (existing != null) {
+                // Chunk(World, ChunkPrimer, int, int) delegates to Chunk(World, int, int)
+                // and BOTH constructors carry the registration hook: the delegation
+                // double-fires for the same object under the SAME ticket. That is a
+                // compile artifact, not a writer event — idempotent success (nothing
+                // is overwritten; the entry stays PRIVATE_BUILDING under this ticket).
+                // A DIFFERENT ticket or a different component's identity still taints.
+                if (existing.ticket == ticket
+                        && existing.state() == ComponentRecord.State.PRIVATE_BUILDING) {
+                    return true;
+                }
                 taint(ticket, TaintReason.EXISTING_IDENTITY_RELABELED);
                 return false;
             }

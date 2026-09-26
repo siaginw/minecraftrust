@@ -98,6 +98,7 @@ public final class LiveCaptureAdmissionTest {
             caseSealedObjectFullyOwned();
             caseAbortPathReleasesGate();
             caseMaskMismatchRejected();
+            caseIoBackingProvenanceDerivation();
         } catch (Throwable uncaught) {
             fail++;
             System.out.println("UNCAUGHT: " + uncaught);
@@ -401,6 +402,73 @@ public final class LiveCaptureAdmissionTest {
             check("mask-mismatch: commit rejected, nothing published",
                     LivePacketCapture.SEALED.get() == sealedBefore
                             && LiveComparisonQueue.queuedCount() == 0, null);
+        } finally { disable(); }
+    }
+
+    /**
+     * IO provenance: NBT byte[] backings are invisible to constructor
+     * instrumentation, so the facade derives their provenance from the
+     * ticket-qualified disk root at the registration observation point — but
+     * ONLY under a source-qualified (FRESH_DISK_CURRENT, untainted) ticket.
+     * An unqualified ticket keeps the UNKNOWN_BACKING taint (fail-closed).
+     */
+    static void caseIoBackingProvenanceDerivation() {
+        enable();
+        try {
+            Object provider = new Object();
+            Object world = new FakeWorld();
+            // qualified disk ticket: facade registration with a never-registered
+            // byte[] backing must derive the backing from the disk root instead
+            // of tainting.
+            PrivateBuildTickets.Ticket qualified = LiveWriterHooks.ticketsForTesting()
+                    .beginIo(provider, 900L, world, 3, 4);
+            if (!LiveWriterHooks.ticketsForTesting().recordDiskRoot(qualified, new Object(),
+                    PrivateBuildTickets.CURRENT_DATA_VERSION)) {
+                throw new AssertionError("recordDiskRoot failed");
+            }
+            Object nibble = new Object();
+            byte[] sharedBacking = new byte[4];
+            LiveWriterHooks.registerNew(nibble, sharedBacking);
+            check("io-provenance: qualified ticket derives the byte[] backing (no taint)",
+                    qualified.taintReason() == null && qualified.isSourceQualified(),
+                    String.valueOf(qualified.taintReason()));
+            check("io-provenance: the component and backing are registered under the same ticket",
+                    LiveWriterHooks.ticketsForTesting().componentRecordFor(nibble) != null
+                            && LiveWriterHooks.ticketsForTesting().componentRecordFor(nibble)
+                                    .ticket() == qualified
+                            && LiveWriterHooks.ticketsForTesting()
+                                    .componentRecordFor(sharedBacking) != null, null);
+            LiveWriterHooks.ticketsForTesting().sealSuccess(qualified);
+
+            // unqualified ticket (no disk root): the same facade call must leave
+            // the unknown backing tainted — the shared-pending / fresh-gen path.
+            PrivateBuildTickets.Ticket unqualified = LiveWriterHooks.ticketsForTesting()
+                    .beginIo(provider, 901L, world, 5, 6);
+            Object nibble2 = new Object();
+            LiveWriterHooks.registerNew(nibble2, new byte[4]);
+            check("io-provenance: unqualified ticket keeps UNKNOWN_BACKING (fail-closed)",
+                    unqualified.taintReason()
+                            == PrivateBuildTickets.TaintReason.UNKNOWN_BACKING_PROVENANCE,
+                    String.valueOf(unqualified.taintReason()));
+            check("io-provenance: unqualified ticket is not source-qualified",
+                    !unqualified.isSourceQualified(), null);
+            LiveWriterHooks.ticketsForTesting().sealSuccess(unqualified);
+
+            // cross-ticket: re-registering an identity owned by ANOTHER ticket
+            // still taints the impostor (aliasing detection is untouched by the
+            // derivation — the backing is already registered, so it never fires).
+            PrivateBuildTickets.Ticket impostor = LiveWriterHooks.ticketsForTesting()
+                    .beginIo(provider, 902L, world, 7, 8);
+            if (!LiveWriterHooks.ticketsForTesting().recordDiskRoot(impostor, new Object(),
+                    PrivateBuildTickets.CURRENT_DATA_VERSION)) {
+                throw new AssertionError("impostor recordDiskRoot failed");
+            }
+            LiveWriterHooks.registerNew(nibble, sharedBacking); // owned by `qualified`
+            check("io-provenance: cross-ticket registration still taints (existing identity)",
+                    impostor.taintReason()
+                            == PrivateBuildTickets.TaintReason.EXISTING_IDENTITY_RELABELED,
+                    String.valueOf(impostor.taintReason()));
+            LiveWriterHooks.ticketsForTesting().sealFailure(impostor);
         } finally { disable(); }
     }
 }
