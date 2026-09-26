@@ -20,6 +20,16 @@ public final class RevOfflineTweaker implements ITweaker {
   @Override public void injectIntoClassLoader(LaunchClassLoader cl) {
     cl.addClassLoaderExclusion("com.rustcraft.offline.agent.");
     delegate.injectIntoClassLoader(cl);
+    if (Boolean.getBoolean("rustcraft.liveWriterDiagnostic")) {
+      // Scope-correct: transformer-support packages load from the parent
+      // classpath (the rev campaign jar is on -cp); the probe packages stay in
+      // the launch loader exactly like the baseline run.
+      cl.addClassLoaderExclusion("com.rustcraft.bridge.");
+      cl.addClassLoaderExclusion("com.rustcraft.coremod.");
+      cl.addTransformerExclusion("com.rustcraft.bridge.");
+      cl.addTransformerExclusion("com.rustcraft.coremod.");
+      cl.addTransformerExclusion("com.rustcraft.livetransformer.");
+    }
   }
   @Override public String getLaunchTarget() { return "com.rustcraft.offline.oracle.RevQualifyRuntime"; }
   @Override public String[] getLaunchArguments() { return delegate.getLaunchArguments(); }

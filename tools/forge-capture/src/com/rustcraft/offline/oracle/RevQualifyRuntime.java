@@ -105,6 +105,18 @@ public final class RevQualifyRuntime {
     if (!"SERVER".equals(FMLLaunchHandler.side().name()) || FMLLaunchHandler.isDeobfuscatedEnvironment()) {
       throw new IllegalStateException("Wrong Forge side or deobfuscated-development environment");
     }
+    // Offline hook-insertion validation: register the three qualified
+    // transformers AFTER the complete FML chain (they must consume exactly the
+    // profile-pinned post-FML pre-hook definitions). Inert unless the
+    // diagnostic property is explicitly set; default-OFF runs never transform.
+    if (Boolean.getBoolean("rustcraft.liveWriterDiagnostic")) {
+      for (String name : new String[] {
+          "com.rustcraft.coremod.SPacketChunkDataTransformer",
+          "com.rustcraft.coremod.LiveChunkOwnershipTransformer",
+          "com.rustcraft.coremod.LiveChunkPublicationTransformer"}) {
+        Launch.classLoader.registerTransformer(name);
+      }
+    }
     result.put("forge_major", safeStatic("net.minecraftforge.fml.relauncher.FMLInjectionData", "major"));
     result.put("forge_minor", safeStatic("net.minecraftforge.fml.relauncher.FMLInjectionData", "minor"));
     result.put("forge_rev", safeStatic("net.minecraftforge.fml.relauncher.FMLInjectionData", "rev"));
@@ -127,7 +139,13 @@ public final class RevQualifyRuntime {
         if (!ObservationAgent.hashes().containsKey(name)) missing.add(name);
         else locations.put(name, "observed");
       } catch (Throwable failure) {
-        missing.add(name + " (" + failure + ")");
+        StringBuilder chain = new StringBuilder(failure.toString());
+        Throwable cause = failure.getCause();
+        while (cause != null) {
+          chain.append(" <- ").append(cause);
+          cause = cause.getCause();
+        }
+        missing.add(name + " (" + chain + ")");
       }
     }
     result.put("required_class_locations", locations);

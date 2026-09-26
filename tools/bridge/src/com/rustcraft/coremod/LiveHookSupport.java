@@ -5,6 +5,8 @@ import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.ClassNode;
+import org.objectweb.asm.tree.FieldNode;
+import org.objectweb.asm.tree.TryCatchBlockNode;
 import org.objectweb.asm.tree.FieldInsnNode;
 import org.objectweb.asm.tree.InsnList;
 import org.objectweb.asm.tree.InsnNode;
@@ -38,6 +40,8 @@ import java.util.Map;
  * as an ordered sequence so no variable-size-opcode approximation can desync.</p>
  */
 public final class LiveHookSupport {
+
+    private static final String CANONICAL_NEWLINE = "\n";
 
     public static final String HOOKS_CLASS = "com/rustcraft/bridge/capture/LiveWriterHooks";
     public static final String MARKER_PREFIX = "liveWriter.";
@@ -78,13 +82,64 @@ public final class LiveHookSupport {
 
     /** Exact pre-hook identity: the source bytes must be the qualified profile's bytes. */
     public static void verifyPreHookIdentity(LiveWriterPlan.Hook[] hooks, byte[] basicClass) {
-        String actual = sha256(basicClass);
+        boolean canonical = hooks.length > 0 && hooks[0].canonicalIdentity;
+        String actual = canonical ? canonicalSha256(basicClass) : sha256(basicClass);
         for (LiveWriterPlan.Hook hook : hooks) {
-            if (!hook.preHookClassSha256.equals(actual)) {
+            String expected = hook.preHookClassSha256;
+            if (!expected.equals(actual)) {
                 throw new ProfileFailure("class " + hooks[0].className
                         + " does not match the qualified pre-hook profile (expected "
-                        + hook.preHookClassSha256 + ", observed " + actual + ")");
+                        + expected + ", observed " + actual + ")");
             }
+        }
+    }
+
+    /**
+     * Deterministic semantic identity for runtimes whose unhooked transformed
+     * bytes are NOT reproducible (mod transformer constant-pool/member-ordering
+     * variance). Emits a constant-pool-independent canonical text — the class
+     * name, sorted field signatures, and each method (sorted by name+descriptor)
+     * rendered through the same fragment vocabulary the anchor matcher uses —
+     * and hashes it. Two definitions with identical canonical hashes are
+     * indistinguishable at the instruction-semantics level this protocol
+     * qualifies.
+     */
+    public static String canonicalSha256(byte[] classBytes) {
+        try {
+            ClassReader reader = new ClassReader(classBytes);
+            ClassNode cn = new ClassNode();
+            reader.accept(cn, 0);
+            StringBuilder text = new StringBuilder();
+            text.append("class ").append(cn.name).append(CANONICAL_NEWLINE);
+            text.append("super ").append(cn.superName).append(CANONICAL_NEWLINE);
+            List<String> interfaces = new ArrayList<String>(cn.interfaces);
+            java.util.Collections.sort(interfaces);
+            for (String iface : interfaces) text.append("iface ").append(iface).append(CANONICAL_NEWLINE);
+            List<String> fields = new ArrayList<String>();
+            for (FieldNode fn : cn.fields) fields.add(fn.desc + " " + fn.name);
+            java.util.Collections.sort(fields);
+            for (String field : fields) text.append("field ").append(field).append(CANONICAL_NEWLINE);
+            List<MethodNode> methods = new ArrayList<MethodNode>(cn.methods);
+            java.util.Collections.sort(methods, new java.util.Comparator<MethodNode>() {
+                @Override public int compare(MethodNode a, MethodNode b) {
+                    int byName = a.name.compareTo(b.name);
+                    return byName != 0 ? byName : a.desc.compareTo(b.desc);
+                }
+            });
+            for (MethodNode mn : methods) {
+                text.append("method ").append(mn.name).append(mn.desc).append(CANONICAL_NEWLINE);
+                for (AbstractInsnNode insn : mn.instructions.toArray()) {
+                    if (insn instanceof LabelNode || insn.getOpcode() == -1) continue;
+                    text.append(describe(insn)).append(CANONICAL_NEWLINE);
+                }
+                for (TryCatchBlockNode block : mn.tryCatchBlocks) {
+                    text.append("catch ").append(block.type == null ? "*" : block.type).append(CANONICAL_NEWLINE);
+                }
+            }
+            return sha256(text.toString().getBytes(java.nio.charset.StandardCharsets.UTF_8));
+        } catch (RuntimeException failure) {
+            throw (ProfileFailure) new ProfileFailure(
+                    "canonical identity read failed: " + failure).initCause(failure);
         }
     }
 

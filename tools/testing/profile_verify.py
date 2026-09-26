@@ -16,9 +16,12 @@ from __future__ import annotations
 
 import argparse
 import hashlib
+import os
 import json
 import sys
 from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1].parent
 
 
 def sha256_file(path: Path) -> str:
@@ -103,11 +106,37 @@ class Verifier:
         self.check("coremod_inventory", actual_coremods == expected_coremods,
                    "coremod drift")
 
-        # 7. hook matrix: complete, resolved, hashes match the observed dumps
+        # 7. hook matrix: complete, resolved, hashes match the observed dumps.
+        # CANONICAL identity mode compares semantic hashes (mod-transformed
+        # runtimes have byte-nondeterministic output); RAW compares file bytes.
         matrix = profile.get("hook_matrix", {})
         sites = matrix.get("sites", [])
         self.check("hook_matrix.count", len(sites) == matrix.get("hook_count"),
                    "incomplete matrix")
+        canonical_mode = profile.get("identity_mode") == "CANONICAL"
+        observed_map = probe.get("transformed_classes") or {}
+        dump_map = {}
+        dump_override = profile.get("transformed_dump_dir")
+        if canonical_mode and dump_override:
+            import subprocess
+            rt = Path("D:/rustcraft-runtime-targets/revelation-3.4.0/server")
+            tool_cp = os.pathsep.join([
+                str(ROOT / "target/rev-campaign/rustcraft-rev-coremod.jar"),
+                str(ROOT / "target/rev-campaign/probe-classes"),
+                str(rt / "libraries/org/ow2/asm/asm-all/5.2/asm-all-5.2.jar"),
+                str(rt / "libraries/net/minecraft/launchwrapper/1.12/launchwrapper-1.12.jar"),
+                str(rt / "forge-1.12.2-14.23.5.2846-universal.jar"),
+                str(rt / "minecraft_server.1.12.2.jar"),
+            ])
+            result = subprocess.run(["D:/rustcraft-toolchains/temurin8/jdk8u504-b01/bin/java.exe",
+                                     "-cp", tool_cp,
+                                     "com.rustcraft.revdiag.RevCanonicalHash",
+                                     str(Path(dump_override))],
+                                    capture_output=True, text=True)
+            for line in result.stdout.splitlines():
+                name, _, digest = line.partition("=")
+                if digest:
+                    dump_map[name] = digest
         bad_classifications = {"CLASS_ABSENT", "METHOD_ABSENT",
                                "DESCRIPTOR_CHANGED", "HOOK_ABSENT"}
         for site in sites:
@@ -121,17 +150,25 @@ class Verifier:
             rev_hash = site.get("rev_sha256")
             self.check("hook:" + label + ":observed", bool(rev_hash), "not observed")
             if rev_hash:
-                observed = probe_hash.get(site["class"])
-                self.check("hook:" + label + ":observed", observed == rev_hash,
-                           "probe/class hash drift")
-                dump_file = root / (site["class"].replace(".", "/") + ".class")
-                # dumps live in the probe output, not the runtime; optional path
-                dump_override = profile.get("transformed_dump_dir")
-                if dump_override:
-                    dump_file = Path(dump_override) / (site["class"].replace(".", "/") + ".class")
-                    if dump_file.exists():
-                        self.check("hook:" + label + ":dump",
-                                   sha256_file(dump_file) == rev_hash, "dump drift")
+                if canonical_mode:
+                    expected_observed = profile.get("expected_transformed_classes", {}).get(site["class"])
+                    self.check("hook:" + label + ":observed",
+                               expected_observed is not None,
+                               "no canonical identity pinned")
+                    observed = dump_map.get(site["class"]) or observed_map.get(site["class"])
+                    self.check("hook:" + label + ":observed",
+                               observed is not None and observed == expected_observed,
+                               "probe/class canonical drift")
+                else:
+                    self.check("hook:" + label + ":observed", observed == rev_hash,
+                               "probe/class hash drift")
+                    dump_file = root / (site["class"].replace(".", "/") + ".class")
+                    dump_override2 = profile.get("transformed_dump_dir")
+                    if dump_override2:
+                        dump_file = Path(dump_override2) / (site["class"].replace(".", "/") + ".class")
+                        if dump_file.exists():
+                            self.check("hook:" + label + ":dump",
+                                       sha256_file(dump_file) == rev_hash, "dump drift")
 
         # 8. required classes: none missing at probe time
         self.check("required_class_missing", not probe.get("required_class_missing"),

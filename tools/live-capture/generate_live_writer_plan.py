@@ -2,14 +2,27 @@
 committed pre-hook live-shadow profile. Fail-closed: refuses unless every required
 hook is QUALIFIED and the manifest hash matches. The plan is the single source of
 truth for which hook sites the transformers may instrument."""
+import argparse
 import hashlib
 import json
 import pathlib
 
 ROOT = pathlib.Path(r"D:/minecraftrust")
-PROFILE = ROOT / "tools/live-capture/live-shadow-profile.json"
-MANIFEST = ROOT / "tools/live-capture/required-live-writer-hooks.json"
-OUT = ROOT / "tools/bridge/src/com/rustcraft/coremod/LiveWriterPlan.java"
+_parser = argparse.ArgumentParser(description=__doc__)
+_parser.add_argument("--profile", type=pathlib.Path,
+                     default=ROOT / "tools/live-capture/live-shadow-profile.json",
+                     help="qualified pre-hook profile JSON (live-shadow shape)")
+_parser.add_argument("--manifest", type=pathlib.Path,
+                     default=ROOT / "tools/live-capture/required-live-writer-hooks.json")
+_parser.add_argument("--out", type=pathlib.Path,
+                     default=ROOT / "tools/bridge/src/com/rustcraft/coremod/LiveWriterPlan.java")
+_parser.add_argument("--class-name", default="LiveWriterPlan",
+                     help="generated plan class name (unique per profile)")
+_args = _parser.parse_args()
+PROFILE = _args.profile
+MANIFEST = _args.manifest
+OUT = _args.out
+PLAN_CLASS = _args.class_name
 
 profile = json.loads(PROFILE.read_text(encoding="utf-8"))
 manifest = json.loads(MANIFEST.read_text(encoding="utf-8"))
@@ -56,12 +69,13 @@ for hook in hooks:
     else:
         fingerprint_expr = "EMPTY_FINGERPRINT"
     plan_entries.append(
-        "new Hook(%s, %s, %s, %s, %s, %s, %s, %s, %s)" % (
+        "new Hook(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)" % (
             jstr(hook["id"]), jstr(transformer_for(hook)), jstr(cls), jstr(hook["method"]),
             jstr(hook["descriptor"]), jstr(hook["hook_type"]),
             jstr("liveWriter." + hook["id"] + "." + cls.rsplit(".", 1)[-1] + "." + hook["method"].replace("<init>", "ctor")),
             fingerprint_expr,
-            jstr(hash_by_class[cls])))
+            jstr(hash_by_class[cls]),
+            "true" if profile.get("identity_mode") == "CANONICAL" else "false"))
 
 java = f"""package com.rustcraft.coremod;
 
@@ -76,7 +90,7 @@ java = f"""package com.rustcraft.coremod;
  * Profile identity bound at generation: minecraft_server {profile["qualification"]["minecraft_server_jar_sha256"][:16]}…,
  * forge build {profile["forge_build"]}, profile {profile["qualification"]["profile"]}.
  */
-public final class LiveWriterPlan {{
+public final class {PLAN_CLASS} {{
     public static final String[][] EMPTY_FINGERPRINT = new String[0][];
 
     public static final class Hook {{
@@ -89,9 +103,11 @@ public final class LiveWriterPlan {{
         public final String operationId;   // unique injected marker + duplicate-detection anchor
         public final String[][] fingerprint; // {{bci, expected instruction fragment}} or empty
         public final String preHookClassSha256;
+        public final boolean canonicalIdentity;
 
         Hook(String id, String transformer, String className, String methodName, String descriptor,
-             String hookType, String operationId, String[][] fingerprint, String preHookClassSha256) {{
+             String hookType, String operationId, String[][] fingerprint, String preHookClassSha256,
+             boolean canonicalIdentity) {{
             this.id = id;
             this.transformer = transformer;
             this.className = className;
@@ -101,6 +117,7 @@ public final class LiveWriterPlan {{
             this.operationId = operationId;
             this.fingerprint = fingerprint;
             this.preHookClassSha256 = preHookClassSha256;
+            this.canonicalIdentity = canonicalIdentity;
         }}
 
         public boolean hasFingerprint() {{
@@ -111,25 +128,26 @@ public final class LiveWriterPlan {{
     /** Negative-control factory: same hook with a wrong pre-hook class hash. */
     public static Hook doctoredSha(Hook hook, String sha) {{
         return new Hook(hook.id, hook.transformer, hook.className, hook.methodName, hook.descriptor,
-                hook.hookType, hook.operationId, hook.fingerprint, sha);
+                hook.hookType, hook.operationId, hook.fingerprint, sha, hook.canonicalIdentity);
     }}
 
     /** Negative-control factory: same hook with an altered descriptor. */
     public static Hook doctoredDescriptor(Hook hook, String descriptor) {{
         return new Hook(hook.id, hook.transformer, hook.className, hook.methodName, descriptor,
-                hook.hookType, hook.operationId, hook.fingerprint, hook.preHookClassSha256);
+                hook.hookType, hook.operationId, hook.fingerprint, hook.preHookClassSha256, hook.canonicalIdentity);
     }}
 
     /** Negative-control factory: same hook with shifted/missing/duplicated anchors. */
     public static Hook doctoredFingerprint(Hook hook, String[][] fingerprint) {{
         return new Hook(hook.id, hook.transformer, hook.className, hook.methodName, hook.descriptor,
-                hook.hookType, hook.operationId, fingerprint, hook.preHookClassSha256);
+                hook.hookType, hook.operationId, fingerprint, hook.preHookClassSha256, hook.canonicalIdentity);
     }}
 
     /** Profile identity binding: any change here requires regeneration + requalification. */
     public static final String FORGE_BUILD = {jstr(profile["forge_build"])};
     public static final String QUALIFICATION_PROFILE = {jstr(profile["qualification"]["profile"])};
     public static final String REQUIRED_HOOKS_MANIFEST_SHA256 = {jstr(manifest_sha)};
+    public static final String IDENTITY_MODE = {jstr(profile.get("identity_mode", "RAW"))};
 
     public static final Hook[] HOOKS = {{
         {",\n        ".join(plan_entries)}

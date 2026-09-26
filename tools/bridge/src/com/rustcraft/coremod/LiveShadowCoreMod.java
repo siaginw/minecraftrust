@@ -46,6 +46,30 @@ public class LiveShadowCoreMod implements IFMLLoadingPlugin {
 
     @Override
     public void injectData(Map<String, Object> data) {
+        // Fail-closed profile selection: the generated plan embeds the Forge
+        // build it was qualified against. A runtime built by a different Forge
+        // must never be instrumented with this plan, even before any per-class
+        // pre-hook hash check can run.
+        try {
+            Object build = Class.forName("net.minecraftforge.fml.relauncher.FMLInjectionData")
+                    .getDeclaredField("build").get(null);
+            String runtimeBuild = String.valueOf(build);
+            String planBuild = LiveWriterPlan.FORGE_BUILD;
+            // FMLInjectionData.build is the bare build number ("2860"); the plan
+            // carries the full version ("14.23.5.2860"). The build number is the
+            // discriminator (2846 vs 2860), so require an exact suffix match.
+            if (runtimeBuild.length() < 4 || !planBuild.endsWith(runtimeBuild)) {
+                throw new IllegalStateException(
+                        "profile/runtime mismatch: plan qualified for Forge " + planBuild
+                                + " but runtime reports build " + runtimeBuild);
+            }
+        } catch (IllegalStateException mismatch) {
+            throw mismatch; // fail closed: refuse to instrument the wrong runtime
+        } catch (Throwable unavailable) {
+            // FMLInjectionData not reachable in this launch shape (offline
+            // harness variants); per-class pre-hook identity still binds the
+            // transformers to the exact qualified bytes.
+        }
         // The live diagnostic is enabled for this campaign: start the in-server
         // consumer (drain → Rust replay → compare → record; SHADOW only).
         if (Boolean.getBoolean("rustcraft.liveWriterDiagnostic")) {

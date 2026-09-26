@@ -69,8 +69,11 @@ class NegativeControls(unittest.TestCase):
 
     def test_03_altered_transformed_class_hash_rejected(self) -> None:
         def mutate(doc: dict) -> None:
-            site = doc["hook_matrix"]["sites"][0]
-            site["rev_sha256"] = "f" * 64
+            if doc.get("identity_mode") == "CANONICAL":
+                cls = doc["hook_matrix"]["sites"][0]["class"]
+                doc["expected_transformed_classes"][cls] = "f" * 64
+            else:
+                doc["hook_matrix"]["sites"][0]["rev_sha256"] = "f" * 64
         code, out = self.mutated(mutate, "class-hash")
         self.assertNotEqual(code, 0)
         self.assertIn("observed", out)
