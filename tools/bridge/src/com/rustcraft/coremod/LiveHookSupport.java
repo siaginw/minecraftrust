@@ -92,6 +92,33 @@ public final class LiveHookSupport {
     }
 
     /**
+     * The ONE defining-loader identity rendering. Concrete type + identity hash
+     * + own name, so two distinct loaders that happen to share a simple name are
+     * not conflated. This is the single definition shared by the same-process
+     * acquisition recorder and the admission gate: two independent renderings
+     * would make every real session-bound authorization fail LOADER_MISMATCH.
+     * getName() exists only on URLClassLoader, so it is read reflectively
+     * through a declared supertype rather than assumed.
+     */
+    public static String loaderIdentity(ClassLoader loader) {
+        if (loader == null) return null;
+        String named = null;
+        try {
+            if (loader instanceof java.net.URLClassLoader) {
+                java.lang.reflect.Method getName =
+                        java.net.URLClassLoader.class.getMethod("getName");
+                Object value = getName.invoke(loader);
+                if (value instanceof String) named = (String) value;
+            }
+        } catch (Exception unavailable) {
+            named = null;
+        }
+        return loader.getClass().getName() + "@"
+                + Integer.toHexString(System.identityHashCode(loader))
+                + "[" + (named == null ? "" : named) + "]";
+    }
+
+    /**
      * Default runtime session binding. The process and transformation-session
      * identities are supplied by the same-process acquisition stage that
      * recorded the pre-writer bytes; a runtime that cannot supply them reports
@@ -110,25 +137,7 @@ public final class LiveHookSupport {
         }
 
         public String definingLoaderIdentity(ClassLoader loader) {
-            if (loader == null) return null;
-            // Concrete type + identity hash + own name: two distinct loaders that
-            // happen to share a simple name are not conflated. getName() is only
-            // available on URLClassLoader, so it is read reflectively through a
-            // declared supertype rather than assumed.
-            String named = null;
-            try {
-                if (loader instanceof java.net.URLClassLoader) {
-                    java.lang.reflect.Method getName =
-                            java.net.URLClassLoader.class.getMethod("getName");
-                    Object value = getName.invoke(loader);
-                    if (value instanceof String) named = (String) value;
-                }
-            } catch (Exception unavailable) {
-                named = null;
-            }
-            return loader.getClass().getName() + "@"
-                    + Integer.toHexString(System.identityHashCode(loader))
-                    + "[" + (named == null ? "" : named) + "]";
+            return loaderIdentity(loader);
         }
     }
 

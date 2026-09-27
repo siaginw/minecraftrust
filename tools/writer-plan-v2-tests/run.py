@@ -12,6 +12,7 @@ def sources():
  p=[ROOT/'tools/live-capture/generate_live_writer_plan.py',ROOT/'tools/testing/hardening_guard.py',ROOT/'tools/testing/session_bound_certificate.py',ROOT/'tools/live-capture/live-shadow-profile.json',ROOT/'tools/live-capture/required-live-writer-hooks.json',Path(__file__)]
  p.extend(ROOT/'tools/bridge/src/com/rustcraft/coremod'/n for n in ['LiveWriterPlan.java','LiveHookSupport.java','CanonicalClassIdentityV2.java','SessionBoundIdentityCertificate.java'])
  p.extend((ROOT/'tools/writer-plan-v2-tests/src').rglob('*.java'))
+ p.append(ROOT/'tools/bridge/src/com/rustcraft/qualification/SameProcessAcquisition.java')
  return {str(x):sha(x) for x in p}
 def main():
  a=argparse.ArgumentParser(description=__doc__);a.add_argument('--output',type=Path)
@@ -149,7 +150,11 @@ def main():
   run('compile-clean-forge-exact-regression',[javac,'-source','8','-target','8','-Xlint:all','-Werror','-cp',asm,'-d',clean,core/'CanonicalClassIdentityV2.java',core/'SessionBoundIdentityCertificate.java',core/'LiveHookSupport.java',core/'LiveWriterPlan.java',test/'CleanForgeExactModeRegression.java'])
   clean_result=run('clean-forge-exact-regression',[java,'-cp',str(clean)+os.pathsep+str(asm),'com.rustcraft.coremod.CleanForgeExactModeRegression'])
   assert clean_result.stdout.strip().startswith(b'PASS Clean Forge exact mode'),clean_result.stdout
-  r.update(status='PASS',java_assertions=26,negative_generator_controls=len(r['negative_controls']),generated_v2_compile_and_admission=True,default_raw_regeneration_byte_identical=True,clean_forge_exact_mode_regression=True,session_bound_plan_generated_and_admitted=True)
+  acquisition=out/'acquisition-classes';acquisition.mkdir()
+  run('compile-same-process-acquisition',[javac,'-source','8','-target','8','-Xlint:all','-Werror','-cp',asm,'-d',acquisition,core/'CanonicalClassIdentityV2.java',core/'SessionBoundIdentityCertificate.java',core/'LiveHookSupport.java',core/'LiveWriterPlan.java',ROOT/'tools/bridge/src/com/rustcraft/qualification/SameProcessAcquisition.java',test/'SameProcessAcquisitionControls.java'])
+  acquisition_result=run('same-process-acquisition-controls',[java,'-cp',str(acquisition)+os.pathsep+str(asm),'com.rustcraft.coremod.SameProcessAcquisitionControls'])
+  assert acquisition_result.stdout.strip().startswith(b'PASS SameProcessAcquisitionControls'),acquisition_result.stdout
+  r.update(status='PASS',java_assertions=26,negative_generator_controls=len(r['negative_controls']),generated_v2_compile_and_admission=True,default_raw_regeneration_byte_identical=True,clean_forge_exact_mode_regression=True,same_process_acquisition_contract=True,session_bound_plan_generated_and_admitted=True)
  except Exception as e:r['error']=type(e).__name__+': '+str(e)
  finally:
   r['sources_after']=sources();r['guard_after']=inspect(ROOT)
