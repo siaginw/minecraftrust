@@ -80,7 +80,7 @@
     {
       "id": "H4",
       "title": "FINE-GRAINED NATIVE CAPABILITY MODEL",
-      "status": "FOUNDATION_VALIDATED",
+      "status": "FOUNDATION_COMMITTED",
       "implementation": [
         "crates/native-capability",
         "docs/architecture/native-capabilities.md"
@@ -91,7 +91,7 @@
       "evidence": [
         "machine/architecture-hardening/h4-validation.json"
       ],
-      "commit": null,
+      "commit": "a36e4d7642ba7bce0d19b846a0b0f7cd5f670c2f",
       "outstanding": [
         "Opaque identities/evidence are model inputs, not verified running JVM objects or H2 certificate imports",
         "Runtime event delivery, quiescence, registry epoch authority and H23 requalification remain pending",
@@ -268,15 +268,19 @@
         "machine/external-reuse/ultra-candidates.json",
         "docs/research/external-candidate-decisions.md",
         "tools/differential-replay",
-        "docs/research/differential-event-replay.md"
+        "docs/research/differential-event-replay.md",
+        "tools/state-diff-experiment",
+        "docs/research/state-diff-execution.md"
       ],
       "validation": [
         "Decision ledger: 70 candidates, all 48 required names, 13 validator tests passed. Remaining bounded experiments are pending.",
-        "Replay model independently rerun:47/47 cases,836 boundaries,5 Rust and14 Python tests; real Minecraft adapters remain pending."
+        "Replay model independently rerun:47/47 cases,836 boundaries,5 Rust and14 Python tests; real Minecraft adapters remain pending.",
+        "State-diff model root rerun:20 Rust tests,24 Java/Rust cases,547 paired boundaries; live scheduler remains rejected."
       ],
       "evidence": [
         "machine/architecture-hardening/h22-5-ledger-validation.json",
-        "machine/architecture-hardening/h22-5-replay-validation.json"
+        "machine/architecture-hardening/h22-5-replay-validation.json",
+        "machine/architecture-hardening/h22-5-state-diff-validation.json"
       ],
       "commit": null,
       "requirements": [
@@ -302,16 +306,17 @@
           "commit": "6d36b9ce8c4deb8043c6edf485c6748b61396864"
         },
         "B": {
-          "status": "IN_PROGRESS"
+          "status": "VALIDATED_PROTOTYPE",
+          "evidence": "machine/architecture-hardening/h22-5-state-diff-validation.json"
         },
         "C": {
-          "status": "PENDING"
+          "status": "IN_PROGRESS"
         },
         "D": {
           "status": "PENDING"
         },
         "E": {
-          "status": "PENDING"
+          "status": "IN_PROGRESS"
         },
         "F": {
           "status": "PENDING"

@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "kind": "H22_5_B_STATE_DIFF_MODEL",
+  "status": "PASS",
+  "scope": "OFFLINE_MODEL_ONLY",
+  "production_authority": false,
+  "root_receipt": "D:\\minecraftrust-astra-hardening\\target\\state-diff-experiment\\521f5295de294a60ba514b1eeca07ed4\\campaign.json",
+  "root_receipt_sha256": "5f53826cbfb24de2c0466f417261e2d74440f068757eda8392c586ff318038cd",
+  "agent_receipt": "target/state-diff-experiment/261a31c0203a4cd18216aa20c1d55f20/campaign.json",
+  "agent_receipt_sha256": "8f332f843eb20f5092bfea52811532870c86f9b41b7bd55009b08c48f0812bd4",
+  "rust_contract_tests": 20,
+  "java_rust_cases": 24,
+  "paired_boundaries": 547,
+  "decisions": {
+    "pure_block_calculations": "LIMITED_USE",
+    "bounded_worldgen_kernels": "LIMITED_USE",
+    "selected_pure_simulations": "LIMITED_USE",
+    "testing_oracle_pattern": "ADOPT",
+    "production_transactional_scheduler": "REJECT_PENDING_QUALIFICATION"
+  },
+  "limits": [
+    "Private immutable model snapshots are not live H2 certificates",
+    "16 cells,32 diffs,16 effects per diff; validation recomputes pure work",
+    "No Forge callbacks,IO,RNG-visible or external effects",
+    "No production speedup,live scheduler or real block behavior qualification"
+  ],
+  "artifacts": {
+    "machine/architecture-hardening/h22-5-state-diff-evidence/campaign.json": "5f53826cbfb24de2c0466f417261e2d74440f068757eda8392c586ff318038cd",
+    "machine/architecture-hardening/h22-5-state-diff-evidence/case-receipts.json": "f7f52a212a59a59adb5c00131533cb100a4c216ef3fe63309b2e7b699ee7ef90",
+    "machine/architecture-hardening/h22-5-state-diff-evidence/java-build.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "machine/architecture-hardening/h22-5-state-diff-evidence/java-build.stdout.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "machine/architecture-hardening/h22-5-state-diff-evidence/rust-build.stderr.txt": "b1f9a8e5a4b555ee8347f8fbc54171511396eab2c33410ea79a29e91d2ec2c61",
+    "machine/architecture-hardening/h22-5-state-diff-evidence/rust-build.stdout.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "machine/architecture-hardening/h22-5-state-diff-evidence/rust-clippy.stderr.txt": "ef1107ea2f91ab5bfe7b2d1ef9c79554b45f1ae53bdcf6156095516598d45475",
+    "machine/architecture-hardening/h22-5-state-diff-evidence/rust-clippy.stdout.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "machine/architecture-hardening/h22-5-state-diff-evidence/rust-fmt.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "machine/architecture-hardening/h22-5-state-diff-evidence/rust-fmt.stdout.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "machine/architecture-hardening/h22-5-state-diff-evidence/rust-tests.stderr.txt": "7e6a432578a13a6e4b651c7fc1525d3b90a9218833000cd05f46d2b4aeeb474f",
+    "machine/architecture-hardening/h22-5-state-diff-evidence/rust-tests.stdout.txt": "3f2475a71b545e57fb917edc9f533e45252b86fd41c3fc5404422184c6c3ba76"
+  }
+}

@@ -1,0 +1,15 @@
+   Compiling state-diff-experiment v0.1.0 (D:\minecraftrust-astra-hardening\tools\state-diff-experiment)
+warning: value assigned to `copied` is never read
+   --> src\lib.rs:332:9
+    |
+332 |         copied[0] = 99;
+    |         ^^^^^^^^^^^^^^
+    |
+    = help: maybe it is overwritten before being read?
+    = note: `#[warn(unused_assignments)]` (part of `#[warn(unused)]`) on by default
+
+warning: `state-diff-experiment` (lib test) generated 1 warning
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.49s
+     Running unittests src\lib.rs (D:\minecraftrust-astra-hardening\target\state-diff-experiment\521f5295de294a60ba514b1eeca07ed4\cargo-target\debug\deps\state_diff_experiment-a64012f2f328a372.exe)
+     Running unittests src\main.rs (D:\minecraftrust-astra-hardening\target\state-diff-experiment\521f5295de294a60ba514b1eeca07ed4\cargo-target\debug\deps\state_diff_experiment-002caddc240417c5.exe)
+   Doc-tests state_diff_experiment

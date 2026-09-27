@@ -1,0 +1,3095 @@
+[
+  {
+    "name": "gradient-copy-add-golden",
+    "original_path": "D:\\minecraftrust-astra-hardening\\target\\state-diff-experiment\\521f5295de294a60ba514b1eeca07ed4\\cases\\2858a26ccdf440339b2c41212824cda3\\receipt.json",
+    "sha256": "7d471df1fdbed5585a4dab3780d2284a40bcdb18ec2a57c9ebebb26f78931709",
+    "receipt": {
+      "schema": "STATE_DIFF_COMPARISON_V1",
+      "name": "gradient-copy-add-golden",
+      "status": "PASS",
+      "expected_divergence": false,
+      "scope": "OFFLINE_MODEL_ONLY",
+      "production_authority": false,
+      "binding": {
+        "session": "2858a26ccdf440339b2c41212824cda3",
+        "challenge": "dd471a6c1ded5e56e32e04e5319e89918e71a192f56b0cb755e412395ad2a109",
+        "trace_sha256": "29f6140293f456d320b775330211cff83467657f2332cc0a5b7d4eacfefcdc85"
+      },
+      "commands_issued": 3,
+      "paired_boundaries": 4,
+      "observed_boundary_bytes": 3588,
+      "first_divergence": null,
+      "final": {
+        "schema": "STATE_DIFF_BOUNDARY_V1",
+        "session": "2858a26ccdf440339b2c41212824cda3",
+        "challenge": "dd471a6c1ded5e56e32e04e5319e89918e71a192f56b0cb755e412395ad2a109",
+        "trace_sha256": "29f6140293f456d320b775330211cff83467657f2332cc0a5b7d4eacfefcdc85",
+        "qualification": "OFFLINE_MODEL_ONLY",
+        "production_authority": false,
+        "step": 3,
+        "status": "COMMITTED",
+        "error": null,
+        "generation": 3,
+        "values": [
+          13,
+          0,
+          0,
+          9,
+          7,
+          5,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "effects": [
+          [
+            0,
+            9,
+            13
+          ]
+        ]
+      },
+      "processes": [
+        {
+          "command": [
+            "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\bin\\java.exe",
+            "-cp",
+            "D:\\minecraftrust-astra-hardening\\target\\state-diff-experiment\\521f5295de294a60ba514b1eeca07ed4\\classes",
+            "StateDiffReference"
+          ],
+          "exit": 0,
+          "stderr_bytes": 0,
+          "extra_stdout_lines": 0,
+          "extra_stdout_bytes": 0,
+          "saved_bytes": {
+            "stdout": 1791,
+            "stderr": 0
+          },
+          "raw_prefix_truncated": {
+            "stdout": false,
+            "stderr": false
+          },
+          "resource_error": null,
+          "reader_threads_alive": [],
+          "limits": {
+            "line_bytes": 1048576,
+            "stdout_bytes": 8388608,
+            "stderr_bytes": 262144,
+            "queue_lines": 4,
+            "boundary_bytes": 4194304,
+            "boundary_timeout": 10,
+            "lifetime": 30
+          },
+          "stdout_sha256": "ce4b94bb17aa1f5f03d776e5d99c5bee9bac7f022435c43fa0b341ae55d3b671",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "command": [
+            "D:\\minecraftrust-astra-hardening\\target\\state-diff-experiment\\521f5295de294a60ba514b1eeca07ed4\\cargo-target\\release\\state-diff-experiment.exe"
+          ],
+          "exit": 0,
+          "stderr_bytes": 0,
+          "extra_stdout_lines": 0,
+          "extra_stdout_bytes": 0,
+          "saved_bytes": {
+            "stdout": 1797,
+            "stderr": 0
+          },
+          "raw_prefix_truncated": {
+            "stdout": false,
+            "stderr": false
+          },
+          "resource_error": null,
+          "reader_threads_alive": [],
+          "limits": {
+            "line_bytes": 1048576,
+            "stdout_bytes": 8388608,
+            "stderr_bytes": 262144,
+            "queue_lines": 4,
+            "boundary_bytes": 4194304,
+            "boundary_timeout": 10,
+            "lifetime": 30
+          },
+          "stdout_sha256": "7b58777e9bd98b6f75eea692e155374e36715d46c5acb68f9c838e0109961c01",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "elapsed_seconds": 0.13289390003774315
+    }
+  },
+  {
+    "name": "gradient-range-failure-is-atomic",
+    "original_path": "D:\\minecraftrust-astra-hardening\\target\\state-diff-experiment\\521f5295de294a60ba514b1eeca07ed4\\cases\\dc49623128244e8dada892a7a6736542\\receipt.json",
+    "sha256": "280abd89488ceeb26696778c821c9be9148124e88375ef53bdc146cca07e7ef7",
+    "receipt": {
+      "schema": "STATE_DIFF_COMPARISON_V1",
+      "name": "gradient-range-failure-is-atomic",
+      "status": "PASS",
+      "expected_divergence": false,
+      "scope": "OFFLINE_MODEL_ONLY",
+      "production_authority": false,
+      "binding": {
+        "session": "dc49623128244e8dada892a7a6736542",
+        "challenge": "28e181ba737b9cd190e77372787fcee17462608a7b17ded193a907d713c20146",
+        "trace_sha256": "dc4345e71ef028950d08fc30c26425d943e31438637ab6da518f2d7d8458bd56"
+      },
+      "commands_issued": 1,
+      "paired_boundaries": 2,
+      "observed_boundary_bytes": 1750,
+      "first_divergence": null,
+      "final": {
+        "schema": "STATE_DIFF_BOUNDARY_V1",
+        "session": "dc49623128244e8dada892a7a6736542",
+        "challenge": "28e181ba737b9cd190e77372787fcee17462608a7b17ded193a907d713c20146",
+        "trace_sha256": "dc4345e71ef028950d08fc30c26425d943e31438637ab6da518f2d7d8458bd56",
+        "qualification": "OFFLINE_MODEL_ONLY",
+        "production_authority": false,
+        "step": 1,
+        "status": "REJECTED",
+        "error": "RANGE",
+        "generation": 0,
+        "values": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "effects": []
+      },
+      "processes": [
+        {
+          "command": [
+            "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\bin\\java.exe",
+            "-cp",
+            "D:\\minecraftrust-astra-hardening\\target\\state-diff-experiment\\521f5295de294a60ba514b1eeca07ed4\\classes",
+            "StateDiffReference"
+          ],
+          "exit": 0,
+          "stderr_bytes": 0,
+          "extra_stdout_lines": 0,
+          "extra_stdout_bytes": 0,
+          "saved_bytes": {
+            "stdout": 876,
+            "stderr": 0
+          },
+          "raw_prefix_truncated": {
+            "stdout": false,
+            "stderr": false
+          },
+          "resource_error": null,
+          "reader_threads_alive": [],
+          "limits": {
+            "line_bytes": 1048576,
+            "stdout_bytes": 8388608,
+            "stderr_bytes": 262144,
+            "queue_lines": 4,
+            "boundary_bytes": 4194304,
+            "boundary_timeout": 10,
+            "lifetime": 30
+          },
+          "stdout_sha256": "60c94c99d380d04725b9e3f92d1983c3ea621e0f1405b6507d4d04114bab9eae",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "command": [
+            "D:\\minecraftrust-astra-hardening\\target\\state-diff-experiment\\521f5295de294a60ba514b1eeca07ed4\\cargo-target\\release\\state-diff-experiment.exe"
+          ],
+          "exit": 0,
+          "stderr_bytes": 0,
+          "extra_stdout_lines": 0,
+          "extra_stdout_bytes": 0,
+          "saved_bytes": {
+            "stdout": 874,
+            "stderr": 0
+          },
+          "raw_prefix_truncated": {
+            "stdout": false,
+            "stderr": false
+          },
+          "resource_error": null,
+          "reader_threads_alive": [],
+          "limits": {
+            "line_bytes": 1048576,
+            "stdout_bytes": 8388608,
+            "stderr_bytes": 262144,
+            "queue_lines": 4,
+            "boundary_bytes": 4194304,
+            "boundary_timeout": 10,
+            "lifetime": 30
+          },
+          "stdout_sha256": "354e974b359380bdc5045bcdcd2ec54b35c04d07f1d21b6137e420be7c5fa33a",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "elapsed_seconds": 0.10303220001515001
+    }
+  },
+  {
+    "name": "failure-then-valid-retry",
+    "original_path": "D:\\minecraftrust-astra-hardening\\target\\state-diff-experiment\\521f5295de294a60ba514b1eeca07ed4\\cases\\9a190efed2314c29a9ba6865b88f5e87\\receipt.json",
+    "sha256": "484e5ce1873d2fe82f7be152b1ff4c3c2ce27d74636c6e84a5eaa7fc2419b638",
+    "receipt": {
+      "schema": "STATE_DIFF_COMPARISON_V1",
+      "name": "failure-then-valid-retry",
+      "status": "PASS",
+      "expected_divergence": false,
+      "scope": "OFFLINE_MODEL_ONLY",
+      "production_authority": false,
+      "binding": {
+        "session": "9a190efed2314c29a9ba6865b88f5e87",
+        "challenge": "1e6e0964981e89e2e3aef7ead1d08f5eb6a8950303ac6c1b4aa20025c7c68813",
+        "trace_sha256": "68ff52105c3927d5962800b65ec6f5d88d0f634db6ea04e4aa99e8fb8affc845"
+      },
+      "commands_issued": 2,
+      "paired_boundaries": 3,
+      "observed_boundary_bytes": 2641,
+      "first_divergence": null,
+      "final": {
+        "schema": "STATE_DIFF_BOUNDARY_V1",
+        "session": "9a190efed2314c29a9ba6865b88f5e87",
+        "challenge": "1e6e0964981e89e2e3aef7ead1d08f5eb6a8950303ac6c1b4aa20025c7c68813",
+        "trace_sha256": "68ff52105c3927d5962800b65ec6f5d88d0f634db6ea04e4aa99e8fb8affc845",
+        "qualification": "OFFLINE_MODEL_ONLY",
+        "production_authority": false,
+        "step": 2,
+        "status": "COMMITTED",
+        "error": null,
+        "generation": 1,
+        "values": [
+          2,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "effects": [
+          [
+            0,
+            0,
+            2
+          ]
+        ]
+      },
+      "processes": [
+        {
+          "command": [
+            "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\bin\\java.exe",
+            "-cp",
+            "D:\\minecraftrust-astra-hardening\\target\\state-diff-experiment\\521f5295de294a60ba514b1eeca07ed4\\classes",
+            "StateDiffReference"
+          ],
+          "exit": 0,
+          "stderr_bytes": 0,
+          "extra_stdout_lines": 0,
+          "extra_stdout_bytes": 0,
+          "saved_bytes": {
+            "stdout": 1321,
+            "stderr": 0
+          },
+          "raw_prefix_truncated": {
+            "stdout": false,
+            "stderr": false
+          },
+          "resource_error": null,
+          "reader_threads_alive": [],
+          "limits": {
+            "line_bytes": 1048576,
+            "stdout_bytes": 8388608,
+            "stderr_bytes": 262144,
+            "queue_lines": 4,
+            "boundary_bytes": 4194304,
+            "boundary_timeout": 10,
+            "lifetime": 30
+          },
+          "stdout_sha256": "f5e91ef8ae9920714b54addbf2d5070869a89e19d78458e87c13ae4f42e40dfc",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "command": [
+            "D:\\minecraftrust-astra-hardening\\target\\state-diff-experiment\\521f5295de294a60ba514b1eeca07ed4\\cargo-target\\release\\state-diff-experiment.exe"
+          ],
+          "exit": 0,
+          "stderr_bytes": 0,
+          "extra_stdout_lines": 0,
+          "extra_stdout_bytes": 0,
+          "saved_bytes": {
+            "stdout": 1320,
+            "stderr": 0
+          },
+          "raw_prefix_truncated": {
+            "stdout": false,
+            "stderr": false
+          },
+          "resource_error": null,
+          "reader_threads_alive": [],
+          "limits": {
+            "line_bytes": 1048576,
+            "stdout_bytes": 8388608,
+            "stderr_bytes": 262144,
+            "queue_lines": 4,
+            "boundary_bytes": 4194304,
+            "boundary_timeout": 10,
+            "lifetime": 30
+          },
+          "stdout_sha256": "ec050343c001047fc840017c79fd9e464e1f2a7312fa3429bf1dfc36c690de4a",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "elapsed_seconds": 0.11840770003618672
+    }
+  },
+  {
+    "name": "effect-order-golden",
+    "original_path": "D:\\minecraftrust-astra-hardening\\target\\state-diff-experiment\\521f5295de294a60ba514b1eeca07ed4\\cases\\aae947298080401dbfc60238ebd8d78b\\receipt.json",
+    "sha256": "fcb1d7f68762674554963acadb74a89d07d311866fa94d0cd0548da15b84aeb0",
+    "receipt": {
+      "schema": "STATE_DIFF_COMPARISON_V1",
+      "name": "effect-order-golden",
+      "status": "PASS",
+      "expected_divergence": false,
+      "scope": "OFFLINE_MODEL_ONLY",
+      "production_authority": false,
+      "binding": {
+        "session": "aae947298080401dbfc60238ebd8d78b",
+        "challenge": "2aa48d37a8469b686a3935da02f49e0b77a928cd33391d016aea56f98e22272e",
+        "trace_sha256": "e5878ba94105bc3da5006ff52e2902aa97cc47e80795ae2627baab4dece198f7"
+      },
+      "commands_issued": 1,
+      "paired_boundaries": 2,
+      "observed_boundary_bytes": 1802,
+      "first_divergence": null,
+      "final": {
+        "schema": "STATE_DIFF_BOUNDARY_V1",
+        "session": "aae947298080401dbfc60238ebd8d78b",
+        "challenge": "2aa48d37a8469b686a3935da02f49e0b77a928cd33391d016aea56f98e22272e",
+        "trace_sha256": "e5878ba94105bc3da5006ff52e2902aa97cc47e80795ae2627baab4dece198f7",
+        "qualification": "OFFLINE_MODEL_ONLY",
+        "production_authority": false,
+        "step": 1,
+        "status": "COMMITTED",
+        "error": null,
+        "generation": 1,
+        "values": [
+          0,
+          0,
+          0,
+          0,
+          2,
+          5,
+          8,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "effects": [
+          [
+            4,
+            0,
+            2
+          ],
+          [
+            5,
+            0,
+            5
+          ],
+          [
+            6,
+            0,
+            8
+          ]
+        ]
+      },
+      "processes": [
+        {
+          "command": [
+            "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\bin\\java.exe",
+            "-cp",
+            "D:\\minecraftrust-astra-hardening\\target\\state-diff-experiment\\521f5295de294a60ba514b1eeca07ed4\\classes",
+            "StateDiffReference"
+          ],
+          "exit": 0,
+          "stderr_bytes": 0,
+          "extra_stdout_lines": 0,
+          "extra_stdout_bytes": 0,
+          "saved_bytes": {
+            "stdout": 899,
+            "stderr": 0
+          },
+          "raw_prefix_truncated": {
+            "stdout": false,
+            "stderr": false
+          },
+          "resource_error": null,
+          "reader_threads_alive": [],
+          "limits": {
+            "line_bytes": 1048576,
+            "stdout_bytes": 8388608,
+            "stderr_bytes": 262144,
+            "queue_lines": 4,
+            "boundary_bytes": 4194304,
+            "boundary_timeout": 10,
+            "lifetime": 30
+          },
+          "stdout_sha256": "4ddc754746fbb189e5fab540b4ec06a44aaa11dfcd76c480368c43d5f4c4797f",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "command": [
+            "D:\\minecraftrust-astra-hardening\\target\\state-diff-experiment\\521f5295de294a60ba514b1eeca07ed4\\cargo-target\\release\\state-diff-experiment.exe"
+          ],
+          "exit": 0,
+          "stderr_bytes": 0,
+          "extra_stdout_lines": 0,
+          "extra_stdout_bytes": 0,
+          "saved_bytes": {
+            "stdout": 903,
+            "stderr": 0
+          },
+          "raw_prefix_truncated": {
+            "stdout": false,
+            "stderr": false
+          },
+          "resource_error": null,
+          "reader_threads_alive": [],
+          "limits": {
+            "line_bytes": 1048576,
+            "stdout_bytes": 8388608,
+            "stderr_bytes": 262144,
+            "queue_lines": 4,
+            "boundary_bytes": 4194304,
+            "boundary_timeout": 10,
+            "lifetime": 30
+          },
+          "stdout_sha256": "869e4c93f63a863190107a4cb4371571fcd18bc309ddfd6311e8f48250374173",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "elapsed_seconds": 0.10431959998095408
+    }
+  },
+  {
+    "name": "invalid-cell",
+    "original_path": "D:\\minecraftrust-astra-hardening\\target\\state-diff-experiment\\521f5295de294a60ba514b1eeca07ed4\\cases\\b160d3868be643818d8d679bce1abcc8\\receipt.json",
+    "sha256": "70c53775eef2722e5c5fcc1aca0dd38e346d449058cfbc3d9c72616a94285420",
+    "receipt": {
+      "schema": "STATE_DIFF_COMPARISON_V1",
+      "name": "invalid-cell",
+      "status": "PASS",
+      "expected_divergence": false,
+      "scope": "OFFLINE_MODEL_ONLY",
+      "production_authority": false,
+      "binding": {
+        "session": "b160d3868be643818d8d679bce1abcc8",
+        "challenge": "76c196abad5cf1bf3858e2b6c6ddba9461b3cdd3f1fa22cdd60372be07444404",
+        "trace_sha256": "fa5ef258511d88cd43f4516d428f8bf10e100e2f28210dc0d6ed4111439efa8b"
+      },
+      "commands_issued": 1,
+      "paired_boundaries": 2,
+      "observed_boundary_bytes": 1748,
+      "first_divergence": null,
+      "final": {
+        "schema": "STATE_DIFF_BOUNDARY_V1",
+        "session": "b160d3868be643818d8d679bce1abcc8",
+        "challenge": "76c196abad5cf1bf3858e2b6c6ddba9461b3cdd3f1fa22cdd60372be07444404",
+        "trace_sha256": "fa5ef258511d88cd43f4516d428f8bf10e100e2f28210dc0d6ed4111439efa8b",
+        "qualification": "OFFLINE_MODEL_ONLY",
+        "production_authority": false,
+        "step": 1,
+        "status": "REJECTED",
+        "error": "CELL",
+        "generation": 0,
+        "values": [
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        "effects": []
+      },
+      "processes": [
+        {
+          "command": [
+            "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\bin\\java.exe",
+            "-cp",
+            "D:\\minecraftrust-astra-hardening\\target\\state-diff-experiment\\521f5295de294a60ba514b1eeca07ed4\\classes",
+            "StateDiffReference"
+          ],
+          "exit": 0,
+          "stderr_bytes": 0,
+          "extra_stdout_lines": 0,
+          "extra_stdout_bytes": 0,
+          "saved_bytes": {
+            "stdout": 875,
+            "stderr": 0
+          },
+          "raw_prefix_truncated": {
+            "stdout": false,
+            "stderr": false
+          },
+          "resource_error": null,
+          "reader_threads_alive": [],
+          "limits": {
+            "line_bytes": 1048576,
+            "stdout_bytes": 8388608,
+            "stderr_bytes": 262144,
+            "queue_lines": 4,
+            "boundary_bytes": 4194304,
+            "boundary_timeout": 10,
+            "lifetime": 30
+          },
+          "stdout_sha256": "a7ff7e594c3c732c9a42979b7420634498bb96e80f8d3dc716205e13054f7de1",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "command": [
+            "D:\\minecraftrust-astra-hardening\\target\\state-diff-experiment\\521f5295de294a60ba514b1eeca07ed4\\cargo-target\\release\\state-diff-experiment.exe"
+          ],
+          "exit": 0,
+          "stderr_bytes": 0,
+          "extra_stdout_lines": 0,
+          "extra_stdout_bytes": 0,
+          "saved_bytes": {
+            "stdout": 873,
+            "stderr": 0
+          },
+          "raw_prefix_truncated": {
+            "stdout": false,
+            "stderr": false
+          },
+          "resource_error": null,
+          "reader_threads_alive": [],
+          "limits": {
+            "line_bytes": 1048576,
+            "stdout_bytes": 8388608,
+            "stderr_bytes": 262144,
+            "queue_lines": 4,
+            "boundary_bytes": 4194304,
+            "boundary_timeout": 10,
+            "lifetime": 30
+          },
+          "stdout_sha256": "bd9647b2653f89e5940d7f8caaa0e7c1ff073f4d29eb063687052d297b263a4c",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "elapsed_seconds": 0.1048634999897331
+    }
+  },
+  {
+    "name": "empty-gradient",
+    "original_path": "D:\\minecraftrust-astra-hardening\\target\\state-diff-experiment\\521f5295de294a60ba514b1eeca07ed4\\cases\\251b2125659b4bb2875e9e305e858b8a\\receipt.json",
+    "sha256": "b1df9996dbf3ad406a2c3d53cb80657171a0f98c46e009a6327694ed177622cd",
+    "receipt": {
+      "schema": "STATE_DIFF_COMPARISON_V1",
+      "name": "empty-gradient",
+      "status": "PASS",
+      "expected_divergence": false,
+      "scope": "OFFLINE_MODEL_ONLY",
+      "production_authority": false,
+      "binding": {
+        "session": "251b2125659b4bb2875e9e305e858b8a",
+        "challenge": "4ae1974d2710946a4ae3ecce13e8bf78d546a5d1b8690025ca2efa406f0bda15",
+        "trace_sha256": "7a1b175f744052d086376c11acef1a476fa54e216e69cd65ebeee85f853880c2"
+      },
+      "commands_issued": 1,
+      "paired_boundaries": 2,
+      "observed_boundary_bytes": 1750,
+      "first_divergence": null,
+      "final": {
+        "schema": "STATE_DIFF_BOUNDARY_V1",
+        "session": "251b2125659b4bb2875e9e305e858b8a",
+        "challenge": "4ae1974d2710946a4ae3ecce13e8bf78d546a5d1b8690025ca2efa406f0bda15",
+        "trace_sha256": "7a1b175f744052d086376c11acef1a476fa54e216e69cd65ebeee85f853880c2",
+        "qualification": "OFFLINE_MODEL_ONLY",
+        "production_authority": false,
+        "step": 1,
+        "status": "REJECTED",
+        "error": "COUNT",
+        "generation": 0,
+        "values": [
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        "effects": []
+      },
+      "processes": [
+        {
+          "command": [
+            "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\bin\\java.exe",
+            "-cp",
+            "D:\\minecraftrust-astra-hardening\\target\\state-diff-experiment\\521f5295de294a60ba514b1eeca07ed4\\classes",
+            "StateDiffReference"
+          ],
+          "exit": 0,
+          "stderr_bytes": 0,
+          "extra_stdout_lines": 0,
+          "extra_stdout_bytes": 0,
+          "saved_bytes": {
+            "stdout": 876,
+            "stderr": 0
+          },
+          "raw_prefix_truncated": {
+            "stdout": false,
+            "stderr": false
+          },
+          "resource_error": null,
+          "reader_threads_alive": [],
+          "limits": {
+            "line_bytes": 1048576,
+            "stdout_bytes": 8388608,
+            "stderr_bytes": 262144,
+            "queue_lines": 4,
+            "boundary_bytes": 4194304,
+            "boundary_timeout": 10,
+            "lifetime": 30
+          },
+          "stdout_sha256": "fd7a1e5683c9b2aa7e339d51ec90736fdc07c662694000378cb74882e72dbe39",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "command": [
+            "D:\\minecraftrust-astra-hardening\\target\\state-diff-experiment\\521f5295de294a60ba514b1eeca07ed4\\cargo-target\\release\\state-diff-experiment.exe"
+          ],
+          "exit": 0,
+          "stderr_bytes": 0,
+          "extra_stdout_lines": 0,
+          "extra_stdout_bytes": 0,
+          "saved_bytes": {
+            "stdout": 874,
+            "stderr": 0
+          },
+          "raw_prefix_truncated": {
+            "stdout": false,
+            "stderr": false
+          },
+          "resource_error": null,
+          "reader_threads_alive": [],
+          "limits": {
+            "line_bytes": 1048576,
+            "stdout_bytes": 8388608,
+            "stderr_bytes": 262144,
+            "queue_lines": 4,
+            "boundary_bytes": 4194304,
+            "boundary_timeout": 10,
+            "lifetime": 30
+          },
+          "stdout_sha256": "7dacd6917b8383b2587689b7f3389bfa28b8bf6e3db0b70a5b8d341bc30383c2",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "elapsed_seconds": 0.10417700000107288
+    }
+  },
+  {
+    "name": "integer-add-overflow",
+    "original_path": "D:\\minecraftrust-astra-hardening\\target\\state-diff-experiment\\521f5295de294a60ba514b1eeca07ed4\\cases\\277ba8fccd654c19ad097bbcd3b6b5a3\\receipt.json",
+    "sha256": "3f297d88ef821632ed29d893bc3382568b6829d1c2b4eba6384e3d9c01e197a4",
+    "receipt": {
+      "schema": "STATE_DIFF_COMPARISON_V1",
+      "name": "integer-add-overflow",
+      "status": "PASS",
+      "expected_divergence": false,
+      "scope": "OFFLINE_MODEL_ONLY",
+      "production_authority": false,
+      "binding": {
+        "session": "277ba8fccd654c19ad097bbcd3b6b5a3",
+        "challenge": "a6a33a90d428d32302b27a9c84721117564a8d20ceaa467c01d46d7528c0578a",
+        "trace_sha256": "42a6379286601247ad94df36a56e21b282572d8749eba6ab97e554a95be1a3d9"
+      },
+      "commands_issued": 1,
+      "paired_boundaries": 2,
+      "observed_boundary_bytes": 1750,
+      "first_divergence": null,
+      "final": {
+        "schema": "STATE_DIFF_BOUNDARY_V1",
+        "session": "277ba8fccd654c19ad097bbcd3b6b5a3",
+        "challenge": "a6a33a90d428d32302b27a9c84721117564a8d20ceaa467c01d46d7528c0578a",
+        "trace_sha256": "42a6379286601247ad94df36a56e21b282572d8749eba6ab97e554a95be1a3d9",
+        "qualification": "OFFLINE_MODEL_ONLY",
+        "production_authority": false,
+        "step": 1,
+        "status": "REJECTED",
+        "error": "RANGE",
+        "generation": 0,
+        "values": [
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        "effects": []
+      },
+      "processes": [
+        {
+          "command": [
+            "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\bin\\java.exe",
+            "-cp",
+            "D:\\minecraftrust-astra-hardening\\target\\state-diff-experiment\\521f5295de294a60ba514b1eeca07ed4\\classes",
+            "StateDiffReference"
+          ],
+          "exit": 0,
+          "stderr_bytes": 0,
+          "extra_stdout_lines": 0,
+          "extra_stdout_bytes": 0,
+          "saved_bytes": {
+            "stdout": 876,
+            "stderr": 0
+          },
+          "raw_prefix_truncated": {
+            "stdout": false,
+            "stderr": false
+          },
+          "resource_error": null,
+          "reader_threads_alive": [],
+          "limits": {
+            "line_bytes": 1048576,
+            "stdout_bytes": 8388608,
+            "stderr_bytes": 262144,
+            "queue_lines": 4,
+            "boundary_bytes": 4194304,
+            "boundary_timeout": 10,
+            "lifetime": 30
+          },
+          "stdout_sha256": "8f3e3d8a1f8ddf83a2e39c8a01ed646b0a70b9640beeb48a0155d9c58f50d1bd",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "command": [
+            "D:\\minecraftrust-astra-hardening\\target\\state-diff-experiment\\521f5295de294a60ba514b1eeca07ed4\\cargo-target\\release\\state-diff-experiment.exe"
+          ],
+          "exit": 0,
+          "stderr_bytes": 0,
+          "extra_stdout_lines": 0,
+          "extra_stdout_bytes": 0,
+          "saved_bytes": {
+            "stdout": 874,
+            "stderr": 0
+          },
+          "raw_prefix_truncated": {
+            "stdout": false,
+            "stderr": false
+          },
+          "resource_error": null,
+          "reader_threads_alive": [],
+          "limits": {
+            "line_bytes": 1048576,
+            "stdout_bytes": 8388608,
+            "stderr_bytes": 262144,
+            "queue_lines": 4,
+            "boundary_bytes": 4194304,
+            "boundary_timeout": 10,
+            "lifetime": 30
+          },
+          "stdout_sha256": "38cac338d27813e6cea7cfd9e58ac4c2ada1180e5666ded9e3360fe9d9b1aece",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "elapsed_seconds": 0.10391040000831708
+    }
+  },
+  {
+    "name": "seeded-pure-trace-0",
+    "original_path": "D:\\minecraftrust-astra-hardening\\target\\state-diff-experiment\\521f5295de294a60ba514b1eeca07ed4\\cases\\d5506734e6d9488495404042e8326106\\receipt.json",
+    "sha256": "707e4fe8d7f1da733ba736257422c8a198bd587edf3e4338c1ca3c5682df5e5c",
+    "receipt": {
+      "schema": "STATE_DIFF_COMPARISON_V1",
+      "name": "seeded-pure-trace-0",
+      "status": "PASS",
+      "expected_divergence": false,
+      "scope": "OFFLINE_MODEL_ONLY",
+      "production_authority": false,
+      "binding": {
+        "session": "d5506734e6d9488495404042e8326106",
+        "challenge": "433c08150575cf05177eaacc704e04d9fbaa55bf6c082de53d4b45f4cb1b543c",
+        "trace_sha256": "c6e1ff56bd7b0274c1073ee9a54b505e8ce708f7b5a5903f9ce6aac9e6eede6d"
+      },
+      "commands_issued": 32,
+      "paired_boundaries": 33,
+      "observed_boundary_bytes": 35955,
+      "first_divergence": null,
+      "final": {
+        "schema": "STATE_DIFF_BOUNDARY_V1",
+        "session": "d5506734e6d9488495404042e8326106",
+        "challenge": "433c08150575cf05177eaacc704e04d9fbaa55bf6c082de53d4b45f4cb1b543c",
+        "trace_sha256": "c6e1ff56bd7b0274c1073ee9a54b505e8ce708f7b5a5903f9ce6aac9e6eede6d",
+        "qualification": "OFFLINE_MODEL_ONLY",
+        "production_authority": false,
+        "step": 32,
+        "status": "COMMITTED",
+        "error": null,
+        "generation": 32,
+        "values": [
+          40202,
+          51847,
+          64242,
+          39825,
+          38942,
+          64190,
+          63557,
+          64216,
+          64229,
+          64242,
+          63557,
+          64268,
+          64281,
+          64294,
+          40760,
+          40845
+        ],
+        "effects": [
+          [
+            6,
+            64203,
+            63557
+          ]
+        ]
+      },
+      "processes": [
+        {
+          "command": [
+            "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\bin\\java.exe",
+            "-cp",
+            "D:\\minecraftrust-astra-hardening\\target\\state-diff-experiment\\521f5295de294a60ba514b1eeca07ed4\\classes",
+            "StateDiffReference"
+          ],
+          "exit": 0,
+          "stderr_bytes": 0,
+          "extra_stdout_lines": 0,
+          "extra_stdout_bytes": 0,
+          "saved_bytes": {
+            "stdout": 17905,
+            "stderr": 0
+          },
+          "raw_prefix_truncated": {
+            "stdout": false,
+            "stderr": false
+          },
+          "resource_error": null,
+          "reader_threads_alive": [],
+          "limits": {
+            "line_bytes": 1048576,
+            "stdout_bytes": 8388608,
+            "stderr_bytes": 262144,
+            "queue_lines": 4,
+            "boundary_bytes": 4194304,
+            "boundary_timeout": 10,
+            "lifetime": 30
+          },
+          "stdout_sha256": "7e9e286f984242e17e015289a706303f3ab401b48b75339fd909986a8f70eb02",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "command": [
+            "D:\\minecraftrust-astra-hardening\\target\\state-diff-experiment\\521f5295de294a60ba514b1eeca07ed4\\cargo-target\\release\\state-diff-experiment.exe"
+          ],
+          "exit": 0,
+          "stderr_bytes": 0,
+          "extra_stdout_lines": 0,
+          "extra_stdout_bytes": 0,
+          "saved_bytes": {
+            "stdout": 18050,
+            "stderr": 0
+          },
+          "raw_prefix_truncated": {
+            "stdout": false,
+            "stderr": false
+          },
+          "resource_error": null,
+          "reader_threads_alive": [],
+          "limits": {
+            "line_bytes": 1048576,
+            "stdout_bytes": 8388608,
+            "stderr_bytes": 262144,
+            "queue_lines": 4,
+            "boundary_bytes": 4194304,
+            "boundary_timeout": 10,
+            "lifetime": 30
+          },
+          "stdout_sha256": "7b02b9807414fc34e452d0322ad937ad26ebff7bfa6645609b04accd5c4babaf",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "elapsed_seconds": 0.5828963000094518
+    }
+  },
+  {
+    "name": "seeded-pure-trace-1",
+    "original_path": "D:\\minecraftrust-astra-hardening\\target\\state-diff-experiment\\521f5295de294a60ba514b1eeca07ed4\\cases\\1fc06122f138460bba3746c9626fe559\\receipt.json",
+    "sha256": "9d02a620ef97d018f26cc8afb8cf6067e97a3e34b3024a22c5a01fa6a5c1be92",
+    "receipt": {
+      "schema": "STATE_DIFF_COMPARISON_V1",
+      "name": "seeded-pure-trace-1",
+      "status": "PASS",
+      "expected_divergence": false,
+      "scope": "OFFLINE_MODEL_ONLY",
+      "production_authority": false,
+      "binding": {
+        "session": "1fc06122f138460bba3746c9626fe559",
+        "challenge": "ede2f6eab2aa83377ab0d2f2c4584804ad99f15e456da4103a30416ee994326a",
+        "trace_sha256": "5cc2aaa06847cff3a6ff65c0414c9865d8c1ec12a8cf2cf58e1becab68e9ef34"
+      },
+      "commands_issued": 32,
+      "paired_boundaries": 33,
+      "observed_boundary_bytes": 34785,
+      "first_divergence": null,
+      "final": {
+        "schema": "STATE_DIFF_BOUNDARY_V1",
+        "session": "1fc06122f138460bba3746c9626fe559",
+        "challenge": "ede2f6eab2aa83377ab0d2f2c4584804ad99f15e456da4103a30416ee994326a",
+        "trace_sha256": "5cc2aaa06847cff3a6ff65c0414c9865d8c1ec12a8cf2cf58e1becab68e9ef34",
+        "qualification": "OFFLINE_MODEL_ONLY",
+        "production_authority": false,
+        "step": 32,
+        "status": "COMMITTED",
+        "error": null,
+        "generation": 32,
+        "values": [
+          46815,
+          54193,
+          12430,
+          54091,
+          62338,
+          62254,
+          62170,
+          62086,
+          53179,
+          46372,
+          51833,
+          51900,
+          53179,
+          53404,
+          54159,
+          12430
+        ],
+        "effects": [
+          [
+            4,
+            54125,
+            62338
+          ],
+          [
+            5,
+            54855,
+            62254
+          ],
+          [
+            6,
+            54193,
+            62170
+          ],
+          [
+            7,
+            11495,
+            62086
+          ]
+        ]
+      },
+      "processes": [
+        {
+          "command": [
+            "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\bin\\java.exe",
+            "-cp",
+            "D:\\minecraftrust-astra-hardening\\target\\state-diff-experiment\\521f5295de294a60ba514b1eeca07ed4\\classes",
+            "StateDiffReference"
+          ],
+          "exit": 0,
+          "stderr_bytes": 0,
+          "extra_stdout_lines": 0,
+          "extra_stdout_bytes": 0,
+          "saved_bytes": {
+            "stdout": 17360,
+            "stderr": 0
+          },
+          "raw_prefix_truncated": {
+            "stdout": false,
+            "stderr": false
+          },
+          "resource_error": null,
+          "reader_threads_alive": [],
+          "limits": {
+            "line_bytes": 1048576,
+            "stdout_bytes": 8388608,
+            "stderr_bytes": 262144,
+            "queue_lines": 4,
+            "boundary_bytes": 4194304,
+            "boundary_timeout": 10,
+            "lifetime": 30
+          },
+          "stdout_sha256": "7cecebe7c824f0c062e911f473a5e41be7897f0a4f24c29274f7f2b6d84e3354",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "command": [
+            "D:\\minecraftrust-astra-hardening\\target\\state-diff-experiment\\521f5295de294a60ba514b1eeca07ed4\\cargo-target\\release\\state-diff-experiment.exe"
+          ],
+          "exit": 0,
+          "stderr_bytes": 0,
+          "extra_stdout_lines": 0,
+          "extra_stdout_bytes": 0,
+          "saved_bytes": {
+            "stdout": 17425,
+            "stderr": 0
+          },
+          "raw_prefix_truncated": {
+            "stdout": false,
+            "stderr": false
+          },
+          "resource_error": null,
+          "reader_threads_alive": [],
+          "limits": {
+            "line_bytes": 1048576,
+            "stdout_bytes": 8388608,
+            "stderr_bytes": 262144,
+            "queue_lines": 4,
+            "boundary_bytes": 4194304,
+            "boundary_timeout": 10,
+            "lifetime": 30
+          },
+          "stdout_sha256": "528d8a1ec45373dfebf1b31b69fe1cd8b635dc61b273a49c70675bc5ac149254",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "elapsed_seconds": 0.5814744000090286
+    }
+  },
+  {
+    "name": "seeded-pure-trace-2",
+    "original_path": "D:\\minecraftrust-astra-hardening\\target\\state-diff-experiment\\521f5295de294a60ba514b1eeca07ed4\\cases\\0eee004c210049978d122223344b66ae\\receipt.json",
+    "sha256": "83b07426fa048612256b4886935fb669ef7ad448dc2939a5f8c712c9c969a493",
+    "receipt": {
+      "schema": "STATE_DIFF_COMPARISON_V1",
+      "name": "seeded-pure-trace-2",
+      "status": "PASS",
+      "expected_divergence": false,
+      "scope": "OFFLINE_MODEL_ONLY",
+      "production_authority": false,
+      "binding": {
+        "session": "0eee004c210049978d122223344b66ae",
+        "challenge": "54b60242e98ac387524da7e2320ac09ff9c3f80ad6ffcc49e6324ce1e0d7480d",
+        "trace_sha256": "97ac2eb498a5ebd9fce4f5944376aabe93f7fbca35e3f55532e7cfe2c6fc946b"
+      },
+      "commands_issued": 32,
+      "paired_boundaries": 33,
+      "observed_boundary_bytes": 34725,
+      "first_divergence": null,
+      "final": {
+        "schema": "STATE_DIFF_BOUNDARY_V1",
+        "session": "0eee004c210049978d122223344b66ae",
+        "challenge": "54b60242e98ac387524da7e2320ac09ff9c3f80ad6ffcc49e6324ce1e0d7480d",
+        "trace_sha256": "97ac2eb498a5ebd9fce4f5944376aabe93f7fbca35e3f55532e7cfe2c6fc946b",
+        "qualification": "OFFLINE_MODEL_ONLY",
+        "production_authority": false,
+        "step": 32,
+        "status": "COMMITTED",
+        "error": null,
+        "generation": 32,
+        "values": [
+          59388,
+          24080,
+          28674,
+          28291,
+          5888,
+          5953,
+          6083,
+          6083,
+          6148,
+          28200,
+          30526,
+          24033,
+          43461,
+          7492,
+          59578,
+          59388
+        ],
+        "effects": [
+          [
+            10,
+            31059,
+            30526
+          ]
+        ]
+      },
+      "processes": [
+        {
+          "command": [
+            "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\bin\\java.exe",
+            "-cp",
+            "D:\\minecraftrust-astra-hardening\\target\\state-diff-experiment\\521f5295de294a60ba514b1eeca07ed4\\classes",
+            "StateDiffReference"
+          ],
+          "exit": 0,
+          "stderr_bytes": 0,
+          "extra_stdout_lines": 0,
+          "extra_stdout_bytes": 0,
+          "saved_bytes": {
+            "stdout": 17328,
+            "stderr": 0
+          },
+          "raw_prefix_truncated": {
+            "stdout": false,
+            "stderr": false
+          },
+          "resource_error": null,
+          "reader_threads_alive": [],
+          "limits": {
+            "line_bytes": 1048576,
+            "stdout_bytes": 8388608,
+            "stderr_bytes": 262144,
+            "queue_lines": 4,
+            "boundary_bytes": 4194304,
+            "boundary_timeout": 10,
+            "lifetime": 30
+          },
+          "stdout_sha256": "3a63c93d0875c123859bb553ccc4bef23ee12fcf60eed0d30ddce42f337a7944",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "command": [
+            "D:\\minecraftrust-astra-hardening\\target\\state-diff-experiment\\521f5295de294a60ba514b1eeca07ed4\\cargo-target\\release\\state-diff-experiment.exe"
+          ],
+          "exit": 0,
+          "stderr_bytes": 0,
+          "extra_stdout_lines": 0,
+          "extra_stdout_bytes": 0,
+          "saved_bytes": {
+            "stdout": 17397,
+            "stderr": 0
+          },
+          "raw_prefix_truncated": {
+            "stdout": false,
+            "stderr": false
+          },
+          "resource_error": null,
+          "reader_threads_alive": [],
+          "limits": {
+            "line_bytes": 1048576,
+            "stdout_bytes": 8388608,
+            "stderr_bytes": 262144,
+            "queue_lines": 4,
+            "boundary_bytes": 4194304,
+            "boundary_timeout": 10,
+            "lifetime": 30
+          },
+          "stdout_sha256": "5ff5962798956a265fe2329cda426c1c92f3edfa015aac8f7bbb4d9e8038b4cb",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "elapsed_seconds": 0.5811013999627903
+    }
+  },
+  {
+    "name": "seeded-pure-trace-3",
+    "original_path": "D:\\minecraftrust-astra-hardening\\target\\state-diff-experiment\\521f5295de294a60ba514b1eeca07ed4\\cases\\bfd7492567564db1a4d1f6e17c338c5a\\receipt.json",
+    "sha256": "d0a6c1afa4b83e8053a54f03ac3a5d0d91d45d2a67f7e9f22534bd71478265da",
+    "receipt": {
+      "schema": "STATE_DIFF_COMPARISON_V1",
+      "name": "seeded-pure-trace-3",
+      "status": "PASS",
+      "expected_divergence": false,
+      "scope": "OFFLINE_MODEL_ONLY",
+      "production_authority": false,
+      "binding": {
+        "session": "bfd7492567564db1a4d1f6e17c338c5a",
+        "challenge": "b806e3d0730c99799399f852b77b12a1277045251dd355a361dc7686bf2e249b",
+        "trace_sha256": "583a05a544558d57a433627f82f02ad417a51d6ed7a003ad67376298a67e4c61"
+      },
+      "commands_issued": 32,
+      "paired_boundaries": 33,
+      "observed_boundary_bytes": 35311,
+      "first_divergence": null,
+      "final": {
+        "schema": "STATE_DIFF_BOUNDARY_V1",
+        "session": "bfd7492567564db1a4d1f6e17c338c5a",
+        "challenge": "b806e3d0730c99799399f852b77b12a1277045251dd355a361dc7686bf2e249b",
+        "trace_sha256": "583a05a544558d57a433627f82f02ad417a51d6ed7a003ad67376298a67e4c61",
+        "qualification": "OFFLINE_MODEL_ONLY",
+        "production_authority": false,
+        "step": 32,
+        "status": "COMMITTED",
+        "error": null,
+        "generation": 31,
+        "values": [
+          42794,
+          29492,
+          6430,
+          52405,
+          52446,
+          34242,
+          34283,
+          34324,
+          52610,
+          52651,
+          52692,
+          52733,
+          52774,
+          52815,
+          29152,
+          29084
+        ],
+        "effects": [
+          [
+            2,
+            7221,
+            6430
+          ]
+        ]
+      },
+      "processes": [
+        {
+          "command": [
+            "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\bin\\java.exe",
+            "-cp",
+            "D:\\minecraftrust-astra-hardening\\target\\state-diff-experiment\\521f5295de294a60ba514b1eeca07ed4\\classes",
+            "StateDiffReference"
+          ],
+          "exit": 0,
+          "stderr_bytes": 0,
+          "extra_stdout_lines": 0,
+          "extra_stdout_bytes": 0,
+          "saved_bytes": {
+            "stdout": 17607,
+            "stderr": 0
+          },
+          "raw_prefix_truncated": {
+            "stdout": false,
+            "stderr": false
+          },
+          "resource_error": null,
+          "reader_threads_alive": [],
+          "limits": {
+            "line_bytes": 1048576,
+            "stdout_bytes": 8388608,
+            "stderr_bytes": 262144,
+            "queue_lines": 4,
+            "boundary_bytes": 4194304,
+            "boundary_timeout": 10,
+            "lifetime": 30
+          },
+          "stdout_sha256": "14cb690bf2cac4073ccb4bb5768829c04cfcca2771f344b2defc5b0b38c2b2c4",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "command": [
+            "D:\\minecraftrust-astra-hardening\\target\\state-diff-experiment\\521f5295de294a60ba514b1eeca07ed4\\cargo-target\\release\\state-diff-experiment.exe"
+          ],
+          "exit": 0,
+          "stderr_bytes": 0,
+          "extra_stdout_lines": 0,
+          "extra_stdout_bytes": 0,
+          "saved_bytes": {
+            "stdout": 17704,
+            "stderr": 0
+          },
+          "raw_prefix_truncated": {
+            "stdout": false,
+            "stderr": false
+          },
+          "resource_error": null,
+          "reader_threads_alive": [],
+          "limits": {
+            "line_bytes": 1048576,
+            "stdout_bytes": 8388608,
+            "stderr_bytes": 262144,
+            "queue_lines": 4,
+            "boundary_bytes": 4194304,
+            "boundary_timeout": 10,
+            "lifetime": 30
+          },
+          "stdout_sha256": "59ff9db365f6815462df3537d3ab9505ce87cb11a58237bea7505b029a3f2cb9",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "elapsed_seconds": 0.5795336999581195
+    }
+  },
+  {
+    "name": "seeded-pure-trace-4",
+    "original_path": "D:\\minecraftrust-astra-hardening\\target\\state-diff-experiment\\521f5295de294a60ba514b1eeca07ed4\\cases\\d64d63b0eeca413eb58134c14aa8342c\\receipt.json",
+    "sha256": "db70cfce16903dd499de9e34519f20113aaa236886a5e320c10eb67a9791a1eb",
+    "receipt": {
+      "schema": "STATE_DIFF_COMPARISON_V1",
+      "name": "seeded-pure-trace-4",
+      "status": "PASS",
+      "expected_divergence": false,
+      "scope": "OFFLINE_MODEL_ONLY",
+      "production_authority": false,
+      "binding": {
+        "session": "d64d63b0eeca413eb58134c14aa8342c",
+        "challenge": "c8527210b900cbb9a4b89ce82157dea342a72eb408b795f6d9b84f2081c9081c",
+        "trace_sha256": "b25b84cca0994749e209472ae862c7ba3a65a131045044451bc8784ad58dd86b"
+      },
+      "commands_issued": 32,
+      "paired_boundaries": 33,
+      "observed_boundary_bytes": 35643,
+      "first_divergence": null,
+      "final": {
+        "schema": "STATE_DIFF_BOUNDARY_V1",
+        "session": "d64d63b0eeca413eb58134c14aa8342c",
+        "challenge": "c8527210b900cbb9a4b89ce82157dea342a72eb408b795f6d9b84f2081c9081c",
+        "trace_sha256": "b25b84cca0994749e209472ae862c7ba3a65a131045044451bc8784ad58dd86b",
+        "qualification": "OFFLINE_MODEL_ONLY",
+        "production_authority": false,
+        "step": 32,
+        "status": "COMMITTED",
+        "error": null,
+        "generation": 32,
+        "values": [
+          48608,
+          48698,
+          64915,
+          48743,
+          60402,
+          59453,
+          59392,
+          58021,
+          58035,
+          58049,
+          59148,
+          2180,
+          59026,
+          29776,
+          29832,
+          7421
+        ],
+        "effects": [
+          [
+            13,
+            9029,
+            29776
+          ],
+          [
+            14,
+            8464,
+            29832
+          ]
+        ]
+      },
+      "processes": [
+        {
+          "command": [
+            "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\bin\\java.exe",
+            "-cp",
+            "D:\\minecraftrust-astra-hardening\\target\\state-diff-experiment\\521f5295de294a60ba514b1eeca07ed4\\classes",
+            "StateDiffReference"
+          ],
+          "exit": 0,
+          "stderr_bytes": 0,
+          "extra_stdout_lines": 0,
+          "extra_stdout_bytes": 0,
+          "saved_bytes": {
+            "stdout": 17762,
+            "stderr": 0
+          },
+          "raw_prefix_truncated": {
+            "stdout": false,
+            "stderr": false
+          },
+          "resource_error": null,
+          "reader_threads_alive": [],
+          "limits": {
+            "line_bytes": 1048576,
+            "stdout_bytes": 8388608,
+            "stderr_bytes": 262144,
+            "queue_lines": 4,
+            "boundary_bytes": 4194304,
+            "boundary_timeout": 10,
+            "lifetime": 30
+          },
+          "stdout_sha256": "3194b24b9d3e9f9d3cba71f5a2d836d0b2abfb06c9d31482d754af46904034ea",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "command": [
+            "D:\\minecraftrust-astra-hardening\\target\\state-diff-experiment\\521f5295de294a60ba514b1eeca07ed4\\cargo-target\\release\\state-diff-experiment.exe"
+          ],
+          "exit": 0,
+          "stderr_bytes": 0,
+          "extra_stdout_lines": 0,
+          "extra_stdout_bytes": 0,
+          "saved_bytes": {
+            "stdout": 17881,
+            "stderr": 0
+          },
+          "raw_prefix_truncated": {
+            "stdout": false,
+            "stderr": false
+          },
+          "resource_error": null,
+          "reader_threads_alive": [],
+          "limits": {
+            "line_bytes": 1048576,
+            "stdout_bytes": 8388608,
+            "stderr_bytes": 262144,
+            "queue_lines": 4,
+            "boundary_bytes": 4194304,
+            "boundary_timeout": 10,
+            "lifetime": 30
+          },
+          "stdout_sha256": "29bc980f9ad6cfb0ea92522daeb80e43130ad125543806461a7d26cd4dd4f0c3",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "elapsed_seconds": 0.5797525999951176
+    }
+  },
+  {
+    "name": "seeded-pure-trace-5",
+    "original_path": "D:\\minecraftrust-astra-hardening\\target\\state-diff-experiment\\521f5295de294a60ba514b1eeca07ed4\\cases\\c4b72123f3234e84bf8bc28a8c37b0c2\\receipt.json",
+    "sha256": "002c30f897b98e3dc80f31752561b8f27627843e05b8c203182d68e6c5cb4d0f",
+    "receipt": {
+      "schema": "STATE_DIFF_COMPARISON_V1",
+      "name": "seeded-pure-trace-5",
+      "status": "PASS",
+      "expected_divergence": false,
+      "scope": "OFFLINE_MODEL_ONLY",
+      "production_authority": false,
+      "binding": {
+        "session": "c4b72123f3234e84bf8bc28a8c37b0c2",
+        "challenge": "98b7d02f3e5533b856ebb61848c2995a5648282099306815d4007e9253628519",
+        "trace_sha256": "d2dd39998239dd6af0a8006ed7338abb982c51b24e4dfc8ff7a21d2b0ea83a6e"
+      },
+      "commands_issued": 32,
+      "paired_boundaries": 33,
+      "observed_boundary_bytes": 35363,
+      "first_divergence": null,
+      "final": {
+        "schema": "STATE_DIFF_BOUNDARY_V1",
+        "session": "c4b72123f3234e84bf8bc28a8c37b0c2",
+        "challenge": "98b7d02f3e5533b856ebb61848c2995a5648282099306815d4007e9253628519",
+        "trace_sha256": "d2dd39998239dd6af0a8006ed7338abb982c51b24e4dfc8ff7a21d2b0ea83a6e",
+        "qualification": "OFFLINE_MODEL_ONLY",
+        "production_authority": false,
+        "step": 32,
+        "status": "COMMITTED",
+        "error": null,
+        "generation": 32,
+        "values": [
+          45380,
+          31177,
+          58535,
+          746,
+          690,
+          730,
+          722,
+          49331,
+          706,
+          698,
+          690,
+          682,
+          674,
+          666,
+          15919,
+          31177
+        ],
+        "effects": [
+          [
+            15,
+            49331,
+            31177
+          ]
+        ]
+      },
+      "processes": [
+        {
+          "command": [
+            "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\bin\\java.exe",
+            "-cp",
+            "D:\\minecraftrust-astra-hardening\\target\\state-diff-experiment\\521f5295de294a60ba514b1eeca07ed4\\classes",
+            "StateDiffReference"
+          ],
+          "exit": 0,
+          "stderr_bytes": 0,
+          "extra_stdout_lines": 0,
+          "extra_stdout_bytes": 0,
+          "saved_bytes": {
+            "stdout": 17627,
+            "stderr": 0
+          },
+          "raw_prefix_truncated": {
+            "stdout": false,
+            "stderr": false
+          },
+          "resource_error": null,
+          "reader_threads_alive": [],
+          "limits": {
+            "line_bytes": 1048576,
+            "stdout_bytes": 8388608,
+            "stderr_bytes": 262144,
+            "queue_lines": 4,
+            "boundary_bytes": 4194304,
+            "boundary_timeout": 10,
+            "lifetime": 30
+          },
+          "stdout_sha256": "7ad190b73dacd3343c3fd7fd9ba9979c1c94194965b8ba1e94c604f9e4f4c842",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "command": [
+            "D:\\minecraftrust-astra-hardening\\target\\state-diff-experiment\\521f5295de294a60ba514b1eeca07ed4\\cargo-target\\release\\state-diff-experiment.exe"
+          ],
+          "exit": 0,
+          "stderr_bytes": 0,
+          "extra_stdout_lines": 0,
+          "extra_stdout_bytes": 0,
+          "saved_bytes": {
+            "stdout": 17736,
+            "stderr": 0
+          },
+          "raw_prefix_truncated": {
+            "stdout": false,
+            "stderr": false
+          },
+          "resource_error": null,
+          "reader_threads_alive": [],
+          "limits": {
+            "line_bytes": 1048576,
+            "stdout_bytes": 8388608,
+            "stderr_bytes": 262144,
+            "queue_lines": 4,
+            "boundary_bytes": 4194304,
+            "boundary_timeout": 10,
+            "lifetime": 30
+          },
+          "stdout_sha256": "58d7c70bbfdfd411578b5592dcab720d2e6300e54938cfca722eda3832c53c32",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "elapsed_seconds": 0.5816755999694578
+    }
+  },
+  {
+    "name": "seeded-pure-trace-6",
+    "original_path": "D:\\minecraftrust-astra-hardening\\target\\state-diff-experiment\\521f5295de294a60ba514b1eeca07ed4\\cases\\4af7efeae96e4c51a2aae63762d87727\\receipt.json",
+    "sha256": "8bc16de3399cebca2bc3250885ed068d598def0fcb84510f08ae8c08597ef6f4",
+    "receipt": {
+      "schema": "STATE_DIFF_COMPARISON_V1",
+      "name": "seeded-pure-trace-6",
+      "status": "PASS",
+      "expected_divergence": false,
+      "scope": "OFFLINE_MODEL_ONLY",
+      "production_authority": false,
+      "binding": {
+        "session": "4af7efeae96e4c51a2aae63762d87727",
+        "challenge": "4f41bea88d9742d0685edb4e6d73225b9afc00d2e8b9c8b926f643e050e3b69a",
+        "trace_sha256": "c22ddcdff9b37e124aebfe4969f6e556b8ffdb138fa042c7f3e1d7af04155ea0"
+      },
+      "commands_issued": 32,
+      "paired_boundaries": 33,
+      "observed_boundary_bytes": 35625,
+      "first_divergence": null,
+      "final": {
+        "schema": "STATE_DIFF_BOUNDARY_V1",
+        "session": "4af7efeae96e4c51a2aae63762d87727",
+        "challenge": "4f41bea88d9742d0685edb4e6d73225b9afc00d2e8b9c8b926f643e050e3b69a",
+        "trace_sha256": "c22ddcdff9b37e124aebfe4969f6e556b8ffdb138fa042c7f3e1d7af04155ea0",
+        "qualification": "OFFLINE_MODEL_ONLY",
+        "production_authority": false,
+        "step": 32,
+        "status": "COMMITTED",
+        "error": null,
+        "generation": 31,
+        "values": [
+          8605,
+          19167,
+          8589,
+          8605,
+          8597,
+          8589,
+          8581,
+          8573,
+          8565,
+          8557,
+          8549,
+          8541,
+          8533,
+          8525,
+          8517,
+          8509
+        ],
+        "effects": [
+          [
+            0,
+            16614,
+            8605
+          ]
+        ]
+      },
+      "processes": [
+        {
+          "command": [
+            "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\bin\\java.exe",
+            "-cp",
+            "D:\\minecraftrust-astra-hardening\\target\\state-diff-experiment\\521f5295de294a60ba514b1eeca07ed4\\classes",
+            "StateDiffReference"
+          ],
+          "exit": 0,
+          "stderr_bytes": 0,
+          "extra_stdout_lines": 0,
+          "extra_stdout_bytes": 0,
+          "saved_bytes": {
+            "stdout": 17752,
+            "stderr": 0
+          },
+          "raw_prefix_truncated": {
+            "stdout": false,
+            "stderr": false
+          },
+          "resource_error": null,
+          "reader_threads_alive": [],
+          "limits": {
+            "line_bytes": 1048576,
+            "stdout_bytes": 8388608,
+            "stderr_bytes": 262144,
+            "queue_lines": 4,
+            "boundary_bytes": 4194304,
+            "boundary_timeout": 10,
+            "lifetime": 30
+          },
+          "stdout_sha256": "0dc1a321ebc53e8a7106af7d554747d5267d6d8d9a88666191979265863f5691",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "command": [
+            "D:\\minecraftrust-astra-hardening\\target\\state-diff-experiment\\521f5295de294a60ba514b1eeca07ed4\\cargo-target\\release\\state-diff-experiment.exe"
+          ],
+          "exit": 0,
+          "stderr_bytes": 0,
+          "extra_stdout_lines": 0,
+          "extra_stdout_bytes": 0,
+          "saved_bytes": {
+            "stdout": 17873,
+            "stderr": 0
+          },
+          "raw_prefix_truncated": {
+            "stdout": false,
+            "stderr": false
+          },
+          "resource_error": null,
+          "reader_threads_alive": [],
+          "limits": {
+            "line_bytes": 1048576,
+            "stdout_bytes": 8388608,
+            "stderr_bytes": 262144,
+            "queue_lines": 4,
+            "boundary_bytes": 4194304,
+            "boundary_timeout": 10,
+            "lifetime": 30
+          },
+          "stdout_sha256": "8d1dcb10871115fdfb1cfeaed21389d46dad5b92c98cbdeea586624028699ce8",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "elapsed_seconds": 0.5836081000161357
+    }
+  },
+  {
+    "name": "seeded-pure-trace-7",
+    "original_path": "D:\\minecraftrust-astra-hardening\\target\\state-diff-experiment\\521f5295de294a60ba514b1eeca07ed4\\cases\\dfcd9f06866542dda9c21493cc29b69a\\receipt.json",
+    "sha256": "4fbd098aed59ffbbc70efa8ae5e5c2d9838a4fe542da5233d39395dbab18e09b",
+    "receipt": {
+      "schema": "STATE_DIFF_COMPARISON_V1",
+      "name": "seeded-pure-trace-7",
+      "status": "PASS",
+      "expected_divergence": false,
+      "scope": "OFFLINE_MODEL_ONLY",
+      "production_authority": false,
+      "binding": {
+        "session": "dfcd9f06866542dda9c21493cc29b69a",
+        "challenge": "42571ca18ae204892fdcc7ac12d9ff2915e77ed99d955912f2b7ce70cfef123e",
+        "trace_sha256": "3bcd6194cb13313b268f6d4373aa098179b7b15f6513c8ee079831b4d64e90e2"
+      },
+      "commands_issued": 32,
+      "paired_boundaries": 33,
+      "observed_boundary_bytes": 36229,
+      "first_divergence": null,
+      "final": {
+        "schema": "STATE_DIFF_BOUNDARY_V1",
+        "session": "dfcd9f06866542dda9c21493cc29b69a",
+        "challenge": "42571ca18ae204892fdcc7ac12d9ff2915e77ed99d955912f2b7ce70cfef123e",
+        "trace_sha256": "3bcd6194cb13313b268f6d4373aa098179b7b15f6513c8ee079831b4d64e90e2",
+        "qualification": "OFFLINE_MODEL_ONLY",
+        "production_authority": false,
+        "step": 32,
+        "status": "COMMITTED",
+        "error": null,
+        "generation": 32,
+        "values": [
+          58816,
+          50487,
+          50577,
+          50667,
+          50485,
+          50662,
+          50937,
+          51027,
+          51117,
+          51207,
+          51297,
+          42350,
+          42338,
+          42326,
+          51585,
+          2898
+        ],
+        "effects": [
+          [
+            5,
+            51585,
+            50662
+          ]
+        ]
+      },
+      "processes": [
+        {
+          "command": [
+            "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\bin\\java.exe",
+            "-cp",
+            "D:\\minecraftrust-astra-hardening\\target\\state-diff-experiment\\521f5295de294a60ba514b1eeca07ed4\\classes",
+            "StateDiffReference"
+          ],
+          "exit": 0,
+          "stderr_bytes": 0,
+          "extra_stdout_lines": 0,
+          "extra_stdout_bytes": 0,
+          "saved_bytes": {
+            "stdout": 18037,
+            "stderr": 0
+          },
+          "raw_prefix_truncated": {
+            "stdout": false,
+            "stderr": false
+          },
+          "resource_error": null,
+          "reader_threads_alive": [],
+          "limits": {
+            "line_bytes": 1048576,
+            "stdout_bytes": 8388608,
+            "stderr_bytes": 262144,
+            "queue_lines": 4,
+            "boundary_bytes": 4194304,
+            "boundary_timeout": 10,
+            "lifetime": 30
+          },
+          "stdout_sha256": "ddfa0fe2d92d8bf06939ea077acf416525d875742b899230781609259966976e",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "command": [
+            "D:\\minecraftrust-astra-hardening\\target\\state-diff-experiment\\521f5295de294a60ba514b1eeca07ed4\\cargo-target\\release\\state-diff-experiment.exe"
+          ],
+          "exit": 0,
+          "stderr_bytes": 0,
+          "extra_stdout_lines": 0,
+          "extra_stdout_bytes": 0,
+          "saved_bytes": {
+            "stdout": 18192,
+            "stderr": 0
+          },
+          "raw_prefix_truncated": {
+            "stdout": false,
+            "stderr": false
+          },
+          "resource_error": null,
+          "reader_threads_alive": [],
+          "limits": {
+            "line_bytes": 1048576,
+            "stdout_bytes": 8388608,
+            "stderr_bytes": 262144,
+            "queue_lines": 4,
+            "boundary_bytes": 4194304,
+            "boundary_timeout": 10,
+            "lifetime": 30
+          },
+          "stdout_sha256": "10356ab05300269d26f597abe44db8ee8ac9f1650245d0b69c75ec6f501821de",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "elapsed_seconds": 0.5834441999904811
+    }
+  },
+  {
+    "name": "seeded-pure-trace-8",
+    "original_path": "D:\\minecraftrust-astra-hardening\\target\\state-diff-experiment\\521f5295de294a60ba514b1eeca07ed4\\cases\\b80d5b971f7d4963a8dd5aee5213286c\\receipt.json",
+    "sha256": "adbd17e5e153c92a40024bf93febe2fa8f380c7940229bb1dbc305c836b960d4",
+    "receipt": {
+      "schema": "STATE_DIFF_COMPARISON_V1",
+      "name": "seeded-pure-trace-8",
+      "status": "PASS",
+      "expected_divergence": false,
+      "scope": "OFFLINE_MODEL_ONLY",
+      "production_authority": false,
+      "binding": {
+        "session": "b80d5b971f7d4963a8dd5aee5213286c",
+        "challenge": "11b5f0ed02594f72e075279962a7c87374c6b9b5fa46636652705722a775b0d1",
+        "trace_sha256": "58d43cecb84c3e4f6c3d7bcd62fb619b3ad6848ac8ac094bca794b70e407e147"
+      },
+      "commands_issued": 32,
+      "paired_boundaries": 33,
+      "observed_boundary_bytes": 35333,
+      "first_divergence": null,
+      "final": {
+        "schema": "STATE_DIFF_BOUNDARY_V1",
+        "session": "b80d5b971f7d4963a8dd5aee5213286c",
+        "challenge": "11b5f0ed02594f72e075279962a7c87374c6b9b5fa46636652705722a775b0d1",
+        "trace_sha256": "58d43cecb84c3e4f6c3d7bcd62fb619b3ad6848ac8ac094bca794b70e407e147",
+        "qualification": "OFFLINE_MODEL_ONLY",
+        "production_authority": false,
+        "step": 32,
+        "status": "COMMITTED",
+        "error": null,
+        "generation": 32,
+        "values": [
+          25289,
+          64858,
+          64795,
+          64732,
+          13052,
+          13053,
+          12242,
+          13055,
+          13056,
+          64595,
+          38192,
+          26172,
+          26172,
+          26204,
+          26236,
+          50845
+        ],
+        "effects": [
+          [
+            6,
+            13054,
+            12242
+          ]
+        ]
+      },
+      "processes": [
+        {
+          "command": [
+            "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\bin\\java.exe",
+            "-cp",
+            "D:\\minecraftrust-astra-hardening\\target\\state-diff-experiment\\521f5295de294a60ba514b1eeca07ed4\\classes",
+            "StateDiffReference"
+          ],
+          "exit": 0,
+          "stderr_bytes": 0,
+          "extra_stdout_lines": 0,
+          "extra_stdout_bytes": 0,
+          "saved_bytes": {
+            "stdout": 17618,
+            "stderr": 0
+          },
+          "raw_prefix_truncated": {
+            "stdout": false,
+            "stderr": false
+          },
+          "resource_error": null,
+          "reader_threads_alive": [],
+          "limits": {
+            "line_bytes": 1048576,
+            "stdout_bytes": 8388608,
+            "stderr_bytes": 262144,
+            "queue_lines": 4,
+            "boundary_bytes": 4194304,
+            "boundary_timeout": 10,
+            "lifetime": 30
+          },
+          "stdout_sha256": "939b85d7a58878454114489653fcb201608d81f147d20f9c50ecce986c325edd",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "command": [
+            "D:\\minecraftrust-astra-hardening\\target\\state-diff-experiment\\521f5295de294a60ba514b1eeca07ed4\\cargo-target\\release\\state-diff-experiment.exe"
+          ],
+          "exit": 0,
+          "stderr_bytes": 0,
+          "extra_stdout_lines": 0,
+          "extra_stdout_bytes": 0,
+          "saved_bytes": {
+            "stdout": 17715,
+            "stderr": 0
+          },
+          "raw_prefix_truncated": {
+            "stdout": false,
+            "stderr": false
+          },
+          "resource_error": null,
+          "reader_threads_alive": [],
+          "limits": {
+            "line_bytes": 1048576,
+            "stdout_bytes": 8388608,
+            "stderr_bytes": 262144,
+            "queue_lines": 4,
+            "boundary_bytes": 4194304,
+            "boundary_timeout": 10,
+            "lifetime": 30
+          },
+          "stdout_sha256": "29007cdac0b51d585b415bf1a7b359d49b6cee1b5f591cab69a817c43e9b542c",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "elapsed_seconds": 0.5881950000184588
+    }
+  },
+  {
+    "name": "seeded-pure-trace-9",
+    "original_path": "D:\\minecraftrust-astra-hardening\\target\\state-diff-experiment\\521f5295de294a60ba514b1eeca07ed4\\cases\\346d14b1d5e24fc6a7e4378f9b7e5ec2\\receipt.json",
+    "sha256": "a0980c963611c3ad0463e8bccc7900415eb5b2203dc7910ee94cd7381a0274b6",
+    "receipt": {
+      "schema": "STATE_DIFF_COMPARISON_V1",
+      "name": "seeded-pure-trace-9",
+      "status": "PASS",
+      "expected_divergence": false,
+      "scope": "OFFLINE_MODEL_ONLY",
+      "production_authority": false,
+      "binding": {
+        "session": "346d14b1d5e24fc6a7e4378f9b7e5ec2",
+        "challenge": "778d9a8bf238eff91db120ba208e178f1ac854c4634fd125fa4a4c24eb19fb29",
+        "trace_sha256": "5aeb3255148df6f94a6b60ff6bb0b2b5a5628525fce902dce64ebec5072b4afc"
+      },
+      "commands_issued": 32,
+      "paired_boundaries": 33,
+      "observed_boundary_bytes": 35475,
+      "first_divergence": null,
+      "final": {
+        "schema": "STATE_DIFF_BOUNDARY_V1",
+        "session": "346d14b1d5e24fc6a7e4378f9b7e5ec2",
+        "challenge": "778d9a8bf238eff91db120ba208e178f1ac854c4634fd125fa4a4c24eb19fb29",
+        "trace_sha256": "5aeb3255148df6f94a6b60ff6bb0b2b5a5628525fce902dce64ebec5072b4afc",
+        "qualification": "OFFLINE_MODEL_ONLY",
+        "production_authority": false,
+        "step": 32,
+        "status": "COMMITTED",
+        "error": null,
+        "generation": 32,
+        "values": [
+          877,
+          35570,
+          16706,
+          34461,
+          34461,
+          16733,
+          16742,
+          16751,
+          877,
+          869,
+          861,
+          853,
+          845,
+          34778,
+          16742,
+          55753
+        ],
+        "effects": [
+          [
+            4,
+            42421,
+            34461
+          ]
+        ]
+      },
+      "processes": [
+        {
+          "command": [
+            "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\bin\\java.exe",
+            "-cp",
+            "D:\\minecraftrust-astra-hardening\\target\\state-diff-experiment\\521f5295de294a60ba514b1eeca07ed4\\classes",
+            "StateDiffReference"
+          ],
+          "exit": 0,
+          "stderr_bytes": 0,
+          "extra_stdout_lines": 0,
+          "extra_stdout_bytes": 0,
+          "saved_bytes": {
+            "stdout": 17682,
+            "stderr": 0
+          },
+          "raw_prefix_truncated": {
+            "stdout": false,
+            "stderr": false
+          },
+          "resource_error": null,
+          "reader_threads_alive": [],
+          "limits": {
+            "line_bytes": 1048576,
+            "stdout_bytes": 8388608,
+            "stderr_bytes": 262144,
+            "queue_lines": 4,
+            "boundary_bytes": 4194304,
+            "boundary_timeout": 10,
+            "lifetime": 30
+          },
+          "stdout_sha256": "4d1f87b7c643e3a6557e07b863da5477503bf5145e49a3fd9faab2cb3763f95f",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "command": [
+            "D:\\minecraftrust-astra-hardening\\target\\state-diff-experiment\\521f5295de294a60ba514b1eeca07ed4\\cargo-target\\release\\state-diff-experiment.exe"
+          ],
+          "exit": 0,
+          "stderr_bytes": 0,
+          "extra_stdout_lines": 0,
+          "extra_stdout_bytes": 0,
+          "saved_bytes": {
+            "stdout": 17793,
+            "stderr": 0
+          },
+          "raw_prefix_truncated": {
+            "stdout": false,
+            "stderr": false
+          },
+          "resource_error": null,
+          "reader_threads_alive": [],
+          "limits": {
+            "line_bytes": 1048576,
+            "stdout_bytes": 8388608,
+            "stderr_bytes": 262144,
+            "queue_lines": 4,
+            "boundary_bytes": 4194304,
+            "boundary_timeout": 10,
+            "lifetime": 30
+          },
+          "stdout_sha256": "1390763acc2279be04dac3e9253cbf1fd9224365159aa190ac3cc6bde81eba5f",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "elapsed_seconds": 0.5860776000190526
+    }
+  },
+  {
+    "name": "seeded-pure-trace-10",
+    "original_path": "D:\\minecraftrust-astra-hardening\\target\\state-diff-experiment\\521f5295de294a60ba514b1eeca07ed4\\cases\\cf429f1127364d38a4be0854a5709b00\\receipt.json",
+    "sha256": "816944ad6aa7a1e10ee081ce199dbaa077075f284943cd3cd34828b3feb19ec2",
+    "receipt": {
+      "schema": "STATE_DIFF_COMPARISON_V1",
+      "name": "seeded-pure-trace-10",
+      "status": "PASS",
+      "expected_divergence": false,
+      "scope": "OFFLINE_MODEL_ONLY",
+      "production_authority": false,
+      "binding": {
+        "session": "cf429f1127364d38a4be0854a5709b00",
+        "challenge": "d9fd90871b64b14dd9524ab49d8d3078589327ad91fdd4281d30b4939f9e6c50",
+        "trace_sha256": "eeda4bf3a4b5f23c16004ff07852d590c26e6be8c15833ed9bfd614ca38a5c2a"
+      },
+      "commands_issued": 32,
+      "paired_boundaries": 33,
+      "observed_boundary_bytes": 35691,
+      "first_divergence": null,
+      "final": {
+        "schema": "STATE_DIFF_BOUNDARY_V1",
+        "session": "cf429f1127364d38a4be0854a5709b00",
+        "challenge": "d9fd90871b64b14dd9524ab49d8d3078589327ad91fdd4281d30b4939f9e6c50",
+        "trace_sha256": "eeda4bf3a4b5f23c16004ff07852d590c26e6be8c15833ed9bfd614ca38a5c2a",
+        "qualification": "OFFLINE_MODEL_ONLY",
+        "production_authority": false,
+        "step": 32,
+        "status": "COMMITTED",
+        "error": null,
+        "generation": 32,
+        "values": [
+          32262,
+          42493,
+          24601,
+          56269,
+          56255,
+          56289,
+          56227,
+          56040,
+          13061,
+          13337,
+          13153,
+          13199,
+          13245,
+          13291,
+          13337,
+          42457
+        ],
+        "effects": [
+          [
+            9,
+            13107,
+            13337
+          ]
+        ]
+      },
+      "processes": [
+        {
+          "command": [
+            "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\bin\\java.exe",
+            "-cp",
+            "D:\\minecraftrust-astra-hardening\\target\\state-diff-experiment\\521f5295de294a60ba514b1eeca07ed4\\classes",
+            "StateDiffReference"
+          ],
+          "exit": 0,
+          "stderr_bytes": 0,
+          "extra_stdout_lines": 0,
+          "extra_stdout_bytes": 0,
+          "saved_bytes": {
+            "stdout": 17788,
+            "stderr": 0
+          },
+          "raw_prefix_truncated": {
+            "stdout": false,
+            "stderr": false
+          },
+          "resource_error": null,
+          "reader_threads_alive": [],
+          "limits": {
+            "line_bytes": 1048576,
+            "stdout_bytes": 8388608,
+            "stderr_bytes": 262144,
+            "queue_lines": 4,
+            "boundary_bytes": 4194304,
+            "boundary_timeout": 10,
+            "lifetime": 30
+          },
+          "stdout_sha256": "ed86d057a3924217cdf5af09eb1c071e342120c70feb105ebe989cabe9481915",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "command": [
+            "D:\\minecraftrust-astra-hardening\\target\\state-diff-experiment\\521f5295de294a60ba514b1eeca07ed4\\cargo-target\\release\\state-diff-experiment.exe"
+          ],
+          "exit": 0,
+          "stderr_bytes": 0,
+          "extra_stdout_lines": 0,
+          "extra_stdout_bytes": 0,
+          "saved_bytes": {
+            "stdout": 17903,
+            "stderr": 0
+          },
+          "raw_prefix_truncated": {
+            "stdout": false,
+            "stderr": false
+          },
+          "resource_error": null,
+          "reader_threads_alive": [],
+          "limits": {
+            "line_bytes": 1048576,
+            "stdout_bytes": 8388608,
+            "stderr_bytes": 262144,
+            "queue_lines": 4,
+            "boundary_bytes": 4194304,
+            "boundary_timeout": 10,
+            "lifetime": 30
+          },
+          "stdout_sha256": "92292ae17d5e9d95cb928d56ab23e51c7debcd66c4cf8fff2520c07b6b7c8ff7",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "elapsed_seconds": 0.5824421999859624
+    }
+  },
+  {
+    "name": "seeded-pure-trace-11",
+    "original_path": "D:\\minecraftrust-astra-hardening\\target\\state-diff-experiment\\521f5295de294a60ba514b1eeca07ed4\\cases\\8ff7cd90a7e94603a8c04894a0aa9931\\receipt.json",
+    "sha256": "d62632009a6becd6c36ce99ca43e6a290732cecef2e449dd1472534d7faa3a5e",
+    "receipt": {
+      "schema": "STATE_DIFF_COMPARISON_V1",
+      "name": "seeded-pure-trace-11",
+      "status": "PASS",
+      "expected_divergence": false,
+      "scope": "OFFLINE_MODEL_ONLY",
+      "production_authority": false,
+      "binding": {
+        "session": "8ff7cd90a7e94603a8c04894a0aa9931",
+        "challenge": "cbeeebb2f9b39584fa382e8a092db44ad0d7e36d9d319ad6cd24e2e95a23975d",
+        "trace_sha256": "321a674669b7c7a9f7497e00eaaeb6b641943860cb7b5aa17aead3a7237f0c17"
+      },
+      "commands_issued": 32,
+      "paired_boundaries": 33,
+      "observed_boundary_bytes": 35885,
+      "first_divergence": null,
+      "final": {
+        "schema": "STATE_DIFF_BOUNDARY_V1",
+        "session": "8ff7cd90a7e94603a8c04894a0aa9931",
+        "challenge": "cbeeebb2f9b39584fa382e8a092db44ad0d7e36d9d319ad6cd24e2e95a23975d",
+        "trace_sha256": "321a674669b7c7a9f7497e00eaaeb6b641943860cb7b5aa17aead3a7237f0c17",
+        "qualification": "OFFLINE_MODEL_ONLY",
+        "production_authority": false,
+        "step": 32,
+        "status": "COMMITTED",
+        "error": null,
+        "generation": 32,
+        "values": [
+          44293,
+          51705,
+          52496,
+          50929,
+          51510,
+          51063,
+          51130,
+          51197,
+          51264,
+          51331,
+          51398,
+          51465,
+          51532,
+          61876,
+          61882,
+          24098
+        ],
+        "effects": [
+          [
+            4,
+            50996,
+            51510
+          ]
+        ]
+      },
+      "processes": [
+        {
+          "command": [
+            "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\bin\\java.exe",
+            "-cp",
+            "D:\\minecraftrust-astra-hardening\\target\\state-diff-experiment\\521f5295de294a60ba514b1eeca07ed4\\classes",
+            "StateDiffReference"
+          ],
+          "exit": 0,
+          "stderr_bytes": 0,
+          "extra_stdout_lines": 0,
+          "extra_stdout_bytes": 0,
+          "saved_bytes": {
+            "stdout": 17879,
+            "stderr": 0
+          },
+          "raw_prefix_truncated": {
+            "stdout": false,
+            "stderr": false
+          },
+          "resource_error": null,
+          "reader_threads_alive": [],
+          "limits": {
+            "line_bytes": 1048576,
+            "stdout_bytes": 8388608,
+            "stderr_bytes": 262144,
+            "queue_lines": 4,
+            "boundary_bytes": 4194304,
+            "boundary_timeout": 10,
+            "lifetime": 30
+          },
+          "stdout_sha256": "caef19b3e8abfe2e4c1cc4219c162a56dbc48f9965ba03e934a32f4bbb71ee3e",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "command": [
+            "D:\\minecraftrust-astra-hardening\\target\\state-diff-experiment\\521f5295de294a60ba514b1eeca07ed4\\cargo-target\\release\\state-diff-experiment.exe"
+          ],
+          "exit": 0,
+          "stderr_bytes": 0,
+          "extra_stdout_lines": 0,
+          "extra_stdout_bytes": 0,
+          "saved_bytes": {
+            "stdout": 18006,
+            "stderr": 0
+          },
+          "raw_prefix_truncated": {
+            "stdout": false,
+            "stderr": false
+          },
+          "resource_error": null,
+          "reader_threads_alive": [],
+          "limits": {
+            "line_bytes": 1048576,
+            "stdout_bytes": 8388608,
+            "stderr_bytes": 262144,
+            "queue_lines": 4,
+            "boundary_bytes": 4194304,
+            "boundary_timeout": 10,
+            "lifetime": 30
+          },
+          "stdout_sha256": "e2c749a280007755be86c5436e4d50673c3cf45eb78d65d8b59b2ef4a225811c",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "elapsed_seconds": 0.5822787000215612
+    }
+  },
+  {
+    "name": "seeded-pure-trace-12",
+    "original_path": "D:\\minecraftrust-astra-hardening\\target\\state-diff-experiment\\521f5295de294a60ba514b1eeca07ed4\\cases\\bdd0485bc0524a9aacbe818bef1bc235\\receipt.json",
+    "sha256": "7af75c5b3d1a4f79b8f0e352b17d531e41e3889084dee00abdaa73183e613a82",
+    "receipt": {
+      "schema": "STATE_DIFF_COMPARISON_V1",
+      "name": "seeded-pure-trace-12",
+      "status": "PASS",
+      "expected_divergence": false,
+      "scope": "OFFLINE_MODEL_ONLY",
+      "production_authority": false,
+      "binding": {
+        "session": "bdd0485bc0524a9aacbe818bef1bc235",
+        "challenge": "80ff26943bd46cbf59791cad1d4eef613775d62913f0f7a22c81633de1a315ec",
+        "trace_sha256": "acdf8a12be9cb3d15fe8a877d0d3866d031d3f599978ae3607ac7701071aac48"
+      },
+      "commands_issued": 32,
+      "paired_boundaries": 33,
+      "observed_boundary_bytes": 35139,
+      "first_divergence": null,
+      "final": {
+        "schema": "STATE_DIFF_BOUNDARY_V1",
+        "session": "bdd0485bc0524a9aacbe818bef1bc235",
+        "challenge": "80ff26943bd46cbf59791cad1d4eef613775d62913f0f7a22c81633de1a315ec",
+        "trace_sha256": "acdf8a12be9cb3d15fe8a877d0d3866d031d3f599978ae3607ac7701071aac48",
+        "qualification": "OFFLINE_MODEL_ONLY",
+        "production_authority": false,
+        "step": 32,
+        "status": "COMMITTED",
+        "error": null,
+        "generation": 32,
+        "values": [
+          2079,
+          55764,
+          23069,
+          23065,
+          3411,
+          2966,
+          3213,
+          2352,
+          3015,
+          2916,
+          2817,
+          2718,
+          2619,
+          3015,
+          2421,
+          3162
+        ],
+        "effects": [
+          [
+            15,
+            2322,
+            3162
+          ]
+        ]
+      },
+      "processes": [
+        {
+          "command": [
+            "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\bin\\java.exe",
+            "-cp",
+            "D:\\minecraftrust-astra-hardening\\target\\state-diff-experiment\\521f5295de294a60ba514b1eeca07ed4\\classes",
+            "StateDiffReference"
+          ],
+          "exit": 0,
+          "stderr_bytes": 0,
+          "extra_stdout_lines": 0,
+          "extra_stdout_bytes": 0,
+          "saved_bytes": {
+            "stdout": 17521,
+            "stderr": 0
+          },
+          "raw_prefix_truncated": {
+            "stdout": false,
+            "stderr": false
+          },
+          "resource_error": null,
+          "reader_threads_alive": [],
+          "limits": {
+            "line_bytes": 1048576,
+            "stdout_bytes": 8388608,
+            "stderr_bytes": 262144,
+            "queue_lines": 4,
+            "boundary_bytes": 4194304,
+            "boundary_timeout": 10,
+            "lifetime": 30
+          },
+          "stdout_sha256": "8d347879f677a6d319d40ea994fdbc79d6655343cfe58ff11946d2d867df2830",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "command": [
+            "D:\\minecraftrust-astra-hardening\\target\\state-diff-experiment\\521f5295de294a60ba514b1eeca07ed4\\cargo-target\\release\\state-diff-experiment.exe"
+          ],
+          "exit": 0,
+          "stderr_bytes": 0,
+          "extra_stdout_lines": 0,
+          "extra_stdout_bytes": 0,
+          "saved_bytes": {
+            "stdout": 17618,
+            "stderr": 0
+          },
+          "raw_prefix_truncated": {
+            "stdout": false,
+            "stderr": false
+          },
+          "resource_error": null,
+          "reader_threads_alive": [],
+          "limits": {
+            "line_bytes": 1048576,
+            "stdout_bytes": 8388608,
+            "stderr_bytes": 262144,
+            "queue_lines": 4,
+            "boundary_bytes": 4194304,
+            "boundary_timeout": 10,
+            "lifetime": 30
+          },
+          "stdout_sha256": "b8af3338c0eca9f47058e3129d5f2d627be7b05df76833b7bfb520c461e40bd6",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "elapsed_seconds": 0.5852763999719173
+    }
+  },
+  {
+    "name": "seeded-pure-trace-13",
+    "original_path": "D:\\minecraftrust-astra-hardening\\target\\state-diff-experiment\\521f5295de294a60ba514b1eeca07ed4\\cases\\d8408da57ecf4906b7f15b389911036a\\receipt.json",
+    "sha256": "4271472eee8a8f18fbe9be177a95c130099d4ac93605a0dbff79bb4356f86eee",
+    "receipt": {
+      "schema": "STATE_DIFF_COMPARISON_V1",
+      "name": "seeded-pure-trace-13",
+      "status": "PASS",
+      "expected_divergence": false,
+      "scope": "OFFLINE_MODEL_ONLY",
+      "production_authority": false,
+      "binding": {
+        "session": "d8408da57ecf4906b7f15b389911036a",
+        "challenge": "541674855447641c799b7df7cdc14942620a3c5d392abf619c30f26a724745ee",
+        "trace_sha256": "4916288dbe311f425108fbbd22d454fa0202039c1cd12219aecac6ac01fe9d15"
+      },
+      "commands_issued": 32,
+      "paired_boundaries": 33,
+      "observed_boundary_bytes": 35531,
+      "first_divergence": null,
+      "final": {
+        "schema": "STATE_DIFF_BOUNDARY_V1",
+        "session": "d8408da57ecf4906b7f15b389911036a",
+        "challenge": "541674855447641c799b7df7cdc14942620a3c5d392abf619c30f26a724745ee",
+        "trace_sha256": "4916288dbe311f425108fbbd22d454fa0202039c1cd12219aecac6ac01fe9d15",
+        "qualification": "OFFLINE_MODEL_ONLY",
+        "production_authority": false,
+        "step": 32,
+        "status": "COMMITTED",
+        "error": null,
+        "generation": 32,
+        "values": [
+          51064,
+          16374,
+          3174,
+          3162,
+          3166,
+          63068,
+          3174,
+          3178,
+          13467,
+          38557,
+          38542,
+          38527,
+          38512,
+          38497,
+          4352,
+          6450
+        ],
+        "effects": [
+          [
+            5,
+            51064,
+            63068
+          ]
+        ]
+      },
+      "processes": [
+        {
+          "command": [
+            "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\bin\\java.exe",
+            "-cp",
+            "D:\\minecraftrust-astra-hardening\\target\\state-diff-experiment\\521f5295de294a60ba514b1eeca07ed4\\classes",
+            "StateDiffReference"
+          ],
+          "exit": 0,
+          "stderr_bytes": 0,
+          "extra_stdout_lines": 0,
+          "extra_stdout_bytes": 0,
+          "saved_bytes": {
+            "stdout": 17710,
+            "stderr": 0
+          },
+          "raw_prefix_truncated": {
+            "stdout": false,
+            "stderr": false
+          },
+          "resource_error": null,
+          "reader_threads_alive": [],
+          "limits": {
+            "line_bytes": 1048576,
+            "stdout_bytes": 8388608,
+            "stderr_bytes": 262144,
+            "queue_lines": 4,
+            "boundary_bytes": 4194304,
+            "boundary_timeout": 10,
+            "lifetime": 30
+          },
+          "stdout_sha256": "7a74338186ef8c26fe0e246473bfbb461733e8d84dbf7db0af3c0b1e15de6d6c",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "command": [
+            "D:\\minecraftrust-astra-hardening\\target\\state-diff-experiment\\521f5295de294a60ba514b1eeca07ed4\\cargo-target\\release\\state-diff-experiment.exe"
+          ],
+          "exit": 0,
+          "stderr_bytes": 0,
+          "extra_stdout_lines": 0,
+          "extra_stdout_bytes": 0,
+          "saved_bytes": {
+            "stdout": 17821,
+            "stderr": 0
+          },
+          "raw_prefix_truncated": {
+            "stdout": false,
+            "stderr": false
+          },
+          "resource_error": null,
+          "reader_threads_alive": [],
+          "limits": {
+            "line_bytes": 1048576,
+            "stdout_bytes": 8388608,
+            "stderr_bytes": 262144,
+            "queue_lines": 4,
+            "boundary_bytes": 4194304,
+            "boundary_timeout": 10,
+            "lifetime": 30
+          },
+          "stdout_sha256": "daf7a7939bf8a00f95dd7cd88ab0376d4e35248d3108bda51dafd3f07fbfba90",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "elapsed_seconds": 0.5763880000449717
+    }
+  },
+  {
+    "name": "seeded-pure-trace-14",
+    "original_path": "D:\\minecraftrust-astra-hardening\\target\\state-diff-experiment\\521f5295de294a60ba514b1eeca07ed4\\cases\\9aa079df0b63406e97cbf9f27c41c1b9\\receipt.json",
+    "sha256": "38c962d3d13842e64e4f3911a6d55df6ecfe381cf85cb8def8289d5a2937af11",
+    "receipt": {
+      "schema": "STATE_DIFF_COMPARISON_V1",
+      "name": "seeded-pure-trace-14",
+      "status": "PASS",
+      "expected_divergence": false,
+      "scope": "OFFLINE_MODEL_ONLY",
+      "production_authority": false,
+      "binding": {
+        "session": "9aa079df0b63406e97cbf9f27c41c1b9",
+        "challenge": "c8827ee18e9a88c99d853dd015783b3acd5781df0a711aaaa0ac8fd2bb0e5287",
+        "trace_sha256": "97ed6de51d9ec0bba19dfd471838733918a4b08497f062e31d80267b0d3f472c"
+      },
+      "commands_issued": 32,
+      "paired_boundaries": 33,
+      "observed_boundary_bytes": 36837,
+      "first_divergence": null,
+      "final": {
+        "schema": "STATE_DIFF_BOUNDARY_V1",
+        "session": "9aa079df0b63406e97cbf9f27c41c1b9",
+        "challenge": "c8827ee18e9a88c99d853dd015783b3acd5781df0a711aaaa0ac8fd2bb0e5287",
+        "trace_sha256": "97ed6de51d9ec0bba19dfd471838733918a4b08497f062e31d80267b0d3f472c",
+        "qualification": "OFFLINE_MODEL_ONLY",
+        "production_authority": false,
+        "step": 32,
+        "status": "COMMITTED",
+        "error": null,
+        "generation": 32,
+        "values": [
+          47597,
+          47528,
+          36048,
+          35996,
+          36637,
+          35892,
+          35840,
+          35788,
+          35736,
+          35684,
+          9417,
+          9344,
+          9271,
+          9198,
+          49116,
+          26607
+        ],
+        "effects": [
+          [
+            10,
+            35632,
+            9417
+          ],
+          [
+            11,
+            35580,
+            9344
+          ],
+          [
+            12,
+            21715,
+            9271
+          ],
+          [
+            13,
+            21757,
+            9198
+          ]
+        ]
+      },
+      "processes": [
+        {
+          "command": [
+            "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\bin\\java.exe",
+            "-cp",
+            "D:\\minecraftrust-astra-hardening\\target\\state-diff-experiment\\521f5295de294a60ba514b1eeca07ed4\\classes",
+            "StateDiffReference"
+          ],
+          "exit": 0,
+          "stderr_bytes": 0,
+          "extra_stdout_lines": 0,
+          "extra_stdout_bytes": 0,
+          "saved_bytes": {
+            "stdout": 18327,
+            "stderr": 0
+          },
+          "raw_prefix_truncated": {
+            "stdout": false,
+            "stderr": false
+          },
+          "resource_error": null,
+          "reader_threads_alive": [],
+          "limits": {
+            "line_bytes": 1048576,
+            "stdout_bytes": 8388608,
+            "stderr_bytes": 262144,
+            "queue_lines": 4,
+            "boundary_bytes": 4194304,
+            "boundary_timeout": 10,
+            "lifetime": 30
+          },
+          "stdout_sha256": "a34e8c4d336ae084332439aaac1a820006a43d96f5e077ccc34d9cd151799863",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "command": [
+            "D:\\minecraftrust-astra-hardening\\target\\state-diff-experiment\\521f5295de294a60ba514b1eeca07ed4\\cargo-target\\release\\state-diff-experiment.exe"
+          ],
+          "exit": 0,
+          "stderr_bytes": 0,
+          "extra_stdout_lines": 0,
+          "extra_stdout_bytes": 0,
+          "saved_bytes": {
+            "stdout": 18510,
+            "stderr": 0
+          },
+          "raw_prefix_truncated": {
+            "stdout": false,
+            "stderr": false
+          },
+          "resource_error": null,
+          "reader_threads_alive": [],
+          "limits": {
+            "line_bytes": 1048576,
+            "stdout_bytes": 8388608,
+            "stderr_bytes": 262144,
+            "queue_lines": 4,
+            "boundary_bytes": 4194304,
+            "boundary_timeout": 10,
+            "lifetime": 30
+          },
+          "stdout_sha256": "c138cf874263168241fcbe012666425115686d2a22763546a545c061aa370f3c",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "elapsed_seconds": 0.5804235999821685
+    }
+  },
+  {
+    "name": "seeded-pure-trace-15",
+    "original_path": "D:\\minecraftrust-astra-hardening\\target\\state-diff-experiment\\521f5295de294a60ba514b1eeca07ed4\\cases\\2c19430c9b254e14a7569cf7b413d29a\\receipt.json",
+    "sha256": "ca86403cfabba1a8999c5efdfd5eea1929f799f6c56946ff55bd41dfc7a83f55",
+    "receipt": {
+      "schema": "STATE_DIFF_COMPARISON_V1",
+      "name": "seeded-pure-trace-15",
+      "status": "PASS",
+      "expected_divergence": false,
+      "scope": "OFFLINE_MODEL_ONLY",
+      "production_authority": false,
+      "binding": {
+        "session": "2c19430c9b254e14a7569cf7b413d29a",
+        "challenge": "5a44f6c3638cb25404ecb38490dbdc2d8e5c36362bc9d6063f0be7c89a3f9300",
+        "trace_sha256": "882ff5c4f9ba00534c211455c802a0576daa2289edf67c1e7c30fdd9bcacd2c1"
+      },
+      "commands_issued": 32,
+      "paired_boundaries": 33,
+      "observed_boundary_bytes": 35451,
+      "first_divergence": null,
+      "final": {
+        "schema": "STATE_DIFF_BOUNDARY_V1",
+        "session": "2c19430c9b254e14a7569cf7b413d29a",
+        "challenge": "5a44f6c3638cb25404ecb38490dbdc2d8e5c36362bc9d6063f0be7c89a3f9300",
+        "trace_sha256": "882ff5c4f9ba00534c211455c802a0576daa2289edf67c1e7c30fdd9bcacd2c1",
+        "qualification": "OFFLINE_MODEL_ONLY",
+        "production_authority": false,
+        "step": 32,
+        "status": "COMMITTED",
+        "error": null,
+        "generation": 32,
+        "values": [
+          28604,
+          15155,
+          51662,
+          51654,
+          51087,
+          51662,
+          45089,
+          45079,
+          20940,
+          20413,
+          20740,
+          20640,
+          21129,
+          20440,
+          15155,
+          21604
+        ],
+        "effects": [
+          [
+            12,
+            20540,
+            21129
+          ]
+        ]
+      },
+      "processes": [
+        {
+          "command": [
+            "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\bin\\java.exe",
+            "-cp",
+            "D:\\minecraftrust-astra-hardening\\target\\state-diff-experiment\\521f5295de294a60ba514b1eeca07ed4\\classes",
+            "StateDiffReference"
+          ],
+          "exit": 0,
+          "stderr_bytes": 0,
+          "extra_stdout_lines": 0,
+          "extra_stdout_bytes": 0,
+          "saved_bytes": {
+            "stdout": 17675,
+            "stderr": 0
+          },
+          "raw_prefix_truncated": {
+            "stdout": false,
+            "stderr": false
+          },
+          "resource_error": null,
+          "reader_threads_alive": [],
+          "limits": {
+            "line_bytes": 1048576,
+            "stdout_bytes": 8388608,
+            "stderr_bytes": 262144,
+            "queue_lines": 4,
+            "boundary_bytes": 4194304,
+            "boundary_timeout": 10,
+            "lifetime": 30
+          },
+          "stdout_sha256": "3f889b400560a984ec006fe1a6b314efb3c5503781022498d28d5afce772d572",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "command": [
+            "D:\\minecraftrust-astra-hardening\\target\\state-diff-experiment\\521f5295de294a60ba514b1eeca07ed4\\cargo-target\\release\\state-diff-experiment.exe"
+          ],
+          "exit": 0,
+          "stderr_bytes": 0,
+          "extra_stdout_lines": 0,
+          "extra_stdout_bytes": 0,
+          "saved_bytes": {
+            "stdout": 17776,
+            "stderr": 0
+          },
+          "raw_prefix_truncated": {
+            "stdout": false,
+            "stderr": false
+          },
+          "resource_error": null,
+          "reader_threads_alive": [],
+          "limits": {
+            "line_bytes": 1048576,
+            "stdout_bytes": 8388608,
+            "stderr_bytes": 262144,
+            "queue_lines": 4,
+            "boundary_bytes": 4194304,
+            "boundary_timeout": 10,
+            "lifetime": 30
+          },
+          "stdout_sha256": "1d337673ab3ad078804fbf625aa542fa81066e14619538629f471ff1555b046a",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "elapsed_seconds": 0.5997638000408188
+    }
+  },
+  {
+    "name": "first-divergence-effect-only-fault",
+    "original_path": "D:\\minecraftrust-astra-hardening\\target\\state-diff-experiment\\521f5295de294a60ba514b1eeca07ed4\\cases\\87effa2706244e3899c28aee699c91b7\\receipt.json",
+    "sha256": "68b7773cc0e41a6d60ef89f069c92888be26a5d483f040859394c9c4cc672ac7",
+    "receipt": {
+      "schema": "STATE_DIFF_COMPARISON_V1",
+      "name": "first-divergence-effect-only-fault",
+      "status": "DIVERGED",
+      "expected_divergence": true,
+      "scope": "OFFLINE_MODEL_ONLY",
+      "production_authority": false,
+      "binding": {
+        "session": "87effa2706244e3899c28aee699c91b7",
+        "challenge": "c5ce2a72ff78cb44b98efad0f53816075616b5a9af8ef119008d45938112c7ff",
+        "trace_sha256": "ecd1b0f21d46bfeea8f557188f0359aec18b65b0ad5089a54ff26798258779f5"
+      },
+      "commands_issued": 1,
+      "paired_boundaries": 2,
+      "observed_boundary_bytes": 1762,
+      "first_divergence": {
+        "step": 1,
+        "command": "ADD 0 1",
+        "reference": {
+          "schema": "STATE_DIFF_BOUNDARY_V1",
+          "session": "87effa2706244e3899c28aee699c91b7",
+          "challenge": "c5ce2a72ff78cb44b98efad0f53816075616b5a9af8ef119008d45938112c7ff",
+          "trace_sha256": "ecd1b0f21d46bfeea8f557188f0359aec18b65b0ad5089a54ff26798258779f5",
+          "qualification": "OFFLINE_MODEL_ONLY",
+          "production_authority": false,
+          "step": 1,
+          "status": "COMMITTED",
+          "error": null,
+          "generation": 1,
+          "values": [
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "effects": [
+            [
+              0,
+              0,
+              1
+            ]
+          ]
+        },
+        "candidate": {
+          "schema": "STATE_DIFF_BOUNDARY_V1",
+          "session": "87effa2706244e3899c28aee699c91b7",
+          "challenge": "c5ce2a72ff78cb44b98efad0f53816075616b5a9af8ef119008d45938112c7ff",
+          "trace_sha256": "ecd1b0f21d46bfeea8f557188f0359aec18b65b0ad5089a54ff26798258779f5",
+          "qualification": "OFFLINE_MODEL_ONLY",
+          "production_authority": false,
+          "step": 1,
+          "status": "COMMITTED",
+          "error": null,
+          "generation": 1,
+          "values": [
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "effects": [
+            [
+              0,
+              0,
+              0
+            ]
+          ]
+        }
+      },
+      "final": {
+        "schema": "STATE_DIFF_BOUNDARY_V1",
+        "session": "87effa2706244e3899c28aee699c91b7",
+        "challenge": "c5ce2a72ff78cb44b98efad0f53816075616b5a9af8ef119008d45938112c7ff",
+        "trace_sha256": "ecd1b0f21d46bfeea8f557188f0359aec18b65b0ad5089a54ff26798258779f5",
+        "qualification": "OFFLINE_MODEL_ONLY",
+        "production_authority": false,
+        "step": 0,
+        "status": "INITIAL",
+        "error": null,
+        "generation": 0,
+        "values": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "effects": []
+      },
+      "processes": [
+        {
+          "command": [
+            "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\bin\\java.exe",
+            "-cp",
+            "D:\\minecraftrust-astra-hardening\\target\\state-diff-experiment\\521f5295de294a60ba514b1eeca07ed4\\classes",
+            "StateDiffReference"
+          ],
+          "exit": 1,
+          "stderr_bytes": 0,
+          "extra_stdout_lines": 0,
+          "extra_stdout_bytes": 0,
+          "saved_bytes": {
+            "stdout": 881,
+            "stderr": 0
+          },
+          "raw_prefix_truncated": {
+            "stdout": false,
+            "stderr": false
+          },
+          "resource_error": null,
+          "reader_threads_alive": [],
+          "limits": {
+            "line_bytes": 1048576,
+            "stdout_bytes": 8388608,
+            "stderr_bytes": 262144,
+            "queue_lines": 4,
+            "boundary_bytes": 4194304,
+            "boundary_timeout": 10,
+            "lifetime": 30
+          },
+          "stdout_sha256": "c2eee72810f20bfeb4cbb78dea17d1fe8e587413d8803fbd0189a9fb6a9f0ad7",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "command": [
+            "D:\\minecraftrust-astra-hardening\\target\\state-diff-experiment\\521f5295de294a60ba514b1eeca07ed4\\cargo-target\\release\\state-diff-experiment.exe",
+            "--fault-effect-receipt"
+          ],
+          "exit": 1,
+          "stderr_bytes": 0,
+          "extra_stdout_lines": 0,
+          "extra_stdout_bytes": 0,
+          "saved_bytes": {
+            "stdout": 881,
+            "stderr": 0
+          },
+          "raw_prefix_truncated": {
+            "stdout": false,
+            "stderr": false
+          },
+          "resource_error": null,
+          "reader_threads_alive": [],
+          "limits": {
+            "line_bytes": 1048576,
+            "stdout_bytes": 8388608,
+            "stderr_bytes": 262144,
+            "queue_lines": 4,
+            "boundary_bytes": 4194304,
+            "boundary_timeout": 10,
+            "lifetime": 30
+          },
+          "stdout_sha256": "8786b4b7d079143a444482553c6f39680b17a0f4d2b6bf080b3d4478deba3e72",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "elapsed_seconds": 0.10352860001148656
+    }
+  }
+]
