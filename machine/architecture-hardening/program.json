@@ -197,7 +197,7 @@
     {
       "id": "H11",
       "title": "ENTITY STORAGE EXPERIMENT",
-      "status": "PROTOTYPE_VALIDATED",
+      "status": "PROTOTYPE_COMMITTED",
       "implementation": [
         "tools/entity-storage-experiment",
         "docs/research/entity-storage-comparison.md"
@@ -208,7 +208,7 @@
       "evidence": [
         "machine/architecture-hardening/h11-entity-storage.json"
       ],
-      "commit": null,
+      "commit": "79517cc",
       "outstanding": [
         "Synthetic integer entity data and prescribed logical order, not Minecraft/Forge behavior",
         "Keys cover one registry lifetime, no session/incarnation-safe production identity",
@@ -387,9 +387,10 @@
           "commit": "4770cf7"
         },
         "D": {
-          "status": "PROTOTYPE_VALIDATED",
+          "status": "PROTOTYPE_COMMITTED",
           "evidence": "machine/architecture-hardening/h11-entity-storage.json",
-          "decision": "KEEP_SOA_AND_HECS_EXPERIMENTS_PARK_BEVY_SHIPYARD_ADOPTION"
+          "decision": "KEEP_SOA_AND_HECS_EXPERIMENTS_PARK_BEVY_SHIPYARD_ADOPTION",
+          "commit": "79517cc"
         },
         "E": {
           "status": "PROTOTYPE_COMMITTED",
@@ -692,11 +693,21 @@
     {
       "id": "H28",
       "title": "TEMPORARY SCAFFOLD EXIT PLAN",
-      "status": "PENDING",
-      "implementation": [],
-      "validation": [],
-      "evidence": [],
-      "commit": null
+      "status": "EXIT_PLAN_VALIDATED",
+      "implementation": [
+        "docs/architecture/scaffold-exit-plan.md",
+        "machine/architecture-hardening/scaffold-exit-plan.json"
+      ],
+      "validation": [
+        "Nine required mechanisms, explicit classifications/exit gates and21 hashed source anchors; documentation-only, no runtime removal"
+      ],
+      "evidence": [
+        "machine/architecture-hardening/scaffold-exit-plan.json"
+      ],
+      "commit": null,
+      "outstanding": [
+        "Replacement evidence and removal decisions remain owned by dependent milestones; preserve all scaffolding until its listed gates pass"
+      ]
     },
     {
       "id": "H29",
