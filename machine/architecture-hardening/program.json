@@ -179,7 +179,7 @@
     {
       "id": "H9",
       "title": "NATIVE NBT / REGION PIPELINE",
-      "status": "PROTOTYPE_VALIDATED",
+      "status": "PROTOTYPE_COMMITTED",
       "implementation": [
         "tools/nbt-region-experiment",
         "docs/research/nbt-region-pipeline.md"
@@ -191,7 +191,7 @@
       "evidence": [
         "machine/architecture-hardening/h9-nbt-region-pipeline.json"
       ],
-      "commit": null,
+      "commit": "1ee8839",
       "outstanding": [
         "Only generated fixtures and checked LastUpdate increment; not general schema editing or real mod save corpus",
         "Malformed inputs qualify shared structural guard, not unsafe candidate parser fuzz safety",
@@ -240,11 +240,27 @@
     {
       "id": "H12",
       "title": "SEMANTIC SCHEDULER",
-      "status": "PENDING",
-      "implementation": [],
-      "validation": [],
-      "evidence": [],
-      "commit": null
+      "status": "FOUNDATION_VALIDATED",
+      "implementation": [
+        "crates/semantic-scheduler-prototype",
+        "docs/architecture/semantic-scheduler.md"
+      ],
+      "validation": [
+        "28 Rust tests,4 compile-fail controls,6 Python tests;891 boundary comparisons including864 ordered decisions;39 subprocess checks;strict fmt/clippy;independent root rerun"
+      ],
+      "evidence": [
+        "machine/architecture-hardening/h12-semantic-scheduler.json"
+      ],
+      "commit": null,
+      "outstanding": [
+        "Closed bounded affine integer jobs only, not Minecraft/Forge semantics or tick parity",
+        "Offline privately issued model token is not actual H4/H6 runtime qualification",
+        "No real compression, packet, worldgen, disk or callback adapters",
+        "Cooperative deadlines and unwind handling, not hard preemption/abort recovery",
+        "Logical reservation excludes allocator overhead, OS stacks/RSS and caller-owned histories",
+        "Demonstration executor joins and is not a responsive live-controller event loop",
+        "No performance claim; six external mechanisms remain STUDY with no dependency added"
+      ]
     },
     {
       "id": "H13",
@@ -353,7 +369,9 @@
         "docs/research/jni-classfile-tooling.md",
         "machine/external-reuse/experiment-results.json",
         "tools/entity-storage-experiment",
-        "docs/research/entity-storage-comparison.md"
+        "docs/research/entity-storage-comparison.md",
+        "crates/semantic-scheduler-prototype",
+        "docs/architecture/semantic-scheduler.md"
       ],
       "validation": [
         "Decision ledger: 70 candidates, all 48 required names, 13 validator tests passed. Remaining bounded experiments are pending.",
@@ -368,7 +386,8 @@
         "machine/architecture-hardening/h22-5-state-diff-validation.json",
         "machine/architecture-hardening/h22-5-gpu-validation.json",
         "machine/architecture-hardening/h22-5-jni-validation.json",
-        "machine/architecture-hardening/h11-entity-storage.json"
+        "machine/architecture-hardening/h11-entity-storage.json",
+        "machine/architecture-hardening/h12-semantic-scheduler.json"
       ],
       "commit": null,
       "requirements": [
@@ -417,7 +436,9 @@
           "commit": "72e68ca"
         },
         "F": {
-          "status": "PENDING"
+          "status": "MECHANISMS_RESEARCHED",
+          "decision": "STUDY_NO_EXTERNAL_MECHANISM_INSTALLED",
+          "evidence": "machine/architecture-hardening/h12-semantic-scheduler.json"
         },
         "G": {
           "status": "PENDING"

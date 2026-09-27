@@ -1,0 +1,1191 @@
+{
+  "schema": "SEMANTIC_SCHEDULER_CAMPAIGN_V1",
+  "status": "PASS",
+  "output": "D:\\minecraftrust-astra-hardening\\target\\semantic-scheduler-prototype\\root-final",
+  "production_authority": false,
+  "guard_before": {
+    "schema_version": 1,
+    "kind": "HARDENING_ISOLATION_GATE_CHECK",
+    "status": "PASS",
+    "failures": [],
+    "original_observed": {
+      "head": "c4b868db2c9e4b03f745bf93c6ebf4fd8a8519e7",
+      "branch": "issue1-jni-v2",
+      "status": [
+        " M tools/live-capture/live_client_session.py",
+        "?? tools/live-capture/__pycache__/",
+        "?? tools/live-capture/run_rev_shadow.py"
+      ],
+      "files": [
+        {
+          "path": "D:\\minecraftrust\\tools\\live-capture\\live_client_session.py",
+          "sha256": "151c356161695aba3db3c1a8cbd589b5eda2b5a1770dff59ab21b728d36cabfa"
+        },
+        {
+          "path": "D:\\minecraftrust\\tools\\live-capture\\run_rev_shadow.py",
+          "sha256": "2b9b2aca49e57dd0d2a74bec46efcdc0ac7f95762a733276e27ff9dbcb472d93"
+        }
+      ]
+    },
+    "isolated_worktree": "D:\\minecraftrust-astra-hardening",
+    "isolated_head": "1ee883947b4173e45fa4c56d86c040cf4198ae60",
+    "isolated_branch": "astra/architecture-hardening",
+    "production_gate_checks": {
+      "tryEncode_fail_closed": true,
+      "productionAuthorityEligible_false": true
+    },
+    "scope": "read-only original HEAD/status/two paused source hashes plus conservative source guards; runtime authority tests remain required"
+  },
+  "environment_policy": {
+    "removed_names": [
+      "RUST_LOG"
+    ],
+    "blocked_exact": [
+      "CFLAGS",
+      "CL",
+      "CLASSPATH",
+      "CLIPPY_ARGS",
+      "CLIPPY_CONF_DIR",
+      "CPPFLAGS",
+      "CXXFLAGS",
+      "JAVA_OPTS",
+      "JAVA_TOOL_OPTIONS",
+      "JDK_JAVAC_OPTIONS",
+      "JDK_JAVA_OPTIONS",
+      "LDFLAGS",
+      "LINK",
+      "_CL_",
+      "_JAVA_OPTIONS",
+      "_LINK_"
+    ],
+    "blocked_prefixes": [
+      "CARGO_ except recorded CARGO_HOME",
+      "RUST except recorded RUSTUP_HOME"
+    ],
+    "explicit": {
+      "RUST_BACKTRACE": "0",
+      "RUSTC": "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\rustc.exe",
+      "PATH_PREPEND": "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin",
+      "CARGO_HOME": "C:\\Users\\Admin\\.cargo",
+      "RUSTUP_HOME": "C:\\Users\\Admin\\.rustup"
+    },
+    "remaining": "inherited operating system compiler/linker environment; not a hermetic compiler proof"
+  },
+  "processes": [
+    {
+      "argv": [
+        "C:\\Users\\Admin\\.cargo\\bin\\rustc.exe",
+        "--print",
+        "sysroot"
+      ],
+      "exit": 0,
+      "resource_error": null,
+      "elapsed_seconds": 0.055838000029325485,
+      "byte_budgets": {
+        "stdout": 1048576,
+        "stderr": 524288
+      },
+      "stdout_sha256": "e0d8249c2fb93ac2106d97fedd24f44420e0ee2316617df20f769f033eaf568d",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "argv": [
+        "C:\\Users\\Admin\\.cargo\\bin\\rustc.exe",
+        "-vV"
+      ],
+      "exit": 0,
+      "resource_error": null,
+      "elapsed_seconds": 0.05856600002152845,
+      "byte_budgets": {
+        "stdout": 1048576,
+        "stderr": 524288
+      },
+      "stdout_sha256": "c45e612575abeef05e99e88eb1e7aea52cddab9ad70d4f65ad20eaa65e92a9cf",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "argv": [
+        "C:\\Users\\Admin\\.cargo\\bin\\cargo.exe",
+        "-vV"
+      ],
+      "exit": 0,
+      "resource_error": null,
+      "elapsed_seconds": 0.052996099984738976,
+      "byte_budgets": {
+        "stdout": 1048576,
+        "stderr": 524288
+      },
+      "stdout_sha256": "86c2d07f9968fd3174d9cff8c60a4d4323fba3166d5dc6dd36f0987a50677d70",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "argv": [
+        "C:\\Users\\Admin\\.cargo\\bin\\cargo.exe",
+        "metadata",
+        "--locked",
+        "--offline",
+        "--format-version",
+        "1"
+      ],
+      "exit": 0,
+      "resource_error": null,
+      "elapsed_seconds": 0.10267180000664666,
+      "byte_budgets": {
+        "stdout": 1048576,
+        "stderr": 524288
+      },
+      "stdout_sha256": "ba7fa0a4e3d66422ca9265a482ced78cd21b2a06fb48528ccedb9c0b9192e3e0",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "argv": [
+        "C:\\Users\\Admin\\.cargo\\bin\\cargo.exe",
+        "fmt",
+        "--",
+        "--check"
+      ],
+      "exit": 0,
+      "resource_error": null,
+      "elapsed_seconds": 0.14794569998048246,
+      "byte_budgets": {
+        "stdout": 1048576,
+        "stderr": 524288
+      },
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "argv": [
+        "C:\\Users\\Admin\\.cargo\\bin\\cargo.exe",
+        "test",
+        "--locked",
+        "--offline",
+        "--target-dir",
+        "D:\\minecraftrust-astra-hardening\\target\\semantic-scheduler-prototype\\root-final\\cargo-target"
+      ],
+      "exit": 0,
+      "resource_error": null,
+      "elapsed_seconds": 1.2835741000017151,
+      "byte_budgets": {
+        "stdout": 1048576,
+        "stderr": 524288
+      },
+      "stdout_sha256": "7ca3e2d19d3711b4cb3d12fcd4dd5f4e0abffcbb5572ef87dc46ce1bf0d753d4",
+      "stderr_sha256": "ff941e941c64163b671f8d8ce45145504f20532af1f11e547bb0f7485fc85c6a"
+    },
+    {
+      "argv": [
+        "C:\\Users\\Admin\\.cargo\\bin\\cargo.exe",
+        "clippy",
+        "--locked",
+        "--offline",
+        "--all-targets",
+        "--target-dir",
+        "D:\\minecraftrust-astra-hardening\\target\\semantic-scheduler-prototype\\root-final\\cargo-target",
+        "--",
+        "-D",
+        "warnings"
+      ],
+      "exit": 0,
+      "resource_error": null,
+      "elapsed_seconds": 0.38228560000425205,
+      "byte_budgets": {
+        "stdout": 1048576,
+        "stderr": 524288
+      },
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3cfed7cacd2a605333707dacb84fd714b74385b1c8250d5038e988654f7618b"
+    },
+    {
+      "argv": [
+        "C:\\Users\\Admin\\.cargo\\bin\\cargo.exe",
+        "build",
+        "--locked",
+        "--offline",
+        "--release",
+        "--example",
+        "boundaries",
+        "--target-dir",
+        "D:\\minecraftrust-astra-hardening\\target\\semantic-scheduler-prototype\\root-final\\cargo-target"
+      ],
+      "exit": 0,
+      "resource_error": null,
+      "elapsed_seconds": 1.009048099978827,
+      "byte_budgets": {
+        "stdout": 1048576,
+        "stderr": 524288
+      },
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "8985b6db1a6bf4f0284694a059479ead343f73eff261cf34d849690e9db1cdce"
+    },
+    {
+      "argv": [
+        "C:\\Python314\\python.exe",
+        "-B",
+        "-m",
+        "unittest",
+        "test_reference",
+        "-v"
+      ],
+      "exit": 0,
+      "resource_error": null,
+      "elapsed_seconds": 0.07984699995722622,
+      "byte_budgets": {
+        "stdout": 1048576,
+        "stderr": 524288
+      },
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "a515f87e3328c2b6e5eb61e4cc6dee508bb989fb2582550eb6c7a8bed862fd99"
+    },
+    {
+      "argv": [
+        "D:\\minecraftrust-astra-hardening\\target\\semantic-scheduler-prototype\\root-final\\cargo-target\\release\\examples\\boundaries.exe",
+        "4df92840f8ff4acbbd43cadcc75c9816",
+        "2dd873187be885aaa1dbed777e819ee99caeb07b8f541c10979e54b54558c68a",
+        "ordered",
+        "0"
+      ],
+      "exit": 0,
+      "resource_error": null,
+      "elapsed_seconds": 0.04579010000452399,
+      "byte_budgets": {
+        "stdout": 1048576,
+        "stderr": 524288
+      },
+      "stdout_sha256": "9b25d2d01ce43dc9917a52c6d74207faa83d04143c0aeba9b794f2aa201c6996",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "argv": [
+        "D:\\minecraftrust-astra-hardening\\target\\semantic-scheduler-prototype\\root-final\\cargo-target\\release\\examples\\boundaries.exe",
+        "8a270c52d05a40f9b7e0bc36d3897b27",
+        "8fece17402ed304d0780099731c1ac814d0f53b6e74cf25e2add69b415f819ee",
+        "conflict",
+        "0"
+      ],
+      "exit": 0,
+      "resource_error": null,
+      "elapsed_seconds": 0.019691499997861683,
+      "byte_budgets": {
+        "stdout": 1048576,
+        "stderr": 524288
+      },
+      "stdout_sha256": "bc23a81b746a564d51c16556baf814651a0b70f71d0ebd2cc07183539b3277a8",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "argv": [
+        "D:\\minecraftrust-astra-hardening\\target\\semantic-scheduler-prototype\\root-final\\cargo-target\\release\\examples\\boundaries.exe",
+        "fde43a66de19400badb4ae71d64510b9",
+        "e27116f31fa861ce6f265f6623b7a386a0934f87752ca6caf9c0ba5d688fe860",
+        "cancel",
+        "0"
+      ],
+      "exit": 0,
+      "resource_error": null,
+      "elapsed_seconds": 0.021518099994864315,
+      "byte_budgets": {
+        "stdout": 1048576,
+        "stderr": 524288
+      },
+      "stdout_sha256": "33616aa964cd201e09c42a9ea007be9142610f4899a120ef03d7dd4f887e1c0a",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "argv": [
+        "D:\\minecraftrust-astra-hardening\\target\\semantic-scheduler-prototype\\root-final\\cargo-target\\release\\examples\\boundaries.exe",
+        "37e9678340064bc980a89fab9d4b5a52",
+        "f1497c28c21c5228cd202d2648f059669bc6bdd6110bfcb5bcc255d7a8bb30b0",
+        "deadline",
+        "0"
+      ],
+      "exit": 0,
+      "resource_error": null,
+      "elapsed_seconds": 0.019335399963892996,
+      "byte_budgets": {
+        "stdout": 1048576,
+        "stderr": 524288
+      },
+      "stdout_sha256": "dcd58b2738bd1673940f31243cd45c8d77b8eae3ce6136a9d5265b4ec78ea80f",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "argv": [
+        "D:\\minecraftrust-astra-hardening\\target\\semantic-scheduler-prototype\\root-final\\cargo-target\\release\\examples\\boundaries.exe",
+        "d3ac079eeeca4f708433a36baebfa836",
+        "56ad98a017d2412aba1d653c60a9210b35dfef9a469a70e97d4b7af7e153c478",
+        "revoke",
+        "0"
+      ],
+      "exit": 0,
+      "resource_error": null,
+      "elapsed_seconds": 0.018645700009074062,
+      "byte_budgets": {
+        "stdout": 1048576,
+        "stderr": 524288
+      },
+      "stdout_sha256": "71695fbb57d9b6405448d28ad8fafe2ac91d1583202a679a3075cd344ea24360",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "argv": [
+        "D:\\minecraftrust-astra-hardening\\target\\semantic-scheduler-prototype\\root-final\\cargo-target\\release\\examples\\boundaries.exe",
+        "9bffae7d24ca4192b93e2383c6a578de",
+        "19526abac32e4eaf9cb9111d3f89ddb78bd50a4cc962b0b190e98c99f5473f67",
+        "unload",
+        "0"
+      ],
+      "exit": 0,
+      "resource_error": null,
+      "elapsed_seconds": 0.01963750005234033,
+      "byte_budgets": {
+        "stdout": 1048576,
+        "stderr": 524288
+      },
+      "stdout_sha256": "9c9a34c09098c147cd46a64ca1f06065a8d964e293713c50a090b00c782560f0",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "argv": [
+        "D:\\minecraftrust-astra-hardening\\target\\semantic-scheduler-prototype\\root-final\\cargo-target\\release\\examples\\boundaries.exe",
+        "4fc93265c5f44bb59d2f18419b2db7d3",
+        "e25b38da52440d5fbffd2d187f7740019dc56670b91830c62af93d3b13497788",
+        "external",
+        "0"
+      ],
+      "exit": 0,
+      "resource_error": null,
+      "elapsed_seconds": 0.024600000004284084,
+      "byte_budgets": {
+        "stdout": 1048576,
+        "stderr": 524288
+      },
+      "stdout_sha256": "a5b655567ecc29c289b37b37a441ae146721ca56d5f9aa604778ef65c8b61536",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "argv": [
+        "D:\\minecraftrust-astra-hardening\\target\\semantic-scheduler-prototype\\root-final\\cargo-target\\release\\examples\\boundaries.exe",
+        "5b5c8923bc364347a53197741a4b8c2a",
+        "9dee9a0b9543afab252ba79815325ca7c3b27f1908f31f61a712beb9275f4e66",
+        "budget",
+        "0"
+      ],
+      "exit": 0,
+      "resource_error": null,
+      "elapsed_seconds": 0.02169039996806532,
+      "byte_budgets": {
+        "stdout": 1048576,
+        "stderr": 524288
+      },
+      "stdout_sha256": "aa2e43532ab0c039c198e9311bf5313f279ec2ca240c0c3b7489751fa448c286",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "argv": [
+        "D:\\minecraftrust-astra-hardening\\target\\semantic-scheduler-prototype\\root-final\\cargo-target\\release\\examples\\boundaries.exe",
+        "a457f57373634a6db192f63640fc3563",
+        "398620f241510b3a483d0a9064b0004a2065dc0cfe428be2a8cba8db7e85e530",
+        "arithmetic",
+        "0"
+      ],
+      "exit": 0,
+      "resource_error": null,
+      "elapsed_seconds": 0.02147859998513013,
+      "byte_budgets": {
+        "stdout": 1048576,
+        "stderr": 524288
+      },
+      "stdout_sha256": "c666296b91df5798de443db0e79f0c63ec9546b297badbd2361a28c501d18748",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "argv": [
+        "D:\\minecraftrust-astra-hardening\\target\\semantic-scheduler-prototype\\root-final\\cargo-target\\release\\examples\\boundaries.exe",
+        "94a657a1a6014f82a99d475bcdbb55a8",
+        "a489999aabfcdd93d9efbd3ee5a292cb8e35532e618b53d23c654d335f12591b",
+        "ordered",
+        "17"
+      ],
+      "exit": 0,
+      "resource_error": null,
+      "elapsed_seconds": 0.021988200023770332,
+      "byte_budgets": {
+        "stdout": 1048576,
+        "stderr": 524288
+      },
+      "stdout_sha256": "040e5fdd7773b40e69209e5ea4f599a8db4e3f8e081c72a041c791864811f0b3",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "argv": [
+        "D:\\minecraftrust-astra-hardening\\target\\semantic-scheduler-prototype\\root-final\\cargo-target\\release\\examples\\boundaries.exe",
+        "d3196d52c8e1420c965729ea87aaedc8",
+        "740a1ec1845db13db2fe92f4069bb7f080110696e1ee2bb69538385575e16495",
+        "conflict",
+        "17"
+      ],
+      "exit": 0,
+      "resource_error": null,
+      "elapsed_seconds": 0.01862970000365749,
+      "byte_budgets": {
+        "stdout": 1048576,
+        "stderr": 524288
+      },
+      "stdout_sha256": "620df6439c24c9378f1f00587783d4e6921e6b34a5a7b5a073cbc95c442f1cbe",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "argv": [
+        "D:\\minecraftrust-astra-hardening\\target\\semantic-scheduler-prototype\\root-final\\cargo-target\\release\\examples\\boundaries.exe",
+        "a265f4c862394a8c83f188bf4fdf5987",
+        "174519fe8f4e9574581fa94d47a38c95abd1c99276780869089ca888086115ec",
+        "cancel",
+        "17"
+      ],
+      "exit": 0,
+      "resource_error": null,
+      "elapsed_seconds": 0.020599599985871464,
+      "byte_budgets": {
+        "stdout": 1048576,
+        "stderr": 524288
+      },
+      "stdout_sha256": "a8a0751a70d4ac0c1dbed554047d98eb4af3813bb6e0e230a237732ab25da5c5",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "argv": [
+        "D:\\minecraftrust-astra-hardening\\target\\semantic-scheduler-prototype\\root-final\\cargo-target\\release\\examples\\boundaries.exe",
+        "c600f19ce0fc4e3d92a7273e164859f2",
+        "e4887b7b0f90e98ae7147b959cafdba544082e9c07f41f184f99f0d8b528587b",
+        "deadline",
+        "17"
+      ],
+      "exit": 0,
+      "resource_error": null,
+      "elapsed_seconds": 0.019505599979311228,
+      "byte_budgets": {
+        "stdout": 1048576,
+        "stderr": 524288
+      },
+      "stdout_sha256": "eba6cb0c77e3c8c00fc97bc13438670786e121ae21247f83326298794aea68be",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "argv": [
+        "D:\\minecraftrust-astra-hardening\\target\\semantic-scheduler-prototype\\root-final\\cargo-target\\release\\examples\\boundaries.exe",
+        "e7f51e2c39084dc38a63475a73418628",
+        "529421fa44dd2ed69dcd9fc00aac3f7c3882b6664b5929754c58e2944dd2f3bc",
+        "revoke",
+        "17"
+      ],
+      "exit": 0,
+      "resource_error": null,
+      "elapsed_seconds": 0.01830380002502352,
+      "byte_budgets": {
+        "stdout": 1048576,
+        "stderr": 524288
+      },
+      "stdout_sha256": "51039b01da45212de790828cb3b3538788a49c2825a3958a7bf1d2cd2d31580a",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "argv": [
+        "D:\\minecraftrust-astra-hardening\\target\\semantic-scheduler-prototype\\root-final\\cargo-target\\release\\examples\\boundaries.exe",
+        "a6d3b449ae9248aeabea16c6d8612413",
+        "4f2913b35846d93642ed0226fa83a18c3a604d207190e68391ae7b009a047c54",
+        "unload",
+        "17"
+      ],
+      "exit": 0,
+      "resource_error": null,
+      "elapsed_seconds": 0.017911500006448478,
+      "byte_budgets": {
+        "stdout": 1048576,
+        "stderr": 524288
+      },
+      "stdout_sha256": "183ed781af8edca172515d4f1ad42e1c06e8d440ce814351bb66e41a8618e327",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "argv": [
+        "D:\\minecraftrust-astra-hardening\\target\\semantic-scheduler-prototype\\root-final\\cargo-target\\release\\examples\\boundaries.exe",
+        "bae00071bdba49cab5001272d1463159",
+        "c72179955b9d694da4d66104821d59b28717219fb91af4918bfb8ff949a54e93",
+        "external",
+        "17"
+      ],
+      "exit": 0,
+      "resource_error": null,
+      "elapsed_seconds": 0.020105700008571148,
+      "byte_budgets": {
+        "stdout": 1048576,
+        "stderr": 524288
+      },
+      "stdout_sha256": "f05809b451fae1b9e3d54bf797b82ddb561d8040fdb44d42c57a97f322f33608",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "argv": [
+        "D:\\minecraftrust-astra-hardening\\target\\semantic-scheduler-prototype\\root-final\\cargo-target\\release\\examples\\boundaries.exe",
+        "0dacf77bfdc94eccae1520da4353b955",
+        "25bace2428f3d8ff1d6f4eea1a35a79e3d2bc787360a7594452b3bf34ca49fd5",
+        "budget",
+        "17"
+      ],
+      "exit": 0,
+      "resource_error": null,
+      "elapsed_seconds": 0.01836770004592836,
+      "byte_budgets": {
+        "stdout": 1048576,
+        "stderr": 524288
+      },
+      "stdout_sha256": "ee886aa6ee2bb6c9ea6001f1592a259c9c6969853c96f69703264bbf3b1b5aef",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "argv": [
+        "D:\\minecraftrust-astra-hardening\\target\\semantic-scheduler-prototype\\root-final\\cargo-target\\release\\examples\\boundaries.exe",
+        "b96ee1f05f334cb68a80ed3cb7222f22",
+        "ad8891986bd0cdce8201ca465dce0fc1004ac672791d840e50d359be3ee6d44a",
+        "arithmetic",
+        "17"
+      ],
+      "exit": 0,
+      "resource_error": null,
+      "elapsed_seconds": 0.02176030003465712,
+      "byte_budgets": {
+        "stdout": 1048576,
+        "stderr": 524288
+      },
+      "stdout_sha256": "190f1b25db26aface249cb83de3aae913c67e1df6df7936466232d6bde71ef72",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "argv": [
+        "D:\\minecraftrust-astra-hardening\\target\\semantic-scheduler-prototype\\root-final\\cargo-target\\release\\examples\\boundaries.exe",
+        "1ff5198fc2f14a5083256b050ce8f11a",
+        "430f30545dc3d8d15b64d9deac9eb78e0e207f33e4cb336215493f869b43e8ce",
+        "ordered",
+        "18446744073709551615"
+      ],
+      "exit": 0,
+      "resource_error": null,
+      "elapsed_seconds": 0.023491300002206117,
+      "byte_budgets": {
+        "stdout": 1048576,
+        "stderr": 524288
+      },
+      "stdout_sha256": "14074288c73f8850f37b2803a0846caaf65221c7bd72020111d51fef93cc6edb",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "argv": [
+        "D:\\minecraftrust-astra-hardening\\target\\semantic-scheduler-prototype\\root-final\\cargo-target\\release\\examples\\boundaries.exe",
+        "59313f2c76674ae0b6bff64118ee300b",
+        "f0bd7088788169b4545ceafbc4c0c569438bb9ed34651bd3983fdc4a576e4351",
+        "conflict",
+        "18446744073709551615"
+      ],
+      "exit": 0,
+      "resource_error": null,
+      "elapsed_seconds": 0.019222899980377406,
+      "byte_budgets": {
+        "stdout": 1048576,
+        "stderr": 524288
+      },
+      "stdout_sha256": "177b4e84533d322ddc933313f0eacdb8d43068ed9387e7a442e0c2737b27e935",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "argv": [
+        "D:\\minecraftrust-astra-hardening\\target\\semantic-scheduler-prototype\\root-final\\cargo-target\\release\\examples\\boundaries.exe",
+        "a34f40b5b6d1473c9d00652e4b8e1fbc",
+        "a028e3c51e92c9afe8533a143c983f5cbbcf88837d13ceb12da555a66790be9c",
+        "cancel",
+        "18446744073709551615"
+      ],
+      "exit": 0,
+      "resource_error": null,
+      "elapsed_seconds": 0.02277819998562336,
+      "byte_budgets": {
+        "stdout": 1048576,
+        "stderr": 524288
+      },
+      "stdout_sha256": "d47f200027d358c2648334f017a5f1345938a657d53383750c4863ab4144829f",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "argv": [
+        "D:\\minecraftrust-astra-hardening\\target\\semantic-scheduler-prototype\\root-final\\cargo-target\\release\\examples\\boundaries.exe",
+        "aede9a362f2e4b2291e08d1b766aca88",
+        "69e56440c3fcba6de46077394313e380f414d0deff89743fdd8c3cba37156adb",
+        "deadline",
+        "18446744073709551615"
+      ],
+      "exit": 0,
+      "resource_error": null,
+      "elapsed_seconds": 0.01873629994224757,
+      "byte_budgets": {
+        "stdout": 1048576,
+        "stderr": 524288
+      },
+      "stdout_sha256": "01695b4ca6751aa625d2d050517806aaf5db33a54f4121992bdbd5d66b5e0b66",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "argv": [
+        "D:\\minecraftrust-astra-hardening\\target\\semantic-scheduler-prototype\\root-final\\cargo-target\\release\\examples\\boundaries.exe",
+        "df56bffe804041ec8f1173a54ae634f6",
+        "feebbcfe4a59e6bdeb20750de1b2a1bf9e605b18b96d4d48c0e10721d9dca6ab",
+        "revoke",
+        "18446744073709551615"
+      ],
+      "exit": 0,
+      "resource_error": null,
+      "elapsed_seconds": 0.02113810001173988,
+      "byte_budgets": {
+        "stdout": 1048576,
+        "stderr": 524288
+      },
+      "stdout_sha256": "24ae03d93f1777784c0a3363293d90a16b8155159cb580ef68a974f59e019034",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "argv": [
+        "D:\\minecraftrust-astra-hardening\\target\\semantic-scheduler-prototype\\root-final\\cargo-target\\release\\examples\\boundaries.exe",
+        "1d14c01874df46219483c9244c2ef097",
+        "c02a4f32ff7b85993cda39c7dd61ed0dbd70c0d9d00ab2c01ef168b53e8afdc2",
+        "unload",
+        "18446744073709551615"
+      ],
+      "exit": 0,
+      "resource_error": null,
+      "elapsed_seconds": 0.018756099976599216,
+      "byte_budgets": {
+        "stdout": 1048576,
+        "stderr": 524288
+      },
+      "stdout_sha256": "91fe0946c2f7c3eb925ae064ad093242b6ddaa1fb17642c07dd50d9bfa2fb640",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "argv": [
+        "D:\\minecraftrust-astra-hardening\\target\\semantic-scheduler-prototype\\root-final\\cargo-target\\release\\examples\\boundaries.exe",
+        "80e1454dec5d42e4867476e346dd70eb",
+        "fd1c4289920c131a303440c29617bb5cddac5e05e99dbcc5a72417de45761ab0",
+        "external",
+        "18446744073709551615"
+      ],
+      "exit": 0,
+      "resource_error": null,
+      "elapsed_seconds": 0.022399999957997352,
+      "byte_budgets": {
+        "stdout": 1048576,
+        "stderr": 524288
+      },
+      "stdout_sha256": "9811fa2c7d5e77179a19651965ea43cdef902740ab85d1fa4a56d3d228aa9c16",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "argv": [
+        "D:\\minecraftrust-astra-hardening\\target\\semantic-scheduler-prototype\\root-final\\cargo-target\\release\\examples\\boundaries.exe",
+        "543f34d592a142f7ad1117792b19e3a9",
+        "b320f851fc8edab293428c20b85afb7739bea42f1b0a6142d9c1db63944b9da4",
+        "budget",
+        "18446744073709551615"
+      ],
+      "exit": 0,
+      "resource_error": null,
+      "elapsed_seconds": 0.022791900031734258,
+      "byte_budgets": {
+        "stdout": 1048576,
+        "stderr": 524288
+      },
+      "stdout_sha256": "3eb110f75e429bcc1fc189d600b784d12b2b2db72a2b7de0287a4749a46736eb",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "argv": [
+        "D:\\minecraftrust-astra-hardening\\target\\semantic-scheduler-prototype\\root-final\\cargo-target\\release\\examples\\boundaries.exe",
+        "887be83868d9494aac9027d54122dadc",
+        "6863b0ac9ea3fe296dc4a5abd80a731a2dd8676778973d3e13d0fdcfbd420bc9",
+        "arithmetic",
+        "18446744073709551615"
+      ],
+      "exit": 0,
+      "resource_error": null,
+      "elapsed_seconds": 0.022699200024362653,
+      "byte_budgets": {
+        "stdout": 1048576,
+        "stderr": 524288
+      },
+      "stdout_sha256": "c62627e008a470a5521242297cceafe0862dba3bce9ce10bfe97e58f65240980",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "argv": [
+        "D:\\minecraftrust-astra-hardening\\target\\semantic-scheduler-prototype\\root-final\\cargo-target\\release\\examples\\boundaries.exe",
+        "bad",
+        "2dd873187be885aaa1dbed777e819ee99caeb07b8f541c10979e54b54558c68a",
+        "ordered",
+        "0"
+      ],
+      "exit": 2,
+      "resource_error": null,
+      "elapsed_seconds": 0.014737699995748699,
+      "byte_budgets": {
+        "stdout": 1048576,
+        "stderr": 524288
+      },
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "1bed19019ea2bd9191ca0befbe5105d83f2a3b17badf8d93b728e942c39acafd"
+    },
+    {
+      "argv": [
+        "D:\\minecraftrust-astra-hardening\\target\\semantic-scheduler-prototype\\root-final\\cargo-target\\release\\examples\\boundaries.exe",
+        "4df92840f8ff4acbbd43cadcc75c9816",
+        "2dd873187be885aaa1dbed777e819ee99caeb07b8f541c10979e54b54558c68a",
+        "unknown",
+        "0"
+      ],
+      "exit": 2,
+      "resource_error": null,
+      "elapsed_seconds": 0.01264540001284331,
+      "byte_budgets": {
+        "stdout": 1048576,
+        "stderr": 524288
+      },
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "9bb0038c6058336024b28b9971fcc884b13b8c2d8404189208c99a23832e8adf"
+    },
+    {
+      "argv": [
+        "D:\\minecraftrust-astra-hardening\\target\\semantic-scheduler-prototype\\root-final\\cargo-target\\release\\examples\\boundaries.exe",
+        "4df92840f8ff4acbbd43cadcc75c9816",
+        "2dd873187be885aaa1dbed777e819ee99caeb07b8f541c10979e54b54558c68a",
+        "ordered",
+        "18446744073709551616"
+      ],
+      "exit": 2,
+      "resource_error": null,
+      "elapsed_seconds": 0.012622000009287149,
+      "byte_budgets": {
+        "stdout": 1048576,
+        "stderr": 524288
+      },
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "011c8fad0382b63dfec34d33c06b0764e4ae293b18efd9ad2341e03d6803d9de"
+    }
+  ],
+  "sources": {
+    "D:\\minecraftrust-astra-hardening\\crates\\semantic-scheduler-prototype\\Cargo.toml": "319182a5def7d457e4669491606893eb5265af85e0441e7b5de703fa26c11172",
+    "D:\\minecraftrust-astra-hardening\\crates\\semantic-scheduler-prototype\\Cargo.lock": "22d09909d0dc7100fa43806e1b377b4cd308735759549c7b0098b685dae54451",
+    "D:\\minecraftrust-astra-hardening\\crates\\semantic-scheduler-prototype\\mechanisms-research.json": "54f39752a1a9b3c346fcf88b71aa6188f0d8c64f90e33c9be5858570c2178796",
+    "D:\\minecraftrust-astra-hardening\\crates\\semantic-scheduler-prototype\\reference.py": "8b96cd848ea389001cb3c2e671861a589ffce7517130df9b5592cf0085a3832a",
+    "D:\\minecraftrust-astra-hardening\\crates\\semantic-scheduler-prototype\\run.py": "d0013bb084d25e0ea66f4b25784864617f9e621a14c47143d4e4a963dab140d0",
+    "D:\\minecraftrust-astra-hardening\\crates\\semantic-scheduler-prototype\\test_reference.py": "18ee4c5a04deaacc0a8af8bdee1151eea62a9184aed2900660d88829144b80aa",
+    "D:\\minecraftrust-astra-hardening\\crates\\semantic-scheduler-prototype\\src\\lib.rs": "e7a1d771e803718c488add0b507a8b8f33beb29153261f31d72d0827abfb23de",
+    "D:\\minecraftrust-astra-hardening\\crates\\semantic-scheduler-prototype\\src\\tests.rs": "bdcead156a2aef896ebd5aaa2927b00d6f5b255ab8a8bf2b3a0484b431d73d01",
+    "D:\\minecraftrust-astra-hardening\\crates\\semantic-scheduler-prototype\\examples\\boundaries.rs": "61fc93f3af7b02309ed79e1c7059f59d4c5dde0efd7a5448d26b0f02019838c1",
+    "D:\\minecraftrust-astra-hardening\\tools\\testing\\hardening_guard.py": "a2062b3ffbec7edba79bf5f5954fbcb1e9d97492ab9c4bb541833ebb820bdb6d",
+    "D:\\minecraftrust-astra-hardening\\machine\\architecture-hardening\\isolation.json": "8f9b34b55f6ecc1d549da1ec4c42900b4a831a3072a9e4aa6aa2ae39cae53d93",
+    "D:\\minecraftrust-astra-hardening\\docs\\architecture\\semantic-scheduler.md": "ebaf2c9ccf121acf5283977a7fa3b3efd24e65cc140dd9fa4381fa5a783263f5"
+  },
+  "tools": {
+    "C:\\Users\\Admin\\.cargo\\bin\\cargo.exe": "6f4bef66261261fcb43131be8720bab817d403a09edec7455c371974b90bdb7e",
+    "C:\\Users\\Admin\\.cargo\\bin\\rustc.exe": "6f4bef66261261fcb43131be8720bab817d403a09edec7455c371974b90bdb7e",
+    "C:\\Python314\\python.exe": "4942b86a6597e5aee0128daa00050ed79bc21f6e709a78eb19cbfeb0c2f39ac9",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\cargo-clippy.exe": "cb0f2b164b3f6e95bfed7ec4ae9fc48f8ce8d9fef3649b5ae87961f75e1ef484",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\cargo-clippy.pdb": "3a680d9ca59c8a9f57ad545aaf3a5c322299ecf996a2c89fd730f6797f65e9d7",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\cargo-fmt.exe": "fcd2d35d13dc1a487c755e234bf2aee06f75b522c8a691cac9ee5f0d6fc854a1",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\cargo-fmt.pdb": "b9e1bd5ecb93d51c5bbdfc6dc976ce2d064194eb01082c9f7d0807fc7f28e371",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\cargo.exe": "c37545ec61d48d31bdefce53280ecab61c4ea54eaace372fac6a0316c6e165d9",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\cargo.pdb": "8cce17351523369a7d8b048a0748cfac676e75658ee4f2562f30e52268eaf0cf",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\clippy-driver.exe": "00fd4ef2fe60e603571573746e52f42f109bbfe4b879e7ca7313614fda0b367b",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\clippy-driver.pdb": "c2d975735a9107baa24abcce1a9e8f23f06b59445a4590365534b9065a5759cc",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\rust-gdb": "557985ec5a31f5617d25d26bd6fe23c4b8d6f85b1498e1aae82831ca0d7f17fe",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\rust-gdbgui": "bc60613775a098e59b49fa4584cea73631697fe1456c44284c337d6700340315",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\rust-lldb": "a82c91ccb285aa4a1dbcf08cda68ba4e8c36082af0adfefdee514673113815da",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\rust-windbg.cmd": "42607991c8f3040a5e7bbf222272007e741ea96e97499a16bc6ab2fc77ab10f5",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\rustc.exe": "ca9988af88b1463f6857fdfe909299fee50a63260b3e5f7dbcb5b4d3318b27bc",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\rustc.pdb": "c6120a2b877403003c2f6eab11116e2c1cd307c50864fbad62de62cf0859ac23",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\rustc_driver-573e106f78c6e3e0.dll": "50b9168c1d7bf98a7c4417eed0c8098daab7033b13ebb0bca752945708ea9ec7",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\rustc_driver-573e106f78c6e3e0.pdb": "624dd7a5857a11a20ff9b9ed24864670fced8f457265d49b14efa6846ea5705b",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\rustc_main-27d7dda480758917.pdb": "c6120a2b877403003c2f6eab11116e2c1cd307c50864fbad62de62cf0859ac23",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\rustdoc.exe": "9daff87cf4052ba3f97decb39d2822e1a96b3ed444eda86ed8df74802679dd60",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\rustdoc.pdb": "b94c0bae3a9ef3d2577453bf67a8d25e0a1713466a3036734b32faa8d448d9a5",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\rustfmt.exe": "ac9d781249bffabbb1bedb691a5ea6f63a818c1dda73dd698d4dff687ad4c24e",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\rustfmt.pdb": "182ba38d314712a0cc7cd014d332ef04c1d9cfb47653565ef52ef9451f77abd3",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\std-44a584f44bc3dd65.dll": "8dd8ea258a3561a499c438b322b218af3cb2f4db1029205adc94d58fd5b0615c",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\std-44a584f44bc3dd65.pdb": "fe5047c7cf230c724b38f9edfb7e1a98b2baba109cea4ebb2118cd4f8f027f6d",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\lib\\rustlib\\x86_64-pc-windows-msvc\\lib\\liballoc-e70c1e2d2d692bb9.rlib": "295df0e47c56fa3315f86911ffc6b374958f0243c62b8d05d2ed9851cf837a32",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\lib\\rustlib\\x86_64-pc-windows-msvc\\lib\\liballoc-e70c1e2d2d692bb9.rmeta": "bd4a8f1181be773e0664f52925a9f8820cbbdb2dba599653b898e09b386ec12f",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\lib\\rustlib\\x86_64-pc-windows-msvc\\lib\\libcfg_if-f6cc825be93b6db6.rlib": "adf5b9d342434214101fb0107255a3ca1e4351bc615c0a603baf28fe64e6909d",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\lib\\rustlib\\x86_64-pc-windows-msvc\\lib\\libcfg_if-f6cc825be93b6db6.rmeta": "fc1346ee3604dbc77d7a477943dde32a54921b9e110c6b59f91964ad593cac3d",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\lib\\rustlib\\x86_64-pc-windows-msvc\\lib\\libcompiler_builtins-d2ba6b5d33df79c1.rlib": "31f484ed29d0af592c71a5402dad113c5153a848c54d8ffb64ab7f4bf1af51bf",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\lib\\rustlib\\x86_64-pc-windows-msvc\\lib\\libcompiler_builtins-d2ba6b5d33df79c1.rmeta": "b778b1ee74368da018e744e654840ab873c00374efe29df2cef3a694267be6f2",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\lib\\rustlib\\x86_64-pc-windows-msvc\\lib\\libcore-5b8de9dae852fb90.rlib": "020e870c2676b36a49d19170265bb2fc53fa74e070edfa9bb9db99372db56522",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\lib\\rustlib\\x86_64-pc-windows-msvc\\lib\\libcore-5b8de9dae852fb90.rmeta": "76f466e2a0a8d6fc79689487c72a12fc5afefc9df6c92257ae1755a58ef7e7be",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\lib\\rustlib\\x86_64-pc-windows-msvc\\lib\\libgetopts-d2d45541664c6692.rlib": "ac1093aea514791f079d09f23b115e20f425d5f41473298f3bf1ce497c97428c",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\lib\\rustlib\\x86_64-pc-windows-msvc\\lib\\libgetopts-d2d45541664c6692.rmeta": "5c860f41a00dd119452532b131c232ed9d448c15dede8ca9863119cf465913d9",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\lib\\rustlib\\x86_64-pc-windows-msvc\\lib\\libhashbrown-d0cff6b08e590a6f.rlib": "96197b46c6a1337eafb3ad94bc91f7a922e7574ebbc1801a7cbdcf65b89816cc",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\lib\\rustlib\\x86_64-pc-windows-msvc\\lib\\libhashbrown-d0cff6b08e590a6f.rmeta": "068086c340c4bb59e40f3227b290fb8f5b9814a9ad4de22180dec59d56fbe226",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\lib\\rustlib\\x86_64-pc-windows-msvc\\lib\\libpanic_abort-91330a6e358edcc5.rlib": "5394014585283b4bdbf1351a289822819e65070dc4878956e7adf1fcade9b32d",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\lib\\rustlib\\x86_64-pc-windows-msvc\\lib\\libpanic_abort-91330a6e358edcc5.rmeta": "2459bcad6a0ae052b6919e4a9ccd53d633bf5ef1ddc0569bd1818ea9a06ec8bb",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\lib\\rustlib\\x86_64-pc-windows-msvc\\lib\\libpanic_unwind-d45f266e54626acb.rlib": "2ba01fc563e45f847a5d489bb19f54e86a2dc7f6c1ec55778401411484dd68de",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\lib\\rustlib\\x86_64-pc-windows-msvc\\lib\\libpanic_unwind-d45f266e54626acb.rmeta": "e5e2656be5ca28ac1a9b16e800e4773a2144e6e0198a4b0d2b43d953e0cd35c4",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\lib\\rustlib\\x86_64-pc-windows-msvc\\lib\\libproc_macro-7186298fd695a1a5.rlib": "fc5e02cb9683a955a6fbff7184725db0c78fc415e4dcc3f96ba48ee20e74875a",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\lib\\rustlib\\x86_64-pc-windows-msvc\\lib\\libproc_macro-7186298fd695a1a5.rmeta": "b97f36899688f05bf2790f8795715f3d22f845e9beeba77ef53b79acd9b3a49c",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\lib\\rustlib\\x86_64-pc-windows-msvc\\lib\\libprofiler_builtins-56fcd661f7d6fe38.rlib": "5bf3aa6724a208115b12b0a5b8f494873288664649af36c09fb2b8d2644c481a",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\lib\\rustlib\\x86_64-pc-windows-msvc\\lib\\libprofiler_builtins-56fcd661f7d6fe38.rmeta": "78367523b449a5834ec46e9b1d83729ce5b59e5c85a3387ff72f4025439e3596",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\lib\\rustlib\\x86_64-pc-windows-msvc\\lib\\librustc_demangle-0d6817d2202cd839.rlib": "80771d243a2faeb8e0baaf52c577746b815ae8354edb5e1dd76318c0f1b3862d",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\lib\\rustlib\\x86_64-pc-windows-msvc\\lib\\librustc_demangle-0d6817d2202cd839.rmeta": "44161335936e300d1127cfdfc53a35b369f03b1fef0d95801ba7607f8bcf7db1",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\lib\\rustlib\\x86_64-pc-windows-msvc\\lib\\librustc_literal_escaper-dd4ecc55777ebb42.rlib": "fd1366ed9f80bfdfc8f2dfc5a1aeb366a2f57a9968d1c1559ca6f0f25dd97524",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\lib\\rustlib\\x86_64-pc-windows-msvc\\lib\\librustc_literal_escaper-dd4ecc55777ebb42.rmeta": "2c845d8cc3fefab1d1d9d22f2b6f3cb51b22bf4b9280eec66345f71252ae3b92",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\lib\\rustlib\\x86_64-pc-windows-msvc\\lib\\librustc_std_workspace_alloc-6b150602d1d36152.rlib": "3bd4038f38bdbd8ac96b6b83c229adfe04d3845d5ee5c1e895dca173be542ac2",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\lib\\rustlib\\x86_64-pc-windows-msvc\\lib\\librustc_std_workspace_alloc-6b150602d1d36152.rmeta": "d96a522f2714117600d4fd8424d355c2b6dda3983e9002aef679aa4269d861b0",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\lib\\rustlib\\x86_64-pc-windows-msvc\\lib\\librustc_std_workspace_core-0958d4df46313f70.rlib": "d16f4f466be193ccf216fa63a5cd319dd6ec04a0e9c12f2a7bc5827f38f6030b",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\lib\\rustlib\\x86_64-pc-windows-msvc\\lib\\librustc_std_workspace_core-0958d4df46313f70.rmeta": "d9b95531740e2ca750a81cd399e5a104018e41299e0c63ad9badb4b263fbfa3e",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\lib\\rustlib\\x86_64-pc-windows-msvc\\lib\\librustc_std_workspace_std-7880561ff197d76f.rlib": "58d24589cb00d7f8f9f76e46788733308c5e8f524c9799e4d46fa760b71c178d",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\lib\\rustlib\\x86_64-pc-windows-msvc\\lib\\librustc_std_workspace_std-7880561ff197d76f.rmeta": "066c2065c7141b174cf0db01f597c1cfd32639f15e0f9e431b2af92cb4df18a2",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\lib\\rustlib\\x86_64-pc-windows-msvc\\lib\\libstd-44a584f44bc3dd65.rlib": "b2269a9ae50f6ed8c16da326fe043d6b1a046399b58511605264154ca9b3c553",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\lib\\rustlib\\x86_64-pc-windows-msvc\\lib\\libstd-44a584f44bc3dd65.rmeta": "418ef6da6caeaedfb8c7a73c7d340373a65367522bd4b5b7f8ed31e557ee46cd",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\lib\\rustlib\\x86_64-pc-windows-msvc\\lib\\libstd_detect-cb31305a36296f2c.rlib": "cfc3f8d8c9e5101931c42d498b8e3a4b64be40176847517722a033e0d107611f",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\lib\\rustlib\\x86_64-pc-windows-msvc\\lib\\libstd_detect-cb31305a36296f2c.rmeta": "3bb6c32b24fe137940b9c370455b2769ec185aae3ea210263c4f5586a4d5b295",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\lib\\rustlib\\x86_64-pc-windows-msvc\\lib\\libsysroot-523460ab676420ca.rlib": "7e7ec698c30c494e26424ddc358abc1446e4f9b99dc1dbea32118e97a5e199d5",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\lib\\rustlib\\x86_64-pc-windows-msvc\\lib\\libsysroot-523460ab676420ca.rmeta": "ed3012862fd7c78389d48f1a84d8215e81b080226929cb3506d60206ff3e45db",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\lib\\rustlib\\x86_64-pc-windows-msvc\\lib\\libtest-b612a6b84a3b28c3.rlib": "b5a6434ae71e76fcd193674af171171d4435e8b1c9057d5920a05df23ae5c9a8",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\lib\\rustlib\\x86_64-pc-windows-msvc\\lib\\libtest-b612a6b84a3b28c3.rmeta": "a4c958b532bc8c010899ef3da3ae628700fbf540302c26b78c9df833482e3050",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\lib\\rustlib\\x86_64-pc-windows-msvc\\lib\\libunwind-e1499329ec2a6c49.rlib": "3d5a88c7ce6d8cf3e41e178753d3dd3c95c338fb9213703a17915e6c56f5c1d1",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\lib\\rustlib\\x86_64-pc-windows-msvc\\lib\\libunwind-e1499329ec2a6c49.rmeta": "9bd037e1e2d6fefb87561085cecdc968f9b1ad68502cedd8e4c0783cc91e9a95",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\lib\\rustlib\\x86_64-pc-windows-msvc\\lib\\libwindows_link-d56ce6793d295ac1.rlib": "25987f1530b6ba3df71b11b82dd38ec22a85279165278905a6880dcf4cadc4fe",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\lib\\rustlib\\x86_64-pc-windows-msvc\\lib\\libwindows_link-d56ce6793d295ac1.rmeta": "6d651273bff357e8425e2a8dcc80e26b7df08a974c947d70bb502c814ccdaf07",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\lib\\rustlib\\x86_64-pc-windows-msvc\\lib\\std-44a584f44bc3dd65.dll": "8dd8ea258a3561a499c438b322b218af3cb2f4db1029205adc94d58fd5b0615c",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\lib\\rustlib\\x86_64-pc-windows-msvc\\lib\\std-44a584f44bc3dd65.dll.lib": "52ea6a190d3c9910292d414e3990b544b5a3e51ad6bf18ebc3aa1025f3c7a9b3",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\lib\\rustlib\\x86_64-pc-windows-msvc\\lib\\std-44a584f44bc3dd65.pdb": "fe5047c7cf230c724b38f9edfb7e1a98b2baba109cea4ebb2118cd4f8f027f6d"
+  },
+  "inherited_build_config": {
+    "D:\\minecraftrust-astra-hardening\\crates\\rust-toolchain": null,
+    "D:\\minecraftrust-astra-hardening\\rust-toolchain.toml": "2c6c06daae576901d5ae1824046862ed1aa59615827de79d9c5e72f5a282183e",
+    "D:\\minecraftrust-astra-hardening\\crates\\.cargo\\config": null,
+    "D:\\minecraftrust-astra-hardening\\rust-toolchain": null,
+    "D:\\.cargo\\config.toml": null,
+    "D:\\minecraftrust-astra-hardening\\crates\\semantic-scheduler-prototype\\.cargo\\config": null,
+    "D:\\minecraftrust-astra-hardening\\crates\\semantic-scheduler-prototype\\rust-toolchain": null,
+    "D:\\minecraftrust-astra-hardening\\crates\\semantic-scheduler-prototype\\rust-toolchain.toml": null,
+    "D:\\rust-toolchain.toml": null,
+    "C:\\Users\\Admin\\.cargo\\config.toml": null,
+    "D:\\minecraftrust-astra-hardening\\.cargo\\config": null,
+    "D:\\minecraftrust-astra-hardening\\.cargo\\config.toml": null,
+    "D:\\minecraftrust-astra-hardening\\crates\\rust-toolchain.toml": null,
+    "D:\\rust-toolchain": null,
+    "D:\\minecraftrust-astra-hardening\\crates\\semantic-scheduler-prototype\\.cargo\\config.toml": null,
+    "C:\\Users\\Admin\\.cargo\\config": null,
+    "D:\\.cargo\\config": null,
+    "D:\\minecraftrust-astra-hardening\\crates\\.cargo\\config.toml": null
+  },
+  "external_dependencies": 0,
+  "artifact": {
+    "path": "D:\\minecraftrust-astra-hardening\\target\\semantic-scheduler-prototype\\root-final\\cargo-target\\release\\examples\\boundaries.exe",
+    "sha256": "26c207a5926e068d316ca26edeb53622787577233a14d4e2f04102871c70078d"
+  },
+  "controls": [
+    {
+      "name": "trace-ordered-0",
+      "boundaries": 33,
+      "decisions": 32,
+      "status": "PASS",
+      "session": "4df92840f8ff4acbbd43cadcc75c9816",
+      "challenge": "2dd873187be885aaa1dbed777e819ee99caeb07b8f541c10979e54b54558c68a"
+    },
+    {
+      "name": "trace-conflict-0",
+      "boundaries": 33,
+      "decisions": 32,
+      "status": "PASS",
+      "session": "8a270c52d05a40f9b7e0bc36d3897b27",
+      "challenge": "8fece17402ed304d0780099731c1ac814d0f53b6e74cf25e2add69b415f819ee"
+    },
+    {
+      "name": "trace-cancel-0",
+      "boundaries": 33,
+      "decisions": 32,
+      "status": "PASS",
+      "session": "fde43a66de19400badb4ae71d64510b9",
+      "challenge": "e27116f31fa861ce6f265f6623b7a386a0934f87752ca6caf9c0ba5d688fe860"
+    },
+    {
+      "name": "trace-deadline-0",
+      "boundaries": 33,
+      "decisions": 32,
+      "status": "PASS",
+      "session": "37e9678340064bc980a89fab9d4b5a52",
+      "challenge": "f1497c28c21c5228cd202d2648f059669bc6bdd6110bfcb5bcc255d7a8bb30b0"
+    },
+    {
+      "name": "trace-revoke-0",
+      "boundaries": 33,
+      "decisions": 32,
+      "status": "PASS",
+      "session": "d3ac079eeeca4f708433a36baebfa836",
+      "challenge": "56ad98a017d2412aba1d653c60a9210b35dfef9a469a70e97d4b7af7e153c478"
+    },
+    {
+      "name": "trace-unload-0",
+      "boundaries": 33,
+      "decisions": 32,
+      "status": "PASS",
+      "session": "9bffae7d24ca4192b93e2383c6a578de",
+      "challenge": "19526abac32e4eaf9cb9111d3f89ddb78bd50a4cc962b0b190e98c99f5473f67"
+    },
+    {
+      "name": "trace-external-0",
+      "boundaries": 33,
+      "decisions": 32,
+      "status": "PASS",
+      "session": "4fc93265c5f44bb59d2f18419b2db7d3",
+      "challenge": "e25b38da52440d5fbffd2d187f7740019dc56670b91830c62af93d3b13497788"
+    },
+    {
+      "name": "trace-budget-0",
+      "boundaries": 33,
+      "decisions": 32,
+      "status": "PASS",
+      "session": "5b5c8923bc364347a53197741a4b8c2a",
+      "challenge": "9dee9a0b9543afab252ba79815325ca7c3b27f1908f31f61a712beb9275f4e66"
+    },
+    {
+      "name": "trace-arithmetic-0",
+      "boundaries": 33,
+      "decisions": 32,
+      "status": "PASS",
+      "session": "a457f57373634a6db192f63640fc3563",
+      "challenge": "398620f241510b3a483d0a9064b0004a2065dc0cfe428be2a8cba8db7e85e530"
+    },
+    {
+      "name": "trace-ordered-17",
+      "boundaries": 33,
+      "decisions": 32,
+      "status": "PASS",
+      "session": "94a657a1a6014f82a99d475bcdbb55a8",
+      "challenge": "a489999aabfcdd93d9efbd3ee5a292cb8e35532e618b53d23c654d335f12591b"
+    },
+    {
+      "name": "trace-conflict-17",
+      "boundaries": 33,
+      "decisions": 32,
+      "status": "PASS",
+      "session": "d3196d52c8e1420c965729ea87aaedc8",
+      "challenge": "740a1ec1845db13db2fe92f4069bb7f080110696e1ee2bb69538385575e16495"
+    },
+    {
+      "name": "trace-cancel-17",
+      "boundaries": 33,
+      "decisions": 32,
+      "status": "PASS",
+      "session": "a265f4c862394a8c83f188bf4fdf5987",
+      "challenge": "174519fe8f4e9574581fa94d47a38c95abd1c99276780869089ca888086115ec"
+    },
+    {
+      "name": "trace-deadline-17",
+      "boundaries": 33,
+      "decisions": 32,
+      "status": "PASS",
+      "session": "c600f19ce0fc4e3d92a7273e164859f2",
+      "challenge": "e4887b7b0f90e98ae7147b959cafdba544082e9c07f41f184f99f0d8b528587b"
+    },
+    {
+      "name": "trace-revoke-17",
+      "boundaries": 33,
+      "decisions": 32,
+      "status": "PASS",
+      "session": "e7f51e2c39084dc38a63475a73418628",
+      "challenge": "529421fa44dd2ed69dcd9fc00aac3f7c3882b6664b5929754c58e2944dd2f3bc"
+    },
+    {
+      "name": "trace-unload-17",
+      "boundaries": 33,
+      "decisions": 32,
+      "status": "PASS",
+      "session": "a6d3b449ae9248aeabea16c6d8612413",
+      "challenge": "4f2913b35846d93642ed0226fa83a18c3a604d207190e68391ae7b009a047c54"
+    },
+    {
+      "name": "trace-external-17",
+      "boundaries": 33,
+      "decisions": 32,
+      "status": "PASS",
+      "session": "bae00071bdba49cab5001272d1463159",
+      "challenge": "c72179955b9d694da4d66104821d59b28717219fb91af4918bfb8ff949a54e93"
+    },
+    {
+      "name": "trace-budget-17",
+      "boundaries": 33,
+      "decisions": 32,
+      "status": "PASS",
+      "session": "0dacf77bfdc94eccae1520da4353b955",
+      "challenge": "25bace2428f3d8ff1d6f4eea1a35a79e3d2bc787360a7594452b3bf34ca49fd5"
+    },
+    {
+      "name": "trace-arithmetic-17",
+      "boundaries": 33,
+      "decisions": 32,
+      "status": "PASS",
+      "session": "b96ee1f05f334cb68a80ed3cb7222f22",
+      "challenge": "ad8891986bd0cdce8201ca465dce0fc1004ac672791d840e50d359be3ee6d44a"
+    },
+    {
+      "name": "trace-ordered-18446744073709551615",
+      "boundaries": 33,
+      "decisions": 32,
+      "status": "PASS",
+      "session": "1ff5198fc2f14a5083256b050ce8f11a",
+      "challenge": "430f30545dc3d8d15b64d9deac9eb78e0e207f33e4cb336215493f869b43e8ce"
+    },
+    {
+      "name": "trace-conflict-18446744073709551615",
+      "boundaries": 33,
+      "decisions": 32,
+      "status": "PASS",
+      "session": "59313f2c76674ae0b6bff64118ee300b",
+      "challenge": "f0bd7088788169b4545ceafbc4c0c569438bb9ed34651bd3983fdc4a576e4351"
+    },
+    {
+      "name": "trace-cancel-18446744073709551615",
+      "boundaries": 33,
+      "decisions": 32,
+      "status": "PASS",
+      "session": "a34f40b5b6d1473c9d00652e4b8e1fbc",
+      "challenge": "a028e3c51e92c9afe8533a143c983f5cbbcf88837d13ceb12da555a66790be9c"
+    },
+    {
+      "name": "trace-deadline-18446744073709551615",
+      "boundaries": 33,
+      "decisions": 32,
+      "status": "PASS",
+      "session": "aede9a362f2e4b2291e08d1b766aca88",
+      "challenge": "69e56440c3fcba6de46077394313e380f414d0deff89743fdd8c3cba37156adb"
+    },
+    {
+      "name": "trace-revoke-18446744073709551615",
+      "boundaries": 33,
+      "decisions": 32,
+      "status": "PASS",
+      "session": "df56bffe804041ec8f1173a54ae634f6",
+      "challenge": "feebbcfe4a59e6bdeb20750de1b2a1bf9e605b18b96d4d48c0e10721d9dca6ab"
+    },
+    {
+      "name": "trace-unload-18446744073709551615",
+      "boundaries": 33,
+      "decisions": 32,
+      "status": "PASS",
+      "session": "1d14c01874df46219483c9244c2ef097",
+      "challenge": "c02a4f32ff7b85993cda39c7dd61ed0dbd70c0d9d00ab2c01ef168b53e8afdc2"
+    },
+    {
+      "name": "trace-external-18446744073709551615",
+      "boundaries": 33,
+      "decisions": 32,
+      "status": "PASS",
+      "session": "80e1454dec5d42e4867476e346dd70eb",
+      "challenge": "fd1c4289920c131a303440c29617bb5cddac5e05e99dbcc5a72417de45761ab0"
+    },
+    {
+      "name": "trace-budget-18446744073709551615",
+      "boundaries": 33,
+      "decisions": 32,
+      "status": "PASS",
+      "session": "543f34d592a142f7ad1117792b19e3a9",
+      "challenge": "b320f851fc8edab293428c20b85afb7739bea42f1b0a6142d9c1db63944b9da4"
+    },
+    {
+      "name": "trace-arithmetic-18446744073709551615",
+      "boundaries": 33,
+      "decisions": 32,
+      "status": "PASS",
+      "session": "887be83868d9494aac9027d54122dadc",
+      "challenge": "6863b0ac9ea3fe296dc4a5abd80a731a2dd8676778973d3e13d0fdcfbd420bc9"
+    },
+    {
+      "name": "cross-session",
+      "status": "EXPECTED_REJECTION",
+      "first_divergence": 0
+    },
+    {
+      "name": "wrong-challenge",
+      "status": "EXPECTED_REJECTION",
+      "first_divergence": 0
+    },
+    {
+      "name": "missing-row",
+      "status": "EXPECTED_REJECTION"
+    },
+    {
+      "name": "extra-row",
+      "status": "EXPECTED_REJECTION"
+    },
+    {
+      "name": "wrong-value",
+      "status": "EXPECTED_DIVERGENCE",
+      "first_divergence": 1
+    },
+    {
+      "name": "reordered",
+      "status": "EXPECTED_DIVERGENCE",
+      "first_divergence": 1
+    },
+    {
+      "name": "bad-session",
+      "status": "EXPECTED_REJECTION"
+    },
+    {
+      "name": "bad-scenario",
+      "status": "EXPECTED_REJECTION"
+    },
+    {
+      "name": "bad-seed",
+      "status": "EXPECTED_REJECTION"
+    }
+  ],
+  "rust_unit_tests": 28,
+  "rust_compile_fail_tests": 4,
+  "python_tests": 6,
+  "independent_boundary_comparisons": 891,
+  "ordered_decisions": 864,
+  "performance_claim": "none; elapsed times are workflow observations only",
+  "guard_after": {
+    "schema_version": 1,
+    "kind": "HARDENING_ISOLATION_GATE_CHECK",
+    "status": "PASS",
+    "failures": [],
+    "original_observed": {
+      "head": "c4b868db2c9e4b03f745bf93c6ebf4fd8a8519e7",
+      "branch": "issue1-jni-v2",
+      "status": [
+        " M tools/live-capture/live_client_session.py",
+        "?? tools/live-capture/__pycache__/",
+        "?? tools/live-capture/run_rev_shadow.py"
+      ],
+      "files": [
+        {
+          "path": "D:\\minecraftrust\\tools\\live-capture\\live_client_session.py",
+          "sha256": "151c356161695aba3db3c1a8cbd589b5eda2b5a1770dff59ab21b728d36cabfa"
+        },
+        {
+          "path": "D:\\minecraftrust\\tools\\live-capture\\run_rev_shadow.py",
+          "sha256": "2b9b2aca49e57dd0d2a74bec46efcdc0ac7f95762a733276e27ff9dbcb472d93"
+        }
+      ]
+    },
+    "isolated_worktree": "D:\\minecraftrust-astra-hardening",
+    "isolated_head": "1ee883947b4173e45fa4c56d86c040cf4198ae60",
+    "isolated_branch": "astra/architecture-hardening",
+    "production_gate_checks": {
+      "tryEncode_fail_closed": true,
+      "productionAuthorityEligible_false": true
+    },
+    "scope": "read-only original HEAD/status/two paused source hashes plus conservative source guards; runtime authority tests remain required"
+  },
+  "elapsed_seconds": 4.964604800043162
+}

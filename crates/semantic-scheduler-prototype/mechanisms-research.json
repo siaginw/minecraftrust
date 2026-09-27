@@ -1,0 +1,80 @@
+{
+  "schema": "SEMANTIC_SCHEDULER_MECHANISMS_RESEARCH_V1",
+  "observed_utc": "2026-09-27T01:33:15.672510+00:00",
+  "dependencies_added": 0,
+  "scope": "Pinned primary metadata research only; archives/checksums recorded but packages not installed or benchmarked by this prototype",
+  "candidates": [
+    {
+      "name": "rayon",
+      "version": "1.12.0",
+      "license": "MIT OR Apache-2.0",
+      "rust_version": "1.80",
+      "archive_sha256": "fb39b166781f92d482534ef4b4b1b2568f42613b53e5b6c160e24cfbfa30926d",
+      "repository": "https://github.com/rayon-rs/rayon",
+      "metadata_url": "https://crates.io/api/v1/crates/rayon/1.12.0",
+      "response_sha256": "d00158707facc7baee1ff78e526442c324d95c9a2ea81c6033fd6cf03f5a1e25",
+      "decision": "STUDY",
+      "installed_for_this_prototype": false
+    },
+    {
+      "name": "parking_lot",
+      "version": "0.12.5",
+      "license": "MIT OR Apache-2.0",
+      "rust_version": "1.71",
+      "archive_sha256": "93857453250e3077bd71ff98b6a65ea6621a19bb0f559a85248955ac12c45a1a",
+      "repository": "https://github.com/Amanieu/parking_lot",
+      "metadata_url": "https://crates.io/api/v1/crates/parking_lot/0.12.5",
+      "response_sha256": "f6fc497fc0576f75b6435a990b1c9b03a2b85e2aaae0ade5a8bd969371fa9e9b",
+      "decision": "STUDY",
+      "installed_for_this_prototype": false
+    },
+    {
+      "name": "slab",
+      "version": "0.4.12",
+      "license": "MIT",
+      "rust_version": "1.51",
+      "archive_sha256": "0c790de23124f9ab44544d7ac05d60440adc586479ce501c1d6d7da3cd8c9cf5",
+      "repository": "https://github.com/tokio-rs/slab",
+      "metadata_url": "https://crates.io/api/v1/crates/slab/0.4.12",
+      "response_sha256": "60092cad2908e5c2e947ea041417ee468bcf7f9b90a8942935d5f9998be2b90b",
+      "decision": "STUDY",
+      "installed_for_this_prototype": false
+    },
+    {
+      "name": "crossbeam-channel",
+      "version": "0.5.17",
+      "license": "MIT OR Apache-2.0",
+      "rust_version": "1.60",
+      "archive_sha256": "98b0cc327b5bc766e7fda9c9260cc0fa81b43a8e240440422dff70788e3f9ef1",
+      "repository": "https://github.com/crossbeam-rs/crossbeam",
+      "metadata_url": "https://crates.io/api/v1/crates/crossbeam-channel/0.5.17",
+      "response_sha256": "a23c8420e1c3a98e1faf704a703201fe79317c4842a6aba50f4cd5b008f71403",
+      "decision": "STUDY",
+      "installed_for_this_prototype": false
+    },
+    {
+      "name": "arc-swap",
+      "version": "1.9.2",
+      "license": "MIT OR Apache-2.0",
+      "rust_version": null,
+      "archive_sha256": "c049c0be4daef0b145cb3555416b3b8ef5b7888a38aea1a3a155801fe7b0810b",
+      "repository": "https://github.com/vorner/arc-swap",
+      "metadata_url": "https://crates.io/api/v1/crates/arc-swap/1.9.2",
+      "response_sha256": "9c1f38598089a18594a91d0526b0fd07b66f52d6c17b393a7bbd36811684aca9",
+      "decision": "STUDY",
+      "installed_for_this_prototype": false
+    },
+    {
+      "name": "bytemuck",
+      "version": "1.25.2",
+      "license": "Zlib OR Apache-2.0 OR MIT",
+      "rust_version": null,
+      "archive_sha256": "95832e849adfb21180ccb6826a99da14e5d266ae5c2e668e1602cf234f153797",
+      "repository": "https://github.com/Lokathor/bytemuck",
+      "metadata_url": "https://crates.io/api/v1/crates/bytemuck/1.25.2",
+      "response_sha256": "d30828df850471de4e945ee616abf3d5c2f266b2f2d833e15eb203052c4f9dac",
+      "decision": "STUDY",
+      "installed_for_this_prototype": false
+    }
+  ]
+}

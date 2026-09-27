@@ -28,3 +28,9 @@ machine/architecture-hardening/h9-nbt-region-evidence/** -text -whitespace
 tools/nbt-region-experiment/licenses/** -text -whitespace
 tools/jni-lifecycle-prototype/third-party/** -text -whitespace
 tools/gpu-offline-experiment/hash-prospector-UNLICENSE -text
+machine/architecture-hardening/h12-scheduler-evidence/** -text -whitespace
+# Preserve the exact new source bytes bound by the offline scheduler receipt.
+crates/semantic-scheduler-prototype/** -text
+docs/architecture/semantic-scheduler.md -text
+crates/semantic-scheduler-prototype/examples/boundaries.rs whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+crates/semantic-scheduler-prototype/mechanisms-research.json whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
