@@ -219,6 +219,8 @@ LIVE_TRANSFORMER_SOURCES = [
     "tools/bridge/src/com/rustcraft/bridge/capture/LiveWriterGate.java",
     "tools/bridge/src/com/rustcraft/bridge/capture/LiveWriterHooks.java",
     "tools/bridge/src/com/rustcraft/bridge/capture/LiveForgeCaptureSource.java",
+    "tools/bridge/src/com/rustcraft/bridge/capture/LiveCaptureScope.java",
+    "tools/bridge/src/com/rustcraft/bridge/capture/LegacyCaptureScopes.java",
     "tools/bridge/src/com/rustcraft/bridge/capture/LivePacketCapture.java",
     "tools/bridge/src/com/rustcraft/bridge/capture/CaptureDraft.java",
     "tools/bridge/src/com/rustcraft/bridge/capture/SealedLiveCapture.java",
@@ -235,6 +237,7 @@ LIVE_TRANSFORMER_SOURCES = [
 
 LIVE_ORACLE_SOURCES = [
     "tools/forge-capture/src/com/rustcraft/livetransformer/LiveTransformerVerification.java",
+    "tools/forge-capture/src/com/rustcraft/livetransformer/ExtractorScopeVerification.java",
     "tools/bridge/src/com/rustcraft/bridge/capture/CaptureContract.java",
     "tools/bridge/src/com/rustcraft/bridge/capture/CaptureSource.java",
     "tools/bridge/src/com/rustcraft/bridge/capture/OwnedPacketSnapshot.java",
@@ -252,6 +255,8 @@ LIVE_ORACLE_SOURCES = [
     "tools/bridge/src/com/rustcraft/bridge/capture/LiveChunkBindings.java",
     "tools/bridge/src/com/rustcraft/bridge/capture/LiveWriterHooks.java",
     "tools/bridge/src/com/rustcraft/bridge/capture/LiveForgeCaptureSource.java",
+    "tools/bridge/src/com/rustcraft/bridge/capture/LiveCaptureScope.java",
+    "tools/bridge/src/com/rustcraft/bridge/capture/LegacyCaptureScopes.java",
     "tools/bridge/src/com/rustcraft/bridge/capture/LivePacketCapture.java",
     "tools/bridge/src/com/rustcraft/bridge/capture/CaptureDraft.java",
     "tools/bridge/src/com/rustcraft/bridge/capture/SealedLiveCapture.java",

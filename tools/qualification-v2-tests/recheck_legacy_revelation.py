@@ -24,6 +24,7 @@ import uuid
 
 ROOT = Path(__file__).resolve().parents[2]
 BASELINE = "c4b868db2c9e4b03f745bf93c6ebf4fd8a8519e7"
+HISTORICAL_TOOL_COMMIT = "5dc125edbdd3716294c13becaeffae86cc06c392"
 CORE = "tools/bridge/src/com/rustcraft/coremod/"
 HELPER = "tools/forge-capture/src/com/rustcraft/revdiag/RevCanonicalHash.java"
 
@@ -114,7 +115,10 @@ def worker() -> int:
     try:
         if document["probe_receipt"].get("transformed_classes") != {}:
             raise ValueError("embedded class fallback must be disabled for this replay")
-        spec = importlib.util.spec_from_file_location("h1_legacy_profile_verify", ROOT / "tools/testing/profile_verify.py")
+        for path, expected in config["historicalTools"].items():
+            if sha(Path(path)) != expected:
+                raise ValueError("historical verifier/control source drift")
+        spec = importlib.util.spec_from_file_location("h1_legacy_profile_verify", config["verifier"])
         module = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(module)
         subprocess.run = strict_helper
@@ -162,7 +166,7 @@ def main() -> int:
     if not dump.is_dir() or not runtime.is_dir():
         parser.error("explicit historical corpus/runtime inputs must exist")
     out.mkdir(parents=True)
-    records, baseline_sources, compiled_artifacts, failure = [], {}, {}, None
+    records, baseline_sources, compiled_artifacts, historical_tools, failure = [], {}, {}, {}, None
     java = args.java_home.resolve() / "bin/java.exe"
     javac = args.java_home.resolve() / "bin/javac.exe"
     sources = [CORE + "LiveHookSupport.java", CORE + "LiveWriterPlan.java", HELPER]
@@ -170,12 +174,23 @@ def main() -> int:
     profile = json.loads(args.profile.read_text(encoding="utf-8"))
     inventory = dump_inventory(dump)
     inputs = [ROOT / p for p in current_sources] + [args.profile.resolve(), java, javac, args.asm.resolve(),
-            Path(__file__).resolve(), ROOT / "tools/testing/test_profile_verify.py", ROOT / "tools/testing/profile_verify.py"]
+            Path(__file__).resolve()]
     inputs += [runtime / p for p in profile["runtime_pins"]["artifacts"]]
     inputs += [runtime / p for p in profile["runtime_pins"]["mods"]]
     before = {str(p): sha(p) for p in inputs}
     canonical = {}
     try:
+        # Replay immutable historical tooling from its accepted commit. The
+        # active profile verifier can therefore reject V1 and evolve safely.
+        history = out / "historical/tools/testing"
+        history.mkdir(parents=True)
+        for filename in ("profile_verify.py", "test_profile_verify.py"):
+            result = command(["git", "--no-optional-locks", "show",
+                              HISTORICAL_TOOL_COMMIT + ":tools/testing/" + filename], records)
+            require_success(result)
+            target = history / filename
+            target.write_text(result.stdout, encoding="utf-8", newline="\n")
+            historical_tools[str(target)] = sha(target)
         version = command([str(java), "-version"], records); require_success(version)
         if not re.search(r'(?:java|openjdk) version "1\.8\.', version.stdout + version.stderr):
             raise ValueError("explicit Java 8 runtime required")
@@ -213,7 +228,8 @@ def main() -> int:
         profile_path.write_text(json.dumps(profile, indent=2) + "\n", encoding="utf-8")
         config = {"out": str(out), "dump": str(dump), "java": str(java),
                   "classpath": classpaths["current"], "corpus": inventory, "canonical": canonical["current"],
-                  "compiledClasses": compiled_artifacts["current"]}
+                  "compiledClasses": compiled_artifacts["current"],
+                  "verifier": str(history / "profile_verify.py"), "historicalTools": historical_tools}
         config_path = out / "worker-config.json"
         config_path.write_text(json.dumps(config, indent=2) + "\n", encoding="utf-8")
         temp = out / "temp"; temp.mkdir()
@@ -223,7 +239,8 @@ def main() -> int:
                     "RUSTCRAFT_PROFILE_TEST_PROFILE": str(profile_path),
                     "RUSTCRAFT_PROFILE_TEST_VERIFIER": str(Path(__file__).resolve()),
                     "RUSTCRAFT_PROFILE_TEST_RUNTIME": str(runtime), "RUSTCRAFT_PROFILE_TEST_TEMP_ROOT": str(temp)})
-        controls = command([sys.executable, "-B", "-m", "unittest", "tools.testing.test_profile_verify", "-v"], records, env=env)
+        controls = command([sys.executable, "-B", "-m", "unittest", "discover", "-s", str(history),
+                            "-p", "test_profile_verify.py", "-v"], records, env=env)
         require_success(controls)
         if not re.search(r"Ran 10 tests in [0-9.]+s\s+OK\s*$", controls.stderr):
             raise ValueError("legacy unittest output does not prove all ten controls ran")
@@ -242,11 +259,14 @@ def main() -> int:
     if any(not Path(path).is_file() or sha(Path(path)) != value
            for classes in compiled_artifacts.values() for path, value in classes.items()):
         failure = "compiled artifact drift during regression"
+    if any(not Path(path).is_file() or sha(Path(path)) != value for path, value in historical_tools.items()):
+        failure = "historical verifier/control source drift during regression"
     receipt = {"schema": "H1_LEGACY_REVELATION_REGRESSION_V1", "status": "FAIL" if failure else "PASS",
                "failure": failure, "baseline": BASELINE, "baselineSources": baseline_sources,
                "inputHashesBefore": before, "inputHashesAfter": after, "corpus": inventory,
                "actualClasses": len(inventory), "historicalCanonical": canonical,
                "compiledArtifacts": compiled_artifacts,
+               "historicalToolCommit": HISTORICAL_TOOL_COMMIT, "historicalTools": historical_tools,
                "commands": records, "controls": {"unittestCount": 10, "verifierExecutions": 9},
                "scope": "Historical preserved Revelation V1 corpus only. No fresh server, live shadow, or V2 qualification.",
                "knownLegacyLimitations": ["CANONICAL_ID_V1 is incomplete; reproduced only for regression",

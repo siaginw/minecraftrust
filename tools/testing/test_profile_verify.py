@@ -1,135 +1,126 @@
-#!/usr/bin/env python3
-"""Negative controls for the generic profile verifier.
+"""Actual CLI failure-contract controls; runtime qualification tests live beside the engine.
 
-Each control mutates ONE aspect of the accepted Revelation profile document
-(or its referenced runtime) and requires the verifier to reject it. A green
-verifier that accepts any mutated profile is itself a FAIL.
-Run:  python -m unittest tools.testing.test_profile_verify -v
+Historical ten-control Revelation replay is pinned by the explicit H1 historical
+harness. These controls cannot pass just because the verifier crashed.
 """
 from __future__ import annotations
 
-import copy
-import hashlib
 import json
-import os
+from pathlib import Path
 import subprocess
 import sys
 import tempfile
 import unittest
-from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
-# Explicit test-only injection for historical regression replay. Production
-# verification does not consume these variables. Defaults preserve this suite.
-PROFILE = Path(os.environ.get("RUSTCRAFT_PROFILE_TEST_PROFILE", str(ROOT / "tools/live-capture/revelation-profile.json")))
-VERIFY = Path(os.environ.get("RUSTCRAFT_PROFILE_TEST_VERIFIER", str(ROOT / "tools/testing/profile_verify.py")))
-RT = Path(os.environ.get("RUSTCRAFT_PROFILE_TEST_RUNTIME", "D:/rustcraft-runtime-targets/revelation-3.4.0/server"))
-TEST_TMP_ROOT = os.environ.get("RUSTCRAFT_PROFILE_TEST_TEMP_ROOT")
+VERIFY = ROOT / "tools/testing/profile_verify.py"
 
 
-def run_verifier(profile_doc: dict, tmp: Path, name: str) -> tuple[int, str]:
-    path = tmp / ("profile-%s.json" % name)
-    path.write_text(json.dumps(profile_doc, indent=1))
-    result = subprocess.run([sys.executable, "-B", str(VERIFY), "--profile", str(path)],
-                            capture_output=True, text=True, cwd=ROOT)
-    return result.returncode, result.stdout
+class ProfileVerifyCliControls(unittest.TestCase):
+    def setUp(self):
+        base = ROOT / "target/qualification-cli-controls"
+        base.mkdir(parents=True, exist_ok=True)
+        self.temporary = tempfile.TemporaryDirectory(dir=base)
+        self.path = Path(self.temporary.name).resolve()
+        self.assertTrue(self.path.is_relative_to(base.resolve()))
+        self.manifest = self.path / "runtime.json"
+        self.profile = self.path / "profile.json"
+        self.manifest.write_text(json.dumps({
+            "schema": "RUSTCRAFT_RUNTIME_MANIFEST_V2", "runtime_root": str(self.path),
+            "inventories": {}, "collector": {}, "identity_tool": {},
+        }), encoding="utf-8")
 
+    def tearDown(self):
+        self.temporary.cleanup()
 
-def sha256_of(path: Path) -> str:
-    return hashlib.sha256(path.read_bytes()).hexdigest()
+    def run_cli(self, expected, requested="OFFLINE_QUALIFIED", expected_maturity=None):
+        result = subprocess.run([
+            sys.executable, "-B", str(VERIFY), "--manifest", str(self.manifest),
+            "--profile", str(self.profile), "--output-root", str(self.path / "runs"),
+            "--requested", requested,
+        ], cwd=ROOT, capture_output=True, text=True, timeout=30)
+        self.assertEqual({"PASS": 0, "FAIL": 1, "INCOMPLETE": 2}[expected], result.returncode,
+                         result.stdout + result.stderr)
+        self.assertEqual("", result.stderr, "unexpected traceback/error-only failure")
+        self.assertEqual(1, len(result.stdout.splitlines()))
+        summary = json.loads(result.stdout)
+        self.assertEqual(expected, summary["status"])
+        self.assertIs(summary["production_authority"], False)
+        cert = Path(summary["certificate"]).resolve()
+        self.assertTrue(cert.is_relative_to(self.path / "runs"))
+        value = json.loads(cert.read_text())
+        self.assertEqual(expected, value["status"])
+        self.assertIs(value["production_authority"], False)
+        self.assertEqual(expected_maturity, value["maturity"])
+        self.assertTrue(value["evidence"], "a failure needs an inspectable evidence reason")
+        return value
 
+    def integration_fixture(self, **kwargs):
+        from tools.testing.test_qualification_engine import EngineFixture
+        fixture = EngineFixture(self.path / ("fixture-" + str(len(list(self.path.iterdir())))), **kwargs)
+        self.manifest, self.profile = fixture.manifest_path, fixture.profile_path
+        return fixture
 
-class NegativeControls(unittest.TestCase):
-    @classmethod
-    def setUpClass(cls) -> None:
-        cls.original = json.loads(PROFILE.read_text())
+    def test_real_java_cli_qualifies_both_raw_and_v2_scoped_fixtures(self):
+        for mode in ("RAW_SHA256", "CANONICAL_ID_V2"):
+            with self.subTest(mode=mode):
+                self.integration_fixture(identity_mode=mode)
+                self.run_cli("PASS", expected_maturity="OFFLINE_QUALIFIED")
 
-    def test_00_positive_control_passes(self) -> None:
-        with tempfile.TemporaryDirectory(dir=TEST_TMP_ROOT) as tmp:
-            code, out = run_verifier(self.original, Path(tmp), "positive")
-            self.assertEqual(code, 0, out)
-            self.assertIn("PROFILE VERIFY: PASS", out)
+    def test_actual_collector_failure_preserves_stderr(self):
+        self.integration_fixture(mode="nonzero")
+        cert = self.run_cli("FAIL")
+        logs = json.loads((Path(cert["context"]["output_directory"]) / "process-log.json").read_text())
+        collector = next(row for row in logs if row["label"] == "collector")
+        self.assertEqual(7, collector["returncode"])
+        self.assertIn("intentional stderr", collector["stderr"])
 
-    def mutated(self, apply_mutation, name: str) -> tuple[int, str]:
-        doc = copy.deepcopy(self.original)
-        apply_mutation(doc)
-        with tempfile.TemporaryDirectory(dir=TEST_TMP_ROOT) as tmp:
-            return run_verifier(doc, Path(tmp), name)
+    def test_offline_cli_cannot_claim_live_qualification(self):
+        self.integration_fixture()
+        self.run_cli("INCOMPLETE", "LIVE_QUALIFIED", "OFFLINE_QUALIFIED")
 
-    def test_01_wrong_forge_build_hash_rejected(self) -> None:
-        def mutate(doc: dict) -> None:
-            doc["runtime_pins"]["artifacts"][
-                "forge-1.12.2-14.23.5.2846-universal.jar"]["sha256"] = "0" * 64
-        code, out = self.mutated(mutate, "forge-hash")
-        self.assertNotEqual(code, 0)
-        self.assertIn("artifact:forge-1.12.2-14.23.5.2846-universal.jar", out)
+    def test_missing_profile_is_incomplete_not_exception(self):
+        self.run_cli("INCOMPLETE")
 
-    def test_02_wrong_forge_build_label_rejected(self) -> None:
-        def mutate(doc: dict) -> None:
-            doc["expected_runtime"]["forge_build"] = "2860"
-        code, out = self.mutated(mutate, "forge-label")
-        self.assertNotEqual(code, 0)
-        self.assertIn("expected_runtime.forge_build", out)
+    def test_missing_runtime_manifest_is_incomplete(self):
+        self.manifest.unlink()
+        self.profile.write_text("{}", encoding="utf-8")
+        self.run_cli("INCOMPLETE")
 
-    def test_03_altered_transformed_class_hash_rejected(self) -> None:
-        def mutate(doc: dict) -> None:
-            if doc.get("identity_mode") == "CANONICAL":
-                cls = doc["hook_matrix"]["sites"][0]["class"]
-                doc["expected_transformed_classes"][cls] = "f" * 64
-            else:
-                doc["hook_matrix"]["sites"][0]["rev_sha256"] = "f" * 64
-        code, out = self.mutated(mutate, "class-hash")
-        self.assertNotEqual(code, 0)
-        self.assertIn("observed", out)
+    def test_malformed_json_is_structured_failure(self):
+        self.profile.write_text('{"schema":', encoding="utf-8")
+        self.run_cli("FAIL")
 
-    def test_04_missing_hook_target_rejected(self) -> None:
-        def mutate(doc: dict) -> None:
-            doc["hook_matrix"]["sites"].pop()
-        code, out = self.mutated(mutate, "missing-hook")
-        self.assertNotEqual(code, 0)
-        self.assertIn("hook_matrix.count", out)
+    def test_duplicate_json_keys_are_rejected(self):
+        self.profile.write_text('{"schema":"x","schema":"y"}', encoding="utf-8")
+        cert = self.run_cli("FAIL")
+        definition = next(row for row in cert["evidence"] if row["id"] == "definitions")
+        self.assertIn("duplicate", definition["detail"].lower())
 
-    def test_05_changed_descriptor_classification_rejected(self) -> None:
-        def mutate(doc: dict) -> None:
-            doc["hook_matrix"]["sites"][3]["classification"] = "DESCRIPTOR_CHANGED"
-        code, out = self.mutated(mutate, "descriptor")
-        self.assertNotEqual(code, 0)
-        self.assertIn("DESCRIPTOR_CHANGED", out)
+    def test_nonfinite_json_is_rejected(self):
+        self.profile.write_text('{"schema":NaN}', encoding="utf-8")
+        cert = self.run_cli("FAIL")
+        definition = next(row for row in cert["evidence"] if row["id"] == "definitions")
+        self.assertIn("nonfinite", definition["detail"].lower())
 
-    def test_06_unexpected_transformer_rejected(self) -> None:
-        def mutate(doc: dict) -> None:
-            doc["expected_transformer_chain"].append("evil.mod.FakeTransformer")
-            doc["probe_receipt"]["transformers"] = doc["expected_transformer_chain"]
-        code, out = self.mutated(mutate, "transformer")
-        self.assertNotEqual(code, 0)
-        self.assertIn("transformer_chain", out)
+    def test_wrong_root_types_are_failures_with_receipts(self):
+        for value in ([], None, "profile", 42):
+            with self.subTest(value=value):
+                self.profile.write_text(json.dumps(value), encoding="utf-8")
+                self.run_cli("FAIL")
 
-    def test_07_missing_coremod_entry_rejected(self) -> None:
-        def mutate(doc: dict) -> None:
-            doc["expected_coremod_plugins"].pop()
-            doc["probe_receipt"]["registered_coremod_plugins"] = \
-                doc["expected_coremod_plugins"]
-        code, out = self.mutated(mutate, "coremod")
-        self.assertNotEqual(code, 0)
-        self.assertIn("coremod_inventory", out)
+    def test_embedded_v1_success_cannot_substitute_for_observation(self):
+        self.profile.write_text(json.dumps({
+            "schema_version": 1, "identity_mode": "CANONICAL", "all_required_qualified": True,
+            "probe_receipt": {"status": "PASS", "transformed_classes": {"fake.Class": "a" * 64}},
+            "production_authority": False,
+        }), encoding="utf-8")
+        self.run_cli("FAIL")
 
-    def test_08_unrecognized_coremod_entry_rejected(self) -> None:
-        def mutate(doc: dict) -> None:
-            doc["expected_coremod_plugins"].append(
-                {"class": "evil.mod.EvilPlugin", "location": "mods/evil.jar"})
-            doc["probe_receipt"]["registered_coremod_plugins"] = \
-                doc["expected_coremod_plugins"]
-        code, out = self.mutated(mutate, "coremod-unknown")
-        self.assertNotEqual(code, 0)
-        self.assertIn("coremod_inventory", out)
-
-    def test_09_runtime_artifact_substitution_rejected(self) -> None:
-        """A substituted mod jar on disk must be caught by hash recompute."""
-        real = json.loads(PROFILE.read_text())["runtime_pins"]["mods"]
-        first = sorted(real.keys())[0]
-        actual = sha256_of(RT / first)
-        self.assertEqual(actual, real[first]["sha256"],
-                         "runtime mod jar was substituted outside the test")
+    def test_authority_request_does_not_open_a_gate(self):
+        cert = self.run_cli("INCOMPLETE", "AUTHORITY_AUTHORIZED")
+        stage = next(row for row in cert["stages"] if row["maturity"] == "AUTHORITY_AUTHORIZED")
+        self.assertIn("PRODUCTION_AUTHORITY_DISABLED", stage["blocked_by"])
 
 
 if __name__ == "__main__":

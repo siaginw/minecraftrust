@@ -225,10 +225,11 @@ public final class LiveWriterHooks {
     /** Production entry: the qualified MinecraftServer.run bootstrap hook. */
     public static void diagnosticSessionStart() {
         if (session != null) return; // one session per JVM; never reset
-        // Install the pinned extractor for the qualified runtime (reflection-only;
-        // no direct Minecraft references in this class or the extractor).
-        LivePacketCapture.installSourceFactory((packet, chunk, filter, binding, gate) ->
-                LiveForgeCaptureSource.forChunk(chunk, binding, gate, filter));
+        // Explicit historical Clean policy only. A Revelation/unknown generated
+        // plan cannot inherit Clean provenance or scope before H23 qualification.
+        LiveCaptureScope scope = LegacyCaptureScopes.selectedLegacyPlan(LiveWriterHooks.class.getClassLoader());
+        LivePacketCapture.installSourceFactory(scope == null ? null
+                : scope.sourceFactory(Thread.currentThread().getContextClassLoader()));
         LiveWriterGate gate = new LiveWriterGate(Thread.currentThread());
         PrivateBuildTickets tickets = new PrivateBuildTickets(gate);
         LiveChunkBindings bindings = new LiveChunkBindings(gate, tickets);

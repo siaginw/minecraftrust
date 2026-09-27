@@ -213,16 +213,18 @@ public final class LiveShadowCampaignConsumer {
                     com.rustcraft.bridge.capture.LivePacketCapture.installedSourceFactory();
             String extraction = "no factory";
             if (factory != null) {
-                // The binding for a Nether chunk may or may not exist; the extractor
-                // only needs the world/chunk pair to classify the provider.
+                // Exercise the installed explicit scope, never the legacy no-policy
+                // overload. A missing binding cannot prove dimension exclusion.
                 LiveChunkBindings.Binding binding = LiveWriterHooks.bindingsForTesting() == null
                         ? null : LiveWriterHooks.bindingsForTesting().bindingFor(netherChunk);
-                com.rustcraft.bridge.capture.LiveForgeCaptureSource source =
-                        com.rustcraft.bridge.capture.LiveForgeCaptureSource.forChunk(
-                                netherChunk, binding,
-                                LiveWriterHooks.gateForTesting(), 0xFFFF);
-                extraction = source == null ? "UNSUPPORTED_WORLD (provider not surface)"
-                        : "surface provider accepted (unexpected)";
+                if (binding == null) {
+                    extraction = "UNCLASSIFIED_NO_BINDING (not dimension exclusion evidence)";
+                } else {
+                    LivePacketCapture.LiveCaptureSource source = factory.create(null, netherChunk, 0xFFFF,
+                            binding, LiveWriterHooks.gateForTesting());
+                    extraction = source == null ? "EXPLICIT_SCOPE_REJECTED (reason not independently classified)"
+                            : "OUT_OF_SCOPE_ACCEPTED (unexpected)";
+                }
             }
             Map<String, Object> rec = new LinkedHashMap<String, Object>();
             rec.put("dimension", -1);

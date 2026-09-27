@@ -44,6 +44,8 @@ SOURCES=(
   "$ROOT/tools/bridge/src/com/rustcraft/bridge/capture/SealedLiveCapture.java"
   "$ROOT/tools/bridge/src/com/rustcraft/bridge/capture/LiveComparisonQueue.java"
   "$ROOT/tools/bridge/src/com/rustcraft/bridge/capture/LiveForgeCaptureSource.java"
+  "$ROOT/tools/bridge/src/com/rustcraft/bridge/capture/LiveCaptureScope.java"
+  "$ROOT/tools/bridge/src/com/rustcraft/bridge/capture/LegacyCaptureScopes.java"
   "$ROOT/tools/bridge/src/com/rustcraft/bridge/capture/LiveShadowCampaignConsumer.java"
   "$ROOT/tools/bridge/src/com/rustcraft/bridge/PacketEncodeResultV2.java"
   "$ROOT/tools/bridge/src/com/rustcraft/bridge/NativeChunkPacket.java"

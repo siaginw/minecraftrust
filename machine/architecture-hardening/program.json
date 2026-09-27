@@ -29,11 +29,25 @@
     {
       "id": "H2",
       "title": "MAKE PROFILE QUALIFICATION TRULY GENERIC",
-      "status": "IN_PROGRESS",
-      "implementation": [],
-      "validation": [],
-      "evidence": [],
-      "commit": null
+      "status": "FOUNDATION_VALIDATED",
+      "implementation": [
+        "tools/testing/qualification_engine.py",
+        "tools/testing/qualification_certificate.py",
+        "tools/bridge/src/com/rustcraft/bridge/capture/LiveCaptureScope.java"
+      ],
+      "validation": [
+        "39 configured Python/real-Java tests;33 detached extractor controls;25 tooling tests;201 Java foundation assertions;fresh legacyCleanpacket comparison;historicalRevelation129classes/10controls"
+      ],
+      "evidence": [
+        "machine/architecture-hardening/h2-validation.json"
+      ],
+      "commit": null,
+      "outstanding": [
+        "Fresh Clean and Revelation V2 collector adapters and substantive placement validators",
+        "Live writer/lifecycle/registry closure validator backend",
+        "Issued-certificate to running loader/session/registry binding",
+        "Fresh V2 runtime requalification H23; H24 remains forbidden until both profiles qualify"
+      ]
     },
     {
       "id": "H3",
@@ -318,25 +332,43 @@
     {
       "id": "H2.1",
       "title": "EVIDENCE DEPENDENCY GRAPH / CERTIFICATES",
-      "status": "IN_PROGRESS",
-      "implementation": [],
-      "validation": [],
-      "evidence": [],
-      "commit": null
+      "status": "VALIDATED",
+      "implementation": [
+        "tools/testing/qualification_engine.py",
+        "tools/testing/qualification_certificate.py",
+        "tools/bridge/src/com/rustcraft/bridge/capture/LiveCaptureScope.java"
+      ],
+      "validation": [
+        "39 configured Python/real-Java tests;33 detached extractor controls;25 tooling tests;201 Java foundation assertions;fresh legacyCleanpacket comparison;historicalRevelation129classes/10controls"
+      ],
+      "evidence": [
+        "machine/architecture-hardening/h2-validation.json"
+      ],
+      "commit": null,
+      "outstanding": []
     },
     {
       "id": "H2.2",
       "title": "EXTRACTOR SCOPE CORRECTION",
-      "status": "IN_PROGRESS",
-      "implementation": [],
-      "validation": [],
-      "evidence": [],
-      "commit": null
+      "status": "VALIDATED",
+      "implementation": [
+        "tools/testing/qualification_engine.py",
+        "tools/testing/qualification_certificate.py",
+        "tools/bridge/src/com/rustcraft/bridge/capture/LiveCaptureScope.java"
+      ],
+      "validation": [
+        "39 configured Python/real-Java tests;33 detached extractor controls;25 tooling tests;201 Java foundation assertions;fresh legacyCleanpacket comparison;historicalRevelation129classes/10controls"
+      ],
+      "evidence": [
+        "machine/architecture-hardening/h2-validation.json"
+      ],
+      "commit": null,
+      "outstanding": []
     },
     {
       "id": "H3.1",
       "title": "PERFORMANCE CLAIM AUDIT",
-      "status": "VALIDATED",
+      "status": "COMMITTED",
       "implementation": [
         "docs/engineering/performance-claim-audit.md",
         "machine/architecture-hardening/h3-claim-audit.json"
@@ -347,7 +379,7 @@
       "evidence": [
         "machine/architecture-hardening/h3-claim-validation.json"
       ],
-      "commit": null
+      "commit": "d89b93314620d8b76a38609a6709c4cf4d0ead81"
     },
     {
       "id": "H5.1",

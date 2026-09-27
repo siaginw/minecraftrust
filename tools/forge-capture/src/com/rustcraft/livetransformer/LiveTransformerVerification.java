@@ -3,6 +3,7 @@ package com.rustcraft.livetransformer;
 import com.rustcraft.bridge.capture.LiveChunkBindings;
 import com.rustcraft.bridge.capture.LiveComparisonQueue;
 import com.rustcraft.bridge.capture.LiveForgeCaptureSource;
+import com.rustcraft.bridge.capture.LegacyCaptureScopes;
 import com.rustcraft.bridge.capture.LivePacketCapture;
 import com.rustcraft.bridge.capture.SealedLiveCapture;
 import com.rustcraft.bridge.capture.LiveWriterGate;
@@ -100,10 +101,11 @@ public final class LiveTransformerVerification {
         Class<?> hooks = Class.forName("com.rustcraft.bridge.capture.LiveWriterHooks", true, bridgeLoader);
         hooks.getMethod("loadNativeLibraryForBridge", String.class)
                 .invoke(null, new java.io.File(dllPath).getCanonicalPath());
-        LivePacketCapture.installSourceFactory((packet, chunk, filter, binding, gate) ->
-                LiveForgeCaptureSource.forChunk(chunk, binding, gate, filter));
+        LivePacketCapture.installSourceFactory(LegacyCaptureScopes.detachedTransformerDiagnostic(
+                OfflineWorld.class.getName(), OfflineProvider.class.getName()).sourceFactory(Launch.classLoader));
 
         negativeControls(preHookDump);
+        RESULT.put("extractor_scope_controls", ExtractorScopeVerification.run());
 
         // ---- integration group 1: default-off behavior before any session ----
         if (LiveWriterHooks.sessionEnabled()) throw new AssertionError("session must start disabled");
@@ -180,7 +182,7 @@ public final class LiveTransformerVerification {
                 throw new AssertionError("writer depth before section construction is "
                         + LiveWriterHooks.gateForTesting().writerDepth());
             }
-            ExtendedBlockStorage section = new ExtendedBlockStorage(0, true) { };
+            ExtendedBlockStorage section = new ExtendedBlockStorage(0, true);
             if (LiveWriterHooks.gateForTesting().writerDepth() != 0) {
                 throw new AssertionError("writer depth after section construction is "
                         + LiveWriterHooks.gateForTesting().writerDepth());
@@ -512,8 +514,22 @@ public final class LiveTransformerVerification {
         for (Map.Entry<String, Object> entry : map.entrySet()) {
             if (!first) sb.append(',');
             first = false;
-            sb.append('"').append(entry.getKey()).append("\":\"").append(entry.getValue()).append('"');
+            sb.append(jsonValue(entry.getKey())).append(':').append(jsonValue(entry.getValue()));
         }
         return sb.append('}').toString();
+    }
+
+    @SuppressWarnings("unchecked")
+    private static String jsonValue(Object value) {
+        if (value == null) return "null";
+        if (value instanceof Map) return jsonOf((Map<String, Object>) value);
+        if (value instanceof Number || value instanceof Boolean) return value.toString();
+        StringBuilder text = new StringBuilder("\"");
+        for (char c : value.toString().toCharArray()) {
+            if (c == '\\' || c == '"') text.append('\\').append(c);
+            else if (c < 0x20) text.append(String.format("\\u%04x", (int) c));
+            else text.append(c);
+        }
+        return text.append('"').toString();
     }
 }

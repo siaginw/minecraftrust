@@ -1,0 +1,175 @@
+{
+  "schema_version": 1,
+  "kind": "H2_GENERIC_QUALIFICATION_AND_SCOPE_FOUNDATION",
+  "status": "PASS",
+  "source_hashes": {
+    "tools/testing/qualification_engine.py": "e1428cadcf423d1088d8278cf842544cdb4c4a5f96b1b368e44e60c3c70c9df1",
+    "tools/testing/test_qualification_engine.py": "7110818b7322d58c585d0281d05032d9cb25858112e6f54bead7665740909962",
+    "tools/testing/qualification_certificate.py": "3eca99c72af064990dd284f78398f68e79b00a4b6ec59eca215e57f56034b914",
+    "tools/testing/test_qualification_certificate.py": "c4de114633ef757595818070244d119668cf602b3f01709f34b7caf618775185",
+    "tools/testing/profile_verify.py": "8fd87e31e519923e9ce6af510b4a4b8b631db8c82daaeecf05d65271e53a77ff",
+    "tools/testing/test_profile_verify.py": "850cb68ea9ec8513fa6769bdef5d67f31df80a69d8abf701ca2c382fce5e8fd5",
+    "tools/testing/forge_runtime.py": "f2ca07c2e9a41834f05efed465f02ce2b552a776bbe8a1dbf36abdace4592861",
+    "tools/qualification-v2-tests/recheck_legacy_revelation.py": "316d62e2eb7326e426178912396c99cc4f38b1529c5d22d4773278be9d85592d",
+    "tools/live-capture/build_campaign_coremod.sh": "467c1861f544b499f7c44167a05658eb92477bab957008a3cb4763bb71e7b763",
+    "tools/live-capture/build_profile_campaign_coremod.sh": "4aa168867bede5e3dbd6f3bb29319bade7ef5a5a23743635d37bb79b6f7cd78f",
+    "docs/engineering/qualification-engine-v2.md": "4d8060345926c8a51f138f91b2c1ddcb518e388c0df6ac2403c54c5f000f997b",
+    "docs/research/live-capture-scope-v1.md": "e4b8c2793b93cb733ef716eb8dc6fb850de2170352284aab2ee96c4ba2c61928",
+    "tools/bridge/src/com/rustcraft/bridge/capture/LiveCaptureScope.java": "9aad3a4b7e3109bf96ce5db3daf6750e74c4dc2bb4477301a5c4e8fb8e3b420d",
+    "tools/bridge/src/com/rustcraft/bridge/capture/LegacyCaptureScopes.java": "a42f00b6d94b4fee188e0e7726fbc9557ccfdfcaaa4d3cfa72de5149125351ec",
+    "tools/bridge/src/com/rustcraft/bridge/capture/LiveForgeCaptureSource.java": "f9d6b4548e835a08903730117746b8538eaa1fcc693dd6c68f4de0f82a933185",
+    "tools/bridge/src/com/rustcraft/bridge/capture/LiveWriterHooks.java": "a095b50264fe6ddd393a7ea63bbf79b9b80595dcdc4a5edf096d276dcf809fa2",
+    "tools/bridge/src/com/rustcraft/bridge/capture/LiveShadowCampaignConsumer.java": "626de7b15d2e9b8844e16bb462c1251fd9ad436d7511694b44b17112ebe69311",
+    "tools/forge-capture/src/com/rustcraft/livetransformer/LiveTransformerVerification.java": "fe550fa971296790e191f5e7f492c1c7eedb5d8dd99a27e3b3cdaaa9b07c9252",
+    "tools/forge-capture/src/com/rustcraft/livetransformer/ExtractorScopeVerification.java": "9b497f9ef8b01164e4df9282db42b41340934af926c3065b5019e20c90a641e4"
+  },
+  "receipts": {
+    "engine": {
+      "path": "target/architecture-hardening/h2-engine-final-a091f4fd7c/receipt.json",
+      "sha256": "dc87e32253252c765f592e0debf9a3de32e26794d3f85065655580f7a1c19902"
+    },
+    "clean": {
+      "path": "target/architecture-hardening/h2-clean-regressions-final/receipt.json",
+      "sha256": "86ce79b0b03646d2a140a807362dacbc0592c8db216dd8368e2ea2984b1a26c5"
+    },
+    "revelation_historical": {
+      "path": "target/architecture-hardening/h2-historical-verifier-cutover-2/receipt.json",
+      "sha256": "e139a7ab920d07a257c0fa5d7ff2e297650543a37961c7f1953abc70e0bb081e"
+    }
+  },
+  "engine_tests": {
+    "count": 39,
+    "skips": 0,
+    "actual_java_v2_parser": true,
+    "runtime": "synthetic pinned collectors, RAW and V2"
+  },
+  "clean": {
+    "tooling_tests": 25,
+    "foundation_assertions": {
+      "PrivateBuildTicketsTest": 60,
+      "LiveWriterGateTest": 39,
+      "LiveChunkBindingsTest": 57,
+      "LiveWriterProtocolEndToEndTest": 14,
+      "LiveCaptureAdmissionTest": 31
+    },
+    "capture_groups": {
+      "t7_real_spacket_captured": "PASS (sealed + enqueued through transformed hooks)",
+      "t8_native_replay": "PASS (mask=1 javaLen=4358 rustLen=4358 byteEqual=true)",
+      "t9_java_output_unchanged": "PASS (captured body == plain rebuild body == native body)"
+    },
+    "scope_controls": {
+      "scope": "DETACHED_REAL_TRANSFORMED_CLASSES_NOT_LIVE_QUALIFICATION",
+      "passed": 33,
+      "positive_controls": 8,
+      "negative_controls": 25,
+      "registryChecks": 3,
+      "rejection_controls": {
+        "provider subclass": "PROVIDER_CLASS",
+        "different world identity": "CHUNK_WORLD_IDENTITY",
+        "same provider name different loader": "PROVIDER_CLASS",
+        "wrong exact provider": "PROVIDER_CLASS",
+        "wrong dimension": "DIMENSION_MISMATCH",
+        "wrong skylight": "SKYLIGHT_MISMATCH",
+        "chunk subclass": "CHUNK_CLASS",
+        "section subclass": "SECTION_CLASS",
+        "container subclass": "CONTAINER_CLASS",
+        "storage family": "UNSUPPORTED_STORAGE_FAMILY",
+        "width mismatch": "STATE_WIDTH_MISMATCH",
+        "registry exact class": "REGISTRY_CLASS",
+        "generator family": "INVALID_SCOPE_POLICY",
+        "unregistered state": "UNRESOLVED_STATE",
+        "field descriptor": "FIELD_DESCRIPTOR",
+        "hidden field ambiguity": "HIDDEN_FIELD",
+        "method descriptor": "METHOD_DESCRIPTOR",
+        "virtual override ambiguity": "UNQUALIFIED_METHOD_OVERRIDE",
+        "wrong generator exact class": "GENERATOR_CLASS",
+        "missing live generator provider": "CHUNK_PROVIDER_CLASS",
+        "detached generator must be absent": "DETACHED_GENERATOR_MUST_BE_ABSENT",
+        "registry epoch": "REGISTRY_EPOCH_MISMATCH",
+        "registry revocation sticky": "REGISTRY_BINDING_REVOKED",
+        "same-size registry content drift": "REGISTRY_ALIAS_CHANGED",
+        "registry drift remains revoked after restoration": "REGISTRY_BINDING_REVOKED"
+      },
+      "registryEntriesCompared": 9569,
+      "registryCheckNanos": 1417300,
+      "productionAuthority": false
+    },
+    "fresh_legacy_qualification": true,
+    "fresh_v2_qualification": false,
+    "inputs": [
+      {
+        "path": "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\bin\\java.exe",
+        "sha256": "65ebee06ec47df0c41c4483ac5aa408e55adb47a1613bad56be30bccc4317e85"
+      },
+      {
+        "path": "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\bin\\javac.exe",
+        "sha256": "9f1dae15ffb49c7363c72351cf61f4889ac6896e3df87c1c5553b81745ae8a07"
+      },
+      {
+        "path": "D:\\minecraftrust-astra-hardening\\target\\release\\rustcraft_ffi.dll",
+        "sha256": "bb047b3e04b6bb0375b3da03085b75db03c1fe43e0ae4e0a0e7cf3a4c79ab967"
+      },
+      {
+        "path": "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\forge-runtime.json",
+        "sha256": "9403fc4daa1159ab22cf64aa9551102729c3048822f367353e13c221814c4954"
+      }
+    ],
+    "capture_receipt": {
+      "path": "target/architecture-hardening/h2-clean-regressions-final/diagnostic/live-transformer-jvm/live-transformer-verification.json",
+      "sha256": "93fc02eb8320c5d111620ec948fa55614e94df196ab71c530c199053d51e1b96"
+    }
+  },
+  "revelation_historical": {
+    "classes": 129,
+    "controls": 10,
+    "fresh_capture": false,
+    "v2_qualified": false,
+    "tool_commit": "5dc125edbdd3716294c13becaeffae86cc06c392"
+  },
+  "isolation": {
+    "schema_version": 1,
+    "kind": "HARDENING_ISOLATION_GATE_CHECK",
+    "status": "PASS",
+    "failures": [],
+    "original_observed": {
+      "head": "c4b868db2c9e4b03f745bf93c6ebf4fd8a8519e7",
+      "branch": "issue1-jni-v2",
+      "status": [
+        " M tools/live-capture/live_client_session.py",
+        "?? tools/live-capture/__pycache__/",
+        "?? tools/live-capture/run_rev_shadow.py"
+      ],
+      "files": [
+        {
+          "path": "D:\\minecraftrust\\tools\\live-capture\\live_client_session.py",
+          "sha256": "151c356161695aba3db3c1a8cbd589b5eda2b5a1770dff59ab21b728d36cabfa"
+        },
+        {
+          "path": "D:\\minecraftrust\\tools\\live-capture\\run_rev_shadow.py",
+          "sha256": "2b9b2aca49e57dd0d2a74bec46efcdc0ac7f95762a733276e27ff9dbcb472d93"
+        }
+      ]
+    },
+    "isolated_worktree": "D:\\minecraftrust-astra-hardening",
+    "isolated_head": "d89b93314620d8b76a38609a6709c4cf4d0ead81",
+    "isolated_branch": "astra/architecture-hardening",
+    "production_gate_checks": {
+      "tryEncode_fail_closed": true,
+      "productionAuthorityEligible_false": true
+    },
+    "scope": "read-only original HEAD/status/two paused source hashes plus conservative source guards; runtime authority tests remain required"
+  },
+  "production_authority": false,
+  "outstanding": [
+    "Fresh Clean and Revelation V2 collector adapters and substantive placement validators",
+    "Live writer/lifecycle/registry closure validator backend",
+    "Issued-certificate to running loader/session/registry binding",
+    "Fresh V2 runtime requalification H23; H24 remains forbidden until both profiles qualify"
+  ],
+  "preserved_failures": [
+    "h2-extractor-01 and02: registry-class assumption rejected; actual class observed",
+    "h2-extractor-03: empty anonymous EBS subclass correctly rejected; exact positive and explicit subclass negative replace it",
+    "h2-historical-verifier-cutover: wrong ASM-all compile artifact lacks required generic metadata; known ASM-debug artifact used in successful -2 replay"
+  ],
+  "applicable_checks": "Python and Java qualification paths changed; no Rust production source belongs to this milestone. H3 Rust telemetry edits are separate and uncommitted."
+}

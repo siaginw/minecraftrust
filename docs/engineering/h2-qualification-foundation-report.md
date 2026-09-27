@@ -1,0 +1,21 @@
+# H2 qualification and extractor foundation
+
+The public verifier now uses one manifest-driven `QualificationEngine`. Missing observations are INCOMPLETE; malformed output, changed artifacts, substituted classes, failed subprocesses and incorrect bindings fail. RAW mode recomputes actual class bytes and method facts. V2 admission requires both semantic and declaration-order digests. Profiles cannot supply a successful observation or redefine mandatory stage requirements.
+
+Certificates contain a dependency graph and cumulative OBSERVED, OFFLINE, LIVE, SHADOW and PERFORMANCE maturity. Invalidation propagates to descendants. Authority is always blocked. Fresh nonce/session binding identifies a run of trusted pinned tools; it is not attestation that an arbitrary collector genuinely executed a runtime. See the [engine contract](qualification-engine-v2.md).
+
+The extractor now requires explicit immutable scope and exact runtime Class/loader identities. Dimension, skylight, storage, generator, registry identity/content/epoch and state width are checked. Hidden fields and unqualified overrides reject. Clean compatibility has a separately named historical diagnostic policy; an unknown or Revelation plan cannot inherit it. A policy is not a certificate or writer-closure proof. See [scope details](../research/live-capture-scope-v1.md).
+
+Validation is recorded in [h2-validation.json](../../machine/architecture-hardening/h2-validation.json):
+
+- 39 configured tests, no skips: synthetic fresh collectors using the actual Java V2 parser, RAW/V2 identities, CLI controls, all ten legacy scenario equivalents, and certificate invalidation.
+- 33 scope assertions against fresh transformed Clean classes: eight positive and 25 exact-reason negatives, including same-name/different-loader and registry mutation/revocation.
+- Fresh existing Clean regression: 25 tooling tests, profile and post-hook verification, real packet capture/native diagnostic replay, and 201 Java foundation assertions. Java/native payloads were identical, mask 1 and 4,358 bytes; the Java output was unchanged.
+- Historical Revelation regression: all 129 preserved class identities and ten legacy controls passed through the accepted old verifier extracted from Git. This preserves historical replay without exposing V1 as a new-certificate path. The new generic fixture controls perform actual artifact substitution; the historical tenth control retains its narrower hash-check limitation.
+- Source, tool, compiled-input and runtime bindings were retained in the respective receipts; the original worktree and both production gates passed the guard.
+
+Failed exploratory receipts remain available. A registry-class assumption was rejected and corrected against observed bytes/objects. The old positive packet fixture used an empty anonymous section subclass; it now uses exact transformed storage, with the subclass retained as a rejection test. A historical replay compile failed when given a different ASM artifact; the successful replay used the established ASM-debug artifact. None of these failures was promoted as passing evidence.
+
+This commit establishes the generic offline foundation and exact extractor admission. **H2's runtime integration remains open:** real Clean/Revelation fresh collectors, substantive injection-placement validators and a live writer/lifecycle/registry closure backend must be integrated before H23. The current backend cannot issue LIVE qualification. The declared registry epoch is not yet an instrumented mutation counter, and begin/end comparisons cannot exclude transient mutation-and-restoration. Existing legacy Clean regression is not fresh V2 runtime qualification.
+
+No live server or Revelation shadow campaign ran for this milestone. Production native chunk authority, MCK6, defaults and compression semantics remain unchanged. `M4NativeStatePayload.tryEncode` stays fail-closed; `CaptureContract.productionAuthorityEligible()` stays false. Rust telemetry work belongs to the separate H3 milestone. No push is authorized or performed.
