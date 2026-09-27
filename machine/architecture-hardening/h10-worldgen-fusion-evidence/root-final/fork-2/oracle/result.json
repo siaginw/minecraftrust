@@ -1,0 +1,655 @@
+{
+  "schema": "H10_SYNTHETIC_WORLDGEN_FUSION_V1",
+  "production_authority": false,
+  "scope": "actual Minecraft noise plus independently specified synthetic composition; NOT full chunk generation",
+  "java": "1.8.0_504-b01",
+  "noise_class_loader": "net.minecraft.launchwrapper.LaunchClassLoader",
+  "correctness": {
+    "narrowing_changed_float_values": 8192,
+    "narrowing_same_classification_despite_changed_float": 8192,
+    "callback_evidence": [
+      {
+        "middle_mode": 0,
+        "java_events": "B14;A14;",
+        "separated_events": "B14;A14;",
+        "fused_or_fenced_events": "B14;A14;",
+        "output_hash": 1045964714
+      },
+      {
+        "middle_mode": 1,
+        "java_events": "B14;M14;A7;",
+        "separated_events": "B14;M14;A7;",
+        "fused_or_fenced_events": "B14;M14;A7;",
+        "output_hash": 1045964714
+      },
+      {
+        "middle_mode": 2,
+        "java_events": "B14;M14;A7;",
+        "separated_events": "B14;M14;A7;",
+        "fused_or_fenced_events": "B14;M14;A7;",
+        "output_hash": -1902379007
+      }
+    ],
+    "cases": [
+      {
+        "seed": "0",
+        "x": 0,
+        "z": 0,
+        "height": 1,
+        "raw_double_values_compared": 1280,
+        "state_hash": 1316282369
+      },
+      {
+        "seed": "0",
+        "x": 0,
+        "z": 0,
+        "height": 17,
+        "raw_double_values_compared": 21760,
+        "state_hash": 2116221087
+      },
+      {
+        "seed": "0",
+        "x": 0,
+        "z": 0,
+        "height": 32,
+        "raw_double_values_compared": 40960,
+        "state_hash": 920586815
+      },
+      {
+        "seed": "0",
+        "x": -17,
+        "z": 31,
+        "height": 1,
+        "raw_double_values_compared": 1280,
+        "state_hash": 1316282369
+      },
+      {
+        "seed": "0",
+        "x": -17,
+        "z": 31,
+        "height": 17,
+        "raw_double_values_compared": 21760,
+        "state_hash": 2106988313
+      },
+      {
+        "seed": "0",
+        "x": -17,
+        "z": 31,
+        "height": 32,
+        "raw_double_values_compared": 40960,
+        "state_hash": -460531217
+      },
+      {
+        "seed": "0",
+        "x": 29999984,
+        "z": -29999984,
+        "height": 1,
+        "raw_double_values_compared": 1280,
+        "state_hash": 52819438
+      },
+      {
+        "seed": "0",
+        "x": 29999984,
+        "z": -29999984,
+        "height": 17,
+        "raw_double_values_compared": 21760,
+        "state_hash": -973660161
+      },
+      {
+        "seed": "0",
+        "x": 29999984,
+        "z": -29999984,
+        "height": 32,
+        "raw_double_values_compared": 40960,
+        "state_hash": 173615649
+      },
+      {
+        "seed": "1",
+        "x": 0,
+        "z": 0,
+        "height": 1,
+        "raw_double_values_compared": 1280,
+        "state_hash": -83410275
+      },
+      {
+        "seed": "1",
+        "x": 0,
+        "z": 0,
+        "height": 17,
+        "raw_double_values_compared": 21760,
+        "state_hash": -792631664
+      },
+      {
+        "seed": "1",
+        "x": 0,
+        "z": 0,
+        "height": 32,
+        "raw_double_values_compared": 40960,
+        "state_hash": -1969048414
+      },
+      {
+        "seed": "1",
+        "x": -17,
+        "z": 31,
+        "height": 1,
+        "raw_double_values_compared": 1280,
+        "state_hash": 1316282369
+      },
+      {
+        "seed": "1",
+        "x": -17,
+        "z": 31,
+        "height": 17,
+        "raw_double_values_compared": 21760,
+        "state_hash": -2130532394
+      },
+      {
+        "seed": "1",
+        "x": -17,
+        "z": 31,
+        "height": 32,
+        "raw_double_values_compared": 40960,
+        "state_hash": -1425244802
+      },
+      {
+        "seed": "1",
+        "x": 29999984,
+        "z": -29999984,
+        "height": 1,
+        "raw_double_values_compared": 1280,
+        "state_hash": 1316282369
+      },
+      {
+        "seed": "1",
+        "x": 29999984,
+        "z": -29999984,
+        "height": 17,
+        "raw_double_values_compared": 21760,
+        "state_hash": 876135297
+      },
+      {
+        "seed": "1",
+        "x": 29999984,
+        "z": -29999984,
+        "height": 32,
+        "raw_double_values_compared": 40960,
+        "state_hash": 742905585
+      },
+      {
+        "seed": "-1",
+        "x": 0,
+        "z": 0,
+        "height": 1,
+        "raw_double_values_compared": 1280,
+        "state_hash": -1061638911
+      },
+      {
+        "seed": "-1",
+        "x": 0,
+        "z": 0,
+        "height": 17,
+        "raw_double_values_compared": 21760,
+        "state_hash": -874156127
+      },
+      {
+        "seed": "-1",
+        "x": 0,
+        "z": 0,
+        "height": 32,
+        "raw_double_values_compared": 40960,
+        "state_hash": 84543439
+      },
+      {
+        "seed": "-1",
+        "x": -17,
+        "z": 31,
+        "height": 1,
+        "raw_double_values_compared": 1280,
+        "state_hash": 1432343173
+      },
+      {
+        "seed": "-1",
+        "x": -17,
+        "z": 31,
+        "height": 17,
+        "raw_double_values_compared": 21760,
+        "state_hash": -1595163461
+      },
+      {
+        "seed": "-1",
+        "x": -17,
+        "z": 31,
+        "height": 32,
+        "raw_double_values_compared": 40960,
+        "state_hash": -1029546987
+      },
+      {
+        "seed": "-1",
+        "x": 29999984,
+        "z": -29999984,
+        "height": 1,
+        "raw_double_values_compared": 1280,
+        "state_hash": 1316282369
+      },
+      {
+        "seed": "-1",
+        "x": 29999984,
+        "z": -29999984,
+        "height": 17,
+        "raw_double_values_compared": 21760,
+        "state_hash": -1026301951
+      },
+      {
+        "seed": "-1",
+        "x": 29999984,
+        "z": -29999984,
+        "height": 32,
+        "raw_double_values_compared": 40960,
+        "state_hash": -1039368191
+      },
+      {
+        "seed": "-9223372036854775808",
+        "x": 0,
+        "z": 0,
+        "height": 1,
+        "raw_double_values_compared": 1280,
+        "state_hash": 1316282369
+      },
+      {
+        "seed": "-9223372036854775808",
+        "x": 0,
+        "z": 0,
+        "height": 17,
+        "raw_double_values_compared": 21760,
+        "state_hash": 2116221087
+      },
+      {
+        "seed": "-9223372036854775808",
+        "x": 0,
+        "z": 0,
+        "height": 32,
+        "raw_double_values_compared": 40960,
+        "state_hash": 920586815
+      },
+      {
+        "seed": "-9223372036854775808",
+        "x": -17,
+        "z": 31,
+        "height": 1,
+        "raw_double_values_compared": 1280,
+        "state_hash": 1316282369
+      },
+      {
+        "seed": "-9223372036854775808",
+        "x": -17,
+        "z": 31,
+        "height": 17,
+        "raw_double_values_compared": 21760,
+        "state_hash": 2106988313
+      },
+      {
+        "seed": "-9223372036854775808",
+        "x": -17,
+        "z": 31,
+        "height": 32,
+        "raw_double_values_compared": 40960,
+        "state_hash": -460531217
+      },
+      {
+        "seed": "-9223372036854775808",
+        "x": 29999984,
+        "z": -29999984,
+        "height": 1,
+        "raw_double_values_compared": 1280,
+        "state_hash": 52819438
+      },
+      {
+        "seed": "-9223372036854775808",
+        "x": 29999984,
+        "z": -29999984,
+        "height": 17,
+        "raw_double_values_compared": 21760,
+        "state_hash": -973660161
+      },
+      {
+        "seed": "-9223372036854775808",
+        "x": 29999984,
+        "z": -29999984,
+        "height": 32,
+        "raw_double_values_compared": 40960,
+        "state_hash": 173615649
+      },
+      {
+        "seed": "81985529216486895",
+        "x": 0,
+        "z": 0,
+        "height": 1,
+        "raw_double_values_compared": 1280,
+        "state_hash": 2023290245
+      },
+      {
+        "seed": "81985529216486895",
+        "x": 0,
+        "z": 0,
+        "height": 17,
+        "raw_double_values_compared": 21760,
+        "state_hash": -1026301951
+      },
+      {
+        "seed": "81985529216486895",
+        "x": 0,
+        "z": 0,
+        "height": 32,
+        "raw_double_values_compared": 40960,
+        "state_hash": -1039368191
+      },
+      {
+        "seed": "81985529216486895",
+        "x": -17,
+        "z": 31,
+        "height": 1,
+        "raw_double_values_compared": 1280,
+        "state_hash": 1316282369
+      },
+      {
+        "seed": "81985529216486895",
+        "x": -17,
+        "z": 31,
+        "height": 17,
+        "raw_double_values_compared": 21760,
+        "state_hash": -558206015
+      },
+      {
+        "seed": "81985529216486895",
+        "x": -17,
+        "z": 31,
+        "height": 32,
+        "raw_double_values_compared": 40960,
+        "state_hash": -1753161023
+      },
+      {
+        "seed": "81985529216486895",
+        "x": 29999984,
+        "z": -29999984,
+        "height": 1,
+        "raw_double_values_compared": 1280,
+        "state_hash": 1316282369
+      },
+      {
+        "seed": "81985529216486895",
+        "x": 29999984,
+        "z": -29999984,
+        "height": 17,
+        "raw_double_values_compared": 21760,
+        "state_hash": 405446192
+      },
+      {
+        "seed": "81985529216486895",
+        "x": 29999984,
+        "z": -29999984,
+        "height": 32,
+        "raw_double_values_compared": 40960,
+        "state_hash": -269710654
+      }
+    ],
+    "case_count": 45,
+    "raw_double_values_compared": 960000,
+    "assertions": 179,
+    "status": "PASS"
+  },
+  "benchmark": [
+    {
+      "sample": 0,
+      "lane": "actual_java_bounded",
+      "iterations": 30,
+      "wall_ns": 8712000,
+      "jni_operation_calls": 0,
+      "explicit_jni_get_bytes": 0,
+      "explicit_jni_set_bytes": 0,
+      "explicit_rust_vector_payload_bytes": 0,
+      "rust_compute_ns": 0,
+      "jni_regions_ns": 0,
+      "retained_state_bytes": 32768,
+      "hash": "865d5693449003de"
+    },
+    {
+      "sample": 0,
+      "lane": "existing_rust_separated",
+      "iterations": 30,
+      "wall_ns": 13115100,
+      "jni_operation_calls": 60,
+      "explicit_jni_get_bytes": 3932160,
+      "explicit_jni_set_bytes": 4915200,
+      "explicit_rust_vector_payload_bytes": 9830400,
+      "rust_compute_ns": 12316300,
+      "jni_regions_ns": 198900,
+      "retained_state_bytes": 32768,
+      "hash": "865d5693449003de"
+    },
+    {
+      "sample": 0,
+      "lane": "existing_rust_fused",
+      "iterations": 30,
+      "wall_ns": 13104400,
+      "jni_operation_calls": 30,
+      "explicit_jni_get_bytes": 0,
+      "explicit_jni_set_bytes": 983040,
+      "explicit_rust_vector_payload_bytes": 5898240,
+      "rust_compute_ns": 12647600,
+      "jni_regions_ns": 50400,
+      "retained_state_bytes": 32768,
+      "hash": "865d5693449003de"
+    },
+    {
+      "sample": 1,
+      "lane": "existing_rust_separated",
+      "iterations": 30,
+      "wall_ns": 13626100,
+      "jni_operation_calls": 60,
+      "explicit_jni_get_bytes": 3932160,
+      "explicit_jni_set_bytes": 4915200,
+      "explicit_rust_vector_payload_bytes": 9830400,
+      "rust_compute_ns": 12306400,
+      "jni_regions_ns": 193300,
+      "retained_state_bytes": 32768,
+      "hash": "9d615c8aba75f7df"
+    },
+    {
+      "sample": 1,
+      "lane": "existing_rust_fused",
+      "iterations": 30,
+      "wall_ns": 13707700,
+      "jni_operation_calls": 30,
+      "explicit_jni_get_bytes": 0,
+      "explicit_jni_set_bytes": 983040,
+      "explicit_rust_vector_payload_bytes": 5898240,
+      "rust_compute_ns": 13280100,
+      "jni_regions_ns": 30600,
+      "retained_state_bytes": 32768,
+      "hash": "9d615c8aba75f7df"
+    },
+    {
+      "sample": 1,
+      "lane": "actual_java_bounded",
+      "iterations": 30,
+      "wall_ns": 9808700,
+      "jni_operation_calls": 0,
+      "explicit_jni_get_bytes": 0,
+      "explicit_jni_set_bytes": 0,
+      "explicit_rust_vector_payload_bytes": 0,
+      "rust_compute_ns": 0,
+      "jni_regions_ns": 0,
+      "retained_state_bytes": 32768,
+      "hash": "9d615c8aba75f7df"
+    },
+    {
+      "sample": 2,
+      "lane": "existing_rust_fused",
+      "iterations": 30,
+      "wall_ns": 13763300,
+      "jni_operation_calls": 30,
+      "explicit_jni_get_bytes": 0,
+      "explicit_jni_set_bytes": 983040,
+      "explicit_rust_vector_payload_bytes": 5898240,
+      "rust_compute_ns": 13376900,
+      "jni_regions_ns": 32700,
+      "retained_state_bytes": 32768,
+      "hash": "a061089c30cf8fa2"
+    },
+    {
+      "sample": 2,
+      "lane": "actual_java_bounded",
+      "iterations": 30,
+      "wall_ns": 10581200,
+      "jni_operation_calls": 0,
+      "explicit_jni_get_bytes": 0,
+      "explicit_jni_set_bytes": 0,
+      "explicit_rust_vector_payload_bytes": 0,
+      "rust_compute_ns": 0,
+      "jni_regions_ns": 0,
+      "retained_state_bytes": 32768,
+      "hash": "a061089c30cf8fa2"
+    },
+    {
+      "sample": 2,
+      "lane": "existing_rust_separated",
+      "iterations": 30,
+      "wall_ns": 11287600,
+      "jni_operation_calls": 60,
+      "explicit_jni_get_bytes": 3932160,
+      "explicit_jni_set_bytes": 4915200,
+      "explicit_rust_vector_payload_bytes": 9830400,
+      "rust_compute_ns": 10529300,
+      "jni_regions_ns": 148700,
+      "retained_state_bytes": 32768,
+      "hash": "a061089c30cf8fa2"
+    },
+    {
+      "sample": 3,
+      "lane": "actual_java_bounded",
+      "iterations": 30,
+      "wall_ns": 7974500,
+      "jni_operation_calls": 0,
+      "explicit_jni_get_bytes": 0,
+      "explicit_jni_set_bytes": 0,
+      "explicit_rust_vector_payload_bytes": 0,
+      "rust_compute_ns": 0,
+      "jni_regions_ns": 0,
+      "retained_state_bytes": 32768,
+      "hash": "2494f44d828cb0b6"
+    },
+    {
+      "sample": 3,
+      "lane": "existing_rust_separated",
+      "iterations": 30,
+      "wall_ns": 11875000,
+      "jni_operation_calls": 60,
+      "explicit_jni_get_bytes": 3932160,
+      "explicit_jni_set_bytes": 4915200,
+      "explicit_rust_vector_payload_bytes": 9830400,
+      "rust_compute_ns": 11081700,
+      "jni_regions_ns": 173300,
+      "retained_state_bytes": 32768,
+      "hash": "2494f44d828cb0b6"
+    },
+    {
+      "sample": 3,
+      "lane": "existing_rust_fused",
+      "iterations": 30,
+      "wall_ns": 11977300,
+      "jni_operation_calls": 30,
+      "explicit_jni_get_bytes": 0,
+      "explicit_jni_set_bytes": 983040,
+      "explicit_rust_vector_payload_bytes": 5898240,
+      "rust_compute_ns": 11626200,
+      "jni_regions_ns": 29200,
+      "retained_state_bytes": 32768,
+      "hash": "2494f44d828cb0b6"
+    },
+    {
+      "sample": 4,
+      "lane": "existing_rust_separated",
+      "iterations": 30,
+      "wall_ns": 11107600,
+      "jni_operation_calls": 60,
+      "explicit_jni_get_bytes": 3932160,
+      "explicit_jni_set_bytes": 4915200,
+      "explicit_rust_vector_payload_bytes": 9830400,
+      "rust_compute_ns": 10414600,
+      "jni_regions_ns": 144200,
+      "retained_state_bytes": 32768,
+      "hash": "5d0e3f4b9307ddd3"
+    },
+    {
+      "sample": 4,
+      "lane": "existing_rust_fused",
+      "iterations": 30,
+      "wall_ns": 11669500,
+      "jni_operation_calls": 30,
+      "explicit_jni_get_bytes": 0,
+      "explicit_jni_set_bytes": 983040,
+      "explicit_rust_vector_payload_bytes": 5898240,
+      "rust_compute_ns": 11320400,
+      "jni_regions_ns": 29300,
+      "retained_state_bytes": 32768,
+      "hash": "5d0e3f4b9307ddd3"
+    },
+    {
+      "sample": 4,
+      "lane": "actual_java_bounded",
+      "iterations": 30,
+      "wall_ns": 8737900,
+      "jni_operation_calls": 0,
+      "explicit_jni_get_bytes": 0,
+      "explicit_jni_set_bytes": 0,
+      "explicit_rust_vector_payload_bytes": 0,
+      "rust_compute_ns": 0,
+      "jni_regions_ns": 0,
+      "retained_state_bytes": 32768,
+      "hash": "5d0e3f4b9307ddd3"
+    },
+    {
+      "sample": 5,
+      "lane": "existing_rust_fused",
+      "iterations": 30,
+      "wall_ns": 19337700,
+      "jni_operation_calls": 30,
+      "explicit_jni_get_bytes": 0,
+      "explicit_jni_set_bytes": 983040,
+      "explicit_rust_vector_payload_bytes": 5898240,
+      "rust_compute_ns": 13007400,
+      "jni_regions_ns": 30300,
+      "retained_state_bytes": 32768,
+      "hash": "68c58a3cdd20a8b8"
+    },
+    {
+      "sample": 5,
+      "lane": "actual_java_bounded",
+      "iterations": 30,
+      "wall_ns": 8519800,
+      "jni_operation_calls": 0,
+      "explicit_jni_get_bytes": 0,
+      "explicit_jni_set_bytes": 0,
+      "explicit_rust_vector_payload_bytes": 0,
+      "rust_compute_ns": 0,
+      "jni_regions_ns": 0,
+      "retained_state_bytes": 32768,
+      "hash": "68c58a3cdd20a8b8"
+    },
+    {
+      "sample": 5,
+      "lane": "existing_rust_separated",
+      "iterations": 30,
+      "wall_ns": 22706600,
+      "jni_operation_calls": 60,
+      "explicit_jni_get_bytes": 3932160,
+      "explicit_jni_set_bytes": 4915200,
+      "explicit_rust_vector_payload_bytes": 9830400,
+      "rust_compute_ns": 12317700,
+      "jni_regions_ns": 186900,
+      "retained_state_bytes": 32768,
+      "hash": "68c58a3cdd20a8b8"
+    }
+  ],
+  "status": "PASS"
+}

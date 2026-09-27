@@ -14,7 +14,11 @@
       "integration_risk": "Pending loader, shutdown, reentrancy and performance qualification; no wholesale bridge replacement",
       "installed_scope": "Standalone tools/jni-lifecycle-prototype only, 25 registry packages with complete license inventory",
       "evidence": "machine/architecture-hardening/h22-5-jni-validation.json",
-      "provenance": "tools/jni-lifecycle-prototype/third-party/inventory.json"
+      "provenance": "tools/jni-lifecycle-prototype/third-party/inventory.json",
+      "additional_evidence": [
+        "machine/architecture-hardening/h10-worldgen-fusion.json"
+      ],
+      "additional_result": "H10 checked array-region fusion:9x fewer explicit payload bytes;bounded operation still slower than Java in initial campaign;no wholesale bridge adoption."
     },
     {
       "candidate": "jbindgen",

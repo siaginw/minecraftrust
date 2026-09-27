@@ -1,0 +1,1478 @@
+{
+  "schema": "H10_WORLDGEN_FUSION_RUN_V1",
+  "status": "PASS",
+  "production_authority": false,
+  "full_forge_chunk_generation": "BLOCKED_NOT_MEASURED",
+  "commands": [
+    {
+      "label": "rust-toolchain",
+      "argv": [
+        "C:\\Users\\Admin\\.cargo\\bin\\cargo.exe",
+        "-Vv"
+      ],
+      "cwd": "D:\\minecraftrust-astra-hardening",
+      "deadline_seconds": 240,
+      "returncode": 0,
+      "wall_seconds": 0.05421209998894483,
+      "output_bytes": 321,
+      "log": {
+        "path": "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h10-correctness-01\\rust-toolchain.log",
+        "sha256": "86c2d07f9968fd3174d9cff8c60a4d4323fba3166d5dc6dd36f0987a50677d70",
+        "bytes": 321
+      }
+    },
+    {
+      "label": "java-version",
+      "argv": [
+        "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\bin\\java.exe",
+        "-version"
+      ],
+      "cwd": "D:\\minecraftrust-astra-hardening",
+      "deadline_seconds": 240,
+      "returncode": 0,
+      "wall_seconds": 0.05294030002551153,
+      "output_bytes": 155,
+      "log": {
+        "path": "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h10-correctness-01\\java-version.log",
+        "sha256": "9d65a43706f49fcfdbcece91e737f759110493e82fd1c4886cf49104c2017b0e",
+        "bytes": 155
+      }
+    },
+    {
+      "label": "rust-tests",
+      "argv": [
+        "C:\\Users\\Admin\\.cargo\\bin\\cargo.exe",
+        "test",
+        "--manifest-path",
+        "D:\\minecraftrust-astra-hardening\\tools\\worldgen-fusion-experiment\\Cargo.toml",
+        "--locked",
+        "--offline"
+      ],
+      "cwd": "D:\\minecraftrust-astra-hardening",
+      "deadline_seconds": 240,
+      "returncode": 0,
+      "wall_seconds": 7.593365599983372,
+      "output_bytes": 6626,
+      "log": {
+        "path": "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h10-correctness-01\\rust-tests.log",
+        "sha256": "f2068201ddcad69a188d1061326cb6994d5d080439fd1264a17311b253bcff85",
+        "bytes": 6626
+      }
+    },
+    {
+      "label": "scoped-fmt",
+      "argv": [
+        "C:\\Users\\Admin\\.cargo\\bin\\cargo.exe",
+        "fmt",
+        "--manifest-path",
+        "D:\\minecraftrust-astra-hardening\\tools\\worldgen-fusion-experiment\\Cargo.toml",
+        "--check"
+      ],
+      "cwd": "D:\\minecraftrust-astra-hardening",
+      "deadline_seconds": 240,
+      "returncode": 0,
+      "wall_seconds": 0.1408383000525646,
+      "output_bytes": 0,
+      "log": {
+        "path": "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h10-correctness-01\\scoped-fmt.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      }
+    },
+    {
+      "label": "scoped-clippy",
+      "argv": [
+        "C:\\Users\\Admin\\.cargo\\bin\\cargo.exe",
+        "clippy",
+        "--manifest-path",
+        "D:\\minecraftrust-astra-hardening\\tools\\worldgen-fusion-experiment\\Cargo.toml",
+        "--locked",
+        "--offline",
+        "--no-deps",
+        "--all-targets",
+        "--",
+        "-D",
+        "warnings"
+      ],
+      "cwd": "D:\\minecraftrust-astra-hardening",
+      "deadline_seconds": 240,
+      "returncode": 0,
+      "wall_seconds": 4.477080999989994,
+      "output_bytes": 5810,
+      "log": {
+        "path": "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h10-correctness-01\\scoped-clippy.log",
+        "sha256": "54d42fe5777706321666c400951eb944fa70c599155260e6e466c37d3195d822",
+        "bytes": 5810
+      }
+    },
+    {
+      "label": "native-release",
+      "argv": [
+        "C:\\Users\\Admin\\.cargo\\bin\\cargo.exe",
+        "build",
+        "--manifest-path",
+        "D:\\minecraftrust-astra-hardening\\tools\\worldgen-fusion-experiment\\Cargo.toml",
+        "--locked",
+        "--offline",
+        "--release"
+      ],
+      "cwd": "D:\\minecraftrust-astra-hardening",
+      "deadline_seconds": 240,
+      "returncode": 0,
+      "wall_seconds": 9.889676199993119,
+      "output_bytes": 6045,
+      "log": {
+        "path": "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h10-correctness-01\\native-release.log",
+        "sha256": "83416c4f773469cb2ac82fecf4a60c0764296e2afad0a54a7cdb7b9658554099",
+        "bytes": 6045
+      }
+    },
+    {
+      "label": "bootstrap-javac",
+      "argv": [
+        "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\bin\\javac.exe",
+        "-source",
+        "8",
+        "-target",
+        "8",
+        "-encoding",
+        "UTF-8",
+        "-cp",
+        "D:\\rustcraft-runtime-targets\\clean-forge-2860\\server\\forge-1.12.2-14.23.5.2860.jar;D:\\rustcraft-runtime-targets\\clean-forge-2860\\server\\libraries\\org\\ow2\\asm\\asm-debug-all\\5.2\\asm-debug-all-5.2.jar;D:\\rustcraft-runtime-targets\\clean-forge-2860\\server\\libraries\\net\\minecraft\\launchwrapper\\1.12\\launchwrapper-1.12.jar;D:\\rustcraft-runtime-targets\\clean-forge-2860\\server\\libraries\\org\\jline\\jline\\3.5.1\\jline-3.5.1.jar;D:\\rustcraft-runtime-targets\\clean-forge-2860\\server\\libraries\\com\\typesafe\\akka\\akka-actor_2.11\\2.3.3\\akka-actor_2.11-2.3.3.jar;D:\\rustcraft-runtime-targets\\clean-forge-2860\\server\\libraries\\com\\typesafe\\config\\1.2.1\\config-1.2.1.jar;D:\\rustcraft-runtime-targets\\clean-forge-2860\\server\\libraries\\org\\scala-lang\\scala-actors-migration_2.11\\1.1.0\\scala-actors-migration_2.11-1.1.0.jar;D:\\rustcraft-runtime-targets\\clean-forge-2860\\server\\libraries\\org\\scala-lang\\scala-compiler\\2.11.1\\scala-compiler-2.11.1.jar;D:\\rustcraft-runtime-targets\\clean-forge-2860\\server\\libraries\\org\\scala-lang\\plugins\\scala-continuations-library_2.11\\1.0.2_mc\\scala-continuations-library_2.11-1.0.2_mc.jar;D:\\rustcraft-runtime-targets\\clean-forge-2860\\server\\libraries\\org\\scala-lang\\plugins\\scala-continuations-plugin_2.11.1\\1.0.2_mc\\scala-continuations-plugin_2.11.1-1.0.2_mc.jar;D:\\rustcraft-runtime-targets\\clean-forge-2860\\server\\libraries\\org\\scala-lang\\scala-library\\2.11.1\\scala-library-2.11.1.jar;D:\\rustcraft-runtime-targets\\clean-forge-2860\\server\\libraries\\org\\scala-lang\\scala-parser-combinators_2.11\\1.0.1\\scala-parser-combinators_2.11-1.0.1.jar;D:\\rustcraft-runtime-targets\\clean-forge-2860\\server\\libraries\\org\\scala-lang\\scala-reflect\\2.11.1\\scala-reflect-2.11.1.jar;D:\\rustcraft-runtime-targets\\clean-forge-2860\\server\\libraries\\org\\scala-lang\\scala-swing_2.11\\1.0.1\\scala-swing_2.11-1.0.1.jar;D:\\rustcraft-runtime-targets\\clean-forge-2860\\server\\libraries\\org\\scala-lang\\scala-xml_2.11\\1.0.2\\scala-xml_2.11-1.0.2.jar;D:\\rustcraft-runtime-targets\\clean-forge-2860\\server\\libraries\\lzma\\lzma\\0.0.1\\lzma-0.0.1.jar;D:\\rustcraft-runtime-targets\\clean-forge-2860\\server\\libraries\\java3d\\vecmath\\1.5.2\\vecmath-1.5.2.jar;D:\\rustcraft-runtime-targets\\clean-forge-2860\\server\\libraries\\net\\sf\\trove4j\\trove4j\\3.0.3\\trove4j-3.0.3.jar;D:\\rustcraft-runtime-targets\\clean-forge-2860\\server\\libraries\\org\\apache\\maven\\maven-artifact\\3.5.3\\maven-artifact-3.5.3.jar;D:\\rustcraft-runtime-targets\\clean-forge-2860\\server\\libraries\\net\\sf\\jopt-simple\\jopt-simple\\5.0.3\\jopt-simple-5.0.3.jar;D:\\rustcraft-runtime-targets\\clean-forge-2860\\server\\libraries\\org\\apache\\logging\\log4j\\log4j-api\\2.15.0\\log4j-api-2.15.0.jar;D:\\rustcraft-runtime-targets\\clean-forge-2860\\server\\libraries\\org\\apache\\logging\\log4j\\log4j-core\\2.15.0\\log4j-core-2.15.0.jar;D:\\rustcraft-runtime-targets\\clean-forge-2860\\server\\minecraft_server.1.12.2.jar",
+        "-d",
+        "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h10-correctness-01\\bootstrap-classes",
+        "D:\\minecraftrust-astra-hardening\\tools\\forge-capture\\src\\com\\rustcraft\\offline\\agent\\ObservationAgent.java",
+        "D:\\minecraftrust-astra-hardening\\tools\\forge-capture\\src\\com\\rustcraft\\offline\\bootstrap\\OfflineTweaker.java",
+        "D:\\minecraftrust-astra-hardening\\tools\\forge-capture\\src\\com\\rustcraft\\offline\\bootstrap\\RevOfflineTweaker.java",
+        "D:\\minecraftrust-astra-hardening\\tools\\forge-capture\\src\\com\\rustcraft\\offline\\oracle\\QualifyRuntime.java",
+        "D:\\minecraftrust-astra-hardening\\tools\\forge-capture\\src\\com\\rustcraft\\offline\\oracle\\RevQualifyRuntime.java",
+        "D:\\minecraftrust-astra-hardening\\tools\\forge-capture\\src\\com\\rustcraft\\offline\\oracle\\RevServerInventoryAgent.java",
+        "D:\\minecraftrust-astra-hardening\\tools\\forge-capture\\src\\com\\rustcraft\\offline\\oracle\\SrgJarBuilder.java",
+        "D:\\minecraftrust-astra-hardening\\tools\\bridge\\src\\com\\rustcraft\\bridge\\capture\\CaptureContract.java",
+        "D:\\minecraftrust-astra-hardening\\tools\\bridge\\src\\com\\rustcraft\\bridge\\capture\\CaptureSource.java",
+        "D:\\minecraftrust-astra-hardening\\tools\\bridge\\src\\com\\rustcraft\\bridge\\capture\\OwnedPacketSnapshot.java",
+        "D:\\minecraftrust-astra-hardening\\tools\\bridge\\src\\com\\rustcraft\\bridge\\capture\\SnapshotCapture.java",
+        "D:\\minecraftrust-astra-hardening\\tools\\bridge\\src\\com\\rustcraft\\bridge\\capture\\SyntheticCaptureSource.java",
+        "D:\\minecraftrust-astra-hardening\\tools\\bridge\\src\\com\\rustcraft\\bridge\\capture\\OwnedSnapshotBridge.java",
+        "D:\\minecraftrust-astra-hardening\\tools\\bridge\\src\\com\\rustcraft\\bridge\\capture\\LiveWriterGate.java",
+        "D:\\minecraftrust-astra-hardening\\tools\\bridge\\src\\com\\rustcraft\\bridge\\capture\\LiveWriterHooks.java",
+        "D:\\minecraftrust-astra-hardening\\tools\\bridge\\src\\com\\rustcraft\\bridge\\capture\\LiveForgeCaptureSource.java",
+        "D:\\minecraftrust-astra-hardening\\tools\\bridge\\src\\com\\rustcraft\\bridge\\capture\\LiveCaptureScope.java",
+        "D:\\minecraftrust-astra-hardening\\tools\\bridge\\src\\com\\rustcraft\\bridge\\capture\\LegacyCaptureScopes.java",
+        "D:\\minecraftrust-astra-hardening\\tools\\bridge\\src\\com\\rustcraft\\bridge\\capture\\LivePacketCapture.java",
+        "D:\\minecraftrust-astra-hardening\\tools\\bridge\\src\\com\\rustcraft\\bridge\\capture\\CaptureDraft.java",
+        "D:\\minecraftrust-astra-hardening\\tools\\bridge\\src\\com\\rustcraft\\bridge\\capture\\SealedLiveCapture.java",
+        "D:\\minecraftrust-astra-hardening\\tools\\bridge\\src\\com\\rustcraft\\bridge\\capture\\LiveComparisonQueue.java",
+        "D:\\minecraftrust-astra-hardening\\tools\\bridge\\src\\com\\rustcraft\\bridge\\PacketEncodeResultV2.java",
+        "D:\\minecraftrust-astra-hardening\\tools\\bridge\\src\\com\\rustcraft\\bridge\\capture\\PrivateBuildTickets.java",
+        "D:\\minecraftrust-astra-hardening\\tools\\bridge\\src\\com\\rustcraft\\bridge\\capture\\LiveChunkBindings.java",
+        "D:\\minecraftrust-astra-hardening\\tools\\bridge\\src\\com\\rustcraft\\coremod\\LiveWriterPlan.java",
+        "D:\\minecraftrust-astra-hardening\\tools\\bridge\\src\\com\\rustcraft\\coremod\\LiveHookSupport.java",
+        "D:\\minecraftrust-astra-hardening\\tools\\bridge\\src\\com\\rustcraft\\coremod\\CanonicalClassIdentityV2.java",
+        "D:\\minecraftrust-astra-hardening\\tools\\bridge\\src\\com\\rustcraft\\coremod\\LiveChunkOwnershipTransformer.java",
+        "D:\\minecraftrust-astra-hardening\\tools\\bridge\\src\\com\\rustcraft\\coremod\\LiveChunkPublicationTransformer.java"
+      ],
+      "cwd": "D:\\minecraftrust-astra-hardening",
+      "deadline_seconds": 240,
+      "returncode": 0,
+      "wall_seconds": 0.8559821000089869,
+      "output_bytes": 0,
+      "log": {
+        "path": "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h10-correctness-01\\bootstrap-javac.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      }
+    },
+    {
+      "label": "srg-compile-support",
+      "argv": [
+        "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\bin\\java.exe",
+        "-cp",
+        "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h10-correctness-01\\bootstrap-classes;D:\\rustcraft-runtime-targets\\clean-forge-2860\\server\\forge-1.12.2-14.23.5.2860.jar;D:\\rustcraft-runtime-targets\\clean-forge-2860\\server\\libraries\\org\\ow2\\asm\\asm-debug-all\\5.2\\asm-debug-all-5.2.jar;D:\\rustcraft-runtime-targets\\clean-forge-2860\\server\\libraries\\net\\minecraft\\launchwrapper\\1.12\\launchwrapper-1.12.jar;D:\\rustcraft-runtime-targets\\clean-forge-2860\\server\\libraries\\org\\jline\\jline\\3.5.1\\jline-3.5.1.jar;D:\\rustcraft-runtime-targets\\clean-forge-2860\\server\\libraries\\com\\typesafe\\akka\\akka-actor_2.11\\2.3.3\\akka-actor_2.11-2.3.3.jar;D:\\rustcraft-runtime-targets\\clean-forge-2860\\server\\libraries\\com\\typesafe\\config\\1.2.1\\config-1.2.1.jar;D:\\rustcraft-runtime-targets\\clean-forge-2860\\server\\libraries\\org\\scala-lang\\scala-actors-migration_2.11\\1.1.0\\scala-actors-migration_2.11-1.1.0.jar;D:\\rustcraft-runtime-targets\\clean-forge-2860\\server\\libraries\\org\\scala-lang\\scala-compiler\\2.11.1\\scala-compiler-2.11.1.jar;D:\\rustcraft-runtime-targets\\clean-forge-2860\\server\\libraries\\org\\scala-lang\\plugins\\scala-continuations-library_2.11\\1.0.2_mc\\scala-continuations-library_2.11-1.0.2_mc.jar;D:\\rustcraft-runtime-targets\\clean-forge-2860\\server\\libraries\\org\\scala-lang\\plugins\\scala-continuations-plugin_2.11.1\\1.0.2_mc\\scala-continuations-plugin_2.11.1-1.0.2_mc.jar;D:\\rustcraft-runtime-targets\\clean-forge-2860\\server\\libraries\\org\\scala-lang\\scala-library\\2.11.1\\scala-library-2.11.1.jar;D:\\rustcraft-runtime-targets\\clean-forge-2860\\server\\libraries\\org\\scala-lang\\scala-parser-combinators_2.11\\1.0.1\\scala-parser-combinators_2.11-1.0.1.jar;D:\\rustcraft-runtime-targets\\clean-forge-2860\\server\\libraries\\org\\scala-lang\\scala-reflect\\2.11.1\\scala-reflect-2.11.1.jar;D:\\rustcraft-runtime-targets\\clean-forge-2860\\server\\libraries\\org\\scala-lang\\scala-swing_2.11\\1.0.1\\scala-swing_2.11-1.0.1.jar;D:\\rustcraft-runtime-targets\\clean-forge-2860\\server\\libraries\\org\\scala-lang\\scala-xml_2.11\\1.0.2\\scala-xml_2.11-1.0.2.jar;D:\\rustcraft-runtime-targets\\clean-forge-2860\\server\\libraries\\lzma\\lzma\\0.0.1\\lzma-0.0.1.jar;D:\\rustcraft-runtime-targets\\clean-forge-2860\\server\\libraries\\java3d\\vecmath\\1.5.2\\vecmath-1.5.2.jar;D:\\rustcraft-runtime-targets\\clean-forge-2860\\server\\libraries\\net\\sf\\trove4j\\trove4j\\3.0.3\\trove4j-3.0.3.jar;D:\\rustcraft-runtime-targets\\clean-forge-2860\\server\\libraries\\org\\apache\\maven\\maven-artifact\\3.5.3\\maven-artifact-3.5.3.jar;D:\\rustcraft-runtime-targets\\clean-forge-2860\\server\\libraries\\net\\sf\\jopt-simple\\jopt-simple\\5.0.3\\jopt-simple-5.0.3.jar;D:\\rustcraft-runtime-targets\\clean-forge-2860\\server\\libraries\\org\\apache\\logging\\log4j\\log4j-api\\2.15.0\\log4j-api-2.15.0.jar;D:\\rustcraft-runtime-targets\\clean-forge-2860\\server\\libraries\\org\\apache\\logging\\log4j\\log4j-core\\2.15.0\\log4j-core-2.15.0.jar;D:\\rustcraft-runtime-targets\\clean-forge-2860\\server\\minecraft_server.1.12.2.jar",
+        "com.rustcraft.offline.oracle.SrgJarBuilder",
+        "D:\\rustcraft-runtime-targets\\clean-forge-2860\\server\\minecraft_server.1.12.2.jar",
+        "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h10-correctness-01\\srg-mapping.txt",
+        "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h10-correctness-01\\compile-only-srg.jar"
+      ],
+      "cwd": "D:\\minecraftrust-astra-hardening",
+      "deadline_seconds": 240,
+      "returncode": 0,
+      "wall_seconds": 6.479441699979361,
+      "output_bytes": 160,
+      "log": {
+        "path": "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h10-correctness-01\\srg-compile-support.log",
+        "sha256": "45fed4615a8832644dd6d5c0a7648fdd5b27516326edb5dbb09d9ca6dcbed9af",
+        "bytes": 160
+      }
+    },
+    {
+      "label": "probe-javac",
+      "argv": [
+        "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\bin\\javac.exe",
+        "-source",
+        "8",
+        "-target",
+        "8",
+        "-encoding",
+        "UTF-8",
+        "-cp",
+        "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h10-correctness-01\\compile-only-srg.jar;D:\\rustcraft-runtime-targets\\clean-forge-2860\\server\\forge-1.12.2-14.23.5.2860.jar;D:\\rustcraft-runtime-targets\\clean-forge-2860\\server\\libraries\\org\\ow2\\asm\\asm-debug-all\\5.2\\asm-debug-all-5.2.jar;D:\\rustcraft-runtime-targets\\clean-forge-2860\\server\\libraries\\net\\minecraft\\launchwrapper\\1.12\\launchwrapper-1.12.jar;D:\\rustcraft-runtime-targets\\clean-forge-2860\\server\\libraries\\org\\jline\\jline\\3.5.1\\jline-3.5.1.jar;D:\\rustcraft-runtime-targets\\clean-forge-2860\\server\\libraries\\com\\typesafe\\akka\\akka-actor_2.11\\2.3.3\\akka-actor_2.11-2.3.3.jar;D:\\rustcraft-runtime-targets\\clean-forge-2860\\server\\libraries\\com\\typesafe\\config\\1.2.1\\config-1.2.1.jar;D:\\rustcraft-runtime-targets\\clean-forge-2860\\server\\libraries\\org\\scala-lang\\scala-actors-migration_2.11\\1.1.0\\scala-actors-migration_2.11-1.1.0.jar;D:\\rustcraft-runtime-targets\\clean-forge-2860\\server\\libraries\\org\\scala-lang\\scala-compiler\\2.11.1\\scala-compiler-2.11.1.jar;D:\\rustcraft-runtime-targets\\clean-forge-2860\\server\\libraries\\org\\scala-lang\\plugins\\scala-continuations-library_2.11\\1.0.2_mc\\scala-continuations-library_2.11-1.0.2_mc.jar;D:\\rustcraft-runtime-targets\\clean-forge-2860\\server\\libraries\\org\\scala-lang\\plugins\\scala-continuations-plugin_2.11.1\\1.0.2_mc\\scala-continuations-plugin_2.11.1-1.0.2_mc.jar;D:\\rustcraft-runtime-targets\\clean-forge-2860\\server\\libraries\\org\\scala-lang\\scala-library\\2.11.1\\scala-library-2.11.1.jar;D:\\rustcraft-runtime-targets\\clean-forge-2860\\server\\libraries\\org\\scala-lang\\scala-parser-combinators_2.11\\1.0.1\\scala-parser-combinators_2.11-1.0.1.jar;D:\\rustcraft-runtime-targets\\clean-forge-2860\\server\\libraries\\org\\scala-lang\\scala-reflect\\2.11.1\\scala-reflect-2.11.1.jar;D:\\rustcraft-runtime-targets\\clean-forge-2860\\server\\libraries\\org\\scala-lang\\scala-swing_2.11\\1.0.1\\scala-swing_2.11-1.0.1.jar;D:\\rustcraft-runtime-targets\\clean-forge-2860\\server\\libraries\\org\\scala-lang\\scala-xml_2.11\\1.0.2\\scala-xml_2.11-1.0.2.jar;D:\\rustcraft-runtime-targets\\clean-forge-2860\\server\\libraries\\lzma\\lzma\\0.0.1\\lzma-0.0.1.jar;D:\\rustcraft-runtime-targets\\clean-forge-2860\\server\\libraries\\java3d\\vecmath\\1.5.2\\vecmath-1.5.2.jar;D:\\rustcraft-runtime-targets\\clean-forge-2860\\server\\libraries\\net\\sf\\trove4j\\trove4j\\3.0.3\\trove4j-3.0.3.jar;D:\\rustcraft-runtime-targets\\clean-forge-2860\\server\\libraries\\org\\apache\\maven\\maven-artifact\\3.5.3\\maven-artifact-3.5.3.jar;D:\\rustcraft-runtime-targets\\clean-forge-2860\\server\\libraries\\net\\sf\\jopt-simple\\jopt-simple\\5.0.3\\jopt-simple-5.0.3.jar;D:\\rustcraft-runtime-targets\\clean-forge-2860\\server\\libraries\\org\\apache\\logging\\log4j\\log4j-api\\2.15.0\\log4j-api-2.15.0.jar;D:\\rustcraft-runtime-targets\\clean-forge-2860\\server\\libraries\\org\\apache\\logging\\log4j\\log4j-core\\2.15.0\\log4j-core-2.15.0.jar;D:\\rustcraft-runtime-targets\\clean-forge-2860\\server\\minecraft_server.1.12.2.jar",
+        "-d",
+        "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h10-correctness-01\\probe-classes",
+        "D:\\minecraftrust-astra-hardening\\tools\\worldgen-fusion-experiment\\java\\com\\rustcraft\\fusion\\FusionProbe.java"
+      ],
+      "cwd": "D:\\minecraftrust-astra-hardening",
+      "deadline_seconds": 240,
+      "returncode": 0,
+      "wall_seconds": 0.460264699999243,
+      "output_bytes": 0,
+      "log": {
+        "path": "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h10-correctness-01\\probe-javac.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      }
+    },
+    {
+      "label": "fork-0",
+      "argv": [
+        "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\bin\\java.exe",
+        "-Xms128m",
+        "-Xmx512m",
+        "-Xcheck:jni",
+        "-javaagent:D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h10-correctness-01\\observer.jar",
+        "-Dlog4j.configurationFile=file:///D:/minecraftrust-astra-hardening/tools/forge-capture/log4j2.xml",
+        "-Dlog4j2.formatMsgNoLookups=true",
+        "-Drustcraft.dumpDir=D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h10-correctness-01\\fork-0\\transformed",
+        "-Drustcraft.qualificationResult=D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h10-correctness-01\\fork-0\\qualification.json",
+        "-Drustcraft.oracleMain=com.rustcraft.fusion.FusionProbe",
+        "-Drustcraft.oracleOutput=D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h10-correctness-01\\fork-0\\oracle",
+        "-Drustcraft.nativeDll=D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h10-correctness-01\\native-build\\release\\worldgen_fusion_experiment.dll",
+        "-Drustcraft.fusionRounds=0",
+        "-cp",
+        "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h10-correctness-01\\probe-classes;D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h10-correctness-01\\bootstrap-classes;D:\\rustcraft-runtime-targets\\clean-forge-2860\\server\\forge-1.12.2-14.23.5.2860.jar;D:\\rustcraft-runtime-targets\\clean-forge-2860\\server\\libraries\\org\\ow2\\asm\\asm-debug-all\\5.2\\asm-debug-all-5.2.jar;D:\\rustcraft-runtime-targets\\clean-forge-2860\\server\\libraries\\net\\minecraft\\launchwrapper\\1.12\\launchwrapper-1.12.jar;D:\\rustcraft-runtime-targets\\clean-forge-2860\\server\\libraries\\org\\jline\\jline\\3.5.1\\jline-3.5.1.jar;D:\\rustcraft-runtime-targets\\clean-forge-2860\\server\\libraries\\com\\typesafe\\akka\\akka-actor_2.11\\2.3.3\\akka-actor_2.11-2.3.3.jar;D:\\rustcraft-runtime-targets\\clean-forge-2860\\server\\libraries\\com\\typesafe\\config\\1.2.1\\config-1.2.1.jar;D:\\rustcraft-runtime-targets\\clean-forge-2860\\server\\libraries\\org\\scala-lang\\scala-actors-migration_2.11\\1.1.0\\scala-actors-migration_2.11-1.1.0.jar;D:\\rustcraft-runtime-targets\\clean-forge-2860\\server\\libraries\\org\\scala-lang\\scala-compiler\\2.11.1\\scala-compiler-2.11.1.jar;D:\\rustcraft-runtime-targets\\clean-forge-2860\\server\\libraries\\org\\scala-lang\\plugins\\scala-continuations-library_2.11\\1.0.2_mc\\scala-continuations-library_2.11-1.0.2_mc.jar;D:\\rustcraft-runtime-targets\\clean-forge-2860\\server\\libraries\\org\\scala-lang\\plugins\\scala-continuations-plugin_2.11.1\\1.0.2_mc\\scala-continuations-plugin_2.11.1-1.0.2_mc.jar;D:\\rustcraft-runtime-targets\\clean-forge-2860\\server\\libraries\\org\\scala-lang\\scala-library\\2.11.1\\scala-library-2.11.1.jar;D:\\rustcraft-runtime-targets\\clean-forge-2860\\server\\libraries\\org\\scala-lang\\scala-parser-combinators_2.11\\1.0.1\\scala-parser-combinators_2.11-1.0.1.jar;D:\\rustcraft-runtime-targets\\clean-forge-2860\\server\\libraries\\org\\scala-lang\\scala-reflect\\2.11.1\\scala-reflect-2.11.1.jar;D:\\rustcraft-runtime-targets\\clean-forge-2860\\server\\libraries\\org\\scala-lang\\scala-swing_2.11\\1.0.1\\scala-swing_2.11-1.0.1.jar;D:\\rustcraft-runtime-targets\\clean-forge-2860\\server\\libraries\\org\\scala-lang\\scala-xml_2.11\\1.0.2\\scala-xml_2.11-1.0.2.jar;D:\\rustcraft-runtime-targets\\clean-forge-2860\\server\\libraries\\lzma\\lzma\\0.0.1\\lzma-0.0.1.jar;D:\\rustcraft-runtime-targets\\clean-forge-2860\\server\\libraries\\java3d\\vecmath\\1.5.2\\vecmath-1.5.2.jar;D:\\rustcraft-runtime-targets\\clean-forge-2860\\server\\libraries\\net\\sf\\trove4j\\trove4j\\3.0.3\\trove4j-3.0.3.jar;D:\\rustcraft-runtime-targets\\clean-forge-2860\\server\\libraries\\org\\apache\\maven\\maven-artifact\\3.5.3\\maven-artifact-3.5.3.jar;D:\\rustcraft-runtime-targets\\clean-forge-2860\\server\\libraries\\net\\sf\\jopt-simple\\jopt-simple\\5.0.3\\jopt-simple-5.0.3.jar;D:\\rustcraft-runtime-targets\\clean-forge-2860\\server\\libraries\\org\\apache\\logging\\log4j\\log4j-api\\2.15.0\\log4j-api-2.15.0.jar;D:\\rustcraft-runtime-targets\\clean-forge-2860\\server\\libraries\\org\\apache\\logging\\log4j\\log4j-core\\2.15.0\\log4j-core-2.15.0.jar;D:\\rustcraft-runtime-targets\\clean-forge-2860\\server\\minecraft_server.1.12.2.jar",
+        "net.minecraft.launchwrapper.Launch",
+        "--tweakClass",
+        "com.rustcraft.offline.bootstrap.OfflineTweaker",
+        "--gameDir",
+        "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h10-correctness-01\\fork-0\\game"
+      ],
+      "cwd": "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h10-correctness-01\\fork-0",
+      "deadline_seconds": 240,
+      "returncode": 0,
+      "wall_seconds": 7.516318799986038,
+      "output_bytes": 58258,
+      "log": {
+        "path": "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h10-correctness-01\\fork-0.log",
+        "sha256": "e39070018e40a8270ec3a2c8fb2bfe73ff33cccb1673abfc1bb45d1c421d3ba0",
+        "bytes": 58258
+      }
+    }
+  ],
+  "forks": [
+    {
+      "qualification": {
+        "path": "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h10-correctness-01\\fork-0\\qualification.json",
+        "sha256": "c484faea7e52f311f11c85f79a2e6f0dccaac8cdbac7843f59110986803c04a8",
+        "bytes": 375127
+      },
+      "result": {
+        "schema": "H10_SYNTHETIC_WORLDGEN_FUSION_V1",
+        "production_authority": false,
+        "scope": "actual Minecraft noise plus independently specified synthetic composition; NOT full chunk generation",
+        "java": "1.8.0_504-b01",
+        "noise_class_loader": "net.minecraft.launchwrapper.LaunchClassLoader",
+        "correctness": {
+          "narrowing_changed_float_values": 8192,
+          "narrowing_same_classification_despite_changed_float": 8192,
+          "cases": [
+            {
+              "seed": "0",
+              "x": 0,
+              "z": 0,
+              "height": 1,
+              "raw_double_values_compared": 1280,
+              "state_hash": 1316282369
+            },
+            {
+              "seed": "0",
+              "x": 0,
+              "z": 0,
+              "height": 17,
+              "raw_double_values_compared": 21760,
+              "state_hash": 2116221087
+            },
+            {
+              "seed": "0",
+              "x": 0,
+              "z": 0,
+              "height": 32,
+              "raw_double_values_compared": 40960,
+              "state_hash": 920586815
+            },
+            {
+              "seed": "0",
+              "x": -17,
+              "z": 31,
+              "height": 1,
+              "raw_double_values_compared": 1280,
+              "state_hash": 1316282369
+            },
+            {
+              "seed": "0",
+              "x": -17,
+              "z": 31,
+              "height": 17,
+              "raw_double_values_compared": 21760,
+              "state_hash": 2106988313
+            },
+            {
+              "seed": "0",
+              "x": -17,
+              "z": 31,
+              "height": 32,
+              "raw_double_values_compared": 40960,
+              "state_hash": -460531217
+            },
+            {
+              "seed": "0",
+              "x": 29999984,
+              "z": -29999984,
+              "height": 1,
+              "raw_double_values_compared": 1280,
+              "state_hash": 52819438
+            },
+            {
+              "seed": "0",
+              "x": 29999984,
+              "z": -29999984,
+              "height": 17,
+              "raw_double_values_compared": 21760,
+              "state_hash": -973660161
+            },
+            {
+              "seed": "0",
+              "x": 29999984,
+              "z": -29999984,
+              "height": 32,
+              "raw_double_values_compared": 40960,
+              "state_hash": 173615649
+            },
+            {
+              "seed": "1",
+              "x": 0,
+              "z": 0,
+              "height": 1,
+              "raw_double_values_compared": 1280,
+              "state_hash": -83410275
+            },
+            {
+              "seed": "1",
+              "x": 0,
+              "z": 0,
+              "height": 17,
+              "raw_double_values_compared": 21760,
+              "state_hash": -792631664
+            },
+            {
+              "seed": "1",
+              "x": 0,
+              "z": 0,
+              "height": 32,
+              "raw_double_values_compared": 40960,
+              "state_hash": -1969048414
+            },
+            {
+              "seed": "1",
+              "x": -17,
+              "z": 31,
+              "height": 1,
+              "raw_double_values_compared": 1280,
+              "state_hash": 1316282369
+            },
+            {
+              "seed": "1",
+              "x": -17,
+              "z": 31,
+              "height": 17,
+              "raw_double_values_compared": 21760,
+              "state_hash": -2130532394
+            },
+            {
+              "seed": "1",
+              "x": -17,
+              "z": 31,
+              "height": 32,
+              "raw_double_values_compared": 40960,
+              "state_hash": -1425244802
+            },
+            {
+              "seed": "1",
+              "x": 29999984,
+              "z": -29999984,
+              "height": 1,
+              "raw_double_values_compared": 1280,
+              "state_hash": 1316282369
+            },
+            {
+              "seed": "1",
+              "x": 29999984,
+              "z": -29999984,
+              "height": 17,
+              "raw_double_values_compared": 21760,
+              "state_hash": 876135297
+            },
+            {
+              "seed": "1",
+              "x": 29999984,
+              "z": -29999984,
+              "height": 32,
+              "raw_double_values_compared": 40960,
+              "state_hash": 742905585
+            },
+            {
+              "seed": "-1",
+              "x": 0,
+              "z": 0,
+              "height": 1,
+              "raw_double_values_compared": 1280,
+              "state_hash": -1061638911
+            },
+            {
+              "seed": "-1",
+              "x": 0,
+              "z": 0,
+              "height": 17,
+              "raw_double_values_compared": 21760,
+              "state_hash": -874156127
+            },
+            {
+              "seed": "-1",
+              "x": 0,
+              "z": 0,
+              "height": 32,
+              "raw_double_values_compared": 40960,
+              "state_hash": 84543439
+            },
+            {
+              "seed": "-1",
+              "x": -17,
+              "z": 31,
+              "height": 1,
+              "raw_double_values_compared": 1280,
+              "state_hash": 1432343173
+            },
+            {
+              "seed": "-1",
+              "x": -17,
+              "z": 31,
+              "height": 17,
+              "raw_double_values_compared": 21760,
+              "state_hash": -1595163461
+            },
+            {
+              "seed": "-1",
+              "x": -17,
+              "z": 31,
+              "height": 32,
+              "raw_double_values_compared": 40960,
+              "state_hash": -1029546987
+            },
+            {
+              "seed": "-1",
+              "x": 29999984,
+              "z": -29999984,
+              "height": 1,
+              "raw_double_values_compared": 1280,
+              "state_hash": 1316282369
+            },
+            {
+              "seed": "-1",
+              "x": 29999984,
+              "z": -29999984,
+              "height": 17,
+              "raw_double_values_compared": 21760,
+              "state_hash": -1026301951
+            },
+            {
+              "seed": "-1",
+              "x": 29999984,
+              "z": -29999984,
+              "height": 32,
+              "raw_double_values_compared": 40960,
+              "state_hash": -1039368191
+            },
+            {
+              "seed": "-9223372036854775808",
+              "x": 0,
+              "z": 0,
+              "height": 1,
+              "raw_double_values_compared": 1280,
+              "state_hash": 1316282369
+            },
+            {
+              "seed": "-9223372036854775808",
+              "x": 0,
+              "z": 0,
+              "height": 17,
+              "raw_double_values_compared": 21760,
+              "state_hash": 2116221087
+            },
+            {
+              "seed": "-9223372036854775808",
+              "x": 0,
+              "z": 0,
+              "height": 32,
+              "raw_double_values_compared": 40960,
+              "state_hash": 920586815
+            },
+            {
+              "seed": "-9223372036854775808",
+              "x": -17,
+              "z": 31,
+              "height": 1,
+              "raw_double_values_compared": 1280,
+              "state_hash": 1316282369
+            },
+            {
+              "seed": "-9223372036854775808",
+              "x": -17,
+              "z": 31,
+              "height": 17,
+              "raw_double_values_compared": 21760,
+              "state_hash": 2106988313
+            },
+            {
+              "seed": "-9223372036854775808",
+              "x": -17,
+              "z": 31,
+              "height": 32,
+              "raw_double_values_compared": 40960,
+              "state_hash": -460531217
+            },
+            {
+              "seed": "-9223372036854775808",
+              "x": 29999984,
+              "z": -29999984,
+              "height": 1,
+              "raw_double_values_compared": 1280,
+              "state_hash": 52819438
+            },
+            {
+              "seed": "-9223372036854775808",
+              "x": 29999984,
+              "z": -29999984,
+              "height": 17,
+              "raw_double_values_compared": 21760,
+              "state_hash": -973660161
+            },
+            {
+              "seed": "-9223372036854775808",
+              "x": 29999984,
+              "z": -29999984,
+              "height": 32,
+              "raw_double_values_compared": 40960,
+              "state_hash": 173615649
+            },
+            {
+              "seed": "81985529216486895",
+              "x": 0,
+              "z": 0,
+              "height": 1,
+              "raw_double_values_compared": 1280,
+              "state_hash": 2023290245
+            },
+            {
+              "seed": "81985529216486895",
+              "x": 0,
+              "z": 0,
+              "height": 17,
+              "raw_double_values_compared": 21760,
+              "state_hash": -1026301951
+            },
+            {
+              "seed": "81985529216486895",
+              "x": 0,
+              "z": 0,
+              "height": 32,
+              "raw_double_values_compared": 40960,
+              "state_hash": -1039368191
+            },
+            {
+              "seed": "81985529216486895",
+              "x": -17,
+              "z": 31,
+              "height": 1,
+              "raw_double_values_compared": 1280,
+              "state_hash": 1316282369
+            },
+            {
+              "seed": "81985529216486895",
+              "x": -17,
+              "z": 31,
+              "height": 17,
+              "raw_double_values_compared": 21760,
+              "state_hash": -558206015
+            },
+            {
+              "seed": "81985529216486895",
+              "x": -17,
+              "z": 31,
+              "height": 32,
+              "raw_double_values_compared": 40960,
+              "state_hash": -1753161023
+            },
+            {
+              "seed": "81985529216486895",
+              "x": 29999984,
+              "z": -29999984,
+              "height": 1,
+              "raw_double_values_compared": 1280,
+              "state_hash": 1316282369
+            },
+            {
+              "seed": "81985529216486895",
+              "x": 29999984,
+              "z": -29999984,
+              "height": 17,
+              "raw_double_values_compared": 21760,
+              "state_hash": 405446192
+            },
+            {
+              "seed": "81985529216486895",
+              "x": 29999984,
+              "z": -29999984,
+              "height": 32,
+              "raw_double_values_compared": 40960,
+              "state_hash": -269710654
+            }
+          ],
+          "case_count": 45,
+          "raw_double_values_compared": 960000,
+          "assertions": 178,
+          "status": "PASS"
+        },
+        "benchmark": [],
+        "status": "PASS"
+      },
+      "result_identity": {
+        "path": "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h10-correctness-01\\fork-0\\oracle\\result.json",
+        "sha256": "57430dd3d66f09c25fcc6c0121c50f60aebf31ad5e38a9a4f07958ab2efdea7e",
+        "bytes": 8810
+      },
+      "actual_noise_definitions": {
+        "net.minecraft.world.gen.NoiseGenerator": "aee95721b880315caa197fc5609e788dc0fb79e51ecd97fafa3fc1dd209df363",
+        "net.minecraft.world.gen.NoiseGeneratorImproved": "e44ac534db3a0d05ffc669c8ebeae085cd4b3ba110d4b3e14795d7cfafa01ecc",
+        "net.minecraft.world.gen.NoiseGeneratorOctaves": "33fc557a226a90a5dcd184afa1a4cc393b21e098e360db8061036414c48c209b",
+        "net.minecraft.world.gen.NoiseGeneratorPerlin": "4902ed6082a6ec0f67d72be668e6ca1fc0df2ff9f8f4175316878b6e0dff455f",
+        "net.minecraft.world.gen.NoiseGeneratorSimplex": "b4e954c0ee72f5619ad0539f22de62c0d2320349aa594d14f004389d730d77be"
+      }
+    }
+  ],
+  "sanitized_environment_keys": [],
+  "sources_before": [
+    {
+      "path": "D:\\minecraftrust-astra-hardening\\Cargo.lock",
+      "sha256": "5ecfd54d11d1046b9b5ce8ff30f0e4520a60612fd6a9ec2007d7e88474404c2c",
+      "bytes": 7428
+    },
+    {
+      "path": "D:\\minecraftrust-astra-hardening\\Cargo.toml",
+      "sha256": "ceaf10e69829d9488f89719c1fbc7889832f66f77234bb222b20625b34443c41",
+      "bytes": 1669
+    },
+    {
+      "path": "D:\\minecraftrust-astra-hardening\\crates\\rustcraft-core\\Cargo.toml",
+      "sha256": "f0b085a397c545665bae25b878f254c090a5d640bdc52e9bc15cf514f22ef39e",
+      "bytes": 220
+    },
+    {
+      "path": "D:\\minecraftrust-astra-hardening\\crates\\rustcraft-core\\src\\lib.rs",
+      "sha256": "3e6a2914001d68fd02d8e0a33f4e7489ea14202e7b011af51aa3797976b73878",
+      "bytes": 10485
+    },
+    {
+      "path": "D:\\minecraftrust-astra-hardening\\crates\\rustcraft-core\\tests\\contracts.rs",
+      "sha256": "f1ab1f5718c72ed5f97d407afdca995f942d2da6d04ea957d435e07a0ec9ff9c",
+      "bytes": 7918
+    },
+    {
+      "path": "D:\\minecraftrust-astra-hardening\\crates\\worldgen-noise\\Cargo.toml",
+      "sha256": "c02da8557a8845add1d2517efd0d347731132d916effe124f769ce597d6b1513",
+      "bytes": 114
+    },
+    {
+      "path": "D:\\minecraftrust-astra-hardening\\crates\\worldgen-noise\\examples\\wndbg.rs",
+      "sha256": "fd6ff1ee9e783cda031f04cdb247b378d50ae901cf1143f913a24f359a1db71f",
+      "bytes": 686
+    },
+    {
+      "path": "D:\\minecraftrust-astra-hardening\\crates\\worldgen-noise\\examples\\wndbg3.rs",
+      "sha256": "a91bf1479c2a9214978e36a21eb893a6f28bbd4fd6de2e3e8fcd2cf1a030d716",
+      "bytes": 737
+    },
+    {
+      "path": "D:\\minecraftrust-astra-hardening\\crates\\worldgen-noise\\examples\\wndbg4.rs",
+      "sha256": "1a47184e4297ffab4add8197ef7f9bda2de96614667d8d312b12e0c8a42a29b2",
+      "bytes": 2426
+    },
+    {
+      "path": "D:\\minecraftrust-astra-hardening\\crates\\worldgen-noise\\src\\field.rs",
+      "sha256": "58a16db769f5b894c4ffda0095bf1a7cae596c9e3eba97f54300e742322fe5d7",
+      "bytes": 15536
+    },
+    {
+      "path": "D:\\minecraftrust-astra-hardening\\crates\\worldgen-noise\\src\\field_complete.rs",
+      "sha256": "f47c003413f9c8ebd2182a0f262a237d30ef0d1c16463e8083cee56a7eefb049",
+      "bytes": 23116
+    },
+    {
+      "path": "D:\\minecraftrust-astra-hardening\\crates\\worldgen-noise\\src\\lib.rs",
+      "sha256": "bff075ee75fb097b693c4e301b618e34cd5ffb152b5bab2c8a7aeaf50c00c06c",
+      "bytes": 15502
+    },
+    {
+      "path": "D:\\minecraftrust-astra-hardening\\crates\\worldgen-noise\\src\\simd.rs",
+      "sha256": "07589a89e294fccadd4c084718a63fe0bff3f435bf4924988bd03258b3259fbf",
+      "bytes": 24971
+    },
+    {
+      "path": "D:\\minecraftrust-astra-hardening\\crates\\worldgen-noise\\src\\terrain.rs",
+      "sha256": "9a975caa7902fed24e885c05d72557677762b77de8f3f1606bbfcbf73e9270b9",
+      "bytes": 15016
+    },
+    {
+      "path": "D:\\minecraftrust-astra-hardening\\tools\\bridge\\src\\com\\rustcraft\\bridge\\capture\\CaptureContract.java",
+      "sha256": "76d053eaf1b10d4d52de00f236365ff00216e6d8db3425f9de0054fcaa268586",
+      "bytes": 6924
+    },
+    {
+      "path": "D:\\minecraftrust-astra-hardening\\tools\\bridge\\src\\com\\rustcraft\\bridge\\capture\\CaptureDraft.java",
+      "sha256": "0402171706dce9a5efc5049554f7c1dbb04471afe585d5afbd3e33f49cb7b379",
+      "bytes": 11549
+    },
+    {
+      "path": "D:\\minecraftrust-astra-hardening\\tools\\bridge\\src\\com\\rustcraft\\bridge\\capture\\CaptureSource.java",
+      "sha256": "c80b6c54a2ab822a34548c92b93860832cdb48e358c90e4b0843ab5d524fef8a",
+      "bytes": 3298
+    },
+    {
+      "path": "D:\\minecraftrust-astra-hardening\\tools\\bridge\\src\\com\\rustcraft\\bridge\\capture\\LegacyCaptureScopes.java",
+      "sha256": "a42f00b6d94b4fee188e0e7726fbc9557ccfdfcaaa4d3cfa72de5149125351ec",
+      "bytes": 2514
+    },
+    {
+      "path": "D:\\minecraftrust-astra-hardening\\tools\\bridge\\src\\com\\rustcraft\\bridge\\capture\\LiveCaptureScope.java",
+      "sha256": "9aad3a4b7e3109bf96ce5db3daf6750e74c4dc2bb4477301a5c4e8fb8e3b420d",
+      "bytes": 18376
+    },
+    {
+      "path": "D:\\minecraftrust-astra-hardening\\tools\\bridge\\src\\com\\rustcraft\\bridge\\capture\\LiveChunkBindings.java",
+      "sha256": "c23ce447621b36c9e8eb1949f540ca07d5d768bd6d538cc410b2ee35b471b74b",
+      "bytes": 38391
+    },
+    {
+      "path": "D:\\minecraftrust-astra-hardening\\tools\\bridge\\src\\com\\rustcraft\\bridge\\capture\\LiveComparisonQueue.java",
+      "sha256": "c4b1017d0b9a8e63e4e26a2fc00136116ddcffb1c0c50f9c60580e80dfd1957e",
+      "bytes": 5263
+    },
+    {
+      "path": "D:\\minecraftrust-astra-hardening\\tools\\bridge\\src\\com\\rustcraft\\bridge\\capture\\LiveForgeCaptureSource.java",
+      "sha256": "f9d6b4548e835a08903730117746b8538eaa1fcc693dd6c68f4de0f82a933185",
+      "bytes": 8162
+    },
+    {
+      "path": "D:\\minecraftrust-astra-hardening\\tools\\bridge\\src\\com\\rustcraft\\bridge\\capture\\LivePacketCapture.java",
+      "sha256": "1416ab5abd365e8d3623794cc5f9e8dd83bd7e5abc2affd519a2507f84694eea",
+      "bytes": 17512
+    },
+    {
+      "path": "D:\\minecraftrust-astra-hardening\\tools\\bridge\\src\\com\\rustcraft\\bridge\\capture\\LiveWriterGate.java",
+      "sha256": "27b8eb203da1a70951f299da68abc420a42ab11c1d466cce7be0dcc6afc205f7",
+      "bytes": 28971
+    },
+    {
+      "path": "D:\\minecraftrust-astra-hardening\\tools\\bridge\\src\\com\\rustcraft\\bridge\\capture\\LiveWriterHooks.java",
+      "sha256": "a095b50264fe6ddd393a7ea63bbf79b9b80595dcdc4a5edf096d276dcf809fa2",
+      "bytes": 42983
+    },
+    {
+      "path": "D:\\minecraftrust-astra-hardening\\tools\\bridge\\src\\com\\rustcraft\\bridge\\capture\\OwnedPacketSnapshot.java",
+      "sha256": "142377e51919765e1c53ddbb8ac075f75e80ffb056a2de3281b485126783f918",
+      "bytes": 9072
+    },
+    {
+      "path": "D:\\minecraftrust-astra-hardening\\tools\\bridge\\src\\com\\rustcraft\\bridge\\capture\\OwnedSnapshotBridge.java",
+      "sha256": "815d6a6e7e5230ad4d6af31fd0bd44b7c0bd2b528457de59966c8d934a1f4fd5",
+      "bytes": 597
+    },
+    {
+      "path": "D:\\minecraftrust-astra-hardening\\tools\\bridge\\src\\com\\rustcraft\\bridge\\capture\\PrivateBuildTickets.java",
+      "sha256": "b31e287fba07ddfa1d1f5ca017345b84655a9f90e1cece28fb01c209bff1989f",
+      "bytes": 26062
+    },
+    {
+      "path": "D:\\minecraftrust-astra-hardening\\tools\\bridge\\src\\com\\rustcraft\\bridge\\capture\\SealedLiveCapture.java",
+      "sha256": "4a87b6375c538ae922975575f6d0b367f6f1c96641f6b0d3713575d4d0f1b306",
+      "bytes": 3521
+    },
+    {
+      "path": "D:\\minecraftrust-astra-hardening\\tools\\bridge\\src\\com\\rustcraft\\bridge\\capture\\SnapshotCapture.java",
+      "sha256": "0237ed1e3c87f0049f0bdf916fb4601fbf38a811c9a2911cb95f3a43369e2902",
+      "bytes": 13363
+    },
+    {
+      "path": "D:\\minecraftrust-astra-hardening\\tools\\bridge\\src\\com\\rustcraft\\bridge\\capture\\SyntheticCaptureSource.java",
+      "sha256": "6fadbb2a23001101640086b084edb0630e9007645782ee281bf2ed62a4df6ebc",
+      "bytes": 2744
+    },
+    {
+      "path": "D:\\minecraftrust-astra-hardening\\tools\\bridge\\src\\com\\rustcraft\\bridge\\PacketEncodeResultV2.java",
+      "sha256": "a9a164f55389823d9b55e96a982dbcb7c3ce782f41e8d09a29b6d9b8d4b1f1b7",
+      "bytes": 3105
+    },
+    {
+      "path": "D:\\minecraftrust-astra-hardening\\tools\\bridge\\src\\com\\rustcraft\\coremod\\CanonicalClassIdentityV2.java",
+      "sha256": "61749a998cb03e43f093b54c6ba5a069a236d868388fe6452ec1e0133ec4f4f8",
+      "bytes": 38765
+    },
+    {
+      "path": "D:\\minecraftrust-astra-hardening\\tools\\bridge\\src\\com\\rustcraft\\coremod\\LiveChunkOwnershipTransformer.java",
+      "sha256": "268279f5ef44f36585f0c1acecd208774da02813ecf4d1a588ba3beb7d97ef19",
+      "bytes": 5320
+    },
+    {
+      "path": "D:\\minecraftrust-astra-hardening\\tools\\bridge\\src\\com\\rustcraft\\coremod\\LiveChunkPublicationTransformer.java",
+      "sha256": "67b4ff72ba46e2bb1183808608f1bf45bfea3a3ef910e693de78aa2580cada3c",
+      "bytes": 12999
+    },
+    {
+      "path": "D:\\minecraftrust-astra-hardening\\tools\\bridge\\src\\com\\rustcraft\\coremod\\LiveHookSupport.java",
+      "sha256": "13f228c95a55916235743deebdee98772a52184004c43a4277d32e3e9d399264",
+      "bytes": 27157
+    },
+    {
+      "path": "D:\\minecraftrust-astra-hardening\\tools\\bridge\\src\\com\\rustcraft\\coremod\\LiveWriterPlan.java",
+      "sha256": "fe9f3ca61a1a510115a4c2e6f472aa31143035e097cc446c3b0c3c8323987603",
+      "bytes": 24938
+    },
+    {
+      "path": "D:\\minecraftrust-astra-hardening\\tools\\forge-capture\\log4j2.xml",
+      "sha256": "959df8931bc8a7f1b7d48034c88de3070d389556e4777d547c4bb8309cfd0608",
+      "bytes": 288
+    },
+    {
+      "path": "D:\\minecraftrust-astra-hardening\\tools\\forge-capture\\runtime-pins.json",
+      "sha256": "66b7c5e19fa1c7a84e53bdfee5b9e3dc1e34a60f5edbbd0d3b4590fb3b90cce1",
+      "bytes": 12964
+    },
+    {
+      "path": "D:\\minecraftrust-astra-hardening\\tools\\forge-capture\\src\\com\\rustcraft\\offline\\agent\\ObservationAgent.java",
+      "sha256": "243482bcdcc7a20eee5236f35af495db8d3f5f35142c8646b45561f85507937f",
+      "bytes": 2721
+    },
+    {
+      "path": "D:\\minecraftrust-astra-hardening\\tools\\forge-capture\\src\\com\\rustcraft\\offline\\bootstrap\\OfflineTweaker.java",
+      "sha256": "8725a38e80bb2a6d1fe95577d7974f6065f094a3153eb0c2a17caa5f9eb088ad",
+      "bytes": 2465
+    },
+    {
+      "path": "D:\\minecraftrust-astra-hardening\\tools\\forge-capture\\src\\com\\rustcraft\\offline\\bootstrap\\RevOfflineTweaker.java",
+      "sha256": "eae91ad0299e9b78efca399750ee28207d109c73dfd9a93ff073f33f212895c9",
+      "bytes": 1904
+    },
+    {
+      "path": "D:\\minecraftrust-astra-hardening\\tools\\forge-capture\\src\\com\\rustcraft\\offline\\oracle\\QualifyRuntime.java",
+      "sha256": "7e5e903eaa40a804f6dffefc450aad637e5ca1631951fb41105cc301a7d0c128",
+      "bytes": 20318
+    },
+    {
+      "path": "D:\\minecraftrust-astra-hardening\\tools\\forge-capture\\src\\com\\rustcraft\\offline\\oracle\\RevQualifyRuntime.java",
+      "sha256": "bc99a5aa1b99a6512d0e05cd2e3f3a1edc9ad6197dbdf1939504b86da621f7cc",
+      "bytes": 8658
+    },
+    {
+      "path": "D:\\minecraftrust-astra-hardening\\tools\\forge-capture\\src\\com\\rustcraft\\offline\\oracle\\RevServerInventoryAgent.java",
+      "sha256": "2688af07ffeac21f75c8d65cc61d61516e5ef87b2afd3f8df7e849451b4460d3",
+      "bytes": 7946
+    },
+    {
+      "path": "D:\\minecraftrust-astra-hardening\\tools\\forge-capture\\src\\com\\rustcraft\\offline\\oracle\\SrgJarBuilder.java",
+      "sha256": "c3b6365fa130154be1985c31ca1bb4b6dacc624afbe1fed74ca928a06c3f643e",
+      "bytes": 5156
+    },
+    {
+      "path": "D:\\minecraftrust-astra-hardening\\tools\\testing\\forge_runtime.py",
+      "sha256": "f2ca07c2e9a41834f05efed465f02ce2b552a776bbe8a1dbf36abdace4592861",
+      "bytes": 29170
+    },
+    {
+      "path": "D:\\minecraftrust-astra-hardening\\tools\\worldgen-fusion-experiment\\Cargo.lock",
+      "sha256": "03f399efefc56d895542236424b05bf99cb19b8f8dc9547885c2962762ead509",
+      "bytes": 6048
+    },
+    {
+      "path": "D:\\minecraftrust-astra-hardening\\tools\\worldgen-fusion-experiment\\Cargo.toml",
+      "sha256": "98d350758acb4326cddde61eb736390a3f71c9668c30595541e1cdc25ed522dc",
+      "bytes": 367
+    },
+    {
+      "path": "D:\\minecraftrust-astra-hardening\\tools\\worldgen-fusion-experiment\\java\\com\\rustcraft\\fusion\\FusionProbe.java",
+      "sha256": "09e2f6fe2bbe55764a441937d40a3edcf22bfc51bb0a098d66775aa333d3ecbf",
+      "bytes": 13254
+    },
+    {
+      "path": "D:\\minecraftrust-astra-hardening\\tools\\worldgen-fusion-experiment\\run.py",
+      "sha256": "1199b261b34672896a008d96f5e2c413b1565d87c7ee27d5f0fbd8e25ae6dad8",
+      "bytes": 10789
+    },
+    {
+      "path": "D:\\minecraftrust-astra-hardening\\tools\\worldgen-fusion-experiment\\src\\lib.rs",
+      "sha256": "32269edddb61f713cdc46fa3a1d0809d67e8a08701e1e90b0b4099685948bcbc",
+      "bytes": 10735
+    }
+  ],
+  "tools": [
+    {
+      "path": "C:\\Users\\Admin\\.cargo\\bin\\cargo.exe",
+      "sha256": "6f4bef66261261fcb43131be8720bab817d403a09edec7455c371974b90bdb7e",
+      "bytes": 12721664
+    },
+    {
+      "path": "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\bin\\java.exe",
+      "sha256": "65ebee06ec47df0c41c4483ac5aa408e55adb47a1613bad56be30bccc4317e85",
+      "bytes": 304768
+    },
+    {
+      "path": "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\bin\\javac.exe",
+      "sha256": "9f1dae15ffb49c7363c72351cf61f4889ac6896e3df87c1c5553b81745ae8a07",
+      "bytes": 24184
+    },
+    {
+      "path": "C:\\Python314\\python.exe",
+      "sha256": "4942b86a6597e5aee0128daa00050ed79bc21f6e709a78eb19cbfeb0c2f39ac9",
+      "bytes": 106208
+    },
+    {
+      "path": "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\bin\\server\\jvm.dll",
+      "sha256": "d3f1564b31a25f280d633d33234bdf88fd12dbe0ae34e15e2e89db3f0ca2d407",
+      "bytes": 8827000
+    },
+    {
+      "path": "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\lib\\rt.jar",
+      "sha256": "1166665601d9b1587682e2540cff6a31b0c7028211d2e07adb9ad30e1699eca3",
+      "bytes": 63266727
+    },
+    {
+      "path": "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\lib\\tools.jar",
+      "sha256": "7325904e8de35b7376bbed7080a1fce7d9b886d3dddb5bfdbc00cefe7b248987",
+      "bytes": 18377228
+    }
+  ],
+  "dll": {
+    "path": "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h10-correctness-01\\native-build\\release\\worldgen_fusion_experiment.dll",
+    "sha256": "db0a8e2cae6cef6d7bc21755e361495a580d2f3b3abada34c0a1799884e0ccdc",
+    "bytes": 434688
+  },
+  "runtime_artifacts": [
+    {
+      "path": "D:\\rustcraft-runtime-targets\\clean-forge-2860\\server\\forge-1.12.2-14.23.5.2860.jar",
+      "sha256": "cd3fbf85d7ca744507fd6a37a41b90122d43e616a4f8962332b1b658655e8a64",
+      "bytes": 4466148
+    },
+    {
+      "path": "D:\\rustcraft-runtime-targets\\clean-forge-2860\\server\\libraries\\org\\ow2\\asm\\asm-debug-all\\5.2\\asm-debug-all-5.2.jar",
+      "sha256": "254b82bec9da4f8efbc8b1f93ab2b87f7465227a82b36cf3d05d9e77a0e8dd2e",
+      "bytes": 387903
+    },
+    {
+      "path": "D:\\rustcraft-runtime-targets\\clean-forge-2860\\server\\libraries\\net\\minecraft\\launchwrapper\\1.12\\launchwrapper-1.12.jar",
+      "sha256": "57f402b626d16cc2705bf2a37add7adbb074f0ca3b3102fa6e23aa303dae682f",
+      "bytes": 32999
+    },
+    {
+      "path": "D:\\rustcraft-runtime-targets\\clean-forge-2860\\server\\libraries\\org\\jline\\jline\\3.5.1\\jline-3.5.1.jar",
+      "sha256": "7285f4a93d4205674e328a3e28e4d7cec10429f3ab5a0d7024b85746e958aeda",
+      "bytes": 614590
+    },
+    {
+      "path": "D:\\rustcraft-runtime-targets\\clean-forge-2860\\server\\libraries\\com\\typesafe\\akka\\akka-actor_2.11\\2.3.3\\akka-actor_2.11-2.3.3.jar",
+      "sha256": "4ccbc821a417f0174c9734fc721f078177cacef94ded09c3775ebf40c6a7bdfd",
+      "bytes": 2514991
+    },
+    {
+      "path": "D:\\rustcraft-runtime-targets\\clean-forge-2860\\server\\libraries\\com\\typesafe\\config\\1.2.1\\config-1.2.1.jar",
+      "sha256": "c160fbd78f51a0c2375a794e435ce2112524a6871f64d0331895e9e26ee8b9ee",
+      "bytes": 219554
+    },
+    {
+      "path": "D:\\rustcraft-runtime-targets\\clean-forge-2860\\server\\libraries\\org\\scala-lang\\scala-actors-migration_2.11\\1.1.0\\scala-actors-migration_2.11-1.1.0.jar",
+      "sha256": "b89d0beb76df20c7b2c2bee59ba53b802cc48566bc3e89ac96ce6361c5c2ee38",
+      "bytes": 58018
+    },
+    {
+      "path": "D:\\rustcraft-runtime-targets\\clean-forge-2860\\server\\libraries\\org\\scala-lang\\scala-compiler\\2.11.1\\scala-compiler-2.11.1.jar",
+      "sha256": "3aa616f5c56d2052fc5e3231f3e8cf1736f876caff0142a66096fc5b4dc87ae5",
+      "bytes": 13449765
+    },
+    {
+      "path": "D:\\rustcraft-runtime-targets\\clean-forge-2860\\server\\libraries\\org\\scala-lang\\plugins\\scala-continuations-library_2.11\\1.0.2_mc\\scala-continuations-library_2.11-1.0.2_mc.jar",
+      "sha256": "8dd0a4941f4564117cc991734ca36aa53dff6bb0be329f39eab46d8819f60d1a",
+      "bytes": 25365
+    },
+    {
+      "path": "D:\\rustcraft-runtime-targets\\clean-forge-2860\\server\\libraries\\org\\scala-lang\\plugins\\scala-continuations-plugin_2.11.1\\1.0.2_mc\\scala-continuations-plugin_2.11.1-1.0.2_mc.jar",
+      "sha256": "79329971a31ede7b6823f21a6ab765506b4093d9276debdc9dbe17b996884f2b",
+      "bytes": 206575
+    },
+    {
+      "path": "D:\\rustcraft-runtime-targets\\clean-forge-2860\\server\\libraries\\org\\scala-lang\\scala-library\\2.11.1\\scala-library-2.11.1.jar",
+      "sha256": "088bcb80f71b6e6a2a31d2fe7288c1fd64f19663ce281b924cdfab3fb105f4f3",
+      "bytes": 5538130
+    },
+    {
+      "path": "D:\\rustcraft-runtime-targets\\clean-forge-2860\\server\\libraries\\org\\scala-lang\\scala-parser-combinators_2.11\\1.0.1\\scala-parser-combinators_2.11-1.0.1.jar",
+      "sha256": "19495ce701fd9ba3c499c137e3ad5364acee8f87a01ef99e912f995a23fd4cb1",
+      "bytes": 419701
+    },
+    {
+      "path": "D:\\rustcraft-runtime-targets\\clean-forge-2860\\server\\libraries\\org\\scala-lang\\scala-reflect\\2.11.1\\scala-reflect-2.11.1.jar",
+      "sha256": "41938d1e89670979dd783102777a8b879999f4fb00a5b811b51c105b02a9d4f8",
+      "bytes": 4372892
+    },
+    {
+      "path": "D:\\rustcraft-runtime-targets\\clean-forge-2860\\server\\libraries\\org\\scala-lang\\scala-swing_2.11\\1.0.1\\scala-swing_2.11-1.0.1.jar",
+      "sha256": "4a7c757d4d87dd37382bd777ad611b5875748aef148277cf25bb39eebb496d07",
+      "bytes": 726500
+    },
+    {
+      "path": "D:\\rustcraft-runtime-targets\\clean-forge-2860\\server\\libraries\\org\\scala-lang\\scala-xml_2.11\\1.0.2\\scala-xml_2.11-1.0.2.jar",
+      "sha256": "6c3338a4062c13dc2ce61630d9854d361a81656a4050e5080302f500dd4a8832",
+      "bytes": 648679
+    },
+    {
+      "path": "D:\\rustcraft-runtime-targets\\clean-forge-2860\\server\\libraries\\lzma\\lzma\\0.0.1\\lzma-0.0.1.jar",
+      "sha256": "0c3085cb93c3ef95d731c274b6f2dd195aa0405fe9328d69cab7f5e899d5e124",
+      "bytes": 5762
+    },
+    {
+      "path": "D:\\rustcraft-runtime-targets\\clean-forge-2860\\server\\libraries\\java3d\\vecmath\\1.5.2\\vecmath-1.5.2.jar",
+      "sha256": "09adf7955baa6bddf57a4bdbf9a91cf690261314969b59a18085ece1e05eccf9",
+      "bytes": 318956
+    },
+    {
+      "path": "D:\\rustcraft-runtime-targets\\clean-forge-2860\\server\\libraries\\net\\sf\\trove4j\\trove4j\\3.0.3\\trove4j-3.0.3.jar",
+      "sha256": "3c8616203d61a12a7e3487e8b34f3c198c2b5ba9e90da0c7ea32d99cd4958012",
+      "bytes": 2523218
+    },
+    {
+      "path": "D:\\rustcraft-runtime-targets\\clean-forge-2860\\server\\libraries\\org\\apache\\maven\\maven-artifact\\3.5.3\\maven-artifact-3.5.3.jar",
+      "sha256": "30d066e27379a51c8d9c67b1ab0b7e55d930c9721161b07ef1666ab9fc24c629",
+      "bytes": 54961
+    },
+    {
+      "path": "D:\\rustcraft-runtime-targets\\clean-forge-2860\\server\\libraries\\net\\sf\\jopt-simple\\jopt-simple\\5.0.3\\jopt-simple-5.0.3.jar",
+      "sha256": "6f45c00908265947c39221035250024f2caec9a15c1c8cf553ebeecee289f342",
+      "bytes": 78175
+    },
+    {
+      "path": "D:\\rustcraft-runtime-targets\\clean-forge-2860\\server\\libraries\\org\\apache\\logging\\log4j\\log4j-api\\2.15.0\\log4j-api-2.15.0.jar",
+      "sha256": "c8c33e7e8e05496dae69cf0caac8c3092cffd937a164526e92922d2d566d0a55",
+      "bytes": 301804
+    },
+    {
+      "path": "D:\\rustcraft-runtime-targets\\clean-forge-2860\\server\\libraries\\org\\apache\\logging\\log4j\\log4j-core\\2.15.0\\log4j-core-2.15.0.jar",
+      "sha256": "419a8512895971b7b4f4f33e620d361254e5c9552b904b0474b09ddd4a6a220b",
+      "bytes": 1789769
+    },
+    {
+      "path": "D:\\rustcraft-runtime-targets\\clean-forge-2860\\server\\minecraft_server.1.12.2.jar",
+      "sha256": "fe1f9274e6dad9191bf6e6e8e36ee6ebc737f373603df0946aafcded0d53167e",
+      "bytes": 30222121
+    }
+  ],
+  "observer": {
+    "path": "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h10-correctness-01\\observer.jar",
+    "sha256": "86d16f51c34bd87e3b9b735a249bb551a57660c5752483608b3e8b1d5d1eb4e4",
+    "bytes": 4616
+  },
+  "compiled_classes": {
+    "bootstrap": {
+      "com/rustcraft/bridge/capture/CaptureContract$Context.class": "fb787c940d3862c065b21471a7dd1acbe086bd55d8d63d0c63c35b2172e33e9d",
+      "com/rustcraft/bridge/capture/CaptureContract$Domain.class": "07cc5717c57e2298e2f668a85c03361c1dd09e85de2e5eb7e939e6374d6205ae",
+      "com/rustcraft/bridge/capture/CaptureContract$ParticipationLease.class": "da8b6a6a41886be9aa52d8942dba6268014afe9b384fdf75e87d83507d186210",
+      "com/rustcraft/bridge/capture/CaptureContract$Phase.class": "7a71e0ecfe25b57b9ecc69aea3ec00560d875deb4c58e130d8186d908d66a341",
+      "com/rustcraft/bridge/capture/CaptureContract$Reason.class": "87e467ce07c79e88d5c86176b72488f9c3d7ad8081012a7def4709639574c9e5",
+      "com/rustcraft/bridge/capture/CaptureContract$Result.class": "ec9ae1ed90f980974ad606856a240871987dbf84d0f8ea6ca7405b33c84757a9",
+      "com/rustcraft/bridge/capture/CaptureContract$Scope.class": "9cb78f7398a8780282708e43abe380f39562a470db6385acec2be724aa40fbfe",
+      "com/rustcraft/bridge/capture/CaptureContract$StorageModel.class": "716aa1f15c28f057f2669f8d81c24f3b962b5b654aaad5edf9ecf2f0f3779a2a",
+      "com/rustcraft/bridge/capture/CaptureContract$TileEntityPolicy.class": "fd07c99a5c6556bac791ffa2e7478e1aaf73a766d33eab6e9d6ebca6fa11e782",
+      "com/rustcraft/bridge/capture/CaptureContract$WriterClass.class": "074e30e9f91964a7e0dc389023605fb7da1ec688cb561849882291a6afed8aa3",
+      "com/rustcraft/bridge/capture/CaptureContract.class": "c07f9cea97e2b256c6736f4a27b225d78f7d11ff58e464f2fd0f5c77b4230b3d",
+      "com/rustcraft/bridge/capture/CaptureDraft.class": "93afe8e5f22c9597595ef72f8d23c33626edb8a38793f00e1f3d5d076b77b412",
+      "com/rustcraft/bridge/capture/CaptureSource$Section.class": "30d6429880655ac72625c3d8f49d1010b6132b3cc6ef845abe2e47e0b445ba02",
+      "com/rustcraft/bridge/capture/CaptureSource$View.class": "c8cf376df8e0bc334787009ca66f7c695ecdd67767404e4d761d204ec31e829e",
+      "com/rustcraft/bridge/capture/CaptureSource.class": "0dd842a38026efda30f2e77d9d9623bb33b46255d1a7ec7e995b584e8b1f1654",
+      "com/rustcraft/bridge/capture/LegacyCaptureScopes.class": "0d9ae452184a2ae20b49511aa01598f4b55436d9e665b9b66cdf75ff6c52ac75",
+      "com/rustcraft/bridge/capture/LiveCaptureScope$1.class": "d46a6811dd0b89f3b05dbf4730503bdcd90038129055701aa17d5bffa06f44b1",
+      "com/rustcraft/bridge/capture/LiveCaptureScope$RuntimeBinding.class": "2991c4b0fadd79d2828da678756caad1b291a6008b245bc2bb8e16f352be64a1",
+      "com/rustcraft/bridge/capture/LiveCaptureScope$ScopeFailure.class": "6f9ef5519ced4ac146f8f5efc9a68dae88df5956df2dbc1f3813cb613ca0b375",
+      "com/rustcraft/bridge/capture/LiveCaptureScope.class": "c70bf42526077b9eb5331844b9169e07bddfb00defb0ee0fce1574898369fd8a",
+      "com/rustcraft/bridge/capture/LiveChunkBindings$1.class": "421df92f170bc8b21093ea849c5b5413f6aee93f2ebf751d6b57ecfe3961fc70",
+      "com/rustcraft/bridge/capture/LiveChunkBindings$Binding.class": "c73b84c7d695f8824863b325b3b590d8c1420e021eb10393caba9c5f1f0d19ec",
+      "com/rustcraft/bridge/capture/LiveChunkBindings$BindingIdentity.class": "536bce949c3330e00e5ad323a6f9ab2138e4c9742b328be5093ee994733773bc",
+      "com/rustcraft/bridge/capture/LiveChunkBindings$BindingState.class": "df473e67ee282a7e0a162fabaf625fc5d46c4ab9d4355a1126fb36fc3d900e21",
+      "com/rustcraft/bridge/capture/LiveChunkBindings$CaptureRejection.class": "0dc39c5cfc79befd67a75e8c9cd0b2eded6b01dec598b3a7ff1896b6222f571c",
+      "com/rustcraft/bridge/capture/LiveChunkBindings$FailureReason.class": "5dcb1db3551c6d2fe06d1695e81fe8270ec3500c0f94811aa0555ed776357f15",
+      "com/rustcraft/bridge/capture/LiveChunkBindings$Outcome.class": "40347dc9df91cd53b95e302ab745bbe579bec1443b1b450430fdf61fb8ad8901",
+      "com/rustcraft/bridge/capture/LiveChunkBindings$Publication.class": "fa59e23304d01db46615a5d6259afffe5709231c5c2f58e4f7c32087fbbb71ed",
+      "com/rustcraft/bridge/capture/LiveChunkBindings$RevocationToken.class": "296552df0d56f450c591996a9f957f73b3f5b89e6b4f6b543aa1c4580a70b473",
+      "com/rustcraft/bridge/capture/LiveChunkBindings$SourceQualification.class": "783904b986530d796545e2f7f324804234449ab9280c6d504c9ee99856cc83e2",
+      "com/rustcraft/bridge/capture/LiveChunkBindings.class": "a34b99642b50f897da23386cd1375d739cee3a78eb52ba683a1bc831a369d994",
+      "com/rustcraft/bridge/capture/LiveComparisonQueue$DropReason.class": "9b77ed93557a280c14a25b4a24a0695537872142adbe1596337b58f3c055494f",
+      "com/rustcraft/bridge/capture/LiveComparisonQueue$OfferResult.class": "cfdc27d938e1a6776632632c6e2615051b41c09b842c03bcaae6944a6f84ae43",
+      "com/rustcraft/bridge/capture/LiveComparisonQueue.class": "829877239eed502868417af5c1105231f8f8bf359729426cf60c07b66ce23e1d",
+      "com/rustcraft/bridge/capture/LiveForgeCaptureSource$1.class": "a68e5ba40f7f92c76063244df64438f91723fa21ea86bdf9cb2c3b8c6af6093a",
+      "com/rustcraft/bridge/capture/LiveForgeCaptureSource.class": "ae24d1a99ccb685c41cab6357e2391016c134277e7714da3845455773e38a626",
+      "com/rustcraft/bridge/capture/LivePacketCapture$1.class": "d5813fab91521388848d62e9c18bda11b7b1bce5496a0e29d839f17284bb533b",
+      "com/rustcraft/bridge/capture/LivePacketCapture$AttemptToken.class": "0d1baa58388ec6150646bc13488e8bb0ab8ab42c7082cceff9d2c3ebc2620863",
+      "com/rustcraft/bridge/capture/LivePacketCapture$JavaPacketView.class": "04d87f587bf3030f83dd23393982a550b105f6493b30d3582feba640ac9ed990",
+      "com/rustcraft/bridge/capture/LivePacketCapture$LiveCaptureSource.class": "50b2ce2a6538209bfcf3c3f122cbab58d133f00eeabd1dc000e6f9c423a38906",
+      "com/rustcraft/bridge/capture/LivePacketCapture$Rejection.class": "2f09074ce65757ac849a6a7c7bc2caa9900ece2c14d266edc5f3ecaf4a3ae855",
+      "com/rustcraft/bridge/capture/LivePacketCapture$RejectionReason.class": "3b69d279690c47d3b0612dd053099d00fac280372fec0ee2cec42c94e88dacdc",
+      "com/rustcraft/bridge/capture/LivePacketCapture$SourceFactory.class": "51f3fbf3b35c20c37a073bf8fe96a66c4c6c43f2c9f544bfcfbb36742929d499",
+      "com/rustcraft/bridge/capture/LivePacketCapture.class": "39d4e167c05a2601fe4ed8605d3a0ea990185cc551b1869fe5995142ff549914",
+      "com/rustcraft/bridge/capture/LiveWriterGate$1.class": "14c3cfd8c9bff1637ed007504d45111f8f1ff3a2263df9c383adc574da2c1eff",
+      "com/rustcraft/bridge/capture/LiveWriterGate$CaptureAttempt.class": "6e04b5f1660a86be40a721560aca0f73017d7764c619ba65fa944a7200e4721b",
+      "com/rustcraft/bridge/capture/LiveWriterGate$CaptureOutcome.class": "829abed52632de0d285c634cfd9d0a4b7928120197d35be0bec0bdc3cad705f7",
+      "com/rustcraft/bridge/capture/LiveWriterGate$DisqualificationReason.class": "2bffb0906ae81b6d2925491ed2fbbd1e048d929da08369e730f121cdbca39303",
+      "com/rustcraft/bridge/capture/LiveWriterGate$FallbackReason.class": "937a13350bd7384dc89b0992925b92b251f0de9aa2160d1415dd39605d5d0574",
+      "com/rustcraft/bridge/capture/LiveWriterGate$InvalidationReason.class": "5d74a8fdcfb34f7ece25e2d16f98754f6d94f6a8ab18897fa2353a8843b35333",
+      "com/rustcraft/bridge/capture/LiveWriterGate$ProtocolViolationException.class": "af5aa37c7beb519c525aa40ab12cd9add51c3d7e88d94da056fc9fd399a5aba1",
+      "com/rustcraft/bridge/capture/LiveWriterGate$WriteToken$Kind.class": "14d501ecf6ea3e9800c691b53b4e20be8765bcfc9cbb7a6158092ef9181f6e5f",
+      "com/rustcraft/bridge/capture/LiveWriterGate$WriteToken.class": "70c5cf5bf8af01d96aa5bb55128e6a490a8bccc6e8cdea89acd7531e3b071544",
+      "com/rustcraft/bridge/capture/LiveWriterGate.class": "b7be329807620a49e9e4607ad265b5c7bd7305802c416fe015d351190996b3f2",
+      "com/rustcraft/bridge/capture/LiveWriterHooks$IoPublicationScope.class": "f9b1c4662d2c66ce2b09f7f9029bfa5ba396ea4489ca3755d4a54e210a81a188",
+      "com/rustcraft/bridge/capture/LiveWriterHooks$PublicationScope.class": "e179025295faf7f1788d6141e5e83e25302fee3ea1bc2db65b019d841e4de9eb",
+      "com/rustcraft/bridge/capture/LiveWriterHooks$Session.class": "4b76921e3aee83e72bea0b213e0b41dfdc20633e7c4c87a557f9f26808014a41",
+      "com/rustcraft/bridge/capture/LiveWriterHooks$WriterScope.class": "ac01527930b520137c86a20f815065d24dd2461081240811776a2d368adb1f73",
+      "com/rustcraft/bridge/capture/LiveWriterHooks.class": "b8fb2345ff68a8e04f86fa72bb144a50b723114ba1e783f904fd6a64c1ff8943",
+      "com/rustcraft/bridge/capture/OwnedPacketSnapshot$1.class": "b9865a77de0c722c6956b6ab9259fdd8fabbc58bd2872fbfade0a82ec258f48d",
+      "com/rustcraft/bridge/capture/OwnedPacketSnapshot$Section.class": "0b4b3bc2c02e9469266c4ddd3195be7b918d021d882162018bd1353683530916",
+      "com/rustcraft/bridge/capture/OwnedPacketSnapshot.class": "4bf64133f74f7311411f3496ba1cef4aa9c4f7ea2bf14c526c9b4a5c97cb8f7e",
+      "com/rustcraft/bridge/capture/OwnedSnapshotBridge.class": "476d79496cce25f044c3048525445459db7ab1e3bd1f2b89eceb690e7b60899c",
+      "com/rustcraft/bridge/capture/PrivateBuildTickets$AcquireOutcome.class": "c870c65f37330577dc8642c6a874f91a4e87122e164336856f91d114cdbcefbc",
+      "com/rustcraft/bridge/capture/PrivateBuildTickets$Completion$Outcome.class": "f78ff3822eb098261b78cf6d0b3679a8c8f43c8fc68d86428d0e6052dbb4a02f",
+      "com/rustcraft/bridge/capture/PrivateBuildTickets$Completion.class": "3d26f30aa19c9cc28dceaefd1d07782f2b5ad8eb2ab3132c8f34e986ca9e2eff",
+      "com/rustcraft/bridge/capture/PrivateBuildTickets$ComponentRecord$State.class": "791c03657f7d6e4b7b78d3024038e40d5ef0a83e7a2b9b5035964773219335ea",
+      "com/rustcraft/bridge/capture/PrivateBuildTickets$ComponentRecord.class": "5c4c7e27b5c115a775ae7be05c13c20cd05190c284c3840172856dfe8b265cf1",
+      "com/rustcraft/bridge/capture/PrivateBuildTickets$SourceStatus.class": "d25c40626f97e8957e10668012ae5081de631c2d577cf578064be5bf972774b3",
+      "com/rustcraft/bridge/capture/PrivateBuildTickets$TaintReason.class": "1029761ab260625ccd7d6d07500dae675824b8d5f1dbe1c9d2b7526e13cbc143",
+      "com/rustcraft/bridge/capture/PrivateBuildTickets$Ticket.class": "5464822e8d5db577890f4b20845e167630b5fb3cb056f3e2ed11279b4c08d45e",
+      "com/rustcraft/bridge/capture/PrivateBuildTickets$TicketFailure.class": "5db33d20996efbe3f052650db360a4b84399b2c59673098f2196dfa2070e84fa",
+      "com/rustcraft/bridge/capture/PrivateBuildTickets$TicketState.class": "92a11acd3fd4fba7b133fbf2e551c4bafdeb24b2120af688a42aef3e52088a95",
+      "com/rustcraft/bridge/capture/PrivateBuildTickets.class": "054098d4d8252bf54cd98ad7ac5a9786e07b34861a00c7cbc83de117339e74a8",
+      "com/rustcraft/bridge/capture/SealedLiveCapture.class": "674ca61c3b9c4167b08029021e3697d5c4f0092ec710bb6c690acff56d750b1f",
+      "com/rustcraft/bridge/capture/SnapshotCapture$AuditCopy.class": "2b096c6603a3212b4d96601ce4e533db1c6439bd899fe14b5f611bad76fef635",
+      "com/rustcraft/bridge/capture/SnapshotCapture$Rejected.class": "cb89d77a6dc89550a6328c0b66bcb1cf080ca7bc9d53bc9ebe3fc7cf77affb54",
+      "com/rustcraft/bridge/capture/SnapshotCapture.class": "51affb28586d1ab95d9181a7cee4e532a4597e1053b70366b10a618875cbffcb",
+      "com/rustcraft/bridge/capture/SyntheticCaptureSource$MutableSection.class": "3c078150cc1528be8f501c222a793e35db761e1fb4ec1ee0122fd5dfd23644d1",
+      "com/rustcraft/bridge/capture/SyntheticCaptureSource.class": "8729e342bb93c3f7635d25ea1c92c8faab5ae1e8e113521e1531073be787fd58",
+      "com/rustcraft/bridge/PacketEncodeResultV2$Failure.class": "1b4d9f441f702517b98341115c18dddb7d7d0d43eefa009c682dfbcc4ee8e6df",
+      "com/rustcraft/bridge/PacketEncodeResultV2.class": "9a7b2772bbbfa6973943c7999d1a719ee9fe3ebb275cbd9c85fd08e28fea47e7",
+      "com/rustcraft/coremod/CanonicalClassIdentityV2$1.class": "4408e4d1ad00f2b661ed54a0559e8ba784fa3019c72e9728fa8730a59d5921cb",
+      "com/rustcraft/coremod/CanonicalClassIdentityV2$2.class": "7def25f8e3a0fb29691820a49d243a8a13c4fdf45e44e3d7076fafb97f89f6f1",
+      "com/rustcraft/coremod/CanonicalClassIdentityV2$IdentityFailure.class": "194d9365f1963a2d865690152fad5561d0865abbda82add527a40a1ad20af84e",
+      "com/rustcraft/coremod/CanonicalClassIdentityV2$RawClass.class": "4e5a6c9f858672200e27c02605c316513050f45e91a8efd20f931a6b8218016e",
+      "com/rustcraft/coremod/CanonicalClassIdentityV2$Result.class": "3429834ff808c13ce977345a0bfcfccbeceff0fc984b1f08427d76c188254ced",
+      "com/rustcraft/coremod/CanonicalClassIdentityV2.class": "ecae040c4ec01af636d6ec5b174d874c9cc3a370ee105fe894d89a149001d093",
+      "com/rustcraft/coremod/LiveChunkOwnershipTransformer.class": "7e77a349c5eaf0554b6bc5319edf2e5a8615d270bd956fffce8cf2523a3208f1",
+      "com/rustcraft/coremod/LiveChunkPublicationTransformer.class": "9df22b0204a637109083babf2464c848dbe41381685077dee57579824574d733",
+      "com/rustcraft/coremod/LiveHookSupport$1.class": "a97163d61c1d05321161e79c10ad1984b46219765a3553d2cc3665e1ebe8143c",
+      "com/rustcraft/coremod/LiveHookSupport$2.class": "e6aa1173be4701076204bf8e269d3aa87451be073f9ca889a76583a5a995ff37",
+      "com/rustcraft/coremod/LiveHookSupport$ProfileFailure.class": "79ecdefbabac1e5c2df4a32b9d248ed41957b40478db2cd6d6e19aeb23de4ce9",
+      "com/rustcraft/coremod/LiveHookSupport.class": "8a26d475ee98de8661c519c99fd7ebeac64ac1148924e4c6f058e2222671f2e8",
+      "com/rustcraft/coremod/LiveWriterPlan$Hook.class": "152a5c52908a4407343adde9027e6f597223bbd977de0f52ed6445921e2ba550",
+      "com/rustcraft/coremod/LiveWriterPlan.class": "5118d216c7f09ac5f63ba37cf2f696642a4356c337cf8c35570f074bdfb96df0",
+      "com/rustcraft/offline/agent/ObservationAgent.class": "11113aed9113292035ea6c42c0cfb0606360f1b64e63c71164f65d567f4ea1df",
+      "com/rustcraft/offline/bootstrap/OfflineTweaker.class": "523f4e0f043096ccf1c92eb4712cbbe714f64a05e9d99b7290ce5ffa6abbf46e",
+      "com/rustcraft/offline/bootstrap/RevOfflineTweaker.class": "68edb95602dc4b41d730af0fcdc19528a2f190ee82f58d244bb7ecc300d4a621",
+      "com/rustcraft/offline/oracle/QualifyRuntime.class": "352d91a2038e10083a170ea59afee94de3cfb8f9db2910eef85d0b38beb6eaf0",
+      "com/rustcraft/offline/oracle/RevQualifyRuntime.class": "7ce768fbb13b0d99ad40dc71b08df042014fa85b7b36d68dfe076c3acb2424de",
+      "com/rustcraft/offline/oracle/RevServerInventoryAgent.class": "36309538c5325abac1c9cbf9527039f0257276ac888c604e3a6c64a20c9f10ff",
+      "com/rustcraft/offline/oracle/SrgJarBuilder.class": "80dfc834c08a5f78d05fcd324d02bdfd6d542fbad9ec6e026c0f9c16373ea76d"
+    },
+    "probe": {
+      "com/rustcraft/fusion/FusionProbe$Callbacks.class": "da02415f082fff064ee1556cb36643d43fa2a0bcca9a6f06f1f32fe84cc59550",
+      "com/rustcraft/fusion/FusionProbe$Generators.class": "43843f6d4d5bb05f22ff3ae8920ca755ec842b589b705c7a1bf50b0fca1f1707",
+      "com/rustcraft/fusion/FusionProbe.class": "d9723b886877b1ac5972f0799911fd98197423645edbfed9ef3fcf88d0df9529"
+    }
+  },
+  "compile_only_srg": {
+    "path": "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h10-correctness-01\\compile-only-srg.jar",
+    "sha256": "a92b10bc2692b65683a43bf343a25d98c1fe0a1879de616bfc896cec592a8ab0",
+    "bytes": 30599170
+  },
+  "summary": {},
+  "sources_after": [
+    {
+      "path": "D:\\minecraftrust-astra-hardening\\Cargo.lock",
+      "sha256": "5ecfd54d11d1046b9b5ce8ff30f0e4520a60612fd6a9ec2007d7e88474404c2c",
+      "bytes": 7428
+    },
+    {
+      "path": "D:\\minecraftrust-astra-hardening\\Cargo.toml",
+      "sha256": "ceaf10e69829d9488f89719c1fbc7889832f66f77234bb222b20625b34443c41",
+      "bytes": 1669
+    },
+    {
+      "path": "D:\\minecraftrust-astra-hardening\\crates\\rustcraft-core\\Cargo.toml",
+      "sha256": "f0b085a397c545665bae25b878f254c090a5d640bdc52e9bc15cf514f22ef39e",
+      "bytes": 220
+    },
+    {
+      "path": "D:\\minecraftrust-astra-hardening\\crates\\rustcraft-core\\src\\lib.rs",
+      "sha256": "3e6a2914001d68fd02d8e0a33f4e7489ea14202e7b011af51aa3797976b73878",
+      "bytes": 10485
+    },
+    {
+      "path": "D:\\minecraftrust-astra-hardening\\crates\\rustcraft-core\\tests\\contracts.rs",
+      "sha256": "f1ab1f5718c72ed5f97d407afdca995f942d2da6d04ea957d435e07a0ec9ff9c",
+      "bytes": 7918
+    },
+    {
+      "path": "D:\\minecraftrust-astra-hardening\\crates\\worldgen-noise\\Cargo.toml",
+      "sha256": "c02da8557a8845add1d2517efd0d347731132d916effe124f769ce597d6b1513",
+      "bytes": 114
+    },
+    {
+      "path": "D:\\minecraftrust-astra-hardening\\crates\\worldgen-noise\\examples\\wndbg.rs",
+      "sha256": "fd6ff1ee9e783cda031f04cdb247b378d50ae901cf1143f913a24f359a1db71f",
+      "bytes": 686
+    },
+    {
+      "path": "D:\\minecraftrust-astra-hardening\\crates\\worldgen-noise\\examples\\wndbg3.rs",
+      "sha256": "a91bf1479c2a9214978e36a21eb893a6f28bbd4fd6de2e3e8fcd2cf1a030d716",
+      "bytes": 737
+    },
+    {
+      "path": "D:\\minecraftrust-astra-hardening\\crates\\worldgen-noise\\examples\\wndbg4.rs",
+      "sha256": "1a47184e4297ffab4add8197ef7f9bda2de96614667d8d312b12e0c8a42a29b2",
+      "bytes": 2426
+    },
+    {
+      "path": "D:\\minecraftrust-astra-hardening\\crates\\worldgen-noise\\src\\field.rs",
+      "sha256": "58a16db769f5b894c4ffda0095bf1a7cae596c9e3eba97f54300e742322fe5d7",
+      "bytes": 15536
+    },
+    {
+      "path": "D:\\minecraftrust-astra-hardening\\crates\\worldgen-noise\\src\\field_complete.rs",
+      "sha256": "f47c003413f9c8ebd2182a0f262a237d30ef0d1c16463e8083cee56a7eefb049",
+      "bytes": 23116
+    },
+    {
+      "path": "D:\\minecraftrust-astra-hardening\\crates\\worldgen-noise\\src\\lib.rs",
+      "sha256": "bff075ee75fb097b693c4e301b618e34cd5ffb152b5bab2c8a7aeaf50c00c06c",
+      "bytes": 15502
+    },
+    {
+      "path": "D:\\minecraftrust-astra-hardening\\crates\\worldgen-noise\\src\\simd.rs",
+      "sha256": "07589a89e294fccadd4c084718a63fe0bff3f435bf4924988bd03258b3259fbf",
+      "bytes": 24971
+    },
+    {
+      "path": "D:\\minecraftrust-astra-hardening\\crates\\worldgen-noise\\src\\terrain.rs",
+      "sha256": "9a975caa7902fed24e885c05d72557677762b77de8f3f1606bbfcbf73e9270b9",
+      "bytes": 15016
+    },
+    {
+      "path": "D:\\minecraftrust-astra-hardening\\tools\\bridge\\src\\com\\rustcraft\\bridge\\capture\\CaptureContract.java",
+      "sha256": "76d053eaf1b10d4d52de00f236365ff00216e6d8db3425f9de0054fcaa268586",
+      "bytes": 6924
+    },
+    {
+      "path": "D:\\minecraftrust-astra-hardening\\tools\\bridge\\src\\com\\rustcraft\\bridge\\capture\\CaptureDraft.java",
+      "sha256": "0402171706dce9a5efc5049554f7c1dbb04471afe585d5afbd3e33f49cb7b379",
+      "bytes": 11549
+    },
+    {
+      "path": "D:\\minecraftrust-astra-hardening\\tools\\bridge\\src\\com\\rustcraft\\bridge\\capture\\CaptureSource.java",
+      "sha256": "c80b6c54a2ab822a34548c92b93860832cdb48e358c90e4b0843ab5d524fef8a",
+      "bytes": 3298
+    },
+    {
+      "path": "D:\\minecraftrust-astra-hardening\\tools\\bridge\\src\\com\\rustcraft\\bridge\\capture\\LegacyCaptureScopes.java",
+      "sha256": "a42f00b6d94b4fee188e0e7726fbc9557ccfdfcaaa4d3cfa72de5149125351ec",
+      "bytes": 2514
+    },
+    {
+      "path": "D:\\minecraftrust-astra-hardening\\tools\\bridge\\src\\com\\rustcraft\\bridge\\capture\\LiveCaptureScope.java",
+      "sha256": "9aad3a4b7e3109bf96ce5db3daf6750e74c4dc2bb4477301a5c4e8fb8e3b420d",
+      "bytes": 18376
+    },
+    {
+      "path": "D:\\minecraftrust-astra-hardening\\tools\\bridge\\src\\com\\rustcraft\\bridge\\capture\\LiveChunkBindings.java",
+      "sha256": "c23ce447621b36c9e8eb1949f540ca07d5d768bd6d538cc410b2ee35b471b74b",
+      "bytes": 38391
+    },
+    {
+      "path": "D:\\minecraftrust-astra-hardening\\tools\\bridge\\src\\com\\rustcraft\\bridge\\capture\\LiveComparisonQueue.java",
+      "sha256": "c4b1017d0b9a8e63e4e26a2fc00136116ddcffb1c0c50f9c60580e80dfd1957e",
+      "bytes": 5263
+    },
+    {
+      "path": "D:\\minecraftrust-astra-hardening\\tools\\bridge\\src\\com\\rustcraft\\bridge\\capture\\LiveForgeCaptureSource.java",
+      "sha256": "f9d6b4548e835a08903730117746b8538eaa1fcc693dd6c68f4de0f82a933185",
+      "bytes": 8162
+    },
+    {
+      "path": "D:\\minecraftrust-astra-hardening\\tools\\bridge\\src\\com\\rustcraft\\bridge\\capture\\LivePacketCapture.java",
+      "sha256": "1416ab5abd365e8d3623794cc5f9e8dd83bd7e5abc2affd519a2507f84694eea",
+      "bytes": 17512
+    },
+    {
+      "path": "D:\\minecraftrust-astra-hardening\\tools\\bridge\\src\\com\\rustcraft\\bridge\\capture\\LiveWriterGate.java",
+      "sha256": "27b8eb203da1a70951f299da68abc420a42ab11c1d466cce7be0dcc6afc205f7",
+      "bytes": 28971
+    },
+    {
+      "path": "D:\\minecraftrust-astra-hardening\\tools\\bridge\\src\\com\\rustcraft\\bridge\\capture\\LiveWriterHooks.java",
+      "sha256": "a095b50264fe6ddd393a7ea63bbf79b9b80595dcdc4a5edf096d276dcf809fa2",
+      "bytes": 42983
+    },
+    {
+      "path": "D:\\minecraftrust-astra-hardening\\tools\\bridge\\src\\com\\rustcraft\\bridge\\capture\\OwnedPacketSnapshot.java",
+      "sha256": "142377e51919765e1c53ddbb8ac075f75e80ffb056a2de3281b485126783f918",
+      "bytes": 9072
+    },
+    {
+      "path": "D:\\minecraftrust-astra-hardening\\tools\\bridge\\src\\com\\rustcraft\\bridge\\capture\\OwnedSnapshotBridge.java",
+      "sha256": "815d6a6e7e5230ad4d6af31fd0bd44b7c0bd2b528457de59966c8d934a1f4fd5",
+      "bytes": 597
+    },
+    {
+      "path": "D:\\minecraftrust-astra-hardening\\tools\\bridge\\src\\com\\rustcraft\\bridge\\capture\\PrivateBuildTickets.java",
+      "sha256": "b31e287fba07ddfa1d1f5ca017345b84655a9f90e1cece28fb01c209bff1989f",
+      "bytes": 26062
+    },
+    {
+      "path": "D:\\minecraftrust-astra-hardening\\tools\\bridge\\src\\com\\rustcraft\\bridge\\capture\\SealedLiveCapture.java",
+      "sha256": "4a87b6375c538ae922975575f6d0b367f6f1c96641f6b0d3713575d4d0f1b306",
+      "bytes": 3521
+    },
+    {
+      "path": "D:\\minecraftrust-astra-hardening\\tools\\bridge\\src\\com\\rustcraft\\bridge\\capture\\SnapshotCapture.java",
+      "sha256": "0237ed1e3c87f0049f0bdf916fb4601fbf38a811c9a2911cb95f3a43369e2902",
+      "bytes": 13363
+    },
+    {
+      "path": "D:\\minecraftrust-astra-hardening\\tools\\bridge\\src\\com\\rustcraft\\bridge\\capture\\SyntheticCaptureSource.java",
+      "sha256": "6fadbb2a23001101640086b084edb0630e9007645782ee281bf2ed62a4df6ebc",
+      "bytes": 2744
+    },
+    {
+      "path": "D:\\minecraftrust-astra-hardening\\tools\\bridge\\src\\com\\rustcraft\\bridge\\PacketEncodeResultV2.java",
+      "sha256": "a9a164f55389823d9b55e96a982dbcb7c3ce782f41e8d09a29b6d9b8d4b1f1b7",
+      "bytes": 3105
+    },
+    {
+      "path": "D:\\minecraftrust-astra-hardening\\tools\\bridge\\src\\com\\rustcraft\\coremod\\CanonicalClassIdentityV2.java",
+      "sha256": "61749a998cb03e43f093b54c6ba5a069a236d868388fe6452ec1e0133ec4f4f8",
+      "bytes": 38765
+    },
+    {
+      "path": "D:\\minecraftrust-astra-hardening\\tools\\bridge\\src\\com\\rustcraft\\coremod\\LiveChunkOwnershipTransformer.java",
+      "sha256": "268279f5ef44f36585f0c1acecd208774da02813ecf4d1a588ba3beb7d97ef19",
+      "bytes": 5320
+    },
+    {
+      "path": "D:\\minecraftrust-astra-hardening\\tools\\bridge\\src\\com\\rustcraft\\coremod\\LiveChunkPublicationTransformer.java",
+      "sha256": "67b4ff72ba46e2bb1183808608f1bf45bfea3a3ef910e693de78aa2580cada3c",
+      "bytes": 12999
+    },
+    {
+      "path": "D:\\minecraftrust-astra-hardening\\tools\\bridge\\src\\com\\rustcraft\\coremod\\LiveHookSupport.java",
+      "sha256": "13f228c95a55916235743deebdee98772a52184004c43a4277d32e3e9d399264",
+      "bytes": 27157
+    },
+    {
+      "path": "D:\\minecraftrust-astra-hardening\\tools\\bridge\\src\\com\\rustcraft\\coremod\\LiveWriterPlan.java",
+      "sha256": "fe9f3ca61a1a510115a4c2e6f472aa31143035e097cc446c3b0c3c8323987603",
+      "bytes": 24938
+    },
+    {
+      "path": "D:\\minecraftrust-astra-hardening\\tools\\forge-capture\\log4j2.xml",
+      "sha256": "959df8931bc8a7f1b7d48034c88de3070d389556e4777d547c4bb8309cfd0608",
+      "bytes": 288
+    },
+    {
+      "path": "D:\\minecraftrust-astra-hardening\\tools\\forge-capture\\runtime-pins.json",
+      "sha256": "66b7c5e19fa1c7a84e53bdfee5b9e3dc1e34a60f5edbbd0d3b4590fb3b90cce1",
+      "bytes": 12964
+    },
+    {
+      "path": "D:\\minecraftrust-astra-hardening\\tools\\forge-capture\\src\\com\\rustcraft\\offline\\agent\\ObservationAgent.java",
+      "sha256": "243482bcdcc7a20eee5236f35af495db8d3f5f35142c8646b45561f85507937f",
+      "bytes": 2721
+    },
+    {
+      "path": "D:\\minecraftrust-astra-hardening\\tools\\forge-capture\\src\\com\\rustcraft\\offline\\bootstrap\\OfflineTweaker.java",
+      "sha256": "8725a38e80bb2a6d1fe95577d7974f6065f094a3153eb0c2a17caa5f9eb088ad",
+      "bytes": 2465
+    },
+    {
+      "path": "D:\\minecraftrust-astra-hardening\\tools\\forge-capture\\src\\com\\rustcraft\\offline\\bootstrap\\RevOfflineTweaker.java",
+      "sha256": "eae91ad0299e9b78efca399750ee28207d109c73dfd9a93ff073f33f212895c9",
+      "bytes": 1904
+    },
+    {
+      "path": "D:\\minecraftrust-astra-hardening\\tools\\forge-capture\\src\\com\\rustcraft\\offline\\oracle\\QualifyRuntime.java",
+      "sha256": "7e5e903eaa40a804f6dffefc450aad637e5ca1631951fb41105cc301a7d0c128",
+      "bytes": 20318
+    },
+    {
+      "path": "D:\\minecraftrust-astra-hardening\\tools\\forge-capture\\src\\com\\rustcraft\\offline\\oracle\\RevQualifyRuntime.java",
+      "sha256": "bc99a5aa1b99a6512d0e05cd2e3f3a1edc9ad6197dbdf1939504b86da621f7cc",
+      "bytes": 8658
+    },
+    {
+      "path": "D:\\minecraftrust-astra-hardening\\tools\\forge-capture\\src\\com\\rustcraft\\offline\\oracle\\RevServerInventoryAgent.java",
+      "sha256": "2688af07ffeac21f75c8d65cc61d61516e5ef87b2afd3f8df7e849451b4460d3",
+      "bytes": 7946
+    },
+    {
+      "path": "D:\\minecraftrust-astra-hardening\\tools\\forge-capture\\src\\com\\rustcraft\\offline\\oracle\\SrgJarBuilder.java",
+      "sha256": "c3b6365fa130154be1985c31ca1bb4b6dacc624afbe1fed74ca928a06c3f643e",
+      "bytes": 5156
+    },
+    {
+      "path": "D:\\minecraftrust-astra-hardening\\tools\\testing\\forge_runtime.py",
+      "sha256": "f2ca07c2e9a41834f05efed465f02ce2b552a776bbe8a1dbf36abdace4592861",
+      "bytes": 29170
+    },
+    {
+      "path": "D:\\minecraftrust-astra-hardening\\tools\\worldgen-fusion-experiment\\Cargo.lock",
+      "sha256": "03f399efefc56d895542236424b05bf99cb19b8f8dc9547885c2962762ead509",
+      "bytes": 6048
+    },
+    {
+      "path": "D:\\minecraftrust-astra-hardening\\tools\\worldgen-fusion-experiment\\Cargo.toml",
+      "sha256": "98d350758acb4326cddde61eb736390a3f71c9668c30595541e1cdc25ed522dc",
+      "bytes": 367
+    },
+    {
+      "path": "D:\\minecraftrust-astra-hardening\\tools\\worldgen-fusion-experiment\\java\\com\\rustcraft\\fusion\\FusionProbe.java",
+      "sha256": "09e2f6fe2bbe55764a441937d40a3edcf22bfc51bb0a098d66775aa333d3ecbf",
+      "bytes": 13254
+    },
+    {
+      "path": "D:\\minecraftrust-astra-hardening\\tools\\worldgen-fusion-experiment\\run.py",
+      "sha256": "1199b261b34672896a008d96f5e2c413b1565d87c7ee27d5f0fbd8e25ae6dad8",
+      "bytes": 10789
+    },
+    {
+      "path": "D:\\minecraftrust-astra-hardening\\tools\\worldgen-fusion-experiment\\src\\lib.rs",
+      "sha256": "32269edddb61f713cdc46fa3a1d0809d67e8a08701e1e90b0b4099685948bcbc",
+      "bytes": 10735
+    }
+  ]
+}

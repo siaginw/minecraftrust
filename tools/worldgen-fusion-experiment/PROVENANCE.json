@@ -1,0 +1,35 @@
+{
+  "schema": "H10_WORLDGEN_PROVENANCE_V1",
+  "authority": false,
+  "composition": "New synthetic formula specified in docs/research/worldgen-fusion.md; authored independently of decompiled Minecraft terrain/field assembly",
+  "actual_java_oracle": {
+    "runtime_pins": "tools/forge-capture/runtime-pins.json",
+    "execution": "Fresh offline FML-initialized LaunchClassLoader with passive final-definition observer; no server/world",
+    "noise_definitions_sha256": {
+      "net.minecraft.world.gen.NoiseGenerator": "aee95721b880315caa197fc5609e788dc0fb79e51ecd97fafa3fc1dd209df363",
+      "net.minecraft.world.gen.NoiseGeneratorImproved": "e44ac534db3a0d05ffc669c8ebeae085cd4b3ba110d4b3e14795d7cfafa01ecc",
+      "net.minecraft.world.gen.NoiseGeneratorOctaves": "33fc557a226a90a5dcd184afa1a4cc393b21e098e360db8061036414c48c209b"
+    },
+    "redistribution": "Runtime jars, class dumps, SRG compile jar and runtime-derived binary data remain target-only. Minecraft code is not relicensed by this experiment."
+  },
+  "existing_rust_kernel": {
+    "path": "crates/worldgen-noise",
+    "provenance_limit": "Existing source describes an exact vanilla port. Reused without edits; not asserted independently authored or granted new licensing clearance. The Java oracle executes actual pinned runtime code, not the existing translated reference harness."
+  },
+  "excluded_shared_reference_harnesses": ["tools/worldgen-interop/src/com/rustcraft/worldgen/FieldParity.java", "tools/worldgen-interop/src/com/rustcraft/worldgen/TerrainParity.java"],
+  "jni": {
+    "version": "0.22.4",
+    "crate_sha256": "5efd9a482cf3a427f00d6b35f14332adc7902ce91efb778580e180ff90fa3498",
+    "upstream_commit": "5ae9458a4ec44c5318f37ddc7569c1d4ae8a69e7",
+    "repository": "https://github.com/jni-rs/jni-rs",
+    "license": "MIT OR Apache-2.0",
+    "default_features": false,
+    "reason": "Isolated checked array-region JNI adapter; no production JNI exports, direct buffers, raw handles or unsafe byte access"
+  },
+  "primary_research": [
+    {"url": "https://docs.oracle.com/javase/8/docs/technotes/guides/jni/spec/functions.html", "claim": "Array-region calls explicitly transfer selected elements; hidden VM/allocator costs are not derivable from call count alone"},
+    {"url": "https://docs.oracle.com/javase/specs/jls/se8/html/jls-15.html#jls-15.4", "claim": "Java8 FP-strict expression semantics constrain intermediate value sets; synthetic composition is strictfp and raw-bit tested"},
+    {"url": "https://github.com/MinecraftForge/MinecraftForge/blob/1.12.x/src/main/java/net/minecraftforge/event/terraingen/TerrainGen.java", "claim": "Forge exposes mod-observable worldgen callbacks; callback closure cannot be assumed"},
+    {"url": "https://github.com/MinecraftForge/MinecraftForge/blob/1.12.x/patches/minecraft/net/minecraft/world/gen/ChunkGeneratorOverworld.java.patch", "claim": "Forge terrain replacement and generator hooks prevent claiming whole-generation fusion from pure noise tests"}
+  ]
+}

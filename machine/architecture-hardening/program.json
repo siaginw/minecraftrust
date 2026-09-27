@@ -170,7 +170,7 @@
     {
       "id": "H8",
       "title": "SECTION LAYOUT PROTOTYPES",
-      "status": "PROTOTYPE_VALIDATED",
+      "status": "PROTOTYPE_COMMITTED",
       "implementation": [
         "tools/section-packet-cache-experiment",
         "docs/research/section-packet-cache-experiment.md"
@@ -181,7 +181,7 @@
       "evidence": [
         "machine/architecture-hardening/h8-section-packet-cache.json"
       ],
-      "commit": null,
+      "commit": "734b7f4",
       "outstanding": [
         "Synthetic serial protocol-340/no-block-entity bodies, before framing/compression/encryption.",
         "Current identity and generation updates are trusted harness inputs, not integrated H6/JVM ownership.",
@@ -225,11 +225,28 @@
     {
       "id": "H10",
       "title": "WORLDGEN PIPELINE FUSION",
-      "status": "PENDING",
-      "implementation": [],
-      "validation": [],
-      "evidence": [],
-      "commit": null
+      "status": "PROTOTYPE_VALIDATED",
+      "implementation": [
+        "tools/worldgen-fusion-experiment",
+        "docs/research/worldgen-fusion.md"
+      ],
+      "validation": [
+        "Independent root five-JVM rerun:4 Rust tests,179 assertions/fork,4.8M raw doubles,90 timing rows;exact transfer counters;retained JVM warnings and license bindings;strict scoped fmt/clippy"
+      ],
+      "evidence": [
+        "machine/architecture-hardening/h10-worldgen-fusion.json"
+      ],
+      "commit": null,
+      "outstanding": [
+        "Actual pinned runtime noise with synthetic density/classification/callbacks, not complete Forge chunk generation",
+        "Identical exact raw floating comparisons on this Java8/Windows host only",
+        "Explicit transfer bytes derived from executed JNI region lengths;hidden copies and allocations/RSS unmeasured",
+        "Observed callback fence/throw/RNG parity limited to specified synthetic callbacks;actual Forge callback closure absent",
+        "Five shared-host forks;no global performance benefit claimed;initial run fused remained slower than Java",
+        "Existing worldgen-noise historical port provenance not newly certified",
+        "Native monotonic process handles and global mutex are diagnostic only, not runtime capability/ownership integration",
+        "32 warnings per fork; supplied stacks point to JDK/bootstrap paths, none name FusionProbe. Stackless warnings remain unclassified; this is not a warning-free JNI campaign or proof of absence of added warnings."
+      ]
     },
     {
       "id": "H11",
@@ -688,7 +705,7 @@
     {
       "id": "H8.1",
       "title": "GENERATION-KEYED PACKET CACHE",
-      "status": "PROTOTYPE_VALIDATED",
+      "status": "PROTOTYPE_COMMITTED",
       "implementation": [
         "tools/section-packet-cache-experiment",
         "docs/research/section-packet-cache-experiment.md"
@@ -699,7 +716,7 @@
       "evidence": [
         "machine/architecture-hardening/h8-section-packet-cache.json"
       ],
-      "commit": null,
+      "commit": "734b7f4",
       "outstanding": [
         "Synthetic serial protocol-340/no-block-entity bodies, before framing/compression/encryption.",
         "Current identity and generation updates are trusted harness inputs, not integrated H6/JVM ownership.",

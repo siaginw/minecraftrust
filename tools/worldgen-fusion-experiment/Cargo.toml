@@ -1,0 +1,19 @@
+[package]
+name = "worldgen-fusion-experiment"
+version = "0.1.0"
+edition = "2021"
+license = "MIT OR Apache-2.0"
+publish = false
+
+[workspace]
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+jni = { version = "=0.22.4", default-features = false }
+worldgen-noise = { path = "../../crates/worldgen-noise" }
+rustcraft-core = { path = "../../crates/rustcraft-core" }
+
+[dev-dependencies]
+mc-1-12-x = { path = "../../versions/mc_1_12_x" }
