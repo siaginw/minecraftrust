@@ -1,0 +1,58 @@
+{
+  "status": "PASS_FIXED_TARGETED_RERUN",
+  "binary_sha256": "42c2b66b844205e73b1480bd653477deb328a5d4bf5ff47303be035c779248ee",
+  "sources": {
+    "D:\\minecraftrust-astra-hardening\\tools\\entity-storage-experiment\\src\\storage.rs": "db725577a10b6e875a750445908cca284d59b79681225632589ddbb3d69e0802",
+    "D:\\minecraftrust-astra-hardening\\tools\\entity-storage-experiment\\reference.py": "5844644719cf761620d5566d2de58484891c8010ab8f0634f418f86ac3d5a7ef"
+  },
+  "results": [
+    {
+      "backend": "soa",
+      "command": [
+        "D:\\minecraftrust-astra-hardening\\target\\entity-storage-experiment\\4927d3e1c7cb4b37aa0cc6a53cef7bc6\\cargo-target\\release\\entity-storage-experiment.exe",
+        "trace",
+        "soa",
+        "00000000000000000000000000000000",
+        "0000000000000000000000000000000000000000000000000000000000000000",
+        "D:\\minecraftrust-astra-hardening\\target\\entity-storage-experiment\\root-error-precedence-after\\commands.txt"
+      ],
+      "status": "PASS"
+    },
+    {
+      "backend": "hecs",
+      "command": [
+        "D:\\minecraftrust-astra-hardening\\target\\entity-storage-experiment\\4927d3e1c7cb4b37aa0cc6a53cef7bc6\\cargo-target\\release\\entity-storage-experiment.exe",
+        "trace",
+        "hecs",
+        "00000000000000000000000000000000",
+        "0000000000000000000000000000000000000000000000000000000000000000",
+        "D:\\minecraftrust-astra-hardening\\target\\entity-storage-experiment\\root-error-precedence-after\\commands.txt"
+      ],
+      "status": "PASS"
+    },
+    {
+      "backend": "bevy",
+      "command": [
+        "D:\\minecraftrust-astra-hardening\\target\\entity-storage-experiment\\4927d3e1c7cb4b37aa0cc6a53cef7bc6\\cargo-target\\release\\entity-storage-experiment.exe",
+        "trace",
+        "bevy",
+        "00000000000000000000000000000000",
+        "0000000000000000000000000000000000000000000000000000000000000000",
+        "D:\\minecraftrust-astra-hardening\\target\\entity-storage-experiment\\root-error-precedence-after\\commands.txt"
+      ],
+      "status": "PASS"
+    },
+    {
+      "backend": "shipyard",
+      "command": [
+        "D:\\minecraftrust-astra-hardening\\target\\entity-storage-experiment\\4927d3e1c7cb4b37aa0cc6a53cef7bc6\\cargo-target\\release\\entity-storage-experiment.exe",
+        "trace",
+        "shipyard",
+        "00000000000000000000000000000000",
+        "0000000000000000000000000000000000000000000000000000000000000000",
+        "D:\\minecraftrust-astra-hardening\\target\\entity-storage-experiment\\root-error-precedence-after\\commands.txt"
+      ],
+      "status": "PASS"
+    }
+  ]
+}

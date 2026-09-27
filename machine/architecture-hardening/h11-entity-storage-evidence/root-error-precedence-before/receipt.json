@@ -1,0 +1,175 @@
+{
+  "status": "EXPECTED_PRE_FIX_DIVERGENCE",
+  "defect": "Stale key plus invalid LIFE value: independent reference prioritizes STALE but Rust prioritizes LIMIT.",
+  "sources": {
+    "D:\\minecraftrust-astra-hardening\\tools\\entity-storage-experiment\\src\\storage.rs": "a6a68e30b93c3584a1021e6164d766e0e79c8a073b98c179e3114603d9dc394d",
+    "D:\\minecraftrust-astra-hardening\\tools\\entity-storage-experiment\\reference.py": "5844644719cf761620d5566d2de58484891c8010ab8f0634f418f86ac3d5a7ef"
+  },
+  "binary_sha256": "e8cbdf684f51a3dfdb307b818f83b32e8122cce25c3bb2d0f609feefbaf6fe30",
+  "results": [
+    {
+      "backend": "soa",
+      "command": [
+        "D:\\minecraftrust-astra-hardening\\target\\entity-storage-experiment\\092f1f0106414f5a90ad68a368040b4c\\cargo-target\\release\\entity-storage-experiment.exe",
+        "trace",
+        "soa",
+        "00000000000000000000000000000000",
+        "0000000000000000000000000000000000000000000000000000000000000000",
+        "D:\\minecraftrust-astra-hardening\\target\\entity-storage-experiment\\root-error-precedence-before\\commands.txt"
+      ],
+      "first_divergence": {
+        "step": 3,
+        "command": "LIFE 9 0 1 2",
+        "expected": {
+          "schema": "ENTITY_STORAGE_BOUNDARY_V1",
+          "session": "00000000000000000000000000000000",
+          "challenge": "0000000000000000000000000000000000000000000000000000000000000000",
+          "step": 3,
+          "status": "STALE",
+          "rows": [],
+          "events": [],
+          "query": [],
+          "pairs": [],
+          "probe": null,
+          "production_authority": false
+        },
+        "actual": {
+          "schema": "ENTITY_STORAGE_BOUNDARY_V1",
+          "session": "00000000000000000000000000000000",
+          "challenge": "0000000000000000000000000000000000000000000000000000000000000000",
+          "step": 3,
+          "status": "LIMIT",
+          "rows": [],
+          "events": [],
+          "query": [],
+          "pairs": [],
+          "probe": null,
+          "production_authority": false
+        }
+      }
+    },
+    {
+      "backend": "hecs",
+      "command": [
+        "D:\\minecraftrust-astra-hardening\\target\\entity-storage-experiment\\092f1f0106414f5a90ad68a368040b4c\\cargo-target\\release\\entity-storage-experiment.exe",
+        "trace",
+        "hecs",
+        "00000000000000000000000000000000",
+        "0000000000000000000000000000000000000000000000000000000000000000",
+        "D:\\minecraftrust-astra-hardening\\target\\entity-storage-experiment\\root-error-precedence-before\\commands.txt"
+      ],
+      "first_divergence": {
+        "step": 3,
+        "command": "LIFE 9 0 1 2",
+        "expected": {
+          "schema": "ENTITY_STORAGE_BOUNDARY_V1",
+          "session": "00000000000000000000000000000000",
+          "challenge": "0000000000000000000000000000000000000000000000000000000000000000",
+          "step": 3,
+          "status": "STALE",
+          "rows": [],
+          "events": [],
+          "query": [],
+          "pairs": [],
+          "probe": null,
+          "production_authority": false
+        },
+        "actual": {
+          "schema": "ENTITY_STORAGE_BOUNDARY_V1",
+          "session": "00000000000000000000000000000000",
+          "challenge": "0000000000000000000000000000000000000000000000000000000000000000",
+          "step": 3,
+          "status": "LIMIT",
+          "rows": [],
+          "events": [],
+          "query": [],
+          "pairs": [],
+          "probe": null,
+          "production_authority": false
+        }
+      }
+    },
+    {
+      "backend": "bevy",
+      "command": [
+        "D:\\minecraftrust-astra-hardening\\target\\entity-storage-experiment\\092f1f0106414f5a90ad68a368040b4c\\cargo-target\\release\\entity-storage-experiment.exe",
+        "trace",
+        "bevy",
+        "00000000000000000000000000000000",
+        "0000000000000000000000000000000000000000000000000000000000000000",
+        "D:\\minecraftrust-astra-hardening\\target\\entity-storage-experiment\\root-error-precedence-before\\commands.txt"
+      ],
+      "first_divergence": {
+        "step": 3,
+        "command": "LIFE 9 0 1 2",
+        "expected": {
+          "schema": "ENTITY_STORAGE_BOUNDARY_V1",
+          "session": "00000000000000000000000000000000",
+          "challenge": "0000000000000000000000000000000000000000000000000000000000000000",
+          "step": 3,
+          "status": "STALE",
+          "rows": [],
+          "events": [],
+          "query": [],
+          "pairs": [],
+          "probe": null,
+          "production_authority": false
+        },
+        "actual": {
+          "schema": "ENTITY_STORAGE_BOUNDARY_V1",
+          "session": "00000000000000000000000000000000",
+          "challenge": "0000000000000000000000000000000000000000000000000000000000000000",
+          "step": 3,
+          "status": "LIMIT",
+          "rows": [],
+          "events": [],
+          "query": [],
+          "pairs": [],
+          "probe": null,
+          "production_authority": false
+        }
+      }
+    },
+    {
+      "backend": "shipyard",
+      "command": [
+        "D:\\minecraftrust-astra-hardening\\target\\entity-storage-experiment\\092f1f0106414f5a90ad68a368040b4c\\cargo-target\\release\\entity-storage-experiment.exe",
+        "trace",
+        "shipyard",
+        "00000000000000000000000000000000",
+        "0000000000000000000000000000000000000000000000000000000000000000",
+        "D:\\minecraftrust-astra-hardening\\target\\entity-storage-experiment\\root-error-precedence-before\\commands.txt"
+      ],
+      "first_divergence": {
+        "step": 3,
+        "command": "LIFE 9 0 1 2",
+        "expected": {
+          "schema": "ENTITY_STORAGE_BOUNDARY_V1",
+          "session": "00000000000000000000000000000000",
+          "challenge": "0000000000000000000000000000000000000000000000000000000000000000",
+          "step": 3,
+          "status": "STALE",
+          "rows": [],
+          "events": [],
+          "query": [],
+          "pairs": [],
+          "probe": null,
+          "production_authority": false
+        },
+        "actual": {
+          "schema": "ENTITY_STORAGE_BOUNDARY_V1",
+          "session": "00000000000000000000000000000000",
+          "challenge": "0000000000000000000000000000000000000000000000000000000000000000",
+          "step": 3,
+          "status": "LIMIT",
+          "rows": [],
+          "events": [],
+          "query": [],
+          "pairs": [],
+          "probe": null,
+          "production_authority": false
+        }
+      }
+    }
+  ]
+}

@@ -150,7 +150,7 @@
     {
       "id": "H7",
       "title": "LOOM MODEL CHECKING",
-      "status": "BOUNDED_MODELS_VALIDATED",
+      "status": "BOUNDED_MODELS_COMMITTED",
       "implementation": [
         "tools/loom-lifecycle-models",
         "docs/architecture/loom-lifecycle-models.md"
@@ -161,7 +161,7 @@
       "evidence": [
         "machine/architecture-hardening/h7-loom.json"
       ],
-      "commit": null,
+      "commit": "6a2d1cc",
       "outstanding": [
         "Models are reduced obligations; actual H4/H6 concurrent implementation and JVM synchronization not Loom-instrumented or proven",
         "No liveness/fairness guarantee or live runtime qualification"
@@ -197,11 +197,27 @@
     {
       "id": "H11",
       "title": "ENTITY STORAGE EXPERIMENT",
-      "status": "PENDING",
-      "implementation": [],
-      "validation": [],
-      "evidence": [],
-      "commit": null
+      "status": "PROTOTYPE_VALIDATED",
+      "implementation": [
+        "tools/entity-storage-experiment",
+        "docs/research/entity-storage-comparison.md"
+      ],
+      "validation": [
+        "Root review fixed rejection precedence;10 Rust+7 Python tests;560 normal boundaries;8 fault/replay controls;40 exploratory samples;strict clippy/fmt"
+      ],
+      "evidence": [
+        "machine/architecture-hardening/h11-entity-storage.json"
+      ],
+      "commit": null,
+      "outstanding": [
+        "Synthetic integer entity data and prescribed logical order, not Minecraft/Forge behavior",
+        "Keys cover one registry lifetime, no session/incarnation-safe production identity",
+        "No actual Java refs, NBT parsing, capability authority or arbitrary dynamic component schemas",
+        "Checked per-component point lookup does not establish each library best possible API",
+        "Requested allocation bytes not RSS; instrumentation overhead included; five samples on shared host, no reliable overall winner or tail result",
+        "Root rerun timings exploratory with possible overlapping correctness/build work; published table is explicitly initial campaign",
+        "No production storage or scheduler integration; H4/H6/runtime qualification and Java traces still required"
+      ]
     },
     {
       "id": "H12",
@@ -317,7 +333,9 @@
         "docs/research/gpu-offline-acceleration.md",
         "tools/jni-lifecycle-prototype",
         "docs/research/jni-classfile-tooling.md",
-        "machine/external-reuse/experiment-results.json"
+        "machine/external-reuse/experiment-results.json",
+        "tools/entity-storage-experiment",
+        "docs/research/entity-storage-comparison.md"
       ],
       "validation": [
         "Decision ledger: 70 candidates, all 48 required names, 13 validator tests passed. Remaining bounded experiments are pending.",
@@ -331,7 +349,8 @@
         "machine/architecture-hardening/h22-5-replay-validation.json",
         "machine/architecture-hardening/h22-5-state-diff-validation.json",
         "machine/architecture-hardening/h22-5-gpu-validation.json",
-        "machine/architecture-hardening/h22-5-jni-validation.json"
+        "machine/architecture-hardening/h22-5-jni-validation.json",
+        "machine/architecture-hardening/h11-entity-storage.json"
       ],
       "commit": null,
       "requirements": [
@@ -368,7 +387,9 @@
           "commit": "4770cf7"
         },
         "D": {
-          "status": "PENDING"
+          "status": "PROTOTYPE_VALIDATED",
+          "evidence": "machine/architecture-hardening/h11-entity-storage.json",
+          "decision": "KEEP_SOA_AND_HECS_EXPERIMENTS_PARK_BEVY_SHIPYARD_ADOPTION"
         },
         "E": {
           "status": "PROTOTYPE_COMMITTED",

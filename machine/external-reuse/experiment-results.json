@@ -94,6 +94,45 @@
       "installed_scope": "NOT_INSTALLED; source review only",
       "evidence": "machine/architecture-hardening/h5-version-adapters.json",
       "provenance": "versions/mc_1_12_x/fixtures/primary-source-review.json"
+    },
+    {
+      "candidate": "hecs",
+      "version": "0.11.1",
+      "decision": "PROTOTYPE",
+      "license": "MIT OR Apache-2.0",
+      "reason": "Keep alternative: hot traversal near SoA and lower initial requested memory in this fixture",
+      "performance_value": "40 shared-host samples for four backends, complete synthetic pipeline; no robust overall winner or server speed claim",
+      "migration_value": "Compares storage cost while retaining independent logical identity and order",
+      "integration_risk": "Archetype retention and current checked lookup costs; optimal batched API unmeasured",
+      "installed_scope": "Standalone tools/entity-storage-experiment;104 locked packages,62 selected native tree entries,7170 source files,208 notices",
+      "evidence": "machine/architecture-hardening/h11-entity-storage.json",
+      "provenance": "tools/entity-storage-experiment/third-party/inventory.json"
+    },
+    {
+      "candidate": "bevy_ecs",
+      "version": "0.19.1",
+      "decision": "PROTOTYPE",
+      "license": "MIT OR Apache-2.0",
+      "reason": "Park adoption: correct cached table queries but no demonstrated payoff for larger surface and retained allocations here",
+      "performance_value": "40 shared-host samples for four backends, complete synthetic pipeline; no robust overall winner or server speed claim",
+      "migration_value": "Compares storage cost while retaining independent logical identity and order",
+      "integration_risk": "Scheduler/reflection benefits untested and migration coupling costly",
+      "installed_scope": "Standalone tools/entity-storage-experiment;104 locked packages,62 selected native tree entries,7170 source files,208 notices",
+      "evidence": "machine/architecture-hardening/h11-entity-storage.json",
+      "provenance": "tools/entity-storage-experiment/third-party/inventory.json"
+    },
+    {
+      "candidate": "Shipyard",
+      "version": "0.11.5",
+      "decision": "PROTOTYPE",
+      "license": "MIT OR Apache-2.0",
+      "reason": "Park adoption: comparatively cheaper ECS extension churn, slower hot traversal in this adapter",
+      "performance_value": "40 shared-host samples for four backends, complete synthetic pipeline; no robust overall winner or server speed claim",
+      "migration_value": "Compares storage cost while retaining independent logical identity and order",
+      "integration_risk": "Optimized borrowed views/workloads untested; no general ranking",
+      "installed_scope": "Standalone tools/entity-storage-experiment;104 locked packages,62 selected native tree entries,7170 source files,208 notices",
+      "evidence": "machine/architecture-hardening/h11-entity-storage.json",
+      "provenance": "tools/entity-storage-experiment/third-party/inventory.json"
     }
   ]
 }

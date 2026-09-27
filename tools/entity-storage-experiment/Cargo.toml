@@ -1,0 +1,16 @@
+[package]
+name = "entity-storage-experiment"
+version = "0.1.0"
+edition = "2021"
+license = "MIT OR Apache-2.0"
+publish = false
+
+[workspace]
+
+[dependencies]
+hecs = { version = "=0.11.1", default-features = false, features = ["std"] }
+bevy_ecs = { version = "=0.19.1", default-features = false, features = ["std"] }
+shipyard = { version = "=0.11.5", default-features = false, features = ["std", "proc"] }
+
+[profile.release]
+debug = 1
