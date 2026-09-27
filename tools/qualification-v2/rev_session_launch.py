@@ -79,6 +79,10 @@ def main() -> int:
     parser.add_argument("--out", type=Path, required=True)
     parser.add_argument("--profile", required=True,
                         help="the runtime profile the static policy names")
+    parser.add_argument("--frame-request", type=Path, default=None,
+                        help="frame obligations to answer in this launch: which types "
+                             "resolve and which are assignable. These are QUESTIONS, not "
+                             "observations; the answers come from this launch's own loader.")
     parser.add_argument("--srg-jar", type=Path, required=True,
                         help="the SRG-named Minecraft study jar this runtime's own "
                              "vanilla jar and forge mapping produce; the writers need it "
@@ -106,6 +110,19 @@ def main() -> int:
     process_id = str(uuid.uuid4())
     session_id = str(uuid.uuid4())
 
+    frame_types = frame_queries = None
+    if args.frame_request is not None:
+        request = json.loads(args.frame_request.read_text(encoding="utf-8"))
+        frame_dir = out / "frame-obligations"
+        frame_dir.mkdir()
+        (frame_dir / "types.txt").write_text(
+            "".join(name + chr(10) for name in request["types"]), encoding="utf-8")
+        (frame_dir / "queries.tsv").write_text(
+            "".join(q["source"] + chr(9) + q["target"] + chr(10)
+                    for q in request["assignability"]), encoding="utf-8")
+        frame_types, frame_queries = frame_dir / "types.txt", frame_dir / "queries.tsv"
+        print("frame obligations: %d types, %d assignability"
+              % (len(request["types"]), len(request["assignability"])))
     dump = out / "transformed"
     dump.mkdir()
     result_path = out / "qualification.json"
@@ -126,6 +143,10 @@ def main() -> int:
         "-Drustcraft.qualificationResult=" + str(result_path),
         "-Drustcraft.transformationChain=" + str(chain_path),
         "-Drustcraft.observationDir=" + str(observation_dir),
+    ] + ([] if frame_types is None else [
+        "-Drustcraft.frameTypes=" + str(frame_types),
+        "-Drustcraft.frameQueries=" + str(frame_queries),
+    ]) + [
         # The three properties that turn a diagnostic boot into a session-bound
         # one. Without them the writers are registered but cannot authorize
         # anything, and every class load is INCOMPLETE by design.

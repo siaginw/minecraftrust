@@ -274,7 +274,27 @@ public final class RevQualifyRuntime {
     }
     result.put("entry_observer_failures", new TreeMap<String, String>(
             com.rustcraft.qualification.LoaderTransformChain.EntryObserver.failures()));
-    result.put("frame_relation_witness", LoaderDefinitionWitness.witness(
+    // The frame/hierarchy witness is the GENERIC one, the same machinery Clean
+    // Forge uses, running in this process against this loader and these defined
+    // buffers. It is not a second, weaker Revelation-specific proof: the
+    // obligations it answers (which types resolve, which are assignable) are
+    // questions, and the answers come from the real loader here.
+    String frameTypes = System.getProperty("rustcraft.frameTypes");
+    String frameQueries = System.getProperty("rustcraft.frameQueries");
+    if (frameTypes != null && frameQueries != null) {
+      try {
+        result.put("frame_relation_witness",
+                com.rustcraft.livetransformer.FrameRelationWitness.run(
+                        System.getProperty("rustcraft.definedDump"),
+                        ObservationAgent.hashes(), frameTypes, frameQueries));
+        result.put("frame_witness", "GENERIC_FRAME_RELATION_WITNESS_V1");
+      } catch (Throwable incomplete) {
+        result.put("frame_relation_witness_status", "INCOMPLETE: " + incomplete);
+      }
+    } else {
+      result.put("frame_relation_witness_status", "INCOMPLETE_NO_FRAME_INPUTS");
+    }
+    result.put("loader_definition_witness", LoaderDefinitionWitness.witness(
             ObservationAgent.hashes(), ObservationAgent.loaders(),
             LoaderTransformChain.loaderIdentity(),
             LiveHookSupport.boundAcquisition()));
