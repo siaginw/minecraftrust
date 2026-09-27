@@ -1,0 +1,11 @@
+error: lifetime may not live long enough
+ --> D:\minecraftrust-astra-hardening\tools\jni-lifecycle-prototype\compile-fail\escape_local.rs:5:37
+  |
+5 |     env.with_local_frame(1, |frame| frame.new_local_ref(object))
+  |                              ------ ^^^^^^^^^^^^^^^^^^^^^^^^^^^ returning this value requires that `'1` must outlive `'2`
+  |                              |    |
+  |                              |    return type of closure is Result<JObject<'2>, jni::errors::Error>
+  |                              has type `&mut Env<'1>`
+
+error: aborting due to 1 previous error
+

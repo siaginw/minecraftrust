@@ -272,19 +272,24 @@
         "tools/state-diff-experiment",
         "docs/research/state-diff-execution.md",
         "tools/gpu-offline-experiment",
-        "docs/research/gpu-offline-acceleration.md"
+        "docs/research/gpu-offline-acceleration.md",
+        "tools/jni-lifecycle-prototype",
+        "docs/research/jni-classfile-tooling.md",
+        "machine/external-reuse/experiment-results.json"
       ],
       "validation": [
         "Decision ledger: 70 candidates, all 48 required names, 13 validator tests passed. Remaining bounded experiments are pending.",
         "Replay model independently rerun:47/47 cases,836 boundaries,5 Rust and14 Python tests; real Minecraft adapters remain pending.",
         "State-diff model root rerun:20 Rust tests,24 Java/Rust cases,547 paired boundaries; live scheduler remains rejected.",
-        "GPU proxy: two frozen-source campaigns of 90 samples; exact full-array integer parity and first-element injected fault detected; no performance qualification or integration."
+        "GPU proxy: two frozen-source campaigns of 90 samples; exact full-array integer parity and first-element injected fault detected; no performance qualification or integration.",
+        "JNI prototype independently rerun:66 assertions,13 JVM probes,positive/negative lifetime compile controls; no incremental warnings over exact bare-JVM baselines;25 isolated dependencies inventoried."
       ],
       "evidence": [
         "machine/architecture-hardening/h22-5-ledger-validation.json",
         "machine/architecture-hardening/h22-5-replay-validation.json",
         "machine/architecture-hardening/h22-5-state-diff-validation.json",
-        "machine/architecture-hardening/h22-5-gpu-validation.json"
+        "machine/architecture-hardening/h22-5-gpu-validation.json",
+        "machine/architecture-hardening/h22-5-jni-validation.json"
       ],
       "commit": null,
       "requirements": [
@@ -315,15 +320,18 @@
           "commit": "44f61a46f7cda93c0ac8aaffe13087678501cc6f"
         },
         "C": {
-          "status": "BOUNDED_EXPERIMENT_VALIDATED",
+          "status": "EXPERIMENT_COMMITTED",
           "decision": "PARK_GPU_AFTER_BOUNDED_PROXY",
-          "evidence": "machine/architecture-hardening/h22-5-gpu-validation.json"
+          "evidence": "machine/architecture-hardening/h22-5-gpu-validation.json",
+          "commit": "4770cf7"
         },
         "D": {
           "status": "PENDING"
         },
         "E": {
-          "status": "IN_PROGRESS"
+          "status": "BOUNDED_PROTOTYPE_VALIDATED",
+          "decision": "PROTOTYPE_JNI_STUDY_GENERATOR_AND_ALTERNATE_PARSER",
+          "evidence": "machine/architecture-hardening/h22-5-jni-validation.json"
         },
         "F": {
           "status": "PENDING"

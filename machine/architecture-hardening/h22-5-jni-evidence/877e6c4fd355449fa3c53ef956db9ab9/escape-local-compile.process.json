@@ -1,0 +1,25 @@
+{
+  "name": "escape-local-compile",
+  "argv": [
+    "C:\\Users\\Admin\\.cargo\\bin\\rustc.exe",
+    "--edition",
+    "2021",
+    "--crate-type",
+    "lib",
+    "--extern",
+    "jni=D:\\minecraftrust-astra-hardening\\target\\jni-lifecycle-prototype\\877e6c4fd355449fa3c53ef956db9ab9\\cargo-target\\release\\deps\\libjni-a9846df3e3edceb7.rlib",
+    "-L",
+    "dependency=D:\\minecraftrust-astra-hardening\\target\\jni-lifecycle-prototype\\877e6c4fd355449fa3c53ef956db9ab9\\cargo-target\\release\\deps",
+    "--out-dir",
+    "D:\\minecraftrust-astra-hardening\\target\\jni-lifecycle-prototype\\877e6c4fd355449fa3c53ef956db9ab9",
+    "--crate-name",
+    "escape_local",
+    "D:\\minecraftrust-astra-hardening\\tools\\jni-lifecycle-prototype\\compile-fail\\escape_local.rs"
+  ],
+  "exit": 1,
+  "elapsed_seconds": 0.08908020000671968,
+  "output_byte_limit_per_stream": 2097152,
+  "resource_error": null,
+  "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stderr_sha256": "076882fe00e17a17d04b35e2fc29392b88a2203fe7e107e658dc9e34229c14ac"
+}

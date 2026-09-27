@@ -1,5 +1,11 @@
 # External candidate decisions
 
+The tables below preserve the initial audit decisions. Subsequent exact pins,
+bounded experiment results, license inventories and continued integration gates
+are recorded in [the experiment ledger](../../machine/external-reuse/experiment-results.json).
+An initial `PENDING` plan is not the current status of a linked completed
+experiment. No result in that supplement grants production authority.
+
 Reviewed 2026-09-26 against source baseline `c4b868db2c9e4b03f745bf93c6ebf4fd8a8519e7`.
 
 This is the H18/H19/H22.5.I/H27 decision inventory: **70 candidates, including all 48 named H22.5 requirements**. It does not complete the experiments or the hardening program. All performance judgments below are hypotheses; no benchmark numbers are invented. The [machine ledger](../../machine/external-reuse/ultra-candidates.json) carries exact versions, source URLs, activity observations, component licenses, notices, risks and acceptance plans for each row.

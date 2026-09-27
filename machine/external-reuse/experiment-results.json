@@ -1,0 +1,72 @@
+{
+  "schema": "RUSTCRAFT_EXTERNAL_EXPERIMENT_RESULTS_V1",
+  "baseline_decisions": "machine/external-reuse/ultra-candidates.json",
+  "scope": "Subsequent bounded evidence supplements the initial audit inventory; no production adoption or authority",
+  "entries": [
+    {
+      "candidate": "jni-rs",
+      "version": "0.22.4",
+      "decision": "PROTOTYPE",
+      "license": "MIT OR Apache-2.0",
+      "reason": "Typed local lifetimes, scoped attachment and exact exception forwarding validated at an isolated seam",
+      "performance_value": "UNMEASURED; campaign duration is not JNI latency",
+      "migration_value": "Demonstrated lifecycle checks can reduce bridge maintenance risk; real-seam comparison remains required",
+      "integration_risk": "Pending loader, shutdown, reentrancy and performance qualification; no wholesale bridge replacement",
+      "installed_scope": "Standalone tools/jni-lifecycle-prototype only, 25 registry packages with complete license inventory",
+      "evidence": "machine/architecture-hardening/h22-5-jni-validation.json",
+      "provenance": "tools/jni-lifecycle-prototype/third-party/inventory.json"
+    },
+    {
+      "candidate": "jbindgen",
+      "version": "0.1.0",
+      "decision": "STUDY",
+      "license": "MIT OR Apache-2.0",
+      "reason": "Typed signature generation remains a useful hypothesis; cafebabe dependency means no independent third parser oracle",
+      "performance_value": "UNMEASURED",
+      "migration_value": "Potential signature maintenance benefit",
+      "integration_risk": "Generated loader/exception behavior must be reviewed against a real bridge seam",
+      "installed_scope": "NOT_INSTALLED",
+      "evidence": "docs/research/jni-classfile-tooling.md",
+      "source": "https://docs.rs/crate/jbindgen/0.1.0/source/Cargo.toml"
+    },
+    {
+      "candidate": "ristretto_classfile",
+      "version": "0.33.0",
+      "decision": "STUDY",
+      "license": "Apache-2.0 OR MIT",
+      "reason": "Potential additional parser implementation; full H1 corpus and mutation projection not performed",
+      "performance_value": "UNMEASURED",
+      "migration_value": "Potential qualification cross-check only",
+      "integration_risk": "Verification described upstream as unfinished; minimum Rust and projection costs require review",
+      "installed_scope": "NOT_INSTALLED",
+      "evidence": "docs/research/jni-classfile-tooling.md",
+      "source": "https://raw.githubusercontent.com/theseus-rs/ristretto/v0.33.0/Cargo.toml"
+    },
+    {
+      "candidate": "cafebabe",
+      "version": "0.9.0",
+      "decision": "PROTOTYPE",
+      "license": "0BSD",
+      "reason": "Existing H1 independent parser evidence retained at its original scope",
+      "performance_value": "No new performance claim",
+      "migration_value": "Independent offline structural cross-check",
+      "integration_risk": "Parser agreement does not qualify live behavior; supplements remain required",
+      "installed_scope": "Existing H1 tooling only",
+      "evidence": "machine/architecture-hardening/h1-validation.json",
+      "provenance": "machine/external-reuse/classfile-crosscheck.json"
+    },
+    {
+      "candidate": "skeeto/hash-prospector lowbias32",
+      "version": "396dbe235c94dfc2e9b559fc965bcfda8b6a122c",
+      "decision": "BORROW_ALGORITHM",
+      "license": "Unlicense",
+      "reason": "Integer mixing construction supplies a bounded deterministic GPU proxy",
+      "performance_value": "Synthetic observations only; GPU integration parked",
+      "migration_value": "Validation mechanism only; no Minecraft migration",
+      "integration_risk": "No approval for gameplay RNG, security or persistence identity use",
+      "installed_scope": "No upstream dependency; construction/constants used only in tools/gpu-offline-experiment",
+      "evidence": "machine/architecture-hardening/h22-5-gpu-validation.json",
+      "provenance": "tools/gpu-offline-experiment/PROVENANCE.json"
+    }
+  ]
+}

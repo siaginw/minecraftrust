@@ -1,0 +1,982 @@
+{
+  "schema": "H22_5_JNI_CLASSFILE_EVALUATION_V1",
+  "status": "BOUNDED_PROTOTYPE_VALIDATED",
+  "production_authority": false,
+  "production_dependencies_added": false,
+  "decisions": {
+    "jni-rs": "PROTOTYPE",
+    "jbindgen": "STUDY",
+    "ristretto_classfile": "STUDY",
+    "cafebabe": "PROTOTYPE_EXISTING_H1"
+  },
+  "jni_version": "0.22.4",
+  "runs": [
+    {
+      "role": "AGENT_FROZEN_VALIDATION",
+      "receipt": "machine/architecture-hardening/h22-5-jni-evidence/877e6c4fd355449fa3c53ef956db9ab9/campaign.json",
+      "sha256": "a4749a3d54dc5a653dfe9477132bf92a240aa038dcde49ef92c80d524e731b41",
+      "status": "PASS_WITH_JVM_BASELINE_WARNINGS",
+      "subprocess_checks": 30,
+      "fixture_assertions": 66,
+      "probe_processes": 13,
+      "input_hashes_unchanged": true
+    },
+    {
+      "role": "ROOT_INDEPENDENT_RERUN",
+      "receipt": "machine/architecture-hardening/h22-5-jni-evidence/308e15b9fbcd491db073cd1f1af606ef/campaign.json",
+      "sha256": "6d70de94cde471985dfc185e67b23d9e9a0b011c5a1645acaadd8bce77677fba",
+      "status": "PASS_WITH_JVM_BASELINE_WARNINGS",
+      "subprocess_checks": 30,
+      "fixture_assertions": 66,
+      "probe_processes": 13,
+      "input_hashes_unchanged": true
+    }
+  ],
+  "dependency_inventory": "tools/jni-lifecycle-prototype/third-party/inventory.json",
+  "dependency_inventory_sha256": "65ee7ab25f2a43c6924df17d7e44474ca118e4a51eac698d0d3f4fe302732cf1",
+  "registry_packages": 25,
+  "transitive_packages": 24,
+  "dependency_source_files": 1109,
+  "license_text_files": 53,
+  "performance": "UNMEASURED_NO_ADOPTION_OR_SPEED_CLAIM",
+  "limitations": [
+    "JVM baseline JNI warnings retained and exactly compared, not suppressed",
+    "Single lifetime compile rejection and scalar positive control are not proof of arbitrary unsafe code",
+    "GC observed after release is not leak freedom",
+    "No Forge loader, live callback, persistent thread pool or shutdown qualification",
+    "jbindgen uses cafebabe and is not a third independent parser",
+    "ristretto_classfile not installed; H1 corpus experiment remains pending"
+  ],
+  "retained_artifacts": [
+    {
+      "original_path": "target/jni-lifecycle-prototype/877e6c4fd355449fa3c53ef956db9ab9/bootstrap-0.process.json",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/877e6c4fd355449fa3c53ef956db9ab9/bootstrap-0.process.json",
+      "sha256": "701dcbe3c9dfe3cad30a0cb73e8d568373588ccdda00c72f46bb4f64e3a95f86"
+    },
+    {
+      "original_path": "target/jni-lifecycle-prototype/877e6c4fd355449fa3c53ef956db9ab9/bootstrap-0.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/877e6c4fd355449fa3c53ef956db9ab9/bootstrap-0.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/jni-lifecycle-prototype/877e6c4fd355449fa3c53ef956db9ab9/bootstrap-0.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/877e6c4fd355449fa3c53ef956db9ab9/bootstrap-0.stdout.txt",
+      "sha256": "e8546acb9792b427538f8be831ae72d90548c3f54aa55d2af098c50b5d363415"
+    },
+    {
+      "original_path": "target/jni-lifecycle-prototype/877e6c4fd355449fa3c53ef956db9ab9/bootstrap-2.process.json",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/877e6c4fd355449fa3c53ef956db9ab9/bootstrap-2.process.json",
+      "sha256": "1fa2bafa4423b63bf9daf90a137c688fee02244d3c39385f9a21b51cee733997"
+    },
+    {
+      "original_path": "target/jni-lifecycle-prototype/877e6c4fd355449fa3c53ef956db9ab9/bootstrap-2.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/877e6c4fd355449fa3c53ef956db9ab9/bootstrap-2.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/jni-lifecycle-prototype/877e6c4fd355449fa3c53ef956db9ab9/bootstrap-2.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/877e6c4fd355449fa3c53ef956db9ab9/bootstrap-2.stdout.txt",
+      "sha256": "f25aa1969ccab467c95277abe4cacc66252bb45e591d9056825ac455360ace76"
+    },
+    {
+      "original_path": "target/jni-lifecycle-prototype/877e6c4fd355449fa3c53ef956db9ab9/bootstrap-4.process.json",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/877e6c4fd355449fa3c53ef956db9ab9/bootstrap-4.process.json",
+      "sha256": "5bd88455b66fb113872267e18252797a808ee18473e632125d3bdb5a26c9d985"
+    },
+    {
+      "original_path": "target/jni-lifecycle-prototype/877e6c4fd355449fa3c53ef956db9ab9/bootstrap-4.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/877e6c4fd355449fa3c53ef956db9ab9/bootstrap-4.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/jni-lifecycle-prototype/877e6c4fd355449fa3c53ef956db9ab9/bootstrap-4.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/877e6c4fd355449fa3c53ef956db9ab9/bootstrap-4.stdout.txt",
+      "sha256": "42e8e125fe0afbb0efd49a64945e3dd2e9cc82c53ba65adc5b140e173ca6cafc"
+    },
+    {
+      "original_path": "target/jni-lifecycle-prototype/877e6c4fd355449fa3c53ef956db9ab9/bootstrap-5.process.json",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/877e6c4fd355449fa3c53ef956db9ab9/bootstrap-5.process.json",
+      "sha256": "675072753328edce087fd08de7eb18d63806ea8d0ab853918baba570a4065ecd"
+    },
+    {
+      "original_path": "target/jni-lifecycle-prototype/877e6c4fd355449fa3c53ef956db9ab9/bootstrap-5.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/877e6c4fd355449fa3c53ef956db9ab9/bootstrap-5.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/jni-lifecycle-prototype/877e6c4fd355449fa3c53ef956db9ab9/bootstrap-5.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/877e6c4fd355449fa3c53ef956db9ab9/bootstrap-5.stdout.txt",
+      "sha256": "0d2888c4bcb70f72ce990362733cdd7461e6f86615ffa6dfe822d23077d05b9d"
+    },
+    {
+      "original_path": "target/jni-lifecycle-prototype/877e6c4fd355449fa3c53ef956db9ab9/campaign.json",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/877e6c4fd355449fa3c53ef956db9ab9/campaign.json",
+      "sha256": "a4749a3d54dc5a653dfe9477132bf92a240aa038dcde49ef92c80d524e731b41"
+    },
+    {
+      "original_path": "target/jni-lifecycle-prototype/877e6c4fd355449fa3c53ef956db9ab9/cargo-metadata.process.json",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/877e6c4fd355449fa3c53ef956db9ab9/cargo-metadata.process.json",
+      "sha256": "bae8fd1ef4d767abae874243b1840c801d733517ee700de2ca4a0276513fc203"
+    },
+    {
+      "original_path": "target/jni-lifecycle-prototype/877e6c4fd355449fa3c53ef956db9ab9/cargo-metadata.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/877e6c4fd355449fa3c53ef956db9ab9/cargo-metadata.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/jni-lifecycle-prototype/877e6c4fd355449fa3c53ef956db9ab9/cargo-metadata.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/877e6c4fd355449fa3c53ef956db9ab9/cargo-metadata.stdout.txt",
+      "sha256": "155cd4dfe98ac66fe1f31c565033d91cce8ed081de2aedff68452de86f936f02"
+    },
+    {
+      "original_path": "target/jni-lifecycle-prototype/877e6c4fd355449fa3c53ef956db9ab9/cargo-version.process.json",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/877e6c4fd355449fa3c53ef956db9ab9/cargo-version.process.json",
+      "sha256": "df0ec9828b451d3daf7a583b29ad193ff58d655c278a10e03b9e07906012c51d"
+    },
+    {
+      "original_path": "target/jni-lifecycle-prototype/877e6c4fd355449fa3c53ef956db9ab9/cargo-version.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/877e6c4fd355449fa3c53ef956db9ab9/cargo-version.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/jni-lifecycle-prototype/877e6c4fd355449fa3c53ef956db9ab9/cargo-version.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/877e6c4fd355449fa3c53ef956db9ab9/cargo-version.stdout.txt",
+      "sha256": "86c2d07f9968fd3174d9cff8c60a4d4323fba3166d5dc6dd36f0987a50677d70"
+    },
+    {
+      "original_path": "target/jni-lifecycle-prototype/877e6c4fd355449fa3c53ef956db9ab9/escape-local-compile.process.json",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/877e6c4fd355449fa3c53ef956db9ab9/escape-local-compile.process.json",
+      "sha256": "90de735b88e365a336b244a0cfd797387b297b4943411a19f48685c31415b1aa"
+    },
+    {
+      "original_path": "target/jni-lifecycle-prototype/877e6c4fd355449fa3c53ef956db9ab9/escape-local-compile.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/877e6c4fd355449fa3c53ef956db9ab9/escape-local-compile.stderr.txt",
+      "sha256": "076882fe00e17a17d04b35e2fc29392b88a2203fe7e107e658dc9e34229c14ac"
+    },
+    {
+      "original_path": "target/jni-lifecycle-prototype/877e6c4fd355449fa3c53ef956db9ab9/escape-local-compile.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/877e6c4fd355449fa3c53ef956db9ab9/escape-local-compile.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/jni-lifecycle-prototype/877e6c4fd355449fa3c53ef956db9ab9/isolation-after.json",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/877e6c4fd355449fa3c53ef956db9ab9/isolation-after.json",
+      "sha256": "c4cba325597513d48fd19014ed49d8651b25aa9386c58d86d727a9fecfc6ea91"
+    },
+    {
+      "original_path": "target/jni-lifecycle-prototype/877e6c4fd355449fa3c53ef956db9ab9/isolation-before.json",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/877e6c4fd355449fa3c53ef956db9ab9/isolation-before.json",
+      "sha256": "c4cba325597513d48fd19014ed49d8651b25aa9386c58d86d727a9fecfc6ea91"
+    },
+    {
+      "original_path": "target/jni-lifecycle-prototype/877e6c4fd355449fa3c53ef956db9ab9/java-build.process.json",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/877e6c4fd355449fa3c53ef956db9ab9/java-build.process.json",
+      "sha256": "2cd3821c3777b8754756affda859b36f1796492eea05628ae638b9ba0e9dcaf1"
+    },
+    {
+      "original_path": "target/jni-lifecycle-prototype/877e6c4fd355449fa3c53ef956db9ab9/java-build.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/877e6c4fd355449fa3c53ef956db9ab9/java-build.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/jni-lifecycle-prototype/877e6c4fd355449fa3c53ef956db9ab9/java-build.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/877e6c4fd355449fa3c53ef956db9ab9/java-build.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/jni-lifecycle-prototype/877e6c4fd355449fa3c53ef956db9ab9/java-version.process.json",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/877e6c4fd355449fa3c53ef956db9ab9/java-version.process.json",
+      "sha256": "8b014bbb432bfc6b966da6d8fa4c7f0182eda3f01541ac5a41bac48e1b5a4426"
+    },
+    {
+      "original_path": "target/jni-lifecycle-prototype/877e6c4fd355449fa3c53ef956db9ab9/java-version.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/877e6c4fd355449fa3c53ef956db9ab9/java-version.stderr.txt",
+      "sha256": "9d65a43706f49fcfdbcece91e737f759110493e82fd1c4886cf49104c2017b0e"
+    },
+    {
+      "original_path": "target/jni-lifecycle-prototype/877e6c4fd355449fa3c53ef956db9ab9/java-version.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/877e6c4fd355449fa3c53ef956db9ab9/java-version.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/jni-lifecycle-prototype/877e6c4fd355449fa3c53ef956db9ab9/nio-without-prototype.process.json",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/877e6c4fd355449fa3c53ef956db9ab9/nio-without-prototype.process.json",
+      "sha256": "3029f08a85250ff70f0d5b5e4284f065abf4dff0dbe28ef0e10363dfa5eac1ec"
+    },
+    {
+      "original_path": "target/jni-lifecycle-prototype/877e6c4fd355449fa3c53ef956db9ab9/nio-without-prototype.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/877e6c4fd355449fa3c53ef956db9ab9/nio-without-prototype.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/jni-lifecycle-prototype/877e6c4fd355449fa3c53ef956db9ab9/nio-without-prototype.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/877e6c4fd355449fa3c53ef956db9ab9/nio-without-prototype.stdout.txt",
+      "sha256": "c0bd7e9cf890e5d26fcfabb261f7924115f11aae053ff98427720cdd0c49176c"
+    },
+    {
+      "original_path": "target/jni-lifecycle-prototype/877e6c4fd355449fa3c53ef956db9ab9/probe-badsig.process.json",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/877e6c4fd355449fa3c53ef956db9ab9/probe-badsig.process.json",
+      "sha256": "b57cf7c0e5344f384c8a533afbd44805fb03f6063989693083c1fc13f609adaa"
+    },
+    {
+      "original_path": "target/jni-lifecycle-prototype/877e6c4fd355449fa3c53ef956db9ab9/probe-badsig.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/877e6c4fd355449fa3c53ef956db9ab9/probe-badsig.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/jni-lifecycle-prototype/877e6c4fd355449fa3c53ef956db9ab9/probe-badsig.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/877e6c4fd355449fa3c53ef956db9ab9/probe-badsig.stdout.txt",
+      "sha256": "5f093930e9bbe4e93231ee74f368624cd045f4ed2b18bb7de29d436ae30d1987"
+    },
+    {
+      "original_path": "target/jni-lifecycle-prototype/877e6c4fd355449fa3c53ef956db9ab9/probe-callback.process.json",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/877e6c4fd355449fa3c53ef956db9ab9/probe-callback.process.json",
+      "sha256": "2c645b22eb3c4325b6927a5e33e42e5956e959a1998a0cbb7d0a36311106a583"
+    },
+    {
+      "original_path": "target/jni-lifecycle-prototype/877e6c4fd355449fa3c53ef956db9ab9/probe-callback.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/877e6c4fd355449fa3c53ef956db9ab9/probe-callback.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/jni-lifecycle-prototype/877e6c4fd355449fa3c53ef956db9ab9/probe-callback.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/877e6c4fd355449fa3c53ef956db9ab9/probe-callback.stdout.txt",
+      "sha256": "a14a8115b52c41c9babd1e075cef176b2cb0bc4bf2596592f472b474de162b01"
+    },
+    {
+      "original_path": "target/jni-lifecycle-prototype/877e6c4fd355449fa3c53ef956db9ab9/probe-class.process.json",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/877e6c4fd355449fa3c53ef956db9ab9/probe-class.process.json",
+      "sha256": "d07c57caae70546670773af16484572bcf4654b91859fed048e15c6ca1449862"
+    },
+    {
+      "original_path": "target/jni-lifecycle-prototype/877e6c4fd355449fa3c53ef956db9ab9/probe-class.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/877e6c4fd355449fa3c53ef956db9ab9/probe-class.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/jni-lifecycle-prototype/877e6c4fd355449fa3c53ef956db9ab9/probe-class.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/877e6c4fd355449fa3c53ef956db9ab9/probe-class.stdout.txt",
+      "sha256": "9594cded803803843ffbb911419d69c2513dee1ee8f49e9e21ee73c53e702ad5"
+    },
+    {
+      "original_path": "target/jni-lifecycle-prototype/877e6c4fd355449fa3c53ef956db9ab9/probe-direct.process.json",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/877e6c4fd355449fa3c53ef956db9ab9/probe-direct.process.json",
+      "sha256": "feaa81927f6aaafcdfdac7a9b036a54d85baf7d5c773a7f175443929361ef6f1"
+    },
+    {
+      "original_path": "target/jni-lifecycle-prototype/877e6c4fd355449fa3c53ef956db9ab9/probe-direct.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/877e6c4fd355449fa3c53ef956db9ab9/probe-direct.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/jni-lifecycle-prototype/877e6c4fd355449fa3c53ef956db9ab9/probe-direct.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/877e6c4fd355449fa3c53ef956db9ab9/probe-direct.stdout.txt",
+      "sha256": "ce0b93886904c5afcdbc51db4b27706b6f99999d01656902a04f22afe5312799"
+    },
+    {
+      "original_path": "target/jni-lifecycle-prototype/877e6c4fd355449fa3c53ef956db9ab9/probe-full.process.json",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/877e6c4fd355449fa3c53ef956db9ab9/probe-full.process.json",
+      "sha256": "e5c897fdaf535cb8a47a0683bd458f378312950c98decdb52802f9d6357e5065"
+    },
+    {
+      "original_path": "target/jni-lifecycle-prototype/877e6c4fd355449fa3c53ef956db9ab9/probe-full.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/877e6c4fd355449fa3c53ef956db9ab9/probe-full.stderr.txt",
+      "sha256": "9a1a6d68cc5f4e5637503c47e0165b365180e56fb6262a281e14e8ef3b080dbc"
+    },
+    {
+      "original_path": "target/jni-lifecycle-prototype/877e6c4fd355449fa3c53ef956db9ab9/probe-full.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/877e6c4fd355449fa3c53ef956db9ab9/probe-full.stdout.txt",
+      "sha256": "0c9ca2b038fc372bf6697debbce94d45b24144bb6fa5d9a794a44f1bc617a7d0"
+    },
+    {
+      "original_path": "target/jni-lifecycle-prototype/877e6c4fd355449fa3c53ef956db9ab9/probe-global.process.json",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/877e6c4fd355449fa3c53ef956db9ab9/probe-global.process.json",
+      "sha256": "55d067cc7a1da120db1b6b5bac8a3f3145dabf4f86d7b9a51f38c5069b8bfdd2"
+    },
+    {
+      "original_path": "target/jni-lifecycle-prototype/877e6c4fd355449fa3c53ef956db9ab9/probe-global.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/877e6c4fd355449fa3c53ef956db9ab9/probe-global.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/jni-lifecycle-prototype/877e6c4fd355449fa3c53ef956db9ab9/probe-global.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/877e6c4fd355449fa3c53ef956db9ab9/probe-global.stdout.txt",
+      "sha256": "d8c9beacc5a9d5c6d137f01bd81c46d4899adee26fe52baadea24c9cccc73783"
+    },
+    {
+      "original_path": "target/jni-lifecycle-prototype/877e6c4fd355449fa3c53ef956db9ab9/probe-load-only.process.json",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/877e6c4fd355449fa3c53ef956db9ab9/probe-load-only.process.json",
+      "sha256": "53367f8de0a96ead4011cb7745307bd955acb8faaa9e7bfc327153a6c74dac06"
+    },
+    {
+      "original_path": "target/jni-lifecycle-prototype/877e6c4fd355449fa3c53ef956db9ab9/probe-load-only.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/877e6c4fd355449fa3c53ef956db9ab9/probe-load-only.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/jni-lifecycle-prototype/877e6c4fd355449fa3c53ef956db9ab9/probe-load-only.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/877e6c4fd355449fa3c53ef956db9ab9/probe-load-only.stdout.txt",
+      "sha256": "642afe1375705f265d77ed1f800ff51cd003c76611c4c2ff9d31ff33f48539f4"
+    },
+    {
+      "original_path": "target/jni-lifecycle-prototype/877e6c4fd355449fa3c53ef956db9ab9/probe-local.process.json",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/877e6c4fd355449fa3c53ef956db9ab9/probe-local.process.json",
+      "sha256": "e9b98e87ec72505901512906261a86acf4e9f87e95f2dc330f1a7a6c77cca125"
+    },
+    {
+      "original_path": "target/jni-lifecycle-prototype/877e6c4fd355449fa3c53ef956db9ab9/probe-local.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/877e6c4fd355449fa3c53ef956db9ab9/probe-local.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/jni-lifecycle-prototype/877e6c4fd355449fa3c53ef956db9ab9/probe-local.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/877e6c4fd355449fa3c53ef956db9ab9/probe-local.stdout.txt",
+      "sha256": "26fe17a851e3501102e2a424bfbb541a5a5785240606e3b38bb4c68dc30ab231"
+    },
+    {
+      "original_path": "target/jni-lifecycle-prototype/877e6c4fd355449fa3c53ef956db9ab9/probe-null.process.json",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/877e6c4fd355449fa3c53ef956db9ab9/probe-null.process.json",
+      "sha256": "9f154b4fc8220e3c835c6fb1694388bfda947e6ec26af9542cf701abedcfb1eb"
+    },
+    {
+      "original_path": "target/jni-lifecycle-prototype/877e6c4fd355449fa3c53ef956db9ab9/probe-null.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/877e6c4fd355449fa3c53ef956db9ab9/probe-null.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/jni-lifecycle-prototype/877e6c4fd355449fa3c53ef956db9ab9/probe-null.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/877e6c4fd355449fa3c53ef956db9ab9/probe-null.stdout.txt",
+      "sha256": "4b53e020455294dda23ff3cfbb43d4d10c5bd2fe3ba772ace3c44ec09671a74b"
+    },
+    {
+      "original_path": "target/jni-lifecycle-prototype/877e6c4fd355449fa3c53ef956db9ab9/probe-panic.process.json",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/877e6c4fd355449fa3c53ef956db9ab9/probe-panic.process.json",
+      "sha256": "2d350e86ecbd10dbe82d4543beca83437fb9cd8a839a6775557c9c4234373bf3"
+    },
+    {
+      "original_path": "target/jni-lifecycle-prototype/877e6c4fd355449fa3c53ef956db9ab9/probe-panic.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/877e6c4fd355449fa3c53ef956db9ab9/probe-panic.stderr.txt",
+      "sha256": "30a2f4478235618ce4c88187a4377c1139907cd02ab59984de7b068a66d13009"
+    },
+    {
+      "original_path": "target/jni-lifecycle-prototype/877e6c4fd355449fa3c53ef956db9ab9/probe-panic.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/877e6c4fd355449fa3c53ef956db9ab9/probe-panic.stdout.txt",
+      "sha256": "91df71f6184ef13c28c7d2af2445fe051f1bd1d25dedae3e6715734913ed6769"
+    },
+    {
+      "original_path": "target/jni-lifecycle-prototype/877e6c4fd355449fa3c53ef956db9ab9/probe-ping.process.json",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/877e6c4fd355449fa3c53ef956db9ab9/probe-ping.process.json",
+      "sha256": "1eaed0a9856518d4a6cc9941eaf4b21c6254c72d5c584a66512a36842cf7956b"
+    },
+    {
+      "original_path": "target/jni-lifecycle-prototype/877e6c4fd355449fa3c53ef956db9ab9/probe-ping.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/877e6c4fd355449fa3c53ef956db9ab9/probe-ping.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/jni-lifecycle-prototype/877e6c4fd355449fa3c53ef956db9ab9/probe-ping.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/877e6c4fd355449fa3c53ef956db9ab9/probe-ping.stdout.txt",
+      "sha256": "e1f00061804210ef1c5c275b2d73d0d9af4a9544508fa5fe63ac0738ae9b89c1"
+    },
+    {
+      "original_path": "target/jni-lifecycle-prototype/877e6c4fd355449fa3c53ef956db9ab9/probe-worker-fail.process.json",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/877e6c4fd355449fa3c53ef956db9ab9/probe-worker-fail.process.json",
+      "sha256": "27e3d590f623d034ab0338b1e5466b57096656906bfd1461bab69cff1e8892d7"
+    },
+    {
+      "original_path": "target/jni-lifecycle-prototype/877e6c4fd355449fa3c53ef956db9ab9/probe-worker-fail.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/877e6c4fd355449fa3c53ef956db9ab9/probe-worker-fail.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/jni-lifecycle-prototype/877e6c4fd355449fa3c53ef956db9ab9/probe-worker-fail.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/877e6c4fd355449fa3c53ef956db9ab9/probe-worker-fail.stdout.txt",
+      "sha256": "c2aa6c76d7cdcbe0c5ba4fff52cbf37f90ea31771fa74a876d385a3c746a36f8"
+    },
+    {
+      "original_path": "target/jni-lifecycle-prototype/877e6c4fd355449fa3c53ef956db9ab9/probe-worker.process.json",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/877e6c4fd355449fa3c53ef956db9ab9/probe-worker.process.json",
+      "sha256": "b7e1b91947839f95fd60478ded7ea8cf6f6fbb75699e4e36f743ff4beed60802"
+    },
+    {
+      "original_path": "target/jni-lifecycle-prototype/877e6c4fd355449fa3c53ef956db9ab9/probe-worker.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/877e6c4fd355449fa3c53ef956db9ab9/probe-worker.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/jni-lifecycle-prototype/877e6c4fd355449fa3c53ef956db9ab9/probe-worker.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/877e6c4fd355449fa3c53ef956db9ab9/probe-worker.stdout.txt",
+      "sha256": "7118cb266b68126d539d36ad56102635aab81fcb1f087ffe351530014624655e"
+    },
+    {
+      "original_path": "target/jni-lifecycle-prototype/877e6c4fd355449fa3c53ef956db9ab9/rust-clippy.process.json",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/877e6c4fd355449fa3c53ef956db9ab9/rust-clippy.process.json",
+      "sha256": "b9e37e028add6c10dc6a750c63fd1757735cb6c87a7f0f34abf1b609e97b8fde"
+    },
+    {
+      "original_path": "target/jni-lifecycle-prototype/877e6c4fd355449fa3c53ef956db9ab9/rust-clippy.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/877e6c4fd355449fa3c53ef956db9ab9/rust-clippy.stderr.txt",
+      "sha256": "b59841dd057e7ab25e108eaf5d286bd301ff26bef5cff35388b49a55cad5773f"
+    },
+    {
+      "original_path": "target/jni-lifecycle-prototype/877e6c4fd355449fa3c53ef956db9ab9/rust-clippy.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/877e6c4fd355449fa3c53ef956db9ab9/rust-clippy.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/jni-lifecycle-prototype/877e6c4fd355449fa3c53ef956db9ab9/rust-fmt.process.json",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/877e6c4fd355449fa3c53ef956db9ab9/rust-fmt.process.json",
+      "sha256": "ba142b069c5e6d13ff8ddf8309519e87dbaea8b0d460e51145acbbe4e998fba8"
+    },
+    {
+      "original_path": "target/jni-lifecycle-prototype/877e6c4fd355449fa3c53ef956db9ab9/rust-fmt.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/877e6c4fd355449fa3c53ef956db9ab9/rust-fmt.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/jni-lifecycle-prototype/877e6c4fd355449fa3c53ef956db9ab9/rust-fmt.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/877e6c4fd355449fa3c53ef956db9ab9/rust-fmt.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/jni-lifecycle-prototype/877e6c4fd355449fa3c53ef956db9ab9/rust-release.process.json",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/877e6c4fd355449fa3c53ef956db9ab9/rust-release.process.json",
+      "sha256": "252efad02d6e7e2f0e2431452ff5a2a66c3e7f160ec831f36f9c835f212a6e9e"
+    },
+    {
+      "original_path": "target/jni-lifecycle-prototype/877e6c4fd355449fa3c53ef956db9ab9/rust-release.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/877e6c4fd355449fa3c53ef956db9ab9/rust-release.stderr.txt",
+      "sha256": "1efe87059652767352891a6f107e248c249c476f6ae63af8135cf68876e7082c"
+    },
+    {
+      "original_path": "target/jni-lifecycle-prototype/877e6c4fd355449fa3c53ef956db9ab9/rust-release.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/877e6c4fd355449fa3c53ef956db9ab9/rust-release.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/jni-lifecycle-prototype/877e6c4fd355449fa3c53ef956db9ab9/rust-sysroot.process.json",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/877e6c4fd355449fa3c53ef956db9ab9/rust-sysroot.process.json",
+      "sha256": "1613c8f7707b3657382facf60590314fd29eae109bc1bc19e3abf25ee0696c9f"
+    },
+    {
+      "original_path": "target/jni-lifecycle-prototype/877e6c4fd355449fa3c53ef956db9ab9/rust-sysroot.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/877e6c4fd355449fa3c53ef956db9ab9/rust-sysroot.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/jni-lifecycle-prototype/877e6c4fd355449fa3c53ef956db9ab9/rust-sysroot.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/877e6c4fd355449fa3c53ef956db9ab9/rust-sysroot.stdout.txt",
+      "sha256": "e0d8249c2fb93ac2106d97fedd24f44420e0ee2316617df20f769f033eaf568d"
+    },
+    {
+      "original_path": "target/jni-lifecycle-prototype/877e6c4fd355449fa3c53ef956db9ab9/rust-tests.process.json",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/877e6c4fd355449fa3c53ef956db9ab9/rust-tests.process.json",
+      "sha256": "3bc3e24c1142145526907bbbc81e94215740d52067b79b2ab76fdaffcde500b0"
+    },
+    {
+      "original_path": "target/jni-lifecycle-prototype/877e6c4fd355449fa3c53ef956db9ab9/rust-tests.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/877e6c4fd355449fa3c53ef956db9ab9/rust-tests.stderr.txt",
+      "sha256": "e80ac9af4aa387786511344d7a14bfd417bb09a7308eb1a10e6fe449a48a1f7e"
+    },
+    {
+      "original_path": "target/jni-lifecycle-prototype/877e6c4fd355449fa3c53ef956db9ab9/rust-tests.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/877e6c4fd355449fa3c53ef956db9ab9/rust-tests.stdout.txt",
+      "sha256": "d38e6ea6d69ddb377e4a4380b22926f3864806998a850d5e28c8459dfc09f014"
+    },
+    {
+      "original_path": "target/jni-lifecycle-prototype/877e6c4fd355449fa3c53ef956db9ab9/rustc-version.process.json",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/877e6c4fd355449fa3c53ef956db9ab9/rustc-version.process.json",
+      "sha256": "997dcff8f8b124ac469f1c5a1c8a52808592dab50bdb8ec3f33907bf47fc53bd"
+    },
+    {
+      "original_path": "target/jni-lifecycle-prototype/877e6c4fd355449fa3c53ef956db9ab9/rustc-version.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/877e6c4fd355449fa3c53ef956db9ab9/rustc-version.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/jni-lifecycle-prototype/877e6c4fd355449fa3c53ef956db9ab9/rustc-version.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/877e6c4fd355449fa3c53ef956db9ab9/rustc-version.stdout.txt",
+      "sha256": "c45e612575abeef05e99e88eb1e7aea52cddab9ad70d4f65ad20eaa65e92a9cf"
+    },
+    {
+      "original_path": "target/jni-lifecycle-prototype/877e6c4fd355449fa3c53ef956db9ab9/valid-local-compile.process.json",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/877e6c4fd355449fa3c53ef956db9ab9/valid-local-compile.process.json",
+      "sha256": "4f8bae0fccf0ecceb4b31f99ad9ff03c16b46808908e6895f5cf052857f5bc18"
+    },
+    {
+      "original_path": "target/jni-lifecycle-prototype/877e6c4fd355449fa3c53ef956db9ab9/valid-local-compile.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/877e6c4fd355449fa3c53ef956db9ab9/valid-local-compile.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/jni-lifecycle-prototype/877e6c4fd355449fa3c53ef956db9ab9/valid-local-compile.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/877e6c4fd355449fa3c53ef956db9ab9/valid-local-compile.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/jni-lifecycle-root-review/308e15b9fbcd491db073cd1f1af606ef/bootstrap-0.process.json",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/308e15b9fbcd491db073cd1f1af606ef/bootstrap-0.process.json",
+      "sha256": "3ce40e03b040ce76c16ea73ebc8cd3f4130e58e644b339cdd7ee1aa61cd1404a"
+    },
+    {
+      "original_path": "target/jni-lifecycle-root-review/308e15b9fbcd491db073cd1f1af606ef/bootstrap-0.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/308e15b9fbcd491db073cd1f1af606ef/bootstrap-0.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/jni-lifecycle-root-review/308e15b9fbcd491db073cd1f1af606ef/bootstrap-0.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/308e15b9fbcd491db073cd1f1af606ef/bootstrap-0.stdout.txt",
+      "sha256": "e8546acb9792b427538f8be831ae72d90548c3f54aa55d2af098c50b5d363415"
+    },
+    {
+      "original_path": "target/jni-lifecycle-root-review/308e15b9fbcd491db073cd1f1af606ef/bootstrap-2.process.json",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/308e15b9fbcd491db073cd1f1af606ef/bootstrap-2.process.json",
+      "sha256": "bb1e4032d517f81242b9300394685d3863e88ae6bdff24b6155810bc757ca97f"
+    },
+    {
+      "original_path": "target/jni-lifecycle-root-review/308e15b9fbcd491db073cd1f1af606ef/bootstrap-2.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/308e15b9fbcd491db073cd1f1af606ef/bootstrap-2.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/jni-lifecycle-root-review/308e15b9fbcd491db073cd1f1af606ef/bootstrap-2.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/308e15b9fbcd491db073cd1f1af606ef/bootstrap-2.stdout.txt",
+      "sha256": "f25aa1969ccab467c95277abe4cacc66252bb45e591d9056825ac455360ace76"
+    },
+    {
+      "original_path": "target/jni-lifecycle-root-review/308e15b9fbcd491db073cd1f1af606ef/bootstrap-4.process.json",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/308e15b9fbcd491db073cd1f1af606ef/bootstrap-4.process.json",
+      "sha256": "19735fe9444fcc12649aeff267559a242d50f5a3114581673e9ee5c50f4ab90f"
+    },
+    {
+      "original_path": "target/jni-lifecycle-root-review/308e15b9fbcd491db073cd1f1af606ef/bootstrap-4.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/308e15b9fbcd491db073cd1f1af606ef/bootstrap-4.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/jni-lifecycle-root-review/308e15b9fbcd491db073cd1f1af606ef/bootstrap-4.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/308e15b9fbcd491db073cd1f1af606ef/bootstrap-4.stdout.txt",
+      "sha256": "42e8e125fe0afbb0efd49a64945e3dd2e9cc82c53ba65adc5b140e173ca6cafc"
+    },
+    {
+      "original_path": "target/jni-lifecycle-root-review/308e15b9fbcd491db073cd1f1af606ef/bootstrap-5.process.json",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/308e15b9fbcd491db073cd1f1af606ef/bootstrap-5.process.json",
+      "sha256": "6ca2dcfc65a477e0613db484b465fedcfcd759409b9ba5f090e5539955f364ce"
+    },
+    {
+      "original_path": "target/jni-lifecycle-root-review/308e15b9fbcd491db073cd1f1af606ef/bootstrap-5.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/308e15b9fbcd491db073cd1f1af606ef/bootstrap-5.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/jni-lifecycle-root-review/308e15b9fbcd491db073cd1f1af606ef/bootstrap-5.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/308e15b9fbcd491db073cd1f1af606ef/bootstrap-5.stdout.txt",
+      "sha256": "0d2888c4bcb70f72ce990362733cdd7461e6f86615ffa6dfe822d23077d05b9d"
+    },
+    {
+      "original_path": "target/jni-lifecycle-root-review/308e15b9fbcd491db073cd1f1af606ef/campaign.json",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/308e15b9fbcd491db073cd1f1af606ef/campaign.json",
+      "sha256": "6d70de94cde471985dfc185e67b23d9e9a0b011c5a1645acaadd8bce77677fba"
+    },
+    {
+      "original_path": "target/jni-lifecycle-root-review/308e15b9fbcd491db073cd1f1af606ef/cargo-metadata.process.json",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/308e15b9fbcd491db073cd1f1af606ef/cargo-metadata.process.json",
+      "sha256": "e0f57724bc099e3cf4997f74458e0a5f23f791acdc93976b4af8bf95285669aa"
+    },
+    {
+      "original_path": "target/jni-lifecycle-root-review/308e15b9fbcd491db073cd1f1af606ef/cargo-metadata.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/308e15b9fbcd491db073cd1f1af606ef/cargo-metadata.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/jni-lifecycle-root-review/308e15b9fbcd491db073cd1f1af606ef/cargo-metadata.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/308e15b9fbcd491db073cd1f1af606ef/cargo-metadata.stdout.txt",
+      "sha256": "155cd4dfe98ac66fe1f31c565033d91cce8ed081de2aedff68452de86f936f02"
+    },
+    {
+      "original_path": "target/jni-lifecycle-root-review/308e15b9fbcd491db073cd1f1af606ef/cargo-version.process.json",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/308e15b9fbcd491db073cd1f1af606ef/cargo-version.process.json",
+      "sha256": "027b880679c48b73201f2d4b793913e352c409461d4a3530a5b2bb7901fa420e"
+    },
+    {
+      "original_path": "target/jni-lifecycle-root-review/308e15b9fbcd491db073cd1f1af606ef/cargo-version.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/308e15b9fbcd491db073cd1f1af606ef/cargo-version.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/jni-lifecycle-root-review/308e15b9fbcd491db073cd1f1af606ef/cargo-version.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/308e15b9fbcd491db073cd1f1af606ef/cargo-version.stdout.txt",
+      "sha256": "86c2d07f9968fd3174d9cff8c60a4d4323fba3166d5dc6dd36f0987a50677d70"
+    },
+    {
+      "original_path": "target/jni-lifecycle-root-review/308e15b9fbcd491db073cd1f1af606ef/escape-local-compile.process.json",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/308e15b9fbcd491db073cd1f1af606ef/escape-local-compile.process.json",
+      "sha256": "5f77fca7563940f842680351209c25c7c572c43d743346c3cad2d2e3266632ae"
+    },
+    {
+      "original_path": "target/jni-lifecycle-root-review/308e15b9fbcd491db073cd1f1af606ef/escape-local-compile.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/308e15b9fbcd491db073cd1f1af606ef/escape-local-compile.stderr.txt",
+      "sha256": "076882fe00e17a17d04b35e2fc29392b88a2203fe7e107e658dc9e34229c14ac"
+    },
+    {
+      "original_path": "target/jni-lifecycle-root-review/308e15b9fbcd491db073cd1f1af606ef/escape-local-compile.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/308e15b9fbcd491db073cd1f1af606ef/escape-local-compile.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/jni-lifecycle-root-review/308e15b9fbcd491db073cd1f1af606ef/isolation-after.json",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/308e15b9fbcd491db073cd1f1af606ef/isolation-after.json",
+      "sha256": "c4cba325597513d48fd19014ed49d8651b25aa9386c58d86d727a9fecfc6ea91"
+    },
+    {
+      "original_path": "target/jni-lifecycle-root-review/308e15b9fbcd491db073cd1f1af606ef/isolation-before.json",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/308e15b9fbcd491db073cd1f1af606ef/isolation-before.json",
+      "sha256": "c4cba325597513d48fd19014ed49d8651b25aa9386c58d86d727a9fecfc6ea91"
+    },
+    {
+      "original_path": "target/jni-lifecycle-root-review/308e15b9fbcd491db073cd1f1af606ef/java-build.process.json",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/308e15b9fbcd491db073cd1f1af606ef/java-build.process.json",
+      "sha256": "bb018b78abe2ea46542ee4efc4424a757ab25b0532bc9e540018bf0615d500b9"
+    },
+    {
+      "original_path": "target/jni-lifecycle-root-review/308e15b9fbcd491db073cd1f1af606ef/java-build.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/308e15b9fbcd491db073cd1f1af606ef/java-build.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/jni-lifecycle-root-review/308e15b9fbcd491db073cd1f1af606ef/java-build.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/308e15b9fbcd491db073cd1f1af606ef/java-build.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/jni-lifecycle-root-review/308e15b9fbcd491db073cd1f1af606ef/java-version.process.json",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/308e15b9fbcd491db073cd1f1af606ef/java-version.process.json",
+      "sha256": "7ffbec1ad96a2a0c7ba8836739e053b38d5fa50732ec767ddba232b04e80076c"
+    },
+    {
+      "original_path": "target/jni-lifecycle-root-review/308e15b9fbcd491db073cd1f1af606ef/java-version.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/308e15b9fbcd491db073cd1f1af606ef/java-version.stderr.txt",
+      "sha256": "9d65a43706f49fcfdbcece91e737f759110493e82fd1c4886cf49104c2017b0e"
+    },
+    {
+      "original_path": "target/jni-lifecycle-root-review/308e15b9fbcd491db073cd1f1af606ef/java-version.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/308e15b9fbcd491db073cd1f1af606ef/java-version.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/jni-lifecycle-root-review/308e15b9fbcd491db073cd1f1af606ef/nio-without-prototype.process.json",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/308e15b9fbcd491db073cd1f1af606ef/nio-without-prototype.process.json",
+      "sha256": "7f0d0d39bde0190ac0d2cd9ce3ec8c715c782b0a2ee4bda667751cf176caea54"
+    },
+    {
+      "original_path": "target/jni-lifecycle-root-review/308e15b9fbcd491db073cd1f1af606ef/nio-without-prototype.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/308e15b9fbcd491db073cd1f1af606ef/nio-without-prototype.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/jni-lifecycle-root-review/308e15b9fbcd491db073cd1f1af606ef/nio-without-prototype.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/308e15b9fbcd491db073cd1f1af606ef/nio-without-prototype.stdout.txt",
+      "sha256": "c0bd7e9cf890e5d26fcfabb261f7924115f11aae053ff98427720cdd0c49176c"
+    },
+    {
+      "original_path": "target/jni-lifecycle-root-review/308e15b9fbcd491db073cd1f1af606ef/probe-badsig.process.json",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/308e15b9fbcd491db073cd1f1af606ef/probe-badsig.process.json",
+      "sha256": "e233bd82ad1e1387ce3434a62bced364ff09da1c6236f0c7ac3229ad1bfa2e09"
+    },
+    {
+      "original_path": "target/jni-lifecycle-root-review/308e15b9fbcd491db073cd1f1af606ef/probe-badsig.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/308e15b9fbcd491db073cd1f1af606ef/probe-badsig.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/jni-lifecycle-root-review/308e15b9fbcd491db073cd1f1af606ef/probe-badsig.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/308e15b9fbcd491db073cd1f1af606ef/probe-badsig.stdout.txt",
+      "sha256": "ed8023cde8d792fc916c7c1a8d2c48f2758f7a72f4d79a5aaa3c899f70b584a7"
+    },
+    {
+      "original_path": "target/jni-lifecycle-root-review/308e15b9fbcd491db073cd1f1af606ef/probe-callback.process.json",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/308e15b9fbcd491db073cd1f1af606ef/probe-callback.process.json",
+      "sha256": "2190731aa6e1c12f8b03d2b7bb4ee2bfcc8c81212d4a1fe1a8d4d67750b39775"
+    },
+    {
+      "original_path": "target/jni-lifecycle-root-review/308e15b9fbcd491db073cd1f1af606ef/probe-callback.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/308e15b9fbcd491db073cd1f1af606ef/probe-callback.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/jni-lifecycle-root-review/308e15b9fbcd491db073cd1f1af606ef/probe-callback.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/308e15b9fbcd491db073cd1f1af606ef/probe-callback.stdout.txt",
+      "sha256": "64cc7dd109a94b983c6d43e361386909d4bf98ae2459a40f90400b63a3f134cb"
+    },
+    {
+      "original_path": "target/jni-lifecycle-root-review/308e15b9fbcd491db073cd1f1af606ef/probe-class.process.json",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/308e15b9fbcd491db073cd1f1af606ef/probe-class.process.json",
+      "sha256": "414bd6d783a274b2f78d50381fb405c4710f396054337ab73a3e188bb01d7283"
+    },
+    {
+      "original_path": "target/jni-lifecycle-root-review/308e15b9fbcd491db073cd1f1af606ef/probe-class.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/308e15b9fbcd491db073cd1f1af606ef/probe-class.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/jni-lifecycle-root-review/308e15b9fbcd491db073cd1f1af606ef/probe-class.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/308e15b9fbcd491db073cd1f1af606ef/probe-class.stdout.txt",
+      "sha256": "b09be1f8b9498807e21fefaef3782ce369d92475342b84b6e55c37e0223c3272"
+    },
+    {
+      "original_path": "target/jni-lifecycle-root-review/308e15b9fbcd491db073cd1f1af606ef/probe-direct.process.json",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/308e15b9fbcd491db073cd1f1af606ef/probe-direct.process.json",
+      "sha256": "bb4b9425925880bb8d66585e0ec069708d140116f648ba3d9d3ebe45882655b5"
+    },
+    {
+      "original_path": "target/jni-lifecycle-root-review/308e15b9fbcd491db073cd1f1af606ef/probe-direct.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/308e15b9fbcd491db073cd1f1af606ef/probe-direct.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/jni-lifecycle-root-review/308e15b9fbcd491db073cd1f1af606ef/probe-direct.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/308e15b9fbcd491db073cd1f1af606ef/probe-direct.stdout.txt",
+      "sha256": "f1f9f03872ad645c1a5b763b38bb9014b159625bc84fe22bdd713d5d6a924398"
+    },
+    {
+      "original_path": "target/jni-lifecycle-root-review/308e15b9fbcd491db073cd1f1af606ef/probe-full.process.json",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/308e15b9fbcd491db073cd1f1af606ef/probe-full.process.json",
+      "sha256": "60abff5c0eb3baf4e5c42760996819e29584d79affb456d0866c7d6f69c90ca3"
+    },
+    {
+      "original_path": "target/jni-lifecycle-root-review/308e15b9fbcd491db073cd1f1af606ef/probe-full.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/308e15b9fbcd491db073cd1f1af606ef/probe-full.stderr.txt",
+      "sha256": "95a79defc6a8fab284757b2d4186b86e96add55c1210d890c0f86b9f27556aa4"
+    },
+    {
+      "original_path": "target/jni-lifecycle-root-review/308e15b9fbcd491db073cd1f1af606ef/probe-full.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/308e15b9fbcd491db073cd1f1af606ef/probe-full.stdout.txt",
+      "sha256": "4fe188a2f20e192630bacbe5d3fcd030b8b271966e10e26693ba2b1f4f32adb4"
+    },
+    {
+      "original_path": "target/jni-lifecycle-root-review/308e15b9fbcd491db073cd1f1af606ef/probe-global.process.json",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/308e15b9fbcd491db073cd1f1af606ef/probe-global.process.json",
+      "sha256": "a5f8e4230185ac7c3565a113c0310277170eb50547b6d4872ebaf9f6315a52f5"
+    },
+    {
+      "original_path": "target/jni-lifecycle-root-review/308e15b9fbcd491db073cd1f1af606ef/probe-global.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/308e15b9fbcd491db073cd1f1af606ef/probe-global.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/jni-lifecycle-root-review/308e15b9fbcd491db073cd1f1af606ef/probe-global.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/308e15b9fbcd491db073cd1f1af606ef/probe-global.stdout.txt",
+      "sha256": "e1478862045271703971f227ee9f600ef91a4fb3bb773fa8cda1d0401047d604"
+    },
+    {
+      "original_path": "target/jni-lifecycle-root-review/308e15b9fbcd491db073cd1f1af606ef/probe-load-only.process.json",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/308e15b9fbcd491db073cd1f1af606ef/probe-load-only.process.json",
+      "sha256": "f1bc71468c45ac4827ec107efb31454b6dffa473443ae73068646105805cac4a"
+    },
+    {
+      "original_path": "target/jni-lifecycle-root-review/308e15b9fbcd491db073cd1f1af606ef/probe-load-only.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/308e15b9fbcd491db073cd1f1af606ef/probe-load-only.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/jni-lifecycle-root-review/308e15b9fbcd491db073cd1f1af606ef/probe-load-only.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/308e15b9fbcd491db073cd1f1af606ef/probe-load-only.stdout.txt",
+      "sha256": "b5792396604678041abbb253f1c7757d1440f7f4323dabf92e95a4834e49c826"
+    },
+    {
+      "original_path": "target/jni-lifecycle-root-review/308e15b9fbcd491db073cd1f1af606ef/probe-local.process.json",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/308e15b9fbcd491db073cd1f1af606ef/probe-local.process.json",
+      "sha256": "1ae90815aff02bf6c5e7d21db385b8d25755404b626f7214d2cd029009c5f334"
+    },
+    {
+      "original_path": "target/jni-lifecycle-root-review/308e15b9fbcd491db073cd1f1af606ef/probe-local.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/308e15b9fbcd491db073cd1f1af606ef/probe-local.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/jni-lifecycle-root-review/308e15b9fbcd491db073cd1f1af606ef/probe-local.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/308e15b9fbcd491db073cd1f1af606ef/probe-local.stdout.txt",
+      "sha256": "7f5e381192eac6f0e50f3c161cca0a0d2a1f701af58eb58480d175d150930371"
+    },
+    {
+      "original_path": "target/jni-lifecycle-root-review/308e15b9fbcd491db073cd1f1af606ef/probe-null.process.json",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/308e15b9fbcd491db073cd1f1af606ef/probe-null.process.json",
+      "sha256": "a628e432a97e946a59c036dd2884096b6340471b74cc098495bbf23ecad0b25b"
+    },
+    {
+      "original_path": "target/jni-lifecycle-root-review/308e15b9fbcd491db073cd1f1af606ef/probe-null.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/308e15b9fbcd491db073cd1f1af606ef/probe-null.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/jni-lifecycle-root-review/308e15b9fbcd491db073cd1f1af606ef/probe-null.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/308e15b9fbcd491db073cd1f1af606ef/probe-null.stdout.txt",
+      "sha256": "45c8d74bf52d50d32aa905f1d237bc0e191ec744781f16a9e2982b2478eb5d62"
+    },
+    {
+      "original_path": "target/jni-lifecycle-root-review/308e15b9fbcd491db073cd1f1af606ef/probe-panic.process.json",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/308e15b9fbcd491db073cd1f1af606ef/probe-panic.process.json",
+      "sha256": "f641fea84280d34f9874d8a7f5d3b48dfc11af7b7bb7b71858c42ca5f4b6b801"
+    },
+    {
+      "original_path": "target/jni-lifecycle-root-review/308e15b9fbcd491db073cd1f1af606ef/probe-panic.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/308e15b9fbcd491db073cd1f1af606ef/probe-panic.stderr.txt",
+      "sha256": "a5afb1812abce60b9f1b0b3210fb9dcc4c107c4ff91a74f67a236e829a93fc86"
+    },
+    {
+      "original_path": "target/jni-lifecycle-root-review/308e15b9fbcd491db073cd1f1af606ef/probe-panic.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/308e15b9fbcd491db073cd1f1af606ef/probe-panic.stdout.txt",
+      "sha256": "e314ac8169966eeffaa575009b9e794be4c41b4617332d92eff262e17b5e8f03"
+    },
+    {
+      "original_path": "target/jni-lifecycle-root-review/308e15b9fbcd491db073cd1f1af606ef/probe-ping.process.json",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/308e15b9fbcd491db073cd1f1af606ef/probe-ping.process.json",
+      "sha256": "51aa79a871df04b2a3df0f7406d4993f633de6f385005aba0b8ff9b0117556d2"
+    },
+    {
+      "original_path": "target/jni-lifecycle-root-review/308e15b9fbcd491db073cd1f1af606ef/probe-ping.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/308e15b9fbcd491db073cd1f1af606ef/probe-ping.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/jni-lifecycle-root-review/308e15b9fbcd491db073cd1f1af606ef/probe-ping.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/308e15b9fbcd491db073cd1f1af606ef/probe-ping.stdout.txt",
+      "sha256": "98d31ed2694df75382a5af7bbce92110cda47c4f45479cc682817e91ad34b62b"
+    },
+    {
+      "original_path": "target/jni-lifecycle-root-review/308e15b9fbcd491db073cd1f1af606ef/probe-worker-fail.process.json",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/308e15b9fbcd491db073cd1f1af606ef/probe-worker-fail.process.json",
+      "sha256": "d4df700282c0d1006911f13f329d63e77d4307cc668c9ec302c23a7cb4825ff9"
+    },
+    {
+      "original_path": "target/jni-lifecycle-root-review/308e15b9fbcd491db073cd1f1af606ef/probe-worker-fail.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/308e15b9fbcd491db073cd1f1af606ef/probe-worker-fail.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/jni-lifecycle-root-review/308e15b9fbcd491db073cd1f1af606ef/probe-worker-fail.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/308e15b9fbcd491db073cd1f1af606ef/probe-worker-fail.stdout.txt",
+      "sha256": "e1eaa096b76a21c7dcdafee85ce0bc7f62ed7f27431cd91eed445c73e7f40659"
+    },
+    {
+      "original_path": "target/jni-lifecycle-root-review/308e15b9fbcd491db073cd1f1af606ef/probe-worker.process.json",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/308e15b9fbcd491db073cd1f1af606ef/probe-worker.process.json",
+      "sha256": "e31656363d5792077d9bb2e548d7242c882899c92fe2f467f384c5af85ec31b9"
+    },
+    {
+      "original_path": "target/jni-lifecycle-root-review/308e15b9fbcd491db073cd1f1af606ef/probe-worker.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/308e15b9fbcd491db073cd1f1af606ef/probe-worker.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/jni-lifecycle-root-review/308e15b9fbcd491db073cd1f1af606ef/probe-worker.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/308e15b9fbcd491db073cd1f1af606ef/probe-worker.stdout.txt",
+      "sha256": "3739b603426372ba630fdc9258f3dea743c8923c1d5b2137a52a3fa178354389"
+    },
+    {
+      "original_path": "target/jni-lifecycle-root-review/308e15b9fbcd491db073cd1f1af606ef/rust-clippy.process.json",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/308e15b9fbcd491db073cd1f1af606ef/rust-clippy.process.json",
+      "sha256": "8c2df1b73340933174338bec5495a21e4dc29dace434bbd19b101f4ef1882219"
+    },
+    {
+      "original_path": "target/jni-lifecycle-root-review/308e15b9fbcd491db073cd1f1af606ef/rust-clippy.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/308e15b9fbcd491db073cd1f1af606ef/rust-clippy.stderr.txt",
+      "sha256": "59883ae4ee0c4c40a3980de4c224cb7b58b8625b804d6d5817d520fac5f30b80"
+    },
+    {
+      "original_path": "target/jni-lifecycle-root-review/308e15b9fbcd491db073cd1f1af606ef/rust-clippy.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/308e15b9fbcd491db073cd1f1af606ef/rust-clippy.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/jni-lifecycle-root-review/308e15b9fbcd491db073cd1f1af606ef/rust-fmt.process.json",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/308e15b9fbcd491db073cd1f1af606ef/rust-fmt.process.json",
+      "sha256": "ac6995bf9f4742cfff86ac8e74f40857f2f4943ccd5d47fa5cb0f504631c763f"
+    },
+    {
+      "original_path": "target/jni-lifecycle-root-review/308e15b9fbcd491db073cd1f1af606ef/rust-fmt.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/308e15b9fbcd491db073cd1f1af606ef/rust-fmt.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/jni-lifecycle-root-review/308e15b9fbcd491db073cd1f1af606ef/rust-fmt.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/308e15b9fbcd491db073cd1f1af606ef/rust-fmt.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/jni-lifecycle-root-review/308e15b9fbcd491db073cd1f1af606ef/rust-release.process.json",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/308e15b9fbcd491db073cd1f1af606ef/rust-release.process.json",
+      "sha256": "229bc8d5d5ea9c32eb004072c76a68e2c716ed44f12b3ab0ac3a6594fc8fcada"
+    },
+    {
+      "original_path": "target/jni-lifecycle-root-review/308e15b9fbcd491db073cd1f1af606ef/rust-release.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/308e15b9fbcd491db073cd1f1af606ef/rust-release.stderr.txt",
+      "sha256": "f8342c90ba5fb2f993810bde7fc017807e7c456b06a4c6c0fcfb127f3a597d0f"
+    },
+    {
+      "original_path": "target/jni-lifecycle-root-review/308e15b9fbcd491db073cd1f1af606ef/rust-release.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/308e15b9fbcd491db073cd1f1af606ef/rust-release.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/jni-lifecycle-root-review/308e15b9fbcd491db073cd1f1af606ef/rust-sysroot.process.json",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/308e15b9fbcd491db073cd1f1af606ef/rust-sysroot.process.json",
+      "sha256": "07a69a2d450e46841236031779afbe6a4f11c5724502e47267eb8a4fcbf3079a"
+    },
+    {
+      "original_path": "target/jni-lifecycle-root-review/308e15b9fbcd491db073cd1f1af606ef/rust-sysroot.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/308e15b9fbcd491db073cd1f1af606ef/rust-sysroot.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/jni-lifecycle-root-review/308e15b9fbcd491db073cd1f1af606ef/rust-sysroot.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/308e15b9fbcd491db073cd1f1af606ef/rust-sysroot.stdout.txt",
+      "sha256": "e0d8249c2fb93ac2106d97fedd24f44420e0ee2316617df20f769f033eaf568d"
+    },
+    {
+      "original_path": "target/jni-lifecycle-root-review/308e15b9fbcd491db073cd1f1af606ef/rust-tests.process.json",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/308e15b9fbcd491db073cd1f1af606ef/rust-tests.process.json",
+      "sha256": "682e9d52a0ead199cb25284ce09057a0fd1f2f924ba55d13c286ccb73d12aa0a"
+    },
+    {
+      "original_path": "target/jni-lifecycle-root-review/308e15b9fbcd491db073cd1f1af606ef/rust-tests.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/308e15b9fbcd491db073cd1f1af606ef/rust-tests.stderr.txt",
+      "sha256": "23d25abc10ae3770f5510ddd72d1ac42da91c22d8865d0644357f811e1f297d6"
+    },
+    {
+      "original_path": "target/jni-lifecycle-root-review/308e15b9fbcd491db073cd1f1af606ef/rust-tests.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/308e15b9fbcd491db073cd1f1af606ef/rust-tests.stdout.txt",
+      "sha256": "d38e6ea6d69ddb377e4a4380b22926f3864806998a850d5e28c8459dfc09f014"
+    },
+    {
+      "original_path": "target/jni-lifecycle-root-review/308e15b9fbcd491db073cd1f1af606ef/rustc-version.process.json",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/308e15b9fbcd491db073cd1f1af606ef/rustc-version.process.json",
+      "sha256": "36dd0d2685df95c8135813d4487cad9b2593b61ef77e849f0716efbca7b073d8"
+    },
+    {
+      "original_path": "target/jni-lifecycle-root-review/308e15b9fbcd491db073cd1f1af606ef/rustc-version.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/308e15b9fbcd491db073cd1f1af606ef/rustc-version.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/jni-lifecycle-root-review/308e15b9fbcd491db073cd1f1af606ef/rustc-version.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/308e15b9fbcd491db073cd1f1af606ef/rustc-version.stdout.txt",
+      "sha256": "c45e612575abeef05e99e88eb1e7aea52cddab9ad70d4f65ad20eaa65e92a9cf"
+    },
+    {
+      "original_path": "target/jni-lifecycle-root-review/308e15b9fbcd491db073cd1f1af606ef/valid-local-compile.process.json",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/308e15b9fbcd491db073cd1f1af606ef/valid-local-compile.process.json",
+      "sha256": "a59808155fe8ec2d0cfa9de063fd86024d1607f95dd7974f3db89001ef01fa9d"
+    },
+    {
+      "original_path": "target/jni-lifecycle-root-review/308e15b9fbcd491db073cd1f1af606ef/valid-local-compile.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/308e15b9fbcd491db073cd1f1af606ef/valid-local-compile.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/jni-lifecycle-root-review/308e15b9fbcd491db073cd1f1af606ef/valid-local-compile.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h22-5-jni-evidence/308e15b9fbcd491db073cd1f1af606ef/valid-local-compile.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ]
+}
