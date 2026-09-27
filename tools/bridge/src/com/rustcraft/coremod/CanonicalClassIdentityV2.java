@@ -47,17 +47,89 @@ public final class CanonicalClassIdentityV2 {
         public final String semanticSha256;
         public final String declarationOrderSha256;
         public final String rawSha256;
+        /** Session-invariant projection: declared process-bound metadata masked. */
+        public final String sessionInvariantSha256;
+        /** Distinct qualified sessionId values the mask replaced (sorted). */
+        public final List<String> maskedValues;
+        /** Total canonical-projection occurrences the mask replaced. */
+        public final int maskedOccurrenceCount;
+        /** Exact annotation provenances that were masked. */
+        public final List<String> maskedLocations;
 
         private Result(String name, String canonical, String order, byte[] original) {
+            this(name, canonical, order, original, null, null, null, 0);
+        }
+
+        private Result(String name, String canonical, String order, byte[] original,
+                String sessionInvariant, List<String> maskedValues, List<String> maskedLocations,
+                int maskedOccurrenceCount) {
             className = name;
             canonicalJson = canonical;
             semanticSha256 = sha256(canonical.getBytes(StandardCharsets.UTF_8));
             declarationOrderSha256 = sha256(order.getBytes(StandardCharsets.UTF_8));
             rawSha256 = sha256(original);
+            this.sessionInvariantSha256 = sessionInvariant;
+            this.maskedValues = maskedValues == null
+                    ? java.util.Collections.<String>emptyList()
+                    : java.util.Collections.unmodifiableList(maskedValues);
+            this.maskedLocations = maskedLocations == null
+                    ? java.util.Collections.<String>emptyList()
+                    : java.util.Collections.unmodifiableList(maskedLocations);
+            this.maskedOccurrenceCount = maskedOccurrenceCount;
         }
 
         public String receiptJson() {
             return json(a(schema, className, semanticSha256, declarationOrderSha256, rawSha256));
+        }
+
+        /** Session-bound receipt: exact + invariant + full mask provenance. */
+        public String sessionBoundReceiptJson() {
+            return json(a(SCHEMA_SESSION_BOUND, className, semanticSha256,
+                    declarationOrderSha256, rawSha256, sessionInvariantSha256,
+                    maskedValues.size(), maskedValues, maskedOccurrenceCount, maskedLocations));
+        }
+    }
+
+    public static final String SCHEMA_SESSION_BOUND = "CANONICAL_ID_V2_SESSION_BOUND";
+
+    /**
+     * Declared process-bound mask, structurally bound to the proven Mixin
+     * merged-method provenance: an annotation whose descriptor is EXACTLY
+     * MIXIN_MERGED_DESC, under its EXACT sessionId element, whose value is a
+     * canonical RFC-4122-shaped UUID. Nothing else is exempted: unrelated
+     * UUID constants, UUIDs under other annotations, UUIDs under other
+     * MixinMerged elements and any other UUID-shaped bytes stay fully
+     * significant. The corresponding symbolic-pool UTF8 value is normalized
+     * only insofar as it represents that qualified annotation provenance
+     * (pool-level value equality with a qualified sessionId; javac dedups
+     * identical UTF8 constants into one pool entry). Masking is applied
+     * BEFORE sorted rendering, so the projection is order-stable across
+     * processes. The exact semantic identity stays untouched; callers must
+     * separately prove within-process sessionId equality so the mask
+     * describes the same transformation session on both sides, never assumed.
+     */
+    public static final String MIXIN_MERGED_DESC =
+            "Lorg/spongepowered/asm/mixin/transformer/meta/MixinMerged;";
+    public static final String SESSION_ELEMENT = "sessionId";
+    public static final String SESSION_PLACEHOLDER = "PROCESS_BOUND_SESSION_ID";
+    private static final java.util.regex.Pattern SESSION_UUID = java.util.regex.Pattern
+        .compile("[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}");
+
+    /** One qualified sessionId provenance: where it was found and its value. */
+    public static final class SessionId {
+        public final String location;   // "class" | "field:name+desc" | "method:name+desc"
+        public final boolean visible;
+        public final String descriptor; // exact annotation descriptor
+        public final String element;    // exact element key
+        public final String value;      // the UUID
+
+        SessionId(String location, boolean visible, String descriptor, String element, String value) {
+            this.location = location; this.visible = visible; this.descriptor = descriptor;
+            this.element = element; this.value = value;
+        }
+
+        public String render() {
+            return location + " visible=" + visible + " " + descriptor + "#" + element + "=" + value;
         }
     }
 
@@ -67,67 +139,166 @@ public final class CanonicalClassIdentityV2 {
         IdentityFailure(String message, Throwable cause) { super(SCHEMA + ": " + message, cause); }
     }
 
+    /** Exact V2 identity: no session mask. */
     public static Result identify(byte[] bytes) {
         if (bytes == null) throw new IdentityFailure("null classfile");
         try {
-            RawClass raw = new RawClass(bytes);
             ClassNode cn = new ClassNode();
-            // Expanded frames make frame compression and offset encodings irrelevant,
-            // while retaining the complete verifier locals/stack at each position.
             new ClassReader(bytes).accept(cn, ClassReader.EXPAND_FRAMES);
-            rejectAttributes(cn.attrs);
-            List<Object> declarationOrder = a(SCHEMA + "_DECLARATION_ORDER");
-            for (FieldNode f : cn.fields) declarationOrder.add(a("field", f.name, f.desc));
-            for (MethodNode m : cn.methods) declarationOrder.add(a("method", m.name, m.desc));
-
-            List<FieldNode> fields = new ArrayList<FieldNode>(cn.fields);
-            Collections.sort(fields, new Comparator<FieldNode>() {
-                public int compare(FieldNode x, FieldNode y) {
-                    int n = x.name.compareTo(y.name);
-                    return n == 0 ? x.desc.compareTo(y.desc) : n;
-                }
-            });
-            List<Object> fs = new ArrayList<Object>();
-            Set<String> fieldKeys = new HashSet<String>();
-            for (FieldNode f : fields) {
-                if (!fieldKeys.add(f.name + "\u0000" + f.desc)) throw new IdentityFailure("duplicate field");
-                rejectAttributes(f.attrs);
-                fs.add(a(cn.name, f.name, f.desc, f.signature, f.access, constant(f.value),
-                        annotations(f.visibleAnnotations, f.invisibleAnnotations),
-                        typeAnnotations(f.visibleTypeAnnotations, f.invisibleTypeAnnotations)));
-            }
-            List<MethodNode> methods = new ArrayList<MethodNode>(cn.methods);
-            Collections.sort(methods, new Comparator<MethodNode>() {
-                public int compare(MethodNode x, MethodNode y) {
-                    int n = x.name.compareTo(y.name);
-                    return n == 0 ? x.desc.compareTo(y.desc) : n;
-                }
-            });
-            List<Object> ms = new ArrayList<Object>();
-            Set<String> methodKeys = new HashSet<String>();
-            for (MethodNode m : methods) {
-                if (!methodKeys.add(m.name + "\u0000" + m.desc)) throw new IdentityFailure("duplicate method");
-                ms.add(method(m, raw.parameterCounts.get(m.name + "\u0000" + m.desc)));
-            }
-            List<Object> inner = new ArrayList<Object>();
-            for (InnerClassNode i : cn.innerClasses) inner.add(a(i.name, i.outerName, i.innerName, i.access));
-            String canonical = json(a(SCHEMA, cn.version, cn.access, cn.name, cn.signature,
-                    cn.superName, cn.interfaces, cn.sourceFile, cn.sourceDebug,
-                    cn.outerClass, cn.outerMethod, cn.outerMethodDesc,
-                    annotations(cn.visibleAnnotations, cn.invisibleAnnotations),
-                    typeAnnotations(cn.visibleTypeAnnotations, cn.invisibleTypeAnnotations),
-                    inner, fs, ms, raw.symbolicPool(), raw.symbolicBootstraps()));
-            return new Result(cn.name, canonical, json(declarationOrder), bytes);
-        } catch (IdentityFailure failure) {
-            throw failure;
-        } catch (IOException failure) {
+            String[] parts = renderCanonical(bytes, cn, null);
+            return new Result(parts[2], parts[0], parts[1], bytes);
+        } catch (IdentityFailure rejected) {
+            throw rejected;
+        } catch (RuntimeException malformed) {
+            // ASM reports a truncated/foreign classfile as IllegalArgumentException.
+            throw new IdentityFailure("malformed classfile", malformed);
+        } catch (java.io.IOException failure) {
             throw new IdentityFailure("malformed classfile", failure);
-        } catch (RuntimeException failure) {
-            throw new IdentityFailure("unsupported or malformed classfile", failure);
         }
     }
 
-    private static Object method(MethodNode m, List<Object> rawParameterAnnotationCounts) {
+    /**
+     * Session-bound identity: structurally scan the provenances, then render
+     * the canonical projection with the qualified sessionId values masked
+     * before sorted rendering. The exact semantic identity is rendered
+     * separately, unmasked.
+     */
+    public static Result identifySessionBound(byte[] bytes) {
+        if (bytes == null) throw new IdentityFailure("null classfile");
+        ClassNode cn = new ClassNode();
+        final String[] invariantRef = new String[1];
+        final int[] occurrenceRef = new int[1];
+        final List<String> locationsRef = new ArrayList<String>();
+        final List<String> valuesRef = new ArrayList<String>();
+        final String[] exactCanonicalRef = new String[1];
+        final String[] classNameRef = new String[1];
+        final String[] declarationOrderRef = new String[1];
+        try {
+            new ClassReader(bytes).accept(cn, ClassReader.EXPAND_FRAMES);
+            List<SessionId> sessions = new ArrayList<SessionId>();
+            collect(sessions, "class", cn.name, cn.visibleAnnotations, cn.invisibleAnnotations);
+            for (FieldNode f : cn.fields)
+                collect(sessions, "field:" + f.name + "+" + f.desc, f.name,
+                        f.visibleAnnotations, f.invisibleAnnotations);
+            for (MethodNode m : cn.methods)
+                collect(sessions, "method:" + m.name + "+" + m.desc, m.name,
+                        m.visibleAnnotations, m.invisibleAnnotations);
+            if (sessions.isEmpty())
+                throw new IdentityFailure(cn.name + ": session-bound identity requires at least one "
+                        + MIXIN_MERGED_DESC + "#" + SESSION_ELEMENT + " provenance");
+            java.util.TreeSet<String> mask = new java.util.TreeSet<String>();
+            for (SessionId sid : sessions) mask.add(sid.value);
+            String[] exactParts = renderCanonical(bytes, cn, null);
+            String[] maskedParts = renderCanonical(bytes, cn, mask);
+            int occurrences = 0;
+            for (String value : mask) {
+                int index = 0, count = 0;
+                while ((index = exactParts[0].indexOf(value, index)) >= 0) {
+                    count++; index += value.length();
+                }
+                if (count == 0)
+                    throw new IdentityFailure(cn.name + ": qualified sessionId " + value
+                            + " absent from the exact canonical projection");
+                occurrences += count;
+            }
+            exactCanonicalRef[0] = exactParts[0];
+            classNameRef[0] = exactParts[2];
+            declarationOrderRef[0] = exactParts[1];
+            invariantRef[0] = sha256(maskedParts[0].getBytes(StandardCharsets.UTF_8));
+            occurrenceRef[0] = occurrences;
+            valuesRef.addAll(mask);
+            for (SessionId sid : sessions) locationsRef.add(sid.render());
+        } catch (IdentityFailure rejected) {
+            throw rejected;
+        } catch (RuntimeException malformed) {
+            throw new IdentityFailure("malformed classfile", malformed);
+        } catch (java.io.IOException failure) {
+            throw new IdentityFailure("malformed classfile", failure);
+        }
+        return new Result(classNameRef[0], exactCanonicalRef[0], declarationOrderRef[0], bytes,
+                invariantRef[0], valuesRef, locationsRef, occurrenceRef[0]);
+    }
+
+    /**
+     * Full canonical rendering. sessionMask == null renders the exact
+     * identity; otherwise every MixinMerged.sessionId annotation value and
+     * the corresponding raw-pool UTF8 value are masked before sorted
+     * rendering, so the projection is order-stable across processes.
+     */
+    private static String[] renderCanonical(byte[] bytes, ClassNode cn,
+            java.util.Set<String> sessionMask) throws java.io.IOException {
+        RawClass raw = new RawClass(bytes);
+        raw.sessionMask = sessionMask;
+        rejectAttributes(cn.attrs);
+        List<Object> declarationOrder = a(SCHEMA + "_DECLARATION_ORDER");
+        for (FieldNode f : cn.fields) declarationOrder.add(a("field", f.name, f.desc));
+        for (MethodNode m : cn.methods) declarationOrder.add(a("method", m.name, m.desc));
+
+        List<FieldNode> fields = new ArrayList<FieldNode>(cn.fields);
+        Collections.sort(fields, new Comparator<FieldNode>() {
+            public int compare(FieldNode x, FieldNode y) {
+                int n = x.name.compareTo(y.name);
+                return n == 0 ? x.desc.compareTo(y.desc) : n;
+            }
+        });
+        List<Object> fs = new ArrayList<Object>();
+        Set<String> fieldKeys = new HashSet<String>();
+        for (FieldNode f : fields) {
+            if (!fieldKeys.add(f.name + "\u0000" + f.desc)) throw new IdentityFailure("duplicate field");
+            rejectAttributes(f.attrs);
+            fs.add(a(cn.name, f.name, f.desc, f.signature, f.access, constant(f.value),
+                    annotations(f.visibleAnnotations, f.invisibleAnnotations, sessionMask),
+                    typeAnnotations(f.visibleTypeAnnotations, f.invisibleTypeAnnotations)));
+        }
+        List<MethodNode> methods = new ArrayList<MethodNode>(cn.methods);
+        Collections.sort(methods, new Comparator<MethodNode>() {
+            public int compare(MethodNode x, MethodNode y) {
+                int n = x.name.compareTo(y.name);
+                return n == 0 ? x.desc.compareTo(y.desc) : n;
+            }
+        });
+        List<Object> ms = new ArrayList<Object>();
+        Set<String> methodKeys = new HashSet<String>();
+        for (MethodNode m : methods) {
+            if (!methodKeys.add(m.name + "\u0000" + m.desc)) throw new IdentityFailure("duplicate method");
+            ms.add(method(m, raw.parameterCounts.get(m.name + "\u0000" + m.desc), sessionMask));
+        }
+        List<Object> inner = new ArrayList<Object>();
+        for (InnerClassNode i : cn.innerClasses) inner.add(a(i.name, i.outerName, i.innerName, i.access));
+        String canonical = json(a(SCHEMA, cn.version, cn.access, cn.name, cn.signature,
+                cn.superName, cn.interfaces, cn.sourceFile, cn.sourceDebug,
+                cn.outerClass, cn.outerMethod, cn.outerMethodDesc,
+                annotations(cn.visibleAnnotations, cn.invisibleAnnotations, sessionMask),
+                typeAnnotations(cn.visibleTypeAnnotations, cn.invisibleTypeAnnotations),
+                inner, fs, ms, raw.symbolicPool(), raw.symbolicBootstraps()));
+        return new String[] {canonical, json(declarationOrder), cn.name};
+    }
+
+    private static void collect(List<SessionId> out, String location, String owner,
+            List<AnnotationNode> visible, List<AnnotationNode> invisible) {
+        collectOne(out, location, owner, true, visible);
+        collectOne(out, location, owner, false, invisible);
+    }
+
+    private static void collectOne(List<SessionId> out, String location, String owner,
+            boolean visible, List<AnnotationNode> nodes) {
+        if (nodes == null) return;
+        for (AnnotationNode n : nodes) {
+            if (!MIXIN_MERGED_DESC.equals(n.desc) || n.values == null) continue;
+            for (int i = 0; i + 1 < n.values.size(); i += 2) {
+                if (!SESSION_ELEMENT.equals(n.values.get(i))) continue;
+                Object value = n.values.get(i + 1);
+                if (!(value instanceof String)
+                        || !SESSION_UUID.matcher((String) value).matches())
+                    throw new IdentityFailure(owner + ": " + MIXIN_MERGED_DESC + "#"
+                            + SESSION_ELEMENT + " is not a canonical UUID: " + value);
+                out.add(new SessionId(location, visible, n.desc, SESSION_ELEMENT, (String) value));
+            }
+        }
+    }
+
+    private static Object method(MethodNode m, List<Object> rawParameterAnnotationCounts,
+            java.util.Set<String> sessionMask) {
         rejectAttributes(m.attrs);
         IdentityHashMap<LabelNode, Integer> labels = new IdentityHashMap<LabelNode, Integer>();
         int count = 0;
@@ -201,7 +372,7 @@ public final class CanonicalClassIdentityV2 {
             for (ParameterNode p : m.parameters) parameters.add(a(p.name, p.access));
         }
         return a(m.name, m.desc, m.signature, m.access, m.exceptions, parameters,
-                annotations(m.visibleAnnotations, m.invisibleAnnotations),
+                annotations(m.visibleAnnotations, m.invisibleAnnotations, sessionMask),
                 typeAnnotations(m.visibleTypeAnnotations, m.invisibleTypeAnnotations),
                 parameterAnnotations(m.visibleParameterAnnotations, m.invisibleParameterAnnotations),
                 annotationValue(m.annotationDefault), m.maxStack, m.maxLocals, instructions,
@@ -252,7 +423,7 @@ public final class CanonicalClassIdentityV2 {
         if (value == null) return null;
         if (value instanceof AnnotationNode) {
             AnnotationNode n = (AnnotationNode) value;
-            return a("annotation", n.desc, annotationPairs(n.values));
+            return a("annotation", n.desc, annotationPairs(n.values, null, null));
         }
         if (value instanceof String[]) {
             String[] e = (String[]) value;
@@ -271,26 +442,39 @@ public final class CanonicalClassIdentityV2 {
         return constant(value);
     }
 
-    private static Object annotationPairs(List<Object> pairs) {
+    private static Object annotationPairs(List<Object> pairs, String annotationDesc,
+            java.util.Set<String> sessionMask) {
         List<Object> result = new ArrayList<Object>();
         if (pairs != null) {
             if ((pairs.size() & 1) != 0) throw new IdentityFailure("odd annotation values");
-            for (int i = 0; i < pairs.size(); i += 2)
-                result.add(a(pairs.get(i), annotationValue(pairs.get(i + 1))));
+            for (int i = 0; i < pairs.size(); i += 2) {
+                Object value = annotationValue(pairs.get(i + 1));
+                if (sessionMask != null && MIXIN_MERGED_DESC.equals(annotationDesc)
+                        && SESSION_ELEMENT.equals(pairs.get(i))
+                        && value instanceof List<?>) {
+                    List<?> entry = (List<?>) value;
+                    if (entry.size() == 2 && "string".equals(entry.get(0))
+                            && sessionMask.contains(entry.get(1)))
+                        value = a("string", SESSION_PLACEHOLDER);
+                }
+                result.add(a(pairs.get(i), value));
+            }
         }
         return result;
     }
 
-    private static Object annotations(List<AnnotationNode> visible, List<AnnotationNode> invisible) {
+    private static List<Object> annotations(List<AnnotationNode> visible,
+            List<AnnotationNode> invisible, java.util.Set<String> sessionMask) {
         List<Object> values = new ArrayList<Object>();
-        addAnnotations(values, visible, true);
-        addAnnotations(values, invisible, false);
+        addAnnotations(values, visible, true, sessionMask);
+        addAnnotations(values, invisible, false, sessionMask);
         return values;
     }
 
-    private static void addAnnotations(List<Object> out, List<AnnotationNode> nodes, boolean visible) {
+    private static void addAnnotations(List<Object> out, List<AnnotationNode> nodes, boolean visible,
+            java.util.Set<String> sessionMask) {
         if (nodes != null) for (AnnotationNode n : nodes)
-            out.add(a(visible, n.desc, annotationPairs(n.values)));
+            out.add(a(visible, n.desc, annotationPairs(n.values, n.desc, sessionMask)));
     }
 
     private static Object typeAnnotations(List<TypeAnnotationNode> visible, List<TypeAnnotationNode> invisible) {
@@ -303,7 +487,7 @@ public final class CanonicalClassIdentityV2 {
     private static void addTypeAnnotations(List<Object> out, List<TypeAnnotationNode> nodes, boolean visible) {
         if (nodes != null) for (TypeAnnotationNode n : nodes)
             out.add(a(visible, n.typeRef, n.typePath == null ? null : n.typePath.toString(),
-                    n.desc, annotationPairs(n.values)));
+                    n.desc, annotationPairs(n.values, null, null)));
     }
 
     private static Object parameterAnnotations(List<AnnotationNode>[] visible, List<AnnotationNode>[] invisible) {
@@ -315,7 +499,7 @@ public final class CanonicalClassIdentityV2 {
         List<Object> result = new ArrayList<Object>();
         for (List<AnnotationNode> nodes : side) {
             List<Object> entry = new ArrayList<Object>();
-            addAnnotations(entry, nodes, true);
+            addAnnotations(entry, nodes, true, null);
             result.add(entry);
         }
         return result;
@@ -333,7 +517,7 @@ public final class CanonicalClassIdentityV2 {
             boolean visible, IdentityHashMap<LabelNode, Integer> labels) {
         if (nodes != null) for (LocalVariableAnnotationNode n : nodes)
             out.add(a(visible, n.typeRef, n.typePath == null ? null : n.typePath.toString(),
-                    n.desc, annotationPairs(n.values), labelList(n.start, labels),
+                    n.desc, annotationPairs(n.values, null, null), labelList(n.start, labels),
                     labelList(n.end, labels), n.index));
     }
 
@@ -410,6 +594,7 @@ public final class CanonicalClassIdentityV2 {
         List<Object> activeParameterCounts;
         List<String> localVariableKeys;
         List<String> localVariableTypeKeys;
+        java.util.Set<String> sessionMask;
         int p;
 
         RawClass(byte[] bytes) throws IOException {
@@ -696,7 +881,19 @@ public final class CanonicalClassIdentityV2 {
 
         Object symbolicPool() {
             List<String> values = new ArrayList<String>();
-            for (int i = 1; i < tags.length; i++) if (tags[i] != 0) values.add(json(resolve(i)));
+            for (int i = 1; i < tags.length; i++) {
+                if (tags[i] == 0) continue;
+                Object resolved = resolve(i);
+                if (sessionMask != null && resolved instanceof List<?>) {
+                    List<?> entry = (List<?>) resolved;
+                    if (entry.size() == 2 && "utf8".equals(entry.get(0))
+                            && sessionMask.contains(entry.get(1))) {
+                        values.add(json(a("utf8", SESSION_PLACEHOLDER)));
+                        continue;
+                    }
+                }
+                values.add(json(resolved));
+            }
             Collections.sort(values);
             return values;
         }

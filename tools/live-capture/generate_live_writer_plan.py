@@ -7,8 +7,11 @@ import hashlib
 import json
 import pathlib
 import re
+import sys
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(ROOT / "tools" / "testing"))
+import session_bound_certificate as certificate_schema
 _parser = argparse.ArgumentParser(description=__doc__)
 _parser.add_argument("--profile", type=pathlib.Path,
                      default=ROOT / "tools/live-capture/live-shadow-profile.json",
@@ -39,14 +42,16 @@ manifest = json.loads(manifest_bytes)
 manifest_sha = hashlib.sha256(manifest_bytes).hexdigest()
 
 mode = profile.get("identity_mode", "RAW")
+SESSION_BOUND = certificate_schema.SESSION_BOUND_SCHEMA
+EXACT_V2 = certificate_schema.EXACT_SCHEMA
 if (profile.get("schema_version") == 2 or "expected_class_identities" in profile
-        or profile.get("kind") == "RUSTCRAFT_V2_WRITER_PLAN_RECIPE") and mode != "CANONICAL_ID_V2":
+        or profile.get("kind") == "RUSTCRAFT_V2_WRITER_PLAN_RECIPE") and mode not in (EXACT_V2, SESSION_BOUND):
     raise SystemExit("REFUSED: V2 recipe may not downgrade its identity mode")
-if mode not in ("RAW", "CANONICAL", "CANONICAL_ID_V2"):
+if mode not in ("RAW", "CANONICAL", EXACT_V2, SESSION_BOUND):
     raise SystemExit("REFUSED: unknown identity mode cannot fall back to RAW")
 if mode == "CANONICAL" and not _args.legacy_v1_reproduction:
     raise SystemExit("REFUSED: V1 requires explicit historical reproduction")
-if mode == "CANONICAL_ID_V2":
+if mode in (EXACT_V2, SESSION_BOUND):
     if profile.get("schema_version") != 2 or profile.get("kind") != "RUSTCRAFT_V2_WRITER_PLAN_RECIPE" or profile.get("all_required_observed") is not True:
         raise SystemExit("REFUSED: explicit observed V2 recipe required; a recipe is not a qualification certificate")
     required_status = "OBSERVED"
@@ -74,7 +79,7 @@ if (not re.fullmatch(r"[0-9]+(?:\.[0-9]+){3}", profile.get("forge_build", ""))
         or not re.fullmatch(r"[0-9a-f]{64}", qualification.get("minecraft_server_jar_sha256", ""))):
     raise SystemExit("REFUSED: malformed runtime/profile metadata")
 identity_by_class = {}
-if mode == "CANONICAL_ID_V2":
+if mode in (EXACT_V2, SESSION_BOUND):
     identities = profile.get("expected_class_identities")
     if not isinstance(identities, dict) or set(identities) != required_classes:
         raise SystemExit("REFUSED: exact V2 class identity inventory required")
@@ -95,6 +100,52 @@ OWNER = {"net.minecraft.world.World", "net.minecraft.world.chunk.Chunk",
          "net.minecraft.world.chunk.BlockStateContainer",
          "net.minecraft.world.chunk.NibbleArray", "net.minecraft.util.BitArray"}
 PACKET = {"net.minecraft.network.play.server.SPacketChunkData"}
+
+# ---------------------------------------------------------------- session-bound
+# Generic, policy-driven: nothing here names a class, a profile or a mod. A site
+# declares its identity mode; session-bound mode additionally REQUIRES a
+# certificate per session-bound class. Structure alone never authorizes masking.
+identity_by_class_mode = {name: EXACT_V2 for name in identity_by_class}
+certificate_by_class = {}
+if mode == SESSION_BOUND:
+    session_classes = profile.get("session_bound_classes")
+    certificates = profile.get("session_certificates")
+    if (not isinstance(session_classes, list) or not session_classes
+            or len(set(session_classes)) != len(session_classes)
+            or any(not isinstance(c, str) or c not in required_classes for c in session_classes)):
+        raise SystemExit("REFUSED: session-bound mode requires an explicit in-scope class list")
+    if not isinstance(certificates, dict):
+        raise SystemExit("REFUSED: session-bound mode requires an acquisition certificate per class")
+    session_set = set(session_classes)
+    if set(certificates) != session_set:
+        raise SystemExit("REFUSED: certificate inventory does not match the declared session-bound classes")
+    binding = profile.get("recipe_binding_sha256")
+    if not isinstance(binding, str) or not re.fullmatch(r"[0-9a-f]{64}", binding):
+        raise SystemExit("REFUSED: explicit recipe binding required for session-bound mode")
+    if binding != certificate_schema.recipe_binding_sha256(profile):
+        raise SystemExit("REFUSED: recipe binding does not cover this recipe revision")
+    for name in sorted(session_set):
+        try:
+            document = certificate_schema.validate(certificates[name])
+        except certificate_schema.CertificateError as invalid:
+            raise SystemExit("REFUSED: certificate for " + name + " is unusable: " + str(invalid))
+        identity = identity_by_class[name]
+        # The certificate must describe the SAME observed pre-writer bytes the
+        # plan already binds exactly. A session certificate can never replace or
+        # relax the exact CANONICAL_ID_V2 identity requirement.
+        if (document["class_name"] != identity["class_name"]
+                or document["pre_writer_raw_sha256"] != identity["raw_sha256"]
+                or document["exact_semantic_sha256"] != identity["semantic_sha256"]
+                or document["exact_declaration_order_sha256"] != identity["declaration_order_sha256"]):
+            raise SystemExit("REFUSED: certificate for " + name + " is not bound to the observed exact identity")
+        if document["recipe_sha256"] != binding:
+            raise SystemExit("REFUSED: certificate for " + name + " binds a different recipe revision")
+        if document["runtime_manifest_sha256"] != qualification.get("runtime_manifest_sha256", document["runtime_manifest_sha256"]):
+            raise SystemExit("REFUSED: certificate for " + name + " binds a different runtime manifest")
+        certificate_by_class[name] = document
+        identity_by_class_mode[name] = SESSION_BOUND
+elif "session_bound_classes" in profile or "session_certificates" in profile:
+    raise SystemExit("REFUSED: session certificates may not ride along on a non-session-bound recipe")
 
 
 def transformer_for(hook):
@@ -131,15 +182,20 @@ for hook in hooks:
     else:
         fingerprint_expr = "EMPTY_FINGERPRINT"
     identity = identity_by_class.get(cls)
+    entry_mode = identity_by_class_mode.get(cls, "CANONICAL_ID_V1" if mode == "CANONICAL" else mode)
+    document = certificate_by_class.get(cls)
+    certificate_arg = "null" if document is None else jstr(certificate_schema.render(document))
+    invariant_arg = "null" if document is None else jstr(document["session_invariant_sha256"])
     plan_entries.append(
-        "new Hook(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)" % (
+        "new Hook(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)" % (
             jstr(hook["id"]), jstr(transformer_for(hook)), jstr(cls), jstr(hook["method"]),
             jstr(hook["descriptor"]), jstr(hook["hook_type"]),
             jstr("liveWriter." + hook["id"] + "." + cls.rsplit(".", 1)[-1] + "." + hook["method"].replace("<init>", "ctor")),
             fingerprint_expr,
             jstr(identity["semantic_sha256"] if identity else hash_by_class[cls]),
-            jstr("CANONICAL_ID_V1" if mode == "CANONICAL" else mode),
-            jstr(identity["declaration_order_sha256"]) if identity else "null"))
+            jstr(entry_mode),
+            jstr(identity["declaration_order_sha256"]) if identity else "null",
+            certificate_arg, invariant_arg))
 
 java = f"""package com.rustcraft.coremod;
 
@@ -171,18 +227,29 @@ public final class {PLAN_CLASS} {{
         public final boolean canonicalIdentity;
         public final String identitySchema;
         public final String declarationOrderSha256;
+        /** Session-bound identity mode requires this certificate; null for every other mode. */
+        public final String sessionCertificateJson;
+        public final String sessionInvariantSha256;
 
         Hook(String id, String transformer, String className, String methodName, String descriptor,
              String hookType, String operationId, String[][] fingerprint, String preHookClassSha256,
              boolean canonicalIdentity) {{
             this(id, transformer, className, methodName, descriptor, hookType, operationId,
                     fingerprint, preHookClassSha256,
-                    canonicalIdentity ? "CANONICAL_ID_V1" : "RAW", null);
+                    canonicalIdentity ? "CANONICAL_ID_V1" : "RAW", null, null, null);
         }}
 
         Hook(String id, String transformer, String className, String methodName, String descriptor,
              String hookType, String operationId, String[][] fingerprint, String preHookClassSha256,
              String identitySchema, String declarationOrderSha256) {{
+            this(id, transformer, className, methodName, descriptor, hookType, operationId,
+                    fingerprint, preHookClassSha256, identitySchema, declarationOrderSha256, null, null);
+        }}
+
+        Hook(String id, String transformer, String className, String methodName, String descriptor,
+             String hookType, String operationId, String[][] fingerprint, String preHookClassSha256,
+             String identitySchema, String declarationOrderSha256, String sessionCertificateJson,
+             String sessionInvariantSha256) {{
             this.id = id;
             this.transformer = transformer;
             this.className = className;
@@ -195,6 +262,12 @@ public final class {PLAN_CLASS} {{
             this.canonicalIdentity = "CANONICAL_ID_V1".equals(identitySchema);
             this.identitySchema = identitySchema;
             this.declarationOrderSha256 = declarationOrderSha256;
+            this.sessionCertificateJson = sessionCertificateJson;
+            this.sessionInvariantSha256 = sessionInvariantSha256;
+        }}
+
+        public boolean sessionBound() {{
+            return "CANONICAL_ID_V2_SESSION_BOUND".equals(identitySchema);
         }}
 
         public boolean hasFingerprint() {{
@@ -205,19 +278,29 @@ public final class {PLAN_CLASS} {{
     /** Negative-control factory: same hook with a wrong pre-hook class hash. */
     public static Hook doctoredSha(Hook hook, String sha) {{
         return new Hook(hook.id, hook.transformer, hook.className, hook.methodName, hook.descriptor,
-                hook.hookType, hook.operationId, hook.fingerprint, sha, hook.identitySchema, hook.declarationOrderSha256);
+                hook.hookType, hook.operationId, hook.fingerprint, sha, hook.identitySchema,
+                hook.declarationOrderSha256, hook.sessionCertificateJson, hook.sessionInvariantSha256);
     }}
 
     /** Negative-control factory: same hook with an altered descriptor. */
     public static Hook doctoredDescriptor(Hook hook, String descriptor) {{
         return new Hook(hook.id, hook.transformer, hook.className, hook.methodName, descriptor,
-                hook.hookType, hook.operationId, hook.fingerprint, hook.preHookClassSha256, hook.identitySchema, hook.declarationOrderSha256);
+                hook.hookType, hook.operationId, hook.fingerprint, hook.preHookClassSha256, hook.identitySchema,
+                hook.declarationOrderSha256, hook.sessionCertificateJson, hook.sessionInvariantSha256);
     }}
 
     /** Negative-control factory: same hook with shifted/missing/duplicated anchors. */
     public static Hook doctoredFingerprint(Hook hook, String[][] fingerprint) {{
         return new Hook(hook.id, hook.transformer, hook.className, hook.methodName, hook.descriptor,
-                hook.hookType, hook.operationId, fingerprint, hook.preHookClassSha256, hook.identitySchema, hook.declarationOrderSha256);
+                hook.hookType, hook.operationId, fingerprint, hook.preHookClassSha256, hook.identitySchema,
+                hook.declarationOrderSha256, hook.sessionCertificateJson, hook.sessionInvariantSha256);
+    }}
+
+    /** Negative-control factory: same hook with a doctored session certificate. */
+    public static Hook doctoredCertificate(Hook hook, String sessionCertificateJson) {{
+        return new Hook(hook.id, hook.transformer, hook.className, hook.methodName, hook.descriptor,
+                hook.hookType, hook.operationId, hook.fingerprint, hook.preHookClassSha256, hook.identitySchema,
+                hook.declarationOrderSha256, sessionCertificateJson, hook.sessionInvariantSha256);
     }}
 
     /** Profile identity binding: any change here requires regeneration + requalification. */

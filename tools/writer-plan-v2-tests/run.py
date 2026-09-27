@@ -5,11 +5,12 @@ from pathlib import Path
 ROOT=Path(__file__).resolve().parents[2]
 sys.path.insert(0,str(ROOT/'tools/testing'))
 from hardening_guard import inspect
+import session_bound_certificate as certificate_schema
 def sha(p):return hashlib.sha256(Path(p).read_bytes()).hexdigest()
 def write(p,v):p.write_text(json.dumps(v,indent=2)+'\n',encoding='utf-8')
 def sources():
- p=[ROOT/'tools/live-capture/generate_live_writer_plan.py',ROOT/'tools/testing/hardening_guard.py',ROOT/'tools/live-capture/live-shadow-profile.json',ROOT/'tools/live-capture/required-live-writer-hooks.json',Path(__file__)]
- p.extend(ROOT/'tools/bridge/src/com/rustcraft/coremod'/n for n in ['LiveWriterPlan.java','LiveHookSupport.java','CanonicalClassIdentityV2.java'])
+ p=[ROOT/'tools/live-capture/generate_live_writer_plan.py',ROOT/'tools/testing/hardening_guard.py',ROOT/'tools/testing/session_bound_certificate.py',ROOT/'tools/live-capture/live-shadow-profile.json',ROOT/'tools/live-capture/required-live-writer-hooks.json',Path(__file__)]
+ p.extend(ROOT/'tools/bridge/src/com/rustcraft/coremod'/n for n in ['LiveWriterPlan.java','LiveHookSupport.java','CanonicalClassIdentityV2.java','SessionBoundIdentityCertificate.java'])
  p.extend((ROOT/'tools/writer-plan-v2-tests/src').rglob('*.java'))
  return {str(x):sha(x) for x in p}
 def main():
@@ -40,7 +41,7 @@ def main():
  try:
   r['guard_before']=inspect(ROOT);assert r['guard_before']['status']=='PASS'
   classes=out/'classes';classes.mkdir();test=ROOT/'tools/writer-plan-v2-tests/src/com/rustcraft/coremod'
-  run('compile-controls',[javac,'-source','8','-target','8','-Xlint:all','-Werror','-cp',asm,'-d',classes,core/'CanonicalClassIdentityV2.java',core/'LiveHookSupport.java',core/'LiveWriterPlan.java',test/'WriterPlanIdentityV2Test.java'])
+  run('compile-controls',[javac,'-source','8','-target','8','-Xlint:all','-Werror','-cp',asm,'-d',classes,core/'CanonicalClassIdentityV2.java',core/'SessionBoundIdentityCertificate.java',core/'LiveHookSupport.java',core/'LiveWriterPlan.java',test/'WriterPlanIdentityV2Test.java'])
   result=run('admission-controls',[java,'-cp',str(classes)+os.pathsep+str(asm),'com.rustcraft.coremod.WriterPlanIdentityV2Test',out/'fixtures'])
   assert result.stdout.strip()==b'PASS WriterPlanIdentityV2Test assertions=26'
   identity=json.loads((out/'fixtures/fixture-identity.json').read_text());name='example.PlanFixture'
@@ -48,7 +49,7 @@ def main():
   manifest=out/'manifest.json';write(manifest,m)
   p={'schema_version':2,'kind':'RUSTCRAFT_V2_WRITER_PLAN_RECIPE','identity_mode':'CANONICAL_ID_V2','all_required_observed':True,'required_hooks_manifest_sha256':sha(manifest),'required_hooks':[{'id':'X','status':'OBSERVED'}],'expected_class_identities':{name:identity},'forge_build':'14.23.5.2860','qualification':{'profile':'SYNTHETIC_RECIPE_NOT_QUALIFIED','minecraft_server_jar_sha256':'0'*64}}
   generated=generate('valid-v2',p,m);v2=out/'v2-classes';v2.mkdir()
-  run('compile-generated-v2',[javac,'-source','8','-target','8','-Xlint:all','-Werror','-cp',asm,'-d',v2,core/'CanonicalClassIdentityV2.java',core/'LiveHookSupport.java',generated,test/'GeneratedPlanV2Smoke.java'])
+  run('compile-generated-v2',[javac,'-source','8','-target','8','-Xlint:all','-Werror','-cp',asm,'-d',v2,core/'CanonicalClassIdentityV2.java',core/'SessionBoundIdentityCertificate.java',core/'LiveHookSupport.java',generated,test/'GeneratedPlanV2Smoke.java'])
   run('generated-v2-smoke',[java,'-cp',str(v2)+os.pathsep+str(asm),'com.rustcraft.coremod.GeneratedPlanV2Smoke',out/'fixtures/fixture.class'])
   variants={}
   def change(label,fn):v=copy.deepcopy(p);fn(v);variants[label]=v
@@ -82,7 +83,73 @@ def main():
   assert old.read_bytes()==(core/'LiveWriterPlan.java').read_bytes(),'generator output drift'
   legacy['identity_mode']='CANONICAL';generate('implicit-v1-rejected',legacy,lm,False);generate('explicit-v1-reproduction',legacy,lm,True,('--legacy-v1-reproduction',))
   custom=generate('named-plan',p,m,True,('--class-name','NamedPlan'));named=custom.with_name('NamedPlan.java');named.write_bytes(custom.read_bytes());(out/'named-classes').mkdir();run('named-plan-compiles',[javac,'-source','8','-target','8','-d',out/'named-classes',named])
-  r.update(status='PASS',java_assertions=26,negative_generator_controls=len(r['negative_controls']),generated_v2_compile_and_admission=True,default_raw_regeneration_byte_identical=True)
+  # ---- session-bound plan generation: structure alone never authorizes ----
+  def session_certificate(identity, session_invariant, distinct=1):
+   return {'schema':certificate_schema.SCHEMA,'schema_version':certificate_schema.SCHEMA_VERSION,
+    'provenance':certificate_schema.PROVENANCE,'process_id':'1'*8+'-'+'1'*4+'-'+'4'*4+'-'+'8'*4+'-'+'1'*12,
+    'transformation_session_id':'2'*8+'-'+'2'*4+'-'+'4'*4+'-'+'8'*4+'-'+'2'*12,
+    'defining_loader_identity':'example.Loader@1','class_name':identity['class_name'],
+    'pre_writer_raw_sha256':identity['raw_sha256'],'exact_semantic_sha256':identity['semantic_sha256'],
+    'exact_declaration_order_sha256':identity['declaration_order_sha256'],
+    'session_invariant_sha256':session_invariant,'expected_session_uuid':'0b2dcd72-90c3-4182-b23c-ac0c2ab6c7a4',
+    'masked_annotation_locations':['method:handler visible=true Lorg/spongepowered/asm/mixin/transformer/meta/MixinMerged;#sessionId'],
+    'distinct_masked_uuid_count':distinct,'masked_occurrence_count':2,'recipe_sha256':'0'*64,
+    'runtime_manifest_sha256':'0'*64,'acquisition_evidence_sha256':'0'*64}
+  def session_recipe(document,**overrides):
+   recipe={'schema_version':2,'kind':'RUSTCRAFT_V2_WRITER_PLAN_RECIPE','identity_mode':'CANONICAL_ID_V2_SESSION_BOUND',
+    'all_required_observed':True,'required_hooks_manifest_sha256':sha(manifest),
+    'required_hooks':[{'id':'X','status':'OBSERVED'}],'expected_class_identities':{name:identity},
+    'forge_build':'14.23.5.2860','qualification':{'profile':'SYNTHETIC_RECIPE_NOT_QUALIFIED','minecraft_server_jar_sha256':'0'*64},
+    'session_bound_classes':[name]}
+   # The binding is computed over the recipe with certificates removed, so the
+   # certificate can carry it without the binding being circular.
+   binding=certificate_schema.recipe_binding_sha256(recipe)
+   if document is not None and document.get('recipe_sha256')=='0'*64:document['recipe_sha256']=binding
+   recipe['session_certificates']={name:document}
+   recipe['recipe_binding_sha256']=binding
+   recipe.update(overrides)
+   return recipe
+  bound='c'*64
+  good=session_certificate(identity,bound)
+  session_plan=generate('session-bound-valid',session_recipe(good),m)
+  text=session_plan.read_text(encoding='utf-8')
+  embedded=certificate_schema.render(good).replace(chr(92)+chr(92),chr(92)*4).replace(chr(34),chr(92)+chr(34))
+  assert embedded in text,'certificate not embedded in the generated plan'
+  assert 'CANONICAL_ID_V2_SESSION_BOUND' in text,'session-bound identity mode not declared'
+  assert json.loads(certificate_schema.render(good))==good,'certificate does not round-trip'
+  def bad_session(label,mutate):
+   document=json.loads(json.dumps(good));mutate(document)
+   generate(label,session_recipe(document),m,False)
+  bad_session('session-cert-missing-field',lambda d:d.pop('expected_session_uuid'))
+  bad_session('session-cert-unknown-field',lambda d:d.update(unexpected_binding='x'))
+  bad_session('session-cert-foreign-schema',lambda d:d.update(schema='SOMETHING_ELSE'))
+  bad_session('session-cert-two-uuids',lambda d:d.update(distinct_masked_uuid_count=2))
+  bad_session('session-cert-wrong-class',lambda d:d.update(class_name='example/Other'))
+  bad_session('session-cert-wrong-raw',lambda d:d.update(pre_writer_raw_sha256='1'*64))
+  bad_session('session-cert-wrong-semantic',lambda d:d.update(exact_semantic_sha256='1'*64))
+  bad_session('session-cert-wrong-order',lambda d:d.update(exact_declaration_order_sha256='1'*64))
+  bad_session('session-cert-wrong-recipe',lambda d:d.update(recipe_sha256='1'*64))
+  bad_session('session-cert-unsorted-locations',lambda d:d.update(masked_annotation_locations=['zzz','aaa']))
+  generate('session-missing-certificate',session_recipe(good,session_certificates={}),m,False)
+  generate('session-missing-class-list',session_recipe(good,session_bound_classes=[]),m,False)
+  generate('session-class-out-of-scope',session_recipe(good,session_bound_classes=['example.Other']),m,False)
+  generate('session-cert-not-in-list',session_recipe(good,session_certificates={name:good,'example.Other':good}),m,False)
+  generate('session-missing-recipe-binding',session_recipe(good,recipe_binding_sha256=None),m,False)
+  generate('session-wrong-recipe-binding',session_recipe(good,recipe_binding_sha256='1'*64),m,False)
+  generate('session-downgrade-to-exact',session_recipe(good,identity_mode='CANONICAL_ID_V2'),m,False)
+  generate('session-downgrade-to-raw',session_recipe(good,identity_mode='RAW'),m,False)
+  exact_with_cert=copy.deepcopy(p);exact_with_cert['session_certificates']={name:good}
+  generate('certificate-on-exact-mode',exact_with_cert,m,False)
+  exact_with_list=copy.deepcopy(p);exact_with_list['session_bound_classes']=[name]
+  generate('class-list-on-exact-mode',exact_with_list,m,False)
+  session_classes=out/'session-classes';session_classes.mkdir()
+  run('compile-generated-session-bound',[javac,'-source','8','-target','8','-Xlint:all','-Werror','-cp',asm,'-d',session_classes,core/'CanonicalClassIdentityV2.java',core/'SessionBoundIdentityCertificate.java',core/'LiveHookSupport.java',session_plan,test/'GeneratedPlanSessionBoundSmoke.java'])
+  run('generated-session-bound-smoke',[java,'-cp',str(session_classes)+os.pathsep+str(asm),'com.rustcraft.coremod.GeneratedPlanSessionBoundSmoke'])
+  clean=out/'clean-forge-classes';clean.mkdir()
+  run('compile-clean-forge-exact-regression',[javac,'-source','8','-target','8','-Xlint:all','-Werror','-cp',asm,'-d',clean,core/'CanonicalClassIdentityV2.java',core/'SessionBoundIdentityCertificate.java',core/'LiveHookSupport.java',core/'LiveWriterPlan.java',test/'CleanForgeExactModeRegression.java'])
+  clean_result=run('clean-forge-exact-regression',[java,'-cp',str(clean)+os.pathsep+str(asm),'com.rustcraft.coremod.CleanForgeExactModeRegression'])
+  assert clean_result.stdout.strip().startswith(b'PASS Clean Forge exact mode'),clean_result.stdout
+  r.update(status='PASS',java_assertions=26,negative_generator_controls=len(r['negative_controls']),generated_v2_compile_and_admission=True,default_raw_regeneration_byte_identical=True,clean_forge_exact_mode_regression=True,session_bound_plan_generated_and_admitted=True)
  except Exception as e:r['error']=type(e).__name__+': '+str(e)
  finally:
   r['sources_after']=sources();r['guard_after']=inspect(ROOT)

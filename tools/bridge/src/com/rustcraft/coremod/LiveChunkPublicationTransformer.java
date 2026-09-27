@@ -40,7 +40,7 @@ public class LiveChunkPublicationTransformer implements IClassTransformer {
         LiveWriterPlan.Hook[] hooks = LiveHookSupport.hooksFor("PUBLICATION", transformedName);
         if (hooks.length == 0) return basicClass;
         try {
-            LiveHookSupport.verifyPreHookIdentity(hooks, basicClass);
+            LiveHookSupport.verifyPreHookIdentity(hooks, basicClass, getClass().getClassLoader());
             ClassNode cn = LiveHookSupport.readClass(basicClass);
             LiveHookSupport.refuseMarkerString(cn);
             for (LiveWriterPlan.Hook hook : hooks) {
