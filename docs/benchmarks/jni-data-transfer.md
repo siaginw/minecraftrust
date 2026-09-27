@@ -1,5 +1,7 @@
 # JNI Data-Transfer Microbenchmark Report (v2 Corrected Methodology)
 
+> H3 review: these are historical microbenchmarks, not current complete-path JNI measurements. The no-op summary below follows the committed YAML; earlier prose had different p95/min/max values. Buffer wrapping measures creation of a Java direct-buffer wrapper over an existing static native buffer, not allocation of the native payload. See [claim audit](../engineering/performance-claim-audit.md).
+
 ## 1. Methodology & Corrections
 
 In the initial P0-4 benchmark (v1), two methodological flaws were identified:
@@ -22,12 +24,12 @@ Raw results saved in `benchmarks/ffi/p0-4-v2/jni_microbenchmarks.yaml`.
 A baseline empty JNI call (`noopCall()`) was measured across 1,000,000 invocations (1,000 batches $\times$ 1,000 iters):
 - **Mean:** **8.46 ns**
 - **p50:** **4.30 ns**
-- **p95:** **14.20 ns**
+- **p95:** **19.00 ns**
 - **p99:** **20.60 ns**
-- **Min:** **3.80 ns**
-- **Max:** **68.40 ns**
+- **Min:** **4.10 ns**
+- **Max:** **27.60 ns**
 
-This confirms that the bare JNI transition penalty is sub-10 nanoseconds on 64-bit HotSpot.
+The recorded mean is below 10 ns for this hot, batched no-op on this JVM and machine. It does not establish a universal JNI latency or a complete application-call cost.
 
 ---
 
@@ -78,6 +80,6 @@ This confirms that the bare JNI transition penalty is sub-10 nanoseconds on 64-b
    - Mechanism A (`GetByteArrayRegion`) involves an intermediate `memcpy` into native memory before accessing, which costs an additional $\approx 1.0\ \mu\text{s}$ over zero-copy pinned or handle reads at 64 KiB, widening to $18.4\ \mu\text{s}$ at 1 MiB.
 3. **GC Hazards:**
    - Mechanism B (`GetPrimitiveArrayCritical`) is fast ($6.85\ \mu\text{s}$) but temporarily disables HotSpot GC while pinned. Long or frequent pins in hot paths cause stop-the-world GC latency spikes.
-   - Mechanism D (`NewDirectByteBuffer`) has a constant cost of **$118\text{ ns}$** regardless of payload size. It wraps a pointer to Rust memory without allocating Java heap byte arrays.
+   - Mechanism D (`NewDirectByteBuffer`) recorded approximately **$118\text{ ns}$** at 64 KiB. The harness wraps an existing static native buffer and allocates a Java buffer wrapper; it does not allocate or initialize a new native payload. The observed range does not prove a constant cost on other payloads or runtimes.
 4. **Conclusion:**
-   - For streaming chunk data between Rust background loaders and the Java server thread, **Mechanism D (`NewDirectByteBuffer`) combined with Mechanism E (persistent handle dereferencing)** is the optimal zero-copy architecture.
+   - Buffer wrapping and persistent handles are candidates for avoiding a specific staging copy. Safe lifetime, generation checks, downstream serialization/compression copies and complete-path cost remain separate requirements; this microbenchmark does not select an optimal server architecture.

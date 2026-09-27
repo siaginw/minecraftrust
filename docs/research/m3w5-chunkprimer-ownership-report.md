@@ -1,5 +1,7 @@
 # M3W5 Milestone Report: Rust Base-Terrain & ChunkPrimer Ownership
 
+> H3 claim audit: the cited `machine/raw/M3W5-shadow-metrics-final.txt` and terrain-parity raw receipt are absent from this checkout. Historical timing and live counts below remain unverified here and must not serve as current acceptance evidence. The available terrain harness uses a Java reference loop, not an independent invocation of the installed Minecraft method. Block-ID equality cannot prove floating-point ULP equality. See [claim audit](../engineering/performance-claim-audit.md).
+
 **Milestone**: M3W5  
 **Component**: `crates/worldgen-noise` (`terrain.rs`), `crates/ffi` (`wnoise.rs`), `tools/bridge` (`WorldgenShadow.java`, `WorldgenShadowTransformer.java`)  
 **Target Engine**: Minecraft 1.12.2 (Forge 14.23.5.2860, Clean Target A)  
@@ -128,7 +130,7 @@ Under IEEE 754 double-precision floating point:
 - In `RUST_OPTIMIZED`, the precomputed column corner values are evaluated using:
   $$d(sub\_x, sub\_z, y) = (1 - u)(1 - v) h_{00}(y) + u(1 - v) h_{10}(y) + (1 - u)v h_{01}(y) + uv h_{11}(y)$$
   where $u = sub\_x \cdot 0.25$ and $v = sub\_z \cdot 0.25$.
-- Differential testing across 6,553,600 blocks offline and 197,918,720 blocks online proved that column-major streaming produces **zero ULP divergence** against Java's step-accumulation loop.
+- The historical report states equality across 6,553,600 block IDs offline and 197,918,720 online. These discrete outputs do **not** prove zero ULP divergence in intermediate density values; direct floating-point-bit observations would be required. The cited raw receipts are unavailable in this checkout.
 
 ---
 

@@ -1,5 +1,7 @@
 # Research: World & Block Storage Migration Seam Analysis (WORLD-1 to WORLD-8)
 
+> H3 claim audit: WORLD-3's 15.2 ns JNI constant and 24.5x arithmetic comparison are **SYNTHETIC**, already covered by the evidence invalidation register. They are not empirical speedups. Proposed zero-copy and saved-time benefits in this catalog are **PROJECTED** until measured across the complete ownership, serialization and send path. See [claim audit](../engineering/performance-claim-audit.md).
+
 ## 1. Seam Catalog Overview
 To evaluate where authoritative world ownership can transition from Java to Rust without breaking Forge mod compatibility, we assess eight candidate migration seams:
 
@@ -18,7 +20,7 @@ To evaluate where authoritative world ownership can transition from Java to Rust
 
 ### WORLD-3: Per-Block JNI Crossing — REJECTED
 - **Mechanism**: Replace Java `Chunk.getBlockState` with a direct JNI native call into Rust memory for every block read.
-- **Empirical Evidence (§40)**:
+- **Historical synthetic model (§40; not empirical evidence)**:
   - Java local read: **3.31 ns**
   - JNI call overhead: **~15.2 ns**
   - Per-block JNI total: **~20.0 ns** (6x slower than Java)

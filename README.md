@@ -41,7 +41,7 @@ Ownership levels actually implemented: **native computation** (kernels, codecs �
 | Java↔Rust interop, contexts, panic isolation | IMPLEMENTED + SHADOW_TESTED | `crates/ffi`, `docs/research/` |
 | M2-C native outbound compression | IMPLEMENTED · SHADOW_TESTED · EXPERIMENTALLY_TRANSMITTED (Target A; modpack SHADOW 146,259/0) | `machine/M2CC-modpack-shadow-results.yaml` |
 | Deterministic worldgen density | SHADOW_TESTED bit-exact (clean Forge + Revelation + SevTech; 3.4M+ doubles, 0 mismatch) | `machine/M3WG-*-results.yaml` |
-| Base terrain (Stone/Water/Air) | SHADOW_TESTED bit-exact | `docs/research/m3w5-chunkprimer-ownership-report.md` |
+| Base terrain (Stone/Water/Air) | Historical SHADOW claim; cited M3W5 raw artifacts unavailable in this checkout | `docs/research/m3w5-chunkprimer-ownership-report.md` |
 | NativeChunk / NativeSection snapshots | IMPLEMENTED · OFFLINE_VALIDATED | `docs/research/m4-native-chunk-state-foundation-report.md` |
 | Generalized palettes (4–13 bit) | OFFLINE_VALIDATED 26/26 vs real vanilla `BlockStateContainer` | `docs/research/m4-1-report.md` |
 | Native packet encoding (Protocol 340) | OFFLINE_VALIDATED · SHADOW_TESTED (1,572/1,572 live) · formerly EXPERIMENTAL, now FAIL-CLOSED | `machine/M43E-readiness-results.yaml` |
@@ -50,17 +50,17 @@ Ownership levels actually implemented: **native computation** (kernels, codecs �
 | Test/evidence infrastructure | IMPLEMENTED (offline suites, integrity checker, provenance registry) | `tools/`, `machine/evidence-provenance.yaml` |
 | External library evaluation | RESEARCH_ONLY | `docs/research/P*.md` |
 
-## Performance (verified, scoped)
+## Performance (historical, scoped)
 
-Windows x64 dev box, JDK 8 (Temurin 8.0.504), Rust release. Kernel/offline scope unless noted.
+Windows x64 dev box, JDK 8 (Temurin 8.0.504), Rust release. These are historical reports, not fresh hardening-program measurements. See the [claim audit](docs/engineering/performance-claim-audit.md) for evidence availability and corrections. Kernel/offline scope unless noted.
 
 | Operation | Java ref | Rust | Scope / caveats | Artifact |
 |---|---|---|---|---|
-| Base-terrain placement (M3W5 kernel) | 23.95 µs | **15.69 µs (1.53×)** | offline component benchmark, bit-exact | `machine/M3W5-*` |
+| Base-terrain placement (M3W5 kernel) | 23.95 µs reported | 15.69 µs reported | Historical claim; cited raw evidence missing; requires a new independent campaign | `docs/research/m3w5-chunkprimer-ownership-report.md` |
 | Optimized worldgen noise (n=1) | 1× | **+5.6%** | offline 240-chunk, bit-exact | `machine/M3W4-n1-results.yaml` |
 | Chunk-packet encode (31 KB, cached palette) | ~7.2 µs ctor | **~1.0 µs** | warm cache vs offline-corpus Java ctor; NOT a like-for-like claim vs full Java construction under load | `machine/M43-*-results.yaml` |
-| Compression throughput (M2CP, Revelation) | 57.5 MB/s | **129.7 MB/s (~2.26×)** | same study: separate Netty-worker CPU reduction 39.9%; compressed size +1.5–2.4% | `machine/M2CP-perf-results.yaml` |
-| Section refresh transfer | — | 12 KB in ~2.7 µs | offline, immutable input | `docs/research/m4-1-refresh-design.md` |
+| Compression throughput (M2CP, Revelation) | 57.5 MB/s | **129.7 MB/s (~2.26×)** | Historical worker-path study: separate CPU reduction 39.9%; median normalized compressed size approximately +0.9% from rounded run volumes; worst ON run approximately +6.0% vs OFF median; no MSPT gain established | `machine/M2CP-perf-results.yaml` |
+| Section refresh transfer | — | 12 KiB in 2.21 µs reported mean | Historical offline immutable-input result; refresh plus encode reported 13.65–75.65 µs depending on palette | `docs/research/m4-1-refresh-design.md` |
 
 Not claimed: whole-server TPS multipliers, zero bugs, universal compatibility, or % completion. Combined-path optimization headroom is open (cached-encode vs rebuild cost, worker CPU vs ServerThread time are kept distinct in the cited reports).
 

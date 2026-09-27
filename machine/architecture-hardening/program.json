@@ -38,7 +38,7 @@
     {
       "id": "H3",
       "title": "FIX TELEMETRY",
-      "status": "PENDING",
+      "status": "IN_PROGRESS",
       "implementation": [],
       "validation": [],
       "evidence": [],
@@ -243,8 +243,8 @@
       ],
       "subtasks": {
         "I": {
-          "status": "VALIDATED",
-          "commit": null
+          "status": "COMMITTED",
+          "commit": "7fe87eb127ce242e14ba1bfe6e75ac5d013370d7"
         },
         "A-H": {
           "status": "PENDING",
@@ -336,10 +336,17 @@
     {
       "id": "H3.1",
       "title": "PERFORMANCE CLAIM AUDIT",
-      "status": "PENDING",
-      "implementation": [],
-      "validation": [],
-      "evidence": [],
+      "status": "VALIDATED",
+      "implementation": [
+        "docs/engineering/performance-claim-audit.md",
+        "machine/architecture-hardening/h3-claim-audit.json"
+      ],
+      "validation": [
+        "323 tracked documents/summaries scanned; 2101 candidate lines inventoried; 17 scoped claims reviewed including all six explicit categories; source bindings checked. No new performance campaign."
+      ],
+      "evidence": [
+        "machine/architecture-hardening/h3-claim-validation.json"
+      ],
       "commit": null
     },
     {

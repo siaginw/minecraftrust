@@ -1,5 +1,7 @@
 # P5: Native Storage & Chunk-State Frontier Research (Design Specification)
 
+> H3 claim audit: the M3W5 materialization timings cited below lack their raw receipts in this checkout. Eliminating a particular staging copy is a **PROJECTED** benefit; the proposed ownership/lifetime design has not established a 100% elimination of whole-path allocations or copying. See [claim audit](../engineering/performance-claim-audit.md).
+
 **Date**: 2026-09-21  
 **Scope**: High-level architectural blueprint for migrating Minecraft 1.12.2 / Forge chunk state into Rust-owned native memory, unblocking M1 (SPacketChunkData), M2-PERSIST (native region save/load), M3-SPAWN, and M3-COLLISION.
 

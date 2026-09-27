@@ -1,5 +1,7 @@
 # M4 — Native Chunk State Foundation: Zero-Copy / Multi-Consumer Architecture Report
 
+> H3 claim audit: retained native state can avoid selected re-extractions; it does not make the complete capture/packet/compression/socket path zero-copy. Serialization still writes a new output buffer. Read the zero-copy language below as a historical architectural projection, not measured whole-path copy accounting. Current production native chunk-packet authority remains disabled. See [claim audit](../engineering/performance-claim-audit.md).
+
 **Status:** COMPLETE / VALIDATED IN LIVE SHADOW  
 **Target:** Clean Forge 1.12.2 (Build 14.23.5.2860) — Target A  
 **Date:** 2026-09-21  

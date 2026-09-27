@@ -17,7 +17,7 @@ Our corrected JNI microbenchmark suite (v2) measured baseline invocation latency
 - **Java In-Memory `HashMap.get()`:** **$3.20\text{--}4.80\text{ ns}$** (when JIT-compiled with inline caching).
 
 ### Finding:
-Replacing in-memory Java field access with JNI calls **doubles** the latency of single-tag lookups ($8.5\text{ ns}$ vs $3.5\text{ ns}$). In hot loops (e.g. querying block properties, checking entity attributes, ticking items), a native facade introduces significant CPU overhead rather than eliminating it.
+The no-op JNI and Java lookup numbers come from different narrow operations. Their ratio is a projection, not a measured native NBT lookup regression. Fine-grained native lookups need a complete benchmark including handle validation, key conversion, actual lookup and lifecycle costs; the current architectural preference for coarse work does not depend on claiming an exact doubling. See the [H3 claim audit](../engineering/performance-claim-audit.md).
 
 ---
 
@@ -39,7 +39,7 @@ Replacing in-memory Java field access with JNI calls **doubles** the latency of 
 **Architectural Rationale:**
 1. **Chatty JNI Hazard:** Violates Permanent Invariant 6 ("Fine-grained JNI/FFI in hot loops is forbidden").
 2. **Breakage of Mod Reflection:** Breaks Forge mods that inspect `tagMap` or `tagList` directly.
-3. **Negative Net Performance:** JNI boundary transitions on per-tag access are slower than JVM JIT-inlined HashMap lookups.
+3. **Unproven Net Performance:** The available no-op and Java lookup timings do not establish a benefit for a complete native per-tag path.
 
 ### Recommended Seam (Coarse Work Units):
 Retain Java's native `NBTTagCompound` heap objects for live server-thread gameplay, while using **coarse-grained batch processing (`NbtCursor` and binary buffers)** for asynchronous chunk loading, decompression, saving, and network transport.

@@ -79,7 +79,13 @@ evidence produced under those semantics is unreliable.
   as "empirical". Real measurement paths exist (`run-p02-benchmarks.py`,
   `calibrateJniOverheadNs`) but the p08/M1.3 chain did not use them.
 
+## H3 architecture-hardening review (2026-09-26)
+
+The [performance claim audit](performance-claim-audit.md) adds scoped corrections without changing historical raw data or the provenance registry. The legacy `FfiMetrics.bytes_transferred` sum is **INVALIDATED as a byte-volume measure** because callers supplied operation IDs. Façade JNI constants and block-storage arithmetic remain assumptions/synthetic models. M3W5's missing receipts cannot support current acceptance, block-ID equality does not establish zero ULP, and allocation-event fractions do not establish byte fractions. M2CP compression-size and JNI no-op summary discrepancies are corrected in active prose against their existing run summaries.
+
 ## Not Invalidated
+
+The following historical scope statements do not override the specific H3 corrections above.
 
 - M1.2 differential oracle structural coverage (schema validation, error
   codes, malformed-input rejection) remains valid.

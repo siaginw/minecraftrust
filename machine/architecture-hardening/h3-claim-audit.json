@@ -1,0 +1,206 @@
+{
+  "schema_version": 1,
+  "kind": "H3_PERFORMANCE_CLAIM_AUDIT",
+  "review_date": "2026-09-26",
+  "classifications": [
+    "MEASURED",
+    "DERIVED_FROM_MEASURED",
+    "PROJECTED",
+    "SYNTHETIC",
+    "ASSUMED",
+    "INVALIDATED"
+  ],
+  "scope": "Active README claims and six mandatory audit categories plus inherited invalidation register. MEASURED labels describe historical source provenance, not a fresh remeasurement. This inventory does not certify all historical prose.",
+  "historical_raw_modified": false,
+  "evidence_registry_modified": false,
+  "production_authority": false,
+  "claims": [
+    {
+      "id": "ffi-volume",
+      "classification": "INVALIDATED",
+      "claim": "Legacy bytes_transferred is a sum of operation IDs, not transferred bytes.",
+      "source": "crates/metrics/src/lib.rs",
+      "line": 20,
+      "source_sha256": "dce71d952db6e53d6e3f2f6afa3d104b54b23ba2bdab0da0d73784632bd0d4f9",
+      "source_revision": "5dc125edbdd3716294c13becaeffae86cc06c392",
+      "evidence": "Legacy metrics source at accepted H1 commit 5dc125e and its ffi call sites supply IDs such as 300.",
+      "restriction": "Never use old counter totals as bytes or throughput; raw historical data remains unchanged."
+    },
+    {
+      "id": "facade-jni",
+      "classification": "ASSUMED",
+      "claim": "18.50 ns facade JNI penalty is a printed constant.",
+      "source": "tools/forge-bench/src/ForgeBenchmarks.java",
+      "line": 416,
+      "source_sha256": "149cc376001ccad33379abe8f915de3b60825491b7bd833ddaeadf3615760db4",
+      "source_revision": "working-tree",
+      "evidence": "The measured loops use Java array access and Unsafe.getShort; neither loop makes JNI calls.",
+      "restriction": "No native facade latency or general subclass/reflection compatibility follows."
+    },
+    {
+      "id": "block-granularity",
+      "classification": "SYNTHETIC",
+      "claim": "15.2 ns JNI and 24.5x penalty derive from constants.",
+      "source": "tools/block-storage-bench/src/com/rustcraft/bench/BlockStorageBenchmarks.java",
+      "line": 349,
+      "source_sha256": "c88385c5a613d59b607c346af7c2aad7f08b690335f2ccc3df2188bc03ad1433",
+      "source_revision": "working-tree",
+      "evidence": "Already inventoried by tools/audit_hardcoded_benchmarks_results.json and evidence-invalidation-register.md.",
+      "restriction": "Retain coarse-boundary hypothesis, discard this empirical speedup claim."
+    },
+    {
+      "id": "allocation-events",
+      "classification": "MEASURED",
+      "claim": "1848 of 12474 sampled events is an event fraction only.",
+      "source": "docs/research/m2-c-proposal-native-packet-compression.md",
+      "line": 84,
+      "source_sha256": "fcb1d426fd21b25730554234c7a351d26a6a85c8ff9e01fc85f309f550270cfe",
+      "source_revision": "working-tree",
+      "evidence": "Historical M2J event count reported in proposal; raw campaign not rerun here.",
+      "restriction": "No allocation-byte share, CPU share, rate or total allocation follows without event weights/bytes and sampling model."
+    },
+    {
+      "id": "synthetic-allocation-histogram",
+      "classification": "SYNTHETIC",
+      "claim": "P0-8 pack allocation rates and histogram are authored tables.",
+      "source": "docs/benchmarks/p0-8-allocation-analysis.md",
+      "line": 1,
+      "source_sha256": "147eb68b7453100c70c987865b2a8c65f82fe9036db512b776fe70fe8b651b3e",
+      "source_revision": "working-tree",
+      "evidence": "Existing invalidation explicitly predates real pack installations; tools/p08_closure_audit.py stores literal histogram rows.",
+      "restriction": "Do not use as empirical allocator or mod workload evidence."
+    },
+    {
+      "id": "factory-scope",
+      "classification": "MEASURED",
+      "claim": "M3J observed a vanilla hopper/chest/furnace fixture inside Revelation.",
+      "source": "machine/M3J-factory-profile-results.yaml",
+      "line": 12,
+      "source_sha256": "fcead40f0799d747fb2b7dbf4b13485bd3f8320ac44d1bf2894c3cb73d196761",
+      "source_revision": "working-tree",
+      "evidence": "32 hoppers,32 chests,8 furnaces, natural entities, single world/night/run.",
+      "restriction": "Call this vanilla storage/smelting plus natural-spawning workload; H16 still needs real mod machines."
+    },
+    {
+      "id": "m3w5-availability",
+      "classification": "INVALIDATED",
+      "claim": "M3W5 timing and live-count claims cannot be accepted as currently verified.",
+      "source": "docs/research/m3w5-chunkprimer-ownership-report.md",
+      "line": 3,
+      "source_sha256": "77cf5f0265bf3b0b23d21b22c872bc11c546f796a0d560a147e8e8e710aec6b1",
+      "source_revision": "working-tree",
+      "evidence": "Cited terrain-parity and final-shadow raw receipts are absent from this checkout.",
+      "restriction": "Invalidated as current acceptance evidence; this does not prove that the historical experiment did not occur. New independent campaign required."
+    },
+    {
+      "id": "terrain-ulp",
+      "classification": "INVALIDATED",
+      "claim": "Block-ID equality does not prove zero ULP of intermediate density.",
+      "source": "tools/worldgen-interop/src/com/rustcraft/worldgen/TerrainParity.java",
+      "line": 59,
+      "source_sha256": "418c25368d1f009043aa4bd54fb502500fd1ccb538657489de1a525f6b0e11cd",
+      "source_revision": "working-tree",
+      "evidence": "Harness compares discrete block classifications; many floating-point values map to the same block.",
+      "restriction": "Compare actual floating-point bit patterns at defined boundaries before claiming zero ULP; no new Mojang translation is authorized."
+    },
+    {
+      "id": "compression-throughput",
+      "classification": "MEASURED",
+      "claim": "Historical M2CP reports 57.5 vs129.7 MB/s and39.9% worker CPU reduction.",
+      "source": "machine/M2CP-perf-results.yaml",
+      "line": 36,
+      "source_sha256": "cb74d57c875f3b83fc76b55e65bad1b3b08bfb3e164bfe991492fb7756536223",
+      "source_revision": "working-tree",
+      "evidence": "Three alternating runs per arm, one machine/pack; slightly asymmetric timing spans and differing chunk mixes; raw campaign not rerun.",
+      "restriction": "Worker-path result only; no server MSPT benefit or linear multiplayer scaling established."
+    },
+    {
+      "id": "compression-size",
+      "classification": "DERIVED_FROM_MEASURED",
+      "claim": "Median normalized compressed-volume increase is approximately0.9% from rounded run MB values.",
+      "source": "machine/M2CP-perf-results.yaml",
+      "line": 25,
+      "source_sha256": "cb74d57c875f3b83fc76b55e65bad1b3b08bfb3e164bfe991492fb7756536223",
+      "source_revision": "working-tree",
+      "evidence": "OFF median13.7207641493%; ON13.8461538462%; relative0.9138681748%; worst ON14.5420285106% is5.9856% above OFFmedian.",
+      "restriction": "Derived from rounded historical summaries, not matched identical packet streams; README1.5-2.4% was not the M2CP summary."
+    },
+    {
+      "id": "noop-jni",
+      "classification": "MEASURED",
+      "claim": "Historical actual native no-op benchmark records mean8.46ns.",
+      "source": "benchmarks/ffi/p0-4-v2/jni_microbenchmarks.yaml",
+      "line": 8,
+      "source_sha256": "e5d90c8d5cf919d2aa1ae24294cf28b29744a471661b866f6dfb06a65675a30d",
+      "source_revision": "working-tree",
+      "evidence": "Committed YAML p95=19.00,min=4.10,max=27.60; earlier prose14.20/3.80/68.40 disagreed.",
+      "restriction": "Hot batched no-op on one JVM/machine; full application call and transfer costs are separate. No new timing campaign performed."
+    },
+    {
+      "id": "buffer-wrap",
+      "classification": "MEASURED",
+      "claim": "NewDirectByteBuffer benchmark wraps existing static memory.",
+      "source": "tools/jni-bench/src/lib.rs",
+      "line": 111,
+      "source_sha256": "ed12d04ce24d4eb374a3624ce7b15c53bf42ffdd3153af27f235775035a57b1e",
+      "source_revision": "working-tree",
+      "evidence": "benchRustAllocDirectBuffer does not allocate native payload; it calls new_direct_byte_buffer on GLOBAL_TARGET_BUFFER.",
+      "restriction": "Latency includes Java wrapper creation; not complete native allocation/copy accounting or optimal architecture proof."
+    },
+    {
+      "id": "nbt-facade-doubling",
+      "classification": "PROJECTED",
+      "claim": "Ratio of no-op JNI and Java lookup timings is not a native NBT benchmark.",
+      "source": "docs/research/nbt-facade-feasibility.md",
+      "line": 20,
+      "source_sha256": "55e624b43da757ff64040f63bf860f02e39ef9a6920986bd4d2e316d90150374",
+      "source_revision": "working-tree",
+      "evidence": "Different operations; native lookup, string handling, lifecycle and identity costs unmeasured.",
+      "restriction": "Do not claim exact doubling; retain bounded complete-path experiment gate."
+    },
+    {
+      "id": "refresh-cost",
+      "classification": "MEASURED",
+      "claim": "Historical refresh-only12KiB mean2.21us; complete refresh+encode13.65-75.65us.",
+      "source": "docs/research/m4-1-refresh-design.md",
+      "line": 51,
+      "source_sha256": "fb54961c6a82ecb28771fcb0db33b8f73efb0331f19222a490eb8f6e5c4742e1",
+      "source_revision": "working-tree",
+      "evidence": "Available report table: immutable input and palette-dependent rebuild. Raw campaign not rerun.",
+      "restriction": "README2.7us corrected to cited report; no wire or live snapshot speedup follows."
+    },
+    {
+      "id": "worldgen-n1",
+      "classification": "MEASURED",
+      "claim": "Historical240chunkworldgendensity benchmark reports5.6% median improvement.",
+      "source": "machine/M3W4-n1-results.yaml",
+      "line": 10,
+      "source_sha256": "aafe240f3bffad7c530b1c59637d593cbb8bdd8f7adcb013c4bc6c794ef7f6d7",
+      "source_revision": "working-tree",
+      "evidence": "Available historical summary; no new benchmark here.",
+      "restriction": "Kernel/coarseoperation scope only; H10 must measure complete generation/callback path."
+    },
+    {
+      "id": "cached-encode",
+      "classification": "DERIVED_FROM_MEASURED",
+      "claim": "CachedRustencode andJava packet constructor timing have different boundaries.",
+      "source": "README.md",
+      "line": 61,
+      "source_sha256": "0a2089efd24b9b88ed58cd5989d43281add6b8a77313b68dc5b5a892be001377",
+      "source_revision": "working-tree",
+      "evidence": "README retains explicit non-like-for-like limitation.",
+      "restriction": "Cannot infer full Java construction or loaded-server speedup from ratio."
+    },
+    {
+      "id": "retained-zero-copy",
+      "classification": "PROJECTED",
+      "claim": "Retained native state may remove selected extraction/materialization copies.",
+      "source": "docs/research/m4-native-chunk-state-foundation-report.md",
+      "line": 3,
+      "source_sha256": "9e7aac55fcd076721a1242134fde9c3a66c12618d4595c0df2096fc40add53d1",
+      "source_revision": "working-tree",
+      "evidence": "Serializer writes a caller buffer; capture cloning, compression, encryption and socket buffers remain distinct boundaries.",
+      "restriction": "No measured end-to-end zero-copy claim; count actual complete-path copies and lifetimes."
+    }
+  ]
+}

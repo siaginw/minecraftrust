@@ -1,5 +1,7 @@
 # Research: Feasibility of Native-Backed Java Façades
 
+> H3 claim audit: the 18.50 ns JNI value below is **ASSUMED**, printed as a constant by `ForgeBenchmarks.java`; that benchmark performs no JNI call. The array/Unsafe timings describe its narrow Java loop, not a safe native ownership boundary. The toy subclass/reference tests do not establish arbitrary mod compatibility, and the table's PERFECT/100% labels are unsupported. See [claim audit](../engineering/performance-claim-audit.md).
+
 ## 1. Research Question
 Can a Java object retain its standard Java API and class signature while delegating its underlying mutable state to off-heap native memory (e.g. a Rust-allocated buffer address `long nativeAddress`), and can such a façade survive the Forge CoreMod and reflection ecosystem?
 
@@ -40,7 +42,7 @@ Many Tier 2 (AT) and Tier 3 (CoreMod) mods do not call getter methods like `stor
 From `ForgeBenchmarks.java`:
 - Direct Java Array Field Read: **3.84 ns/op**
 - Coarse Native Memory Handle Read (`Unsafe.getShort`): **1.36 ns/op**
-- Simulated JNI Call Crossing Penalty: **18.50 ns/op**
+- Assumed JNI Call Crossing Penalty: **18.50 ns/op** (printed constant; not measured)
 
 ### Verdict
-Reading off-heap native memory directly from Java via `Unsafe` is **faster or equivalent** to Java array reads due to eliminating JVM array bounds checking. The danger is not JVM memory read performance; the danger is bytecode incompatibility with mods expecting standard Java fields.
+This loop reported a lower latency for its Unsafe read. It does not isolate bounds checking as the cause or establish general equivalence, complete-path JNI cost, lifetime safety, or arbitrary mod compatibility. Direct-field compatibility and native object lifetime need separate proofs and measurements.
