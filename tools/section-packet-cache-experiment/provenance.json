@@ -1,0 +1,130 @@
+{
+  "schema_version": 1,
+  "status": "STUDY_AND_BORROW_ALGORITHM_ONLY",
+  "external_dependencies_installed": [],
+  "sources": [
+    {
+      "name": "Valence",
+      "repository": "https://github.com/valence-rs/valence",
+      "commit": "c4177cab47ae109c848a431756d5d7c0207c05ed",
+      "license": "MIT",
+      "reviewed_utc": "2026-09-27T01:32:56.739933+00:00",
+      "sources": [
+        {
+          "url": "https://raw.githubusercontent.com/valence-rs/valence/c4177cab47ae109c848a431756d5d7c0207c05ed/LICENSE.txt",
+          "path": "LICENSE.txt",
+          "sha256": "01c39d867eb175cce2f8dcafd98f151d2e704b4adedc8c6a8e1c2721cd9663cd",
+          "bytes": 1069,
+          "retained_license": "third-party/Valence-LICENSE.txt"
+        },
+        {
+          "url": "https://raw.githubusercontent.com/valence-rs/valence/c4177cab47ae109c848a431756d5d7c0207c05ed/crates/valence_server/src/layer/chunk/loaded.rs",
+          "path": "crates/valence_server/src/layer/chunk/loaded.rs",
+          "sha256": "551727471e75bc44b9f4e9a8f6cf12a37caea1eed318d97349ad15e98523951e",
+          "bytes": 27108
+        },
+        {
+          "url": "https://raw.githubusercontent.com/valence-rs/valence/c4177cab47ae109c848a431756d5d7c0207c05ed/crates/valence_server/src/layer/chunk/paletted_container.rs",
+          "path": "crates/valence_server/src/layer/chunk/paletted_container.rs",
+          "sha256": "962b2d1a16a84ca5ab503696de94521f3ade90133354239aaf8b1e8016a9cb62",
+          "bytes": 10721
+        }
+      ],
+      "study": "Observable chunk mutation invalidates cached initialization packet data; storage has uniform/indirect/direct forms. Independent H8 implementation; no code copied or dependency installed."
+    },
+    {
+      "name": "Hyperion",
+      "repository": "https://github.com/hyperion-mc/hyperion",
+      "commit": "85abe336514e507b72a38e351b5df5a641a4bf30",
+      "license": "Apache-2.0",
+      "reviewed_utc": "2026-09-27T01:32:57.000760+00:00",
+      "sources": [
+        {
+          "url": "https://raw.githubusercontent.com/hyperion-mc/hyperion/85abe336514e507b72a38e351b5df5a641a4bf30/LICENSE",
+          "path": "LICENSE",
+          "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+          "bytes": 11357,
+          "retained_license": "third-party/Hyperion-LICENSE.txt"
+        },
+        {
+          "url": "https://raw.githubusercontent.com/hyperion-mc/hyperion/85abe336514e507b72a38e351b5df5a641a4bf30/crates/hyperion-palette/src/indirect.rs",
+          "path": "crates/hyperion-palette/src/indirect.rs",
+          "sha256": "43ed2c76d83540de53f852f97b7abd350bac7524b5832e58e6bd69617a75e286",
+          "bytes": 3545
+        },
+        {
+          "url": "https://raw.githubusercontent.com/hyperion-mc/hyperion/85abe336514e507b72a38e351b5df5a641a4bf30/Cargo.toml",
+          "path": "Cargo.toml",
+          "sha256": "064a26c220a1f299fff2656b7720e2e2ec56590a70701c468268fc90d52fdaf1",
+          "bytes": 11908
+        }
+      ],
+      "study": "Indirect palette representation plus issue 938 chunk-subscription cache proposal. The issue is a design proposal, not evidence of shipped fanout caching. Independent H8 implementation; no code copied or dependency installed.",
+      "additional_primary_source": "https://github.com/hyperion-mc/hyperion/issues/938"
+    },
+    {
+      "name": "PrismarineJS minecraft-data",
+      "repository": "https://github.com/PrismarineJS/minecraft-data",
+      "commit": "2157a992b9eaf07a292101f1823dfca725e6aea8",
+      "license": "MIT",
+      "reviewed_utc": "2026-09-27T01:32:57.152778+00:00",
+      "sources": [
+        {
+          "url": "https://raw.githubusercontent.com/PrismarineJS/minecraft-data/2157a992b9eaf07a292101f1823dfca725e6aea8/README.md",
+          "path": "README.md",
+          "sha256": "d6e8731901c6539651e8725fecdba95d2c5a16b1d70544a0e85c65417a80190f",
+          "bytes": 9899
+        },
+        {
+          "url": "https://raw.githubusercontent.com/PrismarineJS/minecraft-data/2157a992b9eaf07a292101f1823dfca725e6aea8/data/pc/1.12.2/protocol.json",
+          "path": "data/pc/1.12.2/protocol.json",
+          "sha256": "21c57208db654a5e14a34cb696570080df179c5c642e53b16120399eee9232be",
+          "bytes": 102341
+        }
+      ],
+      "license_evidence_url": "https://raw.githubusercontent.com/PrismarineJS/minecraft-data/2157a992b9eaf07a292101f1823dfca725e6aea8/README.md",
+      "verified_packet_fields": [
+        "container",
+        [
+          {
+            "name": "x",
+            "type": "i32"
+          },
+          {
+            "name": "z",
+            "type": "i32"
+          },
+          {
+            "name": "groundUp",
+            "type": "bool"
+          },
+          {
+            "name": "bitMap",
+            "type": "varint"
+          },
+          {
+            "name": "chunkData",
+            "type": [
+              "buffer",
+              {
+                "countType": "varint"
+              }
+            ]
+          },
+          {
+            "name": "blockEntities",
+            "type": [
+              "array",
+              {
+                "countType": "varint",
+                "type": "nbt"
+              }
+            ]
+          }
+        ]
+      ],
+      "study": "Packet id 0x20 and chunk packet field order verified at pinned schema. Java oracle independently constructs the bounded body; no schema implementation copied. Section packing follows current local legacy encoder domain."
+    }
+  ],
+  "notice": "Original prototype code; retained upstream notices for studied sources. Valence logo license is not used."
+}

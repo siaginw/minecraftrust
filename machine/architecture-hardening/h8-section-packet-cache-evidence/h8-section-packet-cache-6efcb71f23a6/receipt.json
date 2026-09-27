@@ -1,0 +1,2334 @@
+{
+  "schema_version": 1,
+  "kind": "H8_SECTION_PACKET_CACHE_PROTOTYPE",
+  "status": "PASS_BOUNDED_PROTOTYPE_ONLY",
+  "started_utc": "2026-09-27T01:36:14.780782+00:00",
+  "production_authority": false,
+  "correctness_only": false,
+  "results": [
+    {
+      "name": "resolve-toolchain",
+      "argv": [
+        "C:\\Users\\Admin\\.cargo\\bin\\rustup.exe",
+        "which",
+        "rustc"
+      ],
+      "status": "PASS",
+      "exit_code": 0,
+      "timed_out": false,
+      "elapsed_seconds": 0.03428990003885701,
+      "job_memory_limit_applied": false,
+      "peak_process_commit_bytes": null,
+      "stdout": "target/architecture-hardening/h8-section-packet-cache-6efcb71f23a6/resolve-toolchain.stdout.log",
+      "stdout_sha256": "54234bc009f7bc295608f8bb882e03677001147f42f05ce19606c17d2db6473b",
+      "stderr": "target/architecture-hardening/h8-section-packet-cache-6efcb71f23a6/resolve-toolchain.stderr.log",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "dependency-metadata",
+      "argv": [
+        "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\cargo.exe",
+        "metadata",
+        "--locked",
+        "--offline",
+        "--manifest-path",
+        "D:\\minecraftrust-astra-hardening\\tools\\section-packet-cache-experiment\\Cargo.toml",
+        "--format-version",
+        "1"
+      ],
+      "status": "PASS",
+      "exit_code": 0,
+      "timed_out": false,
+      "elapsed_seconds": 0.08083089999854565,
+      "job_memory_limit_applied": false,
+      "peak_process_commit_bytes": null,
+      "stdout": "target/architecture-hardening/h8-section-packet-cache-6efcb71f23a6/dependency-metadata.stdout.log",
+      "stdout_sha256": "1ab0e5f6ca8dc3089c26c57a2c7c9c135f5f231ec35453b1c2a3e5f85a7f619e",
+      "stderr": "target/architecture-hardening/h8-section-packet-cache-6efcb71f23a6/dependency-metadata.stderr.log",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "rustc-version",
+      "argv": [
+        "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\rustc.exe",
+        "-Vv"
+      ],
+      "status": "PASS",
+      "exit_code": 0,
+      "timed_out": false,
+      "elapsed_seconds": 0.02216609998140484,
+      "job_memory_limit_applied": false,
+      "peak_process_commit_bytes": null,
+      "stdout": "target/architecture-hardening/h8-section-packet-cache-6efcb71f23a6/rustc-version.stdout.log",
+      "stdout_sha256": "c45e612575abeef05e99e88eb1e7aea52cddab9ad70d4f65ad20eaa65e92a9cf",
+      "stderr": "target/architecture-hardening/h8-section-packet-cache-6efcb71f23a6/rustc-version.stderr.log",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "java-version",
+      "argv": [
+        "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\bin\\java.exe",
+        "-Xms16m",
+        "-Xmx128m",
+        "-version"
+      ],
+      "status": "PASS",
+      "exit_code": 0,
+      "timed_out": false,
+      "elapsed_seconds": 0.0509213000186719,
+      "job_memory_limit_applied": true,
+      "peak_process_commit_bytes": 82284544,
+      "stdout": "target/architecture-hardening/h8-section-packet-cache-6efcb71f23a6/java-version.stdout.log",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "target/architecture-hardening/h8-section-packet-cache-6efcb71f23a6/java-version.stderr.log",
+      "stderr_sha256": "9d65a43706f49fcfdbcece91e737f759110493e82fd1c4886cf49104c2017b0e"
+    },
+    {
+      "name": "format",
+      "argv": [
+        "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\cargo.exe",
+        "fmt",
+        "--manifest-path",
+        "D:\\minecraftrust-astra-hardening\\tools\\section-packet-cache-experiment\\Cargo.toml",
+        "--check"
+      ],
+      "status": "PASS",
+      "exit_code": 0,
+      "timed_out": false,
+      "elapsed_seconds": 0.13220700004603714,
+      "job_memory_limit_applied": false,
+      "peak_process_commit_bytes": null,
+      "stdout": "target/architecture-hardening/h8-section-packet-cache-6efcb71f23a6/format.stdout.log",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "target/architecture-hardening/h8-section-packet-cache-6efcb71f23a6/format.stderr.log",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "clippy",
+      "argv": [
+        "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\cargo.exe",
+        "clippy",
+        "--locked",
+        "--offline",
+        "--manifest-path",
+        "D:\\minecraftrust-astra-hardening\\tools\\section-packet-cache-experiment\\Cargo.toml",
+        "--target-dir",
+        "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h8-section-packet-cache-6efcb71f23a6\\cargo",
+        "--all-targets",
+        "--no-deps",
+        "--",
+        "-D",
+        "warnings"
+      ],
+      "status": "PASS",
+      "exit_code": 0,
+      "timed_out": false,
+      "elapsed_seconds": 0.7984010999789461,
+      "job_memory_limit_applied": false,
+      "peak_process_commit_bytes": null,
+      "stdout": "target/architecture-hardening/h8-section-packet-cache-6efcb71f23a6/clippy.stdout.log",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "target/architecture-hardening/h8-section-packet-cache-6efcb71f23a6/clippy.stderr.log",
+      "stderr_sha256": "930037b1c3e3c003f8e51cda4bffbfa1696ae5c7369b5349ad430607f6d7e4b0"
+    },
+    {
+      "name": "rust-contracts",
+      "argv": [
+        "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\cargo.exe",
+        "test",
+        "--locked",
+        "--offline",
+        "--manifest-path",
+        "D:\\minecraftrust-astra-hardening\\tools\\section-packet-cache-experiment\\Cargo.toml",
+        "--target-dir",
+        "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h8-section-packet-cache-6efcb71f23a6\\cargo"
+      ],
+      "status": "PASS",
+      "exit_code": 0,
+      "timed_out": false,
+      "elapsed_seconds": 2.4059912999509834,
+      "job_memory_limit_applied": false,
+      "peak_process_commit_bytes": null,
+      "stdout": "target/architecture-hardening/h8-section-packet-cache-6efcb71f23a6/rust-contracts.stdout.log",
+      "stdout_sha256": "d8a50e8c334ed164eff2c34832046c01e4e86cb427235a905c9a41752814e634",
+      "stderr": "target/architecture-hardening/h8-section-packet-cache-6efcb71f23a6/rust-contracts.stderr.log",
+      "stderr_sha256": "c9645e6965e1f972058f19a16c937f480582f802dd2aed8a92a1e8844a14761d"
+    },
+    {
+      "name": "process-controls",
+      "argv": [
+        "C:\\Python314\\python.exe",
+        "D:\\minecraftrust-astra-hardening\\tools\\nbt-region-experiment\\test_job.py"
+      ],
+      "status": "PASS",
+      "exit_code": 0,
+      "timed_out": false,
+      "elapsed_seconds": 0.39072580001084134,
+      "job_memory_limit_applied": false,
+      "peak_process_commit_bytes": null,
+      "stdout": "target/architecture-hardening/h8-section-packet-cache-6efcb71f23a6/process-controls.stdout.log",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "target/architecture-hardening/h8-section-packet-cache-6efcb71f23a6/process-controls.stderr.log",
+      "stderr_sha256": "f07b07df8fa9823e7a8cc65da4d83fc3d0f024fa8ef8b2498bf2f5feb5e4cb2b"
+    },
+    {
+      "name": "release-build",
+      "argv": [
+        "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\cargo.exe",
+        "build",
+        "--locked",
+        "--offline",
+        "--manifest-path",
+        "D:\\minecraftrust-astra-hardening\\tools\\section-packet-cache-experiment\\Cargo.toml",
+        "--target-dir",
+        "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h8-section-packet-cache-6efcb71f23a6\\cargo",
+        "--release",
+        "--message-format=json"
+      ],
+      "status": "PASS",
+      "exit_code": 0,
+      "timed_out": false,
+      "elapsed_seconds": 2.293254000018351,
+      "job_memory_limit_applied": false,
+      "peak_process_commit_bytes": null,
+      "stdout": "target/architecture-hardening/h8-section-packet-cache-6efcb71f23a6/release-build.stdout.log",
+      "stdout_sha256": "1e9897b6e0a0eeffc5011c9c5e4810e9c606b4fccf732309e91e5d9519c1b3b4",
+      "stderr": "target/architecture-hardening/h8-section-packet-cache-6efcb71f23a6/release-build.stderr.log",
+      "stderr_sha256": "f662f40b2f849543b34e9c6b0924922da5e17f12ef2da345afe5dcc3a7cfb928"
+    },
+    {
+      "name": "fixtures",
+      "argv": [
+        "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h8-section-packet-cache-6efcb71f23a6\\cargo\\release\\section-packet-cache-experiment.exe",
+        "fixtures",
+        "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h8-section-packet-cache-6efcb71f23a6\\fixtures"
+      ],
+      "status": "PASS",
+      "exit_code": 0,
+      "timed_out": false,
+      "elapsed_seconds": 0.07991540001239628,
+      "job_memory_limit_applied": true,
+      "peak_process_commit_bytes": 2867200,
+      "stdout": "target/architecture-hardening/h8-section-packet-cache-6efcb71f23a6/fixtures.stdout.log",
+      "stdout_sha256": "726d35a654f6ec239154c6773adb5f34cec00cd450ca841466f006a9588d60e1",
+      "stderr": "target/architecture-hardening/h8-section-packet-cache-6efcb71f23a6/fixtures.stderr.log",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "compile-java-oracle",
+      "argv": [
+        "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\bin\\javac.exe",
+        "-J-Xms16m",
+        "-J-Xmx128m",
+        "-source",
+        "8",
+        "-target",
+        "8",
+        "-Xlint:all",
+        "-Werror",
+        "-d",
+        "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h8-section-packet-cache-6efcb71f23a6\\classes",
+        "D:\\minecraftrust-astra-hardening\\tools\\section-packet-cache-experiment\\PacketOracle.java"
+      ],
+      "status": "PASS",
+      "exit_code": 0,
+      "timed_out": false,
+      "elapsed_seconds": 0.2816523999790661,
+      "job_memory_limit_applied": true,
+      "peak_process_commit_bytes": 112750592,
+      "stdout": "target/architecture-hardening/h8-section-packet-cache-6efcb71f23a6/compile-java-oracle.stdout.log",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "target/architecture-hardening/h8-section-packet-cache-6efcb71f23a6/compile-java-oracle.stderr.log",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "java-oracle",
+      "argv": [
+        "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\bin\\java.exe",
+        "-Xms16m",
+        "-Xmx128m",
+        "-cp",
+        "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h8-section-packet-cache-6efcb71f23a6\\classes",
+        "PacketOracle",
+        "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h8-section-packet-cache-6efcb71f23a6\\fixtures"
+      ],
+      "status": "PASS",
+      "exit_code": 0,
+      "timed_out": false,
+      "elapsed_seconds": 0.749870200001169,
+      "job_memory_limit_applied": true,
+      "peak_process_commit_bytes": 106266624,
+      "stdout": "target/architecture-hardening/h8-section-packet-cache-6efcb71f23a6/java-oracle.stdout.log",
+      "stdout_sha256": "1c3c028ba433f2864fc2cce9fd288216b1861f485c1e6a2d9f2c9d6ec675bc38",
+      "stderr": "target/architecture-hardening/h8-section-packet-cache-6efcb71f23a6/java-oracle.stderr.log",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "java-tamper-control",
+      "argv": [
+        "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\bin\\java.exe",
+        "-Xms16m",
+        "-Xmx128m",
+        "-cp",
+        "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h8-section-packet-cache-6efcb71f23a6\\classes",
+        "PacketOracle",
+        "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h8-section-packet-cache-6efcb71f23a6\\tampered-fixture"
+      ],
+      "status": "PASS",
+      "exit_code": 1,
+      "timed_out": false,
+      "elapsed_seconds": 0.09579729998949915,
+      "job_memory_limit_applied": true,
+      "peak_process_commit_bytes": 99942400,
+      "stdout": "target/architecture-hardening/h8-section-packet-cache-6efcb71f23a6/java-tamper-control.stdout.log",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "target/architecture-hardening/h8-section-packet-cache-6efcb71f23a6/java-tamper-control.stderr.log",
+      "stderr_sha256": "b885310516cbf4374160c18858afa9ca0bce13bc175e3794479670d8a3c13cf4",
+      "expected_failure_marker": "FIRST_DIVERGENCE file=uniform.prototype.bin offset=0"
+    },
+    {
+      "name": "benchmark",
+      "argv": [
+        "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h8-section-packet-cache-6efcb71f23a6\\cargo\\release\\section-packet-cache-experiment.exe",
+        "bench"
+      ],
+      "status": "PASS",
+      "exit_code": 0,
+      "timed_out": false,
+      "elapsed_seconds": 10.555383300001267,
+      "job_memory_limit_applied": true,
+      "peak_process_commit_bytes": 29847552,
+      "stdout": "target/architecture-hardening/h8-section-packet-cache-6efcb71f23a6/benchmark.stdout.log",
+      "stdout_sha256": "46ed58fd7d20c4bf5039ee8492eaf905e53834cdd744c519eea7ebaeb2438522",
+      "stderr": "target/architecture-hardening/h8-section-packet-cache-6efcb71f23a6/benchmark.stderr.log",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "limits": {
+    "runtime_process_memory_mib": 512,
+    "runtime_active_processes": 1,
+    "runtime_output_bytes_per_stream": 1048576,
+    "benchmark_deadline_seconds": 180,
+    "resident_payload_budget": 65536,
+    "unique_adopted_live_payload_budget": 98304
+  },
+  "limitations": [
+    "Synthetic serial protocol-340/no-block-entity bodies, before framing/compression/encryption.",
+    "Current identity and generation updates are trusted harness inputs, not integrated H6/JVM ownership.",
+    "Payload budgets exclude metadata, source worlds, temporary builders and allocator overhead.",
+    "Shared-host timings with five samples per case; no real-server or general speedup claim.",
+    "Hash inventory covers listed local source/runtime/tool files, not full OS, MSVC toolchain or SDK."
+  ],
+  "isolation_before": {
+    "schema_version": 1,
+    "kind": "HARDENING_ISOLATION_GATE_CHECK",
+    "status": "PASS",
+    "failures": [],
+    "original_observed": {
+      "head": "c4b868db2c9e4b03f745bf93c6ebf4fd8a8519e7",
+      "branch": "issue1-jni-v2",
+      "status": [
+        " M tools/live-capture/live_client_session.py",
+        "?? tools/live-capture/__pycache__/",
+        "?? tools/live-capture/run_rev_shadow.py"
+      ],
+      "files": [
+        {
+          "path": "D:\\minecraftrust\\tools\\live-capture\\live_client_session.py",
+          "sha256": "151c356161695aba3db3c1a8cbd589b5eda2b5a1770dff59ab21b728d36cabfa"
+        },
+        {
+          "path": "D:\\minecraftrust\\tools\\live-capture\\run_rev_shadow.py",
+          "sha256": "2b9b2aca49e57dd0d2a74bec46efcdc0ac7f95762a733276e27ff9dbcb472d93"
+        }
+      ]
+    },
+    "isolated_worktree": "D:\\minecraftrust-astra-hardening",
+    "isolated_head": "1ee883947b4173e45fa4c56d86c040cf4198ae60",
+    "isolated_branch": "astra/architecture-hardening",
+    "production_gate_checks": {
+      "tryEncode_fail_closed": true,
+      "productionAuthorityEligible_false": true
+    },
+    "scope": "read-only original HEAD/status/two paused source hashes plus conservative source guards; runtime authority tests remain required"
+  },
+  "tool_hashes_before": {
+    "C:\\Users\\Admin\\.cargo\\bin\\cargo.exe": "6f4bef66261261fcb43131be8720bab817d403a09edec7455c371974b90bdb7e",
+    "C:\\Users\\Admin\\.cargo\\bin\\rustup.exe": "6f4bef66261261fcb43131be8720bab817d403a09edec7455c371974b90bdb7e",
+    "C:\\Python314\\python.exe": "4942b86a6597e5aee0128daa00050ed79bc21f6e709a78eb19cbfeb0c2f39ac9",
+    "C:\\Program Files\\Git\\cmd\\git.exe": "37c5725818d602e951ba2563b870d62763322956b73373da4c33a0b566a80bc9",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\bin\\java.exe": "65ebee06ec47df0c41c4483ac5aa408e55adb47a1613bad56be30bccc4317e85",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\bin\\javac.exe": "9f1dae15ffb49c7363c72351cf61f4889ac6896e3df87c1c5553b81745ae8a07",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\bin\\server\\jvm.dll": "d3f1564b31a25f280d633d33234bdf88fd12dbe0ae34e15e2e89db3f0ca2d407",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\lib\\rt.jar": "1166665601d9b1587682e2540cff6a31b0c7028211d2e07adb9ad30e1699eca3",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\lib\\tools.jar": "7325904e8de35b7376bbed7080a1fce7d9b886d3dddb5bfdbc00cefe7b248987",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\cargo.exe": "c37545ec61d48d31bdefce53280ecab61c4ea54eaace372fac6a0316c6e165d9",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\rustc.exe": "ca9988af88b1463f6857fdfe909299fee50a63260b3e5f7dbcb5b4d3318b27bc",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\rustdoc.exe": "9daff87cf4052ba3f97decb39d2822e1a96b3ed444eda86ed8df74802679dd60",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\rustfmt.exe": "ac9d781249bffabbb1bedb691a5ea6f63a818c1dda73dd698d4dff687ad4c24e",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\cargo-fmt.exe": "fcd2d35d13dc1a487c755e234bf2aee06f75b522c8a691cac9ee5f0d6fc854a1",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\cargo-clippy.exe": "cb0f2b164b3f6e95bfed7ec4ae9fc48f8ce8d9fef3649b5ae87961f75e1ef484",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\clippy-driver.exe": "00fd4ef2fe60e603571573746e52f42f109bbfe4b879e7ca7313614fda0b367b"
+  },
+  "source_hashes_before": {
+    "Cargo.toml": "ceaf10e69829d9488f89719c1fbc7889832f66f77234bb222b20625b34443c41",
+    "crates/buffers/Cargo.toml": "b174f499d9c90e7ffd5846e200f1b61a2dbfc53b54b2a6d2f272ec6c19c2d512",
+    "crates/buffers/src/lib.rs": "371258844e412e16b93ec539ab7e7e13a3a344e7fc3a54a7feb350d5bde45ab1",
+    "crates/core-types/Cargo.toml": "00383c33bbd1fb38b76e11d3cded64ff8832ce65efdf7620e00583613c2d2f82",
+    "crates/core-types/src/lib.rs": "630c3b67eeed6fd4e8216e3418656e7851728199391f4155ac94da852fe11521",
+    "crates/native-capability/Cargo.toml": "352d8023b05ef342d2165363f533931258e0f5c8e4758bb83ff64df4183c8964",
+    "crates/native-capability/src/lib.rs": "0fc47fbd5872a404c6fc40d248245549cbd3872c63a4d656cab1f7a5d30872d7",
+    "crates/native-chunk/Cargo.toml": "00b673f4e5f13ae6224b0bd1ef683aeadd07073c426cf077270ea8ecf94ab425",
+    "crates/native-chunk/src/chunk.rs": "4a91edb9587343ed67648de39b771e51600602e4e1d4ec72bea4a3b05d7f0921",
+    "crates/native-chunk/src/lib.rs": "0ff2155a8f4061a7939d3d3e91bbb73ae665b45ef211e10c7892965b2cc0a20c",
+    "crates/native-chunk/src/packet_snapshot.rs": "7170c8b0b56c3675927efa8d418b933683e302ed37002a606033fbc189970c12",
+    "crates/native-chunk/src/registry.rs": "79b4e5366da7b31dda3bd6fd24d72584e07f7c8da0f6514574221a39e1a63deb",
+    "crates/native-chunk/src/section.rs": "262f244fc86dab5d7a8a9eb0d2ef25f092b2229f30198aa5d410839171cb6d1e",
+    "crates/native-state-vnext/Cargo.toml": "a196d468553eee7ee43aee6fcb599e7050d2b6e957b3742b332997d909c3e9d6",
+    "crates/native-state-vnext/src/lib.rs": "15d932ec10f3e885c4535f997725f6a80ab7d88c606cfaca1855c56e415836f1",
+    "crates/native-state-vnext/src/section.rs": "b4ffde7b70168df5160155bacb4b8660c54ae253c400c2f5859d9f479b4122ce",
+    "crates/native-state-vnext/src/store.rs": "445aa04958554ffd1bf31c8112d2e5a2faee34ac0a2668b243eb280b9b0b49f1",
+    "crates/protocol/Cargo.toml": "68a7c06ea5fc1954c962b99a817235f4e6bb65a7d04b9f0ec3288be5385732dd",
+    "crates/protocol/src/codec.rs": "66b943c4ac9fa2ec234f8804df47f98f55ee7dc980ece6b46a93ef8cab92a8a2",
+    "crates/protocol/src/error.rs": "ef9a1267d6062656658857ff0f71df91b0875081fa7058ff3434ca2c92a4a8cf",
+    "crates/protocol/src/lib.rs": "86391633f56434d55f16abcff0a1cd168503378365c1dba14c3c20b963280f7e",
+    "crates/rustcraft-core/Cargo.toml": "f0b085a397c545665bae25b878f254c090a5d640bdc52e9bc15cf514f22ef39e",
+    "crates/rustcraft-core/src/lib.rs": "3e6a2914001d68fd02d8e0a33f4e7489ea14202e7b011af51aa3797976b73878",
+    "machine/architecture-hardening/isolation.json": "8f9b34b55f6ecc1d549da1ec4c42900b4a831a3072a9e4aa6aa2ae39cae53d93",
+    "tools/bridge/src/com/rustcraft/bridge/capture/CaptureContract.java": "76d053eaf1b10d4d52de00f236365ff00216e6d8db3425f9de0054fcaa268586",
+    "tools/bridge/src/com/rustcraft/bridge/M4NativeStatePayload.java": "a47be5f83303a2d039fd56acbc24ba71ae9a98035bc9fb15545167535e2513ab",
+    "tools/nbt-region-experiment/job.py": "41f77a4c87ba2f531872853f2bcc701c5cac3a384c1bb2cf49901b8fcff9c65b",
+    "tools/nbt-region-experiment/test_job.py": "9136383642db857086e84591a580cdff6475b7fb28abfe3d26773829a678c07f",
+    "tools/section-packet-cache-experiment/Cargo.lock": "72d5fa93a7de6b181b676898a71686dc22361f0d42e9d06fd6fd5636278bc1ba",
+    "tools/section-packet-cache-experiment/Cargo.toml": "9a9393aced2b47b600ec85fa15c4a207691a9f042906b4ec0a97c3150c5a98b2",
+    "tools/section-packet-cache-experiment/PacketOracle.java": "3dcdebe0c3701dc77d4a12d0bd1200c15edd764fef9e48472103af783a727ba1",
+    "tools/section-packet-cache-experiment/provenance.json": "b6200551e34d8eb6bd690a0b5e5fa9ec3e610f4100d4baf858968de5c5313643",
+    "tools/section-packet-cache-experiment/run.py": "0576e091bfd4b0a63c951680a003c2ff10dfa14176453830f93755821ae51d34",
+    "tools/section-packet-cache-experiment/src/lib.rs": "9426652eb2c866d83215761482c5947e820a97af97eed7fb3f10a19d4eb29d54",
+    "tools/section-packet-cache-experiment/src/main.rs": "d8ccf336257e5cc9a43d27e9622bf34c7391ee492a9c8816af92136dfc1df959",
+    "tools/section-packet-cache-experiment/tests/contracts.rs": "6d04f2d236fa3937dd3734df7484a414761325ef1c5292370240b1a4b03a0276",
+    "tools/section-packet-cache-experiment/third-party/Hyperion-LICENSE.txt": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+    "tools/section-packet-cache-experiment/third-party/Valence-LICENSE.txt": "01c39d867eb175cce2f8dcafd98f151d2e704b4adedc8c6a8e1c2721cd9663cd",
+    "tools/testing/hardening_guard.py": "a2062b3ffbec7edba79bf5f5954fbcb1e9d97492ab9c4bb541833ebb820bdb6d"
+  },
+  "local_packages": [
+    {
+      "name": "buffers",
+      "version": "0.1.0",
+      "manifest": "D:\\minecraftrust-astra-hardening\\crates\\buffers\\Cargo.toml",
+      "license": "MIT OR Apache-2.0"
+    },
+    {
+      "name": "core-types",
+      "version": "0.1.0",
+      "manifest": "D:\\minecraftrust-astra-hardening\\crates\\core-types\\Cargo.toml",
+      "license": "MIT OR Apache-2.0"
+    },
+    {
+      "name": "native-capability",
+      "version": "0.1.0",
+      "manifest": "D:\\minecraftrust-astra-hardening\\crates\\native-capability\\Cargo.toml",
+      "license": "MIT OR Apache-2.0"
+    },
+    {
+      "name": "native-chunk",
+      "version": "0.1.0",
+      "manifest": "D:\\minecraftrust-astra-hardening\\crates\\native-chunk\\Cargo.toml",
+      "license": "MIT OR Apache-2.0"
+    },
+    {
+      "name": "native-state-vnext",
+      "version": "0.1.0",
+      "manifest": "D:\\minecraftrust-astra-hardening\\crates\\native-state-vnext\\Cargo.toml",
+      "license": "MIT OR Apache-2.0"
+    },
+    {
+      "name": "protocol",
+      "version": "0.1.0",
+      "manifest": "D:\\minecraftrust-astra-hardening\\crates\\protocol\\Cargo.toml",
+      "license": "MIT OR Apache-2.0"
+    },
+    {
+      "name": "rustcraft-core",
+      "version": "0.1.0",
+      "manifest": "D:\\minecraftrust-astra-hardening\\crates\\rustcraft-core\\Cargo.toml",
+      "license": "MIT OR Apache-2.0"
+    },
+    {
+      "name": "section-packet-cache-experiment",
+      "version": "0.1.0",
+      "manifest": "D:\\minecraftrust-astra-hardening\\tools\\section-packet-cache-experiment\\Cargo.toml",
+      "license": "MIT OR Apache-2.0"
+    }
+  ],
+  "binary": {
+    "path": "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h8-section-packet-cache-6efcb71f23a6\\cargo\\release\\section-packet-cache-experiment.exe",
+    "sha256_before": "797008a02e54fb6ac55646e893890cb59fe135620ce9d92082c651f60a54ee52",
+    "sha256_after": "797008a02e54fb6ac55646e893890cb59fe135620ce9d92082c651f60a54ee52"
+  },
+  "fixtures": [
+    {
+      "name": "uniform",
+      "mask": 1,
+      "body_bytes": 6420,
+      "body_sha256": "998e6b205c1d0a7ad5c5d77913c80a4a9fc34f4fa80a8c0b6ead7db8487053f1",
+      "input_sha256": "fbe0336d45e9a015c43dba8eef0854fb218d74c0d5d879fdce0ef166c86bcdb3"
+    },
+    {
+      "name": "small",
+      "mask": 3,
+      "body_bytes": 12584,
+      "body_sha256": "dc95454227821c94ca13ea1307c898392ba97f001937b55a9c0c76c7feb7c36d",
+      "input_sha256": "2294fba7759bb1419f8bf6d2a7f35e732f88c6ed294a872e14120b79a73ad788"
+    },
+    {
+      "name": "large_sparse",
+      "mask": 33,
+      "body_bytes": 15768,
+      "body_sha256": "20f74315e7d9109cbb4f01332328edd6573e6d17fcdfaa6f629e1f2fb0c7ed5b",
+      "input_sha256": "f0d7281b29cb1abe82b0a04b84ea58480a28b2f6fd1d96d3a2576181853f34b9"
+    },
+    {
+      "name": "direct",
+      "mask": 1,
+      "body_bytes": 11026,
+      "body_sha256": "2a1049c598e9a92ba2bb1fa08f6be27cc784d9baca453e281a44cba3b0582cce",
+      "input_sha256": "2f18c152530e12d48153ab44b42e23f9395a11c07b3276242a287ea15f7afa34"
+    },
+    {
+      "name": "dense_hot",
+      "mask": 1,
+      "body_bytes": 6427,
+      "body_sha256": "41786cf90cfc9935de7e92adb0ebc7b77a023533ec8bfdc97f2e63ffe2e6feb1",
+      "input_sha256": "151e953957abfac5c6d23bbc4417fcbcd73a76d1c0b7cbb021c5cf9686266150"
+    },
+    {
+      "name": "no_sky",
+      "mask": 2,
+      "body_bytes": 5971,
+      "body_sha256": "ed60a9ae35aadfb9d0d16ab15d7ff96c6ee274ffbbdc5319995a6b07be4ab60f",
+      "input_sha256": "4ce71de14587156c6c5f410729ea0888c0832d521881e55cc45995dd23f31d84"
+    },
+    {
+      "name": "partial",
+      "mask": 1,
+      "body_bytes": 6171,
+      "body_sha256": "01736a4043a0129ddeb00e77b94f5278f34f1bc9f0b020509bc94f82a235e78d",
+      "input_sha256": "4bbbfb1308fadacd414ff98dfec8f4359ca75f843297aff7d59f4255c3565fb3"
+    },
+    {
+      "name": "recipient",
+      "mask": 1,
+      "body_bytes": 6420,
+      "body_sha256": "998e6b205c1d0a7ad5c5d77913c80a4a9fc34f4fa80a8c0b6ead7db8487053f1",
+      "input_sha256": "40b2edd6387b0ea061d124fda1521ad3b1d16e42a0f78903c56c89ab79eeee77"
+    },
+    {
+      "name": "empty",
+      "mask": 0,
+      "body_bytes": 270,
+      "body_sha256": "4db7a6c6ccbadc29369aaf7f4f1b9aeef633e4df023802fcd241fed98a165659",
+      "input_sha256": "c2eb0ea82e79314556fc2c5233c8617f694edbf70af05541eb582e3951c47487"
+    },
+    {
+      "name": "all_sections",
+      "mask": 65535,
+      "body_bytes": 172369,
+      "body_sha256": "550d6be2d0d85e200aa78b29164421097811518ec62c436bc2cbc493386f1a7f",
+      "input_sha256": "17a6314d9644af9e9416679ca5863984a54d7399107c6c0e1f1c41bfa121ee88"
+    },
+    {
+      "name": "mutated",
+      "mask": 1,
+      "body_bytes": 6427,
+      "body_sha256": "b4532c0ecf2dc3e546fa0fca77bf948605a9b5a15d42207bd8c87f1fbb6092ca",
+      "input_sha256": "1b5cd7361907a177e64163332f077b490ea4a7377faa7a43ed12d133caac547a"
+    },
+    {
+      "name": "air",
+      "mask": 1,
+      "body_bytes": 6419,
+      "body_sha256": "76445efba25625e7a44883ceccfc1da9bd03d5a335d4793510ee4717bc4fd244",
+      "input_sha256": "d639451bd7e29aa26dde04122709bc00eead0be832a0f40cde2a969231d7d052"
+    },
+    {
+      "name": "local_15",
+      "mask": 1,
+      "body_bytes": 6434,
+      "body_sha256": "974d343076202abbd5376e895fe038bd8924de1b9fdb4b36bd895b2aecdfb871",
+      "input_sha256": "9990d28099850cd17b974d76a0395f1515f90ed9e467f72ea24d6c1d85c6e973"
+    },
+    {
+      "name": "local_16",
+      "mask": 1,
+      "body_bytes": 6947,
+      "body_sha256": "e1023cf04a818255a0db41c7a632fdb6eb8274ea84c496777ffddab4eaa969a6",
+      "input_sha256": "281b16abe1ec15dcfb336dd89230a73b6a405578bfb67e9d2563e71607d3d3e7"
+    },
+    {
+      "name": "local_32",
+      "mask": 1,
+      "body_bytes": 7475,
+      "body_sha256": "37db483834f13503bbc819507b4ec9695baaac23599638228e9bf55e39dc34db",
+      "input_sha256": "16217fa7cf137288b42e25901b9c4d278a9a4c7cf3ca36ebc06c5f456207a318"
+    },
+    {
+      "name": "local_128",
+      "mask": 1,
+      "body_bytes": 8597,
+      "body_sha256": "2583429582300cf4df2d69c77a04939cbfe8a873a73cce22d6e2274714bb6438",
+      "input_sha256": "cdc8c4a85bd533573302077694db0caf958190f4bc608b70373027723c250b74"
+    },
+    {
+      "name": "local_255",
+      "mask": 1,
+      "body_bytes": 8851,
+      "body_sha256": "79e1ee1ca1fa391ac187c001bd1f737ecbaf154d29d561680910afd51c417c44",
+      "input_sha256": "f0d0dcc70be2f6e4831a21d80bac8fd037ded635b518f49ea687104acdebe7e9"
+    },
+    {
+      "name": "direct_256",
+      "mask": 1,
+      "body_bytes": 11026,
+      "body_sha256": "b21ffbeaa911414d68f6f9091691c765dc68e9466764bdc82852e841a9a39582",
+      "input_sha256": "f366832d14e6ea536b5074db728e5d1fe354416416758e54491a884b61d2837b"
+    }
+  ],
+  "tamper_control": {
+    "file": "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h8-section-packet-cache-6efcb71f23a6\\tampered-fixture\\uniform.prototype.bin",
+    "sha256": "c79442235c6baf154818f6c3366f451fe48914e202eecc66e6692e2eae29a817",
+    "expected_first_offset": 0
+  },
+  "java_classes": {
+    "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h8-section-packet-cache-6efcb71f23a6\\classes\\PacketOracle.class": "22c39b05bcfd687cd35acd8326a1d7172adfcfafec8ca261c80c19f80e29f444"
+  },
+  "measurements": {
+    "raw_rows": 132,
+    "discarded_warmup_rows": 22,
+    "measurement_samples_per_case": 5,
+    "layout": [
+      {
+        "name": "uniform",
+        "layout": "Uniform",
+        "samples": 5,
+        "reads": {
+          "min": 100000,
+          "median": 100000,
+          "max": 100000
+        },
+        "writes": {
+          "min": 10000,
+          "median": 10000,
+          "max": 10000
+        },
+        "packet_rounds": {
+          "min": 16,
+          "median": 16,
+          "max": 16
+        },
+        "legacy_read_ns": {
+          "min": 39900,
+          "median": 40000,
+          "max": 40300
+        },
+        "prototype_read_ns": {
+          "min": 20000,
+          "median": 20100,
+          "max": 20100
+        },
+        "legacy_write_ns": {
+          "min": 4300,
+          "median": 4400,
+          "max": 4500
+        },
+        "prototype_write_ns": {
+          "min": 21600,
+          "median": 21900,
+          "max": 44700
+        },
+        "legacy_warm_body_ns": {
+          "min": 117900,
+          "median": 119300,
+          "max": 120300
+        },
+        "legacy_cold_body_ns": {
+          "min": 260900,
+          "median": 262400,
+          "max": 352000
+        },
+        "prototype_body_ns": {
+          "min": 350500,
+          "median": 351200,
+          "max": 515500
+        },
+        "legacy_inline_bytes": {
+          "min": 12352,
+          "median": 12352,
+          "max": 12352
+        },
+        "prototype_inline_bytes": {
+          "min": 224,
+          "median": 224,
+          "max": 224
+        },
+        "prototype_vector_bytes": {
+          "min": 4,
+          "median": 4,
+          "max": 4
+        },
+        "lookup_capacity_entries": {
+          "min": 0,
+          "median": 0,
+          "max": 0
+        },
+        "packet_bytes": {
+          "min": 6420,
+          "median": 6420,
+          "max": 6420
+        },
+        "linear_lookups": {
+          "min": 0,
+          "median": 0,
+          "max": 0
+        },
+        "hashed_lookups": {
+          "min": 0,
+          "median": 0,
+          "max": 0
+        }
+      },
+      {
+        "name": "small_palette",
+        "layout": "LocalPalette",
+        "samples": 5,
+        "reads": {
+          "min": 100000,
+          "median": 100000,
+          "max": 100000
+        },
+        "writes": {
+          "min": 10000,
+          "median": 10000,
+          "max": 10000
+        },
+        "packet_rounds": {
+          "min": 16,
+          "median": 16,
+          "max": 16
+        },
+        "legacy_read_ns": {
+          "min": 39900,
+          "median": 40100,
+          "max": 49700
+        },
+        "prototype_read_ns": {
+          "min": 43500,
+          "median": 43600,
+          "max": 79700
+        },
+        "legacy_write_ns": {
+          "min": 13800,
+          "median": 14000,
+          "max": 16500
+        },
+        "prototype_write_ns": {
+          "min": 37800,
+          "median": 37900,
+          "max": 70900
+        },
+        "legacy_warm_body_ns": {
+          "min": 118900,
+          "median": 120400,
+          "max": 124600
+        },
+        "legacy_cold_body_ns": {
+          "min": 350900,
+          "median": 367100,
+          "max": 563900
+        },
+        "prototype_body_ns": {
+          "min": 508900,
+          "median": 514200,
+          "max": 552100
+        },
+        "legacy_inline_bytes": {
+          "min": 12352,
+          "median": 12352,
+          "max": 12352
+        },
+        "prototype_inline_bytes": {
+          "min": 224,
+          "median": 224,
+          "max": 224
+        },
+        "prototype_vector_bytes": {
+          "min": 8288,
+          "median": 8288,
+          "max": 8288
+        },
+        "lookup_capacity_entries": {
+          "min": 0,
+          "median": 0,
+          "max": 0
+        },
+        "packet_bytes": {
+          "min": 6427,
+          "median": 6427,
+          "max": 6427
+        },
+        "linear_lookups": {
+          "min": 4096,
+          "median": 4096,
+          "max": 4096
+        },
+        "hashed_lookups": {
+          "min": 0,
+          "median": 0,
+          "max": 0
+        }
+      },
+      {
+        "name": "large_palette",
+        "layout": "LocalPalette",
+        "samples": 5,
+        "reads": {
+          "min": 100000,
+          "median": 100000,
+          "max": 100000
+        },
+        "writes": {
+          "min": 10000,
+          "median": 10000,
+          "max": 10000
+        },
+        "packet_rounds": {
+          "min": 16,
+          "median": 16,
+          "max": 16
+        },
+        "legacy_read_ns": {
+          "min": 40000,
+          "median": 41300,
+          "max": 60300
+        },
+        "prototype_read_ns": {
+          "min": 43600,
+          "median": 46100,
+          "max": 67500
+        },
+        "legacy_write_ns": {
+          "min": 13900,
+          "median": 14000,
+          "max": 20600
+        },
+        "prototype_write_ns": {
+          "min": 51800,
+          "median": 52100,
+          "max": 86000
+        },
+        "legacy_warm_body_ns": {
+          "min": 145200,
+          "median": 159400,
+          "max": 215200
+        },
+        "legacy_cold_body_ns": {
+          "min": 1437400,
+          "median": 1527000,
+          "max": 1988300
+        },
+        "prototype_body_ns": {
+          "min": 961300,
+          "median": 989600,
+          "max": 1139900
+        },
+        "legacy_inline_bytes": {
+          "min": 12352,
+          "median": 12352,
+          "max": 12352
+        },
+        "prototype_inline_bytes": {
+          "min": 224,
+          "median": 224,
+          "max": 224
+        },
+        "prototype_vector_bytes": {
+          "min": 8960,
+          "median": 8960,
+          "max": 8960
+        },
+        "lookup_capacity_entries": {
+          "min": 112,
+          "median": 112,
+          "max": 112
+        },
+        "packet_bytes": {
+          "min": 8019,
+          "median": 8019,
+          "max": 8019
+        },
+        "linear_lookups": {
+          "min": 0,
+          "median": 0,
+          "max": 0
+        },
+        "hashed_lookups": {
+          "min": 4096,
+          "median": 4096,
+          "max": 4096
+        }
+      },
+      {
+        "name": "dense_hot",
+        "layout": "DenseHot",
+        "samples": 5,
+        "reads": {
+          "min": 100000,
+          "median": 100000,
+          "max": 100000
+        },
+        "writes": {
+          "min": 10000,
+          "median": 10000,
+          "max": 10000
+        },
+        "packet_rounds": {
+          "min": 16,
+          "median": 16,
+          "max": 16
+        },
+        "legacy_read_ns": {
+          "min": 39700,
+          "median": 40100,
+          "max": 58100
+        },
+        "prototype_read_ns": {
+          "min": 45600,
+          "median": 45800,
+          "max": 61300
+        },
+        "legacy_write_ns": {
+          "min": 13900,
+          "median": 13900,
+          "max": 16800
+        },
+        "prototype_write_ns": {
+          "min": 24600,
+          "median": 24700,
+          "max": 49200
+        },
+        "legacy_warm_body_ns": {
+          "min": 118500,
+          "median": 145400,
+          "max": 161000
+        },
+        "legacy_cold_body_ns": {
+          "min": 353500,
+          "median": 497400,
+          "max": 541900
+        },
+        "prototype_body_ns": {
+          "min": 493700,
+          "median": 500800,
+          "max": 835700
+        },
+        "legacy_inline_bytes": {
+          "min": 12352,
+          "median": 12352,
+          "max": 12352
+        },
+        "prototype_inline_bytes": {
+          "min": 224,
+          "median": 224,
+          "max": 224
+        },
+        "prototype_vector_bytes": {
+          "min": 16384,
+          "median": 16384,
+          "max": 16384
+        },
+        "lookup_capacity_entries": {
+          "min": 0,
+          "median": 0,
+          "max": 0
+        },
+        "packet_bytes": {
+          "min": 6427,
+          "median": 6427,
+          "max": 6427
+        },
+        "linear_lookups": {
+          "min": 0,
+          "median": 0,
+          "max": 0
+        },
+        "hashed_lookups": {
+          "min": 0,
+          "median": 0,
+          "max": 0
+        }
+      },
+      {
+        "name": "direct_1024",
+        "layout": "DenseHot",
+        "samples": 5,
+        "reads": {
+          "min": 100000,
+          "median": 100000,
+          "max": 100000
+        },
+        "writes": {
+          "min": 10000,
+          "median": 10000,
+          "max": 10000
+        },
+        "packet_rounds": {
+          "min": 16,
+          "median": 16,
+          "max": 16
+        },
+        "legacy_read_ns": {
+          "min": 39900,
+          "median": 45500,
+          "max": 58700
+        },
+        "prototype_read_ns": {
+          "min": 45400,
+          "median": 46000,
+          "max": 58900
+        },
+        "legacy_write_ns": {
+          "min": 13900,
+          "median": 14000,
+          "max": 17900
+        },
+        "prototype_write_ns": {
+          "min": 24600,
+          "median": 25300,
+          "max": 45300
+        },
+        "legacy_warm_body_ns": {
+          "min": 185700,
+          "median": 202500,
+          "max": 228000
+        },
+        "legacy_cold_body_ns": {
+          "min": 4157900,
+          "median": 4281800,
+          "max": 6867300
+        },
+        "prototype_body_ns": {
+          "min": 2014000,
+          "median": 2107400,
+          "max": 3470400
+        },
+        "legacy_inline_bytes": {
+          "min": 12352,
+          "median": 12352,
+          "max": 12352
+        },
+        "prototype_inline_bytes": {
+          "min": 224,
+          "median": 224,
+          "max": 224
+        },
+        "prototype_vector_bytes": {
+          "min": 16384,
+          "median": 16384,
+          "max": 16384
+        },
+        "lookup_capacity_entries": {
+          "min": 0,
+          "median": 0,
+          "max": 0
+        },
+        "packet_bytes": {
+          "min": 11026,
+          "median": 11026,
+          "max": 11026
+        },
+        "linear_lookups": {
+          "min": 0,
+          "median": 0,
+          "max": 0
+        },
+        "hashed_lookups": {
+          "min": 0,
+          "median": 0,
+          "max": 0
+        }
+      }
+    ],
+    "cache": [
+      {
+        "players": 1,
+        "radius": 2,
+        "mutation": 0,
+        "slow": 0,
+        "samples": 5,
+        "legacy_ns": {
+          "min": 969600,
+          "median": 1082200,
+          "max": 1097400
+        },
+        "cached_ns": {
+          "min": 1828900,
+          "median": 2402600,
+          "max": 2967400
+        },
+        "hits": {
+          "min": 0,
+          "median": 0,
+          "max": 0
+        },
+        "misses": {
+          "min": 50,
+          "median": 50,
+          "max": 50
+        },
+        "invalidated": {
+          "min": 0,
+          "median": 0,
+          "max": 0
+        },
+        "invalidation_ns": {
+          "min": 0,
+          "median": 0,
+          "max": 0
+        },
+        "legacy_pending_peak_bytes": {
+          "min": 0,
+          "median": 0,
+          "max": 0
+        },
+        "cached_live_peak_bytes": {
+          "min": 64270,
+          "median": 64270,
+          "max": 64270
+        },
+        "cached_resident_peak_bytes": {
+          "min": 64270,
+          "median": 64270,
+          "max": 64270
+        },
+        "cached_external_peak_bytes": {
+          "min": 0,
+          "median": 0,
+          "max": 0
+        },
+        "evictions": {
+          "min": 40,
+          "median": 40,
+          "max": 40
+        },
+        "backpressure_drains": {
+          "min": 0,
+          "median": 0,
+          "max": 0
+        },
+        "delivered_bytes": {
+          "min": 321350,
+          "median": 321350,
+          "max": 321350
+        }
+      },
+      {
+        "players": 1,
+        "radius": 2,
+        "mutation": 0,
+        "slow": 1,
+        "samples": 5,
+        "legacy_ns": {
+          "min": 760400,
+          "median": 1097000,
+          "max": 1198000
+        },
+        "cached_ns": {
+          "min": 1570100,
+          "median": 1659400,
+          "max": 2307700
+        },
+        "hits": {
+          "min": 0,
+          "median": 0,
+          "max": 0
+        },
+        "misses": {
+          "min": 50,
+          "median": 50,
+          "max": 50
+        },
+        "invalidated": {
+          "min": 0,
+          "median": 0,
+          "max": 0
+        },
+        "invalidation_ns": {
+          "min": 0,
+          "median": 0,
+          "max": 0
+        },
+        "legacy_pending_peak_bytes": {
+          "min": 96405,
+          "median": 96405,
+          "max": 96405
+        },
+        "cached_live_peak_bytes": {
+          "min": 96405,
+          "median": 96405,
+          "max": 96405
+        },
+        "cached_resident_peak_bytes": {
+          "min": 64270,
+          "median": 64270,
+          "max": 64270
+        },
+        "cached_external_peak_bytes": {
+          "min": 89978,
+          "median": 89978,
+          "max": 89978
+        },
+        "evictions": {
+          "min": 49,
+          "median": 49,
+          "max": 49
+        },
+        "backpressure_drains": {
+          "min": 35,
+          "median": 35,
+          "max": 35
+        },
+        "delivered_bytes": {
+          "min": 321350,
+          "median": 321350,
+          "max": 321350
+        }
+      },
+      {
+        "players": 1,
+        "radius": 2,
+        "mutation": 1,
+        "slow": 0,
+        "samples": 5,
+        "legacy_ns": {
+          "min": 1172200,
+          "median": 1211800,
+          "max": 1772800
+        },
+        "cached_ns": {
+          "min": 1630800,
+          "median": 2239800,
+          "max": 2760500
+        },
+        "hits": {
+          "min": 0,
+          "median": 0,
+          "max": 0
+        },
+        "misses": {
+          "min": 50,
+          "median": 50,
+          "max": 50
+        },
+        "invalidated": {
+          "min": 0,
+          "median": 0,
+          "max": 0
+        },
+        "invalidation_ns": {
+          "min": 2400,
+          "median": 4900,
+          "max": 6300
+        },
+        "legacy_pending_peak_bytes": {
+          "min": 0,
+          "median": 0,
+          "max": 0
+        },
+        "cached_live_peak_bytes": {
+          "min": 64270,
+          "median": 64270,
+          "max": 64270
+        },
+        "cached_resident_peak_bytes": {
+          "min": 64270,
+          "median": 64270,
+          "max": 64270
+        },
+        "cached_external_peak_bytes": {
+          "min": 0,
+          "median": 0,
+          "max": 0
+        },
+        "evictions": {
+          "min": 40,
+          "median": 40,
+          "max": 40
+        },
+        "backpressure_drains": {
+          "min": 0,
+          "median": 0,
+          "max": 0
+        },
+        "delivered_bytes": {
+          "min": 321350,
+          "median": 321350,
+          "max": 321350
+        }
+      },
+      {
+        "players": 1,
+        "radius": 2,
+        "mutation": 1,
+        "slow": 1,
+        "samples": 5,
+        "legacy_ns": {
+          "min": 1162500,
+          "median": 1392600,
+          "max": 1780100
+        },
+        "cached_ns": {
+          "min": 1623700,
+          "median": 2332400,
+          "max": 2903800
+        },
+        "hits": {
+          "min": 0,
+          "median": 0,
+          "max": 0
+        },
+        "misses": {
+          "min": 50,
+          "median": 50,
+          "max": 50
+        },
+        "invalidated": {
+          "min": 0,
+          "median": 0,
+          "max": 0
+        },
+        "invalidation_ns": {
+          "min": 2100,
+          "median": 3200,
+          "max": 3600
+        },
+        "legacy_pending_peak_bytes": {
+          "min": 96405,
+          "median": 96405,
+          "max": 96405
+        },
+        "cached_live_peak_bytes": {
+          "min": 96405,
+          "median": 96405,
+          "max": 96405
+        },
+        "cached_resident_peak_bytes": {
+          "min": 64270,
+          "median": 64270,
+          "max": 64270
+        },
+        "cached_external_peak_bytes": {
+          "min": 89978,
+          "median": 89978,
+          "max": 89978
+        },
+        "evictions": {
+          "min": 49,
+          "median": 49,
+          "max": 49
+        },
+        "backpressure_drains": {
+          "min": 35,
+          "median": 35,
+          "max": 35
+        },
+        "delivered_bytes": {
+          "min": 321350,
+          "median": 321350,
+          "max": 321350
+        }
+      },
+      {
+        "players": 1,
+        "radius": 8,
+        "mutation": 0,
+        "slow": 0,
+        "samples": 5,
+        "legacy_ns": {
+          "min": 9226400,
+          "median": 9960800,
+          "max": 12647000
+        },
+        "cached_ns": {
+          "min": 21509600,
+          "median": 23276000,
+          "max": 25230700
+        },
+        "hits": {
+          "min": 0,
+          "median": 0,
+          "max": 0
+        },
+        "misses": {
+          "min": 578,
+          "median": 578,
+          "max": 578
+        },
+        "invalidated": {
+          "min": 0,
+          "median": 0,
+          "max": 0
+        },
+        "invalidation_ns": {
+          "min": 0,
+          "median": 0,
+          "max": 0
+        },
+        "legacy_pending_peak_bytes": {
+          "min": 0,
+          "median": 0,
+          "max": 0
+        },
+        "cached_live_peak_bytes": {
+          "min": 64270,
+          "median": 64270,
+          "max": 64270
+        },
+        "cached_resident_peak_bytes": {
+          "min": 64270,
+          "median": 64270,
+          "max": 64270
+        },
+        "cached_external_peak_bytes": {
+          "min": 0,
+          "median": 0,
+          "max": 0
+        },
+        "evictions": {
+          "min": 568,
+          "median": 568,
+          "max": 568
+        },
+        "backpressure_drains": {
+          "min": 0,
+          "median": 0,
+          "max": 0
+        },
+        "delivered_bytes": {
+          "min": 3714806,
+          "median": 3714806,
+          "max": 3714806
+        }
+      },
+      {
+        "players": 1,
+        "radius": 8,
+        "mutation": 0,
+        "slow": 1,
+        "samples": 5,
+        "legacy_ns": {
+          "min": 9364000,
+          "median": 9586400,
+          "max": 11375300
+        },
+        "cached_ns": {
+          "min": 20260400,
+          "median": 21441000,
+          "max": 25898300
+        },
+        "hits": {
+          "min": 0,
+          "median": 0,
+          "max": 0
+        },
+        "misses": {
+          "min": 578,
+          "median": 578,
+          "max": 578
+        },
+        "invalidated": {
+          "min": 0,
+          "median": 0,
+          "max": 0
+        },
+        "invalidation_ns": {
+          "min": 0,
+          "median": 0,
+          "max": 0
+        },
+        "legacy_pending_peak_bytes": {
+          "min": 96405,
+          "median": 96405,
+          "max": 96405
+        },
+        "cached_live_peak_bytes": {
+          "min": 96405,
+          "median": 96405,
+          "max": 96405
+        },
+        "cached_resident_peak_bytes": {
+          "min": 64270,
+          "median": 64270,
+          "max": 64270
+        },
+        "cached_external_peak_bytes": {
+          "min": 89978,
+          "median": 89978,
+          "max": 89978
+        },
+        "evictions": {
+          "min": 577,
+          "median": 577,
+          "max": 577
+        },
+        "backpressure_drains": {
+          "min": 563,
+          "median": 563,
+          "max": 563
+        },
+        "delivered_bytes": {
+          "min": 3714806,
+          "median": 3714806,
+          "max": 3714806
+        }
+      },
+      {
+        "players": 1,
+        "radius": 8,
+        "mutation": 1,
+        "slow": 0,
+        "samples": 5,
+        "legacy_ns": {
+          "min": 13846500,
+          "median": 15148800,
+          "max": 15599100
+        },
+        "cached_ns": {
+          "min": 20610100,
+          "median": 21815400,
+          "max": 23211200
+        },
+        "hits": {
+          "min": 0,
+          "median": 0,
+          "max": 0
+        },
+        "misses": {
+          "min": 578,
+          "median": 578,
+          "max": 578
+        },
+        "invalidated": {
+          "min": 0,
+          "median": 0,
+          "max": 0
+        },
+        "invalidation_ns": {
+          "min": 40000,
+          "median": 43000,
+          "max": 48400
+        },
+        "legacy_pending_peak_bytes": {
+          "min": 0,
+          "median": 0,
+          "max": 0
+        },
+        "cached_live_peak_bytes": {
+          "min": 64270,
+          "median": 64270,
+          "max": 64270
+        },
+        "cached_resident_peak_bytes": {
+          "min": 64270,
+          "median": 64270,
+          "max": 64270
+        },
+        "cached_external_peak_bytes": {
+          "min": 0,
+          "median": 0,
+          "max": 0
+        },
+        "evictions": {
+          "min": 568,
+          "median": 568,
+          "max": 568
+        },
+        "backpressure_drains": {
+          "min": 0,
+          "median": 0,
+          "max": 0
+        },
+        "delivered_bytes": {
+          "min": 3714806,
+          "median": 3714806,
+          "max": 3714806
+        }
+      },
+      {
+        "players": 1,
+        "radius": 8,
+        "mutation": 1,
+        "slow": 1,
+        "samples": 5,
+        "legacy_ns": {
+          "min": 14230200,
+          "median": 14999000,
+          "max": 16460000
+        },
+        "cached_ns": {
+          "min": 20462900,
+          "median": 20784700,
+          "max": 21652400
+        },
+        "hits": {
+          "min": 0,
+          "median": 0,
+          "max": 0
+        },
+        "misses": {
+          "min": 578,
+          "median": 578,
+          "max": 578
+        },
+        "invalidated": {
+          "min": 0,
+          "median": 0,
+          "max": 0
+        },
+        "invalidation_ns": {
+          "min": 20700,
+          "median": 21400,
+          "max": 22400
+        },
+        "legacy_pending_peak_bytes": {
+          "min": 96405,
+          "median": 96405,
+          "max": 96405
+        },
+        "cached_live_peak_bytes": {
+          "min": 96405,
+          "median": 96405,
+          "max": 96405
+        },
+        "cached_resident_peak_bytes": {
+          "min": 64270,
+          "median": 64270,
+          "max": 64270
+        },
+        "cached_external_peak_bytes": {
+          "min": 89978,
+          "median": 89978,
+          "max": 89978
+        },
+        "evictions": {
+          "min": 577,
+          "median": 577,
+          "max": 577
+        },
+        "backpressure_drains": {
+          "min": 563,
+          "median": 563,
+          "max": 563
+        },
+        "delivered_bytes": {
+          "min": 3714806,
+          "median": 3714806,
+          "max": 3714806
+        }
+      },
+      {
+        "players": 16,
+        "radius": 2,
+        "mutation": 0,
+        "slow": 0,
+        "samples": 5,
+        "legacy_ns": {
+          "min": 6739500,
+          "median": 7476100,
+          "max": 7778500
+        },
+        "cached_ns": {
+          "min": 3330300,
+          "median": 3719800,
+          "max": 4278900
+        },
+        "hits": {
+          "min": 700,
+          "median": 700,
+          "max": 700
+        },
+        "misses": {
+          "min": 100,
+          "median": 100,
+          "max": 100
+        },
+        "invalidated": {
+          "min": 0,
+          "median": 0,
+          "max": 0
+        },
+        "invalidation_ns": {
+          "min": 0,
+          "median": 0,
+          "max": 0
+        },
+        "legacy_pending_peak_bytes": {
+          "min": 0,
+          "median": 0,
+          "max": 0
+        },
+        "cached_live_peak_bytes": {
+          "min": 64235,
+          "median": 64235,
+          "max": 64235
+        },
+        "cached_resident_peak_bytes": {
+          "min": 64235,
+          "median": 64235,
+          "max": 64235
+        },
+        "cached_external_peak_bytes": {
+          "min": 0,
+          "median": 0,
+          "max": 0
+        },
+        "evictions": {
+          "min": 90,
+          "median": 90,
+          "max": 90
+        },
+        "backpressure_drains": {
+          "min": 0,
+          "median": 0,
+          "max": 0
+        },
+        "delivered_bytes": {
+          "min": 5138800,
+          "median": 5138800,
+          "max": 5138800
+        }
+      },
+      {
+        "players": 16,
+        "radius": 2,
+        "mutation": 0,
+        "slow": 1,
+        "samples": 5,
+        "legacy_ns": {
+          "min": 7002600,
+          "median": 7610400,
+          "max": 7862800
+        },
+        "cached_ns": {
+          "min": 20727100,
+          "median": 20963300,
+          "max": 23345900
+        },
+        "hits": {
+          "min": 196,
+          "median": 196,
+          "max": 196
+        },
+        "misses": {
+          "min": 604,
+          "median": 604,
+          "max": 604
+        },
+        "invalidated": {
+          "min": 0,
+          "median": 0,
+          "max": 0
+        },
+        "invalidation_ns": {
+          "min": 0,
+          "median": 0,
+          "max": 0
+        },
+        "legacy_pending_peak_bytes": {
+          "min": 96405,
+          "median": 96405,
+          "max": 96405
+        },
+        "cached_live_peak_bytes": {
+          "min": 96405,
+          "median": 96405,
+          "max": 96405
+        },
+        "cached_resident_peak_bytes": {
+          "min": 64235,
+          "median": 64235,
+          "max": 64235
+        },
+        "cached_external_peak_bytes": {
+          "min": 89978,
+          "median": 89978,
+          "max": 89978
+        },
+        "evictions": {
+          "min": 603,
+          "median": 603,
+          "max": 603
+        },
+        "backpressure_drains": {
+          "min": 36,
+          "median": 36,
+          "max": 36
+        },
+        "delivered_bytes": {
+          "min": 5138800,
+          "median": 5138800,
+          "max": 5138800
+        }
+      },
+      {
+        "players": 16,
+        "radius": 2,
+        "mutation": 1,
+        "slow": 0,
+        "samples": 5,
+        "legacy_ns": {
+          "min": 7105800,
+          "median": 7532800,
+          "max": 8036900
+        },
+        "cached_ns": {
+          "min": 3109200,
+          "median": 3294300,
+          "max": 4545000
+        },
+        "hits": {
+          "min": 700,
+          "median": 700,
+          "max": 700
+        },
+        "misses": {
+          "min": 100,
+          "median": 100,
+          "max": 100
+        },
+        "invalidated": {
+          "min": 0,
+          "median": 0,
+          "max": 0
+        },
+        "invalidation_ns": {
+          "min": 3100,
+          "median": 3300,
+          "max": 5200
+        },
+        "legacy_pending_peak_bytes": {
+          "min": 0,
+          "median": 0,
+          "max": 0
+        },
+        "cached_live_peak_bytes": {
+          "min": 64235,
+          "median": 64235,
+          "max": 64235
+        },
+        "cached_resident_peak_bytes": {
+          "min": 64235,
+          "median": 64235,
+          "max": 64235
+        },
+        "cached_external_peak_bytes": {
+          "min": 0,
+          "median": 0,
+          "max": 0
+        },
+        "evictions": {
+          "min": 90,
+          "median": 90,
+          "max": 90
+        },
+        "backpressure_drains": {
+          "min": 0,
+          "median": 0,
+          "max": 0
+        },
+        "delivered_bytes": {
+          "min": 5138800,
+          "median": 5138800,
+          "max": 5138800
+        }
+      },
+      {
+        "players": 16,
+        "radius": 2,
+        "mutation": 1,
+        "slow": 1,
+        "samples": 5,
+        "legacy_ns": {
+          "min": 7235300,
+          "median": 7796700,
+          "max": 8339700
+        },
+        "cached_ns": {
+          "min": 19676600,
+          "median": 21907300,
+          "max": 23450000
+        },
+        "hits": {
+          "min": 196,
+          "median": 196,
+          "max": 196
+        },
+        "misses": {
+          "min": 604,
+          "median": 604,
+          "max": 604
+        },
+        "invalidated": {
+          "min": 0,
+          "median": 0,
+          "max": 0
+        },
+        "invalidation_ns": {
+          "min": 2700,
+          "median": 3200,
+          "max": 15100
+        },
+        "legacy_pending_peak_bytes": {
+          "min": 96405,
+          "median": 96405,
+          "max": 96405
+        },
+        "cached_live_peak_bytes": {
+          "min": 96405,
+          "median": 96405,
+          "max": 96405
+        },
+        "cached_resident_peak_bytes": {
+          "min": 64235,
+          "median": 64235,
+          "max": 64235
+        },
+        "cached_external_peak_bytes": {
+          "min": 89978,
+          "median": 89978,
+          "max": 89978
+        },
+        "evictions": {
+          "min": 603,
+          "median": 603,
+          "max": 603
+        },
+        "backpressure_drains": {
+          "min": 36,
+          "median": 36,
+          "max": 36
+        },
+        "delivered_bytes": {
+          "min": 5138800,
+          "median": 5138800,
+          "max": 5138800
+        }
+      },
+      {
+        "players": 16,
+        "radius": 8,
+        "mutation": 0,
+        "slow": 0,
+        "samples": 5,
+        "legacy_ns": {
+          "min": 83649700,
+          "median": 83753200,
+          "max": 86862200
+        },
+        "cached_ns": {
+          "min": 40009100,
+          "median": 41242100,
+          "max": 44970200
+        },
+        "hits": {
+          "min": 8092,
+          "median": 8092,
+          "max": 8092
+        },
+        "misses": {
+          "min": 1156,
+          "median": 1156,
+          "max": 1156
+        },
+        "invalidated": {
+          "min": 0,
+          "median": 0,
+          "max": 0
+        },
+        "invalidation_ns": {
+          "min": 0,
+          "median": 0,
+          "max": 0
+        },
+        "legacy_pending_peak_bytes": {
+          "min": 0,
+          "median": 0,
+          "max": 0
+        },
+        "cached_live_peak_bytes": {
+          "min": 64235,
+          "median": 64235,
+          "max": 64235
+        },
+        "cached_resident_peak_bytes": {
+          "min": 64235,
+          "median": 64235,
+          "max": 64235
+        },
+        "cached_external_peak_bytes": {
+          "min": 0,
+          "median": 0,
+          "max": 0
+        },
+        "evictions": {
+          "min": 1146,
+          "median": 1146,
+          "max": 1146
+        },
+        "backpressure_drains": {
+          "min": 0,
+          "median": 0,
+          "max": 0
+        },
+        "delivered_bytes": {
+          "min": 59404528,
+          "median": 59404528,
+          "max": 59404528
+        }
+      },
+      {
+        "players": 16,
+        "radius": 8,
+        "mutation": 0,
+        "slow": 1,
+        "samples": 5,
+        "legacy_ns": {
+          "min": 80720800,
+          "median": 84929500,
+          "max": 87612000
+        },
+        "cached_ns": {
+          "min": 326787600,
+          "median": 332345900,
+          "max": 346553300
+        },
+        "hits": {
+          "min": 196,
+          "median": 196,
+          "max": 196
+        },
+        "misses": {
+          "min": 9052,
+          "median": 9052,
+          "max": 9052
+        },
+        "invalidated": {
+          "min": 0,
+          "median": 0,
+          "max": 0
+        },
+        "invalidation_ns": {
+          "min": 0,
+          "median": 0,
+          "max": 0
+        },
+        "legacy_pending_peak_bytes": {
+          "min": 96405,
+          "median": 96405,
+          "max": 96405
+        },
+        "cached_live_peak_bytes": {
+          "min": 96405,
+          "median": 96405,
+          "max": 96405
+        },
+        "cached_resident_peak_bytes": {
+          "min": 64235,
+          "median": 64235,
+          "max": 64235
+        },
+        "cached_external_peak_bytes": {
+          "min": 89978,
+          "median": 89978,
+          "max": 89978
+        },
+        "evictions": {
+          "min": 9051,
+          "median": 9051,
+          "max": 9051
+        },
+        "backpressure_drains": {
+          "min": 564,
+          "median": 564,
+          "max": 564
+        },
+        "delivered_bytes": {
+          "min": 59404528,
+          "median": 59404528,
+          "max": 59404528
+        }
+      },
+      {
+        "players": 16,
+        "radius": 8,
+        "mutation": 1,
+        "slow": 0,
+        "samples": 5,
+        "legacy_ns": {
+          "min": 89994900,
+          "median": 90804900,
+          "max": 91451800
+        },
+        "cached_ns": {
+          "min": 40559600,
+          "median": 43612100,
+          "max": 52980400
+        },
+        "hits": {
+          "min": 8092,
+          "median": 8092,
+          "max": 8092
+        },
+        "misses": {
+          "min": 1156,
+          "median": 1156,
+          "max": 1156
+        },
+        "invalidated": {
+          "min": 0,
+          "median": 0,
+          "max": 0
+        },
+        "invalidation_ns": {
+          "min": 41100,
+          "median": 44300,
+          "max": 59000
+        },
+        "legacy_pending_peak_bytes": {
+          "min": 0,
+          "median": 0,
+          "max": 0
+        },
+        "cached_live_peak_bytes": {
+          "min": 64235,
+          "median": 64235,
+          "max": 64235
+        },
+        "cached_resident_peak_bytes": {
+          "min": 64235,
+          "median": 64235,
+          "max": 64235
+        },
+        "cached_external_peak_bytes": {
+          "min": 0,
+          "median": 0,
+          "max": 0
+        },
+        "evictions": {
+          "min": 1146,
+          "median": 1146,
+          "max": 1146
+        },
+        "backpressure_drains": {
+          "min": 0,
+          "median": 0,
+          "max": 0
+        },
+        "delivered_bytes": {
+          "min": 59404528,
+          "median": 59404528,
+          "max": 59404528
+        }
+      },
+      {
+        "players": 16,
+        "radius": 8,
+        "mutation": 1,
+        "slow": 1,
+        "samples": 5,
+        "legacy_ns": {
+          "min": 89190000,
+          "median": 90565100,
+          "max": 92765300
+        },
+        "cached_ns": {
+          "min": 321270500,
+          "median": 334685300,
+          "max": 342794800
+        },
+        "hits": {
+          "min": 196,
+          "median": 196,
+          "max": 196
+        },
+        "misses": {
+          "min": 9052,
+          "median": 9052,
+          "max": 9052
+        },
+        "invalidated": {
+          "min": 0,
+          "median": 0,
+          "max": 0
+        },
+        "invalidation_ns": {
+          "min": 27100,
+          "median": 33300,
+          "max": 42200
+        },
+        "legacy_pending_peak_bytes": {
+          "min": 96405,
+          "median": 96405,
+          "max": 96405
+        },
+        "cached_live_peak_bytes": {
+          "min": 96405,
+          "median": 96405,
+          "max": 96405
+        },
+        "cached_resident_peak_bytes": {
+          "min": 64235,
+          "median": 64235,
+          "max": 64235
+        },
+        "cached_external_peak_bytes": {
+          "min": 89978,
+          "median": 89978,
+          "max": 89978
+        },
+        "evictions": {
+          "min": 9051,
+          "median": 9051,
+          "max": 9051
+        },
+        "backpressure_drains": {
+          "min": 564,
+          "median": 564,
+          "max": 564
+        },
+        "delivered_bytes": {
+          "min": 59404528,
+          "median": 59404528,
+          "max": 59404528
+        }
+      }
+    ],
+    "transitions": [
+      {
+        "samples": 5,
+        "promotion_ns": {
+          "min": 23600,
+          "median": 35200,
+          "max": 43900
+        },
+        "demotion_ns": {
+          "min": 70800,
+          "median": 108400,
+          "max": 123900
+        },
+        "promotions": {
+          "min": 1,
+          "median": 1,
+          "max": 1
+        },
+        "demotions": {
+          "min": 1,
+          "median": 1,
+          "max": 1
+        }
+      }
+    ]
+  },
+  "source_hashes_after": {
+    "Cargo.toml": "ceaf10e69829d9488f89719c1fbc7889832f66f77234bb222b20625b34443c41",
+    "crates/buffers/Cargo.toml": "b174f499d9c90e7ffd5846e200f1b61a2dbfc53b54b2a6d2f272ec6c19c2d512",
+    "crates/buffers/src/lib.rs": "371258844e412e16b93ec539ab7e7e13a3a344e7fc3a54a7feb350d5bde45ab1",
+    "crates/core-types/Cargo.toml": "00383c33bbd1fb38b76e11d3cded64ff8832ce65efdf7620e00583613c2d2f82",
+    "crates/core-types/src/lib.rs": "630c3b67eeed6fd4e8216e3418656e7851728199391f4155ac94da852fe11521",
+    "crates/native-capability/Cargo.toml": "352d8023b05ef342d2165363f533931258e0f5c8e4758bb83ff64df4183c8964",
+    "crates/native-capability/src/lib.rs": "0fc47fbd5872a404c6fc40d248245549cbd3872c63a4d656cab1f7a5d30872d7",
+    "crates/native-chunk/Cargo.toml": "00b673f4e5f13ae6224b0bd1ef683aeadd07073c426cf077270ea8ecf94ab425",
+    "crates/native-chunk/src/chunk.rs": "4a91edb9587343ed67648de39b771e51600602e4e1d4ec72bea4a3b05d7f0921",
+    "crates/native-chunk/src/lib.rs": "0ff2155a8f4061a7939d3d3e91bbb73ae665b45ef211e10c7892965b2cc0a20c",
+    "crates/native-chunk/src/packet_snapshot.rs": "7170c8b0b56c3675927efa8d418b933683e302ed37002a606033fbc189970c12",
+    "crates/native-chunk/src/registry.rs": "79b4e5366da7b31dda3bd6fd24d72584e07f7c8da0f6514574221a39e1a63deb",
+    "crates/native-chunk/src/section.rs": "262f244fc86dab5d7a8a9eb0d2ef25f092b2229f30198aa5d410839171cb6d1e",
+    "crates/native-state-vnext/Cargo.toml": "a196d468553eee7ee43aee6fcb599e7050d2b6e957b3742b332997d909c3e9d6",
+    "crates/native-state-vnext/src/lib.rs": "15d932ec10f3e885c4535f997725f6a80ab7d88c606cfaca1855c56e415836f1",
+    "crates/native-state-vnext/src/section.rs": "b4ffde7b70168df5160155bacb4b8660c54ae253c400c2f5859d9f479b4122ce",
+    "crates/native-state-vnext/src/store.rs": "445aa04958554ffd1bf31c8112d2e5a2faee34ac0a2668b243eb280b9b0b49f1",
+    "crates/protocol/Cargo.toml": "68a7c06ea5fc1954c962b99a817235f4e6bb65a7d04b9f0ec3288be5385732dd",
+    "crates/protocol/src/codec.rs": "66b943c4ac9fa2ec234f8804df47f98f55ee7dc980ece6b46a93ef8cab92a8a2",
+    "crates/protocol/src/error.rs": "ef9a1267d6062656658857ff0f71df91b0875081fa7058ff3434ca2c92a4a8cf",
+    "crates/protocol/src/lib.rs": "86391633f56434d55f16abcff0a1cd168503378365c1dba14c3c20b963280f7e",
+    "crates/rustcraft-core/Cargo.toml": "f0b085a397c545665bae25b878f254c090a5d640bdc52e9bc15cf514f22ef39e",
+    "crates/rustcraft-core/src/lib.rs": "3e6a2914001d68fd02d8e0a33f4e7489ea14202e7b011af51aa3797976b73878",
+    "machine/architecture-hardening/isolation.json": "8f9b34b55f6ecc1d549da1ec4c42900b4a831a3072a9e4aa6aa2ae39cae53d93",
+    "tools/bridge/src/com/rustcraft/bridge/capture/CaptureContract.java": "76d053eaf1b10d4d52de00f236365ff00216e6d8db3425f9de0054fcaa268586",
+    "tools/bridge/src/com/rustcraft/bridge/M4NativeStatePayload.java": "a47be5f83303a2d039fd56acbc24ba71ae9a98035bc9fb15545167535e2513ab",
+    "tools/nbt-region-experiment/job.py": "41f77a4c87ba2f531872853f2bcc701c5cac3a384c1bb2cf49901b8fcff9c65b",
+    "tools/nbt-region-experiment/test_job.py": "9136383642db857086e84591a580cdff6475b7fb28abfe3d26773829a678c07f",
+    "tools/section-packet-cache-experiment/Cargo.lock": "72d5fa93a7de6b181b676898a71686dc22361f0d42e9d06fd6fd5636278bc1ba",
+    "tools/section-packet-cache-experiment/Cargo.toml": "9a9393aced2b47b600ec85fa15c4a207691a9f042906b4ec0a97c3150c5a98b2",
+    "tools/section-packet-cache-experiment/PacketOracle.java": "3dcdebe0c3701dc77d4a12d0bd1200c15edd764fef9e48472103af783a727ba1",
+    "tools/section-packet-cache-experiment/provenance.json": "b6200551e34d8eb6bd690a0b5e5fa9ec3e610f4100d4baf858968de5c5313643",
+    "tools/section-packet-cache-experiment/run.py": "0576e091bfd4b0a63c951680a003c2ff10dfa14176453830f93755821ae51d34",
+    "tools/section-packet-cache-experiment/src/lib.rs": "9426652eb2c866d83215761482c5947e820a97af97eed7fb3f10a19d4eb29d54",
+    "tools/section-packet-cache-experiment/src/main.rs": "d8ccf336257e5cc9a43d27e9622bf34c7391ee492a9c8816af92136dfc1df959",
+    "tools/section-packet-cache-experiment/tests/contracts.rs": "6d04f2d236fa3937dd3734df7484a414761325ef1c5292370240b1a4b03a0276",
+    "tools/section-packet-cache-experiment/third-party/Hyperion-LICENSE.txt": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+    "tools/section-packet-cache-experiment/third-party/Valence-LICENSE.txt": "01c39d867eb175cce2f8dcafd98f151d2e704b4adedc8c6a8e1c2721cd9663cd",
+    "tools/testing/hardening_guard.py": "a2062b3ffbec7edba79bf5f5954fbcb1e9d97492ab9c4bb541833ebb820bdb6d"
+  },
+  "tool_hashes_after": {
+    "C:\\Users\\Admin\\.cargo\\bin\\cargo.exe": "6f4bef66261261fcb43131be8720bab817d403a09edec7455c371974b90bdb7e",
+    "C:\\Users\\Admin\\.cargo\\bin\\rustup.exe": "6f4bef66261261fcb43131be8720bab817d403a09edec7455c371974b90bdb7e",
+    "C:\\Python314\\python.exe": "4942b86a6597e5aee0128daa00050ed79bc21f6e709a78eb19cbfeb0c2f39ac9",
+    "C:\\Program Files\\Git\\cmd\\git.exe": "37c5725818d602e951ba2563b870d62763322956b73373da4c33a0b566a80bc9",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\bin\\java.exe": "65ebee06ec47df0c41c4483ac5aa408e55adb47a1613bad56be30bccc4317e85",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\bin\\javac.exe": "9f1dae15ffb49c7363c72351cf61f4889ac6896e3df87c1c5553b81745ae8a07",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\bin\\server\\jvm.dll": "d3f1564b31a25f280d633d33234bdf88fd12dbe0ae34e15e2e89db3f0ca2d407",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\lib\\rt.jar": "1166665601d9b1587682e2540cff6a31b0c7028211d2e07adb9ad30e1699eca3",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\lib\\tools.jar": "7325904e8de35b7376bbed7080a1fce7d9b886d3dddb5bfdbc00cefe7b248987",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\cargo.exe": "c37545ec61d48d31bdefce53280ecab61c4ea54eaace372fac6a0316c6e165d9",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\rustc.exe": "ca9988af88b1463f6857fdfe909299fee50a63260b3e5f7dbcb5b4d3318b27bc",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\rustdoc.exe": "9daff87cf4052ba3f97decb39d2822e1a96b3ed444eda86ed8df74802679dd60",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\rustfmt.exe": "ac9d781249bffabbb1bedb691a5ea6f63a818c1dda73dd698d4dff687ad4c24e",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\cargo-fmt.exe": "fcd2d35d13dc1a487c755e234bf2aee06f75b522c8a691cac9ee5f0d6fc854a1",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\cargo-clippy.exe": "cb0f2b164b3f6e95bfed7ec4ae9fc48f8ce8d9fef3649b5ae87961f75e1ef484",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\clippy-driver.exe": "00fd4ef2fe60e603571573746e52f42f109bbfe4b879e7ca7313614fda0b367b"
+  },
+  "isolation_after": {
+    "schema_version": 1,
+    "kind": "HARDENING_ISOLATION_GATE_CHECK",
+    "status": "PASS",
+    "failures": [],
+    "original_observed": {
+      "head": "c4b868db2c9e4b03f745bf93c6ebf4fd8a8519e7",
+      "branch": "issue1-jni-v2",
+      "status": [
+        " M tools/live-capture/live_client_session.py",
+        "?? tools/live-capture/__pycache__/",
+        "?? tools/live-capture/run_rev_shadow.py"
+      ],
+      "files": [
+        {
+          "path": "D:\\minecraftrust\\tools\\live-capture\\live_client_session.py",
+          "sha256": "151c356161695aba3db3c1a8cbd589b5eda2b5a1770dff59ab21b728d36cabfa"
+        },
+        {
+          "path": "D:\\minecraftrust\\tools\\live-capture\\run_rev_shadow.py",
+          "sha256": "2b9b2aca49e57dd0d2a74bec46efcdc0ac7f95762a733276e27ff9dbcb472d93"
+        }
+      ]
+    },
+    "isolated_worktree": "D:\\minecraftrust-astra-hardening",
+    "isolated_head": "1ee883947b4173e45fa4c56d86c040cf4198ae60",
+    "isolated_branch": "astra/architecture-hardening",
+    "production_gate_checks": {
+      "tryEncode_fail_closed": true,
+      "productionAuthorityEligible_false": true
+    },
+    "scope": "read-only original HEAD/status/two paused source hashes plus conservative source guards; runtime authority tests remain required"
+  },
+  "finished_utc": "2026-09-27T01:36:33.364538+00:00"
+}

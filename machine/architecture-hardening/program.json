@@ -170,11 +170,30 @@
     {
       "id": "H8",
       "title": "SECTION LAYOUT PROTOTYPES",
-      "status": "PENDING",
-      "implementation": [],
-      "validation": [],
-      "evidence": [],
-      "commit": null
+      "status": "PROTOTYPE_VALIDATED",
+      "implementation": [
+        "tools/section-packet-cache-experiment",
+        "docs/research/section-packet-cache-experiment.md"
+      ],
+      "validation": [
+        "Independent root rerun:10 Rust tests,18 Java fixtures305602bytes/encoder,4 Job controls,strict fmt/clippy;240 exploratory timing rows per campaign;bad-byte first divergence preserved"
+      ],
+      "evidence": [
+        "machine/architecture-hardening/h8-section-packet-cache.json"
+      ],
+      "commit": null,
+      "outstanding": [
+        "Synthetic serial protocol-340/no-block-entity bodies, before framing/compression/encryption.",
+        "Current identity and generation updates are trusted harness inputs, not integrated H6/JVM ownership.",
+        "Payload budgets exclude metadata, source worlds, temporary builders and allocator overhead.",
+        "Shared-host timings with five samples per case; no real-server or general speedup claim.",
+        "Hash inventory covers listed local source/runtime/tool files, not full OS, MSVC toolchain or SDK.",
+        "Cache keys/current generations are trusted serial fixture inputs; H6 validated work publication is not integrated.",
+        "Private legacy palette allocations and H6 HashMap bucket bytes remain unknown; memory columns are partial.",
+        "All-player shared views and immediate oldest-reader release are synthetic; no real network backpressure latency.",
+        "Before/after hashes cover actual local dependency sources, not unrelated standalone projects or every compiler/linker/system input.",
+        "Bind immutable cache keys and source snapshots to H6 WorkTicket/view identity, publish through validated ownership/generation checks, and reserve bytes for concurrent builders before runtime JNI integration."
+      ]
     },
     {
       "id": "H9",
@@ -240,7 +259,7 @@
     {
       "id": "H12",
       "title": "SEMANTIC SCHEDULER",
-      "status": "FOUNDATION_VALIDATED",
+      "status": "FOUNDATION_COMMITTED",
       "implementation": [
         "crates/semantic-scheduler-prototype",
         "docs/architecture/semantic-scheduler.md"
@@ -251,7 +270,7 @@
       "evidence": [
         "machine/architecture-hardening/h12-semantic-scheduler.json"
       ],
-      "commit": null,
+      "commit": "73839e4",
       "outstanding": [
         "Closed bounded affine integer jobs only, not Minecraft/Forge semantics or tick parity",
         "Offline privately issued model token is not actual H4/H6 runtime qualification",
@@ -669,11 +688,30 @@
     {
       "id": "H8.1",
       "title": "GENERATION-KEYED PACKET CACHE",
-      "status": "PENDING",
-      "implementation": [],
-      "validation": [],
-      "evidence": [],
-      "commit": null
+      "status": "PROTOTYPE_VALIDATED",
+      "implementation": [
+        "tools/section-packet-cache-experiment",
+        "docs/research/section-packet-cache-experiment.md"
+      ],
+      "validation": [
+        "Independent root rerun:10 Rust tests,18 Java fixtures305602bytes/encoder,4 Job controls,strict fmt/clippy;240 exploratory timing rows per campaign;bad-byte first divergence preserved"
+      ],
+      "evidence": [
+        "machine/architecture-hardening/h8-section-packet-cache.json"
+      ],
+      "commit": null,
+      "outstanding": [
+        "Synthetic serial protocol-340/no-block-entity bodies, before framing/compression/encryption.",
+        "Current identity and generation updates are trusted harness inputs, not integrated H6/JVM ownership.",
+        "Payload budgets exclude metadata, source worlds, temporary builders and allocator overhead.",
+        "Shared-host timings with five samples per case; no real-server or general speedup claim.",
+        "Hash inventory covers listed local source/runtime/tool files, not full OS, MSVC toolchain or SDK.",
+        "Cache keys/current generations are trusted serial fixture inputs; H6 validated work publication is not integrated.",
+        "Private legacy palette allocations and H6 HashMap bucket bytes remain unknown; memory columns are partial.",
+        "All-player shared views and immediate oldest-reader release are synthetic; no real network backpressure latency.",
+        "Before/after hashes cover actual local dependency sources, not unrelated standalone projects or every compiler/linker/system input.",
+        "Bind immutable cache keys and source snapshots to H6 WorkTicket/view identity, publish through validated ownership/generation checks, and reserve bytes for concurrent builders before runtime JNI integration."
+      ]
     },
     {
       "id": "H19.1",

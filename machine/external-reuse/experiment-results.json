@@ -243,6 +243,32 @@
       "evidence": "machine/architecture-hardening/h12-semantic-scheduler.json",
       "provenance": "crates/semantic-scheduler-prototype/mechanisms-research.json",
       "source": "https://crates.io/api/v1/crates/bytemuck/1.25.2"
+    },
+    {
+      "candidate": "Valence",
+      "version": "c4177cab47ae109c848a431756d5d7c0207c05ed",
+      "decision": "BORROW_ALGORITHM",
+      "license": "MIT",
+      "reason": "Observable chunk mutation invalidates cached initialization packet data; storage has uniform/indirect/direct forms. Independent H8 implementation; no code copied or dependency installed.",
+      "performance_value": "Exploratory H8 full-body/cache measurements;warm dense encoder retained;slow-consumer small-budget regression preserved",
+      "migration_value": "Immutable initialization-body reuse and adaptive palette lookup ideas;no upstream implementation copied",
+      "integration_risk": "Trusted synthetic identity/generation inputs;real ownership and packet-time capture integration still absent",
+      "installed_scope": "NOT_INSTALLED;independently implemented standalone H8 prototype",
+      "evidence": "machine/architecture-hardening/h8-section-packet-cache.json",
+      "provenance": "tools/section-packet-cache-experiment/provenance.json"
+    },
+    {
+      "candidate": "Hyperion",
+      "version": "85abe336514e507b72a38e351b5df5a641a4bf30",
+      "decision": "BORROW_ALGORITHM",
+      "license": "Apache-2.0",
+      "reason": "Indirect palette representation plus issue 938 chunk-subscription cache proposal. The issue is a design proposal, not evidence of shipped fanout caching. Independent H8 implementation; no code copied or dependency installed.",
+      "performance_value": "Exploratory H8 full-body/cache measurements;warm dense encoder retained;slow-consumer small-budget regression preserved",
+      "migration_value": "Immutable initialization-body reuse and adaptive palette lookup ideas;no upstream implementation copied",
+      "integration_risk": "Trusted synthetic identity/generation inputs;real ownership and packet-time capture integration still absent",
+      "installed_scope": "NOT_INSTALLED;independently implemented standalone H8 prototype",
+      "evidence": "machine/architecture-hardening/h8-section-packet-cache.json",
+      "provenance": "tools/section-packet-cache-experiment/provenance.json"
     }
   ]
 }
