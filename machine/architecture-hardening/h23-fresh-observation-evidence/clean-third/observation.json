@@ -1,0 +1,806 @@
+{
+  "schema": "FRESH_FORGE_DEFINITION_OBSERVATION_V1",
+  "session": "debe3a91436843c38e36fd5a39ce35e3",
+  "challenge": "f7d1da88e149f793e3fe9f8ccc91f7a2789e0f8ebc3702f8a3e3fdac4beaecb2",
+  "request_sha256": "7becfb844e0a774dba2814075c671f3600e1594d38ad62ded6d756694130fc67",
+  "java_version": "1.8.0_504",
+  "java_runtime_version": "1.8.0_504-b01",
+  "forge": {
+    "major": "14",
+    "minor": "23",
+    "rev": "5",
+    "build": "2860",
+    "mccversion": "1.12.2",
+    "mcpversion": "9.42"
+  },
+  "transformers_before": [
+    {
+      "class": "net.minecraftforge.fml.common.asm.transformers.PatchingTransformer",
+      "loader": {
+        "chain": [
+          {
+            "process_local_id": 3,
+            "class": "net.minecraft.launchwrapper.LaunchClassLoader"
+          }
+        ],
+        "bootstrap_terminus": true
+      },
+      "code_source": "file:/D:/minecraftrust-astra-hardening/target/fresh-forge-observer/clean-third/game/libraries/net/minecraftforge/forge/1.12.2-14.23.5.2860/forge-1.12.2-14.23.5.2860.jar"
+    },
+    {
+      "class": "$wrapper.net.minecraftforge.fml.common.asm.transformers.SideTransformer",
+      "loader": {
+        "chain": [
+          {
+            "process_local_id": 3,
+            "class": "net.minecraft.launchwrapper.LaunchClassLoader"
+          }
+        ],
+        "bootstrap_terminus": true
+      },
+      "code_source": "asmgen:/$wrapper/net/minecraftforge/fml/common/asm/transformers/SideTransformer.class"
+    },
+    {
+      "class": "$wrapper.net.minecraftforge.fml.common.asm.transformers.EventSubscriptionTransformer",
+      "loader": {
+        "chain": [
+          {
+            "process_local_id": 3,
+            "class": "net.minecraft.launchwrapper.LaunchClassLoader"
+          }
+        ],
+        "bootstrap_terminus": true
+      },
+      "code_source": "asmgen:/$wrapper/net/minecraftforge/fml/common/asm/transformers/EventSubscriptionTransformer.class"
+    },
+    {
+      "class": "$wrapper.net.minecraftforge.fml.common.asm.transformers.EventSubscriberTransformer",
+      "loader": {
+        "chain": [
+          {
+            "process_local_id": 3,
+            "class": "net.minecraft.launchwrapper.LaunchClassLoader"
+          }
+        ],
+        "bootstrap_terminus": true
+      },
+      "code_source": "asmgen:/$wrapper/net/minecraftforge/fml/common/asm/transformers/EventSubscriberTransformer.class"
+    },
+    {
+      "class": "$wrapper.net.minecraftforge.fml.common.asm.transformers.SoundEngineFixTransformer",
+      "loader": {
+        "chain": [
+          {
+            "process_local_id": 3,
+            "class": "net.minecraft.launchwrapper.LaunchClassLoader"
+          }
+        ],
+        "bootstrap_terminus": true
+      },
+      "code_source": "asmgen:/$wrapper/net/minecraftforge/fml/common/asm/transformers/SoundEngineFixTransformer.class"
+    },
+    {
+      "class": "net.minecraftforge.fml.common.asm.transformers.DeobfuscationTransformer",
+      "loader": {
+        "chain": [
+          {
+            "process_local_id": 3,
+            "class": "net.minecraft.launchwrapper.LaunchClassLoader"
+          }
+        ],
+        "bootstrap_terminus": true
+      },
+      "code_source": "file:/D:/minecraftrust-astra-hardening/target/fresh-forge-observer/clean-third/game/libraries/net/minecraftforge/forge/1.12.2-14.23.5.2860/forge-1.12.2-14.23.5.2860.jar"
+    },
+    {
+      "class": "net.minecraftforge.fml.common.asm.transformers.AccessTransformer",
+      "loader": {
+        "chain": [
+          {
+            "process_local_id": 3,
+            "class": "net.minecraft.launchwrapper.LaunchClassLoader"
+          }
+        ],
+        "bootstrap_terminus": true
+      },
+      "code_source": "file:/D:/minecraftrust-astra-hardening/target/fresh-forge-observer/clean-third/game/libraries/net/minecraftforge/forge/1.12.2-14.23.5.2860/forge-1.12.2-14.23.5.2860.jar"
+    },
+    {
+      "class": "net.minecraftforge.fml.common.asm.transformers.ModAccessTransformer",
+      "loader": {
+        "chain": [
+          {
+            "process_local_id": 3,
+            "class": "net.minecraft.launchwrapper.LaunchClassLoader"
+          }
+        ],
+        "bootstrap_terminus": true
+      },
+      "code_source": "file:/D:/minecraftrust-astra-hardening/target/fresh-forge-observer/clean-third/game/libraries/net/minecraftforge/forge/1.12.2-14.23.5.2860/forge-1.12.2-14.23.5.2860.jar"
+    },
+    {
+      "class": "net.minecraftforge.fml.common.asm.transformers.ItemStackTransformer",
+      "loader": {
+        "chain": [
+          {
+            "process_local_id": 3,
+            "class": "net.minecraft.launchwrapper.LaunchClassLoader"
+          }
+        ],
+        "bootstrap_terminus": true
+      },
+      "code_source": "file:/D:/minecraftrust-astra-hardening/target/fresh-forge-observer/clean-third/game/libraries/net/minecraftforge/forge/1.12.2-14.23.5.2860/forge-1.12.2-14.23.5.2860.jar"
+    },
+    {
+      "class": "net.minecraftforge.fml.common.asm.transformers.ItemBlockTransformer",
+      "loader": {
+        "chain": [
+          {
+            "process_local_id": 3,
+            "class": "net.minecraft.launchwrapper.LaunchClassLoader"
+          }
+        ],
+        "bootstrap_terminus": true
+      },
+      "code_source": "file:/D:/minecraftrust-astra-hardening/target/fresh-forge-observer/clean-third/game/libraries/net/minecraftforge/forge/1.12.2-14.23.5.2860/forge-1.12.2-14.23.5.2860.jar"
+    },
+    {
+      "class": "net.minecraftforge.fml.common.asm.transformers.ItemBlockSpecialTransformer",
+      "loader": {
+        "chain": [
+          {
+            "process_local_id": 3,
+            "class": "net.minecraft.launchwrapper.LaunchClassLoader"
+          }
+        ],
+        "bootstrap_terminus": true
+      },
+      "code_source": "file:/D:/minecraftrust-astra-hardening/target/fresh-forge-observer/clean-third/game/libraries/net/minecraftforge/forge/1.12.2-14.23.5.2860/forge-1.12.2-14.23.5.2860.jar"
+    },
+    {
+      "class": "net.minecraftforge.fml.common.asm.transformers.PotionEffectTransformer",
+      "loader": {
+        "chain": [
+          {
+            "process_local_id": 3,
+            "class": "net.minecraft.launchwrapper.LaunchClassLoader"
+          }
+        ],
+        "bootstrap_terminus": true
+      },
+      "code_source": "file:/D:/minecraftrust-astra-hardening/target/fresh-forge-observer/clean-third/game/libraries/net/minecraftforge/forge/1.12.2-14.23.5.2860/forge-1.12.2-14.23.5.2860.jar"
+    },
+    {
+      "class": "net.minecraftforge.fml.common.asm.transformers.TerminalTransformer",
+      "loader": {
+        "chain": [
+          {
+            "process_local_id": 3,
+            "class": "net.minecraft.launchwrapper.LaunchClassLoader"
+          }
+        ],
+        "bootstrap_terminus": true
+      },
+      "code_source": "file:/D:/minecraftrust-astra-hardening/target/fresh-forge-observer/clean-third/game/libraries/net/minecraftforge/forge/1.12.2-14.23.5.2860/forge-1.12.2-14.23.5.2860.jar"
+    }
+  ],
+  "coremods": [
+    {
+      "class": "net.minecraftforge.fml.relauncher.FMLCorePlugin",
+      "loader": {
+        "chain": [
+          {
+            "process_local_id": 1,
+            "class": "sun.misc.Launcher$AppClassLoader"
+          },
+          {
+            "process_local_id": 2,
+            "class": "sun.misc.Launcher$ExtClassLoader"
+          }
+        ],
+        "bootstrap_terminus": true
+      },
+      "code_source": "file:/D:/minecraftrust-astra-hardening/target/fresh-forge-observer/clean-third/game/libraries/net/minecraftforge/forge/1.12.2-14.23.5.2860/forge-1.12.2-14.23.5.2860.jar"
+    },
+    {
+      "class": "net.minecraftforge.classloading.FMLForgePlugin",
+      "loader": {
+        "chain": [
+          {
+            "process_local_id": 1,
+            "class": "sun.misc.Launcher$AppClassLoader"
+          },
+          {
+            "process_local_id": 2,
+            "class": "sun.misc.Launcher$ExtClassLoader"
+          }
+        ],
+        "bootstrap_terminus": true
+      },
+      "code_source": "file:/D:/minecraftrust-astra-hardening/target/fresh-forge-observer/clean-third/game/libraries/net/minecraftforge/forge/1.12.2-14.23.5.2860/forge-1.12.2-14.23.5.2860.jar"
+    }
+  ],
+  "definitions": [
+    {
+      "name": "net/minecraft/network/play/server/SPacketChunkData",
+      "file": "loader-3/net/minecraft/network/play/server/SPacketChunkData.class",
+      "raw_sha256": "9e8abff74ea6266a4793bfa03bbff9731d2c486c9ff34e5a67b81752ec063354",
+      "bytes": 6586,
+      "loader": {
+        "chain": [
+          {
+            "process_local_id": 3,
+            "class": "net.minecraft.launchwrapper.LaunchClassLoader"
+          }
+        ],
+        "bootstrap_terminus": true
+      },
+      "code_source": "jar:file:/D:/minecraftrust-astra-hardening/target/fresh-forge-observer/clean-third/game/minecraft_server.1.12.2.jar!/je.class"
+    },
+    {
+      "name": "net/minecraft/server/MinecraftServer",
+      "file": "loader-3/net/minecraft/server/MinecraftServer.class",
+      "raw_sha256": "97fa984df647eec377a38fb96798f7f6e22fecbb6ca7519d1a952e3c981a4d5b",
+      "bytes": 47661,
+      "loader": {
+        "chain": [
+          {
+            "process_local_id": 3,
+            "class": "net.minecraft.launchwrapper.LaunchClassLoader"
+          }
+        ],
+        "bootstrap_terminus": true
+      },
+      "code_source": "jar:file:/D:/minecraftrust-astra-hardening/target/fresh-forge-observer/clean-third/game/minecraft_server.1.12.2.jar!/net/minecraft/server/MinecraftServer.class"
+    },
+    {
+      "name": "net/minecraft/util/BitArray",
+      "file": "loader-3/net/minecraft/util/BitArray.class",
+      "raw_sha256": "d967a3fc91e099fd8d1ad4b3655cf90950ebb43f181344e1b4d5a5a3fb69be35",
+      "bytes": 1531,
+      "loader": {
+        "chain": [
+          {
+            "process_local_id": 3,
+            "class": "net.minecraft.launchwrapper.LaunchClassLoader"
+          }
+        ],
+        "bootstrap_terminus": true
+      },
+      "code_source": "jar:file:/D:/minecraftrust-astra-hardening/target/fresh-forge-observer/clean-third/game/minecraft_server.1.12.2.jar!/qw.class"
+    },
+    {
+      "name": "net/minecraft/world/World",
+      "file": "loader-3/net/minecraft/world/World.class",
+      "raw_sha256": "5deb85ca3424a85c32b132c763e774a419e32676c8d520ef2677fa7bc695858a",
+      "bytes": 95318,
+      "loader": {
+        "chain": [
+          {
+            "process_local_id": 3,
+            "class": "net.minecraft.launchwrapper.LaunchClassLoader"
+          }
+        ],
+        "bootstrap_terminus": true
+      },
+      "code_source": "jar:file:/D:/minecraftrust-astra-hardening/target/fresh-forge-observer/clean-third/game/minecraft_server.1.12.2.jar!/amu.class"
+    },
+    {
+      "name": "net/minecraft/world/chunk/BlockStateContainer",
+      "file": "loader-3/net/minecraft/world/chunk/BlockStateContainer.class",
+      "raw_sha256": "9720a0dede53bd654fc6704b4251499f1bf1d853b56cd52f75b465b7956716bc",
+      "bytes": 5401,
+      "loader": {
+        "chain": [
+          {
+            "process_local_id": 3,
+            "class": "net.minecraft.launchwrapper.LaunchClassLoader"
+          }
+        ],
+        "bootstrap_terminus": true
+      },
+      "code_source": "jar:file:/D:/minecraftrust-astra-hardening/target/fresh-forge-observer/clean-third/game/minecraft_server.1.12.2.jar!/axp.class"
+    },
+    {
+      "name": "net/minecraft/world/chunk/Chunk",
+      "file": "loader-3/net/minecraft/world/chunk/Chunk.class",
+      "raw_sha256": "0bd20899a444608e1f49f93a2a0a0b594a5cedb81d7202adfc54fd4e3417e7e3",
+      "bytes": 39244,
+      "loader": {
+        "chain": [
+          {
+            "process_local_id": 3,
+            "class": "net.minecraft.launchwrapper.LaunchClassLoader"
+          }
+        ],
+        "bootstrap_terminus": true
+      },
+      "code_source": "jar:file:/D:/minecraftrust-astra-hardening/target/fresh-forge-observer/clean-third/game/minecraft_server.1.12.2.jar!/axw.class"
+    },
+    {
+      "name": "net/minecraft/world/chunk/NibbleArray",
+      "file": "loader-3/net/minecraft/world/chunk/NibbleArray.class",
+      "raw_sha256": "b5556356777ea7c17ecfd1ceec588da0aa8e183ee5305a16438215eaf297285f",
+      "bytes": 1922,
+      "loader": {
+        "chain": [
+          {
+            "process_local_id": 3,
+            "class": "net.minecraft.launchwrapper.LaunchClassLoader"
+          }
+        ],
+        "bootstrap_terminus": true
+      },
+      "code_source": "jar:file:/D:/minecraftrust-astra-hardening/target/fresh-forge-observer/clean-third/game/minecraft_server.1.12.2.jar!/axs.class"
+    },
+    {
+      "name": "net/minecraft/world/chunk/storage/AnvilChunkLoader",
+      "file": "loader-3/net/minecraft/world/chunk/storage/AnvilChunkLoader.class",
+      "raw_sha256": "24fff9a48dec4d82d08caab7484b8b53587ff2110703763675707369dcd91595",
+      "bytes": 22098,
+      "loader": {
+        "chain": [
+          {
+            "process_local_id": 3,
+            "class": "net.minecraft.launchwrapper.LaunchClassLoader"
+          }
+        ],
+        "bootstrap_terminus": true
+      },
+      "code_source": "jar:file:/D:/minecraftrust-astra-hardening/target/fresh-forge-observer/clean-third/game/minecraft_server.1.12.2.jar!/aye.class"
+    },
+    {
+      "name": "net/minecraft/world/chunk/storage/ExtendedBlockStorage",
+      "file": "loader-3/net/minecraft/world/chunk/storage/ExtendedBlockStorage.class",
+      "raw_sha256": "b7445c7bd232e8debf2c6ed47438b890d6bd121e406455cdc3cb9e84b487cd23",
+      "bytes": 3729,
+      "loader": {
+        "chain": [
+          {
+            "process_local_id": 3,
+            "class": "net.minecraft.launchwrapper.LaunchClassLoader"
+          }
+        ],
+        "bootstrap_terminus": true
+      },
+      "code_source": "jar:file:/D:/minecraftrust-astra-hardening/target/fresh-forge-observer/clean-third/game/minecraft_server.1.12.2.jar!/axx.class"
+    },
+    {
+      "name": "net/minecraft/world/gen/ChunkGeneratorFlat",
+      "file": "loader-3/net/minecraft/world/gen/ChunkGeneratorFlat.class",
+      "raw_sha256": "d8bcb37048eb58380e2b162981ca7c35bfcbccf334e3241e4902166fcb010db9",
+      "bytes": 10276,
+      "loader": {
+        "chain": [
+          {
+            "process_local_id": 3,
+            "class": "net.minecraft.launchwrapper.LaunchClassLoader"
+          }
+        ],
+        "bootstrap_terminus": true
+      },
+      "code_source": "jar:file:/D:/minecraftrust-astra-hardening/target/fresh-forge-observer/clean-third/game/minecraft_server.1.12.2.jar!/ayz.class"
+    },
+    {
+      "name": "net/minecraft/world/gen/ChunkProviderServer",
+      "file": "loader-3/net/minecraft/world/gen/ChunkProviderServer.class",
+      "raw_sha256": "6eec9a968581e993495d79b9410e37d3e6b70da5b7de08ae72b3475311f63914",
+      "bytes": 12564,
+      "loader": {
+        "chain": [
+          {
+            "process_local_id": 3,
+            "class": "net.minecraft.launchwrapper.LaunchClassLoader"
+          }
+        ],
+        "bootstrap_terminus": true
+      },
+      "code_source": "jar:file:/D:/minecraftrust-astra-hardening/target/fresh-forge-observer/clean-third/game/minecraft_server.1.12.2.jar!/on.class"
+    },
+    {
+      "name": "net/minecraftforge/common/chunkio/ChunkIOProvider",
+      "file": "loader-3/net/minecraftforge/common/chunkio/ChunkIOProvider.class",
+      "raw_sha256": "e2c76022ef993b0079f62b6a0671a17fd4bf232fa5bf83e01cb66196e6af50d1",
+      "bytes": 4969,
+      "loader": {
+        "chain": [
+          {
+            "process_local_id": 3,
+            "class": "net.minecraft.launchwrapper.LaunchClassLoader"
+          }
+        ],
+        "bootstrap_terminus": true
+      },
+      "code_source": "jar:file:/D:/minecraftrust-astra-hardening/target/fresh-forge-observer/clean-third/game/libraries/net/minecraftforge/forge/1.12.2-14.23.5.2860/forge-1.12.2-14.23.5.2860.jar!/net/minecraftforge/common/chunkio/ChunkIOProvider.class"
+    }
+  ],
+  "all_loader_definitions": [
+    {
+      "name": "net/minecraft/server/MinecraftServer",
+      "file": "loader-1/net/minecraft/server/MinecraftServer.class",
+      "raw_sha256": "246e7916fde4261e776c4beb17c5b7e84a80948c5ce60abf1e8011ca88288b0f",
+      "bytes": 33457,
+      "loader": {
+        "chain": [
+          {
+            "process_local_id": 1,
+            "class": "sun.misc.Launcher$AppClassLoader"
+          },
+          {
+            "process_local_id": 2,
+            "class": "sun.misc.Launcher$ExtClassLoader"
+          }
+        ],
+        "bootstrap_terminus": true
+      },
+      "code_source": "file:/D:/minecraftrust-astra-hardening/target/fresh-forge-observer/clean-third/game/minecraft_server.1.12.2.jar"
+    },
+    {
+      "name": "net/minecraft/network/play/server/SPacketChunkData",
+      "file": "loader-3/net/minecraft/network/play/server/SPacketChunkData.class",
+      "raw_sha256": "9e8abff74ea6266a4793bfa03bbff9731d2c486c9ff34e5a67b81752ec063354",
+      "bytes": 6586,
+      "loader": {
+        "chain": [
+          {
+            "process_local_id": 3,
+            "class": "net.minecraft.launchwrapper.LaunchClassLoader"
+          }
+        ],
+        "bootstrap_terminus": true
+      },
+      "code_source": "jar:file:/D:/minecraftrust-astra-hardening/target/fresh-forge-observer/clean-third/game/minecraft_server.1.12.2.jar!/je.class"
+    },
+    {
+      "name": "net/minecraft/server/MinecraftServer",
+      "file": "loader-3/net/minecraft/server/MinecraftServer.class",
+      "raw_sha256": "97fa984df647eec377a38fb96798f7f6e22fecbb6ca7519d1a952e3c981a4d5b",
+      "bytes": 47661,
+      "loader": {
+        "chain": [
+          {
+            "process_local_id": 3,
+            "class": "net.minecraft.launchwrapper.LaunchClassLoader"
+          }
+        ],
+        "bootstrap_terminus": true
+      },
+      "code_source": "jar:file:/D:/minecraftrust-astra-hardening/target/fresh-forge-observer/clean-third/game/minecraft_server.1.12.2.jar!/net/minecraft/server/MinecraftServer.class"
+    },
+    {
+      "name": "net/minecraft/util/BitArray",
+      "file": "loader-3/net/minecraft/util/BitArray.class",
+      "raw_sha256": "d967a3fc91e099fd8d1ad4b3655cf90950ebb43f181344e1b4d5a5a3fb69be35",
+      "bytes": 1531,
+      "loader": {
+        "chain": [
+          {
+            "process_local_id": 3,
+            "class": "net.minecraft.launchwrapper.LaunchClassLoader"
+          }
+        ],
+        "bootstrap_terminus": true
+      },
+      "code_source": "jar:file:/D:/minecraftrust-astra-hardening/target/fresh-forge-observer/clean-third/game/minecraft_server.1.12.2.jar!/qw.class"
+    },
+    {
+      "name": "net/minecraft/world/World",
+      "file": "loader-3/net/minecraft/world/World.class",
+      "raw_sha256": "5deb85ca3424a85c32b132c763e774a419e32676c8d520ef2677fa7bc695858a",
+      "bytes": 95318,
+      "loader": {
+        "chain": [
+          {
+            "process_local_id": 3,
+            "class": "net.minecraft.launchwrapper.LaunchClassLoader"
+          }
+        ],
+        "bootstrap_terminus": true
+      },
+      "code_source": "jar:file:/D:/minecraftrust-astra-hardening/target/fresh-forge-observer/clean-third/game/minecraft_server.1.12.2.jar!/amu.class"
+    },
+    {
+      "name": "net/minecraft/world/chunk/BlockStateContainer",
+      "file": "loader-3/net/minecraft/world/chunk/BlockStateContainer.class",
+      "raw_sha256": "9720a0dede53bd654fc6704b4251499f1bf1d853b56cd52f75b465b7956716bc",
+      "bytes": 5401,
+      "loader": {
+        "chain": [
+          {
+            "process_local_id": 3,
+            "class": "net.minecraft.launchwrapper.LaunchClassLoader"
+          }
+        ],
+        "bootstrap_terminus": true
+      },
+      "code_source": "jar:file:/D:/minecraftrust-astra-hardening/target/fresh-forge-observer/clean-third/game/minecraft_server.1.12.2.jar!/axp.class"
+    },
+    {
+      "name": "net/minecraft/world/chunk/Chunk",
+      "file": "loader-3/net/minecraft/world/chunk/Chunk.class",
+      "raw_sha256": "0bd20899a444608e1f49f93a2a0a0b594a5cedb81d7202adfc54fd4e3417e7e3",
+      "bytes": 39244,
+      "loader": {
+        "chain": [
+          {
+            "process_local_id": 3,
+            "class": "net.minecraft.launchwrapper.LaunchClassLoader"
+          }
+        ],
+        "bootstrap_terminus": true
+      },
+      "code_source": "jar:file:/D:/minecraftrust-astra-hardening/target/fresh-forge-observer/clean-third/game/minecraft_server.1.12.2.jar!/axw.class"
+    },
+    {
+      "name": "net/minecraft/world/chunk/NibbleArray",
+      "file": "loader-3/net/minecraft/world/chunk/NibbleArray.class",
+      "raw_sha256": "b5556356777ea7c17ecfd1ceec588da0aa8e183ee5305a16438215eaf297285f",
+      "bytes": 1922,
+      "loader": {
+        "chain": [
+          {
+            "process_local_id": 3,
+            "class": "net.minecraft.launchwrapper.LaunchClassLoader"
+          }
+        ],
+        "bootstrap_terminus": true
+      },
+      "code_source": "jar:file:/D:/minecraftrust-astra-hardening/target/fresh-forge-observer/clean-third/game/minecraft_server.1.12.2.jar!/axs.class"
+    },
+    {
+      "name": "net/minecraft/world/chunk/storage/AnvilChunkLoader",
+      "file": "loader-3/net/minecraft/world/chunk/storage/AnvilChunkLoader.class",
+      "raw_sha256": "24fff9a48dec4d82d08caab7484b8b53587ff2110703763675707369dcd91595",
+      "bytes": 22098,
+      "loader": {
+        "chain": [
+          {
+            "process_local_id": 3,
+            "class": "net.minecraft.launchwrapper.LaunchClassLoader"
+          }
+        ],
+        "bootstrap_terminus": true
+      },
+      "code_source": "jar:file:/D:/minecraftrust-astra-hardening/target/fresh-forge-observer/clean-third/game/minecraft_server.1.12.2.jar!/aye.class"
+    },
+    {
+      "name": "net/minecraft/world/chunk/storage/ExtendedBlockStorage",
+      "file": "loader-3/net/minecraft/world/chunk/storage/ExtendedBlockStorage.class",
+      "raw_sha256": "b7445c7bd232e8debf2c6ed47438b890d6bd121e406455cdc3cb9e84b487cd23",
+      "bytes": 3729,
+      "loader": {
+        "chain": [
+          {
+            "process_local_id": 3,
+            "class": "net.minecraft.launchwrapper.LaunchClassLoader"
+          }
+        ],
+        "bootstrap_terminus": true
+      },
+      "code_source": "jar:file:/D:/minecraftrust-astra-hardening/target/fresh-forge-observer/clean-third/game/minecraft_server.1.12.2.jar!/axx.class"
+    },
+    {
+      "name": "net/minecraft/world/gen/ChunkGeneratorFlat",
+      "file": "loader-3/net/minecraft/world/gen/ChunkGeneratorFlat.class",
+      "raw_sha256": "d8bcb37048eb58380e2b162981ca7c35bfcbccf334e3241e4902166fcb010db9",
+      "bytes": 10276,
+      "loader": {
+        "chain": [
+          {
+            "process_local_id": 3,
+            "class": "net.minecraft.launchwrapper.LaunchClassLoader"
+          }
+        ],
+        "bootstrap_terminus": true
+      },
+      "code_source": "jar:file:/D:/minecraftrust-astra-hardening/target/fresh-forge-observer/clean-third/game/minecraft_server.1.12.2.jar!/ayz.class"
+    },
+    {
+      "name": "net/minecraft/world/gen/ChunkProviderServer",
+      "file": "loader-3/net/minecraft/world/gen/ChunkProviderServer.class",
+      "raw_sha256": "6eec9a968581e993495d79b9410e37d3e6b70da5b7de08ae72b3475311f63914",
+      "bytes": 12564,
+      "loader": {
+        "chain": [
+          {
+            "process_local_id": 3,
+            "class": "net.minecraft.launchwrapper.LaunchClassLoader"
+          }
+        ],
+        "bootstrap_terminus": true
+      },
+      "code_source": "jar:file:/D:/minecraftrust-astra-hardening/target/fresh-forge-observer/clean-third/game/minecraft_server.1.12.2.jar!/on.class"
+    },
+    {
+      "name": "net/minecraftforge/common/chunkio/ChunkIOProvider",
+      "file": "loader-3/net/minecraftforge/common/chunkio/ChunkIOProvider.class",
+      "raw_sha256": "e2c76022ef993b0079f62b6a0671a17fd4bf232fa5bf83e01cb66196e6af50d1",
+      "bytes": 4969,
+      "loader": {
+        "chain": [
+          {
+            "process_local_id": 3,
+            "class": "net.minecraft.launchwrapper.LaunchClassLoader"
+          }
+        ],
+        "bootstrap_terminus": true
+      },
+      "code_source": "jar:file:/D:/minecraftrust-astra-hardening/target/fresh-forge-observer/clean-third/game/libraries/net/minecraftforge/forge/1.12.2-14.23.5.2860/forge-1.12.2-14.23.5.2860.jar!/net/minecraftforge/common/chunkio/ChunkIOProvider.class"
+    }
+  ],
+  "transformers_after": [
+    {
+      "class": "net.minecraftforge.fml.common.asm.transformers.PatchingTransformer",
+      "loader": {
+        "chain": [
+          {
+            "process_local_id": 3,
+            "class": "net.minecraft.launchwrapper.LaunchClassLoader"
+          }
+        ],
+        "bootstrap_terminus": true
+      },
+      "code_source": "file:/D:/minecraftrust-astra-hardening/target/fresh-forge-observer/clean-third/game/libraries/net/minecraftforge/forge/1.12.2-14.23.5.2860/forge-1.12.2-14.23.5.2860.jar"
+    },
+    {
+      "class": "$wrapper.net.minecraftforge.fml.common.asm.transformers.SideTransformer",
+      "loader": {
+        "chain": [
+          {
+            "process_local_id": 3,
+            "class": "net.minecraft.launchwrapper.LaunchClassLoader"
+          }
+        ],
+        "bootstrap_terminus": true
+      },
+      "code_source": "asmgen:/$wrapper/net/minecraftforge/fml/common/asm/transformers/SideTransformer.class"
+    },
+    {
+      "class": "$wrapper.net.minecraftforge.fml.common.asm.transformers.EventSubscriptionTransformer",
+      "loader": {
+        "chain": [
+          {
+            "process_local_id": 3,
+            "class": "net.minecraft.launchwrapper.LaunchClassLoader"
+          }
+        ],
+        "bootstrap_terminus": true
+      },
+      "code_source": "asmgen:/$wrapper/net/minecraftforge/fml/common/asm/transformers/EventSubscriptionTransformer.class"
+    },
+    {
+      "class": "$wrapper.net.minecraftforge.fml.common.asm.transformers.EventSubscriberTransformer",
+      "loader": {
+        "chain": [
+          {
+            "process_local_id": 3,
+            "class": "net.minecraft.launchwrapper.LaunchClassLoader"
+          }
+        ],
+        "bootstrap_terminus": true
+      },
+      "code_source": "asmgen:/$wrapper/net/minecraftforge/fml/common/asm/transformers/EventSubscriberTransformer.class"
+    },
+    {
+      "class": "$wrapper.net.minecraftforge.fml.common.asm.transformers.SoundEngineFixTransformer",
+      "loader": {
+        "chain": [
+          {
+            "process_local_id": 3,
+            "class": "net.minecraft.launchwrapper.LaunchClassLoader"
+          }
+        ],
+        "bootstrap_terminus": true
+      },
+      "code_source": "asmgen:/$wrapper/net/minecraftforge/fml/common/asm/transformers/SoundEngineFixTransformer.class"
+    },
+    {
+      "class": "net.minecraftforge.fml.common.asm.transformers.DeobfuscationTransformer",
+      "loader": {
+        "chain": [
+          {
+            "process_local_id": 3,
+            "class": "net.minecraft.launchwrapper.LaunchClassLoader"
+          }
+        ],
+        "bootstrap_terminus": true
+      },
+      "code_source": "file:/D:/minecraftrust-astra-hardening/target/fresh-forge-observer/clean-third/game/libraries/net/minecraftforge/forge/1.12.2-14.23.5.2860/forge-1.12.2-14.23.5.2860.jar"
+    },
+    {
+      "class": "net.minecraftforge.fml.common.asm.transformers.AccessTransformer",
+      "loader": {
+        "chain": [
+          {
+            "process_local_id": 3,
+            "class": "net.minecraft.launchwrapper.LaunchClassLoader"
+          }
+        ],
+        "bootstrap_terminus": true
+      },
+      "code_source": "file:/D:/minecraftrust-astra-hardening/target/fresh-forge-observer/clean-third/game/libraries/net/minecraftforge/forge/1.12.2-14.23.5.2860/forge-1.12.2-14.23.5.2860.jar"
+    },
+    {
+      "class": "net.minecraftforge.fml.common.asm.transformers.ModAccessTransformer",
+      "loader": {
+        "chain": [
+          {
+            "process_local_id": 3,
+            "class": "net.minecraft.launchwrapper.LaunchClassLoader"
+          }
+        ],
+        "bootstrap_terminus": true
+      },
+      "code_source": "file:/D:/minecraftrust-astra-hardening/target/fresh-forge-observer/clean-third/game/libraries/net/minecraftforge/forge/1.12.2-14.23.5.2860/forge-1.12.2-14.23.5.2860.jar"
+    },
+    {
+      "class": "net.minecraftforge.fml.common.asm.transformers.ItemStackTransformer",
+      "loader": {
+        "chain": [
+          {
+            "process_local_id": 3,
+            "class": "net.minecraft.launchwrapper.LaunchClassLoader"
+          }
+        ],
+        "bootstrap_terminus": true
+      },
+      "code_source": "file:/D:/minecraftrust-astra-hardening/target/fresh-forge-observer/clean-third/game/libraries/net/minecraftforge/forge/1.12.2-14.23.5.2860/forge-1.12.2-14.23.5.2860.jar"
+    },
+    {
+      "class": "net.minecraftforge.fml.common.asm.transformers.ItemBlockTransformer",
+      "loader": {
+        "chain": [
+          {
+            "process_local_id": 3,
+            "class": "net.minecraft.launchwrapper.LaunchClassLoader"
+          }
+        ],
+        "bootstrap_terminus": true
+      },
+      "code_source": "file:/D:/minecraftrust-astra-hardening/target/fresh-forge-observer/clean-third/game/libraries/net/minecraftforge/forge/1.12.2-14.23.5.2860/forge-1.12.2-14.23.5.2860.jar"
+    },
+    {
+      "class": "net.minecraftforge.fml.common.asm.transformers.ItemBlockSpecialTransformer",
+      "loader": {
+        "chain": [
+          {
+            "process_local_id": 3,
+            "class": "net.minecraft.launchwrapper.LaunchClassLoader"
+          }
+        ],
+        "bootstrap_terminus": true
+      },
+      "code_source": "file:/D:/minecraftrust-astra-hardening/target/fresh-forge-observer/clean-third/game/libraries/net/minecraftforge/forge/1.12.2-14.23.5.2860/forge-1.12.2-14.23.5.2860.jar"
+    },
+    {
+      "class": "net.minecraftforge.fml.common.asm.transformers.PotionEffectTransformer",
+      "loader": {
+        "chain": [
+          {
+            "process_local_id": 3,
+            "class": "net.minecraft.launchwrapper.LaunchClassLoader"
+          }
+        ],
+        "bootstrap_terminus": true
+      },
+      "code_source": "file:/D:/minecraftrust-astra-hardening/target/fresh-forge-observer/clean-third/game/libraries/net/minecraftforge/forge/1.12.2-14.23.5.2860/forge-1.12.2-14.23.5.2860.jar"
+    },
+    {
+      "class": "net.minecraftforge.fml.common.asm.transformers.TerminalTransformer",
+      "loader": {
+        "chain": [
+          {
+            "process_local_id": 3,
+            "class": "net.minecraft.launchwrapper.LaunchClassLoader"
+          }
+        ],
+        "bootstrap_terminus": true
+      },
+      "code_source": "file:/D:/minecraftrust-astra-hardening/target/fresh-forge-observer/clean-third/game/libraries/net/minecraftforge/forge/1.12.2-14.23.5.2860/forge-1.12.2-14.23.5.2860.jar"
+    }
+  ],
+  "mod_lifecycle_executed": false,
+  "server_main_called": false,
+  "production_authority": false,
+  "scope": "FRESH_OFFLINE_DEFINITIONS_ONLY_NO_WRITER_OR_LIFECYCLE_CLOSURE"
+}

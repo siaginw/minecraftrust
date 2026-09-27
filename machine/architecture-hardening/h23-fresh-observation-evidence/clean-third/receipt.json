@@ -1,0 +1,202 @@
+{
+  "schema": "FRESH_FORGE_OBSERVER_RUN_V1",
+  "status": "FAIL",
+  "production_authority": false,
+  "manifest_sha256": "4582b5450e436a1ffbef087b7ed80b089251bb3fc15f5abaa9b22b75f6c85536",
+  "commands": [
+    {
+      "label": "compile",
+      "argv": [
+        "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\bin\\javac.exe",
+        "-proc:none",
+        "-encoding",
+        "UTF-8",
+        "-source",
+        "8",
+        "-target",
+        "8",
+        "-Xlint:all,-path",
+        "-Werror",
+        "-cp",
+        "D:\\minecraftrust-astra-hardening\\target\\fresh-forge-observer\\clean-third\\game\\libraries\\com\\typesafe\\akka\\akka-actor_2.11\\2.3.3\\akka-actor_2.11-2.3.3.jar;D:\\minecraftrust-astra-hardening\\target\\fresh-forge-observer\\clean-third\\game\\libraries\\com\\typesafe\\config\\1.2.1\\config-1.2.1.jar;D:\\minecraftrust-astra-hardening\\target\\fresh-forge-observer\\clean-third\\game\\libraries\\java3d\\vecmath\\1.5.2\\vecmath-1.5.2.jar;D:\\minecraftrust-astra-hardening\\target\\fresh-forge-observer\\clean-third\\game\\libraries\\lzma\\lzma\\0.0.1\\lzma-0.0.1.jar;D:\\minecraftrust-astra-hardening\\target\\fresh-forge-observer\\clean-third\\game\\libraries\\net\\minecraft\\launchwrapper\\1.12\\launchwrapper-1.12.jar;D:\\minecraftrust-astra-hardening\\target\\fresh-forge-observer\\clean-third\\game\\libraries\\net\\minecraftforge\\forge\\1.12.2-14.23.5.2860\\forge-1.12.2-14.23.5.2860.jar;D:\\minecraftrust-astra-hardening\\target\\fresh-forge-observer\\clean-third\\game\\libraries\\net\\sf\\jopt-simple\\jopt-simple\\5.0.3\\jopt-simple-5.0.3.jar;D:\\minecraftrust-astra-hardening\\target\\fresh-forge-observer\\clean-third\\game\\libraries\\net\\sf\\trove4j\\trove4j\\3.0.3\\trove4j-3.0.3.jar;D:\\minecraftrust-astra-hardening\\target\\fresh-forge-observer\\clean-third\\game\\libraries\\org\\apache\\logging\\log4j\\log4j-api\\2.15.0\\log4j-api-2.15.0.jar;D:\\minecraftrust-astra-hardening\\target\\fresh-forge-observer\\clean-third\\game\\libraries\\org\\apache\\logging\\log4j\\log4j-core\\2.15.0\\log4j-core-2.15.0.jar;D:\\minecraftrust-astra-hardening\\target\\fresh-forge-observer\\clean-third\\game\\libraries\\org\\apache\\maven\\maven-artifact\\3.5.3\\maven-artifact-3.5.3.jar;D:\\minecraftrust-astra-hardening\\target\\fresh-forge-observer\\clean-third\\game\\libraries\\org\\jline\\jline\\3.5.1\\jline-3.5.1.jar;D:\\minecraftrust-astra-hardening\\target\\fresh-forge-observer\\clean-third\\game\\libraries\\org\\ow2\\asm\\asm-debug-all\\5.2\\asm-debug-all-5.2.jar;D:\\minecraftrust-astra-hardening\\target\\fresh-forge-observer\\clean-third\\game\\libraries\\org\\scala-lang\\plugins\\scala-continuations-library_2.11\\1.0.2_mc\\scala-continuations-library_2.11-1.0.2_mc.jar;D:\\minecraftrust-astra-hardening\\target\\fresh-forge-observer\\clean-third\\game\\libraries\\org\\scala-lang\\plugins\\scala-continuations-plugin_2.11.1\\1.0.2_mc\\scala-continuations-plugin_2.11.1-1.0.2_mc.jar;D:\\minecraftrust-astra-hardening\\target\\fresh-forge-observer\\clean-third\\game\\libraries\\org\\scala-lang\\scala-actors-migration_2.11\\1.1.0\\scala-actors-migration_2.11-1.1.0.jar;D:\\minecraftrust-astra-hardening\\target\\fresh-forge-observer\\clean-third\\game\\libraries\\org\\scala-lang\\scala-compiler\\2.11.1\\scala-compiler-2.11.1.jar;D:\\minecraftrust-astra-hardening\\target\\fresh-forge-observer\\clean-third\\game\\libraries\\org\\scala-lang\\scala-library\\2.11.1\\scala-library-2.11.1.jar;D:\\minecraftrust-astra-hardening\\target\\fresh-forge-observer\\clean-third\\game\\libraries\\org\\scala-lang\\scala-parser-combinators_2.11\\1.0.1\\scala-parser-combinators_2.11-1.0.1.jar;D:\\minecraftrust-astra-hardening\\target\\fresh-forge-observer\\clean-third\\game\\libraries\\org\\scala-lang\\scala-reflect\\2.11.1\\scala-reflect-2.11.1.jar;D:\\minecraftrust-astra-hardening\\target\\fresh-forge-observer\\clean-third\\game\\libraries\\org\\scala-lang\\scala-swing_2.11\\1.0.1\\scala-swing_2.11-1.0.1.jar;D:\\minecraftrust-astra-hardening\\target\\fresh-forge-observer\\clean-third\\game\\libraries\\org\\scala-lang\\scala-xml_2.11\\1.0.2\\scala-xml_2.11-1.0.2.jar;D:\\minecraftrust-astra-hardening\\target\\fresh-forge-observer\\clean-third\\game\\forge-1.12.2-14.23.5.2860.jar;D:\\minecraftrust-astra-hardening\\target\\fresh-forge-observer\\clean-third\\game\\minecraft_server.1.12.2.jar",
+        "-d",
+        "D:\\minecraftrust-astra-hardening\\target\\fresh-forge-observer\\clean-third\\classes",
+        "D:\\minecraftrust-astra-hardening\\tools\\fresh-forge-observer\\java\\com\\rustcraft\\fresh\\agent\\DefinitionObserver.java",
+        "D:\\minecraftrust-astra-hardening\\tools\\fresh-forge-observer\\java\\com\\rustcraft\\fresh\\bootstrap\\FreshTweaker.java",
+        "D:\\minecraftrust-astra-hardening\\tools\\fresh-forge-observer\\java\\com\\rustcraft\\fresh\\oracle\\FreshOracle.java",
+        "D:\\minecraftrust-astra-hardening\\tools\\bridge\\src\\com\\rustcraft\\coremod\\CanonicalClassIdentityV2.java"
+      ],
+      "cwd": "D:\\minecraftrust-astra-hardening\\target\\fresh-forge-observer\\clean-third",
+      "memory_mib": 768,
+      "timeout_seconds": 120,
+      "exit_code": 0,
+      "timed_out": false,
+      "peak_process_committed_bytes": 471453696,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "observe",
+      "argv": [
+        "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\bin\\java.exe",
+        "-Xmx1536M",
+        "-XX:+DisableAttachMechanism",
+        "-javaagent:D:\\minecraftrust-astra-hardening\\target\\fresh-forge-observer\\clean-third\\observer.jar",
+        "-Drustcraft.fresh.required=D:\\minecraftrust-astra-hardening\\target\\fresh-forge-observer\\clean-third\\required.txt",
+        "-Drustcraft.fresh.dump=D:\\minecraftrust-astra-hardening\\target\\fresh-forge-observer\\clean-third\\definitions",
+        "-Drustcraft.fresh.result=D:\\minecraftrust-astra-hardening\\target\\fresh-forge-observer\\clean-third\\observation.json",
+        "-Drustcraft.fresh.session=debe3a91436843c38e36fd5a39ce35e3",
+        "-Drustcraft.fresh.challenge=f7d1da88e149f793e3fe9f8ccc91f7a2789e0f8ebc3702f8a3e3fdac4beaecb2",
+        "-Drustcraft.fresh.requestSha256=7becfb844e0a774dba2814075c671f3600e1594d38ad62ded6d756694130fc67",
+        "-cp",
+        "D:\\minecraftrust-astra-hardening\\target\\fresh-forge-observer\\clean-third\\classes;D:\\minecraftrust-astra-hardening\\target\\fresh-forge-observer\\clean-third\\game\\libraries\\com\\typesafe\\akka\\akka-actor_2.11\\2.3.3\\akka-actor_2.11-2.3.3.jar;D:\\minecraftrust-astra-hardening\\target\\fresh-forge-observer\\clean-third\\game\\libraries\\com\\typesafe\\config\\1.2.1\\config-1.2.1.jar;D:\\minecraftrust-astra-hardening\\target\\fresh-forge-observer\\clean-third\\game\\libraries\\java3d\\vecmath\\1.5.2\\vecmath-1.5.2.jar;D:\\minecraftrust-astra-hardening\\target\\fresh-forge-observer\\clean-third\\game\\libraries\\lzma\\lzma\\0.0.1\\lzma-0.0.1.jar;D:\\minecraftrust-astra-hardening\\target\\fresh-forge-observer\\clean-third\\game\\libraries\\net\\minecraft\\launchwrapper\\1.12\\launchwrapper-1.12.jar;D:\\minecraftrust-astra-hardening\\target\\fresh-forge-observer\\clean-third\\game\\libraries\\net\\minecraftforge\\forge\\1.12.2-14.23.5.2860\\forge-1.12.2-14.23.5.2860.jar;D:\\minecraftrust-astra-hardening\\target\\fresh-forge-observer\\clean-third\\game\\libraries\\net\\sf\\jopt-simple\\jopt-simple\\5.0.3\\jopt-simple-5.0.3.jar;D:\\minecraftrust-astra-hardening\\target\\fresh-forge-observer\\clean-third\\game\\libraries\\net\\sf\\trove4j\\trove4j\\3.0.3\\trove4j-3.0.3.jar;D:\\minecraftrust-astra-hardening\\target\\fresh-forge-observer\\clean-third\\game\\libraries\\org\\apache\\logging\\log4j\\log4j-api\\2.15.0\\log4j-api-2.15.0.jar;D:\\minecraftrust-astra-hardening\\target\\fresh-forge-observer\\clean-third\\game\\libraries\\org\\apache\\logging\\log4j\\log4j-core\\2.15.0\\log4j-core-2.15.0.jar;D:\\minecraftrust-astra-hardening\\target\\fresh-forge-observer\\clean-third\\game\\libraries\\org\\apache\\maven\\maven-artifact\\3.5.3\\maven-artifact-3.5.3.jar;D:\\minecraftrust-astra-hardening\\target\\fresh-forge-observer\\clean-third\\game\\libraries\\org\\jline\\jline\\3.5.1\\jline-3.5.1.jar;D:\\minecraftrust-astra-hardening\\target\\fresh-forge-observer\\clean-third\\game\\libraries\\org\\ow2\\asm\\asm-debug-all\\5.2\\asm-debug-all-5.2.jar;D:\\minecraftrust-astra-hardening\\target\\fresh-forge-observer\\clean-third\\game\\libraries\\org\\scala-lang\\plugins\\scala-continuations-library_2.11\\1.0.2_mc\\scala-continuations-library_2.11-1.0.2_mc.jar;D:\\minecraftrust-astra-hardening\\target\\fresh-forge-observer\\clean-third\\game\\libraries\\org\\scala-lang\\plugins\\scala-continuations-plugin_2.11.1\\1.0.2_mc\\scala-continuations-plugin_2.11.1-1.0.2_mc.jar;D:\\minecraftrust-astra-hardening\\target\\fresh-forge-observer\\clean-third\\game\\libraries\\org\\scala-lang\\scala-actors-migration_2.11\\1.1.0\\scala-actors-migration_2.11-1.1.0.jar;D:\\minecraftrust-astra-hardening\\target\\fresh-forge-observer\\clean-third\\game\\libraries\\org\\scala-lang\\scala-compiler\\2.11.1\\scala-compiler-2.11.1.jar;D:\\minecraftrust-astra-hardening\\target\\fresh-forge-observer\\clean-third\\game\\libraries\\org\\scala-lang\\scala-library\\2.11.1\\scala-library-2.11.1.jar;D:\\minecraftrust-astra-hardening\\target\\fresh-forge-observer\\clean-third\\game\\libraries\\org\\scala-lang\\scala-parser-combinators_2.11\\1.0.1\\scala-parser-combinators_2.11-1.0.1.jar;D:\\minecraftrust-astra-hardening\\target\\fresh-forge-observer\\clean-third\\game\\libraries\\org\\scala-lang\\scala-reflect\\2.11.1\\scala-reflect-2.11.1.jar;D:\\minecraftrust-astra-hardening\\target\\fresh-forge-observer\\clean-third\\game\\libraries\\org\\scala-lang\\scala-swing_2.11\\1.0.1\\scala-swing_2.11-1.0.1.jar;D:\\minecraftrust-astra-hardening\\target\\fresh-forge-observer\\clean-third\\game\\libraries\\org\\scala-lang\\scala-xml_2.11\\1.0.2\\scala-xml_2.11-1.0.2.jar;D:\\minecraftrust-astra-hardening\\target\\fresh-forge-observer\\clean-third\\game\\forge-1.12.2-14.23.5.2860.jar;D:\\minecraftrust-astra-hardening\\target\\fresh-forge-observer\\clean-third\\game\\minecraft_server.1.12.2.jar",
+        "net.minecraft.launchwrapper.Launch",
+        "--tweakClass",
+        "com.rustcraft.fresh.bootstrap.FreshTweaker",
+        "--gameDir",
+        "D:\\minecraftrust-astra-hardening\\target\\fresh-forge-observer\\clean-third\\game"
+      ],
+      "cwd": "D:\\minecraftrust-astra-hardening\\target\\fresh-forge-observer\\clean-third\\game",
+      "memory_mib": 3072,
+      "timeout_seconds": 180,
+      "exit_code": 0,
+      "timed_out": false,
+      "peak_process_committed_bytes": 844587008,
+      "stdout_sha256": "63dae38cc773486e052bb48c2fb568d56216ed882c8c286004403336dc802e37",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "identity-0",
+      "argv": [
+        "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\bin\\java.exe",
+        "-cp",
+        "D:\\minecraftrust-astra-hardening\\target\\fresh-forge-observer\\clean-third\\classes;D:\\minecraftrust-astra-hardening\\target\\fresh-forge-observer\\clean-third\\game\\libraries\\org\\ow2\\asm\\asm-debug-all\\5.2\\asm-debug-all-5.2.jar",
+        "com.rustcraft.coremod.CanonicalClassIdentityV2",
+        "D:\\minecraftrust-astra-hardening\\target\\fresh-forge-observer\\clean-third\\definitions\\loader-3\\net\\minecraft\\network\\play\\server\\SPacketChunkData.class",
+        "D:\\minecraftrust-astra-hardening\\target\\fresh-forge-observer\\clean-third\\definitions\\loader-3\\net\\minecraft\\server\\MinecraftServer.class",
+        "D:\\minecraftrust-astra-hardening\\target\\fresh-forge-observer\\clean-third\\definitions\\loader-3\\net\\minecraft\\util\\BitArray.class",
+        "D:\\minecraftrust-astra-hardening\\target\\fresh-forge-observer\\clean-third\\definitions\\loader-3\\net\\minecraft\\world\\World.class",
+        "D:\\minecraftrust-astra-hardening\\target\\fresh-forge-observer\\clean-third\\definitions\\loader-3\\net\\minecraft\\world\\chunk\\BlockStateContainer.class",
+        "D:\\minecraftrust-astra-hardening\\target\\fresh-forge-observer\\clean-third\\definitions\\loader-3\\net\\minecraft\\world\\chunk\\Chunk.class",
+        "D:\\minecraftrust-astra-hardening\\target\\fresh-forge-observer\\clean-third\\definitions\\loader-3\\net\\minecraft\\world\\chunk\\NibbleArray.class",
+        "D:\\minecraftrust-astra-hardening\\target\\fresh-forge-observer\\clean-third\\definitions\\loader-3\\net\\minecraft\\world\\chunk\\storage\\AnvilChunkLoader.class",
+        "D:\\minecraftrust-astra-hardening\\target\\fresh-forge-observer\\clean-third\\definitions\\loader-3\\net\\minecraft\\world\\chunk\\storage\\ExtendedBlockStorage.class",
+        "D:\\minecraftrust-astra-hardening\\target\\fresh-forge-observer\\clean-third\\definitions\\loader-3\\net\\minecraft\\world\\gen\\ChunkGeneratorFlat.class",
+        "D:\\minecraftrust-astra-hardening\\target\\fresh-forge-observer\\clean-third\\definitions\\loader-3\\net\\minecraft\\world\\gen\\ChunkProviderServer.class",
+        "D:\\minecraftrust-astra-hardening\\target\\fresh-forge-observer\\clean-third\\definitions\\loader-3\\net\\minecraftforge\\common\\chunkio\\ChunkIOProvider.class"
+      ],
+      "cwd": "D:\\minecraftrust-astra-hardening\\target\\fresh-forge-observer\\clean-third",
+      "memory_mib": 768,
+      "timeout_seconds": 45,
+      "exit_code": 1,
+      "timed_out": false,
+      "peak_process_committed_bytes": 794988544,
+      "stdout_sha256": "cd0f9fcefaf5ac17676469c4003a1930f12391cadae596146f3794a3b4c43a93",
+      "stderr_sha256": "5a47b9a443096844bbee02716461363984206c74b70b5052f255c8a74044712e"
+    }
+  ],
+  "scope": "OFFLINE_FINAL_DEFINITIONS_ONLY_NO_PROFILE_QUALIFICATION",
+  "sources_before": {
+    "D:\\minecraftrust-astra-hardening\\tools\\fresh-forge-observer\\observe.py": "03c821a04f4a23b2e6861eea2f4263a76f9a93bdda4d82ab7003a4d4fff5c680",
+    "D:\\minecraftrust-astra-hardening\\tools\\fresh-forge-observer\\java\\com\\rustcraft\\fresh\\agent\\DefinitionObserver.java": "3d87ce5bf625bc774b1073f3819fea85af19e1b0df40d44cfc2603b2ed8eaa47",
+    "D:\\minecraftrust-astra-hardening\\tools\\fresh-forge-observer\\java\\com\\rustcraft\\fresh\\bootstrap\\FreshTweaker.java": "6a4c19294d095ba92bf39b1b708e765d5576f8b82016d008c1fc359d526b45b7",
+    "D:\\minecraftrust-astra-hardening\\tools\\fresh-forge-observer\\java\\com\\rustcraft\\fresh\\oracle\\FreshOracle.java": "f2ca266d7c6859836e2609d9c1f25f2e5c104dce9ac6e800f36496c0b4563c8d",
+    "D:\\minecraftrust-astra-hardening\\tools\\testing\\qualification_engine.py": "ce66d4716637858063164b8a7e6d9eb9b88433246f3be1f9746ad75b07184b49",
+    "D:\\minecraftrust-astra-hardening\\tools\\testing\\qualification_certificate.py": "3eca99c72af064990dd284f78398f68e79b00a4b6ec59eca215e57f56034b914",
+    "D:\\minecraftrust-astra-hardening\\tools\\testing\\hardening_guard.py": "a2062b3ffbec7edba79bf5f5954fbcb1e9d97492ab9c4bb541833ebb820bdb6d",
+    "D:\\minecraftrust-astra-hardening\\tools\\nbt-region-experiment\\job.py": "41f77a4c87ba2f531872853f2bcc701c5cac3a384c1bb2cf49901b8fcff9c65b",
+    "D:\\minecraftrust-astra-hardening\\tools\\bridge\\src\\com\\rustcraft\\coremod\\CanonicalClassIdentityV2.java": "61749a998cb03e43f093b54c6ba5a069a236d868388fe6452ec1e0133ec4f4f8"
+  },
+  "removed_environment_names": [],
+  "guard_before": {
+    "schema_version": 1,
+    "kind": "HARDENING_ISOLATION_GATE_CHECK",
+    "status": "PASS",
+    "failures": [],
+    "original_observed": {
+      "head": "c4b868db2c9e4b03f745bf93c6ebf4fd8a8519e7",
+      "branch": "issue1-jni-v2",
+      "status": [
+        " M tools/live-capture/live_client_session.py",
+        "?? tools/live-capture/__pycache__/",
+        "?? tools/live-capture/run_rev_shadow.py"
+      ],
+      "files": [
+        {
+          "path": "D:\\minecraftrust\\tools\\live-capture\\live_client_session.py",
+          "sha256": "151c356161695aba3db3c1a8cbd589b5eda2b5a1770dff59ab21b728d36cabfa"
+        },
+        {
+          "path": "D:\\minecraftrust\\tools\\live-capture\\run_rev_shadow.py",
+          "sha256": "2b9b2aca49e57dd0d2a74bec46efcdc0ac7f95762a733276e27ff9dbcb472d93"
+        }
+      ]
+    },
+    "isolated_worktree": "D:\\minecraftrust-astra-hardening",
+    "isolated_head": "a1769f61f5fcb0c3099ededf0fa2b468f2b461d3",
+    "isolated_branch": "astra/architecture-hardening",
+    "production_gate_checks": {
+      "tryEncode_fail_closed": true,
+      "productionAuthorityEligible_false": true
+    },
+    "scope": "read-only original HEAD/status/two paused source hashes plus conservative source guards; runtime authority tests remain required"
+  },
+  "compiled_classes": {
+    "com/rustcraft/coremod/CanonicalClassIdentityV2$1.class": "4408e4d1ad00f2b661ed54a0559e8ba784fa3019c72e9728fa8730a59d5921cb",
+    "com/rustcraft/coremod/CanonicalClassIdentityV2$2.class": "7def25f8e3a0fb29691820a49d243a8a13c4fdf45e44e3d7076fafb97f89f6f1",
+    "com/rustcraft/coremod/CanonicalClassIdentityV2$IdentityFailure.class": "194d9365f1963a2d865690152fad5561d0865abbda82add527a40a1ad20af84e",
+    "com/rustcraft/coremod/CanonicalClassIdentityV2$RawClass.class": "4e5a6c9f858672200e27c02605c316513050f45e91a8efd20f931a6b8218016e",
+    "com/rustcraft/coremod/CanonicalClassIdentityV2$Result.class": "3429834ff808c13ce977345a0bfcfccbeceff0fc984b1f08427d76c188254ced",
+    "com/rustcraft/coremod/CanonicalClassIdentityV2.class": "ecae040c4ec01af636d6ec5b174d874c9cc3a370ee105fe894d89a149001d093",
+    "com/rustcraft/fresh/agent/DefinitionObserver.class": "dca638dfad9f7fcc29ca6de2cb6eedb881f3045aa35c4365a4738240e5a12d61",
+    "com/rustcraft/fresh/bootstrap/FreshTweaker.class": "9474dda3c84e8c05b467b00debdf48ac91383710528c68cc551a4a41cf426b19",
+    "com/rustcraft/fresh/oracle/FreshOracle.class": "79785d4438ddbd8dfeb915bbe39d570a747713b8df4250c4ac54507e4e88c8af"
+  },
+  "observer_sha256": "4fff437d02b4442d6c35b0ba75c82a5d4758d5943a322101543b6460f0e2969b",
+  "error": "ValueError: identity-0 process failed",
+  "sources_after": {
+    "D:\\minecraftrust-astra-hardening\\tools\\fresh-forge-observer\\observe.py": "03c821a04f4a23b2e6861eea2f4263a76f9a93bdda4d82ab7003a4d4fff5c680",
+    "D:\\minecraftrust-astra-hardening\\tools\\fresh-forge-observer\\java\\com\\rustcraft\\fresh\\agent\\DefinitionObserver.java": "3d87ce5bf625bc774b1073f3819fea85af19e1b0df40d44cfc2603b2ed8eaa47",
+    "D:\\minecraftrust-astra-hardening\\tools\\fresh-forge-observer\\java\\com\\rustcraft\\fresh\\bootstrap\\FreshTweaker.java": "6a4c19294d095ba92bf39b1b708e765d5576f8b82016d008c1fc359d526b45b7",
+    "D:\\minecraftrust-astra-hardening\\tools\\fresh-forge-observer\\java\\com\\rustcraft\\fresh\\oracle\\FreshOracle.java": "f2ca266d7c6859836e2609d9c1f25f2e5c104dce9ac6e800f36496c0b4563c8d",
+    "D:\\minecraftrust-astra-hardening\\tools\\testing\\qualification_engine.py": "ce66d4716637858063164b8a7e6d9eb9b88433246f3be1f9746ad75b07184b49",
+    "D:\\minecraftrust-astra-hardening\\tools\\testing\\qualification_certificate.py": "3eca99c72af064990dd284f78398f68e79b00a4b6ec59eca215e57f56034b914",
+    "D:\\minecraftrust-astra-hardening\\tools\\testing\\hardening_guard.py": "a2062b3ffbec7edba79bf5f5954fbcb1e9d97492ab9c4bb541833ebb820bdb6d",
+    "D:\\minecraftrust-astra-hardening\\tools\\nbt-region-experiment\\job.py": "41f77a4c87ba2f531872853f2bcc701c5cac3a384c1bb2cf49901b8fcff9c65b",
+    "D:\\minecraftrust-astra-hardening\\tools\\bridge\\src\\com\\rustcraft\\coremod\\CanonicalClassIdentityV2.java": "61749a998cb03e43f093b54c6ba5a069a236d868388fe6452ec1e0133ec4f4f8"
+  },
+  "guard_after": {
+    "schema_version": 1,
+    "kind": "HARDENING_ISOLATION_GATE_CHECK",
+    "status": "PASS",
+    "failures": [],
+    "original_observed": {
+      "head": "c4b868db2c9e4b03f745bf93c6ebf4fd8a8519e7",
+      "branch": "issue1-jni-v2",
+      "status": [
+        " M tools/live-capture/live_client_session.py",
+        "?? tools/live-capture/__pycache__/",
+        "?? tools/live-capture/run_rev_shadow.py"
+      ],
+      "files": [
+        {
+          "path": "D:\\minecraftrust\\tools\\live-capture\\live_client_session.py",
+          "sha256": "151c356161695aba3db3c1a8cbd589b5eda2b5a1770dff59ab21b728d36cabfa"
+        },
+        {
+          "path": "D:\\minecraftrust\\tools\\live-capture\\run_rev_shadow.py",
+          "sha256": "2b9b2aca49e57dd0d2a74bec46efcdc0ac7f95762a733276e27ff9dbcb472d93"
+        }
+      ]
+    },
+    "isolated_worktree": "D:\\minecraftrust-astra-hardening",
+    "isolated_head": "a1769f61f5fcb0c3099ededf0fa2b468f2b461d3",
+    "isolated_branch": "astra/architecture-hardening",
+    "production_gate_checks": {
+      "tryEncode_fail_closed": true,
+      "productionAuthorityEligible_false": true
+    },
+    "scope": "read-only original HEAD/status/two paused source hashes plus conservative source guards; runtime authority tests remain required"
+  },
+  "elapsed_seconds": 3.7302014000015333
+}

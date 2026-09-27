@@ -321,7 +321,7 @@
       "evidence": [
         "machine/architecture-hardening/h14-packet-buffer.json"
       ],
-      "commit": null,
+      "commit": "ac654a5cc09c6784c66962b4adf844d05d79ff2e",
       "outstanding": [
         "Synthetic packet0x7e payload and fixed public keys; no Minecraft gameplay/authentication/JNI integration.",
         "Java-valid deflate streams need not be byte-identical; independent AES oracle uses validated native frames.",
@@ -520,27 +520,31 @@
     {
       "id": "H23",
       "title": "REQUALIFY CLEAN FORGE AND REVELATION UNDER V2",
-      "status": "PREREQUISITE_COMMITTED",
+      "status": "FRESH_OBSERVATION_PREREQUISITES_VALIDATED_REQUALIFICATION_INCOMPLETE",
       "implementation": [
         "tools/live-capture/generate_live_writer_plan.py",
         "tools/bridge/src/com/rustcraft/coremod/LiveWriterPlan.java",
         "tools/bridge/src/com/rustcraft/coremod/LiveHookSupport.java",
         "tools/writer-plan-v2-tests",
-        "docs/engineering/v2-writer-plan-admission.md"
+        "docs/engineering/v2-writer-plan-admission.md",
+        "tools/fresh-forge-observer",
+        "docs/engineering/fresh-forge-observer.md"
       ],
       "validation": [
-        "26 Java admission assertions,23 negative generator controls,generated V2 compilation/admission,92 canonical assertions,historical Revelation129/10,fresh Clean25 tooling/201 foundation/4358-byte diagnostic comparison"
+        "26 Java admission assertions,23 negative generator controls,generated V2 compilation/admission,92 canonical assertions,historical Revelation129/10,fresh Clean25 tooling/201 foundation/4358-byte diagnostic comparison",
+        "Fresh same generic launcher:Clean2860 12selected/13attempts/13transformers/2coremods;Revelation2846 12selected/14attempts/34transformers/19coremods;6Python+21malformed variants+3Java controls each;no lifecycle or profile qualification"
       ],
       "evidence": [
-        "machine/architecture-hardening/h23-writer-plan-v2.json"
+        "machine/architecture-hardening/h23-writer-plan-v2.json",
+        "machine/architecture-hardening/h23-fresh-observation.json"
       ],
       "commit": "7bb5326e7fc0d986f218f633c986895756552597",
       "outstanding": [
-        "Admission prerequisite only: no actual V2 runtime profile, issuer, capture scope or qualification certificate installed.",
-        "Default RAW diagnostic plan retained; historical Revelation checks remain V1 only.",
-        "Independent complete V2 placement proof and current writer/lifecycle closure remain pending.",
-        "Original paused worktree remains untouched; H24 live shadow not resumed.",
-        "No Rust source changed; Clean diagnostic rerun loaded existing H3 DLL, not later scoped build artifacts."
+        "QualificationEngine acquisition adapter and evidence certificate binding",
+        "Fresh V2 writer recipes and actual post-hook definition capture",
+        "Independent permitted frame relation, loader/hierarchy and verification proof",
+        "Writer/lifecycle/extractor/registry/capability closure",
+        "Clean and Revelation V2 profile requalification before live shadow"
       ]
     },
     {
