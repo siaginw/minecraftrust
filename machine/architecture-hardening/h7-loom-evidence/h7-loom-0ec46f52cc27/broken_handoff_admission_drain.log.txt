@@ -1,0 +1,17 @@
+
+running 1 test
+test broken_handoff_admission_drain ... 
+thread 'broken_handoff_admission_drain' (31148) panicked at tests\lifecycle.rs:68:17:
+assertion `left == right` failed: ADMISSION_AFTER_FREEZE
+  left: Native
+ right: Java
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+FAILED
+
+failures:
+
+failures:
+    broken_handoff_admission_drain
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 26 filtered out; finished in 0.00s
+

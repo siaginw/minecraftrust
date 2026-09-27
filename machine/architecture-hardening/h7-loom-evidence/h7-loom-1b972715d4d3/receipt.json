@@ -1,0 +1,168 @@
+{
+  "schema_version": 1,
+  "kind": "H7_BOUNDED_LOOM_LIFECYCLE_MODELS",
+  "status": "FAIL",
+  "production_authority": false,
+  "runtime_source_loom_instrumented": false,
+  "started_utc": "2026-09-27T01:15:15.187652+00:00",
+  "results": [
+    {
+      "name": "resolve-toolchain",
+      "argv": [
+        "C:\\Users\\Admin\\.cargo\\bin\\rustup.exe",
+        "which",
+        "rustc"
+      ],
+      "exit_code": 0,
+      "seconds": 0.03726200002711266,
+      "timed_out": false,
+      "log": "target/architecture-hardening/h7-loom-1b972715d4d3/resolve-toolchain.log",
+      "log_sha256": "54234bc009f7bc295608f8bb882e03677001147f42f05ce19606c17d2db6473b",
+      "status": "PASS"
+    },
+    {
+      "name": "rustc-version",
+      "argv": [
+        "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\rustc.exe",
+        "-Vv"
+      ],
+      "exit_code": 0,
+      "seconds": 0.03215669997734949,
+      "timed_out": false,
+      "log": "target/architecture-hardening/h7-loom-1b972715d4d3/rustc-version.log",
+      "log_sha256": "c45e612575abeef05e99e88eb1e7aea52cddab9ad70d4f65ad20eaa65e92a9cf",
+      "status": "PASS"
+    },
+    {
+      "name": "dependency-metadata",
+      "argv": [
+        "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\cargo.exe",
+        "metadata",
+        "--locked",
+        "--offline",
+        "--manifest-path",
+        "D:\\minecraftrust-astra-hardening\\tools\\loom-lifecycle-models\\Cargo.toml",
+        "--format-version",
+        "1"
+      ],
+      "exit_code": 0,
+      "seconds": 0.10372959997039288,
+      "timed_out": false,
+      "log": "target/architecture-hardening/h7-loom-1b972715d4d3/dependency-metadata.log",
+      "log_sha256": "a84f24b044f8c82dfd726d819dddb3276d87aec77919e212d7b8030219663eb7",
+      "status": "PASS"
+    }
+  ],
+  "bounds": {
+    "threads_including_main": 3,
+    "preemptions": 3,
+    "branches_per_execution": 256,
+    "permutation_cap": null,
+    "loom_duration_cap": null,
+    "test_process_deadline_seconds": 30
+  },
+  "source_hashes_before": {
+    "crates/native-capability/src/lib.rs": "0fc47fbd5872a404c6fc40d248245549cbd3872c63a4d656cab1f7a5d30872d7",
+    "crates/native-state-vnext/src/lib.rs": "15d932ec10f3e885c4535f997725f6a80ab7d88c606cfaca1855c56e415836f1",
+    "crates/native-state-vnext/src/store.rs": "eef84fed3e53d0cba644cb088ce19ae333547a2aec0155a6745b2185fc9ce595",
+    "crates/rustcraft-core/src/lib.rs": "3e6a2914001d68fd02d8e0a33f4e7489ea14202e7b011af51aa3797976b73878",
+    "docs/architecture/loom-lifecycle-models.md": "358ec83a0ea9ea015cd35b1f64875accb809a25a5675078570d02f0bcecf21cc",
+    "docs/architecture/retained-native-state.md": "ec1efbc4f95a81ce8759dd4dcf747c133392a0b7655eff8be27e83ad8a40b395",
+    "machine/architecture-hardening/isolation.json": "8f9b34b55f6ecc1d549da1ec4c42900b4a831a3072a9e4aa6aa2ae39cae53d93",
+    "tools/bridge/src/com/rustcraft/bridge/capture/CaptureContract.java": "76d053eaf1b10d4d52de00f236365ff00216e6d8db3425f9de0054fcaa268586",
+    "tools/bridge/src/com/rustcraft/bridge/M4NativeStatePayload.java": "a47be5f83303a2d039fd56acbc24ba71ae9a98035bc9fb15545167535e2513ab",
+    "tools/loom-lifecycle-models/Cargo.lock": "ca8487d7297b3636214e24764fccf595ee764fd78bc7a904bf997194f1e1c93c",
+    "tools/loom-lifecycle-models/Cargo.toml": "de9394dab7dd818bdadfa1a3dd52fd75641f605fa4b163575ce4c80a51ffac25",
+    "tools/loom-lifecycle-models/provenance.json": "96b3c73dfa83489b17076156a302239db74f07bb976240cd85e794b8cd0b564c",
+    "tools/loom-lifecycle-models/run.py": "1a19c2ad710f5e5c5d8a4a8f723df87fa571d608d5b50587a240b15f6cf53ee6",
+    "tools/loom-lifecycle-models/tests/lifecycle.rs": "161919b1f392881eba7e1a1f6ba60bec265c27e91756744b11234e12f4487d73",
+    "tools/loom-lifecycle-models/third-party/LOOM-LICENSE.txt": "8ce0830173fdac609dfb4ea603fdc002c2f4af0dc9b1a005653f5da9cf534b18",
+    "tools/testing/hardening_guard.py": "a2062b3ffbec7edba79bf5f5954fbcb1e9d97492ab9c4bb541833ebb820bdb6d"
+  },
+  "limitations": [
+    "Abstract state machines; no proof of H4/H6 implementation or JVM synchronization.",
+    "READY queue and async IO adoption are prospective obligations, not implemented engine features.",
+    "Only configured bounded schedules and Loom-supported memory behaviors are checked.",
+    "Tool hashes cover listed binaries, not every MSVC linker/SDK/system library or environment input."
+  ],
+  "isolation_before": {
+    "schema_version": 1,
+    "kind": "HARDENING_ISOLATION_GATE_CHECK",
+    "status": "PASS",
+    "failures": [],
+    "original_observed": {
+      "head": "c4b868db2c9e4b03f745bf93c6ebf4fd8a8519e7",
+      "branch": "issue1-jni-v2",
+      "status": [
+        " M tools/live-capture/live_client_session.py",
+        "?? tools/live-capture/__pycache__/",
+        "?? tools/live-capture/run_rev_shadow.py"
+      ],
+      "files": [
+        {
+          "path": "D:\\minecraftrust\\tools\\live-capture\\live_client_session.py",
+          "sha256": "151c356161695aba3db3c1a8cbd589b5eda2b5a1770dff59ab21b728d36cabfa"
+        },
+        {
+          "path": "D:\\minecraftrust\\tools\\live-capture\\run_rev_shadow.py",
+          "sha256": "2b9b2aca49e57dd0d2a74bec46efcdc0ac7f95762a733276e27ff9dbcb472d93"
+        }
+      ]
+    },
+    "isolated_worktree": "D:\\minecraftrust-astra-hardening",
+    "isolated_head": "c13dfb18e3c28028bbb9cc320f83d8d37aa1bd54",
+    "isolated_branch": "astra/architecture-hardening",
+    "production_gate_checks": {
+      "tryEncode_fail_closed": true,
+      "productionAuthorityEligible_false": true
+    },
+    "scope": "read-only original HEAD/status/two paused source hashes plus conservative source guards; runtime authority tests remain required"
+  },
+  "tool_hashes_before": {
+    "C:\\Users\\Admin\\.cargo\\bin\\cargo.exe": "6f4bef66261261fcb43131be8720bab817d403a09edec7455c371974b90bdb7e",
+    "C:\\Users\\Admin\\.cargo\\bin\\rustup.exe": "6f4bef66261261fcb43131be8720bab817d403a09edec7455c371974b90bdb7e",
+    "C:\\Python314\\python.exe": "4942b86a6597e5aee0128daa00050ed79bc21f6e709a78eb19cbfeb0c2f39ac9",
+    "C:\\Program Files\\Git\\cmd\\git.exe": "37c5725818d602e951ba2563b870d62763322956b73373da4c33a0b566a80bc9",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\cargo.exe": "c37545ec61d48d31bdefce53280ecab61c4ea54eaace372fac6a0316c6e165d9",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\rustc.exe": "ca9988af88b1463f6857fdfe909299fee50a63260b3e5f7dbcb5b4d3318b27bc",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\rustdoc.exe": "9daff87cf4052ba3f97decb39d2822e1a96b3ed444eda86ed8df74802679dd60",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\rustfmt.exe": "ac9d781249bffabbb1bedb691a5ea6f63a818c1dda73dd698d4dff687ad4c24e",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\cargo-fmt.exe": "fcd2d35d13dc1a487c755e234bf2aee06f75b522c8a691cac9ee5f0d6fc854a1",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\cargo-clippy.exe": "cb0f2b164b3f6e95bfed7ec4ae9fc48f8ce8d9fef3649b5ae87961f75e1ef484",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\clippy-driver.exe": "00fd4ef2fe60e603571573746e52f42f109bbfe4b879e7ca7313614fda0b367b"
+  },
+  "error": "FileNotFoundError: [Errno 2] No such file or directory: 'C:\\\\Users\\\\Admin\\\\.cargo\\\\registry\\\\src\\\\index.crates.io-1949cf8c6b5b557f\\\\aho-corasick-1.1.5\\\\.cargo-checksum.json'",
+  "source_hashes_after": {
+    "crates/native-capability/src/lib.rs": "0fc47fbd5872a404c6fc40d248245549cbd3872c63a4d656cab1f7a5d30872d7",
+    "crates/native-state-vnext/src/lib.rs": "15d932ec10f3e885c4535f997725f6a80ab7d88c606cfaca1855c56e415836f1",
+    "crates/native-state-vnext/src/store.rs": "eef84fed3e53d0cba644cb088ce19ae333547a2aec0155a6745b2185fc9ce595",
+    "crates/rustcraft-core/src/lib.rs": "3e6a2914001d68fd02d8e0a33f4e7489ea14202e7b011af51aa3797976b73878",
+    "docs/architecture/loom-lifecycle-models.md": "358ec83a0ea9ea015cd35b1f64875accb809a25a5675078570d02f0bcecf21cc",
+    "docs/architecture/retained-native-state.md": "ec1efbc4f95a81ce8759dd4dcf747c133392a0b7655eff8be27e83ad8a40b395",
+    "machine/architecture-hardening/isolation.json": "8f9b34b55f6ecc1d549da1ec4c42900b4a831a3072a9e4aa6aa2ae39cae53d93",
+    "tools/bridge/src/com/rustcraft/bridge/capture/CaptureContract.java": "76d053eaf1b10d4d52de00f236365ff00216e6d8db3425f9de0054fcaa268586",
+    "tools/bridge/src/com/rustcraft/bridge/M4NativeStatePayload.java": "a47be5f83303a2d039fd56acbc24ba71ae9a98035bc9fb15545167535e2513ab",
+    "tools/loom-lifecycle-models/Cargo.lock": "ca8487d7297b3636214e24764fccf595ee764fd78bc7a904bf997194f1e1c93c",
+    "tools/loom-lifecycle-models/Cargo.toml": "de9394dab7dd818bdadfa1a3dd52fd75641f605fa4b163575ce4c80a51ffac25",
+    "tools/loom-lifecycle-models/provenance.json": "96b3c73dfa83489b17076156a302239db74f07bb976240cd85e794b8cd0b564c",
+    "tools/loom-lifecycle-models/run.py": "1a19c2ad710f5e5c5d8a4a8f723df87fa571d608d5b50587a240b15f6cf53ee6",
+    "tools/loom-lifecycle-models/tests/lifecycle.rs": "161919b1f392881eba7e1a1f6ba60bec265c27e91756744b11234e12f4487d73",
+    "tools/loom-lifecycle-models/third-party/LOOM-LICENSE.txt": "8ce0830173fdac609dfb4ea603fdc002c2f4af0dc9b1a005653f5da9cf534b18",
+    "tools/testing/hardening_guard.py": "a2062b3ffbec7edba79bf5f5954fbcb1e9d97492ab9c4bb541833ebb820bdb6d"
+  },
+  "tool_hashes_after": {
+    "C:\\Users\\Admin\\.cargo\\bin\\cargo.exe": "6f4bef66261261fcb43131be8720bab817d403a09edec7455c371974b90bdb7e",
+    "C:\\Users\\Admin\\.cargo\\bin\\rustup.exe": "6f4bef66261261fcb43131be8720bab817d403a09edec7455c371974b90bdb7e",
+    "C:\\Python314\\python.exe": "4942b86a6597e5aee0128daa00050ed79bc21f6e709a78eb19cbfeb0c2f39ac9",
+    "C:\\Program Files\\Git\\cmd\\git.exe": "37c5725818d602e951ba2563b870d62763322956b73373da4c33a0b566a80bc9",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\cargo.exe": "c37545ec61d48d31bdefce53280ecab61c4ea54eaace372fac6a0316c6e165d9",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\rustc.exe": "ca9988af88b1463f6857fdfe909299fee50a63260b3e5f7dbcb5b4d3318b27bc",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\rustdoc.exe": "9daff87cf4052ba3f97decb39d2822e1a96b3ed444eda86ed8df74802679dd60",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\rustfmt.exe": "ac9d781249bffabbb1bedb691a5ea6f63a818c1dda73dd698d4dff687ad4c24e",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\cargo-fmt.exe": "fcd2d35d13dc1a487c755e234bf2aee06f75b522c8a691cac9ee5f0d6fc854a1",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\cargo-clippy.exe": "cb0f2b164b3f6e95bfed7ec4ae9fc48f8ce8d9fef3649b5ae87961f75e1ef484",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\clippy-driver.exe": "00fd4ef2fe60e603571573746e52f42f109bbfe4b879e7ca7313614fda0b367b"
+  },
+  "finalization_error": "FileNotFoundError: [Errno 2] No such file or directory: 'C:\\\\Users\\\\Admin\\\\.cargo\\\\registry\\\\src\\\\index.crates.io-1949cf8c6b5b557f\\\\aho-corasick-1.1.5\\\\.cargo-checksum.json'",
+  "finished_utc": "2026-09-27T01:15:15.672530+00:00"
+}

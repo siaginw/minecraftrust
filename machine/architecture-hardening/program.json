@@ -124,7 +124,7 @@
     {
       "id": "H6",
       "title": "RETAINED NATIVE OWNERSHIP MODEL",
-      "status": "FOUNDATION_VALIDATED",
+      "status": "FOUNDATION_COMMITTED",
       "implementation": [
         "crates/native-state-vnext",
         "docs/architecture/retained-native-state.md"
@@ -137,7 +137,7 @@
       "evidence": [
         "machine/architecture-hardening/h6-retained-state.json"
       ],
-      "commit": null,
+      "commit": "b4d1098",
       "outstanding": [
         "Actual JVM writer/alias closure, safepoints, barriers and atomic handoff",
         "Certificate issuer and loaded-object/registry binding",
@@ -150,11 +150,22 @@
     {
       "id": "H7",
       "title": "LOOM MODEL CHECKING",
-      "status": "PENDING",
-      "implementation": [],
-      "validation": [],
-      "evidence": [],
-      "commit": null
+      "status": "BOUNDED_MODELS_VALIDATED",
+      "implementation": [
+        "tools/loom-lifecycle-models",
+        "docs/architecture/loom-lifecycle-models.md"
+      ],
+      "validation": [
+        "Independent root rerun:13 positive models,521 bounded executions,14 specific broken controls detected; strict clippy/fmt;30 dependency archives/1695 files and source/tool bindings"
+      ],
+      "evidence": [
+        "machine/architecture-hardening/h7-loom.json"
+      ],
+      "commit": null,
+      "outstanding": [
+        "Models are reduced obligations; actual H4/H6 concurrent implementation and JVM synchronization not Loom-instrumented or proven",
+        "No liveness/fairness guarantee or live runtime qualification"
+      ]
     },
     {
       "id": "H8",
@@ -519,7 +530,7 @@
     {
       "id": "H6.1",
       "title": "GENERATIONAL HANDLES",
-      "status": "FOUNDATION_VALIDATED",
+      "status": "FOUNDATION_COMMITTED",
       "implementation": [
         "crates/native-state-vnext",
         "docs/architecture/retained-native-state.md"
@@ -532,7 +543,7 @@
       "evidence": [
         "machine/architecture-hardening/h6-retained-state.json"
       ],
-      "commit": null,
+      "commit": "b4d1098",
       "outstanding": [
         "Actual JVM writer/alias closure, safepoints, barriers and atomic handoff",
         "Certificate issuer and loaded-object/registry binding",
@@ -545,7 +556,7 @@
     {
       "id": "H6.2",
       "title": "NATIVECHUNK VNEXT",
-      "status": "FOUNDATION_VALIDATED",
+      "status": "FOUNDATION_COMMITTED",
       "implementation": [
         "crates/native-state-vnext",
         "docs/architecture/retained-native-state.md"
@@ -558,7 +569,7 @@
       "evidence": [
         "machine/architecture-hardening/h6-retained-state.json"
       ],
-      "commit": null,
+      "commit": "b4d1098",
       "outstanding": [
         "Actual JVM writer/alias closure, safepoints, barriers and atomic handoff",
         "Certificate issuer and loaded-object/registry binding",
@@ -571,7 +582,7 @@
     {
       "id": "H6.3",
       "title": "IMMUTABLE GENERATION-TAGGED VIEWS",
-      "status": "FOUNDATION_VALIDATED",
+      "status": "FOUNDATION_COMMITTED",
       "implementation": [
         "crates/native-state-vnext",
         "docs/architecture/retained-native-state.md"
@@ -584,7 +595,7 @@
       "evidence": [
         "machine/architecture-hardening/h6-retained-state.json"
       ],
-      "commit": null,
+      "commit": "b4d1098",
       "outstanding": [
         "Actual JVM writer/alias closure, safepoints, barriers and atomic handoff",
         "Certificate issuer and loaded-object/registry binding",

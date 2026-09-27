@@ -67,6 +67,33 @@
       "installed_scope": "No upstream dependency; construction/constants used only in tools/gpu-offline-experiment",
       "evidence": "machine/architecture-hardening/h22-5-gpu-validation.json",
       "provenance": "tools/gpu-offline-experiment/PROVENANCE.json"
+    },
+    {
+      "candidate": "Loom",
+      "version": "0.7.2",
+      "decision": "ADOPT",
+      "adopt_scope": "ISOLATED_TEST_MODELS_ONLY",
+      "license": "MIT",
+      "reason": "13 bounded models and14 fault controls reproduced independently; future concurrent adapters have explicit linearization obligations",
+      "performance_value": "Testing productivity only; no runtime speedup",
+      "migration_value": "Checks selected ownership/revocation/publication/reclamation contracts before concurrent migration",
+      "integration_risk": "Model/source drift, incomplete weak-memory and bounded schedule coverage; not an implementation proof",
+      "installed_scope": "Standalone tools/loom-lifecycle-models only;30 registry dependencies, no production dependency",
+      "evidence": "machine/architecture-hardening/h7-loom.json",
+      "provenance": "tools/loom-lifecycle-models/provenance.json"
+    },
+    {
+      "candidate": "PrismarineJS/minecraft-data",
+      "version": "2157a992b9eaf07a292101f1823dfca725e6aea8",
+      "decision": "STUDY",
+      "license": "MIT declared; README extracted-data/source-specific license caveat retained",
+      "reason": "Pinned protocol338/340 field facts cross-checked for H5 static fixtures; no bulk schema/code copied",
+      "performance_value": "Unmeasured; no runtime dependency",
+      "migration_value": "Version-specific boundary facts inform independently implemented adapters",
+      "integration_risk": "Data extraction provenance and unsupported version breadth require review before broader reuse",
+      "installed_scope": "NOT_INSTALLED; source review only",
+      "evidence": "machine/architecture-hardening/h5-version-adapters.json",
+      "provenance": "versions/mc_1_12_x/fixtures/primary-source-review.json"
     }
   ]
 }
