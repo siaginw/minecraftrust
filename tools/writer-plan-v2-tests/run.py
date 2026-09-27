@@ -7,6 +7,10 @@ sys.path.insert(0,str(ROOT/'tools/testing'))
 from hardening_guard import inspect
 import session_bound_certificate as certificate_schema
 import session_bound_policy as policy_schema
+# The engine's own canonical digest, not a local copy: the binding this lane
+# checks is the one the engine will recompute, so a second implementation of it
+# would prove nothing about the real comparison.
+from qualification_certificate import digest_json
 from text_digest import normalized_sha256
 def sha(p):return hashlib.sha256(Path(p).read_bytes()).hexdigest()
 # A manifest pin must be the digest the generator computes, which normalizes line
@@ -142,9 +146,9 @@ def main():
     expected_loader_class=loader_class)
    document.update(overrides)
    return document
-  def session_recipe(document,**overrides):
+  def session_recipe(document,manifest_sha=None,**overrides):
    recipe={'schema_version':2,'kind':'RUSTCRAFT_V2_WRITER_PLAN_RECIPE','identity_mode':'CANONICAL_ID_V2_SESSION_BOUND',
-    'all_required_observed':True,'required_hooks_manifest_sha256':msha(manifest),
+    'all_required_observed':True,'required_hooks_manifest_sha256':manifest_sha or msha(manifest),
     'required_hooks':[{'id':'X','status':'OBSERVED'}],'expected_class_identities':{sname:sexact},
     'forge_build':'14.23.5.2860','qualification':{'profile':'SYNTHETIC_RECIPE_NOT_QUALIFIED','minecraft_server_jar_sha256':'0'*64,'runtime_manifest_sha256':RUNTIME_MANIFEST_SHA},
     'session_bound_classes':[sname]}
@@ -225,6 +229,35 @@ def main():
   run('compile-same-process-acquisition',[javac,'-source','8','-target','8','-Xlint:all','-Werror','-cp',asm,'-d',acquisition,core/'CanonicalClassIdentityV2.java',core/'SessionBoundIdentityCertificate.java',core/'SessionBoundAdmissionPolicy.java',core/'LiveHookSupport.java',core/'AsmTreeCompat.java',core/'LiveWriterPlan.java',acq,test/'SessionBoundAdmissionPolicyFixtures.java',test/'SameProcessAcquisitionControls.java'])
   acquisition_result=run('same-process-acquisition-controls',[java,'-cp',str(acquisition)+os.pathsep+str(asm),'com.rustcraft.coremod.SameProcessAcquisitionControls'])
   assert acquisition_result.stdout.strip().startswith(b'PASS SameProcessAcquisitionControls'),acquisition_result.stdout
+  # ---- the same-process transformation chain, rendered by the real JVM -----
+  # The chain control defines its class through a loader of its own, so the
+  # policy must name THAT loader class: a policy naming any other loader would
+  # refuse, which is the point, and would make this lane prove nothing.
+  chain_loader='com.rustcraft.coremod.TransformationChainControls$Defining'
+  chain_manifest=out/'chain-manifest.json'
+  chain_m={'required_hooks':[{'id':'X','class':name,'method':'handler$zzf000',
+   'descriptor':'()V','hook_type':'WRITE_BEGIN','fingerprint':{'kind':'DECLARATION'}}]}
+  write(chain_manifest,chain_m)
+  chain_policy=session_policy(sidentity,expected_loader_class=chain_loader)
+  chain_plan=generate('chain-session-bound',session_recipe(chain_policy,msha(chain_manifest)),chain_m)
+  chain=out/'chain-classes';chain.mkdir()
+  chain_producer=ROOT/'tools/bridge/src/com/rustcraft/qualification/TransformationChainEvidence.java'
+  chain_src=[core/n for n in ['CanonicalClassIdentityV2.java','AsmTreeCompat.java','SessionBoundIdentityCertificate.java','SessionBoundAdmissionPolicy.java','LiveHookSupport.java']]
+  run('compile-transformation-chain',[javac,'-source','8','-target','8','-Xlint:all','-Werror','-cp',asm,'-d',chain,*chain_src,acq,chain_producer,chain_plan,test/'SessionBoundFixture.java',test/'TransformationChainControls.java'])
+  chain_doc=out/'transformation-chain.json'
+  chain_result=run('transformation-chain-controls',[java,'-cp',str(chain)+os.pathsep+str(asm),'com.rustcraft.coremod.TransformationChainControls',out/'fixtures/session-fixture.class',chain_doc])
+  assert chain_result.stdout.strip().startswith(b'PASS TransformationChainControls'),chain_result.stdout
+  # The Java renderer and the engine must agree byte for byte on the document
+  # the chain binds itself to, or that binding compares a hash against a
+  # different document. Checked in Python rather than asserted in Java because
+  # the engine's canonical digest is the one that counts.
+  rendered=json.loads(chain_doc.read_text(encoding='utf-8'))
+  assert rendered['transformation_chain']['acquisition_evidence_sha256']==digest_json(rendered["session_acquisition"]),'the chain is not bound to the acquisition it names'
+  for name_,document in rendered['session_certificates'].items():certificate_schema.validate(document)
+  r['chain']={'document':str(chain_doc),'document_sha256':sha(chain_doc),
+   'acquisition_rows':len(rendered['session_acquisition']),
+   'certificates':sorted(rendered['session_certificates']),
+   'stages':[s['stage'] for s in rendered['transformation_chain']['classes'][0]['stages']]}
   r.update(status='PASS',java_assertions=26,negative_generator_controls=len(r['negative_controls']),generated_v2_compile_and_admission=True,default_raw_regeneration_byte_identical=True,clean_forge_exact_mode_regression=True,same_process_acquisition_contract=True,session_bound_plan_generated_and_admitted=True,static_policy_not_concrete_certificate=True,runtime_issued_certificate_in_process=True)
  except Exception as e:r['error']=type(e).__name__+': '+str(e)
  finally:
