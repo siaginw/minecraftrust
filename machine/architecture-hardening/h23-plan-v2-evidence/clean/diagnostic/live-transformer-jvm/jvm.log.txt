@@ -1,0 +1,55 @@
+[INFO] LaunchWrapper: Loading tweak class name com.rustcraft.offline.bootstrap.OfflineTweaker
+[INFO] LaunchWrapper: Using primary tweak class name com.rustcraft.offline.bootstrap.OfflineTweaker
+[INFO] LaunchWrapper: Calling tweak class com.rustcraft.offline.bootstrap.OfflineTweaker
+[INFO] FML: Forge Mod Loader version 14.23.5.2860 for Minecraft 1.12.2 loading
+[INFO] FML: Java is OpenJDK 64-Bit Server VM, version 1.8.0_504, running on Windows 11:amd64:10.0, installed at D:\rustcraft-toolchains\temurin8\jdk8u504-b01\jre
+[INFO] FML: Searching D:\minecraftrust-astra-hardening\target\architecture-hardening\h23-plan-clean-regressions\diagnostic\live-transformer-jvm\game\mods for mods
+[INFO] LaunchWrapper: Loading tweak class name net.minecraftforge.fml.common.launcher.FMLInjectionAndSortingTweaker
+[INFO] LaunchWrapper: Loading tweak class name net.minecraftforge.fml.common.launcher.FMLDeobfTweaker
+[INFO] LaunchWrapper: Calling tweak class net.minecraftforge.fml.common.launcher.FMLInjectionAndSortingTweaker
+[INFO] LaunchWrapper: Calling tweak class net.minecraftforge.fml.common.launcher.FMLInjectionAndSortingTweaker
+[INFO] LaunchWrapper: Calling tweak class net.minecraftforge.fml.relauncher.CoreModManager$FMLPluginWrapper
+[INFO] FML: Found valid fingerprint for Minecraft Forge. Certificate fingerprint e3c3d50c7c986df74c645c0ac54639741c90a557
+[INFO] LaunchWrapper: Calling tweak class net.minecraftforge.fml.relauncher.CoreModManager$FMLPluginWrapper
+[INFO] LaunchWrapper: Calling tweak class net.minecraftforge.fml.common.launcher.FMLDeobfTweaker
+[INFO] LaunchWrapper: Loading tweak class name net.minecraftforge.fml.common.launcher.TerminalTweaker
+[INFO] LaunchWrapper: Calling tweak class net.minecraftforge.fml.common.launcher.TerminalTweaker
+[INFO] LaunchWrapper: Launching wrapped minecraft {com.rustcraft.offline.oracle.QualifyRuntime}
+[INFO] FML: MinecraftForge v14.23.5.2860 Initialized
+[INFO] FML: Starts to replace vanilla recipe ingredients with ore ingredients.
+[INFO] FML: Invalid recipe found with multiple oredict ingredients in the same ingredient...
+[INFO] FML: Replaced 1227 ore ingredients
+[INFO] FML: Searching D:\minecraftrust-astra-hardening\target\architecture-hardening\h23-plan-clean-regressions\diagnostic\live-transformer-jvm\game\mods for mods
+[INFO] FML: Forge Mod Loader has identified 4 mods to load
+[WARN] FML: Missing English translation for FML: assets/fml/lang/en_us.lang
+[INFO] FML: Attempting connection with missing mods [minecraft, mcp, FML, forge] at CLIENT
+[INFO] FML: Attempting connection with missing mods [minecraft, mcp, FML, forge] at SERVER
+[INFO] FML: Processing ObjectHolder annotations
+[INFO] FML: Found 1168 ObjectHolder annotations
+[INFO] FML: Identifying ItemStackHolder annotations
+[INFO] FML: Found 0 ItemStackHolder annotations
+[INFO] FML: Configured a dormant chunk cache size of 0
+[INFO] FML: Applying holder lookups
+[INFO] FML: Holder lookups applied
+[INFO] FML: Applying holder lookups
+[INFO] FML: Holder lookups applied
+[INFO] FML: Applying holder lookups
+[INFO] FML: Holder lookups applied
+[INFO] FML: Applying holder lookups
+[INFO] FML: Holder lookups applied
+[INFO] FML: Injecting itemstacks
+[INFO] FML: Itemstack injection complete
+[INFO] FML: Applying holder lookups
+[INFO] FML: Holder lookups applied
+[INFO] FML: Injecting itemstacks
+[INFO] FML: Itemstack injection complete
+[INFO] FML: Forge Mod Loader has successfully loaded 4 mods
+[INFO] STDERR: [com.rustcraft.bridge.capture.LiveWriterHooks:diagnoseTokenMismatch:459]: [live-capture] token diagnostic unavailable: java.lang.NullPointerException
+[live-capture] FIRST disqualification at writerBegin liveWriter.W12.Chunk.func_177436_a: com.rustcraft.bridge.capture.LiveWriterGate$ProtocolViolationException: OFF_OWNER_PUBLISHED_WRITE: off-owner published write; receiver=net.minecraft.world.chunk.Chunk op=liveWriter.W12.Chunk.func_177436_a
+  at com.rustcraft.bridge.capture.LiveWriterGate.beginWrite(LiveWriterGate.java:378)
+  at com.rustcraft.bridge.capture.LiveWriterHooks.writerBegin(LiveWriterHooks.java:365)
+  at net.minecraft.world.chunk.Chunk.func_177436_a(Chunk.java)
+  at com.rustcraft.livetransformer.LiveTransformerVerification$2.run(LiveTransformerVerification.java:326)
+  at java.lang.Thread.run(Thread.java:750)
+[INFO] STDOUT: [com.rustcraft.livetransformer.LiveTransformerVerification:main:353]: RUSTCRAFT_LIVE_TRANSFORMER_VERIFICATION_PASS {"negative_controls":"PASS (wrong hash, missing anchor, ambiguous sequence, altered descriptor, double invocation, wrong build binding, per-class coverage)","extractor_scope_controls":{"scope":"DETACHED_REAL_TRANSFORMED_CLASSES_NOT_LIVE_QUALIFICATION","passed":33,"positive_controls":8,"negative_controls":25,"registryChecks":3,"rejection_controls":{"provider subclass":"PROVIDER_CLASS","different world identity":"CHUNK_WORLD_IDENTITY","same provider name different loader":"PROVIDER_CLASS","wrong exact provider":"PROVIDER_CLASS","wrong dimension":"DIMENSION_MISMATCH","wrong skylight":"SKYLIGHT_MISMATCH","chunk subclass":"CHUNK_CLASS","section subclass":"SECTION_CLASS","container subclass":"CONTAINER_CLASS","storage family":"UNSUPPORTED_STORAGE_FAMILY","width mismatch":"STATE_WIDTH_MISMATCH","registry exact class":"REGISTRY_CLASS","generator family":"INVALID_SCOPE_POLICY","unregistered state":"UNRESOLVED_STATE","field descriptor":"FIELD_DESCRIPTOR","hidden field ambiguity":"HIDDEN_FIELD","method descriptor":"METHOD_DESCRIPTOR","virtual override ambiguity":"UNQUALIFIED_METHOD_OVERRIDE","wrong generator exact class":"GENERATOR_CLASS","missing live generator provider":"CHUNK_PROVIDER_CLASS","detached generator must be absent":"DETACHED_GENERATOR_MUST_BE_ABSENT","registry epoch":"REGISTRY_EPOCH_MISMATCH","registry revocation sticky":"REGISTRY_BINDING_REVOKED","same-size registry content drift":"REGISTRY_ALIAS_CHANGED","registry drift remains revoked after restoration":"REGISTRY_BINDING_REVOKED"},"registryEntriesCompared":9569,"registryCheckNanos":1145300,"productionAuthority":false},"t1_default_off_construction":"PASS (hooks inert, no session)","t2_constructor_registration":"PASS (provisional PUBLISHING binding created)","t3_publication_ready_capture":"PASS (READY at finish; capture committed)","t4_writer_bracket_real_mutation":"PASS (epoch +1, depth balanced)","t7_real_spacket_captured":"PASS (sealed + enqueued through transformed hooks)","t8_native_replay":"PASS (mask=1 javaLen=4358 rustLen=4358 byteEqual=true)","t9_java_output_unchanged":"PASS (captured body == plain rebuild body == native body)","t5_private_bypass_worker":"PASS (guard bypassed for the exact private graph)","t6_off_owner_fail_closed":"PASS (terminal violation before mutation)","all_groups":"PASS","pass_count":13}
+[INFO] STDOUT: [com.rustcraft.offline.oracle.QualifyRuntime:main:314]: RUSTCRAFT_OFFLINE_QUALIFICATION_COMPLETE FORGE_2860_SERVER_TRANSFORMED_FML_INITIALIZED_OFFLINE_V1

@@ -1,0 +1,40 @@
+disabled: writer scopes are NOOP -> PASS (NOOP/NOOP)
+disabled: capture falls back DISABLED without admitting -> PASS (DISABLED)
+disabled: epoch never advanced and nothing was admitted -> PASS (epoch=1)
+uncontended: gate held by owner inside scope -> PASS
+uncontended: cleanup on normal return (depth 0) -> PASS (depth=0)
+uncontended: outermost entry advanced epoch exactly once -> PASS (epoch 1 -> 2)
+uncontended: fully quiesced shutdown accepted -> PASS
+contention: nested scopes both HELD -> PASS
+contention: writer depth is two while nested -> PASS (depth=2)
+contention: depth returns to zero and epoch advanced once -> PASS (depth=0 epoch=2)
+capture-ok: admitted with minted event id and entry epoch -> PASS (event=1 epoch0=2)
+capture-ok: commit sealed SEALED_COMMITTED -> PASS (SEALED_COMMITTED)
+capture-ok: counters seen/admitted/sealed -> PASS
+writer-active: immediate WRITER_ACTIVE fallback -> PASS (WRITER_ACTIVE)
+writer-active: no admission counter movement -> PASS
+nested: second attempt rejects NESTED_CAPTURE without waiting -> PASS (NESTED_CAPTURE)
+offthread: immediate OFF_THREAD fallback -> PASS (OFF_THREAD)
+offthread: no terminal disqualification for a rejected attempt -> PASS
+reentrant: attempt invalidated before the mutation store -> PASS (REENTRANT_WRITE)
+reentrant: epoch advanced before the mutation store -> PASS (epoch=3)
+reentrant: commit refuses the invalidated attempt -> PASS (REENTRANT_WRITE)
+reentrant: gate released after discard (next capture admits cleanly) -> PASS (null)
+aba: restored bytes do not resurrect the invalidated attempt -> PASS (committed=false)
+capture-vs-writer: first attempt discarded (REENTRANT_WRITE) -> PASS (REENTRANT_WRITE)
+capture-vs-writer: next capture admits cleanly after cleanup -> PASS (null)
+writer-exception: depth zero after Throwable exit -> PASS (depth=0)
+writer-exception: terminal WRITE_EXCEPTION disqualification -> PASS (WRITE_EXCEPTION)
+writer-exception: capture now falls back RUNTIME_DISQUALIFIED (no deadlock, no leak) -> PASS (RUNTIME_DISQUALIFIED)
+off-owner: terminal OFF_OWNER_PUBLISHED_WRITE thrown before mutation -> PASS (OFF_OWNER_PUBLISHED_WRITE)
+off-owner: target bytes unchanged (violation fired before the write) -> PASS
+off-owner: session terminally disqualified, still enforcing (no reset) -> PASS (OFF_OWNER_PUBLISHED_WRITE)
+unknown-writer: unparticipating raw-array write rejected OFF_OWNER_PUBLISHED_WRITE -> PASS (OFF_OWNER_PUBLISHED_WRITE)
+unknown-writer: no byte written before rejection -> PASS
+unknown-writer: session disqualified; unsupported profiles stay Java-only by default -> PASS
+epoch-exhaustion: outermost entry disqualifies COUNTER_EXHAUSTED -> PASS (COUNTER_EXHAUSTED)
+epoch-exhaustion: epoch did not wrap -> PASS (epoch=9223372036854775807)
+leaked-publication: capture falls back PUBLICATION_ACTIVE, never admits -> PASS (PUBLICATION_ACTIVE)
+shutdown: writer is NOOP after quiesced shutdown -> PASS (NOOP)
+shutdown: capture DISABLED after quiesced shutdown -> PASS (DISABLED)
+RESULT: 39 pass, 0 fail

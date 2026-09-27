@@ -1,0 +1,27 @@
+{
+  "schema_version": 2,
+  "kind": "RUSTCRAFT_V2_WRITER_PLAN_RECIPE",
+  "identity_mode": "CANONICAL_ID_V2",
+  "all_required_observed": true,
+  "required_hooks_manifest_sha256": "981e12ce4d7a66d0dacbbadaf16894c54896411d869e7394a899da7678e46b9d",
+  "required_hooks": [
+    {
+      "id": "X",
+      "status": "OBSERVED"
+    }
+  ],
+  "expected_class_identities": {
+    "example.PlanFixture": {
+      "schema": "CANONICAL_ID_V1",
+      "class_name": "example/PlanFixture",
+      "raw_sha256": "5fbc5079e6a09fd84fcc23e8df01c8158dbedc05490e630ce225866824e55bfe",
+      "semantic_sha256": "3d2b71b0c4662a7e0dbc429eea5a911fe34ac78df8458f876423b47704ab42d0",
+      "declaration_order_sha256": "f77c747e870feae3cdd1add8d78e24f79b324452048312abfc6cdf53be747acb"
+    }
+  },
+  "forge_build": "14.23.5.2860",
+  "qualification": {
+    "profile": "SYNTHETIC_RECIPE_NOT_QUALIFIED",
+    "minecraft_server_jar_sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+  }
+}

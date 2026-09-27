@@ -1,0 +1,685 @@
+{
+  "schema": "H23_V2_WRITER_PLAN_ADMISSION_V1",
+  "status": "PASS",
+  "scope": "Synthetic contract controls only; no fresh runtime qualification",
+  "production_authority": false,
+  "sources_before": {
+    "D:\\minecraftrust-astra-hardening\\tools\\live-capture\\generate_live_writer_plan.py": "1d88e5cf0f3ebf83b7512f102fd7b3c888601392c4eb23aba6a529844763e82a",
+    "D:\\minecraftrust-astra-hardening\\tools\\testing\\hardening_guard.py": "a2062b3ffbec7edba79bf5f5954fbcb1e9d97492ab9c4bb541833ebb820bdb6d",
+    "D:\\minecraftrust-astra-hardening\\tools\\live-capture\\live-shadow-profile.json": "ab328891ebf4354a03e10f927d950d122c91cc41d33473e43c71e2e5ce28748e",
+    "D:\\minecraftrust-astra-hardening\\tools\\live-capture\\required-live-writer-hooks.json": "738f672dd699ffb1474a4e82047577d73949c7a7e9a67838450852b06782cd32",
+    "D:\\minecraftrust-astra-hardening\\tools\\writer-plan-v2-tests\\run.py": "3047520d297a4c4b51bd60277a2f385dcaf62295ae2332b5b037c7b2fcec1411",
+    "D:\\minecraftrust-astra-hardening\\tools\\bridge\\src\\com\\rustcraft\\coremod\\LiveWriterPlan.java": "f25db39bea9c8bc0ce409546c59387a63944a2e503f206335836e4ec5a834ef7",
+    "D:\\minecraftrust-astra-hardening\\tools\\bridge\\src\\com\\rustcraft\\coremod\\LiveHookSupport.java": "13ee77fc1105391c94325f4775a049063bf24aa433fa773318d7bc83d148667e",
+    "D:\\minecraftrust-astra-hardening\\tools\\bridge\\src\\com\\rustcraft\\coremod\\CanonicalClassIdentityV2.java": "61749a998cb03e43f093b54c6ba5a069a236d868388fe6452ec1e0133ec4f4f8",
+    "D:\\minecraftrust-astra-hardening\\tools\\writer-plan-v2-tests\\src\\com\\rustcraft\\coremod\\GeneratedPlanV2Smoke.java": "78eb307fb1eb64fed476f9a8f9ff98d0fb6459fa8f4d06e2f188940cce99e701",
+    "D:\\minecraftrust-astra-hardening\\tools\\writer-plan-v2-tests\\src\\com\\rustcraft\\coremod\\WriterPlanIdentityV2Test.java": "48773b5e2b424adf3bf24fd29aff560d6298c3ed4331b39f5d9d8e061df54e2f"
+  },
+  "tools": {
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\bin\\java.exe": "65ebee06ec47df0c41c4483ac5aa408e55adb47a1613bad56be30bccc4317e85",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\bin\\javac.exe": "9f1dae15ffb49c7363c72351cf61f4889ac6896e3df87c1c5553b81745ae8a07",
+    "D:\\rustcraft-runtime-targets\\clean-forge-2860\\server\\libraries\\org\\ow2\\asm\\asm-debug-all\\5.2\\asm-debug-all-5.2.jar": "254b82bec9da4f8efbc8b1f93ab2b87f7465227a82b36cf3d05d9e77a0e8dd2e",
+    "C:\\Python314\\python.exe": "4942b86a6597e5aee0128daa00050ed79bc21f6e709a78eb19cbfeb0c2f39ac9"
+  },
+  "commands": [
+    {
+      "name": "compile-controls",
+      "argv": [
+        "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\bin\\javac.exe",
+        "-source",
+        "8",
+        "-target",
+        "8",
+        "-Xlint:all",
+        "-Werror",
+        "-cp",
+        "D:\\rustcraft-runtime-targets\\clean-forge-2860\\server\\libraries\\org\\ow2\\asm\\asm-debug-all\\5.2\\asm-debug-all-5.2.jar",
+        "-d",
+        "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h23-plan-v2-reviewed\\classes",
+        "D:\\minecraftrust-astra-hardening\\tools\\bridge\\src\\com\\rustcraft\\coremod\\CanonicalClassIdentityV2.java",
+        "D:\\minecraftrust-astra-hardening\\tools\\bridge\\src\\com\\rustcraft\\coremod\\LiveHookSupport.java",
+        "D:\\minecraftrust-astra-hardening\\tools\\bridge\\src\\com\\rustcraft\\coremod\\LiveWriterPlan.java",
+        "D:\\minecraftrust-astra-hardening\\tools\\writer-plan-v2-tests\\src\\com\\rustcraft\\coremod\\WriterPlanIdentityV2Test.java"
+      ],
+      "exit_code": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "admission-controls",
+      "argv": [
+        "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\bin\\java.exe",
+        "-cp",
+        "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h23-plan-v2-reviewed\\classes;D:\\rustcraft-runtime-targets\\clean-forge-2860\\server\\libraries\\org\\ow2\\asm\\asm-debug-all\\5.2\\asm-debug-all-5.2.jar",
+        "com.rustcraft.coremod.WriterPlanIdentityV2Test",
+        "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h23-plan-v2-reviewed\\fixtures"
+      ],
+      "exit_code": 0,
+      "stdout_sha256": "85e1b96bc1d1f803add43cddd68fa61bf53b2e8809eb2242b6ef9229684b9206",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "valid-v2",
+      "argv": [
+        "C:\\Python314\\python.exe",
+        "-B",
+        "D:\\minecraftrust-astra-hardening\\tools\\live-capture\\generate_live_writer_plan.py",
+        "--profile",
+        "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h23-plan-v2-reviewed\\valid-v2\\profile.json",
+        "--manifest",
+        "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h23-plan-v2-reviewed\\valid-v2\\manifest.json",
+        "--out",
+        "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h23-plan-v2-reviewed\\valid-v2\\LiveWriterPlan.java"
+      ],
+      "exit_code": 0,
+      "stdout_sha256": "50b14d11860c6ce5f558c4acf110ed6a4c5f8b27c68b7bf78a5c6954b0771f8a",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "compile-generated-v2",
+      "argv": [
+        "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\bin\\javac.exe",
+        "-source",
+        "8",
+        "-target",
+        "8",
+        "-Xlint:all",
+        "-Werror",
+        "-cp",
+        "D:\\rustcraft-runtime-targets\\clean-forge-2860\\server\\libraries\\org\\ow2\\asm\\asm-debug-all\\5.2\\asm-debug-all-5.2.jar",
+        "-d",
+        "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h23-plan-v2-reviewed\\v2-classes",
+        "D:\\minecraftrust-astra-hardening\\tools\\bridge\\src\\com\\rustcraft\\coremod\\CanonicalClassIdentityV2.java",
+        "D:\\minecraftrust-astra-hardening\\tools\\bridge\\src\\com\\rustcraft\\coremod\\LiveHookSupport.java",
+        "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h23-plan-v2-reviewed\\valid-v2\\LiveWriterPlan.java",
+        "D:\\minecraftrust-astra-hardening\\tools\\writer-plan-v2-tests\\src\\com\\rustcraft\\coremod\\GeneratedPlanV2Smoke.java"
+      ],
+      "exit_code": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "generated-v2-smoke",
+      "argv": [
+        "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\bin\\java.exe",
+        "-cp",
+        "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h23-plan-v2-reviewed\\v2-classes;D:\\rustcraft-runtime-targets\\clean-forge-2860\\server\\libraries\\org\\ow2\\asm\\asm-debug-all\\5.2\\asm-debug-all-5.2.jar",
+        "com.rustcraft.coremod.GeneratedPlanV2Smoke",
+        "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h23-plan-v2-reviewed\\fixtures\\fixture.class"
+      ],
+      "exit_code": 0,
+      "stdout_sha256": "b698ad394957adb3f5e95429f85f8a7dd480da03ea5dffce43dbafdf15583cfb",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "missing-order",
+      "argv": [
+        "C:\\Python314\\python.exe",
+        "-B",
+        "D:\\minecraftrust-astra-hardening\\tools\\live-capture\\generate_live_writer_plan.py",
+        "--profile",
+        "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h23-plan-v2-reviewed\\missing-order\\profile.json",
+        "--manifest",
+        "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h23-plan-v2-reviewed\\missing-order\\manifest.json",
+        "--out",
+        "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h23-plan-v2-reviewed\\missing-order\\LiveWriterPlan.java"
+      ],
+      "exit_code": 1,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e40d549ad05f4ed32c7d95c3d68a62ebb2ba95a56119fd10c9efa1e65605ec11"
+    },
+    {
+      "name": "wrong-name",
+      "argv": [
+        "C:\\Python314\\python.exe",
+        "-B",
+        "D:\\minecraftrust-astra-hardening\\tools\\live-capture\\generate_live_writer_plan.py",
+        "--profile",
+        "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h23-plan-v2-reviewed\\wrong-name\\profile.json",
+        "--manifest",
+        "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h23-plan-v2-reviewed\\wrong-name\\manifest.json",
+        "--out",
+        "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h23-plan-v2-reviewed\\wrong-name\\LiveWriterPlan.java"
+      ],
+      "exit_code": 1,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e40d549ad05f4ed32c7d95c3d68a62ebb2ba95a56119fd10c9efa1e65605ec11"
+    },
+    {
+      "name": "missing-raw",
+      "argv": [
+        "C:\\Python314\\python.exe",
+        "-B",
+        "D:\\minecraftrust-astra-hardening\\tools\\live-capture\\generate_live_writer_plan.py",
+        "--profile",
+        "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h23-plan-v2-reviewed\\missing-raw\\profile.json",
+        "--manifest",
+        "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h23-plan-v2-reviewed\\missing-raw\\manifest.json",
+        "--out",
+        "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h23-plan-v2-reviewed\\missing-raw\\LiveWriterPlan.java"
+      ],
+      "exit_code": 1,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e40d549ad05f4ed32c7d95c3d68a62ebb2ba95a56119fd10c9efa1e65605ec11"
+    },
+    {
+      "name": "bad-semantic",
+      "argv": [
+        "C:\\Python314\\python.exe",
+        "-B",
+        "D:\\minecraftrust-astra-hardening\\tools\\live-capture\\generate_live_writer_plan.py",
+        "--profile",
+        "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h23-plan-v2-reviewed\\bad-semantic\\profile.json",
+        "--manifest",
+        "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h23-plan-v2-reviewed\\bad-semantic\\manifest.json",
+        "--out",
+        "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h23-plan-v2-reviewed\\bad-semantic\\LiveWriterPlan.java"
+      ],
+      "exit_code": 1,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e40d549ad05f4ed32c7d95c3d68a62ebb2ba95a56119fd10c9efa1e65605ec11"
+    },
+    {
+      "name": "nested-v1",
+      "argv": [
+        "C:\\Python314\\python.exe",
+        "-B",
+        "D:\\minecraftrust-astra-hardening\\tools\\live-capture\\generate_live_writer_plan.py",
+        "--profile",
+        "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h23-plan-v2-reviewed\\nested-v1\\profile.json",
+        "--manifest",
+        "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h23-plan-v2-reviewed\\nested-v1\\manifest.json",
+        "--out",
+        "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h23-plan-v2-reviewed\\nested-v1\\LiveWriterPlan.java"
+      ],
+      "exit_code": 1,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e40d549ad05f4ed32c7d95c3d68a62ebb2ba95a56119fd10c9efa1e65605ec11"
+    },
+    {
+      "name": "unknown-mode",
+      "argv": [
+        "C:\\Python314\\python.exe",
+        "-B",
+        "D:\\minecraftrust-astra-hardening\\tools\\live-capture\\generate_live_writer_plan.py",
+        "--profile",
+        "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h23-plan-v2-reviewed\\unknown-mode\\profile.json",
+        "--manifest",
+        "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h23-plan-v2-reviewed\\unknown-mode\\manifest.json",
+        "--out",
+        "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h23-plan-v2-reviewed\\unknown-mode\\LiveWriterPlan.java"
+      ],
+      "exit_code": 1,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "bbc06de95edf38fa6e107e4bcaf7a75572c15951df5bcfab3a35c2e175cd1b78"
+    },
+    {
+      "name": "downgrade-raw",
+      "argv": [
+        "C:\\Python314\\python.exe",
+        "-B",
+        "D:\\minecraftrust-astra-hardening\\tools\\live-capture\\generate_live_writer_plan.py",
+        "--profile",
+        "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h23-plan-v2-reviewed\\downgrade-raw\\profile.json",
+        "--manifest",
+        "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h23-plan-v2-reviewed\\downgrade-raw\\manifest.json",
+        "--out",
+        "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h23-plan-v2-reviewed\\downgrade-raw\\LiveWriterPlan.java"
+      ],
+      "exit_code": 1,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "bbc06de95edf38fa6e107e4bcaf7a75572c15951df5bcfab3a35c2e175cd1b78"
+    },
+    {
+      "name": "missing-mode",
+      "argv": [
+        "C:\\Python314\\python.exe",
+        "-B",
+        "D:\\minecraftrust-astra-hardening\\tools\\live-capture\\generate_live_writer_plan.py",
+        "--profile",
+        "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h23-plan-v2-reviewed\\missing-mode\\profile.json",
+        "--manifest",
+        "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h23-plan-v2-reviewed\\missing-mode\\manifest.json",
+        "--out",
+        "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h23-plan-v2-reviewed\\missing-mode\\LiveWriterPlan.java"
+      ],
+      "exit_code": 1,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "bbc06de95edf38fa6e107e4bcaf7a75572c15951df5bcfab3a35c2e175cd1b78"
+    },
+    {
+      "name": "not-observed",
+      "argv": [
+        "C:\\Python314\\python.exe",
+        "-B",
+        "D:\\minecraftrust-astra-hardening\\tools\\live-capture\\generate_live_writer_plan.py",
+        "--profile",
+        "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h23-plan-v2-reviewed\\not-observed\\profile.json",
+        "--manifest",
+        "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h23-plan-v2-reviewed\\not-observed\\manifest.json",
+        "--out",
+        "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h23-plan-v2-reviewed\\not-observed\\LiveWriterPlan.java"
+      ],
+      "exit_code": 1,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "83c6835dd781c6efcf2fdf6d477a1f20939c9f7e60e2147ddd4226100144a5f7"
+    },
+    {
+      "name": "claimed-qualified",
+      "argv": [
+        "C:\\Python314\\python.exe",
+        "-B",
+        "D:\\minecraftrust-astra-hardening\\tools\\live-capture\\generate_live_writer_plan.py",
+        "--profile",
+        "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h23-plan-v2-reviewed\\claimed-qualified\\profile.json",
+        "--manifest",
+        "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h23-plan-v2-reviewed\\claimed-qualified\\manifest.json",
+        "--out",
+        "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h23-plan-v2-reviewed\\claimed-qualified\\LiveWriterPlan.java"
+      ],
+      "exit_code": 1,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "b9c3bc04e6668d8358cc78029ffc69e8f368a25ef43600683974aeafbb7aa772"
+    },
+    {
+      "name": "old-hashes",
+      "argv": [
+        "C:\\Python314\\python.exe",
+        "-B",
+        "D:\\minecraftrust-astra-hardening\\tools\\live-capture\\generate_live_writer_plan.py",
+        "--profile",
+        "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h23-plan-v2-reviewed\\old-hashes\\profile.json",
+        "--manifest",
+        "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h23-plan-v2-reviewed\\old-hashes\\manifest.json",
+        "--out",
+        "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h23-plan-v2-reviewed\\old-hashes\\LiveWriterPlan.java"
+      ],
+      "exit_code": 1,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "b9c3bc04e6668d8358cc78029ffc69e8f368a25ef43600683974aeafbb7aa772"
+    },
+    {
+      "name": "missing-hook",
+      "argv": [
+        "C:\\Python314\\python.exe",
+        "-B",
+        "D:\\minecraftrust-astra-hardening\\tools\\live-capture\\generate_live_writer_plan.py",
+        "--profile",
+        "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h23-plan-v2-reviewed\\missing-hook\\profile.json",
+        "--manifest",
+        "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h23-plan-v2-reviewed\\missing-hook\\manifest.json",
+        "--out",
+        "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h23-plan-v2-reviewed\\missing-hook\\LiveWriterPlan.java"
+      ],
+      "exit_code": 1,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "5beae2da9a163f420c09bf3bc7bd883423a7541e4fdcef4ac77839209096d216"
+    },
+    {
+      "name": "duplicate-hook",
+      "argv": [
+        "C:\\Python314\\python.exe",
+        "-B",
+        "D:\\minecraftrust-astra-hardening\\tools\\live-capture\\generate_live_writer_plan.py",
+        "--profile",
+        "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h23-plan-v2-reviewed\\duplicate-hook\\profile.json",
+        "--manifest",
+        "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h23-plan-v2-reviewed\\duplicate-hook\\manifest.json",
+        "--out",
+        "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h23-plan-v2-reviewed\\duplicate-hook\\LiveWriterPlan.java"
+      ],
+      "exit_code": 1,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "5beae2da9a163f420c09bf3bc7bd883423a7541e4fdcef4ac77839209096d216"
+    },
+    {
+      "name": "extra-hook",
+      "argv": [
+        "C:\\Python314\\python.exe",
+        "-B",
+        "D:\\minecraftrust-astra-hardening\\tools\\live-capture\\generate_live_writer_plan.py",
+        "--profile",
+        "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h23-plan-v2-reviewed\\extra-hook\\profile.json",
+        "--manifest",
+        "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h23-plan-v2-reviewed\\extra-hook\\manifest.json",
+        "--out",
+        "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h23-plan-v2-reviewed\\extra-hook\\LiveWriterPlan.java"
+      ],
+      "exit_code": 1,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "5beae2da9a163f420c09bf3bc7bd883423a7541e4fdcef4ac77839209096d216"
+    },
+    {
+      "name": "bad-hook-status",
+      "argv": [
+        "C:\\Python314\\python.exe",
+        "-B",
+        "D:\\minecraftrust-astra-hardening\\tools\\live-capture\\generate_live_writer_plan.py",
+        "--profile",
+        "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h23-plan-v2-reviewed\\bad-hook-status\\profile.json",
+        "--manifest",
+        "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h23-plan-v2-reviewed\\bad-hook-status\\manifest.json",
+        "--out",
+        "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h23-plan-v2-reviewed\\bad-hook-status\\LiveWriterPlan.java"
+      ],
+      "exit_code": 1,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "17bc95328c0e18f5e597d2585528acbcbd08ccae3eab102dc20316d94882be4c"
+    },
+    {
+      "name": "missing-class",
+      "argv": [
+        "C:\\Python314\\python.exe",
+        "-B",
+        "D:\\minecraftrust-astra-hardening\\tools\\live-capture\\generate_live_writer_plan.py",
+        "--profile",
+        "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h23-plan-v2-reviewed\\missing-class\\profile.json",
+        "--manifest",
+        "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h23-plan-v2-reviewed\\missing-class\\manifest.json",
+        "--out",
+        "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h23-plan-v2-reviewed\\missing-class\\LiveWriterPlan.java"
+      ],
+      "exit_code": 1,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "67dc481d4adadd520e2039318e312bf0b7ed4777b2d9154730576a4ffc6d50eb"
+    },
+    {
+      "name": "extra-class",
+      "argv": [
+        "C:\\Python314\\python.exe",
+        "-B",
+        "D:\\minecraftrust-astra-hardening\\tools\\live-capture\\generate_live_writer_plan.py",
+        "--profile",
+        "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h23-plan-v2-reviewed\\extra-class\\profile.json",
+        "--manifest",
+        "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h23-plan-v2-reviewed\\extra-class\\manifest.json",
+        "--out",
+        "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h23-plan-v2-reviewed\\extra-class\\LiveWriterPlan.java"
+      ],
+      "exit_code": 1,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "67dc481d4adadd520e2039318e312bf0b7ed4777b2d9154730576a4ffc6d50eb"
+    },
+    {
+      "name": "wrong-manifest",
+      "argv": [
+        "C:\\Python314\\python.exe",
+        "-B",
+        "D:\\minecraftrust-astra-hardening\\tools\\live-capture\\generate_live_writer_plan.py",
+        "--profile",
+        "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h23-plan-v2-reviewed\\wrong-manifest\\profile.json",
+        "--manifest",
+        "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h23-plan-v2-reviewed\\wrong-manifest\\manifest.json",
+        "--out",
+        "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h23-plan-v2-reviewed\\wrong-manifest\\LiveWriterPlan.java"
+      ],
+      "exit_code": 1,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "36d87ccc55d715b1e23af42565b621d890c139e1fddf5bf59197cb6fa3963a76"
+    },
+    {
+      "name": "comment-injection",
+      "argv": [
+        "C:\\Python314\\python.exe",
+        "-B",
+        "D:\\minecraftrust-astra-hardening\\tools\\live-capture\\generate_live_writer_plan.py",
+        "--profile",
+        "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h23-plan-v2-reviewed\\comment-injection\\profile.json",
+        "--manifest",
+        "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h23-plan-v2-reviewed\\comment-injection\\manifest.json",
+        "--out",
+        "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h23-plan-v2-reviewed\\comment-injection\\LiveWriterPlan.java"
+      ],
+      "exit_code": 1,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "768be005b8b67244658013994f4faae785a279890ccdc76396e2fba872bbb5b1"
+    },
+    {
+      "name": "bad-class-name",
+      "argv": [
+        "C:\\Python314\\python.exe",
+        "-B",
+        "D:\\minecraftrust-astra-hardening\\tools\\live-capture\\generate_live_writer_plan.py",
+        "--profile",
+        "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h23-plan-v2-reviewed\\bad-class-name\\profile.json",
+        "--manifest",
+        "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h23-plan-v2-reviewed\\bad-class-name\\manifest.json",
+        "--out",
+        "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h23-plan-v2-reviewed\\bad-class-name\\LiveWriterPlan.java",
+        "--class-name",
+        "bad-name"
+      ],
+      "exit_code": 1,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "5c07b63b2e89208de56efe0b6ee0c574ef4f68d9d9c150595d1b8fe9d0e3550d"
+    },
+    {
+      "name": "unknown-fingerprint",
+      "argv": [
+        "C:\\Python314\\python.exe",
+        "-B",
+        "D:\\minecraftrust-astra-hardening\\tools\\live-capture\\generate_live_writer_plan.py",
+        "--profile",
+        "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h23-plan-v2-reviewed\\unknown-fingerprint\\profile.json",
+        "--manifest",
+        "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h23-plan-v2-reviewed\\unknown-fingerprint\\manifest.json",
+        "--out",
+        "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h23-plan-v2-reviewed\\unknown-fingerprint\\LiveWriterPlan.java"
+      ],
+      "exit_code": 1,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "3b8b12a932a89742d940dafbb31d263a26d7520a46017ae98152ae9271923f4e"
+    },
+    {
+      "name": "missing-anchors",
+      "argv": [
+        "C:\\Python314\\python.exe",
+        "-B",
+        "D:\\minecraftrust-astra-hardening\\tools\\live-capture\\generate_live_writer_plan.py",
+        "--profile",
+        "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h23-plan-v2-reviewed\\missing-anchors\\profile.json",
+        "--manifest",
+        "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h23-plan-v2-reviewed\\missing-anchors\\manifest.json",
+        "--out",
+        "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h23-plan-v2-reviewed\\missing-anchors\\LiveWriterPlan.java"
+      ],
+      "exit_code": 1,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "bbf330b105b29c0b93bafd5b908d988eb9423c88525209cda88835793fec65f7"
+    },
+    {
+      "name": "historical-raw",
+      "argv": [
+        "C:\\Python314\\python.exe",
+        "-B",
+        "D:\\minecraftrust-astra-hardening\\tools\\live-capture\\generate_live_writer_plan.py",
+        "--profile",
+        "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h23-plan-v2-reviewed\\historical-raw\\profile.json",
+        "--manifest",
+        "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h23-plan-v2-reviewed\\historical-raw\\manifest.json",
+        "--out",
+        "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h23-plan-v2-reviewed\\historical-raw\\LiveWriterPlan.java"
+      ],
+      "exit_code": 0,
+      "stdout_sha256": "bf1e9493f4b061ae4ac86816226f2948aafb2d85e9372a969485ec95bfc543d3",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "implicit-v1-rejected",
+      "argv": [
+        "C:\\Python314\\python.exe",
+        "-B",
+        "D:\\minecraftrust-astra-hardening\\tools\\live-capture\\generate_live_writer_plan.py",
+        "--profile",
+        "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h23-plan-v2-reviewed\\implicit-v1-rejected\\profile.json",
+        "--manifest",
+        "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h23-plan-v2-reviewed\\implicit-v1-rejected\\manifest.json",
+        "--out",
+        "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h23-plan-v2-reviewed\\implicit-v1-rejected\\LiveWriterPlan.java"
+      ],
+      "exit_code": 1,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "ebf0b8070cba59723b15102e39378727baa85c501a76e16f132d1b404fe1977c"
+    },
+    {
+      "name": "explicit-v1-reproduction",
+      "argv": [
+        "C:\\Python314\\python.exe",
+        "-B",
+        "D:\\minecraftrust-astra-hardening\\tools\\live-capture\\generate_live_writer_plan.py",
+        "--profile",
+        "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h23-plan-v2-reviewed\\explicit-v1-reproduction\\profile.json",
+        "--manifest",
+        "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h23-plan-v2-reviewed\\explicit-v1-reproduction\\manifest.json",
+        "--out",
+        "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h23-plan-v2-reviewed\\explicit-v1-reproduction\\LiveWriterPlan.java",
+        "--legacy-v1-reproduction"
+      ],
+      "exit_code": 0,
+      "stdout_sha256": "b2d232a221042760038eb997ec64e6c1c76630c3f04f1c123fb65c3f42ab4ad7",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "named-plan",
+      "argv": [
+        "C:\\Python314\\python.exe",
+        "-B",
+        "D:\\minecraftrust-astra-hardening\\tools\\live-capture\\generate_live_writer_plan.py",
+        "--profile",
+        "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h23-plan-v2-reviewed\\named-plan\\profile.json",
+        "--manifest",
+        "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h23-plan-v2-reviewed\\named-plan\\manifest.json",
+        "--out",
+        "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h23-plan-v2-reviewed\\named-plan\\LiveWriterPlan.java",
+        "--class-name",
+        "NamedPlan"
+      ],
+      "exit_code": 0,
+      "stdout_sha256": "e12e71c5434f9c253e2689bb7eb4567a46c17ef36700c9db0b092e10412d936a",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "named-plan-compiles",
+      "argv": [
+        "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\bin\\javac.exe",
+        "-source",
+        "8",
+        "-target",
+        "8",
+        "-d",
+        "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h23-plan-v2-reviewed\\named-classes",
+        "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h23-plan-v2-reviewed\\named-plan\\NamedPlan.java"
+      ],
+      "exit_code": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "negative_controls": [
+    "missing-order",
+    "wrong-name",
+    "missing-raw",
+    "bad-semantic",
+    "nested-v1",
+    "unknown-mode",
+    "downgrade-raw",
+    "missing-mode",
+    "not-observed",
+    "claimed-qualified",
+    "old-hashes",
+    "missing-hook",
+    "duplicate-hook",
+    "extra-hook",
+    "bad-hook-status",
+    "missing-class",
+    "extra-class",
+    "wrong-manifest",
+    "comment-injection",
+    "bad-class-name",
+    "unknown-fingerprint",
+    "missing-anchors",
+    "implicit-v1-rejected"
+  ],
+  "guard_before": {
+    "schema_version": 1,
+    "kind": "HARDENING_ISOLATION_GATE_CHECK",
+    "status": "PASS",
+    "failures": [],
+    "original_observed": {
+      "head": "c4b868db2c9e4b03f745bf93c6ebf4fd8a8519e7",
+      "branch": "issue1-jni-v2",
+      "status": [
+        " M tools/live-capture/live_client_session.py",
+        "?? tools/live-capture/__pycache__/",
+        "?? tools/live-capture/run_rev_shadow.py"
+      ],
+      "files": [
+        {
+          "path": "D:\\minecraftrust\\tools\\live-capture\\live_client_session.py",
+          "sha256": "151c356161695aba3db3c1a8cbd589b5eda2b5a1770dff59ab21b728d36cabfa"
+        },
+        {
+          "path": "D:\\minecraftrust\\tools\\live-capture\\run_rev_shadow.py",
+          "sha256": "2b9b2aca49e57dd0d2a74bec46efcdc0ac7f95762a733276e27ff9dbcb472d93"
+        }
+      ]
+    },
+    "isolated_worktree": "D:\\minecraftrust-astra-hardening",
+    "isolated_head": "cb6886371bbd05c722b206d85c4d7672fdc5a98d",
+    "isolated_branch": "astra/architecture-hardening",
+    "production_gate_checks": {
+      "tryEncode_fail_closed": true,
+      "productionAuthorityEligible_false": true
+    },
+    "scope": "read-only original HEAD/status/two paused source hashes plus conservative source guards; runtime authority tests remain required"
+  },
+  "java_assertions": 26,
+  "negative_generator_controls": 23,
+  "generated_v2_compile_and_admission": true,
+  "default_raw_regeneration_byte_identical": true,
+  "sources_after": {
+    "D:\\minecraftrust-astra-hardening\\tools\\live-capture\\generate_live_writer_plan.py": "1d88e5cf0f3ebf83b7512f102fd7b3c888601392c4eb23aba6a529844763e82a",
+    "D:\\minecraftrust-astra-hardening\\tools\\testing\\hardening_guard.py": "a2062b3ffbec7edba79bf5f5954fbcb1e9d97492ab9c4bb541833ebb820bdb6d",
+    "D:\\minecraftrust-astra-hardening\\tools\\live-capture\\live-shadow-profile.json": "ab328891ebf4354a03e10f927d950d122c91cc41d33473e43c71e2e5ce28748e",
+    "D:\\minecraftrust-astra-hardening\\tools\\live-capture\\required-live-writer-hooks.json": "738f672dd699ffb1474a4e82047577d73949c7a7e9a67838450852b06782cd32",
+    "D:\\minecraftrust-astra-hardening\\tools\\writer-plan-v2-tests\\run.py": "3047520d297a4c4b51bd60277a2f385dcaf62295ae2332b5b037c7b2fcec1411",
+    "D:\\minecraftrust-astra-hardening\\tools\\bridge\\src\\com\\rustcraft\\coremod\\LiveWriterPlan.java": "f25db39bea9c8bc0ce409546c59387a63944a2e503f206335836e4ec5a834ef7",
+    "D:\\minecraftrust-astra-hardening\\tools\\bridge\\src\\com\\rustcraft\\coremod\\LiveHookSupport.java": "13ee77fc1105391c94325f4775a049063bf24aa433fa773318d7bc83d148667e",
+    "D:\\minecraftrust-astra-hardening\\tools\\bridge\\src\\com\\rustcraft\\coremod\\CanonicalClassIdentityV2.java": "61749a998cb03e43f093b54c6ba5a069a236d868388fe6452ec1e0133ec4f4f8",
+    "D:\\minecraftrust-astra-hardening\\tools\\writer-plan-v2-tests\\src\\com\\rustcraft\\coremod\\GeneratedPlanV2Smoke.java": "78eb307fb1eb64fed476f9a8f9ff98d0fb6459fa8f4d06e2f188940cce99e701",
+    "D:\\minecraftrust-astra-hardening\\tools\\writer-plan-v2-tests\\src\\com\\rustcraft\\coremod\\WriterPlanIdentityV2Test.java": "48773b5e2b424adf3bf24fd29aff560d6298c3ed4331b39f5d9d8e061df54e2f"
+  },
+  "guard_after": {
+    "schema_version": 1,
+    "kind": "HARDENING_ISOLATION_GATE_CHECK",
+    "status": "PASS",
+    "failures": [],
+    "original_observed": {
+      "head": "c4b868db2c9e4b03f745bf93c6ebf4fd8a8519e7",
+      "branch": "issue1-jni-v2",
+      "status": [
+        " M tools/live-capture/live_client_session.py",
+        "?? tools/live-capture/__pycache__/",
+        "?? tools/live-capture/run_rev_shadow.py"
+      ],
+      "files": [
+        {
+          "path": "D:\\minecraftrust\\tools\\live-capture\\live_client_session.py",
+          "sha256": "151c356161695aba3db3c1a8cbd589b5eda2b5a1770dff59ab21b728d36cabfa"
+        },
+        {
+          "path": "D:\\minecraftrust\\tools\\live-capture\\run_rev_shadow.py",
+          "sha256": "2b9b2aca49e57dd0d2a74bec46efcdc0ac7f95762a733276e27ff9dbcb472d93"
+        }
+      ]
+    },
+    "isolated_worktree": "D:\\minecraftrust-astra-hardening",
+    "isolated_head": "cb6886371bbd05c722b206d85c4d7672fdc5a98d",
+    "isolated_branch": "astra/architecture-hardening",
+    "production_gate_checks": {
+      "tryEncode_fail_closed": true,
+      "productionAuthorityEligible_false": true
+    },
+    "scope": "read-only original HEAD/status/two paused source hashes plus conservative source guards; runtime authority tests remain required"
+  }
+}

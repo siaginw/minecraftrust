@@ -82,8 +82,32 @@ public final class LiveHookSupport {
 
     /** Exact pre-hook identity: the source bytes must be the qualified profile's bytes. */
     public static void verifyPreHookIdentity(LiveWriterPlan.Hook[] hooks, byte[] basicClass) {
-        boolean canonical = hooks.length > 0 && hooks[0].canonicalIdentity;
-        String actual = canonical ? canonicalSha256(basicClass) : sha256(basicClass);
+        if (hooks == null || hooks.length == 0)
+            throw new ProfileFailure("missing pre-hook identity contract");
+        String mode = hooks[0] == null ? null : hooks[0].identitySchema;
+        String name = hooks[0] == null ? null : hooks[0].className;
+        if (name == null || name.length() == 0)
+            throw new ProfileFailure("missing pre-hook class identity");
+        for (LiveWriterPlan.Hook hook : hooks) {
+            if (hook == null || mode == null || !mode.equals(hook.identitySchema)
+                    || !name.equals(hook.className))
+                throw new ProfileFailure("mixed pre-hook identity contracts");
+        }
+        if ("CANONICAL_ID_V2".equals(mode)) {
+            // Both digests come from this exact class buffer. Never fall back to V1/RAW.
+            CanonicalClassIdentityV2.Result identity = verifyCanonicalIdentityV2(basicClass,
+                    mode, name.replace('.', '/'), hooks[0].preHookClassSha256,
+                    hooks[0].declarationOrderSha256);
+            for (LiveWriterPlan.Hook hook : hooks) {
+                if (!identity.semanticSha256.equals(hook.preHookClassSha256)
+                        || !identity.declarationOrderSha256.equals(hook.declarationOrderSha256))
+                    throw new ProfileFailure("inconsistent V2 identity in pre-hook plan");
+            }
+            return;
+        }
+        if (!"RAW".equals(mode) && !"CANONICAL_ID_V1".equals(mode))
+            throw new ProfileFailure("unsupported pre-hook identity schema");
+        String actual = "CANONICAL_ID_V1".equals(mode) ? canonicalSha256(basicClass) : sha256(basicClass);
         for (LiveWriterPlan.Hook hook : hooks) {
             String expected = hook.preHookClassSha256;
             if (!expected.equals(actual)) {

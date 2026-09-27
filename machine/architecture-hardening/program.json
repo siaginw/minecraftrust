@@ -225,7 +225,7 @@
     {
       "id": "H10",
       "title": "WORLDGEN PIPELINE FUSION",
-      "status": "PROTOTYPE_VALIDATED",
+      "status": "PROTOTYPE_COMMITTED",
       "implementation": [
         "tools/worldgen-fusion-experiment",
         "docs/research/worldgen-fusion.md"
@@ -236,7 +236,7 @@
       "evidence": [
         "machine/architecture-hardening/h10-worldgen-fusion.json"
       ],
-      "commit": null,
+      "commit": "cb6886371bbd05c722b206d85c4d7672fdc5a98d",
       "outstanding": [
         "Actual pinned runtime noise with synthetic density/classification/callbacks, not complete Forge chunk generation",
         "Identical exact raw floating comparisons on this Java8/Windows host only",
@@ -487,11 +487,28 @@
     {
       "id": "H23",
       "title": "REQUALIFY CLEAN FORGE AND REVELATION UNDER V2",
-      "status": "PENDING",
-      "implementation": [],
-      "validation": [],
-      "evidence": [],
-      "commit": null
+      "status": "PREREQUISITE_VALIDATED",
+      "implementation": [
+        "tools/live-capture/generate_live_writer_plan.py",
+        "tools/bridge/src/com/rustcraft/coremod/LiveWriterPlan.java",
+        "tools/bridge/src/com/rustcraft/coremod/LiveHookSupport.java",
+        "tools/writer-plan-v2-tests",
+        "docs/engineering/v2-writer-plan-admission.md"
+      ],
+      "validation": [
+        "26 Java admission assertions,23 negative generator controls,generated V2 compilation/admission,92 canonical assertions,historical Revelation129/10,fresh Clean25 tooling/201 foundation/4358-byte diagnostic comparison"
+      ],
+      "evidence": [
+        "machine/architecture-hardening/h23-writer-plan-v2.json"
+      ],
+      "commit": null,
+      "outstanding": [
+        "Admission prerequisite only: no actual V2 runtime profile, issuer, capture scope or qualification certificate installed.",
+        "Default RAW diagnostic plan retained; historical Revelation checks remain V1 only.",
+        "Independent complete V2 placement proof and current writer/lifecycle closure remain pending.",
+        "Original paused worktree remains untouched; H24 live shadow not resumed.",
+        "No Rust source changed; Clean diagnostic rerun loaded existing H3 DLL, not later scoped build artifacts."
+      ]
     },
     {
       "id": "H24",

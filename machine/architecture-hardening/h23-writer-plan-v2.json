@@ -1,0 +1,2840 @@
+{
+  "schema": "H23_WRITER_PLAN_PREREQUISITE_SUMMARY_V1",
+  "status": "PREREQUISITE_VALIDATED",
+  "production_authority": false,
+  "checks": [
+    {
+      "path": "target/architecture-hardening/h23-plan-v2-reviewed/receipt.json",
+      "sha256": "52e067388207e64e98ebd425049f0954403418c1f470265bfc58b82471cc9eab",
+      "status": "PASS"
+    },
+    {
+      "path": "target/architecture-hardening/h23-plan-canonical-regressions/java-controls-receipt.json",
+      "sha256": "55f692bb2b809ac5b6c48c103b39aea6e234e08728a76ec15a52f8f20016d4c9",
+      "status": "PASS"
+    },
+    {
+      "path": "target/architecture-hardening/h23-plan-historical-revelation/receipt.json",
+      "sha256": "f4af719dad60227d57c0af46dea99214f0a9d1868e42354f9de656fdcc4634ee",
+      "status": "PASS"
+    },
+    {
+      "path": "target/architecture-hardening/h23-plan-clean-regressions/receipt.json",
+      "sha256": "0b81b8ae8d16a704a49e776d6a0dcabbeae6d9d711b4a8ade6d897bf5e3f02b8",
+      "status": "PASS"
+    }
+  ],
+  "java_admission_assertions": 26,
+  "negative_generator_controls": 23,
+  "canonical_assertions": 92,
+  "historical_revelation_classes": 129,
+  "historical_revelation_controls": 10,
+  "clean_tooling_tests": 25,
+  "clean_foundation_assertions": 201,
+  "clean_diagnostic_bytes": 4358,
+  "clean_diagnostic_mask": 1,
+  "retained_artifacts": [
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-initial/admission-controls.stderr.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/initial/admission-controls.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-initial/admission-controls.stdout.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/initial/admission-controls.stdout.txt",
+      "sha256": "85e1b96bc1d1f803add43cddd68fa61bf53b2e8809eb2242b6ef9229684b9206"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-initial/bad-class-name/manifest.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/initial/bad-class-name/manifest.json",
+      "sha256": "981e12ce4d7a66d0dacbbadaf16894c54896411d869e7394a899da7678e46b9d"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-initial/bad-class-name/profile.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/initial/bad-class-name/profile.json",
+      "sha256": "80ea06297f8c396633e80d09468018c4d7f61cd9913f516f07f27da64588f28e"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-initial/bad-class-name.stderr.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/initial/bad-class-name.stderr.txt",
+      "sha256": "5c07b63b2e89208de56efe0b6ee0c574ef4f68d9d9c150595d1b8fe9d0e3550d"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-initial/bad-class-name.stdout.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/initial/bad-class-name.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-initial/bad-hook-status/manifest.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/initial/bad-hook-status/manifest.json",
+      "sha256": "981e12ce4d7a66d0dacbbadaf16894c54896411d869e7394a899da7678e46b9d"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-initial/bad-hook-status/profile.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/initial/bad-hook-status/profile.json",
+      "sha256": "e04dc52e390640f62b248fcaa21c2ee5d8f8de8215f6b56f4fb00d087c435391"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-initial/bad-hook-status.stderr.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/initial/bad-hook-status.stderr.txt",
+      "sha256": "17bc95328c0e18f5e597d2585528acbcbd08ccae3eab102dc20316d94882be4c"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-initial/bad-hook-status.stdout.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/initial/bad-hook-status.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-initial/bad-semantic/manifest.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/initial/bad-semantic/manifest.json",
+      "sha256": "981e12ce4d7a66d0dacbbadaf16894c54896411d869e7394a899da7678e46b9d"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-initial/bad-semantic/profile.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/initial/bad-semantic/profile.json",
+      "sha256": "45a289b83cc9ebc00113f440f0611dd3dff612e1d8b503b648b6c2455a1f2da9"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-initial/bad-semantic.stderr.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/initial/bad-semantic.stderr.txt",
+      "sha256": "e40d549ad05f4ed32c7d95c3d68a62ebb2ba95a56119fd10c9efa1e65605ec11"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-initial/bad-semantic.stdout.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/initial/bad-semantic.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-initial/claimed-qualified/manifest.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/initial/claimed-qualified/manifest.json",
+      "sha256": "981e12ce4d7a66d0dacbbadaf16894c54896411d869e7394a899da7678e46b9d"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-initial/claimed-qualified/profile.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/initial/claimed-qualified/profile.json",
+      "sha256": "fdf9d015f282982c75099fa4dd9598920fbc6f3e14d105887e95dc3755e3b6a8"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-initial/claimed-qualified.stderr.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/initial/claimed-qualified.stderr.txt",
+      "sha256": "b9c3bc04e6668d8358cc78029ffc69e8f368a25ef43600683974aeafbb7aa772"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-initial/claimed-qualified.stdout.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/initial/claimed-qualified.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-initial/comment-injection/manifest.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/initial/comment-injection/manifest.json",
+      "sha256": "981e12ce4d7a66d0dacbbadaf16894c54896411d869e7394a899da7678e46b9d"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-initial/comment-injection/profile.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/initial/comment-injection/profile.json",
+      "sha256": "8502e3088f5f7646651e68f49093f7b3eafd764fadfc24251dc6ffb5d411f229"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-initial/comment-injection.stderr.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/initial/comment-injection.stderr.txt",
+      "sha256": "768be005b8b67244658013994f4faae785a279890ccdc76396e2fba872bbb5b1"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-initial/comment-injection.stdout.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/initial/comment-injection.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-initial/compile-controls.stderr.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/initial/compile-controls.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-initial/compile-controls.stdout.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/initial/compile-controls.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-initial/compile-generated-v2.stderr.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/initial/compile-generated-v2.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-initial/compile-generated-v2.stdout.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/initial/compile-generated-v2.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-initial/downgrade-raw/manifest.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/initial/downgrade-raw/manifest.json",
+      "sha256": "981e12ce4d7a66d0dacbbadaf16894c54896411d869e7394a899da7678e46b9d"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-initial/downgrade-raw/profile.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/initial/downgrade-raw/profile.json",
+      "sha256": "a554859241d374e8d7d8eb361262e403b7f2a918a6885bfeb9595b4399396100"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-initial/downgrade-raw.stderr.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/initial/downgrade-raw.stderr.txt",
+      "sha256": "bbc06de95edf38fa6e107e4bcaf7a75572c15951df5bcfab3a35c2e175cd1b78"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-initial/downgrade-raw.stdout.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/initial/downgrade-raw.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-initial/duplicate-hook/manifest.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/initial/duplicate-hook/manifest.json",
+      "sha256": "981e12ce4d7a66d0dacbbadaf16894c54896411d869e7394a899da7678e46b9d"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-initial/duplicate-hook/profile.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/initial/duplicate-hook/profile.json",
+      "sha256": "f617ad5c4ccda1ebaf09e593169a970b4ac879d49f4614d295e6c8a7f4343cab"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-initial/duplicate-hook.stderr.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/initial/duplicate-hook.stderr.txt",
+      "sha256": "5beae2da9a163f420c09bf3bc7bd883423a7541e4fdcef4ac77839209096d216"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-initial/duplicate-hook.stdout.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/initial/duplicate-hook.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-initial/explicit-v1-reproduction/manifest.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/initial/explicit-v1-reproduction/manifest.json",
+      "sha256": "738f672dd699ffb1474a4e82047577d73949c7a7e9a67838450852b06782cd32"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-initial/explicit-v1-reproduction/profile.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/initial/explicit-v1-reproduction/profile.json",
+      "sha256": "183b72892b180e1cf1147195ca86942638a9a8bad75ddddd577b9a5a3db43ae1"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-initial/explicit-v1-reproduction.stderr.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/initial/explicit-v1-reproduction.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-initial/explicit-v1-reproduction.stdout.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/initial/explicit-v1-reproduction.stdout.txt",
+      "sha256": "15082ac568e21d42a7b9e67ebe55bda5f3ec71d16cba9cb75ccb6ac85e247a2a"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-initial/extra-class/manifest.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/initial/extra-class/manifest.json",
+      "sha256": "981e12ce4d7a66d0dacbbadaf16894c54896411d869e7394a899da7678e46b9d"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-initial/extra-class/profile.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/initial/extra-class/profile.json",
+      "sha256": "1f3d20fff0f4530e2718c1215c389e0b464114869795104b9b6e87b49f75c39c"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-initial/extra-class.stderr.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/initial/extra-class.stderr.txt",
+      "sha256": "67dc481d4adadd520e2039318e312bf0b7ed4777b2d9154730576a4ffc6d50eb"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-initial/extra-class.stdout.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/initial/extra-class.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-initial/extra-hook/manifest.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/initial/extra-hook/manifest.json",
+      "sha256": "981e12ce4d7a66d0dacbbadaf16894c54896411d869e7394a899da7678e46b9d"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-initial/extra-hook/profile.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/initial/extra-hook/profile.json",
+      "sha256": "e7353453c72884e18d7a89165aaf5a7b411e43f6d6e7ca700ff8a62163f8f7d1"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-initial/extra-hook.stderr.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/initial/extra-hook.stderr.txt",
+      "sha256": "5beae2da9a163f420c09bf3bc7bd883423a7541e4fdcef4ac77839209096d216"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-initial/extra-hook.stdout.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/initial/extra-hook.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-initial/fixtures/fixture-identity.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/initial/fixtures/fixture-identity.json",
+      "sha256": "b652b00d7c4f8c9cfde55d1a9f3eb0616e378edb2057b986c4edb4451166d06b"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-initial/generated-v2-smoke.stderr.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/initial/generated-v2-smoke.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-initial/generated-v2-smoke.stdout.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/initial/generated-v2-smoke.stdout.txt",
+      "sha256": "b698ad394957adb3f5e95429f85f8a7dd480da03ea5dffce43dbafdf15583cfb"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-initial/historical-raw/manifest.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/initial/historical-raw/manifest.json",
+      "sha256": "738f672dd699ffb1474a4e82047577d73949c7a7e9a67838450852b06782cd32"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-initial/historical-raw/profile.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/initial/historical-raw/profile.json",
+      "sha256": "ab328891ebf4354a03e10f927d950d122c91cc41d33473e43c71e2e5ce28748e"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-initial/historical-raw.stderr.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/initial/historical-raw.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-initial/historical-raw.stdout.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/initial/historical-raw.stdout.txt",
+      "sha256": "0f2a5085a2c47e9110fc8b7209dae53ddb73a0065d2a24ee4219037298d50c5d"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-initial/implicit-v1-rejected/manifest.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/initial/implicit-v1-rejected/manifest.json",
+      "sha256": "738f672dd699ffb1474a4e82047577d73949c7a7e9a67838450852b06782cd32"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-initial/implicit-v1-rejected/profile.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/initial/implicit-v1-rejected/profile.json",
+      "sha256": "183b72892b180e1cf1147195ca86942638a9a8bad75ddddd577b9a5a3db43ae1"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-initial/implicit-v1-rejected.stderr.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/initial/implicit-v1-rejected.stderr.txt",
+      "sha256": "ebf0b8070cba59723b15102e39378727baa85c501a76e16f132d1b404fe1977c"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-initial/implicit-v1-rejected.stdout.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/initial/implicit-v1-rejected.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-initial/legacy-manifest.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/initial/legacy-manifest.json",
+      "sha256": "738f672dd699ffb1474a4e82047577d73949c7a7e9a67838450852b06782cd32"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-initial/manifest.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/initial/manifest.json",
+      "sha256": "981e12ce4d7a66d0dacbbadaf16894c54896411d869e7394a899da7678e46b9d"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-initial/missing-anchors/manifest.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/initial/missing-anchors/manifest.json",
+      "sha256": "63d676bd2eecd59a705e8b5ced0edffc02f66421fb945678836d3bb4db5e5df2"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-initial/missing-anchors/profile.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/initial/missing-anchors/profile.json",
+      "sha256": "3b8e84448d46b82388f2a3997d8f5573239e7d7ca6457c8712fd0de9260ab7d0"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-initial/missing-anchors-manifest.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/initial/missing-anchors-manifest.json",
+      "sha256": "63d676bd2eecd59a705e8b5ced0edffc02f66421fb945678836d3bb4db5e5df2"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-initial/missing-anchors.stderr.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/initial/missing-anchors.stderr.txt",
+      "sha256": "bbf330b105b29c0b93bafd5b908d988eb9423c88525209cda88835793fec65f7"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-initial/missing-anchors.stdout.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/initial/missing-anchors.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-initial/missing-class/manifest.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/initial/missing-class/manifest.json",
+      "sha256": "981e12ce4d7a66d0dacbbadaf16894c54896411d869e7394a899da7678e46b9d"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-initial/missing-class/profile.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/initial/missing-class/profile.json",
+      "sha256": "428f0dad3887495264b806a50aaed84ccf1c444286ea2099188e8661b64a77b8"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-initial/missing-class.stderr.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/initial/missing-class.stderr.txt",
+      "sha256": "67dc481d4adadd520e2039318e312bf0b7ed4777b2d9154730576a4ffc6d50eb"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-initial/missing-class.stdout.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/initial/missing-class.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-initial/missing-hook/manifest.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/initial/missing-hook/manifest.json",
+      "sha256": "981e12ce4d7a66d0dacbbadaf16894c54896411d869e7394a899da7678e46b9d"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-initial/missing-hook/profile.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/initial/missing-hook/profile.json",
+      "sha256": "36bac2110e73b76ea7c1306523c87730e60f98bfff94639feab99160305a388b"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-initial/missing-hook.stderr.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/initial/missing-hook.stderr.txt",
+      "sha256": "5beae2da9a163f420c09bf3bc7bd883423a7541e4fdcef4ac77839209096d216"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-initial/missing-hook.stdout.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/initial/missing-hook.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-initial/missing-mode/manifest.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/initial/missing-mode/manifest.json",
+      "sha256": "981e12ce4d7a66d0dacbbadaf16894c54896411d869e7394a899da7678e46b9d"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-initial/missing-mode/profile.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/initial/missing-mode/profile.json",
+      "sha256": "00981d83b4b81f857f41ec20f63e80d646928afdc903366dd78ecc6696e57412"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-initial/missing-mode.stderr.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/initial/missing-mode.stderr.txt",
+      "sha256": "bbc06de95edf38fa6e107e4bcaf7a75572c15951df5bcfab3a35c2e175cd1b78"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-initial/missing-mode.stdout.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/initial/missing-mode.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-initial/missing-order/manifest.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/initial/missing-order/manifest.json",
+      "sha256": "981e12ce4d7a66d0dacbbadaf16894c54896411d869e7394a899da7678e46b9d"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-initial/missing-order/profile.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/initial/missing-order/profile.json",
+      "sha256": "06c871a048a984a45f67fba2ceed564a540c8ff123f667f81df368ba759ed64e"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-initial/missing-order.stderr.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/initial/missing-order.stderr.txt",
+      "sha256": "e40d549ad05f4ed32c7d95c3d68a62ebb2ba95a56119fd10c9efa1e65605ec11"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-initial/missing-order.stdout.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/initial/missing-order.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-initial/missing-raw/manifest.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/initial/missing-raw/manifest.json",
+      "sha256": "981e12ce4d7a66d0dacbbadaf16894c54896411d869e7394a899da7678e46b9d"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-initial/missing-raw/profile.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/initial/missing-raw/profile.json",
+      "sha256": "1ff9835e50d4ed07a9407a6766566a28d995cbfb60f5dbefb078f52a3efcb394"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-initial/missing-raw.stderr.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/initial/missing-raw.stderr.txt",
+      "sha256": "e40d549ad05f4ed32c7d95c3d68a62ebb2ba95a56119fd10c9efa1e65605ec11"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-initial/missing-raw.stdout.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/initial/missing-raw.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-initial/named-plan/manifest.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/initial/named-plan/manifest.json",
+      "sha256": "981e12ce4d7a66d0dacbbadaf16894c54896411d869e7394a899da7678e46b9d"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-initial/named-plan/profile.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/initial/named-plan/profile.json",
+      "sha256": "80ea06297f8c396633e80d09468018c4d7f61cd9913f516f07f27da64588f28e"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-initial/named-plan-compiles.stderr.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/initial/named-plan-compiles.stderr.txt",
+      "sha256": "2fe2eb46fd9fdb3eb57212281542f53dcb952cc13379aff0f0487dbe6d675cca"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-initial/named-plan-compiles.stdout.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/initial/named-plan-compiles.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-initial/named-plan.stderr.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/initial/named-plan.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-initial/named-plan.stdout.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/initial/named-plan.stdout.txt",
+      "sha256": "89b693866c04df4b9ae2a7281f1a0d0358828a94b282b5f5a23d016a9c9b6db3"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-initial/nested-v1/manifest.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/initial/nested-v1/manifest.json",
+      "sha256": "981e12ce4d7a66d0dacbbadaf16894c54896411d869e7394a899da7678e46b9d"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-initial/nested-v1/profile.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/initial/nested-v1/profile.json",
+      "sha256": "9a07e0bf85879635592d2be94a87b03aa9bfd5afe0a798deaab0d7ec9593d26f"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-initial/nested-v1.stderr.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/initial/nested-v1.stderr.txt",
+      "sha256": "e40d549ad05f4ed32c7d95c3d68a62ebb2ba95a56119fd10c9efa1e65605ec11"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-initial/nested-v1.stdout.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/initial/nested-v1.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-initial/not-observed/manifest.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/initial/not-observed/manifest.json",
+      "sha256": "981e12ce4d7a66d0dacbbadaf16894c54896411d869e7394a899da7678e46b9d"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-initial/not-observed/profile.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/initial/not-observed/profile.json",
+      "sha256": "c9b8c5db15adce089a586b597db068a5cb0140a4529476828c2b811172283b80"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-initial/not-observed.stderr.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/initial/not-observed.stderr.txt",
+      "sha256": "83c6835dd781c6efcf2fdf6d477a1f20939c9f7e60e2147ddd4226100144a5f7"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-initial/not-observed.stdout.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/initial/not-observed.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-initial/old-hashes/manifest.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/initial/old-hashes/manifest.json",
+      "sha256": "981e12ce4d7a66d0dacbbadaf16894c54896411d869e7394a899da7678e46b9d"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-initial/old-hashes/profile.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/initial/old-hashes/profile.json",
+      "sha256": "0f20a7d15447cadccbe6566cc58fa45046886f59b48258d486bf04a75e600a87"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-initial/old-hashes.stderr.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/initial/old-hashes.stderr.txt",
+      "sha256": "b9c3bc04e6668d8358cc78029ffc69e8f368a25ef43600683974aeafbb7aa772"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-initial/old-hashes.stdout.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/initial/old-hashes.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-initial/receipt.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/initial/receipt.json",
+      "sha256": "3ce9ab6ce653d859ad44a775e21d85c2f03c03a72fe7c3feb10486e17bdfff68"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-initial/unknown-fingerprint/manifest.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/initial/unknown-fingerprint/manifest.json",
+      "sha256": "b105938f4c6119cae815d236d577397c25f4683a8777b0d93df0e5a26769b8f2"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-initial/unknown-fingerprint/profile.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/initial/unknown-fingerprint/profile.json",
+      "sha256": "f60a955939751ad3be9332fbba789383fe44293ca56d2c71fb026ac995a20e0b"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-initial/unknown-fingerprint-manifest.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/initial/unknown-fingerprint-manifest.json",
+      "sha256": "b105938f4c6119cae815d236d577397c25f4683a8777b0d93df0e5a26769b8f2"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-initial/unknown-fingerprint.stderr.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/initial/unknown-fingerprint.stderr.txt",
+      "sha256": "3b8b12a932a89742d940dafbb31d263a26d7520a46017ae98152ae9271923f4e"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-initial/unknown-fingerprint.stdout.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/initial/unknown-fingerprint.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-initial/unknown-mode/manifest.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/initial/unknown-mode/manifest.json",
+      "sha256": "981e12ce4d7a66d0dacbbadaf16894c54896411d869e7394a899da7678e46b9d"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-initial/unknown-mode/profile.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/initial/unknown-mode/profile.json",
+      "sha256": "a246c1297192f49ec92a8d9952c90da8cd9574f42c24082f6760929b00751cc8"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-initial/unknown-mode.stderr.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/initial/unknown-mode.stderr.txt",
+      "sha256": "bbc06de95edf38fa6e107e4bcaf7a75572c15951df5bcfab3a35c2e175cd1b78"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-initial/unknown-mode.stdout.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/initial/unknown-mode.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-initial/valid-v2/manifest.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/initial/valid-v2/manifest.json",
+      "sha256": "981e12ce4d7a66d0dacbbadaf16894c54896411d869e7394a899da7678e46b9d"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-initial/valid-v2/profile.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/initial/valid-v2/profile.json",
+      "sha256": "80ea06297f8c396633e80d09468018c4d7f61cd9913f516f07f27da64588f28e"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-initial/valid-v2.stderr.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/initial/valid-v2.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-initial/valid-v2.stdout.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/initial/valid-v2.stdout.txt",
+      "sha256": "152932adffb4b1485c3a7174a6550ab2bcb4b1790e247372f6af94919d4571fc"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-initial/wrong-manifest/manifest.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/initial/wrong-manifest/manifest.json",
+      "sha256": "981e12ce4d7a66d0dacbbadaf16894c54896411d869e7394a899da7678e46b9d"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-initial/wrong-manifest/profile.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/initial/wrong-manifest/profile.json",
+      "sha256": "a709cc12fc39f507b64dab7603d9d221e4e201e43dd94044ae46076d11b0fd7c"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-initial/wrong-manifest.stderr.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/initial/wrong-manifest.stderr.txt",
+      "sha256": "36d87ccc55d715b1e23af42565b621d890c139e1fddf5bf59197cb6fa3963a76"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-initial/wrong-manifest.stdout.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/initial/wrong-manifest.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-initial/wrong-name/manifest.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/initial/wrong-name/manifest.json",
+      "sha256": "981e12ce4d7a66d0dacbbadaf16894c54896411d869e7394a899da7678e46b9d"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-initial/wrong-name/profile.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/initial/wrong-name/profile.json",
+      "sha256": "cef791d0cfaa37aa8e02f017ab7d6cddaa5a4ae606bd94ae53604e6f93927249"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-initial/wrong-name.stderr.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/initial/wrong-name.stderr.txt",
+      "sha256": "e40d549ad05f4ed32c7d95c3d68a62ebb2ba95a56119fd10c9efa1e65605ec11"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-initial/wrong-name.stdout.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/initial/wrong-name.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-final/admission-controls.stderr.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/prior-pass/admission-controls.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-final/admission-controls.stdout.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/prior-pass/admission-controls.stdout.txt",
+      "sha256": "85e1b96bc1d1f803add43cddd68fa61bf53b2e8809eb2242b6ef9229684b9206"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-final/bad-class-name/manifest.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/prior-pass/bad-class-name/manifest.json",
+      "sha256": "981e12ce4d7a66d0dacbbadaf16894c54896411d869e7394a899da7678e46b9d"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-final/bad-class-name/profile.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/prior-pass/bad-class-name/profile.json",
+      "sha256": "80ea06297f8c396633e80d09468018c4d7f61cd9913f516f07f27da64588f28e"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-final/bad-class-name.stderr.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/prior-pass/bad-class-name.stderr.txt",
+      "sha256": "5c07b63b2e89208de56efe0b6ee0c574ef4f68d9d9c150595d1b8fe9d0e3550d"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-final/bad-class-name.stdout.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/prior-pass/bad-class-name.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-final/bad-hook-status/manifest.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/prior-pass/bad-hook-status/manifest.json",
+      "sha256": "981e12ce4d7a66d0dacbbadaf16894c54896411d869e7394a899da7678e46b9d"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-final/bad-hook-status/profile.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/prior-pass/bad-hook-status/profile.json",
+      "sha256": "e04dc52e390640f62b248fcaa21c2ee5d8f8de8215f6b56f4fb00d087c435391"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-final/bad-hook-status.stderr.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/prior-pass/bad-hook-status.stderr.txt",
+      "sha256": "17bc95328c0e18f5e597d2585528acbcbd08ccae3eab102dc20316d94882be4c"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-final/bad-hook-status.stdout.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/prior-pass/bad-hook-status.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-final/bad-semantic/manifest.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/prior-pass/bad-semantic/manifest.json",
+      "sha256": "981e12ce4d7a66d0dacbbadaf16894c54896411d869e7394a899da7678e46b9d"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-final/bad-semantic/profile.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/prior-pass/bad-semantic/profile.json",
+      "sha256": "45a289b83cc9ebc00113f440f0611dd3dff612e1d8b503b648b6c2455a1f2da9"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-final/bad-semantic.stderr.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/prior-pass/bad-semantic.stderr.txt",
+      "sha256": "e40d549ad05f4ed32c7d95c3d68a62ebb2ba95a56119fd10c9efa1e65605ec11"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-final/bad-semantic.stdout.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/prior-pass/bad-semantic.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-final/claimed-qualified/manifest.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/prior-pass/claimed-qualified/manifest.json",
+      "sha256": "981e12ce4d7a66d0dacbbadaf16894c54896411d869e7394a899da7678e46b9d"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-final/claimed-qualified/profile.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/prior-pass/claimed-qualified/profile.json",
+      "sha256": "fdf9d015f282982c75099fa4dd9598920fbc6f3e14d105887e95dc3755e3b6a8"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-final/claimed-qualified.stderr.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/prior-pass/claimed-qualified.stderr.txt",
+      "sha256": "b9c3bc04e6668d8358cc78029ffc69e8f368a25ef43600683974aeafbb7aa772"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-final/claimed-qualified.stdout.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/prior-pass/claimed-qualified.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-final/comment-injection/manifest.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/prior-pass/comment-injection/manifest.json",
+      "sha256": "981e12ce4d7a66d0dacbbadaf16894c54896411d869e7394a899da7678e46b9d"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-final/comment-injection/profile.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/prior-pass/comment-injection/profile.json",
+      "sha256": "8502e3088f5f7646651e68f49093f7b3eafd764fadfc24251dc6ffb5d411f229"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-final/comment-injection.stderr.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/prior-pass/comment-injection.stderr.txt",
+      "sha256": "768be005b8b67244658013994f4faae785a279890ccdc76396e2fba872bbb5b1"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-final/comment-injection.stdout.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/prior-pass/comment-injection.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-final/compile-controls.stderr.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/prior-pass/compile-controls.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-final/compile-controls.stdout.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/prior-pass/compile-controls.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-final/compile-generated-v2.stderr.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/prior-pass/compile-generated-v2.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-final/compile-generated-v2.stdout.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/prior-pass/compile-generated-v2.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-final/downgrade-raw/manifest.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/prior-pass/downgrade-raw/manifest.json",
+      "sha256": "981e12ce4d7a66d0dacbbadaf16894c54896411d869e7394a899da7678e46b9d"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-final/downgrade-raw/profile.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/prior-pass/downgrade-raw/profile.json",
+      "sha256": "a554859241d374e8d7d8eb361262e403b7f2a918a6885bfeb9595b4399396100"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-final/downgrade-raw.stderr.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/prior-pass/downgrade-raw.stderr.txt",
+      "sha256": "bbc06de95edf38fa6e107e4bcaf7a75572c15951df5bcfab3a35c2e175cd1b78"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-final/downgrade-raw.stdout.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/prior-pass/downgrade-raw.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-final/duplicate-hook/manifest.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/prior-pass/duplicate-hook/manifest.json",
+      "sha256": "981e12ce4d7a66d0dacbbadaf16894c54896411d869e7394a899da7678e46b9d"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-final/duplicate-hook/profile.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/prior-pass/duplicate-hook/profile.json",
+      "sha256": "f617ad5c4ccda1ebaf09e593169a970b4ac879d49f4614d295e6c8a7f4343cab"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-final/duplicate-hook.stderr.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/prior-pass/duplicate-hook.stderr.txt",
+      "sha256": "5beae2da9a163f420c09bf3bc7bd883423a7541e4fdcef4ac77839209096d216"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-final/duplicate-hook.stdout.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/prior-pass/duplicate-hook.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-final/explicit-v1-reproduction/manifest.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/prior-pass/explicit-v1-reproduction/manifest.json",
+      "sha256": "738f672dd699ffb1474a4e82047577d73949c7a7e9a67838450852b06782cd32"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-final/explicit-v1-reproduction/profile.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/prior-pass/explicit-v1-reproduction/profile.json",
+      "sha256": "183b72892b180e1cf1147195ca86942638a9a8bad75ddddd577b9a5a3db43ae1"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-final/explicit-v1-reproduction.stderr.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/prior-pass/explicit-v1-reproduction.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-final/explicit-v1-reproduction.stdout.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/prior-pass/explicit-v1-reproduction.stdout.txt",
+      "sha256": "f69eff67cee01650cd4918d3ad4a07e722dc292fa7ced7bb30c1b4ef477d8be5"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-final/extra-class/manifest.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/prior-pass/extra-class/manifest.json",
+      "sha256": "981e12ce4d7a66d0dacbbadaf16894c54896411d869e7394a899da7678e46b9d"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-final/extra-class/profile.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/prior-pass/extra-class/profile.json",
+      "sha256": "1f3d20fff0f4530e2718c1215c389e0b464114869795104b9b6e87b49f75c39c"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-final/extra-class.stderr.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/prior-pass/extra-class.stderr.txt",
+      "sha256": "67dc481d4adadd520e2039318e312bf0b7ed4777b2d9154730576a4ffc6d50eb"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-final/extra-class.stdout.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/prior-pass/extra-class.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-final/extra-hook/manifest.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/prior-pass/extra-hook/manifest.json",
+      "sha256": "981e12ce4d7a66d0dacbbadaf16894c54896411d869e7394a899da7678e46b9d"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-final/extra-hook/profile.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/prior-pass/extra-hook/profile.json",
+      "sha256": "e7353453c72884e18d7a89165aaf5a7b411e43f6d6e7ca700ff8a62163f8f7d1"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-final/extra-hook.stderr.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/prior-pass/extra-hook.stderr.txt",
+      "sha256": "5beae2da9a163f420c09bf3bc7bd883423a7541e4fdcef4ac77839209096d216"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-final/extra-hook.stdout.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/prior-pass/extra-hook.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-final/fixtures/fixture-identity.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/prior-pass/fixtures/fixture-identity.json",
+      "sha256": "b652b00d7c4f8c9cfde55d1a9f3eb0616e378edb2057b986c4edb4451166d06b"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-final/generated-v2-smoke.stderr.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/prior-pass/generated-v2-smoke.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-final/generated-v2-smoke.stdout.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/prior-pass/generated-v2-smoke.stdout.txt",
+      "sha256": "b698ad394957adb3f5e95429f85f8a7dd480da03ea5dffce43dbafdf15583cfb"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-final/historical-raw/manifest.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/prior-pass/historical-raw/manifest.json",
+      "sha256": "738f672dd699ffb1474a4e82047577d73949c7a7e9a67838450852b06782cd32"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-final/historical-raw/profile.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/prior-pass/historical-raw/profile.json",
+      "sha256": "ab328891ebf4354a03e10f927d950d122c91cc41d33473e43c71e2e5ce28748e"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-final/historical-raw.stderr.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/prior-pass/historical-raw.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-final/historical-raw.stdout.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/prior-pass/historical-raw.stdout.txt",
+      "sha256": "31a257f598f8985656c32c16cf77a56b1d78833156870ee32775cacf3d5cec67"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-final/implicit-v1-rejected/manifest.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/prior-pass/implicit-v1-rejected/manifest.json",
+      "sha256": "738f672dd699ffb1474a4e82047577d73949c7a7e9a67838450852b06782cd32"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-final/implicit-v1-rejected/profile.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/prior-pass/implicit-v1-rejected/profile.json",
+      "sha256": "183b72892b180e1cf1147195ca86942638a9a8bad75ddddd577b9a5a3db43ae1"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-final/implicit-v1-rejected.stderr.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/prior-pass/implicit-v1-rejected.stderr.txt",
+      "sha256": "ebf0b8070cba59723b15102e39378727baa85c501a76e16f132d1b404fe1977c"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-final/implicit-v1-rejected.stdout.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/prior-pass/implicit-v1-rejected.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-final/legacy-manifest.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/prior-pass/legacy-manifest.json",
+      "sha256": "738f672dd699ffb1474a4e82047577d73949c7a7e9a67838450852b06782cd32"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-final/manifest.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/prior-pass/manifest.json",
+      "sha256": "981e12ce4d7a66d0dacbbadaf16894c54896411d869e7394a899da7678e46b9d"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-final/missing-anchors/manifest.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/prior-pass/missing-anchors/manifest.json",
+      "sha256": "63d676bd2eecd59a705e8b5ced0edffc02f66421fb945678836d3bb4db5e5df2"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-final/missing-anchors/profile.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/prior-pass/missing-anchors/profile.json",
+      "sha256": "3b8e84448d46b82388f2a3997d8f5573239e7d7ca6457c8712fd0de9260ab7d0"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-final/missing-anchors-manifest.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/prior-pass/missing-anchors-manifest.json",
+      "sha256": "63d676bd2eecd59a705e8b5ced0edffc02f66421fb945678836d3bb4db5e5df2"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-final/missing-anchors.stderr.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/prior-pass/missing-anchors.stderr.txt",
+      "sha256": "bbf330b105b29c0b93bafd5b908d988eb9423c88525209cda88835793fec65f7"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-final/missing-anchors.stdout.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/prior-pass/missing-anchors.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-final/missing-class/manifest.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/prior-pass/missing-class/manifest.json",
+      "sha256": "981e12ce4d7a66d0dacbbadaf16894c54896411d869e7394a899da7678e46b9d"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-final/missing-class/profile.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/prior-pass/missing-class/profile.json",
+      "sha256": "428f0dad3887495264b806a50aaed84ccf1c444286ea2099188e8661b64a77b8"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-final/missing-class.stderr.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/prior-pass/missing-class.stderr.txt",
+      "sha256": "67dc481d4adadd520e2039318e312bf0b7ed4777b2d9154730576a4ffc6d50eb"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-final/missing-class.stdout.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/prior-pass/missing-class.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-final/missing-hook/manifest.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/prior-pass/missing-hook/manifest.json",
+      "sha256": "981e12ce4d7a66d0dacbbadaf16894c54896411d869e7394a899da7678e46b9d"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-final/missing-hook/profile.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/prior-pass/missing-hook/profile.json",
+      "sha256": "36bac2110e73b76ea7c1306523c87730e60f98bfff94639feab99160305a388b"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-final/missing-hook.stderr.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/prior-pass/missing-hook.stderr.txt",
+      "sha256": "5beae2da9a163f420c09bf3bc7bd883423a7541e4fdcef4ac77839209096d216"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-final/missing-hook.stdout.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/prior-pass/missing-hook.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-final/missing-mode/manifest.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/prior-pass/missing-mode/manifest.json",
+      "sha256": "981e12ce4d7a66d0dacbbadaf16894c54896411d869e7394a899da7678e46b9d"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-final/missing-mode/profile.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/prior-pass/missing-mode/profile.json",
+      "sha256": "00981d83b4b81f857f41ec20f63e80d646928afdc903366dd78ecc6696e57412"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-final/missing-mode.stderr.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/prior-pass/missing-mode.stderr.txt",
+      "sha256": "bbc06de95edf38fa6e107e4bcaf7a75572c15951df5bcfab3a35c2e175cd1b78"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-final/missing-mode.stdout.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/prior-pass/missing-mode.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-final/missing-order/manifest.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/prior-pass/missing-order/manifest.json",
+      "sha256": "981e12ce4d7a66d0dacbbadaf16894c54896411d869e7394a899da7678e46b9d"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-final/missing-order/profile.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/prior-pass/missing-order/profile.json",
+      "sha256": "06c871a048a984a45f67fba2ceed564a540c8ff123f667f81df368ba759ed64e"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-final/missing-order.stderr.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/prior-pass/missing-order.stderr.txt",
+      "sha256": "e40d549ad05f4ed32c7d95c3d68a62ebb2ba95a56119fd10c9efa1e65605ec11"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-final/missing-order.stdout.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/prior-pass/missing-order.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-final/missing-raw/manifest.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/prior-pass/missing-raw/manifest.json",
+      "sha256": "981e12ce4d7a66d0dacbbadaf16894c54896411d869e7394a899da7678e46b9d"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-final/missing-raw/profile.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/prior-pass/missing-raw/profile.json",
+      "sha256": "1ff9835e50d4ed07a9407a6766566a28d995cbfb60f5dbefb078f52a3efcb394"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-final/missing-raw.stderr.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/prior-pass/missing-raw.stderr.txt",
+      "sha256": "e40d549ad05f4ed32c7d95c3d68a62ebb2ba95a56119fd10c9efa1e65605ec11"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-final/missing-raw.stdout.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/prior-pass/missing-raw.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-final/named-plan/manifest.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/prior-pass/named-plan/manifest.json",
+      "sha256": "981e12ce4d7a66d0dacbbadaf16894c54896411d869e7394a899da7678e46b9d"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-final/named-plan/profile.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/prior-pass/named-plan/profile.json",
+      "sha256": "80ea06297f8c396633e80d09468018c4d7f61cd9913f516f07f27da64588f28e"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-final/named-plan-compiles.stderr.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/prior-pass/named-plan-compiles.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-final/named-plan-compiles.stdout.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/prior-pass/named-plan-compiles.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-final/named-plan.stderr.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/prior-pass/named-plan.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-final/named-plan.stdout.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/prior-pass/named-plan.stdout.txt",
+      "sha256": "5c9e58be686f77862b7b0ad2d473a3941eecb89f47fd5fee1d8f5706a8abbecf"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-final/nested-v1/manifest.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/prior-pass/nested-v1/manifest.json",
+      "sha256": "981e12ce4d7a66d0dacbbadaf16894c54896411d869e7394a899da7678e46b9d"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-final/nested-v1/profile.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/prior-pass/nested-v1/profile.json",
+      "sha256": "9a07e0bf85879635592d2be94a87b03aa9bfd5afe0a798deaab0d7ec9593d26f"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-final/nested-v1.stderr.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/prior-pass/nested-v1.stderr.txt",
+      "sha256": "e40d549ad05f4ed32c7d95c3d68a62ebb2ba95a56119fd10c9efa1e65605ec11"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-final/nested-v1.stdout.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/prior-pass/nested-v1.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-final/not-observed/manifest.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/prior-pass/not-observed/manifest.json",
+      "sha256": "981e12ce4d7a66d0dacbbadaf16894c54896411d869e7394a899da7678e46b9d"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-final/not-observed/profile.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/prior-pass/not-observed/profile.json",
+      "sha256": "c9b8c5db15adce089a586b597db068a5cb0140a4529476828c2b811172283b80"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-final/not-observed.stderr.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/prior-pass/not-observed.stderr.txt",
+      "sha256": "83c6835dd781c6efcf2fdf6d477a1f20939c9f7e60e2147ddd4226100144a5f7"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-final/not-observed.stdout.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/prior-pass/not-observed.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-final/old-hashes/manifest.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/prior-pass/old-hashes/manifest.json",
+      "sha256": "981e12ce4d7a66d0dacbbadaf16894c54896411d869e7394a899da7678e46b9d"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-final/old-hashes/profile.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/prior-pass/old-hashes/profile.json",
+      "sha256": "0f20a7d15447cadccbe6566cc58fa45046886f59b48258d486bf04a75e600a87"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-final/old-hashes.stderr.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/prior-pass/old-hashes.stderr.txt",
+      "sha256": "b9c3bc04e6668d8358cc78029ffc69e8f368a25ef43600683974aeafbb7aa772"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-final/old-hashes.stdout.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/prior-pass/old-hashes.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-final/receipt.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/prior-pass/receipt.json",
+      "sha256": "cb3d399ee2b671c93636777a3da384b8f38523102f50cd166bf85ed1375708c5"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-final/unknown-fingerprint/manifest.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/prior-pass/unknown-fingerprint/manifest.json",
+      "sha256": "b105938f4c6119cae815d236d577397c25f4683a8777b0d93df0e5a26769b8f2"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-final/unknown-fingerprint/profile.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/prior-pass/unknown-fingerprint/profile.json",
+      "sha256": "f60a955939751ad3be9332fbba789383fe44293ca56d2c71fb026ac995a20e0b"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-final/unknown-fingerprint-manifest.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/prior-pass/unknown-fingerprint-manifest.json",
+      "sha256": "b105938f4c6119cae815d236d577397c25f4683a8777b0d93df0e5a26769b8f2"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-final/unknown-fingerprint.stderr.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/prior-pass/unknown-fingerprint.stderr.txt",
+      "sha256": "3b8b12a932a89742d940dafbb31d263a26d7520a46017ae98152ae9271923f4e"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-final/unknown-fingerprint.stdout.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/prior-pass/unknown-fingerprint.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-final/unknown-mode/manifest.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/prior-pass/unknown-mode/manifest.json",
+      "sha256": "981e12ce4d7a66d0dacbbadaf16894c54896411d869e7394a899da7678e46b9d"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-final/unknown-mode/profile.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/prior-pass/unknown-mode/profile.json",
+      "sha256": "a246c1297192f49ec92a8d9952c90da8cd9574f42c24082f6760929b00751cc8"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-final/unknown-mode.stderr.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/prior-pass/unknown-mode.stderr.txt",
+      "sha256": "bbc06de95edf38fa6e107e4bcaf7a75572c15951df5bcfab3a35c2e175cd1b78"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-final/unknown-mode.stdout.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/prior-pass/unknown-mode.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-final/valid-v2/manifest.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/prior-pass/valid-v2/manifest.json",
+      "sha256": "981e12ce4d7a66d0dacbbadaf16894c54896411d869e7394a899da7678e46b9d"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-final/valid-v2/profile.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/prior-pass/valid-v2/profile.json",
+      "sha256": "80ea06297f8c396633e80d09468018c4d7f61cd9913f516f07f27da64588f28e"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-final/valid-v2.stderr.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/prior-pass/valid-v2.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-final/valid-v2.stdout.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/prior-pass/valid-v2.stdout.txt",
+      "sha256": "73910690c3e415e08ad19dac24699bda860c255bcd877007fd103df4531e9873"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-final/wrong-manifest/manifest.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/prior-pass/wrong-manifest/manifest.json",
+      "sha256": "981e12ce4d7a66d0dacbbadaf16894c54896411d869e7394a899da7678e46b9d"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-final/wrong-manifest/profile.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/prior-pass/wrong-manifest/profile.json",
+      "sha256": "a709cc12fc39f507b64dab7603d9d221e4e201e43dd94044ae46076d11b0fd7c"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-final/wrong-manifest.stderr.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/prior-pass/wrong-manifest.stderr.txt",
+      "sha256": "36d87ccc55d715b1e23af42565b621d890c139e1fddf5bf59197cb6fa3963a76"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-final/wrong-manifest.stdout.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/prior-pass/wrong-manifest.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-final/wrong-name/manifest.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/prior-pass/wrong-name/manifest.json",
+      "sha256": "981e12ce4d7a66d0dacbbadaf16894c54896411d869e7394a899da7678e46b9d"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-final/wrong-name/profile.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/prior-pass/wrong-name/profile.json",
+      "sha256": "cef791d0cfaa37aa8e02f017ab7d6cddaa5a4ae606bd94ae53604e6f93927249"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-final/wrong-name.stderr.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/prior-pass/wrong-name.stderr.txt",
+      "sha256": "e40d549ad05f4ed32c7d95c3d68a62ebb2ba95a56119fd10c9efa1e65605ec11"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-final/wrong-name.stdout.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/prior-pass/wrong-name.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-reviewed/admission-controls.stderr.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/reviewed/admission-controls.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-reviewed/admission-controls.stdout.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/reviewed/admission-controls.stdout.txt",
+      "sha256": "85e1b96bc1d1f803add43cddd68fa61bf53b2e8809eb2242b6ef9229684b9206"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-reviewed/bad-class-name/manifest.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/reviewed/bad-class-name/manifest.json",
+      "sha256": "981e12ce4d7a66d0dacbbadaf16894c54896411d869e7394a899da7678e46b9d"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-reviewed/bad-class-name/profile.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/reviewed/bad-class-name/profile.json",
+      "sha256": "80ea06297f8c396633e80d09468018c4d7f61cd9913f516f07f27da64588f28e"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-reviewed/bad-class-name.stderr.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/reviewed/bad-class-name.stderr.txt",
+      "sha256": "5c07b63b2e89208de56efe0b6ee0c574ef4f68d9d9c150595d1b8fe9d0e3550d"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-reviewed/bad-class-name.stdout.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/reviewed/bad-class-name.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-reviewed/bad-hook-status/manifest.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/reviewed/bad-hook-status/manifest.json",
+      "sha256": "981e12ce4d7a66d0dacbbadaf16894c54896411d869e7394a899da7678e46b9d"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-reviewed/bad-hook-status/profile.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/reviewed/bad-hook-status/profile.json",
+      "sha256": "e04dc52e390640f62b248fcaa21c2ee5d8f8de8215f6b56f4fb00d087c435391"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-reviewed/bad-hook-status.stderr.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/reviewed/bad-hook-status.stderr.txt",
+      "sha256": "17bc95328c0e18f5e597d2585528acbcbd08ccae3eab102dc20316d94882be4c"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-reviewed/bad-hook-status.stdout.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/reviewed/bad-hook-status.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-reviewed/bad-semantic/manifest.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/reviewed/bad-semantic/manifest.json",
+      "sha256": "981e12ce4d7a66d0dacbbadaf16894c54896411d869e7394a899da7678e46b9d"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-reviewed/bad-semantic/profile.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/reviewed/bad-semantic/profile.json",
+      "sha256": "45a289b83cc9ebc00113f440f0611dd3dff612e1d8b503b648b6c2455a1f2da9"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-reviewed/bad-semantic.stderr.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/reviewed/bad-semantic.stderr.txt",
+      "sha256": "e40d549ad05f4ed32c7d95c3d68a62ebb2ba95a56119fd10c9efa1e65605ec11"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-reviewed/bad-semantic.stdout.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/reviewed/bad-semantic.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-reviewed/claimed-qualified/manifest.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/reviewed/claimed-qualified/manifest.json",
+      "sha256": "981e12ce4d7a66d0dacbbadaf16894c54896411d869e7394a899da7678e46b9d"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-reviewed/claimed-qualified/profile.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/reviewed/claimed-qualified/profile.json",
+      "sha256": "fdf9d015f282982c75099fa4dd9598920fbc6f3e14d105887e95dc3755e3b6a8"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-reviewed/claimed-qualified.stderr.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/reviewed/claimed-qualified.stderr.txt",
+      "sha256": "b9c3bc04e6668d8358cc78029ffc69e8f368a25ef43600683974aeafbb7aa772"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-reviewed/claimed-qualified.stdout.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/reviewed/claimed-qualified.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-reviewed/comment-injection/manifest.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/reviewed/comment-injection/manifest.json",
+      "sha256": "981e12ce4d7a66d0dacbbadaf16894c54896411d869e7394a899da7678e46b9d"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-reviewed/comment-injection/profile.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/reviewed/comment-injection/profile.json",
+      "sha256": "8502e3088f5f7646651e68f49093f7b3eafd764fadfc24251dc6ffb5d411f229"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-reviewed/comment-injection.stderr.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/reviewed/comment-injection.stderr.txt",
+      "sha256": "768be005b8b67244658013994f4faae785a279890ccdc76396e2fba872bbb5b1"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-reviewed/comment-injection.stdout.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/reviewed/comment-injection.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-reviewed/compile-controls.stderr.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/reviewed/compile-controls.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-reviewed/compile-controls.stdout.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/reviewed/compile-controls.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-reviewed/compile-generated-v2.stderr.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/reviewed/compile-generated-v2.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-reviewed/compile-generated-v2.stdout.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/reviewed/compile-generated-v2.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-reviewed/downgrade-raw/manifest.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/reviewed/downgrade-raw/manifest.json",
+      "sha256": "981e12ce4d7a66d0dacbbadaf16894c54896411d869e7394a899da7678e46b9d"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-reviewed/downgrade-raw/profile.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/reviewed/downgrade-raw/profile.json",
+      "sha256": "a554859241d374e8d7d8eb361262e403b7f2a918a6885bfeb9595b4399396100"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-reviewed/downgrade-raw.stderr.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/reviewed/downgrade-raw.stderr.txt",
+      "sha256": "bbc06de95edf38fa6e107e4bcaf7a75572c15951df5bcfab3a35c2e175cd1b78"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-reviewed/downgrade-raw.stdout.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/reviewed/downgrade-raw.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-reviewed/duplicate-hook/manifest.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/reviewed/duplicate-hook/manifest.json",
+      "sha256": "981e12ce4d7a66d0dacbbadaf16894c54896411d869e7394a899da7678e46b9d"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-reviewed/duplicate-hook/profile.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/reviewed/duplicate-hook/profile.json",
+      "sha256": "f617ad5c4ccda1ebaf09e593169a970b4ac879d49f4614d295e6c8a7f4343cab"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-reviewed/duplicate-hook.stderr.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/reviewed/duplicate-hook.stderr.txt",
+      "sha256": "5beae2da9a163f420c09bf3bc7bd883423a7541e4fdcef4ac77839209096d216"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-reviewed/duplicate-hook.stdout.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/reviewed/duplicate-hook.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-reviewed/explicit-v1-reproduction/manifest.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/reviewed/explicit-v1-reproduction/manifest.json",
+      "sha256": "738f672dd699ffb1474a4e82047577d73949c7a7e9a67838450852b06782cd32"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-reviewed/explicit-v1-reproduction/profile.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/reviewed/explicit-v1-reproduction/profile.json",
+      "sha256": "183b72892b180e1cf1147195ca86942638a9a8bad75ddddd577b9a5a3db43ae1"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-reviewed/explicit-v1-reproduction.stderr.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/reviewed/explicit-v1-reproduction.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-reviewed/explicit-v1-reproduction.stdout.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/reviewed/explicit-v1-reproduction.stdout.txt",
+      "sha256": "b2d232a221042760038eb997ec64e6c1c76630c3f04f1c123fb65c3f42ab4ad7"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-reviewed/extra-class/manifest.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/reviewed/extra-class/manifest.json",
+      "sha256": "981e12ce4d7a66d0dacbbadaf16894c54896411d869e7394a899da7678e46b9d"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-reviewed/extra-class/profile.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/reviewed/extra-class/profile.json",
+      "sha256": "1f3d20fff0f4530e2718c1215c389e0b464114869795104b9b6e87b49f75c39c"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-reviewed/extra-class.stderr.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/reviewed/extra-class.stderr.txt",
+      "sha256": "67dc481d4adadd520e2039318e312bf0b7ed4777b2d9154730576a4ffc6d50eb"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-reviewed/extra-class.stdout.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/reviewed/extra-class.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-reviewed/extra-hook/manifest.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/reviewed/extra-hook/manifest.json",
+      "sha256": "981e12ce4d7a66d0dacbbadaf16894c54896411d869e7394a899da7678e46b9d"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-reviewed/extra-hook/profile.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/reviewed/extra-hook/profile.json",
+      "sha256": "e7353453c72884e18d7a89165aaf5a7b411e43f6d6e7ca700ff8a62163f8f7d1"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-reviewed/extra-hook.stderr.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/reviewed/extra-hook.stderr.txt",
+      "sha256": "5beae2da9a163f420c09bf3bc7bd883423a7541e4fdcef4ac77839209096d216"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-reviewed/extra-hook.stdout.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/reviewed/extra-hook.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-reviewed/fixtures/fixture-identity.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/reviewed/fixtures/fixture-identity.json",
+      "sha256": "b652b00d7c4f8c9cfde55d1a9f3eb0616e378edb2057b986c4edb4451166d06b"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-reviewed/generated-v2-smoke.stderr.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/reviewed/generated-v2-smoke.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-reviewed/generated-v2-smoke.stdout.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/reviewed/generated-v2-smoke.stdout.txt",
+      "sha256": "b698ad394957adb3f5e95429f85f8a7dd480da03ea5dffce43dbafdf15583cfb"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-reviewed/historical-raw/manifest.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/reviewed/historical-raw/manifest.json",
+      "sha256": "738f672dd699ffb1474a4e82047577d73949c7a7e9a67838450852b06782cd32"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-reviewed/historical-raw/profile.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/reviewed/historical-raw/profile.json",
+      "sha256": "ab328891ebf4354a03e10f927d950d122c91cc41d33473e43c71e2e5ce28748e"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-reviewed/historical-raw.stderr.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/reviewed/historical-raw.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-reviewed/historical-raw.stdout.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/reviewed/historical-raw.stdout.txt",
+      "sha256": "bf1e9493f4b061ae4ac86816226f2948aafb2d85e9372a969485ec95bfc543d3"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-reviewed/implicit-v1-rejected/manifest.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/reviewed/implicit-v1-rejected/manifest.json",
+      "sha256": "738f672dd699ffb1474a4e82047577d73949c7a7e9a67838450852b06782cd32"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-reviewed/implicit-v1-rejected/profile.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/reviewed/implicit-v1-rejected/profile.json",
+      "sha256": "183b72892b180e1cf1147195ca86942638a9a8bad75ddddd577b9a5a3db43ae1"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-reviewed/implicit-v1-rejected.stderr.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/reviewed/implicit-v1-rejected.stderr.txt",
+      "sha256": "ebf0b8070cba59723b15102e39378727baa85c501a76e16f132d1b404fe1977c"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-reviewed/implicit-v1-rejected.stdout.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/reviewed/implicit-v1-rejected.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-reviewed/legacy-manifest.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/reviewed/legacy-manifest.json",
+      "sha256": "738f672dd699ffb1474a4e82047577d73949c7a7e9a67838450852b06782cd32"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-reviewed/manifest.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/reviewed/manifest.json",
+      "sha256": "981e12ce4d7a66d0dacbbadaf16894c54896411d869e7394a899da7678e46b9d"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-reviewed/missing-anchors/manifest.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/reviewed/missing-anchors/manifest.json",
+      "sha256": "63d676bd2eecd59a705e8b5ced0edffc02f66421fb945678836d3bb4db5e5df2"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-reviewed/missing-anchors/profile.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/reviewed/missing-anchors/profile.json",
+      "sha256": "3b8e84448d46b82388f2a3997d8f5573239e7d7ca6457c8712fd0de9260ab7d0"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-reviewed/missing-anchors-manifest.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/reviewed/missing-anchors-manifest.json",
+      "sha256": "63d676bd2eecd59a705e8b5ced0edffc02f66421fb945678836d3bb4db5e5df2"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-reviewed/missing-anchors.stderr.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/reviewed/missing-anchors.stderr.txt",
+      "sha256": "bbf330b105b29c0b93bafd5b908d988eb9423c88525209cda88835793fec65f7"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-reviewed/missing-anchors.stdout.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/reviewed/missing-anchors.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-reviewed/missing-class/manifest.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/reviewed/missing-class/manifest.json",
+      "sha256": "981e12ce4d7a66d0dacbbadaf16894c54896411d869e7394a899da7678e46b9d"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-reviewed/missing-class/profile.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/reviewed/missing-class/profile.json",
+      "sha256": "428f0dad3887495264b806a50aaed84ccf1c444286ea2099188e8661b64a77b8"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-reviewed/missing-class.stderr.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/reviewed/missing-class.stderr.txt",
+      "sha256": "67dc481d4adadd520e2039318e312bf0b7ed4777b2d9154730576a4ffc6d50eb"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-reviewed/missing-class.stdout.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/reviewed/missing-class.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-reviewed/missing-hook/manifest.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/reviewed/missing-hook/manifest.json",
+      "sha256": "981e12ce4d7a66d0dacbbadaf16894c54896411d869e7394a899da7678e46b9d"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-reviewed/missing-hook/profile.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/reviewed/missing-hook/profile.json",
+      "sha256": "36bac2110e73b76ea7c1306523c87730e60f98bfff94639feab99160305a388b"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-reviewed/missing-hook.stderr.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/reviewed/missing-hook.stderr.txt",
+      "sha256": "5beae2da9a163f420c09bf3bc7bd883423a7541e4fdcef4ac77839209096d216"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-reviewed/missing-hook.stdout.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/reviewed/missing-hook.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-reviewed/missing-mode/manifest.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/reviewed/missing-mode/manifest.json",
+      "sha256": "981e12ce4d7a66d0dacbbadaf16894c54896411d869e7394a899da7678e46b9d"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-reviewed/missing-mode/profile.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/reviewed/missing-mode/profile.json",
+      "sha256": "00981d83b4b81f857f41ec20f63e80d646928afdc903366dd78ecc6696e57412"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-reviewed/missing-mode.stderr.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/reviewed/missing-mode.stderr.txt",
+      "sha256": "bbc06de95edf38fa6e107e4bcaf7a75572c15951df5bcfab3a35c2e175cd1b78"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-reviewed/missing-mode.stdout.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/reviewed/missing-mode.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-reviewed/missing-order/manifest.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/reviewed/missing-order/manifest.json",
+      "sha256": "981e12ce4d7a66d0dacbbadaf16894c54896411d869e7394a899da7678e46b9d"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-reviewed/missing-order/profile.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/reviewed/missing-order/profile.json",
+      "sha256": "06c871a048a984a45f67fba2ceed564a540c8ff123f667f81df368ba759ed64e"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-reviewed/missing-order.stderr.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/reviewed/missing-order.stderr.txt",
+      "sha256": "e40d549ad05f4ed32c7d95c3d68a62ebb2ba95a56119fd10c9efa1e65605ec11"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-reviewed/missing-order.stdout.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/reviewed/missing-order.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-reviewed/missing-raw/manifest.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/reviewed/missing-raw/manifest.json",
+      "sha256": "981e12ce4d7a66d0dacbbadaf16894c54896411d869e7394a899da7678e46b9d"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-reviewed/missing-raw/profile.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/reviewed/missing-raw/profile.json",
+      "sha256": "1ff9835e50d4ed07a9407a6766566a28d995cbfb60f5dbefb078f52a3efcb394"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-reviewed/missing-raw.stderr.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/reviewed/missing-raw.stderr.txt",
+      "sha256": "e40d549ad05f4ed32c7d95c3d68a62ebb2ba95a56119fd10c9efa1e65605ec11"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-reviewed/missing-raw.stdout.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/reviewed/missing-raw.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-reviewed/named-plan/manifest.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/reviewed/named-plan/manifest.json",
+      "sha256": "981e12ce4d7a66d0dacbbadaf16894c54896411d869e7394a899da7678e46b9d"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-reviewed/named-plan/profile.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/reviewed/named-plan/profile.json",
+      "sha256": "80ea06297f8c396633e80d09468018c4d7f61cd9913f516f07f27da64588f28e"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-reviewed/named-plan-compiles.stderr.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/reviewed/named-plan-compiles.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-reviewed/named-plan-compiles.stdout.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/reviewed/named-plan-compiles.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-reviewed/named-plan.stderr.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/reviewed/named-plan.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-reviewed/named-plan.stdout.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/reviewed/named-plan.stdout.txt",
+      "sha256": "e12e71c5434f9c253e2689bb7eb4567a46c17ef36700c9db0b092e10412d936a"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-reviewed/nested-v1/manifest.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/reviewed/nested-v1/manifest.json",
+      "sha256": "981e12ce4d7a66d0dacbbadaf16894c54896411d869e7394a899da7678e46b9d"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-reviewed/nested-v1/profile.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/reviewed/nested-v1/profile.json",
+      "sha256": "9a07e0bf85879635592d2be94a87b03aa9bfd5afe0a798deaab0d7ec9593d26f"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-reviewed/nested-v1.stderr.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/reviewed/nested-v1.stderr.txt",
+      "sha256": "e40d549ad05f4ed32c7d95c3d68a62ebb2ba95a56119fd10c9efa1e65605ec11"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-reviewed/nested-v1.stdout.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/reviewed/nested-v1.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-reviewed/not-observed/manifest.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/reviewed/not-observed/manifest.json",
+      "sha256": "981e12ce4d7a66d0dacbbadaf16894c54896411d869e7394a899da7678e46b9d"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-reviewed/not-observed/profile.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/reviewed/not-observed/profile.json",
+      "sha256": "c9b8c5db15adce089a586b597db068a5cb0140a4529476828c2b811172283b80"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-reviewed/not-observed.stderr.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/reviewed/not-observed.stderr.txt",
+      "sha256": "83c6835dd781c6efcf2fdf6d477a1f20939c9f7e60e2147ddd4226100144a5f7"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-reviewed/not-observed.stdout.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/reviewed/not-observed.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-reviewed/old-hashes/manifest.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/reviewed/old-hashes/manifest.json",
+      "sha256": "981e12ce4d7a66d0dacbbadaf16894c54896411d869e7394a899da7678e46b9d"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-reviewed/old-hashes/profile.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/reviewed/old-hashes/profile.json",
+      "sha256": "0f20a7d15447cadccbe6566cc58fa45046886f59b48258d486bf04a75e600a87"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-reviewed/old-hashes.stderr.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/reviewed/old-hashes.stderr.txt",
+      "sha256": "b9c3bc04e6668d8358cc78029ffc69e8f368a25ef43600683974aeafbb7aa772"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-reviewed/old-hashes.stdout.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/reviewed/old-hashes.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-reviewed/receipt.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/reviewed/receipt.json",
+      "sha256": "52e067388207e64e98ebd425049f0954403418c1f470265bfc58b82471cc9eab"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-reviewed/unknown-fingerprint/manifest.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/reviewed/unknown-fingerprint/manifest.json",
+      "sha256": "b105938f4c6119cae815d236d577397c25f4683a8777b0d93df0e5a26769b8f2"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-reviewed/unknown-fingerprint/profile.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/reviewed/unknown-fingerprint/profile.json",
+      "sha256": "f60a955939751ad3be9332fbba789383fe44293ca56d2c71fb026ac995a20e0b"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-reviewed/unknown-fingerprint-manifest.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/reviewed/unknown-fingerprint-manifest.json",
+      "sha256": "b105938f4c6119cae815d236d577397c25f4683a8777b0d93df0e5a26769b8f2"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-reviewed/unknown-fingerprint.stderr.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/reviewed/unknown-fingerprint.stderr.txt",
+      "sha256": "3b8b12a932a89742d940dafbb31d263a26d7520a46017ae98152ae9271923f4e"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-reviewed/unknown-fingerprint.stdout.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/reviewed/unknown-fingerprint.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-reviewed/unknown-mode/manifest.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/reviewed/unknown-mode/manifest.json",
+      "sha256": "981e12ce4d7a66d0dacbbadaf16894c54896411d869e7394a899da7678e46b9d"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-reviewed/unknown-mode/profile.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/reviewed/unknown-mode/profile.json",
+      "sha256": "a246c1297192f49ec92a8d9952c90da8cd9574f42c24082f6760929b00751cc8"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-reviewed/unknown-mode.stderr.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/reviewed/unknown-mode.stderr.txt",
+      "sha256": "bbc06de95edf38fa6e107e4bcaf7a75572c15951df5bcfab3a35c2e175cd1b78"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-reviewed/unknown-mode.stdout.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/reviewed/unknown-mode.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-reviewed/valid-v2/manifest.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/reviewed/valid-v2/manifest.json",
+      "sha256": "981e12ce4d7a66d0dacbbadaf16894c54896411d869e7394a899da7678e46b9d"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-reviewed/valid-v2/profile.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/reviewed/valid-v2/profile.json",
+      "sha256": "80ea06297f8c396633e80d09468018c4d7f61cd9913f516f07f27da64588f28e"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-reviewed/valid-v2.stderr.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/reviewed/valid-v2.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-reviewed/valid-v2.stdout.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/reviewed/valid-v2.stdout.txt",
+      "sha256": "50b14d11860c6ce5f558c4acf110ed6a4c5f8b27c68b7bf78a5c6954b0771f8a"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-reviewed/wrong-manifest/manifest.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/reviewed/wrong-manifest/manifest.json",
+      "sha256": "981e12ce4d7a66d0dacbbadaf16894c54896411d869e7394a899da7678e46b9d"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-reviewed/wrong-manifest/profile.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/reviewed/wrong-manifest/profile.json",
+      "sha256": "a709cc12fc39f507b64dab7603d9d221e4e201e43dd94044ae46076d11b0fd7c"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-reviewed/wrong-manifest.stderr.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/reviewed/wrong-manifest.stderr.txt",
+      "sha256": "36d87ccc55d715b1e23af42565b621d890c139e1fddf5bf59197cb6fa3963a76"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-reviewed/wrong-manifest.stdout.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/reviewed/wrong-manifest.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-reviewed/wrong-name/manifest.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/reviewed/wrong-name/manifest.json",
+      "sha256": "981e12ce4d7a66d0dacbbadaf16894c54896411d869e7394a899da7678e46b9d"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-reviewed/wrong-name/profile.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/reviewed/wrong-name/profile.json",
+      "sha256": "cef791d0cfaa37aa8e02f017ab7d6cddaa5a4ae606bd94ae53604e6f93927249"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-reviewed/wrong-name.stderr.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/reviewed/wrong-name.stderr.txt",
+      "sha256": "e40d549ad05f4ed32c7d95c3d68a62ebb2ba95a56119fd10c9efa1e65605ec11"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-v2-reviewed/wrong-name.stdout.txt",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/reviewed/wrong-name.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-canonical-regressions/fixtures/annotation-default.canonical.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/canonical/fixtures/annotation-default.canonical.json",
+      "sha256": "366f9f01b4678a3034f12ec4c6f38a593440157e10123c40d79b10d591d988af"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-canonical-regressions/fixtures/annotation-default.receipt.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/canonical/fixtures/annotation-default.receipt.json",
+      "sha256": "954f26f5bfc05ef2558323070d058278e5312430d250fb1fea39712eaaa88057"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-canonical-regressions/fixtures/baseline.canonical.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/canonical/fixtures/baseline.canonical.json",
+      "sha256": "13af15269c36e208171f2e3152a1f93cc711ef9ef37d730af5dff3ec88051933"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-canonical-regressions/fixtures/baseline.receipt.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/canonical/fixtures/baseline.receipt.json",
+      "sha256": "6e4c42bfaa4fad4a031930794b8bdb985191921f537764d25ab649d432ae805b"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-canonical-regressions/fixtures/bipush.canonical.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/canonical/fixtures/bipush.canonical.json",
+      "sha256": "42f84261d043f5b77006b318e9087fbd47f4ffbceca8597200e6d5a213429cd0"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-canonical-regressions/fixtures/bipush.receipt.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/canonical/fixtures/bipush.receipt.json",
+      "sha256": "078f9a40618a6a8abd82959149e7cd11b622b8331c51d2830eb61b73c5bcd9f6"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-canonical-regressions/fixtures/bootstrap-argument.canonical.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/canonical/fixtures/bootstrap-argument.canonical.json",
+      "sha256": "6b7ee295ee868e0ea24ffdf7cf9ec8c30fc56f7735f976246ce2ca3e6fab5f52"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-canonical-regressions/fixtures/bootstrap-argument.receipt.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/canonical/fixtures/bootstrap-argument.receipt.json",
+      "sha256": "89c9e35b88b5a93d09f90fc60cedcf2c11ff42a14584b9dec8839999894b5f6d"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-canonical-regressions/fixtures/bootstrap-method.canonical.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/canonical/fixtures/bootstrap-method.canonical.json",
+      "sha256": "d3e2f3e5adf03b87dbbea5d46819dc93d6dee0b2f55688f300849b4b7f69e79b"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-canonical-regressions/fixtures/bootstrap-method.receipt.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/canonical/fixtures/bootstrap-method.receipt.json",
+      "sha256": "1e9e416bab0cb31def6a664cbbfe9984f78f90647e042644f52c32f6f30f6e05"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-canonical-regressions/fixtures/branch-target.canonical.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/canonical/fixtures/branch-target.canonical.json",
+      "sha256": "808de0efb6d032484358138ea8027283363f410e22a59eb9eac99fd2f8a7f0f5"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-canonical-regressions/fixtures/branch-target.receipt.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/canonical/fixtures/branch-target.receipt.json",
+      "sha256": "1eaba1e06d0c41164d5f349ce3a14089c24c8403c6477b58be42448961eeedcc"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-canonical-regressions/fixtures/catch-type.canonical.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/canonical/fixtures/catch-type.canonical.json",
+      "sha256": "727d70b21b9eddaa5ec3877bef07fac1ff7f7f41cdc09f1703c74a35a335c003"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-canonical-regressions/fixtures/catch-type.receipt.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/canonical/fixtures/catch-type.receipt.json",
+      "sha256": "0ac38dd0442c79a5045538ca7af4e8ee156a42c6a96fff9e5a9e11ce49ecfe1f"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-canonical-regressions/fixtures/class-annotation.canonical.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/canonical/fixtures/class-annotation.canonical.json",
+      "sha256": "b24a5ec0b8e4f7d66965e0b3744b84640255d6bc7349de38c6dd607098bad042"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-canonical-regressions/fixtures/class-annotation.receipt.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/canonical/fixtures/class-annotation.receipt.json",
+      "sha256": "d46224c5fad8fe788cc9e6f9a9d2ce69610f5319e13c01e6d125b8bec2c18af6"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-canonical-regressions/fixtures/class-signature.canonical.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/canonical/fixtures/class-signature.canonical.json",
+      "sha256": "c30ee47393c4bb9709541accd6393d211eae33efda0af7be4653d6b54f6b7754"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-canonical-regressions/fixtures/class-signature.receipt.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/canonical/fixtures/class-signature.receipt.json",
+      "sha256": "87bd0df7e88808f5e7bc1de42b25bffc9011eacb800acbc27469930f9813d140"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-canonical-regressions/fixtures/constant-pool-reorder.canonical.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/canonical/fixtures/constant-pool-reorder.canonical.json",
+      "sha256": "13af15269c36e208171f2e3152a1f93cc711ef9ef37d730af5dff3ec88051933"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-canonical-regressions/fixtures/constant-pool-reorder.receipt.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/canonical/fixtures/constant-pool-reorder.receipt.json",
+      "sha256": "c75a7677fbb253b52d08d1e41401ba938df458696a20a576d6a59c67797980ce"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-canonical-regressions/fixtures/declared-exception.canonical.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/canonical/fixtures/declared-exception.canonical.json",
+      "sha256": "7767b4bf8914b055be2deb4894f83ec6725b3fee68604d8f0a624cf188e40bd6"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-canonical-regressions/fixtures/declared-exception.receipt.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/canonical/fixtures/declared-exception.receipt.json",
+      "sha256": "814dc05c1850c343276cf917f3aaabde1c037a07c2d55206fe7c64f7998761f6"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-canonical-regressions/fixtures/double-nan-payload.canonical.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/canonical/fixtures/double-nan-payload.canonical.json",
+      "sha256": "fb34288633afc239a50420b39186e3474b0326d9e0c6f8d252737993efec00d8"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-canonical-regressions/fixtures/double-nan-payload.receipt.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/canonical/fixtures/double-nan-payload.receipt.json",
+      "sha256": "c5bb6bcc14dfb7dcca80887f5c95e18bd80b666a6778c2d5c00cf6794c48e7ab"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-canonical-regressions/fixtures/empty-invisible-parameter-annotations.canonical.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/canonical/fixtures/empty-invisible-parameter-annotations.canonical.json",
+      "sha256": "bfdeccfec37b905e5414c8727d722a933169a0f88aeea7bf5a4a58004e82e6cf"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-canonical-regressions/fixtures/empty-invisible-parameter-annotations.receipt.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/canonical/fixtures/empty-invisible-parameter-annotations.receipt.json",
+      "sha256": "86b1e78f2a45eae3841c3a659a4245b7b18d267d11c0abbc4bf94c82ac79232c"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-canonical-regressions/fixtures/empty-method-parameters.canonical.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/canonical/fixtures/empty-method-parameters.canonical.json",
+      "sha256": "f03945ff638482957a0661fab65b4cb59213f2bf5fec9410ee2eefd4e2238c63"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-canonical-regressions/fixtures/empty-method-parameters.receipt.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/canonical/fixtures/empty-method-parameters.receipt.json",
+      "sha256": "e085336b772451f22b5097ee11412a261b08dfa716ee1a2c883815e445fa7986"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-canonical-regressions/fixtures/empty-visible-parameter-annotations.canonical.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/canonical/fixtures/empty-visible-parameter-annotations.canonical.json",
+      "sha256": "d06ba2fdbc866c98d16f1584e4c67672001a5dabfb9a3562cbddf759ca27d29d"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-canonical-regressions/fixtures/empty-visible-parameter-annotations.receipt.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/canonical/fixtures/empty-visible-parameter-annotations.receipt.json",
+      "sha256": "aa67ebe1f0744a63f990adfe0d28883289e9833bded113024f879c2169b25b45"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-canonical-regressions/fixtures/field-annotation.canonical.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/canonical/fixtures/field-annotation.canonical.json",
+      "sha256": "979251599e28f334698dc9dd4268f66bdebe95a18016612daa484912422b650a"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-canonical-regressions/fixtures/field-annotation.receipt.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/canonical/fixtures/field-annotation.receipt.json",
+      "sha256": "500f5147187743698b1b4a849bee1d11a357da49f17f4c89fc03879e615d924a"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-canonical-regressions/fixtures/field-binding-swap.canonical.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/canonical/fixtures/field-binding-swap.canonical.json",
+      "sha256": "350b3780725d5549148c75fcc027b1d252491581bea2c4fc9d20cf556bcf55da"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-canonical-regressions/fixtures/field-binding-swap.receipt.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/canonical/fixtures/field-binding-swap.receipt.json",
+      "sha256": "852a01ac33e178722940067e2f01b99cca81aacc37b70e78248429e334f6212a"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-canonical-regressions/fixtures/field-descriptor.canonical.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/canonical/fixtures/field-descriptor.canonical.json",
+      "sha256": "6a3da1d9e87d53e7c5f7f6e200e05a3f92849d56fbadc4a83d677b93b0bc2701"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-canonical-regressions/fixtures/field-descriptor.receipt.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/canonical/fixtures/field-descriptor.receipt.json",
+      "sha256": "3ae4969b021268011b317f2c56173fbed6bcf2f56301392ddfd5af4addf7e46a"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-canonical-regressions/fixtures/field-owner.canonical.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/canonical/fixtures/field-owner.canonical.json",
+      "sha256": "50dc76e68ad200f6aa6f1460c4b9557ac43a31836ef597af1ce47c61a5633c6f"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-canonical-regressions/fixtures/field-owner.receipt.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/canonical/fixtures/field-owner.receipt.json",
+      "sha256": "ee9a171e9c4e87d55fd942e6d356b3cba6cd9567cfa6d15076be547d40c59e0e"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-canonical-regressions/fixtures/field-signature.canonical.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/canonical/fixtures/field-signature.canonical.json",
+      "sha256": "f2befde52a261e04d8c0ad9bfe328689e6ca0c5f37f2111cb9d7c0a9ef598143"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-canonical-regressions/fixtures/field-signature.receipt.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/canonical/fixtures/field-signature.receipt.json",
+      "sha256": "5cb10f38f5e4d7e1b82dde6c7f5bf784b213f83cae5bbc5852968d347a427e78"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-canonical-regressions/fixtures/field-volatile.canonical.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/canonical/fixtures/field-volatile.canonical.json",
+      "sha256": "8c1ff7526bb27a7263249a6384189ff8f6ab12d55834772c61820f2a4df7a7de"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-canonical-regressions/fixtures/field-volatile.receipt.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/canonical/fixtures/field-volatile.receipt.json",
+      "sha256": "845a039a7dff2af2cac924779d4ac1e61b518ade639d19b51e1961c403d7e0b4"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-canonical-regressions/fixtures/float-nan-payload.canonical.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/canonical/fixtures/float-nan-payload.canonical.json",
+      "sha256": "daf7d36a36d8dcf11a9d7c9f20f579e1d6344e469418060db6a9c728969729f7"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-canonical-regressions/fixtures/float-nan-payload.receipt.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/canonical/fixtures/float-nan-payload.receipt.json",
+      "sha256": "0555a9a55197d7554c4f2623f0f92b1fb43e7616f57fa7fbcfcabfae01be7f4e"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-canonical-regressions/fixtures/frame-verification-type.canonical.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/canonical/fixtures/frame-verification-type.canonical.json",
+      "sha256": "8b6e2b8fcfc015aed582f2e9225093cadcd2eae9e01dff1ef71317e2c82d5289"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-canonical-regressions/fixtures/frame-verification-type.receipt.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/canonical/fixtures/frame-verification-type.receipt.json",
+      "sha256": "f07c4646229ad641c7e6045825ef62dec070c44e9065f7eb462e9845a3098773"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-canonical-regressions/fixtures/handler-target.canonical.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/canonical/fixtures/handler-target.canonical.json",
+      "sha256": "8276e8d4edb37e1b8953bbc262f1e7d7442dc806a2d7d2dad607bbbe21b945b8"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-canonical-regressions/fixtures/handler-target.receipt.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/canonical/fixtures/handler-target.receipt.json",
+      "sha256": "78a0a442dc7f23ceabb3b255c0246b34e8ca768f65f63cd02d9254db6c3f88ed"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-canonical-regressions/fixtures/iinc-increment.canonical.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/canonical/fixtures/iinc-increment.canonical.json",
+      "sha256": "bc7f387feb6e33a7f0d814c06cfa41fb3abdb3145ec667747eabaa5852c1ef18"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-canonical-regressions/fixtures/iinc-increment.receipt.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/canonical/fixtures/iinc-increment.receipt.json",
+      "sha256": "e22fd12adcfb158cc5c80b839ede1d0a2d9b1cac8c4a14e08dee70142de748c1"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-canonical-regressions/fixtures/iinc-index.canonical.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/canonical/fixtures/iinc-index.canonical.json",
+      "sha256": "a7d8f30590671e3844e4ab6792c50e229205fa90f92fba896faaddc8aa1352d4"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-canonical-regressions/fixtures/iinc-index.receipt.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/canonical/fixtures/iinc-index.receipt.json",
+      "sha256": "032a2be9d9c7ab888d903d9f1ebb1804a3cd37d1c0b2dc966b8b36ed73d4be6e"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-canonical-regressions/fixtures/inner-class-metadata.canonical.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/canonical/fixtures/inner-class-metadata.canonical.json",
+      "sha256": "92715d1247306919ab82fa48fcb0a9b5d75f28d09ee184c7b7b042f5e8fa3370"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-canonical-regressions/fixtures/inner-class-metadata.receipt.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/canonical/fixtures/inner-class-metadata.receipt.json",
+      "sha256": "de20f3a14059b2a862ed0f182fdfd9b2959eff492ebdf5af78a4ef781c2aa450"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-canonical-regressions/fixtures/instruction-type-annotation.canonical.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/canonical/fixtures/instruction-type-annotation.canonical.json",
+      "sha256": "4cc0d445b0617cd9c85193cbf3c8fdf66b138c81d59b4d850adc6853ea83fa68"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-canonical-regressions/fixtures/instruction-type-annotation.receipt.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/canonical/fixtures/instruction-type-annotation.receipt.json",
+      "sha256": "4b315d3296f231fae92f9354ecc72a2d837b409ab95b48707c191354d3ad36b0"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-canonical-regressions/fixtures/interface.canonical.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/canonical/fixtures/interface.canonical.json",
+      "sha256": "aae49f9822b1be14a04453c0e1dbff06367d3a672cf323d5381878250ed7fd23"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-canonical-regressions/fixtures/interface.receipt.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/canonical/fixtures/interface.receipt.json",
+      "sha256": "5d6bee43f1acb7d8c8f7201842b3092e5463178b1533608583c8a8a3b5b07360"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-canonical-regressions/fixtures/invocation-descriptor.canonical.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/canonical/fixtures/invocation-descriptor.canonical.json",
+      "sha256": "be77020286fca9180b32f4c385c01fc2e76bd45e4b00e988be8b6b8f30caf887"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-canonical-regressions/fixtures/invocation-descriptor.receipt.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/canonical/fixtures/invocation-descriptor.receipt.json",
+      "sha256": "45a5287ea8ed88601a6f23a4686b0076f7cc43dc28493471efab8da02f13eefe"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-canonical-regressions/fixtures/invocation-interface-bit.canonical.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/canonical/fixtures/invocation-interface-bit.canonical.json",
+      "sha256": "91249e04d206e13adc2c75236347c88c685e7584f369413144da33f064eb0282"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-canonical-regressions/fixtures/invocation-interface-bit.receipt.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/canonical/fixtures/invocation-interface-bit.receipt.json",
+      "sha256": "02de5a8b11d31e4e9249a9010970fceed20df7446c78f3605ea6d2b0f5678953"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-canonical-regressions/fixtures/invocation-owner.canonical.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/canonical/fixtures/invocation-owner.canonical.json",
+      "sha256": "37086a6bf9c937dc04dbfbfccc548d20539f13740901c19d0c6c93855c4e3318"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-canonical-regressions/fixtures/invocation-owner.receipt.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/canonical/fixtures/invocation-owner.receipt.json",
+      "sha256": "85a3193316c6607f253f03353fb1ab220a9c13fc7d6fcd53b5c98e382ef39976"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-canonical-regressions/fixtures/invokedynamic-descriptor.canonical.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/canonical/fixtures/invokedynamic-descriptor.canonical.json",
+      "sha256": "0ba5ef6875fd2f1b2359f7d7ea9b1f586a11a163075dbaa69a5d7d85145538c4"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-canonical-regressions/fixtures/invokedynamic-descriptor.receipt.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/canonical/fixtures/invokedynamic-descriptor.receipt.json",
+      "sha256": "ea01730e4d626effde50016b2023c5165e2b5f16dece8c56243c6a0d6214e347"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-canonical-regressions/fixtures/label-allocation-order.canonical.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/canonical/fixtures/label-allocation-order.canonical.json",
+      "sha256": "13af15269c36e208171f2e3152a1f93cc711ef9ef37d730af5dff3ec88051933"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-canonical-regressions/fixtures/label-allocation-order.receipt.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/canonical/fixtures/label-allocation-order.receipt.json",
+      "sha256": "6e4c42bfaa4fad4a031930794b8bdb985191921f537764d25ab649d432ae805b"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-canonical-regressions/fixtures/ldc-binding-swap.canonical.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/canonical/fixtures/ldc-binding-swap.canonical.json",
+      "sha256": "7f24844d15d3b8a00c7304dc7e2e220425a6c22c3fa0eb674178eea7bf311a32"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-canonical-regressions/fixtures/ldc-binding-swap.receipt.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/canonical/fixtures/ldc-binding-swap.receipt.json",
+      "sha256": "919396600c1d58319328096020ea7e6bc87b2e4c361a9351d0ea7582007baf6e"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-canonical-regressions/fixtures/ldc.canonical.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/canonical/fixtures/ldc.canonical.json",
+      "sha256": "0379e23339c820d4fa708fc2342e5111bc0517086c49fc906600b1e0b3dfd74b"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-canonical-regressions/fixtures/ldc.receipt.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/canonical/fixtures/ldc.receipt.json",
+      "sha256": "8364dd32ba30f92e1830a8f380fdc5d2817aa24126eada5f8e825a202d984937"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-canonical-regressions/fixtures/line-number.canonical.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/canonical/fixtures/line-number.canonical.json",
+      "sha256": "835f302ef5d420425b22aeade72cabb92fcb0832410eba29637c58553f756636"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-canonical-regressions/fixtures/line-number.receipt.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/canonical/fixtures/line-number.receipt.json",
+      "sha256": "932224bbb967a8cba2930603d1a0f8dfb29a070e46f4a620629b67d5f9ac5902"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-canonical-regressions/fixtures/local-index.canonical.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/canonical/fixtures/local-index.canonical.json",
+      "sha256": "5c81ba3822bc95361fc38107a5bf9497191312c1e94a30b27e820a72fabf7d0a"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-canonical-regressions/fixtures/local-index.receipt.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/canonical/fixtures/local-index.receipt.json",
+      "sha256": "3fb69af1f40a711893a8a746cc5941e6f69cd3cee2b86de54887a00caec4cd93"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-canonical-regressions/fixtures/local-type-annotation.canonical.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/canonical/fixtures/local-type-annotation.canonical.json",
+      "sha256": "6054a4ad5fb181a5012149b6c7952890ab94a3fb45a63e2decc4853fb2524fa6"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-canonical-regressions/fixtures/local-type-annotation.receipt.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/canonical/fixtures/local-type-annotation.receipt.json",
+      "sha256": "d0d8b41fbdc082fc537c27f0cd9459c2a0a90e84548dffe44eb8676d6eab3463"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-canonical-regressions/fixtures/local-variable-metadata.canonical.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/canonical/fixtures/local-variable-metadata.canonical.json",
+      "sha256": "e6015bc6cd93ec7572d34b89f5d9497537cd7621ebd2f1f7434feb8402068137"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-canonical-regressions/fixtures/local-variable-metadata.receipt.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/canonical/fixtures/local-variable-metadata.receipt.json",
+      "sha256": "41a20c3cd807668688f2aa78cea1deb21d0a97ef104b4bdb6586bcbab2533b2f"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-canonical-regressions/fixtures/long-constant.canonical.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/canonical/fixtures/long-constant.canonical.json",
+      "sha256": "63be3d8d348dbea6c1086b9e37e59436aad67d0cad3f8d9cd2d9a506ba3aea71"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-canonical-regressions/fixtures/long-constant.receipt.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/canonical/fixtures/long-constant.receipt.json",
+      "sha256": "4823fcb4e760bd59e3b16f79a01660b12733c8496dd5d4c43cd22ce1e80eefa7"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-canonical-regressions/fixtures/lookupswitch-key.canonical.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/canonical/fixtures/lookupswitch-key.canonical.json",
+      "sha256": "651f38b291dd4a43ac6e3c6972714f20263de06d7b9c9889792c60c1a95c9440"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-canonical-regressions/fixtures/lookupswitch-key.receipt.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/canonical/fixtures/lookupswitch-key.receipt.json",
+      "sha256": "59d15e4d54489233143321023ffd80839462352e56c46d67506d1940cb6e3aa4"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-canonical-regressions/fixtures/lookupswitch-target.canonical.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/canonical/fixtures/lookupswitch-target.canonical.json",
+      "sha256": "eff69d8600096a03a6bad67ef1626953422e763bf416572aa079e576c6459920"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-canonical-regressions/fixtures/lookupswitch-target.receipt.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/canonical/fixtures/lookupswitch-target.receipt.json",
+      "sha256": "5393be93624753b649c30eb8115c0c38a7238f636de4e686d6f58e92c5d464d9"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-canonical-regressions/fixtures/max-locals.canonical.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/canonical/fixtures/max-locals.canonical.json",
+      "sha256": "a1a817532f5c2c556f71b17545047172723d9cc2e6ada04bbe86739282cf1170"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-canonical-regressions/fixtures/max-locals.receipt.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/canonical/fixtures/max-locals.receipt.json",
+      "sha256": "6293702720f970208012cc6d189e1bd7bf88d41b71329b15f4ca615346847c16"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-canonical-regressions/fixtures/max-stack.canonical.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/canonical/fixtures/max-stack.canonical.json",
+      "sha256": "1854f63c6192d67a8e38689ec102e7d42c7d505860c9a2a02adafc9d9e616c94"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-canonical-regressions/fixtures/max-stack.receipt.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/canonical/fixtures/max-stack.receipt.json",
+      "sha256": "9b277085780e82f47a6e93fb874d21f3fdd2e0d2822303f8dd53d87eb79a4ee1"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-canonical-regressions/fixtures/member-emission-order.canonical.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/canonical/fixtures/member-emission-order.canonical.json",
+      "sha256": "13af15269c36e208171f2e3152a1f93cc711ef9ef37d730af5dff3ec88051933"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-canonical-regressions/fixtures/member-emission-order.receipt.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/canonical/fixtures/member-emission-order.receipt.json",
+      "sha256": "96f3fd8f3e78d6991537cc9040841702c30900390c8c05a9d81f3951f6389624"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-canonical-regressions/fixtures/method-access.canonical.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/canonical/fixtures/method-access.canonical.json",
+      "sha256": "0baa731b667e32ff0424d43e1a7a5f3b75892efecc8cc2e4b39d45e71b11e81d"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-canonical-regressions/fixtures/method-access.receipt.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/canonical/fixtures/method-access.receipt.json",
+      "sha256": "2793d18df0d4a83298f7272bb7a65e44b4fcf369a550a31d038ea9de0ce3009a"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-canonical-regressions/fixtures/method-annotation.canonical.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/canonical/fixtures/method-annotation.canonical.json",
+      "sha256": "7b74cad10d65ce334c2b2744f2974ec74bbf55f0f87cf6dfb0a438f05d3d9496"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-canonical-regressions/fixtures/method-annotation.receipt.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/canonical/fixtures/method-annotation.receipt.json",
+      "sha256": "692627e18c905b56a3457232cbf852dc628afb25a3fb3f8cf0cf62fd67931219"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-canonical-regressions/fixtures/method-binding-swap.canonical.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/canonical/fixtures/method-binding-swap.canonical.json",
+      "sha256": "68bf2dad5245ec241ba2573746677ccbbbeb8ba5616cc5c959ecc2857d7027fc"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-canonical-regressions/fixtures/method-binding-swap.receipt.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/canonical/fixtures/method-binding-swap.receipt.json",
+      "sha256": "993d68e5d332690360d713821a5d05d62defb87af4323fa82ccb696ce94d417f"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-canonical-regressions/fixtures/method-signature.canonical.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/canonical/fixtures/method-signature.canonical.json",
+      "sha256": "3402e4510fb6deaed06cc7c141756bc3ab85c19039ddfd93276d86c57bf31e00"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-canonical-regressions/fixtures/method-signature.receipt.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/canonical/fixtures/method-signature.receipt.json",
+      "sha256": "e33393ee614283049125774dbdf50262fa020ae1568f498c1be961744fd72009"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-canonical-regressions/fixtures/method-synchronized.canonical.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/canonical/fixtures/method-synchronized.canonical.json",
+      "sha256": "4e8df5984e1e400d574af976eea27c516a1ee6ba2e2a377383d9854acaca7b7c"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-canonical-regressions/fixtures/method-synchronized.receipt.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/canonical/fixtures/method-synchronized.receipt.json",
+      "sha256": "bf1aad2f04177e9c90692ac2b3ec2a13577ccc8453b276389006838d9dd43526"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-canonical-regressions/fixtures/multiarray-descriptor.canonical.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/canonical/fixtures/multiarray-descriptor.canonical.json",
+      "sha256": "494c8219002c2a89197343af1b39f61b5bca9b94a947e8a1fe1203fe26ee1b67"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-canonical-regressions/fixtures/multiarray-descriptor.receipt.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/canonical/fixtures/multiarray-descriptor.receipt.json",
+      "sha256": "59f7e14d6dcf013a25155162c7225adbfb19de247dcadba8721b99e24bb3ebdd"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-canonical-regressions/fixtures/multiarray-dimensions.canonical.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/canonical/fixtures/multiarray-dimensions.canonical.json",
+      "sha256": "1471d4abb4305a43c30d14fa4844e1528d48268dd22a90ac388e4bbd2f8aebc6"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-canonical-regressions/fixtures/multiarray-dimensions.receipt.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/canonical/fixtures/multiarray-dimensions.receipt.json",
+      "sha256": "a09ceca513a8a2a3c7c847078a0162e2a2d2f0e3354dced39257eb1356872364"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-canonical-regressions/fixtures/narrow-offset-baseline.canonical.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/canonical/fixtures/narrow-offset-baseline.canonical.json",
+      "sha256": "46155267fd73fa720844955e5f2101dd839fbd5b3ef20fa17494554d143c9c52"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-canonical-regressions/fixtures/narrow-offset-baseline.receipt.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/canonical/fixtures/narrow-offset-baseline.receipt.json",
+      "sha256": "7e907d653e44b5fb27cff59178da101afb36a477ee051af2b409ee2a8654ebac"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-canonical-regressions/fixtures/outer-method.canonical.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/canonical/fixtures/outer-method.canonical.json",
+      "sha256": "2da9df35bbcd59df320e229b5c31e964206fdb0854ad0954098ff1b376699c2b"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-canonical-regressions/fixtures/outer-method.receipt.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/canonical/fixtures/outer-method.receipt.json",
+      "sha256": "03d1fea3c286dec225114ca8d347119d5c510a34eceb8b4a25671b2217b1b8f8"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-canonical-regressions/fixtures/parameter-access.canonical.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/canonical/fixtures/parameter-access.canonical.json",
+      "sha256": "d4be30fd99991eb38768162fdeb1d971737f881d8cc212d60d579b5255b0b0ef"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-canonical-regressions/fixtures/parameter-access.receipt.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/canonical/fixtures/parameter-access.receipt.json",
+      "sha256": "03f2ccdffe8971d91d842f11d020d107776eebc8e30bbd785b1cf16376e7baf9"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-canonical-regressions/fixtures/parameter-annotation.canonical.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/canonical/fixtures/parameter-annotation.canonical.json",
+      "sha256": "439924471bf3a4f1324e13691e1fb3a8456b7e46a9b6b77758b3f86861628360"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-canonical-regressions/fixtures/parameter-annotation.receipt.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/canonical/fixtures/parameter-annotation.receipt.json",
+      "sha256": "f441d04c031ece25ab758ce58b7d802f9c9c36ea76ef85ea240a42692678e95d"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-canonical-regressions/fixtures/parameter-count-baseline.canonical.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/canonical/fixtures/parameter-count-baseline.canonical.json",
+      "sha256": "78fdfc74a24734c0a32eea3f03cf14079e969e503425900e88fdd30d96ad6f24"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-canonical-regressions/fixtures/parameter-count-baseline.receipt.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/canonical/fixtures/parameter-count-baseline.receipt.json",
+      "sha256": "fcefb92b05652b1562ab019a99787f5af0b8d67424e31a72a73a5201d06d29bb"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-canonical-regressions/fixtures/parameter-name.canonical.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/canonical/fixtures/parameter-name.canonical.json",
+      "sha256": "42113f087c807f53af1d4ba0d2957feb8ef7daa3d842ba385b7a7deb16f4d5ee"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-canonical-regressions/fixtures/parameter-name.receipt.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/canonical/fixtures/parameter-name.receipt.json",
+      "sha256": "fe6e71e4d0ae8cfda95a627eba6679fc11a1e2a76bc398a6e3adfbfcb9ab8d2f"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-canonical-regressions/fixtures/reflection-member.canonical.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/canonical/fixtures/reflection-member.canonical.json",
+      "sha256": "855e6c814f9cb4a070a24eecbc647b3f88f00a3da12da616c827b76be01a89bc"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-canonical-regressions/fixtures/reflection-member.receipt.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/canonical/fixtures/reflection-member.receipt.json",
+      "sha256": "e40a2f14b1280c6ebae8569d6f9b44604ae1509bc25910cd81ca99353d266df7"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-canonical-regressions/fixtures/sipush.canonical.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/canonical/fixtures/sipush.canonical.json",
+      "sha256": "add65838544bf05ed6e02cdaaf840ffb0a33b073e24fed7fada221d37401115e"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-canonical-regressions/fixtures/sipush.receipt.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/canonical/fixtures/sipush.receipt.json",
+      "sha256": "69eb07add262e22e2fb191b33be357e409a92798bb904459b0c5c0f69345ed4f"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-canonical-regressions/fixtures/source-debug.canonical.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/canonical/fixtures/source-debug.canonical.json",
+      "sha256": "9f359f6be203d92db9046bae6812942f6cb884641fd91f93628dcca7487eccd8"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-canonical-regressions/fixtures/source-debug.receipt.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/canonical/fixtures/source-debug.receipt.json",
+      "sha256": "8534247a23b1be528dbab6109a51b8418877802e676337cf209ccb44ea4ad618"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-canonical-regressions/fixtures/source-file.canonical.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/canonical/fixtures/source-file.canonical.json",
+      "sha256": "640bad8f7e2deca3a0b602e194fa40cf0e81957e71e93e7f067d232d2306d404"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-canonical-regressions/fixtures/source-file.receipt.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/canonical/fixtures/source-file.receipt.json",
+      "sha256": "2932652e9cb87518459f0b29e715679a535dd37d4d6ed8d41752e2b33cc9969c"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-canonical-regressions/fixtures/superclass.canonical.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/canonical/fixtures/superclass.canonical.json",
+      "sha256": "fee4830511d952f30ca10328ecc1b75838ba387dc3332007fd0e6ad75edc8a0a"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-canonical-regressions/fixtures/superclass.receipt.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/canonical/fixtures/superclass.receipt.json",
+      "sha256": "211f13c43eeac17ce32bb0f85f2d9380babdb9f9b0786fc3c3ff29a2eb90c6c8"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-canonical-regressions/fixtures/tableswitch-key.canonical.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/canonical/fixtures/tableswitch-key.canonical.json",
+      "sha256": "35f17704ce4aaf845332f225fbf06526f483e51bca37b4f5d4f7d97fc404317c"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-canonical-regressions/fixtures/tableswitch-key.receipt.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/canonical/fixtures/tableswitch-key.receipt.json",
+      "sha256": "4e49434a24c2353062fea8d43cd31b164718e8e1cabb7d2a092c65a6ea9eff9e"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-canonical-regressions/fixtures/tableswitch-target.canonical.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/canonical/fixtures/tableswitch-target.canonical.json",
+      "sha256": "7b39812726cd41d1dd844ab3a9cbf8b3e345d846f932f0740b01e09b3d20f19c"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-canonical-regressions/fixtures/tableswitch-target.receipt.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/canonical/fixtures/tableswitch-target.receipt.json",
+      "sha256": "40b31289364f5d642dc3289991bbe41d72d5d7664de5c4189564939b8f69d413"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-canonical-regressions/fixtures/try-range.canonical.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/canonical/fixtures/try-range.canonical.json",
+      "sha256": "0edaf25b93d284465dfecdb7c90e6f5d8b15f783408278fcc6a800a189b76ff4"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-canonical-regressions/fixtures/try-range.receipt.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/canonical/fixtures/try-range.receipt.json",
+      "sha256": "fb718a279ae12db7931c5a4a49f0676930b802e108b358b1f156267163e87a67"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-canonical-regressions/fixtures/type-annotation.canonical.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/canonical/fixtures/type-annotation.canonical.json",
+      "sha256": "48902c558bf48e97d0a4329a8c48a9c6a5a5ed66e3ce25bff2f5d33bf9d9f99a"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-canonical-regressions/fixtures/type-annotation.receipt.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/canonical/fixtures/type-annotation.receipt.json",
+      "sha256": "5bd8c6b59c05eb42301d74f0f32cbde02a674c34382cd73387a87fea89c58a7d"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-canonical-regressions/fixtures/type-operand.canonical.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/canonical/fixtures/type-operand.canonical.json",
+      "sha256": "ba5c03afc5b2969eb75898fe378626cb6f50cda403d9fdc410641e6dab05065e"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-canonical-regressions/fixtures/type-operand.receipt.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/canonical/fixtures/type-operand.receipt.json",
+      "sha256": "7bcf61dd89b5431004e8f8f1ac54db61d92603714567c86c1668ead0f34a9c3b"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-canonical-regressions/fixtures/wide-offset-type-annotation.canonical.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/canonical/fixtures/wide-offset-type-annotation.canonical.json",
+      "sha256": "46155267fd73fa720844955e5f2101dd839fbd5b3ef20fa17494554d143c9c52"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-canonical-regressions/fixtures/wide-offset-type-annotation.receipt.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/canonical/fixtures/wide-offset-type-annotation.receipt.json",
+      "sha256": "5acb97726683c10c999431468808a80cb35c855bf4a785e560593859b72c4223"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-canonical-regressions/java-controls-receipt.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/canonical/java-controls-receipt.json",
+      "sha256": "55f692bb2b809ac5b6c48c103b39aea6e234e08728a76ec15a52f8f20016d4c9"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-historical-revelation/controls/19313209c2ab459eac021dd52dff6e5f/profile.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/historical-revelation/controls/19313209c2ab459eac021dd52dff6e5f/profile.json",
+      "sha256": "40a44d57f1e9912c87898083df200aef5c6b944442b66f1970515bc9ab88a7fa"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-historical-revelation/controls/19313209c2ab459eac021dd52dff6e5f/receipt.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/historical-revelation/controls/19313209c2ab459eac021dd52dff6e5f/receipt.json",
+      "sha256": "24943a4ad799593345aaf94394e44b861eb8ed8fd9d15e93b22aced48e44190d"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-historical-revelation/controls/1feae5562bfd4883b0aa71037f6dcadd/profile.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/historical-revelation/controls/1feae5562bfd4883b0aa71037f6dcadd/profile.json",
+      "sha256": "a592d90cdf96b38940836c0db088999f75e4548f664840b504ebf2079b02ca61"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-historical-revelation/controls/1feae5562bfd4883b0aa71037f6dcadd/receipt.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/historical-revelation/controls/1feae5562bfd4883b0aa71037f6dcadd/receipt.json",
+      "sha256": "c95e28485ba354cde213f8f1e2a068ec5bdbdfa2de2b6673d1cbc32317014c81"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-historical-revelation/controls/234fc4d35102429a816086edb70e8e55/profile.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/historical-revelation/controls/234fc4d35102429a816086edb70e8e55/profile.json",
+      "sha256": "c8998aa47b52e66f7cad3ae5df4232c0d50c6e67b4b760a8d8f8c93b80b59ec0"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-historical-revelation/controls/234fc4d35102429a816086edb70e8e55/receipt.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/historical-revelation/controls/234fc4d35102429a816086edb70e8e55/receipt.json",
+      "sha256": "d63ebba7c7c5a1d45b024fec0583956719028a6db33505b998453808717495c0"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-historical-revelation/controls/3e5ff5f2fa41466a923df04b5a2bc7aa/profile.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/historical-revelation/controls/3e5ff5f2fa41466a923df04b5a2bc7aa/profile.json",
+      "sha256": "d37385bd0d1b7dc8517657d0123f3cf0dedc52777af3004192a132fd7088a517"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-historical-revelation/controls/3e5ff5f2fa41466a923df04b5a2bc7aa/receipt.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/historical-revelation/controls/3e5ff5f2fa41466a923df04b5a2bc7aa/receipt.json",
+      "sha256": "e08475226e91596177b88fb8e0cc62ca6f6e5d99c56c540344cefe0f98c11485"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-historical-revelation/controls/4051c62481534b63a021d3cfffdb1819/profile.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/historical-revelation/controls/4051c62481534b63a021d3cfffdb1819/profile.json",
+      "sha256": "9bdc9a91a67ff1697faba3c46fddd6357827107c73dc73ab5e9058287b3c1bd0"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-historical-revelation/controls/4051c62481534b63a021d3cfffdb1819/receipt.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/historical-revelation/controls/4051c62481534b63a021d3cfffdb1819/receipt.json",
+      "sha256": "8b8e325228c01e71f2531a0b04f8baa355976c2dc488d144dc4a35b8990d6433"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-historical-revelation/controls/52975ff3da22470cbde9aa2d78d9dd18/profile.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/historical-revelation/controls/52975ff3da22470cbde9aa2d78d9dd18/profile.json",
+      "sha256": "f73020a4a1c219d7750c519cf6b7de3ee246f5a3d905735cbf4a84f588d41a83"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-historical-revelation/controls/52975ff3da22470cbde9aa2d78d9dd18/receipt.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/historical-revelation/controls/52975ff3da22470cbde9aa2d78d9dd18/receipt.json",
+      "sha256": "effcc176b127165170a8b55de8b4ebcb0d123f248a18637187eb448f65c0510d"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-historical-revelation/controls/c9f7514edede4465b090503a80e64f90/profile.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/historical-revelation/controls/c9f7514edede4465b090503a80e64f90/profile.json",
+      "sha256": "9faa62567107c922aa13fddcd721a4ba58b5b0a367b89f57a1d074931ebbbe57"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-historical-revelation/controls/c9f7514edede4465b090503a80e64f90/receipt.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/historical-revelation/controls/c9f7514edede4465b090503a80e64f90/receipt.json",
+      "sha256": "ec266f36be9f98641b9155e67fef4722e7a5fabf2fc09829e73e79a865ed6541"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-historical-revelation/controls/cb53e4566bd8445a83eccf72de442ecb/profile.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/historical-revelation/controls/cb53e4566bd8445a83eccf72de442ecb/profile.json",
+      "sha256": "e88b049579764e3f6a6c66cd3bf2514aa6ed02ae62e2aed0afec321a0fe22d06"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-historical-revelation/controls/cb53e4566bd8445a83eccf72de442ecb/receipt.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/historical-revelation/controls/cb53e4566bd8445a83eccf72de442ecb/receipt.json",
+      "sha256": "75c19ff9edd6a7ffa4c44146fcebb13493bbe30ed6a1a847e448b527ee4cf9d3"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-historical-revelation/controls/ec442c904b2444b68173be63dcffbf9b/profile.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/historical-revelation/controls/ec442c904b2444b68173be63dcffbf9b/profile.json",
+      "sha256": "3729c2fb49a33519ac82cb7a928e3e81956348ba76d73e42542d2b00224cd804"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-historical-revelation/controls/ec442c904b2444b68173be63dcffbf9b/receipt.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/historical-revelation/controls/ec442c904b2444b68173be63dcffbf9b/receipt.json",
+      "sha256": "0ecfec4c43b8402490c8a71ca08db48011261ba96df279e146d2e24c871468be"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-historical-revelation/historical-profile-no-class-fallback.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/historical-revelation/historical-profile-no-class-fallback.json",
+      "sha256": "9bdc9a91a67ff1697faba3c46fddd6357827107c73dc73ab5e9058287b3c1bd0"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-historical-revelation/receipt.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/historical-revelation/receipt.json",
+      "sha256": "f4af719dad60227d57c0af46dea99214f0a9d1868e42354f9de656fdcc4634ee"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-historical-revelation/worker-config.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/historical-revelation/worker-config.json",
+      "sha256": "20ef1b5320f6856537928d622f49732d87d907d5320332d485213199aa33378a"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-clean-regressions/baseline/bootstrap-javac.log",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/clean/baseline/bootstrap-javac.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-clean-regressions/baseline/forge-runtime-result.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/clean/baseline/forge-runtime-result.json",
+      "sha256": "3ddf39e0fbfe43a0609e6d0b3a1234c886af21913387fcc7752ac0442a75a89f"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-clean-regressions/baseline/live-profile-results.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/clean/baseline/live-profile-results.json",
+      "sha256": "6e27ac0b54b599da498147a8266cd347e1a51e38e01f52bfd40acf386dc4e663"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-clean-regressions/baseline/qualification/jvm.log",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/clean/baseline/qualification/jvm.log.txt",
+      "sha256": "8be06d08436882275b6b2ad02fff0ac0ebb6fac3c64b6aadc311d3a55a8e5a36"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-clean-regressions/baseline/qualification/qualification.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/clean/baseline/qualification/qualification.json",
+      "sha256": "639116508fadb745f1092dca64d53ab723beb4e25a21eb85dd8b07a9e2b46de6"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-clean-regressions/diagnostic/forge-runtime-result.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/clean/diagnostic/forge-runtime-result.json",
+      "sha256": "1d5839d424fa83c7d5d437e1562aa15958729eb45e5175f44ac3bcdc14a0810b"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-clean-regressions/diagnostic/live-transformer-javac.log",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/clean/diagnostic/live-transformer-javac.log.txt",
+      "sha256": "ac85c87e4f1847703df44266d2f2bfbdb82f637c207e512dafbb86a6271f7e2c"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-clean-regressions/diagnostic/live-transformer-jvm/jvm.log",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/clean/diagnostic/live-transformer-jvm/jvm.log.txt",
+      "sha256": "1ed4731065983ad09142ad73280eda3ddeb4605b06c41c923febace5af1d8e35"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-clean-regressions/diagnostic/live-transformer-jvm/live-transformer-verification.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/clean/diagnostic/live-transformer-jvm/live-transformer-verification.json",
+      "sha256": "6bc8199013cb8bce2a964dadeb127d283e26ec88a0fd1b39de472084fd60ecf2"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-clean-regressions/diagnostic/live-transformer-jvm/qualification.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/clean/diagnostic/live-transformer-jvm/qualification.json",
+      "sha256": "caea7dbaf97a5e444d07b328583eb52e168d9d4b48d0d1eb9b4e0ee508eafe47"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-clean-regressions/diagnostic/qualification/jvm.log",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/clean/diagnostic/qualification/jvm.log.txt",
+      "sha256": "3d2dcf1f0e92b59a670e245dfa7cebb12e8a0a3cb3657cba1ce55b1f3bcba1c7"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-clean-regressions/diagnostic/qualification/qualification.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/clean/diagnostic/qualification/qualification.json",
+      "sha256": "1d8633b4fb5f4753f5210e3ab472e493f8ddc8cafe55aaf19022918c7f803396"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-clean-regressions/diagnostic/srg-jar.log",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/clean/diagnostic/srg-jar.log.txt",
+      "sha256": "782127a783cab07fa9dfa7a1008e167d82d3574c99ed7592a0c0e7ab2ee44cd7"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-clean-regressions/foundation-compile.log",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/clean/foundation-compile.log.txt",
+      "sha256": "eee59f1a92762de17bd7517f87fdc097d91d90aea34fe6d6744c3ac4b5438d89"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-clean-regressions/live-profile.log",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/clean/live-profile.log.txt",
+      "sha256": "342df991bdc2ef121c31a94b9bcf8ed94f98d38d299967c80c6c4d0f60ad9ab3"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-clean-regressions/live-transformer-and-capture.log",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/clean/live-transformer-and-capture.log.txt",
+      "sha256": "c66fa9e4798207697dad46019ba3e05e6be96e478b1ca0e8b89d1d647f96505d"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-clean-regressions/LiveCaptureAdmissionTest.log",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/clean/LiveCaptureAdmissionTest.log.txt",
+      "sha256": "3096765b240308f3490eaf420b849b5d978b4e154712c57b3bbd76dcd063a3c3"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-clean-regressions/LiveChunkBindingsTest.log",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/clean/LiveChunkBindingsTest.log.txt",
+      "sha256": "74dd6a2b08dab67c6d546f836a0e469fe0146c453f5075f11bcb16b38936d6e4"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-clean-regressions/LiveWriterGateTest.log",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/clean/LiveWriterGateTest.log.txt",
+      "sha256": "3ed2073ebf524dd2f352edb0b001202199ee50c2e98e978aaf3f14d7c099dc49"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-clean-regressions/LiveWriterProtocolEndToEndTest.log",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/clean/LiveWriterProtocolEndToEndTest.log.txt",
+      "sha256": "aa3ba017aa043ec016104b45f26afda3b930e025f9d3caf3c404d2d08c28ab97"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-clean-regressions/post-hook-verification.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/clean/post-hook-verification.json",
+      "sha256": "376b5446288d4d810852633eaa9bea92c049047d096aa12cae704298ba3e341a"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-clean-regressions/post-hook-verify.log",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/clean/post-hook-verify.log.txt",
+      "sha256": "84ae16e7f0f795c85a1f197d80174d67a135a607dffca72cb54ae4f5eec3d2be"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-clean-regressions/PrivateBuildTicketsTest.log",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/clean/PrivateBuildTicketsTest.log.txt",
+      "sha256": "33c9c3ce5b9d645ea4711de9782cbfc821753fa48297a5024f2b1c9fc9e2a545"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-clean-regressions/receipt.json",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/clean/receipt.json",
+      "sha256": "0b81b8ae8d16a704a49e776d6a0dcabbeae6d9d711b4a8ade6d897bf5e3f02b8"
+    },
+    {
+      "source": "target/architecture-hardening/h23-plan-clean-regressions/tooling.log",
+      "retained": "machine/architecture-hardening/h23-plan-v2-evidence/clean/tooling.log.txt",
+      "sha256": "7d0a96dd0c3b78dca9045a76c691c28d13c3fb56fe64a90c4450756190f2e585"
+    }
+  ],
+  "limits": [
+    "Admission prerequisite only: no actual V2 runtime profile, issuer, capture scope or qualification certificate installed.",
+    "Default RAW diagnostic plan retained; historical Revelation checks remain V1 only.",
+    "Independent complete V2 placement proof and current writer/lifecycle closure remain pending.",
+    "Original paused worktree remains untouched; H24 live shadow not resumed.",
+    "No Rust source changed; Clean diagnostic rerun loaded existing H3 DLL, not later scoped build artifacts."
+  ]
+}
