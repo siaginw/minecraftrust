@@ -237,13 +237,17 @@
       "status": "IN_PROGRESS",
       "implementation": [
         "machine/external-reuse/ultra-candidates.json",
-        "docs/research/external-candidate-decisions.md"
+        "docs/research/external-candidate-decisions.md",
+        "tools/differential-replay",
+        "docs/research/differential-event-replay.md"
       ],
       "validation": [
-        "Decision ledger: 70 candidates, all 48 required names, 13 validator tests passed. Remaining bounded experiments are pending."
+        "Decision ledger: 70 candidates, all 48 required names, 13 validator tests passed. Remaining bounded experiments are pending.",
+        "Replay model independently rerun:47/47 cases,836 boundaries,5 Rust and14 Python tests; real Minecraft adapters remain pending."
       ],
       "evidence": [
-        "machine/architecture-hardening/h22-5-ledger-validation.json"
+        "machine/architecture-hardening/h22-5-ledger-validation.json",
+        "machine/architecture-hardening/h22-5-replay-validation.json"
       ],
       "commit": null,
       "requirements": [
@@ -263,10 +267,12 @@
           "commit": "7fe87eb127ce242e14ba1bfe6e75ac5d013370d7"
         },
         "A": {
-          "status": "IN_PROGRESS"
+          "status": "VALIDATED_PROTOTYPE",
+          "decision": "LIMITED_USE",
+          "evidence": "machine/architecture-hardening/h22-5-replay-validation.json"
         },
         "B": {
-          "status": "PENDING"
+          "status": "IN_PROGRESS"
         },
         "C": {
           "status": "PENDING"
