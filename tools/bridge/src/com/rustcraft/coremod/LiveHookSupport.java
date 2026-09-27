@@ -100,6 +100,75 @@ public final class LiveHookSupport {
      * getName() exists only on URLClassLoader, so it is read reflectively
      * through a declared supertype rather than assumed.
      */
+    /**
+     * The loader that will DEFINE the class a transformer is rewriting.
+     * LaunchWrapper transformers are themselves loaded outside that loader
+     * (the coremod packages are classloader-excluded), so the transformer's own
+     * class loader is NOT the defining loader of its output. Resolved
+     * reflectively so this class keeps compiling outside a Forge launch.
+     */
+    public static ClassLoader definingLoader(ClassLoader fallback) {
+        try {
+            Class<?> launch = Class.forName("net.minecraft.launchwrapper.Launch");
+            Object loader = launch.getField("classLoader").get(null);
+            if (loader instanceof ClassLoader) return (ClassLoader) loader;
+        } catch (Exception notForge) {
+            // not running under LaunchWrapper: the caller's loader is the best
+            // available answer, and an unbound one simply refuses later
+        }
+        return fallback;
+    }
+
+    /** The recorder this class actually opens attempts on. */
+    public static com.rustcraft.qualification.SameProcessAcquisition boundAcquisition() {
+        return com.rustcraft.qualification.SameProcessAcquisition.bound();
+    }
+
+    /**
+     * Opens the same-process acquisition record for one class-definition
+     * attempt. Returns null when no recorder is bound (the diagnostic lane
+     * always binds one); a transformer must never fail to transform because
+     * evidence recording is absent, but the resulting record is what later
+     * authorizes session-bound identity.
+     */
+    public static com.rustcraft.qualification.SameProcessAcquisition.Definition openAcquisition(
+            String transformer, String binaryName, byte[] preWriterBytes, ClassLoader definingLoader) {
+        com.rustcraft.qualification.SameProcessAcquisition acquisition =
+                com.rustcraft.qualification.SameProcessAcquisition.bound();
+        if (acquisition == null) {
+            // Bind on the FIRST real definition attempt, so the recorder always
+            // covers the whole chain. Without explicit session identities there
+            // is nothing to bind to: no record is opened, and every
+            // session-bound authorization therefore stays INCOMPLETE.
+            String processId = System.getProperty("rustcraft.session.processId");
+            String sessionId = System.getProperty("rustcraft.session.transformationSessionId");
+            if (processId == null || processId.length() == 0
+                    || sessionId == null || sessionId.length() == 0) return null;
+            acquisition = new com.rustcraft.qualification.SameProcessAcquisition(processId, sessionId);
+            com.rustcraft.qualification.SameProcessAcquisition.bind(acquisition);
+        }
+        com.rustcraft.qualification.SameProcessAcquisition.Definition attempt =
+                acquisition.begin(binaryName, definingLoader, preWriterBytes);
+        acquisition.record(attempt);
+        return attempt;
+    }
+
+    /**
+     * Completes an acquisition record with the exact buffer the transformer is
+     * returning to the loader, or marks the attempt refused. The Class itself is
+     * bound later, by the loader that actually defined it, never guessed here.
+     */
+    public static void completeAcquisition(
+            com.rustcraft.qualification.SameProcessAcquisition.Definition attempt,
+            byte[] returnedBuffer, String hookPlacement) {
+        if (attempt == null) return;
+        if (returnedBuffer == null) {
+            attempt.failed("transformation refused before returning a buffer");
+            return;
+        }
+        attempt.instrumentedWith(returnedBuffer, hookPlacement);
+    }
+
     public static String loaderIdentity(ClassLoader loader) {
         if (loader == null) return null;
         String named = null;

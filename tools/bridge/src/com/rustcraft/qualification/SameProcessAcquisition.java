@@ -65,6 +65,7 @@ public final class SameProcessAcquisition {
         public final CanonicalClassIdentityV2.Result exact;
         public final CanonicalClassIdentityV2.Result session;
         public String postWriterRawSha256;
+        private byte[] postWriterBytes;
         public String hookPlacement = HookPlacement.NOT_PLANNED;
         public boolean definitionSucceeded;
         public String definedClassIdentity;
@@ -96,9 +97,15 @@ public final class SameProcessAcquisition {
                 throw new Incomplete("definition " + ordinal + " is already closed");
             if (postWriterBytes == null)
                 throw new Incomplete("definition " + ordinal + " has no post-writer buffer");
-            this.postWriterRawSha256 = sha256(postWriterBytes);
+            this.postWriterBytes = postWriterBytes.clone();
+            this.postWriterRawSha256 = sha256(this.postWriterBytes);
             this.hookPlacement = placement;
             return this;
+        }
+
+        /** The exact buffer this process handed the loader, or null if none. */
+        public byte[] postWriterBuffer() {
+            return postWriterBytes == null ? null : postWriterBytes.clone();
         }
 
         /** Records that the loader returned a Class for this attempt. */
@@ -174,6 +181,18 @@ public final class SameProcessAcquisition {
 
     public String processId() { return processId; }
     public String transformationSessionId() { return transformationSessionId; }
+
+    private static volatile SameProcessAcquisition bound;
+
+    /**
+     * The one recorder for this transformation process/session. The live
+     * transformers open their definition attempts here so the pre-writer bytes
+     * they were actually handed, and the buffer they actually returned, are
+     * recorded against the loader and session that produced them.
+     */
+    public static SameProcessAcquisition bound() { return bound; }
+
+    public static void bind(SameProcessAcquisition acquisition) { bound = acquisition; }
 
     /**
      * Opens a definition attempt. `preWriterBytes` must be the exact buffer this

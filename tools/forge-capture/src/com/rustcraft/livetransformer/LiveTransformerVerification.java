@@ -17,6 +17,7 @@ import sun.misc.Unsafe;
 import com.rustcraft.coremod.LiveChunkOwnershipTransformer;
 import com.rustcraft.coremod.LiveHookSupport;
 import com.rustcraft.coremod.LiveWriterPlan;
+import com.rustcraft.qualification.SameProcessAcquisition;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldProviderSurface;
@@ -106,6 +107,20 @@ public final class LiveTransformerVerification {
 
         negativeControls(preHookDump);
         RESULT.put("extractor_scope_controls", ExtractorScopeVerification.run());
+
+        // ---- actual frame/hierarchy witness, inside this real Forge process ----
+        // The vanilla server jar is obfuscated and LaunchClassLoader performs the
+        // deobfuscation at runtime, so the named hierarchy that these transformers
+        // saw exists only here. Missing frame inputs mean the frame relation stays
+        // INCOMPLETE; they are never defaulted into a pass.
+        String frameTypes = System.getProperty("rustcraft.frameTypes");
+        String frameQueries = System.getProperty("rustcraft.frameQueries");
+        if (frameTypes != null && frameQueries != null) {
+            RESULT.put("frame_relation_witness", FrameRelationWitness.run(
+                    preHookDump, frameTypes, frameQueries));
+        } else {
+            RESULT.put("frame_relation_witness_status", "INCOMPLETE_NO_FRAME_INPUTS");
+        }
 
         // ---- integration group 1: default-off behavior before any session ----
         if (LiveWriterHooks.sessionEnabled()) throw new AssertionError("session must start disabled");

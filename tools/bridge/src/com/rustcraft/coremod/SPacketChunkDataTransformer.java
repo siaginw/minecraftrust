@@ -30,6 +30,10 @@ public class SPacketChunkDataTransformer implements IClassTransformer {
             return null;
         }
 
+        com.rustcraft.qualification.SameProcessAcquisition.Definition attempt =
+                LiveHookSupport.openAcquisition("PACKET",
+                        TARGET_CLASS_DEOBF.equals(transformedName) ? transformedName : name,
+                        basicClass, LiveHookSupport.definingLoader(getClass().getClassLoader()));
         try {
             ClassReader cr = new ClassReader(basicClass);
             ClassNode cn = new ClassNode();
@@ -49,11 +53,16 @@ public class SPacketChunkDataTransformer implements IClassTransformer {
                 cn.accept(cw);
                 transformCount++;
                 lastTransformStatus = "TRANSFORMED_SUCCESS";
-                return cw.toByteArray();
+                byte[] result = cw.toByteArray();
+                LiveHookSupport.completeAcquisition(attempt, result,
+                        com.rustcraft.qualification.SameProcessAcquisition.HookPlacement.PLACED);
+                return result;
             } else {
                 if (!"UNKNOWN_LAYOUT_FALLBACK".equals(lastTransformStatus)) {
                     lastTransformStatus = "CONSTRUCTOR_NOT_FOUND";
                 }
+                LiveHookSupport.completeAcquisition(attempt, null,
+                        com.rustcraft.qualification.SameProcessAcquisition.HookPlacement.REFUSED);
                 return basicClass;
             }
         } catch (Throwable t) {

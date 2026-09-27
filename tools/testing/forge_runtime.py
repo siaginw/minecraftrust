@@ -231,12 +231,16 @@ LIVE_TRANSFORMER_SOURCES = [
     "tools/bridge/src/com/rustcraft/coremod/LiveWriterPlan.java",
     "tools/bridge/src/com/rustcraft/coremod/LiveHookSupport.java",
     "tools/bridge/src/com/rustcraft/coremod/CanonicalClassIdentityV2.java",
+    "tools/bridge/src/com/rustcraft/coremod/SessionBoundIdentityCertificate.java",
     "tools/bridge/src/com/rustcraft/coremod/LiveChunkOwnershipTransformer.java",
     "tools/bridge/src/com/rustcraft/coremod/LiveChunkPublicationTransformer.java",
+    "tools/bridge/src/com/rustcraft/qualification/SameProcessAcquisition.java",
 ]
 
 LIVE_ORACLE_SOURCES = [
     "tools/forge-capture/src/com/rustcraft/livetransformer/LiveTransformerVerification.java",
+    "tools/bridge/src/com/rustcraft/qualification/SameProcessAcquisition.java",
+    "tools/bridge/src/com/rustcraft/livetransformer/FrameRelationWitness.java",
     "tools/forge-capture/src/com/rustcraft/livetransformer/ExtractorScopeVerification.java",
     "tools/bridge/src/com/rustcraft/bridge/capture/CaptureContract.java",
     "tools/bridge/src/com/rustcraft/bridge/capture/CaptureSource.java",
@@ -247,6 +251,7 @@ LIVE_ORACLE_SOURCES = [
     "tools/bridge/src/com/rustcraft/coremod/LiveWriterPlan.java",
     "tools/bridge/src/com/rustcraft/coremod/LiveHookSupport.java",
     "tools/bridge/src/com/rustcraft/coremod/CanonicalClassIdentityV2.java",
+    "tools/bridge/src/com/rustcraft/coremod/SessionBoundIdentityCertificate.java",
     "tools/bridge/src/com/rustcraft/coremod/LiveChunkOwnershipTransformer.java",
     "tools/bridge/src/com/rustcraft/coremod/LiveChunkPublicationTransformer.java",
     "tools/bridge/src/com/rustcraft/coremod/SPacketChunkDataTransformer.java",
@@ -326,7 +331,12 @@ def execute(root: Path, output: Path, java_home: Path, dll: Path, manifest: Path
         qualified_inputs["observer_jar"] = make_observer_jar(boot_classes, observer_jar)
 
         def launch(label: str, classes: list[Path], oracle_main: str | None = None,
-                   live_transformers: bool = False, pre_hook_dump: Path | None = None) -> tuple[dict, Path]:
+                   live_transformers: bool = False, pre_hook_dump: Path | None = None,
+                   frame_types: Path | None = None, frame_queries: Path | None = None,
+                   session_id: str = "unset-session") -> tuple[dict, Path]:
+            # One real process identity per launch; the same value is reported in
+            # the receipt so the acquisition records can be tied to this run.
+            session_process = str(uuid.uuid4())
             run_dir = output / label
             run_dir.mkdir()
             game = run_dir / "game"
@@ -350,7 +360,12 @@ def execute(root: Path, output: Path, java_home: Path, dll: Path, manifest: Path
                 args += ["-Drustcraft.liveWriterDiagnostic=true",
                          "-Drustcraft.preHookDump=" + str(pre_hook_dump),
                          "-Drustcraft.srgJar=" + str(output / "live-transformer" / "srg-minecraft.jar"),
-                         "-Drustcraft.verificationResult=" + str(run_dir / "live-transformer-verification.json")]
+                         "-Drustcraft.verificationResult=" + str(run_dir / "live-transformer-verification.json"),
+                         "-Drustcraft.session.processId=" + session_process,
+                         "-Drustcraft.session.transformationSessionId=" + session_id]
+                if frame_types is not None:
+                    args += ["-Drustcraft.frameTypes=" + str(frame_types),
+                             "-Drustcraft.frameQueries=" + str(frame_queries)]
             args += ["-cp", os.pathsep.join(map(str, classes + classpath)),
                      "net.minecraft.launchwrapper.Launch", "--tweakClass",
                      "com.rustcraft.offline.bootstrap.OfflineTweaker", "--gameDir", str(game)]
@@ -374,8 +389,13 @@ def execute(root: Path, output: Path, java_home: Path, dll: Path, manifest: Path
         prepare, dump = launch("qualification", [boot_classes])
         receipt["qualification"] = prepare
         if not qualification_only:
+            # The Clean Forge oracle lane compiles against the transformed
+            # Minecraft classes only. The live-transformer and Revelation lanes
+            # additionally need com.rustcraft.coremod / .qualification, which are
+            # built by the live lane; including them here cannot resolve.
+            other_lane = ("/revdiag/", "/livetransformer/")
             oracle_sources = [path for path in sorted((root / "tools/forge-capture/src").rglob("*.java"))
-                    if path.name != "LiveTransformerVerification.java"]  # live-transformer lane only
+                    if not any(marker in path.as_posix() for marker in other_lane)]
             oracle_sources += sorted((root / "tools/bridge/src/com/rustcraft/bridge/capture").glob("*.java"))
             oracle_sources += [root / "tools/bridge/src/com/rustcraft/bridge/PacketEncodeResultV2.java"]
             compile_identity = dict(qualified_inputs, transformed_classes=class_hashes(dump))
@@ -410,9 +430,31 @@ def execute(root: Path, output: Path, java_home: Path, dll: Path, manifest: Path
             live_classes, live_receipt = compile_cached(root, cache, live_sources,
                     [srg_jar, dump] + classpath, compile_identity, javac, env, output, "live-transformer")
             receipt["live_compile"] = live_receipt
+            # The frame relation obligations, extracted from the retained
+            # stack-map frames of the exact buffers. They are handed to the real
+            # process so the frame reference types and assignability questions
+            # are answered against the classes LaunchClassLoader actually defined.
+            frame_types = frame_queries = None
+            frame_request = config.get("frame_request")
+            if frame_request:
+                request = json.loads(Path(frame_request).read_text(encoding="utf-8"))
+                frame_dir = output / "frame-obligations"
+                frame_dir.mkdir()
+                (frame_dir / "types.txt").write_text(
+                    "".join(name + chr(10) for name in request["types"]), encoding="utf-8")
+                (frame_dir / "queries.tsv").write_text(
+                    "".join(q["source"] + chr(9) + q["target"] + chr(10)
+                            for q in request["assignability"]),
+                    encoding="utf-8")
+                frame_types, frame_queries = frame_dir / "types.txt", frame_dir / "queries.tsv"
+                receipt["frame_obligations"] = {
+                    "request": str(frame_request), "types": len(request["types"]),
+                    "assignability": len(request["assignability"])}
             diagnostic, diag_dump = launch("live-transformer-jvm", [boot_classes, live_classes],
                     "com.rustcraft.livetransformer.LiveTransformerVerification",
-                    live_transformers=True, pre_hook_dump=dump)
+                    live_transformers=True, pre_hook_dump=dump,
+                    frame_types=frame_types, frame_queries=frame_queries,
+                    session_id=str(uuid.uuid4()))
             receipt["live_transformer"] = diagnostic
             receipt["post_hook_transformed_dir"] = str(diag_dump)
             receipt["post_hook_class_hashes"] = json.loads(

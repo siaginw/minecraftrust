@@ -42,7 +42,12 @@ def main():
  try:
   r['guard_before']=inspect(ROOT);assert r['guard_before']['status']=='PASS'
   classes=out/'classes';classes.mkdir();test=ROOT/'tools/writer-plan-v2-tests/src/com/rustcraft/coremod'
-  run('compile-controls',[javac,'-source','8','-target','8','-Xlint:all','-Werror','-cp',asm,'-d',classes,core/'CanonicalClassIdentityV2.java',core/'SessionBoundIdentityCertificate.java',core/'LiveHookSupport.java',core/'LiveWriterPlan.java',test/'WriterPlanIdentityV2Test.java'])
+  # LiveHookSupport reaches the acquisition recorder, so every javac step that
+  # compiles it must also compile SameProcessAcquisition; otherwise the step
+  # fails to resolve com.rustcraft.qualification for reasons unrelated to the
+  # contract it is meant to exercise.
+  acq=ROOT/'tools/bridge/src/com/rustcraft/qualification/SameProcessAcquisition.java'
+  run('compile-controls',[javac,'-source','8','-target','8','-Xlint:all','-Werror','-cp',asm,'-d',classes,core/'CanonicalClassIdentityV2.java',core/'SessionBoundIdentityCertificate.java',core/'LiveHookSupport.java',core/'LiveWriterPlan.java',acq,test/'WriterPlanIdentityV2Test.java'])
   result=run('admission-controls',[java,'-cp',str(classes)+os.pathsep+str(asm),'com.rustcraft.coremod.WriterPlanIdentityV2Test',out/'fixtures'])
   assert result.stdout.strip()==b'PASS WriterPlanIdentityV2Test assertions=26'
   identity=json.loads((out/'fixtures/fixture-identity.json').read_text());name='example.PlanFixture'
@@ -50,7 +55,7 @@ def main():
   manifest=out/'manifest.json';write(manifest,m)
   p={'schema_version':2,'kind':'RUSTCRAFT_V2_WRITER_PLAN_RECIPE','identity_mode':'CANONICAL_ID_V2','all_required_observed':True,'required_hooks_manifest_sha256':sha(manifest),'required_hooks':[{'id':'X','status':'OBSERVED'}],'expected_class_identities':{name:identity},'forge_build':'14.23.5.2860','qualification':{'profile':'SYNTHETIC_RECIPE_NOT_QUALIFIED','minecraft_server_jar_sha256':'0'*64}}
   generated=generate('valid-v2',p,m);v2=out/'v2-classes';v2.mkdir()
-  run('compile-generated-v2',[javac,'-source','8','-target','8','-Xlint:all','-Werror','-cp',asm,'-d',v2,core/'CanonicalClassIdentityV2.java',core/'SessionBoundIdentityCertificate.java',core/'LiveHookSupport.java',generated,test/'GeneratedPlanV2Smoke.java'])
+  run('compile-generated-v2',[javac,'-source','8','-target','8','-Xlint:all','-Werror','-cp',asm,'-d',v2,core/'CanonicalClassIdentityV2.java',core/'SessionBoundIdentityCertificate.java',core/'LiveHookSupport.java',acq,generated,test/'GeneratedPlanV2Smoke.java'])
   run('generated-v2-smoke',[java,'-cp',str(v2)+os.pathsep+str(asm),'com.rustcraft.coremod.GeneratedPlanV2Smoke',out/'fixtures/fixture.class'])
   variants={}
   def change(label,fn):v=copy.deepcopy(p);fn(v);variants[label]=v
@@ -144,14 +149,14 @@ def main():
   exact_with_list=copy.deepcopy(p);exact_with_list['session_bound_classes']=[name]
   generate('class-list-on-exact-mode',exact_with_list,m,False)
   session_classes=out/'session-classes';session_classes.mkdir()
-  run('compile-generated-session-bound',[javac,'-source','8','-target','8','-Xlint:all','-Werror','-cp',asm,'-d',session_classes,core/'CanonicalClassIdentityV2.java',core/'SessionBoundIdentityCertificate.java',core/'LiveHookSupport.java',session_plan,test/'GeneratedPlanSessionBoundSmoke.java'])
+  run('compile-generated-session-bound',[javac,'-source','8','-target','8','-Xlint:all','-Werror','-cp',asm,'-d',session_classes,core/'CanonicalClassIdentityV2.java',core/'SessionBoundIdentityCertificate.java',core/'LiveHookSupport.java',acq,session_plan,test/'GeneratedPlanSessionBoundSmoke.java'])
   run('generated-session-bound-smoke',[java,'-cp',str(session_classes)+os.pathsep+str(asm),'com.rustcraft.coremod.GeneratedPlanSessionBoundSmoke'])
   clean=out/'clean-forge-classes';clean.mkdir()
-  run('compile-clean-forge-exact-regression',[javac,'-source','8','-target','8','-Xlint:all','-Werror','-cp',asm,'-d',clean,core/'CanonicalClassIdentityV2.java',core/'SessionBoundIdentityCertificate.java',core/'LiveHookSupport.java',core/'LiveWriterPlan.java',test/'CleanForgeExactModeRegression.java'])
+  run('compile-clean-forge-exact-regression',[javac,'-source','8','-target','8','-Xlint:all','-Werror','-cp',asm,'-d',clean,core/'CanonicalClassIdentityV2.java',core/'SessionBoundIdentityCertificate.java',core/'LiveHookSupport.java',core/'LiveWriterPlan.java',acq,test/'CleanForgeExactModeRegression.java'])
   clean_result=run('clean-forge-exact-regression',[java,'-cp',str(clean)+os.pathsep+str(asm),'com.rustcraft.coremod.CleanForgeExactModeRegression'])
   assert clean_result.stdout.strip().startswith(b'PASS Clean Forge exact mode'),clean_result.stdout
   acquisition=out/'acquisition-classes';acquisition.mkdir()
-  run('compile-same-process-acquisition',[javac,'-source','8','-target','8','-Xlint:all','-Werror','-cp',asm,'-d',acquisition,core/'CanonicalClassIdentityV2.java',core/'SessionBoundIdentityCertificate.java',core/'LiveHookSupport.java',core/'LiveWriterPlan.java',ROOT/'tools/bridge/src/com/rustcraft/qualification/SameProcessAcquisition.java',test/'SameProcessAcquisitionControls.java'])
+  run('compile-same-process-acquisition',[javac,'-source','8','-target','8','-Xlint:all','-Werror','-cp',asm,'-d',acquisition,core/'CanonicalClassIdentityV2.java',core/'SessionBoundIdentityCertificate.java',core/'LiveHookSupport.java',core/'LiveWriterPlan.java',acq,test/'SameProcessAcquisitionControls.java'])
   acquisition_result=run('same-process-acquisition-controls',[java,'-cp',str(acquisition)+os.pathsep+str(asm),'com.rustcraft.coremod.SameProcessAcquisitionControls'])
   assert acquisition_result.stdout.strip().startswith(b'PASS SameProcessAcquisitionControls'),acquisition_result.stdout
   r.update(status='PASS',java_assertions=26,negative_generator_controls=len(r['negative_controls']),generated_v2_compile_and_admission=True,default_raw_regeneration_byte_identical=True,clean_forge_exact_mode_regression=True,same_process_acquisition_contract=True,session_bound_plan_generated_and_admitted=True)

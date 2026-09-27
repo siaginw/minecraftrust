@@ -1,5 +1,6 @@
 package com.rustcraft.coremod;
 
+import com.rustcraft.qualification.SameProcessAcquisition;
 import net.minecraft.launchwrapper.IClassTransformer;
 import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.ClassReader;
@@ -42,8 +43,11 @@ public class LiveChunkOwnershipTransformer implements IClassTransformer {
         if (basicClass == null || !enabled()) return basicClass;
         LiveWriterPlan.Hook[] hooks = LiveHookSupport.hooksFor("OWNERSHIP", transformedName);
         if (hooks.length == 0) return basicClass;
+        SameProcessAcquisition.Definition attempt =
+                LiveHookSupport.openAcquisition("OWNERSHIP", transformedName, basicClass,
+                        LiveHookSupport.definingLoader(getClass().getClassLoader()));
         try {
-            LiveHookSupport.verifyPreHookIdentity(hooks, basicClass, getClass().getClassLoader());
+            LiveHookSupport.verifyPreHookIdentity(hooks, basicClass, LiveHookSupport.definingLoader(getClass().getClassLoader()));
             ClassNode cn = LiveHookSupport.readClass(basicClass);
             LiveHookSupport.refuseMarkerString(cn);
             for (LiveWriterPlan.Hook hook : hooks) {
@@ -61,9 +65,13 @@ public class LiveChunkOwnershipTransformer implements IClassTransformer {
             byte[] result = LiveHookSupport.writeClass(cn);
             transformCount++;
             lastStatus = "HOOKS_INSTALLED_" + hooks.length;
+            LiveHookSupport.completeAcquisition(attempt, result,
+                    SameProcessAcquisition.HookPlacement.PLACED);
             return result;
         } catch (LiveHookSupport.ProfileFailure failure) {
             lastStatus = "PROFILE_FAILURE: " + failure.getMessage();
+            LiveHookSupport.completeAcquisition(attempt, null,
+                    SameProcessAcquisition.HookPlacement.REFUSED);
             throw failure; // fail closed: the runtime is not transformed
         } catch (Throwable failure) {
             lastStatus = "TRANSFORM_ERROR[" + transformedName + "]: " + failure;

@@ -36,6 +36,9 @@ public final class OfflineTweaker implements ITweaker {
     // like the baseline run (QualifyRuntime must keep launching through it).
     cl.addClassLoaderExclusion("com.rustcraft.bridge.");
     cl.addClassLoaderExclusion("com.rustcraft.coremod.");
+    // Same rule as the packages above: the same-process acquisition recorder is
+    // support code, not game content, and must come from the parent classpath.
+    cl.addClassLoaderExclusion("com.rustcraft.qualification.");
     cl.addTransformerExclusion("com.rustcraft.bridge.");
     cl.addTransformerExclusion("com.rustcraft.coremod.");
     cl.addTransformerExclusion("com.rustcraft.livetransformer.");
