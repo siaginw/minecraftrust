@@ -101,7 +101,7 @@
     {
       "id": "H5",
       "title": "VERSION-NEUTRAL CORE ARCHITECTURE",
-      "status": "FOUNDATION_VALIDATED",
+      "status": "FOUNDATION_COMMITTED",
       "implementation": [
         "crates/rustcraft-core",
         "versions/mc_1_12_x",
@@ -114,7 +114,7 @@
       "evidence": [
         "machine/architecture-hardening/h5-version-adapters.json"
       ],
-      "commit": null,
+      "commit": "c13dfb1",
       "outstanding": [
         "Exact qualified runtime mapping extraction and H4/H6 issuer binding",
         "Accepted legacy core-types/packet/FFI consumers remain unchanged until explicit migration",
@@ -124,11 +124,28 @@
     {
       "id": "H6",
       "title": "RETAINED NATIVE OWNERSHIP MODEL",
-      "status": "IN_PROGRESS",
-      "implementation": [],
-      "validation": [],
-      "evidence": [],
-      "commit": null
+      "status": "FOUNDATION_VALIDATED",
+      "implementation": [
+        "crates/native-state-vnext",
+        "docs/architecture/retained-native-state.md"
+      ],
+      "validation": [
+        "38 scoped tests; strict clippy/fmt;42 independently checked layout rows plus3 transition controls",
+        "Foreign cancellation bug reproduced then fixed; targeted rerun passes",
+        "92 workspace library tests;28 capability regressions;release FFI;fresh Clean25 tooling/201 assertions/4358byte parity;historical Revelation129classes/10controls"
+      ],
+      "evidence": [
+        "machine/architecture-hardening/h6-retained-state.json"
+      ],
+      "commit": null,
+      "outstanding": [
+        "Actual JVM writer/alias closure, safepoints, barriers and atomic handoff",
+        "Certificate issuer and loaded-object/registry binding",
+        "Real packet/light/persistence algorithms and independent qualification",
+        "H8 full packing/cache workloads and memory budget",
+        "H22 registry/cache/abandoned-lease retention cleanup",
+        "Concurrent implementation validation; H7 models are separate reduced contracts"
+      ]
     },
     {
       "id": "H7",
@@ -479,7 +496,7 @@
     {
       "id": "H5.1",
       "title": "1.12.X FAMILY",
-      "status": "FOUNDATION_VALIDATED",
+      "status": "FOUNDATION_COMMITTED",
       "implementation": [
         "crates/rustcraft-core",
         "versions/mc_1_12_x",
@@ -492,7 +509,7 @@
       "evidence": [
         "machine/architecture-hardening/h5-version-adapters.json"
       ],
-      "commit": null,
+      "commit": "c13dfb1",
       "outstanding": [
         "Exact qualified runtime mapping extraction and H4/H6 issuer binding",
         "Accepted legacy core-types/packet/FFI consumers remain unchanged until explicit migration",
@@ -502,29 +519,80 @@
     {
       "id": "H6.1",
       "title": "GENERATIONAL HANDLES",
-      "status": "PENDING",
-      "implementation": [],
-      "validation": [],
-      "evidence": [],
-      "commit": null
+      "status": "FOUNDATION_VALIDATED",
+      "implementation": [
+        "crates/native-state-vnext",
+        "docs/architecture/retained-native-state.md"
+      ],
+      "validation": [
+        "38 scoped tests; strict clippy/fmt;42 independently checked layout rows plus3 transition controls",
+        "Foreign cancellation bug reproduced then fixed; targeted rerun passes",
+        "92 workspace library tests;28 capability regressions;release FFI;fresh Clean25 tooling/201 assertions/4358byte parity;historical Revelation129classes/10controls"
+      ],
+      "evidence": [
+        "machine/architecture-hardening/h6-retained-state.json"
+      ],
+      "commit": null,
+      "outstanding": [
+        "Actual JVM writer/alias closure, safepoints, barriers and atomic handoff",
+        "Certificate issuer and loaded-object/registry binding",
+        "Real packet/light/persistence algorithms and independent qualification",
+        "H8 full packing/cache workloads and memory budget",
+        "H22 registry/cache/abandoned-lease retention cleanup",
+        "Concurrent implementation validation; H7 models are separate reduced contracts"
+      ]
     },
     {
       "id": "H6.2",
       "title": "NATIVECHUNK VNEXT",
-      "status": "PENDING",
-      "implementation": [],
-      "validation": [],
-      "evidence": [],
-      "commit": null
+      "status": "FOUNDATION_VALIDATED",
+      "implementation": [
+        "crates/native-state-vnext",
+        "docs/architecture/retained-native-state.md"
+      ],
+      "validation": [
+        "38 scoped tests; strict clippy/fmt;42 independently checked layout rows plus3 transition controls",
+        "Foreign cancellation bug reproduced then fixed; targeted rerun passes",
+        "92 workspace library tests;28 capability regressions;release FFI;fresh Clean25 tooling/201 assertions/4358byte parity;historical Revelation129classes/10controls"
+      ],
+      "evidence": [
+        "machine/architecture-hardening/h6-retained-state.json"
+      ],
+      "commit": null,
+      "outstanding": [
+        "Actual JVM writer/alias closure, safepoints, barriers and atomic handoff",
+        "Certificate issuer and loaded-object/registry binding",
+        "Real packet/light/persistence algorithms and independent qualification",
+        "H8 full packing/cache workloads and memory budget",
+        "H22 registry/cache/abandoned-lease retention cleanup",
+        "Concurrent implementation validation; H7 models are separate reduced contracts"
+      ]
     },
     {
       "id": "H6.3",
       "title": "IMMUTABLE GENERATION-TAGGED VIEWS",
-      "status": "PENDING",
-      "implementation": [],
-      "validation": [],
-      "evidence": [],
-      "commit": null
+      "status": "FOUNDATION_VALIDATED",
+      "implementation": [
+        "crates/native-state-vnext",
+        "docs/architecture/retained-native-state.md"
+      ],
+      "validation": [
+        "38 scoped tests; strict clippy/fmt;42 independently checked layout rows plus3 transition controls",
+        "Foreign cancellation bug reproduced then fixed; targeted rerun passes",
+        "92 workspace library tests;28 capability regressions;release FFI;fresh Clean25 tooling/201 assertions/4358byte parity;historical Revelation129classes/10controls"
+      ],
+      "evidence": [
+        "machine/architecture-hardening/h6-retained-state.json"
+      ],
+      "commit": null,
+      "outstanding": [
+        "Actual JVM writer/alias closure, safepoints, barriers and atomic handoff",
+        "Certificate issuer and loaded-object/registry binding",
+        "Real packet/light/persistence algorithms and independent qualification",
+        "H8 full packing/cache workloads and memory budget",
+        "H22 registry/cache/abandoned-lease retention cleanup",
+        "Concurrent implementation validation; H7 models are separate reduced contracts"
+      ]
     },
     {
       "id": "H8.1",

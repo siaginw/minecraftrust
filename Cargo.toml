@@ -20,6 +20,7 @@ members = [
     "crates/native-capability",
     "crates/rustcraft-core",
     "versions/mc_1_12_x",
+    "crates/native-state-vnext",
 ]
 
 [workspace.package]
@@ -47,6 +48,7 @@ native-chunk = { path = "crates/native-chunk" }
 native-capability = { path = "crates/native-capability" }
 rustcraft-core = { path = "crates/rustcraft-core" }
 mc-1-12-x = { path = "versions/mc_1_12_x" }
+native-state-vnext = { path = "crates/native-state-vnext" }
 
 [profile.release]
 lto = "fat"

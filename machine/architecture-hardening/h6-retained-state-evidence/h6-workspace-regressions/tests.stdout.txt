@@ -1,0 +1,43 @@
+
+running 2 tests
+test counter_tests::exhausted_resource_counter_never_publishes_a_partial_resource ... ok
+test counter_tests::exhausted_owner_counter_does_not_release_java_or_wrap ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 26 tests
+test ended_session_cannot_create_new_resources_under_different_root_tokens ... ok
+test cross_incarnation_dependency_is_rejected ... ok
+test malformed_specs_and_missing_revocation_conditions_are_atomic ... ok
+test eligible_is_not_shadow_validated_and_java_is_not_native ... ok
+test foreign_registry_handles_cannot_cross_instance_boundaries ... ok
+test invalidation_before_install_is_a_persistent_tombstone ... ok
+test changed_observation_after_prepare_never_commits ... ok
+test missing_duplicate_and_insufficient_dependencies_refuse ... ok
+test complete_identity_and_bound_dependency_generations_are_exposed_together ... ok
+test dependency_java_and_native_ownership_are_checked_at_use ... ok
+test mandatory_revocation_identity_is_not_empty ... ok
+test java_owner_release_restore_aba_invalidates_pending_ticket ... ok
+test invalidated_certificate_writer_lifecycle_registry_and_version_cannot_be_reinstalled ... ok
+test late_revocation_propagates_transitively_without_affecting_other_operations ... ok
+test mixed_operations_worlds_and_storage_do_not_share_a_global_boolean ... ok
+test no_implicit_owner_release_when_model_lease_is_dropped ... ok
+test ownership_domains_deduplicate_labels_and_include_initial_java_owner ... ok
+test quarantine_transition_fences_unrelated_snapshot_ticket_on_same_allocation ... ok
+test receiver_class_loader_order_hash_object_and_state_restrictions_refuse ... ok
+test registry_epoch_invalidation_preserves_independent_registry_branch ... ok
+test reinstall_same_identifier_cannot_resurrect_old_ticket_aba ... ok
+test resource_retirement_and_reincarnation_require_quiescence_even_for_same_root_token ... ok
+test revoked_native_owner_stays_quarantined_until_old_generation_quiesces ... ok
+test zero_identity_and_epoch_inputs_refuse ... ok
+test scope_and_operation_mismatches_refuse ... ok
+test self_cycle_and_multinode_cycle_do_not_publish_any_part ... ok
+
+test result: ok. 26 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+

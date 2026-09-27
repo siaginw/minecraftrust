@@ -1,0 +1,25 @@
+{
+  "status": "EXPECTED_PRE_FIX_FAILURE",
+  "command": [
+    "C:\\Users\\Admin\\.cargo\\bin\\cargo.exe",
+    "test",
+    "--locked",
+    "--offline",
+    "--manifest-path",
+    "crates/native-state-vnext/Cargo.toml",
+    "--target-dir",
+    "target\\architecture-hardening\\h6-foreign-cancel-before\\build",
+    "--test",
+    "lifecycle",
+    "foreign_cancellation_cannot_remove_same_nonce_work_in_another_store",
+    "--",
+    "--exact"
+  ],
+  "exit": 101,
+  "sources": {
+    "crates/native-state-vnext/src/store.rs": "eef84fed3e53d0cba644cb088ce19ae333547a2aec0155a6745b2185fc9ce595",
+    "crates/native-state-vnext/tests/lifecycle.rs": "bda78e34d9b0c4738c49f8a6cb1743b5e1eb62697445507e7c3b73d9be9b0f0c"
+  },
+  "stdout_sha256": "b1ef0efe459daeca176f64a38959ede0c20334c56b45e8f58a9625d8c1de9fc0",
+  "stderr_sha256": "e5cc64a58689aafa41f5673f41d8cd149a00521e99548acbf1cfd2a824667f8c"
+}

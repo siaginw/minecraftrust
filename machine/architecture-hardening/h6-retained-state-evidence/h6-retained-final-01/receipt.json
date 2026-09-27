@@ -1,0 +1,2692 @@
+{
+  "schema": "H6_RETAINED_STATE_CHECK_V1",
+  "milestone": "H6_FOUNDATION",
+  "scope": "SERIALIZED_MODEL_AND_SYNTHETIC_LAYOUT_ONLY",
+  "runtime_integration": false,
+  "production_authority": false,
+  "started_utc": "2026-09-27T01:09:29.254669+00:00",
+  "source_hashes_before": {
+    "Cargo.lock": "4b50c388f451285ef15b9a6283d5d4daaa9f2532243b5d4f007b4531d8ef8b4d",
+    "Cargo.toml": "53cc8edcb8f8822e9e010e8a5046b08d6af8186400eb7c215a344778d6012d01",
+    "crates\\native-capability\\Cargo.toml": "352d8023b05ef342d2165363f533931258e0f5c8e4758bb83ff64df4183c8964",
+    "crates\\native-capability\\src\\lib.rs": "0fc47fbd5872a404c6fc40d248245549cbd3872c63a4d656cab1f7a5d30872d7",
+    "crates\\native-capability\\tests\\model.rs": "0457e842992aad97efcef39fecfdae8c3109a3b212ff6e013a26839636448e66",
+    "crates\\native-state-vnext\\Cargo.lock": "48479c8bbcd19662ef5d588fb07c73206d7c48bbdba234d49ead128dbdcb488d",
+    "crates\\native-state-vnext\\Cargo.toml": "2a6de5495bd0caa9bc0714339f20c9a4f9fafddfea7a3cf4b427b15b7992a9ac",
+    "crates\\native-state-vnext\\examples\\layout_probe.rs": "c86eb72b129d574bb538b8e900c5053c76d0367749afb677df7c5bec642a2a8e",
+    "crates\\native-state-vnext\\src\\lib.rs": "15d932ec10f3e885c4535f997725f6a80ab7d88c606cfaca1855c56e415836f1",
+    "crates\\native-state-vnext\\src\\section.rs": "b4ffde7b70168df5160155bacb4b8660c54ae253c400c2f5859d9f479b4122ce",
+    "crates\\native-state-vnext\\src\\store.rs": "eef84fed3e53d0cba644cb088ce19ae333547a2aec0155a6745b2185fc9ce595",
+    "crates\\native-state-vnext\\tests\\common\\mod.rs": "b015f9c6d42ae48906ac5c7654529a436dc6dc1babee45e96f7db2cf0029744f",
+    "crates\\native-state-vnext\\tests\\layout.rs": "aa5c7e61c38083d95cbac5d6b9bebef379e380e9c654bd6dcda9d9c2f8d96307",
+    "crates\\native-state-vnext\\tests\\lifecycle.rs": "b7c5a574086509d92cbf98bba2b1733187d4b3a2f6c0919bd8530a75fe8e538e",
+    "crates\\native-state-vnext\\verify.py": "f018f9587f9a93bd516d35e0251eba37bd9271da0b630ccefd3e31aec7e8fa00",
+    "crates\\rustcraft-core\\Cargo.toml": "f0b085a397c545665bae25b878f254c090a5d640bdc52e9bc15cf514f22ef39e",
+    "crates\\rustcraft-core\\src\\lib.rs": "3e6a2914001d68fd02d8e0a33f4e7489ea14202e7b011af51aa3797976b73878",
+    "crates\\rustcraft-core\\tests\\contracts.rs": "f1ab1f5718c72ed5f97d407afdca995f942d2da6d04ea957d435e07a0ec9ff9c",
+    "docs\\architecture\\retained-native-state.md": "ec1efbc4f95a81ce8759dd4dcf747c133392a0b7655eff8be27e83ad8a40b395",
+    "tools\\testing\\hardening_guard.py": "a2062b3ffbec7edba79bf5f5954fbcb1e9d97492ab9c4bb541833ebb820bdb6d"
+  },
+  "cargo": {
+    "path": "C:\\Users\\Admin\\.cargo\\bin\\cargo.exe",
+    "sha256": "6f4bef66261261fcb43131be8720bab817d403a09edec7455c371974b90bdb7e"
+  },
+  "python": {
+    "path": "C:\\Python314\\python.exe",
+    "sha256": "4942b86a6597e5aee0128daa00050ed79bc21f6e709a78eb19cbfeb0c2f39ac9",
+    "version": "3.14.7 (tags/v3.14.7:823f032, Aug  5 2026, 10:51:32) [MSC v.1944 64 bit (AMD64)]"
+  },
+  "host": {
+    "platform": "Windows-11-10.0.26200-SP0",
+    "machine": "AMD64",
+    "processor_hint": "AMD64 Family 25 Model 97 Stepping 2, AuthenticAMD",
+    "logical_cpu_count": 16,
+    "exclusive_host": false
+  },
+  "sanitized_environment_keys": [],
+  "processes": [
+    {
+      "name": "cargo-version",
+      "argv": [
+        "C:\\Users\\Admin\\.cargo\\bin\\cargo.exe",
+        "--version",
+        "--verbose"
+      ],
+      "returncode": 0,
+      "seconds": 0.05581099999835715,
+      "stdout_sha256": "86c2d07f9968fd3174d9cff8c60a4d4323fba3166d5dc6dd36f0987a50677d70",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_bytes": 321,
+      "stderr_bytes": 0
+    },
+    {
+      "name": "resolve-cargo",
+      "argv": [
+        "C:\\Users\\Admin\\.cargo\\bin\\rustup.exe",
+        "which",
+        "cargo"
+      ],
+      "returncode": 0,
+      "seconds": 0.03620490001048893,
+      "stdout_sha256": "d70a6681283a709db0b4154a538f41c781608f69fb5bfbfa66dac449b697a95c",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_bytes": 78,
+      "stderr_bytes": 0
+    },
+    {
+      "name": "resolve-rustc",
+      "argv": [
+        "C:\\Users\\Admin\\.cargo\\bin\\rustup.exe",
+        "which",
+        "rustc"
+      ],
+      "returncode": 0,
+      "seconds": 0.03498199995374307,
+      "stdout_sha256": "54234bc009f7bc295608f8bb882e03677001147f42f05ce19606c17d2db6473b",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_bytes": 78,
+      "stderr_bytes": 0
+    },
+    {
+      "name": "resolve-rustfmt",
+      "argv": [
+        "C:\\Users\\Admin\\.cargo\\bin\\rustup.exe",
+        "which",
+        "rustfmt"
+      ],
+      "returncode": 0,
+      "seconds": 0.0342219999874942,
+      "stdout_sha256": "0e07fc57cf9821aa13e5d361fdaa13fcb14ecb9c7db0284d9b66cb63d44a5beb",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_bytes": 80,
+      "stderr_bytes": 0
+    },
+    {
+      "name": "resolve-cargo-clippy",
+      "argv": [
+        "C:\\Users\\Admin\\.cargo\\bin\\rustup.exe",
+        "which",
+        "cargo-clippy"
+      ],
+      "returncode": 0,
+      "seconds": 0.03705459996126592,
+      "stdout_sha256": "26f09df4e33bf098ad9fb2f35d1fce728c2b509fef8c47af1c745973b28b296d",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_bytes": 85,
+      "stderr_bytes": 0
+    },
+    {
+      "name": "resolve-clippy-driver",
+      "argv": [
+        "C:\\Users\\Admin\\.cargo\\bin\\rustup.exe",
+        "which",
+        "clippy-driver"
+      ],
+      "returncode": 0,
+      "seconds": 0.036005400004796684,
+      "stdout_sha256": "934b599a01bd8f7d5338d12d97fc793d1af3427b7f706b93d8eb18819ce01b01",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_bytes": 86,
+      "stderr_bytes": 0
+    },
+    {
+      "name": "rustc-version",
+      "argv": [
+        "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\rustc.exe",
+        "--version",
+        "--verbose"
+      ],
+      "returncode": 0,
+      "seconds": 0.03470820002257824,
+      "stdout_sha256": "c45e612575abeef05e99e88eb1e7aea52cddab9ad70d4f65ad20eaa65e92a9cf",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_bytes": 194,
+      "stderr_bytes": 0
+    },
+    {
+      "name": "tests",
+      "argv": [
+        "C:\\Users\\Admin\\.cargo\\bin\\cargo.exe",
+        "test",
+        "--locked",
+        "--offline",
+        "--manifest-path",
+        "D:\\minecraftrust-astra-hardening\\crates\\native-state-vnext\\Cargo.toml",
+        "-p",
+        "native-state-vnext",
+        "--target-dir",
+        "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h6-retained-final-01\\build"
+      ],
+      "returncode": 0,
+      "seconds": 2.8478443999774754,
+      "stdout_sha256": "115a0c76172de56cf615287bbd57a64fd20338d1cb1a935125e6a8b3d57905e8",
+      "stderr_sha256": "673936ac9cb66c83c78184c6f52e6dd9fe5bba0165d6394bc4ca297bebddf9af",
+      "stdout_bytes": 3499,
+      "stderr_bytes": 799
+    },
+    {
+      "name": "clippy",
+      "argv": [
+        "C:\\Users\\Admin\\.cargo\\bin\\cargo.exe",
+        "clippy",
+        "--locked",
+        "--offline",
+        "--manifest-path",
+        "D:\\minecraftrust-astra-hardening\\crates\\native-state-vnext\\Cargo.toml",
+        "-p",
+        "native-state-vnext",
+        "--target-dir",
+        "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h6-retained-final-01\\build",
+        "--all-targets",
+        "--",
+        "-D",
+        "warnings"
+      ],
+      "returncode": 0,
+      "seconds": 0.703153399983421,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "2cb5f656823cc83fbf3733603826dd9ccb114ad65c138d96217d864dcbc31443",
+      "stdout_bytes": 0,
+      "stderr_bytes": 362
+    },
+    {
+      "name": "format",
+      "argv": [
+        "C:\\Users\\Admin\\.cargo\\bin\\cargo.exe",
+        "fmt",
+        "--manifest-path",
+        "D:\\minecraftrust-astra-hardening\\crates\\native-state-vnext\\Cargo.toml",
+        "-p",
+        "native-state-vnext",
+        "--",
+        "--check"
+      ],
+      "returncode": 0,
+      "seconds": 0.1670213000033982,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_bytes": 0,
+      "stderr_bytes": 0
+    },
+    {
+      "name": "probe-build",
+      "argv": [
+        "C:\\Users\\Admin\\.cargo\\bin\\cargo.exe",
+        "build",
+        "--locked",
+        "--offline",
+        "--manifest-path",
+        "D:\\minecraftrust-astra-hardening\\crates\\native-state-vnext\\Cargo.toml",
+        "-p",
+        "native-state-vnext",
+        "--target-dir",
+        "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h6-retained-final-01\\build",
+        "--release",
+        "--example",
+        "layout_probe"
+      ],
+      "returncode": 0,
+      "seconds": 1.9713890999555588,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "a3bf2152356a0aa8f5577144e3a4c745ee85f7706c3ee27c1137038db28e1195",
+      "stdout_bytes": 0,
+      "stderr_bytes": 352
+    },
+    {
+      "name": "probe",
+      "argv": [
+        "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h6-retained-final-01\\build\\release\\examples\\layout_probe.exe"
+      ],
+      "returncode": 0,
+      "seconds": 0.6126511999755166,
+      "stdout_sha256": "8614796d0497c2a5282e184b7989fad80c73efd56248252db6fffb4e752579ff",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_bytes": 30299,
+      "stderr_bytes": 0
+    }
+  ],
+  "isolation_before": {
+    "schema_version": 1,
+    "kind": "HARDENING_ISOLATION_GATE_CHECK",
+    "status": "PASS",
+    "failures": [],
+    "original_observed": {
+      "head": "c4b868db2c9e4b03f745bf93c6ebf4fd8a8519e7",
+      "branch": "issue1-jni-v2",
+      "status": [
+        " M tools/live-capture/live_client_session.py",
+        "?? tools/live-capture/__pycache__/",
+        "?? tools/live-capture/run_rev_shadow.py"
+      ],
+      "files": [
+        {
+          "path": "D:\\minecraftrust\\tools\\live-capture\\live_client_session.py",
+          "sha256": "151c356161695aba3db3c1a8cbd589b5eda2b5a1770dff59ab21b728d36cabfa"
+        },
+        {
+          "path": "D:\\minecraftrust\\tools\\live-capture\\run_rev_shadow.py",
+          "sha256": "2b9b2aca49e57dd0d2a74bec46efcdc0ac7f95762a733276e27ff9dbcb472d93"
+        }
+      ]
+    },
+    "isolated_worktree": "D:\\minecraftrust-astra-hardening",
+    "isolated_head": "44f61a46f7cda93c0ac8aaffe13087678501cc6f",
+    "isolated_branch": "astra/architecture-hardening",
+    "production_gate_checks": {
+      "tryEncode_fail_closed": true,
+      "productionAuthorityEligible_false": true
+    },
+    "scope": "read-only original HEAD/status/two paused source hashes plus conservative source guards; runtime authority tests remain required"
+  },
+  "cargo_version": "cargo 1.98.1 (797e8a9bc 2026-08-05)\nrelease: 1.98.1\ncommit-hash: 797e8a9bca276c1c9f9f738d2a20f484fa4eea9d\ncommit-date: 2026-08-05\nhost: x86_64-pc-windows-msvc\nlibgit2: 1.9.4 (sys:0.21.0 vendored)\nlibcurl: 8.21.0-DEV (sys:0.4.90+curl-8.21.0 vendored ssl:Schannel)\nos: Windows 10.0.26200 (Windows 11 Professional) [64-bit]\n",
+  "toolchain_executables": {
+    "cargo": {
+      "path": "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\cargo.exe",
+      "sha256": "c37545ec61d48d31bdefce53280ecab61c4ea54eaace372fac6a0316c6e165d9"
+    },
+    "rustc": {
+      "path": "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\rustc.exe",
+      "sha256": "ca9988af88b1463f6857fdfe909299fee50a63260b3e5f7dbcb5b4d3318b27bc"
+    },
+    "rustfmt": {
+      "path": "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\rustfmt.exe",
+      "sha256": "ac9d781249bffabbb1bedb691a5ea6f63a818c1dda73dd698d4dff687ad4c24e"
+    },
+    "cargo-clippy": {
+      "path": "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\cargo-clippy.exe",
+      "sha256": "cb0f2b164b3f6e95bfed7ec4ae9fc48f8ce8d9fef3649b5ae87961f75e1ef484"
+    },
+    "clippy-driver": {
+      "path": "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\clippy-driver.exe",
+      "sha256": "00fd4ef2fe60e603571573746e52f42f109bbfe4b879e7ca7313614fda0b367b"
+    }
+  },
+  "rustc_version": "rustc 1.98.1 (48a229cea 2026-09-01)\nbinary: rustc\ncommit-hash: 48a229ceaefd4985c50990b14116b6d856af0985\ncommit-date: 2026-09-01\nhost: x86_64-pc-windows-msvc\nrelease: 1.98.1\nLLVM version: 22.1.8\n",
+  "test_counts": {
+    "unit": 4,
+    "layout": 7,
+    "lifecycle": 26,
+    "total": 37
+  },
+  "probe_executable": {
+    "path": "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h6-retained-final-01\\build\\release\\examples\\layout_probe.exe",
+    "sha256": "984f1981645bd922cbd3cd23d8a01bf07edd115e2bdc3f46de22bc75d2c0c125"
+  },
+  "probe_checks": {
+    "policy_rows": 42,
+    "transition_controls": 3,
+    "samples_per_case": 5,
+    "independent_python_checksum_matches": 42,
+    "server_or_packet_performance_claim": false
+  },
+  "probe_results": {
+    "schema": "H6_LAYOUT_PROBE_V1",
+    "scope": "SYNTHETIC_SINGLE_THREAD",
+    "production_authority": false,
+    "samples": 5,
+    "warmup_samples": 1,
+    "reads_per_sample": 200000,
+    "writes_per_sample": 50000,
+    "canonicalizations_per_sample": 32,
+    "baseline": "independent_u32_Vec_not_legacy_native_chunk",
+    "memory_scope": "vector_payload_excludes_allocator_and_hash_buckets",
+    "packing_scope": "canonical_local_indices_only_no_wire_packet",
+    "rows": [
+      {
+        "promote_unique": 64,
+        "linear_lookup_max": 8,
+        "cardinality": 1,
+        "layout": "Uniform",
+        "dense_read_ns": [
+          180200,
+          185400,
+          295800,
+          185900,
+          183400
+        ],
+        "layout_read_ns": [
+          176500,
+          188200,
+          185200,
+          188400,
+          194200
+        ],
+        "dense_write_ns": [
+          51400,
+          53300,
+          51700,
+          108300,
+          51100
+        ],
+        "layout_write_ns": [
+          130500,
+          132000,
+          134000,
+          132200,
+          135200
+        ],
+        "canonical_index_ns": [
+          699200,
+          734300,
+          820100,
+          709700,
+          698400
+        ],
+        "median_dense_read_ns": 185400,
+        "median_layout_read_ns": 188200,
+        "median_dense_write_ns": 51700,
+        "median_layout_write_ns": 132200,
+        "median_canonical_index_ns": 709700,
+        "state_bytes": 4,
+        "index_bytes": 0,
+        "count_bytes": 0,
+        "lookup_capacity_entries": 0,
+        "linear_lookups": 0,
+        "hashed_lookups": 0,
+        "final_checksum": 587345920000,
+        "dense_match": true
+      },
+      {
+        "promote_unique": 64,
+        "linear_lookup_max": 8,
+        "cardinality": 4,
+        "layout": "LocalPalette",
+        "dense_read_ns": [
+          318400,
+          183100,
+          179800,
+          184500,
+          183900
+        ],
+        "layout_read_ns": [
+          327500,
+          349000,
+          269000,
+          360400,
+          263100
+        ],
+        "dense_write_ns": [
+          51300,
+          51500,
+          51100,
+          55100,
+          49200
+        ],
+        "layout_write_ns": [
+          379200,
+          347000,
+          339800,
+          492700,
+          346900
+        ],
+        "canonical_index_ns": [
+          833500,
+          903700,
+          882700,
+          872100,
+          749700
+        ],
+        "median_dense_read_ns": 183900,
+        "median_layout_read_ns": 327500,
+        "median_dense_write_ns": 51300,
+        "median_layout_write_ns": 347000,
+        "median_canonical_index_ns": 872100,
+        "state_bytes": 16,
+        "index_bytes": 8192,
+        "count_bytes": 32,
+        "lookup_capacity_entries": 0,
+        "linear_lookups": 37437,
+        "hashed_lookups": 0,
+        "final_checksum": 587358444131,
+        "dense_match": true
+      },
+      {
+        "promote_unique": 64,
+        "linear_lookup_max": 8,
+        "cardinality": 16,
+        "layout": "LocalPalette",
+        "dense_read_ns": [
+          179900,
+          269500,
+          198800,
+          182400,
+          231700
+        ],
+        "layout_read_ns": [
+          332600,
+          376300,
+          263200,
+          275300,
+          275800
+        ],
+        "dense_write_ns": [
+          50900,
+          65000,
+          55800,
+          47700,
+          58400
+        ],
+        "layout_write_ns": [
+          479100,
+          615600,
+          494200,
+          490600,
+          569900
+        ],
+        "canonical_index_ns": [
+          1068500,
+          800900,
+          869100,
+          745400,
+          744300
+        ],
+        "median_dense_read_ns": 198800,
+        "median_layout_read_ns": 275800,
+        "median_dense_write_ns": 55800,
+        "median_layout_write_ns": 494200,
+        "median_canonical_index_ns": 800900,
+        "state_bytes": 64,
+        "index_bytes": 8192,
+        "count_bytes": 128,
+        "lookup_capacity_entries": 28,
+        "linear_lookups": 0,
+        "hashed_lookups": 46903,
+        "final_checksum": 587408824279,
+        "dense_match": true
+      },
+      {
+        "promote_unique": 64,
+        "linear_lookup_max": 8,
+        "cardinality": 64,
+        "layout": "DenseHot",
+        "dense_read_ns": [
+          442500,
+          319900,
+          307100,
+          313200,
+          211900
+        ],
+        "layout_read_ns": [
+          289700,
+          516400,
+          406300,
+          447000,
+          423500
+        ],
+        "dense_write_ns": [
+          97700,
+          96200,
+          83500,
+          89900,
+          53200
+        ],
+        "layout_write_ns": [
+          254300,
+          418500,
+          310300,
+          399600,
+          329100
+        ],
+        "canonical_index_ns": [
+          1349500,
+          1543900,
+          1423900,
+          1371200,
+          757500
+        ],
+        "median_dense_read_ns": 313200,
+        "median_layout_read_ns": 423500,
+        "median_dense_write_ns": 89900,
+        "median_layout_write_ns": 329100,
+        "median_canonical_index_ns": 1371200,
+        "state_bytes": 16384,
+        "index_bytes": 0,
+        "count_bytes": 0,
+        "lookup_capacity_entries": 0,
+        "linear_lookups": 0,
+        "hashed_lookups": 0,
+        "final_checksum": 587606802407,
+        "dense_match": true
+      },
+      {
+        "promote_unique": 64,
+        "linear_lookup_max": 8,
+        "cardinality": 128,
+        "layout": "DenseHot",
+        "dense_read_ns": [
+          182800,
+          201200,
+          183800,
+          280300,
+          187900
+        ],
+        "layout_read_ns": [
+          243800,
+          227600,
+          433300,
+          234500,
+          253700
+        ],
+        "dense_write_ns": [
+          51000,
+          55600,
+          51800,
+          55600,
+          56700
+        ],
+        "layout_write_ns": [
+          175800,
+          160000,
+          176700,
+          174600,
+          180600
+        ],
+        "canonical_index_ns": [
+          927200,
+          1144300,
+          1097400,
+          834600,
+          858900
+        ],
+        "median_dense_read_ns": 187900,
+        "median_layout_read_ns": 243800,
+        "median_dense_write_ns": 55600,
+        "median_layout_write_ns": 175800,
+        "median_canonical_index_ns": 927200,
+        "state_bytes": 16384,
+        "index_bytes": 0,
+        "count_bytes": 0,
+        "lookup_capacity_entries": 0,
+        "linear_lookups": 0,
+        "hashed_lookups": 0,
+        "final_checksum": 587874641255,
+        "dense_match": true
+      },
+      {
+        "promote_unique": 64,
+        "linear_lookup_max": 8,
+        "cardinality": 512,
+        "layout": "DenseHot",
+        "dense_read_ns": [
+          182700,
+          185800,
+          225700,
+          198200,
+          328500
+        ],
+        "layout_read_ns": [
+          244000,
+          329100,
+          322000,
+          254200,
+          240500
+        ],
+        "dense_write_ns": [
+          49900,
+          54100,
+          63700,
+          56500,
+          53500
+        ],
+        "layout_write_ns": [
+          182300,
+          289000,
+          201900,
+          166700,
+          180100
+        ],
+        "canonical_index_ns": [
+          1068200,
+          1825300,
+          1637300,
+          1084400,
+          1248200
+        ],
+        "median_dense_read_ns": 198200,
+        "median_layout_read_ns": 254200,
+        "median_dense_write_ns": 54100,
+        "median_layout_write_ns": 182300,
+        "median_canonical_index_ns": 1248200,
+        "state_bytes": 16384,
+        "index_bytes": 0,
+        "count_bytes": 0,
+        "lookup_capacity_entries": 0,
+        "linear_lookups": 0,
+        "hashed_lookups": 0,
+        "final_checksum": 589482967271,
+        "dense_match": true
+      },
+      {
+        "promote_unique": 64,
+        "linear_lookup_max": 8,
+        "cardinality": 2048,
+        "layout": "DenseHot",
+        "dense_read_ns": [
+          276100,
+          273800,
+          185100,
+          218600,
+          270200
+        ],
+        "layout_read_ns": [
+          237000,
+          376200,
+          436300,
+          230000,
+          359700
+        ],
+        "dense_write_ns": [
+          85800,
+          82200,
+          49400,
+          49100,
+          77200
+        ],
+        "layout_write_ns": [
+          164300,
+          286100,
+          343900,
+          163100,
+          234100
+        ],
+        "canonical_index_ns": [
+          3244400,
+          4399300,
+          3345200,
+          2859500,
+          2673400
+        ],
+        "median_dense_read_ns": 270200,
+        "median_layout_read_ns": 359700,
+        "median_dense_write_ns": 77200,
+        "median_layout_write_ns": 234100,
+        "median_canonical_index_ns": 3244400,
+        "state_bytes": 16384,
+        "index_bytes": 0,
+        "count_bytes": 0,
+        "lookup_capacity_entries": 0,
+        "linear_lookups": 0,
+        "hashed_lookups": 0,
+        "final_checksum": 595958464231,
+        "dense_match": true
+      },
+      {
+        "promote_unique": 64,
+        "linear_lookup_max": 32,
+        "cardinality": 1,
+        "layout": "Uniform",
+        "dense_read_ns": [
+          203000,
+          312500,
+          295200,
+          224700,
+          179800
+        ],
+        "layout_read_ns": [
+          204500,
+          349400,
+          380800,
+          216300,
+          182100
+        ],
+        "dense_write_ns": [
+          103200,
+          89200,
+          63100,
+          63300,
+          52600
+        ],
+        "layout_write_ns": [
+          132800,
+          229800,
+          171600,
+          130600,
+          131800
+        ],
+        "canonical_index_ns": [
+          1493300,
+          1257700,
+          928300,
+          682500,
+          742600
+        ],
+        "median_dense_read_ns": 224700,
+        "median_layout_read_ns": 216300,
+        "median_dense_write_ns": 63300,
+        "median_layout_write_ns": 132800,
+        "median_canonical_index_ns": 928300,
+        "state_bytes": 4,
+        "index_bytes": 0,
+        "count_bytes": 0,
+        "lookup_capacity_entries": 0,
+        "linear_lookups": 0,
+        "hashed_lookups": 0,
+        "final_checksum": 587345920000,
+        "dense_match": true
+      },
+      {
+        "promote_unique": 64,
+        "linear_lookup_max": 32,
+        "cardinality": 4,
+        "layout": "LocalPalette",
+        "dense_read_ns": [
+          274400,
+          187700,
+          180200,
+          180400,
+          195600
+        ],
+        "layout_read_ns": [
+          264700,
+          308800,
+          368200,
+          270400,
+          268000
+        ],
+        "dense_write_ns": [
+          86600,
+          53200,
+          50500,
+          50300,
+          47900
+        ],
+        "layout_write_ns": [
+          475500,
+          365700,
+          354500,
+          344500,
+          354200
+        ],
+        "canonical_index_ns": [
+          973400,
+          756700,
+          725400,
+          733700,
+          1474000
+        ],
+        "median_dense_read_ns": 187700,
+        "median_layout_read_ns": 270400,
+        "median_dense_write_ns": 50500,
+        "median_layout_write_ns": 354500,
+        "median_canonical_index_ns": 756700,
+        "state_bytes": 16,
+        "index_bytes": 8192,
+        "count_bytes": 32,
+        "lookup_capacity_entries": 0,
+        "linear_lookups": 37437,
+        "hashed_lookups": 0,
+        "final_checksum": 587358444131,
+        "dense_match": true
+      },
+      {
+        "promote_unique": 64,
+        "linear_lookup_max": 32,
+        "cardinality": 16,
+        "layout": "LocalPalette",
+        "dense_read_ns": [
+          186800,
+          181400,
+          179600,
+          180800,
+          199400
+        ],
+        "layout_read_ns": [
+          288900,
+          531000,
+          268800,
+          264400,
+          265800
+        ],
+        "dense_write_ns": [
+          46300,
+          69400,
+          46100,
+          50300,
+          48500
+        ],
+        "layout_write_ns": [
+          419300,
+          549600,
+          346500,
+          470100,
+          395700
+        ],
+        "canonical_index_ns": [
+          824400,
+          860600,
+          744200,
+          761700,
+          1296300
+        ],
+        "median_dense_read_ns": 181400,
+        "median_layout_read_ns": 268800,
+        "median_dense_write_ns": 48500,
+        "median_layout_write_ns": 419300,
+        "median_canonical_index_ns": 824400,
+        "state_bytes": 64,
+        "index_bytes": 8192,
+        "count_bytes": 128,
+        "lookup_capacity_entries": 0,
+        "linear_lookups": 46903,
+        "hashed_lookups": 0,
+        "final_checksum": 587408824279,
+        "dense_match": true
+      },
+      {
+        "promote_unique": 64,
+        "linear_lookup_max": 32,
+        "cardinality": 64,
+        "layout": "DenseHot",
+        "dense_read_ns": [
+          313600,
+          225100,
+          179600,
+          179900,
+          187300
+        ],
+        "layout_read_ns": [
+          215300,
+          242700,
+          331600,
+          232900,
+          217200
+        ],
+        "dense_write_ns": [
+          62700,
+          63300,
+          54500,
+          50800,
+          50800
+        ],
+        "layout_write_ns": [
+          322200,
+          161200,
+          181200,
+          160200,
+          160000
+        ],
+        "canonical_index_ns": [
+          1047200,
+          888200,
+          771800,
+          827300,
+          756000
+        ],
+        "median_dense_read_ns": 187300,
+        "median_layout_read_ns": 232900,
+        "median_dense_write_ns": 54500,
+        "median_layout_write_ns": 161200,
+        "median_canonical_index_ns": 827300,
+        "state_bytes": 16384,
+        "index_bytes": 0,
+        "count_bytes": 0,
+        "lookup_capacity_entries": 0,
+        "linear_lookups": 0,
+        "hashed_lookups": 0,
+        "final_checksum": 587606802407,
+        "dense_match": true
+      },
+      {
+        "promote_unique": 64,
+        "linear_lookup_max": 32,
+        "cardinality": 128,
+        "layout": "DenseHot",
+        "dense_read_ns": [
+          301300,
+          225700,
+          218200,
+          288400,
+          179900
+        ],
+        "layout_read_ns": [
+          226400,
+          268700,
+          216000,
+          360800,
+          215500
+        ],
+        "dense_write_ns": [
+          66100,
+          53100,
+          92300,
+          88400,
+          66100
+        ],
+        "layout_write_ns": [
+          162100,
+          202500,
+          158300,
+          175300,
+          158800
+        ],
+        "canonical_index_ns": [
+          1204100,
+          828700,
+          1243100,
+          800900,
+          795100
+        ],
+        "median_dense_read_ns": 225700,
+        "median_layout_read_ns": 226400,
+        "median_dense_write_ns": 66100,
+        "median_layout_write_ns": 162100,
+        "median_canonical_index_ns": 828700,
+        "state_bytes": 16384,
+        "index_bytes": 0,
+        "count_bytes": 0,
+        "lookup_capacity_entries": 0,
+        "linear_lookups": 0,
+        "hashed_lookups": 0,
+        "final_checksum": 587874641255,
+        "dense_match": true
+      },
+      {
+        "promote_unique": 64,
+        "linear_lookup_max": 32,
+        "cardinality": 512,
+        "layout": "DenseHot",
+        "dense_read_ns": [
+          263400,
+          305400,
+          183300,
+          227000,
+          181500
+        ],
+        "layout_read_ns": [
+          320300,
+          408500,
+          221800,
+          239700,
+          249200
+        ],
+        "dense_write_ns": [
+          61900,
+          86000,
+          74000,
+          53100,
+          49500
+        ],
+        "layout_write_ns": [
+          234200,
+          273800,
+          163300,
+          166700,
+          176300
+        ],
+        "canonical_index_ns": [
+          1429200,
+          1103200,
+          1614000,
+          1046800,
+          1469500
+        ],
+        "median_dense_read_ns": 227000,
+        "median_layout_read_ns": 249200,
+        "median_dense_write_ns": 61900,
+        "median_layout_write_ns": 176300,
+        "median_canonical_index_ns": 1429200,
+        "state_bytes": 16384,
+        "index_bytes": 0,
+        "count_bytes": 0,
+        "lookup_capacity_entries": 0,
+        "linear_lookups": 0,
+        "hashed_lookups": 0,
+        "final_checksum": 589482967271,
+        "dense_match": true
+      },
+      {
+        "promote_unique": 64,
+        "linear_lookup_max": 32,
+        "cardinality": 2048,
+        "layout": "DenseHot",
+        "dense_read_ns": [
+          180400,
+          184600,
+          182600,
+          197800,
+          179900
+        ],
+        "layout_read_ns": [
+          231200,
+          213700,
+          268700,
+          247700,
+          215500
+        ],
+        "dense_write_ns": [
+          50200,
+          46200,
+          49900,
+          66900,
+          50000
+        ],
+        "layout_write_ns": [
+          171600,
+          211400,
+          249200,
+          158100,
+          169300
+        ],
+        "canonical_index_ns": [
+          2049300,
+          2287600,
+          2201000,
+          2349000,
+          2285400
+        ],
+        "median_dense_read_ns": 182600,
+        "median_layout_read_ns": 231200,
+        "median_dense_write_ns": 50000,
+        "median_layout_write_ns": 171600,
+        "median_canonical_index_ns": 2285400,
+        "state_bytes": 16384,
+        "index_bytes": 0,
+        "count_bytes": 0,
+        "lookup_capacity_entries": 0,
+        "linear_lookups": 0,
+        "hashed_lookups": 0,
+        "final_checksum": 595958464231,
+        "dense_match": true
+      },
+      {
+        "promote_unique": 128,
+        "linear_lookup_max": 8,
+        "cardinality": 1,
+        "layout": "Uniform",
+        "dense_read_ns": [
+          226300,
+          215600,
+          295400,
+          197300,
+          291500
+        ],
+        "layout_read_ns": [
+          170800,
+          273900,
+          358900,
+          182600,
+          363500
+        ],
+        "dense_write_ns": [
+          46400,
+          88700,
+          74500,
+          58700,
+          77800
+        ],
+        "layout_write_ns": [
+          130300,
+          139100,
+          187000,
+          129900,
+          240900
+        ],
+        "canonical_index_ns": [
+          684300,
+          697400,
+          839900,
+          762400,
+          859000
+        ],
+        "median_dense_read_ns": 226300,
+        "median_layout_read_ns": 273900,
+        "median_dense_write_ns": 74500,
+        "median_layout_write_ns": 139100,
+        "median_canonical_index_ns": 762400,
+        "state_bytes": 4,
+        "index_bytes": 0,
+        "count_bytes": 0,
+        "lookup_capacity_entries": 0,
+        "linear_lookups": 0,
+        "hashed_lookups": 0,
+        "final_checksum": 587345920000,
+        "dense_match": true
+      },
+      {
+        "promote_unique": 128,
+        "linear_lookup_max": 8,
+        "cardinality": 4,
+        "layout": "LocalPalette",
+        "dense_read_ns": [
+          179700,
+          225900,
+          185700,
+          179800,
+          310700
+        ],
+        "layout_read_ns": [
+          278200,
+          498700,
+          271300,
+          267500,
+          459100
+        ],
+        "dense_write_ns": [
+          48200,
+          98500,
+          44200,
+          50100,
+          99600
+        ],
+        "layout_write_ns": [
+          345800,
+          460100,
+          393800,
+          347400,
+          741500
+        ],
+        "canonical_index_ns": [
+          774200,
+          841800,
+          769100,
+          941400,
+          1367800
+        ],
+        "median_dense_read_ns": 185700,
+        "median_layout_read_ns": 278200,
+        "median_dense_write_ns": 50100,
+        "median_layout_write_ns": 393800,
+        "median_canonical_index_ns": 841800,
+        "state_bytes": 16,
+        "index_bytes": 8192,
+        "count_bytes": 32,
+        "lookup_capacity_entries": 0,
+        "linear_lookups": 37437,
+        "hashed_lookups": 0,
+        "final_checksum": 587358444131,
+        "dense_match": true
+      },
+      {
+        "promote_unique": 128,
+        "linear_lookup_max": 8,
+        "cardinality": 16,
+        "layout": "LocalPalette",
+        "dense_read_ns": [
+          184200,
+          205800,
+          190600,
+          310700,
+          182100
+        ],
+        "layout_read_ns": [
+          263400,
+          267800,
+          269900,
+          510900,
+          266500
+        ],
+        "dense_write_ns": [
+          52300,
+          55900,
+          54400,
+          91700,
+          46400
+        ],
+        "layout_write_ns": [
+          485000,
+          483000,
+          506000,
+          644200,
+          541900
+        ],
+        "canonical_index_ns": [
+          734600,
+          776700,
+          808900,
+          899500,
+          771600
+        ],
+        "median_dense_read_ns": 190600,
+        "median_layout_read_ns": 267800,
+        "median_dense_write_ns": 54400,
+        "median_layout_write_ns": 506000,
+        "median_canonical_index_ns": 776700,
+        "state_bytes": 64,
+        "index_bytes": 8192,
+        "count_bytes": 128,
+        "lookup_capacity_entries": 28,
+        "linear_lookups": 0,
+        "hashed_lookups": 46903,
+        "final_checksum": 587408824279,
+        "dense_match": true
+      },
+      {
+        "promote_unique": 128,
+        "linear_lookup_max": 8,
+        "cardinality": 64,
+        "layout": "LocalPalette",
+        "dense_read_ns": [
+          228900,
+          179700,
+          179900,
+          179900,
+          181300
+        ],
+        "layout_read_ns": [
+          468000,
+          264100,
+          290500,
+          410500,
+          348900
+        ],
+        "dense_write_ns": [
+          53300,
+          45800,
+          50300,
+          53900,
+          50200
+        ],
+        "layout_write_ns": [
+          680500,
+          613900,
+          479000,
+          703100,
+          510400
+        ],
+        "canonical_index_ns": [
+          842100,
+          988700,
+          784500,
+          1090000,
+          841300
+        ],
+        "median_dense_read_ns": 179900,
+        "median_layout_read_ns": 348900,
+        "median_dense_write_ns": 50300,
+        "median_layout_write_ns": 613900,
+        "median_canonical_index_ns": 842100,
+        "state_bytes": 256,
+        "index_bytes": 8192,
+        "count_bytes": 512,
+        "lookup_capacity_entries": 112,
+        "linear_lookups": 0,
+        "hashed_lookups": 49215,
+        "final_checksum": 587606802407,
+        "dense_match": true
+      },
+      {
+        "promote_unique": 128,
+        "linear_lookup_max": 8,
+        "cardinality": 128,
+        "layout": "DenseHot",
+        "dense_read_ns": [
+          304700,
+          225000,
+          247500,
+          402600,
+          185900
+        ],
+        "layout_read_ns": [
+          397200,
+          245900,
+          251000,
+          218600,
+          226000
+        ],
+        "dense_write_ns": [
+          63100,
+          64200,
+          59500,
+          122000,
+          49900
+        ],
+        "layout_write_ns": [
+          276400,
+          160300,
+          219000,
+          167600,
+          160200
+        ],
+        "canonical_index_ns": [
+          1054000,
+          789400,
+          1337300,
+          794800,
+          801600
+        ],
+        "median_dense_read_ns": 247500,
+        "median_layout_read_ns": 245900,
+        "median_dense_write_ns": 63100,
+        "median_layout_write_ns": 167600,
+        "median_canonical_index_ns": 801600,
+        "state_bytes": 16384,
+        "index_bytes": 0,
+        "count_bytes": 0,
+        "lookup_capacity_entries": 0,
+        "linear_lookups": 0,
+        "hashed_lookups": 0,
+        "final_checksum": 587874641255,
+        "dense_match": true
+      },
+      {
+        "promote_unique": 128,
+        "linear_lookup_max": 8,
+        "cardinality": 512,
+        "layout": "DenseHot",
+        "dense_read_ns": [
+          340900,
+          283200,
+          298000,
+          292700,
+          179600
+        ],
+        "layout_read_ns": [
+          243400,
+          401800,
+          387400,
+          422700,
+          230800
+        ],
+        "dense_write_ns": [
+          91300,
+          85800,
+          92200,
+          102600,
+          50500
+        ],
+        "layout_write_ns": [
+          207500,
+          317100,
+          266000,
+          356600,
+          171500
+        ],
+        "canonical_index_ns": [
+          1592000,
+          1630300,
+          1694300,
+          1379300,
+          1056200
+        ],
+        "median_dense_read_ns": 292700,
+        "median_layout_read_ns": 387400,
+        "median_dense_write_ns": 91300,
+        "median_layout_write_ns": 266000,
+        "median_canonical_index_ns": 1592000,
+        "state_bytes": 16384,
+        "index_bytes": 0,
+        "count_bytes": 0,
+        "lookup_capacity_entries": 0,
+        "linear_lookups": 0,
+        "hashed_lookups": 0,
+        "final_checksum": 589482967271,
+        "dense_match": true
+      },
+      {
+        "promote_unique": 128,
+        "linear_lookup_max": 8,
+        "cardinality": 2048,
+        "layout": "DenseHot",
+        "dense_read_ns": [
+          189000,
+          185300,
+          196800,
+          288100,
+          277500
+        ],
+        "layout_read_ns": [
+          215600,
+          355200,
+          218500,
+          431500,
+          396400
+        ],
+        "dense_write_ns": [
+          51400,
+          78400,
+          59300,
+          86700,
+          83000
+        ],
+        "layout_write_ns": [
+          156400,
+          208600,
+          156600,
+          310000,
+          276600
+        ],
+        "canonical_index_ns": [
+          2033500,
+          2175500,
+          2431600,
+          2988600,
+          2960200
+        ],
+        "median_dense_read_ns": 196800,
+        "median_layout_read_ns": 355200,
+        "median_dense_write_ns": 78400,
+        "median_layout_write_ns": 208600,
+        "median_canonical_index_ns": 2431600,
+        "state_bytes": 16384,
+        "index_bytes": 0,
+        "count_bytes": 0,
+        "lookup_capacity_entries": 0,
+        "linear_lookups": 0,
+        "hashed_lookups": 0,
+        "final_checksum": 595958464231,
+        "dense_match": true
+      },
+      {
+        "promote_unique": 128,
+        "linear_lookup_max": 32,
+        "cardinality": 1,
+        "layout": "Uniform",
+        "dense_read_ns": [
+          284500,
+          307600,
+          289100,
+          294900,
+          180100
+        ],
+        "layout_read_ns": [
+          323300,
+          329800,
+          324800,
+          284400,
+          255000
+        ],
+        "dense_write_ns": [
+          84900,
+          89300,
+          82800,
+          86100,
+          52200
+        ],
+        "layout_write_ns": [
+          205300,
+          227100,
+          220400,
+          190500,
+          131800
+        ],
+        "canonical_index_ns": [
+          1233300,
+          1316600,
+          1223300,
+          1106800,
+          669100
+        ],
+        "median_dense_read_ns": 289100,
+        "median_layout_read_ns": 323300,
+        "median_dense_write_ns": 84900,
+        "median_layout_write_ns": 205300,
+        "median_canonical_index_ns": 1223300,
+        "state_bytes": 4,
+        "index_bytes": 0,
+        "count_bytes": 0,
+        "lookup_capacity_entries": 0,
+        "linear_lookups": 0,
+        "hashed_lookups": 0,
+        "final_checksum": 587345920000,
+        "dense_match": true
+      },
+      {
+        "promote_unique": 128,
+        "linear_lookup_max": 32,
+        "cardinality": 4,
+        "layout": "LocalPalette",
+        "dense_read_ns": [
+          179700,
+          195400,
+          179900,
+          208400,
+          227600
+        ],
+        "layout_read_ns": [
+          275700,
+          263700,
+          263300,
+          276500,
+          395000
+        ],
+        "dense_write_ns": [
+          47800,
+          50000,
+          54600,
+          49900,
+          81900
+        ],
+        "layout_write_ns": [
+          349400,
+          350200,
+          343900,
+          344400,
+          500300
+        ],
+        "canonical_index_ns": [
+          1417500,
+          722600,
+          774200,
+          1068900,
+          985700
+        ],
+        "median_dense_read_ns": 195400,
+        "median_layout_read_ns": 275700,
+        "median_dense_write_ns": 50000,
+        "median_layout_write_ns": 349400,
+        "median_canonical_index_ns": 985700,
+        "state_bytes": 16,
+        "index_bytes": 8192,
+        "count_bytes": 32,
+        "lookup_capacity_entries": 0,
+        "linear_lookups": 37437,
+        "hashed_lookups": 0,
+        "final_checksum": 587358444131,
+        "dense_match": true
+      },
+      {
+        "promote_unique": 128,
+        "linear_lookup_max": 32,
+        "cardinality": 16,
+        "layout": "LocalPalette",
+        "dense_read_ns": [
+          181500,
+          187400,
+          179800,
+          181300,
+          185000
+        ],
+        "layout_read_ns": [
+          264600,
+          269400,
+          271200,
+          267000,
+          267300
+        ],
+        "dense_write_ns": [
+          48100,
+          54000,
+          48200,
+          48400,
+          52100
+        ],
+        "layout_write_ns": [
+          376200,
+          390200,
+          374900,
+          392700,
+          390600
+        ],
+        "canonical_index_ns": [
+          760300,
+          796200,
+          760200,
+          762900,
+          798900
+        ],
+        "median_dense_read_ns": 181500,
+        "median_layout_read_ns": 267300,
+        "median_dense_write_ns": 48400,
+        "median_layout_write_ns": 390200,
+        "median_canonical_index_ns": 762900,
+        "state_bytes": 64,
+        "index_bytes": 8192,
+        "count_bytes": 128,
+        "lookup_capacity_entries": 0,
+        "linear_lookups": 46903,
+        "hashed_lookups": 0,
+        "final_checksum": 587408824279,
+        "dense_match": true
+      },
+      {
+        "promote_unique": 128,
+        "linear_lookup_max": 32,
+        "cardinality": 64,
+        "layout": "LocalPalette",
+        "dense_read_ns": [
+          192000,
+          185100,
+          181400,
+          181300,
+          179800
+        ],
+        "layout_read_ns": [
+          263100,
+          264900,
+          298500,
+          266900,
+          282200
+        ],
+        "dense_write_ns": [
+          46100,
+          52100,
+          47900,
+          48000,
+          46100
+        ],
+        "layout_write_ns": [
+          493300,
+          483700,
+          493800,
+          480300,
+          527400
+        ],
+        "canonical_index_ns": [
+          839600,
+          839500,
+          808900,
+          828600,
+          827400
+        ],
+        "median_dense_read_ns": 181400,
+        "median_layout_read_ns": 266900,
+        "median_dense_write_ns": 47900,
+        "median_layout_write_ns": 493300,
+        "median_canonical_index_ns": 828600,
+        "state_bytes": 256,
+        "index_bytes": 8192,
+        "count_bytes": 512,
+        "lookup_capacity_entries": 112,
+        "linear_lookups": 0,
+        "hashed_lookups": 49215,
+        "final_checksum": 587606802407,
+        "dense_match": true
+      },
+      {
+        "promote_unique": 128,
+        "linear_lookup_max": 32,
+        "cardinality": 128,
+        "layout": "DenseHot",
+        "dense_read_ns": [
+          184100,
+          197400,
+          253300,
+          179900,
+          211000
+        ],
+        "layout_read_ns": [
+          256000,
+          215400,
+          229900,
+          240700,
+          294700
+        ],
+        "dense_write_ns": [
+          50900,
+          58300,
+          74400,
+          56800,
+          48200
+        ],
+        "layout_write_ns": [
+          169200,
+          157800,
+          207600,
+          174700,
+          254600
+        ],
+        "canonical_index_ns": [
+          805700,
+          820100,
+          852600,
+          800800,
+          819800
+        ],
+        "median_dense_read_ns": 197400,
+        "median_layout_read_ns": 240700,
+        "median_dense_write_ns": 56800,
+        "median_layout_write_ns": 174700,
+        "median_canonical_index_ns": 819800,
+        "state_bytes": 16384,
+        "index_bytes": 0,
+        "count_bytes": 0,
+        "lookup_capacity_entries": 0,
+        "linear_lookups": 0,
+        "hashed_lookups": 0,
+        "final_checksum": 587874641255,
+        "dense_match": true
+      },
+      {
+        "promote_unique": 128,
+        "linear_lookup_max": 32,
+        "cardinality": 512,
+        "layout": "DenseHot",
+        "dense_read_ns": [
+          259900,
+          207500,
+          179800,
+          190300,
+          228100
+        ],
+        "layout_read_ns": [
+          374100,
+          316000,
+          243300,
+          355200,
+          430600
+        ],
+        "dense_write_ns": [
+          82600,
+          77100,
+          50500,
+          50600,
+          50900
+        ],
+        "layout_write_ns": [
+          261500,
+          161400,
+          172300,
+          270000,
+          197100
+        ],
+        "canonical_index_ns": [
+          1172100,
+          1211000,
+          1057600,
+          1324500,
+          1105100
+        ],
+        "median_dense_read_ns": 207500,
+        "median_layout_read_ns": 355200,
+        "median_dense_write_ns": 50900,
+        "median_layout_write_ns": 197100,
+        "median_canonical_index_ns": 1172100,
+        "state_bytes": 16384,
+        "index_bytes": 0,
+        "count_bytes": 0,
+        "lookup_capacity_entries": 0,
+        "linear_lookups": 0,
+        "hashed_lookups": 0,
+        "final_checksum": 589482967271,
+        "dense_match": true
+      },
+      {
+        "promote_unique": 128,
+        "linear_lookup_max": 32,
+        "cardinality": 2048,
+        "layout": "DenseHot",
+        "dense_read_ns": [
+          196700,
+          256800,
+          270900,
+          179600,
+          318700
+        ],
+        "layout_read_ns": [
+          213500,
+          221200,
+          259000,
+          213900,
+          406000
+        ],
+        "dense_write_ns": [
+          58900,
+          61400,
+          44600,
+          43600,
+          100200
+        ],
+        "layout_write_ns": [
+          155600,
+          155700,
+          240100,
+          156900,
+          254600
+        ],
+        "canonical_index_ns": [
+          2036600,
+          2544800,
+          2060100,
+          2574200,
+          2294300
+        ],
+        "median_dense_read_ns": 256800,
+        "median_layout_read_ns": 221200,
+        "median_dense_write_ns": 58900,
+        "median_layout_write_ns": 156900,
+        "median_canonical_index_ns": 2294300,
+        "state_bytes": 16384,
+        "index_bytes": 0,
+        "count_bytes": 0,
+        "lookup_capacity_entries": 0,
+        "linear_lookups": 0,
+        "hashed_lookups": 0,
+        "final_checksum": 595958464231,
+        "dense_match": true
+      },
+      {
+        "promote_unique": 512,
+        "linear_lookup_max": 8,
+        "cardinality": 1,
+        "layout": "Uniform",
+        "dense_read_ns": [
+          179800,
+          181500,
+          185600,
+          182300,
+          179500
+        ],
+        "layout_read_ns": [
+          170600,
+          172500,
+          195100,
+          193000,
+          177100
+        ],
+        "dense_write_ns": [
+          48000,
+          44900,
+          50400,
+          52800,
+          50500
+        ],
+        "layout_write_ns": [
+          130400,
+          237100,
+          134600,
+          131600,
+          130300
+        ],
+        "canonical_index_ns": [
+          876700,
+          718000,
+          695300,
+          886200,
+          713200
+        ],
+        "median_dense_read_ns": 181500,
+        "median_layout_read_ns": 177100,
+        "median_dense_write_ns": 50400,
+        "median_layout_write_ns": 131600,
+        "median_canonical_index_ns": 718000,
+        "state_bytes": 4,
+        "index_bytes": 0,
+        "count_bytes": 0,
+        "lookup_capacity_entries": 0,
+        "linear_lookups": 0,
+        "hashed_lookups": 0,
+        "final_checksum": 587345920000,
+        "dense_match": true
+      },
+      {
+        "promote_unique": 512,
+        "linear_lookup_max": 8,
+        "cardinality": 4,
+        "layout": "LocalPalette",
+        "dense_read_ns": [
+          313100,
+          300200,
+          179900,
+          224200,
+          187100
+        ],
+        "layout_read_ns": [
+          563500,
+          363600,
+          288400,
+          329200,
+          265700
+        ],
+        "dense_write_ns": [
+          106500,
+          89200,
+          51000,
+          52700,
+          59600
+        ],
+        "layout_write_ns": [
+          648800,
+          392300,
+          340200,
+          351600,
+          355600
+        ],
+        "canonical_index_ns": [
+          1192200,
+          962700,
+          839900,
+          752700,
+          741500
+        ],
+        "median_dense_read_ns": 224200,
+        "median_layout_read_ns": 329200,
+        "median_dense_write_ns": 59600,
+        "median_layout_write_ns": 355600,
+        "median_canonical_index_ns": 839900,
+        "state_bytes": 16,
+        "index_bytes": 8192,
+        "count_bytes": 32,
+        "lookup_capacity_entries": 0,
+        "linear_lookups": 37437,
+        "hashed_lookups": 0,
+        "final_checksum": 587358444131,
+        "dense_match": true
+      },
+      {
+        "promote_unique": 512,
+        "linear_lookup_max": 8,
+        "cardinality": 16,
+        "layout": "LocalPalette",
+        "dense_read_ns": [
+          262600,
+          192200,
+          180000,
+          179600,
+          275400
+        ],
+        "layout_read_ns": [
+          292200,
+          265600,
+          329000,
+          268900,
+          719300
+        ],
+        "dense_write_ns": [
+          60200,
+          54800,
+          46200,
+          49700,
+          93700
+        ],
+        "layout_write_ns": [
+          614900,
+          598800,
+          513000,
+          477600,
+          771100
+        ],
+        "canonical_index_ns": [
+          758600,
+          1101700,
+          764700,
+          1105600,
+          1292800
+        ],
+        "median_dense_read_ns": 192200,
+        "median_layout_read_ns": 292200,
+        "median_dense_write_ns": 54800,
+        "median_layout_write_ns": 598800,
+        "median_canonical_index_ns": 1101700,
+        "state_bytes": 64,
+        "index_bytes": 8192,
+        "count_bytes": 128,
+        "lookup_capacity_entries": 28,
+        "linear_lookups": 0,
+        "hashed_lookups": 46903,
+        "final_checksum": 587408824279,
+        "dense_match": true
+      },
+      {
+        "promote_unique": 512,
+        "linear_lookup_max": 8,
+        "cardinality": 64,
+        "layout": "LocalPalette",
+        "dense_read_ns": [
+          180000,
+          179800,
+          198800,
+          179800,
+          179700
+        ],
+        "layout_read_ns": [
+          263000,
+          269300,
+          298700,
+          268400,
+          262900
+        ],
+        "dense_write_ns": [
+          48600,
+          48300,
+          48800,
+          50400,
+          48400
+        ],
+        "layout_write_ns": [
+          862900,
+          478800,
+          603800,
+          507400,
+          482900
+        ],
+        "canonical_index_ns": [
+          781800,
+          885800,
+          862700,
+          803100,
+          818300
+        ],
+        "median_dense_read_ns": 179800,
+        "median_layout_read_ns": 268400,
+        "median_dense_write_ns": 48600,
+        "median_layout_write_ns": 507400,
+        "median_canonical_index_ns": 818300,
+        "state_bytes": 256,
+        "index_bytes": 8192,
+        "count_bytes": 512,
+        "lookup_capacity_entries": 112,
+        "linear_lookups": 0,
+        "hashed_lookups": 49215,
+        "final_checksum": 587606802407,
+        "dense_match": true
+      },
+      {
+        "promote_unique": 512,
+        "linear_lookup_max": 8,
+        "cardinality": 128,
+        "layout": "LocalPalette",
+        "dense_read_ns": [
+          180900,
+          179800,
+          179800,
+          179700,
+          283900
+        ],
+        "layout_read_ns": [
+          280800,
+          281100,
+          266200,
+          267600,
+          266200
+        ],
+        "dense_write_ns": [
+          48300,
+          48000,
+          48500,
+          50900,
+          74600
+        ],
+        "layout_write_ns": [
+          502000,
+          477700,
+          483300,
+          487000,
+          672300
+        ],
+        "canonical_index_ns": [
+          900600,
+          861500,
+          844100,
+          848000,
+          1205500
+        ],
+        "median_dense_read_ns": 179800,
+        "median_layout_read_ns": 267600,
+        "median_dense_write_ns": 48500,
+        "median_layout_write_ns": 487000,
+        "median_canonical_index_ns": 861500,
+        "state_bytes": 512,
+        "index_bytes": 8192,
+        "count_bytes": 1024,
+        "lookup_capacity_entries": 224,
+        "linear_lookups": 0,
+        "hashed_lookups": 49617,
+        "final_checksum": 587874641255,
+        "dense_match": true
+      },
+      {
+        "promote_unique": 512,
+        "linear_lookup_max": 8,
+        "cardinality": 512,
+        "layout": "DenseHot",
+        "dense_read_ns": [
+          236500,
+          197200,
+          180600,
+          308900,
+          205200
+        ],
+        "layout_read_ns": [
+          334500,
+          225900,
+          218900,
+          488300,
+          411600
+        ],
+        "dense_write_ns": [
+          50300,
+          58900,
+          50200,
+          109100,
+          53100
+        ],
+        "layout_write_ns": [
+          182900,
+          157800,
+          156600,
+          367400,
+          255900
+        ],
+        "canonical_index_ns": [
+          1049600,
+          1039700,
+          1025600,
+          1784000,
+          1046400
+        ],
+        "median_dense_read_ns": 205200,
+        "median_layout_read_ns": 334500,
+        "median_dense_write_ns": 53100,
+        "median_layout_write_ns": 182900,
+        "median_canonical_index_ns": 1046400,
+        "state_bytes": 16384,
+        "index_bytes": 0,
+        "count_bytes": 0,
+        "lookup_capacity_entries": 0,
+        "linear_lookups": 0,
+        "hashed_lookups": 0,
+        "final_checksum": 589482967271,
+        "dense_match": true
+      },
+      {
+        "promote_unique": 512,
+        "linear_lookup_max": 8,
+        "cardinality": 2048,
+        "layout": "DenseHot",
+        "dense_read_ns": [
+          179800,
+          181100,
+          182900,
+          182700,
+          183600
+        ],
+        "layout_read_ns": [
+          213500,
+          243800,
+          321800,
+          215400,
+          412300
+        ],
+        "dense_write_ns": [
+          50400,
+          52200,
+          53700,
+          48500,
+          47100
+        ],
+        "layout_write_ns": [
+          155500,
+          157600,
+          183000,
+          175600,
+          251900
+        ],
+        "canonical_index_ns": [
+          2323800,
+          2146400,
+          1993800,
+          2017400,
+          2268100
+        ],
+        "median_dense_read_ns": 182700,
+        "median_layout_read_ns": 243800,
+        "median_dense_write_ns": 50400,
+        "median_layout_write_ns": 175600,
+        "median_canonical_index_ns": 2146400,
+        "state_bytes": 16384,
+        "index_bytes": 0,
+        "count_bytes": 0,
+        "lookup_capacity_entries": 0,
+        "linear_lookups": 0,
+        "hashed_lookups": 0,
+        "final_checksum": 595958464231,
+        "dense_match": true
+      },
+      {
+        "promote_unique": 512,
+        "linear_lookup_max": 32,
+        "cardinality": 1,
+        "layout": "Uniform",
+        "dense_read_ns": [
+          182100,
+          183000,
+          196800,
+          179500,
+          224700
+        ],
+        "layout_read_ns": [
+          187000,
+          175200,
+          191000,
+          175400,
+          326900
+        ],
+        "dense_write_ns": [
+          45800,
+          48000,
+          59100,
+          48200,
+          63400
+        ],
+        "layout_write_ns": [
+          132600,
+          130000,
+          130500,
+          129800,
+          173800
+        ],
+        "canonical_index_ns": [
+          771400,
+          698800,
+          696800,
+          701200,
+          755500
+        ],
+        "median_dense_read_ns": 183000,
+        "median_layout_read_ns": 187000,
+        "median_dense_write_ns": 48200,
+        "median_layout_write_ns": 130500,
+        "median_canonical_index_ns": 701200,
+        "state_bytes": 4,
+        "index_bytes": 0,
+        "count_bytes": 0,
+        "lookup_capacity_entries": 0,
+        "linear_lookups": 0,
+        "hashed_lookups": 0,
+        "final_checksum": 587345920000,
+        "dense_match": true
+      },
+      {
+        "promote_unique": 512,
+        "linear_lookup_max": 32,
+        "cardinality": 4,
+        "layout": "LocalPalette",
+        "dense_read_ns": [
+          338500,
+          234000,
+          197100,
+          179800,
+          183200
+        ],
+        "layout_read_ns": [
+          263000,
+          364900,
+          275400,
+          410400,
+          270000
+        ],
+        "dense_write_ns": [
+          103800,
+          47900,
+          59100,
+          50600,
+          54600
+        ],
+        "layout_write_ns": [
+          356100,
+          416200,
+          339600,
+          559200,
+          348900
+        ],
+        "canonical_index_ns": [
+          1359500,
+          814000,
+          739400,
+          975700,
+          727900
+        ],
+        "median_dense_read_ns": 197100,
+        "median_layout_read_ns": 275400,
+        "median_dense_write_ns": 54600,
+        "median_layout_write_ns": 356100,
+        "median_canonical_index_ns": 814000,
+        "state_bytes": 16,
+        "index_bytes": 8192,
+        "count_bytes": 32,
+        "lookup_capacity_entries": 0,
+        "linear_lookups": 37437,
+        "hashed_lookups": 0,
+        "final_checksum": 587358444131,
+        "dense_match": true
+      },
+      {
+        "promote_unique": 512,
+        "linear_lookup_max": 32,
+        "cardinality": 16,
+        "layout": "LocalPalette",
+        "dense_read_ns": [
+          179900,
+          218800,
+          224800,
+          196800,
+          199500
+        ],
+        "layout_read_ns": [
+          476100,
+          267500,
+          396300,
+          408500,
+          382200
+        ],
+        "dense_write_ns": [
+          45900,
+          63300,
+          52700,
+          58600,
+          60200
+        ],
+        "layout_write_ns": [
+          562200,
+          385000,
+          479900,
+          428700,
+          380800
+        ],
+        "canonical_index_ns": [
+          770600,
+          914400,
+          790600,
+          861300,
+          772400
+        ],
+        "median_dense_read_ns": 199500,
+        "median_layout_read_ns": 396300,
+        "median_dense_write_ns": 58600,
+        "median_layout_write_ns": 428700,
+        "median_canonical_index_ns": 790600,
+        "state_bytes": 64,
+        "index_bytes": 8192,
+        "count_bytes": 128,
+        "lookup_capacity_entries": 0,
+        "linear_lookups": 46903,
+        "hashed_lookups": 0,
+        "final_checksum": 587408824279,
+        "dense_match": true
+      },
+      {
+        "promote_unique": 512,
+        "linear_lookup_max": 32,
+        "cardinality": 64,
+        "layout": "LocalPalette",
+        "dense_read_ns": [
+          201600,
+          283000,
+          179800,
+          309200,
+          224800
+        ],
+        "layout_read_ns": [
+          271700,
+          416100,
+          263600,
+          431300,
+          498800
+        ],
+        "dense_write_ns": [
+          61400,
+          84700,
+          45800,
+          86800,
+          52200
+        ],
+        "layout_write_ns": [
+          488500,
+          518400,
+          484200,
+          785700,
+          803200
+        ],
+        "canonical_index_ns": [
+          1023100,
+          854300,
+          1106700,
+          1355900,
+          1098400
+        ],
+        "median_dense_read_ns": 224800,
+        "median_layout_read_ns": 416100,
+        "median_dense_write_ns": 61400,
+        "median_layout_write_ns": 518400,
+        "median_canonical_index_ns": 1098400,
+        "state_bytes": 256,
+        "index_bytes": 8192,
+        "count_bytes": 512,
+        "lookup_capacity_entries": 112,
+        "linear_lookups": 0,
+        "hashed_lookups": 49215,
+        "final_checksum": 587606802407,
+        "dense_match": true
+      },
+      {
+        "promote_unique": 512,
+        "linear_lookup_max": 32,
+        "cardinality": 128,
+        "layout": "LocalPalette",
+        "dense_read_ns": [
+          182200,
+          221200,
+          224500,
+          180100,
+          180500
+        ],
+        "layout_read_ns": [
+          266100,
+          296500,
+          299600,
+          263200,
+          267800
+        ],
+        "dense_write_ns": [
+          54500,
+          53700,
+          52200,
+          52400,
+          48300
+        ],
+        "layout_write_ns": [
+          487100,
+          656700,
+          806300,
+          485200,
+          509400
+        ],
+        "canonical_index_ns": [
+          1420300,
+          1298600,
+          1022900,
+          859800,
+          1343200
+        ],
+        "median_dense_read_ns": 182200,
+        "median_layout_read_ns": 267800,
+        "median_dense_write_ns": 52400,
+        "median_layout_write_ns": 509400,
+        "median_canonical_index_ns": 1298600,
+        "state_bytes": 512,
+        "index_bytes": 8192,
+        "count_bytes": 1024,
+        "lookup_capacity_entries": 224,
+        "linear_lookups": 0,
+        "hashed_lookups": 49617,
+        "final_checksum": 587874641255,
+        "dense_match": true
+      },
+      {
+        "promote_unique": 512,
+        "linear_lookup_max": 32,
+        "cardinality": 512,
+        "layout": "DenseHot",
+        "dense_read_ns": [
+          180800,
+          202300,
+          179700,
+          180500,
+          305000
+        ],
+        "layout_read_ns": [
+          227200,
+          268700,
+          234800,
+          231400,
+          442700
+        ],
+        "dense_write_ns": [
+          50300,
+          71000,
+          50400,
+          52400,
+          84700
+        ],
+        "layout_write_ns": [
+          158400,
+          157700,
+          156800,
+          177300,
+          300600
+        ],
+        "canonical_index_ns": [
+          1065800,
+          1479100,
+          1141600,
+          1509700,
+          1703400
+        ],
+        "median_dense_read_ns": 180800,
+        "median_layout_read_ns": 234800,
+        "median_dense_write_ns": 52400,
+        "median_layout_write_ns": 158400,
+        "median_canonical_index_ns": 1479100,
+        "state_bytes": 16384,
+        "index_bytes": 0,
+        "count_bytes": 0,
+        "lookup_capacity_entries": 0,
+        "linear_lookups": 0,
+        "hashed_lookups": 0,
+        "final_checksum": 589482967271,
+        "dense_match": true
+      },
+      {
+        "promote_unique": 512,
+        "linear_lookup_max": 32,
+        "cardinality": 2048,
+        "layout": "DenseHot",
+        "dense_read_ns": [
+          192200,
+          180000,
+          183300,
+          327300,
+          187800
+        ],
+        "layout_read_ns": [
+          266900,
+          238500,
+          213800,
+          302700,
+          213800
+        ],
+        "dense_write_ns": [
+          50600,
+          48500,
+          49800,
+          104700,
+          50400
+        ],
+        "layout_write_ns": [
+          195000,
+          172700,
+          155800,
+          156600,
+          155800
+        ],
+        "canonical_index_ns": [
+          2353000,
+          2011000,
+          2179500,
+          2058500,
+          2630800
+        ],
+        "median_dense_read_ns": 187800,
+        "median_layout_read_ns": 238500,
+        "median_dense_write_ns": 50400,
+        "median_layout_write_ns": 156600,
+        "median_canonical_index_ns": 2179500,
+        "state_bytes": 16384,
+        "index_bytes": 0,
+        "count_bytes": 0,
+        "lookup_capacity_entries": 0,
+        "linear_lookups": 0,
+        "hashed_lookups": 0,
+        "final_checksum": 595958464231,
+        "dense_match": true
+      }
+    ],
+    "transitions": [
+      {
+        "hot_write_threshold": 64,
+        "promotion_ns": 34900,
+        "three_sweeps_demotion_ns": 92400,
+        "promotions": 1,
+        "demotions": 1
+      },
+      {
+        "hot_write_threshold": 512,
+        "promotion_ns": 31700,
+        "three_sweeps_demotion_ns": 78100,
+        "promotions": 1,
+        "demotions": 1
+      },
+      {
+        "hot_write_threshold": 2048,
+        "promotion_ns": 40700,
+        "three_sweeps_demotion_ns": 78000,
+        "promotions": 1,
+        "demotions": 1
+      }
+    ]
+  },
+  "status": "PASS",
+  "source_hashes_after": {
+    "Cargo.lock": "4b50c388f451285ef15b9a6283d5d4daaa9f2532243b5d4f007b4531d8ef8b4d",
+    "Cargo.toml": "53cc8edcb8f8822e9e010e8a5046b08d6af8186400eb7c215a344778d6012d01",
+    "crates\\native-capability\\Cargo.toml": "352d8023b05ef342d2165363f533931258e0f5c8e4758bb83ff64df4183c8964",
+    "crates\\native-capability\\src\\lib.rs": "0fc47fbd5872a404c6fc40d248245549cbd3872c63a4d656cab1f7a5d30872d7",
+    "crates\\native-capability\\tests\\model.rs": "0457e842992aad97efcef39fecfdae8c3109a3b212ff6e013a26839636448e66",
+    "crates\\native-state-vnext\\Cargo.lock": "48479c8bbcd19662ef5d588fb07c73206d7c48bbdba234d49ead128dbdcb488d",
+    "crates\\native-state-vnext\\Cargo.toml": "2a6de5495bd0caa9bc0714339f20c9a4f9fafddfea7a3cf4b427b15b7992a9ac",
+    "crates\\native-state-vnext\\examples\\layout_probe.rs": "c86eb72b129d574bb538b8e900c5053c76d0367749afb677df7c5bec642a2a8e",
+    "crates\\native-state-vnext\\src\\lib.rs": "15d932ec10f3e885c4535f997725f6a80ab7d88c606cfaca1855c56e415836f1",
+    "crates\\native-state-vnext\\src\\section.rs": "b4ffde7b70168df5160155bacb4b8660c54ae253c400c2f5859d9f479b4122ce",
+    "crates\\native-state-vnext\\src\\store.rs": "eef84fed3e53d0cba644cb088ce19ae333547a2aec0155a6745b2185fc9ce595",
+    "crates\\native-state-vnext\\tests\\common\\mod.rs": "b015f9c6d42ae48906ac5c7654529a436dc6dc1babee45e96f7db2cf0029744f",
+    "crates\\native-state-vnext\\tests\\layout.rs": "aa5c7e61c38083d95cbac5d6b9bebef379e380e9c654bd6dcda9d9c2f8d96307",
+    "crates\\native-state-vnext\\tests\\lifecycle.rs": "b7c5a574086509d92cbf98bba2b1733187d4b3a2f6c0919bd8530a75fe8e538e",
+    "crates\\native-state-vnext\\verify.py": "f018f9587f9a93bd516d35e0251eba37bd9271da0b630ccefd3e31aec7e8fa00",
+    "crates\\rustcraft-core\\Cargo.toml": "f0b085a397c545665bae25b878f254c090a5d640bdc52e9bc15cf514f22ef39e",
+    "crates\\rustcraft-core\\src\\lib.rs": "3e6a2914001d68fd02d8e0a33f4e7489ea14202e7b011af51aa3797976b73878",
+    "crates\\rustcraft-core\\tests\\contracts.rs": "f1ab1f5718c72ed5f97d407afdca995f942d2da6d04ea957d435e07a0ec9ff9c",
+    "docs\\architecture\\retained-native-state.md": "ec1efbc4f95a81ce8759dd4dcf747c133392a0b7655eff8be27e83ad8a40b395",
+    "tools\\testing\\hardening_guard.py": "a2062b3ffbec7edba79bf5f5954fbcb1e9d97492ab9c4bb541833ebb820bdb6d"
+  },
+  "isolation_after": {
+    "schema_version": 1,
+    "kind": "HARDENING_ISOLATION_GATE_CHECK",
+    "status": "PASS",
+    "failures": [],
+    "original_observed": {
+      "head": "c4b868db2c9e4b03f745bf93c6ebf4fd8a8519e7",
+      "branch": "issue1-jni-v2",
+      "status": [
+        " M tools/live-capture/live_client_session.py",
+        "?? tools/live-capture/__pycache__/",
+        "?? tools/live-capture/run_rev_shadow.py"
+      ],
+      "files": [
+        {
+          "path": "D:\\minecraftrust\\tools\\live-capture\\live_client_session.py",
+          "sha256": "151c356161695aba3db3c1a8cbd589b5eda2b5a1770dff59ab21b728d36cabfa"
+        },
+        {
+          "path": "D:\\minecraftrust\\tools\\live-capture\\run_rev_shadow.py",
+          "sha256": "2b9b2aca49e57dd0d2a74bec46efcdc0ac7f95762a733276e27ff9dbcb472d93"
+        }
+      ]
+    },
+    "isolated_worktree": "D:\\minecraftrust-astra-hardening",
+    "isolated_head": "44f61a46f7cda93c0ac8aaffe13087678501cc6f",
+    "isolated_branch": "astra/architecture-hardening",
+    "production_gate_checks": {
+      "tryEncode_fail_closed": true,
+      "productionAuthorityEligible_false": true
+    },
+    "scope": "read-only original HEAD/status/two paused source hashes plus conservative source guards; runtime authority tests remain required"
+  },
+  "tool_hashes_after": {
+    "cargo": "c37545ec61d48d31bdefce53280ecab61c4ea54eaace372fac6a0316c6e165d9",
+    "rustc": "ca9988af88b1463f6857fdfe909299fee50a63260b3e5f7dbcb5b4d3318b27bc",
+    "rustfmt": "ac9d781249bffabbb1bedb691a5ea6f63a818c1dda73dd698d4dff687ad4c24e",
+    "cargo-clippy": "cb0f2b164b3f6e95bfed7ec4ae9fc48f8ce8d9fef3649b5ae87961f75e1ef484",
+    "clippy-driver": "00fd4ef2fe60e603571573746e52f42f109bbfe4b879e7ca7313614fda0b367b"
+  },
+  "finished_utc": "2026-09-27T01:09:37.051113+00:00"
+}

@@ -1,0 +1,58 @@
+
+running 4 tests
+test store::exhaustion_tests::work_and_writer_nonce_exhaustion_never_issue_reusable_tokens ... ok
+test store::exhaustion_tests::ownership_exhaustion_retires_and_burns_slot_before_reuse ... ok
+test store::exhaustion_tests::slot_generation_exhaustion_never_wraps_or_reuses_slot ... ok
+test store::exhaustion_tests::state_light_and_biome_exhaustion_retire_without_partial_mutation ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 7 tests
+test arbitrary_signed_vertical_bounds_and_sparse_sections_are_supported ... ok
+test malformed_policy_length_cell_and_section_coordinates_refuse ... ok
+test low_cardinality_hot_writes_promote_then_cold_sweeps_demote_with_hysteresis ... ok
+test dense_demotion_needs_distinct_low_threshold_and_repeated_cold_sweeps ... ok
+test uniform_local_and_dense_preserve_full_u32_ids ... ok
+test palette_history_compaction_and_hash_lookup_preserve_canonical_order ... ok
+test independent_dense_reference_matches_seeded_mutations_and_maintenance ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.30s
+
+
+running 27 tests
+test abandoned_writer_lease_fails_closed_instead_of_silently_restoring_mutation ... ok
+test bad_observation_at_claim_rolls_back_without_rust_admission ... ok
+test invalid_publication_order_consumes_ticket_but_restores_safe_java_state ... ok
+test all_five_worker_kinds_are_generation_tagged_and_publish_only_current_results ... ok
+test dependent_writer_evidence_revocation_closes_native_ownership_transitively ... ok
+test native_java_native_roundtrip_requires_new_capability_generation ... ok
+test materialization_failure_before_switch_rolls_back_rust_after_switch_revokes ... ok
+test initial_java_owner_has_single_writer_and_cannot_publish_native_views ... ok
+test foreign_cancellation_cannot_remove_same_nonce_work_in_another_store ... ok
+test capability_revocation_cancels_pending_transfer_and_queued_work ... ok
+test recipient_dimension_protocol_and_view_kind_partition_opaque_artifact_cache ... ok
+test one_epoch_cannot_alias_two_semantic_tables_even_after_destruction ... ok
+test immutable_views_survive_mutation_without_exposing_mutable_aliases ... ok
+test explicit_cancellation_and_foreign_results_cannot_consume_local_work ... ok
+test materialization_waits_for_rust_writer_and_recreates_identical_java_state ... ok
+test invalidated_registry_epoch_cannot_reenter_through_a_new_allocation ... ok
+test revoked_active_writer_cannot_mutate_but_can_drain_for_destruction ... ok
+test registry_invalidation_rejects_old_views_while_retaining_immutable_semantic_lookup ... ok
+test semantic_noop_keeps_generations_and_cached_result ... ok
+test wrong_registry_binding_refuses_before_any_ownership_transition ... ok
+test unknown_states_and_out_of_bounds_writes_do_not_mutate_data ... ok
+test slot_reuse_and_incarnation_changes_never_admit_old_handles_or_results ... ok
+test same_allocation_cannot_reappear_in_new_incarnation_while_old_owner_lives ... ok
+test quiescence_freezes_new_writers_and_drains_existing_java_writer_before_copy ... ok
+test failed_native_publication_rolls_back_exact_java_state_before_and_after_owner_switch ... ok
+test state_light_and_biome_changes_each_reject_queued_results_and_clear_cache ... ok
+test retained_store_accepts_registry_dense_ids_above_u16_without_wire_casting ... ok
+
+test result: ok. 27 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.09s
+
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
