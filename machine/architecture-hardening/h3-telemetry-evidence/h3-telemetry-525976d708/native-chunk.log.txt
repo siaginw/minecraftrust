@@ -1,0 +1,84 @@
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.03s
+     Running unittests src\lib.rs (target\debug\deps\native_chunk-26d3e8c223c4665b.exe)
+
+running 10 tests
+test tests::test_section_index_mapping ... ok
+test tests::test_section_blocks_and_wire ... ok
+test tests::test_registry_lifecycle_and_invalidation ... ok
+test tests::test_zero_copy_consumers ... ok
+test tests::test_section_refresh_model ... ok
+test tests::test_versioned_snapshot_model ... ok
+test tests::test_light_only_refresh ... ok
+test tests::test_dimension_scoped_keys_no_aliasing ... ok
+test tests::test_refresh_then_mutation_then_refresh_cycle ... ok
+test tests::test_chunk_primer_bidirectional_roundtrip ... ok
+
+test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests\owned_snapshot_properties.rs (target\debug\deps\owned_snapshot_properties-60d20f8bdf9f70dd.exe)
+
+running 12 tests
+test maximum_epoch_and_overdeclared_section_count_are_not_ambiguous ... ok
+test publication_width_boundaries_distinguish_local_ids_from_global_values ... ok
+test every_copy_stage_requires_complete_transport_before_publication ... ok
+test incarnation_generation_eligibility_rejection_and_retry ... ok
+test model_boundaries_cover_zero_max_identity_and_all_sections ... ok
+test fill_clear_palette_and_eligibility_sequences ... ok
+test arbitrary_owned_presence_selection_palette_light_and_biomes ... ok
+test late_wide_id_decisions_cannot_publish_partial_sections ... ok
+test arbitrary_missing_selected_section_never_returns_success ... ok
+test partial_transport_progress_never_publishes_and_complete_retry_succeeds ... ok
+test owned_capacity_failure_retry_and_later_input_mutation ... ok
+test rejected_lifecycle_transition_cannot_publish_or_relabel_owned_history ... ok
+
+test result: ok. 12 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.87s
+
+     Running tests\packet_encode_contract.rs (target\debug\deps\packet_encode_contract-f8316feefa4341d5.exe)
+
+running 14 tests
+test empty_mask_supports_zero_bytes_or_biomes_only ... ok
+test invalid_start_offset_is_rejected_without_panicking ... ok
+test capacity_failure_has_no_success_result_or_published_offset ... ok
+test failed_append_preserves_the_previous_successful_payload ... ok
+test selected_missing_section_is_rejected_before_writes ... ok
+test historical_003f_shape_with_only_sections_zero_through_four_is_rejected ... ok
+test late_biome_capacity_failure_does_not_publish_a_shorter_payload ... ok
+test retry_after_capacity_failure_succeeds ... ok
+test result_pairs_byte_count_and_emitted_mask_for_that_operation ... ok
+test retry_after_missing_section_is_restored_succeeds ... ok
+test valid_001f_emits_exactly_five_sections ... ok
+test sparse_mask_excludes_unselected_resident_sections ... ok
+test empty_nonempty_refresh_transitions_keep_mask_and_payload_consistent ... ok
+test every_active_bit_matches_one_serialized_section ... ok
+
+test result: ok. 14 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.11s
+
+     Running tests\packet_snapshot.rs (target\debug\deps\packet_snapshot-bb775f1485a050f8.exe)
+
+running 9 tests
+test incarnation_epoch_thread_scope_and_storage_guards ... ok
+test refcount_and_section_order_are_checked ... ok
+test missing_historical_shape_and_unselected_sections_reject ... ok
+test empty_partial_section_is_present_but_full_empty_selection_rejects ... ok
+test malformed_transport_never_becomes_short_success ... ok
+test wide_ids_reject_without_truncation_and_local_high_u16_remains_exact ... ok
+test sparse_owned_snapshot_survives_input_mutation_and_pairs_result ... ok
+test live_shadow_scope_three_is_admitted_with_structural_constraints ... ok
+test snapshot_registry_width_is_per_operation_and_retry_is_safe ... ok
+
+test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.06s
+
+     Running tests\property_contract.rs (target\debug\deps\property_contract-27fbd515533595c4.exe)
+
+running 2 tests
+test arbitrary_sparse_presence_capacity_and_retry ... ok
+test fill_clear_refresh_encode_sequences_match_presence_model ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.74s
+
+   Doc-tests native_chunk
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+

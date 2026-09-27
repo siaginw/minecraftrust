@@ -118,7 +118,13 @@ pub unsafe extern "system" fn Java_com_rustcraft_bridge_capture_OwnedSnapshotBri
     output_address: i64,
     output_capacity: i32,
 ) -> i64 {
-    result_boundary(|| {
+    let mut call =
+        metrics::GLOBAL_FFI_METRICS.begin_call(metrics::Operation::OwnedSnapshotEncodeV1);
+    call.bytes.input_bytes = Some(0);
+    call.bytes.output_bytes = Some(0);
+    call.bytes.borrowed_bytes = Some(0);
+    call.bytes.retained_bytes = Some(0);
+    let packed = result_boundary(std::panic::AssertUnwindSafe(|| {
         if input_len <= 0 || input_len as usize > MAX_SNAPSHOT_BYTES {
             return Err(PacketEncodeV2Error::InvalidArgument);
         }
@@ -133,10 +139,15 @@ pub unsafe extern "system" fn Java_com_rustcraft_bridge_capture_OwnedSnapshotBri
         // serialization starts. No registry lookup or global-width setter.
         let snapshot = {
             let input = std::slice::from_raw_parts(input_start as *const u8, input_len as usize);
+            call.bytes.input_bytes = Some(input.len() as u64);
+            call.bytes.borrowed_bytes = Some(input.len() as u64);
             OwnedPacketSnapshot::from_transport(input).map_err(classify)?
         };
         let output =
             std::slice::from_raw_parts_mut(output_start as *mut u8, output_capacity as usize);
+        call.bytes.borrowed_bytes = Some(input_len as u64 + output.len() as u64);
         snapshot.encode(output).map_err(classify)
-    })
+    }));
+    crate::packet_encode_v2::observe_packed_result(&mut call, packed);
+    packed
 }

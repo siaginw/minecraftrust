@@ -1,13 +1,12 @@
 //! JNI bridge for M4 NativeChunk state, lifecycle, and zero-copy consumers.
 
+use metrics::GLOBAL_FFI_METRICS;
+use native_chunk::{
+    ChunkHandle, ChunkKey, ChunkRegistry, NativeChunk, BIOME_ARRAY_SIZE, CHUNK_PRIMER_SIZE,
+};
 use std::ffi::c_void;
 use std::panic::catch_unwind;
 use std::sync::OnceLock;
-use native_chunk::{
-    NativeChunk, ChunkRegistry, ChunkHandle, ChunkKey,
-    CHUNK_PRIMER_SIZE, BIOME_ARRAY_SIZE,
-};
-use metrics::GLOBAL_FFI_METRICS;
 
 static GLOBAL_REGISTRY: OnceLock<ChunkRegistry> = OnceLock::new();
 
@@ -28,9 +27,12 @@ pub unsafe extern "system" fn Java_com_rustcraft_bridge_NativeChunkBridge_regist
     primer_addr: i64,
     biome_addr: i64,
 ) -> i64 {
-    GLOBAL_FFI_METRICS.record_call(300);
-    catch_unwind(|| {
-        if primer_addr == 0 { return 0i64; }
+    let mut call = GLOBAL_FFI_METRICS.begin_call(metrics::Operation::ChunkRegisterPrimer);
+    call.bytes = metrics::ByteMeasurements::NO_BULK;
+    let outcome = catch_unwind(std::panic::AssertUnwindSafe(|| {
+        if primer_addr == 0 {
+            return 0i64;
+        }
         let primer = &*(primer_addr as *const [u16; CHUNK_PRIMER_SIZE]);
         let biomes: &[u8; BIOME_ARRAY_SIZE] = if biome_addr != 0 {
             &*(biome_addr as *const [u8; BIOME_ARRAY_SIZE])
@@ -38,12 +40,33 @@ pub unsafe extern "system" fn Java_com_rustcraft_bridge_NativeChunkBridge_regist
             &[0u8; BIOME_ARRAY_SIZE]
         };
 
+        call.bytes.input_bytes = Some(
+            (CHUNK_PRIMER_SIZE * 2 + if biome_addr != 0 { BIOME_ARRAY_SIZE } else { 0 }) as u64,
+        );
+        call.bytes.borrowed_bytes = call.bytes.input_bytes;
+        call.bytes.copied_bytes = None; // Native section construction owns its copies.
         let reg = get_registry();
         let gen_id = reg.next_generation_id();
         let chunk = NativeChunk::from_primer(dim, cx, cz, primer, biomes, gen_id);
         let handle = reg.insert(chunk);
         handle.generation_id as i64
-    }).unwrap_or(0)
+    }));
+    let panicked = outcome.is_err();
+    let code = outcome.unwrap_or(0);
+    call.fallback_reason = if panicked {
+        metrics::FallbackReason::Panic
+    } else {
+        if code > 0 {
+            metrics::FallbackReason::None
+        } else {
+            metrics::FallbackReason::InvalidArgument
+        }
+    };
+    if panicked {
+        call.bytes.output_bytes = Some(0);
+        call.bytes.copied_bytes = None;
+    }
+    code
 }
 
 /// Reverse materializes a NativeChunk into a Java ChunkPrimer DirectBuffer.
@@ -59,10 +82,14 @@ pub unsafe extern "system" fn Java_com_rustcraft_bridge_NativeChunkBridge_materi
     generation_id: i64,
     primer_out_addr: i64,
 ) -> i32 {
-    GLOBAL_FFI_METRICS.record_call(301);
-    catch_unwind(|| {
-        if primer_out_addr == 0 { return -1; }
+    let mut call = GLOBAL_FFI_METRICS.begin_call(metrics::Operation::ChunkMaterializePrimer);
+    call.bytes = metrics::ByteMeasurements::NO_BULK;
+    let outcome = catch_unwind(std::panic::AssertUnwindSafe(|| {
+        if primer_out_addr == 0 {
+            return -1;
+        }
         let primer = &mut *(primer_out_addr as *mut [u16; CHUNK_PRIMER_SIZE]);
+        call.bytes.borrowed_bytes = Some((CHUNK_PRIMER_SIZE * 2) as u64);
         let reg = get_registry();
         let handle = ChunkHandle {
             key: ChunkKey::new(dim, cx, cz),
@@ -71,12 +98,31 @@ pub unsafe extern "system" fn Java_com_rustcraft_bridge_NativeChunkBridge_materi
 
         if let Some(chunk_arc) = reg.get(&handle) {
             let chunk = chunk_arc.read().unwrap();
+            call.bytes.copied_bytes = None;
             chunk.to_primer(primer);
+            call.bytes.output_bytes = Some((CHUNK_PRIMER_SIZE * 2) as u64);
             0
         } else {
             -2 // Not found or invalidated
         }
-    }).unwrap_or(-99)
+    }));
+    let panicked = outcome.is_err();
+    let code = outcome.unwrap_or(-99);
+    call.fallback_reason = if panicked {
+        metrics::FallbackReason::Panic
+    } else {
+        match code {
+            -99 => metrics::FallbackReason::Panic,
+            -1 => metrics::FallbackReason::InvalidArgument,
+            0.. => metrics::FallbackReason::None,
+            _ => metrics::FallbackReason::MissingState,
+        }
+    };
+    if panicked {
+        call.bytes.output_bytes = Some(0);
+        call.bytes.copied_bytes = None;
+    }
+    code
 }
 
 /// Retrieves the primary bit mask (bitmask of populated 16-block sections).
@@ -89,7 +135,8 @@ pub unsafe extern "system" fn Java_com_rustcraft_bridge_NativeChunkBridge_getPri
     cz: i32,
     generation_id: i64,
 ) -> i32 {
-    GLOBAL_FFI_METRICS.record_call(302);
+    let mut call = GLOBAL_FFI_METRICS.begin_call(metrics::Operation::ChunkGetPrimaryBitMask);
+    call.bytes = metrics::ByteMeasurements::NO_BULK;
     catch_unwind(|| {
         let reg = get_registry();
         let handle = ChunkHandle {
@@ -102,7 +149,8 @@ pub unsafe extern "system" fn Java_com_rustcraft_bridge_NativeChunkBridge_getPri
         } else {
             -1
         }
-    }).unwrap_or(-99)
+    })
+    .unwrap_or(-99)
 }
 
 /// First Zero-Copy Consumer: Directly encodes Protocol 340 SPacketChunkData payload from NativeChunk.
@@ -128,10 +176,17 @@ pub unsafe extern "system" fn Java_com_rustcraft_bridge_NativeChunkBridge_encode
     output_buf_address: i64,
     output_buf_capacity: i32,
 ) -> i32 {
-    GLOBAL_FFI_METRICS.record_call(303);
-    catch_unwind(|| {
-        if output_buf_address == 0 || output_buf_capacity <= 0 { return -1; }
-        let out = std::slice::from_raw_parts_mut(output_buf_address as *mut u8, output_buf_capacity as usize);
+    let mut call = GLOBAL_FFI_METRICS.begin_call(metrics::Operation::ChunkEncodePacketPayload);
+    call.bytes = metrics::ByteMeasurements::NO_BULK;
+    let outcome = catch_unwind(std::panic::AssertUnwindSafe(|| {
+        if output_buf_address == 0 || output_buf_capacity <= 0 {
+            return -1;
+        }
+        let out = std::slice::from_raw_parts_mut(
+            output_buf_address as *mut u8,
+            output_buf_capacity as usize,
+        );
+        call.bytes.borrowed_bytes = Some(out.len() as u64);
         let reg = get_registry();
         let handle = ChunkHandle {
             key: ChunkKey::new(dim, cx, cz),
@@ -140,15 +195,36 @@ pub unsafe extern "system" fn Java_com_rustcraft_bridge_NativeChunkBridge_encode
 
         if let Some(chunk_arc) = reg.get(&handle) {
             let mut chunk = chunk_arc.write().unwrap();
+            call.bytes.copied_bytes = None;
             let mut offset = 0usize;
             match chunk.encode_packet_payload(skylight != 0, full_chunk != 0, out, &mut offset) {
-                Ok(result) => result.bytes_written as i32,
+                Ok(result) => {
+                    call.bytes.output_bytes = Some(result.bytes_written as u64);
+                    result.bytes_written as i32
+                }
                 Err(_) => -3, // Overflow or encode error
             }
         } else {
             -2 // Stale or missing
         }
-    }).unwrap_or(-99)
+    }));
+    let panicked = outcome.is_err();
+    let code = outcome.unwrap_or(-99);
+    call.fallback_reason = if panicked {
+        metrics::FallbackReason::Panic
+    } else {
+        match code {
+            0.. => metrics::FallbackReason::None,
+            -1 => metrics::FallbackReason::InvalidArgument,
+            -2 => metrics::FallbackReason::MissingState,
+            _ => metrics::FallbackReason::BackendError,
+        }
+    };
+    if panicked {
+        call.bytes.output_bytes = Some(0);
+        call.bytes.copied_bytes = None;
+    }
+    code
 }
 
 /// Second Consumer Proof A: Section occupancy summary & spatial block count.
@@ -164,8 +240,9 @@ pub unsafe extern "system" fn Java_com_rustcraft_bridge_NativeChunkBridge_getOcc
     generation_id: i64,
     out_count_addr: i64,
 ) -> i32 {
-    GLOBAL_FFI_METRICS.record_call(304);
-    catch_unwind(|| {
+    let mut call = GLOBAL_FFI_METRICS.begin_call(metrics::Operation::ChunkGetOccupancySummary);
+    call.bytes = metrics::ByteMeasurements::NO_BULK;
+    let outcome = catch_unwind(std::panic::AssertUnwindSafe(|| {
         let reg = get_registry();
         let handle = ChunkHandle {
             key: ChunkKey::new(dim, cx, cz),
@@ -175,13 +252,31 @@ pub unsafe extern "system" fn Java_com_rustcraft_bridge_NativeChunkBridge_getOcc
             let mut chunk = chunk_arc.write().unwrap();
             let (mask, total_blocks) = chunk.occupancy_summary();
             if out_count_addr != 0 {
+                call.bytes.borrowed_bytes = Some(4);
                 *(out_count_addr as *mut i32) = total_blocks as i32;
+                call.bytes.output_bytes = Some(4);
             }
             mask as i32
         } else {
             -1
         }
-    }).unwrap_or(-99)
+    }));
+    let panicked = outcome.is_err();
+    let code = outcome.unwrap_or(-99);
+    call.fallback_reason = if panicked {
+        metrics::FallbackReason::Panic
+    } else {
+        if code >= 0 {
+            metrics::FallbackReason::None
+        } else {
+            metrics::FallbackReason::MissingState
+        }
+    };
+    if panicked {
+        call.bytes.output_bytes = Some(0);
+        call.bytes.copied_bytes = None;
+    }
+    code
 }
 
 /// Second Consumer Proof B: Stages raw chunk blocks for MCA / NBT persistence.
@@ -198,10 +293,17 @@ pub unsafe extern "system" fn Java_com_rustcraft_bridge_NativeChunkBridge_stageP
     output_buf_address: i64,
     output_buf_capacity: i32,
 ) -> i32 {
-    GLOBAL_FFI_METRICS.record_call(305);
-    catch_unwind(|| {
-        if output_buf_address == 0 || output_buf_capacity <= 0 { return -1; }
-        let out = std::slice::from_raw_parts_mut(output_buf_address as *mut u8, output_buf_capacity as usize);
+    let mut call = GLOBAL_FFI_METRICS.begin_call(metrics::Operation::ChunkStagePersistence);
+    call.bytes = metrics::ByteMeasurements::NO_BULK;
+    let outcome = catch_unwind(std::panic::AssertUnwindSafe(|| {
+        if output_buf_address == 0 || output_buf_capacity <= 0 {
+            return -1;
+        }
+        let out = std::slice::from_raw_parts_mut(
+            output_buf_address as *mut u8,
+            output_buf_capacity as usize,
+        );
+        call.bytes.borrowed_bytes = Some(out.len() as u64);
         let reg = get_registry();
         let handle = ChunkHandle {
             key: ChunkKey::new(dim, cx, cz),
@@ -210,15 +312,36 @@ pub unsafe extern "system" fn Java_com_rustcraft_bridge_NativeChunkBridge_stageP
 
         if let Some(chunk_arc) = reg.get(&handle) {
             let mut chunk = chunk_arc.write().unwrap();
+            call.bytes.copied_bytes = None;
             let mut offset = 0usize;
             match chunk.stage_persistence(out, &mut offset) {
-                Ok(len) => len as i32,
+                Ok(len) => {
+                    call.bytes.output_bytes = Some(len as u64);
+                    len as i32
+                }
                 Err(_) => -3,
             }
         } else {
             -2
         }
-    }).unwrap_or(-99)
+    }));
+    let panicked = outcome.is_err();
+    let code = outcome.unwrap_or(-99);
+    call.fallback_reason = if panicked {
+        metrics::FallbackReason::Panic
+    } else {
+        match code {
+            0.. => metrics::FallbackReason::None,
+            -1 => metrics::FallbackReason::InvalidArgument,
+            -2 => metrics::FallbackReason::MissingState,
+            _ => metrics::FallbackReason::BackendError,
+        }
+    };
+    if panicked {
+        call.bytes.output_bytes = Some(0);
+        call.bytes.copied_bytes = None;
+    }
+    code
 }
 
 /// Marks a chunk as invalidated when Java or a mod mutates its blocks.
@@ -230,11 +353,17 @@ pub unsafe extern "system" fn Java_com_rustcraft_bridge_NativeChunkBridge_invali
     cx: i32,
     cz: i32,
 ) -> i32 {
-    GLOBAL_FFI_METRICS.record_call(306);
+    let mut call = GLOBAL_FFI_METRICS.begin_call(metrics::Operation::ChunkInvalidate);
+    call.bytes = metrics::ByteMeasurements::NO_BULK;
     catch_unwind(|| {
         let reg = get_registry();
-        if reg.invalidate(ChunkKey::new(dim, cx, cz)) { 1 } else { 0 }
-    }).unwrap_or(0)
+        if reg.invalidate(ChunkKey::new(dim, cx, cz)) {
+            1
+        } else {
+            0
+        }
+    })
+    .unwrap_or(0)
 }
 
 /// Unloads a chunk from native memory when the chunk is unloaded by the server.
@@ -246,11 +375,17 @@ pub unsafe extern "system" fn Java_com_rustcraft_bridge_NativeChunkBridge_unload
     cx: i32,
     cz: i32,
 ) -> i32 {
-    GLOBAL_FFI_METRICS.record_call(307);
+    let mut call = GLOBAL_FFI_METRICS.begin_call(metrics::Operation::ChunkUnload);
+    call.bytes = metrics::ByteMeasurements::NO_BULK;
     catch_unwind(|| {
         let reg = get_registry();
-        if reg.remove(ChunkKey::new(dim, cx, cz)).is_some() { 1 } else { 0 }
-    }).unwrap_or(0)
+        if reg.remove(ChunkKey::new(dim, cx, cz)).is_some() {
+            1
+        } else {
+            0
+        }
+    })
+    .unwrap_or(0)
 }
 
 /// Marks native chunk as mutated (Java/mod changed block state, light, biomes, etc.).
@@ -263,11 +398,17 @@ pub unsafe extern "system" fn Java_com_rustcraft_bridge_NativeChunkBridge_markMu
     cx: i32,
     cz: i32,
 ) -> i32 {
-    GLOBAL_FFI_METRICS.record_call(309);
+    let mut call = GLOBAL_FFI_METRICS.begin_call(metrics::Operation::ChunkMarkMutation);
+    call.bytes = metrics::ByteMeasurements::NO_BULK;
     catch_unwind(|| {
         let reg = get_registry();
-        if reg.mark_mutation(ChunkKey::new(dim, cx, cz)) { 1 } else { 0 }
-    }).unwrap_or(0)
+        if reg.mark_mutation(ChunkKey::new(dim, cx, cz)) {
+            1
+        } else {
+            0
+        }
+    })
+    .unwrap_or(0)
 }
 
 /// Section-granular dirty mark (M4.1 refresh model). Sets bit (sectionY) in the
@@ -283,14 +424,16 @@ pub unsafe extern "system" fn Java_com_rustcraft_bridge_NativeChunkBridge_markSe
     cz: i32,
     section_y: u8,
 ) -> i32 {
-    GLOBAL_FFI_METRICS.record_call(310);
+    let mut call = GLOBAL_FFI_METRICS.begin_call(metrics::Operation::ChunkMarkSectionMutation);
+    call.bytes = metrics::ByteMeasurements::NO_BULK;
     catch_unwind(|| {
         let reg = get_registry();
         match reg.mark_section_mutation(ChunkKey::new(dim, cx, cz), section_y) {
             Some(mask) => mask as i32,
             None => -1,
         }
-    }).unwrap_or(-99)
+    })
+    .unwrap_or(-99)
 }
 
 /// Refreshes one section in place from Java-side snapshot buffers (12 KB:
@@ -308,22 +451,58 @@ pub unsafe extern "system" fn Java_com_rustcraft_bridge_NativeChunkBridge_refres
     block_light_addr: i64,
     sky_light_addr: i64,
 ) -> i32 {
-    GLOBAL_FFI_METRICS.record_call(311);
-    catch_unwind(|| {
-        if states_addr == 0 { return -2; }
+    let mut call = GLOBAL_FFI_METRICS.begin_call(metrics::Operation::ChunkRefreshSection);
+    call.bytes = metrics::ByteMeasurements::NO_BULK;
+    let outcome = catch_unwind(std::panic::AssertUnwindSafe(|| {
+        if states_addr == 0 {
+            return -2;
+        }
         let states = &*(states_addr as *const [u16; 4096]);
         let block_light: Option<&[u8; 2048]> = if block_light_addr != 0 {
             Some(&*(block_light_addr as *const [u8; 2048]))
-        } else { None };
+        } else {
+            None
+        };
         let sky_light: Option<&[u8; 2048]> = if sky_light_addr != 0 {
             Some(&*(sky_light_addr as *const [u8; 2048]))
-        } else { None };
+        } else {
+            None
+        };
+        call.bytes.input_bytes = Some(
+            (4096 * 2
+                + if block_light.is_some() { 2048 } else { 0 }
+                + if sky_light.is_some() { 2048 } else { 0 }) as u64,
+        );
+        call.bytes.borrowed_bytes = call.bytes.input_bytes;
+        call.bytes.copied_bytes = None;
         let reg = get_registry();
-        match reg.refresh_section(ChunkKey::new(dim, cx, cz), section_y, states, block_light, sky_light) {
+        match reg.refresh_section(
+            ChunkKey::new(dim, cx, cz),
+            section_y,
+            states,
+            block_light,
+            sky_light,
+        ) {
             Some(mask) => mask as i32,
             None => -1,
         }
-    }).unwrap_or(-99)
+    }));
+    let panicked = outcome.is_err();
+    let code = outcome.unwrap_or(-99);
+    call.fallback_reason = if panicked {
+        metrics::FallbackReason::Panic
+    } else {
+        match code {
+            0.. => metrics::FallbackReason::None,
+            -2 => metrics::FallbackReason::InvalidArgument,
+            _ => metrics::FallbackReason::MissingState,
+        }
+    };
+    if panicked {
+        call.bytes.output_bytes = Some(0);
+        call.bytes.copied_bytes = None;
+    }
+    code
 }
 
 /// Sets the global-palette bit width from the live block-state registry size
@@ -335,11 +514,13 @@ pub unsafe extern "system" fn Java_com_rustcraft_bridge_NativeChunkBridge_setGlo
     _clazz: *mut c_void,
     bits: u8,
 ) -> i32 {
-    GLOBAL_FFI_METRICS.record_call(313);
+    let mut call = GLOBAL_FFI_METRICS.begin_call(metrics::Operation::ChunkSetGlobalPaletteBits);
+    call.bytes = metrics::ByteMeasurements::NO_BULK;
     catch_unwind(|| {
         native_chunk::section::set_global_palette_bits(bits);
         native_chunk::section::global_palette_bits() as i32
-    }).unwrap_or(-99)
+    })
+    .unwrap_or(-99)
 }
 
 /// Returns the chunk's current per-section dirty mask (bit y = section y stale),
@@ -353,14 +534,16 @@ pub unsafe extern "system" fn Java_com_rustcraft_bridge_NativeChunkBridge_getDir
     cx: i32,
     cz: i32,
 ) -> i32 {
-    GLOBAL_FFI_METRICS.record_call(312);
+    let mut call = GLOBAL_FFI_METRICS.begin_call(metrics::Operation::ChunkGetDirtySections);
+    call.bytes = metrics::ByteMeasurements::NO_BULK;
     catch_unwind(|| {
         let reg = get_registry();
         match reg.dirty_mask(ChunkKey::new(dim, cx, cz)) {
             Some(mask) => mask as i32,
             None => -1,
         }
-    }).unwrap_or(-99)
+    })
+    .unwrap_or(-99)
 }
 
 /// Returns current count of registered chunks in native memory.
@@ -369,10 +552,9 @@ pub unsafe extern "system" fn Java_com_rustcraft_bridge_NativeChunkBridge_getReg
     _env: *mut c_void,
     _clazz: *mut c_void,
 ) -> i32 {
-    GLOBAL_FFI_METRICS.record_call(308);
-    catch_unwind(|| {
-        get_registry().count() as i32
-    }).unwrap_or(0)
+    let mut call = GLOBAL_FFI_METRICS.begin_call(metrics::Operation::ChunkGetRegisteredCount);
+    call.bytes = metrics::ByteMeasurements::NO_BULK;
+    catch_unwind(|| get_registry().count() as i32).unwrap_or(0)
 }
 
 /// Current generation id for a live chunk at (dim, cx, cz), or 0 when absent
@@ -385,11 +567,13 @@ pub unsafe extern "system" fn Java_com_rustcraft_bridge_NativeChunkBridge_findGe
     cx: i32,
     cz: i32,
 ) -> i64 {
-    GLOBAL_FFI_METRICS.record_call(314);
+    let mut call = GLOBAL_FFI_METRICS.begin_call(metrics::Operation::ChunkFindGeneration);
+    call.bytes = metrics::ByteMeasurements::NO_BULK;
     catch_unwind(|| {
         let reg = get_registry();
         reg.find_generation(ChunkKey::new(dim, cx, cz)) as i64
-    }).unwrap_or(0)
+    })
+    .unwrap_or(0)
 }
 
 /// Writes 8 x i64 retention/allocation stats to out_addr:
@@ -402,22 +586,47 @@ pub unsafe extern "system" fn Java_com_rustcraft_bridge_NativeChunkBridge_getReg
     _clazz: *mut c_void,
     out_addr: i64,
 ) -> i32 {
-    GLOBAL_FFI_METRICS.record_call(315);
-    catch_unwind(|| {
-        if out_addr == 0 { return -1; }
+    let mut call = GLOBAL_FFI_METRICS.begin_call(metrics::Operation::ChunkGetRegistryStats);
+    call.bytes = metrics::ByteMeasurements::NO_BULK;
+    let outcome = catch_unwind(std::panic::AssertUnwindSafe(|| {
+        if out_addr == 0 {
+            return -1;
+        }
         let out = std::slice::from_raw_parts_mut(out_addr as *mut i64, 8);
+        call.bytes.borrowed_bytes = Some(8 * 8);
         let reg = get_registry();
         let (chunks, sections, bytes) = reg.retention();
         out[0] = chunks as i64;
         out[1] = sections as i64;
         out[2] = bytes as i64;
-        out[3] = native_chunk::registry::STATS_SECTIONS_ALLOCATED.load(std::sync::atomic::Ordering::Relaxed) as i64;
-        out[4] = native_chunk::registry::STATS_SECTIONS_RELEASED.load(std::sync::atomic::Ordering::Relaxed) as i64;
-        out[5] = native_chunk::registry::STATS_CHUNKS_EVICTED.load(std::sync::atomic::Ordering::Relaxed) as i64;
+        out[3] = native_chunk::registry::STATS_SECTIONS_ALLOCATED
+            .load(std::sync::atomic::Ordering::Relaxed) as i64;
+        out[4] = native_chunk::registry::STATS_SECTIONS_RELEASED
+            .load(std::sync::atomic::Ordering::Relaxed) as i64;
+        out[5] = native_chunk::registry::STATS_CHUNKS_EVICTED
+            .load(std::sync::atomic::Ordering::Relaxed) as i64;
         out[6] = 0;
         out[7] = 0;
+        call.bytes.output_bytes = Some(8 * 8);
         1
-    }).unwrap_or(-99)
+    }));
+    let panicked = outcome.is_err();
+    let code = outcome.unwrap_or(-99);
+    call.fallback_reason = if panicked {
+        metrics::FallbackReason::Panic
+    } else {
+        match code {
+            -99 => metrics::FallbackReason::Panic,
+            -1 => metrics::FallbackReason::InvalidArgument,
+            0.. => metrics::FallbackReason::None,
+            _ => metrics::FallbackReason::MissingState,
+        }
+    };
+    if panicked {
+        call.bytes.output_bytes = Some(0);
+        call.bytes.copied_bytes = None;
+    }
+    code
 }
 
 /// Replaces the chunk's 256-byte biome array (M4.2B: live registration happens
@@ -432,22 +641,44 @@ pub unsafe extern "system" fn Java_com_rustcraft_bridge_NativeChunkBridge_setBio
     cz: i32,
     biome_addr: i64,
 ) -> i32 {
-    GLOBAL_FFI_METRICS.record_call(316);
-    catch_unwind(|| {
-        if biome_addr == 0 { return -1; }
+    let mut call = GLOBAL_FFI_METRICS.begin_call(metrics::Operation::ChunkSetBiomes);
+    call.bytes = metrics::ByteMeasurements::NO_BULK;
+    let outcome = catch_unwind(std::panic::AssertUnwindSafe(|| {
+        if biome_addr == 0 {
+            return -1;
+        }
         let biomes = &*(biome_addr as *const [u8; 256]);
+        call.bytes.input_bytes = Some(256);
+        call.bytes.borrowed_bytes = Some(256);
         let reg = get_registry();
         let key = ChunkKey::new(dim, cx, cz);
         let map = reg.chunks_map().read().unwrap();
         if let Some(arc) = map.get(&key) {
             let mut chunk = arc.write().unwrap();
             chunk.biomes.copy_from_slice(biomes);
+            call.bytes.copied_bytes = Some(256);
             chunk.mark_mutation();
             1
         } else {
             0
         }
-    }).unwrap_or(-99)
+    }));
+    let panicked = outcome.is_err();
+    let code = outcome.unwrap_or(-99);
+    call.fallback_reason = if panicked {
+        metrics::FallbackReason::Panic
+    } else {
+        match code {
+            1.. => metrics::FallbackReason::None,
+            0 => metrics::FallbackReason::MissingState,
+            _ => metrics::FallbackReason::InvalidArgument,
+        }
+    };
+    if panicked {
+        call.bytes.output_bytes = Some(0);
+        call.bytes.copied_bytes = None;
+    }
+    code
 }
 
 /// Writes 4 x i64 snapshot diagnostics for (dim,cx,cz):
@@ -463,10 +694,14 @@ pub unsafe extern "system" fn Java_com_rustcraft_bridge_NativeChunkBridge_getGen
     cz: i32,
     out_addr: i64,
 ) -> i32 {
-    GLOBAL_FFI_METRICS.record_call(317);
-    catch_unwind(|| {
-        if out_addr == 0 { return -1; }
+    let mut call = GLOBAL_FFI_METRICS.begin_call(metrics::Operation::ChunkGetGenerationInfo);
+    call.bytes = metrics::ByteMeasurements::NO_BULK;
+    let outcome = catch_unwind(std::panic::AssertUnwindSafe(|| {
+        if out_addr == 0 {
+            return -1;
+        }
         let out = std::slice::from_raw_parts_mut(out_addr as *mut i64, 4);
+        call.bytes.borrowed_bytes = Some(4 * 8);
         let reg = get_registry();
         let key = ChunkKey::new(dim, cx, cz);
         let map = reg.chunks_map().read().unwrap();
@@ -477,11 +712,35 @@ pub unsafe extern "system" fn Java_com_rustcraft_bridge_NativeChunkBridge_getGen
                 out[1] = c.mutation_generation as i64;
                 out[2] = c.snapshot_generation as i64;
                 out[3] = c.dirty_sections as i64;
+                call.bytes.output_bytes = Some(4 * 8);
                 1
             }
-            None => { out[0] = 0; out[1] = 0; out[2] = 0; out[3] = 0; 0 }
+            None => {
+                call.bytes.output_bytes = Some(4 * 8);
+                out[0] = 0;
+                out[1] = 0;
+                out[2] = 0;
+                out[3] = 0;
+                0
+            }
         }
-    }).unwrap_or(-99)
+    }));
+    let panicked = outcome.is_err();
+    let code = outcome.unwrap_or(-99);
+    call.fallback_reason = if panicked {
+        metrics::FallbackReason::Panic
+    } else {
+        match code {
+            1.. => metrics::FallbackReason::None,
+            0 => metrics::FallbackReason::MissingState,
+            _ => metrics::FallbackReason::InvalidArgument,
+        }
+    };
+    if panicked {
+        call.bytes.output_bytes = Some(0);
+        call.bytes.copied_bytes = None;
+    }
+    code
 }
 
 /// In-JVM lifecycle cleanup (M4.2D): drains the registry with release
@@ -491,13 +750,15 @@ pub unsafe extern "system" fn Java_com_rustcraft_bridge_NativeChunkBridge_regist
     _env: *mut c_void,
     _clazz: *mut c_void,
 ) -> i32 {
-    GLOBAL_FFI_METRICS.record_call(318);
+    let mut call = GLOBAL_FFI_METRICS.begin_call(metrics::Operation::ChunkRegistryClear);
+    call.bytes = metrics::ByteMeasurements::NO_BULK;
     catch_unwind(|| {
         let reg = get_registry();
         let n = reg.count() as i32;
         reg.clear();
         n
-    }).unwrap_or(-99)
+    })
+    .unwrap_or(-99)
 }
 
 /// Reads the chunk's current 256-byte biome array (M4.3C: packet-side freshness
@@ -511,10 +772,14 @@ pub unsafe extern "system" fn Java_com_rustcraft_bridge_NativeChunkBridge_getBio
     cz: i32,
     out_addr: i64,
 ) -> i32 {
-    GLOBAL_FFI_METRICS.record_call(319);
-    catch_unwind(|| {
-        if out_addr == 0 { return -1; }
+    let mut call = GLOBAL_FFI_METRICS.begin_call(metrics::Operation::ChunkGetBiomes);
+    call.bytes = metrics::ByteMeasurements::NO_BULK;
+    let outcome = catch_unwind(std::panic::AssertUnwindSafe(|| {
+        if out_addr == 0 {
+            return -1;
+        }
         let out = std::slice::from_raw_parts_mut(out_addr as *mut u8, 256);
+        call.bytes.borrowed_bytes = Some(256);
         let reg = get_registry();
         let key = ChunkKey::new(dim, cx, cz);
         let map = reg.chunks_map().read().unwrap();
@@ -522,11 +787,29 @@ pub unsafe extern "system" fn Java_com_rustcraft_bridge_NativeChunkBridge_getBio
             Some(arc) => {
                 let chunk = arc.read().unwrap();
                 out.copy_from_slice(&chunk.biomes);
+                call.bytes.copied_bytes = Some(256);
+                call.bytes.output_bytes = Some(256);
                 1
             }
             None => 0,
         }
-    }).unwrap_or(-99)
+    }));
+    let panicked = outcome.is_err();
+    let code = outcome.unwrap_or(-99);
+    call.fallback_reason = if panicked {
+        metrics::FallbackReason::Panic
+    } else {
+        match code {
+            1.. => metrics::FallbackReason::None,
+            0 => metrics::FallbackReason::MissingState,
+            _ => metrics::FallbackReason::InvalidArgument,
+        }
+    };
+    if panicked {
+        call.bytes.output_bytes = Some(0);
+        call.bytes.copied_bytes = None;
+    }
+    code
 }
 
 /// M5.2 light freshness: writes 4096 bytes (2048 block + 2048 sky) of section y
@@ -541,10 +824,14 @@ pub unsafe extern "system" fn Java_com_rustcraft_bridge_NativeChunkBridge_getSec
     section_y: u8,
     out_addr: i64,
 ) -> i32 {
-    GLOBAL_FFI_METRICS.record_call(320);
-    catch_unwind(|| {
-        if out_addr == 0 { return -1; }
+    let mut call = GLOBAL_FFI_METRICS.begin_call(metrics::Operation::ChunkGetSectionLight);
+    call.bytes = metrics::ByteMeasurements::NO_BULK;
+    let outcome = catch_unwind(std::panic::AssertUnwindSafe(|| {
+        if out_addr == 0 {
+            return -1;
+        }
         let out = std::slice::from_raw_parts_mut(out_addr as *mut u8, 4096);
+        call.bytes.borrowed_bytes = Some(4096);
         let reg = get_registry();
         let key = ChunkKey::new(dim, cx, cz);
         let map = reg.chunks_map().read().unwrap();
@@ -556,6 +843,8 @@ pub unsafe extern "system" fn Java_com_rustcraft_bridge_NativeChunkBridge_getSec
                         let (bl, sl) = sec.light_arrays();
                         out[..2048].copy_from_slice(bl);
                         out[2048..].copy_from_slice(sl);
+                        call.bytes.copied_bytes = Some(4096);
+                        call.bytes.output_bytes = Some(4096);
                         1
                     }
                     None => 0,
@@ -563,7 +852,23 @@ pub unsafe extern "system" fn Java_com_rustcraft_bridge_NativeChunkBridge_getSec
             }
             None => 0,
         }
-    }).unwrap_or(-99)
+    }));
+    let panicked = outcome.is_err();
+    let code = outcome.unwrap_or(-99);
+    call.fallback_reason = if panicked {
+        metrics::FallbackReason::Panic
+    } else {
+        match code {
+            1.. => metrics::FallbackReason::None,
+            0 => metrics::FallbackReason::MissingState,
+            _ => metrics::FallbackReason::InvalidArgument,
+        }
+    };
+    if panicked {
+        call.bytes.output_bytes = Some(0);
+        call.bytes.copied_bytes = None;
+    }
+    code
 }
 
 // ====================================================================
@@ -576,12 +881,11 @@ pub unsafe extern "system" fn Java_com_rustcraft_bridge_OutboundFrameCtx_frameCr
     _env: *mut c_void,
     _clazz: *mut c_void,
 ) -> i64 {
-    catch_unwind(|| {
-        match compression::frame::OutboundFrameContext::new() {
-            Ok(ctx) => Box::into_raw(Box::new(ctx)) as i64,
-            Err(_) => 0,
-        }
-    }).unwrap_or(0)
+    catch_unwind(|| match compression::frame::OutboundFrameContext::new() {
+        Ok(ctx) => Box::into_raw(Box::new(ctx)) as i64,
+        Err(_) => 0,
+    })
+    .unwrap_or(0)
 }
 
 /// Frees a frame context (idempotent via caller CAS pattern; 0 is never valid).
@@ -592,10 +896,15 @@ pub unsafe extern "system" fn Java_com_rustcraft_bridge_OutboundFrameCtx_frameFr
     handle: i64,
 ) -> i32 {
     catch_unwind(|| {
-        if handle == 0 { return 0; }
-        drop(Box::from_raw(handle as *mut compression::frame::OutboundFrameContext));
+        if handle == 0 {
+            return 0;
+        }
+        drop(Box::from_raw(
+            handle as *mut compression::frame::OutboundFrameContext,
+        ));
         1
-    }).unwrap_or(0)
+    })
+    .unwrap_or(0)
 }
 
 /// Encodes one complete frame: threshold decision + optional compression +
@@ -631,5 +940,6 @@ pub unsafe extern "system" fn Java_com_rustcraft_bridge_OutboundFrameCtx_frameEn
                 e.as_code()
             }
         }
-    }).unwrap_or(-2)
+    })
+    .unwrap_or(-2)
 }

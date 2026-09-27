@@ -54,11 +54,28 @@
     {
       "id": "H3",
       "title": "FIX TELEMETRY",
-      "status": "IN_PROGRESS",
-      "implementation": [],
-      "validation": [],
-      "evidence": [],
-      "commit": null
+      "status": "VALIDATED",
+      "implementation": [
+        "crates/metrics/src/lib.rs",
+        "crates/ffi/src",
+        "tools/telemetry-tests",
+        "docs/engineering/ffi-telemetry-v2.md"
+      ],
+      "validation": [
+        "8 metrics tests;10 telemetry integration;47 native-chunk;96 workspace library;10 protocol;release FFI PASS",
+        "5 Java suites PASS;1809 telemetry assertions",
+        "Root fresh Clean legacy:25 tooling,201 foundation assertions,mask1/4358 identical bytes",
+        "Changed-file formatting and strict metrics clippy PASS;legacy global fmt and FFI strict lint failures retained"
+      ],
+      "evidence": [
+        "machine/architecture-hardening/h3-telemetry-v2.json"
+      ],
+      "commit": null,
+      "limitations": [
+        "27 scalar outcome reasons remain explicitly unknown",
+        "Uncovered frame/debug exports and unknown copy/allocation fields are inventoried",
+        "Native timing excludes JNI; instrumentation overhead awaits H15 measurement"
+      ]
     },
     {
       "id": "H4",
@@ -267,9 +284,10 @@
           "commit": "7fe87eb127ce242e14ba1bfe6e75ac5d013370d7"
         },
         "A": {
-          "status": "VALIDATED_PROTOTYPE",
+          "status": "PROTOTYPE_COMMITTED",
           "decision": "LIMITED_USE",
-          "evidence": "machine/architecture-hardening/h22-5-replay-validation.json"
+          "evidence": "machine/architecture-hardening/h22-5-replay-validation.json",
+          "commit": "6d36b9ce8c4deb8043c6edf485c6748b61396864"
         },
         "B": {
           "status": "IN_PROGRESS"

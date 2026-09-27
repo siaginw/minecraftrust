@@ -1,0 +1,1740 @@
+{
+  "schema_version": 2,
+  "kind": "H3_FFI_TELEMETRY_COVERAGE_AND_VALIDATION",
+  "generated_utc": "2026-09-27T00:45:24.944166+00:00",
+  "scope": "bounded telemetry correction, not complete JNI/performance/authority qualification",
+  "operation_count": 58,
+  "legacy_misused_call_sites_corrected": 54,
+  "outcome_unknown_count": 27,
+  "production_authority": false,
+  "validation_status": "PASS_WITH_RECORDED_LEGACY_CHECK_FAILURES",
+  "final_receipt": "machine/architecture-hardening/h3-telemetry-evidence/h3-telemetry-525976d708/receipt.json",
+  "dll_sha256": "7db5025ff7c09e6249f7000749a5cdb374681f0d4cb530047be667ccaab5abb2",
+  "source_bindings_before_after_equal": true,
+  "source_binding_count": 152,
+  "copied_and_allocation_unknowns": "No exact value is inferred from size_of, capacity, isCopy, handle allocation or unobserved backend behavior. See field definitions in docs.",
+  "runtime_timing_scope": "native guard interval, excludes Java/JNI transition; instrumentation overhead unmeasured",
+  "snapshot_consistency": "Observational relaxed atomics; quiesce for exact deltas.",
+  "coverage": [
+    {
+      "symbol": "rust_runtime_ping",
+      "source": "crates/ffi/src/lib.rs",
+      "line": 30,
+      "status": "INSTRUMENTED",
+      "operation": "RuntimePing",
+      "operation_id": 0,
+      "outcome_classification": "CLASSIFIED",
+      "bulk_accounting": "NO_BULK_ABI_BUFFER",
+      "allocation": "UNKNOWN_EXCEPT_PROVEN_NO_ALLOCATION_PATHS"
+    },
+    {
+      "symbol": "rust_runtime_get_ffi_calls",
+      "source": "crates/ffi/src/lib.rs",
+      "line": 38,
+      "status": "DIAGNOSTIC_UNINSTRUMENTED",
+      "reason": "Read-only counter/schema export does not observe itself."
+    },
+    {
+      "symbol": "Java_com_rustcraft_bridge_NativeChunkPacket_encodeSections",
+      "source": "crates/ffi/src/lib.rs",
+      "line": 50,
+      "status": "INSTRUMENTED",
+      "operation": "EncodeSections",
+      "operation_id": 1,
+      "outcome_classification": "CLASSIFIED",
+      "bulk_accounting": "ADMITTED_INPUT_AND_SUCCESSFUL_OUTPUT",
+      "allocation": "UNKNOWN_EXCEPT_PROVEN_NO_ALLOCATION_PATHS"
+    },
+    {
+      "symbol": "Java_com_rustcraft_bridge_NativeChunkPacket_predictOutputLen",
+      "source": "crates/ffi/src/lib.rs",
+      "line": 111,
+      "status": "INSTRUMENTED",
+      "operation": "PredictOutputLen",
+      "operation_id": 3,
+      "outcome_classification": "CLASSIFIED",
+      "bulk_accounting": "ADMITTED_INPUT_AND_SUCCESSFUL_OUTPUT",
+      "allocation": "UNKNOWN_EXCEPT_PROVEN_NO_ALLOCATION_PATHS"
+    },
+    {
+      "symbol": "Java_com_rustcraft_bridge_NativeChunkPacket_jniNoop",
+      "source": "crates/ffi/src/lib.rs",
+      "line": 147,
+      "status": "UNCOVERED",
+      "reason": "Calibration/debug helper intentionally remains uninstrumented."
+    },
+    {
+      "symbol": "Java_com_rustcraft_bridge_NativeChunkPacket_testForcedPanic",
+      "source": "crates/ffi/src/lib.rs",
+      "line": 156,
+      "status": "UNCOVERED",
+      "reason": "Calibration/debug helper intentionally remains uninstrumented."
+    },
+    {
+      "symbol": "Java_com_rustcraft_bridge_NativeChunkPacket_fillPattern",
+      "source": "crates/ffi/src/lib.rs",
+      "line": 174,
+      "status": "UNCOVERED",
+      "reason": "Calibration/debug helper intentionally remains uninstrumented."
+    },
+    {
+      "symbol": "Java_com_rustcraft_bridge_NativeChunkPacket_encodeSectionsIntoArray",
+      "source": "crates/ffi/src/lib.rs",
+      "line": 210,
+      "status": "INSTRUMENTED",
+      "operation": "EncodeSectionsIntoArray",
+      "operation_id": 2,
+      "outcome_classification": "CLASSIFIED",
+      "bulk_accounting": "ADMITTED_INPUT_AND_SUCCESSFUL_OUTPUT",
+      "allocation": "UNKNOWN"
+    },
+    {
+      "symbol": "Java_com_rustcraft_bridge_NativeChunkPacket_jniProbeVersion",
+      "source": "crates/ffi/src/lib.rs",
+      "line": 318,
+      "status": "UNCOVERED",
+      "reason": "Calibration/debug helper intentionally remains uninstrumented."
+    },
+    {
+      "symbol": "Java_com_rustcraft_bridge_CompressionCtx_create",
+      "source": "crates/ffi/src/lib.rs",
+      "line": 355,
+      "status": "INSTRUMENTED",
+      "operation": "CompressionCreate",
+      "operation_id": 20,
+      "outcome_classification": "UNKNOWN",
+      "bulk_accounting": "NO_BULK_ABI_BUFFER",
+      "allocation": "UNKNOWN"
+    },
+    {
+      "symbol": "Java_com_rustcraft_bridge_CompressionCtx_compress",
+      "source": "crates/ffi/src/lib.rs",
+      "line": 375,
+      "status": "INSTRUMENTED",
+      "operation": "CompressionCompress",
+      "operation_id": 21,
+      "outcome_classification": "CLASSIFIED",
+      "bulk_accounting": "ADMITTED_INPUT_AND_SUCCESSFUL_OUTPUT",
+      "allocation": "UNKNOWN"
+    },
+    {
+      "symbol": "Java_com_rustcraft_bridge_CompressionCtx_freeRaw",
+      "source": "crates/ffi/src/lib.rs",
+      "line": 429,
+      "status": "INSTRUMENTED",
+      "operation": "CompressionFree",
+      "operation_id": 22,
+      "outcome_classification": "UNKNOWN",
+      "bulk_accounting": "NO_BULK_ABI_BUFFER",
+      "allocation": "UNKNOWN"
+    },
+    {
+      "symbol": "Java_com_rustcraft_bridge_NativeFfiTelemetry_schemaVersion",
+      "source": "crates/ffi/src/lib.rs",
+      "line": 457,
+      "status": "DIAGNOSTIC_UNINSTRUMENTED",
+      "reason": "Read-only counter/schema export does not observe itself."
+    },
+    {
+      "symbol": "Java_com_rustcraft_bridge_NativeFfiTelemetry_readOperationV2",
+      "source": "crates/ffi/src/lib.rs",
+      "line": 468,
+      "status": "DIAGNOSTIC_UNINSTRUMENTED",
+      "reason": "Read-only counter/schema export does not observe itself."
+    },
+    {
+      "symbol": "Java_com_rustcraft_bridge_NativeChunkBridge_registerPrimer",
+      "source": "crates/ffi/src/native_chunk.rs",
+      "line": 21,
+      "status": "INSTRUMENTED",
+      "operation": "ChunkRegisterPrimer",
+      "operation_id": 300,
+      "outcome_classification": "CLASSIFIED",
+      "bulk_accounting": "ADMITTED_INPUT_AND_SUCCESSFUL_OUTPUT",
+      "allocation": "UNKNOWN"
+    },
+    {
+      "symbol": "Java_com_rustcraft_bridge_NativeChunkBridge_materializePrimer",
+      "source": "crates/ffi/src/native_chunk.rs",
+      "line": 76,
+      "status": "INSTRUMENTED",
+      "operation": "ChunkMaterializePrimer",
+      "operation_id": 301,
+      "outcome_classification": "CLASSIFIED",
+      "bulk_accounting": "ADMITTED_INPUT_AND_SUCCESSFUL_OUTPUT",
+      "allocation": "UNKNOWN"
+    },
+    {
+      "symbol": "Java_com_rustcraft_bridge_NativeChunkBridge_getPrimaryBitMask",
+      "source": "crates/ffi/src/native_chunk.rs",
+      "line": 130,
+      "status": "INSTRUMENTED",
+      "operation": "ChunkGetPrimaryBitMask",
+      "operation_id": 302,
+      "outcome_classification": "UNKNOWN",
+      "bulk_accounting": "NO_BULK_ABI_BUFFER",
+      "allocation": "UNKNOWN"
+    },
+    {
+      "symbol": "Java_com_rustcraft_bridge_NativeChunkBridge_encodePacketPayload",
+      "source": "crates/ffi/src/native_chunk.rs",
+      "line": 167,
+      "status": "INSTRUMENTED",
+      "operation": "ChunkEncodePacketPayload",
+      "operation_id": 303,
+      "outcome_classification": "CLASSIFIED",
+      "bulk_accounting": "ADMITTED_INPUT_AND_SUCCESSFUL_OUTPUT",
+      "allocation": "UNKNOWN"
+    },
+    {
+      "symbol": "Java_com_rustcraft_bridge_NativeChunkBridge_getOccupancySummary",
+      "source": "crates/ffi/src/native_chunk.rs",
+      "line": 234,
+      "status": "INSTRUMENTED",
+      "operation": "ChunkGetOccupancySummary",
+      "operation_id": 304,
+      "outcome_classification": "CLASSIFIED",
+      "bulk_accounting": "ADMITTED_INPUT_AND_SUCCESSFUL_OUTPUT",
+      "allocation": "UNKNOWN"
+    },
+    {
+      "symbol": "Java_com_rustcraft_bridge_NativeChunkBridge_stagePersistence",
+      "source": "crates/ffi/src/native_chunk.rs",
+      "line": 286,
+      "status": "INSTRUMENTED",
+      "operation": "ChunkStagePersistence",
+      "operation_id": 305,
+      "outcome_classification": "CLASSIFIED",
+      "bulk_accounting": "ADMITTED_INPUT_AND_SUCCESSFUL_OUTPUT",
+      "allocation": "UNKNOWN"
+    },
+    {
+      "symbol": "Java_com_rustcraft_bridge_NativeChunkBridge_invalidateChunk",
+      "source": "crates/ffi/src/native_chunk.rs",
+      "line": 349,
+      "status": "INSTRUMENTED",
+      "operation": "ChunkInvalidate",
+      "operation_id": 306,
+      "outcome_classification": "UNKNOWN",
+      "bulk_accounting": "NO_BULK_ABI_BUFFER",
+      "allocation": "UNKNOWN"
+    },
+    {
+      "symbol": "Java_com_rustcraft_bridge_NativeChunkBridge_unloadChunk",
+      "source": "crates/ffi/src/native_chunk.rs",
+      "line": 371,
+      "status": "INSTRUMENTED",
+      "operation": "ChunkUnload",
+      "operation_id": 307,
+      "outcome_classification": "UNKNOWN",
+      "bulk_accounting": "NO_BULK_ABI_BUFFER",
+      "allocation": "UNKNOWN"
+    },
+    {
+      "symbol": "Java_com_rustcraft_bridge_NativeChunkBridge_markMutation",
+      "source": "crates/ffi/src/native_chunk.rs",
+      "line": 394,
+      "status": "INSTRUMENTED",
+      "operation": "ChunkMarkMutation",
+      "operation_id": 309,
+      "outcome_classification": "UNKNOWN",
+      "bulk_accounting": "NO_BULK_ABI_BUFFER",
+      "allocation": "UNKNOWN"
+    },
+    {
+      "symbol": "Java_com_rustcraft_bridge_NativeChunkBridge_markSectionMutation",
+      "source": "crates/ffi/src/native_chunk.rs",
+      "line": 419,
+      "status": "INSTRUMENTED",
+      "operation": "ChunkMarkSectionMutation",
+      "operation_id": 310,
+      "outcome_classification": "UNKNOWN",
+      "bulk_accounting": "NO_BULK_ABI_BUFFER",
+      "allocation": "UNKNOWN"
+    },
+    {
+      "symbol": "Java_com_rustcraft_bridge_NativeChunkBridge_refreshSection",
+      "source": "crates/ffi/src/native_chunk.rs",
+      "line": 443,
+      "status": "INSTRUMENTED",
+      "operation": "ChunkRefreshSection",
+      "operation_id": 311,
+      "outcome_classification": "CLASSIFIED",
+      "bulk_accounting": "ADMITTED_INPUT_AND_SUCCESSFUL_OUTPUT",
+      "allocation": "UNKNOWN"
+    },
+    {
+      "symbol": "Java_com_rustcraft_bridge_NativeChunkBridge_setGlobalPaletteBits",
+      "source": "crates/ffi/src/native_chunk.rs",
+      "line": 512,
+      "status": "INSTRUMENTED",
+      "operation": "ChunkSetGlobalPaletteBits",
+      "operation_id": 313,
+      "outcome_classification": "UNKNOWN",
+      "bulk_accounting": "NO_BULK_ABI_BUFFER",
+      "allocation": "UNKNOWN"
+    },
+    {
+      "symbol": "Java_com_rustcraft_bridge_NativeChunkBridge_getDirtySections",
+      "source": "crates/ffi/src/native_chunk.rs",
+      "line": 530,
+      "status": "INSTRUMENTED",
+      "operation": "ChunkGetDirtySections",
+      "operation_id": 312,
+      "outcome_classification": "UNKNOWN",
+      "bulk_accounting": "NO_BULK_ABI_BUFFER",
+      "allocation": "UNKNOWN"
+    },
+    {
+      "symbol": "Java_com_rustcraft_bridge_NativeChunkBridge_getRegisteredCount",
+      "source": "crates/ffi/src/native_chunk.rs",
+      "line": 551,
+      "status": "INSTRUMENTED",
+      "operation": "ChunkGetRegisteredCount",
+      "operation_id": 308,
+      "outcome_classification": "UNKNOWN",
+      "bulk_accounting": "NO_BULK_ABI_BUFFER",
+      "allocation": "UNKNOWN"
+    },
+    {
+      "symbol": "Java_com_rustcraft_bridge_NativeChunkBridge_findGeneration",
+      "source": "crates/ffi/src/native_chunk.rs",
+      "line": 563,
+      "status": "INSTRUMENTED",
+      "operation": "ChunkFindGeneration",
+      "operation_id": 314,
+      "outcome_classification": "UNKNOWN",
+      "bulk_accounting": "NO_BULK_ABI_BUFFER",
+      "allocation": "UNKNOWN"
+    },
+    {
+      "symbol": "Java_com_rustcraft_bridge_NativeChunkBridge_getRegistryStats",
+      "source": "crates/ffi/src/native_chunk.rs",
+      "line": 584,
+      "status": "INSTRUMENTED",
+      "operation": "ChunkGetRegistryStats",
+      "operation_id": 315,
+      "outcome_classification": "CLASSIFIED",
+      "bulk_accounting": "ADMITTED_INPUT_AND_SUCCESSFUL_OUTPUT",
+      "allocation": "UNKNOWN"
+    },
+    {
+      "symbol": "Java_com_rustcraft_bridge_NativeChunkBridge_setBiomes",
+      "source": "crates/ffi/src/native_chunk.rs",
+      "line": 636,
+      "status": "INSTRUMENTED",
+      "operation": "ChunkSetBiomes",
+      "operation_id": 316,
+      "outcome_classification": "CLASSIFIED",
+      "bulk_accounting": "ADMITTED_INPUT_AND_SUCCESSFUL_OUTPUT",
+      "allocation": "UNKNOWN"
+    },
+    {
+      "symbol": "Java_com_rustcraft_bridge_NativeChunkBridge_getGenerationInfo",
+      "source": "crates/ffi/src/native_chunk.rs",
+      "line": 689,
+      "status": "INSTRUMENTED",
+      "operation": "ChunkGetGenerationInfo",
+      "operation_id": 317,
+      "outcome_classification": "CLASSIFIED",
+      "bulk_accounting": "ADMITTED_INPUT_AND_SUCCESSFUL_OUTPUT",
+      "allocation": "UNKNOWN"
+    },
+    {
+      "symbol": "Java_com_rustcraft_bridge_NativeChunkBridge_registryClear",
+      "source": "crates/ffi/src/native_chunk.rs",
+      "line": 749,
+      "status": "INSTRUMENTED",
+      "operation": "ChunkRegistryClear",
+      "operation_id": 318,
+      "outcome_classification": "UNKNOWN",
+      "bulk_accounting": "NO_BULK_ABI_BUFFER",
+      "allocation": "UNKNOWN"
+    },
+    {
+      "symbol": "Java_com_rustcraft_bridge_NativeChunkBridge_getBiomes",
+      "source": "crates/ffi/src/native_chunk.rs",
+      "line": 767,
+      "status": "INSTRUMENTED",
+      "operation": "ChunkGetBiomes",
+      "operation_id": 319,
+      "outcome_classification": "CLASSIFIED",
+      "bulk_accounting": "ADMITTED_INPUT_AND_SUCCESSFUL_OUTPUT",
+      "allocation": "UNKNOWN"
+    },
+    {
+      "symbol": "Java_com_rustcraft_bridge_NativeChunkBridge_getSectionLight",
+      "source": "crates/ffi/src/native_chunk.rs",
+      "line": 818,
+      "status": "INSTRUMENTED",
+      "operation": "ChunkGetSectionLight",
+      "operation_id": 320,
+      "outcome_classification": "CLASSIFIED",
+      "bulk_accounting": "ADMITTED_INPUT_AND_SUCCESSFUL_OUTPUT",
+      "allocation": "UNKNOWN"
+    },
+    {
+      "symbol": "Java_com_rustcraft_bridge_OutboundFrameCtx_frameCreate",
+      "source": "crates/ffi/src/native_chunk.rs",
+      "line": 880,
+      "status": "UNCOVERED",
+      "reason": "Frame engine instrumentation out of scope; formatting only, semantics unchanged."
+    },
+    {
+      "symbol": "Java_com_rustcraft_bridge_OutboundFrameCtx_frameFree",
+      "source": "crates/ffi/src/native_chunk.rs",
+      "line": 893,
+      "status": "UNCOVERED",
+      "reason": "Frame engine instrumentation out of scope; formatting only, semantics unchanged."
+    },
+    {
+      "symbol": "Java_com_rustcraft_bridge_OutboundFrameCtx_frameEncode",
+      "source": "crates/ffi/src/native_chunk.rs",
+      "line": 916,
+      "status": "UNCOVERED",
+      "reason": "Frame engine instrumentation out of scope; formatting only, semantics unchanged."
+    },
+    {
+      "symbol": "Java_com_rustcraft_bridge_capture_OwnedSnapshotBridge_encodeOwnedV1",
+      "source": "crates/ffi/src/owned_snapshot.rs",
+      "line": 113,
+      "status": "INSTRUMENTED",
+      "operation": "OwnedSnapshotEncodeV1",
+      "operation_id": 322,
+      "outcome_classification": "CLASSIFIED",
+      "bulk_accounting": "ADMITTED_INPUT_AND_SUCCESSFUL_OUTPUT",
+      "allocation": "UNKNOWN"
+    },
+    {
+      "symbol": "Java_com_rustcraft_bridge_NativeChunkBridge_encodePacketPayloadV2",
+      "source": "crates/ffi/src/packet_encode_v2.rs",
+      "line": 239,
+      "status": "INSTRUMENTED",
+      "operation": "ChunkEncodePacketPayloadV2",
+      "operation_id": 321,
+      "outcome_classification": "CLASSIFIED",
+      "bulk_accounting": "ADMITTED_INPUT_AND_SUCCESSFUL_OUTPUT",
+      "allocation": "UNKNOWN"
+    },
+    {
+      "symbol": "Java_com_rustcraft_interop_SpawnIndexInterop_create",
+      "source": "crates/ffi/src/spawn.rs",
+      "line": 18,
+      "status": "INSTRUMENTED",
+      "operation": "SpawnCreate",
+      "operation_id": 100,
+      "outcome_classification": "UNKNOWN",
+      "bulk_accounting": "NO_BULK_ABI_BUFFER",
+      "allocation": "UNKNOWN"
+    },
+    {
+      "symbol": "Java_com_rustcraft_interop_SpawnIndexInterop_freeRaw",
+      "source": "crates/ffi/src/spawn.rs",
+      "line": 28,
+      "status": "INSTRUMENTED",
+      "operation": "SpawnFree",
+      "operation_id": 101,
+      "outcome_classification": "UNKNOWN",
+      "bulk_accounting": "NO_BULK_ABI_BUFFER",
+      "allocation": "UNKNOWN"
+    },
+    {
+      "symbol": "Java_com_rustcraft_interop_SpawnIndexInterop_insert",
+      "source": "crates/ffi/src/spawn.rs",
+      "line": 42,
+      "status": "INSTRUMENTED",
+      "operation": "SpawnInsert",
+      "operation_id": 102,
+      "outcome_classification": "CLASSIFIED",
+      "bulk_accounting": "ADMITTED_INPUT_AND_SUCCESSFUL_OUTPUT",
+      "allocation": "UNKNOWN"
+    },
+    {
+      "symbol": "Java_com_rustcraft_interop_SpawnIndexInterop_updateBox",
+      "source": "crates/ffi/src/spawn.rs",
+      "line": 94,
+      "status": "INSTRUMENTED",
+      "operation": "SpawnUpdateBox",
+      "operation_id": 103,
+      "outcome_classification": "UNKNOWN",
+      "bulk_accounting": "NO_BULK_ABI_BUFFER",
+      "allocation": "UNKNOWN"
+    },
+    {
+      "symbol": "Java_com_rustcraft_interop_SpawnIndexInterop_remove",
+      "source": "crates/ffi/src/spawn.rs",
+      "line": 117,
+      "status": "INSTRUMENTED",
+      "operation": "SpawnRemove",
+      "operation_id": 104,
+      "outcome_classification": "UNKNOWN",
+      "bulk_accounting": "NO_BULK_ABI_BUFFER",
+      "allocation": "UNKNOWN"
+    },
+    {
+      "symbol": "Java_com_rustcraft_interop_SpawnIndexInterop_query",
+      "source": "crates/ffi/src/spawn.rs",
+      "line": 135,
+      "status": "INSTRUMENTED",
+      "operation": "SpawnQuery",
+      "operation_id": 105,
+      "outcome_classification": "UNKNOWN",
+      "bulk_accounting": "NO_BULK_ABI_BUFFER",
+      "allocation": "UNKNOWN"
+    },
+    {
+      "symbol": "Java_com_rustcraft_interop_SpawnIndexInterop_stats",
+      "source": "crates/ffi/src/spawn.rs",
+      "line": 155,
+      "status": "INSTRUMENTED",
+      "operation": "SpawnStats",
+      "operation_id": 106,
+      "outcome_classification": "CLASSIFIED",
+      "bulk_accounting": "ADMITTED_INPUT_AND_SUCCESSFUL_OUTPUT",
+      "allocation": "UNKNOWN"
+    },
+    {
+      "symbol": "Java_com_rustcraft_interop_WNoiseInterop_create",
+      "source": "crates/ffi/src/wnoise.rs",
+      "line": 16,
+      "status": "INSTRUMENTED",
+      "operation": "NoiseCreate",
+      "operation_id": 200,
+      "outcome_classification": "UNKNOWN",
+      "bulk_accounting": "NO_BULK_ABI_BUFFER",
+      "allocation": "UNKNOWN"
+    },
+    {
+      "symbol": "Java_com_rustcraft_interop_WNoiseInterop_freeRaw",
+      "source": "crates/ffi/src/wnoise.rs",
+      "line": 32,
+      "status": "INSTRUMENTED",
+      "operation": "NoiseFree",
+      "operation_id": 201,
+      "outcome_classification": "UNKNOWN",
+      "bulk_accounting": "NO_BULK_ABI_BUFFER",
+      "allocation": "UNKNOWN"
+    },
+    {
+      "symbol": "Java_com_rustcraft_interop_WNoiseInterop_gen3d",
+      "source": "crates/ffi/src/wnoise.rs",
+      "line": 47,
+      "status": "INSTRUMENTED",
+      "operation": "NoiseGen3d",
+      "operation_id": 202,
+      "outcome_classification": "CLASSIFIED",
+      "bulk_accounting": "ADMITTED_INPUT_AND_SUCCESSFUL_OUTPUT",
+      "allocation": "UNKNOWN"
+    },
+    {
+      "symbol": "Java_com_rustcraft_interop_WNoiseInterop_gen2d",
+      "source": "crates/ffi/src/wnoise.rs",
+      "line": 92,
+      "status": "INSTRUMENTED",
+      "operation": "NoiseGen2d",
+      "operation_id": 203,
+      "outcome_classification": "CLASSIFIED",
+      "bulk_accounting": "ADMITTED_INPUT_AND_SUCCESSFUL_OUTPUT",
+      "allocation": "UNKNOWN"
+    },
+    {
+      "symbol": "Java_com_rustcraft_interop_WNoiseInterop_batchCreate",
+      "source": "crates/ffi/src/wnoise.rs",
+      "line": 143,
+      "status": "INSTRUMENTED",
+      "operation": "NoiseBatchCreate",
+      "operation_id": 210,
+      "outcome_classification": "UNKNOWN",
+      "bulk_accounting": "NO_BULK_ABI_BUFFER",
+      "allocation": "UNKNOWN"
+    },
+    {
+      "symbol": "Java_com_rustcraft_interop_WNoiseInterop_batchFreeRaw",
+      "source": "crates/ffi/src/wnoise.rs",
+      "line": 156,
+      "status": "INSTRUMENTED",
+      "operation": "NoiseBatchFree",
+      "operation_id": 211,
+      "outcome_classification": "UNKNOWN",
+      "bulk_accounting": "NO_BULK_ABI_BUFFER",
+      "allocation": "UNKNOWN"
+    },
+    {
+      "symbol": "Java_com_rustcraft_interop_WNoiseInterop_batchGen3d",
+      "source": "crates/ffi/src/wnoise.rs",
+      "line": 172,
+      "status": "INSTRUMENTED",
+      "operation": "NoiseBatchGen3d",
+      "operation_id": 212,
+      "outcome_classification": "CLASSIFIED",
+      "bulk_accounting": "ADMITTED_INPUT_AND_SUCCESSFUL_OUTPUT",
+      "allocation": "UNKNOWN"
+    },
+    {
+      "symbol": "Java_com_rustcraft_interop_WNoiseInterop_fieldCreate",
+      "source": "crates/ffi/src/wnoise.rs",
+      "line": 228,
+      "status": "INSTRUMENTED",
+      "operation": "NoiseFieldCreate",
+      "operation_id": 220,
+      "outcome_classification": "UNKNOWN",
+      "bulk_accounting": "NO_BULK_ABI_BUFFER",
+      "allocation": "UNKNOWN"
+    },
+    {
+      "symbol": "Java_com_rustcraft_interop_WNoiseInterop_fieldFreeRaw",
+      "source": "crates/ffi/src/wnoise.rs",
+      "line": 276,
+      "status": "INSTRUMENTED",
+      "operation": "NoiseFieldFree",
+      "operation_id": 221,
+      "outcome_classification": "UNKNOWN",
+      "bulk_accounting": "NO_BULK_ABI_BUFFER",
+      "allocation": "UNKNOWN"
+    },
+    {
+      "symbol": "Java_com_rustcraft_interop_WNoiseInterop_fieldAssemble",
+      "source": "crates/ffi/src/wnoise.rs",
+      "line": 291,
+      "status": "INSTRUMENTED",
+      "operation": "NoiseFieldAssemble",
+      "operation_id": 222,
+      "outcome_classification": "CLASSIFIED",
+      "bulk_accounting": "ADMITTED_INPUT_AND_SUCCESSFUL_OUTPUT",
+      "allocation": "UNKNOWN"
+    },
+    {
+      "symbol": "Java_com_rustcraft_interop_WNoiseInterop_singleCreate",
+      "source": "crates/ffi/src/wnoise.rs",
+      "line": 347,
+      "status": "INSTRUMENTED",
+      "operation": "NoiseSingleCreate",
+      "operation_id": 223,
+      "outcome_classification": "UNKNOWN",
+      "bulk_accounting": "NO_BULK_ABI_BUFFER",
+      "allocation": "UNKNOWN"
+    },
+    {
+      "symbol": "Java_com_rustcraft_interop_WNoiseInterop_singleFreeRaw",
+      "source": "crates/ffi/src/wnoise.rs",
+      "line": 360,
+      "status": "INSTRUMENTED",
+      "operation": "NoiseSingleFree",
+      "operation_id": 224,
+      "outcome_classification": "UNKNOWN",
+      "bulk_accounting": "NO_BULK_ABI_BUFFER",
+      "allocation": "UNKNOWN"
+    },
+    {
+      "symbol": "Java_com_rustcraft_interop_WNoiseInterop_singleGen3d",
+      "source": "crates/ffi/src/wnoise.rs",
+      "line": 374,
+      "status": "INSTRUMENTED",
+      "operation": "NoiseSingleGen3d",
+      "operation_id": 225,
+      "outcome_classification": "CLASSIFIED",
+      "bulk_accounting": "ADMITTED_INPUT_AND_SUCCESSFUL_OUTPUT",
+      "allocation": "UNKNOWN"
+    },
+    {
+      "symbol": "Java_com_rustcraft_interop_WNoiseInterop_initCreate",
+      "source": "crates/ffi/src/wnoise.rs",
+      "line": 422,
+      "status": "INSTRUMENTED",
+      "operation": "NoiseInitCreate",
+      "operation_id": 230,
+      "outcome_classification": "UNKNOWN",
+      "bulk_accounting": "NO_BULK_ABI_BUFFER",
+      "allocation": "UNKNOWN"
+    },
+    {
+      "symbol": "Java_com_rustcraft_interop_WNoiseInterop_initFreeRaw",
+      "source": "crates/ffi/src/wnoise.rs",
+      "line": 480,
+      "status": "INSTRUMENTED",
+      "operation": "NoiseInitFree",
+      "operation_id": 231,
+      "outcome_classification": "UNKNOWN",
+      "bulk_accounting": "NO_BULK_ABI_BUFFER",
+      "allocation": "UNKNOWN"
+    },
+    {
+      "symbol": "Java_com_rustcraft_interop_WNoiseInterop_initFieldComplete",
+      "source": "crates/ffi/src/wnoise.rs",
+      "line": 495,
+      "status": "INSTRUMENTED",
+      "operation": "NoiseInitFieldComplete",
+      "operation_id": 232,
+      "outcome_classification": "CLASSIFIED",
+      "bulk_accounting": "ADMITTED_INPUT_AND_SUCCESSFUL_OUTPUT",
+      "allocation": "UNKNOWN"
+    },
+    {
+      "symbol": "Java_com_rustcraft_interop_WNoiseInterop_initCreateFromState",
+      "source": "crates/ffi/src/wnoise.rs",
+      "line": 528,
+      "status": "INSTRUMENTED",
+      "operation": "NoiseInitCreateFromState",
+      "operation_id": 233,
+      "outcome_classification": "CLASSIFIED",
+      "bulk_accounting": "ADMITTED_INPUT_AND_SUCCESSFUL_OUTPUT",
+      "allocation": "UNKNOWN"
+    },
+    {
+      "symbol": "Java_com_rustcraft_bridge_WorldgenShadow_initCreateFromState",
+      "source": "crates/ffi/src/wnoise.rs",
+      "line": 621,
+      "status": "ALIAS_COUNTS_BASE_OPERATION_ONCE",
+      "target_symbol": "Java_com_rustcraft_interop_WNoiseInterop_initCreateFromState"
+    },
+    {
+      "symbol": "Java_com_rustcraft_bridge_WorldgenShadow_initFieldComplete",
+      "source": "crates/ffi/src/wnoise.rs",
+      "line": 676,
+      "status": "ALIAS_COUNTS_BASE_OPERATION_ONCE",
+      "target_symbol": "Java_com_rustcraft_interop_WNoiseInterop_initFieldComplete"
+    },
+    {
+      "symbol": "Java_com_rustcraft_bridge_WorldgenShadow_initFreeRaw",
+      "source": "crates/ffi/src/wnoise.rs",
+      "line": 691,
+      "status": "ALIAS_COUNTS_BASE_OPERATION_ONCE",
+      "target_symbol": "Java_com_rustcraft_interop_WNoiseInterop_initFreeRaw"
+    },
+    {
+      "symbol": "Java_com_rustcraft_interop_WNoiseInterop_terrainSetBlocks",
+      "source": "crates/ffi/src/wnoise.rs",
+      "line": 704,
+      "status": "INSTRUMENTED",
+      "operation": "TerrainSetBlocks",
+      "operation_id": 240,
+      "outcome_classification": "CLASSIFIED",
+      "bulk_accounting": "ADMITTED_INPUT_AND_SUCCESSFUL_OUTPUT",
+      "allocation": "UNKNOWN"
+    },
+    {
+      "symbol": "Java_com_rustcraft_interop_WNoiseInterop_terrainSetBlocksOpt",
+      "source": "crates/ffi/src/wnoise.rs",
+      "line": 744,
+      "status": "INSTRUMENTED",
+      "operation": "TerrainSetBlocksOpt",
+      "operation_id": 241,
+      "outcome_classification": "CLASSIFIED",
+      "bulk_accounting": "ADMITTED_INPUT_AND_SUCCESSFUL_OUTPUT",
+      "allocation": "UNKNOWN"
+    },
+    {
+      "symbol": "Java_com_rustcraft_interop_WNoiseInterop_terrainComplete",
+      "source": "crates/ffi/src/wnoise.rs",
+      "line": 784,
+      "status": "INSTRUMENTED",
+      "operation": "TerrainComplete",
+      "operation_id": 242,
+      "outcome_classification": "CLASSIFIED",
+      "bulk_accounting": "ADMITTED_INPUT_AND_SUCCESSFUL_OUTPUT",
+      "allocation": "UNKNOWN"
+    },
+    {
+      "symbol": "Java_com_rustcraft_interop_WNoiseInterop_terrainSetBlocksCritical",
+      "source": "crates/ffi/src/wnoise.rs",
+      "line": 833,
+      "status": "INSTRUMENTED",
+      "operation": "TerrainSetBlocksCritical",
+      "operation_id": 243,
+      "outcome_classification": "CLASSIFIED",
+      "bulk_accounting": "ADMITTED_INPUT_AND_SUCCESSFUL_OUTPUT",
+      "allocation": "UNKNOWN"
+    },
+    {
+      "symbol": "Java_com_rustcraft_bridge_WorldgenShadow_terrainSetBlocks",
+      "source": "crates/ffi/src/wnoise.rs",
+      "line": 887,
+      "status": "ALIAS_COUNTS_BASE_OPERATION_ONCE",
+      "target_symbol": "Java_com_rustcraft_interop_WNoiseInterop_terrainSetBlocks"
+    },
+    {
+      "symbol": "Java_com_rustcraft_bridge_WorldgenShadow_terrainSetBlocksOpt",
+      "source": "crates/ffi/src/wnoise.rs",
+      "line": 908,
+      "status": "ALIAS_COUNTS_BASE_OPERATION_ONCE",
+      "target_symbol": "Java_com_rustcraft_interop_WNoiseInterop_terrainSetBlocksOpt"
+    },
+    {
+      "symbol": "Java_com_rustcraft_bridge_WorldgenShadow_terrainComplete",
+      "source": "crates/ffi/src/wnoise.rs",
+      "line": 929,
+      "status": "ALIAS_COUNTS_BASE_OPERATION_ONCE",
+      "target_symbol": "Java_com_rustcraft_interop_WNoiseInterop_terrainComplete"
+    }
+  ],
+  "retained_artifacts": [
+    {
+      "original_path": "target/architecture-hardening/h3-telemetry-1e4826c4f2/cargo-version.log",
+      "retained_path": "machine/architecture-hardening/h3-telemetry-evidence/h3-telemetry-1e4826c4f2/cargo-version.log.txt",
+      "sha256": "9950bbb2d5c3417b1a068f0e81f6d3cac991a363193bdf2a22d447f5acf8b503"
+    },
+    {
+      "original_path": "target/architecture-hardening/h3-telemetry-1e4826c4f2/clippy-ffi-baseline-exceptions.log",
+      "retained_path": "machine/architecture-hardening/h3-telemetry-evidence/h3-telemetry-1e4826c4f2/clippy-ffi-baseline-exceptions.log.txt",
+      "sha256": "ab7567aa3401e700205d73a7b3156a9f12992d901c80d22bf8d335bd3a714f51"
+    },
+    {
+      "original_path": "target/architecture-hardening/h3-telemetry-1e4826c4f2/clippy-ffi-strict.log",
+      "retained_path": "machine/architecture-hardening/h3-telemetry-evidence/h3-telemetry-1e4826c4f2/clippy-ffi-strict.log.txt",
+      "sha256": "1595c74705f8c4e3a5db7660e29143cd7a5898a6563cb122059dc4ab0e7659bf"
+    },
+    {
+      "original_path": "target/architecture-hardening/h3-telemetry-1e4826c4f2/clippy-metrics-strict.log",
+      "retained_path": "machine/architecture-hardening/h3-telemetry-evidence/h3-telemetry-1e4826c4f2/clippy-metrics-strict.log.txt",
+      "sha256": "f458b56c47c5b76a714782b18fd5c4e7dd5da8e8995f1e197fdceb822302edbc"
+    },
+    {
+      "original_path": "target/architecture-hardening/h3-telemetry-1e4826c4f2/format-new-files.log",
+      "retained_path": "machine/architecture-hardening/h3-telemetry-evidence/h3-telemetry-1e4826c4f2/format-new-files.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/architecture-hardening/h3-telemetry-1e4826c4f2/format-workspace.log",
+      "retained_path": "machine/architecture-hardening/h3-telemetry-evidence/h3-telemetry-1e4826c4f2/format-workspace.log.txt",
+      "sha256": "d61108d85e7d087218722bcb28d274e96e28349c1810c6829be6339ea2bd3926"
+    },
+    {
+      "original_path": "target/architecture-hardening/h3-telemetry-1e4826c4f2/java-compile.log",
+      "retained_path": "machine/architecture-hardening/h3-telemetry-evidence/h3-telemetry-1e4826c4f2/java-compile.log.txt",
+      "sha256": "9b3b4216f5bb34a58d5e1f7d0e94c04c5e1a4e6cfe035eebc4649ab8de87d5ea"
+    },
+    {
+      "original_path": "target/architecture-hardening/h3-telemetry-1e4826c4f2/java-version.log",
+      "retained_path": "machine/architecture-hardening/h3-telemetry-evidence/h3-telemetry-1e4826c4f2/java-version.log.txt",
+      "sha256": "9d65a43706f49fcfdbcece91e737f759110493e82fd1c4886cf49104c2017b0e"
+    },
+    {
+      "original_path": "target/architecture-hardening/h3-telemetry-1e4826c4f2/metrics.log",
+      "retained_path": "machine/architecture-hardening/h3-telemetry-evidence/h3-telemetry-1e4826c4f2/metrics.log.txt",
+      "sha256": "ac84295d19eaf2390fa2e98370f458ff9d2c9c3999c2541b641838174b2bc3af"
+    },
+    {
+      "original_path": "target/architecture-hardening/h3-telemetry-1e4826c4f2/native-chunk.log",
+      "retained_path": "machine/architecture-hardening/h3-telemetry-evidence/h3-telemetry-1e4826c4f2/native-chunk.log.txt",
+      "sha256": "791ec8a7976955f833e5d5368038b3fa07b9e77027d16b3046e36972eace1d54"
+    },
+    {
+      "original_path": "target/architecture-hardening/h3-telemetry-1e4826c4f2/protocol.log",
+      "retained_path": "machine/architecture-hardening/h3-telemetry-evidence/h3-telemetry-1e4826c4f2/protocol.log.txt",
+      "sha256": "0df3e97ec6e435de8114f9311d997615cf30af0d283c3922ccc38153c4fa8b25"
+    },
+    {
+      "original_path": "target/architecture-hardening/h3-telemetry-1e4826c4f2/release-ffi.log",
+      "retained_path": "machine/architecture-hardening/h3-telemetry-evidence/h3-telemetry-1e4826c4f2/release-ffi.log.txt",
+      "sha256": "18f8016d37ef805bcd73ebed3865e08718ff9d91cd44ffd4173789398d397c0e"
+    },
+    {
+      "original_path": "target/architecture-hardening/h3-telemetry-1e4826c4f2/telemetry-contract.log",
+      "retained_path": "machine/architecture-hardening/h3-telemetry-evidence/h3-telemetry-1e4826c4f2/telemetry-contract.log.txt",
+      "sha256": "2b37a1d4a1e06e4f5e8cfd861a9784d97d7692594ca86c9ce0d9c27bbe8f3ad2"
+    },
+    {
+      "original_path": "target/architecture-hardening/h3-telemetry-1e4826c4f2/workspace-lib.log",
+      "retained_path": "machine/architecture-hardening/h3-telemetry-evidence/h3-telemetry-1e4826c4f2/workspace-lib.log.txt",
+      "sha256": "08f36baeee6585bc58ecc4a44a8b24365fd98d0b49c5b7831b1b9e5343b64f0f"
+    },
+    {
+      "original_path": "target/architecture-hardening/h3-telemetry-1e4826c4f2/receipt.json",
+      "retained_path": "machine/architecture-hardening/h3-telemetry-evidence/h3-telemetry-1e4826c4f2/receipt.json",
+      "sha256": "0fc0fdafa375ffb88ca1534ec0b35ada47f08253e064bb6800b8aaee5d8786b2"
+    },
+    {
+      "original_path": "target/architecture-hardening/h3-telemetry-9470434f15/cargo-version.log",
+      "retained_path": "machine/architecture-hardening/h3-telemetry-evidence/h3-telemetry-9470434f15/cargo-version.log.txt",
+      "sha256": "9950bbb2d5c3417b1a068f0e81f6d3cac991a363193bdf2a22d447f5acf8b503"
+    },
+    {
+      "original_path": "target/architecture-hardening/h3-telemetry-9470434f15/clippy-ffi-baseline-exceptions.log",
+      "retained_path": "machine/architecture-hardening/h3-telemetry-evidence/h3-telemetry-9470434f15/clippy-ffi-baseline-exceptions.log.txt",
+      "sha256": "af8e7b3e7a43882577ddf9251e30823f231d81947f154549a0ac574dacca0183"
+    },
+    {
+      "original_path": "target/architecture-hardening/h3-telemetry-9470434f15/clippy-ffi-strict.log",
+      "retained_path": "machine/architecture-hardening/h3-telemetry-evidence/h3-telemetry-9470434f15/clippy-ffi-strict.log.txt",
+      "sha256": "b1e18dc842f84aa3daaee71af5e7f0b98473d37e7d28e7e8eb37513566115b5a"
+    },
+    {
+      "original_path": "target/architecture-hardening/h3-telemetry-9470434f15/clippy-metrics-strict.log",
+      "retained_path": "machine/architecture-hardening/h3-telemetry-evidence/h3-telemetry-9470434f15/clippy-metrics-strict.log.txt",
+      "sha256": "f08865a35e6a5d4b4926e2fb658aa555322e42e07dfd3ea821805dd84a249104"
+    },
+    {
+      "original_path": "target/architecture-hardening/h3-telemetry-9470434f15/format-new-files.log",
+      "retained_path": "machine/architecture-hardening/h3-telemetry-evidence/h3-telemetry-9470434f15/format-new-files.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/architecture-hardening/h3-telemetry-9470434f15/format-workspace.log",
+      "retained_path": "machine/architecture-hardening/h3-telemetry-evidence/h3-telemetry-9470434f15/format-workspace.log.txt",
+      "sha256": "d61108d85e7d087218722bcb28d274e96e28349c1810c6829be6339ea2bd3926"
+    },
+    {
+      "original_path": "target/architecture-hardening/h3-telemetry-9470434f15/java-compile.log",
+      "retained_path": "machine/architecture-hardening/h3-telemetry-evidence/h3-telemetry-9470434f15/java-compile.log.txt",
+      "sha256": "f7d970d444f09e729716490d1c2cfdda8d75ceb683b49a356cfbbbf273cf222a"
+    },
+    {
+      "original_path": "target/architecture-hardening/h3-telemetry-9470434f15/java-version.log",
+      "retained_path": "machine/architecture-hardening/h3-telemetry-evidence/h3-telemetry-9470434f15/java-version.log.txt",
+      "sha256": "9d65a43706f49fcfdbcece91e737f759110493e82fd1c4886cf49104c2017b0e"
+    },
+    {
+      "original_path": "target/architecture-hardening/h3-telemetry-9470434f15/metrics.log",
+      "retained_path": "machine/architecture-hardening/h3-telemetry-evidence/h3-telemetry-9470434f15/metrics.log.txt",
+      "sha256": "90ad8908d2fed2a43e5a1c3386202674ee2c215644b81db2757c6e268bcd976b"
+    },
+    {
+      "original_path": "target/architecture-hardening/h3-telemetry-9470434f15/native-chunk.log",
+      "retained_path": "machine/architecture-hardening/h3-telemetry-evidence/h3-telemetry-9470434f15/native-chunk.log.txt",
+      "sha256": "823f91dee2abb0b8a62874150a4014909b96bb9a0bb03c8f3af43a272f0ce99a"
+    },
+    {
+      "original_path": "target/architecture-hardening/h3-telemetry-9470434f15/NativeChunkJniV2Test.log",
+      "retained_path": "machine/architecture-hardening/h3-telemetry-evidence/h3-telemetry-9470434f15/NativeChunkJniV2Test.log.txt",
+      "sha256": "fac5e283f45fd08867bdb2c531cf1c611573030d6593a47f5172584eabd65e7c"
+    },
+    {
+      "original_path": "target/architecture-hardening/h3-telemetry-9470434f15/protocol.log",
+      "retained_path": "machine/architecture-hardening/h3-telemetry-evidence/h3-telemetry-9470434f15/protocol.log.txt",
+      "sha256": "e026e94f53a64c02bef6eeb72fbb83898388386e5367a6193152c16a5eb623bf"
+    },
+    {
+      "original_path": "target/architecture-hardening/h3-telemetry-9470434f15/release-ffi.log",
+      "retained_path": "machine/architecture-hardening/h3-telemetry-evidence/h3-telemetry-9470434f15/release-ffi.log.txt",
+      "sha256": "8265e5b520efcb87e7b9cf12403a21e9a4f87a72100657397126bfa356ac530f"
+    },
+    {
+      "original_path": "target/architecture-hardening/h3-telemetry-9470434f15/telemetry-contract.log",
+      "retained_path": "machine/architecture-hardening/h3-telemetry-evidence/h3-telemetry-9470434f15/telemetry-contract.log.txt",
+      "sha256": "890c443449848e52ae8b42cff4639090cdac7611fe812d165dc8ed636573f9e8"
+    },
+    {
+      "original_path": "target/architecture-hardening/h3-telemetry-9470434f15/TelemetryJniTest.log",
+      "retained_path": "machine/architecture-hardening/h3-telemetry-evidence/h3-telemetry-9470434f15/TelemetryJniTest.log.txt",
+      "sha256": "a7d743102a22c4eb019cca6dc401ce858a45fcf660c9aa1f8c054468c665a5e8"
+    },
+    {
+      "original_path": "target/architecture-hardening/h3-telemetry-9470434f15/workspace-lib.log",
+      "retained_path": "machine/architecture-hardening/h3-telemetry-evidence/h3-telemetry-9470434f15/workspace-lib.log.txt",
+      "sha256": "a2f92a612c615e750c0c83c7233c5131971e7b5720f5999d3d8356934825fe9a"
+    },
+    {
+      "original_path": "target/architecture-hardening/h3-telemetry-9470434f15/receipt.json",
+      "retained_path": "machine/architecture-hardening/h3-telemetry-evidence/h3-telemetry-9470434f15/receipt.json",
+      "sha256": "d0db740058c06966d09807e7b1aaff433c19d6c0f09468cd2ff9bbf4b3373a90"
+    },
+    {
+      "original_path": "target/architecture-hardening/h3-telemetry-525976d708/capture-OwnedSnapshotJniTest.log",
+      "retained_path": "machine/architecture-hardening/h3-telemetry-evidence/h3-telemetry-525976d708/capture-OwnedSnapshotJniTest.log.txt",
+      "sha256": "a64198fa17ba64bea9063edef0f14f83bc87373a732b74ac73912116da0dc281"
+    },
+    {
+      "original_path": "target/architecture-hardening/h3-telemetry-525976d708/capture-SnapshotCaptureTest.log",
+      "retained_path": "machine/architecture-hardening/h3-telemetry-evidence/h3-telemetry-525976d708/capture-SnapshotCaptureTest.log.txt",
+      "sha256": "280fc1526b200246ec15859353946dd82b95d5404e01897dcf2e7834f063b3d4"
+    },
+    {
+      "original_path": "target/architecture-hardening/h3-telemetry-525976d708/cargo-version.log",
+      "retained_path": "machine/architecture-hardening/h3-telemetry-evidence/h3-telemetry-525976d708/cargo-version.log.txt",
+      "sha256": "9950bbb2d5c3417b1a068f0e81f6d3cac991a363193bdf2a22d447f5acf8b503"
+    },
+    {
+      "original_path": "target/architecture-hardening/h3-telemetry-525976d708/clippy-ffi-baseline-exceptions.log",
+      "retained_path": "machine/architecture-hardening/h3-telemetry-evidence/h3-telemetry-525976d708/clippy-ffi-baseline-exceptions.log.txt",
+      "sha256": "f7b3fb46f2a5c21ea41251bd8eb0a2a07a802dfb797090f18f3a7db6dba59313"
+    },
+    {
+      "original_path": "target/architecture-hardening/h3-telemetry-525976d708/clippy-ffi-strict.log",
+      "retained_path": "machine/architecture-hardening/h3-telemetry-evidence/h3-telemetry-525976d708/clippy-ffi-strict.log.txt",
+      "sha256": "2562d4ab28a18e0bfdb42eed7d1c9ef2b9a652261d59aa30dd8b88090f07286d"
+    },
+    {
+      "original_path": "target/architecture-hardening/h3-telemetry-525976d708/clippy-metrics-strict.log",
+      "retained_path": "machine/architecture-hardening/h3-telemetry-evidence/h3-telemetry-525976d708/clippy-metrics-strict.log.txt",
+      "sha256": "f08865a35e6a5d4b4926e2fb658aa555322e42e07dfd3ea821805dd84a249104"
+    },
+    {
+      "original_path": "target/architecture-hardening/h3-telemetry-525976d708/format-changed-files.log",
+      "retained_path": "machine/architecture-hardening/h3-telemetry-evidence/h3-telemetry-525976d708/format-changed-files.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/architecture-hardening/h3-telemetry-525976d708/format-workspace.log",
+      "retained_path": "machine/architecture-hardening/h3-telemetry-evidence/h3-telemetry-525976d708/format-workspace.log.txt",
+      "sha256": "2c35b104b1cb12944dba8c07e3ca359d5b18a6a0ad34d3f6d7439dd1012c4aea"
+    },
+    {
+      "original_path": "target/architecture-hardening/h3-telemetry-525976d708/java-compile.log",
+      "retained_path": "machine/architecture-hardening/h3-telemetry-evidence/h3-telemetry-525976d708/java-compile.log.txt",
+      "sha256": "f7d970d444f09e729716490d1c2cfdda8d75ceb683b49a356cfbbbf273cf222a"
+    },
+    {
+      "original_path": "target/architecture-hardening/h3-telemetry-525976d708/java-version.log",
+      "retained_path": "machine/architecture-hardening/h3-telemetry-evidence/h3-telemetry-525976d708/java-version.log.txt",
+      "sha256": "9d65a43706f49fcfdbcece91e737f759110493e82fd1c4886cf49104c2017b0e"
+    },
+    {
+      "original_path": "target/architecture-hardening/h3-telemetry-525976d708/metrics.log",
+      "retained_path": "machine/architecture-hardening/h3-telemetry-evidence/h3-telemetry-525976d708/metrics.log.txt",
+      "sha256": "142fb0519265d71f5b5710308cf403abfcf0928ad58ae47cfb527fff34e79050"
+    },
+    {
+      "original_path": "target/architecture-hardening/h3-telemetry-525976d708/native-chunk.log",
+      "retained_path": "machine/architecture-hardening/h3-telemetry-evidence/h3-telemetry-525976d708/native-chunk.log.txt",
+      "sha256": "d1bec7e5083a9c729adffb82a8243cbb1ebed9bc342de1d85726f49a023f96a2"
+    },
+    {
+      "original_path": "target/architecture-hardening/h3-telemetry-525976d708/NativeChunkJniV2Test.log",
+      "retained_path": "machine/architecture-hardening/h3-telemetry-evidence/h3-telemetry-525976d708/NativeChunkJniV2Test.log.txt",
+      "sha256": "cbc502e96f655a58535eefd1c0f208e6f913ca6d95d4e96436bc10fa32da113e"
+    },
+    {
+      "original_path": "target/architecture-hardening/h3-telemetry-525976d708/PacketEncodeResultV2Test.log",
+      "retained_path": "machine/architecture-hardening/h3-telemetry-evidence/h3-telemetry-525976d708/PacketEncodeResultV2Test.log.txt",
+      "sha256": "5e7a630e050a55666d49e3d8198eb145ac6a860a5bdfa3361b195f5f1ee47451"
+    },
+    {
+      "original_path": "target/architecture-hardening/h3-telemetry-525976d708/protocol.log",
+      "retained_path": "machine/architecture-hardening/h3-telemetry-evidence/h3-telemetry-525976d708/protocol.log.txt",
+      "sha256": "58dd16a991e5f0d0b6d314e62a55c7b0be81855a9a1d20e19392e22821c6a5f4"
+    },
+    {
+      "original_path": "target/architecture-hardening/h3-telemetry-525976d708/release-ffi.log",
+      "retained_path": "machine/architecture-hardening/h3-telemetry-evidence/h3-telemetry-525976d708/release-ffi.log.txt",
+      "sha256": "cd19f925cff6a800aa2b145a4560b155775fc9e33bbf5ec2e51f95e5e9edd342"
+    },
+    {
+      "original_path": "target/architecture-hardening/h3-telemetry-525976d708/telemetry-contract.log",
+      "retained_path": "machine/architecture-hardening/h3-telemetry-evidence/h3-telemetry-525976d708/telemetry-contract.log.txt",
+      "sha256": "b0c0b6cd0f057de8822726795022fb506a1174e609f14522ff245a9f0beb4557"
+    },
+    {
+      "original_path": "target/architecture-hardening/h3-telemetry-525976d708/TelemetryJniTest.log",
+      "retained_path": "machine/architecture-hardening/h3-telemetry-evidence/h3-telemetry-525976d708/TelemetryJniTest.log.txt",
+      "sha256": "a7d743102a22c4eb019cca6dc401ce858a45fcf660c9aa1f8c054468c665a5e8"
+    },
+    {
+      "original_path": "target/architecture-hardening/h3-telemetry-525976d708/workspace-lib.log",
+      "retained_path": "machine/architecture-hardening/h3-telemetry-evidence/h3-telemetry-525976d708/workspace-lib.log.txt",
+      "sha256": "20c1f2bd87e12ea793b02dd943efb22327eecbebab30350a2ad8d7649fee0cde"
+    },
+    {
+      "original_path": "target/architecture-hardening/h3-telemetry-525976d708/receipt.json",
+      "retained_path": "machine/architecture-hardening/h3-telemetry-evidence/h3-telemetry-525976d708/receipt.json",
+      "sha256": "52ab5fe0b70993e622037dc7c103e91ff85498a0db5492964818272fc05fb923"
+    },
+    {
+      "original_path": "target/architecture-hardening/h3-clean-regressions-final/receipt.json",
+      "retained_path": "machine/architecture-hardening/h3-telemetry-evidence/h3-clean-regressions-final/receipt.json",
+      "sha256": "fd07090cc757f32086b8f34091935a9bfc3b4640878bfc7b3411020c982524f0"
+    },
+    {
+      "original_path": "target/architecture-hardening/h3-clean-regressions-final/tooling.log",
+      "retained_path": "machine/architecture-hardening/h3-telemetry-evidence/h3-clean-regressions-final/tooling.log.txt",
+      "sha256": "4a3a2487c33d6eb51d550f88662784bbf9abe5e34e0354c8efadd7ecfb7c1489"
+    },
+    {
+      "original_path": "target/architecture-hardening/h3-clean-regressions-final/live-profile.log",
+      "retained_path": "machine/architecture-hardening/h3-telemetry-evidence/h3-clean-regressions-final/live-profile.log.txt",
+      "sha256": "342df991bdc2ef121c31a94b9bcf8ed94f98d38d299967c80c6c4d0f60ad9ab3"
+    },
+    {
+      "original_path": "target/architecture-hardening/h3-clean-regressions-final/live-transformer-and-capture.log",
+      "retained_path": "machine/architecture-hardening/h3-telemetry-evidence/h3-clean-regressions-final/live-transformer-and-capture.log.txt",
+      "sha256": "3a08c0a3518bf2fd34fd361ee0adea2448b254d464ffe0d018dd97f5eb725cca"
+    },
+    {
+      "original_path": "target/architecture-hardening/h3-clean-regressions-final/post-hook-verify.log",
+      "retained_path": "machine/architecture-hardening/h3-telemetry-evidence/h3-clean-regressions-final/post-hook-verify.log.txt",
+      "sha256": "84ae16e7f0f795c85a1f197d80174d67a135a607dffca72cb54ae4f5eec3d2be"
+    },
+    {
+      "original_path": "target/architecture-hardening/h3-clean-regressions-final/foundation-compile.log",
+      "retained_path": "machine/architecture-hardening/h3-telemetry-evidence/h3-clean-regressions-final/foundation-compile.log.txt",
+      "sha256": "eee59f1a92762de17bd7517f87fdc097d91d90aea34fe6d6744c3ac4b5438d89"
+    },
+    {
+      "original_path": "target/architecture-hardening/h3-clean-regressions-final/PrivateBuildTicketsTest.log",
+      "retained_path": "machine/architecture-hardening/h3-telemetry-evidence/h3-clean-regressions-final/PrivateBuildTicketsTest.log.txt",
+      "sha256": "33c9c3ce5b9d645ea4711de9782cbfc821753fa48297a5024f2b1c9fc9e2a545"
+    },
+    {
+      "original_path": "target/architecture-hardening/h3-clean-regressions-final/LiveWriterGateTest.log",
+      "retained_path": "machine/architecture-hardening/h3-telemetry-evidence/h3-clean-regressions-final/LiveWriterGateTest.log.txt",
+      "sha256": "3ed2073ebf524dd2f352edb0b001202199ee50c2e98e978aaf3f14d7c099dc49"
+    },
+    {
+      "original_path": "target/architecture-hardening/h3-clean-regressions-final/LiveChunkBindingsTest.log",
+      "retained_path": "machine/architecture-hardening/h3-telemetry-evidence/h3-clean-regressions-final/LiveChunkBindingsTest.log.txt",
+      "sha256": "5f9ef00441506e79f7475df8cfd44a57529e944de229cbefdcd2e684f1c23395"
+    },
+    {
+      "original_path": "target/architecture-hardening/h3-clean-regressions-final/LiveWriterProtocolEndToEndTest.log",
+      "retained_path": "machine/architecture-hardening/h3-telemetry-evidence/h3-clean-regressions-final/LiveWriterProtocolEndToEndTest.log.txt",
+      "sha256": "aa3ba017aa043ec016104b45f26afda3b930e025f9d3caf3c404d2d08c28ab97"
+    },
+    {
+      "original_path": "target/architecture-hardening/h3-clean-regressions-final/LiveCaptureAdmissionTest.log",
+      "retained_path": "machine/architecture-hardening/h3-telemetry-evidence/h3-clean-regressions-final/LiveCaptureAdmissionTest.log.txt",
+      "sha256": "3096765b240308f3490eaf420b849b5d978b4e154712c57b3bbd76dcd063a3c3"
+    }
+  ],
+  "validation_summary": {
+    "metrics_unit": 8,
+    "ffi_telemetry_integration": 10,
+    "native_chunk_unit": 10,
+    "native_chunk_integration": 37,
+    "workspace_lib": 96,
+    "protocol": 10,
+    "java_assertions": {
+      "TelemetryJniTest": 1809,
+      "NativeChunkJniV2Test": 568392,
+      "OwnedSnapshotJniTest": 139,
+      "PacketEncodeResultV2Test": 218,
+      "SnapshotCaptureTest": 454
+    },
+    "release_ffi": "PASS",
+    "format_changed_rust": "PASS",
+    "clippy_metrics_strict": "PASS",
+    "clippy_ffi_strict": "FAIL_EXISTING_WARNINGS",
+    "clippy_ffi_with_enumerated_baseline_exceptions": "PASS",
+    "format_workspace": "FAIL_EXISTING_UNCHANGED_FILES"
+  },
+  "earlier_failed_runs": [
+    {
+      "run": "h3-telemetry-1e4826c4f2",
+      "reason": "runner selected unnecessary CaptureDraft Java source without live dependencies"
+    },
+    {
+      "run": "h3-telemetry-9470434f15",
+      "reason": "runner omitted java.library.path for existing bridge loader"
+    }
+  ],
+  "unchanged_semantics": [
+    "production packet authority gate",
+    "frame engine logic",
+    "MCK6",
+    "compression backend",
+    "defaults",
+    "Issue #1 historical exact-writer classification"
+  ],
+  "baseline_lint_evidence": {
+    "reference_commit": "fd93e8d4cbc25af38a96962ce682093f8f6dab04",
+    "method": "Read-only git show source comparison; no baseline checkout build and no original-checkout execution. Each excluded lint has a source site already present at this accepted commit.",
+    "sites": [
+      {
+        "lint": "clippy::missing_safety_doc",
+        "symbol": "Java_com_rustcraft_interop_SpawnIndexInterop_create",
+        "baseline_path": "crates/ffi/src/spawn.rs",
+        "baseline_line": 18,
+        "baseline_excerpt_start": 10,
+        "baseline_excerpt": "fn from_handle(h: *mut c_void) -> Option<&'static mut SpawnIndex> {\n    if h.is_null() {\n        return None;\n    }\n    Some(unsafe { &mut *(h as *mut SpawnIndex) })\n}\n\n#[no_mangle]\npub unsafe extern \"system\" fn Java_com_rustcraft_interop_SpawnIndexInterop_create(\n    _env: *mut c_void,\n    _cls: *mut c_void,"
+      },
+      {
+        "lint": "clippy::missing_safety_doc",
+        "symbol": "Java_com_rustcraft_interop_SpawnIndexInterop_freeRaw",
+        "baseline_path": "crates/ffi/src/spawn.rs",
+        "baseline_line": 27,
+        "baseline_excerpt_start": 19,
+        "baseline_excerpt": "    _env: *mut c_void,\n    _cls: *mut c_void,\n) -> *mut c_void {\n    GLOBAL_FFI_METRICS.record_call(100);\n    Box::into_raw(Box::new(SpawnIndex::new())) as *mut c_void\n}\n\n#[no_mangle]\npub unsafe extern \"system\" fn Java_com_rustcraft_interop_SpawnIndexInterop_freeRaw(\n    _env: *mut c_void,\n    _cls: *mut c_void,"
+      },
+      {
+        "lint": "clippy::missing_safety_doc",
+        "symbol": "Java_com_rustcraft_interop_SpawnIndexInterop_insert",
+        "baseline_path": "crates/ffi/src/spawn.rs",
+        "baseline_line": 40,
+        "baseline_excerpt_start": 32,
+        "baseline_excerpt": "    GLOBAL_FFI_METRICS.record_call(101);\n    if !h.is_null() {\n        drop(Box::from_raw(h as *mut SpawnIndex));\n    }\n}\n\n/// Insert/replace an entry. components is a flat int[] of 6-int boxes.\n#[no_mangle]\npub unsafe extern \"system\" fn Java_com_rustcraft_interop_SpawnIndexInterop_insert(\n    _env: *mut c_void,\n    _cls: *mut c_void,"
+      },
+      {
+        "lint": "clippy::missing_safety_doc",
+        "symbol": "Java_com_rustcraft_interop_SpawnIndexInterop_updateBox",
+        "baseline_path": "crates/ffi/src/spawn.rs",
+        "baseline_line": 82,
+        "baseline_excerpt_start": 74,
+        "baseline_excerpt": "            max_z,\n            comps,\n        );\n    });\n    let _ = r;\n}\n\n#[no_mangle]\npub unsafe extern \"system\" fn Java_com_rustcraft_interop_SpawnIndexInterop_updateBox(\n    _env: *mut c_void,\n    _cls: *mut c_void,"
+      },
+      {
+        "lint": "clippy::missing_safety_doc",
+        "symbol": "Java_com_rustcraft_interop_SpawnIndexInterop_remove",
+        "baseline_path": "crates/ffi/src/spawn.rs",
+        "baseline_line": 104,
+        "baseline_excerpt_start": 96,
+        "baseline_excerpt": "        if let Some(ix) = from_handle(h) {\n            ix.update_box(rank as u32, min_x, min_y, min_z, max_x, max_y, max_z);\n        }\n    });\n    let _ = r;\n}\n\n#[no_mangle]\npub unsafe extern \"system\" fn Java_com_rustcraft_interop_SpawnIndexInterop_remove(\n    _env: *mut c_void,\n    _cls: *mut c_void,"
+      },
+      {
+        "lint": "clippy::missing_safety_doc",
+        "symbol": "Java_com_rustcraft_interop_SpawnIndexInterop_query",
+        "baseline_path": "crates/ffi/src/spawn.rs",
+        "baseline_line": 121,
+        "baseline_excerpt_start": 113,
+        "baseline_excerpt": "            ix.remove(rank as u32);\n        }\n    });\n    let _ = r;\n}\n\n/// Exact query: winning rank, or -1 for miss.\n#[no_mangle]\npub unsafe extern \"system\" fn Java_com_rustcraft_interop_SpawnIndexInterop_query(\n    _env: *mut c_void,\n    _cls: *mut c_void,"
+      },
+      {
+        "lint": "clippy::missing_safety_doc",
+        "symbol": "Java_com_rustcraft_interop_SpawnIndexInterop_stats",
+        "baseline_path": "crates/ffi/src/spawn.rs",
+        "baseline_line": 142,
+        "baseline_excerpt_start": 134,
+        "baseline_excerpt": "        }\n    }))\n    .unwrap_or(-1)\n}\n\n/// Stats: [queries, candidates_examined, hits, live_entries, region_count,\n/// approx_memory_bytes] \u00e2\u20ac\u201d read-only snapshot.\n#[no_mangle]\npub unsafe extern \"system\" fn Java_com_rustcraft_interop_SpawnIndexInterop_stats(\n    _env: *mut c_void,\n    _cls: *mut c_void,"
+      },
+      {
+        "lint": "clippy::missing_safety_doc",
+        "symbol": "Java_com_rustcraft_interop_WNoiseInterop_create",
+        "baseline_path": "crates/ffi/src/wnoise.rs",
+        "baseline_line": 16,
+        "baseline_excerpt_start": 8,
+        "baseline_excerpt": "fn from_handle(h: *mut c_void) -> Option<&'static mut Octaves> {\n    if h.is_null() {\n        return None;\n    }\n    Some(unsafe { &mut *(h as *mut Octaves) })\n}\n\n#[no_mangle]\npub unsafe extern \"system\" fn Java_com_rustcraft_interop_WNoiseInterop_create(\n    _env: *mut c_void,\n    _cls: *mut c_void,"
+      },
+      {
+        "lint": "clippy::missing_safety_doc",
+        "symbol": "Java_com_rustcraft_interop_WNoiseInterop_freeRaw",
+        "baseline_path": "crates/ffi/src/wnoise.rs",
+        "baseline_line": 31,
+        "baseline_excerpt_start": 23,
+        "baseline_excerpt": "    catch_unwind(|| {\n        let mut rand = JavaRandom::new(seed);\n        Box::into_raw(Box::new(Octaves::new(&mut rand, octaves))) as *mut c_void\n    })\n    .unwrap_or(std::ptr::null_mut())\n}\n\n#[no_mangle]\npub unsafe extern \"system\" fn Java_com_rustcraft_interop_WNoiseInterop_freeRaw(\n    _env: *mut c_void,\n    _cls: *mut c_void,"
+      },
+      {
+        "lint": "clippy::missing_safety_doc",
+        "symbol": "Java_com_rustcraft_interop_WNoiseInterop_gen3d",
+        "baseline_path": "crates/ffi/src/wnoise.rs",
+        "baseline_line": 45,
+        "baseline_excerpt_start": 37,
+        "baseline_excerpt": "    if !h.is_null() {\n        drop(Box::from_raw(h as *mut Octaves));\n    }\n}\n\n/// Generate a full 3D field into the caller's direct double buffer.\n/// ONE call per field \u00e2\u20ac\u201d no per-sample/per-octave crossings.\n#[no_mangle]\npub unsafe extern \"system\" fn Java_com_rustcraft_interop_WNoiseInterop_gen3d(\n    _env: *mut c_void,\n    _cls: *mut c_void,"
+      },
+      {
+        "lint": "clippy::missing_safety_doc",
+        "symbol": "Java_com_rustcraft_interop_WNoiseInterop_gen2d",
+        "baseline_path": "crates/ffi/src/wnoise.rs",
+        "baseline_line": 77,
+        "baseline_excerpt_start": 69,
+        "baseline_excerpt": "            }\n        }\n    }));\n    let _ = r;\n}\n\n/// 2D wrapper field (the vanilla func_76305_a quirk preserved).\n#[no_mangle]\npub unsafe extern \"system\" fn Java_com_rustcraft_interop_WNoiseInterop_gen2d(\n    _env: *mut c_void,\n    _cls: *mut c_void,"
+      },
+      {
+        "lint": "clippy::missing_safety_doc",
+        "symbol": "Java_com_rustcraft_interop_WNoiseInterop_batchCreate",
+        "baseline_path": "crates/ffi/src/wnoise.rs",
+        "baseline_line": 115,
+        "baseline_excerpt_start": 107,
+        "baseline_excerpt": "fn from_batch_handle(h: *mut c_void) -> Option<&'static mut BatchOctaves> {\n    if h.is_null() {\n        return None;\n    }\n    Some(unsafe { &mut *(h as *mut BatchOctaves) })\n}\n\n#[no_mangle]\npub unsafe extern \"system\" fn Java_com_rustcraft_interop_WNoiseInterop_batchCreate(\n    _env: *mut c_void,\n    _cls: *mut c_void,"
+      },
+      {
+        "lint": "clippy::missing_safety_doc",
+        "symbol": "Java_com_rustcraft_interop_WNoiseInterop_batchFreeRaw",
+        "baseline_path": "crates/ffi/src/wnoise.rs",
+        "baseline_line": 129,
+        "baseline_excerpt_start": 121,
+        "baseline_excerpt": "    GLOBAL_FFI_METRICS.record_call(210);\n    catch_unwind(|| {\n        Box::into_raw(Box::new(BatchOctaves::new(seed, octaves))) as *mut c_void\n    })\n    .unwrap_or(std::ptr::null_mut())\n}\n\n#[no_mangle]\npub unsafe extern \"system\" fn Java_com_rustcraft_interop_WNoiseInterop_batchFreeRaw(\n    _env: *mut c_void,\n    _cls: *mut c_void,"
+      },
+      {
+        "lint": "clippy::missing_safety_doc",
+        "symbol": "Java_com_rustcraft_interop_WNoiseInterop_batchGen3d",
+        "baseline_path": "crates/ffi/src/wnoise.rs",
+        "baseline_line": 144,
+        "baseline_excerpt_start": 136,
+        "baseline_excerpt": "        drop(Box::from_raw(h as *mut BatchOctaves));\n    }\n}\n\n/// ONE coarse call: n chunks x one generator's full 3D field into a direct\n/// f64 slab of n*len doubles (chunk-major). Offsets arrive via int-array\n/// addresses (per-chunk x and z offsets).\n#[no_mangle]\npub unsafe extern \"system\" fn Java_com_rustcraft_interop_WNoiseInterop_batchGen3d(\n    _env: *mut c_void,\n    _cls: *mut c_void,"
+      },
+      {
+        "lint": "clippy::missing_safety_doc",
+        "symbol": "Java_com_rustcraft_interop_WNoiseInterop_fieldCreate",
+        "baseline_path": "crates/ffi/src/wnoise.rs",
+        "baseline_line": 184,
+        "baseline_excerpt_start": 176,
+        "baseline_excerpt": "use worldgen_noise::field::SingleFieldGen;\n\nfn from_field_handle(h: *mut c_void) -> Option<&'static mut FieldSettings> {\n    if h.is_null() { return None; }\n    Some(unsafe { &mut *(h as *mut FieldSettings) })\n}\n\n#[no_mangle]\npub unsafe extern \"system\" fn Java_com_rustcraft_interop_WNoiseInterop_fieldCreate(\n    _env: *mut c_void, _cls: *mut c_void,\n    a: f32, b: f32, e: f32, f: f32, g: f32, h: f32, i: f32, j: f32,"
+      },
+      {
+        "lint": "clippy::missing_safety_doc",
+        "symbol": "Java_com_rustcraft_interop_WNoiseInterop_fieldFreeRaw",
+        "baseline_path": "crates/ffi/src/wnoise.rs",
+        "baseline_line": 206,
+        "baseline_excerpt_start": 198,
+        "baseline_excerpt": "            biome_depth_weight: m, biome_depth_offset: n,\n            biome_scale_weight: o, biome_scale_offset: p,\n            amplified: amplified != 0,\n        })) as *mut c_void\n    }).unwrap_or(std::ptr::null_mut())\n}\n\n#[no_mangle]\npub unsafe extern \"system\" fn Java_com_rustcraft_interop_WNoiseInterop_fieldFreeRaw(\n    _env: *mut c_void, _cls: *mut c_void, h: *mut c_void,\n) {"
+      },
+      {
+        "lint": "clippy::missing_safety_doc",
+        "symbol": "Java_com_rustcraft_interop_WNoiseInterop_fieldAssemble",
+        "baseline_path": "crates/ffi/src/wnoise.rs",
+        "baseline_line": 216,
+        "baseline_excerpt_start": 208,
+        "baseline_excerpt": ") {\n    GLOBAL_FFI_METRICS.record_call(221);\n    if !h.is_null() { drop(Box::from_raw(h as *mut FieldSettings)); }\n}\n\n/// Complete initNoiseField ASSEMBLY in one call: h[25], e/f/g[825],\n/// biome floats (100 min-height then 100 variation), q[825] out.\n#[no_mangle]\npub unsafe extern \"system\" fn Java_com_rustcraft_interop_WNoiseInterop_fieldAssemble(\n    _env: *mut c_void, _cls: *mut c_void, fh: *mut c_void,\n    h_addr: i64, e_addr: i64, f_addr: i64, g_addr: i64,"
+      },
+      {
+        "lint": "clippy::missing_safety_doc",
+        "symbol": "Java_com_rustcraft_interop_WNoiseInterop_singleCreate",
+        "baseline_path": "crates/ffi/src/wnoise.rs",
+        "baseline_line": 246,
+        "baseline_excerpt_start": 238,
+        "baseline_excerpt": "}\n\nfn from_single_handle(h: *mut c_void) -> Option<&'static mut SingleFieldGen> {\n    if h.is_null() { return None; }\n    Some(unsafe { &mut *(h as *mut SingleFieldGen) })\n}\n\n#[no_mangle]\npub unsafe extern \"system\" fn Java_com_rustcraft_interop_WNoiseInterop_singleCreate(\n    _env: *mut c_void, _cls: *mut c_void, seed: i64, octaves: i32,\n) -> *mut c_void {"
+      },
+      {
+        "lint": "clippy::missing_safety_doc",
+        "symbol": "Java_com_rustcraft_interop_WNoiseInterop_singleFreeRaw",
+        "baseline_path": "crates/ffi/src/wnoise.rs",
+        "baseline_line": 256,
+        "baseline_excerpt_start": 248,
+        "baseline_excerpt": ") -> *mut c_void {\n    GLOBAL_FFI_METRICS.record_call(223);\n    catch_unwind(|| {\n        Box::into_raw(Box::new(SingleFieldGen::new(seed, octaves))) as *mut c_void\n    }).unwrap_or(std::ptr::null_mut())\n}\n\n#[no_mangle]\npub unsafe extern \"system\" fn Java_com_rustcraft_interop_WNoiseInterop_singleFreeRaw(\n    _env: *mut c_void, _cls: *mut c_void, h: *mut c_void,\n) {"
+      },
+      {
+        "lint": "clippy::missing_safety_doc",
+        "symbol": "Java_com_rustcraft_interop_WNoiseInterop_singleGen3d",
+        "baseline_path": "crates/ffi/src/wnoise.rs",
+        "baseline_line": 265,
+        "baseline_excerpt_start": 257,
+        "baseline_excerpt": "    _env: *mut c_void, _cls: *mut c_void, h: *mut c_void,\n) {\n    GLOBAL_FFI_METRICS.record_call(224);\n    if !h.is_null() { drop(Box::from_raw(h as *mut SingleFieldGen)); }\n}\n\n/// n=1 optimized: one x-lane field generation into a direct buffer.\n#[no_mangle]\npub unsafe extern \"system\" fn Java_com_rustcraft_interop_WNoiseInterop_singleGen3d(\n    _env: *mut c_void, _cls: *mut c_void, h: *mut c_void,\n    x_off: i32, y_off: i32, z_off: i32,"
+      },
+      {
+        "lint": "clippy::missing_safety_doc",
+        "symbol": "Java_com_rustcraft_interop_WNoiseInterop_initCreate",
+        "baseline_path": "crates/ffi/src/wnoise.rs",
+        "baseline_line": 291,
+        "baseline_excerpt_start": 283,
+        "baseline_excerpt": "use worldgen_noise::field_complete::InitNoiseField;\n\nfn from_init_handle(h: *mut c_void) -> Option<&'static mut InitNoiseField> {\n    if h.is_null() { return None; }\n    Some(unsafe { &mut *(h as *mut InitNoiseField) })\n}\n\n#[no_mangle]\npub unsafe extern \"system\" fn Java_com_rustcraft_interop_WNoiseInterop_initCreate(\n    _env: *mut c_void, _cls: *mut c_void,\n    seed_depth: i64, seed_main: i64, seed_min: i64, seed_max: i64,"
+      },
+      {
+        "lint": "clippy::missing_safety_doc",
+        "symbol": "Java_com_rustcraft_interop_WNoiseInterop_initFreeRaw",
+        "baseline_path": "crates/ffi/src/wnoise.rs",
+        "baseline_line": 315,
+        "baseline_excerpt_start": 307,
+        "baseline_excerpt": "                biome_depth_weight: m, biome_depth_offset: n,\n                biome_scale_weight: o, biome_scale_offset: p,\n                amplified: amplified != 0,\n            }))) as *mut c_void\n    }).unwrap_or(std::ptr::null_mut())\n}\n\n#[no_mangle]\npub unsafe extern \"system\" fn Java_com_rustcraft_interop_WNoiseInterop_initFreeRaw(\n    _env: *mut c_void, _cls: *mut c_void, h: *mut c_void,\n) {"
+      },
+      {
+        "lint": "clippy::missing_safety_doc",
+        "symbol": "Java_com_rustcraft_interop_WNoiseInterop_initFieldComplete",
+        "baseline_path": "crates/ffi/src/wnoise.rs",
+        "baseline_line": 325,
+        "baseline_excerpt_start": 317,
+        "baseline_excerpt": ") {\n    GLOBAL_FFI_METRICS.record_call(231);\n    if !h.is_null() { drop(Box::from_raw(h as *mut InitNoiseField)); }\n}\n\n/// THE production boundary: complete terrain-density for ONE chunk in ONE\n/// call. biomeAddr = 200 f32 (100 min-height, 100 variation); out = 825 f64.\n#[no_mangle]\npub unsafe extern \"system\" fn Java_com_rustcraft_interop_WNoiseInterop_initFieldComplete(\n    _env: *mut c_void, _cls: *mut c_void, h: *mut c_void,\n    x4: i32, z4: i32, biome_addr: i64, out_addr: i64,"
+      },
+      {
+        "lint": "clippy::missing_safety_doc",
+        "symbol": "Java_com_rustcraft_interop_WNoiseInterop_initCreateFromState",
+        "baseline_path": "crates/ffi/src/wnoise.rs",
+        "baseline_line": 341,
+        "baseline_excerpt_start": 333,
+        "baseline_excerpt": "            let out = std::slice::from_raw_parts_mut(out_addr as *mut f64, 825);\n            g.complete(x4, z4, biomes, out);\n        }\n    }));\n    let _ = r;\n}\n\n#[no_mangle]\npub unsafe extern \"system\" fn Java_com_rustcraft_interop_WNoiseInterop_initCreateFromState(\n    _env: *mut c_void, _cls: *mut c_void,\n    oct_depth: i32, oct_main: i32, oct_min: i32, oct_max: i32,"
+      },
+      {
+        "lint": "clippy::missing_safety_doc",
+        "symbol": "Java_com_rustcraft_bridge_WorldgenShadow_initCreateFromState",
+        "baseline_path": "crates/ffi/src/wnoise.rs",
+        "baseline_line": 385,
+        "baseline_excerpt_start": 377,
+        "baseline_excerpt": "        }\n    })).unwrap_or(0)\n}\n\n// Bridge-named shims: WorldgenShadow (com.rustcraft.bridge) declares its own\n// natives; JNI symbols must match THE DECLARING CLASS (the M2C lesson).\n\n#[no_mangle]\npub unsafe extern \"system\" fn Java_com_rustcraft_bridge_WorldgenShadow_initCreateFromState(\n    _env: *mut c_void, _cls: *mut c_void,\n    oct_depth: i32, oct_main: i32, oct_min: i32, oct_max: i32,"
+      },
+      {
+        "lint": "clippy::missing_safety_doc",
+        "symbol": "Java_com_rustcraft_bridge_WorldgenShadow_initFieldComplete",
+        "baseline_path": "crates/ffi/src/wnoise.rs",
+        "baseline_line": 398,
+        "baseline_excerpt_start": 390,
+        "baseline_excerpt": "    k: f32, l: f32, d: f32, c: f32, m: f32, n: f32, o: f32, p: f32,\n) -> i64 {\n    Java_com_rustcraft_interop_WNoiseInterop_initCreateFromState(\n        _env, _cls, oct_depth, oct_main, oct_min, oct_max, perms_i32_addr, offs_addr,\n        a, b, e, f, g, h, i, j, k, l, d, c, m, n, o, p)\n}\n\n#[no_mangle]\npub unsafe extern \"system\" fn Java_com_rustcraft_bridge_WorldgenShadow_initFieldComplete(\n    _env: *mut c_void, _cls: *mut c_void, h: *mut c_void,\n    x4: i32, z4: i32, biome_addr: i64, out_addr: i64,"
+      },
+      {
+        "lint": "clippy::missing_safety_doc",
+        "symbol": "Java_com_rustcraft_bridge_WorldgenShadow_initFreeRaw",
+        "baseline_path": "crates/ffi/src/wnoise.rs",
+        "baseline_line": 406,
+        "baseline_excerpt_start": 398,
+        "baseline_excerpt": "pub unsafe extern \"system\" fn Java_com_rustcraft_bridge_WorldgenShadow_initFieldComplete(\n    _env: *mut c_void, _cls: *mut c_void, h: *mut c_void,\n    x4: i32, z4: i32, biome_addr: i64, out_addr: i64,\n) {\n    Java_com_rustcraft_interop_WNoiseInterop_initFieldComplete(_env, _cls, h, x4, z4, biome_addr, out_addr)\n}\n\n#[no_mangle]\npub unsafe extern \"system\" fn Java_com_rustcraft_bridge_WorldgenShadow_initFreeRaw(\n    _env: *mut c_void, _cls: *mut c_void, h: *mut c_void,\n) {"
+      },
+      {
+        "lint": "clippy::missing_safety_doc",
+        "symbol": "Java_com_rustcraft_interop_WNoiseInterop_terrainSetBlocks",
+        "baseline_path": "crates/ffi/src/wnoise.rs",
+        "baseline_line": 417,
+        "baseline_excerpt_start": 409,
+        "baseline_excerpt": "    Java_com_rustcraft_interop_WNoiseInterop_initFreeRaw(_env, _cls, h)\n}\n\n// -------------------------------------------------------------------------\n// M3W5: Base terrain placement & ChunkPrimer ownership FFI\n// -------------------------------------------------------------------------\n\n#[no_mangle]\npub unsafe extern \"system\" fn Java_com_rustcraft_interop_WNoiseInterop_terrainSetBlocks(\n    _env: *mut c_void, _cls: *mut c_void,\n    density_addr: i64, sea_level: i32, stone_id: i32, water_id: i32, primer_out_addr: i64,"
+      },
+      {
+        "lint": "clippy::missing_safety_doc",
+        "symbol": "Java_com_rustcraft_interop_WNoiseInterop_terrainSetBlocksOpt",
+        "baseline_path": "crates/ffi/src/wnoise.rs",
+        "baseline_line": 433,
+        "baseline_excerpt_start": 425,
+        "baseline_excerpt": "        let primer = &mut *(primer_out_addr as *mut [u16; 65536]);\n        worldgen_noise::terrain::set_blocks_in_chunk_parity(\n            density, sea_level, stone_id as u16, water_id as u16, primer,\n        );\n    }));\n}\n\n#[no_mangle]\npub unsafe extern \"system\" fn Java_com_rustcraft_interop_WNoiseInterop_terrainSetBlocksOpt(\n    _env: *mut c_void, _cls: *mut c_void,\n    density_addr: i64, sea_level: i32, stone_id: i32, water_id: i32, primer_out_addr: i64,"
+      },
+      {
+        "lint": "clippy::missing_safety_doc",
+        "symbol": "Java_com_rustcraft_interop_WNoiseInterop_terrainComplete",
+        "baseline_path": "crates/ffi/src/wnoise.rs",
+        "baseline_line": 449,
+        "baseline_excerpt_start": 441,
+        "baseline_excerpt": "        let primer = &mut *(primer_out_addr as *mut [u16; 65536]);\n        worldgen_noise::terrain::set_blocks_in_chunk_column_major(\n            density, sea_level, stone_id as u16, water_id as u16, primer,\n        );\n    }));\n}\n\n#[no_mangle]\npub unsafe extern \"system\" fn Java_com_rustcraft_interop_WNoiseInterop_terrainComplete(\n    _env: *mut c_void, _cls: *mut c_void, h: *mut c_void,\n    x4: i32, z4: i32, biome_addr: i64, sea_level: i32, stone_id: i32, water_id: i32, primer_out_addr: i64,"
+      },
+      {
+        "lint": "clippy::missing_safety_doc",
+        "symbol": "Java_com_rustcraft_interop_WNoiseInterop_terrainSetBlocksCritical",
+        "baseline_path": "crates/ffi/src/wnoise.rs",
+        "baseline_line": 467,
+        "baseline_excerpt_start": 459,
+        "baseline_excerpt": "            worldgen_noise::terrain::generate_terrain_fused(\n                g, x4, z4, biomes, sea_level, stone_id as u16, water_id as u16, primer,\n            );\n        }\n    }));\n}\n\n#[no_mangle]\npub unsafe extern \"system\" fn Java_com_rustcraft_interop_WNoiseInterop_terrainSetBlocksCritical(\n    env: *mut c_void,\n    _cls: *mut c_void,"
+      },
+      {
+        "lint": "clippy::missing_safety_doc",
+        "symbol": "Java_com_rustcraft_bridge_WorldgenShadow_terrainSetBlocks",
+        "baseline_path": "crates/ffi/src/wnoise.rs",
+        "baseline_line": 499,
+        "baseline_excerpt_start": 491,
+        "baseline_excerpt": "    worldgen_noise::terrain::set_blocks_in_chunk_column_major(\n        density, sea_level, stone_id as u16, water_id as u16, primer,\n    );\n\n    release_critical(env, output_array, ptr, 0);\n}\n\n#[no_mangle]\npub unsafe extern \"system\" fn Java_com_rustcraft_bridge_WorldgenShadow_terrainSetBlocks(\n    _env: *mut c_void, _cls: *mut c_void,\n    density_addr: i64, sea_level: i32, stone_id: i32, water_id: i32, primer_out_addr: i64,"
+      },
+      {
+        "lint": "clippy::missing_safety_doc",
+        "symbol": "Java_com_rustcraft_bridge_WorldgenShadow_terrainSetBlocksOpt",
+        "baseline_path": "crates/ffi/src/wnoise.rs",
+        "baseline_line": 509,
+        "baseline_excerpt_start": 501,
+        "baseline_excerpt": "    density_addr: i64, sea_level: i32, stone_id: i32, water_id: i32, primer_out_addr: i64,\n) {\n    Java_com_rustcraft_interop_WNoiseInterop_terrainSetBlocks(\n        _env, _cls, density_addr, sea_level, stone_id, water_id, primer_out_addr,\n    )\n}\n\n#[no_mangle]\npub unsafe extern \"system\" fn Java_com_rustcraft_bridge_WorldgenShadow_terrainSetBlocksOpt(\n    _env: *mut c_void, _cls: *mut c_void,\n    density_addr: i64, sea_level: i32, stone_id: i32, water_id: i32, primer_out_addr: i64,"
+      },
+      {
+        "lint": "clippy::missing_safety_doc",
+        "symbol": "Java_com_rustcraft_bridge_WorldgenShadow_terrainComplete",
+        "baseline_path": "crates/ffi/src/wnoise.rs",
+        "baseline_line": 519,
+        "baseline_excerpt_start": 511,
+        "baseline_excerpt": "    density_addr: i64, sea_level: i32, stone_id: i32, water_id: i32, primer_out_addr: i64,\n) {\n    Java_com_rustcraft_interop_WNoiseInterop_terrainSetBlocksOpt(\n        _env, _cls, density_addr, sea_level, stone_id, water_id, primer_out_addr,\n    )\n}\n\n#[no_mangle]\npub unsafe extern \"system\" fn Java_com_rustcraft_bridge_WorldgenShadow_terrainComplete(\n    _env: *mut c_void, _cls: *mut c_void, h: *mut c_void,\n    x4: i32, z4: i32, biome_addr: i64, sea_level: i32, stone_id: i32, water_id: i32, primer_out_addr: i64,"
+      },
+      {
+        "lint": "clippy::missing_safety_doc",
+        "symbol": "Java_com_rustcraft_bridge_NativeChunkBridge_registerPrimer",
+        "baseline_path": "crates/ffi/src/native_chunk.rs",
+        "baseline_line": 22,
+        "baseline_excerpt_start": 14,
+        "baseline_excerpt": "pub fn get_registry() -> &'static ChunkRegistry {\n    GLOBAL_REGISTRY.get_or_init(ChunkRegistry::new)\n}\n\n/// Registers a newly generated ChunkPrimer into persistent NativeChunk state.\n///\n/// Returns generation_id (>0), or 0 on error.\n#[no_mangle]\npub unsafe extern \"system\" fn Java_com_rustcraft_bridge_NativeChunkBridge_registerPrimer(\n    _env: *mut c_void,\n    _clazz: *mut c_void,"
+      },
+      {
+        "lint": "clippy::missing_safety_doc",
+        "symbol": "Java_com_rustcraft_bridge_NativeChunkBridge_materializePrimer",
+        "baseline_path": "crates/ffi/src/native_chunk.rs",
+        "baseline_line": 53,
+        "baseline_excerpt_start": 45,
+        "baseline_excerpt": "        handle.generation_id as i64\n    }).unwrap_or(0)\n}\n\n/// Reverse materializes a NativeChunk into a Java ChunkPrimer DirectBuffer.\n///\n/// Returns 0 on success, or error code <0.\n#[no_mangle]\npub unsafe extern \"system\" fn Java_com_rustcraft_bridge_NativeChunkBridge_materializePrimer(\n    _env: *mut c_void,\n    _clazz: *mut c_void,"
+      },
+      {
+        "lint": "clippy::missing_safety_doc",
+        "symbol": "Java_com_rustcraft_bridge_NativeChunkBridge_getPrimaryBitMask",
+        "baseline_path": "crates/ffi/src/native_chunk.rs",
+        "baseline_line": 84,
+        "baseline_excerpt_start": 76,
+        "baseline_excerpt": "        } else {\n            -2 // Not found or invalidated\n        }\n    }).unwrap_or(-99)\n}\n\n/// Retrieves the primary bit mask (bitmask of populated 16-block sections).\n#[no_mangle]\npub unsafe extern \"system\" fn Java_com_rustcraft_bridge_NativeChunkBridge_getPrimaryBitMask(\n    _env: *mut c_void,\n    _clazz: *mut c_void,"
+      },
+      {
+        "lint": "clippy::missing_safety_doc",
+        "symbol": "Java_com_rustcraft_bridge_NativeChunkBridge_encodePacketPayload",
+        "baseline_path": "crates/ffi/src/native_chunk.rs",
+        "baseline_line": 119,
+        "baseline_excerpt_start": 111,
+        "baseline_excerpt": "/// Returns bytes written (zero for an empty non-full payload), or a negative error code.\n///\n/// Legacy length-only ABI: this does not expose PacketEncodeResult.emitted_mask.\n/// A separate mask query is NOT metadata for this encode result. A versioned\n/// combined-result JNI contract and caller migration are required before native\n/// packet authority can be reconsidered; the production CAPTURE_UNSAFE gate stays\n/// closed. See docs/research/issue1-structural-mask-contract.md.\n#[no_mangle]\npub unsafe extern \"system\" fn Java_com_rustcraft_bridge_NativeChunkBridge_encodePacketPayload(\n    _env: *mut c_void,\n    _clazz: *mut c_void,"
+      },
+      {
+        "lint": "clippy::missing_safety_doc",
+        "symbol": "Java_com_rustcraft_bridge_NativeChunkBridge_getOccupancySummary",
+        "baseline_path": "crates/ffi/src/native_chunk.rs",
+        "baseline_line": 158,
+        "baseline_excerpt_start": 150,
+        "baseline_excerpt": "        }\n    }).unwrap_or(-99)\n}\n\n/// Second Consumer Proof A: Section occupancy summary & spatial block count.\n///\n/// Writes total non-air block count to out_count_addr, returns primary_bit_mask.\n#[no_mangle]\npub unsafe extern \"system\" fn Java_com_rustcraft_bridge_NativeChunkBridge_getOccupancySummary(\n    _env: *mut c_void,\n    _clazz: *mut c_void,"
+      },
+      {
+        "lint": "clippy::missing_safety_doc",
+        "symbol": "Java_com_rustcraft_bridge_NativeChunkBridge_stagePersistence",
+        "baseline_path": "crates/ffi/src/native_chunk.rs",
+        "baseline_line": 191,
+        "baseline_excerpt_start": 183,
+        "baseline_excerpt": "        }\n    }).unwrap_or(-99)\n}\n\n/// Second Consumer Proof B: Stages raw chunk blocks for MCA / NBT persistence.\n///\n/// Returns bytes written on success, or negative error code.\n#[no_mangle]\npub unsafe extern \"system\" fn Java_com_rustcraft_bridge_NativeChunkBridge_stagePersistence(\n    _env: *mut c_void,\n    _clazz: *mut c_void,"
+      },
+      {
+        "lint": "clippy::missing_safety_doc",
+        "symbol": "Java_com_rustcraft_bridge_NativeChunkBridge_invalidateChunk",
+        "baseline_path": "crates/ffi/src/native_chunk.rs",
+        "baseline_line": 226,
+        "baseline_excerpt_start": 218,
+        "baseline_excerpt": "        } else {\n            -2\n        }\n    }).unwrap_or(-99)\n}\n\n/// Marks a chunk as invalidated when Java or a mod mutates its blocks.\n#[no_mangle]\npub unsafe extern \"system\" fn Java_com_rustcraft_bridge_NativeChunkBridge_invalidateChunk(\n    _env: *mut c_void,\n    _clazz: *mut c_void,"
+      },
+      {
+        "lint": "clippy::missing_safety_doc",
+        "symbol": "Java_com_rustcraft_bridge_NativeChunkBridge_unloadChunk",
+        "baseline_path": "crates/ffi/src/native_chunk.rs",
+        "baseline_line": 242,
+        "baseline_excerpt_start": 234,
+        "baseline_excerpt": "    catch_unwind(|| {\n        let reg = get_registry();\n        if reg.invalidate(ChunkKey::new(dim, cx, cz)) { 1 } else { 0 }\n    }).unwrap_or(0)\n}\n\n/// Unloads a chunk from native memory when the chunk is unloaded by the server.\n#[no_mangle]\npub unsafe extern \"system\" fn Java_com_rustcraft_bridge_NativeChunkBridge_unloadChunk(\n    _env: *mut c_void,\n    _clazz: *mut c_void,"
+      },
+      {
+        "lint": "clippy::missing_safety_doc",
+        "symbol": "Java_com_rustcraft_bridge_NativeChunkBridge_markMutation",
+        "baseline_path": "crates/ffi/src/native_chunk.rs",
+        "baseline_line": 259,
+        "baseline_excerpt_start": 251,
+        "baseline_excerpt": "        let reg = get_registry();\n        if reg.remove(ChunkKey::new(dim, cx, cz)).is_some() { 1 } else { 0 }\n    }).unwrap_or(0)\n}\n\n/// Marks native chunk as mutated (Java/mod changed block state, light, biomes, etc.).\n/// Increments mutation_generation and transitions lifecycle to Dirty if ActiveNative.\n#[no_mangle]\npub unsafe extern \"system\" fn Java_com_rustcraft_bridge_NativeChunkBridge_markMutation(\n    _env: *mut c_void,\n    _clazz: *mut c_void,"
+      },
+      {
+        "lint": "clippy::missing_safety_doc",
+        "symbol": "Java_com_rustcraft_bridge_NativeChunkBridge_markSectionMutation",
+        "baseline_path": "crates/ffi/src/native_chunk.rs",
+        "baseline_line": 278,
+        "baseline_excerpt_start": 270,
+        "baseline_excerpt": "    }).unwrap_or(0)\n}\n\n/// Section-granular dirty mark (M4.1 refresh model). Sets bit (sectionY) in the\n/// chunk's dirty mask, bumps mutation_generation. Cheap: safe to call from a\n/// Chunk.setBlockState hook \u00e2\u20ac\u201d population bursts collapse into a mask.\n/// Returns the new dirty mask (>=0), or -1 if chunk not registered.\n#[no_mangle]\npub unsafe extern \"system\" fn Java_com_rustcraft_bridge_NativeChunkBridge_markSectionMutation(\n    _env: *mut c_void,\n    _clazz: *mut c_void,"
+      },
+      {
+        "lint": "clippy::missing_safety_doc",
+        "symbol": "Java_com_rustcraft_bridge_NativeChunkBridge_refreshSection",
+        "baseline_path": "crates/ffi/src/native_chunk.rs",
+        "baseline_line": 300,
+        "baseline_excerpt_start": 292,
+        "baseline_excerpt": "        }\n    }).unwrap_or(-99)\n}\n\n/// Refreshes one section in place from Java-side snapshot buffers (12 KB:\n/// 8 KB u16 states + optional 2 KB block light + 2 KB sky light).\n/// Clears the section's dirty bit; returns remaining dirty mask, or -1.\n#[no_mangle]\npub unsafe extern \"system\" fn Java_com_rustcraft_bridge_NativeChunkBridge_refreshSection(\n    _env: *mut c_void,\n    _clazz: *mut c_void,"
+      },
+      {
+        "lint": "clippy::missing_safety_doc",
+        "symbol": "Java_com_rustcraft_bridge_NativeChunkBridge_setGlobalPaletteBits",
+        "baseline_path": "crates/ffi/src/native_chunk.rs",
+        "baseline_line": 333,
+        "baseline_excerpt_start": 325,
+        "baseline_excerpt": "        }\n    }).unwrap_or(-99)\n}\n\n/// Sets the global-palette bit width from the live block-state registry size\n/// (vanilla: ceil(log2(Block.BLOCK_STATE_IDS.size())); mods grow the registry).\n/// Must be called at boot before any section with >256 states is encoded.\n#[no_mangle]\npub unsafe extern \"system\" fn Java_com_rustcraft_bridge_NativeChunkBridge_setGlobalPaletteBits(\n    _env: *mut c_void,\n    _clazz: *mut c_void,"
+      },
+      {
+        "lint": "clippy::missing_safety_doc",
+        "symbol": "Java_com_rustcraft_bridge_NativeChunkBridge_getDirtySections",
+        "baseline_path": "crates/ffi/src/native_chunk.rs",
+        "baseline_line": 349,
+        "baseline_excerpt_start": 341,
+        "baseline_excerpt": "        native_chunk::section::global_palette_bits() as i32\n    }).unwrap_or(-99)\n}\n\n/// Returns the chunk's current per-section dirty mask (bit y = section y stale),\n/// or -1 if not registered. Consumers call this before encoding to decide\n/// which sections to push via refreshSection.\n#[no_mangle]\npub unsafe extern \"system\" fn Java_com_rustcraft_bridge_NativeChunkBridge_getDirtySections(\n    _env: *mut c_void,\n    _clazz: *mut c_void,"
+      },
+      {
+        "lint": "clippy::missing_safety_doc",
+        "symbol": "Java_com_rustcraft_bridge_NativeChunkBridge_getRegisteredCount",
+        "baseline_path": "crates/ffi/src/native_chunk.rs",
+        "baseline_line": 368,
+        "baseline_excerpt_start": 360,
+        "baseline_excerpt": "            Some(mask) => mask as i32,\n            None => -1,\n        }\n    }).unwrap_or(-99)\n}\n\n/// Returns current count of registered chunks in native memory.\n#[no_mangle]\npub unsafe extern \"system\" fn Java_com_rustcraft_bridge_NativeChunkBridge_getRegisteredCount(\n    _env: *mut c_void,\n    _clazz: *mut c_void,"
+      },
+      {
+        "lint": "clippy::missing_safety_doc",
+        "symbol": "Java_com_rustcraft_bridge_NativeChunkBridge_findGeneration",
+        "baseline_path": "crates/ffi/src/native_chunk.rs",
+        "baseline_line": 381,
+        "baseline_excerpt_start": 373,
+        "baseline_excerpt": "    catch_unwind(|| {\n        get_registry().count() as i32\n    }).unwrap_or(0)\n}\n\n/// Current generation id for a live chunk at (dim, cx, cz), or 0 when absent\n/// or invalidated. Consumer entry point for mutation-tracked refresh (M4.2A C2).\n#[no_mangle]\npub unsafe extern \"system\" fn Java_com_rustcraft_bridge_NativeChunkBridge_findGeneration(\n    _env: *mut c_void,\n    _clazz: *mut c_void,"
+      },
+      {
+        "lint": "clippy::missing_safety_doc",
+        "symbol": "Java_com_rustcraft_bridge_NativeChunkBridge_getRegistryStats",
+        "baseline_path": "crates/ffi/src/native_chunk.rs",
+        "baseline_line": 400,
+        "baseline_excerpt_start": 392,
+        "baseline_excerpt": "    }).unwrap_or(0)\n}\n\n/// Writes 8 x i64 retention/allocation stats to out_addr:\n/// [0] current chunks, [1] current sections, [2] retained bytes estimate,\n/// [3] sections allocated (cumulative), [4] sections released (cumulative),\n/// [5] chunks evicted (cumulative), [6] reserved, [7] reserved.\n#[no_mangle]\npub unsafe extern \"system\" fn Java_com_rustcraft_bridge_NativeChunkBridge_getRegistryStats(\n    _env: *mut c_void,\n    _clazz: *mut c_void,"
+      },
+      {
+        "lint": "clippy::missing_safety_doc",
+        "symbol": "Java_com_rustcraft_bridge_NativeChunkBridge_setBiomes",
+        "baseline_path": "crates/ffi/src/native_chunk.rs",
+        "baseline_line": 427,
+        "baseline_excerpt_start": 419,
+        "baseline_excerpt": "        1\n    }).unwrap_or(-99)\n}\n\n/// Replaces the chunk's 256-byte biome array (M4.2B: live registration happens\n/// with zero biomes; the flush/comparator path pushes the real array before\n/// any consumer read \u00e2\u20ac\u201d biomes are separately tracked from sections).\n#[no_mangle]\npub unsafe extern \"system\" fn Java_com_rustcraft_bridge_NativeChunkBridge_setBiomes(\n    _env: *mut c_void,\n    _clazz: *mut c_void,"
+      },
+      {
+        "lint": "clippy::missing_safety_doc",
+        "symbol": "Java_com_rustcraft_bridge_NativeChunkBridge_getGenerationInfo",
+        "baseline_path": "crates/ffi/src/native_chunk.rs",
+        "baseline_line": 458,
+        "baseline_excerpt_start": 450,
+        "baseline_excerpt": "    }).unwrap_or(-99)\n}\n\n/// Writes 4 x i64 snapshot diagnostics for (dim,cx,cz):\n/// [0] generation_id (0 if absent/invalidated), [1] mutation_generation,\n/// [2] snapshot_generation, [3] dirty_sections mask.\n/// M4.2C: captured in every mismatch dump.\n#[no_mangle]\npub unsafe extern \"system\" fn Java_com_rustcraft_bridge_NativeChunkBridge_getGenerationInfo(\n    _env: *mut c_void,\n    _clazz: *mut c_void,"
+      },
+      {
+        "lint": "clippy::missing_safety_doc",
+        "symbol": "Java_com_rustcraft_bridge_NativeChunkBridge_registryClear",
+        "baseline_path": "crates/ffi/src/native_chunk.rs",
+        "baseline_line": 490,
+        "baseline_excerpt_start": 482,
+        "baseline_excerpt": "            None => { out[0] = 0; out[1] = 0; out[2] = 0; out[3] = 0; 0 }\n        }\n    }).unwrap_or(-99)\n}\n\n/// In-JVM lifecycle cleanup (M4.2D): drains the registry with release\n/// accounting. Returns chunks removed; getRegistryStats reflects it after.\n#[no_mangle]\npub unsafe extern \"system\" fn Java_com_rustcraft_bridge_NativeChunkBridge_registryClear(\n    _env: *mut c_void,\n    _clazz: *mut c_void,"
+      },
+      {
+        "lint": "clippy::missing_safety_doc",
+        "symbol": "Java_com_rustcraft_bridge_NativeChunkBridge_getBiomes",
+        "baseline_path": "crates/ffi/src/native_chunk.rs",
+        "baseline_line": 506,
+        "baseline_excerpt_start": 498,
+        "baseline_excerpt": "        reg.clear();\n        n\n    }).unwrap_or(-99)\n}\n\n/// Reads the chunk's current 256-byte biome array (M4.3C: packet-side freshness\n/// check against direct array writes vanilla makes without any hook).\n#[no_mangle]\npub unsafe extern \"system\" fn Java_com_rustcraft_bridge_NativeChunkBridge_getBiomes(\n    _env: *mut c_void,\n    _clazz: *mut c_void,"
+      },
+      {
+        "lint": "clippy::missing_safety_doc",
+        "symbol": "Java_com_rustcraft_bridge_NativeChunkBridge_getSectionLight",
+        "baseline_path": "crates/ffi/src/native_chunk.rs",
+        "baseline_line": 535,
+        "baseline_excerpt_start": 527,
+        "baseline_excerpt": "            None => 0,\n        }\n    }).unwrap_or(-99)\n}\n\n/// M5.2 light freshness: writes 4096 bytes (2048 block + 2048 sky) of section y\n/// to out_addr. Returns 1 on success, 0 if chunk/section absent.\n#[no_mangle]\npub unsafe extern \"system\" fn Java_com_rustcraft_bridge_NativeChunkBridge_getSectionLight(\n    _env: *mut c_void,\n    _clazz: *mut c_void,"
+      },
+      {
+        "lint": "clippy::missing_safety_doc",
+        "symbol": "Java_com_rustcraft_bridge_OutboundFrameCtx_frameCreate",
+        "baseline_path": "crates/ffi/src/native_chunk.rs",
+        "baseline_line": 575,
+        "baseline_excerpt_start": 567,
+        "baseline_excerpt": "}\n\n// ====================================================================\n// M-CK3: Rust outbound frame engine (offline; immutable packet bodies)\n// ====================================================================\n\n/// Creates a reusable outbound frame context (threshold supplied per call).\n#[no_mangle]\npub unsafe extern \"system\" fn Java_com_rustcraft_bridge_OutboundFrameCtx_frameCreate(\n    _env: *mut c_void,\n    _clazz: *mut c_void,"
+      },
+      {
+        "lint": "clippy::missing_safety_doc",
+        "symbol": "Java_com_rustcraft_bridge_OutboundFrameCtx_frameFree",
+        "baseline_path": "crates/ffi/src/native_chunk.rs",
+        "baseline_line": 589,
+        "baseline_excerpt_start": 581,
+        "baseline_excerpt": "            Ok(ctx) => Box::into_raw(Box::new(ctx)) as i64,\n            Err(_) => 0,\n        }\n    }).unwrap_or(0)\n}\n\n/// Frees a frame context (idempotent via caller CAS pattern; 0 is never valid).\n#[no_mangle]\npub unsafe extern \"system\" fn Java_com_rustcraft_bridge_OutboundFrameCtx_frameFree(\n    _env: *mut c_void,\n    _clazz: *mut c_void,"
+      },
+      {
+        "lint": "clippy::missing_safety_doc",
+        "symbol": "Java_com_rustcraft_bridge_OutboundFrameCtx_frameEncode",
+        "baseline_path": "crates/ffi/src/native_chunk.rs",
+        "baseline_line": 607,
+        "baseline_excerpt_start": 599,
+        "baseline_excerpt": "}\n\n/// Encodes one complete frame: threshold decision + optional compression +\n/// compression framing + outer length framing, all in Rust.\n/// Returns frame length (>0) or negative FrameError code (-1 capacity: the\n/// SAFE RETRY BOUND is written to retryBoundAddr; -2 backend; -3 too large;\n/// -4 invalid). Partial output is never a completed frame.\n#[no_mangle]\npub unsafe extern \"system\" fn Java_com_rustcraft_bridge_OutboundFrameCtx_frameEncode(\n    _env: *mut c_void,\n    _clazz: *mut c_void,"
+      },
+      {
+        "lint": "clippy::missing_safety_doc",
+        "symbol": "Java_com_rustcraft_bridge_NativeChunkPacket_predictOutputLen",
+        "baseline_path": "crates/ffi/src/lib.rs",
+        "baseline_line": 83,
+        "baseline_excerpt_start": 75,
+        "baseline_excerpt": "    match result {\n        Ok(code) => code,\n        Err(_) => chunk_packet::ChunkPacketError::RustPanicCaught as i32,\n    }\n}\n\n/// M1.4-R2 \u00c2\u00a75: exact output-size prediction. Pure scan, zero writes.\n#[no_mangle]\npub unsafe extern \"system\" fn Java_com_rustcraft_bridge_NativeChunkPacket_predictOutputLen(\n    _env: *mut c_void,\n    _clazz: *mut c_void,"
+      },
+      {
+        "lint": "clippy::missing_safety_doc",
+        "symbol": "Java_com_rustcraft_bridge_NativeChunkPacket_jniNoop",
+        "baseline_path": "crates/ffi/src/lib.rs",
+        "baseline_line": 110,
+        "baseline_excerpt_start": 102,
+        "baseline_excerpt": "        Err(_) => chunk_packet::ChunkPacketError::RustPanicCaught as i32,\n    }\n}\n\n/// JNI crossing-overhead calibration export: does zero work so the measured\n/// round-trip is pure JNI transition cost. Section 0B/0 of M1.4 requires this\n/// to be measured, never assumed.\n#[no_mangle]\npub unsafe extern \"system\" fn Java_com_rustcraft_bridge_NativeChunkPacket_jniNoop(\n    _env: *mut c_void,\n    _clazz: *mut c_void,"
+      },
+      {
+        "lint": "clippy::missing_safety_doc",
+        "symbol": "Java_com_rustcraft_bridge_NativeChunkPacket_testForcedPanic",
+        "baseline_path": "crates/ffi/src/lib.rs",
+        "baseline_line": 119,
+        "baseline_excerpt_start": 111,
+        "baseline_excerpt": "    _env: *mut c_void,\n    _clazz: *mut c_void,\n) -> i32 {\n    0\n}\n\n/// Test-only helper to verify JNI catch_unwind boundary without side effects.\n#[no_mangle]\npub unsafe extern \"system\" fn Java_com_rustcraft_bridge_NativeChunkPacket_testForcedPanic(\n    _env: *mut c_void,\n    _clazz: *mut c_void,"
+      },
+      {
+        "lint": "clippy::missing_safety_doc",
+        "symbol": "Java_com_rustcraft_bridge_NativeChunkPacket_fillPattern",
+        "baseline_path": "crates/ffi/src/lib.rs",
+        "baseline_line": 137,
+        "baseline_excerpt_start": 129,
+        "baseline_excerpt": "    }\n}\n\n/// M1.4-R regression-test helper (Netty pooled-buffer addressing bug).\n/// Fills `len` bytes at raw native address `addr` with `pattern`.\n/// Used ONLY by NettyAddressRegressionTest to prove native writes stay inside\n/// the intended pooled ByteBuf (see docs/engineering/netty-pooled-buffer-addressing.md).\n#[no_mangle]\npub unsafe extern \"system\" fn Java_com_rustcraft_bridge_NativeChunkPacket_fillPattern(\n    _env: *mut c_void,\n    _clazz: *mut c_void,"
+      },
+      {
+        "lint": "clippy::missing_safety_doc",
+        "symbol": "Java_com_rustcraft_bridge_NativeChunkPacket_encodeSectionsIntoArray",
+        "baseline_path": "crates/ffi/src/lib.rs",
+        "baseline_line": 173,
+        "baseline_excerpt_start": 165,
+        "baseline_excerpt": "// (jni.h typedef for C; no wrapper struct). Table layout: reserved[4] then\n// function pointers, so table.add(idx) indexes struct members directly.\n\nconst JNI_GET_ARRAY_LENGTH: usize = 171;\nconst JNI_GET_PRIMITIVE_ARRAY_CRITICAL: usize = 222;\nconst JNI_RELEASE_PRIMITIVE_ARRAY_CRITICAL: usize = 223;\n\n#[no_mangle]\npub unsafe extern \"system\" fn Java_com_rustcraft_bridge_NativeChunkPacket_encodeSectionsIntoArray(\n    env: *mut c_void,\n    _clazz: *mut c_void,"
+      },
+      {
+        "lint": "clippy::missing_safety_doc",
+        "symbol": "Java_com_rustcraft_bridge_NativeChunkPacket_jniProbeVersion",
+        "baseline_path": "crates/ffi/src/lib.rs",
+        "baseline_line": 273,
+        "baseline_excerpt_start": 265,
+        "baseline_excerpt": "        f()\n    }\n}\n\n\n/// M1.4-R2 \u00c2\u00a74 debug: call GetVersion through candidate slots to find the\n/// true table offset. GetVersion returns 0x00010008 (JNI 1.8).\n#[no_mangle]\npub unsafe extern \"system\" fn Java_com_rustcraft_bridge_NativeChunkPacket_jniProbeVersion(\n    env: *mut c_void,\n    _clazz: *mut c_void,"
+      },
+      {
+        "lint": "clippy::missing_safety_doc",
+        "symbol": "Java_com_rustcraft_bridge_CompressionCtx_create",
+        "baseline_path": "crates/ffi/src/lib.rs",
+        "baseline_line": 310,
+        "baseline_excerpt_start": 302,
+        "baseline_excerpt": "// (compress_into resets internally; a capacity error leaves context clean\n// and usable - unit-tested in crates/compression).\n// ---------------------------------------------------------------------------\n\nuse compression::ZlibPacketCompressor;\n\n/// JNI: create a compressor context. Returns handle (positive), 0 on failure.\n#[no_mangle]\npub unsafe extern \"system\" fn Java_com_rustcraft_bridge_CompressionCtx_create(\n    _env: *mut c_void, _clazz: *mut c_void,\n) -> i64 {"
+      },
+      {
+        "lint": "clippy::missing_safety_doc",
+        "symbol": "Java_com_rustcraft_bridge_CompressionCtx_compress",
+        "baseline_path": "crates/ffi/src/lib.rs",
+        "baseline_line": 328,
+        "baseline_excerpt_start": 320,
+        "baseline_excerpt": "        Ok(h) if h != 0 => h,\n        _ => 0,\n    }\n}\n\n/// JNI: compress with an owned context. Returns compressed length or\n/// negative code (-1 capacity, -2 backend/panic, -3 bad args, -4 bad handle).\n#[no_mangle]\npub unsafe extern \"system\" fn Java_com_rustcraft_bridge_CompressionCtx_compress(\n    _env: *mut c_void, _clazz: *mut c_void,\n    handle: i64, in_addr: i64, in_len: i32, out_addr: i64, out_cap: i32,"
+      },
+      {
+        "lint": "clippy::missing_safety_doc",
+        "symbol": "Java_com_rustcraft_bridge_CompressionCtx_freeRaw",
+        "baseline_path": "crates/ffi/src/lib.rs",
+        "baseline_line": 356,
+        "baseline_excerpt_start": 348,
+        "baseline_excerpt": "    match result {\n        Ok(code) => code,\n        Err(_) => -2,\n    }\n}\n\n/// JNI: free an owned context. Double-free/null safe (no-op on 0/-1).\n#[no_mangle]\npub unsafe extern \"system\" fn Java_com_rustcraft_bridge_CompressionCtx_freeRaw(\n    _env: *mut c_void, _clazz: *mut c_void, handle: i64,\n) -> i32 {"
+      },
+      {
+        "lint": "clippy::unnecessary_cast",
+        "baseline_path": "crates/ffi/src/lib.rs",
+        "baseline_line": 222,
+        "baseline_excerpt": "get_len(jenv as *mut c_void"
+      },
+      {
+        "lint": "clippy::unnecessary_cast",
+        "baseline_path": "crates/ffi/src/lib.rs",
+        "baseline_line": 222,
+        "baseline_excerpt": "jenv as *mut c_void,"
+      },
+      {
+        "lint": "clippy::manual_unwrap_or",
+        "baseline_path": "crates/ffi/src/lib.rs",
+        "baseline_line": 365,
+        "baseline_excerpt": "match result { Ok(c) => c, Err(_) => -1 }"
+      },
+      {
+        "lint": "non_snake_case",
+        "baseline_path": "crates/ffi/src/lib.rs",
+        "baseline_line": 262,
+        "baseline_excerpt": "fn AssertUnwindSafeClosure"
+      },
+      {
+        "lint": "clippy::items_after_test_module",
+        "baseline_path": "crates/ffi/src/owned_snapshot.rs",
+        "baseline_test_module_line": 17,
+        "baseline_export_line": 113,
+        "note": "Pre-existing test module precedes the existing export. New packet observer is before cfg(test). This placement warning also appears in the earlier non-strict clippy run; strict lib compile stops before test linting."
+      }
+    ]
+  },
+  "format_workspace_failure_paths": [
+    "crates/compression/src/frame.rs",
+    "crates/compression/src/lib.rs",
+    "crates/native-chunk/examples/memory_model.rs",
+    "crates/native-chunk/examples/palette_parity.rs",
+    "crates/native-chunk/src/chunk.rs",
+    "crates/native-chunk/src/lib.rs",
+    "crates/native-chunk/src/registry.rs",
+    "crates/native-chunk/src/section.rs",
+    "crates/nbt/src/codec.rs",
+    "crates/nbt/src/lib.rs",
+    "crates/nbt/src/mutf8.rs",
+    "crates/nbt/src/tests.rs",
+    "crates/protocol/src/codec.rs",
+    "crates/protocol/src/error.rs",
+    "crates/protocol/src/lib.rs",
+    "crates/protocol/tests/oracle_tests.rs",
+    "crates/spatial-index/src/lib.rs",
+    "crates/spawn-index/src/lib.rs",
+    "crates/worldgen-noise/examples/wndbg.rs",
+    "crates/worldgen-noise/examples/wndbg4.rs",
+    "crates/worldgen-noise/src/field.rs",
+    "crates/worldgen-noise/src/field_complete.rs",
+    "crates/worldgen-noise/src/lib.rs",
+    "crates/worldgen-noise/src/simd.rs",
+    "crates/worldgen-noise/src/terrain.rs"
+  ],
+  "additional_root_clean_regression": {
+    "status": "PASS",
+    "receipt": "machine/architecture-hardening/h3-telemetry-evidence/h3-clean-regressions-final/receipt.json",
+    "receipt_sha256": "fd07090cc757f32086b8f34091935a9bfc3b4640878bfc7b3411020c982524f0",
+    "tooling_tests": 25,
+    "foundation_assertions": 201,
+    "capture_groups": {
+      "t7_real_spacket_captured": "PASS (sealed + enqueued through transformed hooks)",
+      "t8_native_replay": "PASS (mask=1 javaLen=4358 rustLen=4358 byteEqual=true)",
+      "t9_java_output_unchanged": "PASS (captured body == plain rebuild body == native body)"
+    },
+    "same_dll": true,
+    "scope": "existing Clean legacy foundation only; no V2 requalification or resumed live shadow campaign"
+  }
+}

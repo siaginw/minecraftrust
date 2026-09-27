@@ -19,7 +19,8 @@ pub unsafe extern "system" fn Java_com_rustcraft_interop_SpawnIndexInterop_creat
     _env: *mut c_void,
     _cls: *mut c_void,
 ) -> *mut c_void {
-    GLOBAL_FFI_METRICS.record_call(100);
+    let mut call = GLOBAL_FFI_METRICS.begin_call(metrics::Operation::SpawnCreate);
+    call.bytes = metrics::ByteMeasurements::NO_BULK;
     Box::into_raw(Box::new(SpawnIndex::new())) as *mut c_void
 }
 
@@ -29,7 +30,8 @@ pub unsafe extern "system" fn Java_com_rustcraft_interop_SpawnIndexInterop_freeR
     _cls: *mut c_void,
     h: *mut c_void,
 ) {
-    GLOBAL_FFI_METRICS.record_call(101);
+    let mut call = GLOBAL_FFI_METRICS.begin_call(metrics::Operation::SpawnFree);
+    call.bytes = metrics::ByteMeasurements::NO_BULK;
     if !h.is_null() {
         drop(Box::from_raw(h as *mut SpawnIndex));
     }
@@ -52,8 +54,10 @@ pub unsafe extern "system" fn Java_com_rustcraft_interop_SpawnIndexInterop_inser
     comps_addr: i64,
     n_comp_ints: i32,
 ) {
-    GLOBAL_FFI_METRICS.record_call(102);
-    let r = catch_unwind(|| {
+    let mut call = GLOBAL_FFI_METRICS.begin_call(metrics::Operation::SpawnInsert);
+    call.bytes = metrics::ByteMeasurements::NO_BULK;
+    call.fallback_reason = metrics::FallbackReason::MissingState;
+    let r = catch_unwind(std::panic::AssertUnwindSafe(|| {
         let ix = match from_handle(h) {
             Some(ix) => ix,
             None => return,
@@ -63,6 +67,9 @@ pub unsafe extern "system" fn Java_com_rustcraft_interop_SpawnIndexInterop_inser
         } else {
             std::slice::from_raw_parts(comps_addr as *const i32, n_comp_ints as usize)
         };
+        call.bytes.input_bytes = Some(std::mem::size_of_val(comps) as u64);
+        call.bytes.borrowed_bytes = call.bytes.input_bytes;
+        call.bytes.copied_bytes = None;
         ix.insert(
             rank as u32,
             valid != 0,
@@ -74,8 +81,13 @@ pub unsafe extern "system" fn Java_com_rustcraft_interop_SpawnIndexInterop_inser
             max_z,
             comps,
         );
-    });
-    let _ = r;
+        call.fallback_reason = metrics::FallbackReason::None;
+    }));
+    if r.is_err() {
+        call.fallback_reason = metrics::FallbackReason::Panic;
+        call.bytes.output_bytes = Some(0);
+        call.bytes.copied_bytes = None;
+    }
 }
 
 #[no_mangle]
@@ -91,7 +103,8 @@ pub unsafe extern "system" fn Java_com_rustcraft_interop_SpawnIndexInterop_updat
     max_y: i32,
     max_z: i32,
 ) {
-    GLOBAL_FFI_METRICS.record_call(103);
+    let mut call = GLOBAL_FFI_METRICS.begin_call(metrics::Operation::SpawnUpdateBox);
+    call.bytes = metrics::ByteMeasurements::NO_BULK;
     let r = catch_unwind(|| {
         if let Some(ix) = from_handle(h) {
             ix.update_box(rank as u32, min_x, min_y, min_z, max_x, max_y, max_z);
@@ -107,7 +120,8 @@ pub unsafe extern "system" fn Java_com_rustcraft_interop_SpawnIndexInterop_remov
     h: *mut c_void,
     rank: i32,
 ) {
-    GLOBAL_FFI_METRICS.record_call(104);
+    let mut call = GLOBAL_FFI_METRICS.begin_call(metrics::Operation::SpawnRemove);
+    call.bytes = metrics::ByteMeasurements::NO_BULK;
     let r = catch_unwind(|| {
         if let Some(ix) = from_handle(h) {
             ix.remove(rank as u32);
@@ -126,12 +140,11 @@ pub unsafe extern "system" fn Java_com_rustcraft_interop_SpawnIndexInterop_query
     y: i32,
     z: i32,
 ) -> i32 {
-    GLOBAL_FFI_METRICS.record_call(105);
-    catch_unwind(std::panic::AssertUnwindSafe(|| {
-        match from_handle(h) {
-            Some(ix) => ix.query(x, y, z),
-            None => -1,
-        }
+    let mut call = GLOBAL_FFI_METRICS.begin_call(metrics::Operation::SpawnQuery);
+    call.bytes = metrics::ByteMeasurements::NO_BULK;
+    catch_unwind(std::panic::AssertUnwindSafe(|| match from_handle(h) {
+        Some(ix) => ix.query(x, y, z),
+        None => -1,
     }))
     .unwrap_or(-1)
 }
@@ -146,8 +159,10 @@ pub unsafe extern "system" fn Java_com_rustcraft_interop_SpawnIndexInterop_stats
     out: *mut i64,
     _out_len: i32,
 ) {
-    GLOBAL_FFI_METRICS.record_call(106);
-    let r = catch_unwind(|| {
+    let mut call = GLOBAL_FFI_METRICS.begin_call(metrics::Operation::SpawnStats);
+    call.bytes = metrics::ByteMeasurements::NO_BULK;
+    call.fallback_reason = metrics::FallbackReason::MissingState;
+    let r = catch_unwind(std::panic::AssertUnwindSafe(|| {
         if let Some(ix) = from_handle(h) {
             let st = [
                 ix.stats.queries as i64,
@@ -159,11 +174,19 @@ pub unsafe extern "system" fn Java_com_rustcraft_interop_SpawnIndexInterop_stats
             ];
             if !out.is_null() {
                 let slice = std::slice::from_raw_parts_mut(out, 6);
+                call.bytes.borrowed_bytes = Some(std::mem::size_of_val(slice) as u64);
                 slice.copy_from_slice(&st);
+                call.bytes.output_bytes = Some(std::mem::size_of_val(slice) as u64);
+                call.bytes.copied_bytes = call.bytes.output_bytes;
+                call.fallback_reason = metrics::FallbackReason::None;
             }
         }
-    });
-    let _ = r;
+    }));
+    if r.is_err() {
+        call.fallback_reason = metrics::FallbackReason::Panic;
+        call.bytes.output_bytes = Some(0);
+        call.bytes.copied_bytes = None;
+    }
 }
 
 #[allow(non_camel_case_types)]

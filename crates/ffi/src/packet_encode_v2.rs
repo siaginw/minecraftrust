@@ -13,6 +13,25 @@ use std::panic::{catch_unwind, UnwindSafe};
 pub const PACKET_V2_SUCCESS_TAG: i64 = 1i64 << 62;
 pub const PACKET_V2_MAX_BYTES: usize = i32::MAX as usize;
 
+/// Observe only the result already returned by the one serialization operation.
+pub(crate) fn observe_packed_result(call: &mut metrics::CallGuard<'_>, packed: i64) {
+    use metrics::FallbackReason;
+    call.bytes.output_bytes = Some(if packed > 0 {
+        ((packed >> 16) & 0x7fff_ffff) as u64
+    } else {
+        0
+    });
+    call.fallback_reason = match packed {
+        1.. => FallbackReason::None,
+        -1 => FallbackReason::InvalidArgument,
+        -2 | -3 => FallbackReason::MissingState,
+        -4 => FallbackReason::CorruptInput,
+        -5 => FallbackReason::Capacity,
+        -7 => FallbackReason::Panic,
+        _ => FallbackReason::BackendError,
+    };
+}
+
 #[cfg(test)]
 #[path = "../../../tools/testing/rust_property_support.rs"]
 mod property_support;
@@ -229,7 +248,13 @@ pub unsafe extern "system" fn Java_com_rustcraft_bridge_NativeChunkBridge_encode
     output_buf_address: i64,
     output_buf_capacity: i32,
 ) -> i64 {
-    result_boundary(|| {
+    let mut call =
+        metrics::GLOBAL_FFI_METRICS.begin_call(metrics::Operation::ChunkEncodePacketPayloadV2);
+    call.bytes.input_bytes = Some(0);
+    call.bytes.output_bytes = Some(0);
+    call.bytes.borrowed_bytes = Some(0);
+    call.bytes.retained_bytes = Some(0);
+    let packed = result_boundary(std::panic::AssertUnwindSafe(|| {
         let address = checked_output_address(output_buf_address, output_buf_capacity)?;
         if skylight > 1 || full_chunk > 1 {
             return Err(PacketEncodeV2Error::InvalidArgument);
@@ -239,6 +264,7 @@ pub unsafe extern "system" fn Java_com_rustcraft_bridge_NativeChunkBridge_encode
         }
         let output =
             std::slice::from_raw_parts_mut(address as *mut u8, output_buf_capacity as usize);
+        call.bytes.borrowed_bytes = Some(output.len() as u64);
         encode_in_registry(
             get_registry(),
             ChunkHandle {
@@ -249,7 +275,9 @@ pub unsafe extern "system" fn Java_com_rustcraft_bridge_NativeChunkBridge_encode
             full_chunk != 0,
             output,
         )
-    })
+    }));
+    observe_packed_result(&mut call, packed);
+    packed
 }
 
 #[cfg(test)]

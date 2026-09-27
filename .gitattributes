@@ -9,3 +9,8 @@ tests/fixtures/issue1-capture/* text eol=lf
 tools/bridge/src/com/rustcraft/bridge/capture/LiveWriterGate.java text eol=lf
 tools/bridge/src/com/rustcraft/bridge/capture/PrivateBuildTickets.java text eol=lf
 tools/bridge/src/com/rustcraft/bridge/capture/LiveChunkBindings.java text eol=lf
+
+# Raw validation artifacts are hashed as captured, including line endings and
+# command-emitted trailing blank lines. Do not normalize or lint their whitespace.
+machine/architecture-hardening/h22-5-replay-evidence/** -text -whitespace
+machine/architecture-hardening/h3-telemetry-evidence/** -text -whitespace
