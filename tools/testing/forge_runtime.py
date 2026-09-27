@@ -12,6 +12,7 @@ import json
 import os
 from pathlib import Path
 import subprocess
+import time
 import uuid
 import zipfile
 
@@ -141,6 +142,30 @@ def validate_live_transformer_qualification(data: dict, pins: dict) -> None:
 def class_hashes(classes: Path) -> dict[str, str]:
     return {path.relative_to(classes).as_posix(): sha256(path)
             for path in sorted(classes.rglob("*.class"))}
+
+
+def await_dump(dump: Path, declared: dict, timeout: float = 60.0) -> None:
+    """Block until every declared class file is readable in the dump.
+
+    The observer agent writes the dump from inside the launched JVM, and the
+    check below runs the instant that process exits. On this platform a file
+    the dying process created can still be briefly invisible, which turned a
+    complete run into a FileNotFoundError naming a class that was in fact
+    dumped. Waiting is the fix that keeps the check: the comparison afterwards
+    is unchanged and still fails on any real byte disagreement. What is removed
+    is the race, not the assertion -- a class that is genuinely never written
+    still exhausts the timeout and is reported.
+    """
+    deadline = time.monotonic() + timeout
+    wanted = {name.replace(".", "/") + ".class" for name in declared}
+    while True:
+        present = {path.relative_to(dump).as_posix() for path in dump.rglob("*.class")}
+        missing = wanted - present
+        if not missing or time.monotonic() >= deadline:
+            break
+        time.sleep(0.25)
+    if missing:
+        raise RuntimeError("Transformed dump never received: " + ", ".join(sorted(missing)[:5]))
 
 
 def cache_valid(directory: Path, expected_key: str) -> bool:
@@ -380,6 +405,7 @@ def execute(root: Path, output: Path, java_home: Path, dll: Path, manifest: Path
                 validate_live_transformer_qualification(data, pins)
             else:
                 validate_qualification(data, pins)
+            await_dump(dump, data["transformed_classes"])
             for name, digest in data["transformed_classes"].items():
                 if sha256(dump / (name.replace(".", "/") + ".class")) != digest:
                     raise RuntimeError("Transformed dump hash mismatch: " + name)

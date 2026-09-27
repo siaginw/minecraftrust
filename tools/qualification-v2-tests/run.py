@@ -94,19 +94,35 @@ def main():
         if not path.is_file():
             parser.error(f"missing input: {path}")
     sources = [repo / "tools/bridge/src/com/rustcraft/coremod" / name for name in (
-        "CanonicalClassIdentityV2.java", "LiveHookSupport.java", "LiveWriterPlan.java")]
-    sources.append(repo / "tools/qualification-v2-tests/src/com/rustcraft/coremod/CanonicalClassIdentityV2Test.java")
+        "CanonicalClassIdentityV2.java", "LiveHookSupport.java", "LiveWriterPlan.java",
+        # LiveHookSupport resolves the acquisition record and, in session-bound
+        # mode, the evidence certificate. Naming them here is what keeps this
+        # lane a real compile of the identity contract instead of a compile of
+        # whichever files happened to be listed.
+        "SessionBoundIdentityCertificate.java")]
+    sources.append(repo / "tools/bridge/src/com/rustcraft/qualification/SameProcessAcquisition.java")
+    controls = [repo / "tools/qualification-v2-tests/src/com/rustcraft/coremod" / name for name in (
+        "CanonicalClassIdentityV2Test.java", "SessionBoundMaskControls.java",
+        "SessionBoundCertificateControls.java")]
+    sources.extend(controls)
     classes = out / "classes"
     classes.mkdir(parents=True, exist_ok=False)
     input_paths = [*sources, java, javac, args.asm.resolve(), pathlib.Path(__file__).resolve()]
     before = {str(p): digest(p) for p in input_paths}
+    runtime_classpath = str(args.asm) + (";" if sys.platform == "win32" else ":") + str(classes)
     commands = [
         [str(java), "-version"],
         [str(javac), "-version"],
         [str(javac), "-proc:none", "-source", "8", "-target", "8", "-Xlint:all", "-encoding", "UTF-8",
          "-cp", str(args.asm), "-d", str(classes), *map(str, sources)],
-        [str(java), "-cp", str(args.asm) + (";" if sys.platform == "win32" else ":") + str(classes),
+        [str(java), "-cp", runtime_classpath,
          "com.rustcraft.coremod.CanonicalClassIdentityV2Test", str(out / "fixtures")],
+        # The mask and certificate controls used to be run by hand, which meant
+        # nothing kept them green between runs. They are part of the same
+        # contract as the 92 identity controls, so they run in the same lane and
+        # a regression in either fails this receipt.
+        [str(java), "-cp", runtime_classpath, "com.rustcraft.coremod.SessionBoundMaskControls"],
+        [str(java), "-cp", runtime_classpath, "com.rustcraft.coremod.SessionBoundCertificateControls"],
     ]
     results = []
     failure, fixtures = None, None
@@ -124,8 +140,16 @@ def main():
             if index == 1 and not re.search(r'javac 1\.8\.', result.stdout + result.stderr):
                 raise ValueError("Java compiler must be Java 8")
         expected_line = f"CANONICAL_ID_V2 controls passed: 92; fixtures={out / 'fixtures'}"
-        if results[-1]["stdout"].splitlines() != [expected_line] or results[-1]["stderr"]:
+        if results[3]["stdout"].splitlines() != [expected_line] or results[3]["stderr"]:
             raise ValueError("test output/assertion schema mismatch")
+        # The mask and certificate controls report a pass/fail tally. The count
+        # is pinned so a control silently disappearing is a failure, exactly as
+        # a control turning red is.
+        for index, suite, expected in ((4, "mask", "RESULT: 19 pass, 0 fail"),
+                                       (5, "certificate", "RESULT: 38 pass, 0 fail")):
+            lines = results[index]["stdout"].splitlines()
+            if results[index]["stderr"] or lines[-1:] != [expected] or not lines[:-1]:
+                raise ValueError(f"{suite} controls output/assertion schema mismatch: {lines[-1:]}")
         fixtures = validate_fixtures(out / "fixtures")
     except subprocess.TimeoutExpired as error:
         results.append({"command": error.cmd, "returnCode": None, "timedOut": True,
@@ -139,7 +163,9 @@ def main():
         failure = "source, harness or toolchain input changed during validation"
     receipt = {"schema": "CANONICAL_ID_V2_TEST_RECEIPT_V1",
                "status": "PASS" if failure is None else "FAIL", "failure": failure,
-               "runId": run_id, "output": str(out), "assertions": 92 if failure is None else None,
+               "runId": run_id, "output": str(out),
+               "assertions": ({"canonical_v2": 92, "session_bound_mask": 19,
+                               "session_bound_certificate": 38} if failure is None else None),
                "inputHashesBefore": before, "inputHashesAfter": after,
                "sourceHashes": {str(p.relative_to(repo)): before[str(p)] for p in sources},
                "toolchain": {"java": before[str(java)], "javac": before[str(javac)], "asm": before[str(args.asm.resolve())]},
