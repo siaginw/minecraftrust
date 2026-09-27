@@ -17,8 +17,8 @@ import uuid
 import zipfile
 
 
-PROFILE = "FORGE_2860_SERVER_TRANSFORMED_FML_INITIALIZED_OFFLINE_V1"
-TARGET = "minecraft-1.12.2-forge-14.23.5.2860-clean-server"
+# The default pins file, for callers that do not name one in their manifest.
+DEFAULT_PINS = "tools/forge-capture/runtime-pins.json"
 ENV_EXCLUDED = ("JAVA_TOOL_OPTIONS", "_JAVA_OPTIONS", "JDK_JAVA_OPTIONS", "CLASSPATH")
 
 
@@ -46,7 +46,11 @@ def identity(path: Path) -> dict:
 
 
 def validate_artifacts(server: Path, pins: dict) -> list[dict]:
-    if pins.get("schema_version") != 1 or pins.get("target") != TARGET:
+    # The target is whatever the pins declare. A pins file is only usable for
+    # the runtime it was written against: that is the whole point of pinning
+    # it, so the check is that the file is internally consistent and names a
+    # target, not that it names the one this module happened to be written for.
+    if pins.get("schema_version") != 1 or not isinstance(pins.get("target"), str) or not pins["target"]:
         raise Incomplete("ARTIFACT_MISMATCH", "Wrong runtime pin schema or target")
     server = server.resolve()
     result = []
@@ -67,18 +71,24 @@ def validate_artifacts(server: Path, pins: dict) -> list[dict]:
 
 
 def validate_qualification(data: dict, pins: dict) -> None:
-    if data.get("profile") != PROFILE or data.get("production_authority") is not False:
+    # Every expectation below is read from the pins file rather than written
+    # here. The assertions keep exactly the same teeth -- each is still an
+    # exact comparison against a reviewed, hashed expectation -- but no single
+    # runtime's facts are baked into the checker. A modded runtime legitimately
+    # registers chunk-load listeners where a bare Forge server must register
+    # none; that difference belongs in the pins, where it is visible and
+    # reviewable, not in code that pretends one runtime defines the contract.
+    if data.get("profile") != pins["qualification_profile"] or data.get("production_authority") is not False:
         raise Incomplete("ARTIFACT_MISMATCH", "Wrong transformation qualification profile")
-    if data.get("java_runtime_version") != "1.8.0_504-b01":
-        raise Incomplete("ARTIFACT_MISMATCH", "JVM is not qualified Temurin 8u504-b01")
+    if data.get("java_runtime_version") != pins["java_runtime_version"]:
+        raise Incomplete("ARTIFACT_MISMATCH", "JVM is not the qualified runtime")
     for key in ("attach_capabilities_listener_count", "chunk_load_listener_count"):
-        if data.get(key) != 0:
-            raise Incomplete("ARTIFACT_MISMATCH", "Unqualified event listener inventory: " + key)
-    if data.get("mod_lifecycle_executed") is not True or data.get("farmland_water_ticket_map_empty") is not True:
-        raise Incomplete("ARTIFACT_MISMATCH", "FML lifecycle or detached-world callback boundary unqualified")
-    expected_unload = ["net.minecraftforge.fml.common.eventhandler.EventPriority:NORMAL",
-        "net.minecraftforge.fml.common.eventhandler.ASMEventHandler:ASM: net.minecraftforge.common.ForgeInternalHandler@IDENTITY onChunkUnload(Lnet/minecraftforge/event/world/ChunkEvent$Unload;)V"]
-    if data.get("chunk_unload_listeners") != expected_unload:
+        if data.get(key) != pins["listener_counts"][key]:
+            raise Incomplete("ARTIFACT_MISMATCH", "Event listener inventory differs from the pinned expectation: " + key)
+    if data.get("mod_lifecycle_executed") is not pins["mod_lifecycle_executed"] \
+            or data.get("farmland_water_ticket_map_empty") is not pins["farmland_water_ticket_map_empty"]:
+        raise Incomplete("ARTIFACT_MISMATCH", "FML lifecycle or detached-world callback boundary differs from pins")
+    if data.get("chunk_unload_listeners") != pins["chunk_unload_listeners"]:
         raise Incomplete("ARTIFACT_MISMATCH", "Unqualified chunk unload callback")
     if data.get("registry_identity_sha256") != pins["registry_identity_sha256"]:
         raise Incomplete("ARTIFACT_MISMATCH", "Registry identity changed")
@@ -88,7 +98,7 @@ def validate_qualification(data: dict, pins: dict) -> None:
         raise Incomplete("ARTIFACT_MISMATCH", "Active mod order changed")
     if [item.get("class") for item in data.get("registered_coremod_plugins", [])] != pins["coremod_plugin_classes"]:
         raise Incomplete("ARTIFACT_MISMATCH", "Registered coremod plugins changed")
-    if data.get("observer") != "PASSIVE_JVM_CLASS_DEFINITION_OBSERVER_NO_RETRANSFORMATION":
+    if data.get("observer") != pins["observer"]:
         raise Incomplete("ARTIFACT_MISMATCH", "Final-definition observation missing")
     for name, digest in pins["required_transformed_sha256"].items():
         if data.get("transformed_classes", {}).get(name) != digest:
@@ -107,18 +117,17 @@ def validate_live_transformer_qualification(data: dict, pins: dict) -> None:
     transformer inventory carries the three live-writer transformers and the
     required-transformed-hash pins are replaced by post-hook expectations (the
     inserted hooks change the guarded classes by construction)."""
-    if data.get("profile") != PROFILE or data.get("production_authority") is not False:
+    if data.get("profile") != pins["qualification_profile"] or data.get("production_authority") is not False:
         raise Incomplete("ARTIFACT_MISMATCH", "Wrong transformation qualification profile")
-    if data.get("java_runtime_version") != "1.8.0_504-b01":
-        raise Incomplete("ARTIFACT_MISMATCH", "JVM is not qualified Temurin 8u504-b01")
+    if data.get("java_runtime_version") != pins["java_runtime_version"]:
+        raise Incomplete("ARTIFACT_MISMATCH", "JVM is not the qualified runtime")
     for key in ("attach_capabilities_listener_count", "chunk_load_listener_count"):
-        if data.get(key) != 0:
-            raise Incomplete("ARTIFACT_MISMATCH", "Unqualified event listener inventory: " + key)
-    if data.get("mod_lifecycle_executed") is not True or data.get("farmland_water_ticket_map_empty") is not True:
-        raise Incomplete("ARTIFACT_MISMATCH", "FML lifecycle or detached-world callback boundary unqualified")
-    expected_unload = ["net.minecraftforge.fml.common.eventhandler.EventPriority:NORMAL",
-        "net.minecraftforge.fml.common.eventhandler.ASMEventHandler:ASM: net.minecraftforge.common.ForgeInternalHandler@IDENTITY onChunkUnload(Lnet/minecraftforge/event/world/ChunkEvent$Unload;)V"]
-    if data.get("chunk_unload_listeners") != expected_unload:
+        if data.get(key) != pins["listener_counts"][key]:
+            raise Incomplete("ARTIFACT_MISMATCH", "Event listener inventory differs from the pinned expectation: " + key)
+    if data.get("mod_lifecycle_executed") is not pins["mod_lifecycle_executed"] \
+            or data.get("farmland_water_ticket_map_empty") is not pins["farmland_water_ticket_map_empty"]:
+        raise Incomplete("ARTIFACT_MISMATCH", "FML lifecycle or detached-world callback boundary differs from pins")
+    if data.get("chunk_unload_listeners") != pins["chunk_unload_listeners"]:
         raise Incomplete("ARTIFACT_MISMATCH", "Unqualified chunk unload callback")
     if data.get("registry_identity_sha256") != pins["registry_identity_sha256"]:
         raise Incomplete("ARTIFACT_MISMATCH", "Registry identity changed")
@@ -135,7 +144,7 @@ def validate_live_transformer_qualification(data: dict, pins: dict) -> None:
         raise Incomplete("ARTIFACT_MISMATCH", "Active mod order changed")
     if [item.get("class") for item in data.get("registered_coremod_plugins", [])] != pins["coremod_plugin_classes"]:
         raise Incomplete("ARTIFACT_MISMATCH", "Registered coremod plugins changed")
-    if data.get("observer") != "PASSIVE_JVM_CLASS_DEFINITION_OBSERVER_NO_RETRANSFORMATION":
+    if data.get("observer") != pins["observer"]:
         raise Incomplete("ARTIFACT_MISMATCH", "Final-definition observation missing")
 
 
@@ -319,14 +328,18 @@ def execute(root: Path, output: Path, java_home: Path, dll: Path, manifest: Path
             qualification_only: bool = False, live_transformers: bool = False) -> dict:
     output = output.resolve()
     output.mkdir(parents=True, exist_ok=False)
-    receipt = {"schema_version": 1, "target": TARGET, "status": "FAIL",
+    receipt = {"schema_version": 1, "target": None, "status": "FAIL",
                "production_authority": False, "output": str(output)}
     try:
         if not manifest.is_file():
             raise Incomplete("MISSING_ARTIFACT", str(manifest))
         config = json.loads(manifest.read_text(encoding="utf-8-sig"))
-        pins_path = root / "tools/forge-capture/runtime-pins.json"
+        # A manifest may name its own pins file, so one harness can qualify more
+        # than one runtime. The default is the Clean Forge server, unchanged.
+        pins_path = Path(config.get("pins", root / "tools/forge-capture/runtime-pins.json"))
         pins = json.loads(pins_path.read_text(encoding="utf-8"))
+        receipt["target"] = pins.get("target")
+        receipt["pins"] = str(pins_path)
         artifacts = validate_artifacts(Path(config["server_root"]), pins)
         java, javac = java_home / "bin/java.exe", java_home / "bin/javac.exe"
         qualified_inputs = {

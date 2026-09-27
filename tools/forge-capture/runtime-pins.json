@@ -200,5 +200,18 @@
   "coremod_plugin_classes": [
     "net.minecraftforge.fml.relauncher.FMLCorePlugin",
     "net.minecraftforge.classloading.FMLForgePlugin"
+  ],
+  "qualification_profile": "FORGE_2860_SERVER_TRANSFORMED_FML_INITIALIZED_OFFLINE_V1",
+  "java_runtime_version": "1.8.0_504-b01",
+  "observer": "PASSIVE_JVM_CLASS_DEFINITION_OBSERVER_NO_RETRANSFORMATION",
+  "listener_counts": {
+    "attach_capabilities_listener_count": 0,
+    "chunk_load_listener_count": 0
+  },
+  "mod_lifecycle_executed": true,
+  "farmland_water_ticket_map_empty": true,
+  "chunk_unload_listeners": [
+    "net.minecraftforge.fml.common.eventhandler.EventPriority:NORMAL",
+    "net.minecraftforge.fml.common.eventhandler.ASMEventHandler:ASM: net.minecraftforge.common.ForgeInternalHandler@IDENTITY onChunkUnload(Lnet/minecraftforge/event/world/ChunkEvent$Unload;)V"
   ]
 }
