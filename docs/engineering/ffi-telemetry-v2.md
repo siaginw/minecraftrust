@@ -120,7 +120,7 @@ Source/isolation checks and post-build DLL identity passed.
 | Metrics unit tests | 8 pass |
 | New FFI telemetry integration | 10 pass |
 | Native-chunk | Original 10 unit tests + 37 integration/property tests pass |
-| Workspace library tests | 96 pass, including existing 11 FFI tests |
+| Workspace library tests | 86 pass, including existing 11 FFI tests |
 | Protocol | 10 pass |
 | Release FFI build | Pass |
 | Java 8 telemetry / critical-array test | 5 groups, 1,809 assertions pass |
@@ -162,3 +162,7 @@ Production native packet authority remains disabled. No gate, defaults, payload,
 compression backend or Issue #1 historical classification is changed. This
 telemetry work neither closes live snapshot coherency nor resolves the historical
 exact writer.
+
+The initial H3 summary incorrectly counted the separate ten telemetry integration
+tests in the workspace-library total. That command passed 86 tests; its raw log
+is unchanged. H4 adds two unit tests, making its subsequent workspace total 88.

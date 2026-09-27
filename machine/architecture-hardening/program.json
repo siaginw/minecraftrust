@@ -54,7 +54,7 @@
     {
       "id": "H3",
       "title": "FIX TELEMETRY",
-      "status": "VALIDATED",
+      "status": "COMMITTED",
       "implementation": [
         "crates/metrics/src/lib.rs",
         "crates/ffi/src",
@@ -62,7 +62,7 @@
         "docs/engineering/ffi-telemetry-v2.md"
       ],
       "validation": [
-        "8 metrics tests;10 telemetry integration;47 native-chunk;96 workspace library;10 protocol;release FFI PASS",
+        "8 metrics tests;10 telemetry integration;47 native-chunk;86 workspace library;10 protocol;release FFI PASS",
         "5 Java suites PASS;1809 telemetry assertions",
         "Root fresh Clean legacy:25 tooling,201 foundation assertions,mask1/4358 identical bytes",
         "Changed-file formatting and strict metrics clippy PASS;legacy global fmt and FFI strict lint failures retained"
@@ -70,7 +70,7 @@
       "evidence": [
         "machine/architecture-hardening/h3-telemetry-v2.json"
       ],
-      "commit": null,
+      "commit": "7d2fdf5354adb13967951b88c5493dfde7e0246f",
       "limitations": [
         "27 scalar outcome reasons remain explicitly unknown",
         "Uncovered frame/debug exports and unknown copy/allocation fields are inventoried",

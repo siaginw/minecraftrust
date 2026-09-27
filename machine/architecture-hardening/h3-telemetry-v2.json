@@ -1089,7 +1089,7 @@
     "ffi_telemetry_integration": 10,
     "native_chunk_unit": 10,
     "native_chunk_integration": 37,
-    "workspace_lib": 96,
+    "workspace_lib": 86,
     "protocol": 10,
     "java_assertions": {
       "TelemetryJniTest": 1809,
@@ -1736,5 +1736,14 @@
     },
     "same_dll": true,
     "scope": "existing Clean legacy foundation only; no V2 requalification or resumed live shadow campaign"
-  }
+  },
+  "summary_corrections": [
+    {
+      "field": "validation_summary.workspace_lib",
+      "previous": 96,
+      "correct": 86,
+      "basis": "machine\\architecture-hardening\\h3-telemetry-evidence\\h3-telemetry-525976d708\\workspace-lib.log.txt",
+      "reason": "The separate 10 telemetry integration tests were incorrectly included in the workspace library command total. Raw test outputs are unchanged."
+    }
+  ]
 }
