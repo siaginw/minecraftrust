@@ -310,11 +310,29 @@
     {
       "id": "H14",
       "title": "PACKET / BUFFER PIPELINE",
-      "status": "PENDING",
-      "implementation": [],
-      "validation": [],
-      "evidence": [],
-      "commit": null
+      "status": "PROTOTYPE_VALIDATED",
+      "implementation": [
+        "tools/packet-buffer-pipeline-experiment",
+        "docs/research/packet-buffer-pipeline.md"
+      ],
+      "validation": [
+        "Independent root full rerun:14 Rust tests,strict own fmt/clippy,release,4 Job controls,4 Java loopback configurations,2 tamper controls,24 pipeline rows,18 handle rows;exact payload copies,overlapping timing ranges"
+      ],
+      "evidence": [
+        "machine/architecture-hardening/h14-packet-buffer.json"
+      ],
+      "commit": null,
+      "outstanding": [
+        "Synthetic packet0x7e payload and fixed public keys; no Minecraft gameplay/authentication/JNI integration.",
+        "Java-valid deflate streams need not be byte-identical; independent AES oracle uses validated native frames.",
+        "Explicit application payload copies and Rust allocator requests are measured; backend/crypto/OS/kernel internal copies remain unknown.",
+        "Payload reservations exclude metadata, retained source snapshots, backend contexts and kernel socket queues; child Job adds an overall commit limit.",
+        "Shared host and instrumented allocator; no zero-copy or general production-throughput claim.",
+        "Actual pipeline is standalone and synthetic; production H6/JVM capture/key and scheduler integration remains required.",
+        "Canceled completion abandonment remains fail-closed until teardown; no worker-panic recovery qualification.",
+        "Root timing median reverses initial small sharing advantage; no general end-to-end performance win.",
+        "Continuous stream can send a prefix before fatal error; failure closes connection, no transactional wire rollback."
+      ]
     },
     {
       "id": "H15",
@@ -481,7 +499,7 @@
           "evidence": "machine/architecture-hardening/h12-semantic-scheduler.json"
         },
         "G": {
-          "status": "EXPERIMENT_VALIDATED",
+          "status": "EXPERIMENT_COMMITTED",
           "decision": "KEEP_BUFFERED_BASELINE_RETAIN_NARROW_MMAP_REDB_PROTOTYPES",
           "evidence": "machine/architecture-hardening/h22-5-offline-storage.json",
           "outstanding": [
@@ -491,7 +509,8 @@
             "Process-exit recovery during one uncommitted transaction, not power failure or arbitrary crash-point proof.",
             "Five samples per method/size on shared host; no useful mmap speed benefit established.",
             "Peak committed process bytes are not RSS; cache and sidecar caps do not prove unbounded reader retention safe."
-          ]
+          ],
+          "commit": "a1769f61f5fcb0c3099ededf0fa2b468f2b461d3"
         },
         "H": {
           "status": "PENDING"

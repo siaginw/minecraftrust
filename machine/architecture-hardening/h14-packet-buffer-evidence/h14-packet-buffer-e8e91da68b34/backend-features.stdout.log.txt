@@ -1,0 +1,67 @@
+packet-buffer-pipeline-experiment v0.1.0 (D:\minecraftrust-astra-hardening\tools\packet-buffer-pipeline-experiment)
+├── aes feature "default"
+│   └── aes v0.9.3
+│       ├── cipher feature "default"
+│       │   └── cipher v0.5.2
+│       │       ├── crypto-common feature "default"
+│       │       │   └── crypto-common v0.2.2
+│       │       │       └── hybrid-array feature "default"
+│       │       │           └── hybrid-array v0.4.15
+│       │       │               ├── typenum feature "const-generics"
+│       │       │               │   └── typenum v1.20.1
+│       │       │               └── typenum feature "default"
+│       │       │                   └── typenum v1.20.1
+│       │       └── inout feature "default"
+│       │           └── inout v0.2.2
+│       │               └── hybrid-array feature "default" (*)
+│       ├── cpubits feature "default"
+│       │   └── cpubits v0.1.1
+│       └── cpufeatures feature "default"
+│           └── cpufeatures v0.3.1
+├── bytes feature "default"
+│   ├── bytes v1.12.1
+│   └── bytes feature "std"
+│       └── bytes v1.12.1
+├── cfb8 feature "default"
+│   └── cfb8 v0.9.1
+│       └── cipher feature "default" (*)
+├── compression feature "default"
+│   └── compression v0.1.0 (D:\minecraftrust-astra-hardening\crates\compression)
+│       ├── buffers feature "default"
+│       │   └── buffers v0.1.0 (D:\minecraftrust-astra-hardening\crates\buffers)
+│       │       └── core-types feature "default"
+│       │           └── core-types v0.1.0 (D:\minecraftrust-astra-hardening\crates\core-types)
+│       └── flate2 feature "zlib-rs"
+│           ├── flate2 v1.1.10
+│           │   └── zlib-rs feature "rust-allocator"
+│           │       └── zlib-rs v0.6.8
+│           └── flate2 feature "any_zlib"
+│               ├── flate2 v1.1.10 (*)
+│               └── flate2 feature "any_impl"
+│                   └── flate2 v1.1.10 (*)
+└── socket2 feature "default"
+    └── socket2 v0.6.4
+        ├── windows-sys feature "Win32_Foundation"
+        │   ├── windows-sys v0.61.2
+        │   │   └── windows-link v0.2.1
+        │   └── windows-sys feature "Win32"
+        │       ├── windows-sys v0.61.2 (*)
+        │       └── windows-sys feature "Win32_Foundation" (*)
+        ├── windows-sys feature "Win32_Networking_WinSock"
+        │   ├── windows-sys v0.61.2 (*)
+        │   └── windows-sys feature "Win32_Networking"
+        │       ├── windows-sys v0.61.2 (*)
+        │       └── windows-sys feature "Win32" (*)
+        ├── windows-sys feature "Win32_System_IO"
+        │   ├── windows-sys v0.61.2 (*)
+        │   └── windows-sys feature "Win32_System"
+        │       ├── windows-sys v0.61.2 (*)
+        │       └── windows-sys feature "Win32" (*)
+        ├── windows-sys feature "Win32_System_Threading"
+        │   ├── windows-sys v0.61.2 (*)
+        │   └── windows-sys feature "Win32_System" (*)
+        ├── windows-sys feature "Win32_System_WindowsProgramming"
+        │   ├── windows-sys v0.61.2 (*)
+        │   └── windows-sys feature "Win32_System" (*)
+        └── windows-sys feature "default"
+            └── windows-sys v0.61.2 (*)

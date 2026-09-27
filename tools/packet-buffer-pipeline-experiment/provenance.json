@@ -1,0 +1,329 @@
+{
+  "schema_version": 1,
+  "reviewed_utc": "2026-09-27T01:56:42.091853+00:00",
+  "scope": "Isolated H14 experiment only; no root dependency or backend change",
+  "decisions": [
+    {
+      "name": "bytes",
+      "version": "1.12.1",
+      "decision": "PROTOTYPE",
+      "reason": "Compare owned Vec transfer and cloned/sliced handles against std Arc<Vec<u8>> before considering adoption. Main pipeline keeps std Arc."
+    },
+    {
+      "name": "aes/cfb8",
+      "versions": [
+        "0.9.3",
+        "0.9.1"
+      ],
+      "decision": "PROTOTYPE",
+      "reason": "Pinned RustCrypto AES-128/CFB8 for synthetic connection stream; Java8 independently checks rolling state. Fixed public fixture keys, no authentication or runtime integration."
+    },
+    {
+      "name": "socket2",
+      "version": "0.6.4",
+      "decision": "PROTOTYPE",
+      "reason": "Set and inspect private-loopback buffer sizes and force RST failure control through supported socket API."
+    },
+    {
+      "name": "compression",
+      "decision": "REUSE_UNCHANGED_LOCAL",
+      "reason": "Existing ZlibPacketCompressor; flate2=1.1.10/zlib-rs=0.6.8 version and archive hashes match root Cargo.lock. No backend replacement."
+    }
+  ],
+  "external_dependencies": [
+    {
+      "name": "aes",
+      "version": "0.9.3",
+      "license": "MIT OR Apache-2.0",
+      "repository": "https://github.com/RustCrypto/block-ciphers",
+      "vcs_commit": "c1534361e7549e29a16c3505f45a04c92d26b62a",
+      "source_url": "https://docs.rs/crate/aes/0.9.3/source/",
+      "licenses": [
+        {
+          "path": "third-party/aes-0.9.3/LICENSE-APACHE",
+          "sha256": "a9040321c3712d8fd0b09cf52b17445de04a23a10165049ae187cd39e5c86be5"
+        },
+        {
+          "path": "third-party/aes-0.9.3/LICENSE-MIT",
+          "sha256": "25f77efa393854f7c15eaf6a2589a2071db2d7337642742763adb12bdecf0445"
+        }
+      ]
+    },
+    {
+      "name": "bytes",
+      "version": "1.12.1",
+      "license": "MIT",
+      "repository": "https://github.com/tokio-rs/bytes",
+      "vcs_commit": "76c0fbb54ed4336caf9d2311658a2f4a5627c21d",
+      "source_url": "https://docs.rs/crate/bytes/1.12.1/source/",
+      "licenses": [
+        {
+          "path": "third-party/bytes-1.12.1/LICENSE",
+          "sha256": "45f522cacecb1023856e46df79ca625dfc550c94910078bd8aec6e02880b3d42"
+        }
+      ]
+    },
+    {
+      "name": "cfb8",
+      "version": "0.9.1",
+      "license": "MIT OR Apache-2.0",
+      "repository": "https://github.com/RustCrypto/block-modes",
+      "vcs_commit": "2fce5053a789840aa401148b76e01f39fe37de6a",
+      "source_url": "https://docs.rs/crate/cfb8/0.9.1/source/",
+      "licenses": [
+        {
+          "path": "third-party/cfb8-0.9.1/LICENSE-APACHE",
+          "sha256": "a9040321c3712d8fd0b09cf52b17445de04a23a10165049ae187cd39e5c86be5"
+        },
+        {
+          "path": "third-party/cfb8-0.9.1/LICENSE-MIT",
+          "sha256": "63af4bea227c94d021e99427f6ca3a4b8efddadcca93ab6130f708cf6138cf68"
+        }
+      ]
+    },
+    {
+      "name": "cipher",
+      "version": "0.5.2",
+      "license": "MIT OR Apache-2.0",
+      "repository": "https://github.com/RustCrypto/traits",
+      "vcs_commit": "f836f71fadb3b975b577a293d57851d044f0a44b",
+      "source_url": "https://docs.rs/crate/cipher/0.5.2/source/",
+      "licenses": [
+        {
+          "path": "third-party/cipher-0.5.2/LICENSE-APACHE",
+          "sha256": "a9040321c3712d8fd0b09cf52b17445de04a23a10165049ae187cd39e5c86be5"
+        },
+        {
+          "path": "third-party/cipher-0.5.2/LICENSE-MIT",
+          "sha256": "950d712c518a02fcb7cff96950aee304a1cc5283361712c980ea21e8d6d669a5"
+        }
+      ]
+    },
+    {
+      "name": "cpubits",
+      "version": "0.1.1",
+      "license": "MIT OR Apache-2.0",
+      "repository": "https://github.com/RustCrypto/utils",
+      "vcs_commit": "bff92a8c33629ae8e9d1407f3b7fea604992dd0f",
+      "source_url": "https://docs.rs/crate/cpubits/0.1.1/source/",
+      "licenses": [
+        {
+          "path": "third-party/cpubits-0.1.1/LICENSE-APACHE",
+          "sha256": "a9040321c3712d8fd0b09cf52b17445de04a23a10165049ae187cd39e5c86be5"
+        },
+        {
+          "path": "third-party/cpubits-0.1.1/LICENSE-MIT",
+          "sha256": "003736bc98408b53511b9cc8ff5d1af3bf0a8f17d53841cc39d8ab1b96a195b0"
+        }
+      ]
+    },
+    {
+      "name": "cpufeatures",
+      "version": "0.3.1",
+      "license": "MIT OR Apache-2.0",
+      "repository": "https://github.com/RustCrypto/utils",
+      "vcs_commit": "e3ac92bfd33051e146025baa2d0ce79891b7fc73",
+      "source_url": "https://docs.rs/crate/cpufeatures/0.3.1/source/",
+      "licenses": [
+        {
+          "path": "third-party/cpufeatures-0.3.1/LICENSE-APACHE",
+          "sha256": "a9040321c3712d8fd0b09cf52b17445de04a23a10165049ae187cd39e5c86be5"
+        },
+        {
+          "path": "third-party/cpufeatures-0.3.1/LICENSE-MIT",
+          "sha256": "73b9dc2e79c7308998dd30296e073aefaefb944a68fb89aa412c23c0edcabcaa"
+        }
+      ]
+    },
+    {
+      "name": "crypto-common",
+      "version": "0.2.2",
+      "license": "MIT OR Apache-2.0",
+      "repository": "https://github.com/RustCrypto/traits",
+      "vcs_commit": "93dee26c6bde3741a197f1c5f6b7baac277705f3",
+      "source_url": "https://docs.rs/crate/crypto-common/0.2.2/source/",
+      "licenses": [
+        {
+          "path": "third-party/crypto-common-0.2.2/LICENSE-APACHE",
+          "sha256": "a9040321c3712d8fd0b09cf52b17445de04a23a10165049ae187cd39e5c86be5"
+        },
+        {
+          "path": "third-party/crypto-common-0.2.2/LICENSE-MIT",
+          "sha256": "d2e7ec5355c96eeade56b09187ceb48a6a30299da3ce7531a66d3d11405ab963"
+        }
+      ]
+    },
+    {
+      "name": "flate2",
+      "version": "1.1.10",
+      "license": "MIT OR Apache-2.0",
+      "repository": "https://github.com/rust-lang/flate2-rs",
+      "vcs_commit": "ed93d4fc60eaf876c6aded741bf992d524551930",
+      "source_url": "https://docs.rs/crate/flate2/1.1.10/source/",
+      "licenses": [
+        {
+          "path": "third-party/flate2-1.1.10/LICENSE-APACHE",
+          "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2"
+        },
+        {
+          "path": "third-party/flate2-1.1.10/LICENSE-MIT",
+          "sha256": "025436edff4cfcdde17a5811fdea78892d8482efd1abdec5a17872d07a4f2112"
+        }
+      ]
+    },
+    {
+      "name": "hybrid-array",
+      "version": "0.4.15",
+      "license": "MIT OR Apache-2.0",
+      "repository": "https://github.com/RustCrypto/hybrid-array",
+      "vcs_commit": "09310c55b75e2cd408951c7e2e86dba16c63fc68",
+      "source_url": "https://docs.rs/crate/hybrid-array/0.4.15/source/",
+      "licenses": [
+        {
+          "path": "third-party/hybrid-array-0.4.15/LICENSE-APACHE",
+          "sha256": "a9040321c3712d8fd0b09cf52b17445de04a23a10165049ae187cd39e5c86be5"
+        },
+        {
+          "path": "third-party/hybrid-array-0.4.15/LICENSE-MIT",
+          "sha256": "70c9d40f1f9545c3f133b8a67206e89da850f6468eed072281bb3701514114a9"
+        }
+      ]
+    },
+    {
+      "name": "inout",
+      "version": "0.2.2",
+      "license": "MIT OR Apache-2.0",
+      "repository": "https://github.com/RustCrypto/utils",
+      "vcs_commit": "2d5eac49c253b19a064b33fc1f9ca7839732cb30",
+      "source_url": "https://docs.rs/crate/inout/0.2.2/source/",
+      "licenses": [
+        {
+          "path": "third-party/inout-0.2.2/LICENSE-APACHE",
+          "sha256": "a9040321c3712d8fd0b09cf52b17445de04a23a10165049ae187cd39e5c86be5"
+        },
+        {
+          "path": "third-party/inout-0.2.2/LICENSE-MIT",
+          "sha256": "a07fcacc3c60de4dc0fab10ac9d6aaba7379974e28451c99da7f7df09c25b28c"
+        }
+      ]
+    },
+    {
+      "name": "libc",
+      "version": "0.2.189",
+      "license": "MIT OR Apache-2.0",
+      "repository": "https://github.com/rust-lang/libc",
+      "vcs_commit": "ef0906e20828777175f65caa7e681a0ce33c559a",
+      "source_url": "https://docs.rs/crate/libc/0.2.189/source/",
+      "licenses": [
+        {
+          "path": "third-party/libc-0.2.189/LICENSE-APACHE",
+          "sha256": "62c7a1e35f56406896d7aa7ca52d0cc0d272ac022b5d2796e7d6905db8a3636a"
+        },
+        {
+          "path": "third-party/libc-0.2.189/LICENSE-MIT",
+          "sha256": "123a331b5dbf04c30097fa43b8f858bc85df671fe776de498d01f3d6b7c1f69e"
+        }
+      ]
+    },
+    {
+      "name": "socket2",
+      "version": "0.6.4",
+      "license": "MIT OR Apache-2.0",
+      "repository": "https://github.com/rust-lang/socket2",
+      "vcs_commit": "9f41644efeb2f494f31f8ee7792d060f4c76e533",
+      "source_url": "https://docs.rs/crate/socket2/0.6.4/source/",
+      "licenses": [
+        {
+          "path": "third-party/socket2-0.6.4/LICENSE-APACHE",
+          "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2"
+        },
+        {
+          "path": "third-party/socket2-0.6.4/LICENSE-MIT",
+          "sha256": "378f5840b258e2779c39418f3f2d7b2ba96f1c7917dd6be0713f88305dbda397"
+        }
+      ]
+    },
+    {
+      "name": "typenum",
+      "version": "1.20.1",
+      "license": "MIT OR Apache-2.0",
+      "repository": "https://github.com/paholg/typenum",
+      "vcs_commit": "0db9a0f731981f29266b63586c29fa07e4477b1a",
+      "source_url": "https://docs.rs/crate/typenum/1.20.1/source/",
+      "licenses": [
+        {
+          "path": "third-party/typenum-1.20.1/LICENSE",
+          "sha256": "db11fec9946737df39ca3898d9cd8c10ec6f6c3a884a6802b0ad0b81b4e8f23a"
+        },
+        {
+          "path": "third-party/typenum-1.20.1/LICENSE-APACHE",
+          "sha256": "516b24e051bf5630880ebbd55c40a25ce9552ebaf8970a53e8976eb70e522406"
+        },
+        {
+          "path": "third-party/typenum-1.20.1/LICENSE-MIT",
+          "sha256": "a825bd853ab71619a4923d7b4311221427848070ff44d990da39b0b274c1683f"
+        }
+      ]
+    },
+    {
+      "name": "windows-link",
+      "version": "0.2.1",
+      "license": "MIT OR Apache-2.0",
+      "repository": "https://github.com/microsoft/windows-rs",
+      "vcs_commit": "d468916ac27a36fb8a12bafc1bf5c0ec2fe92238",
+      "source_url": "https://docs.rs/crate/windows-link/0.2.1/source/",
+      "licenses": [
+        {
+          "path": "third-party/windows-link-0.2.1/license-apache-2.0",
+          "sha256": "c16f8dcf1a368b83be78d826ea23de4079fe1b4469a0ab9ee20563f37ff3d44b"
+        },
+        {
+          "path": "third-party/windows-link-0.2.1/license-mit",
+          "sha256": "c2cfccb812fe482101a8f04597dfc5a9991a6b2748266c47ac91b6a5aae15383"
+        }
+      ]
+    },
+    {
+      "name": "windows-sys",
+      "version": "0.61.2",
+      "license": "MIT OR Apache-2.0",
+      "repository": "https://github.com/microsoft/windows-rs",
+      "vcs_commit": "32c3144490c016fe496a0aed769bce60987a2e9d",
+      "source_url": "https://docs.rs/crate/windows-sys/0.61.2/source/",
+      "licenses": [
+        {
+          "path": "third-party/windows-sys-0.61.2/license-apache-2.0",
+          "sha256": "c16f8dcf1a368b83be78d826ea23de4079fe1b4469a0ab9ee20563f37ff3d44b"
+        },
+        {
+          "path": "third-party/windows-sys-0.61.2/license-mit",
+          "sha256": "c2cfccb812fe482101a8f04597dfc5a9991a6b2748266c47ac91b6a5aae15383"
+        }
+      ]
+    },
+    {
+      "name": "zlib-rs",
+      "version": "0.6.8",
+      "license": "Zlib",
+      "repository": "https://github.com/trifectatechfoundation/zlib-rs",
+      "vcs_commit": "0254e07204884bfc902d6ebb68c8b703d0ea49cf",
+      "source_url": "https://docs.rs/crate/zlib-rs/0.6.8/source/",
+      "licenses": [
+        {
+          "path": "third-party/zlib-rs-0.6.8/LICENSE",
+          "sha256": "e72111c52b7d96ebe25348dee19f0744f444d3c95ae6b1ecb6ccaecc5bce05ba"
+        }
+      ]
+    }
+  ],
+  "primary_sources": [
+    "https://docs.rs/bytes/1.12.1/bytes/",
+    "https://docs.rs/cfb8/0.9.1/cfb8/",
+    "https://docs.rs/aes/0.9.3/aes/",
+    "https://docs.rs/socket2/0.6.4/socket2/",
+    "https://docs.oracle.com/javase/8/docs/api/java/util/zip/Deflater.html",
+    "https://docs.oracle.com/javase/8/docs/api/java/util/zip/Inflater.html",
+    "https://docs.oracle.com/javase/8/docs/api/javax/crypto/Cipher.html"
+  ],
+  "notices": "Retained package license files; all third-party implementation is a dependency, not copied into local source. Synthetic fixture data uses a deterministic arithmetic pattern; no production hash, PRNG, or performance claim."
+}

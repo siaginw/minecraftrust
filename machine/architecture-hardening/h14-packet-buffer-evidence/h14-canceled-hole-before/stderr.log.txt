@@ -1,0 +1,19 @@
+warning: unused variable: `have`
+   --> D:\minecraftrust-astra-hardening\crates\compression\src\frame.rs:205:68
+    |
+205 |                     crate::CompressError::OutputTooSmall { needed, have } =>
+    |                                                                    ^^^^ help: try ignoring the field: `have: _`
+    |
+    = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: `compression` (lib) generated 1 warning (run `cargo fix --lib -p compression` to apply 1 suggestion)
+   Compiling packet-buffer-pipeline-experiment v0.1.0 (D:\minecraftrust-astra-hardening\tools\packet-buffer-pipeline-experiment)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.59s
+     Running tests\contracts.rs (tools\packet-buffer-pipeline-experiment\target\debug\deps\contracts-ca3a436e96825243.exe)
+
+thread 'canceled_order_hole_retains_credit_until_preceding_work_quiesces' (7372) panicked at tests\contracts.rs:488:5:
+assertion `left == right` failed: canceled order hole released admission credit too early
+  left: 1
+ right: 2
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+error: test failed, to rerun pass `--test contracts`

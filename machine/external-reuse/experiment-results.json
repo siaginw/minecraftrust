@@ -329,6 +329,20 @@
       "evidence": "machine/architecture-hardening/h22-5-offline-storage.json",
       "provenance": "tools/offline-storage-experiment/research-provenance.json",
       "source": "https://crates.io/api/v1/crates/rocksdb/0.25.0"
+    },
+    {
+      "candidate": "bytes",
+      "version": "1.12.1",
+      "license": "MIT",
+      "decision": "PROTOTYPE",
+      "reason": "Bounded owned-buffer/subrange experiment did not justify replacing std Arc in current pipeline.",
+      "performance_value": "100k owned Bytes slice operations slower than Arc owner plus borrowed range in measured pattern; APIs differ, not universal ranking.",
+      "migration_value": "Possible owned shared subviews at future packet boundaries;current pipeline retains standard Arc.",
+      "integration_risk": "No ownership/capability/wire guarantees supplied;subview retention and atomic/refcount overhead need real workload evidence.",
+      "installed_scope": "ISOLATED_H14_COMPARATOR_ONLY",
+      "evidence": "machine/architecture-hardening/h14-packet-buffer.json",
+      "provenance": "tools/packet-buffer-pipeline-experiment/provenance.json",
+      "source": "https://docs.rs/crate/bytes/1.12.1/source/"
     }
   ]
 }

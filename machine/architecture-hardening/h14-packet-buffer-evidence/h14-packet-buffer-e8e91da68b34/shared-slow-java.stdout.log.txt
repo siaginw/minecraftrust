@@ -1,0 +1,17 @@
+DEFLATE_VALID_DIFFERENCE connection=0 packet=4 first_offset=29
+DEFLATE_VALID_DIFFERENCE connection=0 packet=5 first_offset=0
+DEFLATE_VALID_DIFFERENCE connection=0 packet=6 first_offset=0
+DEFLATE_VALID_DIFFERENCE connection=1 packet=2 first_offset=0
+DEFLATE_VALID_DIFFERENCE connection=1 packet=3 first_offset=0
+DEFLATE_VALID_DIFFERENCE connection=1 packet=4 first_offset=0
+DEFLATE_VALID_DIFFERENCE connection=1 packet=5 first_offset=0
+DEFLATE_VALID_DIFFERENCE connection=1 packet=6 first_offset=0
+DEFLATE_VALID_DIFFERENCE connection=2 packet=4 first_offset=29
+DEFLATE_VALID_DIFFERENCE connection=2 packet=5 first_offset=0
+DEFLATE_VALID_DIFFERENCE connection=2 packet=6 first_offset=0
+DEFLATE_VALID_DIFFERENCE connection=3 packet=2 first_offset=0
+DEFLATE_VALID_DIFFERENCE connection=3 packet=3 first_offset=0
+DEFLATE_VALID_DIFFERENCE connection=3 packet=4 first_offset=0
+DEFLATE_VALID_DIFFERENCE connection=3 packet=5 first_offset=0
+DEFLATE_VALID_DIFFERENCE connection=3 packet=6 first_offset=0
+PASS PacketPipelineOracle connections=4 packets=27 encrypted_bytes=128282 exact_jdk_frames=11 native_frame_decode_and_wire_exact=true
