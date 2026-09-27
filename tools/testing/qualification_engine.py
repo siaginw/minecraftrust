@@ -976,7 +976,14 @@ class QualificationEngine:
                 raise Invalid("chain stages must be a dense ascending ordinal sequence: " + name)
             digest(stage["input_raw_sha256"])
             digest(stage["output_raw_sha256"])
-            if stage["input_raw_sha256"] == stage["output_raw_sha256"]:
+            # A transformation stage that changed nothing did not transform
+            # anything. FINAL_DEFINED is not a transformation stage: it is the
+            # observation of a definition event, and when the writers are the
+            # last transformers the loader defines exactly the buffer they
+            # returned. It is exempted from the no-op rule ONLY under the
+            # witnessed conditions in the FINAL branch below; every other stage,
+            # and every FINAL that actually altered bytes, is still refused.
+            if stage["stage"] != STAGE_FINAL and stage["input_raw_sha256"] == stage["output_raw_sha256"]:
                 raise Invalid("chain stage is a no-op: " + stage["stage"] + " for " + name)
             if previous is not None and stage["input_raw_sha256"] != previous["output_raw_sha256"]:
                 # This is the whole point of a chain: no stage may be swapped
@@ -1028,6 +1035,35 @@ class QualificationEngine:
                     raise Invalid("the FINAL_DEFINED stage was not defined by the reported loader: " + name)
                 if defined.get("rustcraft_post_writer_sha256") != rustcraft_output:
                     raise Invalid("the launch's witness does not confirm the RUSTCRAFT_POST output: " + name)
+                if defined.get("status") != "VERIFIED":
+                    # The witness has to have actually verified these bytes, not
+                    # merely recorded them. A witness that observed a class and
+                    # could not establish anything about it is an observation,
+                    # not a definition event, and the difference has to decide
+                    # the verdict.
+                    raise Missing("the launch's witness did not verify this class definition: " + name)
+                if stage["input_raw_sha256"] != stage["output_raw_sha256"]:
+                    # FINAL_DEFINED altered the bytes. When a downstream
+                    # transformer is disclosed, that is what a DOWNSTREAM stage
+                    # is for and the chain must name it. When none is, nothing
+                    # in this chain can have caused the change, so the extra edge
+                    # is unexplained rather than merely unusual.
+                    if not has_downstream:
+                        raise Invalid("FINAL_DEFINED changed the bytes with no downstream transformer "
+                                      "to account for it: " + name)
+                else:
+                    # A confirmation stage. Every condition that makes it
+                    # meaningful is already enforced above -- terminal position,
+                    # adjacency to the previous stage, this process, this
+                    # session, this class, this loader, hook and exception-path
+                    # survival, and an independently verified observation of
+                    # exactly these bytes. The one thing left to insist on is
+                    # that no downstream transformer is being concealed: if one
+                    # is disclosed, the bytes must actually differ, or the chain
+                    # is hiding a stage rather than recording one.
+                    if has_downstream:
+                        raise Invalid("FINAL_DEFINED confirms the last stage's bytes while a downstream "
+                                      "transformer is disclosed: the chain is not accounting for it: " + name)
             else:
                 raise Invalid("unknown chain stage: " + str(stage["stage"]))
         return {"binary_name": name, "stages": [s["stage"] for s in stages],

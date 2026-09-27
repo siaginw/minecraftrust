@@ -149,6 +149,66 @@ if S:
     if mode=='chain-broken-edge': stages[3]['input_raw_sha256']='0'*64
     if mode=='chain-forged-final': stages[3]['output_raw_sha256']='1'*64
     if mode=='chain-no-downstream': del stages[2];[stages[i].__setitem__('ordinal',i) for i in range(len(stages))]
+    # ---- FINAL_DEFINED as a definition EVENT rather than another edge -------
+    # When the live writers are the last transformers, the loader defines
+    # exactly the buffer they returned: the definition event changed nothing,
+    # because there was nothing left to change. These modes express that shape
+    # and each of its failure modes. They are what the corrected semantics is
+    # FOR, so the positive case and every way of abusing it live together.
+    if mode.startswith('chain-final-confirm'):
+        # PRE -> RUSTCRAFT -> FINAL, with FINAL confirming the writer output,
+        # and the independent witness reporting those same bytes as verified.
+        del stages[2]
+        # FINAL_DEFINED is now the last element; the list shifted, and reaching
+        # for the old index would silently edit the wrong stage.
+        final=stages[2]
+        final['input_raw_sha256']=POST
+        final['output_raw_sha256']=POST
+        [stages[i].__setitem__('ordinal',i) for i in range(len(stages))]
+        o['transformation_chain']['downstream_transformers_after_live_writers']=[]
+        row=witness['phases'][1]['verification'][0]
+        # The witness's own fields have to describe the SAME shape as the chain:
+        # the bytes it observed are the bytes the writers returned, so its
+        # raw_sha256 moves with observed_raw_sha256 and its note stops claiming
+        # a downstream transformer ran.
+        row['raw_sha256']=POST
+        row['observed_raw_sha256']=POST
+        row['rustcraft_post_writer_sha256']=POST
+        row['defined_bytes_equal_rustcraft_output']=True
+        row['same_buffer_identity']='DEFINED_BYTES_INDEPENDENTLY_OBSERVED; RUSTCRAFT_OUTPUT_IS_THE_DEFINED_BUFFER'
+        row['status']='VERIFIED'
+        witness['downstream_transformers_after_live_writers']=[]
+        o['frame_relation_witness']=json.dumps(witness)
+    if mode=='chain-final-confirm-witness-mismatch':
+        witness['phases'][1]['verification'][0]['observed_raw_sha256']='7'*64;o['frame_relation_witness']=json.dumps(witness)
+    if mode=='chain-final-confirm-unverified':
+        witness['phases'][1]['verification'][0]['status']='RECORDED_NOT_VERIFIED';o['frame_relation_witness']=json.dumps(witness)
+    if mode=='chain-final-confirm-no-hooks':
+        stages[-1]['rustcraft_hooks']=[dict(HOOKS[0],observed_calls=0)]
+    if mode=='chain-final-confirm-no-paths':
+        stages[-1]['exception_paths']=[]
+    if mode=='chain-final-confirm-hidden-downstream':
+        # A downstream transformer is disclosed but the chain stops at the
+        # writers: the disclosure contradicts the chain, so it is not a pass.
+        # Built on the confirmation shape, where FINAL re-states the writer
+        # output, so the disclosure has nothing in the chain to point at.
+        o['transformation_chain']['downstream_transformers_after_live_writers']=[S['downstream']]
+    if mode=='chain-final-confirm-unexplained-mutation':
+        # No downstream transformer, yet the defined bytes differ from what the
+        # writers returned. Nothing in this chain can have caused that, so the
+        # extra edge is unexplained rather than merely unusual. Built on the
+        # confirmation shape deliberately: in the four-stage shape a disclosed
+        # downstream transformer legitimately explains the change, and testing
+        # it there would prove nothing.
+        stages[-1]['output_raw_sha256']='9'*64
+        row=witness['phases'][1]['verification'][0]
+        row['raw_sha256']='9'*64
+        row['observed_raw_sha256']='9'*64
+        o['frame_relation_witness']=json.dumps(witness)
+    # ---- the no-op prohibition is unchanged for every real transformation ---
+    if mode=='chain-pre-noop': stages[0]['output_raw_sha256']=S['upstream_sha']
+    if mode=='chain-rustcraft-noop': stages[1]['output_raw_sha256']=PRE
+    if mode=='chain-downstream-noop': stages[2]['output_raw_sha256']=POST
     if mode=='chain-missing-rustcraft-stage': stages[1]['stage']='OBSERVED_OTHER_WRITER'
     if mode=='chain-hooks-stripped-downstream': stages[2]['rustcraft_hooks']=[dict(HOOKS[0],observed_calls=0)]
     if mode=='chain-hooks-stripped-final': stages[3]['rustcraft_hooks']=[dict(HOOKS[0],observed_calls=0)]
@@ -684,6 +744,62 @@ class EngineIntegrationControls(unittest.TestCase):
         # well-formed document; only the binding it makes is wrong.
         admission_policy.validate(policy)
         fixture.write()
+
+    def test_final_defined_confirmation_semantics(self):
+        """FINAL_DEFINED is a witnessed definition event, not another edge.
+
+        The writers are the last transformers in a real modded runtime, so the
+        loader defines exactly what they returned and the definition event
+        changes nothing. The engine must accept that shape ONLY when an
+        independent witness reports those same bytes as verified, and must
+        still refuse every way of arriving at it dishonestly."""
+
+        def verdict(mode):
+            result = self.session_fixture(mode=mode).run()
+            nodes = {n["id"]: n for n in result["evidence"]}
+            return nodes["transformation_chain"]["status"], result["status"]
+
+        # 1. confirmation + matching independent witness -> accepted
+        chain, overall = verdict("chain-final-confirm")
+        self.assertEqual(chain, "PASS", "a witnessed definition event is a valid terminal stage")
+        self.assertEqual(overall, "PASS")
+
+        # 2. confirmation + mismatched witness -> FAIL
+        chain, overall = verdict("chain-final-confirm-witness-mismatch")
+        self.assertEqual(chain, "FAIL", "a confirmation the witness contradicts is not a confirmation")
+        self.assertNotEqual(overall, "PASS")
+
+        # 3. a witness that observed but did not verify -> INCOMPLETE
+        chain, _ = verdict("chain-final-confirm-unverified")
+        self.assertEqual(chain, "INCOMPLETE",
+                         "an unverified observation is unproven, not a discovered defect")
+
+        # 4. unexplained FINAL_DEFINED mutation, no downstream to account for it
+        chain, overall = verdict("chain-final-confirm-unexplained-mutation")
+        self.assertEqual(chain, "FAIL",
+                         "bytes changing at definition with no transformer to explain it")
+        self.assertNotEqual(overall, "PASS")
+
+        # 5. a disclosed downstream transformer the chain never stages
+        chain, overall = verdict("chain-final-confirm-hidden-downstream")
+        self.assertEqual(chain, "FAIL", "a disclosed downstream transformer must appear as a stage")
+        self.assertNotEqual(overall, "PASS")
+
+        # 6/7. survival is still required at the final stage
+        chain, overall = verdict("chain-final-confirm-no-hooks")
+        self.assertEqual(chain, "FAIL", "a final stage missing a required hook is a failure")
+        self.assertNotEqual(overall, "PASS")
+        chain, overall = verdict("chain-final-confirm-no-paths")
+        self.assertEqual(chain, "FAIL", "a final stage missing exception coverage is a failure")
+        self.assertNotEqual(overall, "PASS")
+
+        # 8. the no-op prohibition is UNCHANGED for real transformation stages
+        for mode, label in (("chain-pre-noop", "PRE_WRITER"),
+                            ("chain-rustcraft-noop", "RUSTCRAFT_POST_WRITER"),
+                            ("chain-downstream-noop", "DOWNSTREAM_TRANSFORMER")):
+            chain, overall = verdict(mode)
+            self.assertEqual(chain, "FAIL", label + " that changed nothing is not a stage")
+            self.assertNotEqual(overall, "PASS")
 
     def test_final_defined_must_be_independently_observed(self):
         # The chain cannot certify itself. Its FINAL stage is bound to the
