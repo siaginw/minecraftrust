@@ -15,8 +15,27 @@ def require(value,message):
 
 def sha(path):
     with Path(path).open('rb') as source:return hashlib.file_digest(source,'sha256').hexdigest()
-def load(path):return parse_json(Path(path).read_bytes().decode('utf-8'))
+def load_hashed(path):
+    raw=Path(path).read_bytes()
+    return parse_json(raw.decode('utf-8')),hashlib.sha256(raw).hexdigest()
+
+def load(path):return load_hashed(path)[0]
 def write(path,value):Path(path).write_text(json.dumps(value,indent=2)+'\n',encoding='utf-8')
+
+def hook_inputs(directory,required):
+    """Bind partial diagnostic attempts; these are not successful definitions."""
+    raw=(directory/'inputs.tsv').read_bytes();require(len(raw)<=2<<20,'hook input index size')
+    lines=raw.decode('utf-8').splitlines();require(0<len(lines)<=4096,'hook input count')
+    rows=[];total=0;files={'inputs.tsv'}
+    for index,line in enumerate(lines):
+        parts=line.split('\t');require(len(parts)==3,'hook input index fields')
+        name,file,pin=parts
+        require(name in required and file==f'{index:04d}.bin' and re.fullmatch('[0-9a-f]{64}',pin),'hook input index identity')
+        path=local(directory,file);require(0<path.stat().st_size<=16<<20,'hook input size')
+        data=path.read_bytes();total+=len(data);require(total<=256<<20 and hashlib.sha256(data).hexdigest()==pin,'hook input bytes/hash')
+        rows.append({'name':name,'file':file,'bytes':len(data),'sha256':pin});files.add(file)
+    require({p.relative_to(directory).as_posix() for p in directory.rglob('*') if p.is_file()}==files,'hook input file inventory')
+    return {'scope':'ATTEMPT_BYTES_ONLY_NOT_DEFINED_CLASS','index_sha256':hashlib.sha256(raw).hexdigest(),'rows':rows}
 
 def local(root,name):
     require(isinstance(name,str) and name and '\\' not in name and ':' not in name,'portable relative path required')
@@ -86,7 +105,8 @@ def validate_observation(observation,request,required,dump,request_hash):
     return rows
 
 def validate_manifest(m):
-    require(set(m)=={'schema','id','runtime_root','java_home','roots','files','inventory','forge','vanilla','asm','launchwrapper','required_classes','tools','identity_asm'},'manifest fields')
+    fields={'schema','id','runtime_root','java_home','roots','files','inventory','forge','vanilla','asm','launchwrapper','required_classes','tools','identity_asm'}
+    require(fields<=set(m) and set(m)<=fields|{'diagnostic'},'manifest fields')
     require(m['schema']=='FRESH_FORGE_OBSERVER_MANIFEST_V1' and re.fullmatch(r'[A-Za-z0-9_.-]+',m['id']),'manifest schema/id')
     root=Path(m['runtime_root']);java=Path(m['java_home'])
     require(root.is_absolute() and java.is_absolute(),'absolute runtime and Java paths required')
@@ -99,6 +119,15 @@ def validate_manifest(m):
     require(all(isinstance(v,dict) and set(v)=={'sha256','bytes'} and type(v['bytes']) is int and v['bytes']>=0 and re.fullmatch('[0-9a-f]{64}',v['sha256']) for v in m['inventory'].values()),'inventory facts')
     identity_asm=Path(m['identity_asm']);require(identity_asm.is_absolute() and identity_asm.is_file(),'explicit independent identity ASM required')
     require(m['tools']==tool_pins(java,identity_asm),'Java/Python/parser tool inventory drift')
+    if 'diagnostic' in m:
+        d=m['diagnostic']
+        require(isinstance(d,dict) and set(d)=={'mode','jar','jar_sha256','srg_jar','srg_jar_sha256','recipe','recipe_sha256'},'diagnostic fields')
+        require(d['mode']=='OFFLINE_V2_HOOK_DEFINITIONS_ONLY','diagnostic mode')
+        for role in ['jar','srg_jar','recipe']:
+            p=Path(d[role]);require(p.is_absolute() and p.resolve().is_relative_to(ROOT/'target') and p.is_file(),'diagnostic artifact must be an isolated target file')
+            require(sha(p)==d[role+'_sha256'],'diagnostic artifact drift')
+        recipe,recipe_hash=load_hashed(d['recipe']);require(recipe_hash==d['recipe_sha256'],'parsed diagnostic recipe drift')
+        require(recipe.get('kind')=='RUSTCRAFT_V2_WRITER_PLAN_RECIPE' and recipe.get('identity_mode')=='CANONICAL_ID_V2' and recipe.get('all_required_observed') is True,'diagnostic V2 recipe required')
     require(inventory(root,m['roots'],m['files'])==m['inventory'],'runtime input drift')
     return root,java
 
@@ -143,7 +172,7 @@ def observe(args):
         required=out/'required.txt';required.write_text('\n'.join(m['required_classes'])+'\n',encoding='utf-8')
         classes=out/'classes';classes.mkdir();dump=out/'definitions';dump.mkdir()
         jars=[local(game,p) for p in sorted(m['inventory']) if p.startswith('libraries/') and p.endswith('.jar')]
-        cp=os.pathsep.join(map(str,[*jars,local(game,m['forge']),local(game,m['vanilla'])]))
+        cp=os.pathsep.join(map(str,[*([Path(m['diagnostic']['jar'])] if 'diagnostic' in m else []),*jars,local(game,m['forge']),local(game,m['vanilla'])]))
         src=sorted((HERE/'java').rglob('*.java'))
         # Official Forge manifests contain relative optional classpath entries.
         # The explicit copied/pinned classpath is authoritative for this tool.
@@ -169,14 +198,20 @@ def observe(args):
             stdout,stderr=run('observer-control-'+mode,[java/'bin/java.exe','-Xmx128M','-Xverify:all','-javaagent:'+str(observer),'-Drustcraft.fresh.required='+str(control_required),'-Drustcraft.fresh.dump='+str(control_dump),'-cp',str(control_classes)+os.pathsep+str(classes),'ObserverControl',control_classes/'example/Fixture.class',mode],out,384,30)
             require(not stderr and stdout.strip()==('PASS_OBSERVER_CONTROL '+mode).encode(),'observer control result')
         stdout,stderr=run('python-controls',[sys.executable,'-B','-m','unittest','discover','-s',HERE,'-p','test_observe.py'],ROOT,256,30)
-        require(not stdout and b'Ran 6 tests' in stderr and stderr.rstrip().endswith(b'OK'),'Python controls failed')
-        receipt['java_observer_controls']=3;receipt['python_tests']=6;receipt['malformed_observation_variants']=21
+        require(not stdout and b'Ran 10 tests' in stderr and stderr.rstrip().endswith(b'OK'),'Python controls failed')
+        receipt['java_observer_controls']=3;receipt['python_tests']=10;receipt['malformed_observation_variants']=21;receipt['diagnostic_manifest_rejections']=9
         props={'required':required,'dump':dump,'result':out/'observation.json','session':request['session'],'challenge':request['challenge'],'requestSha256':sha(out/'request.json')}
-        argv=[java/'bin/java.exe','-Xmx1536M','-XX:+DisableAttachMechanism','-javaagent:'+str(observer),*[f'-Drustcraft.fresh.{k}={v}' for k,v in props.items()],'-cp',str(classes)+os.pathsep+cp,'net.minecraft.launchwrapper.Launch','--tweakClass','com.rustcraft.fresh.bootstrap.FreshTweaker','--gameDir',game]
+        diagnostic_flags=[]
+        if 'diagnostic' in m:
+            diagnostic_flags=['-Drustcraft.fresh.hookDefinitions=true','-Drustcraft.liveWriterDiagnostic=true','-Drustcraft.srgJar='+m['diagnostic']['srg_jar'],'-Drustcraft.fresh.hookInputDir='+str(out/'hook-inputs')]
+            receipt['diagnostic_inputs']=m['diagnostic']
+        argv=[java/'bin/java.exe','-Xmx1536M','-XX:+DisableAttachMechanism','-javaagent:'+str(observer),*diagnostic_flags,*[f'-Drustcraft.fresh.{k}={v}' for k,v in props.items()],'-cp',str(classes)+os.pathsep+cp,'net.minecraft.launchwrapper.Launch','--tweakClass','com.rustcraft.fresh.bootstrap.FreshTweaker','--gameDir',game]
         stdout,stderr=run('observe',argv,game,3072,180)
         require(stdout.count(b'RUSTCRAFT_FRESH_DEFINITIONS_COMPLETE')==1,'fresh completion marker')
-        observation=load(out/'observation.json')
+        observation,observation_hash=load_hashed(out/'observation.json')
         rows=validate_observation(observation,request,m['required_classes'],dump,sha(out/'request.json'))
+        if 'diagnostic' in m:
+            require([r['class'] for r in observation['transformers_before'][-3:]]==['com.rustcraft.coremod.SPacketChunkDataTransformer','com.rustcraft.coremod.LiveChunkOwnershipTransformer','com.rustcraft.coremod.LiveChunkPublicationTransformer'],'diagnostic transformer order/inventory')
         identities={}
         for start in range(0,len(rows),16):
             batch=rows[start:start+16];data,err=run('identity-'+str(start),[java/'bin/java.exe','-Xmx384M','-cp',str(identity_classes)+os.pathsep+m['identity_asm'],'com.rustcraft.coremod.CanonicalClassIdentityV2',*[local(dump,r['file']) for r in batch]],out,768,45)
@@ -185,7 +220,8 @@ def observe(args):
                 identity=parse_json(line);require(isinstance(identity,list) and len(identity)==5 and identity[:2]==['CANONICAL_ID_V2',row['name']] and identity[4]==row['raw_sha256'],'V2 identity raw/name binding')
                 identities[row['name']]={'schema':identity[0],'class_name':identity[1],'semantic_sha256':identity[2],'declaration_order_sha256':identity[3],'raw_sha256':identity[4]}
         write(out/'v2-identities.json',identities)
-        receipt.update(definition_count=len(rows),identities_sha256=sha(out/'v2-identities.json'),observation_sha256=sha(out/'observation.json'))
+        require(sha(out/'observation.json')==observation_hash,'observation changed after parsing')
+        receipt.update(definition_count=len(rows),identities_sha256=sha(out/'v2-identities.json'),observation_sha256=observation_hash)
         after=inventory(game,m['roots'],m['files']);receipt['private_inventory_after']=after
         require(after==m['inventory'],'private runtime/config drift during observation; preserve, do not qualify')
         require(validate_manifest(m)==(root,java),'input drift')
@@ -196,6 +232,9 @@ def observe(args):
         receipt['status']='PASS'
     except Exception as error:receipt['error']=type(error).__name__+': '+str(error)
     finally:
+        if (out/'hook-inputs').exists():
+            try:receipt['hook_input_observations']=hook_inputs(out/'hook-inputs',m['required_classes'])
+            except Exception as error:receipt.update(status='FAIL',hook_input_error=type(error).__name__+': '+str(error))
         receipt['sources_after']=sources();receipt['guard_after']=inspect(ROOT)
         if receipt['guard_after']['status']!='PASS' or receipt['sources_after']!=before:receipt.update(status='FAIL',error='isolation or source drift')
         receipt['elapsed_seconds']=time.monotonic()-started;write(out/'receipt.json',receipt)

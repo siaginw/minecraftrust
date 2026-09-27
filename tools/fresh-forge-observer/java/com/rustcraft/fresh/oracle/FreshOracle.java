@@ -28,6 +28,12 @@ public final class FreshOracle {
     public static void main(String[] args) throws Exception {
         if (!"SERVER".equals(FMLLaunchHandler.side().name()) || FMLLaunchHandler.isDeobfuscatedEnvironment())
             throw new IllegalStateException("wrong side or development environment");
+        if (Boolean.getBoolean("rustcraft.fresh.hookDefinitions")) {
+            if (!Boolean.getBoolean("rustcraft.liveWriterDiagnostic")) throw new IllegalStateException("diagnostic contract absent");
+            Launch.classLoader.registerTransformer("com.rustcraft.fresh.input.HookInputObserver");
+            for (String name : new String[]{"com.rustcraft.coremod.SPacketChunkDataTransformer", "com.rustcraft.coremod.LiveChunkOwnershipTransformer", "com.rustcraft.coremod.LiveChunkPublicationTransformer"})
+                Launch.classLoader.registerTransformer(name);
+        }
         Map<String, Object> result = new LinkedHashMap<String, Object>();
         result.put("schema", "FRESH_FORGE_DEFINITION_OBSERVATION_V1");
         result.put("session", System.getProperty("rustcraft.fresh.session"));

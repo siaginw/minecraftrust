@@ -14,7 +14,14 @@ public final class FreshTweaker implements ITweaker {
     }
     public void injectIntoClassLoader(LaunchClassLoader loader) {
         loader.addClassLoaderExclusion("com.rustcraft.fresh.agent.");
+        loader.addClassLoaderExclusion("com.rustcraft.fresh.input.");
         delegate.injectIntoClassLoader(loader);
+        if (Boolean.getBoolean("rustcraft.fresh.hookDefinitions")) {
+            loader.addClassLoaderExclusion("com.rustcraft.bridge.");
+            loader.addClassLoaderExclusion("com.rustcraft.coremod.");
+            loader.addTransformerExclusion("com.rustcraft.bridge.");
+            loader.addTransformerExclusion("com.rustcraft.coremod.");
+        }
     }
     public String getLaunchTarget() { return "com.rustcraft.fresh.oracle.FreshOracle"; }
     public String[] getLaunchArguments() { return delegate.getLaunchArguments(); }

@@ -1,7 +1,8 @@
 """Malformed/freshness/loader controls, independent of launching either runtime."""
-import copy,hashlib,tempfile,unittest
+import copy,hashlib,json,tempfile,unittest
+from unittest.mock import patch
 from pathlib import Path
-from observe import ROOT,inventory,local,validate_observation
+from observe import ROOT,inventory,local,validate_manifest,validate_observation,sha,load_hashed,hook_inputs
 
 class Contracts(unittest.TestCase):
     def setUp(self):
@@ -63,5 +64,43 @@ class Contracts(unittest.TestCase):
     def test_paths_reject_escape(self):
         for name in ['../outside','C:/outside','dir\\file','/absolute','']:
             with self.subTest(name=name),self.assertRaises(ValueError):local(self.root,name)
+    def diagnostic_manifest(self):
+        for name in ['forge.jar','vanilla.jar','asm.jar','launch.jar','diagnostic.jar','study.jar']:(self.root/name).write_bytes(name.encode())
+        recipe=self.root/'recipe.json';recipe.write_text(json.dumps({'kind':'RUSTCRAFT_V2_WRITER_PLAN_RECIPE','identity_mode':'CANONICAL_ID_V2','all_required_observed':True}))
+        return {'schema':'FRESH_FORGE_OBSERVER_MANIFEST_V1','id':'fixture','runtime_root':str(self.root),'java_home':str(self.root),'roots':[],'files':['forge.jar','vanilla.jar','asm.jar','launch.jar'],'inventory':inventory(self.root,[],['forge.jar','vanilla.jar','asm.jar','launch.jar']),'forge':'forge.jar','vanilla':'vanilla.jar','asm':'asm.jar','launchwrapper':'launch.jar','required_classes':['example/Fixture'],'tools':{},'identity_asm':str(self.root/'asm.jar'),'diagnostic':{'mode':'OFFLINE_V2_HOOK_DEFINITIONS_ONLY','jar':str(self.root/'diagnostic.jar'),'jar_sha256':sha(self.root/'diagnostic.jar'),'srg_jar':str(self.root/'study.jar'),'srg_jar_sha256':sha(self.root/'study.jar'),'recipe':str(recipe),'recipe_sha256':sha(recipe)}}
+    def test_diagnostic_requires_exact_mode_hashes_and_v2(self):
+        value=self.diagnostic_manifest()
+        with patch('observe.tool_pins',return_value={}):
+            self.assertEqual(validate_manifest(value),(self.root,self.root))
+            for key,bad in [('mode','LIVE'),('jar_sha256','0'*64),('srg_jar_sha256','0'*64),('recipe_sha256','0'*64),('unknown',True)]:
+                changed=copy.deepcopy(value);changed['diagnostic'][key]=bad
+                with self.subTest(key=key),self.assertRaises(ValueError):validate_manifest(changed)
+            recipe=self.root/'recipe.json';recipe.write_text(json.dumps({'kind':'RUSTCRAFT_V2_WRITER_PLAN_RECIPE','identity_mode':'CANONICAL','all_required_observed':True}))
+            value['diagnostic']['recipe_sha256']=sha(recipe)
+            with self.assertRaises(ValueError):validate_manifest(value)
+    def test_diagnostic_cannot_execute_original_or_unpinned_path(self):
+        value=self.diagnostic_manifest()
+        with patch('observe.tool_pins',return_value={}):
+            for path in [str(ROOT/'Cargo.toml'),r'D:\minecraftrust\target\legacy.jar','relative.jar']:
+                changed=copy.deepcopy(value);changed['diagnostic']['jar']=path
+                with self.subTest(path=path),self.assertRaises(ValueError):validate_manifest(changed)
+
+    def test_parsed_json_and_hash_share_one_read(self):
+        first=b'{"value":1}';second=b'{"value":2}'
+        with patch.object(Path,'read_bytes',side_effect=[first,second]) as read:
+            value,pin=load_hashed(self.root/'swap.json')
+        self.assertEqual(read.call_count,1);self.assertEqual(value,{'value':1})
+        self.assertEqual(pin,hashlib.sha256(first).hexdigest())
+
+    def test_hook_input_attempt_inventory_rejects_tampering(self):
+        root=self.root/'inputs';root.mkdir();data=b'attempt';(root/'0000.bin').write_bytes(data)
+        row='example/Fixture\t0000.bin\t'+hashlib.sha256(data).hexdigest()+'\n'
+        index=root/'inputs.tsv';index.write_text(row,encoding='utf-8')
+        self.assertEqual(hook_inputs(root,['example/Fixture'])['scope'],'ATTEMPT_BYTES_ONLY_NOT_DEFINED_CLASS')
+        for changed in [row.replace('0000.bin','../escape.bin'),row.replace('example/Fixture','example/Foreign'),row+row,row.replace(hashlib.sha256(data).hexdigest(),'0'*64)]:
+            index.write_text(changed,encoding='utf-8')
+            with self.assertRaises(ValueError):hook_inputs(root,['example/Fixture'])
+        index.write_text(row,encoding='utf-8');(root/'extra.bin').write_bytes(b'extra')
+        with self.assertRaises(ValueError):hook_inputs(root,['example/Fixture'])
 
 if __name__=='__main__':unittest.main()
