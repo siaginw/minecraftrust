@@ -126,3 +126,109 @@ control set re-proven. Neither was started.
   and the hooked classes genuinely carry `MixinMerged.sessionId`). Artifact identities
   for the Forge 2846 universal jar, the Minecraft server jar, `asm-all` and
   `launchwrapper` are resolved, as are the three embedded Forge resource digests.
+
+## Resolution: both blockers cleared, measured
+
+This section supersedes the "stopped, not waived" status above. Both blockers are
+resolved, each by a measurement recorded in a tool rather than by a judgement.
+
+### Blocker 1 — the certificate is an ADMISSION certificate, and the engine now reads it as one
+
+The Java runtime gate was correct all along. `LiveChunkOwnershipTransformer` receives the
+**pre-writer** buffer and `SessionBoundIdentityCertificate.authorize` checks
+`exactSemanticSha256` against it, which is the only buffer it has. The engine was the
+side that was wrong: it compared the same field against `classes[name]`, the recomputed
+**post-writer** identity, which no single field can equal because the writers inject hooks.
+
+`QualificationEngine.session_evidence` now resolves the certificate against `pre_classes`,
+raises `Missing` if either identity was not recomputed, and adds a second check the old
+code did not have: the post-writer identity must *differ* from the admitted one, so a
+record claiming a certificate where the writers proved nothing is refused rather than
+accepted. The certificate the engine checks is the same document the runtime enforces —
+there is no second, offline-issued certificate.
+
+A certificate that authorizes PRE says nothing about what any transformer did afterwards,
+so §4 added a separate same-process chain — `PRE_WRITER → RUSTCRAFT_POST_WRITER →
+DOWNSTREAM_TRANSFORMER → FINAL_DEFINED` — with dense ascending ordinals, adjacent-edge
+hash continuity, per-stage transformer identity, hook call counts and exception handlers.
+The FINAL stage is bound to the frame witness rather than to the chain document, because
+a chain that only quotes itself proves nothing.
+
+`RUSTCRAFT_POST_WRITER` output is independently recomputed by the engine from the
+observed class, and the FINAL stage's bytes and defining loader must match what the
+launch itself observed. Absent chain evidence is `INCOMPLETE`, not `FAIL` — the run is
+unpromoted, not condemned. Evidence that is present and wrong is `FAIL`.
+
+Fourteen end-to-end controls now reach a real `PASS / OFFLINE_QUALIFIED` with
+`production_authority: false`, including the two separately compiled classfiles that
+share a binary name and differ by a declared writer effect, so the pre/post distinction
+is exercised on real bytes rather than asserted. Engine suite 29/29.
+
+### Blocker 2 — the ASM runtime ABI is equivalent; the sources were the problem
+
+Measured, not assumed, by `tools/testing/asm_abi.py`. Every symbol RustCraft links
+against is read out of the constant pools of its own compiled classfiles — what the JVM
+resolves at link time, not what the source said — and classified against both jars.
+
+```
+verdict: RUNTIME_ABI_EQUIVALENT
+referenced_symbols: 191
+IDENTICAL_RUNTIME_ABI       149
+SIGNATURE_ONLY_DIFFERENCE    42
+REAL_ABI_DIFFERENCE          0
+MISSING                      0
+```
+
+All 42 signature-only differences are `List<Foo>` against the erased `List` — a
+`Signature` attribute, which erasure removes and the linker never reads. Members resolve
+along the superclass chain, because a reference to an inherited member names only the
+subclass; nine of the initial `MISSING` results were that lookup bug, not a finding. The
+join key is name plus parameter list with the return type compared separately, because a
+changed return type is the difference that matters and keying on the full descriptor makes
+it unfindable.
+
+The verdict is worth nothing unless the classifier can detect a break, so
+`tools/testing/test_asm_abi.py` builds a real jar with one entry replaced by a real
+compiled classfile and asserts the classifier names that exact break: widened field →
+`REAL_ABI_DIFFERENCE`, removed field → `MISSING`, severed superclass chain → `MISSING` on
+the inherited members, lost type argument → `SIGNATURE_ONLY`, untouched member →
+`IDENTICAL`, and a broken jar flips the verdict. 10/10.
+
+The twelve real compile errors were therefore what §7 said they were. `AsmTreeCompat`
+holds the only raw casts in the tree and fifteen call sites route through it. No
+reflection, no second ASM on the classpath, no `Object` loops: the casts insert a
+`checkcast` where the compiler emits one and collapse where it does not, so a list that
+does not hold its declared type fails at the use rather than producing a silently wrong
+identity.
+
+Same sources, both pins (§10): the identity tool builds against each target's own ASM
+with receipts recording the jar and its hash, and the harness bootstrap compiles 116
+classfiles against both jars with zero errors.
+
+Runtime linkage, which a static comparison cannot establish (§11).
+`tools/testing/asm_linkage_proof.py` enumerates ASM jars in each runtime tree and
+**refuses to report anything** if a Clean Forge jar is present in the Revelation tree,
+including one merely downloaded — a jar on disk is a jar someone can put on a classpath.
+Revelation holds one distinct ASM build, `asm-all-5.2`, in two identical copies. The
+identity tool built against each jar then runs on twelve real transformed Minecraft
+classfiles with that target's ASM as the only ASM present, and the receipts are
+byte-identical: `RUNTIME_LINKAGE_EQUIVALENT`.
+
+## A pre-existing failure found while re-running the controls, not caused by this work
+
+`tools/writer-plan-v2-tests/run.py` fails at HEAD, before any of the above. Its
+`historical-raw` control regenerates `LiveWriterPlan.java` from the committed profile and
+manifest and asserts the result is byte-identical to the committed file. It is not:
+
+```
+committed   REQUIRED_HOOKS_MANIFEST_SHA256 = 738f672dd699ffb1…
+regenerated                              = 9fa1e033ef715b33…   (the committed manifest)
+```
+
+Reproduced from `HEAD` blobs alone, with the working tree's modified files set aside, so
+it is independent of the ASM work. The generated plan records a manifest hash that the
+committed `required-live-writer-hooks.json` does not have.
+
+It was not regenerated here. `LiveWriterPlan.java` is the plan the live transformers
+enforce, and changing it is a scope change that requires its own requalification — not a
+cleanup to fold into an ASM compatibility fix. It is reported for a decision.
