@@ -301,11 +301,29 @@
     {
       "id": "H13",
       "title": "LIGHTING / COLLISION PROTOTYPES",
-      "status": "PENDING",
-      "implementation": [],
-      "validation": [],
-      "evidence": [],
-      "commit": null
+      "status": "PROTOTYPE_VALIDATED_BOUNDED_PRIMITIVES_ONLY",
+      "implementation": [
+        "tools/lighting-collision-experiment",
+        "docs/research/lighting-collision.md"
+      ],
+      "validation": [
+        "Independent root full rerun PASS:7 Rust tests,4 Job controls,strict scoped fmt/clippy/release,3 actual initialized offline Forge JVMs;25 collision scenes,30 light updates,45 assertions,55 exact fixtures per fork;378 complete-operation timing rows"
+      ],
+      "evidence": [
+        "machine/architecture-hardening/h13-light-collision.json"
+      ],
+      "commit": null,
+      "outstanding": [
+        "Primitive ordered AABB queries only; no full Entity.move, stepping, world border or entity interactions.",
+        "Finite block-light grid only; no skylight, full world/chunk boundaries or dynamic mod behavior.",
+        "Correct initial grid and complete dirty set are fixture preconditions, not generated runtime qualifications.",
+        "No H4/H6 production capture identity, invalidation or runtime publication integration.",
+        "Final light values only in callback-free domain; intermediate callback order not qualified.",
+        "Java retained objects versus native full capture on every operation; no general performance claim.",
+        "Source-defined copy payloads known; allocation counts, RSS and all internal copies remain unknown.",
+        "Minecraft binaries and derived binary fixtures target-only; retained records contain identities and digests.",
+        "Offline Clean Forge only; no Revelation,1.12.1,live shadow or production authority."
+      ]
     },
     {
       "id": "H14",
@@ -349,7 +367,7 @@
       "evidence": [
         "machine/architecture-hardening/h15-observability.json"
       ],
-      "commit": null,
+      "commit": "40983829d86f5717881db8a73dc4599d08dc9103",
       "outstanding": [
         "No live tick/MSPT or complete mod-dispatch adapter",
         "No production network/queue/lock/snapshot-retention/allocator adapters",

@@ -421,6 +421,62 @@
       "installed_scope": "NOT_INSTALLED",
       "evidence": "machine/architecture-hardening/h15-observability.json",
       "provenance": "tools/observability/PROVENANCE.json"
+    },
+    {
+      "candidate": "Starlight",
+      "version": "cca03d62da48e876ac79196bad16864e8a96bbeb",
+      "license": "LGPL-3.0-only",
+      "decision": "BORROW_ALGORITHM",
+      "reason": "Study packed position queues, dirty work and reduced reads; no code copy, no modern semantics transplant",
+      "performance_value": "Bounded H13 complete-operation evidence only; no attributed repository speedup",
+      "migration_value": "Exact primitive parity plus explicit ownership,dependency and callback boundaries",
+      "integration_risk": "Modern engine/physics semantics are not Minecraft1.12.2 Forge qualification; no production integration",
+      "installed_scope": "NOT_INSTALLED",
+      "evidence": "machine/architecture-hardening/h13-light-collision.json",
+      "provenance": "tools/lighting-collision-experiment/provenance.json",
+      "source": "https://github.com/PaperMC/Starlight/blob/cca03d62da48e876ac79196bad16864e8a96bbeb/TECHNICAL_DETAILS.md"
+    },
+    {
+      "candidate": "Folia",
+      "version": "612d9bd8569fe1a6008a05325af3fad66ef1cef7",
+      "license": "GPL-3.0-only",
+      "decision": "STUDY",
+      "reason": "Ownership boundaries only; no scheduler or code reuse",
+      "performance_value": "Bounded H13 complete-operation evidence only; no attributed repository speedup",
+      "migration_value": "Exact primitive parity plus explicit ownership,dependency and callback boundaries",
+      "integration_risk": "Modern engine/physics semantics are not Minecraft1.12.2 Forge qualification; no production integration",
+      "installed_scope": "NOT_INSTALLED",
+      "evidence": "machine/architecture-hardening/h13-light-collision.json",
+      "provenance": "tools/lighting-collision-experiment/provenance.json",
+      "source": "https://github.com/PaperMC/Folia/tree/612d9bd8569fe1a6008a05325af3fad66ef1cef7"
+    },
+    {
+      "candidate": "Parry f64",
+      "version": "3383f51cbbe9af70565427e7a66c605e1557c1fc",
+      "license": "Apache-2.0",
+      "decision": "STUDY",
+      "reason": "Spatial acceleration candidate; general collision APIs do not define Minecraft strict-contact and ordered clipping semantics",
+      "performance_value": "Bounded H13 complete-operation evidence only; no attributed repository speedup",
+      "migration_value": "Exact primitive parity plus explicit ownership,dependency and callback boundaries",
+      "integration_risk": "Modern engine/physics semantics are not Minecraft1.12.2 Forge qualification; no production integration",
+      "installed_scope": "NOT_INSTALLED",
+      "evidence": "machine/architecture-hardening/h13-light-collision.json",
+      "provenance": "tools/lighting-collision-experiment/provenance.json",
+      "source": "https://github.com/dimforge/parry/tree/3383f51cbbe9af70565427e7a66c605e1557c1fc"
+    },
+    {
+      "candidate": "glam DVec3",
+      "version": "0090cbeca303d076d87a8034a75ede85177247bc",
+      "license": "MIT OR Apache-2.0",
+      "decision": "STUDY",
+      "reason": "Double vector layout candidate only; retain explicit scalar operation order for current exact primitive qualification; no dependency installed.",
+      "performance_value": "Bounded H13 complete-operation evidence only; no attributed repository speedup",
+      "migration_value": "Exact primitive parity plus explicit ownership,dependency and callback boundaries",
+      "integration_risk": "Modern engine/physics semantics are not Minecraft1.12.2 Forge qualification; no production integration",
+      "installed_scope": "NOT_INSTALLED",
+      "evidence": "machine/architecture-hardening/h13-light-collision.json",
+      "provenance": "tools/lighting-collision-experiment/provenance.json",
+      "source": "https://github.com/bitshifter/glam-rs/tree/0090cbeca303d076d87a8034a75ede85177247bc"
     }
   ]
 }
