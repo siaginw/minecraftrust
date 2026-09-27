@@ -53,6 +53,12 @@ STAGE_RUSTCRAFT = "RUSTCRAFT_POST_WRITER"
 STAGE_DOWNSTREAM = "DOWNSTREAM_TRANSFORMER"
 STAGE_FINAL = "FINAL_DEFINED"
 
+#: Per-hook and per-exception-path shape. `required_calls` is only meaningful
+#: where the count was declared, so a later stage that merely observes survival
+#: may omit it.
+CHAIN_HOOK_KEYS = ("id", "class", "method", "descriptor", "observed_calls")
+CHAIN_PATH_KEYS = ("id", "class", "method", "descriptor", "handler")
+
 #: The only transformers whose output may be labelled RUSTCRAFT_POST_WRITER.
 RUSTCRAFT_TRANSFORMERS = (
     "com.rustcraft.coremod.LiveChunkOwnershipTransformer",
@@ -691,7 +697,7 @@ class QualificationEngine:
                 raise Invalid("unexpected or duplicate session acquisition record: " + name)
             digest(row["pre_writer_raw_sha256"])
             digest(row["post_writer_raw_sha256"])
-            if row["pre_writer_raw_sha256"] != row["post_writer_raw_sha256"]:
+            if row["pre_writer_raw_sha256"] == row["post_writer_raw_sha256"]:
                 # The writers must have actually changed something; a record
                 # where pre equals post is not an acquisition, it is a no-op.
                 raise Invalid("session acquisition record shows no writer effect: " + name)
@@ -801,9 +807,10 @@ class QualificationEngine:
         downstream = chain["downstream_transformers_after_live_writers"]
         if not isinstance(downstream, list) or any(not isinstance(name, str) or not name for name in downstream):
             raise Invalid("downstream_transformers_after_live_writers must be a transformer name list")
+        definitions = self.final_definitions(observed)
         proven = []
         for row in chain["classes"]:
-            proven.append(self.chain_row(row, block, classes, bool(downstream), chain))
+            proven.append(self.chain_row(row, block, classes, bool(downstream), chain, definitions))
         return {"required": True, "chain_schema": CHAIN_SCHEMA,
                 "process_id": block["process_id"],
                 "transformation_session_id": block["transformation_session_id"],
@@ -811,7 +818,33 @@ class QualificationEngine:
                 "downstream_transformers_after_live_writers": downstream,
                 "classes": proven}
 
-    def chain_row(self, row, block, classes, has_downstream, chain):
+    def final_definitions(self, observed):
+        """The JVM-defined bytes the real launch observed, keyed by binary name.
+
+        A chain that only quotes itself proves nothing: anyone can write a
+        plausible four-stage story. The FINAL_DEFINED stage is therefore bound
+        to the frame witness, which is produced by the loader inside the launch
+        and cannot be authored by the same document that writes the chain.
+        """
+        witness = observed.get("frame_relation_witness")
+        if witness is None:
+            raise Missing("the final chain stage cannot be bound without the launch's frame witness")
+        if isinstance(witness, str):
+            try:
+                witness = parse_json(witness)
+            except (Invalid, json.JSONDecodeError) as error:
+                raise Invalid(f"malformed frame-relation witness: {error}") from error
+        definitions = {}
+        for phase in witness.get("phases", []):
+            if phase.get("phase") != "post":
+                continue
+            for row in phase.get("verification", []):
+                definitions[row["name"].replace(".", "/")] = row
+        if not definitions:
+            raise Missing("the frame witness observed no post-phase class definitions")
+        return definitions
+
+    def chain_row(self, row, block, classes, has_downstream, chain, definitions):
         name = row.get("binary_name", "").replace(".", "/")
         keys(row, ("binary_name", "process_id", "transformation_session_id",
                    "defining_loader_identity", "stages"))
@@ -833,10 +866,15 @@ class QualificationEngine:
         if ordered[1] != STAGE_RUSTCRAFT:
             raise Invalid("RUSTCRAFT_POST must directly follow PRE_WRITER: " + name)
         if has_downstream and ordered[2:-1] != [STAGE_DOWNSTREAM]:
-            raise Missing("downstream transformers ran, so an observed FINAL_DEFINED stage is required: " + name)
+            # RustCraft is not assumed to be the last transformer. A chain that
+            # discloses a downstream transformer and then stops at the writers
+            # is asserting that the writer output is what the loader defined --
+            # which the disclosure itself contradicts.
+            raise Invalid("a disclosed downstream transformer must appear as its own stage: " + name)
         if not has_downstream and len(ordered) != 3:
             raise Invalid("no downstream transformer ran, so the chain must be PRE, RUSTCRAFT_POST, FINAL: " + name)
         previous = None
+        rustcraft_output = None
         for index, stage in enumerate(stages):
             keys(stage, ("stage", "ordinal", "process_id", "transformation_session_id",
                          "defining_loader_identity", "class_name", "transformer",
@@ -864,15 +902,15 @@ class QualificationEngine:
             if stage["stage"] == STAGE_PRE:
                 if stage["transformer"] != "none" and stage["transformer"] != "":
                     raise Invalid("the PRE_WRITER stage must name no transformer: " + name)
-                if stage["input_raw_sha256"] != certificate["pre_writer_raw_sha256"]:
-                    raise Invalid("PRE_WRITER input is not the bytes the certificate admits: " + name)
+                if stage["output_raw_sha256"] != certificate["pre_writer_raw_sha256"]:
+                    raise Invalid("PRE_WRITER output is not the bytes the certificate admits: " + name)
                 if stage["exact_semantic_sha256"] != certificate["exact_semantic_sha256"] \
                         or stage["exact_declaration_order_sha256"] != certificate["exact_declaration_order_sha256"]:
                     raise Invalid("PRE_WRITER identity is not the certified admission identity: " + name)
                 if stage["session_invariant_sha256"] != certificate["session_invariant_sha256"]:
                     raise Invalid("PRE_WRITER session invariant is not the certified invariant: " + name)
             elif stage["stage"] == STAGE_RUSTCRAFT:
-                if not RUSTCRAFT_TRANSFORMERS.issuperset({stage["transformer"]}):
+                if stage["transformer"] not in RUSTCRAFT_TRANSFORMERS:
                     raise Invalid("RUSTCRAFT_POST names a transformer that is not a live writer: " + name)
                 produced = classes.get(name)
                 if produced is None:
@@ -885,6 +923,7 @@ class QualificationEngine:
                     # itself and did not take the chain's word for them.
                     raise Invalid("RUSTCRAFT_POST identity is not the engine's recomputed post-writer identity: " + name)
                 self.check_rustcraft_effect(stage, name)
+                rustcraft_output = stage["output_raw_sha256"]
             elif stage["stage"] == STAGE_DOWNSTREAM:
                 if not chain["downstream_transformers_after_live_writers"]:
                     raise Invalid("a DOWNSTREAM stage was recorded with no downstream transformer: " + name)
@@ -895,6 +934,16 @@ class QualificationEngine:
                 if stage["transformer"] != "class-loader-definition":
                     raise Invalid("the FINAL_DEFINED stage must be the loader definition: " + name)
                 self.check_hook_survival(stage, name, "final")
+                # Independently observed: the launch's own witness, not the chain.
+                defined = definitions.get(name)
+                if defined is None:
+                    raise Missing("no post-phase class definition was observed for " + name)
+                if stage["output_raw_sha256"] != defined["observed_raw_sha256"]:
+                    raise Invalid("the FINAL_DEFINED bytes are not the bytes the launch observed: " + name)
+                if stage["defining_loader_identity"] != defined["defining_loader"]:
+                    raise Invalid("the FINAL_DEFINED stage was not defined by the reported loader: " + name)
+                if defined.get("rustcraft_post_writer_sha256") != rustcraft_output:
+                    raise Invalid("the launch's witness does not confirm the RUSTCRAFT_POST output: " + name)
             else:
                 raise Invalid("unknown chain stage: " + str(stage["stage"]))
         return {"binary_name": name, "stages": [s["stage"] for s in stages],
@@ -908,7 +957,7 @@ class QualificationEngine:
         if not isinstance(stage["exception_paths"], list) or not stage["exception_paths"]:
             raise Invalid("RUSTCRAFT_POST declares no exception paths: " + name)
         for hook in stage["rustcraft_hooks"]:
-            keys(hook, ("id", "class", "method", "descriptor", "required_calls", "observed_calls"))
+            keys(hook, (*CHAIN_HOOK_KEYS, "required_calls"))
             if hook["class"].replace(".", "/") != name:
                 raise Invalid("a declared hook belongs to a different class: " + name)
             if not isinstance(hook["required_calls"], int) or not isinstance(hook["observed_calls"], int):
@@ -916,7 +965,7 @@ class QualificationEngine:
             if hook["required_calls"] != hook["observed_calls"]:
                 raise Invalid("declared hook call count differs from the observed count: " + name + " " + hook["id"])
         for path in stage["exception_paths"]:
-            keys(path, ("id", "class", "method", "descriptor", "handler"))
+            keys(path, CHAIN_PATH_KEYS)
             if path["class"].replace(".", "/") != name:
                 raise Invalid("a declared exception path belongs to a different class: " + name)
             if not isinstance(path["handler"], str) or not path["handler"]:
@@ -933,7 +982,9 @@ class QualificationEngine:
         if not isinstance(stage["rustcraft_hooks"], list) or not stage["rustcraft_hooks"]:
             raise Invalid(f"{where} stage reports no RustCraft hooks: " + name)
         for hook in stage["rustcraft_hooks"]:
-            keys(hook, ("id", "observed_calls"))
+            keys(hook, CHAIN_HOOK_KEYS, ("required_calls",))
+            if hook["class"].replace(".", "/") != name:
+                raise Invalid(f"a surviving hook belongs to a different class: " + name)
             if not isinstance(hook["observed_calls"], int):
                 raise Invalid("hook call counts must be integers: " + name)
             if hook["observed_calls"] < 1:
@@ -941,7 +992,9 @@ class QualificationEngine:
         if not isinstance(stage["exception_paths"], list) or not stage["exception_paths"]:
             raise Invalid(f"{where} stage reports no exception coverage: " + name)
         for path in stage["exception_paths"]:
-            keys(path, ("id", "handler"))
+            keys(path, CHAIN_PATH_KEYS)
+            if path["class"].replace(".", "/") != name:
+                raise Invalid(f"a surviving exception path belongs to a different class: " + name)
             if not isinstance(path["handler"], str) or not path["handler"]:
                 raise Invalid(f"an exception path lost its handler at the {where} stage: " + name + " " + path["id"])
 

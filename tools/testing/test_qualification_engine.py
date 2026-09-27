@@ -15,6 +15,7 @@ an actual launch.
 from __future__ import annotations
 
 import copy
+import hashlib
 import json
 import os
 from pathlib import Path
@@ -24,8 +25,9 @@ import tempfile
 import unittest
 from unittest.mock import patch
 
+from tools.testing import session_bound_certificate as certificate
 from tools.testing.qualification_engine import QualificationEngine, Invalid, Missing, parse_json, sha, strict_lines
-from tools.testing.qualification_certificate import Maturity as M
+from tools.testing.qualification_certificate import Maturity as M, digest_json
 
 
 COLLECTOR = r'''
@@ -39,26 +41,38 @@ if mode=='stderr': print('unexpected successful-process diagnostic',file=sys.std
 if mode=='empty': sys.exit(0)
 if mode=='malformed-output': print('{broken');sys.exit(0)
 raw=pathlib.Path(c['fixture']).read_bytes()
-if mode=='class-drift': raw=raw.replace(b'literal',b'literaX')
+S=c.get('session')
 classes=[];pre=[]
-for target,collection in [('classes',classes),('pre',pre)]:
- path=folder/target/'Fixture.class';path.parent.mkdir();path.write_bytes(raw)
- collection.append({'name':'example/Fixture','file':str(path.relative_to(folder)).replace('\\','/'),'raw_sha256':sha(path)})
+# The post-writer section is what the collector was handed; the pre-writer
+# section is the same buffer before the writers ran. In exact mode they are the
+# same file, which is the point: nothing transformed it.
+for target,collection,source in [('classes',classes,c['fixture']),('pre',pre,c['pre_fixture'] if S else c['fixture'])]:
+    data=pathlib.Path(source).read_bytes()
+    if mode=='class-drift' and not S: data=data.replace(b'literal',b'literaX')
+    path=folder/target/(('SessionFixture' if S else 'Fixture')+'.class');path.parent.mkdir();path.write_bytes(data)
+    collection.append({'name':('example/SessionFixture' if S else 'example/Fixture'),'file':str(path.relative_to(folder)).replace('\\','/'),'raw_sha256':sha(path)})
 control={'schema':'RUSTCRAFT_NEGATIVE_CONTROL_V2','session':r['session'],'challenge':r['challenge'],'request_sha256':sha(request_path),'id':'raw-mutation','outcome':'CHANGED','measurements':{'before':hashlib.sha256(raw).hexdigest(),'after':hashlib.sha256(bytes([raw[0]^1])+raw[1:]).hexdigest()}}
 control_path=folder/'control.json';control_path.write_text(json.dumps(control))
-site={'id':'site-1','class':'example/Fixture','method':'exercise','descriptor':'(I)V','status':'PASS','raw_sha256':classes[0]['raw_sha256']}
+site={'id':'site-1','class':('example/SessionFixture' if S else 'example/Fixture'),'method':'exercise','descriptor':'(I)V','status':'PASS','raw_sha256':classes[0]['raw_sha256']}
 # A SYNTHETIC frame witness standing in for the real-launch one. The real witness
 # is produced inside a real Forge process, which this harness deliberately does
 # not start; what is under test here is the engine's refusal surface, so each
-# negative mode breaks exactly one binding the contract relies on.
-LOADER='synthetic.loader.Loader';LOADER_ID=LOADER+'@0a0b0c[]'
+# negative mode breaks exactly one binding the frame contract relies on.
+# In session mode the digests are the real measured ones for the two separately
+# compiled fixture classfiles, and the class genuinely carries a masked
+# MixinMerged.sessionId, so the admission certificate is a real certificate
+# rather than a placeholder.
+LOADER=(S['loader_class'] if S else 'synthetic.loader.Loader')
+LOADER_ID=(S['loader'] if S else LOADER+'@0a0b0c[]')
 def digest(seed): return hashlib.sha256(seed.encode()).hexdigest()
-PRE=digest('pre');DEF=digest('defined');POST=digest('post')
+PRE=(S['pre_sha'] if S else digest('pre'));DEF=(S['defined_sha'] if S else digest('defined'));POST=(S['post_sha'] if S else digest('post'))
+SEM=(S['pre_semantic'] if S else digest('s1'));ORD=(S['pre_order'] if S else digest('o1'))
+NAME=('example/SessionFixture' if S else 'example/Fixture')
 def phase(name):
     if name=='pre':
-        return {'phase':'pre','loader':LOADER_ID,'verification':[{'name':'example/Fixture','phase':'pre','status':'OBSERVED_NOT_DEFINED_IN_THIS_PROCESS','raw_sha256':PRE,'defined_by_transforming_loader':LOADER_ID,'semantic_sha256':digest('s1'),'declaration_order_sha256':digest('o1'),'jvm_verified':False,'reason':'the loader only ever defined the buffer the transformer returned; these pre-writer bytes were consumed, never defined'}],'resolutions':[{'type':'java/lang/Object','class_id':'java.lang.Object','defining_loader':None,'error':None}],'assignability':[{'source':'java/lang/Object','target':'java/lang/Object','value':True,'witness':'IS_ASSIGNABLE_FROM_ON_DEFINED_CLASSES'}],'hierarchy':[{'name':'java/lang/Object','defining_loader':LOADER_ID}],'required_types':1,'assignability_queries':1}
-    return {'phase':'post','loader':LOADER_ID,'verification':[{'name':'example/Fixture','phase':'post','status':'VERIFIED','raw_sha256':DEF,'observed_raw_sha256':DEF,'rustcraft_post_writer_sha256':POST,'defined_bytes_equal_rustcraft_output':False,'same_buffer_identity':'DEFINED_BYTES_INDEPENDENTLY_OBSERVED; A_DOWNSTREAM_TRANSFORMER_ALSO_RAN','defining_loader':LOADER_ID,'initialized':True,'initialized_before_observation':True,'initialized_after_observation':True,'verification_note':'recorded, not asserted','semantic_sha256':digest('s1'),'declaration_order_sha256':digest('o1'),'trigger':'REAL_LAUNCHCLASSLOADER_DECLARED_METHODS_V1','verify_local':False,'verify_remote':True}],'resolutions':[{'type':'java/lang/Object','class_id':'java.lang.Object','defining_loader':None,'error':None}],'assignability':[{'source':'java/lang/Object','target':'java/lang/Object','value':True,'witness':'IS_ASSIGNABLE_FROM_ON_DEFINED_CLASSES'}],'hierarchy':[{'name':'java/lang/Object','defining_loader':LOADER_ID}],'required_types':1,'assignability_queries':1}
-witness={'schema':'QUALIFIED_FRAME_WITNESS_V1','scope':{'model':'REAL_FORGE_LAUNCH_V1','status':'CLOSED','observer_assurance':'synthetic stand-in','loader_assurance':'synthetic stand-in','no_static_oracle':True,'production_authority':False},'loader_identity':LOADER_ID,'loader_class':LOADER,'phase_summaries':[{'phase':'pre','whole_classes_verified':0,'required_types':1,'assignability_queries':1,'loader':LOADER_ID},{'phase':'post','whole_classes_verified':1,'required_types':1,'assignability_queries':1,'loader':LOADER_ID}],'acquisition':[{'ordinal':1,'binary_name':'example.Fixture','pre_writer_raw_sha256':PRE,'post_writer_raw_sha256':POST,'exact_semantic_sha256':digest('s1'),'hook_placement':'PLACED','definition_succeeded':True,'defined_class_identity':'example.Fixture@1','defining_loader_identity':LOADER_ID,'session_invariant_sha256':None,'certifiable':False}],'chain_of_custody':[{'ordinal':1,'binary_name':'example/Fixture','post_writer_raw_sha256':POST,'linked_to_next_stage':None,'is_final_stage':True,'definition_bound':True,'defined_class_identity':'example.Fixture@1','defining_loader_identity':LOADER_ID,'certifiable':False}],'downstream_transformers_after_live_writers':['synthetic.DownstreamTransformer'],'production_authority':False,'phases':[phase('pre'),phase('post')]}
+        return {'phase':'pre','loader':LOADER_ID,'verification':[{'name':NAME,'phase':'pre','status':'OBSERVED_NOT_DEFINED_IN_THIS_PROCESS','raw_sha256':PRE,'defined_by_transforming_loader':LOADER_ID,'semantic_sha256':SEM,'declaration_order_sha256':ORD,'jvm_verified':False,'reason':'the loader only ever defined the buffer the transformer returned; these pre-writer bytes were consumed, never defined'}],'resolutions':[{'type':'java/lang/Object','class_id':'java.lang.Object','defining_loader':None,'error':None}],'assignability':[{'source':'java/lang/Object','target':'java/lang/Object','value':True,'witness':'IS_ASSIGNABLE_FROM_ON_DEFINED_CLASSES'}],'hierarchy':[{'name':'java/lang/Object','defining_loader':LOADER_ID}],'required_types':1,'assignability_queries':1}
+    return {'phase':'post','loader':LOADER_ID,'verification':[{'name':NAME,'phase':'post','status':'VERIFIED','raw_sha256':DEF,'observed_raw_sha256':DEF,'rustcraft_post_writer_sha256':POST,'defined_bytes_equal_rustcraft_output':False,'same_buffer_identity':'DEFINED_BYTES_INDEPENDENTLY_OBSERVED; A_DOWNSTREAM_TRANSFORMER_ALSO_RAN','defining_loader':LOADER_ID,'initialized':True,'initialized_before_observation':True,'initialized_after_observation':True,'verification_note':'recorded, not asserted','semantic_sha256':SEM,'declaration_order_sha256':ORD,'trigger':'REAL_LAUNCHCLASSLOADER_DECLARED_METHODS_V1','verify_local':False,'verify_remote':True}],'resolutions':[{'type':'java/lang/Object','class_id':'java.lang.Object','defining_loader':None,'error':None}],'assignability':[{'source':'java/lang/Object','target':'java/lang/Object','value':True,'witness':'IS_ASSIGNABLE_FROM_ON_DEFINED_CLASSES'}],'hierarchy':[{'name':'java/lang/Object','defining_loader':LOADER_ID}],'required_types':1,'assignability_queries':1}
+witness={'schema':'QUALIFIED_FRAME_WITNESS_V1','scope':{'model':'REAL_FORGE_LAUNCH_V1','status':'CLOSED','observer_assurance':'synthetic stand-in','loader_assurance':'synthetic stand-in','no_static_oracle':True,'production_authority':False},'loader_identity':LOADER_ID,'loader_class':LOADER,'phase_summaries':[{'phase':'pre','whole_classes_verified':0,'required_types':1,'assignability_queries':1,'loader':LOADER_ID},{'phase':'post','whole_classes_verified':1,'required_types':1,'assignability_queries':1,'loader':LOADER_ID}],'acquisition':[{'ordinal':1,'binary_name':NAME,'pre_writer_raw_sha256':PRE,'post_writer_raw_sha256':POST,'exact_semantic_sha256':SEM,'hook_placement':'PLACED','definition_succeeded':True,'defined_class_identity':NAME+'@1','defining_loader_identity':LOADER_ID,'session_invariant_sha256':(S['invariant'] if S else None),'certifiable':bool(S)}],'chain_of_custody':[{'ordinal':1,'binary_name':NAME,'post_writer_raw_sha256':POST,'linked_to_next_stage':None,'is_final_stage':True,'definition_bound':True,'defined_class_identity':NAME+'@1','defining_loader_identity':LOADER_ID,'certifiable':bool(S)}],'downstream_transformers_after_live_writers':['synthetic.DownstreamTransformer'],'production_authority':False,'phases':[phase('pre'),phase('post')]}
 if mode=='frame-static-oracle': witness['scope']['model']='STATIC_STUDY_JAR_V1'
 if mode=='frame-pre-verified': witness['phases'][0]['verification'][0].update({'status':'VERIFIED','jvm_verified':True})
 if mode=='frame-overstates-pre': witness['phase_summaries'][0]['whole_classes_verified']=1
@@ -71,6 +85,31 @@ if mode=='frame-no-definition': witness['acquisition'][0].update({'definition_su
 if mode=='frame-two-definitions': witness['chain_of_custody'].append(dict(witness['chain_of_custody'][0],ordinal=2))
 if mode=='frame-certifiable-without-invariant': witness['acquisition'][0]['certifiable']=True
 o={'schema':'RUSTCRAFT_FRESH_OBSERVATION_V2','session':r['session'],'challenge':r['challenge'],'request_sha256':sha(request_path),'capture_kind':'OFFLINE_TRANSFORM_CAPTURE','runtime_identity':c['runtime_identity'],'transformer_chain':c['transformer_chain'],'coremods':c['coremods'],'classes':classes,'pre_classes':pre,'writer_matrix':{'scope':'OFFLINE_HOOK_CALL_PRESENCE','sites':[site]},'negative_controls':[{'id':'raw-mutation','actual_outcome':'CHANGED','evidence_file':'control.json','evidence_sha256':sha(control_path)}],'frame_relation_witness':json.dumps(witness)}
+# The same-process transformation chain. Written here rather than in the
+# profile because these are OBSERVED per-run facts about bytes that moved
+# through this process; the profile only declares that a chain is required.
+# The certificate in the profile authorizes stage 0's output and nothing else.
+if S:
+    o['session_acquisition']=[{'binary_name':NAME,'pre_writer_raw_sha256':PRE,'post_writer_raw_sha256':POST,'defining_loader_identity':LOADER_ID,'hook_placement':'PLACED','definition_succeeded':True,'session_invariant_sha256':S['invariant']}]
+    HOOKS=[{'id':'OWNERSHIP.exercise.WRITE_BEGIN','class':NAME,'method':'exercise','descriptor':'(I)V','required_calls':2,'observed_calls':2}]
+    PATHS=[{'id':'OWNERSHIP.exercise.finally','class':NAME,'method':'exercise','descriptor':'(I)V','handler':'java/lang/Throwable'}]
+    def stage(name,ordinal,transformer,si,so,sem=None,order=None,invariant=None,hooks=None,paths=None):
+        return {'stage':name,'ordinal':ordinal,'process_id':S['process_id'],'transformation_session_id':S['session_id'],'defining_loader_identity':LOADER_ID,'class_name':NAME,'transformer':transformer,'input_raw_sha256':si,'output_raw_sha256':so,'exact_semantic_sha256':sem,'exact_declaration_order_sha256':order,'session_invariant_sha256':invariant,'acquisition_evidence_id':S['evidence_id'],'rustcraft_hooks':hooks,'exception_paths':paths}
+    stages=[stage('PRE_WRITER',0,'none',S['upstream_sha'],PRE,SEM,ORD,S['invariant']),
+            stage('RUSTCRAFT_POST_WRITER',1,'com.rustcraft.coremod.LiveChunkOwnershipTransformer',PRE,POST,S['post_semantic'],S['post_order'],None,HOOKS,PATHS),
+            stage('DOWNSTREAM_TRANSFORMER',2,S['downstream'],POST,S['downstream_sha'],None,None,None,HOOKS,PATHS),
+            stage('FINAL_DEFINED',3,'class-loader-definition',S['downstream_sha'],DEF,None,None,None,HOOKS,PATHS)]
+    o['transformation_chain']={'schema':'RUSTCRAFT_TRANSFORMATION_CHAIN_V1','schema_version':1,'process_id':S['process_id'],'transformation_session_id':S['session_id'],'defining_loader_identity':LOADER_ID,'acquisition_evidence_sha256':S['acquisition_sha256'],'downstream_transformers_after_live_writers':[S['downstream']],'classes':[{'binary_name':NAME,'process_id':S['process_id'],'transformation_session_id':S['session_id'],'defining_loader_identity':LOADER_ID,'stages':stages}]}
+    if mode=='chain-missing': o.pop('transformation_chain')
+    if mode=='chain-broken-edge': stages[3]['input_raw_sha256']='0'*64
+    if mode=='chain-forged-final': stages[3]['output_raw_sha256']='1'*64
+    if mode=='chain-no-downstream': del stages[2];[stages[i].__setitem__('ordinal',i) for i in range(len(stages))]
+    if mode=='chain-missing-rustcraft-stage': stages[1]['stage']='OBSERVED_OTHER_WRITER'
+    if mode=='chain-hooks-stripped-downstream': stages[2]['rustcraft_hooks']=[dict(HOOKS[0],observed_calls=0)]
+    if mode=='chain-hooks-stripped-final': stages[3]['rustcraft_hooks']=[dict(HOOKS[0],observed_calls=0)]
+    if mode=='chain-lying-post-identity': stages[1]['exact_semantic_sha256']=SEM
+    if mode=='chain-foreign-session': stages[3]['transformation_session_id']='9d3ccad1-a938-4a64-a7ca-c8c81bef1757'
+    if mode=='chain-foreign-loader': stages[2]['defining_loader_identity']='other.Loader@1'
 if mode=='missing-frame': o.pop('frame_relation_witness')
 if mode=='malformed-frame': o['frame_relation_witness']='{not json'
 if mode=='session-without-profile': o['session_acquisition']=[{'binary_name':'example/Fixture','pre_writer_raw_sha256':PRE,'post_writer_raw_sha256':POST,'defining_loader_identity':LOADER_ID,'hook_placement':'PLACED','definition_succeeded':True,'session_invariant_sha256':None}]
@@ -101,33 +140,77 @@ PLACEMENT = r'''
 import argparse,hashlib,json,pathlib
 p=argparse.ArgumentParser();p.add_argument('--request');p.add_argument('--out');a=p.parse_args();src=pathlib.Path(a.request);r=json.loads(src.read_text());out=pathlib.Path(a.out)
 def sha(path):return hashlib.sha256(pathlib.Path(path).read_bytes()).hexdigest()
-post=r['classes']['example/Fixture'];pre=r['pre_classes']['example/Fixture'];method=next(m for m in post['methods'] if m[:2]==['exercise','(I)V']);pre_method=next(m for m in pre['methods'] if m[:2]==['exercise','(I)V']);calls=[i for i,n in enumerate(method[12]) if n[0]==184 and n[1][:3]==['java/util/Objects','requireNonNull','(Ljava/lang/Object;)Ljava/lang/Object;']];pre_calls=[i for i,n in enumerate(pre_method[12]) if n[0]==184 and n[1][:3]==['java/util/Objects','requireNonNull','(Ljava/lang/Object;)Ljava/lang/Object;']]
-same=pathlib.Path(post['file']).read_bytes()==pathlib.Path(pre['file']).read_bytes()
-covered=all(any(h[0]<=i<h[1] and h[2]!=i for h in method[13]) for i in calls)
-checks={'anchor_order':{'status':'PASS' if calls==pre_calls and len(calls)==1 else 'FAIL','measurements':{'call_positions':calls,'reference_positions':pre_calls}},'exception_paths':{'status':'PASS' if covered and method[13] else 'FAIL','measurements':{'handler_count':len(method[13]),'fixture_callback_is_in_handler_range':covered}},'undeclared_edits':{'status':'PASS' if same else 'FAIL','measurements':{'fixture_requires_byte_identical_pre_post':same}},'pre_post_relation':{'status':'PASS' if same else 'FAIL','measurements':{'pre':sha(pre['file']),'post':sha(post['file'])}}}
+# Driven by the profile's declared writer contract rather than a hardcoded call,
+# so the same validator states the right thing in exact mode (no insertions, so
+# the pre and post bytes must be identical) and in session-bound mode (declared
+# insertions, so they must differ). Both readings are checkable; neither is a
+# restatement of the other.
+def fact(entry,site):
+    m=[x for x in entry['methods'] if x[:2]==[site['method'],site['descriptor']]]
+    return m[0] if len(m)==1 else None
+def positions(m,call):return [i for i,n in enumerate(m[12]) if n[0]==call['opcode'] and n[1][:3]==[call['owner'],call['name'],call['descriptor']]]
+site=r['required_sites'][0];klass=site['class']
+pf=fact(r['classes'][klass],site);pm=fact(r['pre_classes'][klass],site)
+pre_pos=[];post_pos=[];inserted={}
+for call in site['required_calls']:
+    a_=positions(pm,call);b_=positions(pf,call);pre_pos.append(a_);post_pos.append(b_);inserted[call['name']]=len(b_)-len(a_)
+anchors=all(len(b_)==c['count'] and b_[:len(a_)]==a_ and all(q>a_[-1] for q in b_[len(a_):]) for c,a_,b_ in zip(site['required_calls'],pre_pos,post_pos))
+covered=all(any(h[0]<=i<h[1] and h[2]!=i for h in pf[13]) for i in post_pos[0])
+targets=set(s['class'] for s in r['required_sites'])
+drift=[n for n in sorted(r['classes']) if n not in targets and sorted(r['classes'][n]['methods'])!=sorted(r['pre_classes'][n]['methods'])]
+pre_bytes=pathlib.Path(r['pre_classes'][klass]['file']).read_bytes();post_bytes=pathlib.Path(r['classes'][klass]['file']).read_bytes()
+same=pre_bytes==post_bytes;declared_insertions=sum(v for v in inserted.values() if v>0)
+checks={'anchor_order':{'status':'PASS' if anchors else 'FAIL','measurements':{'required':[{k:c[k] for k in ('owner','name','descriptor','count')} for c in site['required_calls']],'pre_positions':pre_pos,'post_positions':post_pos,'inserted':inserted}},'exception_paths':{'status':'PASS' if covered and pf[13] else 'FAIL','measurements':{'handler_count':len(pf[13]),'fixture_callback_is_in_handler_range':covered}},'undeclared_edits':{'status':'PASS' if not drift else 'FAIL','measurements':{'undeclared_method_drift':drift,'methods_compared':[n for n in sorted(r['classes']) if n not in targets]}},'pre_post_relation':{'status':'PASS' if same==(declared_insertions==0) else 'FAIL','measurements':{'pre':sha(r['pre_classes'][klass]['file']),'post':sha(r['classes'][klass]['file']),'pre_equals_post':same,'declared_insertions':declared_insertions,'relation_expected':'equal' if declared_insertions==0 else 'edited'}}}
 w={'schema':'RUSTCRAFT_PLACEMENT_WITNESS_V2','session':r['session'],'challenge':r['challenge'],'request_sha256':sha(src),'observation_sha256':r['observation_sha256'],'covered_sites':[s['id'] for s in r['required_sites']],'checks':checks};out.write_text(json.dumps(w));print(json.dumps({'schema':'RUSTCRAFT_VALIDATOR_ACK_V2','session':r['session'],'challenge':r['challenge'],'output_sha256':sha(out)}))
 '''
 
 
 def integration_tools():
-    names = ("RUSTCRAFT_TEST_JAVA", "RUSTCRAFT_TEST_V2_CLASSES", "RUSTCRAFT_TEST_ASM", "RUSTCRAFT_TEST_CLASS_FIXTURE")
+    names = ("RUSTCRAFT_TEST_JAVA", "RUSTCRAFT_TEST_V2_CLASSES", "RUSTCRAFT_TEST_ASM", "RUSTCRAFT_TEST_CLASS_FIXTURE",
+             "RUSTCRAFT_TEST_SESSION_PRE_FIXTURE", "RUSTCRAFT_TEST_SESSION_POST_FIXTURE")
     if any(not os.environ.get(name) for name in names):
         raise unittest.SkipTest("explicit Java/V2/ASM/fixture inputs not configured; real integration not established")
     paths = [Path(os.environ[n]).resolve(strict=True) for n in names]
     return paths
 
 
+#: Identity of the synthetic transformation session. Fixed, not random: the
+#: certificate binds these two UUIDs, and a run must be reproducible to be a
+#: control rather than a sample.
+PROCESS_ID = "11111111-1111-4111-8111-111111111111"
+SESSION_ID = "22222222-2222-4222-8222-222222222222"
+LOADER_CLASS = "synthetic.loader.Loader"
+LOADER_ID = LOADER_CLASS + "@0a0b0c[]"
+DOWNSTREAM = "synthetic.DownstreamTransformer"
+SESSION_CLASS = "example/SessionFixture"
+
+
+def identity_tool(java, classes, asm, path, *flags):
+    """Run the real identity oracle. Session-bound receipts come from the same
+    binary the engine recomputes exact identities with, not from a second
+    implementation that could drift from it."""
+    process = subprocess.run([str(java), "-cp", os.pathsep.join((str(classes), str(asm))),
+                              "com.rustcraft.coremod.CanonicalClassIdentityV2", *flags, str(path)],
+                             capture_output=True, text=True, check=True)
+    receipt, = strict_lines(process.stdout, 1)
+    return receipt
+
+
 class EngineFixture:
-    def __init__(self, root, *, mode="good", identity_mode="CANONICAL_ID_V2", runtime_name="synthetic-alpha"):
+    def __init__(self, root, *, mode="good", identity_mode="CANONICAL_ID_V2", runtime_name="synthetic-alpha",
+                 session_bound=False):
         self.root = Path(root).resolve()
         self.root.mkdir(parents=True, exist_ok=True)
-        java, classes, asm, fixture = integration_tools()
+        java, classes, asm, fixture, session_pre, session_post = integration_tools()
+        self.session_bound = session_bound
         self.runtime = self.root / "runtime"
         self.runtime.mkdir()
         for name in ("mods", "config"):
             (self.runtime / name).mkdir()
         (self.runtime / "server.jar").write_bytes((runtime_name + " runtime").encode())
-        (self.runtime / "input.class").write_bytes(fixture.read_bytes())
+        (self.runtime / "input.class").write_bytes(session_post.read_bytes() if session_bound else fixture.read_bytes())
+        (self.runtime / "pre.class").write_bytes(session_pre.read_bytes())
+        (self.runtime / "post.class").write_bytes(session_post.read_bytes())
         (self.runtime / "mods" / "test.jar").write_bytes((runtime_name + " mod").encode())
         (self.runtime / "config" / "test.cfg").write_text("setting=" + runtime_name)
         self.collector = self.root / "collector.py"
@@ -136,18 +219,106 @@ class EngineFixture:
         self.validator.write_text(PLACEMENT, encoding="utf-8")
         self.config = self.root / "collector-config.json"
         self.config_data = dict(mode=mode, fixture=str(self.runtime / "input.class"), runtime_artifact=str(self.runtime / "server.jar"), runtime_identity={"implementation": runtime_name, "minecraft": "synthetic-1", "loader": "synthetic-2"}, transformer_chain=[runtime_name + ".First", runtime_name + ".Second"], coremods=[runtime_name + ".Coremod"])
+        if session_bound:
+            self.config_data["pre_fixture"] = str(self.runtime / "pre.class")
+            self.config_data["session"] = self.session_facts(java, classes, asm, session_pre, session_post)
         self.config.write_text(json.dumps(self.config_data), encoding="utf-8")
         self.identity_tool = dict(java=str(java), java_sha256=sha(java), classpath=[dict(path=str(classes), files={p.relative_to(classes).as_posix(): sha(p) for p in classes.rglob("*") if p.is_file()}), dict(path=str(asm), files={"": sha(asm)})], timeout_seconds=30)
         cp = os.pathsep.join((str(classes), str(asm)))
-        process = subprocess.run([str(java), "-cp", cp, "com.rustcraft.coremod.CanonicalClassIdentityV2", str(self.runtime / "input.class")], capture_output=True, text=True, check=True)
-        receipt, = strict_lines(process.stdout, 1)
+        klass = SESSION_CLASS if session_bound else "example/Fixture"
+        source = session_post if session_bound else fixture
+        admitted_source = session_pre if session_bound else fixture
+        receipt = identity_tool(java, classes, asm, source)
         expected = {"raw_sha256": receipt[4]} if identity_mode == "RAW_SHA256" else {"semantic_sha256": receipt[2], "declaration_order_sha256": receipt[3]}
+        admitted_receipt = receipt if not session_bound else identity_tool(java, classes, asm, admitted_source)
+        admitted = {"raw_sha256": admitted_receipt[4]} if identity_mode == "RAW_SHA256" else {"semantic_sha256": admitted_receipt[2], "declaration_order_sha256": admitted_receipt[3]}
+        # The declared hook count is the POST count. In exact mode the writer
+        # proved nothing, so it is 1; in session-bound mode the declared writer
+        # inserted the second call, so it is 2.
+        hook_count = 2 if session_bound else 1
         scope = dict(schema="LIVE_CAPTURE_SCOPE_V1", operation="chunk_packet_shadow_capture", profile_id=runtime_name, dimension=0, storage_family="VANILLA_U16", registry_epoch=1, state_width_bits=16, generator_family="SYNTHETIC_DIAGNOSTIC", skylight=True)
         for key in ("provider_class", "world_class", "chunk_class", "section_class", "container_class", "nibble_class", "packet_class", "registry_class", "generator_class"):
             scope[key] = "synthetic." + key
-        self.profile = dict(schema="RUSTCRAFT_QUALIFICATION_PROFILE_V2", id=runtime_name, identity_mode=identity_mode, runtime_identity=self.config_data["runtime_identity"], transformer_chain=self.config_data["transformer_chain"], coremods=self.config_data["coremods"], classes={"example/Fixture": expected}, pre_classes={"example/Fixture": copy.deepcopy(expected)}, writer_sites=[dict(id="site-1", **{"class": "example/Fixture"}, method="exercise", descriptor="(I)V", required_calls=[dict(opcode=184, owner="java/util/Objects", name="requireNonNull", descriptor="(Ljava/lang/Object;)Ljava/lang/Object;", count=1)])], negative_controls=[dict(id="raw-mutation", expected_outcome="CHANGED")], scope=scope, production_authority=False)
-        self.manifest = dict(schema="RUSTCRAFT_RUNTIME_MANIFEST_V2", runtime_root=str(self.runtime), inventories={"artifacts": {"roots": ["server.jar", "input.class"], "files": {name: sha(self.runtime / name) for name in ("server.jar", "input.class")}}, "mods": {"roots": ["mods"], "files": {"mods/test.jar": sha(self.runtime / "mods" / "test.jar")}}, "config": {"roots": ["config"], "files": {"config/test.cfg": sha(self.runtime / "config" / "test.cfg")}}}, collector=self.command(self.collector, ["--config", str(self.config)], [self.config]), identity_tool=self.identity_tool, validators={"placement": self.command(self.validator)})
+        self.profile = dict(schema="RUSTCRAFT_QUALIFICATION_PROFILE_V2", id=runtime_name, identity_mode=identity_mode, runtime_identity=self.config_data["runtime_identity"], transformer_chain=self.config_data["transformer_chain"], coremods=self.config_data["coremods"], classes={klass: expected}, pre_classes={klass: copy.deepcopy(admitted)}, writer_sites=[dict(id="site-1", **{"class": klass}, method="exercise", descriptor="(I)V", required_calls=[dict(opcode=184, owner="java/util/Objects", name="requireNonNull", descriptor="(Ljava/lang/Object;)Ljava/lang/Object;", count=hook_count)])], negative_controls=[dict(id="raw-mutation", expected_outcome="CHANGED")], scope=scope, production_authority=False)
+        artifacts = ["server.jar", "input.class"] + (["pre.class", "post.class"] if session_bound else [])
+        self.manifest = dict(schema="RUSTCRAFT_RUNTIME_MANIFEST_V2", runtime_root=str(self.runtime), inventories={"artifacts": {"roots": artifacts, "files": {name: sha(self.runtime / name) for name in artifacts}}, "mods": {"roots": ["mods"], "files": {"mods/test.jar": sha(self.runtime / "mods" / "test.jar")}}, "config": {"roots": ["config"], "files": {"config/test.cfg": sha(self.runtime / "config" / "test.cfg")}}}, collector=self.command(self.collector, ["--config", str(self.config)], [self.config]), identity_tool=self.identity_tool, validators={"placement": self.command(self.validator)})
         self.manifest_path, self.profile_path = self.root / "manifest.json", self.root / "profile.json"
+        self.write()
+        if session_bound:
+            self.build_session_block()
+
+    def session_facts(self, java, classes, asm, session_pre, session_post):
+        """Measured facts about the two real fixture classfiles, plus the two
+        buffers that only exist inside the synthetic launch. Those two are
+        seeded rather than derived on purpose: they stand for bytes this
+        offline harness cannot produce, and the engine's job is to require them
+        to be linked, not to re-derive them."""
+        exact_pre = identity_tool(java, classes, asm, session_pre)
+        exact_post = identity_tool(java, classes, asm, session_post)
+        bound = identity_tool(java, classes, asm, session_pre, "--session-bound")
+        seeded = lambda seed: hashlib.sha256(seed.encode()).hexdigest()
+        return {
+            "loader_class": LOADER_CLASS, "loader": LOADER_ID, "downstream": DOWNSTREAM,
+            "process_id": PROCESS_ID, "session_id": SESSION_ID, "evidence_id": "synthetic.acquisition.1",
+            "pre_sha": exact_pre[4], "post_sha": exact_post[4],
+            "pre_semantic": exact_pre[2], "pre_order": exact_pre[3],
+            "post_semantic": exact_post[2], "post_order": exact_post[3],
+            "invariant": bound[5],
+            "session_uuid": bound[7][0], "masked_locations": bound[9],
+            "upstream_sha": seeded("synthetic.upstream-buffer"),
+            "downstream_sha": seeded("synthetic.downstream-output"),
+            "defined_sha": seeded("synthetic.jvm-defined-bytes"),
+            "acquisition_sha256": None,
+        }
+
+    def build_session_block(self):
+        """Issue the admission certificate and bind it to this exact profile.
+
+        The certificate is written LAST and the recipe hash is computed over the
+        profile without it, which is what keeps the binding non-circular. The
+        acquisition record the certificate names is byte-for-byte the one the
+        collector will emit, so an offline certificate cannot be swapped for one
+        issued against a different run's evidence.
+        """
+        facts = self.config_data["session"]
+        acquisition = [{"binary_name": SESSION_CLASS,
+                        "pre_writer_raw_sha256": facts["pre_sha"],
+                        "post_writer_raw_sha256": facts["post_sha"],
+                        "defining_loader_identity": LOADER_ID,
+                        "hook_placement": "PLACED",
+                        "definition_succeeded": True,
+                        "session_invariant_sha256": facts["invariant"]}]
+        facts["acquisition_sha256"] = digest_json(acquisition)
+        # The collector is pinned on this config file, so the hash it needs has
+        # to be in the file before the run reads it.
+        self.config.write_text(json.dumps(self.config_data), encoding="utf-8")
+        # The manifest pins the collector's config by hash, so it has to be
+        # re-pinned before the manifest hash the certificate binds to is taken.
+        self.manifest["collector"] = self.command(self.collector, ["--config", str(self.config)], [self.config])
+        self.manifest_path.write_text(json.dumps(self.manifest), encoding="utf-8")
+        manifest_sha = sha(self.manifest_path)
+        document = certificate.from_identity(
+            process_id=PROCESS_ID, transformation_session_id=SESSION_ID,
+            defining_loader_identity=LOADER_ID,
+            identity=["CANONICAL_ID_V2_SESSION_BOUND", SESSION_CLASS, facts["pre_semantic"],
+                      facts["pre_order"], facts["pre_sha"], facts["invariant"], 1,
+                      [facts["session_uuid"]], len(facts["masked_locations"]), facts["masked_locations"]],
+            recipe_sha256="0" * 64, runtime_manifest_sha256=manifest_sha,
+            acquisition_evidence_sha256=facts["acquisition_sha256"])
+        self.profile["session_bound"] = {
+            "schema": "RUSTCRAFT_SESSION_BOUND_PROFILE_V1", "schema_version": 1,
+            "recipe_sha256": "0" * 64, "process_id": PROCESS_ID,
+            "transformation_session_id": SESSION_ID,
+            "classes": [SESSION_CLASS], "certificates": {SESSION_CLASS: document},
+        }
+        self.profile["frame_evidence"] = {"required_classes": [SESSION_CLASS]}
+        self.profile["identity_mode"] = "CANONICAL_ID_V2_SESSION_BOUND"
+        # The recipe hash covers the profile WITHOUT the block that carries it,
+        # so filling the two bindings in below cannot invalidate itself.
+        recipe = certificate.recipe_binding_sha256(
+            {k: v for k, v in self.profile.items() if k != "session_bound"})
+        self.profile["session_bound"]["recipe_sha256"] = recipe
+        document["recipe_sha256"] = recipe
         self.write()
 
     @staticmethod
@@ -300,6 +471,93 @@ class EngineIntegrationControls(unittest.TestCase):
         fixture = self.fixture()
         fixture.profile["session_bound"] = {"schema": "RUSTCRAFT_SESSION_BOUND_PROFILE_V1"}
         self.assertEqual(fixture.run()["status"], "FAIL")
+
+    def session_fixture(self, **kwargs):
+        return self.fixture(session_bound=True, runtime_name="synthetic-session", **kwargs)
+
+    def test_session_bound_admission_and_chain_reach_pass(self):
+        # The one permitted path: a real session-bound class, a certificate
+        # issued from its PRE-writer bytes, and a four-stage chain whose every
+        # adjacent edge is hash-continuous and whose FINAL stage is bound to
+        # the launch's own frame witness.
+        result = self.session_fixture().run()
+        self.assertEqual((result["status"], result["maturity"]), ("PASS", "OFFLINE_QUALIFIED"))
+        self.assertFalse(result["production_authority"])
+        nodes = {n["id"]: n for n in result["evidence"]}
+        self.assertEqual(nodes["session_evidence"]["status"], "PASS")
+        self.assertEqual(nodes["transformation_chain"]["status"], "PASS")
+        # The chain node binds to the launch's own frame witness, so both hashes
+        # it records are digests of genuinely observed state, not of itself.
+        self.assertEqual(len(nodes["transformation_chain"]["observed_sha256"]), 64)
+
+    def test_absent_transformation_chain_is_incomplete_not_a_pass(self):
+        # A session certificate on its own proves admission, not what the writer
+        # then produced. Without the chain the profile stays unpromoted.
+        result = self.session_fixture(mode="chain-missing").run()
+        self.assertEqual(result["status"], "INCOMPLETE")
+        self.assertEqual(result["maturity"], "OBSERVED")
+        nodes = {n["id"]: n for n in result["evidence"]}
+        self.assertEqual(nodes["session_evidence"]["status"], "PASS")
+        self.assertEqual(nodes["transformation_chain"]["status"], "INCOMPLETE")
+
+    def test_admission_certificate_must_describe_the_pre_writer_class(self):
+        # THE Blocker A control. A certificate that carries the POST-writer
+        # identity is a certificate admitting a class state the Java gate never
+        # saw. Before the fix this is what the engine demanded, so it is the
+        # control that would have failed on the old model.
+        fixture = self.session_fixture()
+        document = fixture.profile["session_bound"]["certificates"][SESSION_CLASS]
+        post = fixture.profile["classes"][SESSION_CLASS]
+        document["exact_semantic_sha256"] = post["semantic_sha256"]
+        document["exact_declaration_order_sha256"] = post["declaration_order_sha256"]
+        document = certificate.validate(document)
+        fixture.profile["session_bound"]["certificates"][SESSION_CLASS] = document
+        fixture.write()
+        self.assertEqual(fixture.run()["status"], "FAIL")
+
+    def test_certificate_must_be_issued_in_this_transformation_session(self):
+        fixture = self.session_fixture()
+        document = fixture.profile["session_bound"]["certificates"][SESSION_CLASS]
+        document["transformation_session_id"] = "9d3ccad1-a938-4a64-a7ca-c8c81bef1757"
+        fixture.profile["session_bound"]["certificates"][SESSION_CLASS] = certificate.validate(document)
+        fixture.write()
+        self.assertEqual(fixture.run()["status"], "FAIL")
+
+    def test_certificate_must_bind_this_manifest(self):
+        fixture = self.session_fixture()
+        document = fixture.profile["session_bound"]["certificates"][SESSION_CLASS]
+        document["runtime_manifest_sha256"] = "b" * 64
+        fixture.profile["session_bound"]["certificates"][SESSION_CLASS] = certificate.validate(document)
+        fixture.write()
+        self.assertEqual(fixture.run()["status"], "FAIL")
+
+    def test_certificate_must_bind_this_acquisition_evidence(self):
+        # An offline certificate issued against a different run's evidence is
+        # not a certificate for this run.
+        fixture = self.session_fixture()
+        document = fixture.profile["session_bound"]["certificates"][SESSION_CLASS]
+        document["acquisition_evidence_sha256"] = "c" * 64
+        fixture.profile["session_bound"]["certificates"][SESSION_CLASS] = certificate.validate(document)
+        fixture.write()
+        self.assertEqual(fixture.run()["status"], "FAIL")
+
+    def test_certificate_must_bind_the_defining_loader(self):
+        fixture = self.session_fixture()
+        document = fixture.profile["session_bound"]["certificates"][SESSION_CLASS]
+        document["defining_loader_identity"] = "other.Loader@1"
+        fixture.profile["session_bound"]["certificates"][SESSION_CLASS] = certificate.validate(document)
+        fixture.write()
+        self.assertEqual(fixture.run()["status"], "FAIL")
+
+    def test_every_transformation_chain_link_is_enforced(self):
+        # Nine chain controls, one broken link each. All must FAIL: none of them
+        # may be absorbed by a weaker reading of the chain.
+        for mode in ("chain-broken-edge", "chain-forged-final", "chain-no-downstream",
+                     "chain-missing-rustcraft-stage", "chain-hooks-stripped-downstream",
+                     "chain-hooks-stripped-final", "chain-lying-post-identity",
+                     "chain-foreign-session", "chain-foreign-loader"):
+            with self.subTest(mode=mode):
+                self.assertEqual(self.session_fixture(mode=mode).run()["status"], "FAIL")
 
     def test_call_presence_cannot_replace_placement_witness(self):
         fixture = self.fixture()

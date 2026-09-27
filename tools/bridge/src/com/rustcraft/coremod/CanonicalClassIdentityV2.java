@@ -916,13 +916,34 @@ public final class CanonicalClassIdentityV2 {
         void skip(int n) { check(n); p += n; }
     }
 
-    /** Generic tooling CLI: all requested files must succeed or the process fails. */
+    /**
+     * Generic tooling CLI: all requested files must succeed or the process fails.
+     *
+     * <p>{@code --session-bound} emits the ten-field session-bound receipt
+     * instead of the five-field exact one. It is what a collector issues an
+     * admission certificate from, so it deliberately does NOT relax anything:
+     * the exact identity it reports is still the UNMASKED canonical rendering,
+     * and a class with no qualified {@code MixinMerged.sessionId} is refused
+     * rather than masked into a vacuous invariant.</p>
+     */
     public static void main(String[] args) throws Exception {
-        boolean dump = args.length > 0 && "--dump".equals(args[0]);
-        int start = dump ? 1 : 0;
-        if (args.length == start) throw new IllegalArgumentException("usage: CanonicalClassIdentityV2 [--dump] classfile ...");
+        boolean dump = false, sessionBound = false;
+        int start = 0;
+        while (start < args.length && args[start].startsWith("--")) {
+            if ("--dump".equals(args[start])) dump = true;
+            else if ("--session-bound".equals(args[start])) sessionBound = true;
+            else throw new IllegalArgumentException("usage: CanonicalClassIdentityV2 [--dump] [--session-bound] classfile ...");
+            start++;
+        }
+        if (args.length == start) throw new IllegalArgumentException("usage: CanonicalClassIdentityV2 [--dump] [--session-bound] classfile ...");
         List<Result> results = new ArrayList<Result>();
-        for (int i = start; i < args.length; i++) results.add(identify(Files.readAllBytes(Paths.get(args[i]))));
-        for (Result result : results) System.out.println(dump ? result.canonicalJson : result.receiptJson());
+        for (int i = start; i < args.length; i++) {
+            byte[] bytes = Files.readAllBytes(Paths.get(args[i]));
+            results.add(sessionBound ? identifySessionBound(bytes) : identify(bytes));
+        }
+        for (Result result : results) {
+            System.out.println(dump ? result.canonicalJson
+                    : sessionBound ? result.sessionBoundReceiptJson() : result.receiptJson());
+        }
     }
 }
