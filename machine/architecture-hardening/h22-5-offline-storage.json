@@ -1,0 +1,2354 @@
+{
+  "schema": "H22_5_G_ROOT_REVIEWED_V1",
+  "status": "EXPERIMENT_VALIDATED",
+  "production_authority": false,
+  "decision": "KEEP_BUFFERED_BASELINE_RETAIN_NARROW_MMAP_REDB_PROTOTYPES",
+  "root_receipt_sha256": "b4ec084bd155b8cc887d88e6887bf4c1087199adc16cba7e68796c66f19f68a7",
+  "root_summary_ns": {
+    "8192-buffered": {
+      "snapshot_copy_sync": {
+        "median": 825300,
+        "minimum": 774600,
+        "maximum": 1093800
+      },
+      "source_hash": {
+        "median": 150700,
+        "minimum": 140600,
+        "maximum": 190500
+      },
+      "map_create": {
+        "median": 0,
+        "minimum": 0,
+        "maximum": 0
+      },
+      "scan": {
+        "median": 101900,
+        "minimum": 82400,
+        "maximum": 119500
+      },
+      "index_sort_hash": {
+        "median": 386100,
+        "minimum": 359000,
+        "maximum": 497500
+      },
+      "sidecar_open_commit": {
+        "median": 6831100,
+        "minimum": 6265400,
+        "maximum": 8265300
+      },
+      "sidecar_verify": {
+        "median": 568400,
+        "minimum": 549100,
+        "maximum": 622900
+      },
+      "sidecar_queries": {
+        "median": 50900,
+        "minimum": 44400,
+        "maximum": 118100
+      },
+      "sidecar_reopen_verify": {
+        "median": 6862200,
+        "minimum": 6620500,
+        "maximum": 7457500
+      },
+      "complete": {
+        "median": 17490500,
+        "minimum": 16584900,
+        "maximum": 19060600
+      }
+    },
+    "8192-mmap": {
+      "snapshot_copy_sync": {
+        "median": 791500,
+        "minimum": 660800,
+        "maximum": 1115300
+      },
+      "source_hash": {
+        "median": 146500,
+        "minimum": 138600,
+        "maximum": 154200
+      },
+      "map_create": {
+        "median": 22300,
+        "minimum": 21500,
+        "maximum": 35300
+      },
+      "scan": {
+        "median": 95300,
+        "minimum": 92300,
+        "maximum": 118300
+      },
+      "index_sort_hash": {
+        "median": 364000,
+        "minimum": 352200,
+        "maximum": 574800
+      },
+      "sidecar_open_commit": {
+        "median": 6892300,
+        "minimum": 6114200,
+        "maximum": 6996200
+      },
+      "sidecar_verify": {
+        "median": 571800,
+        "minimum": 545100,
+        "maximum": 778500
+      },
+      "sidecar_queries": {
+        "median": 39700,
+        "minimum": 36700,
+        "maximum": 47700
+      },
+      "sidecar_reopen_verify": {
+        "median": 6845300,
+        "minimum": 6383100,
+        "maximum": 7595100
+      },
+      "complete": {
+        "median": 16987000,
+        "minimum": 16574300,
+        "maximum": 18051700
+      }
+    },
+    "65536-buffered": {
+      "snapshot_copy_sync": {
+        "median": 1881600,
+        "minimum": 1745200,
+        "maximum": 2199800
+      },
+      "source_hash": {
+        "median": 1089000,
+        "minimum": 1023700,
+        "maximum": 1273500
+      },
+      "map_create": {
+        "median": 0,
+        "minimum": 0,
+        "maximum": 0
+      },
+      "scan": {
+        "median": 615300,
+        "minimum": 537300,
+        "maximum": 978300
+      },
+      "index_sort_hash": {
+        "median": 3340800,
+        "minimum": 3079600,
+        "maximum": 3661900
+      },
+      "sidecar_open_commit": {
+        "median": 37327700,
+        "minimum": 35566100,
+        "maximum": 43366800
+      },
+      "sidecar_verify": {
+        "median": 4770500,
+        "minimum": 4374200,
+        "maximum": 5279400
+      },
+      "sidecar_queries": {
+        "median": 65900,
+        "minimum": 63900,
+        "maximum": 97100
+      },
+      "sidecar_reopen_verify": {
+        "median": 13880600,
+        "minimum": 13563500,
+        "maximum": 15315500
+      },
+      "complete": {
+        "median": 65766500,
+        "minimum": 62118900,
+        "maximum": 70784400
+      }
+    },
+    "65536-mmap": {
+      "snapshot_copy_sync": {
+        "median": 1907500,
+        "minimum": 1680900,
+        "maximum": 3330800
+      },
+      "source_hash": {
+        "median": 1148100,
+        "minimum": 1070800,
+        "maximum": 1467700
+      },
+      "map_create": {
+        "median": 30800,
+        "minimum": 27500,
+        "maximum": 38400
+      },
+      "scan": {
+        "median": 774200,
+        "minimum": 718200,
+        "maximum": 884000
+      },
+      "index_sort_hash": {
+        "median": 3181900,
+        "minimum": 3110200,
+        "maximum": 4176400
+      },
+      "sidecar_open_commit": {
+        "median": 39179900,
+        "minimum": 36765500,
+        "maximum": 40412800
+      },
+      "sidecar_verify": {
+        "median": 4655700,
+        "minimum": 4497700,
+        "maximum": 5051000
+      },
+      "sidecar_queries": {
+        "median": 76000,
+        "minimum": 62100,
+        "maximum": 97000
+      },
+      "sidecar_reopen_verify": {
+        "median": 14191500,
+        "minimum": 12223400,
+        "maximum": 14388000
+      },
+      "complete": {
+        "median": 67749000,
+        "minimum": 63248900,
+        "maximum": 67870500
+      }
+    }
+  },
+  "rust_tests": 12,
+  "compile_fail_tests": 2,
+  "python_tests": 5,
+  "semantic_samples": 20,
+  "processes": 35,
+  "locked_registry_packages": 12,
+  "retained_license_files": 24,
+  "raw_evidence": [
+    {
+      "source": "target/offline-storage-experiment/301bd860ad6e4073847d965fa5249291/bad-magic.process.json",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/301bd860ad6e4073847d965fa5249291/bad-magic.process.json",
+      "sha256": "53f7f484e8c10d36791feb63f0c55adcc4301944d7ebf1e95765f573e10cf464"
+    },
+    {
+      "source": "target/offline-storage-experiment/301bd860ad6e4073847d965fa5249291/bad-magic.stderr.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/301bd860ad6e4073847d965fa5249291/bad-magic.stderr.txt",
+      "sha256": "b1325b6839dffaacf2250a27f282142e6ec8650abec2174026469910a0151866"
+    },
+    {
+      "source": "target/offline-storage-experiment/301bd860ad6e4073847d965fa5249291/bad-magic.stdout.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/301bd860ad6e4073847d965fa5249291/bad-magic.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/offline-storage-experiment/301bd860ad6e4073847d965fa5249291/campaign.json",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/301bd860ad6e4073847d965fa5249291/campaign.json",
+      "sha256": "8dfdf48190cca31ffdea52f1f5760f996936550d42fcc7dbeedd57dc8729cc6f"
+    },
+    {
+      "source": "target/offline-storage-experiment/301bd860ad6e4073847d965fa5249291/clippy.process.json",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/301bd860ad6e4073847d965fa5249291/clippy.process.json",
+      "sha256": "807634636f4f521e73c87a1b7fb364d61ab71720e86bcccafb6c4791bad263f0"
+    },
+    {
+      "source": "target/offline-storage-experiment/301bd860ad6e4073847d965fa5249291/clippy.stderr.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/301bd860ad6e4073847d965fa5249291/clippy.stderr.txt",
+      "sha256": "e6e68e6debd6b4f2b352aa0259e8b805c17ce3866002e472a7c3c988b37cc70f"
+    },
+    {
+      "source": "target/offline-storage-experiment/301bd860ad6e4073847d965fa5249291/clippy.stdout.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/301bd860ad6e4073847d965fa5249291/clippy.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/offline-storage-experiment/301bd860ad6e4073847d965fa5249291/crash-uncommitted.process.json",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/301bd860ad6e4073847d965fa5249291/crash-uncommitted.process.json",
+      "sha256": "6948a2f1d64d9c0fed2af1c0d9256a308485fef56bf1c5d0a7662ef0d6e254fd"
+    },
+    {
+      "source": "target/offline-storage-experiment/301bd860ad6e4073847d965fa5249291/crash-uncommitted.stderr.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/301bd860ad6e4073847d965fa5249291/crash-uncommitted.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/offline-storage-experiment/301bd860ad6e4073847d965fa5249291/crash-uncommitted.stdout.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/301bd860ad6e4073847d965fa5249291/crash-uncommitted.stdout.txt",
+      "sha256": "3e8e30c3287e12abb5f9adff02b45edda8157b00cd256e8597e125f9a71c7e43"
+    },
+    {
+      "source": "target/offline-storage-experiment/301bd860ad6e4073847d965fa5249291/duplicate-key.process.json",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/301bd860ad6e4073847d965fa5249291/duplicate-key.process.json",
+      "sha256": "b1b861b30a67e2beefc95d285548c4f6a281d71e62090b984042c48beeb1d435"
+    },
+    {
+      "source": "target/offline-storage-experiment/301bd860ad6e4073847d965fa5249291/duplicate-key.stderr.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/301bd860ad6e4073847d965fa5249291/duplicate-key.stderr.txt",
+      "sha256": "a827411c1cdab697712f021b7ea777536ea8f35a176e94d0c51425024c5aa2be"
+    },
+    {
+      "source": "target/offline-storage-experiment/301bd860ad6e4073847d965fa5249291/duplicate-key.stdout.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/301bd860ad6e4073847d965fa5249291/duplicate-key.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/offline-storage-experiment/301bd860ad6e4073847d965fa5249291/fmt.process.json",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/301bd860ad6e4073847d965fa5249291/fmt.process.json",
+      "sha256": "e43dcc5412d93e07e359d2997d8b9b6a40c1887f56dd95f4b5572a40f8ba9d5e"
+    },
+    {
+      "source": "target/offline-storage-experiment/301bd860ad6e4073847d965fa5249291/fmt.stderr.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/301bd860ad6e4073847d965fa5249291/fmt.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/offline-storage-experiment/301bd860ad6e4073847d965fa5249291/fmt.stdout.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/301bd860ad6e4073847d965fa5249291/fmt.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/offline-storage-experiment/301bd860ad6e4073847d965fa5249291/metadata.process.json",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/301bd860ad6e4073847d965fa5249291/metadata.process.json",
+      "sha256": "05a88ced0a78c106a05270233049c085bc9a47bdabcc64c4ad4d40ada7ad42a9"
+    },
+    {
+      "source": "target/offline-storage-experiment/301bd860ad6e4073847d965fa5249291/metadata.stderr.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/301bd860ad6e4073847d965fa5249291/metadata.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/offline-storage-experiment/301bd860ad6e4073847d965fa5249291/metadata.stdout.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/301bd860ad6e4073847d965fa5249291/metadata.stdout.txt",
+      "sha256": "745cc703140c36bd65e5a1d0a35b17d72d74c97df3b6d28cdfa1252dede7fa8c"
+    },
+    {
+      "source": "target/offline-storage-experiment/301bd860ad6e4073847d965fa5249291/recover.process.json",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/301bd860ad6e4073847d965fa5249291/recover.process.json",
+      "sha256": "97819cb7cd57cc09bb878ce32ea8a933eecce1b85f6c749a55fb07c7748c6d9e"
+    },
+    {
+      "source": "target/offline-storage-experiment/301bd860ad6e4073847d965fa5249291/recover.stderr.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/301bd860ad6e4073847d965fa5249291/recover.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/offline-storage-experiment/301bd860ad6e4073847d965fa5249291/recover.stdout.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/301bd860ad6e4073847d965fa5249291/recover.stdout.txt",
+      "sha256": "44dfd74ac78e0d13a07a5a340fad28dd63803cd5232949f45a8cd25d49dc1200"
+    },
+    {
+      "source": "target/offline-storage-experiment/301bd860ad6e4073847d965fa5249291/reference-tests.process.json",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/301bd860ad6e4073847d965fa5249291/reference-tests.process.json",
+      "sha256": "1258cbc0405b35eb5e48bb9d060116a7cefb522fb0abbf4c9ab1639136dc242b"
+    },
+    {
+      "source": "target/offline-storage-experiment/301bd860ad6e4073847d965fa5249291/reference-tests.stderr.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/301bd860ad6e4073847d965fa5249291/reference-tests.stderr.txt",
+      "sha256": "7b743ccdd703f894cf2af7e5a8063f2e48972cf1438dbbd2e939191e6ff06bc1"
+    },
+    {
+      "source": "target/offline-storage-experiment/301bd860ad6e4073847d965fa5249291/reference-tests.stdout.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/301bd860ad6e4073847d965fa5249291/reference-tests.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/offline-storage-experiment/301bd860ad6e4073847d965fa5249291/release.process.json",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/301bd860ad6e4073847d965fa5249291/release.process.json",
+      "sha256": "240ecdf36c12045c102d9bf4219a7f8af3bbb75ffefac2a0e51cfd6470660233"
+    },
+    {
+      "source": "target/offline-storage-experiment/301bd860ad6e4073847d965fa5249291/release.stderr.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/301bd860ad6e4073847d965fa5249291/release.stderr.txt",
+      "sha256": "f7bc49484a45bb8cf883d927cae2d44858f295666bcfbbf07701c9aca6d2bc67"
+    },
+    {
+      "source": "target/offline-storage-experiment/301bd860ad6e4073847d965fa5249291/release.stdout.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/301bd860ad6e4073847d965fa5249291/release.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/offline-storage-experiment/301bd860ad6e4073847d965fa5249291/rust-tests.process.json",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/301bd860ad6e4073847d965fa5249291/rust-tests.process.json",
+      "sha256": "a820059612c9cf594c4b7df3a0623879f5759c0cf162846b9e2df407dc81c91f"
+    },
+    {
+      "source": "target/offline-storage-experiment/301bd860ad6e4073847d965fa5249291/rust-tests.stderr.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/301bd860ad6e4073847d965fa5249291/rust-tests.stderr.txt",
+      "sha256": "a1d5f2792a6a0131215414a06743247f0f5bccbe70e530409d4c86db684059e6"
+    },
+    {
+      "source": "target/offline-storage-experiment/301bd860ad6e4073847d965fa5249291/rust-tests.stdout.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/301bd860ad6e4073847d965fa5249291/rust-tests.stdout.txt",
+      "sha256": "cd5ac3100fdc4925ed9c9adaecec73e71c9fcac01490d33a1d34f460dacddb1b"
+    },
+    {
+      "source": "target/offline-storage-experiment/301bd860ad6e4073847d965fa5249291/rust-version.process.json",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/301bd860ad6e4073847d965fa5249291/rust-version.process.json",
+      "sha256": "99d1bc078222101e6da0140d5edca7e47fb1b11f4ecdcac835aec4811fb6c1ce"
+    },
+    {
+      "source": "target/offline-storage-experiment/301bd860ad6e4073847d965fa5249291/rust-version.stderr.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/301bd860ad6e4073847d965fa5249291/rust-version.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/offline-storage-experiment/301bd860ad6e4073847d965fa5249291/rust-version.stdout.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/301bd860ad6e4073847d965fa5249291/rust-version.stdout.txt",
+      "sha256": "c45e612575abeef05e99e88eb1e7aea52cddab9ad70d4f65ad20eaa65e92a9cf"
+    },
+    {
+      "source": "target/offline-storage-experiment/301bd860ad6e4073847d965fa5249291/sample-65536-0-buffered.process.json",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/301bd860ad6e4073847d965fa5249291/sample-65536-0-buffered.process.json",
+      "sha256": "632517c0bf5e5a5cdfe44beefe963cb190708fdb62998b7afa1d14a89db6bcca"
+    },
+    {
+      "source": "target/offline-storage-experiment/301bd860ad6e4073847d965fa5249291/sample-65536-0-buffered.stderr.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/301bd860ad6e4073847d965fa5249291/sample-65536-0-buffered.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/offline-storage-experiment/301bd860ad6e4073847d965fa5249291/sample-65536-0-buffered.stdout.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/301bd860ad6e4073847d965fa5249291/sample-65536-0-buffered.stdout.txt",
+      "sha256": "40615dcfd2a03af28c28a46ffe5ad2fa444e0e04c0e03bbd6de80c52a5c9a643"
+    },
+    {
+      "source": "target/offline-storage-experiment/301bd860ad6e4073847d965fa5249291/sample-65536-0-mmap.process.json",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/301bd860ad6e4073847d965fa5249291/sample-65536-0-mmap.process.json",
+      "sha256": "e9a6e4b288c55065b072d07ad290868e701b29b47ad326401d6931117b351397"
+    },
+    {
+      "source": "target/offline-storage-experiment/301bd860ad6e4073847d965fa5249291/sample-65536-0-mmap.stderr.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/301bd860ad6e4073847d965fa5249291/sample-65536-0-mmap.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/offline-storage-experiment/301bd860ad6e4073847d965fa5249291/sample-65536-0-mmap.stdout.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/301bd860ad6e4073847d965fa5249291/sample-65536-0-mmap.stdout.txt",
+      "sha256": "dade4be6393789fb37ae5c7e9686487c299d8ffdfe107b6cbc8eecdbbab372fa"
+    },
+    {
+      "source": "target/offline-storage-experiment/301bd860ad6e4073847d965fa5249291/sample-65536-1-buffered.process.json",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/301bd860ad6e4073847d965fa5249291/sample-65536-1-buffered.process.json",
+      "sha256": "a75462b19e79f1aec72d46053dc3b5a1f7c54ab6c80f88e39fbf18e49ec6e7be"
+    },
+    {
+      "source": "target/offline-storage-experiment/301bd860ad6e4073847d965fa5249291/sample-65536-1-buffered.stderr.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/301bd860ad6e4073847d965fa5249291/sample-65536-1-buffered.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/offline-storage-experiment/301bd860ad6e4073847d965fa5249291/sample-65536-1-buffered.stdout.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/301bd860ad6e4073847d965fa5249291/sample-65536-1-buffered.stdout.txt",
+      "sha256": "4024a521e9b251511b17c0731efc32e879c87e4e512dcee5d856dcf69da80ca6"
+    },
+    {
+      "source": "target/offline-storage-experiment/301bd860ad6e4073847d965fa5249291/sample-65536-1-mmap.process.json",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/301bd860ad6e4073847d965fa5249291/sample-65536-1-mmap.process.json",
+      "sha256": "9a98b0b6f7475d167cffc80a09894aa96d2d280de768d17174ce6110aa414dfe"
+    },
+    {
+      "source": "target/offline-storage-experiment/301bd860ad6e4073847d965fa5249291/sample-65536-1-mmap.stderr.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/301bd860ad6e4073847d965fa5249291/sample-65536-1-mmap.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/offline-storage-experiment/301bd860ad6e4073847d965fa5249291/sample-65536-1-mmap.stdout.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/301bd860ad6e4073847d965fa5249291/sample-65536-1-mmap.stdout.txt",
+      "sha256": "97c6ef656cd60f5e7dacedffb96f73ed85ca7ced8a19064f0f21507f1f12bbd6"
+    },
+    {
+      "source": "target/offline-storage-experiment/301bd860ad6e4073847d965fa5249291/sample-65536-2-buffered.process.json",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/301bd860ad6e4073847d965fa5249291/sample-65536-2-buffered.process.json",
+      "sha256": "f6878542e44332649c69ea324eff1be76c4d7a9beae5fa2b731ede268a91e28f"
+    },
+    {
+      "source": "target/offline-storage-experiment/301bd860ad6e4073847d965fa5249291/sample-65536-2-buffered.stderr.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/301bd860ad6e4073847d965fa5249291/sample-65536-2-buffered.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/offline-storage-experiment/301bd860ad6e4073847d965fa5249291/sample-65536-2-buffered.stdout.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/301bd860ad6e4073847d965fa5249291/sample-65536-2-buffered.stdout.txt",
+      "sha256": "e3176a28a70e7d52db873df4b8efcad301fd42a9f6eb3b0b63da6664422b5215"
+    },
+    {
+      "source": "target/offline-storage-experiment/301bd860ad6e4073847d965fa5249291/sample-65536-2-mmap.process.json",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/301bd860ad6e4073847d965fa5249291/sample-65536-2-mmap.process.json",
+      "sha256": "49ff2c61dd57b2202b22cc3db84a95e8133b31f30ef2eec8ac445a14e3de007e"
+    },
+    {
+      "source": "target/offline-storage-experiment/301bd860ad6e4073847d965fa5249291/sample-65536-2-mmap.stderr.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/301bd860ad6e4073847d965fa5249291/sample-65536-2-mmap.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/offline-storage-experiment/301bd860ad6e4073847d965fa5249291/sample-65536-2-mmap.stdout.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/301bd860ad6e4073847d965fa5249291/sample-65536-2-mmap.stdout.txt",
+      "sha256": "72a59ecccc346befa7a0c1a270ad1b7c6af052d7972635071f2fdefffaedc509"
+    },
+    {
+      "source": "target/offline-storage-experiment/301bd860ad6e4073847d965fa5249291/sample-65536-3-buffered.process.json",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/301bd860ad6e4073847d965fa5249291/sample-65536-3-buffered.process.json",
+      "sha256": "8e84fb2e24e9379599ebd9a57055a4474d1f23855f6b4f5d1f4635eac73b2e2e"
+    },
+    {
+      "source": "target/offline-storage-experiment/301bd860ad6e4073847d965fa5249291/sample-65536-3-buffered.stderr.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/301bd860ad6e4073847d965fa5249291/sample-65536-3-buffered.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/offline-storage-experiment/301bd860ad6e4073847d965fa5249291/sample-65536-3-buffered.stdout.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/301bd860ad6e4073847d965fa5249291/sample-65536-3-buffered.stdout.txt",
+      "sha256": "37dd8034d3b20839874c2c2532c8abac941c053f236515aded3867a8c67813f8"
+    },
+    {
+      "source": "target/offline-storage-experiment/301bd860ad6e4073847d965fa5249291/sample-65536-3-mmap.process.json",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/301bd860ad6e4073847d965fa5249291/sample-65536-3-mmap.process.json",
+      "sha256": "2c79b67ab868ef3f2f16fd9773a53b4c7f0acca1876a7463143a5fae7cab41e0"
+    },
+    {
+      "source": "target/offline-storage-experiment/301bd860ad6e4073847d965fa5249291/sample-65536-3-mmap.stderr.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/301bd860ad6e4073847d965fa5249291/sample-65536-3-mmap.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/offline-storage-experiment/301bd860ad6e4073847d965fa5249291/sample-65536-3-mmap.stdout.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/301bd860ad6e4073847d965fa5249291/sample-65536-3-mmap.stdout.txt",
+      "sha256": "8130ea4ebd4d35cccb9f04aa02ba19200e4c9f346264820b1e3dfa49c629cce4"
+    },
+    {
+      "source": "target/offline-storage-experiment/301bd860ad6e4073847d965fa5249291/sample-65536-4-buffered.process.json",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/301bd860ad6e4073847d965fa5249291/sample-65536-4-buffered.process.json",
+      "sha256": "2afb33344a0cc17632fbcbe7f92e191f3ceab4ff6b0be07da9c56a91044da9f9"
+    },
+    {
+      "source": "target/offline-storage-experiment/301bd860ad6e4073847d965fa5249291/sample-65536-4-buffered.stderr.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/301bd860ad6e4073847d965fa5249291/sample-65536-4-buffered.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/offline-storage-experiment/301bd860ad6e4073847d965fa5249291/sample-65536-4-buffered.stdout.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/301bd860ad6e4073847d965fa5249291/sample-65536-4-buffered.stdout.txt",
+      "sha256": "7afcfcc706d567e164e634225c276264ed622ae2c1ee56f071618cae0ea58fa5"
+    },
+    {
+      "source": "target/offline-storage-experiment/301bd860ad6e4073847d965fa5249291/sample-65536-4-mmap.process.json",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/301bd860ad6e4073847d965fa5249291/sample-65536-4-mmap.process.json",
+      "sha256": "73a91ff0329fa6ee1033c278694a1da304f2728cf78dbf78924456a31a8c0677"
+    },
+    {
+      "source": "target/offline-storage-experiment/301bd860ad6e4073847d965fa5249291/sample-65536-4-mmap.stderr.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/301bd860ad6e4073847d965fa5249291/sample-65536-4-mmap.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/offline-storage-experiment/301bd860ad6e4073847d965fa5249291/sample-65536-4-mmap.stdout.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/301bd860ad6e4073847d965fa5249291/sample-65536-4-mmap.stdout.txt",
+      "sha256": "82310567c568fbbddf6f24fc33fdfefeb6bdf2c2024450f5780848c2c49b0396"
+    },
+    {
+      "source": "target/offline-storage-experiment/301bd860ad6e4073847d965fa5249291/sample-8192-0-buffered.process.json",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/301bd860ad6e4073847d965fa5249291/sample-8192-0-buffered.process.json",
+      "sha256": "70d65520fe740bd7a1996ee5f1dde7abc14d7e45a2f6ebb37557a2fa052f5706"
+    },
+    {
+      "source": "target/offline-storage-experiment/301bd860ad6e4073847d965fa5249291/sample-8192-0-buffered.stderr.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/301bd860ad6e4073847d965fa5249291/sample-8192-0-buffered.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/offline-storage-experiment/301bd860ad6e4073847d965fa5249291/sample-8192-0-buffered.stdout.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/301bd860ad6e4073847d965fa5249291/sample-8192-0-buffered.stdout.txt",
+      "sha256": "b8b0e4e2a080b585722998618d24e9b026e72f551b603148ec49b8576df9dca4"
+    },
+    {
+      "source": "target/offline-storage-experiment/301bd860ad6e4073847d965fa5249291/sample-8192-0-mmap.process.json",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/301bd860ad6e4073847d965fa5249291/sample-8192-0-mmap.process.json",
+      "sha256": "e0c1bb826dace7611615c76a436abccf7a91da8f3246b48f523c472decc07457"
+    },
+    {
+      "source": "target/offline-storage-experiment/301bd860ad6e4073847d965fa5249291/sample-8192-0-mmap.stderr.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/301bd860ad6e4073847d965fa5249291/sample-8192-0-mmap.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/offline-storage-experiment/301bd860ad6e4073847d965fa5249291/sample-8192-0-mmap.stdout.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/301bd860ad6e4073847d965fa5249291/sample-8192-0-mmap.stdout.txt",
+      "sha256": "97680b932b47f5f6c097ad26291655670f0d6f6926a62aba4454235bccf6d245"
+    },
+    {
+      "source": "target/offline-storage-experiment/301bd860ad6e4073847d965fa5249291/sample-8192-1-buffered.process.json",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/301bd860ad6e4073847d965fa5249291/sample-8192-1-buffered.process.json",
+      "sha256": "bf10d8f9c9597bba0eda0cf4dc034f9e73a77f7b51a2e232271535e772ba4bfd"
+    },
+    {
+      "source": "target/offline-storage-experiment/301bd860ad6e4073847d965fa5249291/sample-8192-1-buffered.stderr.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/301bd860ad6e4073847d965fa5249291/sample-8192-1-buffered.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/offline-storage-experiment/301bd860ad6e4073847d965fa5249291/sample-8192-1-buffered.stdout.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/301bd860ad6e4073847d965fa5249291/sample-8192-1-buffered.stdout.txt",
+      "sha256": "96271e575b9cafec6c7139e16c9d98af3197174b8341deb8f7f021ccbfaec3e4"
+    },
+    {
+      "source": "target/offline-storage-experiment/301bd860ad6e4073847d965fa5249291/sample-8192-1-mmap.process.json",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/301bd860ad6e4073847d965fa5249291/sample-8192-1-mmap.process.json",
+      "sha256": "89182661d331bb85d07701708f0b55eb3de2aa04533b06416a2594556cf0a735"
+    },
+    {
+      "source": "target/offline-storage-experiment/301bd860ad6e4073847d965fa5249291/sample-8192-1-mmap.stderr.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/301bd860ad6e4073847d965fa5249291/sample-8192-1-mmap.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/offline-storage-experiment/301bd860ad6e4073847d965fa5249291/sample-8192-1-mmap.stdout.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/301bd860ad6e4073847d965fa5249291/sample-8192-1-mmap.stdout.txt",
+      "sha256": "2937e0e914db94b474c58c02fd60a85fe020ae90ebc19d3968b297f4b1bf6b46"
+    },
+    {
+      "source": "target/offline-storage-experiment/301bd860ad6e4073847d965fa5249291/sample-8192-2-buffered.process.json",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/301bd860ad6e4073847d965fa5249291/sample-8192-2-buffered.process.json",
+      "sha256": "2a695d1d74e73d9b13f7345b9da4e7a77941aac2c443b1c4cc0991841c7ab98e"
+    },
+    {
+      "source": "target/offline-storage-experiment/301bd860ad6e4073847d965fa5249291/sample-8192-2-buffered.stderr.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/301bd860ad6e4073847d965fa5249291/sample-8192-2-buffered.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/offline-storage-experiment/301bd860ad6e4073847d965fa5249291/sample-8192-2-buffered.stdout.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/301bd860ad6e4073847d965fa5249291/sample-8192-2-buffered.stdout.txt",
+      "sha256": "43098a8da9eab6e3687e78c061291aa40950d61b4477647099e723d2204ccc74"
+    },
+    {
+      "source": "target/offline-storage-experiment/301bd860ad6e4073847d965fa5249291/sample-8192-2-mmap.process.json",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/301bd860ad6e4073847d965fa5249291/sample-8192-2-mmap.process.json",
+      "sha256": "2fb5fa7d415c4b773c4a101ed2705935b2eca74f600fbe4910a5845443bdc6df"
+    },
+    {
+      "source": "target/offline-storage-experiment/301bd860ad6e4073847d965fa5249291/sample-8192-2-mmap.stderr.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/301bd860ad6e4073847d965fa5249291/sample-8192-2-mmap.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/offline-storage-experiment/301bd860ad6e4073847d965fa5249291/sample-8192-2-mmap.stdout.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/301bd860ad6e4073847d965fa5249291/sample-8192-2-mmap.stdout.txt",
+      "sha256": "a54f6b82be8b7628065249c82e7b7648a67054fefaf175e6a67c4d278ea83244"
+    },
+    {
+      "source": "target/offline-storage-experiment/301bd860ad6e4073847d965fa5249291/sample-8192-3-buffered.process.json",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/301bd860ad6e4073847d965fa5249291/sample-8192-3-buffered.process.json",
+      "sha256": "46b40584693a8fc02c01e4436e503257efacc6df98c24f47f4077a4837067f8a"
+    },
+    {
+      "source": "target/offline-storage-experiment/301bd860ad6e4073847d965fa5249291/sample-8192-3-buffered.stderr.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/301bd860ad6e4073847d965fa5249291/sample-8192-3-buffered.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/offline-storage-experiment/301bd860ad6e4073847d965fa5249291/sample-8192-3-buffered.stdout.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/301bd860ad6e4073847d965fa5249291/sample-8192-3-buffered.stdout.txt",
+      "sha256": "b9784dec9152e789b8bab4198cd285ba1ba49c1bdfcf189837c808215a7169a1"
+    },
+    {
+      "source": "target/offline-storage-experiment/301bd860ad6e4073847d965fa5249291/sample-8192-3-mmap.process.json",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/301bd860ad6e4073847d965fa5249291/sample-8192-3-mmap.process.json",
+      "sha256": "08eb45125371516a79a591505eaa42134108dfd2f1de30804e61f1bd5e6d8857"
+    },
+    {
+      "source": "target/offline-storage-experiment/301bd860ad6e4073847d965fa5249291/sample-8192-3-mmap.stderr.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/301bd860ad6e4073847d965fa5249291/sample-8192-3-mmap.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/offline-storage-experiment/301bd860ad6e4073847d965fa5249291/sample-8192-3-mmap.stdout.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/301bd860ad6e4073847d965fa5249291/sample-8192-3-mmap.stdout.txt",
+      "sha256": "6251a804dd71856adbb860405fd0f443bb3140e964a6e053bf15e81b2394e25b"
+    },
+    {
+      "source": "target/offline-storage-experiment/301bd860ad6e4073847d965fa5249291/sample-8192-4-buffered.process.json",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/301bd860ad6e4073847d965fa5249291/sample-8192-4-buffered.process.json",
+      "sha256": "9a25e5a644fb326ea5214fd1db20c780db3431158c99d4ef8e6e1f05c428d29e"
+    },
+    {
+      "source": "target/offline-storage-experiment/301bd860ad6e4073847d965fa5249291/sample-8192-4-buffered.stderr.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/301bd860ad6e4073847d965fa5249291/sample-8192-4-buffered.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/offline-storage-experiment/301bd860ad6e4073847d965fa5249291/sample-8192-4-buffered.stdout.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/301bd860ad6e4073847d965fa5249291/sample-8192-4-buffered.stdout.txt",
+      "sha256": "1ce1a54245bd91d90f7aff5ec2efb62998597de53f30d8b2e5f9be8eca85c004"
+    },
+    {
+      "source": "target/offline-storage-experiment/301bd860ad6e4073847d965fa5249291/sample-8192-4-mmap.process.json",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/301bd860ad6e4073847d965fa5249291/sample-8192-4-mmap.process.json",
+      "sha256": "ad7957f978cee129f998066f825c2fec7662ecf499452d08134b4c823ca43597"
+    },
+    {
+      "source": "target/offline-storage-experiment/301bd860ad6e4073847d965fa5249291/sample-8192-4-mmap.stderr.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/301bd860ad6e4073847d965fa5249291/sample-8192-4-mmap.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/offline-storage-experiment/301bd860ad6e4073847d965fa5249291/sample-8192-4-mmap.stdout.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/301bd860ad6e4073847d965fa5249291/sample-8192-4-mmap.stdout.txt",
+      "sha256": "d5427fa8dc3bf1f73c6a9f294ad32b100253c5797e3254313b6a070707a6e053"
+    },
+    {
+      "source": "target/offline-storage-experiment/301bd860ad6e4073847d965fa5249291/sysroot.process.json",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/301bd860ad6e4073847d965fa5249291/sysroot.process.json",
+      "sha256": "53c6041dd4268d1aaac9ed66256341ec87192aa1ea1d0a66ecaadb9b28472e3f"
+    },
+    {
+      "source": "target/offline-storage-experiment/301bd860ad6e4073847d965fa5249291/sysroot.stderr.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/301bd860ad6e4073847d965fa5249291/sysroot.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/offline-storage-experiment/301bd860ad6e4073847d965fa5249291/sysroot.stdout.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/301bd860ad6e4073847d965fa5249291/sysroot.stdout.txt",
+      "sha256": "e0d8249c2fb93ac2106d97fedd24f44420e0ee2316617df20f769f033eaf568d"
+    },
+    {
+      "source": "target/offline-storage-experiment/301bd860ad6e4073847d965fa5249291/trailing.process.json",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/301bd860ad6e4073847d965fa5249291/trailing.process.json",
+      "sha256": "040abbd98fa2de62f82afe55cd345690be39c176cc48708121d13b3de3b10c7d"
+    },
+    {
+      "source": "target/offline-storage-experiment/301bd860ad6e4073847d965fa5249291/trailing.stderr.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/301bd860ad6e4073847d965fa5249291/trailing.stderr.txt",
+      "sha256": "f2431b0b24eaf4e3074159e63a4e90a41e38fb66aaac130fab149d5e13482c4a"
+    },
+    {
+      "source": "target/offline-storage-experiment/301bd860ad6e4073847d965fa5249291/trailing.stdout.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/301bd860ad6e4073847d965fa5249291/trailing.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/offline-storage-experiment/301bd860ad6e4073847d965fa5249291/truncated.process.json",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/301bd860ad6e4073847d965fa5249291/truncated.process.json",
+      "sha256": "0ce1456f2875373bad8703a447055c6839bbf640f119b75503f438052de50129"
+    },
+    {
+      "source": "target/offline-storage-experiment/301bd860ad6e4073847d965fa5249291/truncated.stderr.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/301bd860ad6e4073847d965fa5249291/truncated.stderr.txt",
+      "sha256": "f2431b0b24eaf4e3074159e63a4e90a41e38fb66aaac130fab149d5e13482c4a"
+    },
+    {
+      "source": "target/offline-storage-experiment/301bd860ad6e4073847d965fa5249291/truncated.stdout.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/301bd860ad6e4073847d965fa5249291/truncated.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/offline-storage-experiment/301bd860ad6e4073847d965fa5249291/wrong-source-epoch.process.json",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/301bd860ad6e4073847d965fa5249291/wrong-source-epoch.process.json",
+      "sha256": "934f7484701e27eaa34c09fe43285f6324d42fe7f3797308793f655f20f2a63d"
+    },
+    {
+      "source": "target/offline-storage-experiment/301bd860ad6e4073847d965fa5249291/wrong-source-epoch.stderr.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/301bd860ad6e4073847d965fa5249291/wrong-source-epoch.stderr.txt",
+      "sha256": "f84bd7f23ecbe9a0c29b59923a36f0870d49d7fe7f7718ef459c2438b419283b"
+    },
+    {
+      "source": "target/offline-storage-experiment/301bd860ad6e4073847d965fa5249291/wrong-source-epoch.stdout.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/301bd860ad6e4073847d965fa5249291/wrong-source-epoch.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/offline-storage-experiment/74ee0d64de0c4d3ea51fa0fa5e92d75a/bad-magic.process.json",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/74ee0d64de0c4d3ea51fa0fa5e92d75a/bad-magic.process.json",
+      "sha256": "494c254c41d7dc0125f2a8f3572e059b4903cb107bb1b4f90abbfae3ca560d9c"
+    },
+    {
+      "source": "target/offline-storage-experiment/74ee0d64de0c4d3ea51fa0fa5e92d75a/bad-magic.stderr.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/74ee0d64de0c4d3ea51fa0fa5e92d75a/bad-magic.stderr.txt",
+      "sha256": "b1325b6839dffaacf2250a27f282142e6ec8650abec2174026469910a0151866"
+    },
+    {
+      "source": "target/offline-storage-experiment/74ee0d64de0c4d3ea51fa0fa5e92d75a/bad-magic.stdout.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/74ee0d64de0c4d3ea51fa0fa5e92d75a/bad-magic.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/offline-storage-experiment/74ee0d64de0c4d3ea51fa0fa5e92d75a/campaign.json",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/74ee0d64de0c4d3ea51fa0fa5e92d75a/campaign.json",
+      "sha256": "5cf91b1b453e1cd1e65ca614c520cfc97b7bcb7f45b245a8d73fa5791109b3bf"
+    },
+    {
+      "source": "target/offline-storage-experiment/74ee0d64de0c4d3ea51fa0fa5e92d75a/clippy.process.json",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/74ee0d64de0c4d3ea51fa0fa5e92d75a/clippy.process.json",
+      "sha256": "e9ce44f0cca962faca038bbe9614bc113eb60da7303ed06795a8bde7dda80d87"
+    },
+    {
+      "source": "target/offline-storage-experiment/74ee0d64de0c4d3ea51fa0fa5e92d75a/clippy.stderr.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/74ee0d64de0c4d3ea51fa0fa5e92d75a/clippy.stderr.txt",
+      "sha256": "5c727fcfa38d544f01b9e5d522ca2d0eeb58abf16afb898fb5ea988e2564d10b"
+    },
+    {
+      "source": "target/offline-storage-experiment/74ee0d64de0c4d3ea51fa0fa5e92d75a/clippy.stdout.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/74ee0d64de0c4d3ea51fa0fa5e92d75a/clippy.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/offline-storage-experiment/74ee0d64de0c4d3ea51fa0fa5e92d75a/crash-uncommitted.process.json",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/74ee0d64de0c4d3ea51fa0fa5e92d75a/crash-uncommitted.process.json",
+      "sha256": "48c5586a7ca28678dfe0f3d82de1f80981f3227cd916b6b7891ec6c2014828fe"
+    },
+    {
+      "source": "target/offline-storage-experiment/74ee0d64de0c4d3ea51fa0fa5e92d75a/crash-uncommitted.stderr.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/74ee0d64de0c4d3ea51fa0fa5e92d75a/crash-uncommitted.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/offline-storage-experiment/74ee0d64de0c4d3ea51fa0fa5e92d75a/crash-uncommitted.stdout.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/74ee0d64de0c4d3ea51fa0fa5e92d75a/crash-uncommitted.stdout.txt",
+      "sha256": "c30d6346cd1547d12985a22b1bf69f0799b741361c1bedfc3c83a30ae847df31"
+    },
+    {
+      "source": "target/offline-storage-experiment/74ee0d64de0c4d3ea51fa0fa5e92d75a/duplicate-key.process.json",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/74ee0d64de0c4d3ea51fa0fa5e92d75a/duplicate-key.process.json",
+      "sha256": "b84aa6d5404764d62a3087ba3796801216bc1a68bb8e5d19661ac16fa87301b2"
+    },
+    {
+      "source": "target/offline-storage-experiment/74ee0d64de0c4d3ea51fa0fa5e92d75a/duplicate-key.stderr.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/74ee0d64de0c4d3ea51fa0fa5e92d75a/duplicate-key.stderr.txt",
+      "sha256": "a827411c1cdab697712f021b7ea777536ea8f35a176e94d0c51425024c5aa2be"
+    },
+    {
+      "source": "target/offline-storage-experiment/74ee0d64de0c4d3ea51fa0fa5e92d75a/duplicate-key.stdout.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/74ee0d64de0c4d3ea51fa0fa5e92d75a/duplicate-key.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/offline-storage-experiment/74ee0d64de0c4d3ea51fa0fa5e92d75a/fmt.process.json",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/74ee0d64de0c4d3ea51fa0fa5e92d75a/fmt.process.json",
+      "sha256": "4134bae5cb0be7d5b76c2781adefa6b872678c93d87b4386029d7fdcaccb8347"
+    },
+    {
+      "source": "target/offline-storage-experiment/74ee0d64de0c4d3ea51fa0fa5e92d75a/fmt.stderr.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/74ee0d64de0c4d3ea51fa0fa5e92d75a/fmt.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/offline-storage-experiment/74ee0d64de0c4d3ea51fa0fa5e92d75a/fmt.stdout.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/74ee0d64de0c4d3ea51fa0fa5e92d75a/fmt.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/offline-storage-experiment/74ee0d64de0c4d3ea51fa0fa5e92d75a/metadata.process.json",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/74ee0d64de0c4d3ea51fa0fa5e92d75a/metadata.process.json",
+      "sha256": "929dde4d65b4116bff9eadb776909dd85ee11c679439e1aed8aa6d7c048f3eea"
+    },
+    {
+      "source": "target/offline-storage-experiment/74ee0d64de0c4d3ea51fa0fa5e92d75a/metadata.stderr.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/74ee0d64de0c4d3ea51fa0fa5e92d75a/metadata.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/offline-storage-experiment/74ee0d64de0c4d3ea51fa0fa5e92d75a/metadata.stdout.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/74ee0d64de0c4d3ea51fa0fa5e92d75a/metadata.stdout.txt",
+      "sha256": "745cc703140c36bd65e5a1d0a35b17d72d74c97df3b6d28cdfa1252dede7fa8c"
+    },
+    {
+      "source": "target/offline-storage-experiment/74ee0d64de0c4d3ea51fa0fa5e92d75a/recover.process.json",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/74ee0d64de0c4d3ea51fa0fa5e92d75a/recover.process.json",
+      "sha256": "3a25762d0694a60f5a24fdc507908169adb85db813e5621f06192d1d91d8c6b1"
+    },
+    {
+      "source": "target/offline-storage-experiment/74ee0d64de0c4d3ea51fa0fa5e92d75a/recover.stderr.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/74ee0d64de0c4d3ea51fa0fa5e92d75a/recover.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/offline-storage-experiment/74ee0d64de0c4d3ea51fa0fa5e92d75a/recover.stdout.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/74ee0d64de0c4d3ea51fa0fa5e92d75a/recover.stdout.txt",
+      "sha256": "67acbaa9c56850659377862c8444eab49887ec9f0b0473e1280880a2bcd8ce7e"
+    },
+    {
+      "source": "target/offline-storage-experiment/74ee0d64de0c4d3ea51fa0fa5e92d75a/reference-tests.process.json",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/74ee0d64de0c4d3ea51fa0fa5e92d75a/reference-tests.process.json",
+      "sha256": "be482b3883e04e246e68e5f89e3f28301dfd97d6c5e39feb6ac168480659978e"
+    },
+    {
+      "source": "target/offline-storage-experiment/74ee0d64de0c4d3ea51fa0fa5e92d75a/reference-tests.stderr.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/74ee0d64de0c4d3ea51fa0fa5e92d75a/reference-tests.stderr.txt",
+      "sha256": "7b743ccdd703f894cf2af7e5a8063f2e48972cf1438dbbd2e939191e6ff06bc1"
+    },
+    {
+      "source": "target/offline-storage-experiment/74ee0d64de0c4d3ea51fa0fa5e92d75a/reference-tests.stdout.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/74ee0d64de0c4d3ea51fa0fa5e92d75a/reference-tests.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/offline-storage-experiment/74ee0d64de0c4d3ea51fa0fa5e92d75a/release.process.json",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/74ee0d64de0c4d3ea51fa0fa5e92d75a/release.process.json",
+      "sha256": "9e57ebf422855408e2f5508ecb7c9399f03836eabd789f3cf13323adee47aeb1"
+    },
+    {
+      "source": "target/offline-storage-experiment/74ee0d64de0c4d3ea51fa0fa5e92d75a/release.stderr.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/74ee0d64de0c4d3ea51fa0fa5e92d75a/release.stderr.txt",
+      "sha256": "d1bef4adb69d63fd9dfba0c8a4705f4d28b356d7a36f2416edc2a5e4d684d85d"
+    },
+    {
+      "source": "target/offline-storage-experiment/74ee0d64de0c4d3ea51fa0fa5e92d75a/release.stdout.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/74ee0d64de0c4d3ea51fa0fa5e92d75a/release.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/offline-storage-experiment/74ee0d64de0c4d3ea51fa0fa5e92d75a/rust-tests.process.json",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/74ee0d64de0c4d3ea51fa0fa5e92d75a/rust-tests.process.json",
+      "sha256": "c537c10858fe44704340ee224b41ad7a25580f86cc3b34433ad82b745e677e76"
+    },
+    {
+      "source": "target/offline-storage-experiment/74ee0d64de0c4d3ea51fa0fa5e92d75a/rust-tests.stderr.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/74ee0d64de0c4d3ea51fa0fa5e92d75a/rust-tests.stderr.txt",
+      "sha256": "2976170b3fa4183c3112040cdb34c15ab34d8b14ea5b8fa32efa2b6f0748b186"
+    },
+    {
+      "source": "target/offline-storage-experiment/74ee0d64de0c4d3ea51fa0fa5e92d75a/rust-tests.stdout.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/74ee0d64de0c4d3ea51fa0fa5e92d75a/rust-tests.stdout.txt",
+      "sha256": "9b250283def33b870edee468188629e21a43ba16f60d63a2edcea9a96c76dc61"
+    },
+    {
+      "source": "target/offline-storage-experiment/74ee0d64de0c4d3ea51fa0fa5e92d75a/rust-version.process.json",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/74ee0d64de0c4d3ea51fa0fa5e92d75a/rust-version.process.json",
+      "sha256": "aa47f295bdece5c83e13d0ea9f85b074c26c7f884029991049b25841f5fe98da"
+    },
+    {
+      "source": "target/offline-storage-experiment/74ee0d64de0c4d3ea51fa0fa5e92d75a/rust-version.stderr.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/74ee0d64de0c4d3ea51fa0fa5e92d75a/rust-version.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/offline-storage-experiment/74ee0d64de0c4d3ea51fa0fa5e92d75a/rust-version.stdout.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/74ee0d64de0c4d3ea51fa0fa5e92d75a/rust-version.stdout.txt",
+      "sha256": "c45e612575abeef05e99e88eb1e7aea52cddab9ad70d4f65ad20eaa65e92a9cf"
+    },
+    {
+      "source": "target/offline-storage-experiment/74ee0d64de0c4d3ea51fa0fa5e92d75a/sample-65536-0-buffered.process.json",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/74ee0d64de0c4d3ea51fa0fa5e92d75a/sample-65536-0-buffered.process.json",
+      "sha256": "9746304424658168142e93f70313466d0994ac2c96bc26f9fdaf58147e3c01c1"
+    },
+    {
+      "source": "target/offline-storage-experiment/74ee0d64de0c4d3ea51fa0fa5e92d75a/sample-65536-0-buffered.stderr.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/74ee0d64de0c4d3ea51fa0fa5e92d75a/sample-65536-0-buffered.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/offline-storage-experiment/74ee0d64de0c4d3ea51fa0fa5e92d75a/sample-65536-0-buffered.stdout.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/74ee0d64de0c4d3ea51fa0fa5e92d75a/sample-65536-0-buffered.stdout.txt",
+      "sha256": "933f19d11b2f30276c355e953f455efc2dd4eb87a9aefc8a4f4434f8df241992"
+    },
+    {
+      "source": "target/offline-storage-experiment/74ee0d64de0c4d3ea51fa0fa5e92d75a/sample-65536-0-mmap.process.json",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/74ee0d64de0c4d3ea51fa0fa5e92d75a/sample-65536-0-mmap.process.json",
+      "sha256": "66d1e104fcde25fb2ab73efa7cc34820bcc726f863eda6eaf05b35550dff5fde"
+    },
+    {
+      "source": "target/offline-storage-experiment/74ee0d64de0c4d3ea51fa0fa5e92d75a/sample-65536-0-mmap.stderr.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/74ee0d64de0c4d3ea51fa0fa5e92d75a/sample-65536-0-mmap.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/offline-storage-experiment/74ee0d64de0c4d3ea51fa0fa5e92d75a/sample-65536-0-mmap.stdout.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/74ee0d64de0c4d3ea51fa0fa5e92d75a/sample-65536-0-mmap.stdout.txt",
+      "sha256": "cbff1fde292501079ec78b3c2a8edcd62e40aba68b526c1ac83b3bb0a62a830b"
+    },
+    {
+      "source": "target/offline-storage-experiment/74ee0d64de0c4d3ea51fa0fa5e92d75a/sample-65536-1-buffered.process.json",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/74ee0d64de0c4d3ea51fa0fa5e92d75a/sample-65536-1-buffered.process.json",
+      "sha256": "5e7b8a56ae5ebfec1dd05dd8986fc9c478cab97fc90f1e301e4edcf4af52b66e"
+    },
+    {
+      "source": "target/offline-storage-experiment/74ee0d64de0c4d3ea51fa0fa5e92d75a/sample-65536-1-buffered.stderr.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/74ee0d64de0c4d3ea51fa0fa5e92d75a/sample-65536-1-buffered.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/offline-storage-experiment/74ee0d64de0c4d3ea51fa0fa5e92d75a/sample-65536-1-buffered.stdout.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/74ee0d64de0c4d3ea51fa0fa5e92d75a/sample-65536-1-buffered.stdout.txt",
+      "sha256": "db260075209efb4e888b4dc2307c461cc1d25f0eed0c7feeedfa59fa0dfcd9dd"
+    },
+    {
+      "source": "target/offline-storage-experiment/74ee0d64de0c4d3ea51fa0fa5e92d75a/sample-65536-1-mmap.process.json",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/74ee0d64de0c4d3ea51fa0fa5e92d75a/sample-65536-1-mmap.process.json",
+      "sha256": "e699ed16bd8045e0957379ddc5a04cf7fd557075f59a3a27934b041ee5463e1c"
+    },
+    {
+      "source": "target/offline-storage-experiment/74ee0d64de0c4d3ea51fa0fa5e92d75a/sample-65536-1-mmap.stderr.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/74ee0d64de0c4d3ea51fa0fa5e92d75a/sample-65536-1-mmap.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/offline-storage-experiment/74ee0d64de0c4d3ea51fa0fa5e92d75a/sample-65536-1-mmap.stdout.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/74ee0d64de0c4d3ea51fa0fa5e92d75a/sample-65536-1-mmap.stdout.txt",
+      "sha256": "ad327da95b8a5a88aae65af62bc66522d70839413a05f82b3a8d0b0a49b06cbb"
+    },
+    {
+      "source": "target/offline-storage-experiment/74ee0d64de0c4d3ea51fa0fa5e92d75a/sample-65536-2-buffered.process.json",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/74ee0d64de0c4d3ea51fa0fa5e92d75a/sample-65536-2-buffered.process.json",
+      "sha256": "f8933b2cb0de36333f674fdb44778f64d608e0688a5fbbbe87b44b4aeaaf5e8e"
+    },
+    {
+      "source": "target/offline-storage-experiment/74ee0d64de0c4d3ea51fa0fa5e92d75a/sample-65536-2-buffered.stderr.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/74ee0d64de0c4d3ea51fa0fa5e92d75a/sample-65536-2-buffered.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/offline-storage-experiment/74ee0d64de0c4d3ea51fa0fa5e92d75a/sample-65536-2-buffered.stdout.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/74ee0d64de0c4d3ea51fa0fa5e92d75a/sample-65536-2-buffered.stdout.txt",
+      "sha256": "dbf45bb1aff835a10e03642b8e01b9c8d0ddcd8b070241be285d80061e751e58"
+    },
+    {
+      "source": "target/offline-storage-experiment/74ee0d64de0c4d3ea51fa0fa5e92d75a/sample-65536-2-mmap.process.json",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/74ee0d64de0c4d3ea51fa0fa5e92d75a/sample-65536-2-mmap.process.json",
+      "sha256": "dc75efcd7b4bad6aa53ff2bfa199fd71faabf9c147d0cbc0036434e22fbcf054"
+    },
+    {
+      "source": "target/offline-storage-experiment/74ee0d64de0c4d3ea51fa0fa5e92d75a/sample-65536-2-mmap.stderr.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/74ee0d64de0c4d3ea51fa0fa5e92d75a/sample-65536-2-mmap.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/offline-storage-experiment/74ee0d64de0c4d3ea51fa0fa5e92d75a/sample-65536-2-mmap.stdout.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/74ee0d64de0c4d3ea51fa0fa5e92d75a/sample-65536-2-mmap.stdout.txt",
+      "sha256": "d8b79f4d060594ce8ff61a022c5766d2db467b4932c6bde70e80b71551bcf3b0"
+    },
+    {
+      "source": "target/offline-storage-experiment/74ee0d64de0c4d3ea51fa0fa5e92d75a/sample-65536-3-buffered.process.json",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/74ee0d64de0c4d3ea51fa0fa5e92d75a/sample-65536-3-buffered.process.json",
+      "sha256": "bc7c331e87066d34f520938a4f29b66a0c7e1a2158fdf3132440bd842860cfce"
+    },
+    {
+      "source": "target/offline-storage-experiment/74ee0d64de0c4d3ea51fa0fa5e92d75a/sample-65536-3-buffered.stderr.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/74ee0d64de0c4d3ea51fa0fa5e92d75a/sample-65536-3-buffered.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/offline-storage-experiment/74ee0d64de0c4d3ea51fa0fa5e92d75a/sample-65536-3-buffered.stdout.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/74ee0d64de0c4d3ea51fa0fa5e92d75a/sample-65536-3-buffered.stdout.txt",
+      "sha256": "ed79f9290438c0bee9cc83d3c104006ff474d64561bc966e5695cdf113376d49"
+    },
+    {
+      "source": "target/offline-storage-experiment/74ee0d64de0c4d3ea51fa0fa5e92d75a/sample-65536-3-mmap.process.json",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/74ee0d64de0c4d3ea51fa0fa5e92d75a/sample-65536-3-mmap.process.json",
+      "sha256": "2b0d9f7aaec24ada59d99a63ce67989010827d1e9f2d34f91cbd6c74b3affe26"
+    },
+    {
+      "source": "target/offline-storage-experiment/74ee0d64de0c4d3ea51fa0fa5e92d75a/sample-65536-3-mmap.stderr.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/74ee0d64de0c4d3ea51fa0fa5e92d75a/sample-65536-3-mmap.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/offline-storage-experiment/74ee0d64de0c4d3ea51fa0fa5e92d75a/sample-65536-3-mmap.stdout.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/74ee0d64de0c4d3ea51fa0fa5e92d75a/sample-65536-3-mmap.stdout.txt",
+      "sha256": "5489154769694b7b8172555ed179c3d404d485591c089d357eeefacfefce063e"
+    },
+    {
+      "source": "target/offline-storage-experiment/74ee0d64de0c4d3ea51fa0fa5e92d75a/sample-65536-4-buffered.process.json",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/74ee0d64de0c4d3ea51fa0fa5e92d75a/sample-65536-4-buffered.process.json",
+      "sha256": "81058eb12fdbceda6cb1873ca1f86fe3e5de35fdd5da531201ba2b5c785d1116"
+    },
+    {
+      "source": "target/offline-storage-experiment/74ee0d64de0c4d3ea51fa0fa5e92d75a/sample-65536-4-buffered.stderr.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/74ee0d64de0c4d3ea51fa0fa5e92d75a/sample-65536-4-buffered.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/offline-storage-experiment/74ee0d64de0c4d3ea51fa0fa5e92d75a/sample-65536-4-buffered.stdout.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/74ee0d64de0c4d3ea51fa0fa5e92d75a/sample-65536-4-buffered.stdout.txt",
+      "sha256": "02bfa191298de707eaac3578d19cb6e084921806d3a331b675537758d545d47c"
+    },
+    {
+      "source": "target/offline-storage-experiment/74ee0d64de0c4d3ea51fa0fa5e92d75a/sample-65536-4-mmap.process.json",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/74ee0d64de0c4d3ea51fa0fa5e92d75a/sample-65536-4-mmap.process.json",
+      "sha256": "7b657bdb67661205a3332d7e7cef2fd321c6849753ef7ba88fdad46ce45901c1"
+    },
+    {
+      "source": "target/offline-storage-experiment/74ee0d64de0c4d3ea51fa0fa5e92d75a/sample-65536-4-mmap.stderr.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/74ee0d64de0c4d3ea51fa0fa5e92d75a/sample-65536-4-mmap.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/offline-storage-experiment/74ee0d64de0c4d3ea51fa0fa5e92d75a/sample-65536-4-mmap.stdout.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/74ee0d64de0c4d3ea51fa0fa5e92d75a/sample-65536-4-mmap.stdout.txt",
+      "sha256": "716fe0fef4d7b15753c264b7db92207a01897113ff6ccdcc9b78450ffb90c866"
+    },
+    {
+      "source": "target/offline-storage-experiment/74ee0d64de0c4d3ea51fa0fa5e92d75a/sample-8192-0-buffered.process.json",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/74ee0d64de0c4d3ea51fa0fa5e92d75a/sample-8192-0-buffered.process.json",
+      "sha256": "b596d8bd795bcd4a8a1ea5ddd260c92e1c92dba5ea0610dbe7d2153d92377123"
+    },
+    {
+      "source": "target/offline-storage-experiment/74ee0d64de0c4d3ea51fa0fa5e92d75a/sample-8192-0-buffered.stderr.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/74ee0d64de0c4d3ea51fa0fa5e92d75a/sample-8192-0-buffered.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/offline-storage-experiment/74ee0d64de0c4d3ea51fa0fa5e92d75a/sample-8192-0-buffered.stdout.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/74ee0d64de0c4d3ea51fa0fa5e92d75a/sample-8192-0-buffered.stdout.txt",
+      "sha256": "9d74b79076df08c9c89b41b7d34346262cfe12df537e6f24b1d2849ace3d83d1"
+    },
+    {
+      "source": "target/offline-storage-experiment/74ee0d64de0c4d3ea51fa0fa5e92d75a/sample-8192-0-mmap.process.json",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/74ee0d64de0c4d3ea51fa0fa5e92d75a/sample-8192-0-mmap.process.json",
+      "sha256": "031b0a5e32513d7fcb187a579778c1d5b395bb7d7be46d742aceddd6aac03833"
+    },
+    {
+      "source": "target/offline-storage-experiment/74ee0d64de0c4d3ea51fa0fa5e92d75a/sample-8192-0-mmap.stderr.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/74ee0d64de0c4d3ea51fa0fa5e92d75a/sample-8192-0-mmap.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/offline-storage-experiment/74ee0d64de0c4d3ea51fa0fa5e92d75a/sample-8192-0-mmap.stdout.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/74ee0d64de0c4d3ea51fa0fa5e92d75a/sample-8192-0-mmap.stdout.txt",
+      "sha256": "a24ded9516e54971201e8efd7552ebeb29580f411e2e2967911bb591271a7bea"
+    },
+    {
+      "source": "target/offline-storage-experiment/74ee0d64de0c4d3ea51fa0fa5e92d75a/sample-8192-1-buffered.process.json",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/74ee0d64de0c4d3ea51fa0fa5e92d75a/sample-8192-1-buffered.process.json",
+      "sha256": "c326cba1ca435996b38da63cee39cfde86806a28b69e6a108f242c1d143c5ad1"
+    },
+    {
+      "source": "target/offline-storage-experiment/74ee0d64de0c4d3ea51fa0fa5e92d75a/sample-8192-1-buffered.stderr.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/74ee0d64de0c4d3ea51fa0fa5e92d75a/sample-8192-1-buffered.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/offline-storage-experiment/74ee0d64de0c4d3ea51fa0fa5e92d75a/sample-8192-1-buffered.stdout.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/74ee0d64de0c4d3ea51fa0fa5e92d75a/sample-8192-1-buffered.stdout.txt",
+      "sha256": "cb72a017b3a212f260b14181a978446ce271e25882e6e29466ff0ea940d70552"
+    },
+    {
+      "source": "target/offline-storage-experiment/74ee0d64de0c4d3ea51fa0fa5e92d75a/sample-8192-1-mmap.process.json",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/74ee0d64de0c4d3ea51fa0fa5e92d75a/sample-8192-1-mmap.process.json",
+      "sha256": "3e2849f2d3547db8958a665b52d8f434e7ca0481014eb4eaf5e4388c50a7660b"
+    },
+    {
+      "source": "target/offline-storage-experiment/74ee0d64de0c4d3ea51fa0fa5e92d75a/sample-8192-1-mmap.stderr.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/74ee0d64de0c4d3ea51fa0fa5e92d75a/sample-8192-1-mmap.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/offline-storage-experiment/74ee0d64de0c4d3ea51fa0fa5e92d75a/sample-8192-1-mmap.stdout.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/74ee0d64de0c4d3ea51fa0fa5e92d75a/sample-8192-1-mmap.stdout.txt",
+      "sha256": "f800d08ddc9c758f8a34a803451832ea2e3d45799b7d766d066f8c25bfc95066"
+    },
+    {
+      "source": "target/offline-storage-experiment/74ee0d64de0c4d3ea51fa0fa5e92d75a/sample-8192-2-buffered.process.json",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/74ee0d64de0c4d3ea51fa0fa5e92d75a/sample-8192-2-buffered.process.json",
+      "sha256": "830f37bb70f637367ecd6d2c7e88a4a590724a663b5172248ce4b22774d24ca5"
+    },
+    {
+      "source": "target/offline-storage-experiment/74ee0d64de0c4d3ea51fa0fa5e92d75a/sample-8192-2-buffered.stderr.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/74ee0d64de0c4d3ea51fa0fa5e92d75a/sample-8192-2-buffered.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/offline-storage-experiment/74ee0d64de0c4d3ea51fa0fa5e92d75a/sample-8192-2-buffered.stdout.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/74ee0d64de0c4d3ea51fa0fa5e92d75a/sample-8192-2-buffered.stdout.txt",
+      "sha256": "0727b8ecbac51d2e860a1ad25763f8f7e34279b395c9c6e91483ecb937c5de18"
+    },
+    {
+      "source": "target/offline-storage-experiment/74ee0d64de0c4d3ea51fa0fa5e92d75a/sample-8192-2-mmap.process.json",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/74ee0d64de0c4d3ea51fa0fa5e92d75a/sample-8192-2-mmap.process.json",
+      "sha256": "e20cd2edfbda73fa1731bb778d4e7abc0670dd83ef6418b4d9781d9ced4ba078"
+    },
+    {
+      "source": "target/offline-storage-experiment/74ee0d64de0c4d3ea51fa0fa5e92d75a/sample-8192-2-mmap.stderr.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/74ee0d64de0c4d3ea51fa0fa5e92d75a/sample-8192-2-mmap.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/offline-storage-experiment/74ee0d64de0c4d3ea51fa0fa5e92d75a/sample-8192-2-mmap.stdout.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/74ee0d64de0c4d3ea51fa0fa5e92d75a/sample-8192-2-mmap.stdout.txt",
+      "sha256": "c0bc57fb23e8913780ad8e4666079a8382fd7e3ede048ac78f928743f2897af9"
+    },
+    {
+      "source": "target/offline-storage-experiment/74ee0d64de0c4d3ea51fa0fa5e92d75a/sample-8192-3-buffered.process.json",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/74ee0d64de0c4d3ea51fa0fa5e92d75a/sample-8192-3-buffered.process.json",
+      "sha256": "cf616473930cd74a8a0c86052dcfac2f93527922a306e0266b2a57add56fc6a8"
+    },
+    {
+      "source": "target/offline-storage-experiment/74ee0d64de0c4d3ea51fa0fa5e92d75a/sample-8192-3-buffered.stderr.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/74ee0d64de0c4d3ea51fa0fa5e92d75a/sample-8192-3-buffered.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/offline-storage-experiment/74ee0d64de0c4d3ea51fa0fa5e92d75a/sample-8192-3-buffered.stdout.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/74ee0d64de0c4d3ea51fa0fa5e92d75a/sample-8192-3-buffered.stdout.txt",
+      "sha256": "640d57d6aa41abb566b4405213d8dc0674555a179c42628450961725c9f8b74a"
+    },
+    {
+      "source": "target/offline-storage-experiment/74ee0d64de0c4d3ea51fa0fa5e92d75a/sample-8192-3-mmap.process.json",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/74ee0d64de0c4d3ea51fa0fa5e92d75a/sample-8192-3-mmap.process.json",
+      "sha256": "9546960d11fdf77751699737f64b5f5369b9dc3869fadfff74e25bce0cac4cd6"
+    },
+    {
+      "source": "target/offline-storage-experiment/74ee0d64de0c4d3ea51fa0fa5e92d75a/sample-8192-3-mmap.stderr.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/74ee0d64de0c4d3ea51fa0fa5e92d75a/sample-8192-3-mmap.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/offline-storage-experiment/74ee0d64de0c4d3ea51fa0fa5e92d75a/sample-8192-3-mmap.stdout.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/74ee0d64de0c4d3ea51fa0fa5e92d75a/sample-8192-3-mmap.stdout.txt",
+      "sha256": "e8cbb82d6ddde2bae34aeb9ee1f7f0b83563eb405af9ee3bdf584300bfc9363e"
+    },
+    {
+      "source": "target/offline-storage-experiment/74ee0d64de0c4d3ea51fa0fa5e92d75a/sample-8192-4-buffered.process.json",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/74ee0d64de0c4d3ea51fa0fa5e92d75a/sample-8192-4-buffered.process.json",
+      "sha256": "76dca1f131702db8b7030e5d8edef9c1f7ed15ab21cea52f6f8c42b1cda19aa1"
+    },
+    {
+      "source": "target/offline-storage-experiment/74ee0d64de0c4d3ea51fa0fa5e92d75a/sample-8192-4-buffered.stderr.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/74ee0d64de0c4d3ea51fa0fa5e92d75a/sample-8192-4-buffered.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/offline-storage-experiment/74ee0d64de0c4d3ea51fa0fa5e92d75a/sample-8192-4-buffered.stdout.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/74ee0d64de0c4d3ea51fa0fa5e92d75a/sample-8192-4-buffered.stdout.txt",
+      "sha256": "5afbddd6fe6e6ab7a1f4964a03b36d62acc31cce3785d86644147efb86206b67"
+    },
+    {
+      "source": "target/offline-storage-experiment/74ee0d64de0c4d3ea51fa0fa5e92d75a/sample-8192-4-mmap.process.json",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/74ee0d64de0c4d3ea51fa0fa5e92d75a/sample-8192-4-mmap.process.json",
+      "sha256": "0a9b385c12c60c5d029911b1f1b5bb50a3e3fa0a7b2243af0975b6d671400a1e"
+    },
+    {
+      "source": "target/offline-storage-experiment/74ee0d64de0c4d3ea51fa0fa5e92d75a/sample-8192-4-mmap.stderr.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/74ee0d64de0c4d3ea51fa0fa5e92d75a/sample-8192-4-mmap.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/offline-storage-experiment/74ee0d64de0c4d3ea51fa0fa5e92d75a/sample-8192-4-mmap.stdout.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/74ee0d64de0c4d3ea51fa0fa5e92d75a/sample-8192-4-mmap.stdout.txt",
+      "sha256": "32da310a51fd06c5ab5255f66c5f8564e0948b1cc5551d6c783453595efd08b4"
+    },
+    {
+      "source": "target/offline-storage-experiment/74ee0d64de0c4d3ea51fa0fa5e92d75a/sysroot.process.json",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/74ee0d64de0c4d3ea51fa0fa5e92d75a/sysroot.process.json",
+      "sha256": "b26d2ff134f9b2deea52bfce8d13a5ccbebe1631aafe36ed54a8dbdcc71ee21d"
+    },
+    {
+      "source": "target/offline-storage-experiment/74ee0d64de0c4d3ea51fa0fa5e92d75a/sysroot.stderr.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/74ee0d64de0c4d3ea51fa0fa5e92d75a/sysroot.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/offline-storage-experiment/74ee0d64de0c4d3ea51fa0fa5e92d75a/sysroot.stdout.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/74ee0d64de0c4d3ea51fa0fa5e92d75a/sysroot.stdout.txt",
+      "sha256": "e0d8249c2fb93ac2106d97fedd24f44420e0ee2316617df20f769f033eaf568d"
+    },
+    {
+      "source": "target/offline-storage-experiment/74ee0d64de0c4d3ea51fa0fa5e92d75a/trailing.process.json",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/74ee0d64de0c4d3ea51fa0fa5e92d75a/trailing.process.json",
+      "sha256": "5317d6c041a85a22e77358e508c1928599bca7b8a1543c614080f778c40de7c5"
+    },
+    {
+      "source": "target/offline-storage-experiment/74ee0d64de0c4d3ea51fa0fa5e92d75a/trailing.stderr.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/74ee0d64de0c4d3ea51fa0fa5e92d75a/trailing.stderr.txt",
+      "sha256": "f2431b0b24eaf4e3074159e63a4e90a41e38fb66aaac130fab149d5e13482c4a"
+    },
+    {
+      "source": "target/offline-storage-experiment/74ee0d64de0c4d3ea51fa0fa5e92d75a/trailing.stdout.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/74ee0d64de0c4d3ea51fa0fa5e92d75a/trailing.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/offline-storage-experiment/74ee0d64de0c4d3ea51fa0fa5e92d75a/truncated.process.json",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/74ee0d64de0c4d3ea51fa0fa5e92d75a/truncated.process.json",
+      "sha256": "8f87583257e77a82c846e9490a24ed9de42d2024385ae08f6033f77b19cdbefe"
+    },
+    {
+      "source": "target/offline-storage-experiment/74ee0d64de0c4d3ea51fa0fa5e92d75a/truncated.stderr.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/74ee0d64de0c4d3ea51fa0fa5e92d75a/truncated.stderr.txt",
+      "sha256": "f2431b0b24eaf4e3074159e63a4e90a41e38fb66aaac130fab149d5e13482c4a"
+    },
+    {
+      "source": "target/offline-storage-experiment/74ee0d64de0c4d3ea51fa0fa5e92d75a/truncated.stdout.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/74ee0d64de0c4d3ea51fa0fa5e92d75a/truncated.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/offline-storage-experiment/74ee0d64de0c4d3ea51fa0fa5e92d75a/wrong-source-epoch.process.json",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/74ee0d64de0c4d3ea51fa0fa5e92d75a/wrong-source-epoch.process.json",
+      "sha256": "e40456bf055eb60ff237e5d4a957bc3a7ad01af6369f18ededbe9f513fc791d0"
+    },
+    {
+      "source": "target/offline-storage-experiment/74ee0d64de0c4d3ea51fa0fa5e92d75a/wrong-source-epoch.stderr.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/74ee0d64de0c4d3ea51fa0fa5e92d75a/wrong-source-epoch.stderr.txt",
+      "sha256": "f84bd7f23ecbe9a0c29b59923a36f0870d49d7fe7f7718ef459c2438b419283b"
+    },
+    {
+      "source": "target/offline-storage-experiment/74ee0d64de0c4d3ea51fa0fa5e92d75a/wrong-source-epoch.stdout.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/74ee0d64de0c4d3ea51fa0fa5e92d75a/wrong-source-epoch.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/offline-storage-experiment/789fb97af47242a49b772f37734bd102/bad-magic.process.json",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/789fb97af47242a49b772f37734bd102/bad-magic.process.json",
+      "sha256": "0669192fc03984a5841624212d25d825decfb0594a8c6ced07ed96225d789898"
+    },
+    {
+      "source": "target/offline-storage-experiment/789fb97af47242a49b772f37734bd102/bad-magic.stderr.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/789fb97af47242a49b772f37734bd102/bad-magic.stderr.txt",
+      "sha256": "b1325b6839dffaacf2250a27f282142e6ec8650abec2174026469910a0151866"
+    },
+    {
+      "source": "target/offline-storage-experiment/789fb97af47242a49b772f37734bd102/bad-magic.stdout.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/789fb97af47242a49b772f37734bd102/bad-magic.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/offline-storage-experiment/789fb97af47242a49b772f37734bd102/campaign.json",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/789fb97af47242a49b772f37734bd102/campaign.json",
+      "sha256": "e194af774cf4fe4467c6e6029addf97ce769bdd04c1b46642b95eee66e21c6ad"
+    },
+    {
+      "source": "target/offline-storage-experiment/789fb97af47242a49b772f37734bd102/clippy.process.json",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/789fb97af47242a49b772f37734bd102/clippy.process.json",
+      "sha256": "0c3cbd30f2163718ae378caa82eae734b85a74b4268ccd6284071a78eea26e99"
+    },
+    {
+      "source": "target/offline-storage-experiment/789fb97af47242a49b772f37734bd102/clippy.stderr.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/789fb97af47242a49b772f37734bd102/clippy.stderr.txt",
+      "sha256": "6d24acebd9e04141efd26b850e2025f85858d31a8d7faec4bb1b3ae88a7514c6"
+    },
+    {
+      "source": "target/offline-storage-experiment/789fb97af47242a49b772f37734bd102/clippy.stdout.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/789fb97af47242a49b772f37734bd102/clippy.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/offline-storage-experiment/789fb97af47242a49b772f37734bd102/crash-uncommitted.process.json",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/789fb97af47242a49b772f37734bd102/crash-uncommitted.process.json",
+      "sha256": "b821b812f6e6ea4c54e4a4ebcc3e4675304602ba728bb38a3269009f5f53d9c4"
+    },
+    {
+      "source": "target/offline-storage-experiment/789fb97af47242a49b772f37734bd102/crash-uncommitted.stderr.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/789fb97af47242a49b772f37734bd102/crash-uncommitted.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/offline-storage-experiment/789fb97af47242a49b772f37734bd102/crash-uncommitted.stdout.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/789fb97af47242a49b772f37734bd102/crash-uncommitted.stdout.txt",
+      "sha256": "dbe695d67aa856bc43ec629b437e2e536bcc3140a3f4809beb8e452034739ed8"
+    },
+    {
+      "source": "target/offline-storage-experiment/789fb97af47242a49b772f37734bd102/duplicate-key.process.json",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/789fb97af47242a49b772f37734bd102/duplicate-key.process.json",
+      "sha256": "6a2804079563165ead6184a4bca1ab2e9dc9a0ec9e5bdc0fd98df27f6f4a2e2d"
+    },
+    {
+      "source": "target/offline-storage-experiment/789fb97af47242a49b772f37734bd102/duplicate-key.stderr.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/789fb97af47242a49b772f37734bd102/duplicate-key.stderr.txt",
+      "sha256": "a827411c1cdab697712f021b7ea777536ea8f35a176e94d0c51425024c5aa2be"
+    },
+    {
+      "source": "target/offline-storage-experiment/789fb97af47242a49b772f37734bd102/duplicate-key.stdout.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/789fb97af47242a49b772f37734bd102/duplicate-key.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/offline-storage-experiment/789fb97af47242a49b772f37734bd102/fmt.process.json",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/789fb97af47242a49b772f37734bd102/fmt.process.json",
+      "sha256": "97fcc944fda245d193dc70dce43ae457cb3eb92d6747ac8fb2ec26ee038fd71b"
+    },
+    {
+      "source": "target/offline-storage-experiment/789fb97af47242a49b772f37734bd102/fmt.stderr.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/789fb97af47242a49b772f37734bd102/fmt.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/offline-storage-experiment/789fb97af47242a49b772f37734bd102/fmt.stdout.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/789fb97af47242a49b772f37734bd102/fmt.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/offline-storage-experiment/789fb97af47242a49b772f37734bd102/metadata.process.json",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/789fb97af47242a49b772f37734bd102/metadata.process.json",
+      "sha256": "b033ca3c7fb987798511e94157be9c3761c1e8231fa9822a44e098be3fd3d044"
+    },
+    {
+      "source": "target/offline-storage-experiment/789fb97af47242a49b772f37734bd102/metadata.stderr.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/789fb97af47242a49b772f37734bd102/metadata.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/offline-storage-experiment/789fb97af47242a49b772f37734bd102/metadata.stdout.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/789fb97af47242a49b772f37734bd102/metadata.stdout.txt",
+      "sha256": "745cc703140c36bd65e5a1d0a35b17d72d74c97df3b6d28cdfa1252dede7fa8c"
+    },
+    {
+      "source": "target/offline-storage-experiment/789fb97af47242a49b772f37734bd102/recover.process.json",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/789fb97af47242a49b772f37734bd102/recover.process.json",
+      "sha256": "e0855987c97bae1e78132a23392d7674ec781bfa73b04f39f8fc7fd76f0fa376"
+    },
+    {
+      "source": "target/offline-storage-experiment/789fb97af47242a49b772f37734bd102/recover.stderr.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/789fb97af47242a49b772f37734bd102/recover.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/offline-storage-experiment/789fb97af47242a49b772f37734bd102/recover.stdout.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/789fb97af47242a49b772f37734bd102/recover.stdout.txt",
+      "sha256": "4f3457e397e02a7b4b30a9cc174eaf17fc0a0a1cbecd07ad00d87fdc84ca5c3e"
+    },
+    {
+      "source": "target/offline-storage-experiment/789fb97af47242a49b772f37734bd102/reference-tests.process.json",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/789fb97af47242a49b772f37734bd102/reference-tests.process.json",
+      "sha256": "003e1587eb65e1e649687cdb4c044318b1fa87d046ebdbe1a80a1ff1149e8862"
+    },
+    {
+      "source": "target/offline-storage-experiment/789fb97af47242a49b772f37734bd102/reference-tests.stderr.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/789fb97af47242a49b772f37734bd102/reference-tests.stderr.txt",
+      "sha256": "7b743ccdd703f894cf2af7e5a8063f2e48972cf1438dbbd2e939191e6ff06bc1"
+    },
+    {
+      "source": "target/offline-storage-experiment/789fb97af47242a49b772f37734bd102/reference-tests.stdout.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/789fb97af47242a49b772f37734bd102/reference-tests.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/offline-storage-experiment/789fb97af47242a49b772f37734bd102/release.process.json",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/789fb97af47242a49b772f37734bd102/release.process.json",
+      "sha256": "2efb8f293bbbc19b96434b60e1759b4ce6bc97682cd29bbe2d0ce190252bdb4e"
+    },
+    {
+      "source": "target/offline-storage-experiment/789fb97af47242a49b772f37734bd102/release.stderr.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/789fb97af47242a49b772f37734bd102/release.stderr.txt",
+      "sha256": "53db803529659026549a87e212162c885e7f046db4a9988e10416e7eb47b1e56"
+    },
+    {
+      "source": "target/offline-storage-experiment/789fb97af47242a49b772f37734bd102/release.stdout.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/789fb97af47242a49b772f37734bd102/release.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/offline-storage-experiment/789fb97af47242a49b772f37734bd102/rust-tests.process.json",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/789fb97af47242a49b772f37734bd102/rust-tests.process.json",
+      "sha256": "cdbcd646cae4048e741590c5b476ebda7c319bd9b85caecebec9da32ac13f8c1"
+    },
+    {
+      "source": "target/offline-storage-experiment/789fb97af47242a49b772f37734bd102/rust-tests.stderr.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/789fb97af47242a49b772f37734bd102/rust-tests.stderr.txt",
+      "sha256": "3d174aeee7cf9986ccda614878d249a6ec7942f15eafc3f095565155aacdf0f2"
+    },
+    {
+      "source": "target/offline-storage-experiment/789fb97af47242a49b772f37734bd102/rust-tests.stdout.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/789fb97af47242a49b772f37734bd102/rust-tests.stdout.txt",
+      "sha256": "5c276a63103a68608e5f4d054c4dd7fc767d327554c1725fe0d1fbb69f1be5c0"
+    },
+    {
+      "source": "target/offline-storage-experiment/789fb97af47242a49b772f37734bd102/rust-version.process.json",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/789fb97af47242a49b772f37734bd102/rust-version.process.json",
+      "sha256": "e044195f05ea2eaec7f80f84e316823b13743a975e807974af89286cbea204a1"
+    },
+    {
+      "source": "target/offline-storage-experiment/789fb97af47242a49b772f37734bd102/rust-version.stderr.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/789fb97af47242a49b772f37734bd102/rust-version.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/offline-storage-experiment/789fb97af47242a49b772f37734bd102/rust-version.stdout.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/789fb97af47242a49b772f37734bd102/rust-version.stdout.txt",
+      "sha256": "c45e612575abeef05e99e88eb1e7aea52cddab9ad70d4f65ad20eaa65e92a9cf"
+    },
+    {
+      "source": "target/offline-storage-experiment/789fb97af47242a49b772f37734bd102/sample-65536-0-buffered.process.json",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/789fb97af47242a49b772f37734bd102/sample-65536-0-buffered.process.json",
+      "sha256": "378d99d53a05d1efed09a2e03504ac0e95713c1bf9c8738d4b9e477a08afba6f"
+    },
+    {
+      "source": "target/offline-storage-experiment/789fb97af47242a49b772f37734bd102/sample-65536-0-buffered.stderr.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/789fb97af47242a49b772f37734bd102/sample-65536-0-buffered.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/offline-storage-experiment/789fb97af47242a49b772f37734bd102/sample-65536-0-buffered.stdout.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/789fb97af47242a49b772f37734bd102/sample-65536-0-buffered.stdout.txt",
+      "sha256": "561b51f202b4301f256205a438f3ad4ddf24a49a08af563816a61a1fe8b3f75a"
+    },
+    {
+      "source": "target/offline-storage-experiment/789fb97af47242a49b772f37734bd102/sample-65536-0-mmap.process.json",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/789fb97af47242a49b772f37734bd102/sample-65536-0-mmap.process.json",
+      "sha256": "b49b9d93d9869a43200729f7a6594f22a279e8ebda6ae81d82f16e04a5d37582"
+    },
+    {
+      "source": "target/offline-storage-experiment/789fb97af47242a49b772f37734bd102/sample-65536-0-mmap.stderr.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/789fb97af47242a49b772f37734bd102/sample-65536-0-mmap.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/offline-storage-experiment/789fb97af47242a49b772f37734bd102/sample-65536-0-mmap.stdout.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/789fb97af47242a49b772f37734bd102/sample-65536-0-mmap.stdout.txt",
+      "sha256": "2400e0df0315f2ce054e03dd9b05945012f6981d09d8a48ffc7916709ab52e7d"
+    },
+    {
+      "source": "target/offline-storage-experiment/789fb97af47242a49b772f37734bd102/sample-65536-1-buffered.process.json",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/789fb97af47242a49b772f37734bd102/sample-65536-1-buffered.process.json",
+      "sha256": "e3a1aca290868b698021b2c5f64f30427cb6560211617871ae58b6d088bc1241"
+    },
+    {
+      "source": "target/offline-storage-experiment/789fb97af47242a49b772f37734bd102/sample-65536-1-buffered.stderr.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/789fb97af47242a49b772f37734bd102/sample-65536-1-buffered.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/offline-storage-experiment/789fb97af47242a49b772f37734bd102/sample-65536-1-buffered.stdout.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/789fb97af47242a49b772f37734bd102/sample-65536-1-buffered.stdout.txt",
+      "sha256": "593f35e7b5356621df17ca946af76006b5a3f41004b2109a2dc5ae6bf03a2a66"
+    },
+    {
+      "source": "target/offline-storage-experiment/789fb97af47242a49b772f37734bd102/sample-65536-1-mmap.process.json",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/789fb97af47242a49b772f37734bd102/sample-65536-1-mmap.process.json",
+      "sha256": "f2497f75bd909e2dff01534a803bf7e0eccde8da5963dc3681c000c704f1ae61"
+    },
+    {
+      "source": "target/offline-storage-experiment/789fb97af47242a49b772f37734bd102/sample-65536-1-mmap.stderr.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/789fb97af47242a49b772f37734bd102/sample-65536-1-mmap.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/offline-storage-experiment/789fb97af47242a49b772f37734bd102/sample-65536-1-mmap.stdout.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/789fb97af47242a49b772f37734bd102/sample-65536-1-mmap.stdout.txt",
+      "sha256": "19e21ba1c80b062daa74c2779957a34e3cf6ab44226c87c894cfce85b72653d9"
+    },
+    {
+      "source": "target/offline-storage-experiment/789fb97af47242a49b772f37734bd102/sample-65536-2-buffered.process.json",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/789fb97af47242a49b772f37734bd102/sample-65536-2-buffered.process.json",
+      "sha256": "24d03f68a7590524e1053121b6926f32cf651d8f31a03067121fafa702011f9c"
+    },
+    {
+      "source": "target/offline-storage-experiment/789fb97af47242a49b772f37734bd102/sample-65536-2-buffered.stderr.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/789fb97af47242a49b772f37734bd102/sample-65536-2-buffered.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/offline-storage-experiment/789fb97af47242a49b772f37734bd102/sample-65536-2-buffered.stdout.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/789fb97af47242a49b772f37734bd102/sample-65536-2-buffered.stdout.txt",
+      "sha256": "dee4640fc597424cb0374ac1237ae6b55ee2e656d819c28401d0b12c64477f5b"
+    },
+    {
+      "source": "target/offline-storage-experiment/789fb97af47242a49b772f37734bd102/sample-65536-2-mmap.process.json",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/789fb97af47242a49b772f37734bd102/sample-65536-2-mmap.process.json",
+      "sha256": "7524898bda7bc5b1bdba1fc7c7490c24d08eefe93fbcb4a236f1b9cff90b9c6a"
+    },
+    {
+      "source": "target/offline-storage-experiment/789fb97af47242a49b772f37734bd102/sample-65536-2-mmap.stderr.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/789fb97af47242a49b772f37734bd102/sample-65536-2-mmap.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/offline-storage-experiment/789fb97af47242a49b772f37734bd102/sample-65536-2-mmap.stdout.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/789fb97af47242a49b772f37734bd102/sample-65536-2-mmap.stdout.txt",
+      "sha256": "636c4e4a04d16c2bc934cae4faca9fc4d55a29066fb042402a7f3864701ba499"
+    },
+    {
+      "source": "target/offline-storage-experiment/789fb97af47242a49b772f37734bd102/sample-65536-3-buffered.process.json",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/789fb97af47242a49b772f37734bd102/sample-65536-3-buffered.process.json",
+      "sha256": "8f76f180c2168889c11a27f3178029fc147a29b4a70eb0fcc4a110d9cd7d1f6f"
+    },
+    {
+      "source": "target/offline-storage-experiment/789fb97af47242a49b772f37734bd102/sample-65536-3-buffered.stderr.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/789fb97af47242a49b772f37734bd102/sample-65536-3-buffered.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/offline-storage-experiment/789fb97af47242a49b772f37734bd102/sample-65536-3-buffered.stdout.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/789fb97af47242a49b772f37734bd102/sample-65536-3-buffered.stdout.txt",
+      "sha256": "336339809b848f9a9f9085912cd7a7053be455a5b46b3caab60b64f5c59faadc"
+    },
+    {
+      "source": "target/offline-storage-experiment/789fb97af47242a49b772f37734bd102/sample-65536-3-mmap.process.json",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/789fb97af47242a49b772f37734bd102/sample-65536-3-mmap.process.json",
+      "sha256": "bceae909f0bba01adaa92d73a285174704d3e4cc4fdc3aaa65452ccbdcb908a5"
+    },
+    {
+      "source": "target/offline-storage-experiment/789fb97af47242a49b772f37734bd102/sample-65536-3-mmap.stderr.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/789fb97af47242a49b772f37734bd102/sample-65536-3-mmap.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/offline-storage-experiment/789fb97af47242a49b772f37734bd102/sample-65536-3-mmap.stdout.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/789fb97af47242a49b772f37734bd102/sample-65536-3-mmap.stdout.txt",
+      "sha256": "900ddfcfb1e24d7cc8c65ffd12323c38458d5d42388c4072be1bf0805d682f38"
+    },
+    {
+      "source": "target/offline-storage-experiment/789fb97af47242a49b772f37734bd102/sample-65536-4-buffered.process.json",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/789fb97af47242a49b772f37734bd102/sample-65536-4-buffered.process.json",
+      "sha256": "84d270958f9e37175469ffdeed345ba9172a12b01645990af55f00a00a3116fc"
+    },
+    {
+      "source": "target/offline-storage-experiment/789fb97af47242a49b772f37734bd102/sample-65536-4-buffered.stderr.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/789fb97af47242a49b772f37734bd102/sample-65536-4-buffered.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/offline-storage-experiment/789fb97af47242a49b772f37734bd102/sample-65536-4-buffered.stdout.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/789fb97af47242a49b772f37734bd102/sample-65536-4-buffered.stdout.txt",
+      "sha256": "5db516b742db028e244092d1b7beee4eef8a97e04666529a3fc654ba20d93eda"
+    },
+    {
+      "source": "target/offline-storage-experiment/789fb97af47242a49b772f37734bd102/sample-65536-4-mmap.process.json",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/789fb97af47242a49b772f37734bd102/sample-65536-4-mmap.process.json",
+      "sha256": "d3c8bb9ab5fb0635c0f1ceb4e1925311193426f80df0705bd54cc6f3d22e9bb8"
+    },
+    {
+      "source": "target/offline-storage-experiment/789fb97af47242a49b772f37734bd102/sample-65536-4-mmap.stderr.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/789fb97af47242a49b772f37734bd102/sample-65536-4-mmap.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/offline-storage-experiment/789fb97af47242a49b772f37734bd102/sample-65536-4-mmap.stdout.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/789fb97af47242a49b772f37734bd102/sample-65536-4-mmap.stdout.txt",
+      "sha256": "dbd24a78395c165421628838b60493c4cb46640cacd1b77ff8d61b23ca9988b8"
+    },
+    {
+      "source": "target/offline-storage-experiment/789fb97af47242a49b772f37734bd102/sample-8192-0-buffered.process.json",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/789fb97af47242a49b772f37734bd102/sample-8192-0-buffered.process.json",
+      "sha256": "0fa83c7ee53868ba56a3aba6e5dee65f01bb32c3f2a38efc6bcc8e9b7947946c"
+    },
+    {
+      "source": "target/offline-storage-experiment/789fb97af47242a49b772f37734bd102/sample-8192-0-buffered.stderr.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/789fb97af47242a49b772f37734bd102/sample-8192-0-buffered.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/offline-storage-experiment/789fb97af47242a49b772f37734bd102/sample-8192-0-buffered.stdout.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/789fb97af47242a49b772f37734bd102/sample-8192-0-buffered.stdout.txt",
+      "sha256": "69083e341d1dc193bf04a547031c69b0beef1ccfcfa1e94eb333130fcdc9d037"
+    },
+    {
+      "source": "target/offline-storage-experiment/789fb97af47242a49b772f37734bd102/sample-8192-0-mmap.process.json",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/789fb97af47242a49b772f37734bd102/sample-8192-0-mmap.process.json",
+      "sha256": "92d392712fb111b96b3b5def8bd66a873380781861550a4c54544af5d75ac0b1"
+    },
+    {
+      "source": "target/offline-storage-experiment/789fb97af47242a49b772f37734bd102/sample-8192-0-mmap.stderr.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/789fb97af47242a49b772f37734bd102/sample-8192-0-mmap.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/offline-storage-experiment/789fb97af47242a49b772f37734bd102/sample-8192-0-mmap.stdout.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/789fb97af47242a49b772f37734bd102/sample-8192-0-mmap.stdout.txt",
+      "sha256": "0dfb869d8ddef88e9530476ffef4b83a06c1a2178e8fa56eca509dfda4b00733"
+    },
+    {
+      "source": "target/offline-storage-experiment/789fb97af47242a49b772f37734bd102/sample-8192-1-buffered.process.json",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/789fb97af47242a49b772f37734bd102/sample-8192-1-buffered.process.json",
+      "sha256": "9e9dd612631bd1ac2baa21fc8f6b539740822db47b518b8e1a3123ccf8c67750"
+    },
+    {
+      "source": "target/offline-storage-experiment/789fb97af47242a49b772f37734bd102/sample-8192-1-buffered.stderr.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/789fb97af47242a49b772f37734bd102/sample-8192-1-buffered.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/offline-storage-experiment/789fb97af47242a49b772f37734bd102/sample-8192-1-buffered.stdout.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/789fb97af47242a49b772f37734bd102/sample-8192-1-buffered.stdout.txt",
+      "sha256": "1a57403c7c66d7c6661576e000ab1c2b440b79ee13ea68ec373c496db5291aad"
+    },
+    {
+      "source": "target/offline-storage-experiment/789fb97af47242a49b772f37734bd102/sample-8192-1-mmap.process.json",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/789fb97af47242a49b772f37734bd102/sample-8192-1-mmap.process.json",
+      "sha256": "e33af2e66f907250e4e335403796ecd060908bebe86113b722d645616dc32e73"
+    },
+    {
+      "source": "target/offline-storage-experiment/789fb97af47242a49b772f37734bd102/sample-8192-1-mmap.stderr.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/789fb97af47242a49b772f37734bd102/sample-8192-1-mmap.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/offline-storage-experiment/789fb97af47242a49b772f37734bd102/sample-8192-1-mmap.stdout.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/789fb97af47242a49b772f37734bd102/sample-8192-1-mmap.stdout.txt",
+      "sha256": "542f31f4f4337b97c2a1733c4e709c7794abd9de1d2d5905d08bf3453a7cae52"
+    },
+    {
+      "source": "target/offline-storage-experiment/789fb97af47242a49b772f37734bd102/sample-8192-2-buffered.process.json",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/789fb97af47242a49b772f37734bd102/sample-8192-2-buffered.process.json",
+      "sha256": "683f5cddb4835dfa3b88213790139884edbaede5711f9aecb3e39f5786cbebff"
+    },
+    {
+      "source": "target/offline-storage-experiment/789fb97af47242a49b772f37734bd102/sample-8192-2-buffered.stderr.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/789fb97af47242a49b772f37734bd102/sample-8192-2-buffered.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/offline-storage-experiment/789fb97af47242a49b772f37734bd102/sample-8192-2-buffered.stdout.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/789fb97af47242a49b772f37734bd102/sample-8192-2-buffered.stdout.txt",
+      "sha256": "07dc80e0c5da953638748a664ff61a1e79f004364451d7f378a6554656725331"
+    },
+    {
+      "source": "target/offline-storage-experiment/789fb97af47242a49b772f37734bd102/sample-8192-2-mmap.process.json",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/789fb97af47242a49b772f37734bd102/sample-8192-2-mmap.process.json",
+      "sha256": "d4e8acba7a55b62d318040b1722243eca883e422536b0176df376d35c358a436"
+    },
+    {
+      "source": "target/offline-storage-experiment/789fb97af47242a49b772f37734bd102/sample-8192-2-mmap.stderr.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/789fb97af47242a49b772f37734bd102/sample-8192-2-mmap.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/offline-storage-experiment/789fb97af47242a49b772f37734bd102/sample-8192-2-mmap.stdout.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/789fb97af47242a49b772f37734bd102/sample-8192-2-mmap.stdout.txt",
+      "sha256": "90cc4f680875d5dff4811d164816bbcaf4f482d54bc6e6ba301fc89d952b3945"
+    },
+    {
+      "source": "target/offline-storage-experiment/789fb97af47242a49b772f37734bd102/sample-8192-3-buffered.process.json",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/789fb97af47242a49b772f37734bd102/sample-8192-3-buffered.process.json",
+      "sha256": "e832d9bb84ebe69143c7f4ff4fb71f05c4952f38b21b3a880809f295f30d5bb5"
+    },
+    {
+      "source": "target/offline-storage-experiment/789fb97af47242a49b772f37734bd102/sample-8192-3-buffered.stderr.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/789fb97af47242a49b772f37734bd102/sample-8192-3-buffered.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/offline-storage-experiment/789fb97af47242a49b772f37734bd102/sample-8192-3-buffered.stdout.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/789fb97af47242a49b772f37734bd102/sample-8192-3-buffered.stdout.txt",
+      "sha256": "2f4c693bbcd3fff0404bcf1ae34ac211cdecbb0325ad1ae0318dcb643b170d4c"
+    },
+    {
+      "source": "target/offline-storage-experiment/789fb97af47242a49b772f37734bd102/sample-8192-3-mmap.process.json",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/789fb97af47242a49b772f37734bd102/sample-8192-3-mmap.process.json",
+      "sha256": "e41e0438d08eb12c41913ff169184a5e310d21bf274bda256799f59f95cf7cab"
+    },
+    {
+      "source": "target/offline-storage-experiment/789fb97af47242a49b772f37734bd102/sample-8192-3-mmap.stderr.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/789fb97af47242a49b772f37734bd102/sample-8192-3-mmap.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/offline-storage-experiment/789fb97af47242a49b772f37734bd102/sample-8192-3-mmap.stdout.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/789fb97af47242a49b772f37734bd102/sample-8192-3-mmap.stdout.txt",
+      "sha256": "5c743030cd7492ee032554fbe8eb84edd668a30fcdfd80ce212045108f91c6a9"
+    },
+    {
+      "source": "target/offline-storage-experiment/789fb97af47242a49b772f37734bd102/sample-8192-4-buffered.process.json",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/789fb97af47242a49b772f37734bd102/sample-8192-4-buffered.process.json",
+      "sha256": "b7b74a1a896afcb12219a7717f0fdd3eda756485f5c2c976acb570f2f4eab859"
+    },
+    {
+      "source": "target/offline-storage-experiment/789fb97af47242a49b772f37734bd102/sample-8192-4-buffered.stderr.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/789fb97af47242a49b772f37734bd102/sample-8192-4-buffered.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/offline-storage-experiment/789fb97af47242a49b772f37734bd102/sample-8192-4-buffered.stdout.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/789fb97af47242a49b772f37734bd102/sample-8192-4-buffered.stdout.txt",
+      "sha256": "c4f6425c74b4f538b9077c24150de5eff74891a2ef9a4794bc0d899a7f81d6c8"
+    },
+    {
+      "source": "target/offline-storage-experiment/789fb97af47242a49b772f37734bd102/sample-8192-4-mmap.process.json",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/789fb97af47242a49b772f37734bd102/sample-8192-4-mmap.process.json",
+      "sha256": "b92fe43d1d5d97fb5af43d9e10ce14e97dfbd34537ca00e5e0b6dd96ff2eae15"
+    },
+    {
+      "source": "target/offline-storage-experiment/789fb97af47242a49b772f37734bd102/sample-8192-4-mmap.stderr.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/789fb97af47242a49b772f37734bd102/sample-8192-4-mmap.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/offline-storage-experiment/789fb97af47242a49b772f37734bd102/sample-8192-4-mmap.stdout.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/789fb97af47242a49b772f37734bd102/sample-8192-4-mmap.stdout.txt",
+      "sha256": "4609418c3b1e5acf6ed4bba6f14ae5ff6e85243ecc27338d1acf3a2a32da9f27"
+    },
+    {
+      "source": "target/offline-storage-experiment/789fb97af47242a49b772f37734bd102/sysroot.process.json",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/789fb97af47242a49b772f37734bd102/sysroot.process.json",
+      "sha256": "7d6ca963ebd31c692f67fc5ce14e7e480c8fee4505a2df1b53808efa07b296f3"
+    },
+    {
+      "source": "target/offline-storage-experiment/789fb97af47242a49b772f37734bd102/sysroot.stderr.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/789fb97af47242a49b772f37734bd102/sysroot.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/offline-storage-experiment/789fb97af47242a49b772f37734bd102/sysroot.stdout.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/789fb97af47242a49b772f37734bd102/sysroot.stdout.txt",
+      "sha256": "e0d8249c2fb93ac2106d97fedd24f44420e0ee2316617df20f769f033eaf568d"
+    },
+    {
+      "source": "target/offline-storage-experiment/789fb97af47242a49b772f37734bd102/trailing.process.json",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/789fb97af47242a49b772f37734bd102/trailing.process.json",
+      "sha256": "4a7b595a552bd12faecac3db01de6214ca93d31307792f7a590ec577a0992386"
+    },
+    {
+      "source": "target/offline-storage-experiment/789fb97af47242a49b772f37734bd102/trailing.stderr.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/789fb97af47242a49b772f37734bd102/trailing.stderr.txt",
+      "sha256": "f2431b0b24eaf4e3074159e63a4e90a41e38fb66aaac130fab149d5e13482c4a"
+    },
+    {
+      "source": "target/offline-storage-experiment/789fb97af47242a49b772f37734bd102/trailing.stdout.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/789fb97af47242a49b772f37734bd102/trailing.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/offline-storage-experiment/789fb97af47242a49b772f37734bd102/truncated.process.json",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/789fb97af47242a49b772f37734bd102/truncated.process.json",
+      "sha256": "a4a032f97ccf8887fc07b4273d6417a8b7959e39d0997d0123ce812baaa89d04"
+    },
+    {
+      "source": "target/offline-storage-experiment/789fb97af47242a49b772f37734bd102/truncated.stderr.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/789fb97af47242a49b772f37734bd102/truncated.stderr.txt",
+      "sha256": "f2431b0b24eaf4e3074159e63a4e90a41e38fb66aaac130fab149d5e13482c4a"
+    },
+    {
+      "source": "target/offline-storage-experiment/789fb97af47242a49b772f37734bd102/truncated.stdout.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/789fb97af47242a49b772f37734bd102/truncated.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/offline-storage-experiment/789fb97af47242a49b772f37734bd102/wrong-source-epoch.process.json",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/789fb97af47242a49b772f37734bd102/wrong-source-epoch.process.json",
+      "sha256": "a1016d3f8b7b172e9b768f612cfc7868dbf5a5138dbfc7e0a64bc3e0d2c8f734"
+    },
+    {
+      "source": "target/offline-storage-experiment/789fb97af47242a49b772f37734bd102/wrong-source-epoch.stderr.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/789fb97af47242a49b772f37734bd102/wrong-source-epoch.stderr.txt",
+      "sha256": "f84bd7f23ecbe9a0c29b59923a36f0870d49d7fe7f7718ef459c2438b419283b"
+    },
+    {
+      "source": "target/offline-storage-experiment/789fb97af47242a49b772f37734bd102/wrong-source-epoch.stdout.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/789fb97af47242a49b772f37734bd102/wrong-source-epoch.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/offline-storage-experiment/root-reviewed/bad-magic.process.json",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/root-reviewed/bad-magic.process.json",
+      "sha256": "7d2aada0dd499ca45a259b0943dae6134f97ebafd4621b180c716946946fd80b"
+    },
+    {
+      "source": "target/offline-storage-experiment/root-reviewed/bad-magic.stderr.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/root-reviewed/bad-magic.stderr.txt",
+      "sha256": "b1325b6839dffaacf2250a27f282142e6ec8650abec2174026469910a0151866"
+    },
+    {
+      "source": "target/offline-storage-experiment/root-reviewed/bad-magic.stdout.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/root-reviewed/bad-magic.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/offline-storage-experiment/root-reviewed/campaign.json",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/root-reviewed/campaign.json",
+      "sha256": "b4ec084bd155b8cc887d88e6887bf4c1087199adc16cba7e68796c66f19f68a7"
+    },
+    {
+      "source": "target/offline-storage-experiment/root-reviewed/clippy.process.json",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/root-reviewed/clippy.process.json",
+      "sha256": "c3a93197218a167b9a26abc35b9aeb3d29294a177db1aef1e4b98dc614d39fa1"
+    },
+    {
+      "source": "target/offline-storage-experiment/root-reviewed/clippy.stderr.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/root-reviewed/clippy.stderr.txt",
+      "sha256": "5c727fcfa38d544f01b9e5d522ca2d0eeb58abf16afb898fb5ea988e2564d10b"
+    },
+    {
+      "source": "target/offline-storage-experiment/root-reviewed/clippy.stdout.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/root-reviewed/clippy.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/offline-storage-experiment/root-reviewed/crash-uncommitted.process.json",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/root-reviewed/crash-uncommitted.process.json",
+      "sha256": "cd68b6a442de65540bae367d376f6ceeb0f2b609f0518f051c3dfe706fb28802"
+    },
+    {
+      "source": "target/offline-storage-experiment/root-reviewed/crash-uncommitted.stderr.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/root-reviewed/crash-uncommitted.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/offline-storage-experiment/root-reviewed/crash-uncommitted.stdout.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/root-reviewed/crash-uncommitted.stdout.txt",
+      "sha256": "5663ec56391dedbab29380af62e9aa594ef618133b7905cad5f4260c5efd3208"
+    },
+    {
+      "source": "target/offline-storage-experiment/root-reviewed/duplicate-key.process.json",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/root-reviewed/duplicate-key.process.json",
+      "sha256": "94ae7f83494ec059fd4f9712129f0dcfacf8daac20ee0f665db99dabd2038ac5"
+    },
+    {
+      "source": "target/offline-storage-experiment/root-reviewed/duplicate-key.stderr.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/root-reviewed/duplicate-key.stderr.txt",
+      "sha256": "a827411c1cdab697712f021b7ea777536ea8f35a176e94d0c51425024c5aa2be"
+    },
+    {
+      "source": "target/offline-storage-experiment/root-reviewed/duplicate-key.stdout.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/root-reviewed/duplicate-key.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/offline-storage-experiment/root-reviewed/fmt.process.json",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/root-reviewed/fmt.process.json",
+      "sha256": "628bb7390f16b29957443b5c4ae33385141f1de34d2390975f6d37ad9f49b4d0"
+    },
+    {
+      "source": "target/offline-storage-experiment/root-reviewed/fmt.stderr.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/root-reviewed/fmt.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/offline-storage-experiment/root-reviewed/fmt.stdout.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/root-reviewed/fmt.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/offline-storage-experiment/root-reviewed/metadata.process.json",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/root-reviewed/metadata.process.json",
+      "sha256": "9daa547c847714154e9694da21efa21161a79caec8b83ab6b26233435a7a0323"
+    },
+    {
+      "source": "target/offline-storage-experiment/root-reviewed/metadata.stderr.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/root-reviewed/metadata.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/offline-storage-experiment/root-reviewed/metadata.stdout.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/root-reviewed/metadata.stdout.txt",
+      "sha256": "745cc703140c36bd65e5a1d0a35b17d72d74c97df3b6d28cdfa1252dede7fa8c"
+    },
+    {
+      "source": "target/offline-storage-experiment/root-reviewed/recover.process.json",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/root-reviewed/recover.process.json",
+      "sha256": "9ebf799e00ead66c7de26736d56d59456c7fd0b013e7d6501f3293241458e131"
+    },
+    {
+      "source": "target/offline-storage-experiment/root-reviewed/recover.stderr.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/root-reviewed/recover.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/offline-storage-experiment/root-reviewed/recover.stdout.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/root-reviewed/recover.stdout.txt",
+      "sha256": "36b14c27c10b26c0268aac909055f84f137eb44b6c256ab2bcf2933af65694f1"
+    },
+    {
+      "source": "target/offline-storage-experiment/root-reviewed/reference-tests.process.json",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/root-reviewed/reference-tests.process.json",
+      "sha256": "ad874b5766d940f131000603f44cc2fb6736a7d4513ab47750575ca6f0f6abf7"
+    },
+    {
+      "source": "target/offline-storage-experiment/root-reviewed/reference-tests.stderr.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/root-reviewed/reference-tests.stderr.txt",
+      "sha256": "7b743ccdd703f894cf2af7e5a8063f2e48972cf1438dbbd2e939191e6ff06bc1"
+    },
+    {
+      "source": "target/offline-storage-experiment/root-reviewed/reference-tests.stdout.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/root-reviewed/reference-tests.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/offline-storage-experiment/root-reviewed/release.process.json",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/root-reviewed/release.process.json",
+      "sha256": "0bb0756648f1e322c0c47b616429293717d7c46945f7d4ae8f929de3f875eb56"
+    },
+    {
+      "source": "target/offline-storage-experiment/root-reviewed/release.stderr.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/root-reviewed/release.stderr.txt",
+      "sha256": "f06ff19e3a14fbc9673ac5facf3dcb75e68f40a4d91dda8eca1329e69edaa7b6"
+    },
+    {
+      "source": "target/offline-storage-experiment/root-reviewed/release.stdout.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/root-reviewed/release.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/offline-storage-experiment/root-reviewed/rust-tests.process.json",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/root-reviewed/rust-tests.process.json",
+      "sha256": "a2fc4758c644eeccdde133480a2c526e6f8f4753e5d7474f3029c13c92239f64"
+    },
+    {
+      "source": "target/offline-storage-experiment/root-reviewed/rust-tests.stderr.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/root-reviewed/rust-tests.stderr.txt",
+      "sha256": "fea807b74254be35ac2d2635a6fa97307abe841534156cc1402026e0dfbb74d9"
+    },
+    {
+      "source": "target/offline-storage-experiment/root-reviewed/rust-tests.stdout.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/root-reviewed/rust-tests.stdout.txt",
+      "sha256": "d93fe5a3e634c2ebe925bec0080a2a708e01fb0237933519952f345fd85347d3"
+    },
+    {
+      "source": "target/offline-storage-experiment/root-reviewed/rust-version.process.json",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/root-reviewed/rust-version.process.json",
+      "sha256": "c4dca5e2a7e5f09f052fc426519beee0ca75d2aaae2647f332f488026be4f35a"
+    },
+    {
+      "source": "target/offline-storage-experiment/root-reviewed/rust-version.stderr.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/root-reviewed/rust-version.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/offline-storage-experiment/root-reviewed/rust-version.stdout.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/root-reviewed/rust-version.stdout.txt",
+      "sha256": "c45e612575abeef05e99e88eb1e7aea52cddab9ad70d4f65ad20eaa65e92a9cf"
+    },
+    {
+      "source": "target/offline-storage-experiment/root-reviewed/sample-65536-0-buffered.process.json",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/root-reviewed/sample-65536-0-buffered.process.json",
+      "sha256": "d3321e4b590f54cb774c2c8dd24d13dd697c76e7f09cdb495b8562d0d4526441"
+    },
+    {
+      "source": "target/offline-storage-experiment/root-reviewed/sample-65536-0-buffered.stderr.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/root-reviewed/sample-65536-0-buffered.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/offline-storage-experiment/root-reviewed/sample-65536-0-buffered.stdout.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/root-reviewed/sample-65536-0-buffered.stdout.txt",
+      "sha256": "c947cc8d86a55fe61d9454b3b108073024a390b066dd0ac4504ebf0cc72dbc7c"
+    },
+    {
+      "source": "target/offline-storage-experiment/root-reviewed/sample-65536-0-mmap.process.json",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/root-reviewed/sample-65536-0-mmap.process.json",
+      "sha256": "4f6aa1cf8fc7ab6093b57deb665c550ecb8a84611adffeec278a5fca63890844"
+    },
+    {
+      "source": "target/offline-storage-experiment/root-reviewed/sample-65536-0-mmap.stderr.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/root-reviewed/sample-65536-0-mmap.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/offline-storage-experiment/root-reviewed/sample-65536-0-mmap.stdout.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/root-reviewed/sample-65536-0-mmap.stdout.txt",
+      "sha256": "3c63b355223a91622eb87fb3f69d6162a2c01a91b6d9ba77102285a84775f662"
+    },
+    {
+      "source": "target/offline-storage-experiment/root-reviewed/sample-65536-1-buffered.process.json",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/root-reviewed/sample-65536-1-buffered.process.json",
+      "sha256": "ead1db7a58545528835a98b24c200dc4ebe98889f63f7a2fa9c873949301a11d"
+    },
+    {
+      "source": "target/offline-storage-experiment/root-reviewed/sample-65536-1-buffered.stderr.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/root-reviewed/sample-65536-1-buffered.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/offline-storage-experiment/root-reviewed/sample-65536-1-buffered.stdout.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/root-reviewed/sample-65536-1-buffered.stdout.txt",
+      "sha256": "4f4ec4cf1132832d1a92b6a7b91a41c76d549c647b5c7d40283880ddced1af65"
+    },
+    {
+      "source": "target/offline-storage-experiment/root-reviewed/sample-65536-1-mmap.process.json",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/root-reviewed/sample-65536-1-mmap.process.json",
+      "sha256": "9c845e698a7b0dea1fb7d1584cdb17c2fdac415da71a676fe560ca0fdab53e08"
+    },
+    {
+      "source": "target/offline-storage-experiment/root-reviewed/sample-65536-1-mmap.stderr.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/root-reviewed/sample-65536-1-mmap.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/offline-storage-experiment/root-reviewed/sample-65536-1-mmap.stdout.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/root-reviewed/sample-65536-1-mmap.stdout.txt",
+      "sha256": "0391282496a311eb1f2a9b044478f3abbbb4893686add2dcf8d2d12861c59be1"
+    },
+    {
+      "source": "target/offline-storage-experiment/root-reviewed/sample-65536-2-buffered.process.json",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/root-reviewed/sample-65536-2-buffered.process.json",
+      "sha256": "17deaa06355fa42e3a5a26ee9d7dff3039d74649803abf0345e08302dcda8ca1"
+    },
+    {
+      "source": "target/offline-storage-experiment/root-reviewed/sample-65536-2-buffered.stderr.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/root-reviewed/sample-65536-2-buffered.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/offline-storage-experiment/root-reviewed/sample-65536-2-buffered.stdout.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/root-reviewed/sample-65536-2-buffered.stdout.txt",
+      "sha256": "5f191aa9c3c8c84241ec319f5182df4b94f2d6f69d339efe9dde45af71e4f37d"
+    },
+    {
+      "source": "target/offline-storage-experiment/root-reviewed/sample-65536-2-mmap.process.json",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/root-reviewed/sample-65536-2-mmap.process.json",
+      "sha256": "982c7ff1ace17a0258e0308e55e9ed047e75d2e9577884c4368782433f88f034"
+    },
+    {
+      "source": "target/offline-storage-experiment/root-reviewed/sample-65536-2-mmap.stderr.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/root-reviewed/sample-65536-2-mmap.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/offline-storage-experiment/root-reviewed/sample-65536-2-mmap.stdout.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/root-reviewed/sample-65536-2-mmap.stdout.txt",
+      "sha256": "3785795bd1b3a57c2ddf2ee5bb1896ddc6396a8cb60096a34b23063b14936998"
+    },
+    {
+      "source": "target/offline-storage-experiment/root-reviewed/sample-65536-3-buffered.process.json",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/root-reviewed/sample-65536-3-buffered.process.json",
+      "sha256": "ffd3bf1f679e09b91b895694432305ef7b0538ddc8cd60a466af891fb17a7821"
+    },
+    {
+      "source": "target/offline-storage-experiment/root-reviewed/sample-65536-3-buffered.stderr.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/root-reviewed/sample-65536-3-buffered.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/offline-storage-experiment/root-reviewed/sample-65536-3-buffered.stdout.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/root-reviewed/sample-65536-3-buffered.stdout.txt",
+      "sha256": "6e2b6895f7f11bdee9a19a55d16d7abfedfa10f87d8ab7fa99ccbbd900669408"
+    },
+    {
+      "source": "target/offline-storage-experiment/root-reviewed/sample-65536-3-mmap.process.json",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/root-reviewed/sample-65536-3-mmap.process.json",
+      "sha256": "04539f512c0e4c75ad055616dd4964583bf3d6ed4dc3de14c03b55bf69d87d6a"
+    },
+    {
+      "source": "target/offline-storage-experiment/root-reviewed/sample-65536-3-mmap.stderr.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/root-reviewed/sample-65536-3-mmap.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/offline-storage-experiment/root-reviewed/sample-65536-3-mmap.stdout.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/root-reviewed/sample-65536-3-mmap.stdout.txt",
+      "sha256": "5b135f2484c34210f9f306c35e4aa512553059383ce4376b354ed873657e6ddf"
+    },
+    {
+      "source": "target/offline-storage-experiment/root-reviewed/sample-65536-4-buffered.process.json",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/root-reviewed/sample-65536-4-buffered.process.json",
+      "sha256": "e50dc06d41c3765f73272466d95d7c3e05262cecd2383e86ffd3f164981ddc37"
+    },
+    {
+      "source": "target/offline-storage-experiment/root-reviewed/sample-65536-4-buffered.stderr.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/root-reviewed/sample-65536-4-buffered.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/offline-storage-experiment/root-reviewed/sample-65536-4-buffered.stdout.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/root-reviewed/sample-65536-4-buffered.stdout.txt",
+      "sha256": "ef1293a217f779f6424ee6c287ebbca36d18b3d0f713a5ce57f8c1c5ac0419b4"
+    },
+    {
+      "source": "target/offline-storage-experiment/root-reviewed/sample-65536-4-mmap.process.json",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/root-reviewed/sample-65536-4-mmap.process.json",
+      "sha256": "80c6f2108c7ae63be4fffffc0a98c190fa79d4f23950018ebb32e6ba2034c667"
+    },
+    {
+      "source": "target/offline-storage-experiment/root-reviewed/sample-65536-4-mmap.stderr.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/root-reviewed/sample-65536-4-mmap.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/offline-storage-experiment/root-reviewed/sample-65536-4-mmap.stdout.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/root-reviewed/sample-65536-4-mmap.stdout.txt",
+      "sha256": "fca036147be30f77541cfe75e3815d7a375f5da449963aa85732721e03f1600e"
+    },
+    {
+      "source": "target/offline-storage-experiment/root-reviewed/sample-8192-0-buffered.process.json",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/root-reviewed/sample-8192-0-buffered.process.json",
+      "sha256": "c057dfb469f6c01cb1241296aa9a634818c1d2da2d9b14caeff825a95377da2b"
+    },
+    {
+      "source": "target/offline-storage-experiment/root-reviewed/sample-8192-0-buffered.stderr.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/root-reviewed/sample-8192-0-buffered.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/offline-storage-experiment/root-reviewed/sample-8192-0-buffered.stdout.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/root-reviewed/sample-8192-0-buffered.stdout.txt",
+      "sha256": "b95766cdaf40e39ff6f34137953406b1b37a9ed6155447fe50c9f6be6e75560e"
+    },
+    {
+      "source": "target/offline-storage-experiment/root-reviewed/sample-8192-0-mmap.process.json",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/root-reviewed/sample-8192-0-mmap.process.json",
+      "sha256": "b7866c20cce085d82b92957f9eb1be0c9f685964667eefa195cff1911ea488d9"
+    },
+    {
+      "source": "target/offline-storage-experiment/root-reviewed/sample-8192-0-mmap.stderr.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/root-reviewed/sample-8192-0-mmap.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/offline-storage-experiment/root-reviewed/sample-8192-0-mmap.stdout.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/root-reviewed/sample-8192-0-mmap.stdout.txt",
+      "sha256": "3aeb45fa91a5343096d0e08c33aeb493facfbc8794489fc08264b82a959ea764"
+    },
+    {
+      "source": "target/offline-storage-experiment/root-reviewed/sample-8192-1-buffered.process.json",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/root-reviewed/sample-8192-1-buffered.process.json",
+      "sha256": "f3d584c01603d6e209ef008087fc3f4b1d07beaf1755ca87874fefa93ad5c482"
+    },
+    {
+      "source": "target/offline-storage-experiment/root-reviewed/sample-8192-1-buffered.stderr.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/root-reviewed/sample-8192-1-buffered.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/offline-storage-experiment/root-reviewed/sample-8192-1-buffered.stdout.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/root-reviewed/sample-8192-1-buffered.stdout.txt",
+      "sha256": "c8bdaf61bf6922ac4793f897c3e0947e93340aba0d99a00d86255abd5e14a77c"
+    },
+    {
+      "source": "target/offline-storage-experiment/root-reviewed/sample-8192-1-mmap.process.json",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/root-reviewed/sample-8192-1-mmap.process.json",
+      "sha256": "fdad57e444f2dbf5d77c11af5c7ece689a80b0cf51f62666283cfd948bf0edcc"
+    },
+    {
+      "source": "target/offline-storage-experiment/root-reviewed/sample-8192-1-mmap.stderr.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/root-reviewed/sample-8192-1-mmap.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/offline-storage-experiment/root-reviewed/sample-8192-1-mmap.stdout.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/root-reviewed/sample-8192-1-mmap.stdout.txt",
+      "sha256": "a78fc60a0498084467523faf437f79513182af522d7e0fb8869646567632d5db"
+    },
+    {
+      "source": "target/offline-storage-experiment/root-reviewed/sample-8192-2-buffered.process.json",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/root-reviewed/sample-8192-2-buffered.process.json",
+      "sha256": "f11b5f975f0afc75bb3b96bf54b2826ddab5ebccae22886bace813b2a32ffc12"
+    },
+    {
+      "source": "target/offline-storage-experiment/root-reviewed/sample-8192-2-buffered.stderr.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/root-reviewed/sample-8192-2-buffered.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/offline-storage-experiment/root-reviewed/sample-8192-2-buffered.stdout.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/root-reviewed/sample-8192-2-buffered.stdout.txt",
+      "sha256": "7cf9328ce895949bdd71c15d2b4f54aad0e19f5a8db26d977515fdae9294a7f0"
+    },
+    {
+      "source": "target/offline-storage-experiment/root-reviewed/sample-8192-2-mmap.process.json",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/root-reviewed/sample-8192-2-mmap.process.json",
+      "sha256": "11815bb585b2202de60267d0527d51213e9801fabf00b89ab2f2d8b1ebc5faea"
+    },
+    {
+      "source": "target/offline-storage-experiment/root-reviewed/sample-8192-2-mmap.stderr.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/root-reviewed/sample-8192-2-mmap.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/offline-storage-experiment/root-reviewed/sample-8192-2-mmap.stdout.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/root-reviewed/sample-8192-2-mmap.stdout.txt",
+      "sha256": "382078e2c326450d694ec230776bcccb01d1eec1cee2248ee13184b6ae1b5d4b"
+    },
+    {
+      "source": "target/offline-storage-experiment/root-reviewed/sample-8192-3-buffered.process.json",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/root-reviewed/sample-8192-3-buffered.process.json",
+      "sha256": "c6418ded3845f51ca00e96e40e1d37eb67d2d158f0ed269d3900336d63516997"
+    },
+    {
+      "source": "target/offline-storage-experiment/root-reviewed/sample-8192-3-buffered.stderr.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/root-reviewed/sample-8192-3-buffered.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/offline-storage-experiment/root-reviewed/sample-8192-3-buffered.stdout.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/root-reviewed/sample-8192-3-buffered.stdout.txt",
+      "sha256": "fe432f3d093d5853dce42b8966af282ef6128121dbeb17a497138008c8d865e3"
+    },
+    {
+      "source": "target/offline-storage-experiment/root-reviewed/sample-8192-3-mmap.process.json",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/root-reviewed/sample-8192-3-mmap.process.json",
+      "sha256": "9c76cb2f5e26e387a1af694fc53728d7ad8ffc4885bf198f6014586024dad5c4"
+    },
+    {
+      "source": "target/offline-storage-experiment/root-reviewed/sample-8192-3-mmap.stderr.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/root-reviewed/sample-8192-3-mmap.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/offline-storage-experiment/root-reviewed/sample-8192-3-mmap.stdout.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/root-reviewed/sample-8192-3-mmap.stdout.txt",
+      "sha256": "e13d1899d0da51505e8405f047308bccac02187a98747e536c565d97a6ed74e0"
+    },
+    {
+      "source": "target/offline-storage-experiment/root-reviewed/sample-8192-4-buffered.process.json",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/root-reviewed/sample-8192-4-buffered.process.json",
+      "sha256": "b8331bd187685b296f2a3c0d27081c6477157a884945141fdeafc68969186382"
+    },
+    {
+      "source": "target/offline-storage-experiment/root-reviewed/sample-8192-4-buffered.stderr.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/root-reviewed/sample-8192-4-buffered.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/offline-storage-experiment/root-reviewed/sample-8192-4-buffered.stdout.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/root-reviewed/sample-8192-4-buffered.stdout.txt",
+      "sha256": "78df7fc415244aa0e5881d2a84f562cbb02535a4ee4e1cf7e3c0e1573e94917b"
+    },
+    {
+      "source": "target/offline-storage-experiment/root-reviewed/sample-8192-4-mmap.process.json",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/root-reviewed/sample-8192-4-mmap.process.json",
+      "sha256": "90e0dcead4f15079cceedd17a2751a1c2105adbc6828de785addae92d7ea0364"
+    },
+    {
+      "source": "target/offline-storage-experiment/root-reviewed/sample-8192-4-mmap.stderr.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/root-reviewed/sample-8192-4-mmap.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/offline-storage-experiment/root-reviewed/sample-8192-4-mmap.stdout.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/root-reviewed/sample-8192-4-mmap.stdout.txt",
+      "sha256": "ee52d3ea3fc6aedc8615d4c613ba5a151f3bb99046480180c8d637568331ad6a"
+    },
+    {
+      "source": "target/offline-storage-experiment/root-reviewed/sysroot.process.json",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/root-reviewed/sysroot.process.json",
+      "sha256": "ba4c45d22d89d2ace02edd8b5f15fb25f2686c0279df878947d25fed7399ef11"
+    },
+    {
+      "source": "target/offline-storage-experiment/root-reviewed/sysroot.stderr.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/root-reviewed/sysroot.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/offline-storage-experiment/root-reviewed/sysroot.stdout.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/root-reviewed/sysroot.stdout.txt",
+      "sha256": "e0d8249c2fb93ac2106d97fedd24f44420e0ee2316617df20f769f033eaf568d"
+    },
+    {
+      "source": "target/offline-storage-experiment/root-reviewed/trailing.process.json",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/root-reviewed/trailing.process.json",
+      "sha256": "0ccdc2bbc3064ef5e73e0625463cf0e57fb1dbde233b86105ff7a7f51ab749c1"
+    },
+    {
+      "source": "target/offline-storage-experiment/root-reviewed/trailing.stderr.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/root-reviewed/trailing.stderr.txt",
+      "sha256": "f2431b0b24eaf4e3074159e63a4e90a41e38fb66aaac130fab149d5e13482c4a"
+    },
+    {
+      "source": "target/offline-storage-experiment/root-reviewed/trailing.stdout.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/root-reviewed/trailing.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/offline-storage-experiment/root-reviewed/truncated.process.json",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/root-reviewed/truncated.process.json",
+      "sha256": "2873604325e0b8e96cccb641273c6edecc86272f927111569758f3669819474c"
+    },
+    {
+      "source": "target/offline-storage-experiment/root-reviewed/truncated.stderr.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/root-reviewed/truncated.stderr.txt",
+      "sha256": "f2431b0b24eaf4e3074159e63a4e90a41e38fb66aaac130fab149d5e13482c4a"
+    },
+    {
+      "source": "target/offline-storage-experiment/root-reviewed/truncated.stdout.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/root-reviewed/truncated.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/offline-storage-experiment/root-reviewed/wrong-source-epoch.process.json",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/root-reviewed/wrong-source-epoch.process.json",
+      "sha256": "57b0be7bd03b874067e55098fc89f31eacff49f3b6e3d1709e1d892691949cf2"
+    },
+    {
+      "source": "target/offline-storage-experiment/root-reviewed/wrong-source-epoch.stderr.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/root-reviewed/wrong-source-epoch.stderr.txt",
+      "sha256": "f84bd7f23ecbe9a0c29b59923a36f0870d49d7fe7f7718ef459c2438b419283b"
+    },
+    {
+      "source": "target/offline-storage-experiment/root-reviewed/wrong-source-epoch.stdout.txt",
+      "retained": "machine/architecture-hardening/h22-5-storage-evidence/root-reviewed/wrong-source-epoch.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "limits": [
+    "Generated fixed-width records, not NBT/MCA or a real server workload.",
+    "Private copy/hash warms page cache; full pipeline includes copy/sync/hash/index/database/verification, not cold disk.",
+    "Windows private-file map lifetime only; no coherent capture of arbitrary live input files.",
+    "Process-exit recovery during one uncommitted transaction, not power failure or arbitrary crash-point proof.",
+    "Five samples per method/size on shared host; no useful mmap speed benefit established.",
+    "Peak committed process bytes are not RSS; cache and sidecar caps do not prove unbounded reader retention safe."
+  ]
+}

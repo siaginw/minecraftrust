@@ -407,14 +407,17 @@
         "tools/entity-storage-experiment",
         "docs/research/entity-storage-comparison.md",
         "crates/semantic-scheduler-prototype",
-        "docs/architecture/semantic-scheduler.md"
+        "docs/architecture/semantic-scheduler.md",
+        "tools/offline-storage-experiment",
+        "docs/research/offline-storage-experiment.md"
       ],
       "validation": [
         "Decision ledger: 70 candidates, all 48 required names, 13 validator tests passed. Remaining bounded experiments are pending.",
         "Replay model independently rerun:47/47 cases,836 boundaries,5 Rust and14 Python tests; real Minecraft adapters remain pending.",
         "State-diff model root rerun:20 Rust tests,24 Java/Rust cases,547 paired boundaries; live scheduler remains rejected.",
         "GPU proxy: two frozen-source campaigns of 90 samples; exact full-array integer parity and first-element injected fault detected; no performance qualification or integration.",
-        "JNI prototype independently rerun:66 assertions,13 JVM probes,positive/negative lifetime compile controls; no incremental warnings over exact bare-JVM baselines;25 isolated dependencies inventoried."
+        "JNI prototype independently rerun:66 assertions,13 JVM probes,positive/negative lifetime compile controls; no incremental warnings over exact bare-JVM baselines;25 isolated dependencies inventoried.",
+        "Offline storage independently rerun:12 Rust+2 compile-fail+5 Python;20 exact samples;6 error/recovery controls;no useful mmap whole-path gain;12 locked dependencies inventoried."
       ],
       "evidence": [
         "machine/architecture-hardening/h22-5-ledger-validation.json",
@@ -423,7 +426,8 @@
         "machine/architecture-hardening/h22-5-gpu-validation.json",
         "machine/architecture-hardening/h22-5-jni-validation.json",
         "machine/architecture-hardening/h11-entity-storage.json",
-        "machine/architecture-hardening/h12-semantic-scheduler.json"
+        "machine/architecture-hardening/h12-semantic-scheduler.json",
+        "machine/architecture-hardening/h22-5-offline-storage.json"
       ],
       "commit": null,
       "requirements": [
@@ -477,7 +481,17 @@
           "evidence": "machine/architecture-hardening/h12-semantic-scheduler.json"
         },
         "G": {
-          "status": "PENDING"
+          "status": "EXPERIMENT_VALIDATED",
+          "decision": "KEEP_BUFFERED_BASELINE_RETAIN_NARROW_MMAP_REDB_PROTOTYPES",
+          "evidence": "machine/architecture-hardening/h22-5-offline-storage.json",
+          "outstanding": [
+            "Generated fixed-width records, not NBT/MCA or a real server workload.",
+            "Private copy/hash warms page cache; full pipeline includes copy/sync/hash/index/database/verification, not cold disk.",
+            "Windows private-file map lifetime only; no coherent capture of arbitrary live input files.",
+            "Process-exit recovery during one uncommitted transaction, not power failure or arbitrary crash-point proof.",
+            "Five samples per method/size on shared host; no useful mmap speed benefit established.",
+            "Peak committed process bytes are not RSS; cache and sidecar caps do not prove unbounded reader retention safe."
+          ]
         },
         "H": {
           "status": "PENDING"
@@ -487,7 +501,7 @@
     {
       "id": "H23",
       "title": "REQUALIFY CLEAN FORGE AND REVELATION UNDER V2",
-      "status": "PREREQUISITE_VALIDATED",
+      "status": "PREREQUISITE_COMMITTED",
       "implementation": [
         "tools/live-capture/generate_live_writer_plan.py",
         "tools/bridge/src/com/rustcraft/coremod/LiveWriterPlan.java",
@@ -501,7 +515,7 @@
       "evidence": [
         "machine/architecture-hardening/h23-writer-plan-v2.json"
       ],
-      "commit": null,
+      "commit": "7bb5326e7fc0d986f218f633c986895756552597",
       "outstanding": [
         "Admission prerequisite only: no actual V2 runtime profile, issuer, capture scope or qualification certificate installed.",
         "Default RAW diagnostic plan retained; historical Revelation checks remain V1 only.",

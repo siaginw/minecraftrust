@@ -273,6 +273,62 @@
       "installed_scope": "NOT_INSTALLED;independently implemented standalone H8 prototype",
       "evidence": "machine/architecture-hardening/h8-section-packet-cache.json",
       "provenance": "tools/section-packet-cache-experiment/provenance.json"
+    },
+    {
+      "candidate": "memmap2",
+      "version": "0.9.11",
+      "license": "MIT OR Apache-2.0",
+      "decision": "PROTOTYPE",
+      "reason": "Private immutable offline snapshot map; no useful advantage over equal-allocation buffered complete pipeline.",
+      "performance_value": "No meaningful mmap complete-pipeline benefit in three comparable campaigns; no Fjall/RocksDB measurement.",
+      "migration_value": "Replaceable offline indexes and metadata only; MCA/NBT compatibility storage unchanged.",
+      "integration_risk": "Unsafe mapping requires exclusive immutable-from-birth file ownership; arbitrary live files excluded.",
+      "installed_scope": "ISOLATED_PROTOTYPE_ONLY",
+      "evidence": "machine/architecture-hardening/h22-5-offline-storage.json",
+      "provenance": "tools/offline-storage-experiment/research-provenance.json",
+      "source": "https://crates.io/api/v1/crates/memmap2/0.9.11"
+    },
+    {
+      "candidate": "redb",
+      "version": "4.3.0",
+      "license": "MIT OR Apache-2.0",
+      "decision": "PROTOTYPE",
+      "reason": "Bounded transactional sidecar covers stable readers, commit/abort/reopen/source binding.",
+      "performance_value": "No meaningful mmap complete-pipeline benefit in three comparable campaigns; no Fjall/RocksDB measurement.",
+      "migration_value": "Replaceable offline indexes and metadata only; MCA/NBT compatibility storage unchanged.",
+      "integration_risk": "Real query workload, retention and broader recovery evidence remain required.",
+      "installed_scope": "ISOLATED_PROTOTYPE_ONLY",
+      "evidence": "machine/architecture-hardening/h22-5-offline-storage.json",
+      "provenance": "tools/offline-storage-experiment/research-provenance.json",
+      "source": "https://crates.io/api/v1/crates/redb/4.3.0"
+    },
+    {
+      "candidate": "Fjall",
+      "version": "3.1.10",
+      "license": "MIT OR Apache-2.0",
+      "decision": "STUDY",
+      "reason": "No demonstrated sustained-update index workload justifies adding another storage engine.",
+      "performance_value": "No meaningful mmap complete-pipeline benefit in three comparable campaigns; no Fjall/RocksDB measurement.",
+      "migration_value": "Replaceable offline indexes and metadata only; MCA/NBT compatibility storage unchanged.",
+      "integration_risk": "Compaction, amplification and retention require representative workload.",
+      "installed_scope": "NOT_INSTALLED",
+      "evidence": "machine/architecture-hardening/h22-5-offline-storage.json",
+      "provenance": "tools/offline-storage-experiment/research-provenance.json",
+      "source": "https://crates.io/api/v1/crates/fjall/3.1.10"
+    },
+    {
+      "candidate": "RocksDB",
+      "version": "0.25.0",
+      "license": "Apache-2.0",
+      "decision": "STUDY",
+      "reason": "C++ LSM comparator reserved for demonstrated large persistent index need.",
+      "performance_value": "No meaningful mmap complete-pipeline benefit in three comparable campaigns; no Fjall/RocksDB measurement.",
+      "migration_value": "Replaceable offline indexes and metadata only; MCA/NBT compatibility storage unchanged.",
+      "integration_risk": "Native build/deployment, transitive license review and tuning are unjustified here.",
+      "installed_scope": "NOT_INSTALLED",
+      "evidence": "machine/architecture-hardening/h22-5-offline-storage.json",
+      "provenance": "tools/offline-storage-experiment/research-provenance.json",
+      "source": "https://crates.io/api/v1/crates/rocksdb/0.25.0"
     }
   ]
 }

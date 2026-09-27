@@ -1,0 +1,66 @@
+{
+  "schema": "OFFLINE_STORAGE_RESEARCH_V1",
+  "observed_utc": "2026-09-27T01:48:50.936475+00:00",
+  "candidates": [
+    {
+      "name": "memmap2",
+      "version": "0.9.11",
+      "decision": "PROTOTYPE",
+      "license": "MIT OR Apache-2.0",
+      "rust_version": "1.65",
+      "repository": "https://github.com/RazrFalcon/memmap2-rs",
+      "archive_sha256": "d1219ed1b7f229ee7104d281dd01d6802fe28bb6e95d292942c4daacdeb798c0",
+      "metadata_url": "https://crates.io/api/v1/crates/memmap2/0.9.11",
+      "response_sha256": "66db8151c71fe0033c0c73ae61b113c976ad031f2366fd01aa522a848a6eb126",
+      "installed": true
+    },
+    {
+      "name": "redb",
+      "version": "4.3.0",
+      "decision": "PROTOTYPE",
+      "license": "MIT OR Apache-2.0",
+      "rust_version": "1.90",
+      "repository": "https://github.com/cberner/redb",
+      "archive_sha256": "fb338a6c67830a61bed824b78c2bb034ab1ff401a20616bd7957524f4fdc2f22",
+      "metadata_url": "https://crates.io/api/v1/crates/redb/4.3.0",
+      "response_sha256": "19caff38dab624d0221c8ddfb3acc528a857a47d703929786b5fce597b0164e6",
+      "installed": true
+    },
+    {
+      "name": "fjall",
+      "version": "3.1.10",
+      "decision": "STUDY",
+      "license": "MIT OR Apache-2.0",
+      "rust_version": "1.90.0",
+      "repository": "https://github.com/fjall-rs/fjall",
+      "archive_sha256": "cd201c93927cdf4712e8f7d4c9c8d34d68c7534380c05d4a58864a309f91c33f",
+      "metadata_url": "https://crates.io/api/v1/crates/fjall/3.1.10",
+      "response_sha256": "59aecb1429356a21cc699a93958e4e8df46833faab5377080cea2744c0ab0fac",
+      "installed": false
+    },
+    {
+      "name": "rocksdb",
+      "version": "0.25.0",
+      "decision": "STUDY",
+      "license": "Apache-2.0",
+      "rust_version": "1.88.0",
+      "repository": "https://github.com/rust-rocksdb/rust-rocksdb",
+      "archive_sha256": "d8d90add70d1d420ee487bce4a1449880a8d147451c6051b2ee5f8354553dcbf",
+      "metadata_url": "https://crates.io/api/v1/crates/rocksdb/0.25.0",
+      "response_sha256": "3f65dd11097cae40c0475a5db25aacc060b8c89f8553af57b7bc6cca267c699b",
+      "installed": false
+    },
+    {
+      "name": "sha2",
+      "version": "0.10.9",
+      "decision": "ADOPT_AUXILIARY_IN_PROTOTYPE",
+      "license": "MIT OR Apache-2.0",
+      "rust_version": null,
+      "repository": "https://github.com/RustCrypto/hashes",
+      "archive_sha256": "a7507d819769d01a365ab707794a4084392c824f54a7a6a7862f8c3d0892b283",
+      "metadata_url": "https://crates.io/api/v1/crates/sha2/0.10.9",
+      "response_sha256": "138a8e8a458bc5051c24d40fefbf2c34f25b007a2426b76fba7ae25a22d1cfa1",
+      "installed": true
+    }
+  ]
+}
