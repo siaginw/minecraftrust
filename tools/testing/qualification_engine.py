@@ -41,6 +41,23 @@ IDENTITY_MODES = ("RAW_SHA256", "CANONICAL_ID_V2", "CANONICAL_ID_V2_SESSION_BOUN
 SESSION_BOUND_PROFILE_SCHEMA = "RUSTCRAFT_SESSION_BOUND_PROFILE_V1"
 SESSION_BOUND_PROFILE_VERSION = 1
 
+#: The same-process transformation chain. It exists because the session
+#: certificate is an ADMISSION certificate: it authorizes the PRE_WRITER buffer
+#: and says nothing about what any transformer did afterwards. Naming the stages
+#: explicitly -- rather than calling the last writer "the writer" -- is what
+#: keeps the chain honest when something other than RustCraft runs last.
+CHAIN_SCHEMA = "RUSTCRAFT_TRANSFORMATION_CHAIN_V1"
+CHAIN_VERSION = 1
+STAGE_PRE = "PRE_WRITER"
+STAGE_RUSTCRAFT = "RUSTCRAFT_POST_WRITER"
+STAGE_DOWNSTREAM = "DOWNSTREAM_TRANSFORMER"
+STAGE_FINAL = "FINAL_DEFINED"
+
+#: The only transformers whose output may be labelled RUSTCRAFT_POST_WRITER.
+RUSTCRAFT_TRANSFORMERS = (
+    "com.rustcraft.coremod.LiveChunkOwnershipTransformer",
+)
+
 
 class Invalid(ValueError):
     pass
@@ -418,7 +435,7 @@ class QualificationEngine:
         # and the session node both read them, and the session node refuses to
         # let session evidence travel alongside an exact identity mode.
         keys(observed, ("schema", "session", "challenge", "request_sha256", "capture_kind", "runtime_identity", "transformer_chain", "coremods", "classes"),
-             ("pre_classes", "writer_matrix", "negative_controls", "live", "frame_relation_witness", "session_acquisition", "session_certificates"))
+             ("pre_classes", "writer_matrix", "negative_controls", "live", "frame_relation_witness", "session_acquisition", "session_certificates", "transformation_chain"))
         if observed["schema"] != "RUSTCRAFT_FRESH_OBSERVATION_V2" or observed["session"] != self.session or observed["challenge"] != self.challenge or observed["request_sha256"] != self.request_sha256:
             raise Invalid("stale/cross-session/request-substituted observation")
         if observed["capture_kind"] != "OFFLINE_TRANSFORM_CAPTURE":
@@ -626,16 +643,27 @@ class QualificationEngine:
                 "unproven_classes": self.frame_requirement["unproven_classes"] if self.frame_requirement
                 else sorted({name.replace(".", "/") for name in classes} - set(required))}
 
-    def session_evidence(self, observed, classes):
+    def session_evidence(self, observed, classes, pre_classes):
         """Blocker #2 as an engine gate: session evidence, or INCOMPLETE.
 
         In an exact identity mode this node records that no session evidence is
-        required and none is claimed -- normalization is not in play, so there
-        is nothing to certify. In session-bound mode the certificates must agree
+        required and none is claimed -- normalization is not in play, so there is
+        nothing to certify. In session-bound mode the certificates must agree
         with the exact identities the engine recomputed from the observed bytes,
         and must be bound to a same-process acquisition record. Structure alone
         never authorizes masking: if the block is absent the stage stays
         INCOMPLETE, and it can never fall back to exact-mode silence.
+
+        The certificate is an ADMISSION certificate: every identity field in it
+        describes the exact buffer the writer was handed and is about to mutate.
+        So it is checked against `pre_classes` -- the pre-writer bytes this engine
+        recomputed itself from the same capture -- and never against `classes`,
+        which holds the bytes the writer produced. Checking it against the
+        post-writer class would ask one field to describe two different class
+        states, and would in effect demand that the pre-write gate accept bytes
+        that did not exist when it ran. The post-writer and finally-defined bytes
+        are not left unproven: the transformation_chain node proves them
+        separately and binds them to this same acquisition and certificate.
         """
         block = self.session_binding
         if block is None:
@@ -644,8 +672,8 @@ class QualificationEngine:
             return {"identity_mode": self.profile["identity_mode"],
                     "session_bound": False,
                     "note": "exact identity mode: no value-level normalization is authorized or claimed"}
-        if classes is None:
-            raise Missing("fresh class identity is required before session certificates can be checked")
+        if classes is None or pre_classes is None:
+            raise Missing("fresh pre-writer and post-writer class identity are required before session certificates can be checked")
         acquisition = observed.get("session_acquisition")
         if acquisition is None:
             raise Missing("no same-process acquisition evidence accompanies the session certificates")
@@ -699,19 +727,223 @@ class QualificationEngine:
                 raise Invalid("session certificate pre-writer identity differs from the acquisition: " + name)
             if document["session_invariant_sha256"] != rows[name]["session_invariant_sha256"]:
                 raise Invalid("session certificate invariant differs from the acquisition: " + name)
-            recomputed = classes.get(name)
-            if recomputed is None:
-                raise Missing("session certificate names a class the engine did not recompute: " + name)
-            if (document["exact_semantic_sha256"] != recomputed["semantic_sha256"]
-                    or document["exact_declaration_order_sha256"] != recomputed["declaration_order_sha256"]):
+            # The certificate authorizes the PRE-writer class, so the engine
+            # recomputes that class's exact identity itself and compares here.
+            admitted = pre_classes.get(name)
+            if admitted is None:
+                raise Missing("session certificate names a class whose pre-writer identity was not recomputed: " + name)
+            if (document["exact_semantic_sha256"] != admitted["semantic_sha256"]
+                    or document["exact_declaration_order_sha256"] != admitted["declaration_order_sha256"]):
                 # The whole point: the certificate claims an exact identity for
-                # real bytes, and the engine recomputed those bytes itself.
-                raise Invalid("session certificate exact identity differs from the recomputed V2 identity: " + name)
+                # the bytes the writer is about to mutate, and the engine
+                # recomputed those bytes itself. A post-writer identity here
+                # would be a certificate that admits a class it never saw.
+                raise Invalid("session certificate admission identity differs from the recomputed PRE-writer V2 identity: " + name)
+            produced = classes.get(name)
+            if produced is None:
+                raise Missing("session certificate names a class whose post-writer identity was not recomputed: " + name)
+            if produced["semantic_sha256"] == admitted["semantic_sha256"]:
+                raise Invalid("post-writer identity equals the admitted pre-writer identity; the writers proved nothing: " + name)
             issued.append(name)
         return {"identity_mode": self.profile["identity_mode"], "session_bound": True,
                 "process_id": block["process_id"], "transformation_session_id": block["transformation_session_id"],
                 "recipe_sha256": block["recipe_sha256"], "acquisition_evidence_sha256": acquisition_hash,
+                "certifies_stage": "PRE_WRITER",
                 "certified_classes": sorted(issued)}
+
+
+    def transformation_chain(self, observed, classes, pre_classes):
+        """The PRE -> RUSTCRAFT_POST -> ... -> FINAL chain, or INCOMPLETE.
+
+        The session certificate is an admission certificate: it authorizes the
+        pre-writer buffer. It says nothing about what the writer then produced.
+        This node is where the rest of the lifecycle is proven, and it is proven
+        as a chain rather than as a second identity so that no stage can be
+        swapped for another: every adjacent pair must satisfy
+        `previous.output_sha256 == next.input_sha256`, and every stage must carry
+        the same process id, transformation session id and defining loader the
+        certificate was bound to.
+
+        RustCraft is NOT assumed to be the last transformer. If the witness
+        reports downstream transformers after the live writers, a FINAL_DEFINED
+        stage observing the bytes the loader actually received is mandatory; its
+        absence is INCOMPLETE, not a pass. The FINAL stage is compared against
+        the engine's own recomputed post-writer identity for the final
+        downstream-free case, and against the witness's own observed final bytes
+        otherwise -- never assumed equal to the pre-writer admission.
+        """
+        block = self.session_binding
+        if block is None:
+            if observed.get("transformation_chain") is not None:
+                raise Invalid("an exact identity profile may not carry a session transformation chain")
+            return {"required": False,
+                    "note": "exact identity mode: no session-bound chain is authorized or claimed"}
+        if classes is None or pre_classes is None:
+            raise Missing("fresh pre-writer and post-writer identity are required before a chain can be checked")
+        chain = observed.get("transformation_chain")
+        if chain is None:
+            raise Missing("no same-process transformation chain accompanies the session certificates")
+        if not isinstance(chain, dict):
+            raise Invalid("the transformation chain must be a single per-session document")
+        keys(chain, ("schema", "schema_version", "process_id", "transformation_session_id",
+                     "defining_loader_identity", "acquisition_evidence_sha256",
+                     "downstream_transformers_after_live_writers", "classes"))
+        if chain["schema"] != CHAIN_SCHEMA or chain["schema_version"] != CHAIN_VERSION:
+            raise Invalid("unsupported transformation chain schema/version")
+        if chain["process_id"] != block["process_id"] or chain["transformation_session_id"] != block["transformation_session_id"]:
+            raise Invalid("the transformation chain belongs to a different process/transformation session")
+        if chain["acquisition_evidence_sha256"] != digest_json(observed["session_acquisition"]):
+            raise Invalid("the transformation chain is not bound to this acquisition evidence")
+        if not isinstance(chain["classes"], list):
+            raise Invalid("the transformation chain must list per-class chains")
+        if set(row.get("binary_name", "").replace(".", "/") for row in chain["classes"]) != set(block["classes"]):
+            raise Invalid("the transformation chain does not cover exactly the certified classes")
+        downstream = chain["downstream_transformers_after_live_writers"]
+        if not isinstance(downstream, list) or any(not isinstance(name, str) or not name for name in downstream):
+            raise Invalid("downstream_transformers_after_live_writers must be a transformer name list")
+        proven = []
+        for row in chain["classes"]:
+            proven.append(self.chain_row(row, block, classes, bool(downstream), chain))
+        return {"required": True, "chain_schema": CHAIN_SCHEMA,
+                "process_id": block["process_id"],
+                "transformation_session_id": block["transformation_session_id"],
+                "acquisition_evidence_sha256": chain["acquisition_evidence_sha256"],
+                "downstream_transformers_after_live_writers": downstream,
+                "classes": proven}
+
+    def chain_row(self, row, block, classes, has_downstream, chain):
+        name = row.get("binary_name", "").replace(".", "/")
+        keys(row, ("binary_name", "process_id", "transformation_session_id",
+                   "defining_loader_identity", "stages"))
+        if row["process_id"] != block["process_id"] or row["transformation_session_id"] != block["transformation_session_id"]:
+            raise Invalid("chain row belongs to a different process/transformation session: " + name)
+        if row["defining_loader_identity"] != chain["defining_loader_identity"]:
+            raise Invalid("chain row names a different defining loader: " + name)
+        stages = row["stages"]
+        if not isinstance(stages, list) or len(stages) < 2:
+            raise Invalid("a chain needs at least a PRE_WRITER and a final stage: " + name)
+        ordered = [stage.get("stage") for stage in stages]
+        if ordered[0] != STAGE_PRE or ordered[-1] != STAGE_FINAL:
+            raise Invalid("a chain must start at PRE_WRITER and end at FINAL_DEFINED: " + name)
+        if len(set(ordered)) != len(ordered):
+            raise Invalid("a chain may not repeat a stage: " + name)
+        certificate = block["certificates"][name]
+        if ordered.count(STAGE_RUSTCRAFT) != 1:
+            raise Invalid("a chain must contain exactly one RUSTCRAFT_POST stage: " + name)
+        if ordered[1] != STAGE_RUSTCRAFT:
+            raise Invalid("RUSTCRAFT_POST must directly follow PRE_WRITER: " + name)
+        if has_downstream and ordered[2:-1] != [STAGE_DOWNSTREAM]:
+            raise Missing("downstream transformers ran, so an observed FINAL_DEFINED stage is required: " + name)
+        if not has_downstream and len(ordered) != 3:
+            raise Invalid("no downstream transformer ran, so the chain must be PRE, RUSTCRAFT_POST, FINAL: " + name)
+        previous = None
+        for index, stage in enumerate(stages):
+            keys(stage, ("stage", "ordinal", "process_id", "transformation_session_id",
+                         "defining_loader_identity", "class_name", "transformer",
+                         "input_raw_sha256", "output_raw_sha256",
+                         "exact_semantic_sha256", "exact_declaration_order_sha256",
+                         "session_invariant_sha256", "acquisition_evidence_id",
+                         "rustcraft_hooks", "exception_paths"))
+            if stage["process_id"] != block["process_id"] or stage["transformation_session_id"] != block["transformation_session_id"]:
+                raise Invalid("chain stage belongs to a different process/transformation session: " + name)
+            if stage["defining_loader_identity"] != chain["defining_loader_identity"]:
+                raise Invalid("chain stage names a different defining loader: " + name)
+            if stage["class_name"].replace(".", "/") != name:
+                raise Invalid("chain stage names a different class: " + name)
+            if stage["ordinal"] != index:
+                raise Invalid("chain stages must be a dense ascending ordinal sequence: " + name)
+            digest(stage["input_raw_sha256"])
+            digest(stage["output_raw_sha256"])
+            if stage["input_raw_sha256"] == stage["output_raw_sha256"]:
+                raise Invalid("chain stage is a no-op: " + stage["stage"] + " for " + name)
+            if previous is not None and stage["input_raw_sha256"] != previous["output_raw_sha256"]:
+                # This is the whole point of a chain: no stage may be swapped
+                # for another, and no gap may be papered over.
+                raise Invalid("broken adjacent transformation hash link before " + stage["stage"] + ": " + name)
+            previous = stage
+            if stage["stage"] == STAGE_PRE:
+                if stage["transformer"] != "none" and stage["transformer"] != "":
+                    raise Invalid("the PRE_WRITER stage must name no transformer: " + name)
+                if stage["input_raw_sha256"] != certificate["pre_writer_raw_sha256"]:
+                    raise Invalid("PRE_WRITER input is not the bytes the certificate admits: " + name)
+                if stage["exact_semantic_sha256"] != certificate["exact_semantic_sha256"] \
+                        or stage["exact_declaration_order_sha256"] != certificate["exact_declaration_order_sha256"]:
+                    raise Invalid("PRE_WRITER identity is not the certified admission identity: " + name)
+                if stage["session_invariant_sha256"] != certificate["session_invariant_sha256"]:
+                    raise Invalid("PRE_WRITER session invariant is not the certified invariant: " + name)
+            elif stage["stage"] == STAGE_RUSTCRAFT:
+                if not RUSTCRAFT_TRANSFORMERS.issuperset({stage["transformer"]}):
+                    raise Invalid("RUSTCRAFT_POST names a transformer that is not a live writer: " + name)
+                produced = classes.get(name)
+                if produced is None:
+                    raise Missing("post-writer identity was not recomputed: " + name)
+                if stage["output_raw_sha256"] != produced["raw_sha256"]:
+                    raise Invalid("RUSTCRAFT_POST output is not the post-writer class the engine observed: " + name)
+                if stage["exact_semantic_sha256"] != produced["semantic_sha256"] \
+                        or stage["exact_declaration_order_sha256"] != produced["declaration_order_sha256"]:
+                    # Independently recomputed: the engine parsed the bytes
+                    # itself and did not take the chain's word for them.
+                    raise Invalid("RUSTCRAFT_POST identity is not the engine's recomputed post-writer identity: " + name)
+                self.check_rustcraft_effect(stage, name)
+            elif stage["stage"] == STAGE_DOWNSTREAM:
+                if not chain["downstream_transformers_after_live_writers"]:
+                    raise Invalid("a DOWNSTREAM stage was recorded with no downstream transformer: " + name)
+                if stage["transformer"] not in chain["downstream_transformers_after_live_writers"]:
+                    raise Invalid("a downstream stage names a transformer that is not in the reported chain: " + name)
+                self.check_hook_survival(stage, name, "downstream")
+            elif stage["stage"] == STAGE_FINAL:
+                if stage["transformer"] != "class-loader-definition":
+                    raise Invalid("the FINAL_DEFINED stage must be the loader definition: " + name)
+                self.check_hook_survival(stage, name, "final")
+            else:
+                raise Invalid("unknown chain stage: " + str(stage["stage"]))
+        return {"binary_name": name, "stages": [s["stage"] for s in stages],
+                "final_raw_sha256": stages[-1]["output_raw_sha256"]}
+
+    def check_rustcraft_effect(self, stage, name):
+        """The RustCraft POST stage must show the hooks, the counts, the
+        exception paths, and the absence of undeclared edits."""
+        if not isinstance(stage["rustcraft_hooks"], list) or not stage["rustcraft_hooks"]:
+            raise Invalid("RUSTCRAFT_POST declares no hooks: " + name)
+        if not isinstance(stage["exception_paths"], list) or not stage["exception_paths"]:
+            raise Invalid("RUSTCRAFT_POST declares no exception paths: " + name)
+        for hook in stage["rustcraft_hooks"]:
+            keys(hook, ("id", "class", "method", "descriptor", "required_calls", "observed_calls"))
+            if hook["class"].replace(".", "/") != name:
+                raise Invalid("a declared hook belongs to a different class: " + name)
+            if not isinstance(hook["required_calls"], int) or not isinstance(hook["observed_calls"], int):
+                raise Invalid("hook call counts must be integers: " + name)
+            if hook["required_calls"] != hook["observed_calls"]:
+                raise Invalid("declared hook call count differs from the observed count: " + name + " " + hook["id"])
+        for path in stage["exception_paths"]:
+            keys(path, ("id", "class", "method", "descriptor", "handler"))
+            if path["class"].replace(".", "/") != name:
+                raise Invalid("a declared exception path belongs to a different class: " + name)
+            if not isinstance(path["handler"], str) or not path["handler"]:
+                raise Invalid("an exception path declares no handler: " + name)
+
+    def check_hook_survival(self, stage, name, where):
+        """Whatever ran after RustCraft must have left the hooks and the
+        exception coverage intact. A downstream transformer that strips them
+        would make the instrumented class unobservable at runtime, and a
+        certificate that authorized a transformation nobody can see is not
+        evidence of anything."""
+        if stage["rustcraft_hooks"] is None and stage["exception_paths"] is None:
+            raise Missing(f"{where} stage does not report hook survival for {name}")
+        if not isinstance(stage["rustcraft_hooks"], list) or not stage["rustcraft_hooks"]:
+            raise Invalid(f"{where} stage reports no RustCraft hooks: " + name)
+        for hook in stage["rustcraft_hooks"]:
+            keys(hook, ("id", "observed_calls"))
+            if not isinstance(hook["observed_calls"], int):
+                raise Invalid("hook call counts must be integers: " + name)
+            if hook["observed_calls"] < 1:
+                raise Invalid(f"a required hook is missing at the {where} stage: " + name + " " + hook["id"])
+        if not isinstance(stage["exception_paths"], list) or not stage["exception_paths"]:
+            raise Invalid(f"{where} stage reports no exception coverage: " + name)
+        for path in stage["exception_paths"]:
+            keys(path, ("id", "handler"))
+            if not isinstance(path["handler"], str) or not path["handler"]:
+                raise Invalid(f"an exception path lost its handler at the {where} stage: " + name + " " + path["id"])
 
     def unchanged(self):
         if self.initial_inputs != {p: sha(Path(p)) for p in self.initial_inputs}:
@@ -745,7 +977,11 @@ class QualificationEngine:
                     # frame proof and a session proof are only meaningful once
                     # the bytes they describe have been independently identified.
                     self.node("frame_evidence", "real_launch_frame_relation_and_hierarchy_proof", ("acquisition", "classes"), lambda: self.frame_evidence(observed, classes))
-                    self.node("session_evidence", "session_bound_identity_evidence", ("acquisition", "classes"), lambda: self.session_evidence(observed, classes))
+                    # The certificate authorizes PRE; the chain proves what the
+                    # writers then produced and what the loader finally defined.
+                    # Neither substitutes for the other.
+                    self.node("session_evidence", "session_bound_identity_evidence", ("acquisition", "classes", "pre_classes"), lambda: self.session_evidence(observed, classes, pre_classes))
+                    self.node("transformation_chain", "same_process_transformation_chain", ("session_evidence", "classes", "pre_classes"), lambda: self.transformation_chain(observed, classes, pre_classes))
                     self.node("live_closure", "live_writer_lifecycle_closure", ("writers", "controls"), lambda: self.live(observed))
                 self.node("unchanged", "end_of_run_drift_check", ("inventory", "tools"), self.unchanged)
         log_path = self.output / "process-log.json"
@@ -762,7 +998,7 @@ class QualificationEngine:
         # them is honest. Any claim of qualification needs both, and a missing
         # one lands on INCOMPLETE rather than a vacuous PASS.
         requirements = {M.OBSERVED: ("definitions", "inventory", "tools", "acquisition", "runtime", "classes", "unchanged"),
-                        M.OFFLINE_QUALIFIED: ("pre_classes", "writers", "placement", "controls", "frame_evidence", "session_evidence"),
+                        M.OFFLINE_QUALIFIED: ("pre_classes", "writers", "placement", "controls", "frame_evidence", "session_evidence", "transformation_chain"),
                         M.LIVE_QUALIFIED: ("live_closure",),
                         M.SHADOW_VALIDATED: ("live_shadow",), M.PERFORMANCE_QUALIFIED: ("complete_performance",),
                         M.AUTHORITY_AUTHORIZED: ("explicit_authority_approval",)}
