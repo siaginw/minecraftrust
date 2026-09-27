@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "kind": "H22_5_I_DECISION_LEDGER_VALIDATION",
+  "created_utc": "2026-09-27T00:26:45.209960+00:00",
+  "status": "PASS",
+  "sources_before": {
+    "machine/external-reuse/ultra-candidates.json": "67d0a50fd47a6f9e1917016413750a9f6e65c00d2e26ad2f8f90393bd67590dd",
+    "docs/research/external-candidate-decisions.md": "f5bbbec64b600645dc0d632af0900f6757824504176e1f0885bd89d094f2b326",
+    "tools/testing/test_external_reuse_ledger.py": "7b9f71194fbe1bfd9013a7167eaaba5a1f4d15705e4b37b80b19ee7e705b2145"
+  },
+  "sources_after": {
+    "machine/external-reuse/ultra-candidates.json": "67d0a50fd47a6f9e1917016413750a9f6e65c00d2e26ad2f8f90393bd67590dd",
+    "docs/research/external-candidate-decisions.md": "f5bbbec64b600645dc0d632af0900f6757824504176e1f0885bd89d094f2b326",
+    "tools/testing/test_external_reuse_ledger.py": "7b9f71194fbe1bfd9013a7167eaaba5a1f4d15705e4b37b80b19ee7e705b2145"
+  },
+  "commands": [
+    {
+      "argv": [
+        "C:\\Python314\\python.exe",
+        "-B",
+        "tools/testing/test_external_reuse_ledger.py"
+      ],
+      "exit_code": 0,
+      "stdout": "0.stdout.log",
+      "stderr": "0.stderr.log"
+    },
+    {
+      "argv": [
+        "C:\\Python314\\python.exe",
+        "-B",
+        "tools/testing/hardening_guard.py"
+      ],
+      "exit_code": 0,
+      "stdout": "1.stdout.log",
+      "stderr": "1.stderr.log"
+    }
+  ],
+  "candidate_count": 70,
+  "required_count": 48,
+  "tests": 13,
+  "scope": "Decision ledger only; remaining H22.5 experiments pending; no dependencies installed; no performance results claimed.",
+  "production_authority": false,
+  "local_receipt": {
+    "path": "target/architecture-hardening/h22-5-ledger-be23d33f7c/receipt.json",
+    "sha256": "f80cf5fa8ce4798cf33d837ea6330e1611b2323cfbd747dc089044b3173b23fa"
+  },
+  "decisions": {
+    "PROTOTYPE": 35,
+    "STUDY": 25,
+    "BORROW_ALGORITHM": 5,
+    "AVOID": 5,
+    "ADOPT": 0
+  }
+}

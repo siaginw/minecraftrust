@@ -9,7 +9,7 @@
     {
       "id": "H1",
       "title": "COMPLETE CANONICAL BYTECODE IDENTITY V2",
-      "status": "VALIDATED",
+      "status": "COMMITTED",
       "implementation": [
         "tools/bridge/src/com/rustcraft/coremod/CanonicalClassIdentityV2.java",
         "tools/classfile-crosscheck"
@@ -24,7 +24,7 @@
       "evidence": [
         "machine/architecture-hardening/h1-validation.json"
       ],
-      "commit": null
+      "commit": "5dc125edbdd3716294c13becaeffae86cc06c392"
     },
     {
       "id": "H2",
@@ -218,10 +218,17 @@
     {
       "id": "H22.5",
       "title": "Remaining Ultra audit experiments",
-      "status": "PENDING",
-      "implementation": [],
-      "validation": [],
-      "evidence": [],
+      "status": "IN_PROGRESS",
+      "implementation": [
+        "machine/external-reuse/ultra-candidates.json",
+        "docs/research/external-candidate-decisions.md"
+      ],
+      "validation": [
+        "Decision ledger: 70 candidates, all 48 required names, 13 validator tests passed. Remaining bounded experiments are pending."
+      ],
+      "evidence": [
+        "machine/architecture-hardening/h22-5-ledger-validation.json"
+      ],
       "commit": null,
       "requirements": [
         "A: differential first-divergence replay",
@@ -233,7 +240,17 @@
         "G: mmap and sidecar storage",
         "H: profile-guided hot mod method research",
         "I: complete external decision ledger"
-      ]
+      ],
+      "subtasks": {
+        "I": {
+          "status": "VALIDATED",
+          "commit": null
+        },
+        "A-H": {
+          "status": "PENDING",
+          "note": "Tracked requirements, not completed by the decision ledger."
+        }
+      }
     },
     {
       "id": "H23",
@@ -256,29 +273,47 @@
     {
       "id": "H1.1",
       "title": "CLASS REPRESENTATION",
-      "status": "PENDING",
-      "implementation": [],
-      "validation": [],
-      "evidence": [],
-      "commit": null
+      "status": "COMMITTED",
+      "implementation": [
+        "See H1 implementation inventory"
+      ],
+      "validation": [
+        "See H1 scoped validation"
+      ],
+      "evidence": [
+        "machine/architecture-hardening/h1-validation.json"
+      ],
+      "commit": "5dc125edbdd3716294c13becaeffae86cc06c392"
     },
     {
       "id": "H1.2",
       "title": "MUTATION NEGATIVE CONTROLS",
-      "status": "PENDING",
-      "implementation": [],
-      "validation": [],
-      "evidence": [],
-      "commit": null
+      "status": "COMMITTED",
+      "implementation": [
+        "See H1 implementation inventory"
+      ],
+      "validation": [
+        "See H1 scoped validation"
+      ],
+      "evidence": [
+        "machine/architecture-hardening/h1-validation.json"
+      ],
+      "commit": "5dc125edbdd3716294c13becaeffae86cc06c392"
     },
     {
       "id": "H1.3",
       "title": "INDEPENDENT CLASSFILE CROSS-CHECK",
-      "status": "PENDING",
-      "implementation": [],
-      "validation": [],
-      "evidence": [],
-      "commit": null
+      "status": "COMMITTED",
+      "implementation": [
+        "See H1 implementation inventory"
+      ],
+      "validation": [
+        "See H1 scoped validation"
+      ],
+      "evidence": [
+        "machine/architecture-hardening/h1-validation.json"
+      ],
+      "commit": "5dc125edbdd3716294c13becaeffae86cc06c392"
     },
     {
       "id": "H2.1",
@@ -292,7 +327,7 @@
     {
       "id": "H2.2",
       "title": "EXTRACTOR SCOPE CORRECTION",
-      "status": "PENDING",
+      "status": "IN_PROGRESS",
       "implementation": [],
       "validation": [],
       "evidence": [],
