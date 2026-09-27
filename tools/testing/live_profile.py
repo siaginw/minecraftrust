@@ -22,6 +22,9 @@ import subprocess
 import sys
 import zipfile
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from text_digest import normalized_sha256  # noqa: E402
+
 ROOT = Path(__file__).resolve().parents[2]
 REQUIRED_HOOKS = ROOT / "tools/live-capture/required-live-writer-hooks.json"
 COMMITTED_PROFILE = ROOT / "tools/live-capture/live-shadow-profile.json"
@@ -393,7 +396,7 @@ def main() -> int:
     if args.write_profile and result["status"] == "QUALIFIED":
         profile = {"schema_version": 1, "kind": "LIVE_SHADOW_WRITER_PROFILE_V1",
                    "target": manifest["target"], "forge_build": manifest["forge_build"],
-                   "required_hooks_manifest_sha256": file_sha256(args.required_hooks),
+                   "required_hooks_manifest_sha256": normalized_sha256(args.required_hooks),
                    "identity_requirements": manifest["identity_requirements"],
                    "expected_class_hashes": result["expected_class_hashes"],
                    "qualification": result["qualification"],

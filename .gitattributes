@@ -10,6 +10,17 @@ tools/bridge/src/com/rustcraft/bridge/capture/LiveWriterGate.java text eol=lf
 tools/bridge/src/com/rustcraft/bridge/capture/PrivateBuildTickets.java text eol=lf
 tools/bridge/src/com/rustcraft/bridge/capture/LiveChunkBindings.java text eol=lf
 
+# The generated plan pins the hook-manifest digest, so the manifest and the profile
+# that carries the pin must check out byte-identically everywhere. Under
+# core.autocrlf they did not, which made the pinned value a function of the
+# checker's line endings rather than of the commit. tools/testing/text_digest.py
+# normalizes as well, so the pin is correct even where these attributes are ignored.
+tools/live-capture/required-live-writer-hooks.json text eol=lf
+tools/live-capture/live-shadow-profile.json text eol=lf
+tools/live-capture/revelation-live-shadow-profile.json text eol=lf
+tools/testing/text_digest.py text eol=lf
+tools/live-capture/derive_rev_profile.py text eol=lf
+
 # Raw validation artifacts are hashed as captured, including line endings and
 # command-emitted trailing blank lines. Do not normalize or lint their whitespace.
 machine/architecture-hardening/h22-5-replay-evidence/** -text -whitespace

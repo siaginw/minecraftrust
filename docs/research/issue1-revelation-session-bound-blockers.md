@@ -229,6 +229,60 @@ Reproduced from `HEAD` blobs alone, with the working tree's modified files set a
 it is independent of the ASM work. The generated plan records a manifest hash that the
 committed `required-live-writer-hooks.json` does not have.
 
-It was not regenerated here. `LiveWriterPlan.java` is the plan the live transformers
-enforce, and changing it is a scope change that requires its own requalification — not a
-cleanup to fold into an ASM compatibility fix. It is reported for a decision.
+It was not regenerated as part of the ASM work. `LiveWriterPlan.java` is the plan the
+live transformers enforce, and changing it is a scope change requiring its own
+requalification — not a cleanup to fold into an ASM compatibility fix. It was escalated
+as its own item and is resolved below.
+
+## Resolution: the writer-plan drift, root-caused and corrected
+
+Two independent defects, both established from git history rather than inferred. Neither
+is a change to hook-plan semantics.
+
+**(A) The pinned digest was line-ending dependent.** `generate_live_writer_plan.py`
+hashed the manifest's raw working-tree bytes. `core.autocrlf=true` checks the committed
+LF blob out as CRLF, so the digest depended on the platform performing the checkout.
+That is why the plan recorded a value no committed revision hashes to: brute-forcing
+serialization variants showed `738f672d…` is the **CRLF** rendering of the `07ac311`
+manifest. The committed revisions hash to `6d7fcfd7` (1028021), `6c901dbe` (07ac311) and
+`9fa1e033` (128be76). `.gitattributes` already pinned `LiveWriterPlan.java` and the
+generator to `-text`, but not the two JSON files the digest is computed over — the guard
+protecting the generated file never protected its input.
+
+**(B) A manifest change was never propagated.** The last manifest edit, `128be76`
+(2026-09-27 10:33), postdates the last plan regeneration, `576fffa` (08:26). The plan and
+profile have carried `738f672d` since `c4b868d` (2026-09-26 18:31).
+
+The §16 stop condition — *plan/manifest drift implies a semantic hook-plan change* — is
+**not** triggered, and this is measured rather than argued. The `07ac311 → 128be76`
+manifest diff adds and removes no keys; the single change is
+`identity_requirements.runtime_pins_sha256` (`66b7c5e1…` → `16f0c66b…`). Hook IDs are
+identical and hook bodies are identical.
+
+**The correction.** A CRLF-derived pin would be as unreproducible as the old one, so the
+digest rule had to change, not merely the constant. `tools/testing/text_digest.py`
+defines one rule — hash the LF rendering, which is what git stores, so the digest equals
+the committed blob's identity on any platform — and the three authoring sites share it
+(`generate_live_writer_plan.py`, `live_profile.py`, `derive_rev_profile.py`).
+`.gitattributes` additionally pins the manifest, the profile and the new module to
+`eol=lf`. Normalization is deliberately **not** applied to captured evidence: those
+artifacts are hashed as captured, and their `-text` attributes keep their bytes stable.
+
+The normalized digest is `9fa1e033ef715b33…`, exactly the current committed manifest
+blob. The plan is therefore regenerated from the committed current manifest — the
+preferred outcome — rather than from a rewritten input.
+
+**Structural diff, old plan vs regenerated.** 70 `new Hook(` sites in both, 66 hooks,
+identical order, **0 field-level differences** across every hook's id, transformer,
+class, method, descriptor, hook type, operation id, fingerprint, pre-hook class hash,
+identity schema, declaration-order hash, certificate and session-invariant fields.
+`IDENTITY_MODE` unchanged at `RAW`. Of 183 file lines exactly 2 differ, both provenance:
+the header comment and `REQUIRED_HOOKS_MANIFEST_SHA256`. **Only provenance/hash metadata
+changed.**
+
+**Controls added so this cannot recur silently.** The writer-plan lane now asserts the
+manifest, profile and plan pins agree, and that a CRLF rendering of the same manifest
+generates a byte-identical plan. Both directions were checked: the new rule refuses the
+old raw-byte pin with `REFUSED: profile was built from a different manifest revision` and
+writes no output, so the control discriminates rather than merely accepting the new
+value.

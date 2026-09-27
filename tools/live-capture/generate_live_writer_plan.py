@@ -3,7 +3,6 @@ committed pre-hook live-shadow profile. Fail-closed: refuses unless every requir
 hook is QUALIFIED and the manifest hash matches. The plan is the single source of
 truth for which hook sites the transformers may instrument."""
 import argparse
-import hashlib
 import json
 import pathlib
 import re
@@ -12,6 +11,7 @@ import sys
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "tools" / "testing"))
 import session_bound_certificate as certificate_schema
+from text_digest import normalized_sha256
 _parser = argparse.ArgumentParser(description=__doc__)
 _parser.add_argument("--profile", type=pathlib.Path,
                      default=ROOT / "tools/live-capture/live-shadow-profile.json",
@@ -39,7 +39,11 @@ profile = json.loads(PROFILE.read_bytes())
 # Parse and bind one captured manifest buffer; a second read could name other bytes.
 manifest_bytes = MANIFEST.read_bytes()
 manifest = json.loads(manifest_bytes)
-manifest_sha = hashlib.sha256(manifest_bytes).hexdigest()
+# The pinned digest is taken over the LF rendering, which is what git stores. A raw
+# working-tree hash would make the value embedded in the generated plan depend on the
+# checker's core.autocrlf, so the same commit would pin a different constant on every
+# platform. See tools/testing/text_digest.py.
+manifest_sha = normalized_sha256(MANIFEST)
 
 mode = profile.get("identity_mode", "RAW")
 SESSION_BOUND = certificate_schema.SESSION_BOUND_SCHEMA

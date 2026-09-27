@@ -12,9 +12,12 @@ transformers to exactly these bytes at runtime.
 """
 from __future__ import annotations
 
-import hashlib
 import json
 from pathlib import Path
+import sys
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "tools" / "testing"))
+from text_digest import normalized_sha256  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[2]
 MANIFEST = ROOT / "tools/live-capture/required-live-writer-hooks.json"
@@ -29,7 +32,7 @@ def main() -> int:
     rev = json.loads(REV_PROFILE.read_text())
     matrix = json.loads(MATRIX.read_text())
 
-    manifest_sha = hashlib.sha256(MANIFEST.read_bytes()).hexdigest()
+    manifest_sha = normalized_sha256(MANIFEST)
     if rev["runtime_pins"]["profile"] != "FORGE_2846_FTB_REVELATION_3_4_0_SERVER_OFFLINE_V1":
         raise SystemExit("REFUSED: unexpected runtime pins profile")
 

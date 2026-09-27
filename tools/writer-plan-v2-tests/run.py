@@ -6,10 +6,15 @@ ROOT=Path(__file__).resolve().parents[2]
 sys.path.insert(0,str(ROOT/'tools/testing'))
 from hardening_guard import inspect
 import session_bound_certificate as certificate_schema
+from text_digest import normalized_sha256
 def sha(p):return hashlib.sha256(Path(p).read_bytes()).hexdigest()
+# A manifest pin must be the digest the generator computes, which normalizes line
+# endings. Hashing these fixtures raw would make every pin a function of the
+# platform that ran the control.
+def msha(p):return normalized_sha256(p)
 def write(p,v):p.write_text(json.dumps(v,indent=2)+'\n',encoding='utf-8')
 def sources():
- p=[ROOT/'tools/live-capture/generate_live_writer_plan.py',ROOT/'tools/testing/hardening_guard.py',ROOT/'tools/testing/session_bound_certificate.py',ROOT/'tools/live-capture/live-shadow-profile.json',ROOT/'tools/live-capture/required-live-writer-hooks.json',Path(__file__)]
+ p=[ROOT/'tools/live-capture/generate_live_writer_plan.py',ROOT/'tools/testing/hardening_guard.py',ROOT/'tools/testing/session_bound_certificate.py',ROOT/'tools/testing/text_digest.py',ROOT/'tools/live-capture/live-shadow-profile.json',ROOT/'tools/live-capture/required-live-writer-hooks.json',Path(__file__)]
  p.extend(ROOT/'tools/bridge/src/com/rustcraft/coremod'/n for n in ['LiveWriterPlan.java','LiveHookSupport.java','CanonicalClassIdentityV2.java','SessionBoundIdentityCertificate.java','AsmTreeCompat.java'])
  p.extend((ROOT/'tools/writer-plan-v2-tests/src').rglob('*.java'))
  p.append(ROOT/'tools/bridge/src/com/rustcraft/qualification/SameProcessAcquisition.java')
@@ -53,7 +58,7 @@ def main():
   identity=json.loads((out/'fixtures/fixture-identity.json').read_text());name='example.PlanFixture'
   m={'required_hooks':[{'id':'X','class':name,'method':'value','descriptor':'()I','hook_type':'WRITE_BEGIN','fingerprint':{'kind':'DECLARATION'}}]}
   manifest=out/'manifest.json';write(manifest,m)
-  p={'schema_version':2,'kind':'RUSTCRAFT_V2_WRITER_PLAN_RECIPE','identity_mode':'CANONICAL_ID_V2','all_required_observed':True,'required_hooks_manifest_sha256':sha(manifest),'required_hooks':[{'id':'X','status':'OBSERVED'}],'expected_class_identities':{name:identity},'forge_build':'14.23.5.2860','qualification':{'profile':'SYNTHETIC_RECIPE_NOT_QUALIFIED','minecraft_server_jar_sha256':'0'*64}}
+  p={'schema_version':2,'kind':'RUSTCRAFT_V2_WRITER_PLAN_RECIPE','identity_mode':'CANONICAL_ID_V2','all_required_observed':True,'required_hooks_manifest_sha256':msha(manifest),'required_hooks':[{'id':'X','status':'OBSERVED'}],'expected_class_identities':{name:identity},'forge_build':'14.23.5.2860','qualification':{'profile':'SYNTHETIC_RECIPE_NOT_QUALIFIED','minecraft_server_jar_sha256':'0'*64}}
   generated=generate('valid-v2',p,m);v2=out/'v2-classes';v2.mkdir()
   run('compile-generated-v2',[javac,'-source','8','-target','8','-Xlint:all','-Werror','-cp',asm,'-d',v2,core/'CanonicalClassIdentityV2.java',core/'SessionBoundIdentityCertificate.java',core/'LiveHookSupport.java',core/'AsmTreeCompat.java',acq,generated,test/'GeneratedPlanV2Smoke.java'])
   run('generated-v2-smoke',[java,'-cp',str(v2)+os.pathsep+str(asm),'com.rustcraft.coremod.GeneratedPlanV2Smoke',out/'fixtures/fixture.class'])
@@ -81,12 +86,32 @@ def main():
   for label,v in variants.items():generate(label,v,m,False)
   generate('bad-class-name',p,m,False,('--class-name','bad-name'))
   for label,kind in [('unknown-fingerprint','UNKNOWN'),('missing-anchors','BCI_ASSERTIONS')]:
-   mm=copy.deepcopy(m);mm['required_hooks'][0]['fingerprint']={'kind':kind};tmp=out/(label+'-manifest.json');write(tmp,mm);pp=copy.deepcopy(p);pp['required_hooks_manifest_sha256']=sha(tmp);generate(label,pp,mm,False)
+   mm=copy.deepcopy(m);mm['required_hooks'][0]['fingerprint']={'kind':kind};tmp=out/(label+'-manifest.json');write(tmp,mm);pp=copy.deepcopy(p);pp['required_hooks_manifest_sha256']=msha(tmp);generate(label,pp,mm,False)
   legacy=json.loads((ROOT/'tools/live-capture/live-shadow-profile.json').read_text());lm=json.loads((ROOT/'tools/live-capture/required-live-writer-hooks.json').read_text())
   # Preserve exact committed manifest bytes; pretty reserialization may change its hash.
-  temp=out/'legacy-manifest.json';write(temp,lm);legacy['required_hooks_manifest_sha256']=sha(temp)
+  temp=out/'legacy-manifest.json';write(temp,lm);legacy['required_hooks_manifest_sha256']=msha(temp)
   old=generate('historical-raw',legacy,lm)
   assert old.read_bytes()==(core/'LiveWriterPlan.java').read_bytes(),'generator output drift'
+  # The committed manifest and profile must carry the same digest on any checkout.
+  # Under core.autocrlf=true the working-tree bytes were CRLF, so a raw-byte hash
+  # produced a different pin per platform and the committed plan recorded a digest
+  # no committed blob hashes to. This fails if the two ever drift apart again, and it
+  # is the control that was missing when that drift was introduced.
+  committed_manifest=ROOT/'tools/live-capture/required-live-writer-hooks.json'
+  committed_profile=ROOT/'tools/live-capture/live-shadow-profile.json'
+  r['manifest_pin']={'manifest_lf_sha256':msha(committed_manifest),
+   'profile_pin':json.loads(committed_profile.read_text(encoding='utf-8'))['required_hooks_manifest_sha256'],
+   'plan_pin':re.search(r'REQUIRED_HOOKS_MANIFEST_SHA256 = "([0-9a-f]{64})"',(core/'LiveWriterPlan.java').read_text(encoding='utf-8')).group(1)}
+  assert len({r['manifest_pin']['manifest_lf_sha256'],r['manifest_pin']['profile_pin'],r['manifest_pin']['plan_pin']})==1,'manifest pin drift between manifest, profile and plan'
+  # A CRLF rendering of the same manifest must produce the same plan: if the digest
+  # were taken over raw working-tree bytes this comparison would fail on Windows.
+  crlf_manifest=out/'crlf-manifest.json'
+  crlf_manifest.write_bytes((json.dumps(lm,indent=2)+'\n').replace('\n','\r\n').encode('utf-8'))
+  crlf_profile=copy.deepcopy(legacy);crlf_profile['required_hooks_manifest_sha256']=msha(crlf_manifest)
+  crlf_dir=out/'crlf';crlf_dir.mkdir();write(crlf_dir/'profile.json',crlf_profile);write(crlf_dir/'manifest.json',lm)
+  crlf_plan=crlf_dir/'LiveWriterPlan.java'
+  run('crlf-manifest-same-plan',[sys.executable,'-B',gen,'--profile',str(crlf_dir/'profile.json'),'--manifest',str(crlf_manifest),'--out',str(crlf_plan)])
+  assert crlf_plan.read_bytes()==old.read_bytes(),'line endings changed the generated plan'
   legacy['identity_mode']='CANONICAL';generate('implicit-v1-rejected',legacy,lm,False);generate('explicit-v1-reproduction',legacy,lm,True,('--legacy-v1-reproduction',))
   custom=generate('named-plan',p,m,True,('--class-name','NamedPlan'));named=custom.with_name('NamedPlan.java');named.write_bytes(custom.read_bytes());(out/'named-classes').mkdir();run('named-plan-compiles',[javac,'-source','8','-target','8','-d',out/'named-classes',named])
   # ---- session-bound plan generation: structure alone never authorizes ----
@@ -103,7 +128,7 @@ def main():
     'runtime_manifest_sha256':'0'*64,'acquisition_evidence_sha256':'0'*64}
   def session_recipe(document,**overrides):
    recipe={'schema_version':2,'kind':'RUSTCRAFT_V2_WRITER_PLAN_RECIPE','identity_mode':'CANONICAL_ID_V2_SESSION_BOUND',
-    'all_required_observed':True,'required_hooks_manifest_sha256':sha(manifest),
+    'all_required_observed':True,'required_hooks_manifest_sha256':msha(manifest),
     'required_hooks':[{'id':'X','status':'OBSERVED'}],'expected_class_identities':{name:identity},
     'forge_build':'14.23.5.2860','qualification':{'profile':'SYNTHETIC_RECIPE_NOT_QUALIFIED','minecraft_server_jar_sha256':'0'*64},
     'session_bound_classes':[name]}
