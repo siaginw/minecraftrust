@@ -23,6 +23,11 @@ INCOMPLETE; changed artifacts, bad bindings, malformed schemas, subprocess
 failures and mismatched observations are FAIL. Duplicate JSON keys and nonfinite
 JSON values reject. Expected data never substitutes for an observation.
 
+Profiles, manifests, observations and JSON witnesses are parsed and hashed from
+the same in-memory byte buffer. A later filesystem read cannot silently replace
+the digest of the bytes actually interpreted. The final drift check still runs;
+this does not provide filesystem attestation or exclude all transient writes.
+
 ## Manifest contract
 
 The top-level object has exactly these required keys:

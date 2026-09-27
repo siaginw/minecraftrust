@@ -39,11 +39,13 @@ def sha(path: Path) -> str:
     return h.hexdigest()
 
 
-def load(path: Path):
+def load_hashed(path: Path):
+    """Bind parsed data to the very same bytes, not a later filesystem read."""
     if not path.is_file():
         raise Missing(f"missing file: {path}")
     try:
-        return parse_json(path.read_text(encoding="utf-8"))
+        raw = path.read_bytes()
+        return parse_json(raw.decode("utf-8")), hashlib.sha256(raw).hexdigest()
     except (UnicodeError, json.JSONDecodeError) as error:
         raise Invalid(f"malformed JSON: {path}: {error}") from error
 
@@ -140,7 +142,8 @@ class QualificationEngine:
         return value
 
     def definitions(self):
-        self.manifest, self.profile = load(self.manifest_path), load(self.profile_path)
+        self.manifest, manifest_hash = load_hashed(self.manifest_path)
+        self.profile, profile_hash = load_hashed(self.profile_path)
         m, p = self.manifest, self.profile
         keys(m, ("schema", "runtime_root", "inventories", "collector", "identity_tool"), ("validators",))
         keys(p, ("schema", "id", "identity_mode", "runtime_identity", "transformer_chain", "coremods", "classes", "writer_sites", "negative_controls", "scope", "production_authority"), ("pre_classes",))
@@ -192,7 +195,7 @@ class QualificationEngine:
             keys(control, ("id", "expected_outcome"))
             if control["expected_outcome"] not in ("REJECTED", "CHANGED", "STABLE"):
                 raise Invalid("unknown negative control expectation")
-        self.initial_inputs = {str(self.manifest_path): sha(self.manifest_path), str(self.profile_path): sha(self.profile_path)}
+        self.initial_inputs = {str(self.manifest_path): manifest_hash, str(self.profile_path): profile_hash}
         return self.initial_inputs
 
     def inventory(self):
@@ -324,8 +327,8 @@ class QualificationEngine:
         keys(ack, ("schema", "session", "challenge", "output_sha256"))
         if ack["schema"] != "RUSTCRAFT_COLLECTOR_ACK_V2" or ack["session"] != self.session or ack["challenge"] != self.challenge:
             raise Invalid("stale/cross-session collector acknowledgement")
-        observed = load(out)
-        if ack["output_sha256"] != sha(out):
+        observed, observed_hash = load_hashed(out)
+        if ack["output_sha256"] != observed_hash:
             raise Invalid("collector acknowledgement/output hash drift")
         keys(observed, ("schema", "session", "challenge", "request_sha256", "capture_kind", "runtime_identity", "transformer_chain", "coremods", "classes"), ("pre_classes", "writer_matrix", "negative_controls", "live"))
         if observed["schema"] != "RUSTCRAFT_FRESH_OBSERVATION_V2" or observed["session"] != self.session or observed["challenge"] != self.challenge or observed["request_sha256"] != self.request_sha256:
@@ -334,7 +337,7 @@ class QualificationEngine:
             raise Invalid("this engine adapter only accepts explicit offline transformed capture")
         if sha(request_path) != self.request_sha256:
             raise Invalid("collector changed its input request")
-        self.observation_sha256 = sha(out)
+        self.observation_sha256 = observed_hash
         return observed
 
     def runtime(self, observed):
@@ -451,9 +454,9 @@ class QualificationEngine:
         keys(ack, ("schema", "session", "challenge", "output_sha256"))
         if ack["schema"] != "RUSTCRAFT_VALIDATOR_ACK_V2" or ack["session"] != self.session or ack["challenge"] != self.challenge:
             raise Invalid("stale placement acknowledgement")
-        witness = load(output)
+        witness, witness_hash = load_hashed(output)
         keys(witness, ("schema", "session", "challenge", "request_sha256", "observation_sha256", "covered_sites", "checks"))
-        if witness["schema"] != "RUSTCRAFT_PLACEMENT_WITNESS_V2" or witness["session"] != self.session or witness["challenge"] != self.challenge or witness["request_sha256"] != request_hash or witness["observation_sha256"] != self.observation_sha256 or ack["output_sha256"] != sha(output) or sha(request_path) != request_hash:
+        if witness["schema"] != "RUSTCRAFT_PLACEMENT_WITNESS_V2" or witness["session"] != self.session or witness["challenge"] != self.challenge or witness["request_sha256"] != request_hash or witness["observation_sha256"] != self.observation_sha256 or ack["output_sha256"] != witness_hash or sha(request_path) != request_hash:
             raise Invalid("placement witness binding drift")
         if sorted(witness["covered_sites"]) != sorted(x["id"] for x in self.profile["writer_sites"]):
             raise Missing("placement witness does not cover exact required sites")
@@ -464,7 +467,7 @@ class QualificationEngine:
                 raise Missing(f"placement {name} incomplete")
             if check["status"] != "PASS" or not isinstance(check["measurements"], dict) or not check["measurements"]:
                 raise Invalid(f"placement {name} failed or lacks measurements")
-        self.observed_class_paths[str(output)] = sha(output)
+        self.observed_class_paths[str(output)] = witness_hash
         return witness
 
     def controls(self, observed):
@@ -479,9 +482,9 @@ class QualificationEngine:
             if row["id"] in by_id:
                 raise Invalid("duplicate negative control")
             path = relative(self.output, row["evidence_file"])
-            if sha(path) != digest(row["evidence_sha256"]):
+            witness, witness_hash = load_hashed(path)
+            if witness_hash != digest(row["evidence_sha256"]):
                 raise Invalid("negative control evidence hash drift")
-            witness = load(path)
             keys(witness, ("schema", "session", "challenge", "request_sha256", "id", "outcome", "measurements"))
             if witness["schema"] != "RUSTCRAFT_NEGATIVE_CONTROL_V2" or witness["session"] != self.session or witness["challenge"] != self.challenge or witness["request_sha256"] != self.request_sha256:
                 raise Invalid("stale/cross-session negative control evidence")
@@ -489,7 +492,7 @@ class QualificationEngine:
                 raise Invalid("control receipt lacks concrete observations")
             by_id[row["id"]] = row
             self.observed_class_paths = getattr(self, "observed_class_paths", {})
-            self.observed_class_paths[str(path)] = sha(path)
+            self.observed_class_paths[str(path)] = witness_hash
         expected = {x["id"]: x["expected_outcome"] for x in self.profile["negative_controls"]}
         if by_id.keys() - expected.keys():
             raise Invalid("unexpected negative control observations")

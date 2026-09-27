@@ -251,6 +251,57 @@ class EngineIntegrationControls(unittest.TestCase):
         for key in ("acquisition", "runtime", "classes", "pre_classes", "writers", "placement", "controls"):
             self.assertEqual(nodes[key]["status"], "INVALIDATED")
 
+    def test_definition_hash_binds_the_exact_bytes_parsed(self):
+        fixture = self.fixture()
+        engine = fixture.engine()
+        original_text = fixture.profile_path.read_text(encoding="utf-8")
+        changed = False
+
+        def change_after_read(text):
+            nonlocal changed
+            value = parse_json(text)
+            if text == original_text and not changed:
+                changed = True
+                # A deterministic concurrent-edit boundary: parsing consumed
+                # the old bytes, but a later independent file hash sees new ones.
+                fixture.profile_path.write_text(original_text + "\n", encoding="utf-8")
+            return value
+
+        with patch("tools.testing.qualification_engine.parse_json", change_after_read):
+            cert = engine.run()
+        self.assertTrue(changed)
+        self.assertEqual(cert["status"], "FAIL")
+        nodes = {node["id"]: node for node in cert["evidence"]}
+        self.assertEqual(nodes["unchanged"]["status"], "FAIL")
+        self.assertEqual(nodes["acquisition"]["status"], "INVALIDATED")
+
+    def test_observation_and_witness_hashes_bind_parsed_bytes(self):
+        targets = (
+            ("RUSTCRAFT_FRESH_OBSERVATION_V2", "observation.json"),
+            ("RUSTCRAFT_NEGATIVE_CONTROL_V2", "control.json"),
+            ("RUSTCRAFT_PLACEMENT_WITNESS_V2", "placement/witness.json"),
+        )
+        for schema, relative_path in targets:
+            with self.subTest(schema=schema):
+                engine = self.fixture().engine()
+                changed = False
+
+                def change_after_read(text):
+                    nonlocal changed
+                    value = parse_json(text)
+                    if isinstance(value, dict) and value.get("schema") == schema and not changed:
+                        changed = True
+                        (engine.output / relative_path).write_text(text + "\n", encoding="utf-8")
+                    return value
+
+                with patch("tools.testing.qualification_engine.parse_json", change_after_read):
+                    cert = engine.run()
+                self.assertTrue(changed)
+                self.assertEqual(cert["status"], "FAIL")
+                nodes = {node["id"]: node for node in cert["evidence"]}
+                self.assertEqual(nodes["unchanged"]["status"], "FAIL")
+                self.assertEqual(nodes["acquisition"]["status"], "INVALIDATED")
+
     def test_malformed_schema_returns_certificate(self):
         for key, value in (("writer_sites", [None]), ("negative_controls", [{}]), ("scope", {"unsupported": 1})):
             fixture = self.fixture()

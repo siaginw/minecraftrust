@@ -29,19 +29,21 @@
     {
       "id": "H2",
       "title": "MAKE PROFILE QUALIFICATION TRULY GENERIC",
-      "status": "FOUNDATION_VALIDATED",
+      "status": "FOUNDATION_COMMITTED",
       "implementation": [
         "tools/testing/qualification_engine.py",
         "tools/testing/qualification_certificate.py",
         "tools/bridge/src/com/rustcraft/bridge/capture/LiveCaptureScope.java"
       ],
       "validation": [
-        "39 configured Python/real-Java tests;33 detached extractor controls;25 tooling tests;201 Java foundation assertions;fresh legacyCleanpacket comparison;historicalRevelation129classes/10controls"
+        "39 configured Python/real-Java tests;33 detached extractor controls;25 tooling tests;201 Java foundation assertions;fresh legacyCleanpacket comparison;historicalRevelation129classes/10controls",
+        "41 configured tests after same-buffer parse/hash race correction; all passed, no skips."
       ],
       "evidence": [
-        "machine/architecture-hardening/h2-validation.json"
+        "machine/architecture-hardening/h2-validation.json",
+        "machine/architecture-hardening/h2-parsed-byte-validation.json"
       ],
-      "commit": null,
+      "commit": "06b57d672c8e1f0962cd1ba7bab0d0ba45903e57",
       "outstanding": [
         "Fresh Clean and Revelation V2 collector adapters and substantive placement validators",
         "Live writer/lifecycle/registry closure validator backend",
@@ -61,7 +63,7 @@
     {
       "id": "H4",
       "title": "FINE-GRAINED NATIVE CAPABILITY MODEL",
-      "status": "PENDING",
+      "status": "IN_PROGRESS",
       "implementation": [],
       "validation": [],
       "evidence": [],
@@ -260,9 +262,29 @@
           "status": "COMMITTED",
           "commit": "7fe87eb127ce242e14ba1bfe6e75ac5d013370d7"
         },
-        "A-H": {
-          "status": "PENDING",
-          "note": "Tracked requirements, not completed by the decision ledger."
+        "A": {
+          "status": "IN_PROGRESS"
+        },
+        "B": {
+          "status": "PENDING"
+        },
+        "C": {
+          "status": "PENDING"
+        },
+        "D": {
+          "status": "PENDING"
+        },
+        "E": {
+          "status": "PENDING"
+        },
+        "F": {
+          "status": "PENDING"
+        },
+        "G": {
+          "status": "PENDING"
+        },
+        "H": {
+          "status": "PENDING"
         }
       }
     },
@@ -332,25 +354,27 @@
     {
       "id": "H2.1",
       "title": "EVIDENCE DEPENDENCY GRAPH / CERTIFICATES",
-      "status": "VALIDATED",
+      "status": "COMMITTED",
       "implementation": [
         "tools/testing/qualification_engine.py",
         "tools/testing/qualification_certificate.py",
         "tools/bridge/src/com/rustcraft/bridge/capture/LiveCaptureScope.java"
       ],
       "validation": [
-        "39 configured Python/real-Java tests;33 detached extractor controls;25 tooling tests;201 Java foundation assertions;fresh legacyCleanpacket comparison;historicalRevelation129classes/10controls"
+        "39 configured Python/real-Java tests;33 detached extractor controls;25 tooling tests;201 Java foundation assertions;fresh legacyCleanpacket comparison;historicalRevelation129classes/10controls",
+        "41 configured tests after same-buffer parse/hash race correction; all passed, no skips."
       ],
       "evidence": [
-        "machine/architecture-hardening/h2-validation.json"
+        "machine/architecture-hardening/h2-validation.json",
+        "machine/architecture-hardening/h2-parsed-byte-validation.json"
       ],
-      "commit": null,
+      "commit": "06b57d672c8e1f0962cd1ba7bab0d0ba45903e57",
       "outstanding": []
     },
     {
       "id": "H2.2",
       "title": "EXTRACTOR SCOPE CORRECTION",
-      "status": "VALIDATED",
+      "status": "COMMITTED",
       "implementation": [
         "tools/testing/qualification_engine.py",
         "tools/testing/qualification_certificate.py",
@@ -362,7 +386,7 @@
       "evidence": [
         "machine/architecture-hardening/h2-validation.json"
       ],
-      "commit": null,
+      "commit": "06b57d672c8e1f0962cd1ba7bab0d0ba45903e57",
       "outstanding": []
     },
     {
