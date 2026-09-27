@@ -19,8 +19,27 @@ import uuid
 
 try:
     from tools.testing.qualification_certificate import Evidence, EvidenceStatus as S, Maturity as M, digest_json, evaluate
+    from tools.testing.session_bound_certificate import (
+        CertificateError, recipe_binding_sha256, validate as validate_certificate)
+    from tools.testing.frame_relation_evidence import (
+        FrameEvidenceError, describe as describe_frames, validate as validate_frames)
 except ModuleNotFoundError:
     from qualification_certificate import Evidence, EvidenceStatus as S, Maturity as M, digest_json, evaluate
+    from session_bound_certificate import (
+        CertificateError, recipe_binding_sha256, validate as validate_certificate)
+    from frame_relation_evidence import (
+        FrameEvidenceError, describe as describe_frames, validate as validate_frames)
+
+
+#: CANONICAL_ID_V2_SESSION_BOUND is a real identity mode, not a V1 fallback. In
+#: that mode the profile's declared class identities stay the EXACT (unmasked)
+#: V2 identity of the observed bytes, so the engine can still recompute them
+#: independently. What authorizes value-level normalization is the session
+#: evidence block -- never the class structure.
+IDENTITY_MODES = ("RAW_SHA256", "CANONICAL_ID_V2", "CANONICAL_ID_V2_SESSION_BOUND")
+
+SESSION_BOUND_PROFILE_SCHEMA = "RUSTCRAFT_SESSION_BOUND_PROFILE_V1"
+SESSION_BOUND_PROFILE_VERSION = 1
 
 
 class Invalid(ValueError):
@@ -146,10 +165,10 @@ class QualificationEngine:
         self.profile, profile_hash = load_hashed(self.profile_path)
         m, p = self.manifest, self.profile
         keys(m, ("schema", "runtime_root", "inventories", "collector", "identity_tool"), ("validators",))
-        keys(p, ("schema", "id", "identity_mode", "runtime_identity", "transformer_chain", "coremods", "classes", "writer_sites", "negative_controls", "scope", "production_authority"), ("pre_classes",))
+        keys(p, ("schema", "id", "identity_mode", "runtime_identity", "transformer_chain", "coremods", "classes", "writer_sites", "negative_controls", "scope", "production_authority"), ("pre_classes", "session_bound", "frame_evidence"))
         if m["schema"] != "RUSTCRAFT_RUNTIME_MANIFEST_V2" or p["schema"] != "RUSTCRAFT_QUALIFICATION_PROFILE_V2":
             raise Invalid("unsupported manifest/profile schema")
-        if p["identity_mode"] not in ("RAW_SHA256", "CANONICAL_ID_V2") or p["production_authority"] is not False:
+        if p["identity_mode"] not in IDENTITY_MODES or p["production_authority"] is not False:
             raise Invalid("V1/unknown identity or production authority is forbidden")
         if not isinstance(p["id"], str) or not p["id"] or not isinstance(p["runtime_identity"], dict) or not p["runtime_identity"]:
             raise Invalid("profile/runtime identity must be nonempty")
@@ -171,6 +190,10 @@ class QualificationEngine:
             if not isinstance(name, str) or "." in name or name.startswith("/") or ".." in name:
                 raise Invalid("class names must be JVM internal names")
             required = ("raw_sha256",) if p["identity_mode"] == "RAW_SHA256" else ("semantic_sha256", "declaration_order_sha256")
+            # In session-bound mode the declared identity is still the EXACT V2
+            # identity of the pre-writer bytes. That is what makes the engine's
+            # independent recomputation meaningful: it recomputes the exact
+            # identity and the certificate must agree with it.
             keys(identity, required)
             for item in identity.values():
                 digest(item)
@@ -196,7 +219,66 @@ class QualificationEngine:
             if control["expected_outcome"] not in ("REJECTED", "CHANGED", "STABLE"):
                 raise Invalid("unknown negative control expectation")
         self.initial_inputs = {str(self.manifest_path): manifest_hash, str(self.profile_path): profile_hash}
+        self.session_binding = self.declared_session_binding(p)
+        self.frame_requirement = self.declared_frame_requirement(p)
         return self.initial_inputs
+
+    def declared_session_binding(self, profile):
+        """The session evidence a profile declares, before any observation.
+
+        Missing evidence is a Missing (INCOMPLETE), never an Invalid: the goal
+        is that absent evidence leaves the profile unpromoted, not that the run
+        is scored as a discovered defect. A *present* but unreadable block is a
+        FAIL, because that is a real disagreement.
+        """
+        block = profile.get("session_bound")
+        if profile["identity_mode"] != "CANONICAL_ID_V2_SESSION_BOUND":
+            if block is not None:
+                raise Invalid("a session evidence block is meaningless in an exact identity mode")
+            return None
+        if block is None:
+            raise Missing("a session-bound profile must declare its session evidence block")
+        keys(block, ("schema", "schema_version", "recipe_sha256", "process_id",
+                     "transformation_session_id", "classes", "certificates"))
+        if block["schema"] != SESSION_BOUND_PROFILE_SCHEMA or block["schema_version"] != SESSION_BOUND_PROFILE_VERSION:
+            raise Invalid("unsupported session evidence block schema/version")
+        digest(block["recipe_sha256"])
+        names = block["classes"]
+        if (not isinstance(names, list) or not names
+                or not all(isinstance(name, str) and name and "." not in name and not name.startswith("/") for name in names)
+                or len(set(names)) != len(names)):
+            raise Invalid("session evidence must name a distinct, ordered class inventory")
+        if set(names) - set(profile["classes"]):
+            raise Invalid("session evidence names classes the profile does not require")
+        if not isinstance(block["certificates"], dict) or set(block["certificates"]) != set(names):
+            raise Invalid("session evidence must carry exactly one certificate per declared class")
+        # Non-circular binding: the recipe hash covers the whole profile minus the
+        # block that carries it, so a certificate cannot be swapped for one
+        # issued against a different hook inventory, manifest or class set.
+        expected = recipe_binding_sha256({k: v for k, v in profile.items() if k != "session_bound"})
+        if block["recipe_sha256"] != expected:
+            raise Invalid("session evidence recipe binding does not cover this profile")
+        return block
+
+    def declared_frame_requirement(self, profile):
+        """Which classes must be frame-proven, and against what evidence source.
+
+        A profile may only declare that frame evidence is optional by saying so
+        explicitly, and the recorded certificate carries that claim forward so a
+        later reader cannot mistake an unproven class for a proven one.
+        """
+        block = profile.get("frame_evidence")
+        if block is None:
+            if profile["identity_mode"] != "CANONICAL_ID_V2_SESSION_BOUND":
+                return None
+            raise Missing("a session-bound profile must declare its frame evidence requirement")
+        keys(block, ("required_classes",))
+        names = block["required_classes"]
+        if not isinstance(names, list) or not names or not all(isinstance(name, str) and name for name in names):
+            raise Invalid("frame evidence must name the classes it requires proven")
+        normalized = {name.replace(".", "/") for name in names}
+        return {"required_classes": sorted(normalized),
+                "unproven_classes": sorted(set(self.profile["classes"]) - normalized)}
 
     def inventory(self):
         root = absolute(self.manifest["runtime_root"])
@@ -330,7 +412,13 @@ class QualificationEngine:
         observed, observed_hash = load_hashed(out)
         if ack["output_sha256"] != observed_hash:
             raise Invalid("collector acknowledgement/output hash drift")
-        keys(observed, ("schema", "session", "challenge", "request_sha256", "capture_kind", "runtime_identity", "transformer_chain", "coremods", "classes"), ("pre_classes", "writer_matrix", "negative_controls", "live"))
+        # The frame witness and the session acquisition/certificate records are
+        # optional only in the sense that a profile which does not require them
+        # may omit them. When present they are never ignored: the frame node
+        # and the session node both read them, and the session node refuses to
+        # let session evidence travel alongside an exact identity mode.
+        keys(observed, ("schema", "session", "challenge", "request_sha256", "capture_kind", "runtime_identity", "transformer_chain", "coremods", "classes"),
+             ("pre_classes", "writer_matrix", "negative_controls", "live", "frame_relation_witness", "session_acquisition", "session_certificates"))
         if observed["schema"] != "RUSTCRAFT_FRESH_OBSERVATION_V2" or observed["session"] != self.session or observed["challenge"] != self.challenge or observed["request_sha256"] != self.request_sha256:
             raise Invalid("stale/cross-session/request-substituted observation")
         if observed["capture_kind"] != "OFFLINE_TRANSFORM_CAPTURE":
@@ -379,7 +467,7 @@ class QualificationEngine:
             dumps = strict_lines(dump_text, len(batch))
             for name, receipt, dump, line in zip(batch, receipts, dumps, dump_text.splitlines()):
                 if not isinstance(receipt, list) or len(receipt) != 5 or receipt[:2] != ["CANONICAL_ID_V2", name]:
-                    raise Invalid("identity receipt schema/name mismatch")
+                    raise Invalid(f"identity receipt schema/name mismatch for {name}: {receipt!r}")
                 for value in receipt[2:]:
                     digest(value)
                 if not isinstance(dump, list) or len(dump) != 19 or dump[0] != "CANONICAL_ID_V2" or dump[3] != name:
@@ -509,6 +597,122 @@ class QualificationEngine:
             raise Invalid("offline collector may not promote self-reported live evidence")
         raise Missing("live execution writer/lifecycle validator not supplied; offline evidence cannot establish closure")
 
+    def frame_evidence(self, observed, classes):
+        """Blocker #1 as an engine gate: a frame proof, or INCOMPLETE.
+
+        The witness is produced inside the real launch by the same process that
+        transformed the classes, because the obfuscated server jar leaves no
+        other honest oracle. A missing witness leaves the stage unpromoted; a
+        present but wrong-scoped or unbound one is a FAIL.
+        """
+        if classes is None:
+            raise Missing("fresh class identity is required before frame evidence can be bound")
+        witness = observed.get("frame_relation_witness")
+        if witness is None:
+            raise Missing("no frame-relation witness was captured; whole-class frame proof is unavailable")
+        if isinstance(witness, str):
+            # The real witness is carried verbatim out of the launched JVM.
+            try:
+                witness = parse_json(witness)
+            except (Invalid, json.JSONDecodeError) as error:
+                raise Invalid(f"malformed frame-relation witness: {error}") from error
+        required = self.frame_requirement["required_classes"] if self.frame_requirement else sorted(classes)
+        try:
+            validate_frames(witness, required)
+        except FrameEvidenceError as error:
+            raise Invalid(f"frame-relation evidence rejected: {error}") from error
+        return {"witness": witness, "provenance": describe_frames(witness),
+                "required_classes": required,
+                "unproven_classes": self.frame_requirement["unproven_classes"] if self.frame_requirement
+                else sorted({name.replace(".", "/") for name in classes} - set(required))}
+
+    def session_evidence(self, observed, classes):
+        """Blocker #2 as an engine gate: session evidence, or INCOMPLETE.
+
+        In an exact identity mode this node records that no session evidence is
+        required and none is claimed -- normalization is not in play, so there
+        is nothing to certify. In session-bound mode the certificates must agree
+        with the exact identities the engine recomputed from the observed bytes,
+        and must be bound to a same-process acquisition record. Structure alone
+        never authorizes masking: if the block is absent the stage stays
+        INCOMPLETE, and it can never fall back to exact-mode silence.
+        """
+        block = self.session_binding
+        if block is None:
+            if observed.get("session_acquisition") is not None or observed.get("session_certificates") is not None:
+                raise Invalid("an exact identity profile may not carry session evidence")
+            return {"identity_mode": self.profile["identity_mode"],
+                    "session_bound": False,
+                    "note": "exact identity mode: no value-level normalization is authorized or claimed"}
+        if classes is None:
+            raise Missing("fresh class identity is required before session certificates can be checked")
+        acquisition = observed.get("session_acquisition")
+        if acquisition is None:
+            raise Missing("no same-process acquisition evidence accompanies the session certificates")
+        manifest_hash = self.initial_inputs[str(self.manifest_path)]
+        acquisition_hash = digest_json(acquisition)
+        rows = {}
+        if not isinstance(acquisition, list):
+            raise Invalid("session acquisition evidence must be a list of per-class records")
+        for row in acquisition:
+            keys(row, ("binary_name", "pre_writer_raw_sha256", "post_writer_raw_sha256",
+                       "defining_loader_identity", "hook_placement", "definition_succeeded",
+                       "session_invariant_sha256"))
+            name = row["binary_name"].replace(".", "/")
+            if name in rows or name not in block["classes"]:
+                raise Invalid("unexpected or duplicate session acquisition record: " + name)
+            digest(row["pre_writer_raw_sha256"])
+            digest(row["post_writer_raw_sha256"])
+            if row["pre_writer_raw_sha256"] != row["post_writer_raw_sha256"]:
+                # The writers must have actually changed something; a record
+                # where pre equals post is not an acquisition, it is a no-op.
+                raise Invalid("session acquisition record shows no writer effect: " + name)
+            if not isinstance(row["defining_loader_identity"], str) or not row["defining_loader_identity"]:
+                raise Invalid("session acquisition record has no defining loader identity: " + name)
+            if row["hook_placement"] not in ("PLACED", "REFUSED"):
+                raise Invalid("unknown hook placement outcome for " + name)
+            if row["definition_succeeded"] is not True:
+                raise Invalid("no successful class definition was observed: " + name)
+            if row["session_invariant_sha256"] is not None:
+                digest(row["session_invariant_sha256"])
+            rows[name] = row
+        if set(rows) != set(block["classes"]):
+            raise Missing("session acquisition evidence does not cover every certified class")
+        issued = []
+        for name in block["classes"]:
+            document = block["certificates"][name]
+            try:
+                validate_certificate(document)
+            except CertificateError as error:
+                raise Invalid(f"session certificate for {name} is unusable: {error}") from error
+            if document["class_name"] != name:
+                raise Invalid(f"session certificate names a different class: {name}")
+            if document["process_id"] != block["process_id"] or document["transformation_session_id"] != block["transformation_session_id"]:
+                raise Invalid("session certificate is bound to a different process/transformation session: " + name)
+            if document["defining_loader_identity"] != rows[name]["defining_loader_identity"]:
+                raise Invalid("session certificate and acquisition disagree on the defining loader: " + name)
+            if document["runtime_manifest_sha256"] != manifest_hash:
+                raise Invalid("session certificate is not bound to this manifest: " + name)
+            if document["acquisition_evidence_sha256"] != acquisition_hash:
+                raise Invalid("session certificate is not bound to this acquisition evidence: " + name)
+            if document["pre_writer_raw_sha256"] != rows[name]["pre_writer_raw_sha256"]:
+                raise Invalid("session certificate pre-writer identity differs from the acquisition: " + name)
+            if document["session_invariant_sha256"] != rows[name]["session_invariant_sha256"]:
+                raise Invalid("session certificate invariant differs from the acquisition: " + name)
+            recomputed = classes.get(name)
+            if recomputed is None:
+                raise Missing("session certificate names a class the engine did not recompute: " + name)
+            if (document["exact_semantic_sha256"] != recomputed["semantic_sha256"]
+                    or document["exact_declaration_order_sha256"] != recomputed["declaration_order_sha256"]):
+                # The whole point: the certificate claims an exact identity for
+                # real bytes, and the engine recomputed those bytes itself.
+                raise Invalid("session certificate exact identity differs from the recomputed V2 identity: " + name)
+            issued.append(name)
+        return {"identity_mode": self.profile["identity_mode"], "session_bound": True,
+                "process_id": block["process_id"], "transformation_session_id": block["transformation_session_id"],
+                "recipe_sha256": block["recipe_sha256"], "acquisition_evidence_sha256": acquisition_hash,
+                "certified_classes": sorted(issued)}
+
     def unchanged(self):
         if self.initial_inputs != {p: sha(Path(p)) for p in self.initial_inputs}:
             raise Invalid("profile/manifest changed during qualification")
@@ -537,6 +741,11 @@ class QualificationEngine:
                         self.node("writers", "offline_hook_call_presence_only", ("classes",), lambda: self.writers(observed, classes))
                     self.node("placement", "independent_offline_placement_validation", ("writers", "classes", "pre_classes", "tools"), lambda: self.placement(observed, classes, pre_classes))
                     self.node("controls", "negative_control_witnesses", ("acquisition", "classes"), lambda: self.controls(observed))
+                    # Both blocker gates sit above recomputed class identity: a
+                    # frame proof and a session proof are only meaningful once
+                    # the bytes they describe have been independently identified.
+                    self.node("frame_evidence", "real_launch_frame_relation_and_hierarchy_proof", ("acquisition", "classes"), lambda: self.frame_evidence(observed, classes))
+                    self.node("session_evidence", "session_bound_identity_evidence", ("acquisition", "classes"), lambda: self.session_evidence(observed, classes))
                     self.node("live_closure", "live_writer_lifecycle_closure", ("writers", "controls"), lambda: self.live(observed))
                 self.node("unchanged", "end_of_run_drift_check", ("inventory", "tools"), self.unchanged)
         log_path = self.output / "process-log.json"
@@ -545,11 +754,16 @@ class QualificationEngine:
         # reporting must not dereference that invalid value or erase its failure.
         reporting = self.profile if isinstance(self.profile, dict) else {}
         context = {"profile_id": reporting.get("id") or "UNRESOLVED_PROFILE", "observation_session": self.session,
-                   "identity_schema": reporting.get("identity_mode") if reporting.get("identity_mode") in ("RAW_SHA256", "CANONICAL_ID_V2") else "CANONICAL_ID_V2",
+                   "identity_schema": reporting.get("identity_mode") if reporting.get("identity_mode") in IDENTITY_MODES else "CANONICAL_ID_V2",
                    "challenge": self.challenge, "scope": reporting.get("scope"), "capture_kind": "OFFLINE_TRANSFORM_CAPTURE",
                    "output_directory": str(self.output), "requested_profile_identity": reporting.get("identity_mode"), "process_log_sha256": sha(log_path)}
+        # Frame and session evidence gate OFFLINE_QUALIFIED, not OBSERVED: an
+        # OBSERVED profile is a record of what was seen, and saying so without
+        # them is honest. Any claim of qualification needs both, and a missing
+        # one lands on INCOMPLETE rather than a vacuous PASS.
         requirements = {M.OBSERVED: ("definitions", "inventory", "tools", "acquisition", "runtime", "classes", "unchanged"),
-                        M.OFFLINE_QUALIFIED: ("pre_classes", "writers", "placement", "controls"), M.LIVE_QUALIFIED: ("live_closure",),
+                        M.OFFLINE_QUALIFIED: ("pre_classes", "writers", "placement", "controls", "frame_evidence", "session_evidence"),
+                        M.LIVE_QUALIFIED: ("live_closure",),
                         M.SHADOW_VALIDATED: ("live_shadow",), M.PERFORMANCE_QUALIFIED: ("complete_performance",),
                         M.AUTHORITY_AUTHORIZED: ("explicit_authority_approval",)}
         certificate = evaluate(self.records, requirements, context=context, requested=requested)

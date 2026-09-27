@@ -3,6 +3,14 @@
 Set RUSTCRAFT_TEST_JAVA, RUSTCRAFT_TEST_V2_CLASSES, RUSTCRAFT_TEST_ASM and
 RUSTCRAFT_TEST_CLASS_FIXTURE to run the real Java identity integration suite.
 EngineFixture is shared by CLI controls; all materialized files stay in its root.
+
+The frame-relation witness the collector emits here is SYNTHETIC. The real one
+is produced inside a real Forge launch, which this file deliberately does not
+start. What these controls exercise is the engine's refusal surface: each
+negative mode breaks exactly one binding the frame contract relies on, and the
+engine must refuse it rather than fall back to a weaker oracle. A real
+`REAL_FORGE_LAUNCH_V1` witness is validated separately against the outputs of
+an actual launch.
 """
 from __future__ import annotations
 
@@ -39,7 +47,33 @@ for target,collection in [('classes',classes),('pre',pre)]:
 control={'schema':'RUSTCRAFT_NEGATIVE_CONTROL_V2','session':r['session'],'challenge':r['challenge'],'request_sha256':sha(request_path),'id':'raw-mutation','outcome':'CHANGED','measurements':{'before':hashlib.sha256(raw).hexdigest(),'after':hashlib.sha256(bytes([raw[0]^1])+raw[1:]).hexdigest()}}
 control_path=folder/'control.json';control_path.write_text(json.dumps(control))
 site={'id':'site-1','class':'example/Fixture','method':'exercise','descriptor':'(I)V','status':'PASS','raw_sha256':classes[0]['raw_sha256']}
-o={'schema':'RUSTCRAFT_FRESH_OBSERVATION_V2','session':r['session'],'challenge':r['challenge'],'request_sha256':sha(request_path),'capture_kind':'OFFLINE_TRANSFORM_CAPTURE','runtime_identity':c['runtime_identity'],'transformer_chain':c['transformer_chain'],'coremods':c['coremods'],'classes':classes,'pre_classes':pre,'writer_matrix':{'scope':'OFFLINE_HOOK_CALL_PRESENCE','sites':[site]},'negative_controls':[{'id':'raw-mutation','actual_outcome':'CHANGED','evidence_file':'control.json','evidence_sha256':sha(control_path)}]}
+# A SYNTHETIC frame witness standing in for the real-launch one. The real witness
+# is produced inside a real Forge process, which this harness deliberately does
+# not start; what is under test here is the engine's refusal surface, so each
+# negative mode breaks exactly one binding the contract relies on.
+LOADER='synthetic.loader.Loader';LOADER_ID=LOADER+'@0a0b0c[]'
+def digest(seed): return hashlib.sha256(seed.encode()).hexdigest()
+PRE=digest('pre');DEF=digest('defined');POST=digest('post')
+def phase(name):
+    if name=='pre':
+        return {'phase':'pre','loader':LOADER_ID,'verification':[{'name':'example/Fixture','phase':'pre','status':'OBSERVED_NOT_DEFINED_IN_THIS_PROCESS','raw_sha256':PRE,'defined_by_transforming_loader':LOADER_ID,'semantic_sha256':digest('s1'),'declaration_order_sha256':digest('o1'),'jvm_verified':False,'reason':'the loader only ever defined the buffer the transformer returned; these pre-writer bytes were consumed, never defined'}],'resolutions':[{'type':'java/lang/Object','class_id':'java.lang.Object','defining_loader':None,'error':None}],'assignability':[{'source':'java/lang/Object','target':'java/lang/Object','value':True,'witness':'IS_ASSIGNABLE_FROM_ON_DEFINED_CLASSES'}],'hierarchy':[{'name':'java/lang/Object','defining_loader':LOADER_ID}],'required_types':1,'assignability_queries':1}
+    return {'phase':'post','loader':LOADER_ID,'verification':[{'name':'example/Fixture','phase':'post','status':'VERIFIED','raw_sha256':DEF,'observed_raw_sha256':DEF,'rustcraft_post_writer_sha256':POST,'defined_bytes_equal_rustcraft_output':False,'same_buffer_identity':'DEFINED_BYTES_INDEPENDENTLY_OBSERVED; A_DOWNSTREAM_TRANSFORMER_ALSO_RAN','defining_loader':LOADER_ID,'initialized':True,'initialized_before_observation':True,'initialized_after_observation':True,'verification_note':'recorded, not asserted','semantic_sha256':digest('s1'),'declaration_order_sha256':digest('o1'),'trigger':'REAL_LAUNCHCLASSLOADER_DECLARED_METHODS_V1','verify_local':False,'verify_remote':True}],'resolutions':[{'type':'java/lang/Object','class_id':'java.lang.Object','defining_loader':None,'error':None}],'assignability':[{'source':'java/lang/Object','target':'java/lang/Object','value':True,'witness':'IS_ASSIGNABLE_FROM_ON_DEFINED_CLASSES'}],'hierarchy':[{'name':'java/lang/Object','defining_loader':LOADER_ID}],'required_types':1,'assignability_queries':1}
+witness={'schema':'QUALIFIED_FRAME_WITNESS_V1','scope':{'model':'REAL_FORGE_LAUNCH_V1','status':'CLOSED','observer_assurance':'synthetic stand-in','loader_assurance':'synthetic stand-in','no_static_oracle':True,'production_authority':False},'loader_identity':LOADER_ID,'loader_class':LOADER,'phase_summaries':[{'phase':'pre','whole_classes_verified':0,'required_types':1,'assignability_queries':1,'loader':LOADER_ID},{'phase':'post','whole_classes_verified':1,'required_types':1,'assignability_queries':1,'loader':LOADER_ID}],'acquisition':[{'ordinal':1,'binary_name':'example.Fixture','pre_writer_raw_sha256':PRE,'post_writer_raw_sha256':POST,'exact_semantic_sha256':digest('s1'),'hook_placement':'PLACED','definition_succeeded':True,'defined_class_identity':'example.Fixture@1','defining_loader_identity':LOADER_ID,'session_invariant_sha256':None,'certifiable':False}],'chain_of_custody':[{'ordinal':1,'binary_name':'example/Fixture','post_writer_raw_sha256':POST,'linked_to_next_stage':None,'is_final_stage':True,'definition_bound':True,'defined_class_identity':'example.Fixture@1','defining_loader_identity':LOADER_ID,'certifiable':False}],'downstream_transformers_after_live_writers':['synthetic.DownstreamTransformer'],'production_authority':False,'phases':[phase('pre'),phase('post')]}
+if mode=='frame-static-oracle': witness['scope']['model']='STATIC_STUDY_JAR_V1'
+if mode=='frame-pre-verified': witness['phases'][0]['verification'][0].update({'status':'VERIFIED','jvm_verified':True})
+if mode=='frame-overstates-pre': witness['phase_summaries'][0]['whole_classes_verified']=1
+if mode=='frame-unbound': witness['phases'][1]['verification'][0]['observed_raw_sha256']='0'*64
+if mode=='frame-unresolved-type': witness['phases'][1]['resolutions'][0]['error']='java.lang.NoClassDefFoundError'
+if mode=='frame-silent-drift': witness['phases'][1]['verification'][0]['defined_bytes_equal_rustcraft_output']=True
+if mode=='frame-claims-authority': witness['production_authority']=True
+if mode=='frame-unplanned-loader': witness['phases'][1]['verification'][0]['defining_loader']='other.Loader@9'
+if mode=='frame-no-definition': witness['acquisition'][0].update({'definition_succeeded':False,'defined_class_identity':None})
+if mode=='frame-two-definitions': witness['chain_of_custody'].append(dict(witness['chain_of_custody'][0],ordinal=2))
+if mode=='frame-certifiable-without-invariant': witness['acquisition'][0]['certifiable']=True
+o={'schema':'RUSTCRAFT_FRESH_OBSERVATION_V2','session':r['session'],'challenge':r['challenge'],'request_sha256':sha(request_path),'capture_kind':'OFFLINE_TRANSFORM_CAPTURE','runtime_identity':c['runtime_identity'],'transformer_chain':c['transformer_chain'],'coremods':c['coremods'],'classes':classes,'pre_classes':pre,'writer_matrix':{'scope':'OFFLINE_HOOK_CALL_PRESENCE','sites':[site]},'negative_controls':[{'id':'raw-mutation','actual_outcome':'CHANGED','evidence_file':'control.json','evidence_sha256':sha(control_path)}],'frame_relation_witness':json.dumps(witness)}
+if mode=='missing-frame': o.pop('frame_relation_witness')
+if mode=='malformed-frame': o['frame_relation_witness']='{not json'
+if mode=='session-without-profile': o['session_acquisition']=[{'binary_name':'example/Fixture','pre_writer_raw_sha256':PRE,'post_writer_raw_sha256':POST,'defining_loader_identity':LOADER_ID,'hook_placement':'PLACED','definition_succeeded':True,'session_invariant_sha256':None}]
 if mode=='missing-class': o['classes']=[];(folder/'classes'/'Fixture.class').unlink()
 if mode=='missing-pre': o.pop('pre_classes');(folder/'pre'/'Fixture.class').unlink()
 if mode=='missing-controls': o.pop('negative_controls')
@@ -228,6 +262,44 @@ class EngineIntegrationControls(unittest.TestCase):
         self.assertEqual(result["status"], "INCOMPLETE")
         self.assertEqual(result["maturity"], "OFFLINE_QUALIFIED")
         self.assertEqual(self.fixture(mode="live-claim").run(M.LIVE_QUALIFIED)["status"], "FAIL")
+
+    def test_frame_evidence_is_required_and_never_silently_weakened(self):
+        # Absent frame evidence leaves the profile unpromoted, and OBSERVED is
+        # still reachable because "observed" never claimed to be verified.
+        absent = self.fixture(mode="missing-frame").run()
+        self.assertEqual(absent["status"], "INCOMPLETE")
+        self.assertEqual(absent["maturity"], "OBSERVED")
+        nodes = {n["id"]: n for n in absent["evidence"]}
+        self.assertEqual(nodes["frame_evidence"]["status"], "INCOMPLETE")
+        # A witness that exists but is malformed, or that claims a weaker
+        # oracle, is a FAIL -- not a downgrade to a study jar.
+        for mode in ("malformed-frame", "frame-static-oracle", "frame-pre-verified",
+                     "frame-overstates-pre", "frame-unbound", "frame-unresolved-type",
+                     "frame-silent-drift", "frame-claims-authority", "frame-unplanned-loader",
+                     "frame-no-definition", "frame-two-definitions",
+                     "frame-certifiable-without-invariant"):
+            with self.subTest(mode=mode):
+                self.assertEqual(self.fixture(mode=mode).run()["status"], "FAIL")
+
+    def test_frame_evidence_gates_offline_but_not_observed(self):
+        # `requested` is the maturity being aimed at, not a ceiling, so a
+        # complete run reports the highest maturity it actually proved. The
+        # frame/session gap has to show up as a difference between the two
+        # runs: with both present the run reaches OFFLINE_QUALIFIED, and with
+        # the frame witness absent the same request stops at OBSERVED rather
+        # than failing outright, because the observation itself is still sound.
+        complete = self.fixture().run(M.OBSERVED)
+        self.assertEqual((complete["status"], complete["maturity"]), ("PASS", "OFFLINE_QUALIFIED"))
+        unframed = self.fixture(mode="missing-frame").run(M.OBSERVED)
+        self.assertEqual((unframed["status"], unframed["maturity"]), ("PASS", "OBSERVED"))
+
+    def test_exact_mode_never_carries_session_evidence(self):
+        # Nothing authorizes masking in an exact-mode profile, so accepting a
+        # session evidence block for one would be a back door.
+        self.assertEqual(self.fixture(mode="session-without-profile").run()["status"], "FAIL")
+        fixture = self.fixture()
+        fixture.profile["session_bound"] = {"schema": "RUSTCRAFT_SESSION_BOUND_PROFILE_V1"}
+        self.assertEqual(fixture.run()["status"], "FAIL")
 
     def test_call_presence_cannot_replace_placement_witness(self):
         fixture = self.fixture()

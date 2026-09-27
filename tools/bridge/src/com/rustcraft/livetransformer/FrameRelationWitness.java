@@ -59,7 +59,8 @@ public final class FrameRelationWitness {
 
     private FrameRelationWitness() { }
 
-    public static String run(String preHookDump, String typesFile, String queriesFile) throws Exception {
+    public static String run(String definedDump, java.util.Map<String, String> observedHashes,
+            String typesFile, String queriesFile) throws Exception {
         ClassLoader real = net.minecraft.launchwrapper.Launch.classLoader;
         if (real == null)
             throw new IllegalStateException("no LaunchClassLoader: not a real Forge process");
@@ -68,6 +69,9 @@ public final class FrameRelationWitness {
                     + "witness sees qualification via " + SameProcessAcquisition.class.getClassLoader()
                     + " and coremod via " + LiveHookSupport.class.getClassLoader()
                     + ", transformer registrations=" + transformersSeen());
+        if (observedHashes == null || observedHashes.isEmpty())
+            throw new IllegalStateException("the passive definition observer reported no definitions; "
+                    + "without its in-process hashes there is nothing to bind this witness to");
 
         List<String> targets = new ArrayList<String>();
         for (LiveWriterPlan.Hook hook : LiveWriterPlan.HOOKS) {
@@ -78,8 +82,8 @@ public final class FrameRelationWitness {
 
         List<Map<String, Object>> chain = closeChain();
         List<Map<String, Object>> phases = new ArrayList<Map<String, Object>>();
-        phases.add(phase("pre", real, preHookDump, targets, typesFile, queriesFile, true));
-        phases.add(phase("post", real, preHookDump, targets, typesFile, queriesFile, false));
+        phases.add(phase("pre", real, definedDump, observedHashes, targets, typesFile, queriesFile, true));
+        phases.add(phase("post", real, definedDump, observedHashes, targets, typesFile, queriesFile, false));
 
         Map<String, Object> witness = new LinkedHashMap<String, Object>();
         witness.put("schema", SCHEMA);
@@ -123,10 +127,11 @@ public final class FrameRelationWitness {
     }
 
     /** One phase over the exact buffers this process actually handled. */
-    private static Map<String, Object> phase(String name, ClassLoader real, String preHookDump,
-            List<String> targets, String typesFile, String queriesFile, boolean pre)
+    private static Map<String, Object> phase(String name, ClassLoader real, String definedDump,
+            java.util.Map<String, String> observedHashes, List<String> targets,
+            String typesFile, String queriesFile, boolean pre)
             throws Exception {
-        Path dump = Paths.get(preHookDump);
+        Path dump = Paths.get(definedDump);
         List<String> requiredTypes = readLines(Paths.get(typesFile));
         List<String[]> questions = readQueries(Paths.get(queriesFile));
 
@@ -137,9 +142,9 @@ public final class FrameRelationWitness {
 
         // Whole-class verification of the exact buffer for this phase. The Class
         // under test is the one the real loader actually defined; the buffer is
-        // the one this process handed it, bound by the acquisition record.
+        // the one the passive observer saw that loader being handed.
         for (String internal : targets) {
-            byte[] buffer = pre ? preWriterBuffer(internal) : definedBuffer(dump, internal);
+            byte[] buffer = pre ? preWriterBuffer(internal) : definedBytes(dump, internal);
             if (buffer == null) {
                 verification.add(map("name", internal, "status", "ABSENT", "phase", name));
                 continue;
@@ -153,7 +158,7 @@ public final class FrameRelationWitness {
                 verification.add(preObserved(name, internal, buffer, real));
                 continue;
             }
-            verification.add(verify(name, internal, buffer, postRawSha(internal), dump, real));
+            verification.add(verify(name, internal, buffer, observedHashes.get(internal.replace('/', '.')), real));
         }
 
         // Every frame reference type, resolved through the real defining loader.
@@ -243,30 +248,34 @@ public final class FrameRelationWitness {
      * handed the loader for this class.
      */
     private static Map<String, Object> verify(String phase, String internal, byte[] buffer,
-            String expectedRaw, Path dump, ClassLoader real) throws Exception {
+            String observedRaw, ClassLoader real) throws Exception {
         Class<?> target = Class.forName(internal.replace('/', '.'), false, real);
         Method should = unsafeShouldBeInitialized();
         boolean before = ((Boolean) should.invoke(unsafe(), target)).booleanValue();
         target.getDeclaredMethods();
         boolean after = ((Boolean) should.invoke(unsafe(), target)).booleanValue();
         CanonicalClassIdentityV2.Result exact = CanonicalClassIdentityV2.identify(buffer);
-        // The buffer the JVM actually verified is the DEFINED one, and it is
-        // proven against the passive javaagent observer's independent record.
-        byte[] observed = preWriterBytes(dump, internal);
-        if (observed == null)
+        // The buffer the JVM actually verified is the DEFINED one. It is bound
+        // to the passive javaagent observer two ways that cannot both be faked by
+        // the thing under test: the bytes on disk are hashed here, and the
+        // observer's hash was computed in premain from the in-memory buffer it
+        // saw the loader being handed. Neither value comes from the transformer
+        // chain, so agreement is real evidence rather than a tautology.
+        if (observedRaw == null)
             throw new IllegalStateException(internal
-                    + ": no independent observation of the final definition bytes");
-        if (!MessageDigest.isEqual(MessageDigest.getInstance("SHA-256").digest(observed),
-                MessageDigest.getInstance("SHA-256").digest(buffer)))
+                    + ": the passive observer recorded no in-process definition hash");
+        String onDisk = sha256(buffer);
+        if (!observedRaw.equals(onDisk))
             throw new IllegalStateException(internal
-                    + ": the buffer under test is not the independently observed definition");
+                    + ": the observed definition bytes do not match the hash the passive"
+                    + " observer computed in premain (" + onDisk + " != " + observedRaw + ")");
         SameProcessAcquisition.Definition last = finalStage(internal);
         byte[] rustcraftOutput = last == null ? null : last.postWriterBuffer();
         boolean identical = rustcraftOutput != null && MessageDigest.isEqual(
                 MessageDigest.getInstance("SHA-256").digest(rustcraftOutput),
-                MessageDigest.getInstance("SHA-256").digest(observed));
+                MessageDigest.getInstance("SHA-256").digest(buffer));
         return map("name", internal, "phase", phase, "status", "VERIFIED",
-                "raw_sha256", sha256(buffer), "observed_raw_sha256", expectedRaw,
+                "raw_sha256", onDisk, "observed_raw_sha256", observedRaw,
                 "rustcraft_post_writer_sha256", last == null ? null : last.postWriterRawSha256,
                 "defined_bytes_equal_rustcraft_output", Boolean.valueOf(identical),
                 "same_buffer_identity", "DEFINED_BYTES_INDEPENDENTLY_OBSERVED; "
@@ -397,14 +406,17 @@ public final class FrameRelationWitness {
 
     // ---- exact buffers this process handled --------------------------------
 
-    private static byte[] preWriterBytes(Path dump, String internal) throws Exception {
+    /**
+     * The bytes the real loader ACTUALLY defined, as written down by the passive
+     * javaagent observer. There is deliberately no fallback: an earlier version
+     * of this witness fell back to the transformer output, which made the
+     * "independent observation" check compare a value with itself and would
+     * have certified bytes the loader never saw. A missing observation is now a
+     * hard failure instead of a convenient substitution.
+     */
+    private static byte[] definedBytes(Path dump, String internal) throws Exception {
         Path path = dump.resolve(internal + ".class");
         return Files.isRegularFile(path) ? Files.readAllBytes(path) : null;
-    }
-
-    private static String rawSha(Path dump, String internal) throws Exception {
-        byte[] bytes = preWriterBytes(dump, internal);
-        return bytes == null ? null : sha256(bytes);
     }
 
     /** The exact buffer this process's transformer chain was handed. */
@@ -430,26 +442,6 @@ public final class FrameRelationWitness {
             if (sameClass(definition, internal) && definition.postWriterRawSha256 != null) last = definition;
         }
         return last;
-    }
-
-    /**
-     * The bytes the real loader ACTUALLY defined, as recorded by the passive
-     * javaagent observer. Transformers registered after the live writers may
-     * still alter them, so this is never assumed equal to the RustCraft output.
-     */
-    private static byte[] definedBuffer(Path dump, String internal) throws Exception {
-        byte[] observed = preWriterBytes(dump, internal);
-        return observed != null ? observed : postWriterBytes(internal);
-    }
-
-    private static byte[] postWriterBytes(String internal) {
-        SameProcessAcquisition.Definition last = finalStage(internal);
-        return last == null ? null : last.postWriterBuffer();
-    }
-
-    private static String postRawSha(String internal) {
-        SameProcessAcquisition.Definition last = finalStage(internal);
-        return last == null ? null : last.postWriterRawSha256;
     }
 
     /**

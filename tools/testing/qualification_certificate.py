@@ -85,7 +85,7 @@ def evaluate(
         raise ValueError("unknown requested maturity")
     if not context.get("profile_id") or not context.get("observation_session"):
         raise ValueError("profile and fresh observation session binding required")
-    if context.get("identity_schema") not in ("RAW_SHA256", "CANONICAL_ID_V2"):
+    if context.get("identity_schema") not in ("RAW_SHA256", "CANONICAL_ID_V2", "CANONICAL_ID_V2_SESSION_BOUND"):
         raise ValueError("V1/unknown identity cannot issue a new certificate")
     nodes: dict[str, Evidence] = {}
     for node in records:

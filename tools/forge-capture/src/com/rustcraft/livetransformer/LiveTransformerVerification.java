@@ -93,8 +93,17 @@ public final class LiveTransformerVerification {
     }
 
     public static void main(String[] args) throws Exception {
+        // Two distinct dumps, and the distinction is load-bearing. The pre-hook
+        // dump comes from a launch with no live writers, so its bytes are an
+        // uninstrumented fixture for the negative controls. The definition dump
+        // is THIS process's own agent output: the bytes the real loader was
+        // handed after every transformer had run. Pointing the frame witness at
+        // the first one would have made its "independent observation" a
+        // comparison of the pre-writer buffer with itself.
         String preHookDump = System.getProperty("rustcraft.preHookDump");
         if (preHookDump == null) throw new IllegalStateException("rustcraft.preHookDump required");
+        String definedDump = System.getProperty("rustcraft.definedDump");
+        if (definedDump == null) throw new IllegalStateException("rustcraft.definedDump required");
         String dllPath = System.getProperty("rustcraft.nativeDll");
         if (dllPath == null) throw new IllegalStateException("rustcraft.nativeDll required");
         // Bind the native library to the bridge classes' loader (JNI is per-loader).
@@ -107,6 +116,19 @@ public final class LiveTransformerVerification {
 
         negativeControls(preHookDump);
         RESULT.put("extractor_scope_controls", ExtractorScopeVerification.run());
+        // Hashes the javaagent computed in premain, from the in-memory buffer it
+        // saw the loader being handed. The witness re-hashes the dumped bytes and
+        // requires the two to agree. A failure here is recorded, not swallowed:
+        // an observer that cannot vouch for definitions leaves the frame
+        // relation INCOMPLETE rather than quietly unproven.
+        java.util.Map<String, String> observedHashes;
+        try {
+            observedHashes = com.rustcraft.offline.agent.ObservationAgent.hashes();
+            RESULT.put("observed_definition_sha256", observedHashes);
+        } catch (RuntimeException observerFailure) {
+            observedHashes = new java.util.TreeMap<String, String>();
+            RESULT.put("observed_definition_status", "OBSERVER_UNAVAILABLE: " + observerFailure);
+        }
 
         // ---- actual frame/hierarchy witness, inside this real Forge process ----
         // The vanilla server jar is obfuscated and LaunchClassLoader performs the
@@ -117,7 +139,7 @@ public final class LiveTransformerVerification {
         String frameQueries = System.getProperty("rustcraft.frameQueries");
         if (frameTypes != null && frameQueries != null) {
             RESULT.put("frame_relation_witness", FrameRelationWitness.run(
-                    preHookDump, frameTypes, frameQueries));
+                    definedDump, observedHashes, frameTypes, frameQueries));
         } else {
             RESULT.put("frame_relation_witness_status", "INCOMPLETE_NO_FRAME_INPUTS");
         }

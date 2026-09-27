@@ -349,6 +349,11 @@ def execute(root: Path, output: Path, java_home: Path, dll: Path, manifest: Path
             args = [str(java), "-javaagent:" + str(observer_jar),
                     "-Dlog4j.configurationFile=" + (root / "tools/forge-capture/log4j2.xml").as_uri(),
                     "-Dlog4j2.formatMsgNoLookups=true", "-Drustcraft.dumpDir=" + str(dump),
+                    # This launch's own agent output. Always this process's dump,
+                    # never another launch's: the frame witness binds to the bytes
+                    # THIS loader was handed, and a cross-launch directory would
+                    # make that binding vacuous.
+                    "-Drustcraft.definedDump=" + str(dump),
                     "-Drustcraft.qualificationResult=" + str(result_path)]
             if oracle_main is not None:
                 oracle_output = output / "oracle"
@@ -428,7 +433,7 @@ def execute(root: Path, output: Path, java_home: Path, dll: Path, manifest: Path
             compile_identity = dict(qualified_inputs, transformed_classes=class_hashes(dump),
                     srg_jar_sha256=sha256(srg_jar))
             live_classes, live_receipt = compile_cached(root, cache, live_sources,
-                    [srg_jar, dump] + classpath, compile_identity, javac, env, output, "live-transformer")
+                    [srg_jar, dump, boot_classes] + classpath, compile_identity, javac, env, output, "live-transformer")
             receipt["live_compile"] = live_receipt
             # The frame relation obligations, extracted from the retained
             # stack-map frames of the exact buffers. They are handed to the real
