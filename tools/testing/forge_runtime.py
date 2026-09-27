@@ -275,6 +275,10 @@ LIVE_TRANSFORMER_SOURCES = [
     "tools/bridge/src/com/rustcraft/qualification/LoaderTransformChain.java",
     "tools/bridge/src/com/rustcraft/qualification/LoaderDefinitionWitness.java",
     "tools/bridge/src/com/rustcraft/qualification/CalleeIsolation.java",
+    # The bootstrap compiles the whole offline/oracle tree, which includes the
+    # Revelation harness; it now reaches the frame witness too, so that class has to
+    # be here as well or the Clean Forge lane fails on a source it never uses.
+    "tools/bridge/src/com/rustcraft/livetransformer/FrameRelationWitness.java",
     "tools/forge-capture/src/com/rustcraft/offline/oracle/QualifyRuntime.java",
 ]
 
