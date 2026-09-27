@@ -228,6 +228,7 @@ LIVE_TRANSFORMER_SOURCES = [
     "tools/bridge/src/com/rustcraft/bridge/capture/LiveChunkBindings.java",
     "tools/bridge/src/com/rustcraft/coremod/LiveWriterPlan.java",
     "tools/bridge/src/com/rustcraft/coremod/LiveHookSupport.java",
+    "tools/bridge/src/com/rustcraft/coremod/CanonicalClassIdentityV2.java",
     "tools/bridge/src/com/rustcraft/coremod/LiveChunkOwnershipTransformer.java",
     "tools/bridge/src/com/rustcraft/coremod/LiveChunkPublicationTransformer.java",
 ]
@@ -242,6 +243,7 @@ LIVE_ORACLE_SOURCES = [
     "tools/bridge/src/com/rustcraft/bridge/capture/OwnedSnapshotBridge.java",
     "tools/bridge/src/com/rustcraft/coremod/LiveWriterPlan.java",
     "tools/bridge/src/com/rustcraft/coremod/LiveHookSupport.java",
+    "tools/bridge/src/com/rustcraft/coremod/CanonicalClassIdentityV2.java",
     "tools/bridge/src/com/rustcraft/coremod/LiveChunkOwnershipTransformer.java",
     "tools/bridge/src/com/rustcraft/coremod/LiveChunkPublicationTransformer.java",
     "tools/bridge/src/com/rustcraft/coremod/SPacketChunkDataTransformer.java",

@@ -95,14 +95,11 @@ public final class LiveHookSupport {
     }
 
     /**
-     * Deterministic semantic identity for runtimes whose unhooked transformed
-     * bytes are NOT reproducible (mod transformer constant-pool/member-ordering
-     * variance). Emits a constant-pool-independent canonical text — the class
-     * name, sorted field signatures, and each method (sorted by name+descriptor)
-     * rendered through the same fragment vocabulary the anchor matcher uses —
-     * and hashes it. Two definitions with identical canonical hashes are
-     * indistinguishable at the instruction-semantics level this protocol
-     * qualifies.
+     * Historical CANONICAL_ID_V1 receipt reproduction ONLY. This lossy format
+     * omits behavior-relevant operands and metadata; equal hashes do not prove
+     * semantic equivalence. Kept unchanged so existing historical evidence can
+     * be inspected. New qualification must use the explicit V2 composite
+     * contract; do not regenerate new V1 admission profiles with this method.
      */
     public static String canonicalSha256(byte[] classBytes) {
         try {
@@ -141,6 +138,33 @@ public final class LiveHookSupport {
             throw (ProfileFailure) new ProfileFailure(
                     "canonical identity read failed: " + failure).initCause(failure);
         }
+    }
+
+    /** Complete V2 identity; callers must retain both semantic and declaration-order hashes. */
+    public static CanonicalClassIdentityV2.Result canonicalIdentityV2(byte[] classBytes) {
+        return CanonicalClassIdentityV2.identify(classBytes);
+    }
+
+    /**
+     * Explicit V2 admission API. It accepts no V1 alias, no missing declaration
+     * order receipt, and no digest synthesized from unrelated observations.
+     * This does not grant packet authority or change the existing profile gate.
+     */
+    public static CanonicalClassIdentityV2.Result verifyCanonicalIdentityV2(byte[] classBytes,
+            String schema, String expectedClass, String expectedSemanticSha256,
+            String expectedDeclarationOrderSha256) {
+        if (!CanonicalClassIdentityV2.SCHEMA.equals(schema))
+            throw new ProfileFailure("V2 identity requires CANONICAL_ID_V2 schema");
+        if (expectedSemanticSha256 == null || !expectedSemanticSha256.matches("[0-9a-f]{64}")
+                || expectedDeclarationOrderSha256 == null
+                || !expectedDeclarationOrderSha256.matches("[0-9a-f]{64}"))
+            throw new ProfileFailure("V2 identity requires both complete SHA-256 receipts");
+        CanonicalClassIdentityV2.Result actual = canonicalIdentityV2(classBytes);
+        if (!actual.className.equals(expectedClass)
+                || !actual.semanticSha256.equals(expectedSemanticSha256)
+                || !actual.declarationOrderSha256.equals(expectedDeclarationOrderSha256))
+            throw new ProfileFailure("V2 composite identity mismatch for " + expectedClass);
+        return actual;
     }
 
     public static void refuseMarkerString(ClassNode cn) {

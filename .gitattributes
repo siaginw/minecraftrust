@@ -3,3 +3,9 @@
 tools/testing/packet_decoder.py text eol=lf
 tools/testing/generate_synthetic_fixtures.py text eol=lf
 tests/fixtures/issue1-capture/* text eol=lf
+
+# The Clean Forge profile pins the exact committed source bytes for these
+# foundation classes. Keep those bytes stable with core.autocrlf=true too.
+tools/bridge/src/com/rustcraft/bridge/capture/LiveWriterGate.java text eol=lf
+tools/bridge/src/com/rustcraft/bridge/capture/PrivateBuildTickets.java text eol=lf
+tools/bridge/src/com/rustcraft/bridge/capture/LiveChunkBindings.java text eol=lf

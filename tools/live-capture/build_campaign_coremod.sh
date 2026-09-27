@@ -26,6 +26,7 @@ SOURCES=(
   "$ROOT/tools/bridge/src/com/rustcraft/coremod/LiveChunkOwnershipTransformer.java"
   "$ROOT/tools/bridge/src/com/rustcraft/coremod/LiveChunkPublicationTransformer.java"
   "$ROOT/tools/bridge/src/com/rustcraft/coremod/LiveHookSupport.java"
+  "$ROOT/tools/bridge/src/com/rustcraft/coremod/CanonicalClassIdentityV2.java"
   "$ROOT/tools/bridge/src/com/rustcraft/coremod/LiveWriterPlan.java"
   "$ROOT/tools/bridge/src/com/rustcraft/bridge/capture/CaptureContract.java"
   "$ROOT/tools/bridge/src/com/rustcraft/bridge/capture/CaptureSource.java"

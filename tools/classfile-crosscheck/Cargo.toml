@@ -1,0 +1,14 @@
+[package]
+name = "rustcraft-classfile-crosscheck"
+version = "0.1.0"
+edition = "2021"
+publish = false
+license = "MIT OR Apache-2.0"
+
+# Tooling-only parser experiment; deliberately outside the engine workspace.
+[workspace]
+
+[dependencies]
+cafebabe = "=0.9.0"
+serde_json = "=1.0.145"
+sha2 = "=0.10.9"

@@ -11,6 +11,7 @@ from __future__ import annotations
 import copy
 import hashlib
 import json
+import os
 import subprocess
 import sys
 import tempfile
@@ -18,16 +19,19 @@ import unittest
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
-PROFILE = ROOT / "tools/live-capture/revelation-profile.json"
-VERIFY = ROOT / "tools/testing/profile_verify.py"
-RT = Path("D:/rustcraft-runtime-targets/revelation-3.4.0/server")
+# Explicit test-only injection for historical regression replay. Production
+# verification does not consume these variables. Defaults preserve this suite.
+PROFILE = Path(os.environ.get("RUSTCRAFT_PROFILE_TEST_PROFILE", str(ROOT / "tools/live-capture/revelation-profile.json")))
+VERIFY = Path(os.environ.get("RUSTCRAFT_PROFILE_TEST_VERIFIER", str(ROOT / "tools/testing/profile_verify.py")))
+RT = Path(os.environ.get("RUSTCRAFT_PROFILE_TEST_RUNTIME", "D:/rustcraft-runtime-targets/revelation-3.4.0/server"))
+TEST_TMP_ROOT = os.environ.get("RUSTCRAFT_PROFILE_TEST_TEMP_ROOT")
 
 
 def run_verifier(profile_doc: dict, tmp: Path, name: str) -> tuple[int, str]:
     path = tmp / ("profile-%s.json" % name)
     path.write_text(json.dumps(profile_doc, indent=1))
     result = subprocess.run([sys.executable, "-B", str(VERIFY), "--profile", str(path)],
-                            capture_output=True, text=True)
+                            capture_output=True, text=True, cwd=ROOT)
     return result.returncode, result.stdout
 
 
@@ -41,7 +45,7 @@ class NegativeControls(unittest.TestCase):
         cls.original = json.loads(PROFILE.read_text())
 
     def test_00_positive_control_passes(self) -> None:
-        with tempfile.TemporaryDirectory() as tmp:
+        with tempfile.TemporaryDirectory(dir=TEST_TMP_ROOT) as tmp:
             code, out = run_verifier(self.original, Path(tmp), "positive")
             self.assertEqual(code, 0, out)
             self.assertIn("PROFILE VERIFY: PASS", out)
@@ -49,7 +53,7 @@ class NegativeControls(unittest.TestCase):
     def mutated(self, apply_mutation, name: str) -> tuple[int, str]:
         doc = copy.deepcopy(self.original)
         apply_mutation(doc)
-        with tempfile.TemporaryDirectory() as tmp:
+        with tempfile.TemporaryDirectory(dir=TEST_TMP_ROOT) as tmp:
             return run_verifier(doc, Path(tmp), name)
 
     def test_01_wrong_forge_build_hash_rejected(self) -> None:

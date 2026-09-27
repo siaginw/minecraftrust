@@ -1,0 +1,247 @@
+{
+  "schema": "RUSTCRAFT_EXTERNAL_REUSE_V1",
+  "milestone": "H1.3",
+  "decision": "PROTOTYPE",
+  "subsystem": "independent classfile qualification tooling",
+  "production_dependency": false,
+  "reuse": "Cargo dependencies only; no copied server/JVM implementation code",
+  "primary_project": "cafebabe",
+  "primary_version": "0.9.0",
+  "primary_license": "0BSD",
+  "primary_sources": [
+    "https://github.com/staktrace/cafebabe",
+    "https://docs.rs/cafebabe/0.9.0/cafebabe/",
+    "https://crates.io/crates/cafebabe/0.9.0"
+  ],
+  "provenance": "Pinned crates.io artifacts; license/repository metadata inspected from downloaded package Cargo.toml; checksums retained in isolated Cargo.lock. No dependencies added to root workspace.",
+  "benchmark": "Not a runtime performance integration. Correctness campaign compares every generated V2 fixture and all preserved Clean Forge/Revelation transformed class inputs.",
+  "semantic_differences": [
+    "cafebabe MemberRef erases interface reference kind; bounded raw CP-tag supplement retains it",
+    "cafebabe type annotation representation erases some target tags; bounded raw tag supplement retains them",
+    "cafebabe access flag types truncate unknown bits; bounded raw access supplement retains bits",
+    "ASM 5 adds Synthetic annotation markers for omitted leading parameters; exact count-checked inversion documented in README",
+    "Unused CP/bootstrap entries excluded from cross-check projection; retained by authoritative V2 identity",
+    "No JVM execution, dataflow verification or live profile qualification is claimed"
+  ],
+  "integration_complexity": "Moderate, isolated CLI and Python fact projection. Unknown attributes and unsupported versions/strings reject.",
+  "notice_policy": "No copyleft code copied. Before redistributing standalone binaries include notices from selected licensed dependency artifacts. 0BSD imposes no notice retention condition; provenance remains recorded.",
+  "cargo_lock_sha256": "d28e72b4acc68aa220ef29a61ad1dc890d35deafd8f3d77d58f29c66223c8f07",
+  "dependencies": [
+    {
+      "project": "bitflags",
+      "version": "1.3.2",
+      "repository": "https://github.com/bitflags/bitflags",
+      "license": "MIT/Apache-2.0",
+      "registry_checksum": "bef38d45163c2f1dde094a7dfd33ccf595c92905c8f8f4fdc18d06fb1037718a",
+      "relationship": "transitive dependency",
+      "notice_obligations": "Preserve applicable upstream license/copyright notices when redistributing; Unicode-3.0 additionally applies to unicode-ident."
+    },
+    {
+      "project": "block-buffer",
+      "version": "0.10.4",
+      "repository": "https://github.com/RustCrypto/utils",
+      "license": "MIT OR Apache-2.0",
+      "registry_checksum": "3078c7629b62d3f0439517fa394996acacc5cbc91c5a20d8c658e77abd503a71",
+      "relationship": "transitive dependency",
+      "notice_obligations": "Preserve applicable upstream license/copyright notices when redistributing; Unicode-3.0 additionally applies to unicode-ident."
+    },
+    {
+      "project": "cafebabe",
+      "version": "0.9.0",
+      "repository": "https://github.com/staktrace/cafebabe",
+      "license": "0BSD",
+      "registry_checksum": "b9dc1dc4d3a0a7a314b5dcaad4077be139cfa3fcaa8d237218dedc6b71835872",
+      "relationship": "direct dependency",
+      "notice_obligations": "Preserve applicable upstream license/copyright notices when redistributing; Unicode-3.0 additionally applies to unicode-ident."
+    },
+    {
+      "project": "cesu8",
+      "version": "1.1.0",
+      "repository": "https://github.com/emk/cesu8-rs",
+      "license": "Apache-2.0/MIT",
+      "registry_checksum": "6d43a04d8753f35258c91f8ec639f792891f748a1edbd759cf1dcea3382ad83c",
+      "relationship": "transitive dependency",
+      "notice_obligations": "Preserve applicable upstream license/copyright notices when redistributing; Unicode-3.0 additionally applies to unicode-ident."
+    },
+    {
+      "project": "cfg-if",
+      "version": "1.0.5",
+      "repository": "https://github.com/rust-lang/cfg-if",
+      "license": "MIT OR Apache-2.0",
+      "registry_checksum": "4e7648175b45a9a48536d676f68d918270699102aa8dab5496df06904c914600",
+      "relationship": "transitive dependency",
+      "notice_obligations": "Preserve applicable upstream license/copyright notices when redistributing; Unicode-3.0 additionally applies to unicode-ident."
+    },
+    {
+      "project": "cpufeatures",
+      "version": "0.2.17",
+      "repository": "https://github.com/RustCrypto/utils",
+      "license": "MIT OR Apache-2.0",
+      "registry_checksum": "59ed5838eebb26a2bb2e58f6d5b5316989ae9d08bab10e0e6d103e656d1b0280",
+      "relationship": "transitive dependency",
+      "notice_obligations": "Preserve applicable upstream license/copyright notices when redistributing; Unicode-3.0 additionally applies to unicode-ident."
+    },
+    {
+      "project": "crypto-common",
+      "version": "0.1.7",
+      "repository": "https://github.com/RustCrypto/traits",
+      "license": "MIT OR Apache-2.0",
+      "registry_checksum": "78c8292055d1c1df0cce5d180393dc8cce0abec0a7102adb6c7b1eef6016d60a",
+      "relationship": "transitive dependency",
+      "notice_obligations": "Preserve applicable upstream license/copyright notices when redistributing; Unicode-3.0 additionally applies to unicode-ident."
+    },
+    {
+      "project": "digest",
+      "version": "0.10.7",
+      "repository": "https://github.com/RustCrypto/traits",
+      "license": "MIT OR Apache-2.0",
+      "registry_checksum": "9ed9a281f7bc9b7576e61468ba615a66a5c8cfdff42420a70aa82701a3b1e292",
+      "relationship": "transitive dependency",
+      "notice_obligations": "Preserve applicable upstream license/copyright notices when redistributing; Unicode-3.0 additionally applies to unicode-ident."
+    },
+    {
+      "project": "generic-array",
+      "version": "0.14.7",
+      "repository": "https://github.com/fizyk20/generic-array.git",
+      "license": "MIT",
+      "registry_checksum": "85649ca51fd72272d7821adaf274ad91c288277713d9c18820d8499a7ff69e9a",
+      "relationship": "transitive dependency",
+      "notice_obligations": "Preserve applicable upstream license/copyright notices when redistributing; Unicode-3.0 additionally applies to unicode-ident."
+    },
+    {
+      "project": "itoa",
+      "version": "1.0.18",
+      "repository": "https://github.com/dtolnay/itoa",
+      "license": "MIT OR Apache-2.0",
+      "registry_checksum": "8f42a60cbdf9a97f5d2305f08a87dc4e09308d1276d28c869c684d7777685682",
+      "relationship": "transitive dependency",
+      "notice_obligations": "Preserve applicable upstream license/copyright notices when redistributing; Unicode-3.0 additionally applies to unicode-ident."
+    },
+    {
+      "project": "libc",
+      "version": "0.2.189",
+      "repository": "https://github.com/rust-lang/libc",
+      "license": "MIT OR Apache-2.0",
+      "registry_checksum": "3eaf3ede3fee6db1a4c2ee091bf8a8b4dccdc6d17f656fb07896ee72867612f2",
+      "relationship": "transitive dependency",
+      "notice_obligations": "Preserve applicable upstream license/copyright notices when redistributing; Unicode-3.0 additionally applies to unicode-ident."
+    },
+    {
+      "project": "memchr",
+      "version": "2.8.3",
+      "repository": "https://github.com/BurntSushi/memchr",
+      "license": "Unlicense OR MIT",
+      "registry_checksum": "cf8baf1c55e62ffcace7a9f06f4bd9cd3f0c4beb022d3b367256b91b87513d98",
+      "relationship": "transitive dependency",
+      "notice_obligations": "Preserve applicable upstream license/copyright notices when redistributing; Unicode-3.0 additionally applies to unicode-ident."
+    },
+    {
+      "project": "proc-macro2",
+      "version": "1.0.107",
+      "repository": "https://github.com/dtolnay/proc-macro2",
+      "license": "MIT OR Apache-2.0",
+      "registry_checksum": "985e7ec9bb745e6ce6535b544d84d6cd6f7ad8bd711c398938ae983b91a766d9",
+      "relationship": "transitive dependency",
+      "notice_obligations": "Preserve applicable upstream license/copyright notices when redistributing; Unicode-3.0 additionally applies to unicode-ident."
+    },
+    {
+      "project": "quote",
+      "version": "1.0.47",
+      "repository": "https://github.com/dtolnay/quote",
+      "license": "MIT OR Apache-2.0",
+      "registry_checksum": "1fbf4db142a473a8d80c26bbf18454ed458bf8d26c8219c331daecfdbd079001",
+      "relationship": "transitive dependency",
+      "notice_obligations": "Preserve applicable upstream license/copyright notices when redistributing; Unicode-3.0 additionally applies to unicode-ident."
+    },
+    {
+      "project": "ryu",
+      "version": "1.0.23",
+      "repository": "https://github.com/dtolnay/ryu",
+      "license": "Apache-2.0 OR BSL-1.0",
+      "registry_checksum": "9774ba4a74de5f7b1c1451ed6cd5285a32eddb5cccb8cc655a4e50009e06477f",
+      "relationship": "transitive dependency",
+      "notice_obligations": "Preserve applicable upstream license/copyright notices when redistributing; Unicode-3.0 additionally applies to unicode-ident."
+    },
+    {
+      "project": "serde",
+      "version": "1.0.229",
+      "repository": "https://github.com/serde-rs/serde",
+      "license": "MIT OR Apache-2.0",
+      "registry_checksum": "4148590afebada386688f18773da617792bf2ef03ffc1e4cbd2b1d45b023e0ba",
+      "relationship": "transitive dependency",
+      "notice_obligations": "Preserve applicable upstream license/copyright notices when redistributing; Unicode-3.0 additionally applies to unicode-ident."
+    },
+    {
+      "project": "serde_core",
+      "version": "1.0.229",
+      "repository": "https://github.com/serde-rs/serde",
+      "license": "MIT OR Apache-2.0",
+      "registry_checksum": "67dca2c9c51e58a4791a4b1ed58308b39c64224d349a935ab5039aa360942a48",
+      "relationship": "transitive dependency",
+      "notice_obligations": "Preserve applicable upstream license/copyright notices when redistributing; Unicode-3.0 additionally applies to unicode-ident."
+    },
+    {
+      "project": "serde_derive",
+      "version": "1.0.229",
+      "repository": "https://github.com/serde-rs/serde",
+      "license": "MIT OR Apache-2.0",
+      "registry_checksum": "e7a5d71263a5a7d47b41f6b3f06ba276f10cc18b0931f1799f710578e2309348",
+      "relationship": "transitive dependency",
+      "notice_obligations": "Preserve applicable upstream license/copyright notices when redistributing; Unicode-3.0 additionally applies to unicode-ident."
+    },
+    {
+      "project": "serde_json",
+      "version": "1.0.145",
+      "repository": "https://github.com/serde-rs/json",
+      "license": "MIT OR Apache-2.0",
+      "registry_checksum": "402a6f66d8c709116cf22f558eab210f5a50187f702eb4d7e5ef38d9a7f1c79c",
+      "relationship": "direct dependency",
+      "notice_obligations": "Preserve applicable upstream license/copyright notices when redistributing; Unicode-3.0 additionally applies to unicode-ident."
+    },
+    {
+      "project": "sha2",
+      "version": "0.10.9",
+      "repository": "https://github.com/RustCrypto/hashes",
+      "license": "MIT OR Apache-2.0",
+      "registry_checksum": "a7507d819769d01a365ab707794a4084392c824f54a7a6a7862f8c3d0892b283",
+      "relationship": "direct dependency",
+      "notice_obligations": "Preserve applicable upstream license/copyright notices when redistributing; Unicode-3.0 additionally applies to unicode-ident."
+    },
+    {
+      "project": "syn",
+      "version": "3.0.6",
+      "repository": "https://github.com/dtolnay/syn",
+      "license": "MIT OR Apache-2.0",
+      "registry_checksum": "8593e8e72159ed2257d083c7a454a85cbf854f37a0966d8d483aff8c8a3ebcee",
+      "relationship": "transitive dependency",
+      "notice_obligations": "Preserve applicable upstream license/copyright notices when redistributing; Unicode-3.0 additionally applies to unicode-ident."
+    },
+    {
+      "project": "typenum",
+      "version": "1.20.1",
+      "repository": "https://github.com/paholg/typenum",
+      "license": "MIT OR Apache-2.0",
+      "registry_checksum": "b6f5e870be6c3b371b77fe0ee0bafb859fa4964b4404c27de1d380043c4dda20",
+      "relationship": "transitive dependency",
+      "notice_obligations": "Preserve applicable upstream license/copyright notices when redistributing; Unicode-3.0 additionally applies to unicode-ident."
+    },
+    {
+      "project": "unicode-ident",
+      "version": "1.0.26",
+      "repository": "https://github.com/dtolnay/unicode-ident",
+      "license": "(MIT OR Apache-2.0) AND Unicode-3.0",
+      "registry_checksum": "d245f478577f809a851594d02313b640fb437e0bb33866753cff937863096954",
+      "relationship": "transitive dependency",
+      "notice_obligations": "Preserve applicable upstream license/copyright notices when redistributing; Unicode-3.0 additionally applies to unicode-ident."
+    },
+    {
+      "project": "version_check",
+      "version": "0.9.5",
+      "repository": "https://github.com/SergioBenitez/version_check",
+      "license": "MIT/Apache-2.0",
+      "registry_checksum": "0b928f33d975fc6ad9f86c8f283853ad26bdd5b10b7f1542aa2fa15e2289105a",
+      "relationship": "transitive dependency",
+      "notice_obligations": "Preserve applicable upstream license/copyright notices when redistributing; Unicode-3.0 additionally applies to unicode-ident."
+    }
+  ]
+}
