@@ -155,6 +155,11 @@ if S:
     if mode=='chain-lying-post-identity': stages[1]['exact_semantic_sha256']=SEM
     if mode=='chain-foreign-session': stages[3]['transformation_session_id']='9d3ccad1-a938-4a64-a7ca-c8c81bef1757'
     if mode=='chain-foreign-loader': stages[2]['defining_loader_identity']='other.Loader@1'
+    # The FINAL stage is only worth anything if the launch independently saw
+    # those bytes. These two modes leave the chain internally consistent and
+    # self-consistent, and take away the one thing it cannot prove itself.
+    if mode=='chain-final-unwitnessed': witness['phases'][1]['verification']=[];o['frame_relation_witness']=json.dumps(witness)
+    if mode=='chain-final-foreign-witness': witness['phases'][1]['verification'][0]['name']='example/SomeOtherClass';o['frame_relation_witness']=json.dumps(witness)
 if mode=='missing-frame': o.pop('frame_relation_witness')
 if mode=='malformed-frame': o['frame_relation_witness']='{not json'
 if mode=='session-without-profile': o['session_acquisition']=[{'binary_name':'example/Fixture','pre_writer_raw_sha256':PRE,'post_writer_raw_sha256':POST,'defining_loader_identity':LOADER_ID,'hook_placement':'PLACED','definition_succeeded':True,'session_invariant_sha256':None}]
@@ -679,6 +684,29 @@ class EngineIntegrationControls(unittest.TestCase):
         # well-formed document; only the binding it makes is wrong.
         admission_policy.validate(policy)
         fixture.write()
+
+    def test_final_defined_must_be_independently_observed(self):
+        # The chain cannot certify itself. Its FINAL stage is bound to the
+        # launch's own frame witness, and when the launch did not observe those
+        # bytes there is nothing left to prove -- which is unpromoted
+        # (INCOMPLETE), not a discovered defect. Both modes leave the chain's
+        # own four stages hash-continuous and consistent; only the independent
+        # witness is gone.
+        #
+        # The overall document FAILs rather than staying INCOMPLETE, and that is
+        # correct: the same witness is also the frame contract's own evidence,
+        # and a witness that verifies nothing is a genuine break of a separate
+        # obligation. What this control pins is the CHAIN's verdict, which must
+        # be INCOMPLETE -- never FAIL for a chain that is merely unproven, and
+        # never PASS.
+        for mode in ("chain-final-unwitnessed", "chain-final-foreign-witness"):
+            with self.subTest(mode=mode):
+                result = self.session_fixture(mode=mode).run()
+                nodes = {n["id"]: n for n in result["evidence"]}
+                self.assertEqual(nodes["transformation_chain"]["status"], "INCOMPLETE")
+                self.assertEqual(nodes["session_evidence"]["status"], "PASS")
+                self.assertNotEqual(result["status"], "PASS")
+                self.assertEqual(result["maturity"], "OBSERVED")
 
     def test_every_transformation_chain_link_is_enforced(self):
         # Nine chain controls, one broken link each. All must FAIL: none of them
