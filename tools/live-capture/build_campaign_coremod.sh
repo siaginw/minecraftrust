@@ -1,22 +1,31 @@
 #!/usr/bin/env bash
-# Builds the live-SHADOW campaign coremod jar from the pinned Clean Forge runtime.
-# Usage: build_campaign_coremod.sh <srg_minecraft_jar> <output_jar>
-# Compilation references ONLY the pinned qualified artifacts (forge .2860, SRG
-# minecraft study jar, launchwrapper, ASM) — never a best-effort substitute.
+# Builds the live-SHADOW campaign coremod jar from a pinned runtime.
+# Usage: build_campaign_coremod.sh <srg_minecraft_jar> <output_jar> [runtime_root] [asm_jar] [forge_jar]
+# Compilation references ONLY the pinned qualified artifacts of THAT runtime (its
+# forge build, its SRG minecraft study jar, its launchwrapper, and ITS OWN ASM
+# jar) — never a best-effort substitute, and never another runtime's ASM. The
+# defaults reproduce the Clean Forge build exactly; passing the Revelation root
+# and its asm-all builds the same sources against the Revelation pins instead.
 set -e
 SRG_JAR="$1"
 OUT_JAR="$2"
-ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
-RT="D:/rustcraft-runtime-targets/clean-forge-2860/server"
+# pwd -W on MSYS/Git Bash; javac.exe is a Windows binary and cannot open a
+# /d/... path, so a POSIX ROOT fails before a single source is read.
+ROOT="$(cd "$(dirname "$0")/../.." && pwd -W 2>/dev/null || pwd)"
+RT="${3:-D:/rustcraft-runtime-targets/clean-forge-2860/server}"
 JAVA_HOME="D:/rustcraft-toolchains/temurin8/jdk8u504-b01"
 JAVAC="$JAVA_HOME/bin/javac.exe"
 JAR="$JAVA_HOME/bin/jar.exe"
-ASM="$RT/libraries/org/ow2/asm/asm-debug-all/5.2/asm-debug-all-5.2.jar"
+# The ASM jar is a parameter rather than a constant for one reason: the two
+# runtimes pin different builds (asm-debug-all for Clean Forge, asm-all for
+# Revelation), and putting the other tree's jar on this classpath is exactly the
+# substitution the qualification exists to prevent.
+ASM="${4:-$RT/libraries/org/ow2/asm/asm-debug-all/5.2/asm-debug-all-5.2.jar}"
 LW="$RT/libraries/net/minecraft/launchwrapper/1.12/launchwrapper-1.12.jar"
-FORGE="$RT/forge-1.12.2-14.23.5.2860.jar"
+FORGE="${5:-$RT/forge-1.12.2-14.23.5.2860.jar}"
 CP="$FORGE;$SRG_JAR;$ASM;$LW"
 
-BUILD="$ROOT/target/live-shadow-campaign/coremod-build"
+BUILD="$ROOT/target/live-shadow-campaign/coremod-build-$(basename "$OUT_JAR" .jar)"
 rm -rf "$BUILD"
 mkdir -p "$BUILD"
 
@@ -69,6 +78,13 @@ SOURCES=(
   "$ROOT/tools/bridge/src/com/rustcraft/bridge/OutboundFrameCtx.java"
   "$ROOT/tools/bridge/src/com/rustcraft/bridge/M4DecoderGate.java"
   "$ROOT/tools/bridge/src/com/rustcraft/coremod/ChunkMutationTransformer.java"
+  # LiveHookSupport reaches the same-process acquisition recorder, and the
+  # recorder is what the chain producer reads. Omitting them does not build a
+  # smaller jar, it fails the build: javac cannot resolve a type the sources
+  # reference, and a launch that somehow had them anyway would be reading a
+  # different copy of the class the writers used.
+  "$ROOT/tools/bridge/src/com/rustcraft/qualification/SameProcessAcquisition.java"
+  "$ROOT/tools/bridge/src/com/rustcraft/qualification/TransformationChainEvidence.java"
 )
 "$JAVAC" -encoding UTF-8 -source 8 -target 8 -nowarn -cp "$CP" -d "$BUILD" "${SOURCES[@]}" 2> "$BUILD/javac-errors.log" || {
   cat "$BUILD/javac-errors.log" | grep -E "error" | head -20

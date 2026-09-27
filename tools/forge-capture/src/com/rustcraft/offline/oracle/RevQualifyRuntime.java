@@ -1,6 +1,7 @@
 package com.rustcraft.offline.oracle;
 
 import com.google.gson.GsonBuilder;
+import com.rustcraft.coremod.LiveHookSupport;
 import com.rustcraft.offline.agent.ObservationAgent;
 import java.lang.reflect.Field;
 import java.nio.charset.StandardCharsets;
@@ -110,6 +111,26 @@ public final class RevQualifyRuntime {
     // profile-pinned post-FML pre-hook definitions). Inert unless the
     // diagnostic property is explicitly set; default-OFF runs never transform.
     if (Boolean.getBoolean("rustcraft.liveWriterDiagnostic")) {
+      // The session environment is what authorizes a session-bound admission,
+      // and before this it had no production caller at all: only the synthetic
+      // controls bound one. Unbound, every session-bound class load is INCOMPLETE
+      // -- the correct fail-closed answer, but one that hides whether the run
+      // was ever capable of authorizing anything. Binding it from this launch's
+      // OWN properties, before the writers are registered, is what lets them
+      // issue certificates for this process. The outcome is recorded either way,
+      // so a run that authorized nothing says so in its manifest instead of
+      // being indistinguishable from one that was never asked.
+      String sessionProcess = System.getProperty(
+              LiveHookSupport.SystemPropertySessionEnvironment.PROCESS_PROPERTY);
+      String sessionId = System.getProperty(
+              LiveHookSupport.SystemPropertySessionEnvironment.SESSION_PROPERTY);
+      boolean sessionBound = sessionProcess != null && sessionProcess.length() > 0
+              && sessionId != null && sessionId.length() > 0;
+      if (sessionBound) {
+        LiveHookSupport.bindSessionEnvironment(
+                new LiveHookSupport.SystemPropertySessionEnvironment());
+      }
+      result.put("session_environment_bound", Boolean.valueOf(sessionBound));
       for (String name : new String[] {
           "com.rustcraft.coremod.SPacketChunkDataTransformer",
           "com.rustcraft.coremod.LiveChunkOwnershipTransformer",

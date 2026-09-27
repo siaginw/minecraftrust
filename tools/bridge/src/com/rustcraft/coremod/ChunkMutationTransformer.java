@@ -55,7 +55,11 @@ public class ChunkMutationTransformer implements IClassTransformer {
             cr.accept(cn, 0);
 
             int patched = 0;
-            for (MethodNode mn : cn.methods) {
+            // Through AsmTreeCompat, not cn.methods directly: that is the only
+            // place a raw-typed ASM list is cast, and it is what lets these
+            // sources compile against the generic-stripped asm-all the
+            // Revelation runtime pins without swapping in another ASM.
+            for (MethodNode mn : AsmTreeCompat.methods(cn)) {
                 // setBlockState(BlockPos, IBlockState) — arg1 = pos
                 if (is(mn, "func_177436_a", "(Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/state/IBlockState;)Lnet/minecraft/block/state/IBlockState;")) {
                     patched += injectAllReturns(mn, "(Ljava/lang/Object;Ljava/lang/Object;)V", "onBlockSet", 0, 1);

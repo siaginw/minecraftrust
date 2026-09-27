@@ -26,6 +26,14 @@ public final class RevOfflineTweaker implements ITweaker {
       // the launch loader exactly like the baseline run.
       cl.addClassLoaderExclusion("com.rustcraft.bridge.");
       cl.addClassLoaderExclusion("com.rustcraft.coremod.");
+      // Same rule as the packages above, and the same reason as in
+      // OfflineTweaker: the same-process acquisition recorder and the chain
+      // producer are support code. Left in the launch loader they would be a
+      // SECOND copy of the classes the parent-loaded writers use, so the
+      // writers' records would land in one SameProcessAcquisition and the chain
+      // would read the other's -- which is not a missing chain, it is a chain
+      // that can never see a definition.
+      cl.addClassLoaderExclusion("com.rustcraft.qualification.");
       cl.addTransformerExclusion("com.rustcraft.bridge.");
       cl.addTransformerExclusion("com.rustcraft.coremod.");
       cl.addTransformerExclusion("com.rustcraft.livetransformer.");
