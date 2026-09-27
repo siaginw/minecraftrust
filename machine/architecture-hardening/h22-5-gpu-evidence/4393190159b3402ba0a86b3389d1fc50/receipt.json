@@ -1,0 +1,3239 @@
+{
+  "schema": "H22_5_GPU_OFFLINE_V1",
+  "status": "PASS_EXPLORATORY_ONLY",
+  "scope": "BOUNDED_SYNTHETIC_INTEGER_MIXING_ONLY",
+  "production_authority": false,
+  "server_started": false,
+  "processes": [
+    {
+      "name": "build",
+      "argv": [
+        "C:\\WINDOWS\\System32\\cmd.exe",
+        "/d",
+        "/c",
+        "D:\\minecraftrust-astra-hardening\\target\\gpu-offline-experiment\\4393190159b3402ba0a86b3389d1fc50\\build.cmd"
+      ],
+      "exit": 0,
+      "timed_out": false,
+      "deadline_seconds": 60,
+      "seconds": 2.0849682000116445,
+      "stdout_sha256": "22282cc2dc9f53c7110f12e59a0b204aa19d33835e2e806e071fe78b50d5741b",
+      "stderr_sha256": "95f71f26414b8a8645e42e6c160f3bf41fa9e96ca50ca9fd7461299cd25b078a"
+    },
+    {
+      "name": "gpu-load-before",
+      "argv": [
+        "C:\\WINDOWS\\System32\\nvidia-smi.exe",
+        "--query-gpu=name,driver_version,memory.total,utilization.gpu",
+        "--format=csv,noheader"
+      ],
+      "exit": 0,
+      "timed_out": false,
+      "deadline_seconds": 60,
+      "seconds": 0.05689340003300458,
+      "stdout_sha256": "4b29ba284b7ea3a0af3e77bc261dce66a4ae600267e2d7b874cc64ddaaff7ebf",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "experiment",
+      "argv": [
+        "D:\\minecraftrust-astra-hardening\\target\\gpu-offline-experiment\\4393190159b3402ba0a86b3389d1fc50\\probe.exe",
+        "D:\\minecraftrust-astra-hardening\\tools\\gpu-offline-experiment\\kernel.hlsl"
+      ],
+      "exit": 0,
+      "timed_out": false,
+      "deadline_seconds": 45,
+      "seconds": 2.731852400000207,
+      "stdout_sha256": "c91a7e2258f2e00800d01a3d7d9f9c0b53fc4b22bf9c8844df731f5705094e48",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "fault-control",
+      "argv": [
+        "D:\\minecraftrust-astra-hardening\\target\\gpu-offline-experiment\\4393190159b3402ba0a86b3389d1fc50\\probe.exe",
+        "D:\\minecraftrust-astra-hardening\\target\\gpu-offline-experiment\\4393190159b3402ba0a86b3389d1fc50\\fault-output.hlsl"
+      ],
+      "exit": 1,
+      "timed_out": false,
+      "deadline_seconds": 45,
+      "seconds": 0.2025563000352122,
+      "stdout_sha256": "2052bff53dc5438ced2ba9745707faa626feeed7c84839a2eee6433d74953e42",
+      "stderr_sha256": "f8fd38b6a63ed262a731a3b3ec1185ddaf6247c76e7d504d5783b9c60e429ada"
+    },
+    {
+      "name": "gpu-load-after",
+      "argv": [
+        "C:\\WINDOWS\\System32\\nvidia-smi.exe",
+        "--query-gpu=name,driver_version,memory.total,utilization.gpu",
+        "--format=csv,noheader"
+      ],
+      "exit": 0,
+      "timed_out": false,
+      "deadline_seconds": 60,
+      "seconds": 0.05760920001193881,
+      "stdout_sha256": "b875bb3db3ea99ba50b1573a9c903fdaf10ff1c83f1975a6e684953a2c557342",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "platform": "Windows-11-10.0.26200-SP0",
+  "logical_processors": 16,
+  "original_before": {
+    "schema_version": 1,
+    "kind": "HARDENING_ISOLATION_GATE_CHECK",
+    "status": "PASS",
+    "failures": [],
+    "original_observed": {
+      "head": "c4b868db2c9e4b03f745bf93c6ebf4fd8a8519e7",
+      "branch": "issue1-jni-v2",
+      "status": [
+        " M tools/live-capture/live_client_session.py",
+        "?? tools/live-capture/__pycache__/",
+        "?? tools/live-capture/run_rev_shadow.py"
+      ],
+      "files": [
+        {
+          "path": "D:\\minecraftrust\\tools\\live-capture\\live_client_session.py",
+          "sha256": "151c356161695aba3db3c1a8cbd589b5eda2b5a1770dff59ab21b728d36cabfa"
+        },
+        {
+          "path": "D:\\minecraftrust\\tools\\live-capture\\run_rev_shadow.py",
+          "sha256": "2b9b2aca49e57dd0d2a74bec46efcdc0ac7f95762a733276e27ff9dbcb472d93"
+        }
+      ]
+    },
+    "isolated_worktree": "D:\\minecraftrust-astra-hardening",
+    "isolated_head": "44f61a46f7cda93c0ac8aaffe13087678501cc6f",
+    "isolated_branch": "astra/architecture-hardening",
+    "production_gate_checks": {
+      "tryEncode_fail_closed": true,
+      "productionAuthorityEligible_false": true
+    },
+    "scope": "read-only original HEAD/status/two paused source hashes plus conservative source guards; runtime authority tests remain required"
+  },
+  "sources_before": {
+    "D:\\minecraftrust-astra-hardening\\tools\\gpu-offline-experiment\\main.cpp": "61102576fb79c1c9dbe4f04a7ac57fb846d7541a87333b4001aa033cd87543b4",
+    "D:\\minecraftrust-astra-hardening\\tools\\gpu-offline-experiment\\kernel.hlsl": "ccaf8b12844cefc0c5332a6136821941a4a5c194300d327cdfb4d003219676c3",
+    "D:\\minecraftrust-astra-hardening\\tools\\gpu-offline-experiment\\run.py": "e580b9229e8ba6b388bcc5d03f7d08554a3619296ef0ce09f0990ed506fb74c9",
+    "D:\\minecraftrust-astra-hardening\\tools\\gpu-offline-experiment\\PROVENANCE.json": "9ad3efe16552de5336026da379f8d7e04e53296fe6d67a6654a7d49f546b38cd",
+    "D:\\minecraftrust-astra-hardening\\tools\\gpu-offline-experiment\\hash-prospector-UNLICENSE": "7e12e5df4bae12cb21581ba157ced20e1986a0508dd10d0e8a4ab9a4cf94e85c",
+    "D:\\minecraftrust-astra-hardening\\tools\\testing\\hardening_guard.py": "a2062b3ffbec7edba79bf5f5954fbcb1e9d97492ab9c4bb541833ebb820bdb6d",
+    "D:\\minecraftrust-astra-hardening\\machine\\architecture-hardening\\isolation.json": "8f9b34b55f6ecc1d549da1ec4c42900b4a831a3072a9e4aa6aa2ae39cae53d93"
+  },
+  "environment_policy": {
+    "removed_compiler_overrides": [
+      "CL",
+      "_CL_",
+      "LINK",
+      "_LINK_"
+    ]
+  },
+  "tools_before": {
+    "C:\\Program Files\\Microsoft Visual Studio\\18\\Community\\VC\\Tools\\MSVC\\14.51.36231\\bin\\Hostx64\\x64\\cl.exe": "dc8426b8760d92cf757df3d10b9f0244a95b454ff43194a58161568a0ec70d53",
+    "C:\\Program Files\\Microsoft Visual Studio\\18\\Community\\VC\\Tools\\MSVC\\14.51.36231\\bin\\Hostx64\\x64\\c1xx.dll": "363135c271bcb76ce1eeb179b22a9e410d72f8501b99171fb7cd71ea0e7a9166",
+    "C:\\Program Files\\Microsoft Visual Studio\\18\\Community\\VC\\Tools\\MSVC\\14.51.36231\\bin\\Hostx64\\x64\\c2.dll": "a557ac7b90fb5a68d393da2dce7ada52c91efad2a6956cc62ea23da392e9be89",
+    "C:\\Program Files\\Microsoft Visual Studio\\18\\Community\\VC\\Tools\\MSVC\\14.51.36231\\bin\\Hostx64\\x64\\link.exe": "e8c524347b8bc87fba790d254c8a3b902bf1a4b63807093b816d992940af3791",
+    "C:\\WINDOWS\\System32\\d3dcompiler_47.dll": "2e3526354dbcd9cf013f7b741c549df2170fe6af607628442216a21e7d584883",
+    "C:\\WINDOWS\\System32\\d3d11.dll": "ae2777002f5a0ff543b5b9bec5124746559fd01d6c7c0c216d3194632f084502",
+    "C:\\WINDOWS\\System32\\dxgi.dll": "b12aebf0f077d6c1394b50e2eecdd5e16072c9a0c871f30887b5d170cbf2eaae",
+    "C:\\Python314\\python.exe": "4942b86a6597e5aee0128daa00050ed79bc21f6e709a78eb19cbfeb0c2f39ac9",
+    "C:\\Program Files\\Microsoft Visual Studio\\18\\Community\\Common7\\Tools\\VsDevCmd.bat": "a7815e85d636828e5cf70fe4235b11fcb41750896a4d2d60756b43bacaf4f0b2",
+    "C:\\WINDOWS\\System32\\cmd.exe": "97ac98b1a92c286054cce55239cfccdfc23a5517bd07fe693072c9ca96c7dabb",
+    "C:\\WINDOWS\\System32\\taskkill.exe": "1249717315fc8f4d2df17d5db9da0444795fdb9fb83dfb1f763c3f39282244f7",
+    "C:\\WINDOWS\\System32\\nvidia-smi.exe": "e2ea800cae4f1af494920d2bfcc2f83491c003a69ed2552109a519ba6818c418"
+  },
+  "cpu_avx2_flag": true,
+  "build_script_sha256": "30d9dbc1e1923f668fa041a0b4a2f8cdfbbe5011a29bbf86c2215fa3e22b5a76",
+  "executable_sha256": "34b4a499c969537947d265231c0ffa29849f2397426a9142efdfeaa2f20d50fa",
+  "device": {
+    "kind": "device",
+    "name": "NVIDIA GeForce RTX 5060 Ti",
+    "vendor": 4318,
+    "device": 11524,
+    "dedicated_bytes": 16829644800,
+    "device_and_shader_ms": 171.9616
+  },
+  "samples": [
+    {
+      "kind": "sample",
+      "count": 4096,
+      "rounds": 0,
+      "repeat": -1,
+      "seed": 2654435769,
+      "workers": 8,
+      "pool_setup_ms": 0.1704,
+      "buffers_ms": 0.3762,
+      "scalar_ms": 0.003,
+      "simd_ms": 0.0004,
+      "pool_ms": 0.4897,
+      "gpu_whole_ms": 2.1006,
+      "gpu_kernel_ms": 0.004448,
+      "gpu_wrapper_ms": 2.1065,
+      "logical_array_bytes_each_direction": 16384,
+      "parameter_upload_bytes": 16,
+      "parity": true,
+      "golden_indices": [
+        0,
+        1,
+        31,
+        4095
+      ],
+      "golden_values": [
+        17,
+        2654435778,
+        683129984,
+        3647182432
+      ]
+    },
+    {
+      "kind": "sample",
+      "count": 4096,
+      "rounds": 0,
+      "repeat": 0,
+      "seed": 2654435770,
+      "workers": 8,
+      "pool_setup_ms": 0.1704,
+      "buffers_ms": 0.3762,
+      "scalar_ms": 0.0032,
+      "simd_ms": 0.0315,
+      "pool_ms": 0.0398,
+      "gpu_whole_ms": 0.0568,
+      "gpu_kernel_ms": 0.003456,
+      "gpu_wrapper_ms": 0.0572,
+      "logical_array_bytes_each_direction": 16384,
+      "parameter_upload_bytes": 16,
+      "parity": true,
+      "golden_indices": [
+        0,
+        1,
+        31,
+        4095
+      ],
+      "golden_values": [
+        17,
+        2654435778,
+        683129984,
+        3647182432
+      ]
+    },
+    {
+      "kind": "sample",
+      "count": 4096,
+      "rounds": 0,
+      "repeat": 1,
+      "seed": 2654435771,
+      "workers": 8,
+      "pool_setup_ms": 0.1704,
+      "buffers_ms": 0.3762,
+      "scalar_ms": 0.0021,
+      "simd_ms": 0.0003,
+      "pool_ms": 0.0378,
+      "gpu_whole_ms": 0.0561,
+      "gpu_kernel_ms": 0.003264,
+      "gpu_wrapper_ms": 0.0573,
+      "logical_array_bytes_each_direction": 16384,
+      "parameter_upload_bytes": 16,
+      "parity": true,
+      "golden_indices": [
+        0,
+        1,
+        31,
+        4095
+      ],
+      "golden_values": [
+        17,
+        2654435778,
+        683129984,
+        3647182432
+      ]
+    },
+    {
+      "kind": "sample",
+      "count": 4096,
+      "rounds": 0,
+      "repeat": 2,
+      "seed": 2654435772,
+      "workers": 8,
+      "pool_setup_ms": 0.1704,
+      "buffers_ms": 0.3762,
+      "scalar_ms": 0.0031,
+      "simd_ms": 0.0004,
+      "pool_ms": 0.0502,
+      "gpu_whole_ms": 0.2102,
+      "gpu_kernel_ms": 0.003776,
+      "gpu_wrapper_ms": 0.2116,
+      "logical_array_bytes_each_direction": 16384,
+      "parameter_upload_bytes": 16,
+      "parity": true,
+      "golden_indices": [
+        0,
+        1,
+        31,
+        4095
+      ],
+      "golden_values": [
+        17,
+        2654435778,
+        683129984,
+        3647182432
+      ]
+    },
+    {
+      "kind": "sample",
+      "count": 4096,
+      "rounds": 0,
+      "repeat": 3,
+      "seed": 2654435773,
+      "workers": 8,
+      "pool_setup_ms": 0.1704,
+      "buffers_ms": 0.3762,
+      "scalar_ms": 0.0017,
+      "simd_ms": 0.0003,
+      "pool_ms": 0.0277,
+      "gpu_whole_ms": 0.0542,
+      "gpu_kernel_ms": 0.003264,
+      "gpu_wrapper_ms": 0.0551,
+      "logical_array_bytes_each_direction": 16384,
+      "parameter_upload_bytes": 16,
+      "parity": true,
+      "golden_indices": [
+        0,
+        1,
+        31,
+        4095
+      ],
+      "golden_values": [
+        17,
+        2654435778,
+        683129984,
+        3647182432
+      ]
+    },
+    {
+      "kind": "sample",
+      "count": 4096,
+      "rounds": 0,
+      "repeat": 4,
+      "seed": 2654435774,
+      "workers": 8,
+      "pool_setup_ms": 0.1704,
+      "buffers_ms": 0.3762,
+      "scalar_ms": 0.0025,
+      "simd_ms": 0.0002,
+      "pool_ms": 0.0351,
+      "gpu_whole_ms": 0.0297,
+      "gpu_kernel_ms": 0.003264,
+      "gpu_wrapper_ms": 0.0301,
+      "logical_array_bytes_each_direction": 16384,
+      "parameter_upload_bytes": 16,
+      "parity": true,
+      "golden_indices": [
+        0,
+        1,
+        31,
+        4095
+      ],
+      "golden_values": [
+        17,
+        2654435778,
+        683129984,
+        3647182432
+      ]
+    },
+    {
+      "kind": "sample",
+      "count": 4096,
+      "rounds": 0,
+      "repeat": 5,
+      "seed": 2654435775,
+      "workers": 8,
+      "pool_setup_ms": 0.1704,
+      "buffers_ms": 0.3762,
+      "scalar_ms": 0.0017,
+      "simd_ms": 0.0003,
+      "pool_ms": 0.0314,
+      "gpu_whole_ms": 0.0462,
+      "gpu_kernel_ms": 0.003264,
+      "gpu_wrapper_ms": 0.0471,
+      "logical_array_bytes_each_direction": 16384,
+      "parameter_upload_bytes": 16,
+      "parity": true,
+      "golden_indices": [
+        0,
+        1,
+        31,
+        4095
+      ],
+      "golden_values": [
+        17,
+        2654435778,
+        683129984,
+        3647182432
+      ]
+    },
+    {
+      "kind": "sample",
+      "count": 4096,
+      "rounds": 0,
+      "repeat": 6,
+      "seed": 2654435776,
+      "workers": 8,
+      "pool_setup_ms": 0.1704,
+      "buffers_ms": 0.3762,
+      "scalar_ms": 0.0032,
+      "simd_ms": 0.0003,
+      "pool_ms": 0.0463,
+      "gpu_whole_ms": 0.2542,
+      "gpu_kernel_ms": 0.003808,
+      "gpu_wrapper_ms": 0.2557,
+      "logical_array_bytes_each_direction": 16384,
+      "parameter_upload_bytes": 16,
+      "parity": true,
+      "golden_indices": [
+        0,
+        1,
+        31,
+        4095
+      ],
+      "golden_values": [
+        17,
+        2654435778,
+        683129984,
+        3647182432
+      ]
+    },
+    {
+      "kind": "sample",
+      "count": 4096,
+      "rounds": 0,
+      "repeat": 7,
+      "seed": 2654435777,
+      "workers": 8,
+      "pool_setup_ms": 0.1704,
+      "buffers_ms": 0.3762,
+      "scalar_ms": 0.002,
+      "simd_ms": 0.0003,
+      "pool_ms": 0.0312,
+      "gpu_whole_ms": 0.0572,
+      "gpu_kernel_ms": 0.003264,
+      "gpu_wrapper_ms": 0.0579,
+      "logical_array_bytes_each_direction": 16384,
+      "parameter_upload_bytes": 16,
+      "parity": true,
+      "golden_indices": [
+        0,
+        1,
+        31,
+        4095
+      ],
+      "golden_values": [
+        17,
+        2654435778,
+        683129984,
+        3647182432
+      ]
+    },
+    {
+      "kind": "sample",
+      "count": 4096,
+      "rounds": 0,
+      "repeat": 8,
+      "seed": 2654435778,
+      "workers": 8,
+      "pool_setup_ms": 0.1704,
+      "buffers_ms": 0.3762,
+      "scalar_ms": 0.0025,
+      "simd_ms": 0.0002,
+      "pool_ms": 0.0486,
+      "gpu_whole_ms": 0.0278,
+      "gpu_kernel_ms": 0.003264,
+      "gpu_wrapper_ms": 0.0282,
+      "logical_array_bytes_each_direction": 16384,
+      "parameter_upload_bytes": 16,
+      "parity": true,
+      "golden_indices": [
+        0,
+        1,
+        31,
+        4095
+      ],
+      "golden_values": [
+        17,
+        2654435778,
+        683129984,
+        3647182432
+      ]
+    },
+    {
+      "kind": "sample",
+      "count": 4096,
+      "rounds": 1,
+      "repeat": -1,
+      "seed": 2654435769,
+      "workers": 8,
+      "pool_setup_ms": 0.1704,
+      "buffers_ms": 0.3762,
+      "scalar_ms": 0.0066,
+      "simd_ms": 0.0005,
+      "pool_ms": 0.0348,
+      "gpu_whole_ms": 0.0475,
+      "gpu_kernel_ms": 0.003296,
+      "gpu_wrapper_ms": 0.0486,
+      "logical_array_bytes_each_direction": 16384,
+      "parameter_upload_bytes": 16,
+      "parity": true,
+      "golden_indices": [
+        0,
+        1,
+        31,
+        4095
+      ],
+      "golden_values": [
+        3940344990,
+        4188615043,
+        2871847183,
+        2465813638
+      ]
+    },
+    {
+      "kind": "sample",
+      "count": 4096,
+      "rounds": 1,
+      "repeat": 0,
+      "seed": 2654435770,
+      "workers": 8,
+      "pool_setup_ms": 0.1704,
+      "buffers_ms": 0.3762,
+      "scalar_ms": 0.0101,
+      "simd_ms": 0.001,
+      "pool_ms": 0.0307,
+      "gpu_whole_ms": 0.0253,
+      "gpu_kernel_ms": 0.003296,
+      "gpu_wrapper_ms": 0.0258,
+      "logical_array_bytes_each_direction": 16384,
+      "parameter_upload_bytes": 16,
+      "parity": true,
+      "golden_indices": [
+        0,
+        1,
+        31,
+        4095
+      ],
+      "golden_values": [
+        3940344991,
+        4188615044,
+        2871847184,
+        2465813639
+      ]
+    },
+    {
+      "kind": "sample",
+      "count": 4096,
+      "rounds": 1,
+      "repeat": 1,
+      "seed": 2654435771,
+      "workers": 8,
+      "pool_setup_ms": 0.1704,
+      "buffers_ms": 0.3762,
+      "scalar_ms": 0.0067,
+      "simd_ms": 0.0006,
+      "pool_ms": 0.0298,
+      "gpu_whole_ms": 0.0553,
+      "gpu_kernel_ms": 0.003456,
+      "gpu_wrapper_ms": 0.0564,
+      "logical_array_bytes_each_direction": 16384,
+      "parameter_upload_bytes": 16,
+      "parity": true,
+      "golden_indices": [
+        0,
+        1,
+        31,
+        4095
+      ],
+      "golden_values": [
+        3940344992,
+        4188615045,
+        2871847185,
+        2465813640
+      ]
+    },
+    {
+      "kind": "sample",
+      "count": 4096,
+      "rounds": 1,
+      "repeat": 2,
+      "seed": 2654435772,
+      "workers": 8,
+      "pool_setup_ms": 0.1704,
+      "buffers_ms": 0.3762,
+      "scalar_ms": 0.0065,
+      "simd_ms": 0.0005,
+      "pool_ms": 0.0315,
+      "gpu_whole_ms": 0.0333,
+      "gpu_kernel_ms": 0.003296,
+      "gpu_wrapper_ms": 0.0338,
+      "logical_array_bytes_each_direction": 16384,
+      "parameter_upload_bytes": 16,
+      "parity": true,
+      "golden_indices": [
+        0,
+        1,
+        31,
+        4095
+      ],
+      "golden_values": [
+        3940344993,
+        4188615046,
+        2871847186,
+        2465813641
+      ]
+    },
+    {
+      "kind": "sample",
+      "count": 4096,
+      "rounds": 1,
+      "repeat": 3,
+      "seed": 2654435773,
+      "workers": 8,
+      "pool_setup_ms": 0.1704,
+      "buffers_ms": 0.3762,
+      "scalar_ms": 0.0052,
+      "simd_ms": 0.0005,
+      "pool_ms": 0.021,
+      "gpu_whole_ms": 0.0401,
+      "gpu_kernel_ms": 0.003296,
+      "gpu_wrapper_ms": 0.0408,
+      "logical_array_bytes_each_direction": 16384,
+      "parameter_upload_bytes": 16,
+      "parity": true,
+      "golden_indices": [
+        0,
+        1,
+        31,
+        4095
+      ],
+      "golden_values": [
+        3940344994,
+        4188615047,
+        2871847187,
+        2465813642
+      ]
+    },
+    {
+      "kind": "sample",
+      "count": 4096,
+      "rounds": 1,
+      "repeat": 4,
+      "seed": 2654435774,
+      "workers": 8,
+      "pool_setup_ms": 0.1704,
+      "buffers_ms": 0.3762,
+      "scalar_ms": 0.0052,
+      "simd_ms": 0.0005,
+      "pool_ms": 0.0397,
+      "gpu_whole_ms": 0.0258,
+      "gpu_kernel_ms": 0.003296,
+      "gpu_wrapper_ms": 0.0262,
+      "logical_array_bytes_each_direction": 16384,
+      "parameter_upload_bytes": 16,
+      "parity": true,
+      "golden_indices": [
+        0,
+        1,
+        31,
+        4095
+      ],
+      "golden_values": [
+        3940344995,
+        4188615048,
+        2871847188,
+        2465813643
+      ]
+    },
+    {
+      "kind": "sample",
+      "count": 4096,
+      "rounds": 1,
+      "repeat": 5,
+      "seed": 2654435775,
+      "workers": 8,
+      "pool_setup_ms": 0.1704,
+      "buffers_ms": 0.3762,
+      "scalar_ms": 0.0054,
+      "simd_ms": 0.0005,
+      "pool_ms": 0.0356,
+      "gpu_whole_ms": 0.341,
+      "gpu_kernel_ms": 0.003968,
+      "gpu_wrapper_ms": 0.3423,
+      "logical_array_bytes_each_direction": 16384,
+      "parameter_upload_bytes": 16,
+      "parity": true,
+      "golden_indices": [
+        0,
+        1,
+        31,
+        4095
+      ],
+      "golden_values": [
+        3940344996,
+        4188615049,
+        2871847189,
+        2465813644
+      ]
+    },
+    {
+      "kind": "sample",
+      "count": 4096,
+      "rounds": 1,
+      "repeat": 6,
+      "seed": 2654435776,
+      "workers": 8,
+      "pool_setup_ms": 0.1704,
+      "buffers_ms": 0.3762,
+      "scalar_ms": 0.0257,
+      "simd_ms": 0.0004,
+      "pool_ms": 0.0303,
+      "gpu_whole_ms": 0.0375,
+      "gpu_kernel_ms": 0.003296,
+      "gpu_wrapper_ms": 0.0379,
+      "logical_array_bytes_each_direction": 16384,
+      "parameter_upload_bytes": 16,
+      "parity": true,
+      "golden_indices": [
+        0,
+        1,
+        31,
+        4095
+      ],
+      "golden_values": [
+        3940344997,
+        4188615050,
+        2871847190,
+        2465813645
+      ]
+    },
+    {
+      "kind": "sample",
+      "count": 4096,
+      "rounds": 1,
+      "repeat": 7,
+      "seed": 2654435777,
+      "workers": 8,
+      "pool_setup_ms": 0.1704,
+      "buffers_ms": 0.3762,
+      "scalar_ms": 0.0067,
+      "simd_ms": 0.0006,
+      "pool_ms": 0.0306,
+      "gpu_whole_ms": 0.0475,
+      "gpu_kernel_ms": 0.003264,
+      "gpu_wrapper_ms": 0.0485,
+      "logical_array_bytes_each_direction": 16384,
+      "parameter_upload_bytes": 16,
+      "parity": true,
+      "golden_indices": [
+        0,
+        1,
+        31,
+        4095
+      ],
+      "golden_values": [
+        3940344998,
+        4188615051,
+        2871847191,
+        2465813646
+      ]
+    },
+    {
+      "kind": "sample",
+      "count": 4096,
+      "rounds": 1,
+      "repeat": 8,
+      "seed": 2654435778,
+      "workers": 8,
+      "pool_setup_ms": 0.1704,
+      "buffers_ms": 0.3762,
+      "scalar_ms": 0.0052,
+      "simd_ms": 0.0005,
+      "pool_ms": 0.0295,
+      "gpu_whole_ms": 0.0266,
+      "gpu_kernel_ms": 0.003296,
+      "gpu_wrapper_ms": 0.0271,
+      "logical_array_bytes_each_direction": 16384,
+      "parameter_upload_bytes": 16,
+      "parity": true,
+      "golden_indices": [
+        0,
+        1,
+        31,
+        4095
+      ],
+      "golden_values": [
+        3940344999,
+        4188615052,
+        2871847192,
+        2465813647
+      ]
+    },
+    {
+      "kind": "sample",
+      "count": 4096,
+      "rounds": 64,
+      "repeat": -1,
+      "seed": 2654435769,
+      "workers": 8,
+      "pool_setup_ms": 0.1704,
+      "buffers_ms": 0.3762,
+      "scalar_ms": 0.7208,
+      "simd_ms": 0.0806,
+      "pool_ms": 0.052,
+      "gpu_whole_ms": 0.0567,
+      "gpu_kernel_ms": 0.00432,
+      "gpu_wrapper_ms": 0.0579,
+      "logical_array_bytes_each_direction": 16384,
+      "parameter_upload_bytes": 16,
+      "parity": true,
+      "golden_indices": [
+        0,
+        1,
+        31,
+        4095
+      ],
+      "golden_values": [
+        3755089096,
+        2506705649,
+        1799710518,
+        3864471416
+      ]
+    },
+    {
+      "kind": "sample",
+      "count": 4096,
+      "rounds": 64,
+      "repeat": 0,
+      "seed": 2654435770,
+      "workers": 8,
+      "pool_setup_ms": 0.1704,
+      "buffers_ms": 0.3762,
+      "scalar_ms": 0.7544,
+      "simd_ms": 0.0806,
+      "pool_ms": 0.1391,
+      "gpu_whole_ms": 0.036,
+      "gpu_kernel_ms": 0.00432,
+      "gpu_wrapper_ms": 0.0364,
+      "logical_array_bytes_each_direction": 16384,
+      "parameter_upload_bytes": 16,
+      "parity": true,
+      "golden_indices": [
+        0,
+        1,
+        31,
+        4095
+      ],
+      "golden_values": [
+        2908276440,
+        4150822269,
+        193069159,
+        770386253
+      ]
+    },
+    {
+      "kind": "sample",
+      "count": 4096,
+      "rounds": 64,
+      "repeat": 1,
+      "seed": 2654435771,
+      "workers": 8,
+      "pool_setup_ms": 0.1704,
+      "buffers_ms": 0.3762,
+      "scalar_ms": 0.7159,
+      "simd_ms": 0.0805,
+      "pool_ms": 0.0618,
+      "gpu_whole_ms": 0.0564,
+      "gpu_kernel_ms": 0.004768,
+      "gpu_wrapper_ms": 0.0571,
+      "logical_array_bytes_each_direction": 16384,
+      "parameter_upload_bytes": 16,
+      "parity": true,
+      "golden_indices": [
+        0,
+        1,
+        31,
+        4095
+      ],
+      "golden_values": [
+        660493800,
+        1836625723,
+        1951003759,
+        1156595508
+      ]
+    },
+    {
+      "kind": "sample",
+      "count": 4096,
+      "rounds": 64,
+      "repeat": 2,
+      "seed": 2654435772,
+      "workers": 8,
+      "pool_setup_ms": 0.1704,
+      "buffers_ms": 0.3762,
+      "scalar_ms": 0.7979,
+      "simd_ms": 0.0805,
+      "pool_ms": 0.0669,
+      "gpu_whole_ms": 0.0356,
+      "gpu_kernel_ms": 0.004288,
+      "gpu_wrapper_ms": 0.0361,
+      "logical_array_bytes_each_direction": 16384,
+      "parameter_upload_bytes": 16,
+      "parity": true,
+      "golden_indices": [
+        0,
+        1,
+        31,
+        4095
+      ],
+      "golden_values": [
+        353728860,
+        3427520826,
+        1839436562,
+        1724349633
+      ]
+    },
+    {
+      "kind": "sample",
+      "count": 4096,
+      "rounds": 64,
+      "repeat": 3,
+      "seed": 2654435773,
+      "workers": 8,
+      "pool_setup_ms": 0.1704,
+      "buffers_ms": 0.3762,
+      "scalar_ms": 0.764,
+      "simd_ms": 0.0811,
+      "pool_ms": 0.086,
+      "gpu_whole_ms": 0.0591,
+      "gpu_kernel_ms": 0.004768,
+      "gpu_wrapper_ms": 0.06,
+      "logical_array_bytes_each_direction": 16384,
+      "parameter_upload_bytes": 16,
+      "parity": true,
+      "golden_indices": [
+        0,
+        1,
+        31,
+        4095
+      ],
+      "golden_values": [
+        3695175476,
+        1627996153,
+        3999425277,
+        3235459322
+      ]
+    },
+    {
+      "kind": "sample",
+      "count": 4096,
+      "rounds": 64,
+      "repeat": 4,
+      "seed": 2654435774,
+      "workers": 8,
+      "pool_setup_ms": 0.1704,
+      "buffers_ms": 0.3762,
+      "scalar_ms": 0.7515,
+      "simd_ms": 0.0812,
+      "pool_ms": 0.0855,
+      "gpu_whole_ms": 0.0671,
+      "gpu_kernel_ms": 0.004288,
+      "gpu_wrapper_ms": 0.0684,
+      "logical_array_bytes_each_direction": 16384,
+      "parameter_upload_bytes": 16,
+      "parity": true,
+      "golden_indices": [
+        0,
+        1,
+        31,
+        4095
+      ],
+      "golden_values": [
+        3400811055,
+        1297606320,
+        2611305322,
+        568508936
+      ]
+    },
+    {
+      "kind": "sample",
+      "count": 4096,
+      "rounds": 64,
+      "repeat": 5,
+      "seed": 2654435775,
+      "workers": 8,
+      "pool_setup_ms": 0.1704,
+      "buffers_ms": 0.3762,
+      "scalar_ms": 0.8954,
+      "simd_ms": 0.1006,
+      "pool_ms": 0.0702,
+      "gpu_whole_ms": 2.6279,
+      "gpu_kernel_ms": 0.004736,
+      "gpu_wrapper_ms": 2.6296,
+      "logical_array_bytes_each_direction": 16384,
+      "parameter_upload_bytes": 16,
+      "parity": true,
+      "golden_indices": [
+        0,
+        1,
+        31,
+        4095
+      ],
+      "golden_values": [
+        3507169700,
+        1070119012,
+        2748581106,
+        2670100816
+      ]
+    },
+    {
+      "kind": "sample",
+      "count": 4096,
+      "rounds": 64,
+      "repeat": 6,
+      "seed": 2654435776,
+      "workers": 8,
+      "pool_setup_ms": 0.1704,
+      "buffers_ms": 0.3762,
+      "scalar_ms": 0.8952,
+      "simd_ms": 0.1008,
+      "pool_ms": 0.0702,
+      "gpu_whole_ms": 0.7161,
+      "gpu_kernel_ms": 0.004672,
+      "gpu_wrapper_ms": 0.7176,
+      "logical_array_bytes_each_direction": 16384,
+      "parameter_upload_bytes": 16,
+      "parity": true,
+      "golden_indices": [
+        0,
+        1,
+        31,
+        4095
+      ],
+      "golden_values": [
+        1609847236,
+        3442878063,
+        2338317382,
+        2808377893
+      ]
+    },
+    {
+      "kind": "sample",
+      "count": 4096,
+      "rounds": 64,
+      "repeat": 7,
+      "seed": 2654435777,
+      "workers": 8,
+      "pool_setup_ms": 0.1704,
+      "buffers_ms": 0.3762,
+      "scalar_ms": 1.0717,
+      "simd_ms": 0.1013,
+      "pool_ms": 0.0532,
+      "gpu_whole_ms": 2.1959,
+      "gpu_kernel_ms": 0.004736,
+      "gpu_wrapper_ms": 2.1971,
+      "logical_array_bytes_each_direction": 16384,
+      "parameter_upload_bytes": 16,
+      "parity": true,
+      "golden_indices": [
+        0,
+        1,
+        31,
+        4095
+      ],
+      "golden_values": [
+        1592884430,
+        40722850,
+        699013766,
+        1577732771
+      ]
+    },
+    {
+      "kind": "sample",
+      "count": 4096,
+      "rounds": 64,
+      "repeat": 8,
+      "seed": 2654435778,
+      "workers": 8,
+      "pool_setup_ms": 0.1704,
+      "buffers_ms": 0.3762,
+      "scalar_ms": 0.7618,
+      "simd_ms": 0.0806,
+      "pool_ms": 0.0646,
+      "gpu_whole_ms": 0.2138,
+      "gpu_kernel_ms": 0.004512,
+      "gpu_wrapper_ms": 0.2154,
+      "logical_array_bytes_each_direction": 16384,
+      "parameter_upload_bytes": 16,
+      "parity": true,
+      "golden_indices": [
+        0,
+        1,
+        31,
+        4095
+      ],
+      "golden_values": [
+        903107948,
+        1880821566,
+        615237821,
+        874458679
+      ]
+    },
+    {
+      "kind": "sample",
+      "count": 65536,
+      "rounds": 0,
+      "repeat": -1,
+      "seed": 2654435769,
+      "workers": 8,
+      "pool_setup_ms": 0.1704,
+      "buffers_ms": 0.2219,
+      "scalar_ms": 0.0265,
+      "simd_ms": 0.0048,
+      "pool_ms": 0.0483,
+      "gpu_whole_ms": 0.543,
+      "gpu_kernel_ms": 0.006496,
+      "gpu_wrapper_ms": 0.5442,
+      "logical_array_bytes_each_direction": 262144,
+      "parameter_upload_bytes": 16,
+      "parity": true,
+      "golden_indices": [
+        0,
+        1,
+        31,
+        65535
+      ],
+      "golden_values": [
+        17,
+        2654435778,
+        683129984,
+        3682174560
+      ]
+    },
+    {
+      "kind": "sample",
+      "count": 65536,
+      "rounds": 0,
+      "repeat": 0,
+      "seed": 2654435770,
+      "workers": 8,
+      "pool_setup_ms": 0.1704,
+      "buffers_ms": 0.2219,
+      "scalar_ms": 0.0394,
+      "simd_ms": 0.0044,
+      "pool_ms": 0.0439,
+      "gpu_whole_ms": 0.366,
+      "gpu_kernel_ms": 0.005728,
+      "gpu_wrapper_ms": 0.3672,
+      "logical_array_bytes_each_direction": 262144,
+      "parameter_upload_bytes": 16,
+      "parity": true,
+      "golden_indices": [
+        0,
+        1,
+        31,
+        65535
+      ],
+      "golden_values": [
+        17,
+        2654435778,
+        683129984,
+        3682174560
+      ]
+    },
+    {
+      "kind": "sample",
+      "count": 65536,
+      "rounds": 0,
+      "repeat": 1,
+      "seed": 2654435771,
+      "workers": 8,
+      "pool_setup_ms": 0.1704,
+      "buffers_ms": 0.2219,
+      "scalar_ms": 0.0297,
+      "simd_ms": 0.0042,
+      "pool_ms": 0.0375,
+      "gpu_whole_ms": 0.2952,
+      "gpu_kernel_ms": 0.005472,
+      "gpu_wrapper_ms": 0.2964,
+      "logical_array_bytes_each_direction": 262144,
+      "parameter_upload_bytes": 16,
+      "parity": true,
+      "golden_indices": [
+        0,
+        1,
+        31,
+        65535
+      ],
+      "golden_values": [
+        17,
+        2654435778,
+        683129984,
+        3682174560
+      ]
+    },
+    {
+      "kind": "sample",
+      "count": 65536,
+      "rounds": 0,
+      "repeat": 2,
+      "seed": 2654435772,
+      "workers": 8,
+      "pool_setup_ms": 0.1704,
+      "buffers_ms": 0.2219,
+      "scalar_ms": 0.0395,
+      "simd_ms": 0.0043,
+      "pool_ms": 0.0417,
+      "gpu_whole_ms": 0.0942,
+      "gpu_kernel_ms": 0.004832,
+      "gpu_wrapper_ms": 0.0952,
+      "logical_array_bytes_each_direction": 262144,
+      "parameter_upload_bytes": 16,
+      "parity": true,
+      "golden_indices": [
+        0,
+        1,
+        31,
+        65535
+      ],
+      "golden_values": [
+        17,
+        2654435778,
+        683129984,
+        3682174560
+      ]
+    },
+    {
+      "kind": "sample",
+      "count": 65536,
+      "rounds": 0,
+      "repeat": 3,
+      "seed": 2654435773,
+      "workers": 8,
+      "pool_setup_ms": 0.1704,
+      "buffers_ms": 0.2219,
+      "scalar_ms": 0.0262,
+      "simd_ms": 0.0041,
+      "pool_ms": 0.0386,
+      "gpu_whole_ms": 0.1041,
+      "gpu_kernel_ms": 0.004864,
+      "gpu_wrapper_ms": 0.105,
+      "logical_array_bytes_each_direction": 262144,
+      "parameter_upload_bytes": 16,
+      "parity": true,
+      "golden_indices": [
+        0,
+        1,
+        31,
+        65535
+      ],
+      "golden_values": [
+        17,
+        2654435778,
+        683129984,
+        3682174560
+      ]
+    },
+    {
+      "kind": "sample",
+      "count": 65536,
+      "rounds": 0,
+      "repeat": 4,
+      "seed": 2654435774,
+      "workers": 8,
+      "pool_setup_ms": 0.1704,
+      "buffers_ms": 0.2219,
+      "scalar_ms": 0.0796,
+      "simd_ms": 0.0065,
+      "pool_ms": 0.0404,
+      "gpu_whole_ms": 0.3378,
+      "gpu_kernel_ms": 0.005472,
+      "gpu_wrapper_ms": 0.3397,
+      "logical_array_bytes_each_direction": 262144,
+      "parameter_upload_bytes": 16,
+      "parity": true,
+      "golden_indices": [
+        0,
+        1,
+        31,
+        65535
+      ],
+      "golden_values": [
+        17,
+        2654435778,
+        683129984,
+        3682174560
+      ]
+    },
+    {
+      "kind": "sample",
+      "count": 65536,
+      "rounds": 0,
+      "repeat": 5,
+      "seed": 2654435775,
+      "workers": 8,
+      "pool_setup_ms": 0.1704,
+      "buffers_ms": 0.2219,
+      "scalar_ms": 0.0338,
+      "simd_ms": 0.005,
+      "pool_ms": 0.0437,
+      "gpu_whole_ms": 0.2679,
+      "gpu_kernel_ms": 0.0056,
+      "gpu_wrapper_ms": 0.2694,
+      "logical_array_bytes_each_direction": 262144,
+      "parameter_upload_bytes": 16,
+      "parity": true,
+      "golden_indices": [
+        0,
+        1,
+        31,
+        65535
+      ],
+      "golden_values": [
+        17,
+        2654435778,
+        683129984,
+        3682174560
+      ]
+    },
+    {
+      "kind": "sample",
+      "count": 65536,
+      "rounds": 0,
+      "repeat": 6,
+      "seed": 2654435776,
+      "workers": 8,
+      "pool_setup_ms": 0.1704,
+      "buffers_ms": 0.2219,
+      "scalar_ms": 0.0493,
+      "simd_ms": 0.0052,
+      "pool_ms": 0.0567,
+      "gpu_whole_ms": 0.0762,
+      "gpu_kernel_ms": 0.005056,
+      "gpu_wrapper_ms": 0.0768,
+      "logical_array_bytes_each_direction": 262144,
+      "parameter_upload_bytes": 16,
+      "parity": true,
+      "golden_indices": [
+        0,
+        1,
+        31,
+        65535
+      ],
+      "golden_values": [
+        17,
+        2654435778,
+        683129984,
+        3682174560
+      ]
+    },
+    {
+      "kind": "sample",
+      "count": 65536,
+      "rounds": 0,
+      "repeat": 7,
+      "seed": 2654435777,
+      "workers": 8,
+      "pool_setup_ms": 0.1704,
+      "buffers_ms": 0.2219,
+      "scalar_ms": 0.0263,
+      "simd_ms": 0.01,
+      "pool_ms": 0.0437,
+      "gpu_whole_ms": 0.0823,
+      "gpu_kernel_ms": 0.0048,
+      "gpu_wrapper_ms": 0.083,
+      "logical_array_bytes_each_direction": 262144,
+      "parameter_upload_bytes": 16,
+      "parity": true,
+      "golden_indices": [
+        0,
+        1,
+        31,
+        65535
+      ],
+      "golden_values": [
+        17,
+        2654435778,
+        683129984,
+        3682174560
+      ]
+    },
+    {
+      "kind": "sample",
+      "count": 65536,
+      "rounds": 0,
+      "repeat": 8,
+      "seed": 2654435778,
+      "workers": 8,
+      "pool_setup_ms": 0.1704,
+      "buffers_ms": 0.2219,
+      "scalar_ms": 0.0492,
+      "simd_ms": 0.0052,
+      "pool_ms": 0.0453,
+      "gpu_whole_ms": 0.0705,
+      "gpu_kernel_ms": 0.004128,
+      "gpu_wrapper_ms": 0.071,
+      "logical_array_bytes_each_direction": 262144,
+      "parameter_upload_bytes": 16,
+      "parity": true,
+      "golden_indices": [
+        0,
+        1,
+        31,
+        65535
+      ],
+      "golden_values": [
+        17,
+        2654435778,
+        683129984,
+        3682174560
+      ]
+    },
+    {
+      "kind": "sample",
+      "count": 65536,
+      "rounds": 1,
+      "repeat": -1,
+      "seed": 2654435769,
+      "workers": 8,
+      "pool_setup_ms": 0.1704,
+      "buffers_ms": 0.2219,
+      "scalar_ms": 0.0793,
+      "simd_ms": 0.007,
+      "pool_ms": 0.0398,
+      "gpu_whole_ms": 0.1173,
+      "gpu_kernel_ms": 0.004704,
+      "gpu_wrapper_ms": 0.1185,
+      "logical_array_bytes_each_direction": 262144,
+      "parameter_upload_bytes": 16,
+      "parity": true,
+      "golden_indices": [
+        0,
+        1,
+        31,
+        65535
+      ],
+      "golden_values": [
+        3940344990,
+        4188615043,
+        2871847183,
+        767284581
+      ]
+    },
+    {
+      "kind": "sample",
+      "count": 65536,
+      "rounds": 1,
+      "repeat": 0,
+      "seed": 2654435770,
+      "workers": 8,
+      "pool_setup_ms": 0.1704,
+      "buffers_ms": 0.2219,
+      "scalar_ms": 0.0793,
+      "simd_ms": 0.0076,
+      "pool_ms": 0.0362,
+      "gpu_whole_ms": 0.0937,
+      "gpu_kernel_ms": 0.004704,
+      "gpu_wrapper_ms": 0.0945,
+      "logical_array_bytes_each_direction": 262144,
+      "parameter_upload_bytes": 16,
+      "parity": true,
+      "golden_indices": [
+        0,
+        1,
+        31,
+        65535
+      ],
+      "golden_values": [
+        3940344991,
+        4188615044,
+        2871847184,
+        767284582
+      ]
+    },
+    {
+      "kind": "sample",
+      "count": 65536,
+      "rounds": 1,
+      "repeat": 1,
+      "seed": 2654435771,
+      "workers": 8,
+      "pool_setup_ms": 0.1704,
+      "buffers_ms": 0.2219,
+      "scalar_ms": 0.0871,
+      "simd_ms": 0.0076,
+      "pool_ms": 0.0284,
+      "gpu_whole_ms": 0.1025,
+      "gpu_kernel_ms": 0.004736,
+      "gpu_wrapper_ms": 0.1033,
+      "logical_array_bytes_each_direction": 262144,
+      "parameter_upload_bytes": 16,
+      "parity": true,
+      "golden_indices": [
+        0,
+        1,
+        31,
+        65535
+      ],
+      "golden_values": [
+        3940344992,
+        4188615045,
+        2871847185,
+        767284583
+      ]
+    },
+    {
+      "kind": "sample",
+      "count": 65536,
+      "rounds": 1,
+      "repeat": 2,
+      "seed": 2654435772,
+      "workers": 8,
+      "pool_setup_ms": 0.1704,
+      "buffers_ms": 0.2219,
+      "scalar_ms": 0.0791,
+      "simd_ms": 0.0072,
+      "pool_ms": 0.0399,
+      "gpu_whole_ms": 0.0853,
+      "gpu_kernel_ms": 0.003744,
+      "gpu_wrapper_ms": 0.0859,
+      "logical_array_bytes_each_direction": 262144,
+      "parameter_upload_bytes": 16,
+      "parity": true,
+      "golden_indices": [
+        0,
+        1,
+        31,
+        65535
+      ],
+      "golden_values": [
+        3940344993,
+        4188615046,
+        2871847186,
+        767284584
+      ]
+    },
+    {
+      "kind": "sample",
+      "count": 65536,
+      "rounds": 1,
+      "repeat": 3,
+      "seed": 2654435773,
+      "workers": 8,
+      "pool_setup_ms": 0.1704,
+      "buffers_ms": 0.2219,
+      "scalar_ms": 0.0991,
+      "simd_ms": 0.0078,
+      "pool_ms": 0.0309,
+      "gpu_whole_ms": 0.0862,
+      "gpu_kernel_ms": 0.004736,
+      "gpu_wrapper_ms": 0.0873,
+      "logical_array_bytes_each_direction": 262144,
+      "parameter_upload_bytes": 16,
+      "parity": true,
+      "golden_indices": [
+        0,
+        1,
+        31,
+        65535
+      ],
+      "golden_values": [
+        3940344994,
+        4188615047,
+        2871847187,
+        767284585
+      ]
+    },
+    {
+      "kind": "sample",
+      "count": 65536,
+      "rounds": 1,
+      "repeat": 4,
+      "seed": 2654435774,
+      "workers": 8,
+      "pool_setup_ms": 0.1704,
+      "buffers_ms": 0.2219,
+      "scalar_ms": 0.0791,
+      "simd_ms": 0.0075,
+      "pool_ms": 0.0385,
+      "gpu_whole_ms": 0.0694,
+      "gpu_kernel_ms": 0.004704,
+      "gpu_wrapper_ms": 0.0701,
+      "logical_array_bytes_each_direction": 262144,
+      "parameter_upload_bytes": 16,
+      "parity": true,
+      "golden_indices": [
+        0,
+        1,
+        31,
+        65535
+      ],
+      "golden_values": [
+        3940344995,
+        4188615048,
+        2871847188,
+        767284586
+      ]
+    },
+    {
+      "kind": "sample",
+      "count": 65536,
+      "rounds": 1,
+      "repeat": 5,
+      "seed": 2654435775,
+      "workers": 8,
+      "pool_setup_ms": 0.1704,
+      "buffers_ms": 0.2219,
+      "scalar_ms": 0.0824,
+      "simd_ms": 0.0075,
+      "pool_ms": 0.0327,
+      "gpu_whole_ms": 0.0751,
+      "gpu_kernel_ms": 0.004736,
+      "gpu_wrapper_ms": 0.0758,
+      "logical_array_bytes_each_direction": 262144,
+      "parameter_upload_bytes": 16,
+      "parity": true,
+      "golden_indices": [
+        0,
+        1,
+        31,
+        65535
+      ],
+      "golden_values": [
+        3940344996,
+        4188615049,
+        2871847189,
+        767284587
+      ]
+    },
+    {
+      "kind": "sample",
+      "count": 65536,
+      "rounds": 1,
+      "repeat": 6,
+      "seed": 2654435776,
+      "workers": 8,
+      "pool_setup_ms": 0.1704,
+      "buffers_ms": 0.2219,
+      "scalar_ms": 0.0793,
+      "simd_ms": 0.0075,
+      "pool_ms": 0.0385,
+      "gpu_whole_ms": 0.0697,
+      "gpu_kernel_ms": 0.005408,
+      "gpu_wrapper_ms": 0.0704,
+      "logical_array_bytes_each_direction": 262144,
+      "parameter_upload_bytes": 16,
+      "parity": true,
+      "golden_indices": [
+        0,
+        1,
+        31,
+        65535
+      ],
+      "golden_values": [
+        3940344997,
+        4188615050,
+        2871847190,
+        767284588
+      ]
+    },
+    {
+      "kind": "sample",
+      "count": 65536,
+      "rounds": 1,
+      "repeat": 7,
+      "seed": 2654435777,
+      "workers": 8,
+      "pool_setup_ms": 0.1704,
+      "buffers_ms": 0.2219,
+      "scalar_ms": 0.0792,
+      "simd_ms": 0.0076,
+      "pool_ms": 0.0248,
+      "gpu_whole_ms": 0.1106,
+      "gpu_kernel_ms": 0.0048,
+      "gpu_wrapper_ms": 0.1117,
+      "logical_array_bytes_each_direction": 262144,
+      "parameter_upload_bytes": 16,
+      "parity": true,
+      "golden_indices": [
+        0,
+        1,
+        31,
+        65535
+      ],
+      "golden_values": [
+        3940344998,
+        4188615051,
+        2871847191,
+        767284589
+      ]
+    },
+    {
+      "kind": "sample",
+      "count": 65536,
+      "rounds": 1,
+      "repeat": 8,
+      "seed": 2654435778,
+      "workers": 8,
+      "pool_setup_ms": 0.1704,
+      "buffers_ms": 0.2219,
+      "scalar_ms": 0.0793,
+      "simd_ms": 0.0071,
+      "pool_ms": 0.0311,
+      "gpu_whole_ms": 0.288,
+      "gpu_kernel_ms": 0.005504,
+      "gpu_wrapper_ms": 0.2891,
+      "logical_array_bytes_each_direction": 262144,
+      "parameter_upload_bytes": 16,
+      "parity": true,
+      "golden_indices": [
+        0,
+        1,
+        31,
+        65535
+      ],
+      "golden_values": [
+        3940344999,
+        4188615052,
+        2871847192,
+        767284590
+      ]
+    },
+    {
+      "kind": "sample",
+      "count": 65536,
+      "rounds": 64,
+      "repeat": -1,
+      "seed": 2654435769,
+      "workers": 8,
+      "pool_setup_ms": 0.1704,
+      "buffers_ms": 0.2219,
+      "scalar_ms": 12.6232,
+      "simd_ms": 1.3587,
+      "pool_ms": 0.4282,
+      "gpu_whole_ms": 0.1382,
+      "gpu_kernel_ms": 0.011008,
+      "gpu_wrapper_ms": 0.1395,
+      "logical_array_bytes_each_direction": 262144,
+      "parameter_upload_bytes": 16,
+      "parity": true,
+      "golden_indices": [
+        0,
+        1,
+        31,
+        65535
+      ],
+      "golden_values": [
+        3755089096,
+        2506705649,
+        1799710518,
+        1045711610
+      ]
+    },
+    {
+      "kind": "sample",
+      "count": 65536,
+      "rounds": 64,
+      "repeat": 0,
+      "seed": 2654435770,
+      "workers": 8,
+      "pool_setup_ms": 0.1704,
+      "buffers_ms": 0.2219,
+      "scalar_ms": 12.6827,
+      "simd_ms": 1.5897,
+      "pool_ms": 0.4038,
+      "gpu_whole_ms": 0.1096,
+      "gpu_kernel_ms": 0.009792,
+      "gpu_wrapper_ms": 0.1104,
+      "logical_array_bytes_each_direction": 262144,
+      "parameter_upload_bytes": 16,
+      "parity": true,
+      "golden_indices": [
+        0,
+        1,
+        31,
+        65535
+      ],
+      "golden_values": [
+        2908276440,
+        4150822269,
+        193069159,
+        3110973678
+      ]
+    },
+    {
+      "kind": "sample",
+      "count": 65536,
+      "rounds": 64,
+      "repeat": 1,
+      "seed": 2654435771,
+      "workers": 8,
+      "pool_setup_ms": 0.1704,
+      "buffers_ms": 0.2219,
+      "scalar_ms": 12.2173,
+      "simd_ms": 1.6522,
+      "pool_ms": 0.4485,
+      "gpu_whole_ms": 0.179,
+      "gpu_kernel_ms": 0.011776,
+      "gpu_wrapper_ms": 0.1802,
+      "logical_array_bytes_each_direction": 262144,
+      "parameter_upload_bytes": 16,
+      "parity": true,
+      "golden_indices": [
+        0,
+        1,
+        31,
+        65535
+      ],
+      "golden_values": [
+        660493800,
+        1836625723,
+        1951003759,
+        827665465
+      ]
+    },
+    {
+      "kind": "sample",
+      "count": 65536,
+      "rounds": 64,
+      "repeat": 2,
+      "seed": 2654435772,
+      "workers": 8,
+      "pool_setup_ms": 0.1704,
+      "buffers_ms": 0.2219,
+      "scalar_ms": 12.3185,
+      "simd_ms": 1.3105,
+      "pool_ms": 0.4563,
+      "gpu_whole_ms": 0.1325,
+      "gpu_kernel_ms": 0.010944,
+      "gpu_wrapper_ms": 0.1338,
+      "logical_array_bytes_each_direction": 262144,
+      "parameter_upload_bytes": 16,
+      "parity": true,
+      "golden_indices": [
+        0,
+        1,
+        31,
+        65535
+      ],
+      "golden_values": [
+        353728860,
+        3427520826,
+        1839436562,
+        3909140330
+      ]
+    },
+    {
+      "kind": "sample",
+      "count": 65536,
+      "rounds": 64,
+      "repeat": 3,
+      "seed": 2654435773,
+      "workers": 8,
+      "pool_setup_ms": 0.1704,
+      "buffers_ms": 0.2219,
+      "scalar_ms": 12.2335,
+      "simd_ms": 1.297,
+      "pool_ms": 0.4889,
+      "gpu_whole_ms": 0.3784,
+      "gpu_kernel_ms": 0.01024,
+      "gpu_wrapper_ms": 0.3796,
+      "logical_array_bytes_each_direction": 262144,
+      "parameter_upload_bytes": 16,
+      "parity": true,
+      "golden_indices": [
+        0,
+        1,
+        31,
+        65535
+      ],
+      "golden_values": [
+        3695175476,
+        1627996153,
+        3999425277,
+        3969613136
+      ]
+    },
+    {
+      "kind": "sample",
+      "count": 65536,
+      "rounds": 64,
+      "repeat": 4,
+      "seed": 2654435774,
+      "workers": 8,
+      "pool_setup_ms": 0.1704,
+      "buffers_ms": 0.2219,
+      "scalar_ms": 12.6662,
+      "simd_ms": 1.3218,
+      "pool_ms": 0.3753,
+      "gpu_whole_ms": 0.1353,
+      "gpu_kernel_ms": 0.009856,
+      "gpu_wrapper_ms": 0.136,
+      "logical_array_bytes_each_direction": 262144,
+      "parameter_upload_bytes": 16,
+      "parity": true,
+      "golden_indices": [
+        0,
+        1,
+        31,
+        65535
+      ],
+      "golden_values": [
+        3400811055,
+        1297606320,
+        2611305322,
+        1652029419
+      ]
+    },
+    {
+      "kind": "sample",
+      "count": 65536,
+      "rounds": 64,
+      "repeat": 5,
+      "seed": 2654435775,
+      "workers": 8,
+      "pool_setup_ms": 0.1704,
+      "buffers_ms": 0.2219,
+      "scalar_ms": 12.2688,
+      "simd_ms": 1.2955,
+      "pool_ms": 0.4245,
+      "gpu_whole_ms": 0.162,
+      "gpu_kernel_ms": 0.00928,
+      "gpu_wrapper_ms": 0.1634,
+      "logical_array_bytes_each_direction": 262144,
+      "parameter_upload_bytes": 16,
+      "parity": true,
+      "golden_indices": [
+        0,
+        1,
+        31,
+        65535
+      ],
+      "golden_values": [
+        3507169700,
+        1070119012,
+        2748581106,
+        3211026344
+      ]
+    },
+    {
+      "kind": "sample",
+      "count": 65536,
+      "rounds": 64,
+      "repeat": 6,
+      "seed": 2654435776,
+      "workers": 8,
+      "pool_setup_ms": 0.1704,
+      "buffers_ms": 0.2219,
+      "scalar_ms": 11.9545,
+      "simd_ms": 1.3102,
+      "pool_ms": 0.3298,
+      "gpu_whole_ms": 0.0815,
+      "gpu_kernel_ms": 0.009344,
+      "gpu_wrapper_ms": 0.0823,
+      "logical_array_bytes_each_direction": 262144,
+      "parameter_upload_bytes": 16,
+      "parity": true,
+      "golden_indices": [
+        0,
+        1,
+        31,
+        65535
+      ],
+      "golden_values": [
+        1609847236,
+        3442878063,
+        2338317382,
+        3519233982
+      ]
+    },
+    {
+      "kind": "sample",
+      "count": 65536,
+      "rounds": 64,
+      "repeat": 7,
+      "seed": 2654435777,
+      "workers": 8,
+      "pool_setup_ms": 0.1704,
+      "buffers_ms": 0.2219,
+      "scalar_ms": 12.6368,
+      "simd_ms": 1.3051,
+      "pool_ms": 0.5034,
+      "gpu_whole_ms": 0.202,
+      "gpu_kernel_ms": 0.010496,
+      "gpu_wrapper_ms": 0.2033,
+      "logical_array_bytes_each_direction": 262144,
+      "parameter_upload_bytes": 16,
+      "parity": true,
+      "golden_indices": [
+        0,
+        1,
+        31,
+        65535
+      ],
+      "golden_values": [
+        1592884430,
+        40722850,
+        699013766,
+        1854933690
+      ]
+    },
+    {
+      "kind": "sample",
+      "count": 65536,
+      "rounds": 64,
+      "repeat": 8,
+      "seed": 2654435778,
+      "workers": 8,
+      "pool_setup_ms": 0.1704,
+      "buffers_ms": 0.2219,
+      "scalar_ms": 12.2451,
+      "simd_ms": 1.6059,
+      "pool_ms": 0.3952,
+      "gpu_whole_ms": 0.106,
+      "gpu_kernel_ms": 0.009856,
+      "gpu_wrapper_ms": 0.1068,
+      "logical_array_bytes_each_direction": 262144,
+      "parameter_upload_bytes": 16,
+      "parity": true,
+      "golden_indices": [
+        0,
+        1,
+        31,
+        65535
+      ],
+      "golden_values": [
+        903107948,
+        1880821566,
+        615237821,
+        400829688
+      ]
+    },
+    {
+      "kind": "sample",
+      "count": 1048576,
+      "rounds": 0,
+      "repeat": -1,
+      "seed": 2654435769,
+      "workers": 8,
+      "pool_setup_ms": 0.1704,
+      "buffers_ms": 0.2174,
+      "scalar_ms": 0.4204,
+      "simd_ms": 0.0856,
+      "pool_ms": 0.0718,
+      "gpu_whole_ms": 3.8442,
+      "gpu_kernel_ms": 0.020608,
+      "gpu_wrapper_ms": 3.8458,
+      "logical_array_bytes_each_direction": 4194304,
+      "parameter_upload_bytes": 16,
+      "parity": true,
+      "golden_indices": [
+        0,
+        1,
+        31,
+        1048575
+      ],
+      "golden_values": [
+        17,
+        2654435778,
+        683129984,
+        4242048608
+      ]
+    },
+    {
+      "kind": "sample",
+      "count": 1048576,
+      "rounds": 0,
+      "repeat": 0,
+      "seed": 2654435770,
+      "workers": 8,
+      "pool_setup_ms": 0.1704,
+      "buffers_ms": 0.2174,
+      "scalar_ms": 0.6393,
+      "simd_ms": 0.0683,
+      "pool_ms": 0.0722,
+      "gpu_whole_ms": 1.544,
+      "gpu_kernel_ms": 0.018304,
+      "gpu_wrapper_ms": 1.5453,
+      "logical_array_bytes_each_direction": 4194304,
+      "parameter_upload_bytes": 16,
+      "parity": true,
+      "golden_indices": [
+        0,
+        1,
+        31,
+        1048575
+      ],
+      "golden_values": [
+        17,
+        2654435778,
+        683129984,
+        4242048608
+      ]
+    },
+    {
+      "kind": "sample",
+      "count": 1048576,
+      "rounds": 0,
+      "repeat": 1,
+      "seed": 2654435771,
+      "workers": 8,
+      "pool_setup_ms": 0.1704,
+      "buffers_ms": 0.2174,
+      "scalar_ms": 0.4253,
+      "simd_ms": 0.0663,
+      "pool_ms": 0.0607,
+      "gpu_whole_ms": 0.6696,
+      "gpu_kernel_ms": 0.010848,
+      "gpu_wrapper_ms": 0.6709,
+      "logical_array_bytes_each_direction": 4194304,
+      "parameter_upload_bytes": 16,
+      "parity": true,
+      "golden_indices": [
+        0,
+        1,
+        31,
+        1048575
+      ],
+      "golden_values": [
+        17,
+        2654435778,
+        683129984,
+        4242048608
+      ]
+    },
+    {
+      "kind": "sample",
+      "count": 1048576,
+      "rounds": 0,
+      "repeat": 2,
+      "seed": 2654435772,
+      "workers": 8,
+      "pool_setup_ms": 0.1704,
+      "buffers_ms": 0.2174,
+      "scalar_ms": 0.6298,
+      "simd_ms": 0.0626,
+      "pool_ms": 0.0693,
+      "gpu_whole_ms": 0.6505,
+      "gpu_kernel_ms": 0.011744,
+      "gpu_wrapper_ms": 0.6518,
+      "logical_array_bytes_each_direction": 4194304,
+      "parameter_upload_bytes": 16,
+      "parity": true,
+      "golden_indices": [
+        0,
+        1,
+        31,
+        1048575
+      ],
+      "golden_values": [
+        17,
+        2654435778,
+        683129984,
+        4242048608
+      ]
+    },
+    {
+      "kind": "sample",
+      "count": 1048576,
+      "rounds": 0,
+      "repeat": 3,
+      "seed": 2654435773,
+      "workers": 8,
+      "pool_setup_ms": 0.1704,
+      "buffers_ms": 0.2174,
+      "scalar_ms": 0.488,
+      "simd_ms": 0.0693,
+      "pool_ms": 0.0664,
+      "gpu_whole_ms": 0.6387,
+      "gpu_kernel_ms": 0.01072,
+      "gpu_wrapper_ms": 0.6394,
+      "logical_array_bytes_each_direction": 4194304,
+      "parameter_upload_bytes": 16,
+      "parity": true,
+      "golden_indices": [
+        0,
+        1,
+        31,
+        1048575
+      ],
+      "golden_values": [
+        17,
+        2654435778,
+        683129984,
+        4242048608
+      ]
+    },
+    {
+      "kind": "sample",
+      "count": 1048576,
+      "rounds": 0,
+      "repeat": 4,
+      "seed": 2654435774,
+      "workers": 8,
+      "pool_setup_ms": 0.1704,
+      "buffers_ms": 0.2174,
+      "scalar_ms": 0.6456,
+      "simd_ms": 0.0648,
+      "pool_ms": 0.0735,
+      "gpu_whole_ms": 0.6517,
+      "gpu_kernel_ms": 0.011744,
+      "gpu_wrapper_ms": 0.6524,
+      "logical_array_bytes_each_direction": 4194304,
+      "parameter_upload_bytes": 16,
+      "parity": true,
+      "golden_indices": [
+        0,
+        1,
+        31,
+        1048575
+      ],
+      "golden_values": [
+        17,
+        2654435778,
+        683129984,
+        4242048608
+      ]
+    },
+    {
+      "kind": "sample",
+      "count": 1048576,
+      "rounds": 0,
+      "repeat": 5,
+      "seed": 2654435775,
+      "workers": 8,
+      "pool_setup_ms": 0.1704,
+      "buffers_ms": 0.2174,
+      "scalar_ms": 0.4201,
+      "simd_ms": 0.0704,
+      "pool_ms": 0.0869,
+      "gpu_whole_ms": 0.6554,
+      "gpu_kernel_ms": 0.010752,
+      "gpu_wrapper_ms": 0.6565,
+      "logical_array_bytes_each_direction": 4194304,
+      "parameter_upload_bytes": 16,
+      "parity": true,
+      "golden_indices": [
+        0,
+        1,
+        31,
+        1048575
+      ],
+      "golden_values": [
+        17,
+        2654435778,
+        683129984,
+        4242048608
+      ]
+    },
+    {
+      "kind": "sample",
+      "count": 1048576,
+      "rounds": 0,
+      "repeat": 6,
+      "seed": 2654435776,
+      "workers": 8,
+      "pool_setup_ms": 0.1704,
+      "buffers_ms": 0.2174,
+      "scalar_ms": 0.6301,
+      "simd_ms": 0.0635,
+      "pool_ms": 0.0615,
+      "gpu_whole_ms": 0.6434,
+      "gpu_kernel_ms": 0.011712,
+      "gpu_wrapper_ms": 0.6441,
+      "logical_array_bytes_each_direction": 4194304,
+      "parameter_upload_bytes": 16,
+      "parity": true,
+      "golden_indices": [
+        0,
+        1,
+        31,
+        1048575
+      ],
+      "golden_values": [
+        17,
+        2654435778,
+        683129984,
+        4242048608
+      ]
+    },
+    {
+      "kind": "sample",
+      "count": 1048576,
+      "rounds": 0,
+      "repeat": 7,
+      "seed": 2654435777,
+      "workers": 8,
+      "pool_setup_ms": 0.1704,
+      "buffers_ms": 0.2174,
+      "scalar_ms": 0.6455,
+      "simd_ms": 0.0647,
+      "pool_ms": 0.067,
+      "gpu_whole_ms": 0.6998,
+      "gpu_kernel_ms": 0.010752,
+      "gpu_wrapper_ms": 0.7012,
+      "logical_array_bytes_each_direction": 4194304,
+      "parameter_upload_bytes": 16,
+      "parity": true,
+      "golden_indices": [
+        0,
+        1,
+        31,
+        1048575
+      ],
+      "golden_values": [
+        17,
+        2654435778,
+        683129984,
+        4242048608
+      ]
+    },
+    {
+      "kind": "sample",
+      "count": 1048576,
+      "rounds": 0,
+      "repeat": 8,
+      "seed": 2654435778,
+      "workers": 8,
+      "pool_setup_ms": 0.1704,
+      "buffers_ms": 0.2174,
+      "scalar_ms": 0.6327,
+      "simd_ms": 0.0657,
+      "pool_ms": 0.0666,
+      "gpu_whole_ms": 0.6826,
+      "gpu_kernel_ms": 0.01104,
+      "gpu_wrapper_ms": 0.6839,
+      "logical_array_bytes_each_direction": 4194304,
+      "parameter_upload_bytes": 16,
+      "parity": true,
+      "golden_indices": [
+        0,
+        1,
+        31,
+        1048575
+      ],
+      "golden_values": [
+        17,
+        2654435778,
+        683129984,
+        4242048608
+      ]
+    },
+    {
+      "kind": "sample",
+      "count": 1048576,
+      "rounds": 1,
+      "repeat": -1,
+      "seed": 2654435769,
+      "workers": 8,
+      "pool_setup_ms": 0.1704,
+      "buffers_ms": 0.2174,
+      "scalar_ms": 1.5229,
+      "simd_ms": 0.1078,
+      "pool_ms": 0.1214,
+      "gpu_whole_ms": 0.6985,
+      "gpu_kernel_ms": 0.011424,
+      "gpu_wrapper_ms": 0.7001,
+      "logical_array_bytes_each_direction": 4194304,
+      "parameter_upload_bytes": 16,
+      "parity": true,
+      "golden_indices": [
+        0,
+        1,
+        31,
+        1048575
+      ],
+      "golden_values": [
+        3940344990,
+        4188615043,
+        2871847183,
+        521240916
+      ]
+    },
+    {
+      "kind": "sample",
+      "count": 1048576,
+      "rounds": 1,
+      "repeat": 0,
+      "seed": 2654435770,
+      "workers": 8,
+      "pool_setup_ms": 0.1704,
+      "buffers_ms": 0.2174,
+      "scalar_ms": 1.362,
+      "simd_ms": 0.1131,
+      "pool_ms": 0.0862,
+      "gpu_whole_ms": 0.6679,
+      "gpu_kernel_ms": 0.012544,
+      "gpu_wrapper_ms": 0.669,
+      "logical_array_bytes_each_direction": 4194304,
+      "parameter_upload_bytes": 16,
+      "parity": true,
+      "golden_indices": [
+        0,
+        1,
+        31,
+        1048575
+      ],
+      "golden_values": [
+        3940344991,
+        4188615044,
+        2871847184,
+        521240917
+      ]
+    },
+    {
+      "kind": "sample",
+      "count": 1048576,
+      "rounds": 1,
+      "repeat": 1,
+      "seed": 2654435771,
+      "workers": 8,
+      "pool_setup_ms": 0.1704,
+      "buffers_ms": 0.2174,
+      "scalar_ms": 1.5151,
+      "simd_ms": 0.1209,
+      "pool_ms": 0.1708,
+      "gpu_whole_ms": 0.6536,
+      "gpu_kernel_ms": 0.01136,
+      "gpu_wrapper_ms": 0.655,
+      "logical_array_bytes_each_direction": 4194304,
+      "parameter_upload_bytes": 16,
+      "parity": true,
+      "golden_indices": [
+        0,
+        1,
+        31,
+        1048575
+      ],
+      "golden_values": [
+        3940344992,
+        4188615045,
+        2871847185,
+        521240918
+      ]
+    },
+    {
+      "kind": "sample",
+      "count": 1048576,
+      "rounds": 1,
+      "repeat": 2,
+      "seed": 2654435772,
+      "workers": 8,
+      "pool_setup_ms": 0.1704,
+      "buffers_ms": 0.2174,
+      "scalar_ms": 1.4846,
+      "simd_ms": 0.1213,
+      "pool_ms": 0.0789,
+      "gpu_whole_ms": 0.6577,
+      "gpu_kernel_ms": 0.012352,
+      "gpu_wrapper_ms": 0.6585,
+      "logical_array_bytes_each_direction": 4194304,
+      "parameter_upload_bytes": 16,
+      "parity": true,
+      "golden_indices": [
+        0,
+        1,
+        31,
+        1048575
+      ],
+      "golden_values": [
+        3940344993,
+        4188615046,
+        2871847186,
+        521240919
+      ]
+    },
+    {
+      "kind": "sample",
+      "count": 1048576,
+      "rounds": 1,
+      "repeat": 3,
+      "seed": 2654435773,
+      "workers": 8,
+      "pool_setup_ms": 0.1704,
+      "buffers_ms": 0.2174,
+      "scalar_ms": 1.3031,
+      "simd_ms": 0.1122,
+      "pool_ms": 0.0829,
+      "gpu_whole_ms": 2.8389,
+      "gpu_kernel_ms": 0.020192,
+      "gpu_wrapper_ms": 2.8405,
+      "logical_array_bytes_each_direction": 4194304,
+      "parameter_upload_bytes": 16,
+      "parity": true,
+      "golden_indices": [
+        0,
+        1,
+        31,
+        1048575
+      ],
+      "golden_values": [
+        3940344994,
+        4188615047,
+        2871847187,
+        521240920
+      ]
+    },
+    {
+      "kind": "sample",
+      "count": 1048576,
+      "rounds": 1,
+      "repeat": 4,
+      "seed": 2654435774,
+      "workers": 8,
+      "pool_setup_ms": 0.1704,
+      "buffers_ms": 0.2174,
+      "scalar_ms": 1.4095,
+      "simd_ms": 0.1266,
+      "pool_ms": 0.0945,
+      "gpu_whole_ms": 1.722,
+      "gpu_kernel_ms": 0.019136,
+      "gpu_wrapper_ms": 1.7232,
+      "logical_array_bytes_each_direction": 4194304,
+      "parameter_upload_bytes": 16,
+      "parity": true,
+      "golden_indices": [
+        0,
+        1,
+        31,
+        1048575
+      ],
+      "golden_values": [
+        3940344995,
+        4188615048,
+        2871847188,
+        521240921
+      ]
+    },
+    {
+      "kind": "sample",
+      "count": 1048576,
+      "rounds": 1,
+      "repeat": 5,
+      "seed": 2654435775,
+      "workers": 8,
+      "pool_setup_ms": 0.1704,
+      "buffers_ms": 0.2174,
+      "scalar_ms": 1.6033,
+      "simd_ms": 0.1216,
+      "pool_ms": 0.0964,
+      "gpu_whole_ms": 0.7575,
+      "gpu_kernel_ms": 0.02048,
+      "gpu_wrapper_ms": 0.7589,
+      "logical_array_bytes_each_direction": 4194304,
+      "parameter_upload_bytes": 16,
+      "parity": true,
+      "golden_indices": [
+        0,
+        1,
+        31,
+        1048575
+      ],
+      "golden_values": [
+        3940344996,
+        4188615049,
+        2871847189,
+        521240922
+      ]
+    },
+    {
+      "kind": "sample",
+      "count": 1048576,
+      "rounds": 1,
+      "repeat": 6,
+      "seed": 2654435776,
+      "workers": 8,
+      "pool_setup_ms": 0.1704,
+      "buffers_ms": 0.2174,
+      "scalar_ms": 1.3745,
+      "simd_ms": 0.1078,
+      "pool_ms": 0.0866,
+      "gpu_whole_ms": 0.6843,
+      "gpu_kernel_ms": 0.012352,
+      "gpu_wrapper_ms": 0.6853,
+      "logical_array_bytes_each_direction": 4194304,
+      "parameter_upload_bytes": 16,
+      "parity": true,
+      "golden_indices": [
+        0,
+        1,
+        31,
+        1048575
+      ],
+      "golden_values": [
+        3940344997,
+        4188615050,
+        2871847190,
+        521240923
+      ]
+    },
+    {
+      "kind": "sample",
+      "count": 1048576,
+      "rounds": 1,
+      "repeat": 7,
+      "seed": 2654435777,
+      "workers": 8,
+      "pool_setup_ms": 0.1704,
+      "buffers_ms": 0.2174,
+      "scalar_ms": 1.2681,
+      "simd_ms": 0.1265,
+      "pool_ms": 0.079,
+      "gpu_whole_ms": 0.6808,
+      "gpu_kernel_ms": 0.011328,
+      "gpu_wrapper_ms": 0.6821,
+      "logical_array_bytes_each_direction": 4194304,
+      "parameter_upload_bytes": 16,
+      "parity": true,
+      "golden_indices": [
+        0,
+        1,
+        31,
+        1048575
+      ],
+      "golden_values": [
+        3940344998,
+        4188615051,
+        2871847191,
+        521240924
+      ]
+    },
+    {
+      "kind": "sample",
+      "count": 1048576,
+      "rounds": 1,
+      "repeat": 8,
+      "seed": 2654435778,
+      "workers": 8,
+      "pool_setup_ms": 0.1704,
+      "buffers_ms": 0.2174,
+      "scalar_ms": 1.56,
+      "simd_ms": 0.1215,
+      "pool_ms": 0.1156,
+      "gpu_whole_ms": 0.6934,
+      "gpu_kernel_ms": 0.012256,
+      "gpu_wrapper_ms": 0.6949,
+      "logical_array_bytes_each_direction": 4194304,
+      "parameter_upload_bytes": 16,
+      "parity": true,
+      "golden_indices": [
+        0,
+        1,
+        31,
+        1048575
+      ],
+      "golden_values": [
+        3940344999,
+        4188615052,
+        2871847192,
+        521240925
+      ]
+    },
+    {
+      "kind": "sample",
+      "count": 1048576,
+      "rounds": 64,
+      "repeat": -1,
+      "seed": 2654435769,
+      "workers": 8,
+      "pool_setup_ms": 0.1704,
+      "buffers_ms": 0.2174,
+      "scalar_ms": 198.046,
+      "simd_ms": 23.3214,
+      "pool_ms": 4.0331,
+      "gpu_whole_ms": 1.0768,
+      "gpu_kernel_ms": 0.081248,
+      "gpu_wrapper_ms": 1.0787,
+      "logical_array_bytes_each_direction": 4194304,
+      "parameter_upload_bytes": 16,
+      "parity": true,
+      "golden_indices": [
+        0,
+        1,
+        31,
+        1048575
+      ],
+      "golden_values": [
+        3755089096,
+        2506705649,
+        1799710518,
+        2900499044
+      ]
+    },
+    {
+      "kind": "sample",
+      "count": 1048576,
+      "rounds": 64,
+      "repeat": 0,
+      "seed": 2654435770,
+      "workers": 8,
+      "pool_setup_ms": 0.1704,
+      "buffers_ms": 0.2174,
+      "scalar_ms": 199.4187,
+      "simd_ms": 22.4844,
+      "pool_ms": 4.9765,
+      "gpu_whole_ms": 1.1098,
+      "gpu_kernel_ms": 0.082176,
+      "gpu_wrapper_ms": 1.1111,
+      "logical_array_bytes_each_direction": 4194304,
+      "parameter_upload_bytes": 16,
+      "parity": true,
+      "golden_indices": [
+        0,
+        1,
+        31,
+        1048575
+      ],
+      "golden_values": [
+        2908276440,
+        4150822269,
+        193069159,
+        3069811465
+      ]
+    },
+    {
+      "kind": "sample",
+      "count": 1048576,
+      "rounds": 64,
+      "repeat": 1,
+      "seed": 2654435771,
+      "workers": 8,
+      "pool_setup_ms": 0.1704,
+      "buffers_ms": 0.2174,
+      "scalar_ms": 197.5975,
+      "simd_ms": 23.4256,
+      "pool_ms": 3.5525,
+      "gpu_whole_ms": 0.8747,
+      "gpu_kernel_ms": 0.081696,
+      "gpu_wrapper_ms": 0.8764,
+      "logical_array_bytes_each_direction": 4194304,
+      "parameter_upload_bytes": 16,
+      "parity": true,
+      "golden_indices": [
+        0,
+        1,
+        31,
+        1048575
+      ],
+      "golden_values": [
+        660493800,
+        1836625723,
+        1951003759,
+        2717484918
+      ]
+    },
+    {
+      "kind": "sample",
+      "count": 1048576,
+      "rounds": 64,
+      "repeat": 2,
+      "seed": 2654435772,
+      "workers": 8,
+      "pool_setup_ms": 0.1704,
+      "buffers_ms": 0.2174,
+      "scalar_ms": 195.4551,
+      "simd_ms": 22.373,
+      "pool_ms": 4.4574,
+      "gpu_whole_ms": 0.7342,
+      "gpu_kernel_ms": 0.082336,
+      "gpu_wrapper_ms": 0.7351,
+      "logical_array_bytes_each_direction": 4194304,
+      "parameter_upload_bytes": 16,
+      "parity": true,
+      "golden_indices": [
+        0,
+        1,
+        31,
+        1048575
+      ],
+      "golden_values": [
+        353728860,
+        3427520826,
+        1839436562,
+        3548040116
+      ]
+    },
+    {
+      "kind": "sample",
+      "count": 1048576,
+      "rounds": 64,
+      "repeat": 3,
+      "seed": 2654435773,
+      "workers": 8,
+      "pool_setup_ms": 0.1704,
+      "buffers_ms": 0.2174,
+      "scalar_ms": 197.6344,
+      "simd_ms": 23.5836,
+      "pool_ms": 4.0463,
+      "gpu_whole_ms": 0.8434,
+      "gpu_kernel_ms": 0.082048,
+      "gpu_wrapper_ms": 0.8454,
+      "logical_array_bytes_each_direction": 4194304,
+      "parameter_upload_bytes": 16,
+      "parity": true,
+      "golden_indices": [
+        0,
+        1,
+        31,
+        1048575
+      ],
+      "golden_values": [
+        3695175476,
+        1627996153,
+        3999425277,
+        3561963784
+      ]
+    },
+    {
+      "kind": "sample",
+      "count": 1048576,
+      "rounds": 64,
+      "repeat": 4,
+      "seed": 2654435774,
+      "workers": 8,
+      "pool_setup_ms": 0.1704,
+      "buffers_ms": 0.2174,
+      "scalar_ms": 194.0024,
+      "simd_ms": 21.7017,
+      "pool_ms": 3.4093,
+      "gpu_whole_ms": 0.7175,
+      "gpu_kernel_ms": 0.082208,
+      "gpu_wrapper_ms": 0.7183,
+      "logical_array_bytes_each_direction": 4194304,
+      "parameter_upload_bytes": 16,
+      "parity": true,
+      "golden_indices": [
+        0,
+        1,
+        31,
+        1048575
+      ],
+      "golden_values": [
+        3400811055,
+        1297606320,
+        2611305322,
+        116767221
+      ]
+    },
+    {
+      "kind": "sample",
+      "count": 1048576,
+      "rounds": 64,
+      "repeat": 5,
+      "seed": 2654435775,
+      "workers": 8,
+      "pool_setup_ms": 0.1704,
+      "buffers_ms": 0.2174,
+      "scalar_ms": 201.0993,
+      "simd_ms": 22.661,
+      "pool_ms": 4.0522,
+      "gpu_whole_ms": 0.8567,
+      "gpu_kernel_ms": 0.081504,
+      "gpu_wrapper_ms": 0.8585,
+      "logical_array_bytes_each_direction": 4194304,
+      "parameter_upload_bytes": 16,
+      "parity": true,
+      "golden_indices": [
+        0,
+        1,
+        31,
+        1048575
+      ],
+      "golden_values": [
+        3507169700,
+        1070119012,
+        2748581106,
+        666217140
+      ]
+    },
+    {
+      "kind": "sample",
+      "count": 1048576,
+      "rounds": 64,
+      "repeat": 6,
+      "seed": 2654435776,
+      "workers": 8,
+      "pool_setup_ms": 0.1704,
+      "buffers_ms": 0.2174,
+      "scalar_ms": 196.9012,
+      "simd_ms": 24.2387,
+      "pool_ms": 3.7617,
+      "gpu_whole_ms": 1.8657,
+      "gpu_kernel_ms": 0.082496,
+      "gpu_wrapper_ms": 1.8671,
+      "logical_array_bytes_each_direction": 4194304,
+      "parameter_upload_bytes": 16,
+      "parity": true,
+      "golden_indices": [
+        0,
+        1,
+        31,
+        1048575
+      ],
+      "golden_values": [
+        1609847236,
+        3442878063,
+        2338317382,
+        1422744726
+      ]
+    },
+    {
+      "kind": "sample",
+      "count": 1048576,
+      "rounds": 64,
+      "repeat": 7,
+      "seed": 2654435777,
+      "workers": 8,
+      "pool_setup_ms": 0.1704,
+      "buffers_ms": 0.2174,
+      "scalar_ms": 198.9892,
+      "simd_ms": 22.627,
+      "pool_ms": 3.8262,
+      "gpu_whole_ms": 0.8887,
+      "gpu_kernel_ms": 0.082208,
+      "gpu_wrapper_ms": 0.8906,
+      "logical_array_bytes_each_direction": 4194304,
+      "parameter_upload_bytes": 16,
+      "parity": true,
+      "golden_indices": [
+        0,
+        1,
+        31,
+        1048575
+      ],
+      "golden_values": [
+        1592884430,
+        40722850,
+        699013766,
+        2263140955
+      ]
+    },
+    {
+      "kind": "sample",
+      "count": 1048576,
+      "rounds": 64,
+      "repeat": 8,
+      "seed": 2654435778,
+      "workers": 8,
+      "pool_setup_ms": 0.1704,
+      "buffers_ms": 0.2174,
+      "scalar_ms": 196.5207,
+      "simd_ms": 22.1139,
+      "pool_ms": 3.6172,
+      "gpu_whole_ms": 0.7407,
+      "gpu_kernel_ms": 0.082016,
+      "gpu_wrapper_ms": 0.7417,
+      "logical_array_bytes_each_direction": 4194304,
+      "parameter_upload_bytes": 16,
+      "parity": true,
+      "golden_indices": [
+        0,
+        1,
+        31,
+        1048575
+      ],
+      "golden_values": [
+        903107948,
+        1880821566,
+        615237821,
+        792837859
+      ]
+    }
+  ],
+  "summary": [
+    {
+      "count": 4096,
+      "rounds": 0,
+      "samples": 9,
+      "median_ms": {
+        "scalar_ms": 0.0025,
+        "simd_ms": 0.0003,
+        "pool_ms": 0.0378,
+        "gpu_whole_ms": 0.0561,
+        "gpu_kernel_ms": 0.003264,
+        "gpu_wrapper_ms": 0.0572
+      },
+      "max_ms": {
+        "scalar_ms": 0.0032,
+        "simd_ms": 0.0315,
+        "pool_ms": 0.0502,
+        "gpu_whole_ms": 0.2542,
+        "gpu_kernel_ms": 0.003808,
+        "gpu_wrapper_ms": 0.2557
+      },
+      "best_cpu_over_gpu_ratio": 0.0053475935828877,
+      "non_kernel_fraction": 0.9418181818181818,
+      "decision": "PARK_GPU_FOR_THIS_WORKLOAD"
+    },
+    {
+      "count": 4096,
+      "rounds": 1,
+      "samples": 9,
+      "median_ms": {
+        "scalar_ms": 0.0065,
+        "simd_ms": 0.0005,
+        "pool_ms": 0.0306,
+        "gpu_whole_ms": 0.0375,
+        "gpu_kernel_ms": 0.003296,
+        "gpu_wrapper_ms": 0.0379
+      },
+      "max_ms": {
+        "scalar_ms": 0.0257,
+        "simd_ms": 0.001,
+        "pool_ms": 0.0397,
+        "gpu_whole_ms": 0.341,
+        "gpu_kernel_ms": 0.003968,
+        "gpu_wrapper_ms": 0.3423
+      },
+      "best_cpu_over_gpu_ratio": 0.013333333333333334,
+      "non_kernel_fraction": 0.9121066666666666,
+      "decision": "PARK_GPU_FOR_THIS_WORKLOAD"
+    },
+    {
+      "count": 4096,
+      "rounds": 64,
+      "samples": 9,
+      "median_ms": {
+        "scalar_ms": 0.764,
+        "simd_ms": 0.0811,
+        "pool_ms": 0.0702,
+        "gpu_whole_ms": 0.0671,
+        "gpu_kernel_ms": 0.004672,
+        "gpu_wrapper_ms": 0.0684
+      },
+      "max_ms": {
+        "scalar_ms": 1.0717,
+        "simd_ms": 0.1013,
+        "pool_ms": 0.1391,
+        "gpu_whole_ms": 2.6279,
+        "gpu_kernel_ms": 0.004768,
+        "gpu_wrapper_ms": 2.6296
+      },
+      "best_cpu_over_gpu_ratio": 1.0461997019374067,
+      "non_kernel_fraction": 0.9303725782414307,
+      "decision": "NEAR_UNITY_INCONCLUSIVE"
+    },
+    {
+      "count": 65536,
+      "rounds": 0,
+      "samples": 9,
+      "median_ms": {
+        "scalar_ms": 0.0394,
+        "simd_ms": 0.005,
+        "pool_ms": 0.0437,
+        "gpu_whole_ms": 0.1041,
+        "gpu_kernel_ms": 0.005056,
+        "gpu_wrapper_ms": 0.105
+      },
+      "max_ms": {
+        "scalar_ms": 0.0796,
+        "simd_ms": 0.01,
+        "pool_ms": 0.0567,
+        "gpu_whole_ms": 0.366,
+        "gpu_kernel_ms": 0.005728,
+        "gpu_wrapper_ms": 0.3672
+      },
+      "best_cpu_over_gpu_ratio": 0.04803073967339097,
+      "non_kernel_fraction": 0.951431316042267,
+      "decision": "PARK_GPU_FOR_THIS_WORKLOAD"
+    },
+    {
+      "count": 65536,
+      "rounds": 1,
+      "samples": 9,
+      "median_ms": {
+        "scalar_ms": 0.0793,
+        "simd_ms": 0.0075,
+        "pool_ms": 0.0327,
+        "gpu_whole_ms": 0.0862,
+        "gpu_kernel_ms": 0.004736,
+        "gpu_wrapper_ms": 0.0873
+      },
+      "max_ms": {
+        "scalar_ms": 0.0991,
+        "simd_ms": 0.0078,
+        "pool_ms": 0.0399,
+        "gpu_whole_ms": 0.288,
+        "gpu_kernel_ms": 0.005504,
+        "gpu_wrapper_ms": 0.2891
+      },
+      "best_cpu_over_gpu_ratio": 0.08700696055684455,
+      "non_kernel_fraction": 0.9450580046403713,
+      "decision": "PARK_GPU_FOR_THIS_WORKLOAD"
+    },
+    {
+      "count": 65536,
+      "rounds": 64,
+      "samples": 9,
+      "median_ms": {
+        "scalar_ms": 12.2688,
+        "simd_ms": 1.3105,
+        "pool_ms": 0.4245,
+        "gpu_whole_ms": 0.1353,
+        "gpu_kernel_ms": 0.009856,
+        "gpu_wrapper_ms": 0.136
+      },
+      "max_ms": {
+        "scalar_ms": 12.6827,
+        "simd_ms": 1.6522,
+        "pool_ms": 0.5034,
+        "gpu_whole_ms": 0.3784,
+        "gpu_kernel_ms": 0.011776,
+        "gpu_wrapper_ms": 0.3796
+      },
+      "best_cpu_over_gpu_ratio": 3.137472283813747,
+      "non_kernel_fraction": 0.9271544715447154,
+      "decision": "SYNTHETIC_MEDIAN_ADVANTAGE_UNQUALIFIED"
+    },
+    {
+      "count": 1048576,
+      "rounds": 0,
+      "samples": 9,
+      "median_ms": {
+        "scalar_ms": 0.6301,
+        "simd_ms": 0.0657,
+        "pool_ms": 0.067,
+        "gpu_whole_ms": 0.6554,
+        "gpu_kernel_ms": 0.01104,
+        "gpu_wrapper_ms": 0.6565
+      },
+      "max_ms": {
+        "scalar_ms": 0.6456,
+        "simd_ms": 0.0704,
+        "pool_ms": 0.0869,
+        "gpu_whole_ms": 1.544,
+        "gpu_kernel_ms": 0.018304,
+        "gpu_wrapper_ms": 1.5453
+      },
+      "best_cpu_over_gpu_ratio": 0.10024412572474824,
+      "non_kernel_fraction": 0.983155324992371,
+      "decision": "PARK_GPU_FOR_THIS_WORKLOAD"
+    },
+    {
+      "count": 1048576,
+      "rounds": 1,
+      "samples": 9,
+      "median_ms": {
+        "scalar_ms": 1.4095,
+        "simd_ms": 0.1213,
+        "pool_ms": 0.0866,
+        "gpu_whole_ms": 0.6843,
+        "gpu_kernel_ms": 0.012352,
+        "gpu_wrapper_ms": 0.6853
+      },
+      "max_ms": {
+        "scalar_ms": 1.6033,
+        "simd_ms": 0.1266,
+        "pool_ms": 0.1708,
+        "gpu_whole_ms": 2.8389,
+        "gpu_kernel_ms": 0.02048,
+        "gpu_wrapper_ms": 2.8405
+      },
+      "best_cpu_over_gpu_ratio": 0.12655268157240976,
+      "non_kernel_fraction": 0.9819494373812655,
+      "decision": "PARK_GPU_FOR_THIS_WORKLOAD"
+    },
+    {
+      "count": 1048576,
+      "rounds": 64,
+      "samples": 9,
+      "median_ms": {
+        "scalar_ms": 197.5975,
+        "simd_ms": 22.627,
+        "pool_ms": 3.8262,
+        "gpu_whole_ms": 0.8567,
+        "gpu_kernel_ms": 0.082176,
+        "gpu_wrapper_ms": 0.8585
+      },
+      "max_ms": {
+        "scalar_ms": 201.0993,
+        "simd_ms": 24.2387,
+        "pool_ms": 4.9765,
+        "gpu_whole_ms": 1.8657,
+        "gpu_kernel_ms": 0.082496,
+        "gpu_wrapper_ms": 1.8671
+      },
+      "best_cpu_over_gpu_ratio": 4.466207540562624,
+      "non_kernel_fraction": 0.9040784405276059,
+      "decision": "SYNTHETIC_MEDIAN_ADVANTAGE_UNQUALIFIED"
+    }
+  ],
+  "fault_control": {
+    "status": "EXPECTED_FIRST_DIVERGENCE",
+    "shader_sha256": "4777975d3e8a7c9da5c59362baa4f83316a672f45ed10dbea289bf0dfc218453"
+  },
+  "integration_decision": "PARK_GPU_AFTER_BOUNDED_PROXY",
+  "decision_reason": "Cheap workloads lose, non-kernel costs dominate warm time, cold setup and latency variation prevent live acceptance; heavy synthetic gain is not a qualified offline Minecraft kernel",
+  "limitations": [
+    "Synthetic mixing intensity is not Minecraft generation, lighting, or a complete map index",
+    "Host/GPU load and CPU affinity are uncontrolled; timings are exploratory, not performance qualification",
+    "Non-kernel fraction includes driver/submission/synchronization and CPU memcpy, not just PCIe transfer",
+    "GPU whole time includes upload, dispatch, completion wait, readback and copy; device/shader/buffer initialization is separately reported",
+    "GPU wrapper time additionally includes timestamp-query collection; array byte counts exclude parameter upload and unknown driver traffic",
+    "Scalar, explicit AVX2 when available, and persistent SIMD CPU pool baselines are checked; no live-server work is enabled",
+    "Best CPU is best tested median: fixed scalar/SIMD/pool ordering, warm caches and eight-worker cap are not optimized-machine qualification",
+    "Tool hashes do not close over SDK headers/import libraries, transitive VsDevCmd scripts, firmware or full graphics driver binaries",
+    "Driver/system API calls are bounded externally by a 45-second child deadline; no software GPU fallback"
+  ],
+  "sources_after": {
+    "D:\\minecraftrust-astra-hardening\\tools\\gpu-offline-experiment\\main.cpp": "61102576fb79c1c9dbe4f04a7ac57fb846d7541a87333b4001aa033cd87543b4",
+    "D:\\minecraftrust-astra-hardening\\tools\\gpu-offline-experiment\\kernel.hlsl": "ccaf8b12844cefc0c5332a6136821941a4a5c194300d327cdfb4d003219676c3",
+    "D:\\minecraftrust-astra-hardening\\tools\\gpu-offline-experiment\\run.py": "e580b9229e8ba6b388bcc5d03f7d08554a3619296ef0ce09f0990ed506fb74c9",
+    "D:\\minecraftrust-astra-hardening\\tools\\gpu-offline-experiment\\PROVENANCE.json": "9ad3efe16552de5336026da379f8d7e04e53296fe6d67a6654a7d49f546b38cd",
+    "D:\\minecraftrust-astra-hardening\\tools\\gpu-offline-experiment\\hash-prospector-UNLICENSE": "7e12e5df4bae12cb21581ba157ced20e1986a0508dd10d0e8a4ab9a4cf94e85c",
+    "D:\\minecraftrust-astra-hardening\\tools\\testing\\hardening_guard.py": "a2062b3ffbec7edba79bf5f5954fbcb1e9d97492ab9c4bb541833ebb820bdb6d",
+    "D:\\minecraftrust-astra-hardening\\machine\\architecture-hardening\\isolation.json": "8f9b34b55f6ecc1d549da1ec4c42900b4a831a3072a9e4aa6aa2ae39cae53d93"
+  },
+  "tools_after": {
+    "C:\\Program Files\\Microsoft Visual Studio\\18\\Community\\VC\\Tools\\MSVC\\14.51.36231\\bin\\Hostx64\\x64\\cl.exe": "dc8426b8760d92cf757df3d10b9f0244a95b454ff43194a58161568a0ec70d53",
+    "C:\\Program Files\\Microsoft Visual Studio\\18\\Community\\VC\\Tools\\MSVC\\14.51.36231\\bin\\Hostx64\\x64\\c1xx.dll": "363135c271bcb76ce1eeb179b22a9e410d72f8501b99171fb7cd71ea0e7a9166",
+    "C:\\Program Files\\Microsoft Visual Studio\\18\\Community\\VC\\Tools\\MSVC\\14.51.36231\\bin\\Hostx64\\x64\\c2.dll": "a557ac7b90fb5a68d393da2dce7ada52c91efad2a6956cc62ea23da392e9be89",
+    "C:\\Program Files\\Microsoft Visual Studio\\18\\Community\\VC\\Tools\\MSVC\\14.51.36231\\bin\\Hostx64\\x64\\link.exe": "e8c524347b8bc87fba790d254c8a3b902bf1a4b63807093b816d992940af3791",
+    "C:\\WINDOWS\\System32\\d3dcompiler_47.dll": "2e3526354dbcd9cf013f7b741c549df2170fe6af607628442216a21e7d584883",
+    "C:\\WINDOWS\\System32\\d3d11.dll": "ae2777002f5a0ff543b5b9bec5124746559fd01d6c7c0c216d3194632f084502",
+    "C:\\WINDOWS\\System32\\dxgi.dll": "b12aebf0f077d6c1394b50e2eecdd5e16072c9a0c871f30887b5d170cbf2eaae",
+    "C:\\Python314\\python.exe": "4942b86a6597e5aee0128daa00050ed79bc21f6e709a78eb19cbfeb0c2f39ac9",
+    "C:\\Program Files\\Microsoft Visual Studio\\18\\Community\\Common7\\Tools\\VsDevCmd.bat": "a7815e85d636828e5cf70fe4235b11fcb41750896a4d2d60756b43bacaf4f0b2",
+    "C:\\WINDOWS\\System32\\cmd.exe": "97ac98b1a92c286054cce55239cfccdfc23a5517bd07fe693072c9ca96c7dabb",
+    "C:\\WINDOWS\\System32\\taskkill.exe": "1249717315fc8f4d2df17d5db9da0444795fdb9fb83dfb1f763c3f39282244f7",
+    "C:\\WINDOWS\\System32\\nvidia-smi.exe": "e2ea800cae4f1af494920d2bfcc2f83491c003a69ed2552109a519ba6818c418"
+  },
+  "build_script_unchanged": true,
+  "original_after": {
+    "schema_version": 1,
+    "kind": "HARDENING_ISOLATION_GATE_CHECK",
+    "status": "PASS",
+    "failures": [],
+    "original_observed": {
+      "head": "c4b868db2c9e4b03f745bf93c6ebf4fd8a8519e7",
+      "branch": "issue1-jni-v2",
+      "status": [
+        " M tools/live-capture/live_client_session.py",
+        "?? tools/live-capture/__pycache__/",
+        "?? tools/live-capture/run_rev_shadow.py"
+      ],
+      "files": [
+        {
+          "path": "D:\\minecraftrust\\tools\\live-capture\\live_client_session.py",
+          "sha256": "151c356161695aba3db3c1a8cbd589b5eda2b5a1770dff59ab21b728d36cabfa"
+        },
+        {
+          "path": "D:\\minecraftrust\\tools\\live-capture\\run_rev_shadow.py",
+          "sha256": "2b9b2aca49e57dd0d2a74bec46efcdc0ac7f95762a733276e27ff9dbcb472d93"
+        }
+      ]
+    },
+    "isolated_worktree": "D:\\minecraftrust-astra-hardening",
+    "isolated_head": "44f61a46f7cda93c0ac8aaffe13087678501cc6f",
+    "isolated_branch": "astra/architecture-hardening",
+    "production_gate_checks": {
+      "tryEncode_fail_closed": true,
+      "productionAuthorityEligible_false": true
+    },
+    "scope": "read-only original HEAD/status/two paused source hashes plus conservative source guards; runtime authority tests remain required"
+  }
+}

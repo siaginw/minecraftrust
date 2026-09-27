@@ -1,0 +1,6 @@
+@echo off
+call "C:\Program Files\Microsoft Visual Studio\18\Community\Common7\Tools\VsDevCmd.bat" -arch=x64 -host_arch=x64 >nul
+if errorlevel 1 exit /b %errorlevel%
+where cl
+"C:\Program Files\Microsoft Visual Studio\18\Community\VC\Tools\MSVC\14.51.36231\bin\Hostx64\x64\cl.exe" /nologo /Bv /std:c++17 /O2 /arch:AVX2 /EHsc /W4 /WX /DNDEBUG "D:\minecraftrust-astra-hardening\tools\gpu-offline-experiment\main.cpp" /Fo:"D:\minecraftrust-astra-hardening\target\gpu-offline-experiment\43ac3f24c9794bb3a5dad218bfc9d4b5\main.obj" /Fe:"D:\minecraftrust-astra-hardening\target\gpu-offline-experiment\43ac3f24c9794bb3a5dad218bfc9d4b5\probe.exe" /link d3d11.lib dxgi.lib d3dcompiler.lib
+exit /b %errorlevel%
