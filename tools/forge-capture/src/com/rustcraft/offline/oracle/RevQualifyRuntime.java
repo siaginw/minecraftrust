@@ -56,6 +56,19 @@ public final class RevQualifyRuntime {
       "net.minecraft.util.datafix.DataFixer", "net.minecraft.nbt.CompressedStreamTools"
   };
 
+  private static void writeClass(Path file, byte[] bytes) {
+    try {
+      if (bytes == null) return;
+      Files.createDirectories(file.getParent());
+      Files.write(file, bytes);
+    } catch (Exception unwritable) {
+      // A class whose buffer could not be written is a gap in what the engine
+      // can recompute. The engine reports that as INCOMPLETE against the
+      // missing file, which is more honest than a receipt claiming a class was
+      // captured when no file exists.
+    }
+  }
+
   private static List<String> transformers() {
     List<String> names = new ArrayList<>();
     for (Object transformer : Launch.classLoader.getTransformers()) {
@@ -242,6 +255,23 @@ public final class RevQualifyRuntime {
       }
     }
     result.put("session_acquisition_definitions", acquisitionRows);
+    // The engine does not take the writers' word for any class identity: it
+    // reparses the bytes itself. So the pre-writer and post-writer buffers have
+    // to leave this process as FILES, written from the same records the chain
+    // is built from, or there is nothing for it to recompute and every
+    // certificate comparison would be against a value this run asserted.
+    String observationDir = System.getProperty("rustcraft.observationDir");
+    if (observationDir != null && observationDir.length() > 0
+            && LiveHookSupport.boundAcquisition() != null) {
+      Path root = Paths.get(observationDir);
+      for (com.rustcraft.qualification.SameProcessAcquisition.Definition definition
+          : LiveHookSupport.boundAcquisition().definitions()) {
+        String relative = definition.binaryName.replace('.', '/') + ".class";
+        writeClass(root.resolve("pre").resolve(relative), definition.preWriterBytes);
+        writeClass(root.resolve("classes").resolve(relative), definition.postWriterBuffer());
+      }
+      result.put("observation_dir", observationDir);
+    }
     result.put("entry_observer_failures", new TreeMap<String, String>(
             com.rustcraft.qualification.LoaderTransformChain.EntryObserver.failures()));
     result.put("frame_relation_witness", LoaderDefinitionWitness.witness(

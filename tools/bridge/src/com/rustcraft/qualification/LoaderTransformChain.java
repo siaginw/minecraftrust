@@ -1,5 +1,6 @@
 package com.rustcraft.qualification;
 
+import com.rustcraft.coremod.AsmTreeCompat;
 import com.rustcraft.coremod.LiveHookSupport;
 import com.rustcraft.coremod.LiveWriterPlan;
 
@@ -179,31 +180,40 @@ public final class LoaderTransformChain {
     }
 
     /**
-     * How many of each planned hook's injected call sites survive in these bytes.
+     * How many injected call sites of each planned hook survive in these bytes.
      *
-     * <p>Counted per hook, from the bytes themselves: each hook injects a
-     * constant-pool marker unique to it, and a stage that removed or duplicated
-     * a hook changed how many of that marker the class carries. A count of zero
-     * for a planned hook is therefore a real, checkable statement rather than an
-     * absence of data.</p>
+     * <p>Counted from the BYTES, by parsing them and counting the calls into the
+     * hook facade inside each hook's own method. The obvious cheaper proxy --
+     * searching for the hook's operation-id marker string -- is wrong, and was
+     * caught being wrong: a hook family that injects a bare facade call carries
+     * no marker, so the proxy reports zero survivors for hooks that are
+     * demonstrably present. Counting the calls the writer actually emits is
+     * what "survived" means, and it works for every hook family rather than only
+     * the ones that happen to be annotated.</p>
      */
-    private static int survivingCallSites(String internalName, byte[] bytes) {
-        if (bytes == null) return 0;
-        String text = new String(bytes, java.nio.charset.StandardCharsets.ISO_8859_1);
-        int alive = 0;
-        for (LiveWriterPlan.Hook hook : hooksFor(internalName))
-            alive += countOccurrences(text, hook.operationId);
-        return alive;
-    }
-
-    private static int countOccurrences(String haystack, String needle) {
-        if (needle == null || needle.length() == 0) return 0;
-        int found = 0, at = haystack.indexOf(needle);
-        while (at >= 0) {
-            found++;
-            at = haystack.indexOf(needle, at + needle.length());
+    private static Map<String, Integer> survivingFacadeCalls(String internalName, byte[] bytes) {
+        Map<String, Integer> out = new TreeMap<String, Integer>();
+        List<LiveWriterPlan.Hook> hooks = hooksFor(internalName);
+        if (bytes == null) {
+            for (LiveWriterPlan.Hook hook : hooks) out.put(hook.id, Integer.valueOf(0));
+            return out;
         }
-        return found;
+        org.objectweb.asm.tree.ClassNode cn =
+                LiveHookSupport.readClass(bytes);
+        for (LiveWriterPlan.Hook hook : hooks) {
+            int calls = 0;
+            for (org.objectweb.asm.tree.MethodNode mn : AsmTreeCompat.methods(cn)) {
+                if (!mn.name.equals(hook.methodName) || !mn.desc.equals(hook.descriptor)) continue;
+                for (org.objectweb.asm.tree.AbstractInsnNode insn : AsmTreeCompat.instructions(mn)) {
+                    if (insn.getOpcode() != org.objectweb.asm.Opcodes.INVOKESTATIC) continue;
+                    org.objectweb.asm.tree.MethodInsnNode call =
+                            (org.objectweb.asm.tree.MethodInsnNode) insn;
+                    if (LiveHookSupport.HOOKS_CLASS.equals(call.owner)) calls++;
+                }
+            }
+            out.put(hook.id, Integer.valueOf(calls));
+        }
+        return out;
     }
 
     private static List<LiveWriterPlan.Hook> hooksFor(String internalName) {
@@ -228,13 +238,7 @@ public final class LoaderTransformChain {
                 return null;
             }
             public Map<String, Integer> observedHookCalls(String name) {
-                Map<String, Integer> out = new TreeMap<String, Integer>();
-                byte[] bytes = definedBytes(name);
-                String text = bytes == null ? ""
-                        : new String(bytes, java.nio.charset.StandardCharsets.ISO_8859_1);
-                for (LiveWriterPlan.Hook hook : hooksFor(name))
-                    out.put(hook.id, Integer.valueOf(countOccurrences(text, hook.operationId)));
-                return out;
+                return survivingFacadeCalls(name, definedBytes(name));
             }
             public String definingLoaderIdentity() { return definingLoaderIdentity; }
         };

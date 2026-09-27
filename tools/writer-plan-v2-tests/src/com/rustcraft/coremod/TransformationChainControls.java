@@ -96,7 +96,11 @@ public final class TransformationChainControls {
         check(!SameProcessAcquisition.sha256(entry).equals(definition.exact.rawSha256),
                 "the entry buffer is a different buffer from the admitted one");
 
-        final byte[] defined = secondMarker(postWriter);
+        // The real shape: the loader defines exactly the buffer the last writer
+        // returned, because the writers were the last transformers. FINAL_DEFINED
+        // is a definition event, so it re-states that buffer rather than
+        // transforming it again.
+        final byte[] defined = postWriter;
         final Map<String, Integer> observed = new HashMap<String, Integer>();
         observed.put(planned.id, Integer.valueOf(1));
         final String[] target = {internal};
@@ -140,12 +144,19 @@ public final class TransformationChainControls {
         // here from the buffer this process defined, not quoted from the writer.
         check(document.contains("\"output_raw_sha256\":\"" + SameProcessAcquisition.sha256(defined) + "\""),
                 "the final stage reports the bytes this loader was handed");
+        check(document.contains("\"output_raw_sha256\":\"" + SameProcessAcquisition.sha256(postWriter) + "\""),
+                "a definition event that changed nothing is not refused as a no-op");
         Files.write(Paths.get(out), document.getBytes(StandardCharsets.UTF_8));
 
         // ---- the refusals --------------------------------------------------
         refuses("an unnamed entry buffer is not invented", noEntry(observations));
-        refuses("defined bytes equal to the last stage are not written as a no-op",
-                observationsWithDefined(observations, postWriter));
+        // FINAL_DEFINED is a definition event, not another transformation, so
+        // the loader defining exactly what the last writer returned is the
+        // EXPECTED shape rather than a no-op to be refused. The refusal that
+        // matters now is the opposite one: defined bytes that DIFFER with no
+        // downstream transformer to account for the difference.
+        refuses("defined bytes differing with no downstream transformer to explain it",
+                observationsWithDefined(observations, secondMarker(postWriter)));
         refuses("a hook that never ran is not reported as present",
                 observationsWithoutCounts(observations));
         refuses("a downstream transformer that changed nothing is not a stage",
@@ -156,7 +167,8 @@ public final class TransformationChainControls {
         // writer's output AND from the defined bytes, or one of the two stages
         // around it is a no-op and the producer is right to refuse.
         String withDownstream = TransformationChainEvidence.render(
-                observationsWithDownstream(observations, thirdMarker(postWriter)));
+                observationsWithDownstreamAndDefined(observations, thirdMarker(postWriter),
+                        secondMarker(postWriter)));
         check(withDownstream.contains("\"stage\":\"" + TransformationChainEvidence.STAGE_DOWNSTREAM + "\""),
                 "a downstream transformer that changed the bytes becomes its own stage");
         check(withDownstream.contains("example.Downstream"),
@@ -212,6 +224,20 @@ public final class TransformationChainControls {
             final TransformationChainEvidence.Observations base, final byte[] defined) {
         return new Delegating(base) {
             public byte[] definedBytes(String name) { return defined; }
+        };
+    }
+
+    /** A disclosed downstream stage AND a definition that differs from its output. */
+    private static TransformationChainEvidence.Observations observationsWithDownstreamAndDefined(
+            final TransformationChainEvidence.Observations base,
+            final byte[] downstreamOutput, final byte[] defined) {
+        return new Delegating(observationsWithDefined(base, defined)) {
+            public List<TransformationChainEvidence.Stage> downstreamStages(String name) {
+                List<TransformationChainEvidence.Stage> out =
+                        new ArrayList<TransformationChainEvidence.Stage>();
+                out.add(new TransformationChainEvidence.Stage("example.Downstream", downstreamOutput));
+                return out;
+            }
         };
     }
 

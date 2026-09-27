@@ -282,9 +282,18 @@ public final class TransformationChainEvidence {
                 previous = each.outputBytes;
             }
         }
-        if (SameProcessAcquisition.sha256(previous).equals(SameProcessAcquisition.sha256(defined)))
+        // FINAL_DEFINED is a definition EVENT, not another transformation. When
+        // the writers are the last transformers the loader defines exactly the
+        // buffer they returned, and the definition changes nothing -- so
+        // refusing that here would make a complete chain inexpressible. It is
+        // written only when nothing ran after the writers to account for a
+        // difference, which the engine then re-checks independently against the
+        // frame witness.
+        if (!hasDownstream && !SameProcessAcquisition.sha256(previous)
+                .equals(SameProcessAcquisition.sha256(defined)))
             throw new Incomplete("the defined bytes of " + internal
-                    + " equal the last recorded stage: FINAL_DEFINED would be a no-op");
+                    + " differ from the last recorded stage with no downstream "
+                    + "transformer to account for the difference");
         stages.append(',').append(stage(STAGE_FINAL, ordinal, acquisition, definition, observations,
                 LOADER_DEFINITION, previous, defined,
                 hookDeclarations(observations, definition, false), exceptionPaths(definition, defined)));
@@ -313,7 +322,10 @@ public final class TransformationChainEvidence {
                     + " has no buffer on one side");
         String inputSha = SameProcessAcquisition.sha256(input);
         String outputSha = SameProcessAcquisition.sha256(output);
-        if (inputSha.equals(outputSha))
+        // Mirrors the engine exactly: a transformation stage that changed
+        // nothing did not transform anything, and only the terminal
+        // definition event may re-state a buffer unchanged.
+        if (inputSha.equals(outputSha) && !STAGE_FINAL.equals(name))
             throw new Incomplete("stage " + name + " for " + definition.binaryName
                     + " changed nothing and is not a stage");
         CanonicalClassIdentityV2.Result exact = CanonicalClassIdentityV2.identify(output);
@@ -359,7 +371,12 @@ public final class TransformationChainEvidence {
      */
     private static String hookDeclarations(Observations observations,
             SameProcessAcquisition.Definition definition, boolean declared) {
-        Map<String, Integer> observed = observations.observedHookCalls(definition.binaryName);
+        // The internal name, like every other observation callback: the plan
+        // spells this class with dots, the loader and this chain row do not, and
+        // asking one map for a key the other spelling never wrote returns an
+        // empty map rather than an error.
+        String internal = definition.binaryName.replace('.', '/');
+        Map<String, Integer> observed = observations.observedHookCalls(internal);
         StringBuilder out = new StringBuilder("[");
         boolean first = true;
         for (LiveWriterPlan.Hook hook : hooksFor(definition.binaryName)) {

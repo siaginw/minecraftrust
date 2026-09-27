@@ -110,6 +110,9 @@ def main() -> int:
     dump.mkdir()
     result_path = out / "qualification.json"
     chain_path = out / "transformation-chain.json"
+    # The engine reparses class identities itself, so the pre-writer and
+    # post-writer buffers have to exist as files it can read.
+    observation_dir = out / "observation"
 
     cp = os.pathsep.join([str(out), str(harness), str(campaign)]
                          + [str(p) for p in sorted((RT / "libraries").rglob("*.jar"))]
@@ -122,6 +125,7 @@ def main() -> int:
         "-Drustcraft.definedDump=" + str(dump),
         "-Drustcraft.qualificationResult=" + str(result_path),
         "-Drustcraft.transformationChain=" + str(chain_path),
+        "-Drustcraft.observationDir=" + str(observation_dir),
         # The three properties that turn a diagnostic boot into a session-bound
         # one. Without them the writers are registered but cannot authorize
         # anything, and every class load is INCOMPLETE by design.
