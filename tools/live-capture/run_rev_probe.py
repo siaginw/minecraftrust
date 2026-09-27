@@ -33,6 +33,13 @@ RT = Path("D:/rustcraft-runtime-targets/revelation-3.4.0/server")
 JAVA = Path("D:/rustcraft-toolchains/temurin8/jdk8u504-b01/bin/java.exe")
 JAVAC = Path("D:/rustcraft-toolchains/temurin8/jdk8u504-b01/bin/javac.exe")
 OUT = ROOT / "target/rev-probe"
+# The writers and the session-support classes live in the campaign jar, built
+# from these same sources against the Revelation pins. It is on the probe's
+# classpath for the same reason RevOfflineTweaker excludes those packages from
+# the launch loader: the writers must be loaded by the PARENT, or they are a
+# different copy of the class the harness sees, and a session admission
+# recorded in one copy is invisible to the other.
+CAMPAIGN_JAR = ROOT / "target/architecture-hardening/rev-srg/rustcraft-rev-coremod.jar"
 
 
 def compile_probe() -> Path:
@@ -44,6 +51,7 @@ def compile_probe() -> Path:
         ROOT / "tools/forge-capture/src/com/rustcraft/offline/oracle/RevQualifyRuntime.java",
     ]
     cp = os.pathsep.join([
+        str(CAMPAIGN_JAR),
         str(RT / "forge-1.12.2-14.23.5.2846-universal.jar"),
         str(RT / "minecraft_server.1.12.2.jar"),
         str(RT / "libraries/org/ow2/asm/asm-all/5.2/asm-all-5.2.jar"),
@@ -78,7 +86,7 @@ def main() -> int:
         shutil.rmtree(dump)
     dump.mkdir()
     result_path = OUT / "qualification.json"
-    cp = os.pathsep.join([str(classes)]
+    cp = os.pathsep.join([str(classes), str(CAMPAIGN_JAR)]
                          + [str(p) for p in sorted((RT / "libraries").rglob("*.jar"))]
                          + [str(RT / "forge-1.12.2-14.23.5.2846-universal.jar"),
                             str(RT / "minecraft_server.1.12.2.jar")])
