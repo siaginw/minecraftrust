@@ -179,20 +179,26 @@ public class LiveChunkPublicationTransformer implements IClassTransformer {
                 List<AbstractInsnNode> anchors = LiveHookSupport.verifyAnchorsInOrder(mn, hook);
                 // loadChunk__Async(World, int, int) is an INSTANCE method: this=0,
                 // world=1, x=2, z=3.
+                // One-shot observations, called through their qualified safe
+                // wrappers. The callsite is the same single INVOKESTATIC at the
+                // same anchor with the same arguments; only the callee differs,
+                // and the callee is where containment lives. Nothing is added to
+                // this method's exception table, so its control flow and its
+                // operand stack are exactly what they were.
                 InsnList scopeArgs = new InsnList();
                 scopeArgs.add(new VarInsnNode(Opcodes.ALOAD, 1));
                 scopeArgs.add(new VarInsnNode(Opcodes.ILOAD, 2));
                 scopeArgs.add(new VarInsnNode(Opcodes.ILOAD, 3));
-                mn.instructions.insertBefore(mn.instructions.getFirst(), LiveHookSupport.call("ioPrivateLoadScope",
+                mn.instructions.insertBefore(mn.instructions.getFirst(), LiveHookSupport.call("safeIoPrivateLoadScope",
                         "(Ljava/lang/Object;II)V", scopeArgs));
                 InsnList pending = LiveHookSupport.dup();
                 pending.add(new org.objectweb.asm.tree.MethodInsnNode(Opcodes.INVOKESTATIC,
-                        LiveHookSupport.HOOKS_CLASS, "ioPendingNbt",
+                        LiveHookSupport.HOOKS_CLASS, "safeIoPendingNbt",
                         "(Ljava/lang/Object;)V", false));
                 mn.instructions.insert(anchors.get(0), pending); // after pending Map.get (BCI 17)
                 InsnList disk = LiveHookSupport.dup();
                 disk.add(new org.objectweb.asm.tree.MethodInsnNode(Opcodes.INVOKESTATIC,
-                        LiveHookSupport.HOOKS_CLASS, "ioDiskRoot",
+                        LiveHookSupport.HOOKS_CLASS, "safeIoDiskRoot",
                         "(Ljava/lang/Object;)V", false));
                 mn.instructions.insert(anchors.get(2), disk);    // after compressed root read (BCI 59)
                 break;
@@ -200,12 +206,12 @@ public class LiveChunkPublicationTransformer implements IClassTransformer {
             case "S04":
             case "S05": {
                 // Local 0: the loader instance (instance methods) or the World (static).
-                mn.instructions.insert(LiveHookSupport.call("ioPrivateConstructionSite",
+                mn.instructions.insert(LiveHookSupport.call("safeIoPrivateConstructionSite",
                         "(Ljava/lang/Object;)V", LiveHookSupport.loadLocal(0)));
                 break;
             }
             case "S06": {
-                mn.instructions.insert(LiveHookSupport.call("generatorScopeBegin",
+                mn.instructions.insert(LiveHookSupport.call("safeGeneratorScopeBegin",
                         "(Ljava/lang/Object;)V", LiveHookSupport.loadLocal(0)));
                 break;
             }

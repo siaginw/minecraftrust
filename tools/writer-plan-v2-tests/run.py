@@ -243,7 +243,7 @@ def main():
   chain=out/'chain-classes';chain.mkdir()
   chain_producer=ROOT/'tools/bridge/src/com/rustcraft/qualification/TransformationChainEvidence.java'
   chain_src=[core/n for n in ['CanonicalClassIdentityV2.java','AsmTreeCompat.java','SessionBoundIdentityCertificate.java','SessionBoundAdmissionPolicy.java','LiveHookSupport.java']]
-  run('compile-transformation-chain',[javac,'-source','8','-target','8','-Xlint:all','-Werror','-cp',asm,'-d',chain,*chain_src,acq,chain_producer,chain_plan,test/'SessionBoundFixture.java',test/'TransformationChainControls.java'])
+  run('compile-transformation-chain',[javac,'-source','8','-target','8','-Xlint:all','-Werror','-cp',asm,'-d',chain,*chain_src,acq,chain_producer,ROOT/'tools/bridge/src/com/rustcraft/qualification/CalleeIsolation.java',chain_plan,test/'SessionBoundFixture.java',test/'TransformationChainControls.java'])
   chain_doc=out/'transformation-chain.json'
   chain_result=run('transformation-chain-controls',[java,'-cp',str(chain)+os.pathsep+str(asm),'com.rustcraft.coremod.TransformationChainControls',out/'fixtures/session-fixture.class',chain_doc])
   assert chain_result.stdout.strip().startswith(b'PASS TransformationChainControls'),chain_result.stdout

@@ -274,6 +274,7 @@ LIVE_TRANSFORMER_SOURCES = [
     "tools/bridge/src/com/rustcraft/qualification/TransformationChainEvidence.java",
     "tools/bridge/src/com/rustcraft/qualification/LoaderTransformChain.java",
     "tools/bridge/src/com/rustcraft/qualification/LoaderDefinitionWitness.java",
+    "tools/bridge/src/com/rustcraft/qualification/CalleeIsolation.java",
     "tools/forge-capture/src/com/rustcraft/offline/oracle/QualifyRuntime.java",
 ]
 

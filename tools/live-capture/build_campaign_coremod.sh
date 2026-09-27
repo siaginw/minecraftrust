@@ -92,6 +92,7 @@ SOURCES=(
   "$ROOT/tools/bridge/src/com/rustcraft/qualification/TransformationChainEvidence.java"
   "$ROOT/tools/bridge/src/com/rustcraft/qualification/LoaderTransformChain.java"
   "$ROOT/tools/bridge/src/com/rustcraft/qualification/LoaderDefinitionWitness.java"
+  "$ROOT/tools/bridge/src/com/rustcraft/qualification/CalleeIsolation.java"
 )
 "$JAVAC" -encoding UTF-8 -source 8 -target 8 -nowarn -cp "$CP" -d "$BUILD" "${SOURCES[@]}" 2> "$BUILD/javac-errors.log" || {
   cat "$BUILD/javac-errors.log" | grep -E "error" | head -20

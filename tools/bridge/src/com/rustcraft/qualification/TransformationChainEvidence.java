@@ -11,6 +11,7 @@ import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.MethodInsnNode;
 import org.objectweb.asm.tree.MethodNode;
+import org.objectweb.asm.tree.TryCatchBlockNode;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -424,26 +425,69 @@ public final class TransformationChainEvidence {
                 if (insn.getOpcode() != Opcodes.INVOKESTATIC) continue;
                 MethodInsnNode call = (MethodInsnNode) insn;
                 if (!LiveHookSupport.HOOKS_CLASS.equals(call.owner)) continue;
-                if (!takesThrowable(call.desc)) continue;
+                String contract = exceptionContractFor(mn, call);
+                if (contract == null) continue;
                 if (first) first = false; else out.append(',');
                 out.append("{\"class\":").append(canonicalString(definition.binaryName));
                 out.append(",\"descriptor\":").append(canonicalString(hook.descriptor));
-                out.append(",\"handler\":").append(canonicalString(
-                        call.owner.replace('/', '.') + "#" + call.name + call.desc));
+                out.append(",\"handler\":").append(canonicalString(contract));
                 out.append(",\"id\":").append(canonicalString(hook.id));
                 out.append(",\"method\":").append(canonicalString(hook.methodName));
                 out.append('}');
             }
         }
         if (first)
+            // Naming the refusal is what makes this diagnosable: "no exception
+            // coverage" is a symptom, and the reason is somewhere in the callee.
             throw new Incomplete("the writers placed no exception coverage in "
-                    + definition.binaryName);
+                    + definition.binaryName + " (last callee refusal: "
+                    + CalleeIsolation.lastRefusal() + ")");
         return out.append(']').toString();
     }
 
     private static MethodNode methodNamed(ClassNode cn, String name, String descriptor) {
         for (MethodNode mn : AsmTreeCompat.methods(cn))
             if (mn.name.equals(name) && mn.desc.equals(descriptor)) return mn;
+        return null;
+    }
+
+    /**
+     * The exception contract protecting one injected call, or null if none.
+     *
+     * <p>Two shapes count, and the difference is a fact about where the
+     * behaviour physically lives:</p>
+     * <ul>
+     *   <li>SCOPED_RETHROW -- the call takes a Throwable, which is how a scope
+     *       bracket reports the failure and rethrows it. The behaviour is in
+     *       THIS method.</li>
+     *   <li>ISOLATED_CALLEE -- the call is to a qualified safe wrapper whose own
+     *       bytecode is then inspected to establish that it really contains a
+     *       failing observation. A name is not a contract: a wrapper whose
+     *       catch-all has been removed reports as no coverage here, which is the
+     *       whole reason the wrapper's bytes are read rather than its name.</li>
+     * </ul>
+     */
+    private static String exceptionContractFor(MethodNode mn, MethodInsnNode call) {
+        if (takesThrowable(call.desc))
+            return "SCOPED_RETHROW:" + call.owner.replace('/', '.') + "#" + call.name + call.desc;
+        String isolated = CalleeIsolation.verify(call);
+        if (isolated != null) return isolated;
+        AbstractInsnNode[] body = AsmTreeCompat.instructions(mn);
+        int at = -1;
+        for (int i = 0; i < body.length; i++) if (body[i] == call) { at = i; break; }
+        if (at < 0) return null;
+        for (TryCatchBlockNode block : AsmTreeCompat.tryCatchBlocks(mn)) {
+            if (block.type != null) continue;
+            int from = -1, to = -1;
+            for (int i = 0; i < body.length; i++) {
+                if (body[i] == block.start) from = i;
+                if (body[i] == block.end) { to = i; break; }
+            }
+            if (block.end == mn.instructions.getLast()) to = body.length;
+            if (from < 0 || to < 0) continue;
+            if (from <= at && at < to)
+                return "CALLER_ISOLATION:" + call.owner.replace('/', '.') + "#" + call.name;
+        }
         return null;
     }
 

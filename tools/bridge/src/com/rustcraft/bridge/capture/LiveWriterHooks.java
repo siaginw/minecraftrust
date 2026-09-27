@@ -802,6 +802,77 @@ public final class LiveWriterHooks {
     }
 
     /** Injected at the flat generator entry (DIAGNOSTIC_ONLY verification marker). */
+    // ---- qualified one-shot observation wrappers ---------------------------
+    //
+    // A one-shot observational hook is a notification, not a lifecycle: there is
+    // no begin/end pair, so there is nothing to close on the way out. The only
+    // exception contract such a hook can honour is containment, and -- this is
+    // the part that matters -- it is honoured HERE, in the callee, not at the
+    // Minecraft callsite.
+    //
+    // The alternative was a catch-all wrapped around the injected call in the
+    // game method. That is not safe to do generically: the writer cannot know
+    // the operand stack at an arbitrary anchor, and a handler is entered with an
+    // empty stack, so resuming mid-expression means reconstructing the caller's
+    // frame -- which is verifier-precise, was measured at depths 1 and 3 for the
+    // S03 sites, and widened to java/lang/Object when spilled. Here the callsite
+    // stays a single INVOKESTATIC with the same arguments and the same stack, and
+    // the try/catch lives in a method that has no live stack to protect.
+    //
+    // The contract, precisely: a failure of the OBSERVATION is contained and the
+    // caller continues normally. An exception from the caller's own code is not
+    // swallowed, because it is raised outside this method and the range covers
+    // only the observation call.
+    /** Observations that failed and were contained, for qualification evidence. */
+    public static final AtomicLong OBSERVATION_FAILURES_CONTAINED = new AtomicLong();
+
+    // Each wrapper states its own containment rather than sharing one generic
+    // helper. A shared helper that took a lambda or an interface would put the
+    // real observation call inside a synthetic inner class, one frame away from
+    // the catch-all -- and a contract that cannot be seen in the method it
+    // claims to protect is a contract nobody can prove. Written out, the try
+    // range visibly contains exactly the one call it is about.
+
+    public static void safeIoPrivateLoadScope(Object world, int x, int z) {
+        try {
+            ioPrivateLoadScope(world, x, z);
+        } catch (Throwable contained) {
+            OBSERVATION_FAILURES_CONTAINED.incrementAndGet();
+        }
+    }
+
+    public static void safeIoPendingNbt(Object pendingResult) {
+        try {
+            ioPendingNbt(pendingResult);
+        } catch (Throwable contained) {
+            OBSERVATION_FAILURES_CONTAINED.incrementAndGet();
+        }
+    }
+
+    public static void safeIoDiskRoot(Object nbtRoot) {
+        try {
+            ioDiskRoot(nbtRoot);
+        } catch (Throwable contained) {
+            OBSERVATION_FAILURES_CONTAINED.incrementAndGet();
+        }
+    }
+
+    public static void safeIoPrivateConstructionSite(Object anchor) {
+        try {
+            ioPrivateConstructionSite(anchor);
+        } catch (Throwable contained) {
+            OBSERVATION_FAILURES_CONTAINED.incrementAndGet();
+        }
+    }
+
+    public static void safeGeneratorScopeBegin(Object generator) {
+        try {
+            generatorScopeBegin(generator);
+        } catch (Throwable contained) {
+            OBSERVATION_FAILURES_CONTAINED.incrementAndGet();
+        }
+    }
+
     public static void generatorScopeBegin(Object generator) {
         if (session != null) GENERATOR_SCOPES.incrementAndGet();
     }

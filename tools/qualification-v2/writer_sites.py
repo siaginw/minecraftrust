@@ -111,11 +111,20 @@ def expected_calls(hook: dict, pre_facts: list) -> list[dict]:
             # The load scope opens before anything else; the pending-NBT marker
             # and the disk-root marker are each anchored to a single verified
             # read in the pre-writer bytecode, so all three are single calls.
-            return [_call("ioPrivateLoadScope", "(Ljava/lang/Object;II)V"),
-                    _call("ioPendingNbt", "(Ljava/lang/Object;)V"),
-                    _call("ioDiskRoot", "(Ljava/lang/Object;)V")]
+            # The declared call is the qualified SAFE wrapper, because that is
+            # the call the writer now injects at the anchor: the wrapper is where
+            # a failing observation is contained. The engine still recounts every
+            # one of these from the transformed bytecode by owner, name and
+            # descriptor, so this states what must be there and not what is
+            # believed to be there. The wrapper's own containment is proved from
+            # the wrapper class, separately.
+            return [_call("safeIoPrivateLoadScope", "(Ljava/lang/Object;II)V"),
+                    _call("safeIoPendingNbt", "(Ljava/lang/Object;)V"),
+                    _call("safeIoDiskRoot", "(Ljava/lang/Object;)V")]
         if hook_id in ("S04", "S05"):
-            return [_call("ioPrivateConstructionSite", "(Ljava/lang/Object;)V")]
+            return [_call("safeIoPrivateConstructionSite", "(Ljava/lang/Object;)V")]
+        if hook_id == "S06":
+            return [_call("safeGeneratorScopeBegin", "(Ljava/lang/Object;)V")]
     raise ValueError("no derived call contract for hook " + hook_id + " (" + hook_type + ")")
 
 

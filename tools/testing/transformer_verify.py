@@ -167,16 +167,24 @@ def expected_groups(hook: dict) -> list:
         stop_handler = [("astore", ""), ("aload", ""),
                         ("invokestatic", FACADE + ".diagnosticSessionEnd"), ("aload", ""), ("athrow", "")]
         return [(start, "begin"), (stop, "end"), (stop_handler, "handler")]
+    # One-shot observational hooks are injected through their qualified safe
+    # wrappers: the callee is what contains a failing observation, so the
+    # wrapper is the call that must appear at the anchor. The shape check is
+    # otherwise unchanged -- same opcodes, same order, same contiguity, and the
+    # original instruction sequence must still be preserved exactly. The wrapper
+    # body is verified separately from its own bytecode; naming it here is not
+    # the evidence, it is only what has to be there.
     if hook["id"] == "S03":
         scope = [("aload", ""), ("iload_2", ""), ("iload_3", ""),
-                 ("invokestatic", FACADE + ".ioPrivateLoadScope")]
-        pending = [("dup", ""), ("invokestatic", FACADE + ".ioPendingNbt")]
-        disk = [("dup", ""), ("invokestatic", FACADE + ".ioDiskRoot")]
+                 ("invokestatic", FACADE + ".safeIoPrivateLoadScope")]
+        pending = [("dup", ""), ("invokestatic", FACADE + ".safeIoPendingNbt")]
+        disk = [("dup", ""), ("invokestatic", FACADE + ".safeIoDiskRoot")]
         return [(scope, "once"), (pending, "once"), (disk, "once")]
     if hook["id"] in ("S04", "S05", "S06"):
         marker = [("aload", ""), ("invokestatic", FACADE +
-                  {"S04": ".ioPrivateConstructionSite", "S05": ".ioPrivateConstructionSite",
-                   "S06": ".generatorScopeBegin"}[hook["id"]])]
+                  {"S04": ".safeIoPrivateConstructionSite",
+                   "S05": ".safeIoPrivateConstructionSite",
+                   "S06": ".safeGeneratorScopeBegin"}[hook["id"]])]
         return [(marker, "once")]
     if kind == "PRIVATE_BUILD_BEGIN":
         if hook["class"].endswith("Chunk"):
