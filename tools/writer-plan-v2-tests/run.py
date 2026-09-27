@@ -110,10 +110,15 @@ def main():
   # is the control that was missing when that drift was introduced.
   committed_manifest=ROOT/'tools/live-capture/required-live-writer-hooks.json'
   committed_profile=ROOT/'tools/live-capture/live-shadow-profile.json'
+  # The Revelation profile carries the same pin and nothing generates a plan from
+  # it, so nothing else would have noticed when it was left behind. Naming it
+  # here is what keeps one profile from drifting silently out of the set.
+  rev_profile=ROOT/'tools/live-capture/revelation-live-shadow-profile.json'
   r['manifest_pin']={'manifest_lf_sha256':msha(committed_manifest),
    'profile_pin':json.loads(committed_profile.read_text(encoding='utf-8'))['required_hooks_manifest_sha256'],
+   'revelation_profile_pin':json.loads(rev_profile.read_text(encoding='utf-8'))['required_hooks_manifest_sha256'],
    'plan_pin':re.search(r'REQUIRED_HOOKS_MANIFEST_SHA256 = "([0-9a-f]{64})"',(core/'LiveWriterPlan.java').read_text(encoding='utf-8')).group(1)}
-  assert len({r['manifest_pin']['manifest_lf_sha256'],r['manifest_pin']['profile_pin'],r['manifest_pin']['plan_pin']})==1,'manifest pin drift between manifest, profile and plan'
+  assert len(set(r['manifest_pin'].values()))==1,'manifest pin drift between manifest, both profiles and plan'
   # A CRLF rendering of the same manifest must produce the same plan: if the digest
   # were taken over raw working-tree bytes this comparison would fail on Windows.
   crlf_manifest=out/'crlf-manifest.json'
