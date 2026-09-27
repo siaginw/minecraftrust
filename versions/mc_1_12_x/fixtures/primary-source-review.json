@@ -1,0 +1,103 @@
+{
+  "schema_version": 1,
+  "reviewed_utc": "2026-09-27T00:57:27.625720+00:00",
+  "repository": "https://github.com/PrismarineJS/minecraft-data",
+  "tag": "3.112.0",
+  "commit": "2157a992b9eaf07a292101f1823dfca725e6aea8",
+  "license_declared": "MIT",
+  "license_evidence_url": "https://raw.githubusercontent.com/PrismarineJS/minecraft-data/2157a992b9eaf07a292101f1823dfca725e6aea8/README.md",
+  "license_limitation": "README cautions about extracted wiki data and potential source-specific licensing; no complete upstream schema/code is vendored.",
+  "source_files": [
+    {
+      "url": "https://raw.githubusercontent.com/PrismarineJS/minecraft-data/2157a992b9eaf07a292101f1823dfca725e6aea8/data/pc/common/protocolVersions.json",
+      "sha256": "317c15361cdf0a63ddd965894d94240ec33a6a0f3fb0b60238ee6fced97b51a2",
+      "bytes_read": 122940
+    },
+    {
+      "url": "https://raw.githubusercontent.com/PrismarineJS/minecraft-data/2157a992b9eaf07a292101f1823dfca725e6aea8/data/pc/1.12.1/protocol.json",
+      "sha256": "1976689d2f109ee662dcffe5c72a5f5b6791559117bdcc6c92853e65369cc7f7",
+      "bytes_read": 102347
+    },
+    {
+      "url": "https://raw.githubusercontent.com/PrismarineJS/minecraft-data/2157a992b9eaf07a292101f1823dfca725e6aea8/data/pc/1.12.2/protocol.json",
+      "sha256": "21c57208db654a5e14a34cb696570080df179c5c642e53b16120399eee9232be",
+      "bytes_read": 102341
+    },
+    {
+      "url": "https://raw.githubusercontent.com/PrismarineJS/minecraft-data/2157a992b9eaf07a292101f1823dfca725e6aea8/README.md",
+      "sha256": "d6e8731901c6539651e8725fecdba95d2c5a16b1d70544a0e85c65417a80190f",
+      "bytes_read": 9899
+    }
+  ],
+  "verified_facts": [
+    {
+      "release": "1.12.1",
+      "protocol": 338,
+      "data_version": 1241,
+      "keepalive": {
+        "toClient": {
+          "packet_id": "0x1f",
+          "field_name": "keepAliveId",
+          "field_type": "varint"
+        },
+        "toServer": {
+          "packet_id": "0x0b",
+          "field_name": "keepAliveId",
+          "field_type": "varint"
+        }
+      },
+      "position_fields": [
+        {
+          "name": "x",
+          "size": 26,
+          "signed": true
+        },
+        {
+          "name": "y",
+          "size": 12,
+          "signed": true
+        },
+        {
+          "name": "z",
+          "size": 26,
+          "signed": true
+        }
+      ]
+    },
+    {
+      "release": "1.12.2",
+      "protocol": 340,
+      "data_version": 1343,
+      "keepalive": {
+        "toClient": {
+          "packet_id": "0x1f",
+          "field_name": "keepAliveId",
+          "field_type": "i64"
+        },
+        "toServer": {
+          "packet_id": "0x0b",
+          "field_name": "keepAliveId",
+          "field_type": "i64"
+        }
+      },
+      "position_fields": [
+        {
+          "name": "x",
+          "size": 26,
+          "signed": true
+        },
+        {
+          "name": "y",
+          "size": 12,
+          "signed": true
+        },
+        {
+          "name": "z",
+          "size": 26,
+          "signed": true
+        }
+      ]
+    }
+  ],
+  "verification": "Read pinned primary repository metadata/schema, check both packet directions and position fields; factual fixture inputs only. No official Mojang binary executed."
+}

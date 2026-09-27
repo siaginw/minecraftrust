@@ -100,6 +100,13 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "3eaf3ede3fee6db1a4c2ee091bf8a8b4dccdc6d17f656fb07896ee72867612f2"
 
 [[package]]
+name = "mc-1-12-x"
+version = "0.1.0"
+dependencies = [
+ "rustcraft-core",
+]
+
+[[package]]
 name = "metrics"
 version = "0.1.0"
 
@@ -238,6 +245,10 @@ dependencies = [
  "core-types",
  "nbt",
 ]
+
+[[package]]
+name = "rustcraft-core"
+version = "0.1.0"
 
 [[package]]
 name = "spatial-index"

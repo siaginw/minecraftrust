@@ -18,6 +18,8 @@ members = [
     "crates/protocol",
     "crates/native-chunk",
     "crates/native-capability",
+    "crates/rustcraft-core",
+    "versions/mc_1_12_x",
 ]
 
 [workspace.package]
@@ -43,6 +45,8 @@ chunk-packet = { path = "crates/chunk-packet" }
 protocol = { path = "crates/protocol" }
 native-chunk = { path = "crates/native-chunk" }
 native-capability = { path = "crates/native-capability" }
+rustcraft-core = { path = "crates/rustcraft-core" }
+mc-1-12-x = { path = "versions/mc_1_12_x" }
 
 [profile.release]
 lto = "fat"

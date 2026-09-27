@@ -101,11 +101,25 @@
     {
       "id": "H5",
       "title": "VERSION-NEUTRAL CORE ARCHITECTURE",
-      "status": "IN_PROGRESS",
-      "implementation": [],
-      "validation": [],
-      "evidence": [],
-      "commit": null
+      "status": "FOUNDATION_VALIDATED",
+      "implementation": [
+        "crates/rustcraft-core",
+        "versions/mc_1_12_x",
+        "docs/architecture/version-adapters.md"
+      ],
+      "validation": [
+        "Core13 (11 integration +2 compile-fail); adapter11;Java18 fixture checks;strict scoped clippy/fmt; both4096-state dispatches;339 rejection;independent root rerun PASS",
+        "88 workspace library tests;28 capability regressions;release FFI;fresh Clean25 tooling/201 foundation/mask1 4358bytes identical;historical Revelation129classes/10controls PASS"
+      ],
+      "evidence": [
+        "machine/architecture-hardening/h5-version-adapters.json"
+      ],
+      "commit": null,
+      "outstanding": [
+        "Exact qualified runtime mapping extraction and H4/H6 issuer binding",
+        "Accepted legacy core-types/packet/FFI consumers remain unchanged until explicit migration",
+        "Complete codecs, loader/mod runtime and1.12.1 gameplay unimplemented"
+      ]
     },
     {
       "id": "H6",
@@ -329,9 +343,10 @@
           "status": "PENDING"
         },
         "E": {
-          "status": "BOUNDED_PROTOTYPE_VALIDATED",
+          "status": "PROTOTYPE_COMMITTED",
           "decision": "PROTOTYPE_JNI_STUDY_GENERATOR_AND_ALTERNATE_PARSER",
-          "evidence": "machine/architecture-hardening/h22-5-jni-validation.json"
+          "evidence": "machine/architecture-hardening/h22-5-jni-validation.json",
+          "commit": "72e68ca"
         },
         "F": {
           "status": "PENDING"
@@ -464,11 +479,25 @@
     {
       "id": "H5.1",
       "title": "1.12.X FAMILY",
-      "status": "PENDING",
-      "implementation": [],
-      "validation": [],
-      "evidence": [],
-      "commit": null
+      "status": "FOUNDATION_VALIDATED",
+      "implementation": [
+        "crates/rustcraft-core",
+        "versions/mc_1_12_x",
+        "docs/architecture/version-adapters.md"
+      ],
+      "validation": [
+        "Core13 (11 integration +2 compile-fail); adapter11;Java18 fixture checks;strict scoped clippy/fmt; both4096-state dispatches;339 rejection;independent root rerun PASS",
+        "88 workspace library tests;28 capability regressions;release FFI;fresh Clean25 tooling/201 foundation/mask1 4358bytes identical;historical Revelation129classes/10controls PASS"
+      ],
+      "evidence": [
+        "machine/architecture-hardening/h5-version-adapters.json"
+      ],
+      "commit": null,
+      "outstanding": [
+        "Exact qualified runtime mapping extraction and H4/H6 issuer binding",
+        "Accepted legacy core-types/packet/FFI consumers remain unchanged until explicit migration",
+        "Complete codecs, loader/mod runtime and1.12.1 gameplay unimplemented"
+      ]
     },
     {
       "id": "H6.1",

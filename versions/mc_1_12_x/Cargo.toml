@@ -1,0 +1,12 @@
+[package]
+name = "mc-1-12-x"
+version = "0.1.0"
+edition = "2021"
+license = "MIT OR Apache-2.0"
+description = "Minecraft 1.12.x version adapter architecture and fixtures"
+
+[dependencies]
+rustcraft-core = { path = "../../crates/rustcraft-core" }
+
+[lints.rust]
+unsafe_code = "forbid"

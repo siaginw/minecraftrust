@@ -1,0 +1,18 @@
+D:\minecraftrust-astra-hardening\tools\bridge\src\com\rustcraft\bridge\capture\LiveShadowCampaignConsumer.java:4: warning: Unsafe is internal proprietary API and may be removed in a future release
+import sun.misc.Unsafe;
+               ^
+D:\minecraftrust-astra-hardening\tools\bridge\src\com\rustcraft\bridge\capture\LiveShadowCampaignConsumer.java:32: warning: Unsafe is internal proprietary API and may be removed in a future release
+    private static final Unsafe MEMORY = unsafe();
+                         ^
+D:\minecraftrust-astra-hardening\tools\bridge\src\com\rustcraft\bridge\capture\LiveShadowCampaignConsumer.java:454: warning: Unsafe is internal proprietary API and may be removed in a future release
+    private static Unsafe unsafe() {
+                   ^
+D:\minecraftrust-astra-hardening\tools\bridge\src\com\rustcraft\bridge\capture\LiveShadowCampaignConsumer.java:456: warning: Unsafe is internal proprietary API and may be removed in a future release
+            Field f = Unsafe.class.getDeclaredField("theUnsafe");
+                      ^
+D:\minecraftrust-astra-hardening\tools\bridge\src\com\rustcraft\bridge\capture\LiveShadowCampaignConsumer.java:458: warning: Unsafe is internal proprietary API and may be removed in a future release
+            return (Unsafe) f.get(null);
+                    ^
+Note: D:\minecraftrust-astra-hardening\tools\bridge\src\com\rustcraft\bridge\capture\LiveShadowCampaignConsumer.java uses unchecked or unsafe operations.
+Note: Recompile with -Xlint:unchecked for details.
+5 warnings

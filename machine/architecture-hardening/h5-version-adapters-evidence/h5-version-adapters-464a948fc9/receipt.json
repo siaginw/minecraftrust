@@ -1,0 +1,495 @@
+{
+  "schema_version": 2,
+  "kind": "H5_VERSION_NEUTRAL_ARCHITECTURE_FIXTURES",
+  "started_utc": "2026-09-27T01:08:34.102661+00:00",
+  "production_authority": false,
+  "source_hashes_before": {
+    "Cargo.lock": "4b50c388f451285ef15b9a6283d5d4daaa9f2532243b5d4f007b4531d8ef8b4d",
+    "Cargo.toml": "53cc8edcb8f8822e9e010e8a5046b08d6af8186400eb7c215a344778d6012d01",
+    "crates/rustcraft-core/Cargo.toml": "f0b085a397c545665bae25b878f254c090a5d640bdc52e9bc15cf514f22ef39e",
+    "crates/rustcraft-core/src/lib.rs": "3e6a2914001d68fd02d8e0a33f4e7489ea14202e7b011af51aa3797976b73878",
+    "crates/rustcraft-core/tests/contracts.rs": "f1ab1f5718c72ed5f97d407afdca995f942d2da6d04ea957d435e07a0ec9ff9c",
+    "docs/architecture/version-adapters.md": "00e364b9093418aed55b23f5ee0dc4daa5641508df7c78c30adc2c8cca5a5996",
+    "machine/architecture-hardening/isolation.json": "8f9b34b55f6ecc1d549da1ec4c42900b4a831a3072a9e4aa6aa2ae39cae53d93",
+    "tools/bridge/src/com/rustcraft/bridge/capture/CaptureContract.java": "76d053eaf1b10d4d52de00f236365ff00216e6d8db3425f9de0054fcaa268586",
+    "tools/bridge/src/com/rustcraft/bridge/M4NativeStatePayload.java": "a47be5f83303a2d039fd56acbc24ba71ae9a98035bc9fb15545167535e2513ab",
+    "tools/testing/hardening_guard.py": "a2062b3ffbec7edba79bf5f5954fbcb1e9d97492ab9c4bb541833ebb820bdb6d",
+    "versions/mc_1_12_x/Cargo.toml": "9b958de3defbfd44a2faebddc1bad0bde21c461cdc49713a75854976b26145c5",
+    "versions/mc_1_12_x/examples/dispatch_once.rs": "4aef2cab4f9c323d3125ab7e2858d07b258878b6c45aab8d53f1fe1fcbaa9d92",
+    "versions/mc_1_12_x/fixtures/keepalive.tsv": "063fc32d1b66b48dfc2a6ef0bca36cd118e71aa32030fd16f775c04c03232b9a",
+    "versions/mc_1_12_x/fixtures/KeepAliveOracle.java": "e7337414be904cbfb7d10109e13b1810572cdcc6e88fd7e518be7e4befdd5c32",
+    "versions/mc_1_12_x/fixtures/NOTICES.md": "dffd8a49e0e04cf24550802417bf27a098ccbf1b756f822fd7f64cdcabba1e06",
+    "versions/mc_1_12_x/fixtures/positions.tsv": "7ad88478a6b8a4ea09af75b7e4f14ddade2d1007ff586df285fb16a5dd797799",
+    "versions/mc_1_12_x/fixtures/primary-source-review.json": "7223c6392398927dbec6cc376f4550253e5318eb510c3c9e6e4b3a5668a71251",
+    "versions/mc_1_12_x/fixtures/release-metadata.tsv": "3a9ad0eb15df7463d825d8c3b73db40b99d80796b91942374afe4a8a4cab75b9",
+    "versions/mc_1_12_x/fixtures/resource-location-review.json": "8fc0854115bcfa342bd0678e636132daf41fa9e2bd01e7df66d36bc30be0248e",
+    "versions/mc_1_12_x/src/lib.rs": "5c9ce7e6889687defff92c654754c908eeb5b231444e7094990968c2d34f9c76",
+    "versions/mc_1_12_x/src/mc_1_12_1/mod.rs": "ff1acd99c380bb461791bf9d4e45e5e07456799896e51deb9e67d6fc51f3cc1c",
+    "versions/mc_1_12_x/src/mc_1_12_2/mod.rs": "dd842b724fb601c86ecb82da35d8a977a383f50903d57fd48562ec6b000c5094",
+    "versions/mc_1_12_x/src/protocol.rs": "94fc8442f79e4dab83d65cd77b062dc49a0094b5189286b97f1f3c7c581daefd",
+    "versions/mc_1_12_x/src/world_format.rs": "15f024d2b1ad02d185a556ce5372c26314bae02410d51a0fb62d4e9b4a187722",
+    "versions/mc_1_12_x/tests/adapter_contracts.rs": "af4f7fd81ff20a0dbdc1fdf5f80a8dd222320dbf4de38e71900fdebf55b3a92d",
+    "versions/mc_1_12_x/tools/run_validation.py": "e1ddb78a16e2086209a969714dd4c92eb2f8373187591d7548ab1a7876ad56ed"
+  },
+  "tool_hashes_before": {
+    "C:\\Users\\Admin\\.cargo\\bin\\cargo.exe": "6f4bef66261261fcb43131be8720bab817d403a09edec7455c371974b90bdb7e",
+    "C:\\Users\\Admin\\.cargo\\bin\\rustup.exe": "6f4bef66261261fcb43131be8720bab817d403a09edec7455c371974b90bdb7e",
+    "C:\\Python314\\python.exe": "4942b86a6597e5aee0128daa00050ed79bc21f6e709a78eb19cbfeb0c2f39ac9",
+    "C:\\Program Files\\Git\\cmd\\git.exe": "37c5725818d602e951ba2563b870d62763322956b73373da4c33a0b566a80bc9",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\bin\\java.exe": "65ebee06ec47df0c41c4483ac5aa408e55adb47a1613bad56be30bccc4317e85",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\bin\\javac.exe": "9f1dae15ffb49c7363c72351cf61f4889ac6896e3df87c1c5553b81745ae8a07",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\bin\\server\\jvm.dll": "d3f1564b31a25f280d633d33234bdf88fd12dbe0ae34e15e2e89db3f0ca2d407",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\lib\\rt.jar": "1166665601d9b1587682e2540cff6a31b0c7028211d2e07adb9ad30e1699eca3",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\lib\\tools.jar": "7325904e8de35b7376bbed7080a1fce7d9b886d3dddb5bfdbc00cefe7b248987",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\cargo.exe": "c37545ec61d48d31bdefce53280ecab61c4ea54eaace372fac6a0316c6e165d9",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\rustc.exe": "ca9988af88b1463f6857fdfe909299fee50a63260b3e5f7dbcb5b4d3318b27bc",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\rustdoc.exe": "9daff87cf4052ba3f97decb39d2822e1a96b3ed444eda86ed8df74802679dd60",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\rustfmt.exe": "ac9d781249bffabbb1bedb691a5ea6f63a818c1dda73dd698d4dff687ad4c24e",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\clippy-driver.exe": "00fd4ef2fe60e603571573746e52f42f109bbfe4b879e7ca7313614fda0b367b",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\cargo-fmt.exe": "fcd2d35d13dc1a487c755e234bf2aee06f75b522c8a691cac9ee5f0d6fc854a1",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\cargo-clippy.exe": "cb0f2b164b3f6e95bfed7ec4ae9fc48f8ce8d9fef3649b5ae87961f75e1ef484"
+  },
+  "selected_toolchain": "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin",
+  "results": [
+    {
+      "name": "cargo-version",
+      "argv": [
+        "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\cargo.exe",
+        "--version"
+      ],
+      "exit_code": 0,
+      "seconds": 0.030439900001510978,
+      "log": "target/architecture-hardening/h5-version-adapters-464a948fc9/cargo-version.log",
+      "log_sha256": "9950bbb2d5c3417b1a068f0e81f6d3cac991a363193bdf2a22d447f5acf8b503",
+      "status": "PASS"
+    },
+    {
+      "name": "rustc-version",
+      "argv": [
+        "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\rustc.exe",
+        "-Vv"
+      ],
+      "exit_code": 0,
+      "seconds": 0.020519499958027154,
+      "log": "target/architecture-hardening/h5-version-adapters-464a948fc9/rustc-version.log",
+      "log_sha256": "c45e612575abeef05e99e88eb1e7aea52cddab9ad70d4f65ad20eaa65e92a9cf",
+      "status": "PASS"
+    },
+    {
+      "name": "java-version",
+      "argv": [
+        "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\bin\\java.exe",
+        "-version"
+      ],
+      "exit_code": 0,
+      "seconds": 0.0489981000428088,
+      "log": "target/architecture-hardening/h5-version-adapters-464a948fc9/java-version.log",
+      "log_sha256": "9d65a43706f49fcfdbcece91e737f759110493e82fd1c4886cf49104c2017b0e",
+      "status": "PASS"
+    },
+    {
+      "name": "core-fmt",
+      "argv": [
+        "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\cargo.exe",
+        "fmt",
+        "--manifest-path",
+        "D:\\minecraftrust-astra-hardening\\Cargo.toml",
+        "-p",
+        "rustcraft-core",
+        "--check"
+      ],
+      "exit_code": 0,
+      "seconds": 0.12444510002387688,
+      "log": "target/architecture-hardening/h5-version-adapters-464a948fc9/core-fmt.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "status": "PASS"
+    },
+    {
+      "name": "core-clippy",
+      "argv": [
+        "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\cargo.exe",
+        "clippy",
+        "--locked",
+        "--offline",
+        "--manifest-path",
+        "D:\\minecraftrust-astra-hardening\\Cargo.toml",
+        "-p",
+        "rustcraft-core",
+        "--target-dir",
+        "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h5-version-adapters-464a948fc9\\cargo\\core",
+        "--all-targets",
+        "--",
+        "-D",
+        "warnings"
+      ],
+      "exit_code": 0,
+      "seconds": 0.3896116000250913,
+      "log": "target/architecture-hardening/h5-version-adapters-464a948fc9/core-clippy.log",
+      "log_sha256": "7650083098cb43e70d2853e7b7bf9c493283f18f45a398b1e6570e0075e4b065",
+      "status": "PASS"
+    },
+    {
+      "name": "core-tests",
+      "argv": [
+        "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\cargo.exe",
+        "test",
+        "--locked",
+        "--offline",
+        "--manifest-path",
+        "D:\\minecraftrust-astra-hardening\\Cargo.toml",
+        "-p",
+        "rustcraft-core",
+        "--target-dir",
+        "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h5-version-adapters-464a948fc9\\cargo\\core"
+      ],
+      "exit_code": 0,
+      "seconds": 1.1981445999699645,
+      "log": "target/architecture-hardening/h5-version-adapters-464a948fc9/core-tests.log",
+      "log_sha256": "0ea2adbf7e83dd4238d7d14e6d1aa215e79d7fed88eab24bc0e58f7900610cb3",
+      "test_summaries": [
+        {
+          "passed": 0,
+          "failed": 0,
+          "ignored": 0
+        },
+        {
+          "passed": 11,
+          "failed": 0,
+          "ignored": 0
+        },
+        {
+          "passed": 2,
+          "failed": 0,
+          "ignored": 0
+        }
+      ],
+      "command_passed_total": 13,
+      "status": "PASS"
+    },
+    {
+      "name": "adapter-fmt",
+      "argv": [
+        "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\cargo.exe",
+        "fmt",
+        "--manifest-path",
+        "D:\\minecraftrust-astra-hardening\\Cargo.toml",
+        "-p",
+        "mc-1-12-x",
+        "--check"
+      ],
+      "exit_code": 0,
+      "seconds": 0.12747970002237707,
+      "log": "target/architecture-hardening/h5-version-adapters-464a948fc9/adapter-fmt.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "status": "PASS"
+    },
+    {
+      "name": "adapter-clippy",
+      "argv": [
+        "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\cargo.exe",
+        "clippy",
+        "--locked",
+        "--offline",
+        "--manifest-path",
+        "D:\\minecraftrust-astra-hardening\\Cargo.toml",
+        "-p",
+        "mc-1-12-x",
+        "--target-dir",
+        "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h5-version-adapters-464a948fc9\\cargo\\adapter",
+        "--all-targets",
+        "--",
+        "-D",
+        "warnings"
+      ],
+      "exit_code": 0,
+      "seconds": 0.5164373999577947,
+      "log": "target/architecture-hardening/h5-version-adapters-464a948fc9/adapter-clippy.log",
+      "log_sha256": "e842371cbff53c1fbebf4f1e59d8a5aeda90d916e880f1708b6994adbc9cb43c",
+      "status": "PASS"
+    },
+    {
+      "name": "adapter-tests",
+      "argv": [
+        "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\cargo.exe",
+        "test",
+        "--locked",
+        "--offline",
+        "--manifest-path",
+        "D:\\minecraftrust-astra-hardening\\Cargo.toml",
+        "-p",
+        "mc-1-12-x",
+        "--target-dir",
+        "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h5-version-adapters-464a948fc9\\cargo\\adapter"
+      ],
+      "exit_code": 0,
+      "seconds": 1.302354799991008,
+      "log": "target/architecture-hardening/h5-version-adapters-464a948fc9/adapter-tests.log",
+      "log_sha256": "afe0e84fda53fb1448abc5adcf601b421df6a6844ab3b9ff0e8397041fa8acba",
+      "test_summaries": [
+        {
+          "passed": 0,
+          "failed": 0,
+          "ignored": 0
+        },
+        {
+          "passed": 11,
+          "failed": 0,
+          "ignored": 0
+        },
+        {
+          "passed": 0,
+          "failed": 0,
+          "ignored": 0
+        }
+      ],
+      "command_passed_total": 11,
+      "status": "PASS"
+    },
+    {
+      "name": "dispatch-338",
+      "argv": [
+        "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\cargo.exe",
+        "run",
+        "--locked",
+        "--offline",
+        "--manifest-path",
+        "D:\\minecraftrust-astra-hardening\\Cargo.toml",
+        "-p",
+        "mc-1-12-x",
+        "--target-dir",
+        "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h5-version-adapters-464a948fc9\\cargo\\adapter",
+        "--example",
+        "dispatch_once",
+        "--",
+        "338"
+      ],
+      "exit_code": 0,
+      "seconds": 0.09559629997238517,
+      "log": "target/architecture-hardening/h5-version-adapters-464a948fc9/dispatch-338.log",
+      "log_sha256": "4148b68a25c79a6d735ea8a53f69ef35db854e706916203abaeaa9581d586c7d",
+      "status": "PASS"
+    },
+    {
+      "name": "dispatch-340",
+      "argv": [
+        "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\cargo.exe",
+        "run",
+        "--locked",
+        "--offline",
+        "--manifest-path",
+        "D:\\minecraftrust-astra-hardening\\Cargo.toml",
+        "-p",
+        "mc-1-12-x",
+        "--target-dir",
+        "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h5-version-adapters-464a948fc9\\cargo\\adapter",
+        "--example",
+        "dispatch_once",
+        "--",
+        "340"
+      ],
+      "exit_code": 0,
+      "seconds": 0.057544799987226725,
+      "log": "target/architecture-hardening/h5-version-adapters-464a948fc9/dispatch-340.log",
+      "log_sha256": "a075bb1c07602b2280d9471de213a1c744f9a83e253010f0c04a51e7bee299b8",
+      "status": "PASS"
+    },
+    {
+      "name": "dispatch-339",
+      "argv": [
+        "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\cargo.exe",
+        "run",
+        "--locked",
+        "--offline",
+        "--manifest-path",
+        "D:\\minecraftrust-astra-hardening\\Cargo.toml",
+        "-p",
+        "mc-1-12-x",
+        "--target-dir",
+        "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h5-version-adapters-464a948fc9\\cargo\\adapter",
+        "--example",
+        "dispatch_once",
+        "--",
+        "339"
+      ],
+      "exit_code": 1,
+      "seconds": 0.053775699983816594,
+      "log": "target/architecture-hardening/h5-version-adapters-464a948fc9/dispatch-339.log",
+      "log_sha256": "e99eeef800d849729410da19fda8c915e4f63c0aa4be1b0ff2a7aee4e12e9f87",
+      "expected_failure_marker": "UnsupportedProtocol",
+      "status": "PASS"
+    },
+    {
+      "name": "java-compile",
+      "argv": [
+        "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\bin\\javac.exe",
+        "-proc:none",
+        "-encoding",
+        "UTF-8",
+        "-source",
+        "8",
+        "-target",
+        "8",
+        "-d",
+        "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h5-version-adapters-464a948fc9\\java-classes",
+        "D:\\minecraftrust-astra-hardening\\versions\\mc_1_12_x\\fixtures\\KeepAliveOracle.java"
+      ],
+      "exit_code": 0,
+      "seconds": 0.2938834000378847,
+      "log": "target/architecture-hardening/h5-version-adapters-464a948fc9/java-compile.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "status": "PASS"
+    },
+    {
+      "name": "java-oracle",
+      "argv": [
+        "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\bin\\java.exe",
+        "-cp",
+        "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h5-version-adapters-464a948fc9\\java-classes",
+        "KeepAliveOracle",
+        "D:\\minecraftrust-astra-hardening\\versions\\mc_1_12_x\\fixtures\\keepalive.tsv"
+      ],
+      "exit_code": 0,
+      "seconds": 0.06687909999163821,
+      "log": "target/architecture-hardening/h5-version-adapters-464a948fc9/java-oracle.log",
+      "log_sha256": "489aa0fe8afa3c58138406a832dd899fdb51f32640a7e86d2f214b7aab35e5cb",
+      "status": "PASS"
+    },
+    {
+      "name": "diff-check",
+      "argv": [
+        "C:\\Program Files\\Git\\cmd\\git.EXE",
+        "diff",
+        "--check",
+        "--",
+        "crates/rustcraft-core",
+        "versions/mc_1_12_x",
+        "docs/architecture/version-adapters.md"
+      ],
+      "exit_code": 0,
+      "seconds": 0.033074700040742755,
+      "log": "target/architecture-hardening/h5-version-adapters-464a948fc9/diff-check.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "status": "PASS"
+    }
+  ],
+  "limitations": [
+    "New packages integrated into root workspace; no existing consumer migration.",
+    "No full 1.12.1 gameplay, modern support, Forge/modpack qualification or performance claim.",
+    "Java reference fixture oracle is not a captured Minecraft runtime.",
+    "Tool hashes bind listed executables/JDK runtime files, not every system DLL, linker, SDK or environment dependency."
+  ],
+  "isolation_before": {
+    "schema_version": 1,
+    "kind": "HARDENING_ISOLATION_GATE_CHECK",
+    "status": "PASS",
+    "failures": [],
+    "original_observed": {
+      "head": "c4b868db2c9e4b03f745bf93c6ebf4fd8a8519e7",
+      "branch": "issue1-jni-v2",
+      "status": [
+        " M tools/live-capture/live_client_session.py",
+        "?? tools/live-capture/__pycache__/",
+        "?? tools/live-capture/run_rev_shadow.py"
+      ],
+      "files": [
+        {
+          "path": "D:\\minecraftrust\\tools\\live-capture\\live_client_session.py",
+          "sha256": "151c356161695aba3db3c1a8cbd589b5eda2b5a1770dff59ab21b728d36cabfa"
+        },
+        {
+          "path": "D:\\minecraftrust\\tools\\live-capture\\run_rev_shadow.py",
+          "sha256": "2b9b2aca49e57dd0d2a74bec46efcdc0ac7f95762a733276e27ff9dbcb472d93"
+        }
+      ]
+    },
+    "isolated_worktree": "D:\\minecraftrust-astra-hardening",
+    "isolated_head": "44f61a46f7cda93c0ac8aaffe13087678501cc6f",
+    "isolated_branch": "astra/architecture-hardening",
+    "production_gate_checks": {
+      "tryEncode_fail_closed": true,
+      "productionAuthorityEligible_false": true
+    },
+    "scope": "read-only original HEAD/status/two paused source hashes plus conservative source guards; runtime authority tests remain required"
+  },
+  "status": "PASS",
+  "source_hashes_after": {
+    "Cargo.lock": "4b50c388f451285ef15b9a6283d5d4daaa9f2532243b5d4f007b4531d8ef8b4d",
+    "Cargo.toml": "53cc8edcb8f8822e9e010e8a5046b08d6af8186400eb7c215a344778d6012d01",
+    "crates/rustcraft-core/Cargo.toml": "f0b085a397c545665bae25b878f254c090a5d640bdc52e9bc15cf514f22ef39e",
+    "crates/rustcraft-core/src/lib.rs": "3e6a2914001d68fd02d8e0a33f4e7489ea14202e7b011af51aa3797976b73878",
+    "crates/rustcraft-core/tests/contracts.rs": "f1ab1f5718c72ed5f97d407afdca995f942d2da6d04ea957d435e07a0ec9ff9c",
+    "docs/architecture/version-adapters.md": "00e364b9093418aed55b23f5ee0dc4daa5641508df7c78c30adc2c8cca5a5996",
+    "machine/architecture-hardening/isolation.json": "8f9b34b55f6ecc1d549da1ec4c42900b4a831a3072a9e4aa6aa2ae39cae53d93",
+    "tools/bridge/src/com/rustcraft/bridge/capture/CaptureContract.java": "76d053eaf1b10d4d52de00f236365ff00216e6d8db3425f9de0054fcaa268586",
+    "tools/bridge/src/com/rustcraft/bridge/M4NativeStatePayload.java": "a47be5f83303a2d039fd56acbc24ba71ae9a98035bc9fb15545167535e2513ab",
+    "tools/testing/hardening_guard.py": "a2062b3ffbec7edba79bf5f5954fbcb1e9d97492ab9c4bb541833ebb820bdb6d",
+    "versions/mc_1_12_x/Cargo.toml": "9b958de3defbfd44a2faebddc1bad0bde21c461cdc49713a75854976b26145c5",
+    "versions/mc_1_12_x/examples/dispatch_once.rs": "4aef2cab4f9c323d3125ab7e2858d07b258878b6c45aab8d53f1fe1fcbaa9d92",
+    "versions/mc_1_12_x/fixtures/keepalive.tsv": "063fc32d1b66b48dfc2a6ef0bca36cd118e71aa32030fd16f775c04c03232b9a",
+    "versions/mc_1_12_x/fixtures/KeepAliveOracle.java": "e7337414be904cbfb7d10109e13b1810572cdcc6e88fd7e518be7e4befdd5c32",
+    "versions/mc_1_12_x/fixtures/NOTICES.md": "dffd8a49e0e04cf24550802417bf27a098ccbf1b756f822fd7f64cdcabba1e06",
+    "versions/mc_1_12_x/fixtures/positions.tsv": "7ad88478a6b8a4ea09af75b7e4f14ddade2d1007ff586df285fb16a5dd797799",
+    "versions/mc_1_12_x/fixtures/primary-source-review.json": "7223c6392398927dbec6cc376f4550253e5318eb510c3c9e6e4b3a5668a71251",
+    "versions/mc_1_12_x/fixtures/release-metadata.tsv": "3a9ad0eb15df7463d825d8c3b73db40b99d80796b91942374afe4a8a4cab75b9",
+    "versions/mc_1_12_x/fixtures/resource-location-review.json": "8fc0854115bcfa342bd0678e636132daf41fa9e2bd01e7df66d36bc30be0248e",
+    "versions/mc_1_12_x/src/lib.rs": "5c9ce7e6889687defff92c654754c908eeb5b231444e7094990968c2d34f9c76",
+    "versions/mc_1_12_x/src/mc_1_12_1/mod.rs": "ff1acd99c380bb461791bf9d4e45e5e07456799896e51deb9e67d6fc51f3cc1c",
+    "versions/mc_1_12_x/src/mc_1_12_2/mod.rs": "dd842b724fb601c86ecb82da35d8a977a383f50903d57fd48562ec6b000c5094",
+    "versions/mc_1_12_x/src/protocol.rs": "94fc8442f79e4dab83d65cd77b062dc49a0094b5189286b97f1f3c7c581daefd",
+    "versions/mc_1_12_x/src/world_format.rs": "15f024d2b1ad02d185a556ce5372c26314bae02410d51a0fb62d4e9b4a187722",
+    "versions/mc_1_12_x/tests/adapter_contracts.rs": "af4f7fd81ff20a0dbdc1fdf5f80a8dd222320dbf4de38e71900fdebf55b3a92d",
+    "versions/mc_1_12_x/tools/run_validation.py": "e1ddb78a16e2086209a969714dd4c92eb2f8373187591d7548ab1a7876ad56ed"
+  },
+  "isolation_after": {
+    "schema_version": 1,
+    "kind": "HARDENING_ISOLATION_GATE_CHECK",
+    "status": "PASS",
+    "failures": [],
+    "original_observed": {
+      "head": "c4b868db2c9e4b03f745bf93c6ebf4fd8a8519e7",
+      "branch": "issue1-jni-v2",
+      "status": [
+        " M tools/live-capture/live_client_session.py",
+        "?? tools/live-capture/__pycache__/",
+        "?? tools/live-capture/run_rev_shadow.py"
+      ],
+      "files": [
+        {
+          "path": "D:\\minecraftrust\\tools\\live-capture\\live_client_session.py",
+          "sha256": "151c356161695aba3db3c1a8cbd589b5eda2b5a1770dff59ab21b728d36cabfa"
+        },
+        {
+          "path": "D:\\minecraftrust\\tools\\live-capture\\run_rev_shadow.py",
+          "sha256": "2b9b2aca49e57dd0d2a74bec46efcdc0ac7f95762a733276e27ff9dbcb472d93"
+        }
+      ]
+    },
+    "isolated_worktree": "D:\\minecraftrust-astra-hardening",
+    "isolated_head": "44f61a46f7cda93c0ac8aaffe13087678501cc6f",
+    "isolated_branch": "astra/architecture-hardening",
+    "production_gate_checks": {
+      "tryEncode_fail_closed": true,
+      "productionAuthorityEligible_false": true
+    },
+    "scope": "read-only original HEAD/status/two paused source hashes plus conservative source guards; runtime authority tests remain required"
+  },
+  "tool_hashes_after": {
+    "C:\\Users\\Admin\\.cargo\\bin\\cargo.exe": "6f4bef66261261fcb43131be8720bab817d403a09edec7455c371974b90bdb7e",
+    "C:\\Users\\Admin\\.cargo\\bin\\rustup.exe": "6f4bef66261261fcb43131be8720bab817d403a09edec7455c371974b90bdb7e",
+    "C:\\Python314\\python.exe": "4942b86a6597e5aee0128daa00050ed79bc21f6e709a78eb19cbfeb0c2f39ac9",
+    "C:\\Program Files\\Git\\cmd\\git.exe": "37c5725818d602e951ba2563b870d62763322956b73373da4c33a0b566a80bc9",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\bin\\java.exe": "65ebee06ec47df0c41c4483ac5aa408e55adb47a1613bad56be30bccc4317e85",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\bin\\javac.exe": "9f1dae15ffb49c7363c72351cf61f4889ac6896e3df87c1c5553b81745ae8a07",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\bin\\server\\jvm.dll": "d3f1564b31a25f280d633d33234bdf88fd12dbe0ae34e15e2e89db3f0ca2d407",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\lib\\rt.jar": "1166665601d9b1587682e2540cff6a31b0c7028211d2e07adb9ad30e1699eca3",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\lib\\tools.jar": "7325904e8de35b7376bbed7080a1fce7d9b886d3dddb5bfdbc00cefe7b248987",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\cargo.exe": "c37545ec61d48d31bdefce53280ecab61c4ea54eaace372fac6a0316c6e165d9",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\rustc.exe": "ca9988af88b1463f6857fdfe909299fee50a63260b3e5f7dbcb5b4d3318b27bc",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\rustdoc.exe": "9daff87cf4052ba3f97decb39d2822e1a96b3ed444eda86ed8df74802679dd60",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\rustfmt.exe": "ac9d781249bffabbb1bedb691a5ea6f63a818c1dda73dd698d4dff687ad4c24e",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\clippy-driver.exe": "00fd4ef2fe60e603571573746e52f42f109bbfe4b879e7ca7313614fda0b367b",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\cargo-fmt.exe": "fcd2d35d13dc1a487c755e234bf2aee06f75b522c8a691cac9ee5f0d6fc854a1",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\cargo-clippy.exe": "cb0f2b164b3f6e95bfed7ec4ae9fc48f8ce8d9fef3649b5ae87961f75e1ef484"
+  },
+  "finished_utc": "2026-09-27T01:08:39.095440+00:00"
+}

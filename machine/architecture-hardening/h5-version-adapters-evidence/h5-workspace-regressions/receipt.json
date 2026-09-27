@@ -1,0 +1,502 @@
+{
+  "schema": "H4_CAPABILITY_MODEL_CHECK_V1",
+  "scope": "DETERMINISTIC_MODEL_ONLY",
+  "milestone": "H4_FOUNDATION",
+  "runtime_integration": false,
+  "workspace_regressions_requested": true,
+  "strict_lint_scope": "native-capability only; existing workspace debt is not reclassified",
+  "production_authority": false,
+  "started_utc": "2026-09-27T01:10:36.495395+00:00",
+  "source_hashes_before": {
+    "Cargo.lock": "4b50c388f451285ef15b9a6283d5d4daaa9f2532243b5d4f007b4531d8ef8b4d",
+    "Cargo.toml": "53cc8edcb8f8822e9e010e8a5046b08d6af8186400eb7c215a344778d6012d01",
+    "crates\\buffers\\Cargo.toml": "b174f499d9c90e7ffd5846e200f1b61a2dbfc53b54b2a6d2f272ec6c19c2d512",
+    "crates\\buffers\\src\\lib.rs": "371258844e412e16b93ec539ab7e7e13a3a344e7fc3a54a7feb350d5bde45ab1",
+    "crates\\chunk-packet\\Cargo.toml": "a12041689a2b4f4756fb1a1d06cc5ba7083dd231c605818f6b24b57eac8bd314",
+    "crates\\chunk-packet\\src\\lib.rs": "efe274775c67d0613fc19856e041bf0b2eb5f404ac12eca57ff6aaf0c839f3f7",
+    "crates\\compression\\Cargo.toml": "4895b32bbb0ddbf52906b99964e60454aad47a1288d05b3a3995a64d6c12967d",
+    "crates\\compression\\src\\frame.rs": "da3ae0a63572df73d5181d2d8fdaa62570e1f60326922e9dbb2cd799475f66ae",
+    "crates\\compression\\src\\lib.rs": "99046742806d30a8dc41115eb69591dbf1d96c6c7424e25fb5db7c579bac8093",
+    "crates\\contracts\\Cargo.toml": "7d7fc3c7b6a9d856f257ddf87d4f032ced6733a0b145586b8cd081332c5525ee",
+    "crates\\contracts\\src\\lib.rs": "d10b82b03f5f47fd01d50fa86377961a1a5efb70e00f4a63ca4988e31f318dd7",
+    "crates\\core-types\\Cargo.toml": "00383c33bbd1fb38b76e11d3cded64ff8832ce65efdf7620e00583613c2d2f82",
+    "crates\\core-types\\src\\lib.rs": "630c3b67eeed6fd4e8216e3418656e7851728199391f4155ac94da852fe11521",
+    "crates\\ffi\\Cargo.toml": "09c4549e27140e51440fe2ac79cacd255b0241b92294753381fef3d50221df3a",
+    "crates\\ffi\\examples\\snapshot_replay.rs": "9553981d4bb1f13177e339a04e5e719ebb29bd8471ec8c92ae30375374174e3f",
+    "crates\\ffi\\src\\lib.rs": "132151a88182600e5e8428b88df75ae9b50ce1954096d729f47b519f0d8a848e",
+    "crates\\ffi\\src\\native_chunk.rs": "91ced7c51800611321a38f3762a0e9c95f95a0acd9546a677894e699a1dced03",
+    "crates\\ffi\\src\\owned_snapshot.rs": "0bbd964a9795a640f744544d4e7f5716e43be89472d0db0c2b999c65c1dffe59",
+    "crates\\ffi\\src\\packet_encode_v2.rs": "66516c71a2b7cf5e7d02f794bad6a06a99288a2111e2daef0bb0906ec40b801f",
+    "crates\\ffi\\src\\spawn.rs": "d9eb4a08fb1e5fb61beb4ae8125e0eb8f59823b59133604d4bf473ccbbe920d9",
+    "crates\\ffi\\src\\wnoise.rs": "ff672473d07056374ced129373e201ebcf2c0d0ec2e486d62138f99119afc2d8",
+    "crates\\ffi\\tests\\packet_encode_v2.rs": "a8da735f8c902d98e85b047c0b0f19935718bd95895ba6dd24c1dd875c2de195",
+    "crates\\ffi\\tests\\telemetry_contract.rs": "bfbbc3bd779a79c6ef15dbb7cd678728326db55bc32b186c6ea38f21452f02d4",
+    "crates\\metrics\\Cargo.toml": "aba7aa21c53aaedfdc94452a4e47b423b06a94cecde966ebfc8b299913cb2db4",
+    "crates\\metrics\\src\\lib.rs": "ec51b389e3174d56c1b3642d0cce7d7a5431248df3efff11b9c14dbecdfdda2e",
+    "crates\\native-capability\\Cargo.toml": "352d8023b05ef342d2165363f533931258e0f5c8e4758bb83ff64df4183c8964",
+    "crates\\native-capability\\src\\lib.rs": "0fc47fbd5872a404c6fc40d248245549cbd3872c63a4d656cab1f7a5d30872d7",
+    "crates\\native-capability\\tests\\model.rs": "0457e842992aad97efcef39fecfdae8c3109a3b212ff6e013a26839636448e66",
+    "crates\\native-capability\\verify.py": "49110937ada5c03db93cc30fb272392b5b58c6c08b57a41fb6142bdfcf9f10d4",
+    "crates\\native-chunk\\Cargo.toml": "00b673f4e5f13ae6224b0bd1ef683aeadd07073c426cf077270ea8ecf94ab425",
+    "crates\\native-chunk\\examples\\memory_model.rs": "62d9c41b62db6a1958742321dc06fa28b7e1f225a4237f1b8372dede4402998d",
+    "crates\\native-chunk\\examples\\palette_parity.rs": "fe37a7945cb2cfe3905f56be69af891f22e709446910c307327883b2e33aa8e3",
+    "crates\\native-chunk\\src\\chunk.rs": "4a91edb9587343ed67648de39b771e51600602e4e1d4ec72bea4a3b05d7f0921",
+    "crates\\native-chunk\\src\\lib.rs": "0ff2155a8f4061a7939d3d3e91bbb73ae665b45ef211e10c7892965b2cc0a20c",
+    "crates\\native-chunk\\src\\packet_snapshot.rs": "7170c8b0b56c3675927efa8d418b933683e302ed37002a606033fbc189970c12",
+    "crates\\native-chunk\\src\\registry.rs": "79b4e5366da7b31dda3bd6fd24d72584e07f7c8da0f6514574221a39e1a63deb",
+    "crates\\native-chunk\\src\\section.rs": "262f244fc86dab5d7a8a9eb0d2ef25f092b2229f30198aa5d410839171cb6d1e",
+    "crates\\native-chunk\\tests\\owned_snapshot_properties.rs": "1446938e30c54784dd16074f859c74500eb052f780cc1d9925c3d4a61e6dc487",
+    "crates\\native-chunk\\tests\\packet_encode_contract.rs": "09b276011606b492ecda0623b77e3ef1fcaf8c4e2247a33641d415ccac486820",
+    "crates\\native-chunk\\tests\\packet_snapshot.rs": "de43bac3a13ba598d4d2d1ce52deb247fbbd960f0637cc03361250e16923bdad",
+    "crates\\native-chunk\\tests\\property_contract.rs": "1c6a82d851b0e4eacd567dfd85b70d04f8d81098cedd57b80a8ead9fc017b516",
+    "crates\\nbt\\Cargo.toml": "af740ed4473def3917699526200a03eb6b00b5997a6b61276ab3e23adefcb314",
+    "crates\\nbt\\src\\codec.rs": "8eed3209ef4817f7e5c1076dedf2d4473ebe5a0ebcef8acfbf017894922a3782",
+    "crates\\nbt\\src\\lib.rs": "aa69fd9bc5d2caeeb42460f95d5d0aa343ab48682f02a91ec7406208d93c5852",
+    "crates\\nbt\\src\\mutf8.rs": "055000a5760f4c6c8e44aa729552a1f3763b1c2f85142d66b20efa38803e753a",
+    "crates\\nbt\\src\\tape.rs": "44267a09feafac4d1a2a5e2098cdce509675703920b167a9b1e3adc4ff3af0e2",
+    "crates\\nbt\\src\\tests.rs": "e8967ff927637276b3e77da0cdf17bc37b03452625a625d75ac75a9977185b93",
+    "crates\\protocol\\Cargo.toml": "68a7c06ea5fc1954c962b99a817235f4e6bb65a7d04b9f0ec3288be5385732dd",
+    "crates\\protocol\\src\\codec.rs": "66b943c4ac9fa2ec234f8804df47f98f55ee7dc980ece6b46a93ef8cab92a8a2",
+    "crates\\protocol\\src\\error.rs": "ef9a1267d6062656658857ff0f71df91b0875081fa7058ff3434ca2c92a4a8cf",
+    "crates\\protocol\\src\\lib.rs": "86391633f56434d55f16abcff0a1cd168503378365c1dba14c3c20b963280f7e",
+    "crates\\protocol\\tests\\oracle_tests.rs": "3cbba75b9c276a1332142be14ea0d4c631e4063cbf50445fc221adf2b920904a",
+    "crates\\region-io\\Cargo.toml": "f0d306543fc6ea9ee74b9311ce3cba0d2e0d52f1e760333a1cfe2198ae8fa3f4",
+    "crates\\region-io\\src\\lib.rs": "492b3ec81d212e3c8c1405fe8ff1e88d097e143a84872d6d4337f7d28a9972ee",
+    "crates\\rustcraft-core\\Cargo.toml": "f0b085a397c545665bae25b878f254c090a5d640bdc52e9bc15cf514f22ef39e",
+    "crates\\rustcraft-core\\src\\lib.rs": "3e6a2914001d68fd02d8e0a33f4e7489ea14202e7b011af51aa3797976b73878",
+    "crates\\rustcraft-core\\tests\\contracts.rs": "f1ab1f5718c72ed5f97d407afdca995f942d2da6d04ea957d435e07a0ec9ff9c",
+    "crates\\spatial-index\\Cargo.toml": "a9b071b73075a174beabfc4c5e962f864a7da41b77674373c2062b915bf391ee",
+    "crates\\spatial-index\\src\\lib.rs": "ad75be0fd1304fe5bfe1baa0fdeb835245b4012e3dbb768a12de3e6f1cc1f0f8",
+    "crates\\spawn-index\\Cargo.toml": "36d453b6ee23b93ff9cecbed803df42b5704fdcccdafa3e0760e1052737274b9",
+    "crates\\spawn-index\\src\\lib.rs": "761f07590ba6fbd38b39f8bad620331a9bf0023a6599266a33a5a91201fc0bfd",
+    "crates\\test-support\\Cargo.toml": "156db043ac14e90f8b62934be2a0630421aec6cb7850f3f010deb7d3816f137c",
+    "crates\\test-support\\src\\lib.rs": "1bba8990a1afa700d5e20c94f2170e6c1e32a9954779bedd6b16bab8f2c6b64b",
+    "crates\\transport\\Cargo.toml": "5c20062ffc8798207af6f7801b33ddfe78fef04723d2f0d38fd0af848471fbea",
+    "crates\\transport\\src\\lib.rs": "13e05d0c33d5c96739fbcd96e344af5bbe5854ad79851f355f14db479a5cde84",
+    "crates\\worldgen-noise\\Cargo.toml": "c02da8557a8845add1d2517efd0d347731132d916effe124f769ce597d6b1513",
+    "crates\\worldgen-noise\\examples\\wndbg.rs": "fd6ff1ee9e783cda031f04cdb247b378d50ae901cf1143f913a24f359a1db71f",
+    "crates\\worldgen-noise\\examples\\wndbg3.rs": "a91bf1479c2a9214978e36a21eb893a6f28bbd4fd6de2e3e8fcd2cf1a030d716",
+    "crates\\worldgen-noise\\examples\\wndbg4.rs": "1a47184e4297ffab4add8197ef7f9bda2de96614667d8d312b12e0c8a42a29b2",
+    "crates\\worldgen-noise\\src\\field.rs": "58a16db769f5b894c4ffda0095bf1a7cae596c9e3eba97f54300e742322fe5d7",
+    "crates\\worldgen-noise\\src\\field_complete.rs": "f47c003413f9c8ebd2182a0f262a237d30ef0d1c16463e8083cee56a7eefb049",
+    "crates\\worldgen-noise\\src\\lib.rs": "bff075ee75fb097b693c4e301b618e34cd5ffb152b5bab2c8a7aeaf50c00c06c",
+    "crates\\worldgen-noise\\src\\simd.rs": "07589a89e294fccadd4c084718a63fe0bff3f435bf4924988bd03258b3259fbf",
+    "crates\\worldgen-noise\\src\\terrain.rs": "9a975caa7902fed24e885c05d72557677762b77de8f3f1606bbfcbf73e9270b9",
+    "docs\\architecture\\native-capabilities.md": "37e0b207cdb2a3ad19dc68f20077e1f812b771e744e44cdac1a41e387315edf8",
+    "tools\\testing\\hardening_guard.py": "a2062b3ffbec7edba79bf5f5954fbcb1e9d97492ab9c4bb541833ebb820bdb6d",
+    "tools\\testing\\rust_property_support.rs": "98c1287100e8b7c673d6e607e3f7442cc3b78360361babda46e54a59301b59ea",
+    "versions\\mc_1_12_x\\Cargo.toml": "9b958de3defbfd44a2faebddc1bad0bde21c461cdc49713a75854976b26145c5",
+    "versions\\mc_1_12_x\\examples\\dispatch_once.rs": "4aef2cab4f9c323d3125ab7e2858d07b258878b6c45aab8d53f1fe1fcbaa9d92",
+    "versions\\mc_1_12_x\\src\\lib.rs": "5c9ce7e6889687defff92c654754c908eeb5b231444e7094990968c2d34f9c76",
+    "versions\\mc_1_12_x\\src\\mc_1_12_1\\mod.rs": "ff1acd99c380bb461791bf9d4e45e5e07456799896e51deb9e67d6fc51f3cc1c",
+    "versions\\mc_1_12_x\\src\\mc_1_12_2\\mod.rs": "dd842b724fb601c86ecb82da35d8a977a383f50903d57fd48562ec6b000c5094",
+    "versions\\mc_1_12_x\\src\\protocol.rs": "94fc8442f79e4dab83d65cd77b062dc49a0094b5189286b97f1f3c7c581daefd",
+    "versions\\mc_1_12_x\\src\\world_format.rs": "15f024d2b1ad02d185a556ce5372c26314bae02410d51a0fb62d4e9b4a187722",
+    "versions\\mc_1_12_x\\tests\\adapter_contracts.rs": "af4f7fd81ff20a0dbdc1fdf5f80a8dd222320dbf4de38e71900fdebf55b3a92d"
+  },
+  "cargo": {
+    "path": "C:\\Users\\Admin\\.cargo\\bin\\cargo.exe",
+    "sha256": "6f4bef66261261fcb43131be8720bab817d403a09edec7455c371974b90bdb7e"
+  },
+  "sanitized_environment_keys": [],
+  "processes": [
+    {
+      "name": "cargo-version",
+      "argv": [
+        "C:\\Users\\Admin\\.cargo\\bin\\cargo.exe",
+        "--version",
+        "--verbose"
+      ],
+      "returncode": 0,
+      "seconds": 0.06597779999719933,
+      "stdout_sha256": "86c2d07f9968fd3174d9cff8c60a4d4323fba3166d5dc6dd36f0987a50677d70",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_bytes": 321,
+      "stderr_bytes": 0
+    },
+    {
+      "name": "resolve-cargo",
+      "argv": [
+        "C:\\Users\\Admin\\.cargo\\bin\\rustup.exe",
+        "which",
+        "cargo"
+      ],
+      "returncode": 0,
+      "seconds": 0.0373630000394769,
+      "stdout_sha256": "d70a6681283a709db0b4154a538f41c781608f69fb5bfbfa66dac449b697a95c",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_bytes": 78,
+      "stderr_bytes": 0
+    },
+    {
+      "name": "resolve-rustc",
+      "argv": [
+        "C:\\Users\\Admin\\.cargo\\bin\\rustup.exe",
+        "which",
+        "rustc"
+      ],
+      "returncode": 0,
+      "seconds": 0.03634679998503998,
+      "stdout_sha256": "54234bc009f7bc295608f8bb882e03677001147f42f05ce19606c17d2db6473b",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_bytes": 78,
+      "stderr_bytes": 0
+    },
+    {
+      "name": "resolve-rustfmt",
+      "argv": [
+        "C:\\Users\\Admin\\.cargo\\bin\\rustup.exe",
+        "which",
+        "rustfmt"
+      ],
+      "returncode": 0,
+      "seconds": 0.03577279997989535,
+      "stdout_sha256": "0e07fc57cf9821aa13e5d361fdaa13fcb14ecb9c7db0284d9b66cb63d44a5beb",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_bytes": 80,
+      "stderr_bytes": 0
+    },
+    {
+      "name": "resolve-cargo-clippy",
+      "argv": [
+        "C:\\Users\\Admin\\.cargo\\bin\\rustup.exe",
+        "which",
+        "cargo-clippy"
+      ],
+      "returncode": 0,
+      "seconds": 0.03765010001370683,
+      "stdout_sha256": "26f09df4e33bf098ad9fb2f35d1fce728c2b509fef8c47af1c745973b28b296d",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_bytes": 85,
+      "stderr_bytes": 0
+    },
+    {
+      "name": "resolve-clippy-driver",
+      "argv": [
+        "C:\\Users\\Admin\\.cargo\\bin\\rustup.exe",
+        "which",
+        "clippy-driver"
+      ],
+      "returncode": 0,
+      "seconds": 0.03692000004230067,
+      "stdout_sha256": "934b599a01bd8f7d5338d12d97fc793d1af3427b7f706b93d8eb18819ce01b01",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_bytes": 86,
+      "stderr_bytes": 0
+    },
+    {
+      "name": "rustc-version",
+      "argv": [
+        "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\rustc.exe",
+        "--version",
+        "--verbose"
+      ],
+      "returncode": 0,
+      "seconds": 0.021606800029985607,
+      "stdout_sha256": "c45e612575abeef05e99e88eb1e7aea52cddab9ad70d4f65ad20eaa65e92a9cf",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_bytes": 194,
+      "stderr_bytes": 0
+    },
+    {
+      "name": "tests",
+      "argv": [
+        "C:\\Users\\Admin\\.cargo\\bin\\cargo.exe",
+        "test",
+        "--locked",
+        "--offline",
+        "--manifest-path",
+        "D:\\minecraftrust-astra-hardening\\crates\\native-capability\\Cargo.toml",
+        "-p",
+        "native-capability",
+        "--target-dir",
+        "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h5-workspace-regressions\\build"
+      ],
+      "returncode": 0,
+      "seconds": 2.2256145999999717,
+      "stdout_sha256": "443945fe5412602a158f85fbf6eebfe510b6d0919018b3d0c6adae255f5467df",
+      "stderr_sha256": "b5157dbb5cb99b50509f03b8a376e4aa6c3e562596f3c94e247c81959f9d46ae",
+      "stdout_bytes": 2392,
+      "stderr_bytes": 478
+    },
+    {
+      "name": "clippy",
+      "argv": [
+        "C:\\Users\\Admin\\.cargo\\bin\\cargo.exe",
+        "clippy",
+        "--locked",
+        "--offline",
+        "--manifest-path",
+        "D:\\minecraftrust-astra-hardening\\crates\\native-capability\\Cargo.toml",
+        "-p",
+        "native-capability",
+        "--target-dir",
+        "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h5-workspace-regressions\\build",
+        "--all-targets",
+        "--",
+        "-D",
+        "warnings"
+      ],
+      "returncode": 0,
+      "seconds": 0.7083035000250675,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "9df24e1a7703d5e6f2c9ab96e132d02ba22683737f0d488f8b712a8f9ee9ac25",
+      "stdout_bytes": 0,
+      "stderr_bytes": 170
+    },
+    {
+      "name": "format",
+      "argv": [
+        "C:\\Users\\Admin\\.cargo\\bin\\cargo.exe",
+        "fmt",
+        "--manifest-path",
+        "D:\\minecraftrust-astra-hardening\\crates\\native-capability\\Cargo.toml",
+        "-p",
+        "native-capability",
+        "--",
+        "--check"
+      ],
+      "returncode": 0,
+      "seconds": 0.21741179999662563,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_bytes": 0,
+      "stderr_bytes": 0
+    },
+    {
+      "name": "workspace-lib",
+      "argv": [
+        "C:\\Users\\Admin\\.cargo\\bin\\cargo.exe",
+        "test",
+        "--workspace",
+        "--lib",
+        "--locked",
+        "--offline",
+        "--target-dir",
+        "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h5-workspace-regressions\\build"
+      ],
+      "returncode": 0,
+      "seconds": 11.419123800005764,
+      "stdout_sha256": "c945187aae6c060adf1effa09ee3eb3035072f80bbbe6c735ecb9334e9598bfb",
+      "stderr_sha256": "6a91330b273fb4bf3a60bbbca0e7d38a86afc8d76392c86bf37a23a1fc795d75",
+      "stdout_bytes": 7442,
+      "stderr_bytes": 11371
+    },
+    {
+      "name": "release-ffi",
+      "argv": [
+        "C:\\Users\\Admin\\.cargo\\bin\\cargo.exe",
+        "build",
+        "--release",
+        "--locked",
+        "--offline",
+        "-p",
+        "ffi",
+        "--target-dir",
+        "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h5-workspace-regressions\\build"
+      ],
+      "returncode": 0,
+      "seconds": 4.016574999957811,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "03710904d64d576c421df6b702a7a5cd8f5aa8a54cbbd9d4e42fd224c38e03b4",
+      "stdout_bytes": 0,
+      "stderr_bytes": 6951
+    }
+  ],
+  "isolation_before": {
+    "schema_version": 1,
+    "kind": "HARDENING_ISOLATION_GATE_CHECK",
+    "status": "PASS",
+    "failures": [],
+    "original_observed": {
+      "head": "c4b868db2c9e4b03f745bf93c6ebf4fd8a8519e7",
+      "branch": "issue1-jni-v2",
+      "status": [
+        " M tools/live-capture/live_client_session.py",
+        "?? tools/live-capture/__pycache__/",
+        "?? tools/live-capture/run_rev_shadow.py"
+      ],
+      "files": [
+        {
+          "path": "D:\\minecraftrust\\tools\\live-capture\\live_client_session.py",
+          "sha256": "151c356161695aba3db3c1a8cbd589b5eda2b5a1770dff59ab21b728d36cabfa"
+        },
+        {
+          "path": "D:\\minecraftrust\\tools\\live-capture\\run_rev_shadow.py",
+          "sha256": "2b9b2aca49e57dd0d2a74bec46efcdc0ac7f95762a733276e27ff9dbcb472d93"
+        }
+      ]
+    },
+    "isolated_worktree": "D:\\minecraftrust-astra-hardening",
+    "isolated_head": "4770cf71dfdae7b15db554600500c30683e9b80b",
+    "isolated_branch": "astra/architecture-hardening",
+    "production_gate_checks": {
+      "tryEncode_fail_closed": true,
+      "productionAuthorityEligible_false": true
+    },
+    "scope": "read-only original HEAD/status/two paused source hashes plus conservative source guards; runtime authority tests remain required"
+  },
+  "cargo_version": "cargo 1.98.1 (797e8a9bc 2026-08-05)\nrelease: 1.98.1\ncommit-hash: 797e8a9bca276c1c9f9f738d2a20f484fa4eea9d\ncommit-date: 2026-08-05\nhost: x86_64-pc-windows-msvc\nlibgit2: 1.9.4 (sys:0.21.0 vendored)\nlibcurl: 8.21.0-DEV (sys:0.4.90+curl-8.21.0 vendored ssl:Schannel)\nos: Windows 10.0.26200 (Windows 11 Professional) [64-bit]\n",
+  "toolchain_executables": {
+    "cargo": {
+      "path": "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\cargo.exe",
+      "sha256": "c37545ec61d48d31bdefce53280ecab61c4ea54eaace372fac6a0316c6e165d9"
+    },
+    "rustc": {
+      "path": "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\rustc.exe",
+      "sha256": "ca9988af88b1463f6857fdfe909299fee50a63260b3e5f7dbcb5b4d3318b27bc"
+    },
+    "rustfmt": {
+      "path": "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\rustfmt.exe",
+      "sha256": "ac9d781249bffabbb1bedb691a5ea6f63a818c1dda73dd698d4dff687ad4c24e"
+    },
+    "cargo-clippy": {
+      "path": "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\cargo-clippy.exe",
+      "sha256": "cb0f2b164b3f6e95bfed7ec4ae9fc48f8ce8d9fef3649b5ae87961f75e1ef484"
+    },
+    "clippy-driver": {
+      "path": "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\clippy-driver.exe",
+      "sha256": "00fd4ef2fe60e603571573746e52f42f109bbfe4b879e7ca7313614fda0b367b"
+    }
+  },
+  "rustc_version": "rustc 1.98.1 (48a229cea 2026-09-01)\nbinary: rustc\ncommit-hash: 48a229ceaefd4985c50990b14116b6d856af0985\ncommit-date: 2026-09-01\nhost: x86_64-pc-windows-msvc\nrelease: 1.98.1\nLLVM version: 22.1.8\n",
+  "tests_passed": 28,
+  "unit_tests": 2,
+  "integration_tests": 26,
+  "workspace_lib_tests": 88,
+  "workspace_lib_suites": 19,
+  "release_ffi": {
+    "path": "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h5-workspace-regressions\\build\\release\\rustcraft_ffi.dll",
+    "sha256": "ebe7731e9d7386b80abe2fa7836e541f238dbdd8f5eac85d50e218b5fa587919",
+    "bytes": 427008
+  },
+  "status": "PASS",
+  "source_hashes_after": {
+    "Cargo.lock": "4b50c388f451285ef15b9a6283d5d4daaa9f2532243b5d4f007b4531d8ef8b4d",
+    "Cargo.toml": "53cc8edcb8f8822e9e010e8a5046b08d6af8186400eb7c215a344778d6012d01",
+    "crates\\buffers\\Cargo.toml": "b174f499d9c90e7ffd5846e200f1b61a2dbfc53b54b2a6d2f272ec6c19c2d512",
+    "crates\\buffers\\src\\lib.rs": "371258844e412e16b93ec539ab7e7e13a3a344e7fc3a54a7feb350d5bde45ab1",
+    "crates\\chunk-packet\\Cargo.toml": "a12041689a2b4f4756fb1a1d06cc5ba7083dd231c605818f6b24b57eac8bd314",
+    "crates\\chunk-packet\\src\\lib.rs": "efe274775c67d0613fc19856e041bf0b2eb5f404ac12eca57ff6aaf0c839f3f7",
+    "crates\\compression\\Cargo.toml": "4895b32bbb0ddbf52906b99964e60454aad47a1288d05b3a3995a64d6c12967d",
+    "crates\\compression\\src\\frame.rs": "da3ae0a63572df73d5181d2d8fdaa62570e1f60326922e9dbb2cd799475f66ae",
+    "crates\\compression\\src\\lib.rs": "99046742806d30a8dc41115eb69591dbf1d96c6c7424e25fb5db7c579bac8093",
+    "crates\\contracts\\Cargo.toml": "7d7fc3c7b6a9d856f257ddf87d4f032ced6733a0b145586b8cd081332c5525ee",
+    "crates\\contracts\\src\\lib.rs": "d10b82b03f5f47fd01d50fa86377961a1a5efb70e00f4a63ca4988e31f318dd7",
+    "crates\\core-types\\Cargo.toml": "00383c33bbd1fb38b76e11d3cded64ff8832ce65efdf7620e00583613c2d2f82",
+    "crates\\core-types\\src\\lib.rs": "630c3b67eeed6fd4e8216e3418656e7851728199391f4155ac94da852fe11521",
+    "crates\\ffi\\Cargo.toml": "09c4549e27140e51440fe2ac79cacd255b0241b92294753381fef3d50221df3a",
+    "crates\\ffi\\examples\\snapshot_replay.rs": "9553981d4bb1f13177e339a04e5e719ebb29bd8471ec8c92ae30375374174e3f",
+    "crates\\ffi\\src\\lib.rs": "132151a88182600e5e8428b88df75ae9b50ce1954096d729f47b519f0d8a848e",
+    "crates\\ffi\\src\\native_chunk.rs": "91ced7c51800611321a38f3762a0e9c95f95a0acd9546a677894e699a1dced03",
+    "crates\\ffi\\src\\owned_snapshot.rs": "0bbd964a9795a640f744544d4e7f5716e43be89472d0db0c2b999c65c1dffe59",
+    "crates\\ffi\\src\\packet_encode_v2.rs": "66516c71a2b7cf5e7d02f794bad6a06a99288a2111e2daef0bb0906ec40b801f",
+    "crates\\ffi\\src\\spawn.rs": "d9eb4a08fb1e5fb61beb4ae8125e0eb8f59823b59133604d4bf473ccbbe920d9",
+    "crates\\ffi\\src\\wnoise.rs": "ff672473d07056374ced129373e201ebcf2c0d0ec2e486d62138f99119afc2d8",
+    "crates\\ffi\\tests\\packet_encode_v2.rs": "a8da735f8c902d98e85b047c0b0f19935718bd95895ba6dd24c1dd875c2de195",
+    "crates\\ffi\\tests\\telemetry_contract.rs": "bfbbc3bd779a79c6ef15dbb7cd678728326db55bc32b186c6ea38f21452f02d4",
+    "crates\\metrics\\Cargo.toml": "aba7aa21c53aaedfdc94452a4e47b423b06a94cecde966ebfc8b299913cb2db4",
+    "crates\\metrics\\src\\lib.rs": "ec51b389e3174d56c1b3642d0cce7d7a5431248df3efff11b9c14dbecdfdda2e",
+    "crates\\native-capability\\Cargo.toml": "352d8023b05ef342d2165363f533931258e0f5c8e4758bb83ff64df4183c8964",
+    "crates\\native-capability\\src\\lib.rs": "0fc47fbd5872a404c6fc40d248245549cbd3872c63a4d656cab1f7a5d30872d7",
+    "crates\\native-capability\\tests\\model.rs": "0457e842992aad97efcef39fecfdae8c3109a3b212ff6e013a26839636448e66",
+    "crates\\native-capability\\verify.py": "49110937ada5c03db93cc30fb272392b5b58c6c08b57a41fb6142bdfcf9f10d4",
+    "crates\\native-chunk\\Cargo.toml": "00b673f4e5f13ae6224b0bd1ef683aeadd07073c426cf077270ea8ecf94ab425",
+    "crates\\native-chunk\\examples\\memory_model.rs": "62d9c41b62db6a1958742321dc06fa28b7e1f225a4237f1b8372dede4402998d",
+    "crates\\native-chunk\\examples\\palette_parity.rs": "fe37a7945cb2cfe3905f56be69af891f22e709446910c307327883b2e33aa8e3",
+    "crates\\native-chunk\\src\\chunk.rs": "4a91edb9587343ed67648de39b771e51600602e4e1d4ec72bea4a3b05d7f0921",
+    "crates\\native-chunk\\src\\lib.rs": "0ff2155a8f4061a7939d3d3e91bbb73ae665b45ef211e10c7892965b2cc0a20c",
+    "crates\\native-chunk\\src\\packet_snapshot.rs": "7170c8b0b56c3675927efa8d418b933683e302ed37002a606033fbc189970c12",
+    "crates\\native-chunk\\src\\registry.rs": "79b4e5366da7b31dda3bd6fd24d72584e07f7c8da0f6514574221a39e1a63deb",
+    "crates\\native-chunk\\src\\section.rs": "262f244fc86dab5d7a8a9eb0d2ef25f092b2229f30198aa5d410839171cb6d1e",
+    "crates\\native-chunk\\tests\\owned_snapshot_properties.rs": "1446938e30c54784dd16074f859c74500eb052f780cc1d9925c3d4a61e6dc487",
+    "crates\\native-chunk\\tests\\packet_encode_contract.rs": "09b276011606b492ecda0623b77e3ef1fcaf8c4e2247a33641d415ccac486820",
+    "crates\\native-chunk\\tests\\packet_snapshot.rs": "de43bac3a13ba598d4d2d1ce52deb247fbbd960f0637cc03361250e16923bdad",
+    "crates\\native-chunk\\tests\\property_contract.rs": "1c6a82d851b0e4eacd567dfd85b70d04f8d81098cedd57b80a8ead9fc017b516",
+    "crates\\nbt\\Cargo.toml": "af740ed4473def3917699526200a03eb6b00b5997a6b61276ab3e23adefcb314",
+    "crates\\nbt\\src\\codec.rs": "8eed3209ef4817f7e5c1076dedf2d4473ebe5a0ebcef8acfbf017894922a3782",
+    "crates\\nbt\\src\\lib.rs": "aa69fd9bc5d2caeeb42460f95d5d0aa343ab48682f02a91ec7406208d93c5852",
+    "crates\\nbt\\src\\mutf8.rs": "055000a5760f4c6c8e44aa729552a1f3763b1c2f85142d66b20efa38803e753a",
+    "crates\\nbt\\src\\tape.rs": "44267a09feafac4d1a2a5e2098cdce509675703920b167a9b1e3adc4ff3af0e2",
+    "crates\\nbt\\src\\tests.rs": "e8967ff927637276b3e77da0cdf17bc37b03452625a625d75ac75a9977185b93",
+    "crates\\protocol\\Cargo.toml": "68a7c06ea5fc1954c962b99a817235f4e6bb65a7d04b9f0ec3288be5385732dd",
+    "crates\\protocol\\src\\codec.rs": "66b943c4ac9fa2ec234f8804df47f98f55ee7dc980ece6b46a93ef8cab92a8a2",
+    "crates\\protocol\\src\\error.rs": "ef9a1267d6062656658857ff0f71df91b0875081fa7058ff3434ca2c92a4a8cf",
+    "crates\\protocol\\src\\lib.rs": "86391633f56434d55f16abcff0a1cd168503378365c1dba14c3c20b963280f7e",
+    "crates\\protocol\\tests\\oracle_tests.rs": "3cbba75b9c276a1332142be14ea0d4c631e4063cbf50445fc221adf2b920904a",
+    "crates\\region-io\\Cargo.toml": "f0d306543fc6ea9ee74b9311ce3cba0d2e0d52f1e760333a1cfe2198ae8fa3f4",
+    "crates\\region-io\\src\\lib.rs": "492b3ec81d212e3c8c1405fe8ff1e88d097e143a84872d6d4337f7d28a9972ee",
+    "crates\\rustcraft-core\\Cargo.toml": "f0b085a397c545665bae25b878f254c090a5d640bdc52e9bc15cf514f22ef39e",
+    "crates\\rustcraft-core\\src\\lib.rs": "3e6a2914001d68fd02d8e0a33f4e7489ea14202e7b011af51aa3797976b73878",
+    "crates\\rustcraft-core\\tests\\contracts.rs": "f1ab1f5718c72ed5f97d407afdca995f942d2da6d04ea957d435e07a0ec9ff9c",
+    "crates\\spatial-index\\Cargo.toml": "a9b071b73075a174beabfc4c5e962f864a7da41b77674373c2062b915bf391ee",
+    "crates\\spatial-index\\src\\lib.rs": "ad75be0fd1304fe5bfe1baa0fdeb835245b4012e3dbb768a12de3e6f1cc1f0f8",
+    "crates\\spawn-index\\Cargo.toml": "36d453b6ee23b93ff9cecbed803df42b5704fdcccdafa3e0760e1052737274b9",
+    "crates\\spawn-index\\src\\lib.rs": "761f07590ba6fbd38b39f8bad620331a9bf0023a6599266a33a5a91201fc0bfd",
+    "crates\\test-support\\Cargo.toml": "156db043ac14e90f8b62934be2a0630421aec6cb7850f3f010deb7d3816f137c",
+    "crates\\test-support\\src\\lib.rs": "1bba8990a1afa700d5e20c94f2170e6c1e32a9954779bedd6b16bab8f2c6b64b",
+    "crates\\transport\\Cargo.toml": "5c20062ffc8798207af6f7801b33ddfe78fef04723d2f0d38fd0af848471fbea",
+    "crates\\transport\\src\\lib.rs": "13e05d0c33d5c96739fbcd96e344af5bbe5854ad79851f355f14db479a5cde84",
+    "crates\\worldgen-noise\\Cargo.toml": "c02da8557a8845add1d2517efd0d347731132d916effe124f769ce597d6b1513",
+    "crates\\worldgen-noise\\examples\\wndbg.rs": "fd6ff1ee9e783cda031f04cdb247b378d50ae901cf1143f913a24f359a1db71f",
+    "crates\\worldgen-noise\\examples\\wndbg3.rs": "a91bf1479c2a9214978e36a21eb893a6f28bbd4fd6de2e3e8fcd2cf1a030d716",
+    "crates\\worldgen-noise\\examples\\wndbg4.rs": "1a47184e4297ffab4add8197ef7f9bda2de96614667d8d312b12e0c8a42a29b2",
+    "crates\\worldgen-noise\\src\\field.rs": "58a16db769f5b894c4ffda0095bf1a7cae596c9e3eba97f54300e742322fe5d7",
+    "crates\\worldgen-noise\\src\\field_complete.rs": "f47c003413f9c8ebd2182a0f262a237d30ef0d1c16463e8083cee56a7eefb049",
+    "crates\\worldgen-noise\\src\\lib.rs": "bff075ee75fb097b693c4e301b618e34cd5ffb152b5bab2c8a7aeaf50c00c06c",
+    "crates\\worldgen-noise\\src\\simd.rs": "07589a89e294fccadd4c084718a63fe0bff3f435bf4924988bd03258b3259fbf",
+    "crates\\worldgen-noise\\src\\terrain.rs": "9a975caa7902fed24e885c05d72557677762b77de8f3f1606bbfcbf73e9270b9",
+    "docs\\architecture\\native-capabilities.md": "37e0b207cdb2a3ad19dc68f20077e1f812b771e744e44cdac1a41e387315edf8",
+    "tools\\testing\\hardening_guard.py": "a2062b3ffbec7edba79bf5f5954fbcb1e9d97492ab9c4bb541833ebb820bdb6d",
+    "tools\\testing\\rust_property_support.rs": "98c1287100e8b7c673d6e607e3f7442cc3b78360361babda46e54a59301b59ea",
+    "versions\\mc_1_12_x\\Cargo.toml": "9b958de3defbfd44a2faebddc1bad0bde21c461cdc49713a75854976b26145c5",
+    "versions\\mc_1_12_x\\examples\\dispatch_once.rs": "4aef2cab4f9c323d3125ab7e2858d07b258878b6c45aab8d53f1fe1fcbaa9d92",
+    "versions\\mc_1_12_x\\src\\lib.rs": "5c9ce7e6889687defff92c654754c908eeb5b231444e7094990968c2d34f9c76",
+    "versions\\mc_1_12_x\\src\\mc_1_12_1\\mod.rs": "ff1acd99c380bb461791bf9d4e45e5e07456799896e51deb9e67d6fc51f3cc1c",
+    "versions\\mc_1_12_x\\src\\mc_1_12_2\\mod.rs": "dd842b724fb601c86ecb82da35d8a977a383f50903d57fd48562ec6b000c5094",
+    "versions\\mc_1_12_x\\src\\protocol.rs": "94fc8442f79e4dab83d65cd77b062dc49a0094b5189286b97f1f3c7c581daefd",
+    "versions\\mc_1_12_x\\src\\world_format.rs": "15f024d2b1ad02d185a556ce5372c26314bae02410d51a0fb62d4e9b4a187722",
+    "versions\\mc_1_12_x\\tests\\adapter_contracts.rs": "af4f7fd81ff20a0dbdc1fdf5f80a8dd222320dbf4de38e71900fdebf55b3a92d"
+  },
+  "isolation_after": {
+    "schema_version": 1,
+    "kind": "HARDENING_ISOLATION_GATE_CHECK",
+    "status": "PASS",
+    "failures": [],
+    "original_observed": {
+      "head": "c4b868db2c9e4b03f745bf93c6ebf4fd8a8519e7",
+      "branch": "issue1-jni-v2",
+      "status": [
+        " M tools/live-capture/live_client_session.py",
+        "?? tools/live-capture/__pycache__/",
+        "?? tools/live-capture/run_rev_shadow.py"
+      ],
+      "files": [
+        {
+          "path": "D:\\minecraftrust\\tools\\live-capture\\live_client_session.py",
+          "sha256": "151c356161695aba3db3c1a8cbd589b5eda2b5a1770dff59ab21b728d36cabfa"
+        },
+        {
+          "path": "D:\\minecraftrust\\tools\\live-capture\\run_rev_shadow.py",
+          "sha256": "2b9b2aca49e57dd0d2a74bec46efcdc0ac7f95762a733276e27ff9dbcb472d93"
+        }
+      ]
+    },
+    "isolated_worktree": "D:\\minecraftrust-astra-hardening",
+    "isolated_head": "4770cf71dfdae7b15db554600500c30683e9b80b",
+    "isolated_branch": "astra/architecture-hardening",
+    "production_gate_checks": {
+      "tryEncode_fail_closed": true,
+      "productionAuthorityEligible_false": true
+    },
+    "scope": "read-only original HEAD/status/two paused source hashes plus conservative source guards; runtime authority tests remain required"
+  },
+  "tool_hashes_after": {
+    "cargo": "c37545ec61d48d31bdefce53280ecab61c4ea54eaace372fac6a0316c6e165d9",
+    "rustc": "ca9988af88b1463f6857fdfe909299fee50a63260b3e5f7dbcb5b4d3318b27bc",
+    "rustfmt": "ac9d781249bffabbb1bedb691a5ea6f63a818c1dda73dd698d4dff687ad4c24e",
+    "cargo-clippy": "cb0f2b164b3f6e95bfed7ec4ae9fc48f8ce8d9fef3649b5ae87961f75e1ef484",
+    "clippy-driver": "00fd4ef2fe60e603571573746e52f42f109bbfe4b879e7ca7313614fda0b367b"
+  },
+  "finished_utc": "2026-09-27T01:10:55.866695+00:00"
+}
