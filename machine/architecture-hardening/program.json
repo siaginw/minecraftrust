@@ -80,16 +80,28 @@
     {
       "id": "H4",
       "title": "FINE-GRAINED NATIVE CAPABILITY MODEL",
-      "status": "IN_PROGRESS",
-      "implementation": [],
-      "validation": [],
-      "evidence": [],
-      "commit": null
+      "status": "FOUNDATION_VALIDATED",
+      "implementation": [
+        "crates/native-capability",
+        "docs/architecture/native-capabilities.md"
+      ],
+      "validation": [
+        "28 deterministic tests;88 workspace-library tests;strict crate clippy/fmt;release FFI PASS"
+      ],
+      "evidence": [
+        "machine/architecture-hardening/h4-validation.json"
+      ],
+      "commit": null,
+      "outstanding": [
+        "Opaque identities/evidence are model inputs, not verified running JVM objects or H2 certificate imports",
+        "Runtime event delivery, quiescence, registry epoch authority and H23 requalification remain pending",
+        "Serialized model is not Loom concurrency proof"
+      ]
     },
     {
       "id": "H5",
       "title": "VERSION-NEUTRAL CORE ARCHITECTURE",
-      "status": "PENDING",
+      "status": "IN_PROGRESS",
       "implementation": [],
       "validation": [],
       "evidence": [],
@@ -98,7 +110,7 @@
     {
       "id": "H6",
       "title": "RETAINED NATIVE OWNERSHIP MODEL",
-      "status": "PENDING",
+      "status": "IN_PROGRESS",
       "implementation": [],
       "validation": [],
       "evidence": [],

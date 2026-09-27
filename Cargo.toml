@@ -17,6 +17,7 @@ members = [
     "crates/worldgen-noise",
     "crates/protocol",
     "crates/native-chunk",
+    "crates/native-capability",
 ]
 
 [workspace.package]
@@ -41,6 +42,7 @@ test-support = { path = "crates/test-support" }
 chunk-packet = { path = "crates/chunk-packet" }
 protocol = { path = "crates/protocol" }
 native-chunk = { path = "crates/native-chunk" }
+native-capability = { path = "crates/native-capability" }
 
 [profile.release]
 lto = "fat"
