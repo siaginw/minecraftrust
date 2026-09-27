@@ -172,7 +172,8 @@ def main():
    expected_session_uuid='0b2dcd72-90c3-4182-b23c-ac0c2ab6c7a4',
    masked_annotation_locations=sidentity['masked_locations'],distinct_masked_uuid_count=1,
    masked_occurrence_count=sidentity['masked_occurrences'],recipe_sha256='0'*64,
-   runtime_manifest_sha256='0'*64,acquisition_evidence_sha256='0'*64)
+   runtime_manifest_sha256='0'*64,policy_sha256=policy_schema.policy_sha256(good),
+   acquisition_evidence_sha256='0'*64)
   generate('session-certificate-in-static-plan',session_recipe(good,session_certificates={sname:concrete}),m,False)
   def bad_policy(label,mutate):
    document=json.loads(json.dumps(good));mutate(document)

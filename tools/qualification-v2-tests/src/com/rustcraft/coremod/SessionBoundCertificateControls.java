@@ -43,6 +43,7 @@ public final class SessionBoundCertificateControls {
     static final String OTHER_LOADER = "cpw.mods.fml.common.asm.transformers.ASMEventTransformer@1c5d0aa4";
     static final String RECIPE = repeat('a');
     static final String MANIFEST = repeat('b');
+    static final String POLICY = repeat('d');
     static final String EVIDENCE = repeat('c');
 
     static String repeat(char unit) {
@@ -256,7 +257,7 @@ public final class SessionBoundCertificateControls {
 
     static SessionBoundIdentityCertificate issue(byte[] bytes) {
         return SessionBoundIdentityCertificate.issue(PROCESS, SESSION, LOADER, bytes,
-                CanonicalClassIdentityV2.identifySessionBound(bytes), RECIPE, MANIFEST, EVIDENCE);
+                CanonicalClassIdentityV2.identifySessionBound(bytes), RECIPE, MANIFEST, POLICY, EVIDENCE);
     }
 
     static SessionBoundIdentityCertificate.Observation observe(byte[] bytes) {

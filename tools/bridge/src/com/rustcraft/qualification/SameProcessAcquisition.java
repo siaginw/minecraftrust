@@ -238,7 +238,7 @@ public final class SameProcessAcquisition {
      * record. Anything incomplete, inconsistent or ambiguous refuses.
      */
     public SessionBoundIdentityCertificate certify(Definition definition, String recipeSha256,
-            String runtimeManifestSha256, String acquisitionEvidenceSha256) {
+            String runtimeManifestSha256, String policySha256, String acquisitionEvidenceSha256) {
         if (definition == null)
             throw new Incomplete("no acquisition record supplied");
         if (!definitions.contains(definition))
@@ -261,9 +261,12 @@ public final class SameProcessAcquisition {
         if (!definition.processId.equals(processId)
                 || !definition.transformationSessionId.equals(transformationSessionId))
             throw new Incomplete("record " + definition.ordinal + " belongs to another session");
+        if (policySha256 == null)
+            throw new Incomplete("no admission policy supplied: a certificate may not record "
+                    + "an acquisition without naming what authorized it");
         return SessionBoundIdentityCertificate.issue(processId, transformationSessionId,
                 definition.definingLoaderIdentity, definition.preWriterBytes, definition.session,
-                recipeSha256, runtimeManifestSha256, acquisitionEvidenceSha256);
+                recipeSha256, runtimeManifestSha256, policySha256, acquisitionEvidenceSha256);
     }
 
     /** A loader identity that does not conflate two distinct loaders. */

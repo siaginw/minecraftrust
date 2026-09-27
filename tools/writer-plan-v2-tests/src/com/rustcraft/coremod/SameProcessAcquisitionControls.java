@@ -58,7 +58,7 @@ public final class SameProcessAcquisitionControls {
                 || true, "exact identity is recorded for the pre-writer buffer");
 
         SessionBoundIdentityCertificate certificate = acquisition.certify(definition,
-                sha('a'), sha('b'), sha('c'));
+                sha('a'), sha('b'), sha('d'), sha('c'));
         check(certificate.className.equals("example/Acquired"), "the certificate names the class");
         check(certificate.preWriterRawSha256.equals(SameProcessAcquisition.sha256(preWriter)),
                 "the certificate binds the exact pre-writer bytes");
@@ -258,7 +258,7 @@ public final class SameProcessAcquisitionControls {
     private static void checkIncomplete(String what, SameProcessAcquisition acquisition,
             SameProcessAcquisition.Definition definition) {
         try {
-            acquisition.certify(definition, sha('a'), sha('b'), sha('c'));
+            acquisition.certify(definition, sha('a'), sha('b'), sha('d'), sha('c'));
             check(false, what + " -> unexpectedly certified");
         } catch (SameProcessAcquisition.Incomplete expected) {
             check(true, what);

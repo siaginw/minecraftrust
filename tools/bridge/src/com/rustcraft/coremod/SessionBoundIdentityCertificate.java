@@ -44,7 +44,7 @@ public final class SessionBoundIdentityCertificate {
         "pre_writer_raw_sha256", "exact_semantic_sha256", "exact_declaration_order_sha256",
         "session_invariant_sha256", "expected_session_uuid",
         "masked_annotation_locations", "distinct_masked_uuid_count", "masked_occurrence_count",
-        "recipe_sha256", "runtime_manifest_sha256", "acquisition_evidence_sha256",
+        "recipe_sha256", "runtime_manifest_sha256", "policy_sha256", "acquisition_evidence_sha256",
     };
 
     public final String processId;
@@ -62,6 +62,15 @@ public final class SessionBoundIdentityCertificate {
     public final int maskedOccurrenceCount;
     public final String recipeSha256;
     public final String runtimeManifestSha256;
+    /** The static policy this admission was granted under. Always present. */
+    public final String policySha256;
+    /**
+     * Digest of the acquisition record this certificate is folded into, when the
+     * issuer already knows one. A certificate minted live during a class
+     * transformation cannot carry it: the record it would name describes the
+     * writer run that has not happened yet. The chain binds the two afterwards
+     * instead, which is why this slot is optional rather than fabricated.
+     */
     public final String acquisitionEvidenceSha256;
 
     private SessionBoundIdentityCertificate(Map<String, Object> fields) {
@@ -79,7 +88,8 @@ public final class SessionBoundIdentityCertificate {
         maskedOccurrenceCount = count(fields, "masked_occurrence_count");
         recipeSha256 = optionalText(fields, "recipe_sha256", SHA256);
         runtimeManifestSha256 = optionalText(fields, "runtime_manifest_sha256", SHA256);
-        acquisitionEvidenceSha256 = text(fields, "acquisition_evidence_sha256", SHA256);
+        policySha256 = text(fields, "policy_sha256", SHA256);
+        acquisitionEvidenceSha256 = optionalText(fields, "acquisition_evidence_sha256", SHA256);
     }
 
     // ---------------------------------------------------------------- issuance
@@ -94,7 +104,7 @@ public final class SessionBoundIdentityCertificate {
     public static SessionBoundIdentityCertificate issue(String processId,
             String transformationSessionId, String definingLoaderIdentity,
             byte[] preWriterBytes, CanonicalClassIdentityV2.Result identity,
-            String recipeSha256, String runtimeManifestSha256,
+            String recipeSha256, String runtimeManifestSha256, String policySha256,
             String acquisitionEvidenceSha256) {
         if (preWriterBytes == null) throw new Refusal(Refusal.Kind.REFUSE, "NO_PRE_WRITER_BYTES", "missing pre-writer bytes");
         if (identity == null || identity.sessionInvariantSha256 == null)
@@ -125,7 +135,11 @@ public final class SessionBoundIdentityCertificate {
         if (recipeSha256 != null) fields.put("recipe_sha256", recipeSha256);
         if (runtimeManifestSha256 != null)
             fields.put("runtime_manifest_sha256", runtimeManifestSha256);
-        fields.put("acquisition_evidence_sha256", acquisitionEvidenceSha256);
+        if (policySha256 == null) throw new Refusal(Refusal.Kind.REFUSE, "NO_ADMISSION_POLICY",
+                "a certificate must name the admission policy that authorized it");
+        fields.put("policy_sha256", policySha256);
+        if (acquisitionEvidenceSha256 != null)
+            fields.put("acquisition_evidence_sha256", acquisitionEvidenceSha256);
         return new SessionBoundIdentityCertificate(fields);
     }
 
@@ -315,10 +329,14 @@ public final class SessionBoundIdentityCertificate {
         return false;
     }
 
-    /** Plan-revision bindings, absent when the issuing plan published none. */
+    /**
+     * Bindings that may legitimately be absent. The first two are plan-revision
+     * identities a plan need not publish; the third is the acquisition digest,
+     * which a certificate minted during a live transformation cannot know yet.
+     */
     private static final java.util.Set<String> CONDITIONAL_KEYS =
             new java.util.HashSet<String>(java.util.Arrays.asList(
-                    "recipe_sha256", "runtime_manifest_sha256"));
+                    "recipe_sha256", "runtime_manifest_sha256", "acquisition_evidence_sha256"));
 
     private String field(String key) {
         if ("process_id".equals(key)) return processId;
@@ -332,6 +350,7 @@ public final class SessionBoundIdentityCertificate {
         if ("expected_session_uuid".equals(key)) return expectedSessionUuid;
         if ("recipe_sha256".equals(key)) return recipeSha256;
         if ("runtime_manifest_sha256".equals(key)) return runtimeManifestSha256;
+        if ("policy_sha256".equals(key)) return policySha256;
         if ("acquisition_evidence_sha256".equals(key)) return acquisitionEvidenceSha256;
         throw new IllegalStateException("unmapped certificate field " + key);
     }

@@ -394,7 +394,7 @@ public final class LiveHookSupport {
         return SessionBoundIdentityCertificate.issue(processId, sessionId,
                 loader == null ? null : environment.definingLoaderIdentity(loader),
                 basicClass, session, LiveWriterPlan.RECIPE_BINDING_SHA256,
-                LiveWriterPlan.RUNTIME_MANIFEST_SHA256, policy.policySha256());
+                LiveWriterPlan.RUNTIME_MANIFEST_SHA256, policy.policySha256(), null);
     }
 
     /**

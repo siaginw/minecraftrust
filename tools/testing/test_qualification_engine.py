@@ -26,12 +26,16 @@ import unittest
 from unittest.mock import patch
 
 from tools.testing import session_bound_certificate as certificate
+from tools.testing import session_bound_policy as admission_policy
 from tools.testing.qualification_engine import QualificationEngine, Invalid, Missing, parse_json, sha, strict_lines
 from tools.testing.qualification_certificate import Maturity as M, digest_json
 
 
+REPO_ROOT = Path(__file__).resolve().parents[2]
+
+
 COLLECTOR = r'''
-import argparse, hashlib, json, pathlib, sys
+import argparse, copy, hashlib, json, pathlib, sys
 p=argparse.ArgumentParser();p.add_argument('--config');p.add_argument('--request');p.add_argument('--out');a=p.parse_args()
 c=json.loads(pathlib.Path(a.config).read_text()); request_path=pathlib.Path(a.request); r=json.loads(request_path.read_text()); out=pathlib.Path(a.out); folder=out.parent
 def sha(path): return hashlib.sha256(pathlib.Path(path).read_bytes()).hexdigest()
@@ -91,8 +95,49 @@ o={'schema':'RUSTCRAFT_FRESH_OBSERVATION_V2','session':r['session'],'challenge':
 # The certificate in the profile authorizes stage 0's output and nothing else.
 if S:
     o['session_acquisition']=[{'binary_name':NAME,'pre_writer_raw_sha256':PRE,'post_writer_raw_sha256':POST,'defining_loader_identity':LOADER_ID,'hook_placement':'PLACED','definition_succeeded':True,'session_invariant_sha256':S['invariant']}]
-    HOOKS=[{'id':'OWNERSHIP.exercise.WRITE_BEGIN','class':NAME,'method':'exercise','descriptor':'(I)V','required_calls':2,'observed_calls':2}]
+    HOOKS=[{'id':S['hook_id'],'class':NAME,'method':'exercise','descriptor':'(I)V','required_calls':2,'observed_calls':2}]
     PATHS=[{'id':'OWNERSHIP.exercise.finally','class':NAME,'method':'exercise','descriptor':'(I)V','handler':'java/lang/Throwable'}]
+    # This collector stands in for the transforming JVM, so it does what that JVM
+    # does: it reads the STATIC policy, checks the pre-writer facts it actually
+    # observed against that policy, and only then mints the concrete certificate
+    # for THIS process. It never receives a certificate. Modes prefixed
+    # `engine-sees-` disable the runtime's own refusal so a broken policy can be
+    # carried past admission and refused by the offline engine instead -- the two
+    # layers have to refuse independently, or one of them is doing no work.
+    if c.get('pythonpath'): sys.path[:0]=c['pythonpath']
+    from tools.testing import session_bound_certificate as cert
+    from tools.testing import session_bound_policy as sbpolicy
+    prof=json.loads(pathlib.Path(c['profile']).read_text())
+    block=prof['session_bound']
+    policy=sbpolicy.validate(copy.deepcopy(block['admission_policies'][S['class_name']]))
+    recipe=cert.recipe_binding_sha256({k:v for k,v in prof.items() if k!='session_bound'})
+    manifest_sha=sha(c['manifest'])
+    refusals=[]
+    if policy['recipe_sha256']!=recipe: refusals.append('RECIPE_MISMATCH: policy is bound to another recipe')
+    refusals+=sbpolicy.admits(policy,session_invariant_sha256=S['invariant'],declaration_order_sha256=S['pre_order'],masked_locations=S['masked_locations'],masked_occurrence_count=len(S['masked_locations']),distinct_masked_uuid_count=1,loader_class=LOADER,runtime_profile=S['runtime_profile'],recipe_sha256=recipe,manifest_sha256=manifest_sha)
+    if sorted(h['id'] for h in HOOKS)!=policy['required_hook_ids']: refusals.append('HOOK_IDS_MISMATCH: this run places hooks the policy does not cover')
+    if refusals:
+        if mode.startswith('engine-sees-'):
+            pass
+        else:
+            print('session-bound admission REFUSED: %r'%refusals,file=sys.stderr);sys.exit(4)
+    def digest_json(value): return hashlib.sha256(json.dumps(value,sort_keys=True,separators=(',',':'),ensure_ascii=False).encode()).hexdigest()
+    issued=dict(process_id=S['process_id'],transformation_session_id=S['session_id'],defining_loader_identity=LOADER_ID,
+        identity=['CANONICAL_ID_V2_SESSION_BOUND',S['class_name'],S['pre_semantic'],S['pre_order'],PRE,S['invariant'],1,[S['session_uuid']],len(S['masked_locations']),S['masked_locations']],
+        recipe_sha256=recipe,runtime_manifest_sha256=manifest_sha,policy_sha256=sbpolicy.policy_sha256(policy),
+        acquisition_evidence_sha256=digest_json(o['session_acquisition']))
+    if mode=='cert-foreign-process': issued['process_id']='9d3ccad1-a938-4a64-a7ca-c8c81bef1757'
+    if mode=='cert-foreign-session': issued['transformation_session_id']='9d3ccad1-a938-4a64-a7ca-c8c81bef1757'
+    if mode=='cert-foreign-manifest': issued['runtime_manifest_sha256']='b'*64
+    if mode=='cert-foreign-acquisition': issued['acquisition_evidence_sha256']='c'*64
+    if mode=='cert-foreign-loader': issued['defining_loader_identity']='other.Loader@1'
+    if mode=='cert-foreign-policy': issued['policy_sha256']='d'*64
+    if mode=='cert-post-identity': issued['identity']=list(issued['identity']);issued['identity'][2]=S['post_semantic'];issued['identity'][3]=S['post_order']
+    if mode=='cert-missing': o['session_certificates']={}
+    else:
+        document=cert.from_identity(**issued)
+        if mode=='cert-strips-policy-hash': document.pop('policy_sha256')
+        o['session_certificates']={S['class_name']: document}
     def stage(name,ordinal,transformer,si,so,sem=None,order=None,invariant=None,hooks=None,paths=None):
         return {'stage':name,'ordinal':ordinal,'process_id':S['process_id'],'transformation_session_id':S['session_id'],'defining_loader_identity':LOADER_ID,'class_name':NAME,'transformer':transformer,'input_raw_sha256':si,'output_raw_sha256':so,'exact_semantic_sha256':sem,'exact_declaration_order_sha256':order,'session_invariant_sha256':invariant,'acquisition_evidence_id':S['evidence_id'],'rustcraft_hooks':hooks,'exception_paths':paths}
     stages=[stage('PRE_WRITER',0,'none',S['upstream_sha'],PRE,SEM,ORD,S['invariant']),
@@ -183,6 +228,7 @@ LOADER_CLASS = "synthetic.loader.Loader"
 LOADER_ID = LOADER_CLASS + "@0a0b0c[]"
 DOWNSTREAM = "synthetic.DownstreamTransformer"
 SESSION_CLASS = "example/SessionFixture"
+SESSION_HOOK_ID = "OWNERSHIP.exercise.WRITE_BEGIN"
 
 
 def identity_tool(java, classes, asm, path, *flags):
@@ -272,15 +318,29 @@ class EngineFixture:
         }
 
     def build_session_block(self):
-        """Issue the admission certificate and bind it to this exact profile.
+        """Declare the STATIC admission policy and bind it to this exact profile.
 
-        The certificate is written LAST and the recipe hash is computed over the
-        profile without it, which is what keeps the binding non-circular. The
-        acquisition record the certificate names is byte-for-byte the one the
-        collector will emit, so an offline certificate cannot be swapped for one
-        issued against a different run's evidence.
+        Nothing concrete is written here. The block names what MAY be admitted --
+        the session-invariant identity, the masked sites and counts, the loader
+        and runtime constraints, and the plan-revision bindings -- and it says
+        nothing about any one launch. The certificate that will authorize actual
+        bytes is issued by the run itself, in the collector, from the pre-writer
+        buffer it is holding.
+
+        The recipe hash is computed over the profile WITHOUT the block that
+        carries it, which is what keeps the binding non-circular: a policy cannot
+        make itself consistent by editing the very recipe it is judged against.
         """
         facts = self.config_data["session"]
+        facts["class_name"] = SESSION_CLASS
+        facts["runtime_profile"] = self.profile["id"]
+        facts["hook_id"] = SESSION_HOOK_ID
+        # The collector reads the two static documents it is judged against, the
+        # same way a transforming JVM reads its writer plan, and can import the
+        # same validators rather than a second implementation of them.
+        self.config_data["pythonpath"] = [str(REPO_ROOT)]
+        self.config_data["profile"] = str(self.profile_path)
+        self.config_data["manifest"] = str(self.manifest_path)
         acquisition = [{"binary_name": SESSION_CLASS,
                         "pre_writer_raw_sha256": facts["pre_sha"],
                         "post_writer_raw_sha256": facts["post_sha"],
@@ -293,32 +353,33 @@ class EngineFixture:
         # to be in the file before the run reads it.
         self.config.write_text(json.dumps(self.config_data), encoding="utf-8")
         # The manifest pins the collector's config by hash, so it has to be
-        # re-pinned before the manifest hash the certificate binds to is taken.
+        # re-pinned before the manifest hash the policy binds to is taken.
         self.manifest["collector"] = self.command(self.collector, ["--config", str(self.config)], [self.config])
+        self.manifest["collector"]["environment"] = {"PYTHONPATH": str(REPO_ROOT)}
         self.manifest_path.write_text(json.dumps(self.manifest), encoding="utf-8")
         manifest_sha = sha(self.manifest_path)
-        document = certificate.from_identity(
-            process_id=PROCESS_ID, transformation_session_id=SESSION_ID,
-            defining_loader_identity=LOADER_ID,
-            identity=["CANONICAL_ID_V2_SESSION_BOUND", SESSION_CLASS, facts["pre_semantic"],
-                      facts["pre_order"], facts["pre_sha"], facts["invariant"], 1,
-                      [facts["session_uuid"]], len(facts["masked_locations"]), facts["masked_locations"]],
-            recipe_sha256="0" * 64, runtime_manifest_sha256=manifest_sha,
-            acquisition_evidence_sha256=facts["acquisition_sha256"])
-        self.profile["session_bound"] = {
-            "schema": "RUSTCRAFT_SESSION_BOUND_PROFILE_V1", "schema_version": 1,
-            "recipe_sha256": "0" * 64, "process_id": PROCESS_ID,
-            "transformation_session_id": SESSION_ID,
-            "classes": [SESSION_CLASS], "certificates": {SESSION_CLASS: document},
-        }
         self.profile["frame_evidence"] = {"required_classes": [SESSION_CLASS]}
         self.profile["identity_mode"] = "CANONICAL_ID_V2_SESSION_BOUND"
-        # The recipe hash covers the profile WITHOUT the block that carries it,
-        # so filling the two bindings in below cannot invalidate itself.
         recipe = certificate.recipe_binding_sha256(
             {k: v for k, v in self.profile.items() if k != "session_bound"})
-        self.profile["session_bound"]["recipe_sha256"] = recipe
-        document["recipe_sha256"] = recipe
+        policy = admission_policy.build(
+            class_name=SESSION_CLASS.replace("/", "."),
+            expected_session_invariant_sha256=facts["invariant"],
+            expected_declaration_order_sha256=facts["pre_order"],
+            expected_masked_locations=facts["masked_locations"],
+            expected_masked_occurrence_count=len(facts["masked_locations"]),
+            runtime_profile=self.profile["id"],
+            runtime_manifest_sha256=manifest_sha,
+            writer_plan_sha256=hashlib.sha256(b"synthetic writer plan").hexdigest(),
+            recipe_sha256=recipe,
+            required_hook_ids=[SESSION_HOOK_ID],
+            expected_loader_class=LOADER_CLASS)
+        self.profile["session_bound"] = {
+            "schema": "RUSTCRAFT_SESSION_BOUND_PROFILE_V1", "schema_version": 1,
+            "recipe_sha256": recipe, "process_id": PROCESS_ID,
+            "transformation_session_id": SESSION_ID,
+            "classes": [SESSION_CLASS], "admission_policies": {SESSION_CLASS: policy},
+        }
         self.write()
 
     @staticmethod
@@ -505,49 +566,119 @@ class EngineIntegrationControls(unittest.TestCase):
         # identity is a certificate admitting a class state the Java gate never
         # saw. Before the fix this is what the engine demanded, so it is the
         # control that would have failed on the old model.
-        fixture = self.session_fixture()
-        document = fixture.profile["session_bound"]["certificates"][SESSION_CLASS]
-        post = fixture.profile["classes"][SESSION_CLASS]
-        document["exact_semantic_sha256"] = post["semantic_sha256"]
-        document["exact_declaration_order_sha256"] = post["declaration_order_sha256"]
-        document = certificate.validate(document)
-        fixture.profile["session_bound"]["certificates"][SESSION_CLASS] = document
-        fixture.write()
-        self.assertEqual(fixture.run()["status"], "FAIL")
+        self.assertEqual(self.session_fixture(mode="cert-post-identity").run()["status"], "FAIL")
 
     def test_certificate_must_be_issued_in_this_transformation_session(self):
-        fixture = self.session_fixture()
-        document = fixture.profile["session_bound"]["certificates"][SESSION_CLASS]
-        document["transformation_session_id"] = "9d3ccad1-a938-4a64-a7ca-c8c81bef1757"
-        fixture.profile["session_bound"]["certificates"][SESSION_CLASS] = certificate.validate(document)
-        fixture.write()
-        self.assertEqual(fixture.run()["status"], "FAIL")
+        # A certificate carried over from a previous launch names that launch's
+        # process and transformation session, so it cannot describe this one.
+        # This is the control that rules out the two-launch design: there is no
+        # second launch in which such a certificate would be valid.
+        self.assertEqual(self.session_fixture(mode="cert-foreign-session").run()["status"], "FAIL")
+
+    def test_certificate_must_be_issued_in_this_process(self):
+        # The other half of the same rule. A certificate from another process is
+        # refused even when its session id happens to line up, because the
+        # process id is the fact that names the JVM which did the admitting.
+        self.assertEqual(self.session_fixture(mode="cert-foreign-process").run()["status"], "FAIL")
 
     def test_certificate_must_bind_this_manifest(self):
-        fixture = self.session_fixture()
-        document = fixture.profile["session_bound"]["certificates"][SESSION_CLASS]
-        document["runtime_manifest_sha256"] = "b" * 64
-        fixture.profile["session_bound"]["certificates"][SESSION_CLASS] = certificate.validate(document)
-        fixture.write()
-        self.assertEqual(fixture.run()["status"], "FAIL")
+        self.assertEqual(self.session_fixture(mode="cert-foreign-manifest").run()["status"], "FAIL")
 
     def test_certificate_must_bind_this_acquisition_evidence(self):
-        # An offline certificate issued against a different run's evidence is
-        # not a certificate for this run.
-        fixture = self.session_fixture()
-        document = fixture.profile["session_bound"]["certificates"][SESSION_CLASS]
-        document["acquisition_evidence_sha256"] = "c" * 64
-        fixture.profile["session_bound"]["certificates"][SESSION_CLASS] = certificate.validate(document)
-        fixture.write()
-        self.assertEqual(fixture.run()["status"], "FAIL")
+        # A certificate issued against a different run's acquisition is not a
+        # certificate for this run.
+        self.assertEqual(self.session_fixture(mode="cert-foreign-acquisition").run()["status"], "FAIL")
 
     def test_certificate_must_bind_the_defining_loader(self):
+        self.assertEqual(self.session_fixture(mode="cert-foreign-loader").run()["status"], "FAIL")
+
+    def test_certificate_must_name_the_policy_that_admitted_it(self):
+        # The certificate is evidence that a NAMED policy admitted these bytes.
+        # One that names no policy, or names a different one, is not evidence of
+        # anything: without the policy hash the mask provenance it reports is
+        # unauthorized by construction.
+        for mode in ("cert-strips-policy-hash", "cert-foreign-policy"):
+            with self.subTest(mode=mode):
+                self.assertEqual(self.session_fixture(mode=mode).run()["status"], "FAIL")
+
+    def test_absent_runtime_certificate_is_incomplete_never_a_synthesis(self):
+        # The engine must not be able to make a certificate for a run that did
+        # not issue one. Absent evidence leaves the profile unpromoted.
+        result = self.session_fixture(mode="cert-missing").run()
+        self.assertEqual(result["status"], "INCOMPLETE")
+        self.assertEqual(result["maturity"], "OBSERVED")
+        nodes = {n["id"]: n for n in result["evidence"]}
+        self.assertEqual(nodes["session_evidence"]["status"], "INCOMPLETE")
+
+    def test_profile_may_not_carry_a_session_certificate(self):
+        # The circularity this whole design removes: a written-down profile
+        # cannot hold permission, only what may be accepted. A profile that
+        # tries is refused outright, however well-formed its certificates are.
         fixture = self.session_fixture()
-        document = fixture.profile["session_bound"]["certificates"][SESSION_CLASS]
-        document["defining_loader_identity"] = "other.Loader@1"
-        fixture.profile["session_bound"]["certificates"][SESSION_CLASS] = certificate.validate(document)
-        fixture.write()
+        fixture.profile["session_bound"]["certificates"] = {SESSION_CLASS: {}}
         self.assertEqual(fixture.run()["status"], "FAIL")
+
+    def test_profile_may_not_be_issued_against_a_concrete_session(self):
+        # A static policy that names a process, a session UUID or a pre-writer
+        # hash is rejected by the schema, not merely frowned upon. Each of these
+        # is exactly the field that made the old design circular.
+        for key, value in (("process_id", PROCESS_ID), ("session_uuid", SESSION_ID),
+                           ("expected_session_uuid", SESSION_ID), ("pre_writer_raw_sha256", "a" * 64),
+                           ("defining_loader_identity", LOADER_ID)):
+            with self.subTest(key=key):
+                fixture = self.session_fixture()
+                policy = fixture.profile["session_bound"]["admission_policies"][SESSION_CLASS]
+                policy[key] = value
+                self.assertEqual(fixture.run()["status"], "FAIL")
+
+    def test_engine_refuses_a_policy_the_runtime_would_have_refused(self):
+        # The runtime gate and the offline engine must refuse independently. Each
+        # of these mutations is a policy that admits nothing it observed, which
+        # the collector would refuse; the `engine-sees-` prefix carries it past
+        # that gate so the ENGINE is the one under test here.
+        for mode in ("engine-sees-invariance", "engine-sees-location", "engine-sees-occurrence",
+                     "engine-sees-recipe", "engine-sees-manifest", "engine-sees-profile"):
+            with self.subTest(mode=mode):
+                fixture = self.session_fixture(mode=mode)
+                self.mutate_policy(fixture, mode[len("engine-sees-"):])
+                self.assertEqual(fixture.run()["status"], "FAIL")
+
+    def test_runtime_refuses_a_policy_that_does_not_match_the_buffer(self):
+        # And the same mutations refused by the RUN rather than the engine. This
+        # is the fail-closed gate: nothing is instrumented, so the run produces
+        # no certificate and the profile is never scored.
+        for change in ("invariance", "location", "occurrence", "recipe", "manifest", "profile"):
+            with self.subTest(change=change):
+                fixture = self.session_fixture()
+                self.mutate_policy(fixture, change)
+                result = fixture.run()
+                self.assertEqual(result["status"], "FAIL")
+                nodes = {n["id"]: n for n in result["evidence"]}
+                self.assertIn(nodes["session_evidence"]["status"], ("INVALIDATED", "FAIL", "INCOMPLETE"))
+
+    @staticmethod
+    def mutate_policy(fixture, change):
+        """Break exactly one policy binding the admission decision rests on."""
+        policy = fixture.profile["session_bound"]["admission_policies"][SESSION_CLASS]
+        if change == "invariance":
+            policy["expected_session_invariant_sha256"] = "1" * 64
+        elif change == "location":
+            policy["expected_masked_locations"] = sorted(
+                policy["expected_masked_locations"] + [policy["expected_masked_locations"][0] + " extra"])
+        elif change == "occurrence":
+            policy["expected_masked_occurrence_count"] += 1
+        elif change == "recipe":
+            policy["recipe_sha256"] = "2" * 64
+        elif change == "manifest":
+            policy["runtime_manifest_sha256"] = "3" * 64
+        elif change == "profile":
+            policy["runtime_profile"] = "some-other-profile"
+        else:
+            raise AssertionError(change)
+        # The policy is validated on read, so a mutated one must still be a
+        # well-formed document; only the binding it makes is wrong.
+        admission_policy.validate(policy)
+        fixture.write()
 
     def test_every_transformation_chain_link_is_enforced(self):
         # Nine chain controls, one broken link each. All must FAIL: none of them

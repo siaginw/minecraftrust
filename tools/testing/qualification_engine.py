@@ -12,6 +12,7 @@ import hashlib
 import json
 import os
 from pathlib import Path
+import re
 import secrets
 import subprocess
 import sys
@@ -21,12 +22,16 @@ try:
     from tools.testing.qualification_certificate import Evidence, EvidenceStatus as S, Maturity as M, digest_json, evaluate
     from tools.testing.session_bound_certificate import (
         CertificateError, recipe_binding_sha256, validate as validate_certificate)
+    from tools.testing.session_bound_policy import (
+        PolicyError, policy_sha256, validate as validate_policy)
     from tools.testing.frame_relation_evidence import (
         FrameEvidenceError, describe as describe_frames, validate as validate_frames)
 except ModuleNotFoundError:
     from qualification_certificate import Evidence, EvidenceStatus as S, Maturity as M, digest_json, evaluate
     from session_bound_certificate import (
         CertificateError, recipe_binding_sha256, validate as validate_certificate)
+    from session_bound_policy import (
+        PolicyError, policy_sha256, validate as validate_policy)
     from frame_relation_evidence import (
         FrameEvidenceError, describe as describe_frames, validate as validate_frames)
 
@@ -262,7 +267,7 @@ class QualificationEngine:
         if block is None:
             raise Missing("a session-bound profile must declare its session evidence block")
         keys(block, ("schema", "schema_version", "recipe_sha256", "process_id",
-                     "transformation_session_id", "classes", "certificates"))
+                     "transformation_session_id", "classes", "admission_policies"))
         if block["schema"] != SESSION_BOUND_PROFILE_SCHEMA or block["schema_version"] != SESSION_BOUND_PROFILE_VERSION:
             raise Invalid("unsupported session evidence block schema/version")
         digest(block["recipe_sha256"])
@@ -273,8 +278,25 @@ class QualificationEngine:
             raise Invalid("session evidence must name a distinct, ordered class inventory")
         if set(names) - set(profile["classes"]):
             raise Invalid("session evidence names classes the profile does not require")
-        if not isinstance(block["certificates"], dict) or set(block["certificates"]) != set(names):
-            raise Invalid("session evidence must carry exactly one certificate per declared class")
+        if "certificates" in block:
+            # A certificate binds a process, a transformation session, a loader
+            # object and an exact pre-writer byte hash. A profile is written
+            # before the run it describes, so it cannot hold one, and a profile
+            # that does is asking the engine to accept a certificate imported
+            # from some earlier JVM. The policy it may hold says what MAY be
+            # accepted; the transforming JVM records what WAS accepted.
+            raise Invalid("a qualification profile may not carry session certificates; "
+                          "it carries admission policies and the engine reads the "
+                          "certificates the run itself issued")
+        if not isinstance(block["admission_policies"], dict) or set(block["admission_policies"]) != set(names):
+            raise Invalid("session evidence must carry exactly one admission policy per declared class")
+        for name in names:
+            try:
+                validate_policy(block["admission_policies"][name])
+            except PolicyError as error:
+                raise Invalid(f"admission policy for {name} is unusable: {error}") from error
+            if block["admission_policies"][name]["class_name"].replace(".", "/") != name:
+                raise Invalid(f"admission policy names a different class: {name}")
         # Non-circular binding: the recipe hash covers the whole profile minus the
         # block that carries it, so a certificate cannot be swapped for one
         # issued against a different hook inventory, manifest or class set.
@@ -712,22 +734,43 @@ class QualificationEngine:
             rows[name] = row
         if set(rows) != set(block["classes"]):
             raise Missing("session acquisition evidence does not cover every certified class")
+        # The certificates are the run's own, not the profile's. Absent evidence
+        # is INCOMPLETE (unpromoted); present-but-wrong is FAIL, and a certificate
+        # carried over from another launch necessarily is, because it names a
+        # different process, session, loader and acquisition evidence hash.
+        certificates = observed.get("session_certificates")
+        if certificates is None or certificates == {}:
+            # A run that issued no certificate at all has not disproven anything;
+            # it has simply not proven the admission, so the profile stays
+            # unpromoted rather than scored as a discovered defect.
+            raise Missing("no runtime-issued session certificates accompany this capture; "
+                          "the engine will not synthesize one")
+        if not isinstance(certificates, dict):
+            raise Invalid("runtime-issued session certificates must be keyed by class name")
+        if set(certificates) != set(block["classes"]):
+            raise Invalid("runtime-issued session certificates do not cover exactly the declared classes")
         issued = []
         for name in block["classes"]:
-            document = block["certificates"][name]
+            document = certificates[name]
             try:
                 validate_certificate(document)
             except CertificateError as error:
                 raise Invalid(f"session certificate for {name} is unusable: {error}") from error
-            if document["class_name"] != name:
+            if document["class_name"].replace(".", "/") != name:
                 raise Invalid(f"session certificate names a different class: {name}")
             if document["process_id"] != block["process_id"] or document["transformation_session_id"] != block["transformation_session_id"]:
                 raise Invalid("session certificate is bound to a different process/transformation session: " + name)
             if document["defining_loader_identity"] != rows[name]["defining_loader_identity"]:
                 raise Invalid("session certificate and acquisition disagree on the defining loader: " + name)
-            if document["runtime_manifest_sha256"] != manifest_hash:
+            if document.get("runtime_manifest_sha256") != manifest_hash:
+                # A manifest binding may be absent only when the issuing plan
+                # published none; the engine always has one, so absence here is a
+                # certificate that declines to say which manifest it ran under.
                 raise Invalid("session certificate is not bound to this manifest: " + name)
-            if document["acquisition_evidence_sha256"] != acquisition_hash:
+            if document.get("acquisition_evidence_sha256") not in (None, acquisition_hash):
+                # A live certificate is minted during the class transformation and
+                # cannot yet name the acquisition record that will describe the
+                # writer run. When it does name one, that one must be THIS run's.
                 raise Invalid("session certificate is not bound to this acquisition evidence: " + name)
             if document["pre_writer_raw_sha256"] != rows[name]["pre_writer_raw_sha256"]:
                 raise Invalid("session certificate pre-writer identity differs from the acquisition: " + name)
@@ -750,6 +793,34 @@ class QualificationEngine:
                 raise Missing("session certificate names a class whose post-writer identity was not recomputed: " + name)
             if produced["semantic_sha256"] == admitted["semantic_sha256"]:
                 raise Invalid("post-writer identity equals the admitted pre-writer identity; the writers proved nothing: " + name)
+            # The certificate is evidence of an admission, so it has to name the
+            # policy that granted it, and the mask provenance the policy
+            # authorized has to be the provenance actually observed. Without
+            # this a certificate could be minted against a policy that allowed a
+            # different annotation, a different number of sites, or a second
+            # session UUID, and still describe this class correctly.
+            policy = block["admission_policies"][name]
+            if policy["runtime_manifest_sha256"] != manifest_hash:
+                raise Invalid("admission policy is not bound to this manifest: " + name)
+            if policy["recipe_sha256"] != block["recipe_sha256"]:
+                raise Invalid("admission policy is not bound to this profile's recipe: " + name)
+            if policy["runtime_profile"] != self.profile["id"]:
+                # The policy authorizes admission for one qualified profile. A
+                # policy carried across to a different one would be authorizing
+                # bytes it was never qualified against.
+                raise Invalid("admission policy is not bound to this qualified profile: " + name)
+            if document.get("policy_sha256") != policy_sha256(policy):
+                raise Invalid("session certificate does not record the admission policy that authorized it: " + name)
+            if document["session_invariant_sha256"] != policy["expected_session_invariant_sha256"]:
+                raise Invalid("session certificate invariant is not the one the policy authorized: " + name)
+            if sorted(document["masked_annotation_locations"]) != sorted(policy["expected_masked_locations"]):
+                raise Invalid("session certificate masks different annotation sites than the policy authorized: " + name)
+            if document["masked_occurrence_count"] != policy["expected_masked_occurrence_count"]:
+                raise Invalid("session certificate masks a different number of occurrences than the policy authorized: " + name)
+            if document["distinct_masked_uuid_count"] != policy["expected_distinct_masked_uuid_count"]:
+                raise Invalid("session certificate observed a different number of distinct session UUIDs than the policy authorized: " + name)
+            if not re.fullmatch(policy["expected_session_uuid_shape"], document["expected_session_uuid"] or ""):
+                raise Invalid("session certificate does not record a session UUID of the authorized shape: " + name)
             issued.append(name)
         return {"identity_mode": self.profile["identity_mode"], "session_bound": True,
                 "process_id": block["process_id"], "transformation_session_id": block["transformation_session_id"],
@@ -807,10 +878,21 @@ class QualificationEngine:
         downstream = chain["downstream_transformers_after_live_writers"]
         if not isinstance(downstream, list) or any(not isinstance(name, str) or not name for name in downstream):
             raise Invalid("downstream_transformers_after_live_writers must be a transformer name list")
+        # The PRE_WRITER stage is checked against the certificate THIS run issued,
+        # taken from the same observation the chain came from. Reading it from
+        # the profile instead would let a written-down plan vouch for bytes no
+        # JVM in this run ever admitted.
+        issued = observed.get("session_certificates")
+        if issued is None or issued == {}:
+            # The chain's PRE_WRITER stage stands on the admission the run
+            # actually performed. With no admission to stand on, the chain is
+            # simply unproven -- the same verdict the session node reaches, not a
+            # stricter one, because nothing has been disproven.
+            raise Missing("the chain has no runtime-issued admission certificate to bind its PRE_WRITER stage to")
         definitions = self.final_definitions(observed)
         proven = []
         for row in chain["classes"]:
-            proven.append(self.chain_row(row, block, classes, bool(downstream), chain, definitions))
+            proven.append(self.chain_row(row, block, classes, bool(downstream), chain, definitions, issued))
         return {"required": True, "chain_schema": CHAIN_SCHEMA,
                 "process_id": block["process_id"],
                 "transformation_session_id": block["transformation_session_id"],
@@ -844,10 +926,12 @@ class QualificationEngine:
             raise Missing("the frame witness observed no post-phase class definitions")
         return definitions
 
-    def chain_row(self, row, block, classes, has_downstream, chain, definitions):
+    def chain_row(self, row, block, classes, has_downstream, chain, definitions, issued):
         name = row.get("binary_name", "").replace(".", "/")
         keys(row, ("binary_name", "process_id", "transformation_session_id",
                    "defining_loader_identity", "stages"))
+        if name not in issued:
+            raise Invalid("chain row names a class this run issued no admission certificate for: " + name)
         if row["process_id"] != block["process_id"] or row["transformation_session_id"] != block["transformation_session_id"]:
             raise Invalid("chain row belongs to a different process/transformation session: " + name)
         if row["defining_loader_identity"] != chain["defining_loader_identity"]:
@@ -860,7 +944,7 @@ class QualificationEngine:
             raise Invalid("a chain must start at PRE_WRITER and end at FINAL_DEFINED: " + name)
         if len(set(ordered)) != len(ordered):
             raise Invalid("a chain may not repeat a stage: " + name)
-        certificate = block["certificates"][name]
+        certificate = issued[name]
         if ordered.count(STAGE_RUSTCRAFT) != 1:
             raise Invalid("a chain must contain exactly one RUSTCRAFT_POST stage: " + name)
         if ordered[1] != STAGE_RUSTCRAFT:

@@ -44,8 +44,16 @@ KEYS = (
     "masked_occurrence_count",
     "recipe_sha256",
     "runtime_manifest_sha256",
+    "policy_sha256",
     "acquisition_evidence_sha256",
 )
+
+#: Bindings that may legitimately be absent. The first two are plan-revision
+#: identities a plan need not publish; the third is the acquisition digest, which
+#: a certificate minted during a live class transformation cannot know yet,
+#: because the record it would name describes a writer run still to come. The
+#: chain binds certificate and acquisition together after the fact instead.
+CONDITIONAL_KEYS = ("recipe_sha256", "runtime_manifest_sha256", "acquisition_evidence_sha256")
 
 SHA256 = re.compile(r"[0-9a-f]{64}")
 UUID = re.compile(r"[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}")
@@ -67,6 +75,8 @@ def render(document: Dict[str, Any]) -> str:
     """Canonical JSON rendering. Byte-identical to the Java implementation."""
     parts = []
     for key in KEYS:
+        if key in CONDITIONAL_KEYS and key not in document:
+            continue
         value = document[key]
         if key in _LIST_KEYS:
             rendered = "[" + ",".join(_quote(item) for item in value) + "]"
@@ -109,6 +119,8 @@ def validate(document: Any) -> Dict[str, Any]:
     if unknown:
         raise CertificateError("unknown certificate field(s): %s" % ", ".join(unknown))
     for key in KEYS:
+        if key in CONDITIONAL_KEYS:
+            continue
         if key not in document:
             raise CertificateError("certificate is missing %s" % key)
     if document["schema"] != SCHEMA:
@@ -118,6 +130,8 @@ def validate(document: Any) -> Dict[str, Any]:
     if document["provenance"] != PROVENANCE:
         raise CertificateError("unexpected certificate provenance")
     for key in _STRING_KEYS:
+        if key not in document:
+            continue
         value = document[key]
         if not isinstance(value, str) or not value:
             raise CertificateError("%s must be a non-empty string" % key)
@@ -149,8 +163,14 @@ def issue(*, process_id: str, transformation_session_id: str, defining_loader_id
           exact_declaration_order_sha256: str, session_invariant_sha256: str,
           expected_session_uuid: str, masked_annotation_locations: Iterable[str],
           distinct_masked_uuid_count: int, masked_occurrence_count: int, recipe_sha256: str,
-          runtime_manifest_sha256: str, acquisition_evidence_sha256: str) -> Dict[str, Any]:
-    """Builds a certificate from a recorded same-process acquisition observation."""
+          runtime_manifest_sha256: str, policy_sha256: str,
+          acquisition_evidence_sha256: str = None) -> Dict[str, Any]:
+    """Builds a certificate from a recorded same-process acquisition observation.
+
+    `policy_sha256` is required: a certificate is evidence that a named static
+    policy admitted these bytes, so it must say which policy. It is not
+    permission -- the policy is what authorizes, and it cannot name a session.
+    """
     document = {
         "schema": SCHEMA,
         "schema_version": SCHEMA_VERSION,
@@ -167,17 +187,21 @@ def issue(*, process_id: str, transformation_session_id: str, defining_loader_id
         "masked_annotation_locations": sorted(masked_annotation_locations),
         "distinct_masked_uuid_count": distinct_masked_uuid_count,
         "masked_occurrence_count": masked_occurrence_count,
-        "recipe_sha256": recipe_sha256,
-        "runtime_manifest_sha256": runtime_manifest_sha256,
-        "acquisition_evidence_sha256": acquisition_evidence_sha256,
+        "policy_sha256": policy_sha256,
     }
+    if recipe_sha256 is not None:
+        document["recipe_sha256"] = recipe_sha256
+    if runtime_manifest_sha256 is not None:
+        document["runtime_manifest_sha256"] = runtime_manifest_sha256
+    if acquisition_evidence_sha256 is not None:
+        document["acquisition_evidence_sha256"] = acquisition_evidence_sha256
     return validate(document)
 
 
 def from_identity(*, process_id: str, transformation_session_id: str,
                   defining_loader_identity: str, identity: Any,
                   recipe_sha256: str, runtime_manifest_sha256: str,
-                  acquisition_evidence_sha256: str) -> Dict[str, Any]:
+                  policy_sha256: str, acquisition_evidence_sha256: str = None) -> Dict[str, Any]:
     """Builds a certificate from a session-bound identity receipt.
 
     `identity` is the parsed `sessionBoundReceiptJson()` document from
@@ -209,6 +233,7 @@ def from_identity(*, process_id: str, transformation_session_id: str,
         masked_occurrence_count=occurrences,
         recipe_sha256=recipe_sha256,
         runtime_manifest_sha256=runtime_manifest_sha256,
+        policy_sha256=policy_sha256,
         acquisition_evidence_sha256=acquisition_evidence_sha256,
     )
 
