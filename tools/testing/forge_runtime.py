@@ -271,6 +271,10 @@ LIVE_TRANSFORMER_SOURCES = [
     "tools/bridge/src/com/rustcraft/coremod/LiveChunkOwnershipTransformer.java",
     "tools/bridge/src/com/rustcraft/coremod/LiveChunkPublicationTransformer.java",
     "tools/bridge/src/com/rustcraft/qualification/SameProcessAcquisition.java",
+    "tools/bridge/src/com/rustcraft/qualification/TransformationChainEvidence.java",
+    "tools/bridge/src/com/rustcraft/qualification/LoaderTransformChain.java",
+    "tools/bridge/src/com/rustcraft/qualification/LoaderDefinitionWitness.java",
+    "tools/forge-capture/src/com/rustcraft/offline/oracle/QualifyRuntime.java",
 ]
 
 LIVE_ORACLE_SOURCES = [

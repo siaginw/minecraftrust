@@ -30,11 +30,24 @@ public class SPacketChunkDataTransformer implements IClassTransformer {
             return null;
         }
 
+        String binaryName = TARGET_CLASS_DEOBF.equals(transformedName) ? transformedName : name;
         com.rustcraft.qualification.SameProcessAcquisition.Definition attempt =
-                LiveHookSupport.openAcquisition("PACKET",
-                        TARGET_CLASS_DEOBF.equals(transformedName) ? transformedName : name,
+                LiveHookSupport.openAcquisition("PACKET", binaryName,
                         basicClass, LiveHookSupport.definingLoader(getClass().getClassLoader()));
         try {
+            // The same PRE-hook gate every other live writer runs. It was absent
+            // here, and the absence was invisible: the class was still
+            // instrumented, so the only symptom was that a session-bound class
+            // transformed by THIS writer could never produce an admission
+            // certificate, and its chain row had nothing to stand on. Identity
+            // admission is a property of the writer, not of which hook family
+            // it injects, so it belongs in all three or none.
+            LiveWriterPlan.Hook[] hooks =
+                    LiveHookSupport.hooksFor("PACKET", binaryName);
+            if (hooks.length > 0) {
+                LiveHookSupport.verifyPreHookIdentity(hooks, basicClass,
+                        LiveHookSupport.definingLoader(getClass().getClassLoader()));
+            }
             ClassReader cr = new ClassReader(basicClass);
             ClassNode cn = new ClassNode();
             cr.accept(cn, 0);

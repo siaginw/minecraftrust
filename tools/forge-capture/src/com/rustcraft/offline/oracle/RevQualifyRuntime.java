@@ -2,6 +2,8 @@ package com.rustcraft.offline.oracle;
 
 import com.google.gson.GsonBuilder;
 import com.rustcraft.coremod.LiveHookSupport;
+import com.rustcraft.qualification.LoaderDefinitionWitness;
+import com.rustcraft.qualification.LoaderTransformChain;
 import com.rustcraft.offline.agent.ObservationAgent;
 import java.lang.reflect.Field;
 import java.nio.charset.StandardCharsets;
@@ -131,6 +133,15 @@ public final class RevQualifyRuntime {
                 new LiveHookSupport.SystemPropertySessionEnvironment());
       }
       result.put("session_environment_bound", Boolean.valueOf(sessionBound));
+      // The observer goes in at the FRONT of the loader's transformer list, so
+      // it sees the buffer the loader was about to transform -- the true entry
+      // to this launch's transformation chain. Registered immediately before
+      // the writers instead, it would capture the very buffer the writers
+      // receive, and the chain's first stage would be a no-op that describes
+      // nothing. Registration order is the whole point, and it is also why the
+      // chain needs a genuine first edge rather than a restatement.
+      result.put("entry_observer_position",
+              com.rustcraft.qualification.LoaderTransformChain.installAtFront(Launch.classLoader));
       for (String name : new String[] {
           "com.rustcraft.coremod.SPacketChunkDataTransformer",
           "com.rustcraft.coremod.LiveChunkOwnershipTransformer",
@@ -177,6 +188,66 @@ public final class RevQualifyRuntime {
     result.put("server_main_called", false);
     result.put("transformed_classes", ObservationAgent.hashes());
     result.put("transformed_class_loaders", ObservationAgent.loaders());
+
+    // ---- the same-process chain, and an INDEPENDENT definition witness ----
+    // Both are emitted here, after the required classes are defined, because
+    // both are statements about what this launch did. Neither is derived from
+    // the other: the chain is built from the writers' own records, the witness
+    // from the passive agent's record of the loader's definitions. A chain that
+    // could only confirm itself would prove nothing, so the engine is given
+    // both and is free to disagree with either.
+    int boundDefinitions = LoaderTransformChain.bindDefinitions(
+            Launch.classLoader, LiveHookSupport.boundAcquisition());
+    result.put("definitions_bound_to_classes", Integer.valueOf(boundDefinitions));
+    List<String> downstream = LoaderTransformChain.downstreamTransformers();
+    result.put("downstream_transformers_after_live_writers", downstream);
+    result.put("loader_identity", LoaderTransformChain.loaderIdentity());
+    String chainProperty = System.getProperty("rustcraft.transformationChain");
+    if (chainProperty != null && chainProperty.length() > 0) {
+      try {
+        String document = LoaderTransformChain.forThisLaunch().render();
+        Path chainOut = Paths.get(chainProperty);
+        Files.createDirectories(chainOut.getParent());
+        Files.write(chainOut, document.getBytes(StandardCharsets.UTF_8));
+        result.put("transformation_chain_status", "RENDERED");
+        result.put("transformation_chain_sha256", LiveHookSupport.sha256(
+                document.getBytes(StandardCharsets.UTF_8)));
+      } catch (Throwable incomplete) {
+        // A chain that cannot be proven is not an error here: the receipt says
+        // exactly why, and the engine reads an absent chain as INCOMPLETE
+        // rather than as a defect.
+        result.put("transformation_chain_status", "INCOMPLETE: " + incomplete);
+      }
+    }
+    // Why each definition stands where it does. A chain that renders nothing
+    // is indistinguishable, from the receipt alone, between "the writers never
+    // ran" and "the writers ran and their records are incomplete"; naming the
+    // per-definition state is the difference between a gap in the evidence and
+    // a bug in the evidence.
+    List<Object> acquisitionRows = new ArrayList<Object>();
+    if (LiveHookSupport.boundAcquisition() != null) {
+      for (com.rustcraft.qualification.SameProcessAcquisition.Definition definition
+          : LiveHookSupport.boundAcquisition().definitions()) {
+        Map<String, Object> row = new TreeMap<String, Object>();
+        row.put("ordinal", Integer.valueOf(definition.ordinal));
+        row.put("binary_name", definition.binaryName);
+        row.put("hook_placement", definition.hookPlacement);
+        row.put("definition_succeeded", Boolean.valueOf(definition.definitionSucceeded));
+        row.put("has_post_writer_buffer",
+                Boolean.valueOf(definition.postWriterRawSha256 != null));
+        row.put("has_session_provenance", Boolean.valueOf(definition.session != null));
+        row.put("certifiable", Boolean.valueOf(definition.certifiable()));
+        row.put("failure", definition.failure);
+        acquisitionRows.add(row);
+      }
+    }
+    result.put("session_acquisition_definitions", acquisitionRows);
+    result.put("entry_observer_failures", new TreeMap<String, String>(
+            com.rustcraft.qualification.LoaderTransformChain.EntryObserver.failures()));
+    result.put("frame_relation_witness", LoaderDefinitionWitness.witness(
+            ObservationAgent.hashes(), ObservationAgent.loaders(),
+            LoaderTransformChain.loaderIdentity(),
+            LiveHookSupport.boundAcquisition()));
     Path out = Paths.get(System.getProperty("rustcraft.qualificationResult"));
     Files.createDirectories(out.getParent());
     Files.write(out, new GsonBuilder().setPrettyPrinting().create().toJson(result)

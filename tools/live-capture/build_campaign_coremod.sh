@@ -1,6 +1,10 @@
 #!/usr/bin/env bash
 # Builds the live-SHADOW campaign coremod jar from a pinned runtime.
-# Usage: build_campaign_coremod.sh <srg_minecraft_jar> <output_jar> [runtime_root] [asm_jar] [forge_jar]
+# Usage: build_campaign_coremod.sh <srg_minecraft_jar> <output_jar> [runtime_root] [asm_jar] [forge_jar] [plan_java]
+# The optional plan is a GENERATED LiveWriterPlan.java for a different runtime.
+# It is a parameter rather than an edit because the plan is an artifact: the
+# committed one is Clean Forge's, and qualification has to run the same writers
+# under a plan that was generated from that runtime's own evidence.
 # Compilation references ONLY the pinned qualified artifacts of THAT runtime (its
 # forge build, its SRG minecraft study jar, its launchwrapper, and ITS OWN ASM
 # jar) — never a best-effort substitute, and never another runtime's ASM. The
@@ -23,6 +27,7 @@ JAR="$JAVA_HOME/bin/jar.exe"
 ASM="${4:-$RT/libraries/org/ow2/asm/asm-debug-all/5.2/asm-debug-all-5.2.jar}"
 LW="$RT/libraries/net/minecraft/launchwrapper/1.12/launchwrapper-1.12.jar"
 FORGE="${5:-$RT/forge-1.12.2-14.23.5.2860.jar}"
+PLAN="${6:-$ROOT/tools/bridge/src/com/rustcraft/coremod/LiveWriterPlan.java}"
 CP="$FORGE;$SRG_JAR;$ASM;$LW"
 
 BUILD="$ROOT/target/live-shadow-campaign/coremod-build-$(basename "$OUT_JAR" .jar)"
@@ -39,7 +44,7 @@ SOURCES=(
   "$ROOT/tools/bridge/src/com/rustcraft/coremod/CanonicalClassIdentityV2.java"
   "$ROOT/tools/bridge/src/com/rustcraft/coremod/SessionBoundAdmissionPolicy.java"
   "$ROOT/tools/bridge/src/com/rustcraft/coremod/SessionBoundIdentityCertificate.java"
-  "$ROOT/tools/bridge/src/com/rustcraft/coremod/LiveWriterPlan.java"
+  "$PLAN"
   "$ROOT/tools/bridge/src/com/rustcraft/bridge/capture/CaptureContract.java"
   "$ROOT/tools/bridge/src/com/rustcraft/bridge/capture/CaptureSource.java"
   "$ROOT/tools/bridge/src/com/rustcraft/bridge/capture/OwnedPacketSnapshot.java"
@@ -85,6 +90,8 @@ SOURCES=(
   # different copy of the class the writers used.
   "$ROOT/tools/bridge/src/com/rustcraft/qualification/SameProcessAcquisition.java"
   "$ROOT/tools/bridge/src/com/rustcraft/qualification/TransformationChainEvidence.java"
+  "$ROOT/tools/bridge/src/com/rustcraft/qualification/LoaderTransformChain.java"
+  "$ROOT/tools/bridge/src/com/rustcraft/qualification/LoaderDefinitionWitness.java"
 )
 "$JAVAC" -encoding UTF-8 -source 8 -target 8 -nowarn -cp "$CP" -d "$BUILD" "${SOURCES[@]}" 2> "$BUILD/javac-errors.log" || {
   cat "$BUILD/javac-errors.log" | grep -E "error" | head -20
