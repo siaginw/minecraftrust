@@ -477,6 +477,58 @@
       "evidence": "machine/architecture-hardening/h13-light-collision.json",
       "provenance": "tools/lighting-collision-experiment/provenance.json",
       "source": "https://github.com/bitshifter/glam-rs/tree/0090cbeca303d076d87a8034a75ede85177247bc"
+    },
+    {
+      "candidate": "mimalloc",
+      "version": "0.1.52 / libmimalloc-sys0.1.49",
+      "license": "MIT",
+      "decision": "PROTOTYPE",
+      "reason": "Lower fixture median with higher private commit; no production selection",
+      "performance_value": "Complete bounded actual-kernel pipeline evidence in H17; no server throughput/fragmentation claim",
+      "migration_value": "Mixed lifetime,cross-thread last free,retained snapshots and scratch qualification",
+      "integration_risk": "Allocator-specific lifetime/platform behavior,unattributed startup retention,instrumentation overhead,missing representative workloads",
+      "installed_scope": "ISOLATED_H17_EXECUTABLE_ONLY",
+      "evidence": "machine/architecture-hardening/h17-allocator.json",
+      "provenance": "tools/allocator-experiment/PROVENANCE.json"
+    },
+    {
+      "candidate": "rpmalloc",
+      "version": "0.2.2 / rpmalloc-sys0.2.3+b097fd0",
+      "license": "MIT OR Apache-2.0 wrapper;MIT/public-domain bundled C",
+      "decision": "PROTOTYPE",
+      "reason": "Lower fixture median with higher private commit and current Windows link burden",
+      "performance_value": "Complete bounded actual-kernel pipeline evidence in H17; no server throughput/fragmentation claim",
+      "migration_value": "Mixed lifetime,cross-thread last free,retained snapshots and scratch qualification",
+      "integration_risk": "Allocator-specific lifetime/platform behavior,unattributed startup retention,instrumentation overhead,missing representative workloads",
+      "installed_scope": "ISOLATED_H17_EXECUTABLE_ONLY",
+      "evidence": "machine/architecture-hardening/h17-allocator.json",
+      "provenance": "tools/allocator-experiment/PROVENANCE.json"
+    },
+    {
+      "candidate": "jemalloc",
+      "version": "upstream tikv Rust wrapper support reviewed",
+      "license": "MIT OR Apache-2.0 wrapper;BSD-2-Clause allocator",
+      "decision": "STUDY",
+      "reason": "Current Rust wrapper excludes MSVC; no installed or fabricated comparison lane",
+      "performance_value": "Complete bounded actual-kernel pipeline evidence in H17; no server throughput/fragmentation claim",
+      "migration_value": "Mixed lifetime,cross-thread last free,retained snapshots and scratch qualification",
+      "integration_risk": "Allocator-specific lifetime/platform behavior,unattributed startup retention,instrumentation overhead,missing representative workloads",
+      "installed_scope": "NOT_INSTALLED",
+      "evidence": "machine/architecture-hardening/h17-allocator.json",
+      "provenance": "tools/allocator-experiment/PROVENANCE.json"
+    },
+    {
+      "candidate": "bumpalo",
+      "version": "3.20.3",
+      "license": "MIT OR Apache-2.0",
+      "decision": "PROTOTYPE",
+      "reason": "Bounded scratch and destructor controls pass; no consistent complete-operation advantage",
+      "performance_value": "Complete bounded actual-kernel pipeline evidence in H17; no server throughput/fragmentation claim",
+      "migration_value": "Mixed lifetime,cross-thread last free,retained snapshots and scratch qualification",
+      "integration_risk": "Allocator-specific lifetime/platform behavior,unattributed startup retention,instrumentation overhead,missing representative workloads",
+      "installed_scope": "ISOLATED_H17_EXECUTABLE_ONLY",
+      "evidence": "machine/architecture-hardening/h17-allocator.json",
+      "provenance": "tools/allocator-experiment/PROVENANCE.json"
     }
   ]
 }

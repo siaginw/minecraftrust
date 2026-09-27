@@ -391,11 +391,27 @@
     {
       "id": "H17",
       "title": "ALLOCATOR EXPERIMENTS",
-      "status": "PENDING",
-      "implementation": [],
-      "validation": [],
-      "evidence": [],
-      "commit": null
+      "status": "BOUNDED_EXPERIMENT_VALIDATED_NO_PRODUCTION_SELECTION",
+      "implementation": [
+        "tools/allocator-experiment",
+        "docs/research/allocator-experiment.md"
+      ],
+      "validation": [
+        "Independent root rerun PASS:36Rust integration+6compilefail+6process controls,42native processes,216measured+108warmup rows,exact packet/NBT artifacts across3allocators;48startup bytes in cross-thread runs remain unknown"
+      ],
+      "evidence": [
+        "machine/architecture-hardening/h17-allocator.json"
+      ],
+      "commit": null,
+      "outstanding": [
+        "Authored fixture schedule executing actual kernels; not a captured server allocation trace",
+        "No JNI, network, region disk I/O, live server, lifecycle authority or allocator integration",
+        "Pure allocator fragmentation and usable allocation sizes remain unknown",
+        "Instrumented requested-layout high water is not simultaneous backend live memory",
+        "Small-sample p95 and p99 are both observed maxima, not population tails",
+        "No uninstrumented throughput or long-duration retention result",
+        "First-use 48-byte requested retention remains explicitly unattributed"
+      ]
     },
     {
       "id": "H18",
@@ -589,7 +605,8 @@
       "prerequisite_commits": [
         "7bb5326e7fc0d986f218f633c986895756552597",
         "ad274e7",
-        "0ab1f71bea44d5f57c9cd27d022f33326919d49b"
+        "0ab1f71bea44d5f57c9cd27d022f33326919d49b",
+        "b0d0a232991e1989f0abeaa6a04981c4a9172d25"
       ],
       "prerequisites": [
         {

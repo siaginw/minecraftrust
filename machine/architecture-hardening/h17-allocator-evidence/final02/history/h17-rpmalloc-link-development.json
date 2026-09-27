@@ -1,0 +1,11 @@
+{
+  "schema": "H17_DEVELOPMENT_DIAGNOSTIC_V1",
+  "status": "BUILD_LINK_FAILURE_REPORTED_IN_SESSION",
+  "backend": "rpmalloc-0.2.2 / rpmalloc-sys-0.2.3+b097fd0",
+  "tool": "MSVC x86_64 linker",
+  "failure": "LNK2019 unresolved OpenProcessToken, AdjustTokenPrivileges, LookupPrivilegeValueA",
+  "raw_log": null,
+  "raw_log_limit": "The initial tool output was not saved to a separate file. This record is a session diagnostic, not a captured subprocess receipt.",
+  "resolution": "Experiment-local build.rs links Windows advapi32 for rp feature only; no upstream edits or large-page enabling. Must pass fresh build and controls.",
+  "production_changed": false
+}

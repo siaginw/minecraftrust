@@ -1,0 +1,32 @@
+    Checking core-types v0.1.0 (D:\minecraftrust-astra-hardening\crates\core-types)
+    Checking num-traits v0.2.19
+    Checking buffers v0.1.0 (D:\minecraftrust-astra-hardening\crates\buffers)
+    Checking byteorder v1.5.0
+    Checking zlib-rs v0.6.8
+    Checking hdrhistogram v7.5.4
+    Checking protocol v0.1.0 (D:\minecraftrust-astra-hardening\crates\protocol)
+    Checking serde_core v1.0.229
+    Checking flate2 v1.1.10
+   Compiling allocator-experiment v0.1.0 (D:\minecraftrust-astra-hardening\tools\allocator-experiment)
+    Checking metrics v0.1.0 (D:\minecraftrust-astra-hardening\crates\metrics)
+    Checking rustcraft-core v0.1.0 (D:\minecraftrust-astra-hardening\crates\rustcraft-core)
+    Checking memchr v2.8.3
+    Checking ryu v1.0.23
+    Checking itoa v1.0.18
+    Checking native-capability v0.1.0 (D:\minecraftrust-astra-hardening\crates\native-capability)
+    Checking serde_json v1.0.145
+    Checking native-state-vnext v0.1.0 (D:\minecraftrust-astra-hardening\crates\native-state-vnext)
+    Checking native-observability v0.1.0 (D:\minecraftrust-astra-hardening\crates\native-observability)
+    Checking compression v0.1.0 (D:\minecraftrust-astra-hardening\crates\compression)
+    Checking native-chunk v0.1.0 (D:\minecraftrust-astra-hardening\crates\native-chunk)
+warning: unused variable: `have`
+   --> D:\minecraftrust-astra-hardening\crates\compression\src\frame.rs:205:68
+    |
+205 |                     crate::CompressError::OutputTooSmall { needed, have } =>
+    |                                                                    ^^^^ help: try ignoring the field: `have: _`
+    |
+    = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: `compression` (lib) generated 1 warning (run `cargo clippy --fix --lib -p compression -- --no-deps -D warnings` to apply 1 suggestion)
+    Checking bumpalo v3.20.3
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 3.00s
