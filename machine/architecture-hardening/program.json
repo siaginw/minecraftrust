@@ -528,15 +528,19 @@
         "tools/writer-plan-v2-tests",
         "docs/engineering/v2-writer-plan-admission.md",
         "tools/fresh-forge-observer",
-        "docs/engineering/fresh-forge-observer.md"
+        "docs/engineering/fresh-forge-observer.md",
+        "tools/writer-placement-v2",
+        "docs/engineering/v2-writer-placement.md"
       ],
       "validation": [
         "26 Java admission assertions,23 negative generator controls,generated V2 compilation/admission,92 canonical assertions,historical Revelation129/10,fresh Clean25 tooling/201 foundation/4358-byte diagnostic comparison",
-        "Fresh same generic launcher:Clean2860 12selected/13attempts/13transformers/2coremods;Revelation2846 12selected/14attempts/34transformers/19coremods;6Python+21malformed variants+3Java controls each;no lifecycle or profile qualification"
+        "Fresh same generic launcher:Clean2860 12selected/13attempts/13transformers/2coremods;Revelation2846 12selected/14attempts/34transformers/19coremods;6Python+21malformed variants+3Java controls each;no lifecycle or profile qualification",
+        "Root independent placement rerun PASS controls:18Python,27actual mutated classes,66missing hooks,29fixture+24Clean parser agreements,3adapter controls;Clean actual relation INCOMPLETE due preserved frame differences"
       ],
       "evidence": [
         "machine/architecture-hardening/h23-writer-plan-v2.json",
-        "machine/architecture-hardening/h23-fresh-observation.json"
+        "machine/architecture-hardening/h23-fresh-observation.json",
+        "machine/architecture-hardening/h23-placement.json"
       ],
       "commit": "7bb5326e7fc0d986f218f633c986895756552597",
       "outstanding": [
@@ -545,6 +549,10 @@
         "Independent permitted frame relation, loader/hierarchy and verification proof",
         "Writer/lifecycle/extractor/registry/capability closure",
         "Clean and Revelation V2 profile requalification before live shadow"
+      ],
+      "prerequisite_commits": [
+        "7bb5326e7fc0d986f218f633c986895756552597",
+        "ad274e7"
       ]
     },
     {

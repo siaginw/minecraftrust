@@ -1,0 +1,1680 @@
+{
+  "class-signature": {
+    "schema": "RUSTCRAFT_WRITER_PLACEMENT_AUDIT_V2",
+    "status": "FAIL",
+    "production_authority": false,
+    "scope": "OFFLINE_EXACT_INSERTION_AND_V2_PRESERVATION; no live writer/lifecycle closure",
+    "records": [
+      {
+        "class_name": "fixture/Writer",
+        "status": "FAIL",
+        "error": "class/field/annotation metadata changed"
+      }
+    ],
+    "required_hook_count": 2,
+    "observed_class_count": 1
+  },
+  "declaration-order": {
+    "schema": "RUSTCRAFT_WRITER_PLACEMENT_AUDIT_V2",
+    "status": "FAIL",
+    "production_authority": false,
+    "scope": "OFFLINE_EXACT_INSERTION_AND_V2_PRESERVATION; no live writer/lifecycle closure",
+    "records": [
+      {
+        "class_name": "fixture/Writer",
+        "status": "FAIL",
+        "error": "member declaration order changed"
+      }
+    ],
+    "required_hook_count": 2,
+    "observed_class_count": 1
+  },
+  "duplicate-begin": {
+    "schema": "RUSTCRAFT_WRITER_PLACEMENT_AUDIT_V2",
+    "status": "FAIL",
+    "production_authority": false,
+    "scope": "OFFLINE_EXACT_INSERTION_AND_V2_PRESERVATION; no live writer/lifecycle closure",
+    "records": [
+      {
+        "class_name": "fixture/Writer",
+        "status": "FAIL",
+        "sites": [
+          {
+            "id": "W36",
+            "status": "PASS",
+            "blockers": [],
+            "original_instructions": 3,
+            "inserted_instructions": 3,
+            "original_handlers": 0,
+            "added_handlers": 0,
+            "normal_exits": 1,
+            "anchors": []
+          },
+          {
+            "id": "W01",
+            "status": "FAIL",
+            "error": "method V2 field 12 differs (instruction/operand/target/handler/metadata preservation)"
+          }
+        ],
+        "unhooked_method_differences": [],
+        "pool_failures": {
+          "removed": [],
+          "unexpected_added": [
+            "[\"method\",[\"class\",\"com/rustcraft/bridge/capture/LiveWriterHooks\"],[\"name_type\",\"writerBegin\",\"(Ljava/lang/Object;Ljava/lang/String;)Ljava/lang/Object;\"]]",
+            "[\"method\",[\"class\",\"com/rustcraft/bridge/capture/LiveWriterHooks\"],[\"name_type\",\"writerEnd\",\"(Ljava/lang/Object;Ljava/lang/Throwable;)V\"]]",
+            "[\"name_type\",\"writerBegin\",\"(Ljava/lang/Object;Ljava/lang/String;)Ljava/lang/Object;\"]",
+            "[\"name_type\",\"writerEnd\",\"(Ljava/lang/Object;Ljava/lang/Throwable;)V\"]",
+            "[\"string\",\"liveWriter.W01.Writer.set\"]",
+            "[\"utf8\",\"(Ljava/lang/Object;Ljava/lang/String;)Ljava/lang/Object;\"]",
+            "[\"utf8\",\"(Ljava/lang/Object;Ljava/lang/Throwable;)V\"]",
+            "[\"utf8\",\"liveWriter.W01.Writer.set\"]",
+            "[\"utf8\",\"writerBegin\"]",
+            "[\"utf8\",\"writerEnd\"]"
+          ],
+          "duplicate_added": []
+        },
+        "frame_related_pool_additions_unproven": [],
+        "pre_identity": [
+          "CANONICAL_ID_V2",
+          "fixture/Writer",
+          "f83d77dda89b3dc2a1b7213fdf916fb90d73bc0ef102ac698aac834218b72a71",
+          "06dbd2fb6983caefaf76a2691ad5b93a6c34ab4ca5c8b10ef69caac6d96d1921",
+          "d739f96abbf88b2b388eb3c4df03f765c8e3d6ed306f70f523cf02d9d282e37d"
+        ],
+        "post_identity": [
+          "CANONICAL_ID_V2",
+          "fixture/Writer",
+          "8e7c3516ee1c20d5429fa88ad6355964a3d81610594fdb1d796484a04627a16a",
+          "06dbd2fb6983caefaf76a2691ad5b93a6c34ab4ca5c8b10ef69caac6d96d1921",
+          "e35f01a195a28ac508e70e9f97391494e074f609066d1fb9dd2dfdd4e6d4f6ab"
+        ],
+        "original_methods": 2,
+        "required_sites": 2
+      }
+    ],
+    "required_hook_count": 2,
+    "observed_class_count": 1
+  },
+  "extra-end": {
+    "schema": "RUSTCRAFT_WRITER_PLACEMENT_AUDIT_V2",
+    "status": "FAIL",
+    "production_authority": false,
+    "scope": "OFFLINE_EXACT_INSERTION_AND_V2_PRESERVATION; no live writer/lifecycle closure",
+    "records": [
+      {
+        "class_name": "fixture/Writer",
+        "status": "FAIL",
+        "sites": [
+          {
+            "id": "W36",
+            "status": "PASS",
+            "blockers": [],
+            "original_instructions": 3,
+            "inserted_instructions": 3,
+            "original_handlers": 0,
+            "added_handlers": 0,
+            "normal_exits": 1,
+            "anchors": []
+          },
+          {
+            "id": "W01",
+            "status": "FAIL",
+            "error": "method V2 field 12 differs (instruction/operand/target/handler/metadata preservation)"
+          }
+        ],
+        "unhooked_method_differences": [],
+        "pool_failures": {
+          "removed": [],
+          "unexpected_added": [
+            "[\"method\",[\"class\",\"com/rustcraft/bridge/capture/LiveWriterHooks\"],[\"name_type\",\"writerBegin\",\"(Ljava/lang/Object;Ljava/lang/String;)Ljava/lang/Object;\"]]",
+            "[\"method\",[\"class\",\"com/rustcraft/bridge/capture/LiveWriterHooks\"],[\"name_type\",\"writerEnd\",\"(Ljava/lang/Object;Ljava/lang/Throwable;)V\"]]",
+            "[\"name_type\",\"writerBegin\",\"(Ljava/lang/Object;Ljava/lang/String;)Ljava/lang/Object;\"]",
+            "[\"name_type\",\"writerEnd\",\"(Ljava/lang/Object;Ljava/lang/Throwable;)V\"]",
+            "[\"string\",\"liveWriter.W01.Writer.set\"]",
+            "[\"utf8\",\"(Ljava/lang/Object;Ljava/lang/String;)Ljava/lang/Object;\"]",
+            "[\"utf8\",\"(Ljava/lang/Object;Ljava/lang/Throwable;)V\"]",
+            "[\"utf8\",\"liveWriter.W01.Writer.set\"]",
+            "[\"utf8\",\"writerBegin\"]",
+            "[\"utf8\",\"writerEnd\"]"
+          ],
+          "duplicate_added": []
+        },
+        "frame_related_pool_additions_unproven": [],
+        "pre_identity": [
+          "CANONICAL_ID_V2",
+          "fixture/Writer",
+          "f83d77dda89b3dc2a1b7213fdf916fb90d73bc0ef102ac698aac834218b72a71",
+          "06dbd2fb6983caefaf76a2691ad5b93a6c34ab4ca5c8b10ef69caac6d96d1921",
+          "d739f96abbf88b2b388eb3c4df03f765c8e3d6ed306f70f523cf02d9d282e37d"
+        ],
+        "post_identity": [
+          "CANONICAL_ID_V2",
+          "fixture/Writer",
+          "920d1a3712cee5d35ff86f248e320f8f49c5b0fdf403ae951d18676491815c19",
+          "06dbd2fb6983caefaf76a2691ad5b93a6c34ab4ca5c8b10ef69caac6d96d1921",
+          "d1dbe274c9f8fb3dc0ff69843db61328aae1796164c5f04aae695c5845e75ff2"
+        ],
+        "original_methods": 2,
+        "required_sites": 2
+      }
+    ],
+    "required_hook_count": 2,
+    "observed_class_count": 1
+  },
+  "extra-handler": {
+    "schema": "RUSTCRAFT_WRITER_PLACEMENT_AUDIT_V2",
+    "status": "FAIL",
+    "production_authority": false,
+    "scope": "OFFLINE_EXACT_INSERTION_AND_V2_PRESERVATION; no live writer/lifecycle closure",
+    "records": [
+      {
+        "class_name": "fixture/Writer",
+        "status": "FAIL",
+        "sites": [
+          {
+            "id": "W36",
+            "status": "PASS",
+            "blockers": [],
+            "original_instructions": 3,
+            "inserted_instructions": 3,
+            "original_handlers": 0,
+            "added_handlers": 0,
+            "normal_exits": 1,
+            "anchors": []
+          },
+          {
+            "id": "W01",
+            "status": "FAIL",
+            "error": "method V2 field 13 differs (instruction/operand/target/handler/metadata preservation)"
+          }
+        ],
+        "unhooked_method_differences": [],
+        "pool_failures": {
+          "removed": [],
+          "unexpected_added": [
+            "[\"method\",[\"class\",\"com/rustcraft/bridge/capture/LiveWriterHooks\"],[\"name_type\",\"writerBegin\",\"(Ljava/lang/Object;Ljava/lang/String;)Ljava/lang/Object;\"]]",
+            "[\"method\",[\"class\",\"com/rustcraft/bridge/capture/LiveWriterHooks\"],[\"name_type\",\"writerEnd\",\"(Ljava/lang/Object;Ljava/lang/Throwable;)V\"]]",
+            "[\"name_type\",\"writerBegin\",\"(Ljava/lang/Object;Ljava/lang/String;)Ljava/lang/Object;\"]",
+            "[\"name_type\",\"writerEnd\",\"(Ljava/lang/Object;Ljava/lang/Throwable;)V\"]",
+            "[\"string\",\"liveWriter.W01.Writer.set\"]",
+            "[\"utf8\",\"(Ljava/lang/Object;Ljava/lang/String;)Ljava/lang/Object;\"]",
+            "[\"utf8\",\"(Ljava/lang/Object;Ljava/lang/Throwable;)V\"]",
+            "[\"utf8\",\"liveWriter.W01.Writer.set\"]",
+            "[\"utf8\",\"writerBegin\"]",
+            "[\"utf8\",\"writerEnd\"]"
+          ],
+          "duplicate_added": []
+        },
+        "frame_related_pool_additions_unproven": [],
+        "pre_identity": [
+          "CANONICAL_ID_V2",
+          "fixture/Writer",
+          "f83d77dda89b3dc2a1b7213fdf916fb90d73bc0ef102ac698aac834218b72a71",
+          "06dbd2fb6983caefaf76a2691ad5b93a6c34ab4ca5c8b10ef69caac6d96d1921",
+          "d739f96abbf88b2b388eb3c4df03f765c8e3d6ed306f70f523cf02d9d282e37d"
+        ],
+        "post_identity": [
+          "CANONICAL_ID_V2",
+          "fixture/Writer",
+          "6874c478ba3380570aaf6f66c76baf1bb2626e30c174286389e0e8eb2b42ea40",
+          "06dbd2fb6983caefaf76a2691ad5b93a6c34ab4ca5c8b10ef69caac6d96d1921",
+          "513ea6c1e725e7930aef6533ef8926c10bb4937c1a8e9449a01752db2999d2c9"
+        ],
+        "original_methods": 2,
+        "required_sites": 2
+      }
+    ],
+    "required_hook_count": 2,
+    "observed_class_count": 1
+  },
+  "extra-instruction": {
+    "schema": "RUSTCRAFT_WRITER_PLACEMENT_AUDIT_V2",
+    "status": "FAIL",
+    "production_authority": false,
+    "scope": "OFFLINE_EXACT_INSERTION_AND_V2_PRESERVATION; no live writer/lifecycle closure",
+    "records": [
+      {
+        "class_name": "fixture/Writer",
+        "status": "FAIL",
+        "sites": [
+          {
+            "id": "W36",
+            "status": "PASS",
+            "blockers": [],
+            "original_instructions": 3,
+            "inserted_instructions": 3,
+            "original_handlers": 0,
+            "added_handlers": 0,
+            "normal_exits": 1,
+            "anchors": []
+          },
+          {
+            "id": "W01",
+            "status": "FAIL",
+            "error": "method V2 field 12 differs (instruction/operand/target/handler/metadata preservation)"
+          }
+        ],
+        "unhooked_method_differences": [],
+        "pool_failures": {
+          "removed": [],
+          "unexpected_added": [
+            "[\"method\",[\"class\",\"com/rustcraft/bridge/capture/LiveWriterHooks\"],[\"name_type\",\"writerBegin\",\"(Ljava/lang/Object;Ljava/lang/String;)Ljava/lang/Object;\"]]",
+            "[\"method\",[\"class\",\"com/rustcraft/bridge/capture/LiveWriterHooks\"],[\"name_type\",\"writerEnd\",\"(Ljava/lang/Object;Ljava/lang/Throwable;)V\"]]",
+            "[\"name_type\",\"writerBegin\",\"(Ljava/lang/Object;Ljava/lang/String;)Ljava/lang/Object;\"]",
+            "[\"name_type\",\"writerEnd\",\"(Ljava/lang/Object;Ljava/lang/Throwable;)V\"]",
+            "[\"string\",\"liveWriter.W01.Writer.set\"]",
+            "[\"utf8\",\"(Ljava/lang/Object;Ljava/lang/String;)Ljava/lang/Object;\"]",
+            "[\"utf8\",\"(Ljava/lang/Object;Ljava/lang/Throwable;)V\"]",
+            "[\"utf8\",\"liveWriter.W01.Writer.set\"]",
+            "[\"utf8\",\"writerBegin\"]",
+            "[\"utf8\",\"writerEnd\"]"
+          ],
+          "duplicate_added": []
+        },
+        "frame_related_pool_additions_unproven": [],
+        "pre_identity": [
+          "CANONICAL_ID_V2",
+          "fixture/Writer",
+          "f83d77dda89b3dc2a1b7213fdf916fb90d73bc0ef102ac698aac834218b72a71",
+          "06dbd2fb6983caefaf76a2691ad5b93a6c34ab4ca5c8b10ef69caac6d96d1921",
+          "d739f96abbf88b2b388eb3c4df03f765c8e3d6ed306f70f523cf02d9d282e37d"
+        ],
+        "post_identity": [
+          "CANONICAL_ID_V2",
+          "fixture/Writer",
+          "ac831249d0252c8ba45f789ed5ae1756a4599e2f5199ce8d363c750377c6effc",
+          "06dbd2fb6983caefaf76a2691ad5b93a6c34ab4ca5c8b10ef69caac6d96d1921",
+          "998a89c74d506a4764fc5c70fd939d97df83b4ba1fd0fb8d9d8eb0949a1a2a1c"
+        ],
+        "original_methods": 2,
+        "required_sites": 2
+      }
+    ],
+    "required_hook_count": 2,
+    "observed_class_count": 1
+  },
+  "extra-method": {
+    "schema": "RUSTCRAFT_WRITER_PLACEMENT_AUDIT_V2",
+    "status": "FAIL",
+    "production_authority": false,
+    "scope": "OFFLINE_EXACT_INSERTION_AND_V2_PRESERVATION; no live writer/lifecycle closure",
+    "records": [
+      {
+        "class_name": "fixture/Writer",
+        "status": "FAIL",
+        "error": "member declaration order changed"
+      }
+    ],
+    "required_hook_count": 2,
+    "observed_class_count": 1
+  },
+  "field-access": {
+    "schema": "RUSTCRAFT_WRITER_PLACEMENT_AUDIT_V2",
+    "status": "FAIL",
+    "production_authority": false,
+    "scope": "OFFLINE_EXACT_INSERTION_AND_V2_PRESERVATION; no live writer/lifecycle closure",
+    "records": [
+      {
+        "class_name": "fixture/Writer",
+        "status": "FAIL",
+        "error": "class/field/annotation metadata changed"
+      }
+    ],
+    "required_hook_count": 2,
+    "observed_class_count": 1
+  },
+  "frame-local": {
+    "schema": "RUSTCRAFT_WRITER_PLACEMENT_AUDIT_V2",
+    "status": "INCOMPLETE",
+    "production_authority": false,
+    "scope": "OFFLINE_EXACT_INSERTION_AND_V2_PRESERVATION; no live writer/lifecycle closure",
+    "records": [
+      {
+        "class_name": "fixture/Writer",
+        "status": "INCOMPLETE",
+        "sites": [
+          {
+            "id": "W36",
+            "status": "PASS",
+            "blockers": [],
+            "original_instructions": 3,
+            "inserted_instructions": 3,
+            "original_handlers": 0,
+            "added_handlers": 0,
+            "normal_exits": 1,
+            "anchors": []
+          },
+          {
+            "id": "W01",
+            "status": "INCOMPLETE",
+            "blockers": [
+              {
+                "kind": "ADDED_FRAME_LOCAL_UNPROVEN",
+                "pc": 15,
+                "observed": [
+                  [
+                    "verification_tag",
+                    1
+                  ]
+                ]
+              },
+              {
+                "kind": "HANDLER_FRAME_RELATION_UNPROVEN",
+                "pc": 19,
+                "argument_reassignment": false,
+                "expected": [
+                  [
+                    "object",
+                    "fixture/Writer"
+                  ],
+                  [
+                    "verification_tag",
+                    1
+                  ],
+                  [
+                    "object",
+                    "java/lang/Object"
+                  ]
+                ],
+                "observed": [
+                  [
+                    "object",
+                    "fixture/Writer"
+                  ],
+                  [
+                    "verification_tag",
+                    1
+                  ],
+                  [
+                    "verification_tag",
+                    1
+                  ]
+                ]
+              }
+            ],
+            "original_instructions": 7,
+            "inserted_instructions": 18,
+            "original_handlers": 0,
+            "added_handlers": 1,
+            "normal_exits": 2,
+            "anchors": []
+          }
+        ],
+        "unhooked_method_differences": [],
+        "pool_failures": {
+          "removed": [],
+          "unexpected_added": [],
+          "duplicate_added": []
+        },
+        "frame_related_pool_additions_unproven": [],
+        "pre_identity": [
+          "CANONICAL_ID_V2",
+          "fixture/Writer",
+          "f83d77dda89b3dc2a1b7213fdf916fb90d73bc0ef102ac698aac834218b72a71",
+          "06dbd2fb6983caefaf76a2691ad5b93a6c34ab4ca5c8b10ef69caac6d96d1921",
+          "d739f96abbf88b2b388eb3c4df03f765c8e3d6ed306f70f523cf02d9d282e37d"
+        ],
+        "post_identity": [
+          "CANONICAL_ID_V2",
+          "fixture/Writer",
+          "45405a0d01a1ca4f71f346cb44b2613a6210a0f09d1093b2ee976699aaa11ab4",
+          "06dbd2fb6983caefaf76a2691ad5b93a6c34ab4ca5c8b10ef69caac6d96d1921",
+          "6ff72da0a8368c5a8f31ca6c1451352150f6daa30672e2612b65cfc5bf99478c"
+        ],
+        "original_methods": 2,
+        "required_sites": 2
+      }
+    ],
+    "required_hook_count": 2,
+    "observed_class_count": 1
+  },
+  "handler-range": {
+    "schema": "RUSTCRAFT_WRITER_PLACEMENT_AUDIT_V2",
+    "status": "FAIL",
+    "production_authority": false,
+    "scope": "OFFLINE_EXACT_INSERTION_AND_V2_PRESERVATION; no live writer/lifecycle closure",
+    "records": [
+      {
+        "class_name": "fixture/Writer",
+        "status": "FAIL",
+        "sites": [
+          {
+            "id": "W36",
+            "status": "PASS",
+            "blockers": [],
+            "original_instructions": 3,
+            "inserted_instructions": 3,
+            "original_handlers": 0,
+            "added_handlers": 0,
+            "normal_exits": 1,
+            "anchors": []
+          },
+          {
+            "id": "W01",
+            "status": "FAIL",
+            "error": "method V2 field 13 differs (instruction/operand/target/handler/metadata preservation)"
+          }
+        ],
+        "unhooked_method_differences": [],
+        "pool_failures": {
+          "removed": [],
+          "unexpected_added": [
+            "[\"method\",[\"class\",\"com/rustcraft/bridge/capture/LiveWriterHooks\"],[\"name_type\",\"writerBegin\",\"(Ljava/lang/Object;Ljava/lang/String;)Ljava/lang/Object;\"]]",
+            "[\"method\",[\"class\",\"com/rustcraft/bridge/capture/LiveWriterHooks\"],[\"name_type\",\"writerEnd\",\"(Ljava/lang/Object;Ljava/lang/Throwable;)V\"]]",
+            "[\"name_type\",\"writerBegin\",\"(Ljava/lang/Object;Ljava/lang/String;)Ljava/lang/Object;\"]",
+            "[\"name_type\",\"writerEnd\",\"(Ljava/lang/Object;Ljava/lang/Throwable;)V\"]",
+            "[\"string\",\"liveWriter.W01.Writer.set\"]",
+            "[\"utf8\",\"(Ljava/lang/Object;Ljava/lang/String;)Ljava/lang/Object;\"]",
+            "[\"utf8\",\"(Ljava/lang/Object;Ljava/lang/Throwable;)V\"]",
+            "[\"utf8\",\"liveWriter.W01.Writer.set\"]",
+            "[\"utf8\",\"writerBegin\"]",
+            "[\"utf8\",\"writerEnd\"]"
+          ],
+          "duplicate_added": []
+        },
+        "frame_related_pool_additions_unproven": [],
+        "pre_identity": [
+          "CANONICAL_ID_V2",
+          "fixture/Writer",
+          "f83d77dda89b3dc2a1b7213fdf916fb90d73bc0ef102ac698aac834218b72a71",
+          "06dbd2fb6983caefaf76a2691ad5b93a6c34ab4ca5c8b10ef69caac6d96d1921",
+          "d739f96abbf88b2b388eb3c4df03f765c8e3d6ed306f70f523cf02d9d282e37d"
+        ],
+        "post_identity": [
+          "CANONICAL_ID_V2",
+          "fixture/Writer",
+          "d9e9e65c07cb3b1a98e00b3581b312ab71ac6dd3742c0d60916d15130ac2a4fb",
+          "06dbd2fb6983caefaf76a2691ad5b93a6c34ab4ca5c8b10ef69caac6d96d1921",
+          "b0eb89ae93098cb705fc45d54663a5be79b3d09eb76d22d9615bcf20a595c8f8"
+        ],
+        "original_methods": 2,
+        "required_sites": 2
+      }
+    ],
+    "required_hook_count": 2,
+    "observed_class_count": 1
+  },
+  "handler-target": {
+    "schema": "RUSTCRAFT_WRITER_PLACEMENT_AUDIT_V2",
+    "status": "FAIL",
+    "production_authority": false,
+    "scope": "OFFLINE_EXACT_INSERTION_AND_V2_PRESERVATION; no live writer/lifecycle closure",
+    "records": [
+      {
+        "class_name": "fixture/Writer",
+        "status": "FAIL",
+        "sites": [
+          {
+            "id": "W36",
+            "status": "PASS",
+            "blockers": [],
+            "original_instructions": 3,
+            "inserted_instructions": 3,
+            "original_handlers": 0,
+            "added_handlers": 0,
+            "normal_exits": 1,
+            "anchors": []
+          },
+          {
+            "id": "W01",
+            "status": "FAIL",
+            "error": "method V2 field 13 differs (instruction/operand/target/handler/metadata preservation)"
+          }
+        ],
+        "unhooked_method_differences": [],
+        "pool_failures": {
+          "removed": [],
+          "unexpected_added": [
+            "[\"method\",[\"class\",\"com/rustcraft/bridge/capture/LiveWriterHooks\"],[\"name_type\",\"writerBegin\",\"(Ljava/lang/Object;Ljava/lang/String;)Ljava/lang/Object;\"]]",
+            "[\"method\",[\"class\",\"com/rustcraft/bridge/capture/LiveWriterHooks\"],[\"name_type\",\"writerEnd\",\"(Ljava/lang/Object;Ljava/lang/Throwable;)V\"]]",
+            "[\"name_type\",\"writerBegin\",\"(Ljava/lang/Object;Ljava/lang/String;)Ljava/lang/Object;\"]",
+            "[\"name_type\",\"writerEnd\",\"(Ljava/lang/Object;Ljava/lang/Throwable;)V\"]",
+            "[\"string\",\"liveWriter.W01.Writer.set\"]",
+            "[\"utf8\",\"(Ljava/lang/Object;Ljava/lang/String;)Ljava/lang/Object;\"]",
+            "[\"utf8\",\"(Ljava/lang/Object;Ljava/lang/Throwable;)V\"]",
+            "[\"utf8\",\"liveWriter.W01.Writer.set\"]",
+            "[\"utf8\",\"writerBegin\"]",
+            "[\"utf8\",\"writerEnd\"]"
+          ],
+          "duplicate_added": []
+        },
+        "frame_related_pool_additions_unproven": [],
+        "pre_identity": [
+          "CANONICAL_ID_V2",
+          "fixture/Writer",
+          "f83d77dda89b3dc2a1b7213fdf916fb90d73bc0ef102ac698aac834218b72a71",
+          "06dbd2fb6983caefaf76a2691ad5b93a6c34ab4ca5c8b10ef69caac6d96d1921",
+          "d739f96abbf88b2b388eb3c4df03f765c8e3d6ed306f70f523cf02d9d282e37d"
+        ],
+        "post_identity": [
+          "CANONICAL_ID_V2",
+          "fixture/Writer",
+          "bf12a9aab77974c80be4b29ce3bb5d0a4f887b67e4a936b3a6dd2d1fc4a3ab4d",
+          "06dbd2fb6983caefaf76a2691ad5b93a6c34ab4ca5c8b10ef69caac6d96d1921",
+          "f4924f61accc59b65df443a300a21ce0e446d0213296f0fc312e5ecec73e7cee"
+        ],
+        "original_methods": 2,
+        "required_sites": 2
+      }
+    ],
+    "required_hook_count": 2,
+    "observed_class_count": 1
+  },
+  "max-locals": {
+    "schema": "RUSTCRAFT_WRITER_PLACEMENT_AUDIT_V2",
+    "status": "FAIL",
+    "production_authority": false,
+    "scope": "OFFLINE_EXACT_INSERTION_AND_V2_PRESERVATION; no live writer/lifecycle closure",
+    "records": [
+      {
+        "class_name": "fixture/Writer",
+        "status": "FAIL",
+        "sites": [
+          {
+            "id": "W36",
+            "status": "PASS",
+            "blockers": [],
+            "original_instructions": 3,
+            "inserted_instructions": 3,
+            "original_handlers": 0,
+            "added_handlers": 0,
+            "normal_exits": 1,
+            "anchors": []
+          },
+          {
+            "id": "W01",
+            "status": "FAIL",
+            "error": "method V2 field 11 differs (instruction/operand/target/handler/metadata preservation)"
+          }
+        ],
+        "unhooked_method_differences": [],
+        "pool_failures": {
+          "removed": [],
+          "unexpected_added": [
+            "[\"method\",[\"class\",\"com/rustcraft/bridge/capture/LiveWriterHooks\"],[\"name_type\",\"writerBegin\",\"(Ljava/lang/Object;Ljava/lang/String;)Ljava/lang/Object;\"]]",
+            "[\"method\",[\"class\",\"com/rustcraft/bridge/capture/LiveWriterHooks\"],[\"name_type\",\"writerEnd\",\"(Ljava/lang/Object;Ljava/lang/Throwable;)V\"]]",
+            "[\"name_type\",\"writerBegin\",\"(Ljava/lang/Object;Ljava/lang/String;)Ljava/lang/Object;\"]",
+            "[\"name_type\",\"writerEnd\",\"(Ljava/lang/Object;Ljava/lang/Throwable;)V\"]",
+            "[\"string\",\"liveWriter.W01.Writer.set\"]",
+            "[\"utf8\",\"(Ljava/lang/Object;Ljava/lang/String;)Ljava/lang/Object;\"]",
+            "[\"utf8\",\"(Ljava/lang/Object;Ljava/lang/Throwable;)V\"]",
+            "[\"utf8\",\"liveWriter.W01.Writer.set\"]",
+            "[\"utf8\",\"writerBegin\"]",
+            "[\"utf8\",\"writerEnd\"]"
+          ],
+          "duplicate_added": []
+        },
+        "frame_related_pool_additions_unproven": [],
+        "pre_identity": [
+          "CANONICAL_ID_V2",
+          "fixture/Writer",
+          "f83d77dda89b3dc2a1b7213fdf916fb90d73bc0ef102ac698aac834218b72a71",
+          "06dbd2fb6983caefaf76a2691ad5b93a6c34ab4ca5c8b10ef69caac6d96d1921",
+          "d739f96abbf88b2b388eb3c4df03f765c8e3d6ed306f70f523cf02d9d282e37d"
+        ],
+        "post_identity": [
+          "CANONICAL_ID_V2",
+          "fixture/Writer",
+          "834028743abab19619edd5a6f6b114285bfdb8338f1f2873cb8ded82fc043b99",
+          "06dbd2fb6983caefaf76a2691ad5b93a6c34ab4ca5c8b10ef69caac6d96d1921",
+          "da25157e43e451210e93e3e3684f7e7a1bbaaef546117ee19d47668af9a588d7"
+        ],
+        "original_methods": 2,
+        "required_sites": 2
+      }
+    ],
+    "required_hook_count": 2,
+    "observed_class_count": 1
+  },
+  "max-stack": {
+    "schema": "RUSTCRAFT_WRITER_PLACEMENT_AUDIT_V2",
+    "status": "FAIL",
+    "production_authority": false,
+    "scope": "OFFLINE_EXACT_INSERTION_AND_V2_PRESERVATION; no live writer/lifecycle closure",
+    "records": [
+      {
+        "class_name": "fixture/Writer",
+        "status": "FAIL",
+        "sites": [
+          {
+            "id": "W36",
+            "status": "PASS",
+            "blockers": [],
+            "original_instructions": 3,
+            "inserted_instructions": 3,
+            "original_handlers": 0,
+            "added_handlers": 0,
+            "normal_exits": 1,
+            "anchors": []
+          },
+          {
+            "id": "W01",
+            "status": "FAIL",
+            "error": "method V2 field 10 differs (instruction/operand/target/handler/metadata preservation)"
+          }
+        ],
+        "unhooked_method_differences": [],
+        "pool_failures": {
+          "removed": [],
+          "unexpected_added": [
+            "[\"method\",[\"class\",\"com/rustcraft/bridge/capture/LiveWriterHooks\"],[\"name_type\",\"writerBegin\",\"(Ljava/lang/Object;Ljava/lang/String;)Ljava/lang/Object;\"]]",
+            "[\"method\",[\"class\",\"com/rustcraft/bridge/capture/LiveWriterHooks\"],[\"name_type\",\"writerEnd\",\"(Ljava/lang/Object;Ljava/lang/Throwable;)V\"]]",
+            "[\"name_type\",\"writerBegin\",\"(Ljava/lang/Object;Ljava/lang/String;)Ljava/lang/Object;\"]",
+            "[\"name_type\",\"writerEnd\",\"(Ljava/lang/Object;Ljava/lang/Throwable;)V\"]",
+            "[\"string\",\"liveWriter.W01.Writer.set\"]",
+            "[\"utf8\",\"(Ljava/lang/Object;Ljava/lang/String;)Ljava/lang/Object;\"]",
+            "[\"utf8\",\"(Ljava/lang/Object;Ljava/lang/Throwable;)V\"]",
+            "[\"utf8\",\"liveWriter.W01.Writer.set\"]",
+            "[\"utf8\",\"writerBegin\"]",
+            "[\"utf8\",\"writerEnd\"]"
+          ],
+          "duplicate_added": []
+        },
+        "frame_related_pool_additions_unproven": [],
+        "pre_identity": [
+          "CANONICAL_ID_V2",
+          "fixture/Writer",
+          "f83d77dda89b3dc2a1b7213fdf916fb90d73bc0ef102ac698aac834218b72a71",
+          "06dbd2fb6983caefaf76a2691ad5b93a6c34ab4ca5c8b10ef69caac6d96d1921",
+          "d739f96abbf88b2b388eb3c4df03f765c8e3d6ed306f70f523cf02d9d282e37d"
+        ],
+        "post_identity": [
+          "CANONICAL_ID_V2",
+          "fixture/Writer",
+          "ad3856332becafe33b71a9bc196f91b5252b991bffab8cb8a703e9f55de890fa",
+          "06dbd2fb6983caefaf76a2691ad5b93a6c34ab4ca5c8b10ef69caac6d96d1921",
+          "b26a89e0588317bc7b5333ef18d218a835d86071ca31896cf341b433ab956e1d"
+        ],
+        "original_methods": 2,
+        "required_sites": 2
+      }
+    ],
+    "required_hook_count": 2,
+    "observed_class_count": 1
+  },
+  "method-access": {
+    "schema": "RUSTCRAFT_WRITER_PLACEMENT_AUDIT_V2",
+    "status": "FAIL",
+    "production_authority": false,
+    "scope": "OFFLINE_EXACT_INSERTION_AND_V2_PRESERVATION; no live writer/lifecycle closure",
+    "records": [
+      {
+        "class_name": "fixture/Writer",
+        "status": "FAIL",
+        "sites": [
+          {
+            "id": "W36",
+            "status": "PASS",
+            "blockers": [],
+            "original_instructions": 3,
+            "inserted_instructions": 3,
+            "original_handlers": 0,
+            "added_handlers": 0,
+            "normal_exits": 1,
+            "anchors": []
+          },
+          {
+            "id": "W01",
+            "status": "FAIL",
+            "error": "method V2 field 3 differs (instruction/operand/target/handler/metadata preservation)"
+          }
+        ],
+        "unhooked_method_differences": [],
+        "pool_failures": {
+          "removed": [],
+          "unexpected_added": [
+            "[\"method\",[\"class\",\"com/rustcraft/bridge/capture/LiveWriterHooks\"],[\"name_type\",\"writerBegin\",\"(Ljava/lang/Object;Ljava/lang/String;)Ljava/lang/Object;\"]]",
+            "[\"method\",[\"class\",\"com/rustcraft/bridge/capture/LiveWriterHooks\"],[\"name_type\",\"writerEnd\",\"(Ljava/lang/Object;Ljava/lang/Throwable;)V\"]]",
+            "[\"name_type\",\"writerBegin\",\"(Ljava/lang/Object;Ljava/lang/String;)Ljava/lang/Object;\"]",
+            "[\"name_type\",\"writerEnd\",\"(Ljava/lang/Object;Ljava/lang/Throwable;)V\"]",
+            "[\"string\",\"liveWriter.W01.Writer.set\"]",
+            "[\"utf8\",\"(Ljava/lang/Object;Ljava/lang/String;)Ljava/lang/Object;\"]",
+            "[\"utf8\",\"(Ljava/lang/Object;Ljava/lang/Throwable;)V\"]",
+            "[\"utf8\",\"liveWriter.W01.Writer.set\"]",
+            "[\"utf8\",\"writerBegin\"]",
+            "[\"utf8\",\"writerEnd\"]"
+          ],
+          "duplicate_added": []
+        },
+        "frame_related_pool_additions_unproven": [],
+        "pre_identity": [
+          "CANONICAL_ID_V2",
+          "fixture/Writer",
+          "f83d77dda89b3dc2a1b7213fdf916fb90d73bc0ef102ac698aac834218b72a71",
+          "06dbd2fb6983caefaf76a2691ad5b93a6c34ab4ca5c8b10ef69caac6d96d1921",
+          "d739f96abbf88b2b388eb3c4df03f765c8e3d6ed306f70f523cf02d9d282e37d"
+        ],
+        "post_identity": [
+          "CANONICAL_ID_V2",
+          "fixture/Writer",
+          "fb71721ac3fcf7bf4f3e08e7a5f1a312558418960b30cbc961564f616991ebfb",
+          "06dbd2fb6983caefaf76a2691ad5b93a6c34ab4ca5c8b10ef69caac6d96d1921",
+          "2f8d97a081c229e0222a41e7f673f056047ca3f3e94b0ec2aa5f11b9b2ba2025"
+        ],
+        "original_methods": 2,
+        "required_sites": 2
+      }
+    ],
+    "required_hook_count": 2,
+    "observed_class_count": 1
+  },
+  "missing-begin": {
+    "schema": "RUSTCRAFT_WRITER_PLACEMENT_AUDIT_V2",
+    "status": "FAIL",
+    "production_authority": false,
+    "scope": "OFFLINE_EXACT_INSERTION_AND_V2_PRESERVATION; no live writer/lifecycle closure",
+    "records": [
+      {
+        "class_name": "fixture/Writer",
+        "status": "FAIL",
+        "sites": [
+          {
+            "id": "W36",
+            "status": "PASS",
+            "blockers": [],
+            "original_instructions": 3,
+            "inserted_instructions": 3,
+            "original_handlers": 0,
+            "added_handlers": 0,
+            "normal_exits": 1,
+            "anchors": []
+          },
+          {
+            "id": "W01",
+            "status": "FAIL",
+            "error": "method V2 field 12 differs (instruction/operand/target/handler/metadata preservation)"
+          }
+        ],
+        "unhooked_method_differences": [],
+        "pool_failures": {
+          "removed": [],
+          "unexpected_added": [
+            "[\"method\",[\"class\",\"com/rustcraft/bridge/capture/LiveWriterHooks\"],[\"name_type\",\"writerBegin\",\"(Ljava/lang/Object;Ljava/lang/String;)Ljava/lang/Object;\"]]",
+            "[\"method\",[\"class\",\"com/rustcraft/bridge/capture/LiveWriterHooks\"],[\"name_type\",\"writerEnd\",\"(Ljava/lang/Object;Ljava/lang/Throwable;)V\"]]",
+            "[\"name_type\",\"writerBegin\",\"(Ljava/lang/Object;Ljava/lang/String;)Ljava/lang/Object;\"]",
+            "[\"name_type\",\"writerEnd\",\"(Ljava/lang/Object;Ljava/lang/Throwable;)V\"]",
+            "[\"string\",\"liveWriter.W01.Writer.set\"]",
+            "[\"utf8\",\"(Ljava/lang/Object;Ljava/lang/String;)Ljava/lang/Object;\"]",
+            "[\"utf8\",\"(Ljava/lang/Object;Ljava/lang/Throwable;)V\"]",
+            "[\"utf8\",\"liveWriter.W01.Writer.set\"]",
+            "[\"utf8\",\"writerBegin\"]",
+            "[\"utf8\",\"writerEnd\"]"
+          ],
+          "duplicate_added": []
+        },
+        "frame_related_pool_additions_unproven": [],
+        "pre_identity": [
+          "CANONICAL_ID_V2",
+          "fixture/Writer",
+          "f83d77dda89b3dc2a1b7213fdf916fb90d73bc0ef102ac698aac834218b72a71",
+          "06dbd2fb6983caefaf76a2691ad5b93a6c34ab4ca5c8b10ef69caac6d96d1921",
+          "d739f96abbf88b2b388eb3c4df03f765c8e3d6ed306f70f523cf02d9d282e37d"
+        ],
+        "post_identity": [
+          "CANONICAL_ID_V2",
+          "fixture/Writer",
+          "e7155e8857890a321a80b8daf909b37525ab0efda079201651d517ad61c26a12",
+          "06dbd2fb6983caefaf76a2691ad5b93a6c34ab4ca5c8b10ef69caac6d96d1921",
+          "90cfea900a7963a838702abef87025169347faea9743a840506395332c7127c3"
+        ],
+        "original_methods": 2,
+        "required_sites": 2
+      }
+    ],
+    "required_hook_count": 2,
+    "observed_class_count": 1
+  },
+  "missing-handler": {
+    "schema": "RUSTCRAFT_WRITER_PLACEMENT_AUDIT_V2",
+    "status": "FAIL",
+    "production_authority": false,
+    "scope": "OFFLINE_EXACT_INSERTION_AND_V2_PRESERVATION; no live writer/lifecycle closure",
+    "records": [
+      {
+        "class_name": "fixture/Writer",
+        "status": "FAIL",
+        "sites": [
+          {
+            "id": "W36",
+            "status": "PASS",
+            "blockers": [],
+            "original_instructions": 3,
+            "inserted_instructions": 3,
+            "original_handlers": 0,
+            "added_handlers": 0,
+            "normal_exits": 1,
+            "anchors": []
+          },
+          {
+            "id": "W01",
+            "status": "FAIL",
+            "error": "method V2 field 13 differs (instruction/operand/target/handler/metadata preservation)"
+          }
+        ],
+        "unhooked_method_differences": [],
+        "pool_failures": {
+          "removed": [],
+          "unexpected_added": [
+            "[\"method\",[\"class\",\"com/rustcraft/bridge/capture/LiveWriterHooks\"],[\"name_type\",\"writerBegin\",\"(Ljava/lang/Object;Ljava/lang/String;)Ljava/lang/Object;\"]]",
+            "[\"method\",[\"class\",\"com/rustcraft/bridge/capture/LiveWriterHooks\"],[\"name_type\",\"writerEnd\",\"(Ljava/lang/Object;Ljava/lang/Throwable;)V\"]]",
+            "[\"name_type\",\"writerBegin\",\"(Ljava/lang/Object;Ljava/lang/String;)Ljava/lang/Object;\"]",
+            "[\"name_type\",\"writerEnd\",\"(Ljava/lang/Object;Ljava/lang/Throwable;)V\"]",
+            "[\"string\",\"liveWriter.W01.Writer.set\"]",
+            "[\"utf8\",\"(Ljava/lang/Object;Ljava/lang/String;)Ljava/lang/Object;\"]",
+            "[\"utf8\",\"(Ljava/lang/Object;Ljava/lang/Throwable;)V\"]",
+            "[\"utf8\",\"liveWriter.W01.Writer.set\"]",
+            "[\"utf8\",\"writerBegin\"]",
+            "[\"utf8\",\"writerEnd\"]"
+          ],
+          "duplicate_added": []
+        },
+        "frame_related_pool_additions_unproven": [],
+        "pre_identity": [
+          "CANONICAL_ID_V2",
+          "fixture/Writer",
+          "f83d77dda89b3dc2a1b7213fdf916fb90d73bc0ef102ac698aac834218b72a71",
+          "06dbd2fb6983caefaf76a2691ad5b93a6c34ab4ca5c8b10ef69caac6d96d1921",
+          "d739f96abbf88b2b388eb3c4df03f765c8e3d6ed306f70f523cf02d9d282e37d"
+        ],
+        "post_identity": [
+          "CANONICAL_ID_V2",
+          "fixture/Writer",
+          "fb3263c52d76cb0dc25c29efd9ca898a961d600be037cb8827a597a731b71f50",
+          "06dbd2fb6983caefaf76a2691ad5b93a6c34ab4ca5c8b10ef69caac6d96d1921",
+          "e10aa933f5299cdeeadaae04ab75d41d74a4c70862ba220e6375205f5cacb8fc"
+        ],
+        "original_methods": 2,
+        "required_sites": 2
+      }
+    ],
+    "required_hook_count": 2,
+    "observed_class_count": 1
+  },
+  "missing-normal-end": {
+    "schema": "RUSTCRAFT_WRITER_PLACEMENT_AUDIT_V2",
+    "status": "FAIL",
+    "production_authority": false,
+    "scope": "OFFLINE_EXACT_INSERTION_AND_V2_PRESERVATION; no live writer/lifecycle closure",
+    "records": [
+      {
+        "class_name": "fixture/Writer",
+        "status": "FAIL",
+        "sites": [
+          {
+            "id": "W36",
+            "status": "PASS",
+            "blockers": [],
+            "original_instructions": 3,
+            "inserted_instructions": 3,
+            "original_handlers": 0,
+            "added_handlers": 0,
+            "normal_exits": 1,
+            "anchors": []
+          },
+          {
+            "id": "W01",
+            "status": "FAIL",
+            "error": "method V2 field 12 differs (instruction/operand/target/handler/metadata preservation)"
+          }
+        ],
+        "unhooked_method_differences": [],
+        "pool_failures": {
+          "removed": [],
+          "unexpected_added": [
+            "[\"method\",[\"class\",\"com/rustcraft/bridge/capture/LiveWriterHooks\"],[\"name_type\",\"writerBegin\",\"(Ljava/lang/Object;Ljava/lang/String;)Ljava/lang/Object;\"]]",
+            "[\"method\",[\"class\",\"com/rustcraft/bridge/capture/LiveWriterHooks\"],[\"name_type\",\"writerEnd\",\"(Ljava/lang/Object;Ljava/lang/Throwable;)V\"]]",
+            "[\"name_type\",\"writerBegin\",\"(Ljava/lang/Object;Ljava/lang/String;)Ljava/lang/Object;\"]",
+            "[\"name_type\",\"writerEnd\",\"(Ljava/lang/Object;Ljava/lang/Throwable;)V\"]",
+            "[\"string\",\"liveWriter.W01.Writer.set\"]",
+            "[\"utf8\",\"(Ljava/lang/Object;Ljava/lang/String;)Ljava/lang/Object;\"]",
+            "[\"utf8\",\"(Ljava/lang/Object;Ljava/lang/Throwable;)V\"]",
+            "[\"utf8\",\"liveWriter.W01.Writer.set\"]",
+            "[\"utf8\",\"writerBegin\"]",
+            "[\"utf8\",\"writerEnd\"]"
+          ],
+          "duplicate_added": []
+        },
+        "frame_related_pool_additions_unproven": [],
+        "pre_identity": [
+          "CANONICAL_ID_V2",
+          "fixture/Writer",
+          "f83d77dda89b3dc2a1b7213fdf916fb90d73bc0ef102ac698aac834218b72a71",
+          "06dbd2fb6983caefaf76a2691ad5b93a6c34ab4ca5c8b10ef69caac6d96d1921",
+          "d739f96abbf88b2b388eb3c4df03f765c8e3d6ed306f70f523cf02d9d282e37d"
+        ],
+        "post_identity": [
+          "CANONICAL_ID_V2",
+          "fixture/Writer",
+          "5903fc7a1ed62c3851ed73415ee163aaf0ea75acc64b36e58216aab03427a736",
+          "06dbd2fb6983caefaf76a2691ad5b93a6c34ab4ca5c8b10ef69caac6d96d1921",
+          "e3a794cef959d47c360ba570ae7f4ba8cf1ac53bde2f601a130ccad61e436dee"
+        ],
+        "original_methods": 2,
+        "required_sites": 2
+      }
+    ],
+    "required_hook_count": 2,
+    "observed_class_count": 1
+  },
+  "moved-begin": {
+    "schema": "RUSTCRAFT_WRITER_PLACEMENT_AUDIT_V2",
+    "status": "FAIL",
+    "production_authority": false,
+    "scope": "OFFLINE_EXACT_INSERTION_AND_V2_PRESERVATION; no live writer/lifecycle closure",
+    "records": [
+      {
+        "class_name": "fixture/Writer",
+        "status": "FAIL",
+        "sites": [
+          {
+            "id": "W36",
+            "status": "PASS",
+            "blockers": [],
+            "original_instructions": 3,
+            "inserted_instructions": 3,
+            "original_handlers": 0,
+            "added_handlers": 0,
+            "normal_exits": 1,
+            "anchors": []
+          },
+          {
+            "id": "W01",
+            "status": "FAIL",
+            "error": "method V2 field 12 differs (instruction/operand/target/handler/metadata preservation)"
+          }
+        ],
+        "unhooked_method_differences": [],
+        "pool_failures": {
+          "removed": [],
+          "unexpected_added": [
+            "[\"method\",[\"class\",\"com/rustcraft/bridge/capture/LiveWriterHooks\"],[\"name_type\",\"writerBegin\",\"(Ljava/lang/Object;Ljava/lang/String;)Ljava/lang/Object;\"]]",
+            "[\"method\",[\"class\",\"com/rustcraft/bridge/capture/LiveWriterHooks\"],[\"name_type\",\"writerEnd\",\"(Ljava/lang/Object;Ljava/lang/Throwable;)V\"]]",
+            "[\"name_type\",\"writerBegin\",\"(Ljava/lang/Object;Ljava/lang/String;)Ljava/lang/Object;\"]",
+            "[\"name_type\",\"writerEnd\",\"(Ljava/lang/Object;Ljava/lang/Throwable;)V\"]",
+            "[\"string\",\"liveWriter.W01.Writer.set\"]",
+            "[\"utf8\",\"(Ljava/lang/Object;Ljava/lang/String;)Ljava/lang/Object;\"]",
+            "[\"utf8\",\"(Ljava/lang/Object;Ljava/lang/Throwable;)V\"]",
+            "[\"utf8\",\"liveWriter.W01.Writer.set\"]",
+            "[\"utf8\",\"writerBegin\"]",
+            "[\"utf8\",\"writerEnd\"]"
+          ],
+          "duplicate_added": []
+        },
+        "frame_related_pool_additions_unproven": [],
+        "pre_identity": [
+          "CANONICAL_ID_V2",
+          "fixture/Writer",
+          "f83d77dda89b3dc2a1b7213fdf916fb90d73bc0ef102ac698aac834218b72a71",
+          "06dbd2fb6983caefaf76a2691ad5b93a6c34ab4ca5c8b10ef69caac6d96d1921",
+          "d739f96abbf88b2b388eb3c4df03f765c8e3d6ed306f70f523cf02d9d282e37d"
+        ],
+        "post_identity": [
+          "CANONICAL_ID_V2",
+          "fixture/Writer",
+          "ccbb33c262727bf9d753296e35886a6725a4755a2fe5ca555d425e1e719447b6",
+          "06dbd2fb6983caefaf76a2691ad5b93a6c34ab4ca5c8b10ef69caac6d96d1921",
+          "fe267d79f1e116eb01dd07ae7071e0dd0c2bf395b7e990a0baa84e6e7db99ee3"
+        ],
+        "original_methods": 2,
+        "required_sites": 2
+      }
+    ],
+    "required_hook_count": 2,
+    "observed_class_count": 1
+  },
+  "unused-pool-entry": {
+    "schema": "RUSTCRAFT_WRITER_PLACEMENT_AUDIT_V2",
+    "status": "FAIL",
+    "production_authority": false,
+    "scope": "OFFLINE_EXACT_INSERTION_AND_V2_PRESERVATION; no live writer/lifecycle closure",
+    "records": [
+      {
+        "class_name": "fixture/Writer",
+        "status": "FAIL",
+        "sites": [
+          {
+            "id": "W36",
+            "status": "PASS",
+            "blockers": [],
+            "original_instructions": 3,
+            "inserted_instructions": 3,
+            "original_handlers": 0,
+            "added_handlers": 0,
+            "normal_exits": 1,
+            "anchors": []
+          },
+          {
+            "id": "W01",
+            "status": "PASS",
+            "blockers": [],
+            "original_instructions": 7,
+            "inserted_instructions": 18,
+            "original_handlers": 0,
+            "added_handlers": 1,
+            "normal_exits": 2,
+            "anchors": []
+          }
+        ],
+        "unhooked_method_differences": [],
+        "pool_failures": {
+          "removed": [],
+          "unexpected_added": [
+            "[\"utf8\",\"UNDECLARED_UNUSED_CONSTANT\"]"
+          ],
+          "duplicate_added": []
+        },
+        "frame_related_pool_additions_unproven": [],
+        "pre_identity": [
+          "CANONICAL_ID_V2",
+          "fixture/Writer",
+          "f83d77dda89b3dc2a1b7213fdf916fb90d73bc0ef102ac698aac834218b72a71",
+          "06dbd2fb6983caefaf76a2691ad5b93a6c34ab4ca5c8b10ef69caac6d96d1921",
+          "d739f96abbf88b2b388eb3c4df03f765c8e3d6ed306f70f523cf02d9d282e37d"
+        ],
+        "post_identity": [
+          "CANONICAL_ID_V2",
+          "fixture/Writer",
+          "ddae8d9194137ea7e420e656f30457accc6f9028769714239f6f25fbccace55a",
+          "06dbd2fb6983caefaf76a2691ad5b93a6c34ab4ca5c8b10ef69caac6d96d1921",
+          "0ae5c451879e1610fdea7ec873ce2c0889f52e8888c871d76ea4c09482937c2f"
+        ],
+        "original_methods": 2,
+        "required_sites": 2
+      }
+    ],
+    "required_hook_count": 2,
+    "observed_class_count": 1
+  },
+  "valid": {
+    "schema": "RUSTCRAFT_WRITER_PLACEMENT_AUDIT_V2",
+    "status": "PASS",
+    "production_authority": false,
+    "scope": "OFFLINE_EXACT_INSERTION_AND_V2_PRESERVATION; no live writer/lifecycle closure",
+    "records": [
+      {
+        "class_name": "fixture/Writer",
+        "status": "PASS",
+        "sites": [
+          {
+            "id": "W36",
+            "status": "PASS",
+            "blockers": [],
+            "original_instructions": 3,
+            "inserted_instructions": 3,
+            "original_handlers": 0,
+            "added_handlers": 0,
+            "normal_exits": 1,
+            "anchors": []
+          },
+          {
+            "id": "W01",
+            "status": "PASS",
+            "blockers": [],
+            "original_instructions": 7,
+            "inserted_instructions": 18,
+            "original_handlers": 0,
+            "added_handlers": 1,
+            "normal_exits": 2,
+            "anchors": []
+          }
+        ],
+        "unhooked_method_differences": [],
+        "pool_failures": {
+          "removed": [],
+          "unexpected_added": [],
+          "duplicate_added": []
+        },
+        "frame_related_pool_additions_unproven": [],
+        "pre_identity": [
+          "CANONICAL_ID_V2",
+          "fixture/Writer",
+          "f83d77dda89b3dc2a1b7213fdf916fb90d73bc0ef102ac698aac834218b72a71",
+          "06dbd2fb6983caefaf76a2691ad5b93a6c34ab4ca5c8b10ef69caac6d96d1921",
+          "d739f96abbf88b2b388eb3c4df03f765c8e3d6ed306f70f523cf02d9d282e37d"
+        ],
+        "post_identity": [
+          "CANONICAL_ID_V2",
+          "fixture/Writer",
+          "4b57cc0a3947c85b0ea9e6bfdec2051df0061831fdc504954d47a1a3b8018a4e",
+          "06dbd2fb6983caefaf76a2691ad5b93a6c34ab4ca5c8b10ef69caac6d96d1921",
+          "58b9872f83803baec946ac63337895ad05235b0ddff98f75b761f0fc0c40c099"
+        ],
+        "original_methods": 2,
+        "required_sites": 2
+      }
+    ],
+    "required_hook_count": 2,
+    "observed_class_count": 1
+  },
+  "wrong-branch-target": {
+    "schema": "RUSTCRAFT_WRITER_PLACEMENT_AUDIT_V2",
+    "status": "FAIL",
+    "production_authority": false,
+    "scope": "OFFLINE_EXACT_INSERTION_AND_V2_PRESERVATION; no live writer/lifecycle closure",
+    "records": [
+      {
+        "class_name": "fixture/Writer",
+        "status": "FAIL",
+        "sites": [
+          {
+            "id": "W36",
+            "status": "PASS",
+            "blockers": [],
+            "original_instructions": 3,
+            "inserted_instructions": 3,
+            "original_handlers": 0,
+            "added_handlers": 0,
+            "normal_exits": 1,
+            "anchors": []
+          },
+          {
+            "id": "W01",
+            "status": "FAIL",
+            "error": "method V2 field 12 differs (instruction/operand/target/handler/metadata preservation)"
+          }
+        ],
+        "unhooked_method_differences": [],
+        "pool_failures": {
+          "removed": [],
+          "unexpected_added": [
+            "[\"method\",[\"class\",\"com/rustcraft/bridge/capture/LiveWriterHooks\"],[\"name_type\",\"writerBegin\",\"(Ljava/lang/Object;Ljava/lang/String;)Ljava/lang/Object;\"]]",
+            "[\"method\",[\"class\",\"com/rustcraft/bridge/capture/LiveWriterHooks\"],[\"name_type\",\"writerEnd\",\"(Ljava/lang/Object;Ljava/lang/Throwable;)V\"]]",
+            "[\"name_type\",\"writerBegin\",\"(Ljava/lang/Object;Ljava/lang/String;)Ljava/lang/Object;\"]",
+            "[\"name_type\",\"writerEnd\",\"(Ljava/lang/Object;Ljava/lang/Throwable;)V\"]",
+            "[\"string\",\"liveWriter.W01.Writer.set\"]",
+            "[\"utf8\",\"(Ljava/lang/Object;Ljava/lang/String;)Ljava/lang/Object;\"]",
+            "[\"utf8\",\"(Ljava/lang/Object;Ljava/lang/Throwable;)V\"]",
+            "[\"utf8\",\"liveWriter.W01.Writer.set\"]",
+            "[\"utf8\",\"writerBegin\"]",
+            "[\"utf8\",\"writerEnd\"]"
+          ],
+          "duplicate_added": []
+        },
+        "frame_related_pool_additions_unproven": [],
+        "pre_identity": [
+          "CANONICAL_ID_V2",
+          "fixture/Writer",
+          "f83d77dda89b3dc2a1b7213fdf916fb90d73bc0ef102ac698aac834218b72a71",
+          "06dbd2fb6983caefaf76a2691ad5b93a6c34ab4ca5c8b10ef69caac6d96d1921",
+          "d739f96abbf88b2b388eb3c4df03f765c8e3d6ed306f70f523cf02d9d282e37d"
+        ],
+        "post_identity": [
+          "CANONICAL_ID_V2",
+          "fixture/Writer",
+          "00a8bb3479040175cd87be0590df04b5522da08358cf04d49e8961f9035980ba",
+          "06dbd2fb6983caefaf76a2691ad5b93a6c34ab4ca5c8b10ef69caac6d96d1921",
+          "136aa9acdbaf621755b84aa7afd7a4f9c2c40da78b2c33d023eaaba0dd5ca040"
+        ],
+        "original_methods": 2,
+        "required_sites": 2
+      }
+    ],
+    "required_hook_count": 2,
+    "observed_class_count": 1
+  },
+  "wrong-constructor-binding": {
+    "schema": "RUSTCRAFT_WRITER_PLACEMENT_AUDIT_V2",
+    "status": "FAIL",
+    "production_authority": false,
+    "scope": "OFFLINE_EXACT_INSERTION_AND_V2_PRESERVATION; no live writer/lifecycle closure",
+    "records": [
+      {
+        "class_name": "fixture/Writer",
+        "status": "FAIL",
+        "sites": [
+          {
+            "id": "W36",
+            "status": "FAIL",
+            "error": "method V2 field 12 differs (instruction/operand/target/handler/metadata preservation)"
+          },
+          {
+            "id": "W01",
+            "status": "PASS",
+            "blockers": [],
+            "original_instructions": 7,
+            "inserted_instructions": 18,
+            "original_handlers": 0,
+            "added_handlers": 1,
+            "normal_exits": 2,
+            "anchors": []
+          }
+        ],
+        "unhooked_method_differences": [],
+        "pool_failures": {
+          "removed": [],
+          "unexpected_added": [
+            "[\"method\",[\"class\",\"com/rustcraft/bridge/capture/LiveWriterHooks\"],[\"name_type\",\"registerNew\",\"(Ljava/lang/Object;Ljava/lang/Object;)V\"]]",
+            "[\"name_type\",\"registerNew\",\"(Ljava/lang/Object;Ljava/lang/Object;)V\"]",
+            "[\"utf8\",\"(Ljava/lang/Object;Ljava/lang/Object;)V\"]",
+            "[\"utf8\",\"registerNew\"]"
+          ],
+          "duplicate_added": []
+        },
+        "frame_related_pool_additions_unproven": [],
+        "pre_identity": [
+          "CANONICAL_ID_V2",
+          "fixture/Writer",
+          "f83d77dda89b3dc2a1b7213fdf916fb90d73bc0ef102ac698aac834218b72a71",
+          "06dbd2fb6983caefaf76a2691ad5b93a6c34ab4ca5c8b10ef69caac6d96d1921",
+          "d739f96abbf88b2b388eb3c4df03f765c8e3d6ed306f70f523cf02d9d282e37d"
+        ],
+        "post_identity": [
+          "CANONICAL_ID_V2",
+          "fixture/Writer",
+          "184adadd4f50c88aabcd3acd37e688aa9b83f69704cfb877d842c1f85c578fc4",
+          "06dbd2fb6983caefaf76a2691ad5b93a6c34ab4ca5c8b10ef69caac6d96d1921",
+          "efce11bd80b343bc19bee7f0ea297eb59cf1534eb56700305a6fc8de7217b607"
+        ],
+        "original_methods": 2,
+        "required_sites": 2
+      }
+    ],
+    "required_hook_count": 2,
+    "observed_class_count": 1
+  },
+  "wrong-descriptor": {
+    "schema": "RUSTCRAFT_WRITER_PLACEMENT_AUDIT_V2",
+    "status": "FAIL",
+    "production_authority": false,
+    "scope": "OFFLINE_EXACT_INSERTION_AND_V2_PRESERVATION; no live writer/lifecycle closure",
+    "records": [
+      {
+        "class_name": "fixture/Writer",
+        "status": "FAIL",
+        "sites": [
+          {
+            "id": "W36",
+            "status": "PASS",
+            "blockers": [],
+            "original_instructions": 3,
+            "inserted_instructions": 3,
+            "original_handlers": 0,
+            "added_handlers": 0,
+            "normal_exits": 1,
+            "anchors": []
+          },
+          {
+            "id": "W01",
+            "status": "FAIL",
+            "error": "method V2 field 12 differs (instruction/operand/target/handler/metadata preservation)"
+          }
+        ],
+        "unhooked_method_differences": [],
+        "pool_failures": {
+          "removed": [],
+          "unexpected_added": [
+            "[\"method\",[\"class\",\"com/rustcraft/bridge/capture/LiveWriterHooks\"],[\"name_type\",\"writerBegin\",\"(Ljava/lang/Object;)Ljava/lang/Object;\"]]",
+            "[\"method\",[\"class\",\"com/rustcraft/bridge/capture/LiveWriterHooks\"],[\"name_type\",\"writerBegin\",\"(Ljava/lang/Object;Ljava/lang/String;)Ljava/lang/Object;\"]]",
+            "[\"method\",[\"class\",\"com/rustcraft/bridge/capture/LiveWriterHooks\"],[\"name_type\",\"writerEnd\",\"(Ljava/lang/Object;Ljava/lang/Throwable;)V\"]]",
+            "[\"name_type\",\"writerBegin\",\"(Ljava/lang/Object;)Ljava/lang/Object;\"]",
+            "[\"name_type\",\"writerBegin\",\"(Ljava/lang/Object;Ljava/lang/String;)Ljava/lang/Object;\"]",
+            "[\"name_type\",\"writerEnd\",\"(Ljava/lang/Object;Ljava/lang/Throwable;)V\"]",
+            "[\"string\",\"liveWriter.W01.Writer.set\"]",
+            "[\"utf8\",\"(Ljava/lang/Object;)Ljava/lang/Object;\"]",
+            "[\"utf8\",\"(Ljava/lang/Object;Ljava/lang/String;)Ljava/lang/Object;\"]",
+            "[\"utf8\",\"(Ljava/lang/Object;Ljava/lang/Throwable;)V\"]",
+            "[\"utf8\",\"liveWriter.W01.Writer.set\"]",
+            "[\"utf8\",\"writerBegin\"]",
+            "[\"utf8\",\"writerEnd\"]"
+          ],
+          "duplicate_added": []
+        },
+        "frame_related_pool_additions_unproven": [],
+        "pre_identity": [
+          "CANONICAL_ID_V2",
+          "fixture/Writer",
+          "f83d77dda89b3dc2a1b7213fdf916fb90d73bc0ef102ac698aac834218b72a71",
+          "06dbd2fb6983caefaf76a2691ad5b93a6c34ab4ca5c8b10ef69caac6d96d1921",
+          "d739f96abbf88b2b388eb3c4df03f765c8e3d6ed306f70f523cf02d9d282e37d"
+        ],
+        "post_identity": [
+          "CANONICAL_ID_V2",
+          "fixture/Writer",
+          "20b82fb318b488667a84a02e605d703a60785e423695fd94684d8878ae250d45",
+          "06dbd2fb6983caefaf76a2691ad5b93a6c34ab4ca5c8b10ef69caac6d96d1921",
+          "5e8baa3a1ea91598b6b919df8dc453c411c019b30b507125cea2d111dd9d8079"
+        ],
+        "original_methods": 2,
+        "required_sites": 2
+      }
+    ],
+    "required_hook_count": 2,
+    "observed_class_count": 1
+  },
+  "wrong-interface-bit": {
+    "schema": "RUSTCRAFT_WRITER_PLACEMENT_AUDIT_V2",
+    "status": "FAIL",
+    "production_authority": false,
+    "scope": "OFFLINE_EXACT_INSERTION_AND_V2_PRESERVATION; no live writer/lifecycle closure",
+    "records": [
+      {
+        "class_name": "fixture/Writer",
+        "status": "FAIL",
+        "sites": [
+          {
+            "id": "W36",
+            "status": "PASS",
+            "blockers": [],
+            "original_instructions": 3,
+            "inserted_instructions": 3,
+            "original_handlers": 0,
+            "added_handlers": 0,
+            "normal_exits": 1,
+            "anchors": []
+          },
+          {
+            "id": "W01",
+            "status": "FAIL",
+            "error": "method V2 field 12 differs (instruction/operand/target/handler/metadata preservation)"
+          }
+        ],
+        "unhooked_method_differences": [],
+        "pool_failures": {
+          "removed": [],
+          "unexpected_added": [
+            "[\"interface_method\",[\"class\",\"com/rustcraft/bridge/capture/LiveWriterHooks\"],[\"name_type\",\"writerBegin\",\"(Ljava/lang/Object;Ljava/lang/String;)Ljava/lang/Object;\"]]",
+            "[\"method\",[\"class\",\"com/rustcraft/bridge/capture/LiveWriterHooks\"],[\"name_type\",\"writerBegin\",\"(Ljava/lang/Object;Ljava/lang/String;)Ljava/lang/Object;\"]]",
+            "[\"method\",[\"class\",\"com/rustcraft/bridge/capture/LiveWriterHooks\"],[\"name_type\",\"writerEnd\",\"(Ljava/lang/Object;Ljava/lang/Throwable;)V\"]]",
+            "[\"name_type\",\"writerBegin\",\"(Ljava/lang/Object;Ljava/lang/String;)Ljava/lang/Object;\"]",
+            "[\"name_type\",\"writerEnd\",\"(Ljava/lang/Object;Ljava/lang/Throwable;)V\"]",
+            "[\"string\",\"liveWriter.W01.Writer.set\"]",
+            "[\"utf8\",\"(Ljava/lang/Object;Ljava/lang/String;)Ljava/lang/Object;\"]",
+            "[\"utf8\",\"(Ljava/lang/Object;Ljava/lang/Throwable;)V\"]",
+            "[\"utf8\",\"liveWriter.W01.Writer.set\"]",
+            "[\"utf8\",\"writerBegin\"]",
+            "[\"utf8\",\"writerEnd\"]"
+          ],
+          "duplicate_added": []
+        },
+        "frame_related_pool_additions_unproven": [],
+        "pre_identity": [
+          "CANONICAL_ID_V2",
+          "fixture/Writer",
+          "f83d77dda89b3dc2a1b7213fdf916fb90d73bc0ef102ac698aac834218b72a71",
+          "06dbd2fb6983caefaf76a2691ad5b93a6c34ab4ca5c8b10ef69caac6d96d1921",
+          "d739f96abbf88b2b388eb3c4df03f765c8e3d6ed306f70f523cf02d9d282e37d"
+        ],
+        "post_identity": [
+          "CANONICAL_ID_V2",
+          "fixture/Writer",
+          "41a08001db35d7ce77eb6cdd9215c7a53e408688dfe24ce41317f2029483116c",
+          "06dbd2fb6983caefaf76a2691ad5b93a6c34ab4ca5c8b10ef69caac6d96d1921",
+          "0d35d810dc212288acb267b6dbe6dcce1c7af9f68c4123a4a2b8990fbae0553c"
+        ],
+        "original_methods": 2,
+        "required_sites": 2
+      }
+    ],
+    "required_hook_count": 2,
+    "observed_class_count": 1
+  },
+  "wrong-marker": {
+    "schema": "RUSTCRAFT_WRITER_PLACEMENT_AUDIT_V2",
+    "status": "FAIL",
+    "production_authority": false,
+    "scope": "OFFLINE_EXACT_INSERTION_AND_V2_PRESERVATION; no live writer/lifecycle closure",
+    "records": [
+      {
+        "class_name": "fixture/Writer",
+        "status": "FAIL",
+        "sites": [
+          {
+            "id": "W36",
+            "status": "PASS",
+            "blockers": [],
+            "original_instructions": 3,
+            "inserted_instructions": 3,
+            "original_handlers": 0,
+            "added_handlers": 0,
+            "normal_exits": 1,
+            "anchors": []
+          },
+          {
+            "id": "W01",
+            "status": "FAIL",
+            "error": "method V2 field 12 differs (instruction/operand/target/handler/metadata preservation)"
+          }
+        ],
+        "unhooked_method_differences": [],
+        "pool_failures": {
+          "removed": [],
+          "unexpected_added": [
+            "[\"method\",[\"class\",\"com/rustcraft/bridge/capture/LiveWriterHooks\"],[\"name_type\",\"writerBegin\",\"(Ljava/lang/Object;Ljava/lang/String;)Ljava/lang/Object;\"]]",
+            "[\"method\",[\"class\",\"com/rustcraft/bridge/capture/LiveWriterHooks\"],[\"name_type\",\"writerEnd\",\"(Ljava/lang/Object;Ljava/lang/Throwable;)V\"]]",
+            "[\"name_type\",\"writerBegin\",\"(Ljava/lang/Object;Ljava/lang/String;)Ljava/lang/Object;\"]",
+            "[\"name_type\",\"writerEnd\",\"(Ljava/lang/Object;Ljava/lang/Throwable;)V\"]",
+            "[\"string\",\"liveWriter.W01.Writer.set\"]",
+            "[\"string\",\"liveWriter.WRONG.Writer.set\"]",
+            "[\"utf8\",\"(Ljava/lang/Object;Ljava/lang/String;)Ljava/lang/Object;\"]",
+            "[\"utf8\",\"(Ljava/lang/Object;Ljava/lang/Throwable;)V\"]",
+            "[\"utf8\",\"liveWriter.W01.Writer.set\"]",
+            "[\"utf8\",\"liveWriter.WRONG.Writer.set\"]",
+            "[\"utf8\",\"writerBegin\"]",
+            "[\"utf8\",\"writerEnd\"]"
+          ],
+          "duplicate_added": []
+        },
+        "frame_related_pool_additions_unproven": [],
+        "pre_identity": [
+          "CANONICAL_ID_V2",
+          "fixture/Writer",
+          "f83d77dda89b3dc2a1b7213fdf916fb90d73bc0ef102ac698aac834218b72a71",
+          "06dbd2fb6983caefaf76a2691ad5b93a6c34ab4ca5c8b10ef69caac6d96d1921",
+          "d739f96abbf88b2b388eb3c4df03f765c8e3d6ed306f70f523cf02d9d282e37d"
+        ],
+        "post_identity": [
+          "CANONICAL_ID_V2",
+          "fixture/Writer",
+          "c7717637232e453247f039c771fae2c8cdbb9348c13f5dfc4ba31cb48ef33e1c",
+          "06dbd2fb6983caefaf76a2691ad5b93a6c34ab4ca5c8b10ef69caac6d96d1921",
+          "4cc137798b8d0cdee7f509fbebccaf1b8adc286ce7fec7887844d552df1c122c"
+        ],
+        "original_methods": 2,
+        "required_sites": 2
+      }
+    ],
+    "required_hook_count": 2,
+    "observed_class_count": 1
+  },
+  "wrong-original-operand": {
+    "schema": "RUSTCRAFT_WRITER_PLACEMENT_AUDIT_V2",
+    "status": "FAIL",
+    "production_authority": false,
+    "scope": "OFFLINE_EXACT_INSERTION_AND_V2_PRESERVATION; no live writer/lifecycle closure",
+    "records": [
+      {
+        "class_name": "fixture/Writer",
+        "status": "FAIL",
+        "sites": [
+          {
+            "id": "W36",
+            "status": "PASS",
+            "blockers": [],
+            "original_instructions": 3,
+            "inserted_instructions": 3,
+            "original_handlers": 0,
+            "added_handlers": 0,
+            "normal_exits": 1,
+            "anchors": []
+          },
+          {
+            "id": "W01",
+            "status": "FAIL",
+            "error": "method V2 field 12 differs (instruction/operand/target/handler/metadata preservation)"
+          }
+        ],
+        "unhooked_method_differences": [],
+        "pool_failures": {
+          "removed": [],
+          "unexpected_added": [
+            "[\"method\",[\"class\",\"com/rustcraft/bridge/capture/LiveWriterHooks\"],[\"name_type\",\"writerBegin\",\"(Ljava/lang/Object;Ljava/lang/String;)Ljava/lang/Object;\"]]",
+            "[\"method\",[\"class\",\"com/rustcraft/bridge/capture/LiveWriterHooks\"],[\"name_type\",\"writerEnd\",\"(Ljava/lang/Object;Ljava/lang/Throwable;)V\"]]",
+            "[\"name_type\",\"writerBegin\",\"(Ljava/lang/Object;Ljava/lang/String;)Ljava/lang/Object;\"]",
+            "[\"name_type\",\"writerEnd\",\"(Ljava/lang/Object;Ljava/lang/Throwable;)V\"]",
+            "[\"string\",\"liveWriter.W01.Writer.set\"]",
+            "[\"utf8\",\"(Ljava/lang/Object;Ljava/lang/String;)Ljava/lang/Object;\"]",
+            "[\"utf8\",\"(Ljava/lang/Object;Ljava/lang/Throwable;)V\"]",
+            "[\"utf8\",\"liveWriter.W01.Writer.set\"]",
+            "[\"utf8\",\"writerBegin\"]",
+            "[\"utf8\",\"writerEnd\"]"
+          ],
+          "duplicate_added": []
+        },
+        "frame_related_pool_additions_unproven": [],
+        "pre_identity": [
+          "CANONICAL_ID_V2",
+          "fixture/Writer",
+          "f83d77dda89b3dc2a1b7213fdf916fb90d73bc0ef102ac698aac834218b72a71",
+          "06dbd2fb6983caefaf76a2691ad5b93a6c34ab4ca5c8b10ef69caac6d96d1921",
+          "d739f96abbf88b2b388eb3c4df03f765c8e3d6ed306f70f523cf02d9d282e37d"
+        ],
+        "post_identity": [
+          "CANONICAL_ID_V2",
+          "fixture/Writer",
+          "7110d82d18b9cac5ef784da15845b934eeb7196901770018668e4da81ff86a2a",
+          "06dbd2fb6983caefaf76a2691ad5b93a6c34ab4ca5c8b10ef69caac6d96d1921",
+          "9816c5be770321c6a04d482aacdf7306aaa3320bbdd3b51dc72b6aaf5ec5aa1f"
+        ],
+        "original_methods": 2,
+        "required_sites": 2
+      }
+    ],
+    "required_hook_count": 2,
+    "observed_class_count": 1
+  },
+  "wrong-owner": {
+    "schema": "RUSTCRAFT_WRITER_PLACEMENT_AUDIT_V2",
+    "status": "FAIL",
+    "production_authority": false,
+    "scope": "OFFLINE_EXACT_INSERTION_AND_V2_PRESERVATION; no live writer/lifecycle closure",
+    "records": [
+      {
+        "class_name": "fixture/Writer",
+        "status": "FAIL",
+        "sites": [
+          {
+            "id": "W36",
+            "status": "PASS",
+            "blockers": [],
+            "original_instructions": 3,
+            "inserted_instructions": 3,
+            "original_handlers": 0,
+            "added_handlers": 0,
+            "normal_exits": 1,
+            "anchors": []
+          },
+          {
+            "id": "W01",
+            "status": "FAIL",
+            "error": "method V2 field 12 differs (instruction/operand/target/handler/metadata preservation)"
+          }
+        ],
+        "unhooked_method_differences": [],
+        "pool_failures": {
+          "removed": [],
+          "unexpected_added": [
+            "[\"class\",\"fixture/Wrong\"]",
+            "[\"method\",[\"class\",\"com/rustcraft/bridge/capture/LiveWriterHooks\"],[\"name_type\",\"writerBegin\",\"(Ljava/lang/Object;Ljava/lang/String;)Ljava/lang/Object;\"]]",
+            "[\"method\",[\"class\",\"com/rustcraft/bridge/capture/LiveWriterHooks\"],[\"name_type\",\"writerEnd\",\"(Ljava/lang/Object;Ljava/lang/Throwable;)V\"]]",
+            "[\"method\",[\"class\",\"fixture/Wrong\"],[\"name_type\",\"writerBegin\",\"(Ljava/lang/Object;Ljava/lang/String;)Ljava/lang/Object;\"]]",
+            "[\"name_type\",\"writerBegin\",\"(Ljava/lang/Object;Ljava/lang/String;)Ljava/lang/Object;\"]",
+            "[\"name_type\",\"writerEnd\",\"(Ljava/lang/Object;Ljava/lang/Throwable;)V\"]",
+            "[\"string\",\"liveWriter.W01.Writer.set\"]",
+            "[\"utf8\",\"(Ljava/lang/Object;Ljava/lang/String;)Ljava/lang/Object;\"]",
+            "[\"utf8\",\"(Ljava/lang/Object;Ljava/lang/Throwable;)V\"]",
+            "[\"utf8\",\"fixture/Wrong\"]",
+            "[\"utf8\",\"liveWriter.W01.Writer.set\"]",
+            "[\"utf8\",\"writerBegin\"]",
+            "[\"utf8\",\"writerEnd\"]"
+          ],
+          "duplicate_added": []
+        },
+        "frame_related_pool_additions_unproven": [],
+        "pre_identity": [
+          "CANONICAL_ID_V2",
+          "fixture/Writer",
+          "f83d77dda89b3dc2a1b7213fdf916fb90d73bc0ef102ac698aac834218b72a71",
+          "06dbd2fb6983caefaf76a2691ad5b93a6c34ab4ca5c8b10ef69caac6d96d1921",
+          "d739f96abbf88b2b388eb3c4df03f765c8e3d6ed306f70f523cf02d9d282e37d"
+        ],
+        "post_identity": [
+          "CANONICAL_ID_V2",
+          "fixture/Writer",
+          "38159088a7733e2300dbe3fb478e72ce7a94ac8e91d625f357109b2c6596c13d",
+          "06dbd2fb6983caefaf76a2691ad5b93a6c34ab4ca5c8b10ef69caac6d96d1921",
+          "ba39b3c259a9c6c4eb5e66c1d2d88c3a44b8dd2329728a8bb6775425b03d6273"
+        ],
+        "original_methods": 2,
+        "required_sites": 2
+      }
+    ],
+    "required_hook_count": 2,
+    "observed_class_count": 1
+  },
+  "wrong-token-local": {
+    "schema": "RUSTCRAFT_WRITER_PLACEMENT_AUDIT_V2",
+    "status": "FAIL",
+    "production_authority": false,
+    "scope": "OFFLINE_EXACT_INSERTION_AND_V2_PRESERVATION; no live writer/lifecycle closure",
+    "records": [
+      {
+        "class_name": "fixture/Writer",
+        "status": "FAIL",
+        "sites": [
+          {
+            "id": "W36",
+            "status": "PASS",
+            "blockers": [],
+            "original_instructions": 3,
+            "inserted_instructions": 3,
+            "original_handlers": 0,
+            "added_handlers": 0,
+            "normal_exits": 1,
+            "anchors": []
+          },
+          {
+            "id": "W01",
+            "status": "FAIL",
+            "error": "method V2 field 12 differs (instruction/operand/target/handler/metadata preservation)"
+          }
+        ],
+        "unhooked_method_differences": [],
+        "pool_failures": {
+          "removed": [],
+          "unexpected_added": [
+            "[\"method\",[\"class\",\"com/rustcraft/bridge/capture/LiveWriterHooks\"],[\"name_type\",\"writerBegin\",\"(Ljava/lang/Object;Ljava/lang/String;)Ljava/lang/Object;\"]]",
+            "[\"method\",[\"class\",\"com/rustcraft/bridge/capture/LiveWriterHooks\"],[\"name_type\",\"writerEnd\",\"(Ljava/lang/Object;Ljava/lang/Throwable;)V\"]]",
+            "[\"name_type\",\"writerBegin\",\"(Ljava/lang/Object;Ljava/lang/String;)Ljava/lang/Object;\"]",
+            "[\"name_type\",\"writerEnd\",\"(Ljava/lang/Object;Ljava/lang/Throwable;)V\"]",
+            "[\"string\",\"liveWriter.W01.Writer.set\"]",
+            "[\"utf8\",\"(Ljava/lang/Object;Ljava/lang/String;)Ljava/lang/Object;\"]",
+            "[\"utf8\",\"(Ljava/lang/Object;Ljava/lang/Throwable;)V\"]",
+            "[\"utf8\",\"liveWriter.W01.Writer.set\"]",
+            "[\"utf8\",\"writerBegin\"]",
+            "[\"utf8\",\"writerEnd\"]"
+          ],
+          "duplicate_added": []
+        },
+        "frame_related_pool_additions_unproven": [],
+        "pre_identity": [
+          "CANONICAL_ID_V2",
+          "fixture/Writer",
+          "f83d77dda89b3dc2a1b7213fdf916fb90d73bc0ef102ac698aac834218b72a71",
+          "06dbd2fb6983caefaf76a2691ad5b93a6c34ab4ca5c8b10ef69caac6d96d1921",
+          "d739f96abbf88b2b388eb3c4df03f765c8e3d6ed306f70f523cf02d9d282e37d"
+        ],
+        "post_identity": [
+          "CANONICAL_ID_V2",
+          "fixture/Writer",
+          "755aec36a33e5a7ad3c7eb97398ee558ad2ac45cf7859ccdaa381ceec3352987",
+          "06dbd2fb6983caefaf76a2691ad5b93a6c34ab4ca5c8b10ef69caac6d96d1921",
+          "b593809f97e7ab7be19d734a761f1454eaa8308437be6ae446288538e1d3749f"
+        ],
+        "original_methods": 2,
+        "required_sites": 2
+      }
+    ],
+    "required_hook_count": 2,
+    "observed_class_count": 1
+  }
+}

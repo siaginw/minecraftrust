@@ -1,0 +1,49 @@
+{
+  "schema": "RUSTCRAFT_PLACEMENT_WITNESS_V2",
+  "session": "9d7caa9ca12c4b16b09e5aba7da1aa2f",
+  "challenge": "af49bc72c3b9c0d61135cb3b30c27ff4a8c1a12d4ea9e0764f9cf9fd939b484d",
+  "request_sha256": "ca5a25a0ea1e706aa77a7a250cde19a428f330add3dca36e2a117b554cf564fb",
+  "observation_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+  "covered_sites": [
+    "W01",
+    "W36"
+  ],
+  "checks": {
+    "anchor_order": {
+      "status": "FAIL",
+      "measurements": {
+        "audit_file": "D:\\minecraftrust-astra-hardening\\target\\writer-placement-v2\\root-reviewed-01\\wrong-observation-witness-audit\\audit.json",
+        "audit_sha256": "f3fa4b67df3342731defdbc50e5e99179be683b326793cc2482a0ebae85e1c0a",
+        "independent_parser_agreements": 2,
+        "required_hook_count": 2
+      }
+    },
+    "exception_paths": {
+      "status": "FAIL",
+      "measurements": {
+        "audit_file": "D:\\minecraftrust-astra-hardening\\target\\writer-placement-v2\\root-reviewed-01\\wrong-observation-witness-audit\\audit.json",
+        "audit_sha256": "f3fa4b67df3342731defdbc50e5e99179be683b326793cc2482a0ebae85e1c0a",
+        "independent_parser_agreements": 2,
+        "required_hook_count": 2
+      }
+    },
+    "undeclared_edits": {
+      "status": "FAIL",
+      "measurements": {
+        "audit_file": "D:\\minecraftrust-astra-hardening\\target\\writer-placement-v2\\root-reviewed-01\\wrong-observation-witness-audit\\audit.json",
+        "audit_sha256": "f3fa4b67df3342731defdbc50e5e99179be683b326793cc2482a0ebae85e1c0a",
+        "independent_parser_agreements": 2,
+        "required_hook_count": 2
+      }
+    },
+    "pre_post_relation": {
+      "status": "FAIL",
+      "measurements": {
+        "audit_file": "D:\\minecraftrust-astra-hardening\\target\\writer-placement-v2\\root-reviewed-01\\wrong-observation-witness-audit\\audit.json",
+        "audit_sha256": "f3fa4b67df3342731defdbc50e5e99179be683b326793cc2482a0ebae85e1c0a",
+        "independent_parser_agreements": 2,
+        "required_hook_count": 2
+      }
+    }
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "required_hooks": [
+    {
+      "id": "W01",
+      "hook_type": "WRITE_BEGIN",
+      "method": "set",
+      "descriptor": "(I)V",
+      "class": "fixture.Writer",
+      "fingerprint": {
+        "kind": "DECLARATION"
+      }
+    },
+    {
+      "id": "W36",
+      "hook_type": "PRIVATE_BUILD_BEGIN",
+      "method": "<init>",
+      "descriptor": "()V",
+      "class": "fixture.Writer",
+      "fingerprint": {
+        "kind": "DECLARATION"
+      }
+    }
+  ]
+}
