@@ -29,7 +29,7 @@ public final class LiveWriterPlan {
         public final String identitySchema;
         public final String declarationOrderSha256;
         /** Session-bound identity mode requires this certificate; null for every other mode. */
-        public final String sessionCertificateJson;
+        public final String sessionAdmissionPolicyJson;
         public final String sessionInvariantSha256;
 
         Hook(String id, String transformer, String className, String methodName, String descriptor,
@@ -49,7 +49,7 @@ public final class LiveWriterPlan {
 
         Hook(String id, String transformer, String className, String methodName, String descriptor,
              String hookType, String operationId, String[][] fingerprint, String preHookClassSha256,
-             String identitySchema, String declarationOrderSha256, String sessionCertificateJson,
+             String identitySchema, String declarationOrderSha256, String sessionAdmissionPolicyJson,
              String sessionInvariantSha256) {
             this.id = id;
             this.transformer = transformer;
@@ -63,7 +63,7 @@ public final class LiveWriterPlan {
             this.canonicalIdentity = "CANONICAL_ID_V1".equals(identitySchema);
             this.identitySchema = identitySchema;
             this.declarationOrderSha256 = declarationOrderSha256;
-            this.sessionCertificateJson = sessionCertificateJson;
+            this.sessionAdmissionPolicyJson = sessionAdmissionPolicyJson;
             this.sessionInvariantSha256 = sessionInvariantSha256;
         }
 
@@ -80,28 +80,28 @@ public final class LiveWriterPlan {
     public static Hook doctoredSha(Hook hook, String sha) {
         return new Hook(hook.id, hook.transformer, hook.className, hook.methodName, hook.descriptor,
                 hook.hookType, hook.operationId, hook.fingerprint, sha, hook.identitySchema,
-                hook.declarationOrderSha256, hook.sessionCertificateJson, hook.sessionInvariantSha256);
+                hook.declarationOrderSha256, hook.sessionAdmissionPolicyJson, hook.sessionInvariantSha256);
     }
 
     /** Negative-control factory: same hook with an altered descriptor. */
     public static Hook doctoredDescriptor(Hook hook, String descriptor) {
         return new Hook(hook.id, hook.transformer, hook.className, hook.methodName, descriptor,
                 hook.hookType, hook.operationId, hook.fingerprint, hook.preHookClassSha256, hook.identitySchema,
-                hook.declarationOrderSha256, hook.sessionCertificateJson, hook.sessionInvariantSha256);
+                hook.declarationOrderSha256, hook.sessionAdmissionPolicyJson, hook.sessionInvariantSha256);
     }
 
     /** Negative-control factory: same hook with shifted/missing/duplicated anchors. */
     public static Hook doctoredFingerprint(Hook hook, String[][] fingerprint) {
         return new Hook(hook.id, hook.transformer, hook.className, hook.methodName, hook.descriptor,
                 hook.hookType, hook.operationId, fingerprint, hook.preHookClassSha256, hook.identitySchema,
-                hook.declarationOrderSha256, hook.sessionCertificateJson, hook.sessionInvariantSha256);
+                hook.declarationOrderSha256, hook.sessionAdmissionPolicyJson, hook.sessionInvariantSha256);
     }
 
-    /** Negative-control factory: same hook with a doctored session certificate. */
-    public static Hook doctoredCertificate(Hook hook, String sessionCertificateJson) {
+    /** Negative-control factory: same hook with a doctored session admission policy. */
+    public static Hook doctoredPolicy(Hook hook, String sessionAdmissionPolicyJson) {
         return new Hook(hook.id, hook.transformer, hook.className, hook.methodName, hook.descriptor,
                 hook.hookType, hook.operationId, hook.fingerprint, hook.preHookClassSha256, hook.identitySchema,
-                hook.declarationOrderSha256, sessionCertificateJson, hook.sessionInvariantSha256);
+                hook.declarationOrderSha256, sessionAdmissionPolicyJson, hook.sessionInvariantSha256);
     }
 
     /** Profile identity binding: any change here requires regeneration + requalification. */
@@ -110,6 +110,14 @@ public final class LiveWriterPlan {
     public static final String REQUIRED_HOOKS_MANIFEST_SHA256 = "9fa1e033ef715b335b26eb3d279d2105adb5c872ad0e125e55fde4e9185cc155";
     public static final String IDENTITY_MODE = "RAW";
 
+    /** Recipe revision this plan was generated from. The admission policies
+     * carried below must name it, and the runtime checks them against THIS
+     * constant rather than against their own copy, so a policy cannot make
+     * itself consistent by editing the very field it is judged on. */
+    public static final String RECIPE_BINDING_SHA256 = null;
+
+    /** Runtime manifest identity observed when this profile was qualified. */
+    public static final String RUNTIME_MANIFEST_SHA256 = null;
     public static final Hook[] HOOKS = {
         new Hook("W01", "OWNERSHIP", "net.minecraft.world.World", "func_180501_a", "(Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/state/IBlockState;I)Z", "WRITE_BEGIN", "liveWriter.W01.World.func_180501_a", EMPTY_FINGERPRINT, "5deb85ca3424a85c32b132c763e774a419e32676c8d520ef2677fa7bc695858a", "RAW", null, null, null),
         new Hook("W02", "OWNERSHIP", "net.minecraft.world.World", "func_175653_a", "(Lnet/minecraft/world/EnumSkyBlock;Lnet/minecraft/util/math/BlockPos;I)V", "WRITE_BEGIN", "liveWriter.W02.World.func_175653_a", EMPTY_FINGERPRINT, "5deb85ca3424a85c32b132c763e774a419e32676c8d520ef2677fa7bc695858a", "RAW", null, null, null),

@@ -128,8 +128,20 @@ public final class CanonicalClassIdentityV2 {
             this.element = element; this.value = value;
         }
 
+        /**
+         * A location is a SITE, and a site is identical on every launch. The
+         * value it carried is the process-bound fact, so it stays in
+         * {@link #maskedValues} and in the runtime-issued certificate. Folding it
+         * into the location would make the expected location unpinnable by any
+         * static policy, which is the whole reason the policy is split out.
+         */
         public String render() {
-            return location + " visible=" + visible + " " + descriptor + "#" + element + "=" + value;
+            return location + " visible=" + visible + " " + descriptor + "#" + element;
+        }
+
+        /** The same site together with the value it carried. Per-launch evidence only. */
+        public String renderWithValue() {
+            return render() + "=" + value;
         }
     }
 

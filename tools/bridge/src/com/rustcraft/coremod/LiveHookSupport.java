@@ -276,18 +276,32 @@ public final class LiveHookSupport {
     /**
      * Session-bound admission, in the mandated order and fail-closed at every
      * step: exact identity, then the session projection, then provenance
-     * extraction, then the certificate binding (process, transformation session,
-     * defining loader, bytes, exact identity, invariant, session UUID, masked
-     * locations and counts). The hook transformation is permitted only after
-     * every one of these agrees; any failure throws before a single hook is
-     * applied, so a class is never left partially instrumented.
+     * extraction, then ADMISSION against the static policy carried by the plan,
+     * and only then issuance of the concrete certificate for THIS process and
+     * THIS buffer. The hook transformation is permitted only after every one of
+     * these agrees; any failure throws before a single hook is applied, so a
+     * class is never left partially instrumented.
+     *
+     * <p>The order matters and is the whole point: the plan states what MAY be
+     * accepted, this method observes what is actually in front of it, and the
+     * certificate is minted from that observation. Nothing is imported from a
+     * previous launch, because nothing in the policy could describe one.</p>
      */
     private static void verifySessionBoundIdentity(LiveWriterPlan.Hook[] hooks, byte[] basicClass,
             ClassLoader loader, String name) {
-        // 1. exact CANONICAL_ID_V2 identity, never weakened
-        CanonicalClassIdentityV2.Result exact = verifyCanonicalIdentityV2(basicClass,
-                CanonicalClassIdentityV2.SCHEMA, name.replace('.', '/'),
-                hooks[0].preHookClassSha256, hooks[0].declarationOrderSha256);
+        // 1. exact CANONICAL_ID_V2 identity, computed here from this buffer and
+        // never compared against a stored digest: this class embeds a per-launch
+        // value, so its exact identity cannot be known before launch. The plan
+        // pins only the two digests that DO survive a relaunch, and both are
+        // checked below against this process's own bytes.
+        CanonicalClassIdentityV2.Result exact;
+        try {
+            exact = CanonicalClassIdentityV2.identify(basicClass);
+        } catch (CanonicalClassIdentityV2.IdentityFailure malformed) {
+            throw (ProfileFailure) new ProfileFailure(
+                    "exact identity could not be established for " + name
+                            + ": " + malformed.getMessage()).initCause(malformed);
+        }
         // 2./3. session projection and provenance extraction from the same buffer
         CanonicalClassIdentityV2.Result session;
         try {
@@ -301,59 +315,99 @@ public final class LiveHookSupport {
                 || !exact.declarationOrderSha256.equals(session.declarationOrderSha256)
                 || !exact.rawSha256.equals(session.rawSha256))
             throw new ProfileFailure("session projection disagrees with the exact identity for " + name);
-        // 4.-8. evidence binding: parse, then verify against the observed runtime
-        SessionBoundIdentityCertificate certificate =
-                parseSessionCertificate(hooks[0], name);
+        // The declaration order is the plan's cross-launch anchor: it is rendered
+        // from names and descriptors only, so a relaunch must reproduce it byte
+        // for byte even though every other digest legitimately moves.
+        if (hooks[0].declarationOrderSha256 == null
+                || !hooks[0].declarationOrderSha256.equals(exact.declarationOrderSha256))
+            throw new ProfileFailure("session-bound identity for " + name
+                    + " does not match the qualified declaration order (expected "
+                    + hooks[0].declarationOrderSha256 + ", observed "
+                    + exact.declarationOrderSha256 + ")");
         for (LiveWriterPlan.Hook hook : hooks) {
-            if (!certificate.sessionInvariantSha256.equals(hook.sessionInvariantSha256))
+            if (hook.preHookClassSha256 != null)
+                throw new ProfileFailure("plan entry " + hook.id + " for " + name
+                        + " pins a pre-hook digest that no launch can reproduce");
+        }
+        // 4. the static policy every hook for this class must agree on
+        SessionBoundAdmissionPolicy policy = parseSessionPolicy(hooks[0], name);
+        rememberAdmittedBytes(name, basicClass);
+        for (LiveWriterPlan.Hook hook : hooks) {
+            if (!policy.expectedSessionInvariantSha256.equals(hook.sessionInvariantSha256))
                 throw new ProfileFailure("plan entry for " + name
-                        + " does not bind the certified session invariant");
-            if (hook.sessionCertificateJson == null
-                    || !hook.sessionCertificateJson.equals(hooks[0].sessionCertificateJson))
-                throw new ProfileFailure("mixed session certificates for " + name);
+                        + " does not bind the policy's session invariant");
+            if (hook.sessionAdmissionPolicyJson == null
+                    || !hook.sessionAdmissionPolicyJson.equals(hooks[0].sessionAdmissionPolicyJson))
+                throw new ProfileFailure("mixed session admission policies for " + name);
+            if (!policy.requiredHookIds.contains(hook.id))
+                throw new ProfileFailure("plan entry " + hook.id + " for " + name
+                        + " is not a hook the admission policy covers");
         }
         if (environment == null)
             throw (ProfileFailure) new ProfileFailure(
                     "no session environment bound; session-bound identity for " + name
                             + " is INCOMPLETE, not authorized").initCause(
-                    new SessionBoundIdentityCertificate.Refusal(
-                            SessionBoundIdentityCertificate.Refusal.Kind.INCOMPLETE,
+                    new SessionBoundAdmissionPolicy.Refusal(
+                            SessionBoundAdmissionPolicy.Refusal.Kind.INCOMPLETE,
                             "NO_SESSION_ENVIRONMENT", "no runtime session identity is bound"));
-        authorize(certificate, loader, basicClass, session, name);
-    }
-
-    /** Strict certificate extraction; any problem refuses the class load. */
-    private static SessionBoundIdentityCertificate parseSessionCertificate(
-            LiveWriterPlan.Hook hook, String name) {
-        try {
-            return SessionBoundIdentityCertificate.parse(hook.sessionCertificateJson);
-        } catch (SessionBoundIdentityCertificate.Refusal refused) {
-            throw (ProfileFailure) new ProfileFailure(
-                    "session-bound identity for " + name + " is not certified: "
-                            + refused.getMessage()).initCause(refused);
-        }
+        // 5.-9. admit THIS buffer against the policy, then record what happened
+        SessionBoundIdentityCertificate certificate =
+                admitAndIssue(policy, loader, basicClass, session, name);
+        recordSessionBound(name, policy, certificate);
     }
 
     /**
-     * Runs the certificate against freshly observed runtime state and records the
-     * exact identity, the session invariant and the provenance. Split out so the
-     * negative controls can drive it with doctored observations.
+     * Admits the observed pre-writer buffer against the static policy and, only
+     * if nothing refuses, issues the concrete certificate for this process.
+     *
+     * <p>A different session UUID on this launch is not a failure. The policy
+     * cannot name one -- it does not know one yet -- so the claim it makes is
+     * about the session-INVARIANT identity, and that is what is compared. What
+     * would be a failure is a policy quietly carrying a previous launch's UUID,
+     * and {@link SessionBoundAdmissionPolicy#parse} refuses that outright.</p>
      */
-    static void authorize(SessionBoundIdentityCertificate certificate, ClassLoader loader,
-            byte[] basicClass, CanonicalClassIdentityV2.Result session, String name) {
-        SessionBoundIdentityCertificate.Observation observation =
-                new SessionBoundIdentityCertificate.Observation(
-                        environment.processId(),
-                        environment.transformationSessionId(),
-                        loader == null ? null : environment.definingLoaderIdentity(loader),
-                        basicClass, session);
-        try {
-            certificate.authorize(observation);
-        } catch (SessionBoundIdentityCertificate.Refusal refused) {
+    static SessionBoundIdentityCertificate admitAndIssue(SessionBoundAdmissionPolicy policy,
+            ClassLoader loader, byte[] basicClass, CanonicalClassIdentityV2.Result session,
+            String name) {
+        String loaderClass = loader == null ? null : loader.getClass().getName();
+        SessionBoundAdmissionPolicy.Candidate candidate =
+                new SessionBoundAdmissionPolicy.Candidate(name, session, loaderClass,
+                        runtimeProfile(), LiveWriterPlan.RECIPE_BINDING_SHA256,
+                        LiveWriterPlan.RUNTIME_MANIFEST_SHA256);
+        List<String> refusals = policy.refuses(candidate);
+        if (!refusals.isEmpty())
             throw (ProfileFailure) new ProfileFailure(
-                    "session-bound identity for " + name + " is not authorized: "
-                            + refused.getMessage()).initCause(refused);
-        }
+                    "session-bound identity for " + name + " is not admitted: " + refusals)
+                    .initCause(new SessionBoundAdmissionPolicy.Refusal(
+                            SessionBoundAdmissionPolicy.Refusal.Kind.REFUSE,
+                            "POLICY_ADMISSION_REFUSED", refusals.toString()));
+        String processId = environment.processId();
+        String sessionId = environment.transformationSessionId();
+        if (processId == null || processId.length() == 0
+                || sessionId == null || sessionId.length() == 0)
+            throw (ProfileFailure) new ProfileFailure(
+                    "admission for " + name + " cannot be recorded: this process has no "
+                            + "process/session identity, so no certificate may be issued")
+                    .initCause(new SessionBoundAdmissionPolicy.Refusal(
+                            SessionBoundAdmissionPolicy.Refusal.Kind.INCOMPLETE,
+                            "NO_SESSION_IDENTITY", "no process or transformation session identity"));
+        return SessionBoundIdentityCertificate.issue(processId, sessionId,
+                loader == null ? null : environment.definingLoaderIdentity(loader),
+                basicClass, session, LiveWriterPlan.RECIPE_BINDING_SHA256,
+                LiveWriterPlan.RUNTIME_MANIFEST_SHA256, policy.policySha256());
+    }
+
+    /**
+     * The admission record for a class: which policy authorized it, the policy
+     * hash, and the certificate this process issued from the admission that
+     * actually happened. Recorded only after a successful admission.
+     */
+    private static void recordSessionBound(String name, SessionBoundAdmissionPolicy policy,
+            SessionBoundIdentityCertificate certificate) {
+        // The certificate must describe the bytes in hand, or the admission and
+        // the record disagree about what was admitted.
+        if (!certificate.preWriterRawSha256.equals(certificateSha256Of(basicClassOf(name))))
+            throw new ProfileFailure("issued certificate does not bind the admitted bytes for " + name);
         if (certificate.sessionInvariantSha256.equals(certificate.exactSemanticSha256))
             throw new ProfileFailure("session certificate for " + name
                     + " does not actually project away a process-bound value");
@@ -363,18 +417,66 @@ public final class LiveHookSupport {
             certificate.expectedSessionUuid,
             certificate.certificateSha256(),
             certificate.definingLoaderIdentity,
+            policy.policySha256(),
+            certificate.toJson(),
         });
     }
 
     /**
+     * The runtime profile identity an admission is bound to. Read per admission
+     * rather than frozen at class load: the profile is something the running JVM
+     * asserts, and a constant captured once could disagree with the value the
+     * policy was generated against without anything noticing.
+     */
+    public static final String RUNTIME_PROFILE_PROPERTY = "rustcraft.profile";
+
+    public static String runtimeProfile() {
+        String value = System.getProperty(RUNTIME_PROFILE_PROPERTY);
+        return value == null || value.length() == 0 ? "UNSPECIFIED" : value;
+    }
+
+    private static final java.util.Map<String, byte[]> ADMITTED_BYTES =
+            new java.util.concurrent.ConcurrentHashMap<String, byte[]>();
+
+    private static void rememberAdmittedBytes(String name, byte[] basicClass) {
+        ADMITTED_BYTES.put(name, basicClass.clone());
+    }
+
+    private static byte[] basicClassOf(String name) {
+        return ADMITTED_BYTES.get(name);
+    }
+
+    private static String certificateSha256Of(byte[] bytes) {
+        return SessionBoundAdmissionPolicy.sha256(bytes);
+    }
+
+    /** Strict policy extraction; any problem refuses the class load. */
+    private static SessionBoundAdmissionPolicy parseSessionPolicy(
+            LiveWriterPlan.Hook hook, String name) {
+        try {
+            return SessionBoundAdmissionPolicy.parse(hook.sessionAdmissionPolicyJson);
+        } catch (SessionBoundAdmissionPolicy.Refusal refused) {
+            throw (ProfileFailure) new ProfileFailure(
+                    "session-bound identity for " + name + " has no usable admission policy: "
+                            + refused.getMessage()).initCause(refused);
+        }
+    }
+
+    /** Strict certificate extraction; any problem refuses the class load. */
+    /**
      * Session-bound admission evidence recorded for the qualification engine,
-     * keyed by transformed class name. Populated only by a fully authorized
-     * admission; an empty entry means session-bound identity was never proven.
+     * keyed by transformed class name. Populated only by a fully admitted
+     * session; an empty entry means session-bound identity was never proven.
+     *
+     * <p>Layout: exact semantic, session invariant, the session UUID THIS launch
+     * actually used, the certificate hash, the defining loader, the authorizing
+     * policy's hash, and the full certificate JSON so the engine can re-verify
+     * every field rather than trust this array.</p>
      */
     public static final Map<String, String[]> SESSION_BOUND_EVIDENCE =
             new java.util.concurrent.ConcurrentHashMap<String, String[]>();
 
-    /** The last admission record for a class, or null when it was never authorized. */
+    /** The last admission record for a class, or null when it was never admitted. */
     public static String[] sessionBoundEvidence(String className) {
         return SESSION_BOUND_EVIDENCE.get(className);
     }

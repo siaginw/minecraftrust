@@ -31,6 +31,7 @@ SRC = HERE / "src/com/rustcraft/coremod"
 SOURCES = (
     SRC / "CanonicalClassIdentityV2.java",
     SRC / "SessionBoundIdentityCertificate.java",
+    SRC / "SessionBoundAdmissionPolicy.java",
     SRC / "LiveWriterPlan.java",
     SRC / "LiveHookSupport.java",
     SRC / "AsmTreeCompat.java",

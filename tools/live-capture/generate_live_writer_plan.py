@@ -11,6 +11,7 @@ import sys
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "tools" / "testing"))
 import session_bound_certificate as certificate_schema
+import session_bound_policy as policy_schema
 from text_digest import normalized_sha256
 _parser = argparse.ArgumentParser(description=__doc__)
 _parser.add_argument("--profile", type=pathlib.Path,
@@ -82,15 +83,41 @@ if (not re.fullmatch(r"[0-9]+(?:\.[0-9]+){3}", profile.get("forge_build", ""))
         or not re.fullmatch(r"[A-Za-z0-9_.-]+", qualification.get("profile", ""))
         or not re.fullmatch(r"[0-9a-f]{64}", qualification.get("minecraft_server_jar_sha256", ""))):
     raise SystemExit("REFUSED: malformed runtime/profile metadata")
+# Which classes are session-bound has to be known before the identity inventory
+# is validated, because the two modes accept deliberately different -- and
+# deliberately different SIZES -- identity record.
+session_classes = profile.get("session_bound_classes")
+if mode != SESSION_BOUND:
+    session_classes = []
+if mode == SESSION_BOUND:
+    if (not isinstance(session_classes, list) or not session_classes
+            or len(set(session_classes)) != len(session_classes)
+            or any(not isinstance(c, str) or c not in required_classes for c in session_classes)):
+        raise SystemExit("REFUSED: session-bound mode requires an explicit in-scope class list")
+session_set = set(session_classes)
+
+# A session-bound class carries a per-launch value inside its constant pool, so
+# its raw and semantic digests are a property of ONE launch and cannot appear in
+# a static plan. What survives every launch is the declaration order (names and
+# descriptors only, no annotation values) and the masked invariant. Those are
+# what the plan is allowed to pin, and the rest is issued at runtime.
+EXACT_V2_KEYS = {"schema", "class_name", "raw_sha256", "semantic_sha256", "declaration_order_sha256"}
+SESSION_BOUND_KEYS = {"schema", "class_name", "declaration_order_sha256", "session_invariant_sha256"}
+
 identity_by_class = {}
 if mode in (EXACT_V2, SESSION_BOUND):
     identities = profile.get("expected_class_identities")
     if not isinstance(identities, dict) or set(identities) != required_classes:
         raise SystemExit("REFUSED: exact V2 class identity inventory required")
     for name, identity in identities.items():
-        if (not isinstance(identity, dict) or set(identity) != {"schema", "class_name", "raw_sha256", "semantic_sha256", "declaration_order_sha256"}
-                or identity["schema"] != "CANONICAL_ID_V2" or identity["class_name"] != name.replace(".", "/")
-                or any(not isinstance(identity[k], str) or not re.fullmatch(r"[0-9a-f]{64}", identity[k]) for k in ("raw_sha256", "semantic_sha256", "declaration_order_sha256"))):
+        bound = name in session_set
+        expected_keys = SESSION_BOUND_KEYS if bound else EXACT_V2_KEYS
+        expected_schema = "CANONICAL_ID_V2_SESSION_BOUND" if bound else "CANONICAL_ID_V2"
+        digest_keys = ["declaration_order_sha256"] + (["session_invariant_sha256"] if bound
+                      else ["raw_sha256", "semantic_sha256"])
+        if (not isinstance(identity, dict) or set(identity) != expected_keys
+                or identity["schema"] != expected_schema or identity["class_name"] != name.replace(".", "/")
+                or any(not isinstance(identity[k], str) or not re.fullmatch(r"[0-9a-f]{64}", identity[k]) for k in digest_keys)):
             raise SystemExit("REFUSED: malformed/unbound V2 identity for " + name)
         identity_by_class[name] = identity
 else:
@@ -110,46 +137,48 @@ PACKET = {"net.minecraft.network.play.server.SPacketChunkData"}
 # declares its identity mode; session-bound mode additionally REQUIRES a
 # certificate per session-bound class. Structure alone never authorizes masking.
 identity_by_class_mode = {name: EXACT_V2 for name in identity_by_class}
-certificate_by_class = {}
+policy_by_class = {}
 if mode == SESSION_BOUND:
-    session_classes = profile.get("session_bound_classes")
-    certificates = profile.get("session_certificates")
-    if (not isinstance(session_classes, list) or not session_classes
-            or len(set(session_classes)) != len(session_classes)
-            or any(not isinstance(c, str) or c not in required_classes for c in session_classes)):
-        raise SystemExit("REFUSED: session-bound mode requires an explicit in-scope class list")
-    if not isinstance(certificates, dict):
-        raise SystemExit("REFUSED: session-bound mode requires an acquisition certificate per class")
-    session_set = set(session_classes)
-    if set(certificates) != session_set:
-        raise SystemExit("REFUSED: certificate inventory does not match the declared session-bound classes")
+    policies = profile.get("session_admission_policies")
+    if not isinstance(policies, dict):
+        raise SystemExit("REFUSED: session-bound mode requires an admission policy per class")
+    if set(policies) != session_set:
+        raise SystemExit("REFUSED: policy inventory does not match the declared session-bound classes")
     binding = profile.get("recipe_binding_sha256")
     if not isinstance(binding, str) or not re.fullmatch(r"[0-9a-f]{64}", binding):
         raise SystemExit("REFUSED: explicit recipe binding required for session-bound mode")
-    if binding != certificate_schema.recipe_binding_sha256(profile):
+    if binding != policy_schema.recipe_binding_sha256(profile):
         raise SystemExit("REFUSED: recipe binding does not cover this recipe revision")
     for name in sorted(session_set):
         try:
-            document = certificate_schema.validate(certificates[name])
-        except certificate_schema.CertificateError as invalid:
-            raise SystemExit("REFUSED: certificate for " + name + " is unusable: " + str(invalid))
+            document = policy_schema.validate(policies[name])
+        except policy_schema.PolicyError as invalid:
+            raise SystemExit("REFUSED: admission policy for " + name + " is unusable: " + str(invalid))
         identity = identity_by_class[name]
-        # The certificate must describe the SAME observed pre-writer bytes the
-        # plan already binds exactly. A session certificate can never replace or
-        # relax the exact CANONICAL_ID_V2 identity requirement.
-        if (document["class_name"] != identity["class_name"]
-                or document["pre_writer_raw_sha256"] != identity["raw_sha256"]
-                or document["exact_semantic_sha256"] != identity["semantic_sha256"]
-                or document["exact_declaration_order_sha256"] != identity["declaration_order_sha256"]):
-            raise SystemExit("REFUSED: certificate for " + name + " is not bound to the observed exact identity")
+        # The policy is static, so it names the session-INVARIANT identity and
+        # the declaration-order identity -- never a raw byte hash, which belongs
+        # to one launch. It may still not contradict the exact identity the plan
+        # already binds, or the two halves of the contract would disagree.
+        if (document["class_name"] != name
+                or document["expected_declaration_order_sha256"] != identity["declaration_order_sha256"]
+                or document["expected_session_invariant_sha256"] != identity["session_invariant_sha256"]):
+            raise SystemExit("REFUSED: admission policy for " + name
+                             + " is not bound to the observed session-invariant identity")
         if document["recipe_sha256"] != binding:
-            raise SystemExit("REFUSED: certificate for " + name + " binds a different recipe revision")
+            raise SystemExit("REFUSED: admission policy for " + name + " binds a different recipe revision")
         if document["runtime_manifest_sha256"] != qualification.get("runtime_manifest_sha256", document["runtime_manifest_sha256"]):
-            raise SystemExit("REFUSED: certificate for " + name + " binds a different runtime manifest")
-        certificate_by_class[name] = document
+            raise SystemExit("REFUSED: admission policy for " + name + " binds a different runtime manifest")
+        policy_by_class[name] = document
         identity_by_class_mode[name] = SESSION_BOUND
-elif "session_bound_classes" in profile or "session_certificates" in profile:
-    raise SystemExit("REFUSED: session certificates may not ride along on a non-session-bound recipe")
+elif ("session_bound_classes" in profile or "session_admission_policies" in profile
+        or "session_certificates" in profile):
+    raise SystemExit("REFUSED: session policies may not ride along on a non-session-bound recipe")
+if "session_certificates" in profile:
+    # A concrete certificate binds a process, a session, a loader object and a
+    # pre-writer byte hash. None of those exist before launch, so embedding one
+    # in a static plan can only be satisfied by importing it from another JVM.
+    raise SystemExit("REFUSED: a static writer plan may not carry session certificates; "
+                     "carry admission policies and let the transforming JVM issue them")
 
 
 def transformer_for(hook):
@@ -187,19 +216,32 @@ for hook in hooks:
         fingerprint_expr = "EMPTY_FINGERPRINT"
     identity = identity_by_class.get(cls)
     entry_mode = identity_by_class_mode.get(cls, "CANONICAL_ID_V1" if mode == "CANONICAL" else mode)
-    document = certificate_by_class.get(cls)
-    certificate_arg = "null" if document is None else jstr(certificate_schema.render(document))
-    invariant_arg = "null" if document is None else jstr(document["session_invariant_sha256"])
+    document = policy_by_class.get(cls)
+    policy_arg = "null" if document is None else jstr(policy_schema.render(document))
+    invariant_arg = "null" if document is None else jstr(document["expected_session_invariant_sha256"])
     plan_entries.append(
         "new Hook(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)" % (
             jstr(hook["id"]), jstr(transformer_for(hook)), jstr(cls), jstr(hook["method"]),
             jstr(hook["descriptor"]), jstr(hook["hook_type"]),
             jstr("liveWriter." + hook["id"] + "." + cls.rsplit(".", 1)[-1] + "." + hook["method"].replace("<init>", "ctor")),
             fingerprint_expr,
+            # null, not another launch's digest: a session-bound class is pinned
+            # by its invariant and its declaration order, and its exact identity
+            # is issued at admission time by the JVM that holds the bytes.
+            "null" if document is not None else
             jstr(identity["semantic_sha256"] if identity else hash_by_class[cls]),
             jstr(entry_mode),
             jstr(identity["declaration_order_sha256"]) if identity else "null",
-            certificate_arg, invariant_arg))
+            policy_arg, invariant_arg))
+
+# `jstr` refuses non-text, so an absent value is emitted as a Java null rather
+# than as the literal string "null".
+def jstr_or_null(value):
+    return "null" if value is None else jstr(value)
+
+
+JSTRB = jstr_or_null(profile.get("recipe_binding_sha256"))
+JSTRM = jstr_or_null(qualification.get("runtime_manifest_sha256"))
 
 java = f"""package com.rustcraft.coremod;
 
@@ -232,7 +274,7 @@ public final class {PLAN_CLASS} {{
         public final String identitySchema;
         public final String declarationOrderSha256;
         /** Session-bound identity mode requires this certificate; null for every other mode. */
-        public final String sessionCertificateJson;
+        public final String sessionAdmissionPolicyJson;
         public final String sessionInvariantSha256;
 
         Hook(String id, String transformer, String className, String methodName, String descriptor,
@@ -252,7 +294,7 @@ public final class {PLAN_CLASS} {{
 
         Hook(String id, String transformer, String className, String methodName, String descriptor,
              String hookType, String operationId, String[][] fingerprint, String preHookClassSha256,
-             String identitySchema, String declarationOrderSha256, String sessionCertificateJson,
+             String identitySchema, String declarationOrderSha256, String sessionAdmissionPolicyJson,
              String sessionInvariantSha256) {{
             this.id = id;
             this.transformer = transformer;
@@ -266,7 +308,7 @@ public final class {PLAN_CLASS} {{
             this.canonicalIdentity = "CANONICAL_ID_V1".equals(identitySchema);
             this.identitySchema = identitySchema;
             this.declarationOrderSha256 = declarationOrderSha256;
-            this.sessionCertificateJson = sessionCertificateJson;
+            this.sessionAdmissionPolicyJson = sessionAdmissionPolicyJson;
             this.sessionInvariantSha256 = sessionInvariantSha256;
         }}
 
@@ -283,28 +325,28 @@ public final class {PLAN_CLASS} {{
     public static Hook doctoredSha(Hook hook, String sha) {{
         return new Hook(hook.id, hook.transformer, hook.className, hook.methodName, hook.descriptor,
                 hook.hookType, hook.operationId, hook.fingerprint, sha, hook.identitySchema,
-                hook.declarationOrderSha256, hook.sessionCertificateJson, hook.sessionInvariantSha256);
+                hook.declarationOrderSha256, hook.sessionAdmissionPolicyJson, hook.sessionInvariantSha256);
     }}
 
     /** Negative-control factory: same hook with an altered descriptor. */
     public static Hook doctoredDescriptor(Hook hook, String descriptor) {{
         return new Hook(hook.id, hook.transformer, hook.className, hook.methodName, descriptor,
                 hook.hookType, hook.operationId, hook.fingerprint, hook.preHookClassSha256, hook.identitySchema,
-                hook.declarationOrderSha256, hook.sessionCertificateJson, hook.sessionInvariantSha256);
+                hook.declarationOrderSha256, hook.sessionAdmissionPolicyJson, hook.sessionInvariantSha256);
     }}
 
     /** Negative-control factory: same hook with shifted/missing/duplicated anchors. */
     public static Hook doctoredFingerprint(Hook hook, String[][] fingerprint) {{
         return new Hook(hook.id, hook.transformer, hook.className, hook.methodName, hook.descriptor,
                 hook.hookType, hook.operationId, fingerprint, hook.preHookClassSha256, hook.identitySchema,
-                hook.declarationOrderSha256, hook.sessionCertificateJson, hook.sessionInvariantSha256);
+                hook.declarationOrderSha256, hook.sessionAdmissionPolicyJson, hook.sessionInvariantSha256);
     }}
 
-    /** Negative-control factory: same hook with a doctored session certificate. */
-    public static Hook doctoredCertificate(Hook hook, String sessionCertificateJson) {{
+    /** Negative-control factory: same hook with a doctored session admission policy. */
+    public static Hook doctoredPolicy(Hook hook, String sessionAdmissionPolicyJson) {{
         return new Hook(hook.id, hook.transformer, hook.className, hook.methodName, hook.descriptor,
                 hook.hookType, hook.operationId, hook.fingerprint, hook.preHookClassSha256, hook.identitySchema,
-                hook.declarationOrderSha256, sessionCertificateJson, hook.sessionInvariantSha256);
+                hook.declarationOrderSha256, sessionAdmissionPolicyJson, hook.sessionInvariantSha256);
     }}
 
     /** Profile identity binding: any change here requires regeneration + requalification. */
@@ -313,6 +355,14 @@ public final class {PLAN_CLASS} {{
     public static final String REQUIRED_HOOKS_MANIFEST_SHA256 = {jstr(manifest_sha)};
     public static final String IDENTITY_MODE = {jstr(profile.get("identity_mode", "RAW"))};
 
+    /** Recipe revision this plan was generated from. The admission policies
+     * carried below must name it, and the runtime checks them against THIS
+     * constant rather than against their own copy, so a policy cannot make
+     * itself consistent by editing the very field it is judged on. */
+    public static final String RECIPE_BINDING_SHA256 = {JSTRB};
+
+    /** Runtime manifest identity observed when this profile was qualified. */
+    public static final String RUNTIME_MANIFEST_SHA256 = {JSTRM};
     public static final Hook[] HOOKS = {{
         {",\n        ".join(plan_entries)}
     }};

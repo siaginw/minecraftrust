@@ -170,7 +170,7 @@ def main() -> int:
     java = args.java_home.resolve() / "bin/java.exe"
     javac = args.java_home.resolve() / "bin/javac.exe"
     sources = [CORE + "LiveHookSupport.java", CORE + "LiveWriterPlan.java",
-               CORE + "AsmTreeCompat.java", HELPER]
+               CORE + "AsmTreeCompat.java", CORE + "SessionBoundAdmissionPolicy.java", HELPER]
     current_sources = sources + [CORE + "CanonicalClassIdentityV2.java"]
     profile = json.loads(args.profile.read_text(encoding="utf-8"))
     inventory = dump_inventory(dump)

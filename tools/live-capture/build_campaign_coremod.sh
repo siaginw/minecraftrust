@@ -28,6 +28,8 @@ SOURCES=(
   "$ROOT/tools/bridge/src/com/rustcraft/coremod/LiveHookSupport.java"
   "$ROOT/tools/bridge/src/com/rustcraft/coremod/AsmTreeCompat.java"
   "$ROOT/tools/bridge/src/com/rustcraft/coremod/CanonicalClassIdentityV2.java"
+  "$ROOT/tools/bridge/src/com/rustcraft/coremod/SessionBoundAdmissionPolicy.java"
+  "$ROOT/tools/bridge/src/com/rustcraft/coremod/SessionBoundIdentityCertificate.java"
   "$ROOT/tools/bridge/src/com/rustcraft/coremod/LiveWriterPlan.java"
   "$ROOT/tools/bridge/src/com/rustcraft/bridge/capture/CaptureContract.java"
   "$ROOT/tools/bridge/src/com/rustcraft/bridge/capture/CaptureSource.java"

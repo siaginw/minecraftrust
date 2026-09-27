@@ -77,8 +77,8 @@ public final class SessionBoundIdentityCertificate {
         maskedAnnotationLocations = textList(fields, "masked_annotation_locations");
         distinctMaskedUuidCount = count(fields, "distinct_masked_uuid_count");
         maskedOccurrenceCount = count(fields, "masked_occurrence_count");
-        recipeSha256 = text(fields, "recipe_sha256", SHA256);
-        runtimeManifestSha256 = text(fields, "runtime_manifest_sha256", SHA256);
+        recipeSha256 = optionalText(fields, "recipe_sha256", SHA256);
+        runtimeManifestSha256 = optionalText(fields, "runtime_manifest_sha256", SHA256);
         acquisitionEvidenceSha256 = text(fields, "acquisition_evidence_sha256", SHA256);
     }
 
@@ -122,8 +122,9 @@ public final class SessionBoundIdentityCertificate {
         fields.put("masked_annotation_locations", new ArrayList<String>(identity.maskedLocations));
         fields.put("distinct_masked_uuid_count", Integer.valueOf(identity.maskedValues.size()));
         fields.put("masked_occurrence_count", Integer.valueOf(identity.maskedOccurrenceCount));
-        fields.put("recipe_sha256", recipeSha256);
-        fields.put("runtime_manifest_sha256", runtimeManifestSha256);
+        if (recipeSha256 != null) fields.put("recipe_sha256", recipeSha256);
+        if (runtimeManifestSha256 != null)
+            fields.put("runtime_manifest_sha256", runtimeManifestSha256);
         fields.put("acquisition_evidence_sha256", acquisitionEvidenceSha256);
         return new SessionBoundIdentityCertificate(fields);
     }
@@ -134,9 +135,13 @@ public final class SessionBoundIdentityCertificate {
     public String toJson() {
         StringBuilder text = new StringBuilder();
         text.append('{');
+        boolean first = true;
         for (int i = 0; i < KEYS.length; i++) {
-            if (i > 0) text.append(',');
-            appendKey(text, KEYS[i]);
+            String key = KEYS[i];
+            if (CONDITIONAL_KEYS.contains(key) && field(key) == null) continue;
+            if (!first) text.append(',');
+            first = false;
+            appendKey(text, key);
             if (KEYS[i].equals("masked_annotation_locations")) {
                 text.append('[');
                 for (int j = 0; j < maskedAnnotationLocations.size(); j++) {
@@ -177,6 +182,7 @@ public final class SessionBoundIdentityCertificate {
         }
         for (String key : KEYS) {
             if (key.startsWith("schema") || key.equals("provenance")) continue;
+            if (CONDITIONAL_KEYS.contains(key)) continue;
             if (!fields.containsKey(key))
                 throw new Refusal(Refusal.Kind.INCOMPLETE, "INCOMPLETE_CERTIFICATE", "certificate is missing " + key);
         }
@@ -309,6 +315,11 @@ public final class SessionBoundIdentityCertificate {
         return false;
     }
 
+    /** Plan-revision bindings, absent when the issuing plan published none. */
+    private static final java.util.Set<String> CONDITIONAL_KEYS =
+            new java.util.HashSet<String>(java.util.Arrays.asList(
+                    "recipe_sha256", "runtime_manifest_sha256"));
+
     private String field(String key) {
         if ("process_id".equals(key)) return processId;
         if ("transformation_session_id".equals(key)) return transformationSessionId;
@@ -323,6 +334,12 @@ public final class SessionBoundIdentityCertificate {
         if ("runtime_manifest_sha256".equals(key)) return runtimeManifestSha256;
         if ("acquisition_evidence_sha256".equals(key)) return acquisitionEvidenceSha256;
         throw new IllegalStateException("unmapped certificate field " + key);
+    }
+
+    /** A plan binding that MAY be absent, because the plan may publish none. */
+    private static String optionalText(Map<String, Object> fields, String key, String pattern) {
+        if (!fields.containsKey(key)) return null;
+        return text(fields, key, pattern);
     }
 
     private static String text(Map<String, Object> fields, String key, String pattern) {

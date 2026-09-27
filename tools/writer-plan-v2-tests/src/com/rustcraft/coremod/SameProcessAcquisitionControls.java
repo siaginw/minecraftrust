@@ -75,11 +75,13 @@ public final class SameProcessAcquisitionControls {
         System.setProperty(LiveHookSupport.SystemPropertySessionEnvironment.PROCESS_PROPERTY, PROCESS);
         System.setProperty(LiveHookSupport.SystemPropertySessionEnvironment.SESSION_PROPERTY, SESSION);
         LiveHookSupport.bindSessionEnvironment(environment);
-        canonicalIdentityV2PreHook(definition, preWriter, certificate, loader, true);
-        // Same process, same session, same certificate, SAME BYTES -- only the
-        // defining loader differs. This is the one thing the certificate binds
-        // that byte equality cannot reproduce, so it must refuse.
-        canonicalIdentityV2PreHook(definition, preWriter, certificate, new Defining(), false);
+        canonicalIdentityV2PreHook(definition, preWriter, loader, true);
+        // Same process, same session, same bytes -- only the defining loader
+        // differs. A static policy names the loader CLASS, so a second instance
+        // of that class is still admitted; what must not happen is the first
+        // launch's certificate being accepted for it.
+        canonicalIdentityV2PreHook(definition, preWriter, new Defining(), true);
+        loaderBindingRefuses(certificate, new Defining(), preWriter);
 
         // ---- a failed attempt is recorded, not dropped -------------------
         SameProcessAcquisition.Definition failed =
@@ -180,24 +182,76 @@ public final class SameProcessAcquisitionControls {
                 + "; certification and authority remain absent");
     }
 
-    /** Drives the real LiveHookSupport gate with the record's own evidence. */
+    /**
+     * Drives the real LiveHookSupport gate with a STATIC admission policy built
+     * only from facts that survive a relaunch, and reads back the certificate the
+     * transforming JVM issues for itself.
+     *
+     * <p>The plan no longer carries a concrete certificate -- that is the whole
+     * point of the split -- so this control cannot hand the gate a pre-minted
+     * certificate and expect it to work. What it does instead is stronger: the
+     * policy is admitted against the real pre-writer buffer, and the certificate
+     * that comes back must independently equal the one the acquisition record
+     * computed, binding this process, this session, this loader and these exact
+     * bytes.</p>
+     */
     private static void canonicalIdentityV2PreHook(SameProcessAcquisition.Definition definition,
-            byte[] preWriter, SessionBoundIdentityCertificate certificate, ClassLoader loader,
-            boolean admitted) {
-        CanonicalClassIdentityV2.Result exact = CanonicalClassIdentityV2.identify(preWriter);
+            byte[] preWriter, ClassLoader loader, boolean admitted) {
+        String policyJson = SessionBoundAdmissionPolicyFixtures.policyFor(
+                definition.exact, definition.session, definition.binaryName.replace('/', '.'),
+                loader == null ? null : loader.getClass().getName(), "A1");
         LiveWriterPlan.Hook hook = new LiveWriterPlan.Hook(
                 "A1", "OWNERSHIP", definition.binaryName.replace('/', '.'), "value", "()V",
                 "WRITE_BEGIN", "liveWriter.A1.Acquired.value",
-                LiveWriterPlan.EMPTY_FINGERPRINT, exact.semanticSha256,
-                CanonicalClassIdentityV2.SCHEMA_SESSION_BOUND, exact.declarationOrderSha256,
-                certificate.toJson(), certificate.sessionInvariantSha256);
+                LiveWriterPlan.EMPTY_FINGERPRINT, null,
+                CanonicalClassIdentityV2.SCHEMA_SESSION_BOUND, definition.exact.declarationOrderSha256,
+                policyJson, definition.session.sessionInvariantSha256);
         try {
             LiveHookSupport.verifyPreHookIdentity(
                     new LiveWriterPlan.Hook[] {hook}, preWriter, loader);
-            check(admitted, "the same-process certificate admits its own class");
+            check(admitted, "the static policy admits its own class in this process");
         } catch (LiveHookSupport.ProfileFailure refused) {
-            check(!admitted, (admitted ? "the same-process certificate was refused: "
-                    : "a different defining loader refuses: ") + refused.getMessage());
+            check(!admitted, (admitted ? "a valid static policy was refused: "
+                    : "a policy for a different loader refuses: ") + refused.getMessage());
+            return;
+        }
+        String[] evidence = LiveHookSupport.sessionBoundEvidence(hook.className);
+        check(evidence != null && evidence.length == 7,
+                "admission records the policy hash and the issued certificate");
+        check(evidence[5].equals(SessionBoundAdmissionPolicy.parse(policyJson).policySha256()),
+                "the admission record names the policy that authorized it");
+        // The certificate is EVIDENCE OF THE ADMISSION THAT JUST HAPPENED, so it
+        // must reproduce the acquisition record independently rather than merely
+        // be present. Any of these disagreeing would mean the runtime and the
+        // recorder saw different bytes.
+        SessionBoundIdentityCertificate issued = SessionBoundIdentityCertificate.parse(evidence[6]);
+        check(issued.className.equals("example/Acquired")
+                        && issued.preWriterRawSha256.equals(SameProcessAcquisition.sha256(preWriter))
+                        && issued.sessionInvariantSha256.equals(definition.session.sessionInvariantSha256)
+                        && issued.expectedSessionUuid.equals(SESSION_UUID),
+                "the issued certificate reproduces the acquisition record's own evidence");
+        check(issued.processId.equals(PROCESS) && issued.transformationSessionId.equals(SESSION),
+                "the issued certificate names this process and this transformation session");
+    }
+
+    /**
+     * A certificate minted for one defining loader must not be accepted for a
+     * different one. Byte equality cannot reproduce this binding, so it is
+     * checked directly against the certificate's own verification.
+     */
+    private static void loaderBindingRefuses(SessionBoundIdentityCertificate certificate,
+            ClassLoader actual, byte[] preWriter) {
+        SessionBoundIdentityCertificate.Observation observation =
+                new SessionBoundIdentityCertificate.Observation(
+                        certificate.processId, certificate.transformationSessionId,
+                        SameProcessAcquisition.identityOf(actual), preWriter,
+                        CanonicalClassIdentityV2.identifySessionBound(preWriter));
+        try {
+            certificate.authorize(observation);
+            check(false, "a certificate minted for another loader was accepted -> unexpectedly admitted");
+        } catch (SessionBoundIdentityCertificate.Refusal refused) {
+            check("LOADER_MISMATCH".equals(refused.reason),
+                    "a certificate minted for another loader is refused by loader binding: " + refused.getMessage());
         }
     }
 

@@ -102,7 +102,8 @@ def main():
         # mode, the evidence certificate. Naming them here is what keeps this
         # lane a real compile of the identity contract instead of a compile of
         # whichever files happened to be listed.
-        "SessionBoundIdentityCertificate.java")]
+        "SessionBoundIdentityCertificate.java",
+        "SessionBoundAdmissionPolicy.java")]
     sources.append(repo / "tools/bridge/src/com/rustcraft/qualification/SameProcessAcquisition.java")
     controls = [repo / "tools/qualification-v2-tests/src/com/rustcraft/coremod" / name for name in (
         "CanonicalClassIdentityV2Test.java", "SessionBoundMaskControls.java",
