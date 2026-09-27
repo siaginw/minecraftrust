@@ -398,10 +398,10 @@ public final class LiveHookSupport {
             java.util.Collections.sort(interfaces);
             for (String iface : interfaces) text.append("iface ").append(iface).append(CANONICAL_NEWLINE);
             List<String> fields = new ArrayList<String>();
-            for (FieldNode fn : cn.fields) fields.add(fn.desc + " " + fn.name);
+            for (FieldNode fn : AsmTreeCompat.fields(cn)) fields.add(fn.desc + " " + fn.name);
             java.util.Collections.sort(fields);
             for (String field : fields) text.append("field ").append(field).append(CANONICAL_NEWLINE);
-            List<MethodNode> methods = new ArrayList<MethodNode>(cn.methods);
+            List<MethodNode> methods = new ArrayList<MethodNode>(AsmTreeCompat.methods(cn));
             java.util.Collections.sort(methods, new java.util.Comparator<MethodNode>() {
                 @Override public int compare(MethodNode a, MethodNode b) {
                     int byName = a.name.compareTo(b.name);
@@ -414,7 +414,7 @@ public final class LiveHookSupport {
                     if (insn instanceof LabelNode || insn.getOpcode() == -1) continue;
                     text.append(describe(insn)).append(CANONICAL_NEWLINE);
                 }
-                for (TryCatchBlockNode block : mn.tryCatchBlocks) {
+                for (TryCatchBlockNode block : AsmTreeCompat.tryCatchBlocks(mn)) {
                     text.append("catch ").append(block.type == null ? "*" : block.type).append(CANONICAL_NEWLINE);
                 }
             }
@@ -453,7 +453,7 @@ public final class LiveHookSupport {
     }
 
     public static void refuseMarkerString(ClassNode cn) {
-        for (MethodNode mn : cn.methods) {
+        for (MethodNode mn : AsmTreeCompat.methods(cn)) {
             for (AbstractInsnNode insn : mn.instructions.toArray()) {
                 if (insn instanceof LdcInsnNode) {
                     Object constant = ((LdcInsnNode) insn).cst;
@@ -467,7 +467,7 @@ public final class LiveHookSupport {
     }
 
     public static MethodNode findMethod(ClassNode cn, LiveWriterPlan.Hook hook) {
-        for (MethodNode mn : cn.methods) {
+        for (MethodNode mn : AsmTreeCompat.methods(cn)) {
             if (mn.name.equals(hook.methodName) && mn.desc.equals(hook.descriptor)) return mn;
         }
         throw new ProfileFailure("method " + hook.className + "." + hook.methodName

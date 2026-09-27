@@ -95,6 +95,9 @@ def main():
             parser.error(f"missing input: {path}")
     sources = [repo / "tools/bridge/src/com/rustcraft/coremod" / name for name in (
         "CanonicalClassIdentityV2.java", "LiveHookSupport.java", "LiveWriterPlan.java",
+        # AsmTreeCompat is the only place a raw ASM tree list is cast, so it
+        # has to be in this lane or the compile proves something else.
+        "AsmTreeCompat.java",
         # LiveHookSupport resolves the acquisition record and, in session-bound
         # mode, the evidence certificate. Naming them here is what keeps this
         # lane a real compile of the identity contract instead of a compile of

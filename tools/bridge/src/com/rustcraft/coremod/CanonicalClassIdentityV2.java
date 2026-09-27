@@ -177,10 +177,10 @@ public final class CanonicalClassIdentityV2 {
             new ClassReader(bytes).accept(cn, ClassReader.EXPAND_FRAMES);
             List<SessionId> sessions = new ArrayList<SessionId>();
             collect(sessions, "class", cn.name, cn.visibleAnnotations, cn.invisibleAnnotations);
-            for (FieldNode f : cn.fields)
+            for (FieldNode f : AsmTreeCompat.fields(cn))
                 collect(sessions, "field:" + f.name + "+" + f.desc, f.name,
                         f.visibleAnnotations, f.invisibleAnnotations);
-            for (MethodNode m : cn.methods)
+            for (MethodNode m : AsmTreeCompat.methods(cn))
                 collect(sessions, "method:" + m.name + "+" + m.desc, m.name,
                         m.visibleAnnotations, m.invisibleAnnotations);
             if (sessions.isEmpty())
@@ -231,10 +231,10 @@ public final class CanonicalClassIdentityV2 {
         raw.sessionMask = sessionMask;
         rejectAttributes(cn.attrs);
         List<Object> declarationOrder = a(SCHEMA + "_DECLARATION_ORDER");
-        for (FieldNode f : cn.fields) declarationOrder.add(a("field", f.name, f.desc));
-        for (MethodNode m : cn.methods) declarationOrder.add(a("method", m.name, m.desc));
+        for (FieldNode f : AsmTreeCompat.fields(cn)) declarationOrder.add(a("field", f.name, f.desc));
+        for (MethodNode m : AsmTreeCompat.methods(cn)) declarationOrder.add(a("method", m.name, m.desc));
 
-        List<FieldNode> fields = new ArrayList<FieldNode>(cn.fields);
+        List<FieldNode> fields = new ArrayList<FieldNode>(AsmTreeCompat.fields(cn));
         Collections.sort(fields, new Comparator<FieldNode>() {
             public int compare(FieldNode x, FieldNode y) {
                 int n = x.name.compareTo(y.name);
@@ -250,7 +250,7 @@ public final class CanonicalClassIdentityV2 {
                     annotations(f.visibleAnnotations, f.invisibleAnnotations, sessionMask),
                     typeAnnotations(f.visibleTypeAnnotations, f.invisibleTypeAnnotations)));
         }
-        List<MethodNode> methods = new ArrayList<MethodNode>(cn.methods);
+        List<MethodNode> methods = new ArrayList<MethodNode>(AsmTreeCompat.methods(cn));
         Collections.sort(methods, new Comparator<MethodNode>() {
             public int compare(MethodNode x, MethodNode y) {
                 int n = x.name.compareTo(y.name);
@@ -264,7 +264,7 @@ public final class CanonicalClassIdentityV2 {
             ms.add(method(m, raw.parameterCounts.get(m.name + "\u0000" + m.desc), sessionMask));
         }
         List<Object> inner = new ArrayList<Object>();
-        for (InnerClassNode i : cn.innerClasses) inner.add(a(i.name, i.outerName, i.innerName, i.access));
+        for (InnerClassNode i : AsmTreeCompat.innerClasses(cn)) inner.add(a(i.name, i.outerName, i.innerName, i.access));
         String canonical = json(a(SCHEMA, cn.version, cn.access, cn.name, cn.signature,
                 cn.superName, cn.interfaces, cn.sourceFile, cn.sourceDebug,
                 cn.outerClass, cn.outerMethod, cn.outerMethodDesc,
@@ -359,17 +359,17 @@ public final class CanonicalClassIdentityV2 {
             ordinal++;
         }
         List<Object> handlers = new ArrayList<Object>();
-        for (TryCatchBlockNode t : m.tryCatchBlocks) {
+        for (TryCatchBlockNode t : AsmTreeCompat.tryCatchBlocks(m)) {
             handlers.add(a(label(t.start, labels), label(t.end, labels), label(t.handler, labels), t.type,
                     typeAnnotations(t.visibleTypeAnnotations, t.invisibleTypeAnnotations)));
         }
         List<Object> locals = new ArrayList<Object>();
-        if (m.localVariables != null) for (LocalVariableNode l : m.localVariables)
+        for (LocalVariableNode l : AsmTreeCompat.localVariables(m))
             locals.add(a(l.name, l.desc, l.signature, label(l.start, labels), label(l.end, labels), l.index));
         List<Object> parameters = null;
         if (m.parameters != null) {
             parameters = new ArrayList<Object>();
-            for (ParameterNode p : m.parameters) parameters.add(a(p.name, p.access));
+            for (ParameterNode p : AsmTreeCompat.parameters(m)) parameters.add(a(p.name, p.access));
         }
         return a(m.name, m.desc, m.signature, m.access, m.exceptions, parameters,
                 annotations(m.visibleAnnotations, m.invisibleAnnotations, sessionMask),

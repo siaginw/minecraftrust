@@ -169,7 +169,8 @@ def main() -> int:
     records, baseline_sources, compiled_artifacts, historical_tools, failure = [], {}, {}, {}, None
     java = args.java_home.resolve() / "bin/java.exe"
     javac = args.java_home.resolve() / "bin/javac.exe"
-    sources = [CORE + "LiveHookSupport.java", CORE + "LiveWriterPlan.java", HELPER]
+    sources = [CORE + "LiveHookSupport.java", CORE + "LiveWriterPlan.java",
+               CORE + "AsmTreeCompat.java", HELPER]
     current_sources = sources + [CORE + "CanonicalClassIdentityV2.java"]
     profile = json.loads(args.profile.read_text(encoding="utf-8"))
     inventory = dump_inventory(dump)

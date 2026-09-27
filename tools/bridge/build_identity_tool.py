@@ -33,6 +33,7 @@ SOURCES = (
     SRC / "SessionBoundIdentityCertificate.java",
     SRC / "LiveWriterPlan.java",
     SRC / "LiveHookSupport.java",
+    SRC / "AsmTreeCompat.java",
     SRC.parent / "qualification/SameProcessAcquisition.java",
 )
 
