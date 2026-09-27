@@ -312,7 +312,7 @@
       "evidence": [
         "machine/architecture-hardening/h13-light-collision.json"
       ],
-      "commit": null,
+      "commit": "0136df3363851ed88bd8fd4df13ed8c6613cb8bb",
       "outstanding": [
         "Primitive ordered AABB queries only; no full Entity.move, stepping, world border or entity interactions.",
         "Finite block-light grid only; no skylight, full world/chunk boundaries or dynamic mod behavior.",
@@ -590,6 +590,21 @@
         "7bb5326e7fc0d986f218f633c986895756552597",
         "ad274e7",
         "0ab1f71bea44d5f57c9cd27d022f33326919d49b"
+      ],
+      "prerequisites": [
+        {
+          "name": "Pinned whole-class verification trigger and unresolved-frame-type counterexample",
+          "status": "BOUNDED_FIXTURE_VALIDATED",
+          "evidence": "machine/architecture-hardening/h23-hotspot-verification.json",
+          "outstanding": [
+            "Pinned vendor HotSpot fixture proof only; no actual Forge verification or native authority.",
+            "Local vendor release SOURCE has plus suffix; source lead is not reproducible source-to-binary proof.",
+            "Verifier success does not resolve all frame reference types; explicit complete hierarchy and Class/loader binding still required.",
+            "Three finite fixture relations are demonstrations, not general frame qualification.",
+            "Runtime/game bytecode observers and loader effects need separately accepted scope policies.",
+            "All consulted primary-source files remain hash-bound target-only; immutable upstream URLs and licenses are recorded in provenance."
+          ]
+        }
       ]
     },
     {

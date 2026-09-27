@@ -1,0 +1,415 @@
+{
+  "bad-dormant": {
+    "schema": "HOTSPOT_VERIFICATION_PROBE_V1",
+    "session": "c43b565bca2048e6b1b5d1e6df167131",
+    "challenge": "d58a9689921454286f31da5550988ea2707581d8223d8cc018776864c32c2d31",
+    "mode": "bad-dormant",
+    "production_authority": false,
+    "target_initialized_before": false,
+    "runtime_version": "1.8.0_504-b01",
+    "vm_version": "25.504-b01",
+    "vm_vendor": "Temurin",
+    "input_arguments": [
+      "-Xverify:all"
+    ],
+    "verify_local": true,
+    "verify_remote": true,
+    "security_manager": false,
+    "defined": true,
+    "trigger_started": true,
+    "trigger_returned": false,
+    "actual_sha256": "62c653662389410d549a555560887cf19db26c2561dab152ea080b42f3ab6ddd",
+    "expected_sha256": "62c653662389410d549a555560887cf19db26c2561dab152ea080b42f3ab6ddd",
+    "defining_loader_is_exact": true,
+    "target_initialized_after_define": false,
+    "status": "REJECTED_VERIFY_ERROR",
+    "error_class": "java.lang.VerifyError",
+    "error_message": "Bad type on operand stack\nException Details:\n  Location:\n    proof/Target.dormant(Z)I @1: areturn\n  Reason:\n    Type integer (current frame, stack[0]) is not assignable to reference type\n  Current Frame:\n    bci: @1\n    flags: { }\n    locals: { integer }\n    stack: { integer }\n  Bytecode:\n    0x0000000: 03b0                                   \n",
+    "loader_requests": [
+      "proof.Target",
+      "java.lang.Object"
+    ],
+    "target_initialized_after": false
+  },
+  "bad-frame": {
+    "schema": "HOTSPOT_VERIFICATION_PROBE_V1",
+    "session": "9a0f6f4edd184451b5fdb1b4d0bb537f",
+    "challenge": "0e95308d249d3dabdbddb0a196d3f9b7a9d5b14bab980f8f91a58ecb7a3c1c13",
+    "mode": "bad-frame",
+    "production_authority": false,
+    "target_initialized_before": false,
+    "runtime_version": "1.8.0_504-b01",
+    "vm_version": "25.504-b01",
+    "vm_vendor": "Temurin",
+    "input_arguments": [
+      "-Xverify:all"
+    ],
+    "verify_local": true,
+    "verify_remote": true,
+    "security_manager": false,
+    "defined": true,
+    "trigger_started": true,
+    "trigger_returned": false,
+    "actual_sha256": "6b2ffa6c72ba21aeeef1267e91b403bf3daa54f307b8f998b1b14a7deee9699b",
+    "expected_sha256": "6b2ffa6c72ba21aeeef1267e91b403bf3daa54f307b8f998b1b14a7deee9699b",
+    "defining_loader_is_exact": true,
+    "target_initialized_after_define": false,
+    "status": "REJECTED_VERIFY_ERROR",
+    "error_class": "java.lang.VerifyError",
+    "error_message": "Inconsistent stackmap frames at branch target 9\nException Details:\n  Location:\n    proof/Target.dormant(Z)I @9: iconst_2\n  Reason:\n    Type integer (current frame, locals[0]) is not assignable to 'java/lang/String' (stack map, locals[0])\n  Current Frame:\n    bci: @4\n    flags: { }\n    locals: { integer, 'java/lang/String' }\n    stack: { integer }\n  Stackmap Frame:\n    bci: @9\n    flags: { }\n    locals: { 'java/lang/String', 'java/lang/Object' }\n    stack: { }\n  Bytecode:\n    0x0000000: 1217 4c1a 9900 0504 ac05 ac            \n  Stackmap Table:\n    full_frame(@9,{Object[#25],Object[#4]},{})\n",
+    "loader_requests": [
+      "proof.Target",
+      "java.lang.Object"
+    ],
+    "target_initialized_after": false
+  },
+  "null-missing-type": {
+    "schema": "HOTSPOT_VERIFICATION_PROBE_V1",
+    "session": "5103e7e240764fd8b6fc49744f96586c",
+    "challenge": "6389d6d4dbdba8875242d4128e437fa5ea831a83a3af559c817f5134152b53e4",
+    "mode": "null-missing-type",
+    "production_authority": false,
+    "target_initialized_before": false,
+    "runtime_version": "1.8.0_504-b01",
+    "vm_version": "25.504-b01",
+    "vm_vendor": "Temurin",
+    "input_arguments": [
+      "-Xverify:all"
+    ],
+    "verify_local": true,
+    "verify_remote": true,
+    "security_manager": false,
+    "defined": true,
+    "trigger_started": true,
+    "trigger_returned": true,
+    "actual_sha256": "3dad390cb663c4e6227a8d0b8446bb5ee35dd7af00e96e8d908e7fda9659de0b",
+    "expected_sha256": "3dad390cb663c4e6227a8d0b8446bb5ee35dd7af00e96e8d908e7fda9659de0b",
+    "defining_loader_is_exact": true,
+    "target_initialized_after_define": false,
+    "declared_method_count": 1,
+    "method_names": [
+      "dormant:10"
+    ],
+    "status": "VERIFIED_BY_PINNED_LINK_TRIGGER",
+    "verification_loader_requests": [
+      "proof.Target",
+      "java.lang.Object"
+    ],
+    "frame_type_bindings": [
+      [
+        "missing/Unknown",
+        "UNRESOLVED",
+        "java.lang.ClassNotFoundException"
+      ]
+    ],
+    "frame_type_binding_complete": false,
+    "loader_requests": [
+      "proof.Target",
+      "java.lang.Object",
+      "missing.Unknown"
+    ],
+    "target_initialized_after": false
+  },
+  "null-object": {
+    "schema": "HOTSPOT_VERIFICATION_PROBE_V1",
+    "session": "86ae37018e7741d69c80a0b591cd8fe6",
+    "challenge": "e396e50cfd0c22ee97209ef1c378df1f58d40224b8210477731271476b759b7a",
+    "mode": "null-object",
+    "production_authority": false,
+    "target_initialized_before": false,
+    "runtime_version": "1.8.0_504-b01",
+    "vm_version": "25.504-b01",
+    "vm_vendor": "Temurin",
+    "input_arguments": [
+      "-Xverify:all"
+    ],
+    "verify_local": true,
+    "verify_remote": true,
+    "security_manager": false,
+    "defined": true,
+    "trigger_started": true,
+    "trigger_returned": true,
+    "actual_sha256": "086e5c34ed3fe0b6d1187c86960acc05286fae7f65df4dca36597b36d3eadffa",
+    "expected_sha256": "086e5c34ed3fe0b6d1187c86960acc05286fae7f65df4dca36597b36d3eadffa",
+    "defining_loader_is_exact": true,
+    "target_initialized_after_define": false,
+    "declared_method_count": 1,
+    "method_names": [
+      "dormant:10"
+    ],
+    "status": "VERIFIED_BY_PINNED_LINK_TRIGGER",
+    "verification_loader_requests": [
+      "proof.Target",
+      "java.lang.Object"
+    ],
+    "frame_type_bindings": [
+      [
+        "java/lang/Object",
+        "BOUND_BOOTSTRAP",
+        null
+      ]
+    ],
+    "frame_type_binding_complete": true,
+    "loader_requests": [
+      "proof.Target",
+      "java.lang.Object"
+    ],
+    "target_initialized_after": false
+  },
+  "valid-max": {
+    "schema": "HOTSPOT_VERIFICATION_PROBE_V1",
+    "session": "e27a70cf399542d286af29c6e3efa97a",
+    "challenge": "a6df0b90b6810255d598c2eb07733c85f3d1c4e3348a1b707581edafb2c5a806",
+    "mode": "valid-max",
+    "production_authority": false,
+    "target_initialized_before": false,
+    "runtime_version": "1.8.0_504-b01",
+    "vm_version": "25.504-b01",
+    "vm_vendor": "Temurin",
+    "input_arguments": [
+      "-Xverify:all"
+    ],
+    "verify_local": true,
+    "verify_remote": true,
+    "security_manager": false,
+    "defined": true,
+    "trigger_started": true,
+    "trigger_returned": true,
+    "actual_sha256": "c72eb40a5ad76e15155312638aedb4a4224623ba7de7e931d1330c1aa8486f0e",
+    "expected_sha256": "c72eb40a5ad76e15155312638aedb4a4224623ba7de7e931d1330c1aa8486f0e",
+    "defining_loader_is_exact": true,
+    "target_initialized_after_define": false,
+    "declared_method_count": 1,
+    "method_names": [
+      "dormant:10"
+    ],
+    "status": "VERIFIED_BY_PINNED_LINK_TRIGGER",
+    "verification_loader_requests": [
+      "proof.Target",
+      "java.lang.Object"
+    ],
+    "frame_type_bindings": [
+      [
+        "java/lang/Object",
+        "BOUND_BOOTSTRAP",
+        null
+      ]
+    ],
+    "frame_type_binding_complete": true,
+    "loader_requests": [
+      "proof.Target",
+      "java.lang.Object"
+    ],
+    "target_initialized_after": false
+  },
+  "valid-object": {
+    "schema": "HOTSPOT_VERIFICATION_PROBE_V1",
+    "session": "90456c024b9545e4b2eb972e51dcf835",
+    "challenge": "48b3098ad90caeebb7f72b57c4113e89efd3c25cbd21c55c05455949b3ce6270",
+    "mode": "valid-object",
+    "production_authority": false,
+    "target_initialized_before": false,
+    "runtime_version": "1.8.0_504-b01",
+    "vm_version": "25.504-b01",
+    "vm_vendor": "Temurin",
+    "input_arguments": [
+      "-Xverify:all"
+    ],
+    "verify_local": true,
+    "verify_remote": true,
+    "security_manager": false,
+    "defined": true,
+    "trigger_started": true,
+    "trigger_returned": true,
+    "actual_sha256": "d22f75cd1cdf2e8b9223267a7956aaf1137b7783c19c60192e5435a65faad105",
+    "expected_sha256": "d22f75cd1cdf2e8b9223267a7956aaf1137b7783c19c60192e5435a65faad105",
+    "defining_loader_is_exact": true,
+    "target_initialized_after_define": false,
+    "declared_method_count": 1,
+    "method_names": [
+      "dormant:10"
+    ],
+    "status": "VERIFIED_BY_PINNED_LINK_TRIGGER",
+    "verification_loader_requests": [
+      "proof.Target",
+      "java.lang.Object"
+    ],
+    "frame_type_bindings": [
+      [
+        "java/lang/Object",
+        "BOUND_BOOTSTRAP",
+        null
+      ]
+    ],
+    "frame_type_binding_complete": true,
+    "loader_requests": [
+      "proof.Target",
+      "java.lang.Object"
+    ],
+    "target_initialized_after": false
+  },
+  "valid-refined": {
+    "schema": "HOTSPOT_VERIFICATION_PROBE_V1",
+    "session": "af728a367e2b4a5385bf362052d21636",
+    "challenge": "e74d6c04cd44a81eb07fd4231b45bd5a6d9597f861fce9f2010d27afd83d88a0",
+    "mode": "valid-refined",
+    "production_authority": false,
+    "target_initialized_before": false,
+    "runtime_version": "1.8.0_504-b01",
+    "vm_version": "25.504-b01",
+    "vm_vendor": "Temurin",
+    "input_arguments": [
+      "-Xverify:all"
+    ],
+    "verify_local": true,
+    "verify_remote": true,
+    "security_manager": false,
+    "defined": true,
+    "trigger_started": true,
+    "trigger_returned": true,
+    "actual_sha256": "84cd76389346ae3d449073134478dfc643db84c021b892ae55f6780f2ce3ad14",
+    "expected_sha256": "84cd76389346ae3d449073134478dfc643db84c021b892ae55f6780f2ce3ad14",
+    "defining_loader_is_exact": true,
+    "target_initialized_after_define": false,
+    "declared_method_count": 1,
+    "method_names": [
+      "dormant:10"
+    ],
+    "status": "VERIFIED_BY_PINNED_LINK_TRIGGER",
+    "verification_loader_requests": [
+      "proof.Target",
+      "java.lang.Object"
+    ],
+    "frame_type_bindings": [
+      [
+        "java/lang/String",
+        "BOUND_BOOTSTRAP",
+        null
+      ]
+    ],
+    "frame_type_binding_complete": true,
+    "loader_requests": [
+      "proof.Target",
+      "java.lang.Object",
+      "java.lang.String"
+    ],
+    "target_initialized_after": false
+  },
+  "valid-top": {
+    "schema": "HOTSPOT_VERIFICATION_PROBE_V1",
+    "session": "48955e24241148d187fe3ff6f3412ccc",
+    "challenge": "3d7f7e9ffa9fc38ca5ca077b1cc51f16a4d7ddf99407a564c67d8b906da394bc",
+    "mode": "valid-top",
+    "production_authority": false,
+    "target_initialized_before": false,
+    "runtime_version": "1.8.0_504-b01",
+    "vm_version": "25.504-b01",
+    "vm_vendor": "Temurin",
+    "input_arguments": [
+      "-Xverify:all"
+    ],
+    "verify_local": true,
+    "verify_remote": true,
+    "security_manager": false,
+    "defined": true,
+    "trigger_started": true,
+    "trigger_returned": true,
+    "actual_sha256": "1244162db254171eef86eb8deeb9bd5994f34b6bf68f76e4dadfba4c83da170a",
+    "expected_sha256": "1244162db254171eef86eb8deeb9bd5994f34b6bf68f76e4dadfba4c83da170a",
+    "defining_loader_is_exact": true,
+    "target_initialized_after_define": false,
+    "declared_method_count": 1,
+    "method_names": [
+      "dormant:10"
+    ],
+    "status": "VERIFIED_BY_PINNED_LINK_TRIGGER",
+    "verification_loader_requests": [
+      "proof.Target",
+      "java.lang.Object"
+    ],
+    "frame_type_bindings": [],
+    "frame_type_binding_complete": true,
+    "loader_requests": [
+      "proof.Target",
+      "java.lang.Object"
+    ],
+    "target_initialized_after": false
+  },
+  "foreign-loader": {
+    "schema": "HOTSPOT_VERIFICATION_PROBE_V1",
+    "session": "b291dca3fd7e42f0b813fa36ec1412d4",
+    "challenge": "4fb90477de257be6f124872b3d61e993ed5b7780d7e6fbd126365840a9978cf3",
+    "mode": "foreign-loader",
+    "production_authority": false,
+    "target_initialized_before": false,
+    "runtime_version": "1.8.0_504-b01",
+    "vm_version": "25.504-b01",
+    "vm_vendor": "Temurin",
+    "input_arguments": [
+      "-Xverify:all"
+    ],
+    "verify_local": true,
+    "verify_remote": true,
+    "security_manager": false,
+    "defined": true,
+    "trigger_started": false,
+    "trigger_returned": false,
+    "actual_sha256": "d22f75cd1cdf2e8b9223267a7956aaf1137b7783c19c60192e5435a65faad105",
+    "expected_sha256": "d22f75cd1cdf2e8b9223267a7956aaf1137b7783c19c60192e5435a65faad105",
+    "defining_loader_is_exact": true,
+    "same_binary_name": true,
+    "same_class_object": false,
+    "status": "REFUSED_LOADER",
+    "loader_requests": [
+      "proof.Target",
+      "java.lang.Object"
+    ],
+    "target_initialized_after": false
+  },
+  "changed-byte-pin": {
+    "schema": "HOTSPOT_VERIFICATION_PROBE_V1",
+    "session": "e311b3409cbb432f8cc7ed9d91053b5f",
+    "challenge": "ae34a7f3dd2018e1dc7459f8724b4fb818332d3f5b909721a0d6e27f4059823a",
+    "mode": "changed-byte-pin",
+    "production_authority": false,
+    "target_initialized_before": false,
+    "runtime_version": "1.8.0_504-b01",
+    "vm_version": "25.504-b01",
+    "vm_vendor": "Temurin",
+    "input_arguments": [
+      "-Xverify:all"
+    ],
+    "verify_local": true,
+    "verify_remote": true,
+    "security_manager": false,
+    "defined": false,
+    "trigger_started": false,
+    "trigger_returned": false,
+    "actual_sha256": "d22f75cd1cdf2e8b9223267a7956aaf1137b7783c19c60192e5435a65faad105",
+    "expected_sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+    "status": "REFUSED_HASH",
+    "target_initialized_after": false
+  },
+  "disabled-verification": {
+    "schema": "HOTSPOT_VERIFICATION_PROBE_V1",
+    "session": "6fa227ebd4e74b129995b9aa88beda93",
+    "challenge": "44c80370251d421bf763f5712ed96c6cfdf33dc760d1387d61cad2c78651b2db",
+    "mode": "disabled-verification",
+    "production_authority": false,
+    "target_initialized_before": false,
+    "runtime_version": "1.8.0_504-b01",
+    "vm_version": "25.504-b01",
+    "vm_vendor": "Temurin",
+    "input_arguments": [
+      "-Xverify:none"
+    ],
+    "verify_local": false,
+    "verify_remote": false,
+    "security_manager": false,
+    "defined": false,
+    "trigger_started": false,
+    "trigger_returned": false,
+    "status": "REFUSED_VERIFY_FLAGS",
+    "target_initialized_after": false
+  }
+}

@@ -1,0 +1,74 @@
+{
+  "schema": "HOTSPOT_PRIMARY_SOURCE_REVIEW_V1",
+  "retrieved_utc": "2026-09-27T02:20:02.006356+00:00",
+  "repository": "https://github.com/adoptium/jdk8u",
+  "commit": "1358e1b273e29392787e6feb32732304befaf1da",
+  "commit_api_sha256": "c31d671b07709fe0ead8b6285b3dbf5015d0d9e95380724c12e4d53ad1fef732",
+  "source_lead": "1358e1b273e2+",
+  "local_release_sha256": "e6cae76bfbad3be459eb5d730446d8e76b5d531f81a3d2dc14ebea6bc4e79fde",
+  "source_identity_limit": "Local release SOURCE ends '+': cited vendor source lead is not a reproducible build guarantee. Native binary hashes and actual controls are separately required.",
+  "license": "Consulted OpenJDK HotSpot source is GPL-2.0-only with applicable OpenJDK Assembly Exception; no HotSpot code is compiled into or copied into the original probe implementation.",
+  "sources": [
+    {
+      "path": "LICENSE",
+      "url": "https://raw.githubusercontent.com/adoptium/jdk8u/1358e1b273e29392787e6feb32732304befaf1da/LICENSE",
+      "sha256": "4b9abebc4338048a7c2dc184e9f800deb349366bdf28eb23c2677a77b4c87726",
+      "bytes": 19274,
+      "evidence_file": "D:\\minecraftrust-astra-hardening\\target\\hotspot-verification-proof\\primary-88d92b116423423885eb1e0dd4ce4aa9\\LICENSE"
+    },
+    {
+      "path": "ASSEMBLY_EXCEPTION",
+      "url": "https://raw.githubusercontent.com/adoptium/jdk8u/1358e1b273e29392787e6feb32732304befaf1da/ASSEMBLY_EXCEPTION",
+      "sha256": "a44eb7b5caf5534c6ef536b21edb40b4d6babf91bf97d9d45596868618b2c6fb",
+      "bytes": 1522,
+      "evidence_file": "D:\\minecraftrust-astra-hardening\\target\\hotspot-verification-proof\\primary-88d92b116423423885eb1e0dd4ce4aa9\\ASSEMBLY_EXCEPTION"
+    },
+    {
+      "path": "hotspot/src/share/vm/prims/jvm.cpp",
+      "url": "https://raw.githubusercontent.com/adoptium/jdk8u/1358e1b273e29392787e6feb32732304befaf1da/hotspot/src/share/vm/prims/jvm.cpp",
+      "sha256": "5817054d820c624f3c83be346794da4c89b0e6fd229597312cda76dfaf1cef11",
+      "bytes": 177564,
+      "evidence_file": "D:\\minecraftrust-astra-hardening\\target\\hotspot-verification-proof\\primary-88d92b116423423885eb1e0dd4ce4aa9\\hotspot\\src\\share\\vm\\prims\\jvm.cpp"
+    },
+    {
+      "path": "hotspot/src/share/vm/oops/instanceKlass.cpp",
+      "url": "https://raw.githubusercontent.com/adoptium/jdk8u/1358e1b273e29392787e6feb32732304befaf1da/hotspot/src/share/vm/oops/instanceKlass.cpp",
+      "sha256": "b8f1c1f2523e0e87514296f4525ba766abed588c84a727c29360110a0844c523",
+      "bytes": 148725,
+      "evidence_file": "D:\\minecraftrust-astra-hardening\\target\\hotspot-verification-proof\\primary-88d92b116423423885eb1e0dd4ce4aa9\\hotspot\\src\\share\\vm\\oops\\instanceKlass.cpp"
+    },
+    {
+      "path": "hotspot/src/share/vm/classfile/verifier.cpp",
+      "url": "https://raw.githubusercontent.com/adoptium/jdk8u/1358e1b273e29392787e6feb32732304befaf1da/hotspot/src/share/vm/classfile/verifier.cpp",
+      "sha256": "fb1ec928ddacc71026ad23786bb9c941ddfc73cb921598fb0fe95a9c1e86c182",
+      "bytes": 113628,
+      "evidence_file": "D:\\minecraftrust-astra-hardening\\target\\hotspot-verification-proof\\primary-88d92b116423423885eb1e0dd4ce4aa9\\hotspot\\src\\share\\vm\\classfile\\verifier.cpp"
+    },
+    {
+      "path": "hotspot/src/share/vm/classfile/verificationType.cpp",
+      "url": "https://raw.githubusercontent.com/adoptium/jdk8u/1358e1b273e29392787e6feb32732304befaf1da/hotspot/src/share/vm/classfile/verificationType.cpp",
+      "sha256": "dd49b5ed172a562ab35f96a7eb3adb812a4a3517e055b5596de6e6e36bbb8b75",
+      "bytes": 7017,
+      "evidence_file": "D:\\minecraftrust-astra-hardening\\target\\hotspot-verification-proof\\primary-88d92b116423423885eb1e0dd4ce4aa9\\hotspot\\src\\share\\vm\\classfile\\verificationType.cpp"
+    },
+    {
+      "path": "hotspot/src/share/vm/runtime/arguments.cpp",
+      "url": "https://raw.githubusercontent.com/adoptium/jdk8u/1358e1b273e29392787e6feb32732304befaf1da/hotspot/src/share/vm/runtime/arguments.cpp",
+      "sha256": "0e2284f71dacf8c6cc7e668cd90ee5422f409909ef1a8d2a97e36ee7d123a6a9",
+      "bytes": 170648,
+      "evidence_file": "D:\\minecraftrust-astra-hardening\\target\\hotspot-verification-proof\\primary-88d92b116423423885eb1e0dd4ce4aa9\\hotspot\\src\\share\\vm\\runtime\\arguments.cpp"
+    },
+    {
+      "path": "hotspot/src/share/vm/runtime/globals.hpp",
+      "url": "https://raw.githubusercontent.com/adoptium/jdk8u/1358e1b273e29392787e6feb32732304befaf1da/hotspot/src/share/vm/runtime/globals.hpp",
+      "sha256": "2980f3f0437a82d23a35d321422a9a0d3a30bcd5c2f89cce54182dad9a6074ad",
+      "bytes": 296766,
+      "evidence_file": "D:\\minecraftrust-astra-hardening\\target\\hotspot-verification-proof\\primary-88d92b116423423885eb1e0dd4ce4aa9\\hotspot\\src\\share\\vm\\runtime\\globals.hpp"
+    }
+  ],
+  "specification_urls": [
+    "https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-4.html#jvms-4.7.4",
+    "https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-5.html#jvms-5.4.1",
+    "https://docs.oracle.com/javase/8/docs/platform/jvmti/jvmti.html#GetClassStatus"
+  ]
+}

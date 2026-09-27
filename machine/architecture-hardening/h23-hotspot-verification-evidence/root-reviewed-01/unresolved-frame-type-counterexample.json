@@ -1,0 +1,66 @@
+{
+  "status": "VERIFIED_BUT_HIERARCHY_UNQUALIFIED",
+  "fixture": "null-missing-type",
+  "actual_sha256": "3dad390cb663c4e6227a8d0b8446bb5ee35dd7af00e96e8d908e7fda9659de0b",
+  "frame_types": [
+    "missing/Unknown"
+  ],
+  "verifier_loader_requests": [
+    "proof.Target",
+    "java.lang.Object"
+  ],
+  "explicit_binding_loader_requests": [
+    "proof.Target",
+    "java.lang.Object",
+    "missing.Unknown"
+  ],
+  "proof_row": {
+    "schema": "HOTSPOT_VERIFICATION_PROBE_V1",
+    "session": "5103e7e240764fd8b6fc49744f96586c",
+    "challenge": "6389d6d4dbdba8875242d4128e437fa5ea831a83a3af559c817f5134152b53e4",
+    "mode": "null-missing-type",
+    "production_authority": false,
+    "target_initialized_before": false,
+    "runtime_version": "1.8.0_504-b01",
+    "vm_version": "25.504-b01",
+    "vm_vendor": "Temurin",
+    "input_arguments": [
+      "-Xverify:all"
+    ],
+    "verify_local": true,
+    "verify_remote": true,
+    "security_manager": false,
+    "defined": true,
+    "trigger_started": true,
+    "trigger_returned": true,
+    "actual_sha256": "3dad390cb663c4e6227a8d0b8446bb5ee35dd7af00e96e8d908e7fda9659de0b",
+    "expected_sha256": "3dad390cb663c4e6227a8d0b8446bb5ee35dd7af00e96e8d908e7fda9659de0b",
+    "defining_loader_is_exact": true,
+    "target_initialized_after_define": false,
+    "declared_method_count": 1,
+    "method_names": [
+      "dormant:10"
+    ],
+    "status": "VERIFIED_BY_PINNED_LINK_TRIGGER",
+    "verification_loader_requests": [
+      "proof.Target",
+      "java.lang.Object"
+    ],
+    "frame_type_bindings": [
+      [
+        "missing/Unknown",
+        "UNRESOLVED",
+        "java.lang.ClassNotFoundException"
+      ]
+    ],
+    "frame_type_binding_complete": false,
+    "loader_requests": [
+      "proof.Target",
+      "java.lang.Object",
+      "missing.Unknown"
+    ],
+    "target_initialized_after": false
+  },
+  "implication": "Whole-class verification does not prove every frame object type was resolved or exists in the qualified hierarchy.",
+  "production_authority": false
+}

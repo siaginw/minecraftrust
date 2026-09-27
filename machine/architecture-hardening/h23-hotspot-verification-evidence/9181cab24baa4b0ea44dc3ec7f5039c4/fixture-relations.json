@@ -1,0 +1,221 @@
+[
+  {
+    "before": "valid-top",
+    "after": "valid-refined",
+    "before_identity": [
+      "CANONICAL_ID_V2",
+      "proof/Target",
+      "3fcf176f2d86f3e75c1ddd36633cb1ccf71af7763ccf00767cc42af7a855258d",
+      "682bacce423600499284450ca9afa9f11b7beb36240e3a1904e81d16161aab4e",
+      "1244162db254171eef86eb8deeb9bd5994f34b6bf68f76e4dadfba4c83da170a"
+    ],
+    "after_identity": [
+      "CANONICAL_ID_V2",
+      "proof/Target",
+      "401b5dd1f798826722ef554aa03addf18008bd5f383b124618efbd8a2d78a23f",
+      "682bacce423600499284450ca9afa9f11b7beb36240e3a1904e81d16161aab4e",
+      "84cd76389346ae3d449073134478dfc643db84c021b892ae55f6780f2ce3ad14"
+    ],
+    "relation": {
+      "status": "FIXTURE_RELATION_ONLY",
+      "changes": [
+        {
+          "method": [
+            "dormant",
+            "(Z)I"
+          ],
+          "before_max_stack": 1,
+          "after_max_stack": 1,
+          "before_frames": [
+            [
+              6,
+              -1,
+              [
+                [
+                  "verification_tag",
+                  1
+                ],
+                [
+                  "verification_tag",
+                  0
+                ]
+              ],
+              []
+            ]
+          ],
+          "after_frames": [
+            [
+              6,
+              -1,
+              [
+                [
+                  "verification_tag",
+                  1
+                ],
+                [
+                  "object",
+                  "java/lang/String"
+                ]
+              ],
+              []
+            ]
+          ]
+        }
+      ],
+      "frame_types": [
+        "java/lang/String"
+      ],
+      "pool_added": [
+        "[\"class\",\"java/lang/String\"]",
+        "[\"utf8\",\"java/lang/String\"]"
+      ],
+      "production_authority": false,
+      "general_frame_relation_implemented": false
+    }
+  },
+  {
+    "before": "valid-object",
+    "after": "valid-refined",
+    "before_identity": [
+      "CANONICAL_ID_V2",
+      "proof/Target",
+      "5c8bd45a5ddb534df36054b98b0f001a187d202533722957351f5cfa1650b390",
+      "682bacce423600499284450ca9afa9f11b7beb36240e3a1904e81d16161aab4e",
+      "d22f75cd1cdf2e8b9223267a7956aaf1137b7783c19c60192e5435a65faad105"
+    ],
+    "after_identity": [
+      "CANONICAL_ID_V2",
+      "proof/Target",
+      "401b5dd1f798826722ef554aa03addf18008bd5f383b124618efbd8a2d78a23f",
+      "682bacce423600499284450ca9afa9f11b7beb36240e3a1904e81d16161aab4e",
+      "84cd76389346ae3d449073134478dfc643db84c021b892ae55f6780f2ce3ad14"
+    ],
+    "relation": {
+      "status": "FIXTURE_RELATION_ONLY",
+      "changes": [
+        {
+          "method": [
+            "dormant",
+            "(Z)I"
+          ],
+          "before_max_stack": 1,
+          "after_max_stack": 1,
+          "before_frames": [
+            [
+              6,
+              -1,
+              [
+                [
+                  "verification_tag",
+                  1
+                ],
+                [
+                  "object",
+                  "java/lang/Object"
+                ]
+              ],
+              []
+            ]
+          ],
+          "after_frames": [
+            [
+              6,
+              -1,
+              [
+                [
+                  "verification_tag",
+                  1
+                ],
+                [
+                  "object",
+                  "java/lang/String"
+                ]
+              ],
+              []
+            ]
+          ]
+        }
+      ],
+      "frame_types": [
+        "java/lang/String"
+      ],
+      "pool_added": [
+        "[\"class\",\"java/lang/String\"]",
+        "[\"utf8\",\"java/lang/String\"]"
+      ],
+      "production_authority": false,
+      "general_frame_relation_implemented": false
+    }
+  },
+  {
+    "before": "valid-object",
+    "after": "valid-max",
+    "before_identity": [
+      "CANONICAL_ID_V2",
+      "proof/Target",
+      "5c8bd45a5ddb534df36054b98b0f001a187d202533722957351f5cfa1650b390",
+      "682bacce423600499284450ca9afa9f11b7beb36240e3a1904e81d16161aab4e",
+      "d22f75cd1cdf2e8b9223267a7956aaf1137b7783c19c60192e5435a65faad105"
+    ],
+    "after_identity": [
+      "CANONICAL_ID_V2",
+      "proof/Target",
+      "0fccc81e49e9d4112cca7a5e630f2869b95cf8df48033528cfc0a382974754e8",
+      "682bacce423600499284450ca9afa9f11b7beb36240e3a1904e81d16161aab4e",
+      "c72eb40a5ad76e15155312638aedb4a4224623ba7de7e931d1330c1aa8486f0e"
+    ],
+    "relation": {
+      "status": "FIXTURE_RELATION_ONLY",
+      "changes": [
+        {
+          "method": [
+            "dormant",
+            "(Z)I"
+          ],
+          "before_max_stack": 1,
+          "after_max_stack": 3,
+          "before_frames": [
+            [
+              6,
+              -1,
+              [
+                [
+                  "verification_tag",
+                  1
+                ],
+                [
+                  "object",
+                  "java/lang/Object"
+                ]
+              ],
+              []
+            ]
+          ],
+          "after_frames": [
+            [
+              6,
+              -1,
+              [
+                [
+                  "verification_tag",
+                  1
+                ],
+                [
+                  "object",
+                  "java/lang/Object"
+                ]
+              ],
+              []
+            ]
+          ]
+        }
+      ],
+      "frame_types": [
+        "java/lang/Object"
+      ],
+      "pool_added": [],
+      "production_authority": false,
+      "general_frame_relation_implemented": false
+    }
+  }
+]
