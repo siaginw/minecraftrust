@@ -20,23 +20,31 @@ class ForgeRuntimeTests(unittest.TestCase):
         jar = self.root / "forge.jar"
         with zipfile.ZipFile(jar, "w") as out:
             out.writestr("mapping.lzma", b"exact mapping fixture")
-        return {"schema_version": 1, "target": runtime.TARGET,
+        # A pins file names whatever runtime it was written against; the target is
+        # data, not a constant this module owns.
+        return {"schema_version": 1, "target": "synthetic-runtime",
                 "artifacts": [{"path": "forge.jar", "sha256": runtime.sha256(jar)}],
                 "forge_embedded_sha256": {"mapping.lzma": hashlib.sha256(b"exact mapping fixture").hexdigest()}}
 
     def qualified(self):
         pins = {"registry_identity_sha256": "r", "qualified_transformers": ["forge-transform"],
                 "loaded_mods": {"forge": "2860"}, "ordered_loaded_mods": [{"id": "forge", "version": "2860"}],
-                "coremod_plugin_classes": ["forge-plugin"], "required_transformed_sha256": {"Chunk": "c"}}
-        data = {"profile": runtime.PROFILE, "production_authority": False, "java_runtime_version": "1.8.0_504-b01",
-                "attach_capabilities_listener_count": 0, "chunk_load_listener_count": 0,
+                "coremod_plugin_classes": ["forge-plugin"], "required_transformed_sha256": {"Chunk": "c"},
+                "qualification_profile": "FORGE_SYNTHETIC_TRANSFORMED_V1", "java_runtime_version": "1.8.0_504-b01",
+                "observer": "PASSIVE_JVM_CLASS_DEFINITION_OBSERVER_NO_RETRANSFORMATION",
+                "listener_counts": {"attach_capabilities_listener_count": 0, "chunk_load_listener_count": 0},
                 "mod_lifecycle_executed": True, "farmland_water_ticket_map_empty": True,
                 "chunk_unload_listeners": ["net.minecraftforge.fml.common.eventhandler.EventPriority:NORMAL",
-                    "net.minecraftforge.fml.common.eventhandler.ASMEventHandler:ASM: net.minecraftforge.common.ForgeInternalHandler@IDENTITY onChunkUnload(Lnet/minecraftforge/event/world/ChunkEvent$Unload;)V"],
+                    "net.minecraftforge.fml.common.eventhandler.ASMEventHandler:ASM: net.minecraftforge.common.ForgeInternalHandler@IDENTITY onChunkUnload(Lnet/minecraftforge/event/world/ChunkEvent$Unload;)V"]}
+        data = {"profile": pins["qualification_profile"], "production_authority": False,
+                "java_runtime_version": pins["java_runtime_version"],
+                "attach_capabilities_listener_count": 0, "chunk_load_listener_count": 0,
+                "mod_lifecycle_executed": True, "farmland_water_ticket_map_empty": True,
+                "chunk_unload_listeners": list(pins["chunk_unload_listeners"]),
                 "registry_identity_sha256": "r", "transformers": ["forge-transform"], "loaded_mods": {"forge": "2860"},
                 "ordered_loaded_mods": [{"id": "forge", "version": "2860"}],
                 "registered_coremod_plugins": [{"class": "forge-plugin"}],
-                "observer": "PASSIVE_JVM_CLASS_DEFINITION_OBSERVER_NO_RETRANSFORMATION",
+                "observer": pins["observer"],
                 "transformed_classes": {"Chunk": "c"}}
         return data, pins
 
@@ -69,6 +77,24 @@ class ForgeRuntimeTests(unittest.TestCase):
         with self.assertRaises(runtime.Incomplete) as error:
             runtime.validate_artifacts(self.root, pins)
         self.assertEqual(error.exception.reason, "ARTIFACT_MISMATCH")
+
+    def test_pins_must_still_name_the_runtime_they_were_written_for(self):
+        # The target stopped being a hardcoded constant, not a requirement: a
+        # pins file that names no runtime cannot be tied to one, so it refuses.
+        for target in (None, "", 7, ["a"]):
+            pins = self.artifacts()
+            if target is None:
+                del pins["target"]
+            else:
+                pins["target"] = target
+            with self.subTest(target=target), self.assertRaises(runtime.Incomplete) as error:
+                runtime.validate_artifacts(self.root, pins)
+            self.assertEqual(error.exception.reason, "ARTIFACT_MISMATCH")
+        for schema in (0, 2, "1"):
+            pins = self.artifacts()
+            pins["schema_version"] = schema
+            with self.subTest(schema=schema), self.assertRaises(runtime.Incomplete):
+                runtime.validate_artifacts(self.root, pins)
 
     def test_full_qualified_profile_accepted(self):
         runtime.validate_qualification(*self.qualified())
