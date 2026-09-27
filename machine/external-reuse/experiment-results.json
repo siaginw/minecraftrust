@@ -133,6 +133,32 @@
       "installed_scope": "Standalone tools/entity-storage-experiment;104 locked packages,62 selected native tree entries,7170 source files,208 notices",
       "evidence": "machine/architecture-hardening/h11-entity-storage.json",
       "provenance": "tools/entity-storage-experiment/third-party/inventory.json"
+    },
+    {
+      "candidate": "fastnbt",
+      "version": "2.6.3",
+      "decision": "AVOID",
+      "license": "MIT",
+      "reason": "Avoid tested Value representation as lossless drop-in: order, duplicate/type/string preservation losses; no blanket rejection of custom visitors",
+      "performance_value": "Complete fixture read/decompress/parse/edit/compress/sync/rename/reopen timings; no server speed claim",
+      "migration_value": "Tests whether native persistence can preserve opaque Forge/mod data",
+      "integration_risk": "New lossless visitor model would need independent evidence; existing successful narrow cases do not establish save fidelity",
+      "installed_scope": "Isolated tools/nbt-region-experiment only;31 locked registry dependencies;separate pinned nightly under target",
+      "evidence": "machine/architecture-hardening/h9-nbt-region-pipeline.json",
+      "provenance": "tools/nbt-region-experiment/PROVENANCE.json"
+    },
+    {
+      "candidate": "simdnbt",
+      "version": "0.10.0",
+      "decision": "PROTOTYPE",
+      "license": "MIT",
+      "reason": "All40 valid raw preservation fixtures exact; keep research candidate alongside raw-span baseline",
+      "performance_value": "Complete fixture read/decompress/parse/edit/compress/sync/rename/reopen timings; no server speed claim",
+      "migration_value": "Tests whether native persistence can preserve opaque Forge/mod data",
+      "integration_risk": "Unsafe internals, isolated nightly, real mod corpus/fuzz/lifecycle and whole-operation benefit remain unqualified",
+      "installed_scope": "Isolated tools/nbt-region-experiment only;31 locked registry dependencies;separate pinned nightly under target",
+      "evidence": "machine/architecture-hardening/h9-nbt-region-pipeline.json",
+      "provenance": "tools/nbt-region-experiment/PROVENANCE.json"
     }
   ]
 }

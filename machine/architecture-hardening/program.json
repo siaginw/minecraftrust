@@ -179,11 +179,29 @@
     {
       "id": "H9",
       "title": "NATIVE NBT / REGION PIPELINE",
-      "status": "PENDING",
-      "implementation": [],
-      "validation": [],
-      "evidence": [],
-      "commit": null
+      "status": "PROTOTYPE_VALIDATED",
+      "implementation": [
+        "tools/nbt-region-experiment",
+        "docs/research/nbt-region-pipeline.md"
+      ],
+      "validation": [
+        "216 generated fixture cases;15 transaction/bounds controls;4 actual-process Job failure controls;strict clippy/fmt;independent root final campaign PASS",
+        "Custom raw span and simdnbt40 exact each;14 malformed inputs refused before each candidate;all existing/fastnbt representation losses preserved"
+      ],
+      "evidence": [
+        "machine/architecture-hardening/h9-nbt-region-pipeline.json"
+      ],
+      "commit": null,
+      "outstanding": [
+        "Only generated fixtures and checked LastUpdate increment; not general schema editing or real mod save corpus",
+        "Malformed inputs qualify shared structural guard, not unsafe candidate parser fuzz safety",
+        "Warm-cache full-file append/replace with orphan old sectors; no production free-sector allocator or crash recovery",
+        "No external writer exclusion or directory power-loss durability",
+        "Dependencies archive/source-verified before build; not full after-run dependency/system-DLL environment closure",
+        "512MiB Job process commit cap and observed peaks are not allocator retention or RSS",
+        "Five timing samples and no server benchmark; compression is same isolated zlib-rs configuration with production unchanged",
+        "Real runtime ownership, version schema, unload/disk scheduling and save replay remain required"
+      ]
     },
     {
       "id": "H10",
@@ -693,7 +711,7 @@
     {
       "id": "H28",
       "title": "TEMPORARY SCAFFOLD EXIT PLAN",
-      "status": "EXIT_PLAN_VALIDATED",
+      "status": "EXIT_PLAN_COMMITTED",
       "implementation": [
         "docs/architecture/scaffold-exit-plan.md",
         "machine/architecture-hardening/scaffold-exit-plan.json"
@@ -704,7 +722,7 @@
       "evidence": [
         "machine/architecture-hardening/scaffold-exit-plan.json"
       ],
-      "commit": null,
+      "commit": "9cba1b3",
       "outstanding": [
         "Replacement evidence and removal decisions remain owned by dependent milestones; preserve all scaffolding until its listed gates pass"
       ]

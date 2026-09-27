@@ -1,0 +1,306 @@
+{
+  "schema": "H9_NBT_REGION_EXPERIMENT_V1",
+  "status": "FAIL",
+  "production_authority": false,
+  "scope": "GENERATED_FIXTURE_ONLY_NO_LIVE_WORLD",
+  "start_utc": "2026-09-27T01:23:31.448173+00:00",
+  "source_before": {
+    "Cargo.lock": "5ecfd54d11d1046b9b5ce8ff30f0e4520a60612fd6a9ec2007d7e88474404c2c",
+    "Cargo.toml": "ceaf10e69829d9488f89719c1fbc7889832f66f77234bb222b20625b34443c41",
+    "crates\\compression\\Cargo.toml": "4895b32bbb0ddbf52906b99964e60454aad47a1288d05b3a3995a64d6c12967d",
+    "crates\\core-types\\Cargo.toml": "00383c33bbd1fb38b76e11d3cded64ff8832ce65efdf7620e00583613c2d2f82",
+    "crates\\core-types\\src\\lib.rs": "630c3b67eeed6fd4e8216e3418656e7851728199391f4155ac94da852fe11521",
+    "crates\\nbt\\Cargo.toml": "af740ed4473def3917699526200a03eb6b00b5997a6b61276ab3e23adefcb314",
+    "crates\\nbt\\src\\codec.rs": "8eed3209ef4817f7e5c1076dedf2d4473ebe5a0ebcef8acfbf017894922a3782",
+    "crates\\nbt\\src\\lib.rs": "aa69fd9bc5d2caeeb42460f95d5d0aa343ab48682f02a91ec7406208d93c5852",
+    "crates\\nbt\\src\\mutf8.rs": "055000a5760f4c6c8e44aa729552a1f3763b1c2f85142d66b20efa38803e753a",
+    "crates\\nbt\\src\\tape.rs": "44267a09feafac4d1a2a5e2098cdce509675703920b167a9b1e3adc4ff3af0e2",
+    "crates\\nbt\\src\\tests.rs": "e8967ff927637276b3e77da0cdf17bc37b03452625a625d75ac75a9977185b93",
+    "crates\\region-io\\src\\lib.rs": "492b3ec81d212e3c8c1405fe8ff1e88d097e143a84872d6d4337f7d28a9972ee",
+    "tools\\nbt-region-experiment\\Cargo.lock": "63bd0e858eb3667cc6adce0d0f190014a6501cc3bf7371dc4c763e8da6d75561",
+    "tools\\nbt-region-experiment\\Cargo.toml": "46154164dc971f6f71c42123bf9ed21daf2916ea2f0cc34c266de810b9e250a5",
+    "tools\\nbt-region-experiment\\java\\NbtFixtureOracle.java": "ceccc93566d976f57b19d5b79b06328e42f8d777e79823358f27c7a8e4a141f3",
+    "tools\\nbt-region-experiment\\job.py": "d96463cd8e8ced2cd670ca748b04479f9978ab2a5615f7e5d8bf0475858aa31d",
+    "tools\\nbt-region-experiment\\licenses\\fastnbt-MIT.txt": "09dbb44f72a02771daf763db1419ac897f24b433ef739bdd1620cbab2b7fe35c",
+    "tools\\nbt-region-experiment\\licenses\\simdnbt-MIT.txt": "c46eb0dccbfdbbe66b20d470edf7dee4d80b551f2319c05abf4adc02719e39ef",
+    "tools\\nbt-region-experiment\\PROVENANCE.json": "41ba6dc6b06417f0be7a6fb8906f11b509697e565086af0e7a0461b910c8fb8f",
+    "tools\\nbt-region-experiment\\run.py": "048418b37d4b6e45abd610a24802c436bb4d69aa7ffec45468a460c175a0c2b1",
+    "tools\\nbt-region-experiment\\src\\candidates.rs": "9e8ddb2047888a5c13b987bef8db154ca6f3556115e64907a6b115bddeef3bfa",
+    "tools\\nbt-region-experiment\\src\\lossless.rs": "fbd9f918dc2ebb43faebbaf14c096c1a3e90c745eb92cf02ee00844e79acb154",
+    "tools\\nbt-region-experiment\\src\\main.rs": "871b937d0844df9c6196538ecc837eb3e04583bda1be0e391ddf206bf47d3024",
+    "tools\\nbt-region-experiment\\src\\region.rs": "ae54984c7871c5d2ec1cf62b525f39355bb1f0d6908cd13377796a922ffb0122",
+    "tools\\testing\\hardening_guard.py": "a2062b3ffbec7edba79bf5f5954fbcb1e9d97492ab9c4bb541833ebb820bdb6d"
+  },
+  "tool_hashes": {
+    "C:\\Users\\Admin\\.cargo\\bin\\cargo.exe": "6f4bef66261261fcb43131be8720bab817d403a09edec7455c371974b90bdb7e",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\bin\\java.exe": "65ebee06ec47df0c41c4483ac5aa408e55adb47a1613bad56be30bccc4317e85",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\bin\\javac.exe": "9f1dae15ffb49c7363c72351cf61f4889ac6896e3df87c1c5553b81745ae8a07",
+    "C:\\Python314\\python.exe": "4942b86a6597e5aee0128daa00050ed79bc21f6e709a78eb19cbfeb0c2f39ac9",
+    "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h9-toolchains\\toolchains\\nightly-2026-09-24-x86_64-pc-windows-msvc\\bin\\cargo.exe": "a92c13e35f99fdf17c1c7e201b1c595c2070e835cd574660b2907f7b13c88c69",
+    "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h9-toolchains\\toolchains\\nightly-2026-09-24-x86_64-pc-windows-msvc\\bin\\rustc.exe": "b6abfaa00ed1b61079ef387772d2d6c7462a7a698e599d80848b545b3ab35377",
+    "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h9-toolchains\\toolchains\\nightly-2026-09-24-x86_64-pc-windows-msvc\\bin\\rustfmt.exe": "234dee5346cb80606b34c003bffc42916e8bd23661a161ffe884b1d0b95b6a10",
+    "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h9-toolchains\\toolchains\\nightly-2026-09-24-x86_64-pc-windows-msvc\\bin\\cargo-clippy.exe": "e3bee424e4a2bf48302dfd4dc972700c61d5c433beb599b4d89b426570abcecf",
+    "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h9-toolchains\\toolchains\\nightly-2026-09-24-x86_64-pc-windows-msvc\\bin\\clippy-driver.exe": "ee7bf470cc5e9f778b676b822bf0d0030e47f5a5347ca065af92b9185a40ac56"
+  },
+  "toolchain": "nightly-2026-09-24",
+  "environment_removed_names": [
+    "RUST_LOG"
+  ],
+  "limits": {
+    "parser_process_memory_mib": 512,
+    "parser_timeout_seconds": 30,
+    "raw_nbt_bytes": 2097152,
+    "compressed_bytes": 1048576,
+    "region_bytes": 16777216,
+    "depth": 64,
+    "nodes": 200000,
+    "sequence": 1000000
+  },
+  "compression": {
+    "flate2": "1.1.10",
+    "zlib_rs": "0.6.8",
+    "level": 6,
+    "backend_proof": "resolved Cargo features plus pinned flate2 cfg source; no runtime backend API",
+    "resolved_features": [
+      "any_impl",
+      "any_zlib",
+      "default",
+      "miniz_oxide",
+      "runtime_detection",
+      "rust_backend",
+      "zlib-rs"
+    ]
+  },
+  "host": {
+    "platform": "Windows-11-10.0.26200-SP0",
+    "cpu_hint": "AMD64 Family 25 Model 97 Stepping 2, AuthenticAMD",
+    "exclusive": false
+  },
+  "processes": [
+    {
+      "name": "resolve-cargo",
+      "argv": [
+        "C:\\Users\\Admin\\.cargo\\bin\\rustup.exe",
+        "which",
+        "--toolchain",
+        "nightly-2026-09-24",
+        "cargo"
+      ],
+      "returncode": 0,
+      "seconds": 0.02392070001224056,
+      "timed_out": false,
+      "stdout_sha256": "3b6790ab0deb364f0ee7e0c11dd4a8feed871b634bf3928b0c8cffbe0abb9ce0",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "limited_job": false,
+      "stdout_bytes": 144,
+      "stderr_bytes": 0
+    },
+    {
+      "name": "resolve-rustc",
+      "argv": [
+        "C:\\Users\\Admin\\.cargo\\bin\\rustup.exe",
+        "which",
+        "--toolchain",
+        "nightly-2026-09-24",
+        "rustc"
+      ],
+      "returncode": 0,
+      "seconds": 0.0207941000116989,
+      "timed_out": false,
+      "stdout_sha256": "95cc47c5c69e97f012b298b2e5146d9b3d15794c757a1915dfc75a9068d3b5d4",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "limited_job": false,
+      "stdout_bytes": 144,
+      "stderr_bytes": 0
+    },
+    {
+      "name": "resolve-rustfmt",
+      "argv": [
+        "C:\\Users\\Admin\\.cargo\\bin\\rustup.exe",
+        "which",
+        "--toolchain",
+        "nightly-2026-09-24",
+        "rustfmt"
+      ],
+      "returncode": 0,
+      "seconds": 0.02184160001343116,
+      "timed_out": false,
+      "stdout_sha256": "7a7b206057ec22e378e77a4532f5fcd18641fd906832e16d3025637610568035",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "limited_job": false,
+      "stdout_bytes": 146,
+      "stderr_bytes": 0
+    },
+    {
+      "name": "resolve-cargo-clippy",
+      "argv": [
+        "C:\\Users\\Admin\\.cargo\\bin\\rustup.exe",
+        "which",
+        "--toolchain",
+        "nightly-2026-09-24",
+        "cargo-clippy"
+      ],
+      "returncode": 0,
+      "seconds": 0.018840999982785434,
+      "timed_out": false,
+      "stdout_sha256": "4a4be73262237202470261b8b78ea88e76b7ba73920afff9edfb15bf751c3c34",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "limited_job": false,
+      "stdout_bytes": 151,
+      "stderr_bytes": 0
+    },
+    {
+      "name": "resolve-clippy-driver",
+      "argv": [
+        "C:\\Users\\Admin\\.cargo\\bin\\rustup.exe",
+        "which",
+        "--toolchain",
+        "nightly-2026-09-24",
+        "clippy-driver"
+      ],
+      "returncode": 0,
+      "seconds": 0.01959400001214817,
+      "timed_out": false,
+      "stdout_sha256": "728304fdc537ee26d22c3878409b0afbc1cab7b206c201aa7f6b7435377b6197",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "limited_job": false,
+      "stdout_bytes": 152,
+      "stderr_bytes": 0
+    },
+    {
+      "name": "rustc-version",
+      "argv": [
+        "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h9-toolchains\\toolchains\\nightly-2026-09-24-x86_64-pc-windows-msvc\\bin\\rustc.exe",
+        "--version",
+        "--verbose"
+      ],
+      "returncode": 0,
+      "seconds": 0.028244099987205118,
+      "timed_out": false,
+      "stdout_sha256": "9cf8a731572f608f96f4cf0021e3113de26106bf27e1b597b30ce0d7ae1387dc",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "limited_job": false,
+      "stdout_bytes": 212,
+      "stderr_bytes": 0
+    },
+    {
+      "name": "metadata",
+      "argv": [
+        "C:\\Users\\Admin\\.cargo\\bin\\cargo.exe",
+        "+nightly-2026-09-24",
+        "metadata",
+        "--manifest-path",
+        "D:\\minecraftrust-astra-hardening\\tools\\nbt-region-experiment\\Cargo.toml",
+        "--locked",
+        "--offline",
+        "--format-version",
+        "1"
+      ],
+      "returncode": 0,
+      "seconds": 0.16121029999339953,
+      "timed_out": false,
+      "stdout_sha256": "f839ec80ce8988abd24dc985ed9f911c142df13feeb517638eeb104fd11bcb63",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "limited_job": false,
+      "stdout_bytes": 141034,
+      "stderr_bytes": 0
+    }
+  ],
+  "cases": [],
+  "isolation_before": {
+    "schema_version": 1,
+    "kind": "HARDENING_ISOLATION_GATE_CHECK",
+    "status": "PASS",
+    "failures": [],
+    "original_observed": {
+      "head": "c4b868db2c9e4b03f745bf93c6ebf4fd8a8519e7",
+      "branch": "issue1-jni-v2",
+      "status": [
+        " M tools/live-capture/live_client_session.py",
+        "?? tools/live-capture/__pycache__/",
+        "?? tools/live-capture/run_rev_shadow.py"
+      ],
+      "files": [
+        {
+          "path": "D:\\minecraftrust\\tools\\live-capture\\live_client_session.py",
+          "sha256": "151c356161695aba3db3c1a8cbd589b5eda2b5a1770dff59ab21b728d36cabfa"
+        },
+        {
+          "path": "D:\\minecraftrust\\tools\\live-capture\\run_rev_shadow.py",
+          "sha256": "2b9b2aca49e57dd0d2a74bec46efcdc0ac7f95762a733276e27ff9dbcb472d93"
+        }
+      ]
+    },
+    "isolated_worktree": "D:\\minecraftrust-astra-hardening",
+    "isolated_head": "b4d109835f9e6e336b1f4501947955c7a8606f9e",
+    "isolated_branch": "astra/architecture-hardening",
+    "production_gate_checks": {
+      "tryEncode_fail_closed": true,
+      "productionAuthorityEligible_false": true
+    },
+    "scope": "read-only original HEAD/status/two paused source hashes plus conservative source guards; runtime authority tests remain required"
+  },
+  "rustc_version": "rustc 1.100.0-nightly (6eeff9a52 2026-09-23)\nbinary: rustc\ncommit-hash: 6eeff9a52c3e35c4c4cbf5651f342dcd2191866f\ncommit-date: 2026-09-23\nhost: x86_64-pc-windows-msvc\nrelease: 1.100.0-nightly\nLLVM version: 23.1.1\n",
+  "error": "FileNotFoundError: [Errno 2] No such file or directory: 'C:\\\\Users\\\\Admin\\\\.cargo\\\\registry\\\\src\\\\index.crates.io-1949cf8c6b5b557f\\\\adler2-2.0.1\\\\.cargo-checksum.json'",
+  "source_after": {
+    "Cargo.lock": "5ecfd54d11d1046b9b5ce8ff30f0e4520a60612fd6a9ec2007d7e88474404c2c",
+    "Cargo.toml": "ceaf10e69829d9488f89719c1fbc7889832f66f77234bb222b20625b34443c41",
+    "crates\\compression\\Cargo.toml": "4895b32bbb0ddbf52906b99964e60454aad47a1288d05b3a3995a64d6c12967d",
+    "crates\\core-types\\Cargo.toml": "00383c33bbd1fb38b76e11d3cded64ff8832ce65efdf7620e00583613c2d2f82",
+    "crates\\core-types\\src\\lib.rs": "630c3b67eeed6fd4e8216e3418656e7851728199391f4155ac94da852fe11521",
+    "crates\\nbt\\Cargo.toml": "af740ed4473def3917699526200a03eb6b00b5997a6b61276ab3e23adefcb314",
+    "crates\\nbt\\src\\codec.rs": "8eed3209ef4817f7e5c1076dedf2d4473ebe5a0ebcef8acfbf017894922a3782",
+    "crates\\nbt\\src\\lib.rs": "aa69fd9bc5d2caeeb42460f95d5d0aa343ab48682f02a91ec7406208d93c5852",
+    "crates\\nbt\\src\\mutf8.rs": "055000a5760f4c6c8e44aa729552a1f3763b1c2f85142d66b20efa38803e753a",
+    "crates\\nbt\\src\\tape.rs": "44267a09feafac4d1a2a5e2098cdce509675703920b167a9b1e3adc4ff3af0e2",
+    "crates\\nbt\\src\\tests.rs": "e8967ff927637276b3e77da0cdf17bc37b03452625a625d75ac75a9977185b93",
+    "crates\\region-io\\src\\lib.rs": "492b3ec81d212e3c8c1405fe8ff1e88d097e143a84872d6d4337f7d28a9972ee",
+    "tools\\nbt-region-experiment\\Cargo.lock": "63bd0e858eb3667cc6adce0d0f190014a6501cc3bf7371dc4c763e8da6d75561",
+    "tools\\nbt-region-experiment\\Cargo.toml": "46154164dc971f6f71c42123bf9ed21daf2916ea2f0cc34c266de810b9e250a5",
+    "tools\\nbt-region-experiment\\java\\NbtFixtureOracle.java": "ceccc93566d976f57b19d5b79b06328e42f8d777e79823358f27c7a8e4a141f3",
+    "tools\\nbt-region-experiment\\job.py": "d96463cd8e8ced2cd670ca748b04479f9978ab2a5615f7e5d8bf0475858aa31d",
+    "tools\\nbt-region-experiment\\licenses\\fastnbt-MIT.txt": "09dbb44f72a02771daf763db1419ac897f24b433ef739bdd1620cbab2b7fe35c",
+    "tools\\nbt-region-experiment\\licenses\\simdnbt-MIT.txt": "c46eb0dccbfdbbe66b20d470edf7dee4d80b551f2319c05abf4adc02719e39ef",
+    "tools\\nbt-region-experiment\\PROVENANCE.json": "41ba6dc6b06417f0be7a6fb8906f11b509697e565086af0e7a0461b910c8fb8f",
+    "tools\\nbt-region-experiment\\run.py": "048418b37d4b6e45abd610a24802c436bb4d69aa7ffec45468a460c175a0c2b1",
+    "tools\\nbt-region-experiment\\src\\candidates.rs": "9e8ddb2047888a5c13b987bef8db154ca6f3556115e64907a6b115bddeef3bfa",
+    "tools\\nbt-region-experiment\\src\\lossless.rs": "fbd9f918dc2ebb43faebbaf14c096c1a3e90c745eb92cf02ee00844e79acb154",
+    "tools\\nbt-region-experiment\\src\\main.rs": "871b937d0844df9c6196538ecc837eb3e04583bda1be0e391ddf206bf47d3024",
+    "tools\\nbt-region-experiment\\src\\region.rs": "ae54984c7871c5d2ec1cf62b525f39355bb1f0d6908cd13377796a922ffb0122",
+    "tools\\testing\\hardening_guard.py": "a2062b3ffbec7edba79bf5f5954fbcb1e9d97492ab9c4bb541833ebb820bdb6d"
+  },
+  "isolation_after": {
+    "schema_version": 1,
+    "kind": "HARDENING_ISOLATION_GATE_CHECK",
+    "status": "PASS",
+    "failures": [],
+    "original_observed": {
+      "head": "c4b868db2c9e4b03f745bf93c6ebf4fd8a8519e7",
+      "branch": "issue1-jni-v2",
+      "status": [
+        " M tools/live-capture/live_client_session.py",
+        "?? tools/live-capture/__pycache__/",
+        "?? tools/live-capture/run_rev_shadow.py"
+      ],
+      "files": [
+        {
+          "path": "D:\\minecraftrust\\tools\\live-capture\\live_client_session.py",
+          "sha256": "151c356161695aba3db3c1a8cbd589b5eda2b5a1770dff59ab21b728d36cabfa"
+        },
+        {
+          "path": "D:\\minecraftrust\\tools\\live-capture\\run_rev_shadow.py",
+          "sha256": "2b9b2aca49e57dd0d2a74bec46efcdc0ac7f95762a733276e27ff9dbcb472d93"
+        }
+      ]
+    },
+    "isolated_worktree": "D:\\minecraftrust-astra-hardening",
+    "isolated_head": "b4d109835f9e6e336b1f4501947955c7a8606f9e",
+    "isolated_branch": "astra/architecture-hardening",
+    "production_gate_checks": {
+      "tryEncode_fail_closed": true,
+      "productionAuthorityEligible_false": true
+    },
+    "scope": "read-only original HEAD/status/two paused source hashes plus conservative source guards; runtime authority tests remain required"
+  },
+  "finish_utc": "2026-09-27T01:23:32.255877+00:00"
+}
