@@ -337,11 +337,29 @@
     {
       "id": "H15",
       "title": "OBSERVABILITY PLATFORM",
-      "status": "PENDING",
-      "implementation": [],
-      "validation": [],
-      "evidence": [],
-      "commit": null
+      "status": "FOUNDATION_VALIDATED_LIVE_ADAPTERS_PENDING",
+      "implementation": [
+        "crates/native-observability",
+        "tools/observability",
+        "docs/architecture/observability.md"
+      ],
+      "validation": [
+        "Root final3fork6sample rerun PASS:13Rust tests,scopedfmt/clippy,65Java assertions and4attempt-rejection controls\u00d74processes,20400actual callback values,9stage imports,10malformed imports,162Java/40native timing rows"
+      ],
+      "evidence": [
+        "machine/architecture-hardening/h15-observability.json"
+      ],
+      "commit": null,
+      "outstanding": [
+        "No live tick/MSPT or complete mod-dispatch adapter",
+        "No production network/queue/lock/snapshot-retention/allocator adapters",
+        "No full Java/JNI transition pairing",
+        "No H4 issuer-certified capability lineage integration",
+        "Final agent-order and unload/redefinition closure remains live qualification work",
+        "Disabled/enabled callback overhead is a synthetic preallocated-body microbenchmark, not whole-server overhead",
+        "About35.8MB histogram counter storage for aggregate+8workers; bounded memory but nontrivial",
+        "Pre-fix final01/root-reviewed01 receipts preserved as historical PASS before discovered redefinition-attempt attribution defect; current root lifecycle-final supersedes them"
+      ]
     },
     {
       "id": "H16",
@@ -552,7 +570,8 @@
       ],
       "prerequisite_commits": [
         "7bb5326e7fc0d986f218f633c986895756552597",
-        "ad274e7"
+        "ad274e7",
+        "0ab1f71bea44d5f57c9cd27d022f33326919d49b"
       ]
     },
     {

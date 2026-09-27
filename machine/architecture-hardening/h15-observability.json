@@ -1,0 +1,793 @@
+{
+  "schema": "H15_ROOT_REVIEWED_OBSERVABILITY_V1",
+  "status": "FOUNDATION_WITH_OFFLINE_ADAPTERS",
+  "live_runtime_coverage": "INCOMPLETE",
+  "production_authority": false,
+  "root_receipt_sha256": "bd740ac521e815ee1e731c118654c392adfc937fbf4adc9c86fa0ed8a7f86822",
+  "validation": {
+    "rust_tests": 13,
+    "rust_fmt": "PASS",
+    "rust_clippy_no_deps_all_targets_warnings_deny": "PASS",
+    "java_deterministic_assertions_per_process": 65,
+    "java_deterministic_processes": 4,
+    "offline_forge_forks": 3,
+    "actual_noise_raw_double_comparisons": 20400,
+    "stage_import_batches": 9,
+    "malformed_import_controls": 10,
+    "java_warmup_rows": 54,
+    "java_measured_rows": 108,
+    "native_measured_rows": 40,
+    "subprocess_count": 41,
+    "successful_subprocesses": 31,
+    "expected_rejection_subprocesses": 10,
+    "source_inputs": 56,
+    "registry_archives_and_source_trees": 4,
+    "postrun_existing_observer_identity_verified": true,
+    "rejected_definition_attempt_controls_per_process": 4
+  },
+  "root_callback_overhead": {
+    "0": {
+      "sample_count": 18,
+      "median_ns_per_callback_operation": 2.543,
+      "min_ns": 2.316,
+      "max_ns": 4.216,
+      "thread_allocated_bytes": [
+        24,
+        24,
+        24,
+        24,
+        24,
+        24,
+        24,
+        24,
+        24,
+        24,
+        24,
+        24,
+        24,
+        24,
+        24,
+        24,
+        24,
+        24
+      ]
+    },
+    "1": {
+      "sample_count": 18,
+      "median_ns_per_callback_operation": 7.0865,
+      "min_ns": 5.599,
+      "max_ns": 11.214,
+      "thread_allocated_bytes": [
+        24,
+        24,
+        24,
+        24,
+        24,
+        24,
+        24,
+        24,
+        24,
+        24,
+        24,
+        24,
+        24,
+        24,
+        24,
+        24,
+        24,
+        24
+      ]
+    },
+    "2": {
+      "sample_count": 18,
+      "median_ns_per_callback_operation": 81.441,
+      "min_ns": 68.357,
+      "max_ns": 101.358,
+      "thread_allocated_bytes": [
+        24,
+        24,
+        24,
+        24,
+        24,
+        24,
+        24,
+        24,
+        24,
+        24,
+        24,
+        24,
+        24,
+        24,
+        24,
+        24,
+        24,
+        24
+      ]
+    },
+    "3": {
+      "sample_count": 18,
+      "median_ns_per_callback_operation": 5.075,
+      "min_ns": 3.42,
+      "max_ns": 6.404,
+      "thread_allocated_bytes": [
+        24,
+        24,
+        24,
+        24,
+        24,
+        24,
+        24,
+        24,
+        24,
+        24,
+        24,
+        24,
+        24,
+        24,
+        24,
+        24,
+        24,
+        24
+      ]
+    },
+    "4": {
+      "sample_count": 18,
+      "median_ns_per_callback_operation": 12.896,
+      "min_ns": 8.129,
+      "max_ns": 17.298,
+      "thread_allocated_bytes": [
+        24,
+        24,
+        24,
+        24,
+        24,
+        24,
+        24,
+        24,
+        24,
+        24,
+        24,
+        24,
+        24,
+        24,
+        24,
+        24,
+        24,
+        24
+      ]
+    },
+    "5": {
+      "sample_count": 18,
+      "median_ns_per_callback_operation": 174.62150000000003,
+      "min_ns": 135.438,
+      "max_ns": 202.077,
+      "thread_allocated_bytes": [
+        24,
+        24,
+        24,
+        24,
+        24,
+        24,
+        24,
+        24,
+        24,
+        24,
+        24,
+        24,
+        24,
+        24,
+        24,
+        24,
+        24,
+        24
+      ]
+    }
+  },
+  "native_recording_coverage": {
+    "kind": "coverage",
+    "recording_alloc_bytes": 0,
+    "recording_alloc_events": 0,
+    "histogram_counter_bytes": 3981312,
+    "trace_kept": 256,
+    "trace_dropped": 5994,
+    "working_set_bytes": 17285120,
+    "private_commit_bytes": 13074432,
+    "native_allocator_live_bytes": null
+  },
+  "retained_evidence": [
+    {
+      "source": "target/architecture-hardening/h15-root-reviewed-01/bootstrap-javac.log",
+      "retained": "machine/architecture-hardening/h15-observability-evidence/h15-root-reviewed-01/bootstrap-javac.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h15-root-reviewed-01/cargo-metadata.log",
+      "retained": "machine/architecture-hardening/h15-observability-evidence/h15-root-reviewed-01/cargo-metadata.log.txt",
+      "sha256": "bfe09064b580ed77149c14a05d69816940b296001adc01b9305e259d892c9d23"
+    },
+    {
+      "source": "target/architecture-hardening/h15-root-reviewed-01/deterministic-java.log",
+      "retained": "machine/architecture-hardening/h15-observability-evidence/h15-root-reviewed-01/deterministic-java.log.txt",
+      "sha256": "63f77853f7666898c96c492ce7fe4bffb24c314d84df8dffe0f8372af09c4a38"
+    },
+    {
+      "source": "target/architecture-hardening/h15-root-reviewed-01/deterministic.json",
+      "retained": "machine/architecture-hardening/h15-observability-evidence/h15-root-reviewed-01/deterministic.json",
+      "sha256": "ab58b650ae2e6ed41ea0ccef83e76fe3f6761807109718c80926b2bdec6f4ea7"
+    },
+    {
+      "source": "target/architecture-hardening/h15-root-reviewed-01/fork-0/oracle/actual-callback-stages.tsv",
+      "retained": "machine/architecture-hardening/h15-observability-evidence/h15-root-reviewed-01/fork-0/oracle/actual-callback-stages.tsv",
+      "sha256": "c3f9bd7684e392d28874101b86533cd14909181de40b548fc4325f3c7d383710"
+    },
+    {
+      "source": "target/architecture-hardening/h15-root-reviewed-01/fork-0/oracle/result.json",
+      "retained": "machine/architecture-hardening/h15-observability-evidence/h15-root-reviewed-01/fork-0/oracle/result.json",
+      "sha256": "f497e0a5d5280239c72fcd7ccd580cac6e0e93d3380fd533e26db6bfe5c8e4bc"
+    },
+    {
+      "source": "target/architecture-hardening/h15-root-reviewed-01/fork-0/oracle/synthetic-known-ticks.tsv",
+      "retained": "machine/architecture-hardening/h15-observability-evidence/h15-root-reviewed-01/fork-0/oracle/synthetic-known-ticks.tsv",
+      "sha256": "d863d3b4ddce4c281b093c2400303f9f657d208dde1c35fea49246a47d222276"
+    },
+    {
+      "source": "target/architecture-hardening/h15-root-reviewed-01/fork-0/oracle/synthetic-loss-stages.tsv",
+      "retained": "machine/architecture-hardening/h15-observability-evidence/h15-root-reviewed-01/fork-0/oracle/synthetic-loss-stages.tsv",
+      "sha256": "b653b066502e45ba4be3827c2233ac21102f1b0dd27ab2b4ab06c0c05fd6c05c"
+    },
+    {
+      "source": "target/architecture-hardening/h15-root-reviewed-01/fork-0/qualification.json",
+      "retained": "machine/architecture-hardening/h15-observability-evidence/h15-root-reviewed-01/fork-0/qualification.json",
+      "sha256": "a4162aafbfbe6003a5e150bde04cfab7f9ee93d9cda5adb7245f3a1e5df88d99"
+    },
+    {
+      "source": "target/architecture-hardening/h15-root-reviewed-01/fork-0.log",
+      "retained": "machine/architecture-hardening/h15-observability-evidence/h15-root-reviewed-01/fork-0.log.txt",
+      "sha256": "e7d4efdb2d2485b3028af2aac7e55740ef35cb9526dc84738f8ddfe975f759a4"
+    },
+    {
+      "source": "target/architecture-hardening/h15-root-reviewed-01/fork-1/oracle/actual-callback-stages.tsv",
+      "retained": "machine/architecture-hardening/h15-observability-evidence/h15-root-reviewed-01/fork-1/oracle/actual-callback-stages.tsv",
+      "sha256": "5573dc8d6ad6ea18d08af8daacb699256791e8e4cf18b9dc203b6442ea95a212"
+    },
+    {
+      "source": "target/architecture-hardening/h15-root-reviewed-01/fork-1/oracle/result.json",
+      "retained": "machine/architecture-hardening/h15-observability-evidence/h15-root-reviewed-01/fork-1/oracle/result.json",
+      "sha256": "8156848fe45bc4041ae6a64cc27d8bff4fbb82c67801bc2237dcf7f8f31c152e"
+    },
+    {
+      "source": "target/architecture-hardening/h15-root-reviewed-01/fork-1/oracle/synthetic-known-ticks.tsv",
+      "retained": "machine/architecture-hardening/h15-observability-evidence/h15-root-reviewed-01/fork-1/oracle/synthetic-known-ticks.tsv",
+      "sha256": "d863d3b4ddce4c281b093c2400303f9f657d208dde1c35fea49246a47d222276"
+    },
+    {
+      "source": "target/architecture-hardening/h15-root-reviewed-01/fork-1/oracle/synthetic-loss-stages.tsv",
+      "retained": "machine/architecture-hardening/h15-observability-evidence/h15-root-reviewed-01/fork-1/oracle/synthetic-loss-stages.tsv",
+      "sha256": "b653b066502e45ba4be3827c2233ac21102f1b0dd27ab2b4ab06c0c05fd6c05c"
+    },
+    {
+      "source": "target/architecture-hardening/h15-root-reviewed-01/fork-1/qualification.json",
+      "retained": "machine/architecture-hardening/h15-observability-evidence/h15-root-reviewed-01/fork-1/qualification.json",
+      "sha256": "ad2d48e671fbb16158309a6dab3ffcf473fd7ee2622688f016221ccc0e4bb0dd"
+    },
+    {
+      "source": "target/architecture-hardening/h15-root-reviewed-01/fork-1.log",
+      "retained": "machine/architecture-hardening/h15-observability-evidence/h15-root-reviewed-01/fork-1.log.txt",
+      "sha256": "9bc0fb09a85d0bdb6207102b28f134330407a57f491108d3500e757294770c37"
+    },
+    {
+      "source": "target/architecture-hardening/h15-root-reviewed-01/fork-2/oracle/actual-callback-stages.tsv",
+      "retained": "machine/architecture-hardening/h15-observability-evidence/h15-root-reviewed-01/fork-2/oracle/actual-callback-stages.tsv",
+      "sha256": "b62d8f937abf61871bfa09ae52a1f1993c3bb8647c54c953485322ac974285ee"
+    },
+    {
+      "source": "target/architecture-hardening/h15-root-reviewed-01/fork-2/oracle/result.json",
+      "retained": "machine/architecture-hardening/h15-observability-evidence/h15-root-reviewed-01/fork-2/oracle/result.json",
+      "sha256": "670954f6607081e0e768cfb8131dcc293c49c069f57c94ec8ccd7f6320fbac92"
+    },
+    {
+      "source": "target/architecture-hardening/h15-root-reviewed-01/fork-2/oracle/synthetic-known-ticks.tsv",
+      "retained": "machine/architecture-hardening/h15-observability-evidence/h15-root-reviewed-01/fork-2/oracle/synthetic-known-ticks.tsv",
+      "sha256": "d863d3b4ddce4c281b093c2400303f9f657d208dde1c35fea49246a47d222276"
+    },
+    {
+      "source": "target/architecture-hardening/h15-root-reviewed-01/fork-2/oracle/synthetic-loss-stages.tsv",
+      "retained": "machine/architecture-hardening/h15-observability-evidence/h15-root-reviewed-01/fork-2/oracle/synthetic-loss-stages.tsv",
+      "sha256": "b653b066502e45ba4be3827c2233ac21102f1b0dd27ab2b4ab06c0c05fd6c05c"
+    },
+    {
+      "source": "target/architecture-hardening/h15-root-reviewed-01/fork-2/qualification.json",
+      "retained": "machine/architecture-hardening/h15-observability-evidence/h15-root-reviewed-01/fork-2/qualification.json",
+      "sha256": "90cc99906a72bd6e02e6889508d2434bb02bb2b0d5cfd20b20582132b67d5c3d"
+    },
+    {
+      "source": "target/architecture-hardening/h15-root-reviewed-01/fork-2.log",
+      "retained": "machine/architecture-hardening/h15-observability-evidence/h15-root-reviewed-01/fork-2.log.txt",
+      "sha256": "9d0da674482cc6f49f49c9e13f66856a1a63dad3b1d63ab8158e917b5523ca44"
+    },
+    {
+      "source": "target/architecture-hardening/h15-root-reviewed-01/import-0-actual-callback-stages.log",
+      "retained": "machine/architecture-hardening/h15-observability-evidence/h15-root-reviewed-01/import-0-actual-callback-stages.log.txt",
+      "sha256": "db75bb9db882ccdbd7110fd4cb185023e1e48add4b14eb41365e899426064c43"
+    },
+    {
+      "source": "target/architecture-hardening/h15-root-reviewed-01/import-0-synthetic-known-ticks.log",
+      "retained": "machine/architecture-hardening/h15-observability-evidence/h15-root-reviewed-01/import-0-synthetic-known-ticks.log.txt",
+      "sha256": "af438d1b5784f1590052f34e1efca23e134ddd25ef6ed50e9d4f4cdca44fc0b6"
+    },
+    {
+      "source": "target/architecture-hardening/h15-root-reviewed-01/import-0-synthetic-loss-stages.log",
+      "retained": "machine/architecture-hardening/h15-observability-evidence/h15-root-reviewed-01/import-0-synthetic-loss-stages.log.txt",
+      "sha256": "fa07188d58636d20409fff35af26e63f25180647ae9796679d237031b93bbc34"
+    },
+    {
+      "source": "target/architecture-hardening/h15-root-reviewed-01/import-1-actual-callback-stages.log",
+      "retained": "machine/architecture-hardening/h15-observability-evidence/h15-root-reviewed-01/import-1-actual-callback-stages.log.txt",
+      "sha256": "fdc4f9e46eca07a6d358d90b0b4ba307953424f79c55f5c6fe7eacb3ca96a084"
+    },
+    {
+      "source": "target/architecture-hardening/h15-root-reviewed-01/import-1-synthetic-known-ticks.log",
+      "retained": "machine/architecture-hardening/h15-observability-evidence/h15-root-reviewed-01/import-1-synthetic-known-ticks.log.txt",
+      "sha256": "af438d1b5784f1590052f34e1efca23e134ddd25ef6ed50e9d4f4cdca44fc0b6"
+    },
+    {
+      "source": "target/architecture-hardening/h15-root-reviewed-01/import-1-synthetic-loss-stages.log",
+      "retained": "machine/architecture-hardening/h15-observability-evidence/h15-root-reviewed-01/import-1-synthetic-loss-stages.log.txt",
+      "sha256": "fa07188d58636d20409fff35af26e63f25180647ae9796679d237031b93bbc34"
+    },
+    {
+      "source": "target/architecture-hardening/h15-root-reviewed-01/import-2-actual-callback-stages.log",
+      "retained": "machine/architecture-hardening/h15-observability-evidence/h15-root-reviewed-01/import-2-actual-callback-stages.log.txt",
+      "sha256": "351b143596014c6fa5e7646e6ee54bb1bd5cec7d2e83dd6d6e07ee8a5b411467"
+    },
+    {
+      "source": "target/architecture-hardening/h15-root-reviewed-01/import-2-synthetic-known-ticks.log",
+      "retained": "machine/architecture-hardening/h15-observability-evidence/h15-root-reviewed-01/import-2-synthetic-known-ticks.log.txt",
+      "sha256": "af438d1b5784f1590052f34e1efca23e134ddd25ef6ed50e9d4f4cdca44fc0b6"
+    },
+    {
+      "source": "target/architecture-hardening/h15-root-reviewed-01/import-2-synthetic-loss-stages.log",
+      "retained": "machine/architecture-hardening/h15-observability-evidence/h15-root-reviewed-01/import-2-synthetic-loss-stages.log.txt",
+      "sha256": "fa07188d58636d20409fff35af26e63f25180647ae9796679d237031b93bbc34"
+    },
+    {
+      "source": "target/architecture-hardening/h15-root-reviewed-01/invalid-capacity.log",
+      "retained": "machine/architecture-hardening/h15-observability-evidence/h15-root-reviewed-01/invalid-capacity.log.txt",
+      "sha256": "05260f68112049cf4f747dcbdbdeab265f16d86efe909e871afd68879af02d8e"
+    },
+    {
+      "source": "target/architecture-hardening/h15-root-reviewed-01/invalid-duplicate-loss.log",
+      "retained": "machine/architecture-hardening/h15-observability-evidence/h15-root-reviewed-01/invalid-duplicate-loss.log.txt",
+      "sha256": "8493787f091aa54319b86fa1caf5604db79195407cc68050beb1d1b54c0abbd3"
+    },
+    {
+      "source": "target/architecture-hardening/h15-root-reviewed-01/invalid-event-capacity.log",
+      "retained": "machine/architecture-hardening/h15-observability-evidence/h15-root-reviewed-01/invalid-event-capacity.log.txt",
+      "sha256": "e3922891e1cb85f3dc5d099999619a66d91a0c37e409afb17c76a5de7562f9df"
+    },
+    {
+      "source": "target/architecture-hardening/h15-root-reviewed-01/invalid-fields.log",
+      "retained": "machine/architecture-hardening/h15-observability-evidence/h15-root-reviewed-01/invalid-fields.log.txt",
+      "sha256": "86311330a3ce03d2449185baa3f61b4bef475ab56dca8760eb894183015bf82e"
+    },
+    {
+      "source": "target/architecture-hardening/h15-root-reviewed-01/invalid-negative.log",
+      "retained": "machine/architecture-hardening/h15-observability-evidence/h15-root-reviewed-01/invalid-negative.log.txt",
+      "sha256": "52f40b6db69995bae815f5648afa36f8997a3eaa28ef22200ab1364cca6af6e6"
+    },
+    {
+      "source": "target/architecture-hardening/h15-root-reviewed-01/invalid-overflow.log",
+      "retained": "machine/architecture-hardening/h15-observability-evidence/h15-root-reviewed-01/invalid-overflow.log.txt",
+      "sha256": "ebe398d7384ee8368f526141495c8529138333e71e6a3126e2a96aa0b78f232f"
+    },
+    {
+      "source": "target/architecture-hardening/h15-root-reviewed-01/invalid-sample-after-loss.log",
+      "retained": "machine/architecture-hardening/h15-observability-evidence/h15-root-reviewed-01/invalid-sample-after-loss.log.txt",
+      "sha256": "e3922891e1cb85f3dc5d099999619a66d91a0c37e409afb17c76a5de7562f9df"
+    },
+    {
+      "source": "target/architecture-hardening/h15-root-reviewed-01/invalid-sample-capacity.log",
+      "retained": "machine/architecture-hardening/h15-observability-evidence/h15-root-reviewed-01/invalid-sample-capacity.log.txt",
+      "sha256": "e3922891e1cb85f3dc5d099999619a66d91a0c37e409afb17c76a5de7562f9df"
+    },
+    {
+      "source": "target/architecture-hardening/h15-root-reviewed-01/invalid-schema.log",
+      "retained": "machine/architecture-hardening/h15-observability-evidence/h15-root-reviewed-01/invalid-schema.log.txt",
+      "sha256": "b5ebe3975df8fb6bf3766a059e1bf095c3d27ff66f7ab7fb0bfa45ee956ba458"
+    },
+    {
+      "source": "target/architecture-hardening/h15-root-reviewed-01/invalid-stage.log",
+      "retained": "machine/architecture-hardening/h15-observability-evidence/h15-root-reviewed-01/invalid-stage.log.txt",
+      "sha256": "95bf4800968e115d02f15302314a41200cf7b8680bc95c0a607fbbd49b3372ed"
+    },
+    {
+      "source": "target/architecture-hardening/h15-root-reviewed-01/java-version.log",
+      "retained": "machine/architecture-hardening/h15-observability-evidence/h15-root-reviewed-01/java-version.log.txt",
+      "sha256": "9d65a43706f49fcfdbcece91e737f759110493e82fd1c4886cf49104c2017b0e"
+    },
+    {
+      "source": "target/architecture-hardening/h15-root-reviewed-01/java8-jfr.log",
+      "retained": "machine/architecture-hardening/h15-observability-evidence/h15-root-reviewed-01/java8-jfr.log.txt",
+      "sha256": "5acdd4f9d73238d22f6f71a4519ddb97f2cf966ef7653f6fda99a6f4e84bb56a"
+    },
+    {
+      "source": "target/architecture-hardening/h15-root-reviewed-01/native-probe.log",
+      "retained": "machine/architecture-hardening/h15-observability-evidence/h15-root-reviewed-01/native-probe.log.txt",
+      "sha256": "592634dd72501b3a5ccc5d736ff56f2ee07e0849e4e564f42dc8731ce73978f3"
+    },
+    {
+      "source": "target/architecture-hardening/h15-root-reviewed-01/native-release.log",
+      "retained": "machine/architecture-hardening/h15-observability-evidence/h15-root-reviewed-01/native-release.log.txt",
+      "sha256": "164a2aecbdb7dad9cefab62ce8b362b92692e9a8a320bc42ef92b6654711993e"
+    },
+    {
+      "source": "target/architecture-hardening/h15-root-reviewed-01/probe-javac.log",
+      "retained": "machine/architecture-hardening/h15-observability-evidence/h15-root-reviewed-01/probe-javac.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h15-root-reviewed-01/receipt.json",
+      "retained": "machine/architecture-hardening/h15-observability-evidence/h15-root-reviewed-01/receipt.json",
+      "sha256": "10999d0598ab186b35950930225ea65c70ccde98f28cdde581ac323c8b8280bd"
+    },
+    {
+      "source": "target/architecture-hardening/h15-root-reviewed-01/resolve-cargo-clippy.log",
+      "retained": "machine/architecture-hardening/h15-observability-evidence/h15-root-reviewed-01/resolve-cargo-clippy.log.txt",
+      "sha256": "26f09df4e33bf098ad9fb2f35d1fce728c2b509fef8c47af1c745973b28b296d"
+    },
+    {
+      "source": "target/architecture-hardening/h15-root-reviewed-01/resolve-cargo.log",
+      "retained": "machine/architecture-hardening/h15-observability-evidence/h15-root-reviewed-01/resolve-cargo.log.txt",
+      "sha256": "d70a6681283a709db0b4154a538f41c781608f69fb5bfbfa66dac449b697a95c"
+    },
+    {
+      "source": "target/architecture-hardening/h15-root-reviewed-01/resolve-clippy-driver.log",
+      "retained": "machine/architecture-hardening/h15-observability-evidence/h15-root-reviewed-01/resolve-clippy-driver.log.txt",
+      "sha256": "934b599a01bd8f7d5338d12d97fc793d1af3427b7f706b93d8eb18819ce01b01"
+    },
+    {
+      "source": "target/architecture-hardening/h15-root-reviewed-01/resolve-rustc.log",
+      "retained": "machine/architecture-hardening/h15-observability-evidence/h15-root-reviewed-01/resolve-rustc.log.txt",
+      "sha256": "54234bc009f7bc295608f8bb882e03677001147f42f05ce19606c17d2db6473b"
+    },
+    {
+      "source": "target/architecture-hardening/h15-root-reviewed-01/resolve-rustfmt.log",
+      "retained": "machine/architecture-hardening/h15-observability-evidence/h15-root-reviewed-01/resolve-rustfmt.log.txt",
+      "sha256": "0e07fc57cf9821aa13e5d361fdaa13fcb14ecb9c7db0284d9b66cb63d44a5beb"
+    },
+    {
+      "source": "target/architecture-hardening/h15-root-reviewed-01/rust-tests.log",
+      "retained": "machine/architecture-hardening/h15-observability-evidence/h15-root-reviewed-01/rust-tests.log.txt",
+      "sha256": "451c42b40a788b7b3686c8483ef9ae7616f92f3d9a171d5003c5418746496e67"
+    },
+    {
+      "source": "target/architecture-hardening/h15-root-reviewed-01/rust-toolchain.log",
+      "retained": "machine/architecture-hardening/h15-observability-evidence/h15-root-reviewed-01/rust-toolchain.log.txt",
+      "sha256": "86c2d07f9968fd3174d9cff8c60a4d4323fba3166d5dc6dd36f0987a50677d70"
+    },
+    {
+      "source": "target/architecture-hardening/h15-root-reviewed-01/rustc-version.log",
+      "retained": "machine/architecture-hardening/h15-observability-evidence/h15-root-reviewed-01/rustc-version.log.txt",
+      "sha256": "c45e612575abeef05e99e88eb1e7aea52cddab9ad70d4f65ad20eaa65e92a9cf"
+    },
+    {
+      "source": "target/architecture-hardening/h15-root-reviewed-01/scoped-clippy.log",
+      "retained": "machine/architecture-hardening/h15-observability-evidence/h15-root-reviewed-01/scoped-clippy.log.txt",
+      "sha256": "91ea2a31adbd3c8307fdd3cba99badcdfdec365a2e9042eb0473622507139a85"
+    },
+    {
+      "source": "target/architecture-hardening/h15-root-reviewed-01/scoped-fmt.log",
+      "retained": "machine/architecture-hardening/h15-observability-evidence/h15-root-reviewed-01/scoped-fmt.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h15-root-reviewed-01/srg-compile-support.log",
+      "retained": "machine/architecture-hardening/h15-observability-evidence/h15-root-reviewed-01/srg-compile-support.log.txt",
+      "sha256": "69fa482ed82e5a3b70b99f7e774fdb71f679608533f34476d53208eb9f0a34e9"
+    },
+    {
+      "source": "target/architecture-hardening/h15-root-lifecycle-final/bootstrap-javac.log",
+      "retained": "machine/architecture-hardening/h15-observability-evidence/h15-root-lifecycle-final/bootstrap-javac.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h15-root-lifecycle-final/cargo-metadata.log",
+      "retained": "machine/architecture-hardening/h15-observability-evidence/h15-root-lifecycle-final/cargo-metadata.log.txt",
+      "sha256": "8edab81762272ac7b2cf522a44594e99c456e5dcd09b67f6a3a4919f4bc5b7b6"
+    },
+    {
+      "source": "target/architecture-hardening/h15-root-lifecycle-final/deterministic-java.log",
+      "retained": "machine/architecture-hardening/h15-observability-evidence/h15-root-lifecycle-final/deterministic-java.log.txt",
+      "sha256": "a9ea1f9d26a5dd84894fd2ea2dd804d48b067c9c9bc54b5c7b98a9d21fb1e0eb"
+    },
+    {
+      "source": "target/architecture-hardening/h15-root-lifecycle-final/deterministic.json",
+      "retained": "machine/architecture-hardening/h15-observability-evidence/h15-root-lifecycle-final/deterministic.json",
+      "sha256": "833962a4e75f4cfabc2e9c809f0b263311502a9393baedfaa0d63e85b7897e44"
+    },
+    {
+      "source": "target/architecture-hardening/h15-root-lifecycle-final/fork-0/oracle/actual-callback-stages.tsv",
+      "retained": "machine/architecture-hardening/h15-observability-evidence/h15-root-lifecycle-final/fork-0/oracle/actual-callback-stages.tsv",
+      "sha256": "95bcfbe9999faba2fd5fb5444002ddfed01bf581f52ec8a73f8b9d352d650d24"
+    },
+    {
+      "source": "target/architecture-hardening/h15-root-lifecycle-final/fork-0/oracle/result.json",
+      "retained": "machine/architecture-hardening/h15-observability-evidence/h15-root-lifecycle-final/fork-0/oracle/result.json",
+      "sha256": "bcc0c5b3b26f2733d413bc650b836ba05c15f114dbd931cd00fef9d9016c3481"
+    },
+    {
+      "source": "target/architecture-hardening/h15-root-lifecycle-final/fork-0/oracle/synthetic-known-ticks.tsv",
+      "retained": "machine/architecture-hardening/h15-observability-evidence/h15-root-lifecycle-final/fork-0/oracle/synthetic-known-ticks.tsv",
+      "sha256": "d863d3b4ddce4c281b093c2400303f9f657d208dde1c35fea49246a47d222276"
+    },
+    {
+      "source": "target/architecture-hardening/h15-root-lifecycle-final/fork-0/oracle/synthetic-loss-stages.tsv",
+      "retained": "machine/architecture-hardening/h15-observability-evidence/h15-root-lifecycle-final/fork-0/oracle/synthetic-loss-stages.tsv",
+      "sha256": "b653b066502e45ba4be3827c2233ac21102f1b0dd27ab2b4ab06c0c05fd6c05c"
+    },
+    {
+      "source": "target/architecture-hardening/h15-root-lifecycle-final/fork-0/qualification.json",
+      "retained": "machine/architecture-hardening/h15-observability-evidence/h15-root-lifecycle-final/fork-0/qualification.json",
+      "sha256": "e0b5118d4cb285be3050095232b5d8a33d76c68271fd7a19d74ee1b9ecf609f2"
+    },
+    {
+      "source": "target/architecture-hardening/h15-root-lifecycle-final/fork-0.log",
+      "retained": "machine/architecture-hardening/h15-observability-evidence/h15-root-lifecycle-final/fork-0.log.txt",
+      "sha256": "90681764e08a63a0fdd843167068aa4eecd02b786e27d9d4111209e87677e60f"
+    },
+    {
+      "source": "target/architecture-hardening/h15-root-lifecycle-final/fork-1/oracle/actual-callback-stages.tsv",
+      "retained": "machine/architecture-hardening/h15-observability-evidence/h15-root-lifecycle-final/fork-1/oracle/actual-callback-stages.tsv",
+      "sha256": "2a3dd59b22a572655f1d9fc941d4aa8a364b7d476251da35097f2fb46fbc61f2"
+    },
+    {
+      "source": "target/architecture-hardening/h15-root-lifecycle-final/fork-1/oracle/result.json",
+      "retained": "machine/architecture-hardening/h15-observability-evidence/h15-root-lifecycle-final/fork-1/oracle/result.json",
+      "sha256": "a162a987b089fcc32d11f3e5898ac61964c473d17c3344380223b9cba317a277"
+    },
+    {
+      "source": "target/architecture-hardening/h15-root-lifecycle-final/fork-1/oracle/synthetic-known-ticks.tsv",
+      "retained": "machine/architecture-hardening/h15-observability-evidence/h15-root-lifecycle-final/fork-1/oracle/synthetic-known-ticks.tsv",
+      "sha256": "d863d3b4ddce4c281b093c2400303f9f657d208dde1c35fea49246a47d222276"
+    },
+    {
+      "source": "target/architecture-hardening/h15-root-lifecycle-final/fork-1/oracle/synthetic-loss-stages.tsv",
+      "retained": "machine/architecture-hardening/h15-observability-evidence/h15-root-lifecycle-final/fork-1/oracle/synthetic-loss-stages.tsv",
+      "sha256": "b653b066502e45ba4be3827c2233ac21102f1b0dd27ab2b4ab06c0c05fd6c05c"
+    },
+    {
+      "source": "target/architecture-hardening/h15-root-lifecycle-final/fork-1/qualification.json",
+      "retained": "machine/architecture-hardening/h15-observability-evidence/h15-root-lifecycle-final/fork-1/qualification.json",
+      "sha256": "cf1d0830547ad57a67cc2a1ec0cf9a7240b20025c1beb632679957312f7be9bd"
+    },
+    {
+      "source": "target/architecture-hardening/h15-root-lifecycle-final/fork-1.log",
+      "retained": "machine/architecture-hardening/h15-observability-evidence/h15-root-lifecycle-final/fork-1.log.txt",
+      "sha256": "79437bc6f8d659ea728c6e15d4039d7e8ec00ce6b0e6db513a89eb7a56d60f6e"
+    },
+    {
+      "source": "target/architecture-hardening/h15-root-lifecycle-final/fork-2/oracle/actual-callback-stages.tsv",
+      "retained": "machine/architecture-hardening/h15-observability-evidence/h15-root-lifecycle-final/fork-2/oracle/actual-callback-stages.tsv",
+      "sha256": "e3abf5fd24c877819a749a5d17afb188097453719c0148830dbb1dfa3171f672"
+    },
+    {
+      "source": "target/architecture-hardening/h15-root-lifecycle-final/fork-2/oracle/result.json",
+      "retained": "machine/architecture-hardening/h15-observability-evidence/h15-root-lifecycle-final/fork-2/oracle/result.json",
+      "sha256": "64ca19e8d2344f974982278cac5ccbddb0947de9c219975607b25d3d5b3f7465"
+    },
+    {
+      "source": "target/architecture-hardening/h15-root-lifecycle-final/fork-2/oracle/synthetic-known-ticks.tsv",
+      "retained": "machine/architecture-hardening/h15-observability-evidence/h15-root-lifecycle-final/fork-2/oracle/synthetic-known-ticks.tsv",
+      "sha256": "d863d3b4ddce4c281b093c2400303f9f657d208dde1c35fea49246a47d222276"
+    },
+    {
+      "source": "target/architecture-hardening/h15-root-lifecycle-final/fork-2/oracle/synthetic-loss-stages.tsv",
+      "retained": "machine/architecture-hardening/h15-observability-evidence/h15-root-lifecycle-final/fork-2/oracle/synthetic-loss-stages.tsv",
+      "sha256": "b653b066502e45ba4be3827c2233ac21102f1b0dd27ab2b4ab06c0c05fd6c05c"
+    },
+    {
+      "source": "target/architecture-hardening/h15-root-lifecycle-final/fork-2/qualification.json",
+      "retained": "machine/architecture-hardening/h15-observability-evidence/h15-root-lifecycle-final/fork-2/qualification.json",
+      "sha256": "35c00d899427ebda3b587d6ac4c408a41c9e59ba951cb00f4b058b96f6c4b54d"
+    },
+    {
+      "source": "target/architecture-hardening/h15-root-lifecycle-final/fork-2.log",
+      "retained": "machine/architecture-hardening/h15-observability-evidence/h15-root-lifecycle-final/fork-2.log.txt",
+      "sha256": "0ffd1f11ea551855a4061c7e5d6c5298ba8a17ffcd0ee955377d6bd5537d46cc"
+    },
+    {
+      "source": "target/architecture-hardening/h15-root-lifecycle-final/import-0-actual-callback-stages.log",
+      "retained": "machine/architecture-hardening/h15-observability-evidence/h15-root-lifecycle-final/import-0-actual-callback-stages.log.txt",
+      "sha256": "d7e17cbca97bf1a1dbcd00e0458d160da9cf3bab2f0e63df7ae7b738ba669786"
+    },
+    {
+      "source": "target/architecture-hardening/h15-root-lifecycle-final/import-0-synthetic-known-ticks.log",
+      "retained": "machine/architecture-hardening/h15-observability-evidence/h15-root-lifecycle-final/import-0-synthetic-known-ticks.log.txt",
+      "sha256": "af438d1b5784f1590052f34e1efca23e134ddd25ef6ed50e9d4f4cdca44fc0b6"
+    },
+    {
+      "source": "target/architecture-hardening/h15-root-lifecycle-final/import-0-synthetic-loss-stages.log",
+      "retained": "machine/architecture-hardening/h15-observability-evidence/h15-root-lifecycle-final/import-0-synthetic-loss-stages.log.txt",
+      "sha256": "fa07188d58636d20409fff35af26e63f25180647ae9796679d237031b93bbc34"
+    },
+    {
+      "source": "target/architecture-hardening/h15-root-lifecycle-final/import-1-actual-callback-stages.log",
+      "retained": "machine/architecture-hardening/h15-observability-evidence/h15-root-lifecycle-final/import-1-actual-callback-stages.log.txt",
+      "sha256": "203a473a6031ea4fcb1ce29caf4d3c74e4331b03a4779f0ff7bb0ca737dc2aed"
+    },
+    {
+      "source": "target/architecture-hardening/h15-root-lifecycle-final/import-1-synthetic-known-ticks.log",
+      "retained": "machine/architecture-hardening/h15-observability-evidence/h15-root-lifecycle-final/import-1-synthetic-known-ticks.log.txt",
+      "sha256": "af438d1b5784f1590052f34e1efca23e134ddd25ef6ed50e9d4f4cdca44fc0b6"
+    },
+    {
+      "source": "target/architecture-hardening/h15-root-lifecycle-final/import-1-synthetic-loss-stages.log",
+      "retained": "machine/architecture-hardening/h15-observability-evidence/h15-root-lifecycle-final/import-1-synthetic-loss-stages.log.txt",
+      "sha256": "fa07188d58636d20409fff35af26e63f25180647ae9796679d237031b93bbc34"
+    },
+    {
+      "source": "target/architecture-hardening/h15-root-lifecycle-final/import-2-actual-callback-stages.log",
+      "retained": "machine/architecture-hardening/h15-observability-evidence/h15-root-lifecycle-final/import-2-actual-callback-stages.log.txt",
+      "sha256": "f328c3dbb79965f7490fa93a5711eb0af171b6279906664db8c4ea3dd2eb023b"
+    },
+    {
+      "source": "target/architecture-hardening/h15-root-lifecycle-final/import-2-synthetic-known-ticks.log",
+      "retained": "machine/architecture-hardening/h15-observability-evidence/h15-root-lifecycle-final/import-2-synthetic-known-ticks.log.txt",
+      "sha256": "af438d1b5784f1590052f34e1efca23e134ddd25ef6ed50e9d4f4cdca44fc0b6"
+    },
+    {
+      "source": "target/architecture-hardening/h15-root-lifecycle-final/import-2-synthetic-loss-stages.log",
+      "retained": "machine/architecture-hardening/h15-observability-evidence/h15-root-lifecycle-final/import-2-synthetic-loss-stages.log.txt",
+      "sha256": "fa07188d58636d20409fff35af26e63f25180647ae9796679d237031b93bbc34"
+    },
+    {
+      "source": "target/architecture-hardening/h15-root-lifecycle-final/invalid-capacity.log",
+      "retained": "machine/architecture-hardening/h15-observability-evidence/h15-root-lifecycle-final/invalid-capacity.log.txt",
+      "sha256": "05260f68112049cf4f747dcbdbdeab265f16d86efe909e871afd68879af02d8e"
+    },
+    {
+      "source": "target/architecture-hardening/h15-root-lifecycle-final/invalid-duplicate-loss.log",
+      "retained": "machine/architecture-hardening/h15-observability-evidence/h15-root-lifecycle-final/invalid-duplicate-loss.log.txt",
+      "sha256": "8493787f091aa54319b86fa1caf5604db79195407cc68050beb1d1b54c0abbd3"
+    },
+    {
+      "source": "target/architecture-hardening/h15-root-lifecycle-final/invalid-event-capacity.log",
+      "retained": "machine/architecture-hardening/h15-observability-evidence/h15-root-lifecycle-final/invalid-event-capacity.log.txt",
+      "sha256": "e3922891e1cb85f3dc5d099999619a66d91a0c37e409afb17c76a5de7562f9df"
+    },
+    {
+      "source": "target/architecture-hardening/h15-root-lifecycle-final/invalid-fields.log",
+      "retained": "machine/architecture-hardening/h15-observability-evidence/h15-root-lifecycle-final/invalid-fields.log.txt",
+      "sha256": "86311330a3ce03d2449185baa3f61b4bef475ab56dca8760eb894183015bf82e"
+    },
+    {
+      "source": "target/architecture-hardening/h15-root-lifecycle-final/invalid-negative.log",
+      "retained": "machine/architecture-hardening/h15-observability-evidence/h15-root-lifecycle-final/invalid-negative.log.txt",
+      "sha256": "52f40b6db69995bae815f5648afa36f8997a3eaa28ef22200ab1364cca6af6e6"
+    },
+    {
+      "source": "target/architecture-hardening/h15-root-lifecycle-final/invalid-overflow.log",
+      "retained": "machine/architecture-hardening/h15-observability-evidence/h15-root-lifecycle-final/invalid-overflow.log.txt",
+      "sha256": "ebe398d7384ee8368f526141495c8529138333e71e6a3126e2a96aa0b78f232f"
+    },
+    {
+      "source": "target/architecture-hardening/h15-root-lifecycle-final/invalid-sample-after-loss.log",
+      "retained": "machine/architecture-hardening/h15-observability-evidence/h15-root-lifecycle-final/invalid-sample-after-loss.log.txt",
+      "sha256": "e3922891e1cb85f3dc5d099999619a66d91a0c37e409afb17c76a5de7562f9df"
+    },
+    {
+      "source": "target/architecture-hardening/h15-root-lifecycle-final/invalid-sample-capacity.log",
+      "retained": "machine/architecture-hardening/h15-observability-evidence/h15-root-lifecycle-final/invalid-sample-capacity.log.txt",
+      "sha256": "e3922891e1cb85f3dc5d099999619a66d91a0c37e409afb17c76a5de7562f9df"
+    },
+    {
+      "source": "target/architecture-hardening/h15-root-lifecycle-final/invalid-schema.log",
+      "retained": "machine/architecture-hardening/h15-observability-evidence/h15-root-lifecycle-final/invalid-schema.log.txt",
+      "sha256": "b5ebe3975df8fb6bf3766a059e1bf095c3d27ff66f7ab7fb0bfa45ee956ba458"
+    },
+    {
+      "source": "target/architecture-hardening/h15-root-lifecycle-final/invalid-stage.log",
+      "retained": "machine/architecture-hardening/h15-observability-evidence/h15-root-lifecycle-final/invalid-stage.log.txt",
+      "sha256": "95bf4800968e115d02f15302314a41200cf7b8680bc95c0a607fbbd49b3372ed"
+    },
+    {
+      "source": "target/architecture-hardening/h15-root-lifecycle-final/java-version.log",
+      "retained": "machine/architecture-hardening/h15-observability-evidence/h15-root-lifecycle-final/java-version.log.txt",
+      "sha256": "9d65a43706f49fcfdbcece91e737f759110493e82fd1c4886cf49104c2017b0e"
+    },
+    {
+      "source": "target/architecture-hardening/h15-root-lifecycle-final/java8-jfr.log",
+      "retained": "machine/architecture-hardening/h15-observability-evidence/h15-root-lifecycle-final/java8-jfr.log.txt",
+      "sha256": "5a3e12e8a51fd6e63f61d569e19e06bfa30076c400e73e7e30fc20777a9f39af"
+    },
+    {
+      "source": "target/architecture-hardening/h15-root-lifecycle-final/native-probe.log",
+      "retained": "machine/architecture-hardening/h15-observability-evidence/h15-root-lifecycle-final/native-probe.log.txt",
+      "sha256": "8370d782f8f0d94e330e14d04eb913b7abf2463c5777cec36cfc4ca1f4a856a0"
+    },
+    {
+      "source": "target/architecture-hardening/h15-root-lifecycle-final/native-release.log",
+      "retained": "machine/architecture-hardening/h15-observability-evidence/h15-root-lifecycle-final/native-release.log.txt",
+      "sha256": "b062fa9eeed2fe4f7f134da074fe9812579c26a66086dec1144b90dc5fc39080"
+    },
+    {
+      "source": "target/architecture-hardening/h15-root-lifecycle-final/probe-javac.log",
+      "retained": "machine/architecture-hardening/h15-observability-evidence/h15-root-lifecycle-final/probe-javac.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h15-root-lifecycle-final/receipt.json",
+      "retained": "machine/architecture-hardening/h15-observability-evidence/h15-root-lifecycle-final/receipt.json",
+      "sha256": "bd740ac521e815ee1e731c118654c392adfc937fbf4adc9c86fa0ed8a7f86822"
+    },
+    {
+      "source": "target/architecture-hardening/h15-root-lifecycle-final/resolve-cargo-clippy.log",
+      "retained": "machine/architecture-hardening/h15-observability-evidence/h15-root-lifecycle-final/resolve-cargo-clippy.log.txt",
+      "sha256": "26f09df4e33bf098ad9fb2f35d1fce728c2b509fef8c47af1c745973b28b296d"
+    },
+    {
+      "source": "target/architecture-hardening/h15-root-lifecycle-final/resolve-cargo.log",
+      "retained": "machine/architecture-hardening/h15-observability-evidence/h15-root-lifecycle-final/resolve-cargo.log.txt",
+      "sha256": "d70a6681283a709db0b4154a538f41c781608f69fb5bfbfa66dac449b697a95c"
+    },
+    {
+      "source": "target/architecture-hardening/h15-root-lifecycle-final/resolve-clippy-driver.log",
+      "retained": "machine/architecture-hardening/h15-observability-evidence/h15-root-lifecycle-final/resolve-clippy-driver.log.txt",
+      "sha256": "934b599a01bd8f7d5338d12d97fc793d1af3427b7f706b93d8eb18819ce01b01"
+    },
+    {
+      "source": "target/architecture-hardening/h15-root-lifecycle-final/resolve-rustc.log",
+      "retained": "machine/architecture-hardening/h15-observability-evidence/h15-root-lifecycle-final/resolve-rustc.log.txt",
+      "sha256": "54234bc009f7bc295608f8bb882e03677001147f42f05ce19606c17d2db6473b"
+    },
+    {
+      "source": "target/architecture-hardening/h15-root-lifecycle-final/resolve-rustfmt.log",
+      "retained": "machine/architecture-hardening/h15-observability-evidence/h15-root-lifecycle-final/resolve-rustfmt.log.txt",
+      "sha256": "0e07fc57cf9821aa13e5d361fdaa13fcb14ecb9c7db0284d9b66cb63d44a5beb"
+    },
+    {
+      "source": "target/architecture-hardening/h15-root-lifecycle-final/rust-tests.log",
+      "retained": "machine/architecture-hardening/h15-observability-evidence/h15-root-lifecycle-final/rust-tests.log.txt",
+      "sha256": "dbc3f5002392c2eae1423443a5c50cdb49e86457874c0956f690855f82f1d3d8"
+    },
+    {
+      "source": "target/architecture-hardening/h15-root-lifecycle-final/rust-toolchain.log",
+      "retained": "machine/architecture-hardening/h15-observability-evidence/h15-root-lifecycle-final/rust-toolchain.log.txt",
+      "sha256": "86c2d07f9968fd3174d9cff8c60a4d4323fba3166d5dc6dd36f0987a50677d70"
+    },
+    {
+      "source": "target/architecture-hardening/h15-root-lifecycle-final/rustc-version.log",
+      "retained": "machine/architecture-hardening/h15-observability-evidence/h15-root-lifecycle-final/rustc-version.log.txt",
+      "sha256": "c45e612575abeef05e99e88eb1e7aea52cddab9ad70d4f65ad20eaa65e92a9cf"
+    },
+    {
+      "source": "target/architecture-hardening/h15-root-lifecycle-final/scoped-clippy.log",
+      "retained": "machine/architecture-hardening/h15-observability-evidence/h15-root-lifecycle-final/scoped-clippy.log.txt",
+      "sha256": "76cb1292f2f924c6869388b61559b29dac75a99a63adc29237d313a91509763a"
+    },
+    {
+      "source": "target/architecture-hardening/h15-root-lifecycle-final/scoped-fmt.log",
+      "retained": "machine/architecture-hardening/h15-observability-evidence/h15-root-lifecycle-final/scoped-fmt.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h15-root-lifecycle-final/srg-compile-support.log",
+      "retained": "machine/architecture-hardening/h15-observability-evidence/h15-root-lifecycle-final/srg-compile-support.log.txt",
+      "sha256": "8fdf9a85477d5bca4afe0f31da36fe09608a5851ab30611d353b130e265d6588"
+    }
+  ],
+  "retained_agent_summaries": [
+    "machine/architecture-hardening/h15-observability-final-01.json",
+    "machine/architecture-hardening/h15-observability-lifecycle-fix-01.json"
+  ],
+  "limitations": [
+    "No live tick/MSPT or complete mod-dispatch adapter",
+    "No production network/queue/lock/snapshot-retention/allocator adapters",
+    "No full Java/JNI transition pairing",
+    "No H4 issuer-certified capability lineage integration",
+    "Final agent-order and unload/redefinition closure remains live qualification work",
+    "Disabled/enabled callback overhead is a synthetic preallocated-body microbenchmark, not whole-server overhead",
+    "About35.8MB histogram counter storage for aggregate+8workers; bounded memory but nontrivial",
+    "Pre-fix final01/root-reviewed01 receipts preserved as historical PASS before discovered redefinition-attempt attribution defect; current root lifecycle-final supersedes them"
+  ]
+}

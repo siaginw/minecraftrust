@@ -1,0 +1,833 @@
+{
+  "schema": "H15_OBSERVABILITY_MILESTONE_V1",
+  "status": "FOUNDATION_WITH_OFFLINE_ADAPTERS",
+  "qualification": "LIVE_RUNTIME_COVERAGE_INCOMPLETE",
+  "authority": false,
+  "receipt": {
+    "path": "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h15-final-01\\receipt.json",
+    "bytes": 307038,
+    "sha256": "87286b6bdc1416e730dfd3ebb23222c92d26da0e17fb0da13c67189958d5f336"
+  },
+  "evidence_archive": "D:\\minecraftrust-astra-hardening\\machine\\architecture-hardening\\h15-observability-evidence\\final01",
+  "validation": {
+    "rust_tests": 13,
+    "rust_fmt": "PASS",
+    "rust_clippy_no_deps_all_targets_warnings_deny": "PASS",
+    "java_deterministic_assertions_per_process": 46,
+    "java_deterministic_processes": 4,
+    "offline_forge_forks": 3,
+    "actual_noise_raw_double_comparisons": 20400,
+    "stage_import_batches": 9,
+    "malformed_import_controls": 10,
+    "java_warmup_rows": 54,
+    "java_measured_rows": 108,
+    "native_measured_rows": 40,
+    "subprocess_count": 41,
+    "successful_subprocesses": 31,
+    "expected_rejection_subprocesses": 10,
+    "source_inputs": 55,
+    "registry_archives_and_source_trees": 4,
+    "postrun_existing_observer_identity_verified": true
+  },
+  "costs": {
+    "native_recording_alloc_bytes": 0,
+    "native_recording_alloc_events": 0,
+    "native_recording_iterations": 100000,
+    "native_histogram_counter_bytes_per_collector": 3981312,
+    "java_median_ns_per_operation": {
+      "0": 3.5540000000000003,
+      "1": 8.487,
+      "2": 85.352,
+      "3": 4.87,
+      "4": 10.0415,
+      "5": 163.7095
+    },
+    "java_modes": {
+      "0": "direct",
+      "1": "disabled",
+      "2": "enabled",
+      "3": "direct_nested",
+      "4": "disabled_nested",
+      "5": "enabled_nested"
+    },
+    "java_thread_allocation_bytes_per_100000_calls": {
+      "min": 24,
+      "max": 24,
+      "coverage": "Approximate Java ThreadMXBean values, including sampler; same in all direct/disabled/enabled modes. Consistent with sampler boxing; no per-call excess observed, not proof of universal allocation freedom."
+    },
+    "native_median_ns_per_operation": {
+      "0": 0.6174999999999999,
+      "1": 1.4005,
+      "2": 60.131,
+      "3": 83.3545
+    },
+    "scope": "Single-thread bounded observer overhead fixture; not live MSPT, full generation or throughput"
+  },
+  "jfr": {
+    "recording": {
+      "path": "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h15-final-01\\java8-probe.jfr",
+      "sha256": "e1a34d6bd2f361e28afae7de019423144180df9091815ed99231ee15f6d43723",
+      "bytes": 201062
+    },
+    "scope": "startup-only local Java8 feature probe; not a server profile"
+  },
+  "coverage_gaps": [
+    "No live tick/MSPT or complete mod-dispatch adapter",
+    "No production network/queue/lock/snapshot-retention/allocator adapters",
+    "No full Java/JNI transition pairing",
+    "No H4 issuer-certified capability lineage integration",
+    "Final agent-order and unload/redefinition closure remains live qualification work"
+  ],
+  "preserved_failure": {
+    "run": "h15-dev-01",
+    "classification": "OFFLINE_ADAPTER_LOADER_CONSTRAINT_VIOLATION",
+    "resolution": "Early minimal entrypoint sets telemetry loader exclusion before signature-bearing probe verification",
+    "source_only_scope": true
+  },
+  "archive": [
+    {
+      "source": {
+        "path": "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h15-final-01\\receipt.json",
+        "bytes": 307038,
+        "sha256": "87286b6bdc1416e730dfd3ebb23222c92d26da0e17fb0da13c67189958d5f336"
+      },
+      "archive": {
+        "path": "D:\\minecraftrust-astra-hardening\\machine\\architecture-hardening\\h15-observability-evidence\\final01\\receipt.json",
+        "bytes": 307038,
+        "sha256": "87286b6bdc1416e730dfd3ebb23222c92d26da0e17fb0da13c67189958d5f336"
+      }
+    },
+    {
+      "source": {
+        "path": "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h15-final-01\\deterministic.json",
+        "bytes": 9637,
+        "sha256": "fe8a1ac5e3c416630054044f601b89e5a2eccd862b6d63d5ba272475aa382449"
+      },
+      "archive": {
+        "path": "D:\\minecraftrust-astra-hardening\\machine\\architecture-hardening\\h15-observability-evidence\\final01\\deterministic.json",
+        "bytes": 9637,
+        "sha256": "fe8a1ac5e3c416630054044f601b89e5a2eccd862b6d63d5ba272475aa382449"
+      }
+    },
+    {
+      "source": {
+        "path": "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h15-final-01\\bootstrap-javac.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "archive": {
+        "path": "D:\\minecraftrust-astra-hardening\\machine\\architecture-hardening\\h15-observability-evidence\\final01\\logs\\bootstrap-javac.log.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "source": {
+        "path": "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h15-final-01\\cargo-metadata.log",
+        "bytes": 19353,
+        "sha256": "3e4099f8a5300530e10026f5271a77705a559a79774a935cc3f94abb812d1ca0"
+      },
+      "archive": {
+        "path": "D:\\minecraftrust-astra-hardening\\machine\\architecture-hardening\\h15-observability-evidence\\final01\\logs\\cargo-metadata.log.txt",
+        "bytes": 19353,
+        "sha256": "3e4099f8a5300530e10026f5271a77705a559a79774a935cc3f94abb812d1ca0"
+      }
+    },
+    {
+      "source": {
+        "path": "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h15-final-01\\deterministic-java.log",
+        "bytes": 36,
+        "sha256": "63f77853f7666898c96c492ce7fe4bffb24c314d84df8dffe0f8372af09c4a38"
+      },
+      "archive": {
+        "path": "D:\\minecraftrust-astra-hardening\\machine\\architecture-hardening\\h15-observability-evidence\\final01\\logs\\deterministic-java.log.txt",
+        "bytes": 36,
+        "sha256": "63f77853f7666898c96c492ce7fe4bffb24c314d84df8dffe0f8372af09c4a38"
+      }
+    },
+    {
+      "source": {
+        "path": "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h15-final-01\\fork-0.log",
+        "bytes": 3673,
+        "sha256": "ed85f4dfeddd7ff80b103077b28db17a3389e434db6ef3d5283afc9dfca0a09e"
+      },
+      "archive": {
+        "path": "D:\\minecraftrust-astra-hardening\\machine\\architecture-hardening\\h15-observability-evidence\\final01\\logs\\fork-0.log.txt",
+        "bytes": 3673,
+        "sha256": "ed85f4dfeddd7ff80b103077b28db17a3389e434db6ef3d5283afc9dfca0a09e"
+      }
+    },
+    {
+      "source": {
+        "path": "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h15-final-01\\fork-1.log",
+        "bytes": 3673,
+        "sha256": "d68c7ae6a6f906a15c6e963b9414f477b1b15646db3215e89d6467e08b6370bc"
+      },
+      "archive": {
+        "path": "D:\\minecraftrust-astra-hardening\\machine\\architecture-hardening\\h15-observability-evidence\\final01\\logs\\fork-1.log.txt",
+        "bytes": 3673,
+        "sha256": "d68c7ae6a6f906a15c6e963b9414f477b1b15646db3215e89d6467e08b6370bc"
+      }
+    },
+    {
+      "source": {
+        "path": "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h15-final-01\\fork-2.log",
+        "bytes": 3673,
+        "sha256": "38072ec81e81a538b5817e7c785e0ca37b4494d812263dc8f0d29f31ec03b457"
+      },
+      "archive": {
+        "path": "D:\\minecraftrust-astra-hardening\\machine\\architecture-hardening\\h15-observability-evidence\\final01\\logs\\fork-2.log.txt",
+        "bytes": 3673,
+        "sha256": "38072ec81e81a538b5817e7c785e0ca37b4494d812263dc8f0d29f31ec03b457"
+      }
+    },
+    {
+      "source": {
+        "path": "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h15-final-01\\import-0-actual-callback-stages.log",
+        "bytes": 1698,
+        "sha256": "43e74cd05e1de9d92fbc6f6b959b86853cee7ac5812a5e9e746fd41d9ce71506"
+      },
+      "archive": {
+        "path": "D:\\minecraftrust-astra-hardening\\machine\\architecture-hardening\\h15-observability-evidence\\final01\\logs\\import-0-actual-callback-stages.log.txt",
+        "bytes": 1698,
+        "sha256": "43e74cd05e1de9d92fbc6f6b959b86853cee7ac5812a5e9e746fd41d9ce71506"
+      }
+    },
+    {
+      "source": {
+        "path": "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h15-final-01\\import-0-synthetic-known-ticks.log",
+        "bytes": 1711,
+        "sha256": "af438d1b5784f1590052f34e1efca23e134ddd25ef6ed50e9d4f4cdca44fc0b6"
+      },
+      "archive": {
+        "path": "D:\\minecraftrust-astra-hardening\\machine\\architecture-hardening\\h15-observability-evidence\\final01\\logs\\import-0-synthetic-known-ticks.log.txt",
+        "bytes": 1711,
+        "sha256": "af438d1b5784f1590052f34e1efca23e134ddd25ef6ed50e9d4f4cdca44fc0b6"
+      }
+    },
+    {
+      "source": {
+        "path": "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h15-final-01\\import-0-synthetic-loss-stages.log",
+        "bytes": 1664,
+        "sha256": "fa07188d58636d20409fff35af26e63f25180647ae9796679d237031b93bbc34"
+      },
+      "archive": {
+        "path": "D:\\minecraftrust-astra-hardening\\machine\\architecture-hardening\\h15-observability-evidence\\final01\\logs\\import-0-synthetic-loss-stages.log.txt",
+        "bytes": 1664,
+        "sha256": "fa07188d58636d20409fff35af26e63f25180647ae9796679d237031b93bbc34"
+      }
+    },
+    {
+      "source": {
+        "path": "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h15-final-01\\import-1-actual-callback-stages.log",
+        "bytes": 1698,
+        "sha256": "e10637085201ce2f253e22d18dfe6afa695a3da7cf2e2b7af6cb62f9952235e1"
+      },
+      "archive": {
+        "path": "D:\\minecraftrust-astra-hardening\\machine\\architecture-hardening\\h15-observability-evidence\\final01\\logs\\import-1-actual-callback-stages.log.txt",
+        "bytes": 1698,
+        "sha256": "e10637085201ce2f253e22d18dfe6afa695a3da7cf2e2b7af6cb62f9952235e1"
+      }
+    },
+    {
+      "source": {
+        "path": "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h15-final-01\\import-1-synthetic-known-ticks.log",
+        "bytes": 1711,
+        "sha256": "af438d1b5784f1590052f34e1efca23e134ddd25ef6ed50e9d4f4cdca44fc0b6"
+      },
+      "archive": {
+        "path": "D:\\minecraftrust-astra-hardening\\machine\\architecture-hardening\\h15-observability-evidence\\final01\\logs\\import-1-synthetic-known-ticks.log.txt",
+        "bytes": 1711,
+        "sha256": "af438d1b5784f1590052f34e1efca23e134ddd25ef6ed50e9d4f4cdca44fc0b6"
+      }
+    },
+    {
+      "source": {
+        "path": "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h15-final-01\\import-1-synthetic-loss-stages.log",
+        "bytes": 1664,
+        "sha256": "fa07188d58636d20409fff35af26e63f25180647ae9796679d237031b93bbc34"
+      },
+      "archive": {
+        "path": "D:\\minecraftrust-astra-hardening\\machine\\architecture-hardening\\h15-observability-evidence\\final01\\logs\\import-1-synthetic-loss-stages.log.txt",
+        "bytes": 1664,
+        "sha256": "fa07188d58636d20409fff35af26e63f25180647ae9796679d237031b93bbc34"
+      }
+    },
+    {
+      "source": {
+        "path": "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h15-final-01\\import-2-actual-callback-stages.log",
+        "bytes": 1698,
+        "sha256": "16f184891d1d131773ed4ec9aa101b66457d96dd6a3dd4e770bdd391b42fa21c"
+      },
+      "archive": {
+        "path": "D:\\minecraftrust-astra-hardening\\machine\\architecture-hardening\\h15-observability-evidence\\final01\\logs\\import-2-actual-callback-stages.log.txt",
+        "bytes": 1698,
+        "sha256": "16f184891d1d131773ed4ec9aa101b66457d96dd6a3dd4e770bdd391b42fa21c"
+      }
+    },
+    {
+      "source": {
+        "path": "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h15-final-01\\import-2-synthetic-known-ticks.log",
+        "bytes": 1711,
+        "sha256": "af438d1b5784f1590052f34e1efca23e134ddd25ef6ed50e9d4f4cdca44fc0b6"
+      },
+      "archive": {
+        "path": "D:\\minecraftrust-astra-hardening\\machine\\architecture-hardening\\h15-observability-evidence\\final01\\logs\\import-2-synthetic-known-ticks.log.txt",
+        "bytes": 1711,
+        "sha256": "af438d1b5784f1590052f34e1efca23e134ddd25ef6ed50e9d4f4cdca44fc0b6"
+      }
+    },
+    {
+      "source": {
+        "path": "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h15-final-01\\import-2-synthetic-loss-stages.log",
+        "bytes": 1664,
+        "sha256": "fa07188d58636d20409fff35af26e63f25180647ae9796679d237031b93bbc34"
+      },
+      "archive": {
+        "path": "D:\\minecraftrust-astra-hardening\\machine\\architecture-hardening\\h15-observability-evidence\\final01\\logs\\import-2-synthetic-loss-stages.log.txt",
+        "bytes": 1664,
+        "sha256": "fa07188d58636d20409fff35af26e63f25180647ae9796679d237031b93bbc34"
+      }
+    },
+    {
+      "source": {
+        "path": "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h15-final-01\\invalid-capacity.log",
+        "bytes": 24,
+        "sha256": "05260f68112049cf4f747dcbdbdeab265f16d86efe909e871afd68879af02d8e"
+      },
+      "archive": {
+        "path": "D:\\minecraftrust-astra-hardening\\machine\\architecture-hardening\\h15-observability-evidence\\final01\\logs\\invalid-capacity.log.txt",
+        "bytes": 24,
+        "sha256": "05260f68112049cf4f747dcbdbdeab265f16d86efe909e871afd68879af02d8e"
+      }
+    },
+    {
+      "source": {
+        "path": "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h15-final-01\\invalid-duplicate-loss.log",
+        "bytes": 32,
+        "sha256": "8493787f091aa54319b86fa1caf5604db79195407cc68050beb1d1b54c0abbd3"
+      },
+      "archive": {
+        "path": "D:\\minecraftrust-astra-hardening\\machine\\architecture-hardening\\h15-observability-evidence\\final01\\logs\\invalid-duplicate-loss.log.txt",
+        "bytes": 32,
+        "sha256": "8493787f091aa54319b86fa1caf5604db79195407cc68050beb1d1b54c0abbd3"
+      }
+    },
+    {
+      "source": {
+        "path": "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h15-final-01\\invalid-event-capacity.log",
+        "bytes": 31,
+        "sha256": "e3922891e1cb85f3dc5d099999619a66d91a0c37e409afb17c76a5de7562f9df"
+      },
+      "archive": {
+        "path": "D:\\minecraftrust-astra-hardening\\machine\\architecture-hardening\\h15-observability-evidence\\final01\\logs\\invalid-event-capacity.log.txt",
+        "bytes": 31,
+        "sha256": "e3922891e1cb85f3dc5d099999619a66d91a0c37e409afb17c76a5de7562f9df"
+      }
+    },
+    {
+      "source": {
+        "path": "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h15-final-01\\invalid-fields.log",
+        "bytes": 16,
+        "sha256": "86311330a3ce03d2449185baa3f61b4bef475ab56dca8760eb894183015bf82e"
+      },
+      "archive": {
+        "path": "D:\\minecraftrust-astra-hardening\\machine\\architecture-hardening\\h15-observability-evidence\\final01\\logs\\invalid-fields.log.txt",
+        "bytes": 16,
+        "sha256": "86311330a3ce03d2449185baa3f61b4bef475ab56dca8760eb894183015bf82e"
+      }
+    },
+    {
+      "source": {
+        "path": "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h15-final-01\\invalid-negative.log",
+        "bytes": 27,
+        "sha256": "52f40b6db69995bae815f5648afa36f8997a3eaa28ef22200ab1364cca6af6e6"
+      },
+      "archive": {
+        "path": "D:\\minecraftrust-astra-hardening\\machine\\architecture-hardening\\h15-observability-evidence\\final01\\logs\\invalid-negative.log.txt",
+        "bytes": 27,
+        "sha256": "52f40b6db69995bae815f5648afa36f8997a3eaa28ef22200ab1364cca6af6e6"
+      }
+    },
+    {
+      "source": {
+        "path": "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h15-final-01\\invalid-overflow.log",
+        "bytes": 43,
+        "sha256": "ebe398d7384ee8368f526141495c8529138333e71e6a3126e2a96aa0b78f232f"
+      },
+      "archive": {
+        "path": "D:\\minecraftrust-astra-hardening\\machine\\architecture-hardening\\h15-observability-evidence\\final01\\logs\\invalid-overflow.log.txt",
+        "bytes": 43,
+        "sha256": "ebe398d7384ee8368f526141495c8529138333e71e6a3126e2a96aa0b78f232f"
+      }
+    },
+    {
+      "source": {
+        "path": "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h15-final-01\\invalid-sample-after-loss.log",
+        "bytes": 31,
+        "sha256": "e3922891e1cb85f3dc5d099999619a66d91a0c37e409afb17c76a5de7562f9df"
+      },
+      "archive": {
+        "path": "D:\\minecraftrust-astra-hardening\\machine\\architecture-hardening\\h15-observability-evidence\\final01\\logs\\invalid-sample-after-loss.log.txt",
+        "bytes": 31,
+        "sha256": "e3922891e1cb85f3dc5d099999619a66d91a0c37e409afb17c76a5de7562f9df"
+      }
+    },
+    {
+      "source": {
+        "path": "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h15-final-01\\invalid-sample-capacity.log",
+        "bytes": 31,
+        "sha256": "e3922891e1cb85f3dc5d099999619a66d91a0c37e409afb17c76a5de7562f9df"
+      },
+      "archive": {
+        "path": "D:\\minecraftrust-astra-hardening\\machine\\architecture-hardening\\h15-observability-evidence\\final01\\logs\\invalid-sample-capacity.log.txt",
+        "bytes": 31,
+        "sha256": "e3922891e1cb85f3dc5d099999619a66d91a0c37e409afb17c76a5de7562f9df"
+      }
+    },
+    {
+      "source": {
+        "path": "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h15-final-01\\invalid-schema.log",
+        "bytes": 16,
+        "sha256": "b5ebe3975df8fb6bf3766a059e1bf095c3d27ff66f7ab7fb0bfa45ee956ba458"
+      },
+      "archive": {
+        "path": "D:\\minecraftrust-astra-hardening\\machine\\architecture-hardening\\h15-observability-evidence\\final01\\logs\\invalid-schema.log.txt",
+        "bytes": 16,
+        "sha256": "b5ebe3975df8fb6bf3766a059e1bf095c3d27ff66f7ab7fb0bfa45ee956ba458"
+      }
+    },
+    {
+      "source": {
+        "path": "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h15-final-01\\invalid-stage.log",
+        "bytes": 15,
+        "sha256": "95bf4800968e115d02f15302314a41200cf7b8680bc95c0a607fbbd49b3372ed"
+      },
+      "archive": {
+        "path": "D:\\minecraftrust-astra-hardening\\machine\\architecture-hardening\\h15-observability-evidence\\final01\\logs\\invalid-stage.log.txt",
+        "bytes": 15,
+        "sha256": "95bf4800968e115d02f15302314a41200cf7b8680bc95c0a607fbbd49b3372ed"
+      }
+    },
+    {
+      "source": {
+        "path": "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h15-final-01\\java-version.log",
+        "bytes": 155,
+        "sha256": "9d65a43706f49fcfdbcece91e737f759110493e82fd1c4886cf49104c2017b0e"
+      },
+      "archive": {
+        "path": "D:\\minecraftrust-astra-hardening\\machine\\architecture-hardening\\h15-observability-evidence\\final01\\logs\\java-version.log.txt",
+        "bytes": 155,
+        "sha256": "9d65a43706f49fcfdbcece91e737f759110493e82fd1c4886cf49104c2017b0e"
+      }
+    },
+    {
+      "source": {
+        "path": "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h15-final-01\\java8-jfr.log",
+        "bytes": 303,
+        "sha256": "1f086c22966b2a23157463d61cdf6aa026fb134bc1e4e844a112ecf91b60fa13"
+      },
+      "archive": {
+        "path": "D:\\minecraftrust-astra-hardening\\machine\\architecture-hardening\\h15-observability-evidence\\final01\\logs\\java8-jfr.log.txt",
+        "bytes": 303,
+        "sha256": "1f086c22966b2a23157463d61cdf6aa026fb134bc1e4e844a112ecf91b60fa13"
+      }
+    },
+    {
+      "source": {
+        "path": "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h15-final-01\\native-probe.log",
+        "bytes": 4211,
+        "sha256": "f18cf39789c406ad64a5fb6868f8f0db5187b948925395b8a70f07f210513b6b"
+      },
+      "archive": {
+        "path": "D:\\minecraftrust-astra-hardening\\machine\\architecture-hardening\\h15-observability-evidence\\final01\\logs\\native-probe.log.txt",
+        "bytes": 4211,
+        "sha256": "f18cf39789c406ad64a5fb6868f8f0db5187b948925395b8a70f07f210513b6b"
+      }
+    },
+    {
+      "source": {
+        "path": "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h15-final-01\\native-release.log",
+        "bytes": 367,
+        "sha256": "c868313a4c22bdf52a7dffb8782ef0d25e9a16bc0808cf34613ac0cd56904063"
+      },
+      "archive": {
+        "path": "D:\\minecraftrust-astra-hardening\\machine\\architecture-hardening\\h15-observability-evidence\\final01\\logs\\native-release.log.txt",
+        "bytes": 367,
+        "sha256": "c868313a4c22bdf52a7dffb8782ef0d25e9a16bc0808cf34613ac0cd56904063"
+      }
+    },
+    {
+      "source": {
+        "path": "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h15-final-01\\probe-javac.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "archive": {
+        "path": "D:\\minecraftrust-astra-hardening\\machine\\architecture-hardening\\h15-observability-evidence\\final01\\logs\\probe-javac.log.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "source": {
+        "path": "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h15-final-01\\resolve-cargo-clippy.log",
+        "bytes": 85,
+        "sha256": "26f09df4e33bf098ad9fb2f35d1fce728c2b509fef8c47af1c745973b28b296d"
+      },
+      "archive": {
+        "path": "D:\\minecraftrust-astra-hardening\\machine\\architecture-hardening\\h15-observability-evidence\\final01\\logs\\resolve-cargo-clippy.log.txt",
+        "bytes": 85,
+        "sha256": "26f09df4e33bf098ad9fb2f35d1fce728c2b509fef8c47af1c745973b28b296d"
+      }
+    },
+    {
+      "source": {
+        "path": "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h15-final-01\\resolve-cargo.log",
+        "bytes": 78,
+        "sha256": "d70a6681283a709db0b4154a538f41c781608f69fb5bfbfa66dac449b697a95c"
+      },
+      "archive": {
+        "path": "D:\\minecraftrust-astra-hardening\\machine\\architecture-hardening\\h15-observability-evidence\\final01\\logs\\resolve-cargo.log.txt",
+        "bytes": 78,
+        "sha256": "d70a6681283a709db0b4154a538f41c781608f69fb5bfbfa66dac449b697a95c"
+      }
+    },
+    {
+      "source": {
+        "path": "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h15-final-01\\resolve-clippy-driver.log",
+        "bytes": 86,
+        "sha256": "934b599a01bd8f7d5338d12d97fc793d1af3427b7f706b93d8eb18819ce01b01"
+      },
+      "archive": {
+        "path": "D:\\minecraftrust-astra-hardening\\machine\\architecture-hardening\\h15-observability-evidence\\final01\\logs\\resolve-clippy-driver.log.txt",
+        "bytes": 86,
+        "sha256": "934b599a01bd8f7d5338d12d97fc793d1af3427b7f706b93d8eb18819ce01b01"
+      }
+    },
+    {
+      "source": {
+        "path": "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h15-final-01\\resolve-rustc.log",
+        "bytes": 78,
+        "sha256": "54234bc009f7bc295608f8bb882e03677001147f42f05ce19606c17d2db6473b"
+      },
+      "archive": {
+        "path": "D:\\minecraftrust-astra-hardening\\machine\\architecture-hardening\\h15-observability-evidence\\final01\\logs\\resolve-rustc.log.txt",
+        "bytes": 78,
+        "sha256": "54234bc009f7bc295608f8bb882e03677001147f42f05ce19606c17d2db6473b"
+      }
+    },
+    {
+      "source": {
+        "path": "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h15-final-01\\resolve-rustfmt.log",
+        "bytes": 80,
+        "sha256": "0e07fc57cf9821aa13e5d361fdaa13fcb14ecb9c7db0284d9b66cb63d44a5beb"
+      },
+      "archive": {
+        "path": "D:\\minecraftrust-astra-hardening\\machine\\architecture-hardening\\h15-observability-evidence\\final01\\logs\\resolve-rustfmt.log.txt",
+        "bytes": 80,
+        "sha256": "0e07fc57cf9821aa13e5d361fdaa13fcb14ecb9c7db0284d9b66cb63d44a5beb"
+      }
+    },
+    {
+      "source": {
+        "path": "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h15-final-01\\rust-tests.log",
+        "bytes": 1792,
+        "sha256": "45731a8aa86fed694619bcae67402ed11664080e73ee1ce4413d6dc466891b27"
+      },
+      "archive": {
+        "path": "D:\\minecraftrust-astra-hardening\\machine\\architecture-hardening\\h15-observability-evidence\\final01\\logs\\rust-tests.log.txt",
+        "bytes": 1792,
+        "sha256": "45731a8aa86fed694619bcae67402ed11664080e73ee1ce4413d6dc466891b27"
+      }
+    },
+    {
+      "source": {
+        "path": "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h15-final-01\\rust-toolchain.log",
+        "bytes": 321,
+        "sha256": "86c2d07f9968fd3174d9cff8c60a4d4323fba3166d5dc6dd36f0987a50677d70"
+      },
+      "archive": {
+        "path": "D:\\minecraftrust-astra-hardening\\machine\\architecture-hardening\\h15-observability-evidence\\final01\\logs\\rust-toolchain.log.txt",
+        "bytes": 321,
+        "sha256": "86c2d07f9968fd3174d9cff8c60a4d4323fba3166d5dc6dd36f0987a50677d70"
+      }
+    },
+    {
+      "source": {
+        "path": "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h15-final-01\\rustc-version.log",
+        "bytes": 194,
+        "sha256": "c45e612575abeef05e99e88eb1e7aea52cddab9ad70d4f65ad20eaa65e92a9cf"
+      },
+      "archive": {
+        "path": "D:\\minecraftrust-astra-hardening\\machine\\architecture-hardening\\h15-observability-evidence\\final01\\logs\\rustc-version.log.txt",
+        "bytes": 194,
+        "sha256": "c45e612575abeef05e99e88eb1e7aea52cddab9ad70d4f65ad20eaa65e92a9cf"
+      }
+    },
+    {
+      "source": {
+        "path": "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h15-final-01\\scoped-clippy.log",
+        "bytes": 349,
+        "sha256": "8812b850629a1e9f764970da66299f7a5195947d1c2463c1cb090e87059f87ae"
+      },
+      "archive": {
+        "path": "D:\\minecraftrust-astra-hardening\\machine\\architecture-hardening\\h15-observability-evidence\\final01\\logs\\scoped-clippy.log.txt",
+        "bytes": 349,
+        "sha256": "8812b850629a1e9f764970da66299f7a5195947d1c2463c1cb090e87059f87ae"
+      }
+    },
+    {
+      "source": {
+        "path": "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h15-final-01\\scoped-fmt.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "archive": {
+        "path": "D:\\minecraftrust-astra-hardening\\machine\\architecture-hardening\\h15-observability-evidence\\final01\\logs\\scoped-fmt.log.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "source": {
+        "path": "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h15-final-01\\srg-compile-support.log",
+        "bytes": 154,
+        "sha256": "463028ff0a01cab7143fcf428bba2f2613d6486354b44ea7973f636c7c73dda8"
+      },
+      "archive": {
+        "path": "D:\\minecraftrust-astra-hardening\\machine\\architecture-hardening\\h15-observability-evidence\\final01\\logs\\srg-compile-support.log.txt",
+        "bytes": 154,
+        "sha256": "463028ff0a01cab7143fcf428bba2f2613d6486354b44ea7973f636c7c73dda8"
+      }
+    },
+    {
+      "source": {
+        "path": "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h15-final-01\\fork-0\\qualification.json",
+        "bytes": 375176,
+        "sha256": "d5bb8c80298a331133ef67e4c5756455c3d28d5776355b6dafc72f8e04fecfb6"
+      },
+      "archive": {
+        "path": "D:\\minecraftrust-astra-hardening\\machine\\architecture-hardening\\h15-observability-evidence\\final01\\fork-0\\qualification.json",
+        "bytes": 375176,
+        "sha256": "d5bb8c80298a331133ef67e4c5756455c3d28d5776355b6dafc72f8e04fecfb6"
+      }
+    },
+    {
+      "source": {
+        "path": "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h15-final-01\\fork-0\\oracle\\actual-callback-stages.tsv",
+        "bytes": 216,
+        "sha256": "51b533354bfe9d643663979f98384a9d11dd64c85a3c48b7e8fec2b05d107eaf"
+      },
+      "archive": {
+        "path": "D:\\minecraftrust-astra-hardening\\machine\\architecture-hardening\\h15-observability-evidence\\final01\\fork-0\\actual-callback-stages.tsv",
+        "bytes": 216,
+        "sha256": "51b533354bfe9d643663979f98384a9d11dd64c85a3c48b7e8fec2b05d107eaf"
+      }
+    },
+    {
+      "source": {
+        "path": "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h15-final-01\\fork-0\\oracle\\result.json",
+        "bytes": 27890,
+        "sha256": "99c95044042d4e2ec90059b2ae3465ae4f91f892c1273d7d96a7a2046cd7d9a7"
+      },
+      "archive": {
+        "path": "D:\\minecraftrust-astra-hardening\\machine\\architecture-hardening\\h15-observability-evidence\\final01\\fork-0\\result.json",
+        "bytes": 27890,
+        "sha256": "99c95044042d4e2ec90059b2ae3465ae4f91f892c1273d7d96a7a2046cd7d9a7"
+      }
+    },
+    {
+      "source": {
+        "path": "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h15-final-01\\fork-0\\oracle\\synthetic-known-ticks.tsv",
+        "bytes": 1317,
+        "sha256": "d863d3b4ddce4c281b093c2400303f9f657d208dde1c35fea49246a47d222276"
+      },
+      "archive": {
+        "path": "D:\\minecraftrust-astra-hardening\\machine\\architecture-hardening\\h15-observability-evidence\\final01\\fork-0\\synthetic-known-ticks.tsv",
+        "bytes": 1317,
+        "sha256": "d863d3b4ddce4c281b093c2400303f9f657d208dde1c35fea49246a47d222276"
+      }
+    },
+    {
+      "source": {
+        "path": "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h15-final-01\\fork-0\\oracle\\synthetic-loss-stages.tsv",
+        "bytes": 83,
+        "sha256": "b653b066502e45ba4be3827c2233ac21102f1b0dd27ab2b4ab06c0c05fd6c05c"
+      },
+      "archive": {
+        "path": "D:\\minecraftrust-astra-hardening\\machine\\architecture-hardening\\h15-observability-evidence\\final01\\fork-0\\synthetic-loss-stages.tsv",
+        "bytes": 83,
+        "sha256": "b653b066502e45ba4be3827c2233ac21102f1b0dd27ab2b4ab06c0c05fd6c05c"
+      }
+    },
+    {
+      "source": {
+        "path": "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h15-final-01\\fork-1\\qualification.json",
+        "bytes": 375176,
+        "sha256": "ff45249d1e6abccb9901c6216be34918e5026da70e8597996a0c6f6c590e7567"
+      },
+      "archive": {
+        "path": "D:\\minecraftrust-astra-hardening\\machine\\architecture-hardening\\h15-observability-evidence\\final01\\fork-1\\qualification.json",
+        "bytes": 375176,
+        "sha256": "ff45249d1e6abccb9901c6216be34918e5026da70e8597996a0c6f6c590e7567"
+      }
+    },
+    {
+      "source": {
+        "path": "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h15-final-01\\fork-1\\oracle\\actual-callback-stages.tsv",
+        "bytes": 217,
+        "sha256": "e707639f7b95df2f71aba804454f6aff7d42fb273cbb399ad04c72b1fe63fbc3"
+      },
+      "archive": {
+        "path": "D:\\minecraftrust-astra-hardening\\machine\\architecture-hardening\\h15-observability-evidence\\final01\\fork-1\\actual-callback-stages.tsv",
+        "bytes": 217,
+        "sha256": "e707639f7b95df2f71aba804454f6aff7d42fb273cbb399ad04c72b1fe63fbc3"
+      }
+    },
+    {
+      "source": {
+        "path": "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h15-final-01\\fork-1\\oracle\\result.json",
+        "bytes": 27886,
+        "sha256": "441c832cf6d5321f0b77c18e04f475c99bbd5cca50f55c03fa5776c59b5d534f"
+      },
+      "archive": {
+        "path": "D:\\minecraftrust-astra-hardening\\machine\\architecture-hardening\\h15-observability-evidence\\final01\\fork-1\\result.json",
+        "bytes": 27886,
+        "sha256": "441c832cf6d5321f0b77c18e04f475c99bbd5cca50f55c03fa5776c59b5d534f"
+      }
+    },
+    {
+      "source": {
+        "path": "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h15-final-01\\fork-1\\oracle\\synthetic-known-ticks.tsv",
+        "bytes": 1317,
+        "sha256": "d863d3b4ddce4c281b093c2400303f9f657d208dde1c35fea49246a47d222276"
+      },
+      "archive": {
+        "path": "D:\\minecraftrust-astra-hardening\\machine\\architecture-hardening\\h15-observability-evidence\\final01\\fork-1\\synthetic-known-ticks.tsv",
+        "bytes": 1317,
+        "sha256": "d863d3b4ddce4c281b093c2400303f9f657d208dde1c35fea49246a47d222276"
+      }
+    },
+    {
+      "source": {
+        "path": "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h15-final-01\\fork-1\\oracle\\synthetic-loss-stages.tsv",
+        "bytes": 83,
+        "sha256": "b653b066502e45ba4be3827c2233ac21102f1b0dd27ab2b4ab06c0c05fd6c05c"
+      },
+      "archive": {
+        "path": "D:\\minecraftrust-astra-hardening\\machine\\architecture-hardening\\h15-observability-evidence\\final01\\fork-1\\synthetic-loss-stages.tsv",
+        "bytes": 83,
+        "sha256": "b653b066502e45ba4be3827c2233ac21102f1b0dd27ab2b4ab06c0c05fd6c05c"
+      }
+    },
+    {
+      "source": {
+        "path": "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h15-final-01\\fork-2\\qualification.json",
+        "bytes": 375176,
+        "sha256": "655b0c93e56209bf33955cc68ed69a92457ce9dfce5ef55de9c3ad32bb6ada01"
+      },
+      "archive": {
+        "path": "D:\\minecraftrust-astra-hardening\\machine\\architecture-hardening\\h15-observability-evidence\\final01\\fork-2\\qualification.json",
+        "bytes": 375176,
+        "sha256": "655b0c93e56209bf33955cc68ed69a92457ce9dfce5ef55de9c3ad32bb6ada01"
+      }
+    },
+    {
+      "source": {
+        "path": "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h15-final-01\\fork-2\\oracle\\actual-callback-stages.tsv",
+        "bytes": 217,
+        "sha256": "5f77fa0b4ff0d55f8f20619fdd9184940ab2b3b7547c1b581928b4b45b3f6b4a"
+      },
+      "archive": {
+        "path": "D:\\minecraftrust-astra-hardening\\machine\\architecture-hardening\\h15-observability-evidence\\final01\\fork-2\\actual-callback-stages.tsv",
+        "bytes": 217,
+        "sha256": "5f77fa0b4ff0d55f8f20619fdd9184940ab2b3b7547c1b581928b4b45b3f6b4a"
+      }
+    },
+    {
+      "source": {
+        "path": "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h15-final-01\\fork-2\\oracle\\result.json",
+        "bytes": 27883,
+        "sha256": "0453d806b684c66bca1f16dd30ae416b64d1abe6c1efbbe3c12ab6ad345dd14b"
+      },
+      "archive": {
+        "path": "D:\\minecraftrust-astra-hardening\\machine\\architecture-hardening\\h15-observability-evidence\\final01\\fork-2\\result.json",
+        "bytes": 27883,
+        "sha256": "0453d806b684c66bca1f16dd30ae416b64d1abe6c1efbbe3c12ab6ad345dd14b"
+      }
+    },
+    {
+      "source": {
+        "path": "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h15-final-01\\fork-2\\oracle\\synthetic-known-ticks.tsv",
+        "bytes": 1317,
+        "sha256": "d863d3b4ddce4c281b093c2400303f9f657d208dde1c35fea49246a47d222276"
+      },
+      "archive": {
+        "path": "D:\\minecraftrust-astra-hardening\\machine\\architecture-hardening\\h15-observability-evidence\\final01\\fork-2\\synthetic-known-ticks.tsv",
+        "bytes": 1317,
+        "sha256": "d863d3b4ddce4c281b093c2400303f9f657d208dde1c35fea49246a47d222276"
+      }
+    },
+    {
+      "source": {
+        "path": "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h15-final-01\\fork-2\\oracle\\synthetic-loss-stages.tsv",
+        "bytes": 83,
+        "sha256": "b653b066502e45ba4be3827c2233ac21102f1b0dd27ab2b4ab06c0c05fd6c05c"
+      },
+      "archive": {
+        "path": "D:\\minecraftrust-astra-hardening\\machine\\architecture-hardening\\h15-observability-evidence\\final01\\fork-2\\synthetic-loss-stages.tsv",
+        "bytes": 83,
+        "sha256": "b653b066502e45ba4be3827c2233ac21102f1b0dd27ab2b4ab06c0c05fd6c05c"
+      }
+    },
+    {
+      "source": {
+        "path": "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h15-dev-01\\receipt.json",
+        "bytes": 114478,
+        "sha256": "2e666412112aa933221436302cfa10564ded1dde5997859b07fc7589e2ebc39b"
+      },
+      "archive": {
+        "path": "D:\\minecraftrust-astra-hardening\\machine\\architecture-hardening\\h15-observability-evidence\\final01\\development\\h15-dev-01\\receipt.json",
+        "bytes": 114478,
+        "sha256": "2e666412112aa933221436302cfa10564ded1dde5997859b07fc7589e2ebc39b"
+      }
+    },
+    {
+      "source": {
+        "path": "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h15-dev-02\\receipt.json",
+        "bytes": 161667,
+        "sha256": "4ebcc21bdb5cdaa4d1ddae8a19ddcc05e369c1ad778ace38e6abad0cfd27c045"
+      },
+      "archive": {
+        "path": "D:\\minecraftrust-astra-hardening\\machine\\architecture-hardening\\h15-observability-evidence\\final01\\development\\h15-dev-02\\receipt.json",
+        "bytes": 161667,
+        "sha256": "4ebcc21bdb5cdaa4d1ddae8a19ddcc05e369c1ad778ace38e6abad0cfd27c045"
+      }
+    },
+    {
+      "source": {
+        "path": "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h15-dev-03\\receipt.json",
+        "bytes": 165886,
+        "sha256": "aded5dae43e8b72f2e0ae022330c85eae905507b1518e4c59b2ab2c1626b29a6"
+      },
+      "archive": {
+        "path": "D:\\minecraftrust-astra-hardening\\machine\\architecture-hardening\\h15-observability-evidence\\final01\\development\\h15-dev-03\\receipt.json",
+        "bytes": 165886,
+        "sha256": "aded5dae43e8b72f2e0ae022330c85eae905507b1518e4c59b2ab2c1626b29a6"
+      }
+    },
+    {
+      "source": {
+        "path": "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h15-dev-01\\fork-0.log",
+        "bytes": 6846,
+        "sha256": "d379751dfad2ad0b56a3860bc8727c4ce2f240a7f831ad45bc9b179c28589957"
+      },
+      "archive": {
+        "path": "D:\\minecraftrust-astra-hardening\\machine\\architecture-hardening\\h15-observability-evidence\\final01\\development\\h15-dev-01\\fork-0.log.txt",
+        "bytes": 6846,
+        "sha256": "d379751dfad2ad0b56a3860bc8727c4ce2f240a7f831ad45bc9b179c28589957"
+      }
+    }
+  ]
+}

@@ -343,6 +343,84 @@
       "evidence": "machine/architecture-hardening/h14-packet-buffer.json",
       "provenance": "tools/packet-buffer-pipeline-experiment/provenance.json",
       "source": "https://docs.rs/crate/bytes/1.12.1/source/"
+    },
+    {
+      "candidate": "HdrHistogram",
+      "version": "7.5.4",
+      "license": "MIT OR Apache-2.0",
+      "decision": "PROTOTYPE",
+      "reason": "Pinned7.5.4 minimal-feature bounded reusable foundation; sorted percentile oracle,missing/tail/overflow semantics and hot zero-allocation recording validated",
+      "performance_value": "Measured bounded collector cost in H15; no server throughput claim",
+      "migration_value": "Durable explicit coverage and cost evidence for migration decisions",
+      "integration_risk": "Actual live adapters,identity/worker lifecycle,sampling overhead and export policy remain required",
+      "installed_scope": "ISOLATED_H15_FOUNDATION",
+      "evidence": "machine/architecture-hardening/h15-observability.json",
+      "provenance": "tools/observability/PROVENANCE.json"
+    },
+    {
+      "candidate": "metrics",
+      "version": "see baseline pinned candidate and H15 primary source record",
+      "license": "MIT OR Apache-2.0",
+      "decision": "STUDY",
+      "reason": "Defer general label exporter until bounded identity/lifecycle policy; existing local metrics crate remains H3",
+      "performance_value": "No local runtime performance claim",
+      "migration_value": "Durable explicit coverage and cost evidence for migration decisions",
+      "integration_risk": "Actual live adapters,identity/worker lifecycle,sampling overhead and export policy remain required",
+      "installed_scope": "NOT_INSTALLED",
+      "evidence": "machine/architecture-hardening/h15-observability.json",
+      "provenance": "tools/observability/PROVENANCE.json"
+    },
+    {
+      "candidate": "tracing",
+      "version": "see baseline pinned candidate and H15 primary source record",
+      "license": "MIT OR Apache-2.0",
+      "decision": "STUDY",
+      "reason": "Defer subscriber/filter integration; bounded coarse sampling implemented without general dependency",
+      "performance_value": "No local runtime performance claim",
+      "migration_value": "Durable explicit coverage and cost evidence for migration decisions",
+      "integration_risk": "Actual live adapters,identity/worker lifecycle,sampling overhead and export policy remain required",
+      "installed_scope": "NOT_INSTALLED",
+      "evidence": "machine/architecture-hardening/h15-observability.json",
+      "provenance": "tools/observability/PROVENANCE.json"
+    },
+    {
+      "candidate": "Tracy",
+      "version": "see baseline pinned candidate and H15 primary source record",
+      "license": "BSD-3-Clause",
+      "decision": "STUDY",
+      "reason": "Windows native diagnostic candidate; Java8/JNI symbols and perturbation unqualified",
+      "performance_value": "No local runtime performance claim",
+      "migration_value": "Durable explicit coverage and cost evidence for migration decisions",
+      "integration_risk": "Actual live adapters,identity/worker lifecycle,sampling overhead and export policy remain required",
+      "installed_scope": "NOT_INSTALLED",
+      "evidence": "machine/architecture-hardening/h15-observability.json",
+      "provenance": "tools/observability/PROVENANCE.json"
+    },
+    {
+      "candidate": "Samply",
+      "version": "see baseline pinned candidate and H15 primary source record",
+      "license": "MIT OR Apache-2.0",
+      "decision": "STUDY",
+      "reason": "Windows ETW candidate; no broad capture or established Java8 symbol coverage",
+      "performance_value": "No local runtime performance claim",
+      "migration_value": "Durable explicit coverage and cost evidence for migration decisions",
+      "integration_risk": "Actual live adapters,identity/worker lifecycle,sampling overhead and export policy remain required",
+      "installed_scope": "NOT_INSTALLED",
+      "evidence": "machine/architecture-hardening/h15-observability.json",
+      "provenance": "tools/observability/PROVENANCE.json"
+    },
+    {
+      "candidate": "async-profiler",
+      "version": "see baseline pinned candidate and H15 primary source record",
+      "license": "Apache-2.0",
+      "decision": "AVOID",
+      "reason": "Avoid installation on current Windows host; official maintained builds are Linux/macOS; retain study for future supported-host profiling",
+      "performance_value": "No local runtime performance claim",
+      "migration_value": "Durable explicit coverage and cost evidence for migration decisions",
+      "integration_risk": "Actual live adapters,identity/worker lifecycle,sampling overhead and export policy remain required",
+      "installed_scope": "NOT_INSTALLED",
+      "evidence": "machine/architecture-hardening/h15-observability.json",
+      "provenance": "tools/observability/PROVENANCE.json"
     }
   ]
 }
