@@ -23,6 +23,7 @@ from __future__ import annotations
 import json
 import os
 import shutil
+import sys
 import subprocess
 import time
 import zipfile
@@ -40,6 +41,28 @@ OUT = ROOT / "target/rev-probe"
 # different copy of the class the harness sees, and a session admission
 # recorded in one copy is invisible to the other.
 CAMPAIGN_JAR = ROOT / "target/architecture-hardening/rev-srg/rustcraft-rev-coremod.jar"
+
+# Where this run's evidence lands. Overridable so a caller that needs more than
+# one discovery launch -- which is what makes a measurement into a fact -- gets
+# an independent copy each time instead of overwriting the last.
+OUT_OVERRIDE = None
+CAMPAIGN_OVERRIDE = None
+
+
+def set_output(path):
+    global OUT, OUT_OVERRIDE
+    # Absolute, because the launch runs with cwd set to the pinned runtime: a
+    # relative classpath entry is resolved against that instead, and the JVM
+    # reports the consequence as a transformer failure rather than a missing
+    # path.
+    OUT_OVERRIDE = Path(path).resolve()
+
+
+def set_campaign(jar):
+    global CAMPAIGN_JAR, CAMPAIGN_OVERRIDE
+    # Absolute for the same reason as the output directory: this jar is on the
+    # launch classpath, and the launch's cwd is the runtime, not this repo.
+    CAMPAIGN_JAR = Path(jar).resolve()
 
 
 def compile_probe() -> Path:
@@ -78,9 +101,14 @@ def make_observer_jar(classes: Path) -> Path:
 
 
 def main() -> int:
+    global OUT
+    if OUT_OVERRIDE is not None:
+        OUT = OUT_OVERRIDE
     OUT.mkdir(parents=True, exist_ok=True)
     classes = compile_probe()
-    observer = make_observer_jar(classes)
+    # Absolute: the JVM runs with cwd set to the pinned runtime, so a
+    # relative agent path is looked for there and reported as a missing JAR.
+    observer = make_observer_jar(classes).resolve()
     dump = OUT / "transformed"
     if dump.exists():
         shutil.rmtree(dump)
@@ -123,4 +151,18 @@ def main() -> int:
 
 
 if __name__ == "__main__":
+    # Discovery is run more than once by the generic qualification driver, and
+    # the writer plan in force differs per runtime, so both are arguments here
+    # rather than constants. A bare invocation keeps the historical defaults.
+    argv = sys.argv[1:]
+    while argv:
+        flag = argv.pop(0)
+        if flag == "--out" and argv:
+            set_output(argv.pop(0))
+        elif flag == "--campaign-jar" and argv:
+            set_campaign(argv.pop(0))
+        else:
+            print("usage: run_rev_probe.py [--out <dir>] [--campaign-jar <jar>]",
+                  file=sys.stderr)
+            raise SystemExit(2)
     raise SystemExit(main())
