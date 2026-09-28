@@ -178,8 +178,8 @@ public final class LiveCaptureScope {
                 // Under the per-chunk policy ids may exceed the width in the
                 // registry; only their sign is still bound here, because a
                 // negative id is a broken registry rather than a wide one.
-                for (Integer id : aliases.values())
-                    if (id < 0) throw new ScopeFailure("REGISTRY_ID_OUT_OF_WIDTH");
+                for (Integer assigned : aliases.values())
+                    if (assigned < 0) throw new ScopeFailure("REGISTRY_ID_OUT_OF_WIDTH");
             checkRegistry(scope.registryEpoch);
         }
 
