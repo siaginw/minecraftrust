@@ -246,6 +246,19 @@ def main():
   run('compile-transformation-chain',[javac,'-source','8','-target','8','-Xlint:all','-Werror','-cp',asm,'-d',chain,*chain_src,acq,chain_producer,ROOT/'tools/bridge/src/com/rustcraft/qualification/CalleeIsolation.java',chain_plan,test/'SessionBoundFixture.java',test/'TransformationChainControls.java'])
   chain_doc=out/'transformation-chain.json'
   chain_result=run('transformation-chain-controls',[java,'-cp',str(chain)+os.pathsep+str(asm),'com.rustcraft.coremod.TransformationChainControls',out/'fixtures/session-fixture.class',chain_doc])
+  # Behavioural half of the ISOLATED_CALLEE contract: a wrapper of the production
+  # shape whose observation deliberately throws. Structure is proved by
+  # CalleeIsolation; this proves the containment actually happens at runtime and
+  # that the caller's own failures either side of it still propagate.
+  calib=out/'callee-controls';calib.mkdir()
+  # The wrapper variants are REAL Java compiled by the real compiler, so the
+  # control tests the shape production actually ships rather than one assembled
+  # by hand.
+  callee_fixtures=out/'callee-fixtures';callee_fixtures.mkdir()
+  run('compile-callee-fixtures',[javac,'-g','-source','8','-target','8','-d',str(callee_fixtures),ROOT/'tools/writer-plan-v2-tests/fixtures/callee/example/Wrappers.java'])
+  run('compile-isolated-callee-controls',[javac,'-source','8','-target','8','-Xlint:all','-Werror','-cp',asm,'-d',calib,*chain_src,acq,chain_plan,ROOT/'tools/bridge/src/com/rustcraft/qualification/CalleeIsolation.java',ROOT/'tools/bridge/src/com/rustcraft/qualification/LoaderDefinitionWitness.java',ROOT/'tools/bridge/src/com/rustcraft/qualification/TransformationChainEvidence.java',test/'IsolatedCalleeControls.java'])
+  callee_result=run('isolated-callee-controls',[java,'-cp',str(calib)+os.pathsep+str(asm),'com.rustcraft.coremod.IsolatedCalleeControls',str(callee_fixtures)])
+  assert callee_result.stdout.strip().startswith(b'PASS IsolatedCalleeControls'),callee_result.stdout
   assert chain_result.stdout.strip().startswith(b'PASS TransformationChainControls'),chain_result.stdout
   # The Java renderer and the engine must agree byte for byte on the document
   # the chain binds itself to, or that binding compares a hash against a

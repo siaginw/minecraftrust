@@ -76,28 +76,41 @@ public final class CalleeIsolation {
      *         safe wrapper -- which the caller must treat as NO coverage
      */
     public static String verify(MethodInsnNode call) {
-        if (call.name == null || call.name.length() == SAFE_PREFIX.length()) {
-            lastRefusal = "callee name is not a safe wrapper: " + call.name;
-            return null;
-        }
-        String key = call.owner + "#" + call.name + call.desc;
-        String cached = VERIFIED.get(key);
-        if (cached != null) return cached;
-
-        lastRefusal = "not examined";
-        if (call.name == null || !call.name.startsWith(SAFE_PREFIX)) {
-            lastRefusal = "callee is not a safe wrapper: " + call.name;
-            return null;
-        }
-        String underlying = call.name.substring(SAFE_PREFIX.length());
         byte[] bytes = classBytesOf(call.owner);
         if (bytes == null) {
             lastRefusal = "cannot read the callee class bytes for " + call.owner;
             return null;
         }
+        String key = call.owner + "#" + call.name + call.desc;
+        String cached = VERIFIED.get(key);
+        if (cached != null) {
+            lastRefusal = "verified";
+            return cached;
+        }
+        String evidence = verify(bytes, call);
+        if (evidence != null) VERIFIED.put(key, evidence);
+        return evidence;
+    }
+
+    /**
+     * The same verification against class bytes the caller already holds.
+     *
+     * <p>Exposed so a control can verify a wrapper it built itself, which is how
+     * the behavioural half of this contract is tested: a synthetic wrapper of the
+     * production shape, with an observation that deliberately throws. The
+     * production observations never throw, and making one throw to test this
+     * would be changing the product in order to observe it.</p>
+     */
+    public static String verify(byte[] classBytes, MethodInsnNode call) {
+        lastRefusal = "not examined";
+        if (call.name == null || call.name.length() == SAFE_PREFIX.length()
+                || !call.name.startsWith(SAFE_PREFIX)) {
+            lastRefusal = "callee is not a safe wrapper: " + call.name;
+            return null;
+        }
         ClassNode cn;
         try {
-            cn = LiveHookSupport.readClass(bytes);
+            cn = LiveHookSupport.readClass(classBytes);
         } catch (Throwable unreadable) {
             lastRefusal = "callee class bytes are unreadable: " + unreadable;
             return null;
@@ -109,26 +122,14 @@ public final class CalleeIsolation {
             lastRefusal = "no method " + call.name + call.desc + " in " + call.owner;
             return null;
         }
-
         String reason = analyse(wrapper, call.owner);
-        if (reason == null) underlying = observedUnderlying(wrapper, call.owner);
         lastRefusal = reason == null ? "verified" : reason;
         if (reason != null) return null;
-
-        String evidence = CONTRACT + ":" + call.owner.replace('/', '.') + "#" + call.name
-                + call.desc + ";underlying=" + underlying
+        return CONTRACT + ":" + call.owner.replace('/', '.') + "#" + call.name
+                + call.desc + ";underlying=" + observedUnderlying(wrapper, call.owner)
                 + ";wrapper_body_sha256=" + bodyDigest(wrapper);
-        VERIFIED.put(key, evidence);
-        return evidence;
     }
 
-    /**
-     * Why this wrapper is not a containment contract, or null if it is.
-     *
-     * <p>Each check names the failure it exists to catch. A wrapper that merely
-     * LOOKS safe fails one of them, which is the point: the alternative is
-     * trusting a name, and a name is not evidence.</p>
-     */
     private static String analyse(MethodNode wrapper, String owner) {
         AbstractInsnNode[] body = AsmTreeCompat.instructions(wrapper);
         // The isolated observation is identified STRUCTURALLY: it is the one
@@ -217,16 +218,20 @@ public final class CalleeIsolation {
     }
 
     /**
-     * Where this handler's instructions end: at the next label that begins
-     * another block, or at the end of the method.
+     * Where this handler's instructions end.
+     *
+     * <p>At the next BLOCK boundary, not the next label. javac emits a label
+     * inside the handler for the normal path's jump target, and stopping there
+     * cut the scan short before the rethrowing athrow -- which is the one
+     * instruction this whole check exists to find. A handler that contains an
+     * athrow is not a containment contract, and missing it would report an
+     * unsafe wrapper as safe.</p>
      */
     private static int handlerEnd(MethodNode mn, AbstractInsnNode[] body, int handlerAt) {
         for (int i = handlerAt + 1; i < body.length; i++) {
-            if (!(body[i] instanceof org.objectweb.asm.tree.LabelNode)) continue;
             for (TryCatchBlockNode block : AsmTreeCompat.tryCatchBlocks(mn)) {
                 if (body[i] == block.start || body[i] == block.handler) return i;
             }
-            return i;
         }
         return body.length;
     }
