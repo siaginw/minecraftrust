@@ -107,7 +107,7 @@ def main():
     sources.append(repo / "tools/bridge/src/com/rustcraft/qualification/SameProcessAcquisition.java")
     controls = [repo / "tools/qualification-v2-tests/src/com/rustcraft/coremod" / name for name in (
         "CanonicalClassIdentityV2Test.java", "SessionBoundMaskControls.java",
-        "SessionBoundCertificateControls.java")]
+        "SessionBoundCertificateControls.java", "SessionCrossSessionControls.java")]
     sources.extend(controls)
     classes = out / "classes"
     classes.mkdir(parents=True, exist_ok=False)
@@ -127,6 +127,7 @@ def main():
         # a regression in either fails this receipt.
         [str(java), "-cp", runtime_classpath, "com.rustcraft.coremod.SessionBoundMaskControls"],
         [str(java), "-cp", runtime_classpath, "com.rustcraft.coremod.SessionBoundCertificateControls"],
+        [str(java), "-cp", runtime_classpath, "com.rustcraft.coremod.SessionCrossSessionControls"],
     ]
     results = []
     failure, fixtures = None, None
@@ -150,7 +151,8 @@ def main():
         # is pinned so a control silently disappearing is a failure, exactly as
         # a control turning red is.
         for index, suite, expected in ((4, "mask", "RESULT: 19 pass, 0 fail"),
-                                       (5, "certificate", "RESULT: 38 pass, 0 fail")):
+                                       (5, "certificate", "RESULT: 38 pass, 0 fail"),
+                                       (6, "cross-session", "SessionCrossSessionControls PASS (16 assertions)")):
             lines = results[index]["stdout"].splitlines()
             if results[index]["stderr"] or lines[-1:] != [expected] or not lines[:-1]:
                 raise ValueError(f"{suite} controls output/assertion schema mismatch: {lines[-1:]}")
@@ -169,7 +171,8 @@ def main():
                "status": "PASS" if failure is None else "FAIL", "failure": failure,
                "runId": run_id, "output": str(out),
                "assertions": ({"canonical_v2": 92, "session_bound_mask": 19,
-                               "session_bound_certificate": 38} if failure is None else None),
+                               "session_bound_certificate": 38,
+                               "session_cross_session": 16} if failure is None else None),
                "inputHashesBefore": before, "inputHashesAfter": after,
                "sourceHashes": {str(p.relative_to(repo)): before[str(p)] for p in sources},
                "toolchain": {"java": before[str(java)], "javac": before[str(javac)], "asm": before[str(args.asm.resolve())]},
