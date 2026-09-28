@@ -93,23 +93,33 @@ class Frame:
         self.packets_in = 0
         self.bytes_in = 0
         self.packets_out = 0
+        #: Bounded wire trace, when the caller wants one. Each entry is
+        #: (direction, packet id, hex body); the probe writes it to a file so a
+        #: handshake disagreement can be diagnosed from bytes rather than
+        #: guessed at from a stack trace on the other side.
+        self.trace: list[tuple[str, int, str]] | None = None
 
     # ---- write ------------------------------------------------------------
 
     def send(self, packet_id: int, body: bytes = b"") -> None:
+        if self.trace is not None:
+            self.trace.append(("OUT", packet_id, body.hex()))
         self._write_frame(varint(packet_id) + body)
 
     def _write_frame(self, payload: bytes) -> None:
         if self.threshold >= 0:
             import zlib
-            compressor = zlib.compressobj(1)
-            compressed = compressor.compress(payload) + compressor.flush()
+            # Once compression is enabled every frame carries a data-length
+            # varint: 0 when the body is sent uncompressed (below threshold),
+            # the compressed size otherwise. Omitting it on the uncompressed
+            # path makes the server parse our body as that varint -- which is
+            # an IndexOutOfBoundsException on its side and a disconnect.
             if len(payload) < self.threshold:
-                header = varint(len(payload)) + varint(0)
-                body = header + payload
+                body = varint(len(payload)) + varint(0) + payload
             else:
-                header = varint(len(payload)) + varint(len(compressed))
-                body = header + compressed
+                compressor = zlib.compressobj(1)
+                compressed = compressor.compress(payload) + compressor.flush()
+                body = varint(len(payload)) + varint(len(compressed)) + compressed
         else:
             body = varint(len(payload)) + payload
         self.sock.sendall(body)
@@ -125,12 +135,15 @@ class Frame:
         if self.threshold >= 0:
             expected, offset = read_varint(data)
             if expected == 0:
+                # Uncompressed frame: the packet-length prefix counts the
+                # data-length varint, so `offset` bytes are overhead and the
+                # payload is the remainder -- NOT the whole frame.
                 payload = data[offset:]
             else:
                 import zlib
                 payload = zlib.decompress(data[offset:])
-            if len(payload) != expected:
-                raise ValueError("decompressed length mismatch")
+                if len(payload) != expected:
+                    raise ValueError("decompressed length mismatch")
         else:
             payload = data
         if not payload:
@@ -138,6 +151,8 @@ class Frame:
         packet_id, offset = read_varint(payload)
         self.packets_in += 1
         self.bytes_in += length
+        if self.trace is not None:
+            self.trace.append(("IN", packet_id, payload[offset:].hex()))
         return packet_id, payload[offset:]
 
     def _read_exact(self, count: int) -> bytes:

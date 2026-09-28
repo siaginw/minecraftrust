@@ -76,12 +76,14 @@ def run_probe(host: str, port: int, username: str, *, expect_forge: bool,
                      "stability_held": False, "disconnect_clean": False})
     handshake = FmlHandshake()
     frame: Frame | None = None
+    wire_trace: list[tuple[str, int, str]] = []
     registered: set[str] = set()
 
     try:
         # ---- connect -------------------------------------------------------
         t0 = time.time()
         frame = Frame(host, port, connect_timeout_s)
+        frame.trace = wire_trace
         observed["tcp_connected"] = True
         receipt["times"]["connect_s"] = round(time.time() - t0, 3)
 
@@ -111,6 +113,13 @@ def run_probe(host: str, port: int, username: str, *, expect_forge: bool,
                 if packet_id == CB_DISCONNECT_LOGIN:
                     reason, _ = _read_chat(body)
                     raise ProbeFailure("login disconnect: " + reason)
+                if packet_id == CB_PLUGIN_MESSAGE:
+                    # Forge starts FML|HS in the LOGIN state; treating the
+                    # channel as PLAY-only meant the ServerHello was dropped
+                    # and the handshake never began.
+                    _handle_plugin(frame, packet_id, body, handshake,
+                                   observed, registered, receipt)
+                    continue
                 continue
 
             # ---- PLAY -----------------------------------------------------
@@ -127,25 +136,17 @@ def run_probe(host: str, port: int, username: str, *, expect_forge: bool,
                 # Confirm the teleport so the server considers us present.
                 teleport_id, _ = _read_poslook(body)
                 frame.send(SB_CONFIRM_TELEPORT, varint(teleport_id))
+                # CPacketClientSettings: lang, viewDist, chatVisibility,
+                # colors, modelParts (one BYTE bitmask), mainHand. The body
+                # below is the canonical field list; sending an extra byte
+                # shifts every later frame the server decodes.
                 frame.send(SB_CLIENT_SETTINGS,
-                           write_string("en_US") + bytes([8]) + varint(0) + b"\x00\xff" + varint(1))
+                           write_string("en_US") + bytes([8]) + varint(0)
+                           + b"\x00" + bytes([0x7f]) + varint(1))
                 continue
             if packet_id == CB_PLUGIN_MESSAGE:
-                channel, offset = _read_channel(body)
-                payload = body[offset:]
-                if channel == FML_CHANNEL:
-                    reply = handshake.on_server_message(payload)
-                    if reply is not None:
-                        frame.send(SB_PLUGIN_MESSAGE,
-                                   write_string(FML_CHANNEL) + reply)
-                    if handshake.complete:
-                        observed["fml_handshake_complete"] = True
-                elif channel.startswith("FML|"):
-                    # Forge control channels: registered/reserved traffic.
-                    registered.add(channel)
-                else:
-                    registered.add(channel)
-                    receipt["channels"]["unknown"].append(channel)
+                _handle_plugin(frame, packet_id, body, handshake,
+                               observed, registered, receipt)
                 continue
             if packet_id == CB_CHUNK_DATA:
                 observed["chunk_packets"] = observed.get("chunk_packets", 0) + 1
@@ -210,6 +211,7 @@ def run_probe(host: str, port: int, username: str, *, expect_forge: bool,
             receipt["bytes_in"] = frame.bytes_in
             frame.close()
 
+    receipt["wire_trace"] = [{"dir": d, "id": i, "body": b} for d, i, b in wire_trace]
     receipt["fml"] = handshake.summary()
     receipt["channels"]["registered"] = sorted(registered)
     receipt["channels"]["unknown"] = sorted(set(receipt["channels"]["unknown"]))
@@ -223,6 +225,43 @@ def run_probe(host: str, port: int, username: str, *, expect_forge: bool,
     receipt["checks"] = {name: observed.get(name, False) for name in PROBE_SUCCESS}
     receipt["verdict"] = "PASS" if all(receipt["checks"].values()) else "FAIL"
     return receipt
+
+
+def _handle_plugin(frame, packet_id: int, body: bytes, handshake: FmlHandshake,
+                    observed: dict, registered: set, receipt: dict) -> None:
+    """One clientbound plugin message, from either LOGIN or PLAY.
+
+    Shared so the FML|HS handshake works wherever Forge chooses to start it;
+    a PLAY-only handler silently dropped the LOGIN-state ServerHello.
+    """
+    channel, offset = _read_channel(body)
+    payload = body[offset:]
+    if channel == FML_CHANNEL:
+        reply = handshake.on_server_message(payload)
+        if reply is not None:
+            # Verified against vanilla's own decoder (obfuscated lh.a(gy)): it
+            # reads the channel string then takes the REMAINING bytes as the
+            # payload -- no VarInt array length. A length prefix here makes FML
+            # read the length byte as the discriminator and desynchronise.
+            frame.send(SB_PLUGIN_MESSAGE, write_string(FML_CHANNEL) + reply)
+        if handshake.complete:
+            observed["fml_handshake_complete"] = True
+        return
+    if channel in ("REGISTER", "UNREGISTER"):
+        # Vanilla channel registration. The clientbound body lists channel
+        # names separated by NUL; a server sending REGISTER expects the client
+        # to reply REGISTER with its own list. An EMPTY reply is a zero-length
+        # string array -- but CPacketCustomPayload always carries a ByteArray,
+        # so the well-formed empty reply is a zero-length array, not no bytes
+        # at all. Silence is also legal and safer than a malformed frame, so
+        # the probe records the channel and stays silent.
+        registered.add(channel)
+        return
+    if channel.startswith("FML"):
+        registered.add(channel)
+        return
+    registered.add(channel)
+    receipt["channels"]["unknown"].append(channel)
 
 
 # ---- small parsers ---------------------------------------------------------
