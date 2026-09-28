@@ -85,13 +85,15 @@ public class LiveChunkOwnershipTransformer implements IClassTransformer {
             // placements from the recorded evidence instead.
             LiveHookSupport.recordNonAdmission(transformedName,
                     String.valueOf(failure.getMessage()));
-            // Rethrow: aborting THIS load attempt is what lets the defining
-            // pass win. A re-entrant nested pass whose buffer lacks the
-            // launch-scoped provenance must not define the class unhooked --
-            // the loader's outer pass re-transforms fresh, WITH provenance,
-            // and defines the hooked bytes (measured: defined == post). The
-            // non-admission is recorded for the evidence flush either way.
-            throw failure;        } catch (Throwable failure) {
+            // Pass through UNHOOKED (measured): aborting the load poisons
+            // the class in the loader's invalid-classes set and takes the
+            // whole server down. The re-entrant nested pass records its
+            // non-admission here; whether IT or the later provenanced pass
+            // defines the class is settled by the DEFINITION WITNESS, which
+            // binds definition claims to the agent's observed final bytes.
+            System.err.println("[RustCraft] writer non-admission for " + transformedName
+                    + ": " + failure.getMessage());
+            return basicClass;        } catch (Throwable failure) {
             lastStatus = "TRANSFORM_ERROR[" + transformedName + "]: " + failure;
             throw (LiveHookSupport.ProfileFailure) new LiveHookSupport.ProfileFailure(
                     "unexpected transform error for " + transformedName + ": " + failure).initCause(failure);

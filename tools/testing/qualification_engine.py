@@ -975,7 +975,7 @@ class QualificationEngine:
             # different annotation, a different number of sites, or a second
             # session UUID, and still describe this class correctly.
             policy = block["admission_policies"][name]
-            if policy["runtime_manifest_sha256"] != manifest_hash:
+            if policy["runtime_manifest_sha256"] != expected_manifest:
                 raise Invalid("admission policy is not bound to this manifest: " + name)
             if policy["recipe_sha256"] != block["recipe_sha256"]:
                 raise Invalid("admission policy is not bound to this profile's recipe: " + name)
@@ -1191,7 +1191,16 @@ class QualificationEngine:
                     raise Missing("post-writer identity was not recomputed: " + name)
                 if stage["output_raw_sha256"] != produced["raw_sha256"]:
                     raise Invalid("RUSTCRAFT_POST output is not the post-writer class the engine observed: " + name)
-                if stage["exact_semantic_sha256"] != produced["semantic_sha256"] \
+                # For session-bound rows the engine's recomputation is the
+                # masked invariant (the exact semantic embeds this launch's
+                # own sessionId, which the chain and the certificate share).
+                produced_semantic = (produced["session_invariant_sha256"]
+                                     if "session_invariant_sha256" in produced
+                                     else produced["semantic_sha256"])
+                stage_semantic = (stage.get("session_invariant_sha256")
+                                  if "session_invariant_sha256" in produced
+                                  else stage["exact_semantic_sha256"])
+                if stage_semantic != produced_semantic \
                         or stage["exact_declaration_order_sha256"] != produced["declaration_order_sha256"]:
                     # Independently recomputed: the engine parsed the bytes
                     # itself and did not take the chain's word for them.

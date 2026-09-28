@@ -452,9 +452,20 @@ public final class FrameRelationWitness {
      */
     private static List<Map<String, Object>> closeChain() throws Exception {
         List<Map<String, Object>> rows = new ArrayList<Map<String, Object>>();
+        // A class may be defined exactly once: even when two attempts of one
+        // class produce IDENTICAL output (an exact class transformed twice),
+        // only the FIRST attempt claims the definition; later twins are
+        // recorded as unbound duplicate attempts.
+        java.util.Set<String> claimed = new java.util.HashSet<String>();
         for (SameProcessAcquisition.Definition definition : LiveHookSupport.boundAcquisition().definitions()) {
             if (definition.postWriterRawSha256 == null) continue;
             String internal = definition.binaryName.replace('.', '/');
+            if (!claimed.add(internal)) {
+                rows.add(map("ordinal", Integer.valueOf(definition.ordinal), "binary_name", internal,
+                        "linked_to_next_stage", null, "definition_bound", Boolean.FALSE,
+                        "refusal", "DUPLICATE_ATTEMPT_ALREADY_CLAIMED"));
+                continue;
+            }
             Boolean linked = null;
             for (SameProcessAcquisition.Definition later : LiveHookSupport.boundAcquisition().definitions()) {
                 if (later.ordinal <= definition.ordinal || !sameClass(later, internal)) continue;

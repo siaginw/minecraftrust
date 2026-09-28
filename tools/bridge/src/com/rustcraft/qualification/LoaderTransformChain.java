@@ -263,12 +263,40 @@ public final class LoaderTransformChain {
      * @return the number of definitions successfully bound
      */
     public static int bindDefinitions(ClassLoader loader, SameProcessAcquisition acquisition) {
+        return bindDefinitions(loader, acquisition, null);
+    }
+
+    /**
+     * Binds definition claims to the agent's OBSERVED final definitions. A
+     * real launch transforms some classes more than once (re-entrant loads
+     * during other transformers' work); only the attempt whose output bytes
+     * ARE the loader's final definition may claim the definition. Without
+     * the witness hashes, every loadable row would claim -- exactly the
+     * double claim the engine's frame evidence exists to reject.
+     */
+    public static int bindDefinitions(ClassLoader loader, SameProcessAcquisition acquisition,
+                                      java.util.Map<String, String> observedFinalHashes) {
         int bound = 0;
         if (acquisition == null) return 0;
         String identity = LiveHookSupport.loaderIdentity(loader);
+        java.util.Set<String> alreadyClaimed = new java.util.HashSet<String>();
         for (SameProcessAcquisition.Definition definition : acquisition.definitions()) {
             if (definition.failure != null || definition.postWriterRawSha256 == null) continue;
             try {
+                if (observedFinalHashes != null) {
+                    // Two attempts of one class can produce IDENTICAL output
+                    // (an exact class transformed twice); the definition is
+                    // claimed ONCE -- by the first attempt whose bytes match.
+                    if (!alreadyClaimed.add(definition.binaryName)) continue;
+                    String finalHash = observedFinalHashes.get(
+                            definition.binaryName.replace('/', '.'));
+                    if (finalHash == null || !finalHash.equals(definition.postWriterRawSha256)) {
+                        // Discarded attempt: its buffer is not what the
+                        // loader defined. The row stays recorded as a
+                        // non-defining attempt; the flush reports it.
+                        continue;
+                    }
+                }
                 Class<?> returned = Class.forName(
                         definition.binaryName.replace('/', '.'), false, loader);
                 definition.defined(returned, identity);
