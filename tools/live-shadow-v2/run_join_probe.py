@@ -157,6 +157,11 @@ def main() -> int:
                              "stays closed (kicking with 'Server is still starting') "
                              "until it finishes. This is a wait condition, not a retry.")
     parser.add_argument("--boot-timeout-s", type=int, default=1800)
+    parser.add_argument("--mod-versions", type=Path, default=None,
+                        help="modid->version map produced by derive_mod_versions.py "
+                             "for this runtime's mods. Without it every mod reports "
+                             "FML's '1.0' placeholder, which the server's "
+                             "NetworkCheckHandler will reject for versioned mods.")
     args = parser.parse_args()
 
     out = args.output.resolve()
@@ -225,19 +230,59 @@ def main() -> int:
             (out / "join-receipt.json").write_text(
                 json.dumps(receipt, indent=2, sort_keys=True) + "\n")
             return 1
-        versions = {
+        derived: dict = {}
+        provenance: dict = {}
+        if args.mod_versions is not None:
+            document = json.loads(args.mod_versions.read_text(encoding="utf-8"))
+            # Both layouts are accepted: the plain {modid: version} map and
+            # derive_mod_versions.py's {versions, provenance} document.
+            derived = document.get("versions", document)
+            provenance = document.get("provenance", {})
+        # The four FML built-ins are properties of the runtime itself.
+        builtins = {
             "minecraft": "1.12.2",
             "FML": "8.0.99.99",
             "forge": args.forge_jar.split("-")[-1].replace(".jar", "")
             if "-" in args.forge_jar else "0.0",
             "mcp": "9.42",
         }
-        client_mods = [(name.strip(), versions.get(name.strip(), "1.0"))
-                       for name in inventory.group(1).split(",")]
+        unversioned = []
+        client_mods = []
+        for name in inventory.group(1).split(","):
+            modid = name.strip()
+            version = derived.get(modid, builtins.get(modid))
+            if version is None:
+                # Not the runtime's built-ins and not derived from its jars:
+                # sending FML's '1.0' placeholder would be a guess, and the
+                # server's NetworkCheckHandler treats it as one.
+                unversioned.append(modid)
+                version = "1.0"
+            client_mods.append((modid, version))
         receipt["client_mod_inventory"] = {
             "derivation": "server-startup-log:missing-mods-line",
+            "versions_source": {
+                "path": str(args.mod_versions) if args.mod_versions else None,
+                "sha256": sha(args.mod_versions) if args.mod_versions else None,
+            },
+            "unversioned_modids": unversioned,
+            "provenance": {m: provenance[m] for m in sorted(provenance)
+                           if m in dict(client_mods)},
             "mods": [{"modid": m, "version": v} for m, v in client_mods],
         }
+        if unversioned:
+            # The inventory names a mod whose version could not be derived
+            # from the runtime's own jars. Sending any placeholder would be
+            # lying to the server's NetworkCheckHandler; refuse instead.
+            receipt["verdict"] = "FAIL"
+            receipt["failure"] = ("modids with no derived version: "
+                                  + ", ".join(unversioned))
+            stop(process, timeout_s=120)
+            (out / "join-receipt.json").write_text(
+                json.dumps(receipt, indent=2, sort_keys=True) + "\n")
+            print(json.dumps({"status": "FAIL",
+                              "reason": "UNVERSIONED_MODIDS",
+                              "modids": unversioned}))
+            return 1
 
     # Post-Done settle. Measured on the real Revelation runtime: the 'Done'
     # line is logged while FML's onServerStarted chain is still running (woot
