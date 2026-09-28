@@ -79,8 +79,10 @@ machine/target*/shadow-run/
 machine/target*/run-*/
 machine/target*/world-*/
 tools/dist/
-tools/__pycache__/
-tools/testing/__pycache__/
+# Python bytecode. One rule rather than a per-directory list, which kept
+# needing a new entry every time a tool grew a subpackage.
+__pycache__/
+*.pyc
 fml-hs-capture.txt
 
 # Third-party evaluation checkouts (pinned metadata committed instead; see
