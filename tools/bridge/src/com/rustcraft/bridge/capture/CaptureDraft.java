@@ -206,7 +206,8 @@ final class CaptureDraft {
                 "LIVE_SHADOW_OWNED_V1", true, writers, null);
     }
 
-    private static void validateBegin(CaptureSource.View begin, LiveChunkBindings.Binding binding, int filter) {
+    /** Package-private for the Phase-D offline identity controls. */
+    static void validateBegin(CaptureSource.View begin, LiveChunkBindings.Binding binding, int filter) {
         if (begin == null || begin.sectionSlots() != 16 || (filter & ~0xFFFF) != 0
                 || begin.biomes == null || begin.biomes.length != 256
                 || begin.globalPaletteBits < 9 || begin.globalPaletteBits > 16
@@ -223,6 +224,11 @@ final class CaptureDraft {
     }
 
     private void validateEnd(CaptureSource.View end) {
+        validateViews(this.begin, end);
+    }
+
+    /** Package-private for the Phase-D offline epoch/incarnation controls. */
+    static void validateViews(CaptureSource.View begin, CaptureSource.View end) {
         if (end == null || end.sectionSlots() != 16) {
             throw LivePacketCapture.reject(LivePacketCapture.RejectionReason.INVALID_INPUT,
                     "malformed end view");
