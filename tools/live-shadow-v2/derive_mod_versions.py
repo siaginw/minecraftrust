@@ -2,25 +2,23 @@
 
 The genuine client's ModList must name the versions the server's
 NetworkCheckHandler requires, and those come from each mod's own declared
-metadata, resolved the way FML resolves it. Sources, in FML's own order of
-authority:
+metadata, resolved the way FML resolves it. The resolution order is proven
+from FMLModContainer.bindMetadata and MetadataCollection.getMetadataForId
+bytecode, not approximated:
 
-  1. META-INF/fml_cache_annotation.json -- FML's own build-time parse of the
-     @Mod annotations, present in most properly-built jars. This is exactly
-     what FML reads, not our interpretation of it.
-  2. The @Mod annotation's constant pool in class files, when no cache entry
-     covers the mod.
-  3. ModMetadata-construction pattern in coremod dummy container classes
-     (modid, "modId", name, "name", ..., "version", V) -- the openmodscore /
-     foamfixcore family, which has no @Mod at all.
-  4. The owning jar's mcmod.info, matching modid when possible, else the
-     first entry -- FML's own fallback for @Mod elements FML substitutes a
-     placeholder for.
+  1. The @Mod version element. Preferred carrier: FML's own build-time parse
+     in META-INF/fml_cache_annotation.json (exactly what FML reads);
+     otherwise the RuntimeVisibleAnnotations attribute parsed from the
+     classfile itself.
+  2. version.properties in the mod's jar, key "<modid>.version".
+  3. The jar's mcmod.info entry whose modid STRICTLY equals the modid --
+     getMetadataForId does not fall back to the first entry. A jar whose
+     mcmod.info keys a different id yields no metadata version.
+  4. FML's literal substitute "1.0".
 
-A literal "1.0" is FML's own substitute when nothing resolves (careerbees'
-@Mod version element is literally "1.0" in FML's cache); a "1.0" that comes
-from OUR failure to resolve is honestly reported as source "unresolved" so a
-consumer can refuse to trust it.
+Coremod dummy containers that construct ModMetadata in code (openmodscore,
+foamfixcore) have no @Mod; their version comes from the ModMetadata field
+assignments in the container class's constant pool.
 
     python -B tools/live-shadow-v2/derive_mod_versions.py \
         --mods <runtime>/mods [--forge-jar <forge>] [--out versions.json]
@@ -104,6 +102,131 @@ def fml_annotation_cache(path: Path) -> dict:
     return out
 
 
+def _u2(data: bytes, at: int) -> int:
+    return struct.unpack(">H", data[at:at + 2])[0]
+
+
+def _u4(data: bytes, at: int) -> int:
+    return struct.unpack(">I", data[at:at + 4])[0]
+
+
+def annotation_elements(data: bytes) -> dict | None:
+    """@Mod element values from the class's RuntimeVisibleAnnotations.
+
+    Parses the classfile structure (JVMS 4.7.16) rather than sniffing pool
+    strings, so the version element is the annotation's own value -- not a
+    guess about which pool string it might be.
+    """
+    if data[:4] != b"\xca\xfe\xba\xbe":
+        return None
+    count = _u2(data, 8)
+    offset = 10
+    utf8: dict[int, str] = {}
+    for index in range(1, count):
+        tag = data[offset]
+        if tag == 1:
+            length = _u2(data, offset + 1)
+            utf8[index] = data[offset + 3:offset + 3 + length].decode("utf-8", "replace")
+            offset += 3 + length
+        elif tag in (7, 8, 16, 19, 20):
+            offset += 3
+        elif tag == 15:
+            offset += 4
+        elif tag in (3, 4, 9, 10, 11, 12, 17, 18):
+            offset += 5
+        elif tag in (5, 6):
+            offset += 9
+        else:
+            return None
+    at = offset + 6  # access_flags, this_class, super_class
+    at += 2 + 2 * _u2(data, at)  # interfaces_count + interfaces
+    at += 2  # fields_count
+    for _ in range(_u2(data, at - 2)):
+        at += 6  # access_flags, name_index, descriptor_index
+        at += _attribute_table_size(data, at)
+    at += 2  # methods_count
+    for _ in range(_u2(data, at - 2)):
+        at += 6
+        at += _attribute_table_size(data, at)
+    at += 2  # class attributes_count
+    for _ in range(_u2(data, at - 2)):
+        name = utf8.get(_u2(data, at), "")
+        length = _u4(data, at + 2)
+        body = at + 6
+        if name == "RuntimeVisibleAnnotations":
+            found = _read_mod_annotation(data, body, utf8)
+            if found is not None:
+                return found
+        at = body + length
+    return None
+
+
+def _attribute_table_size(data: bytes, at: int) -> int:
+    """Byte size of an attribute table whose count is at `at`."""
+    size = 2
+    for _ in range(_u2(data, at)):
+        size += 6 + _u4(data, at + size + 2)
+    return size
+
+
+def _read_mod_annotation(data: bytes, at: int, utf8: dict[int, str]) -> dict | None:
+    """The @Mod element/value pairs from a RuntimeVisibleAnnotations body."""
+    annotations = _u2(data, at)
+    at += 2
+    for _ in range(annotations):
+        if utf8.get(_u2(data, at)) != MOD_ANNOTATION:
+            at = _skip_annotation(data, at)
+            continue
+        at += 2  # past type_index
+        pairs = _u2(data, at)
+        at += 2
+        out: dict = {}
+        for _ in range(pairs):
+            element = utf8.get(_u2(data, at), "")
+            at += 2
+            tag = data[at:at + 1]
+            at += 1
+            if tag == b"s":
+                out[element] = utf8.get(_u2(data, at), "")
+                at += 2
+            elif tag == b"Z":
+                out[element] = "true" if _u2(data, at) else "false"
+                at += 2
+            else:
+                return None  # array/annotation/class values: not @Mod's shape
+        return out
+    return None
+
+
+def _skip_annotation(data: bytes, at: int) -> int:
+    """Offset past one annotation structure (type already at `at`)."""
+    at += 2  # type_index
+    pairs = _u2(data, at)
+    at += 2
+    for _ in range(pairs):
+        at += 2  # element_name_index
+        at = _skip_element_value(data, at)
+    return at
+
+
+def _skip_element_value(data: bytes, at: int) -> int:
+    tag = data[at:at + 1]
+    at += 1
+    if tag in (b"e", b"c"):
+        return at + 4
+    if tag == b"[":
+        values = _u2(data, at)
+        at += 2
+        for _ in range(values):
+            at = _skip_element_value(data, at)
+        return at
+    if tag == b"@":
+        return _skip_annotation(data, at)
+    if tag in (b"J", b"D"):
+        return at + 8  # long/double constants carry 8 payload bytes
+    return at + 2
+
+
 def annotation_mod(strs, class_internal: str):
     """(modid, version) for a class whose pool carries @Mod, or None."""
     if strs is None or "modid" not in strs:
@@ -123,6 +246,7 @@ def annotation_mod(strs, class_internal: str):
 
 
 def scan_jar(path: Path) -> dict:
+    """modid -> @Mod version element (None when the element is absent)."""
     out = {}
     try:
         with zipfile.ZipFile(path) as archive:
@@ -132,9 +256,43 @@ def scan_jar(path: Path) -> dict:
                 data = archive.read(name)
                 if MOD_ANNOTATION.encode() not in data:
                     continue
-                found = annotation_mod(pool_strings(data), name)
-                if found:
-                    out.setdefault(found[0], found[1])
+                try:
+                    elements = annotation_elements(data)
+                except (struct.error, IndexError):
+                    # A walk that runs off the buffer means this classfile
+                    # uses something the parser mis-measured; the pool
+                    # heuristic below is the fallback, not a silent guess.
+                    elements = None
+                if elements is None:
+                    # Attribute parse failed; fall back to the pool heuristic.
+                    found = annotation_mod(pool_strings(data), name)
+                    if found:
+                        out.setdefault(found[0], found[1])
+                    continue
+                modid = elements.get("modid")
+                if modid:
+                    out.setdefault(modid, elements.get("version"))
+    except (OSError, zipfile.BadZipFile):
+        pass
+    return out
+
+
+def version_properties(path: Path) -> dict:
+    """modid.version -> version from a jar's version.properties, if present.
+
+    FML's second stop when the @Mod version element is missing
+    (FMLModContainer.bindMetadata -> searchForVersionProperties).
+    """
+    out = {}
+    try:
+        with zipfile.ZipFile(path) as archive:
+            if "version.properties" not in archive.namelist():
+                return out
+            for line in archive.read("version.properties").decode(
+                    "utf-8", "replace").splitlines():
+                if "=" in line and not line.startswith("#"):
+                    key, value = line.split("=", 1)
+                    out[key.strip()] = value.strip()
     except (OSError, zipfile.BadZipFile):
         pass
     return out
@@ -230,39 +388,31 @@ def main() -> int:
         scanned = scan_jar(jar)
         containers = metadata_containers(jar)
         info = mcmod_info(jar)
-        first_info = next(iter(info.items()), None)
+        props = version_properties(jar)
         for modid in set(cached) | set(scanned) | set(containers):
             entry = cached.get(modid)
-            if entry is not None and entry["version"]:
-                record(modid, entry["version"], "fml-annotation-cache")
+            # FML's exact resolution order, proven from FMLModContainer
+            # .bindMetadata and MetadataCollection.getMetadataForId bytecode:
+            # the @Mod version element, then version.properties, then the
+            # STRICT modid-matched mcmod.info entry, then the literal "1.0".
+            element = ((entry or {}).get("version")) if entry is not None else scanned.get(modid, "")
+            if element:
+                record(modid, element, "fml-annotation-cache" if entry is not None
+                       else "mod-annotation-element")
                 continue
-            if entry is not None and entry["version"] is None and modid in info:
-                # @Mod with no version element: FML falls back to the jar's
-                # own metadata (useMetadata / metadataFromJar).
+            if props.get(modid + ".version"):
+                record(modid, props[modid + ".version"], "version.properties")
+                continue
+            if info.get(modid):
                 record(modid, info[modid], "mcmod.info:modid-match")
-                continue
-            if modid in scanned and scanned[modid]:
-                record(modid, scanned[modid], "mod-annotation-pool")
                 continue
             if modid in containers:
                 record(modid, containers[modid], "modmetadata-container")
                 continue
-            if entry is not None and first_info is not None:
-                # @Mod with no version element and no matching mcmod.info id:
-                # FML's ModMetadata for the container comes from the jar's
-                # metadata file, first entry.
-                record(modid, first_info[1], "mcmod.info:first-entry")
-                continue
-            if modid in info:
-                # The annotation scan anchored the modid but found no version
-                # element; the jar's own metadata is FML's next stop.
-                record(modid, info[modid], "mcmod.info:modid-match")
-                continue
-            if entry is not None and entry["version"] is None:
-                record(modid, "1.0", "mod-annotation:fml-literal-1.0")
-                continue
-            if modid in scanned:
-                record(modid, "1.0", "unresolved")
+            # getMetadataForId is a strict modid match: a jar whose mcmod.info
+            # keys a different id yields autogenerated metadata with an empty
+            # version, and FML substitutes its own literal "1.0".
+            record(modid, "1.0", "fml-substitute-1.0")
         # Standalone mcmod.info-only mods (no @Mod anywhere): rare, but do
         # not lose them.
         for modid in info:
