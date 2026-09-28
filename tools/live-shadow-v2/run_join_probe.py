@@ -150,6 +150,12 @@ def main() -> int:
                              "and require the FML|HS handshake")
     parser.add_argument("--username", default="RustCraftProbe")
     parser.add_argument("--stability-s", type=float, default=20.0)
+    parser.add_argument("--post-done-settle-s", type=float, default=30.0,
+                        help="bounded wait after the 'Done' log line before the one "
+                             "join attempt: heavily modded runtimes run substantial "
+                             "onServerStarted work after Done, and FML's login gate "
+                             "stays closed (kicking with 'Server is still starting') "
+                             "until it finishes. This is a wait condition, not a retry.")
     parser.add_argument("--boot-timeout-s", type=int, default=1800)
     args = parser.parse_args()
 
@@ -232,6 +238,16 @@ def main() -> int:
             "derivation": "server-startup-log:missing-mods-line",
             "mods": [{"modid": m, "version": v} for m, v in client_mods],
         }
+
+    # Post-Done settle. Measured on the real Revelation runtime: the 'Done'
+    # line is logged while FML's onServerStarted chain is still running (woot
+    # loot loading, Actually Additions world data, railcraft loot pools), and
+    # FMLCommonHandler.shouldAllowPlayerLogins stays false until it completes --
+    # an early join is kicked with 'Server is still starting!' exactly as
+    # observed. Waiting is diagnosis-driven, not a retry.
+    if booted and args.post_done_settle_s > 0:
+        time.sleep(args.post_done_settle_s)
+        receipt["post_done_settle_s"] = args.post_done_settle_s
 
     # ONE bounded attempt. No retry loop: a materially different attempt is a
     # new run with its own receipt, decided by a human, not by this loop.

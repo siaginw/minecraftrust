@@ -73,7 +73,7 @@ public final class ReplayServerDecode {
 
         // ---- full-frame replay: exactly the bytes our client puts on the wire,
         // through the real framing, compression and packet decode ----
-        if (args.length > 3) {
+        if (args.length > 3 && args[3].length() >= 8) {
             byte[] frame = unhex(args[3]);
             Object packetLenBuf = packetBuffer.getDeclaredConstructor(ByteBuf.class)
                     .newInstance(Unpooled.wrappedBuffer(frame));
@@ -119,6 +119,20 @@ public final class ReplayServerDecode {
             System.out.println("HEADLESS.decoded_channel=" + channelField.get(decoded));
             System.out.println("HEADLESS.fml_readable_bytes=" + readableBytes);
             System.out.println("HEADLESS.fml_payload=" + hex(payloadBytes));
+        }
+
+        // ---- feed the FML payload to the REAL FML ModList decoder ----
+        if (args.length > 4 && args[4].length() >= 4) {
+            byte[] fmlBytes = unhex(args[4]);   // count + pairs, no discriminator
+            Class<?> modList = Class.forName(
+                    "net.minecraftforge.fml.common.network.handshake.FMLHandshakeMessage$ModList",
+                    false, loader);
+            Object message = modList.getDeclaredConstructor().newInstance();
+            Object fmlBuf = packetBuffer.getDeclaredConstructor(ByteBuf.class)
+                    .newInstance(Unpooled.wrappedBuffer(fmlBytes));
+            modList.getMethod("fromBytes", io.netty.buffer.ByteBuf.class).invoke(message, fmlBuf);
+            Method size = modList.getMethod("modListSize");
+            System.out.println("FML.mod_count_decoded=" + size.invoke(message));
         }
 
         // ---- the reference comparison at the packet layer ----
