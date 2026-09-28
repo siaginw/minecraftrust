@@ -21,6 +21,9 @@ public class SPacketChunkDataTransformer implements IClassTransformer {
 
     @Override
     public byte[] transform(String name, String transformedName, byte[] basicClass) {
+        // The qualified topology places the writers AFTER the complete FML
+        // chain (the offline contract); ensure it holds in a real launch too.
+        LiveWriterOrdering.ensureWritersLast();
         if (!TARGET_CLASS_DEOBF.equals(transformedName) && !TARGET_CLASS_OBF.equals(name)) {
             return basicClass;
         }

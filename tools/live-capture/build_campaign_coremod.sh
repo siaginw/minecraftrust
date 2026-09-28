@@ -40,6 +40,9 @@ SOURCES=(
   "$ROOT/tools/bridge/src/com/rustcraft/coremod/LiveChunkOwnershipTransformer.java"
   "$ROOT/tools/bridge/src/com/rustcraft/coremod/LiveChunkPublicationTransformer.java"
   "$ROOT/tools/bridge/src/com/rustcraft/coremod/LiveHookSupport.java"
+  "$ROOT/tools/bridge/src/com/rustcraft/coremod/LiveWriterOrdering.java"
+  "$ROOT/tools/bridge/src/com/rustcraft/coremod/LiveSessionAdmissionTweaker.java"
+  "$ROOT/tools/forge-capture/src/com/rustcraft/offline/agent/ObservationAgent.java"
   "$ROOT/tools/bridge/src/com/rustcraft/coremod/AsmTreeCompat.java"
   "$ROOT/tools/bridge/src/com/rustcraft/coremod/CanonicalClassIdentityV2.java"
   "$ROOT/tools/bridge/src/com/rustcraft/coremod/SessionBoundAdmissionPolicy.java"
@@ -94,6 +97,7 @@ SOURCES=(
   # reference, and a launch that somehow had them anyway would be reading a
   # different copy of the class the writers used.
   "$ROOT/tools/bridge/src/com/rustcraft/qualification/SameProcessAcquisition.java"
+  "$ROOT/tools/bridge/src/com/rustcraft/qualification/SessionEvidenceFlush.java"
   "$ROOT/tools/bridge/src/com/rustcraft/qualification/TransformationChainEvidence.java"
   "$ROOT/tools/bridge/src/com/rustcraft/qualification/LoaderTransformChain.java"
   "$ROOT/tools/bridge/src/com/rustcraft/qualification/LoaderDefinitionWitness.java"
@@ -110,6 +114,7 @@ mkdir -p "$BUILD/META-INF"
 cat > "$BUILD/META-INF/MANIFEST.MF" <<'EOF'
 Manifest-Version: 1.0
 FMLCorePlugin: com.rustcraft.coremod.LiveShadowCoreMod
+Premain-Class: com.rustcraft.offline.agent.ObservationAgent
 EOF
 rm -f "$OUT_JAR"
 "$JAR" cfm "$OUT_JAR" "$BUILD/META-INF/MANIFEST.MF" -C "$BUILD" .

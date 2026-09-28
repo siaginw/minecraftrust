@@ -40,6 +40,9 @@ public class LiveChunkOwnershipTransformer implements IClassTransformer {
 
     @Override
     public byte[] transform(String name, String transformedName, byte[] basicClass) {
+        // The qualified topology places the writers AFTER the complete FML
+        // chain (the offline contract); ensure it holds in a real launch too.
+        LiveWriterOrdering.ensureWritersLast();
         if (basicClass == null || !enabled()) return basicClass;
         LiveWriterPlan.Hook[] hooks = LiveHookSupport.hooksFor("OWNERSHIP", transformedName);
         if (hooks.length == 0) return basicClass;

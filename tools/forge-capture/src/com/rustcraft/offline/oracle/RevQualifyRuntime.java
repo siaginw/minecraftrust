@@ -198,110 +198,16 @@ public final class RevQualifyRuntime {
     result.put("mod_lifecycle_executed", false);
     result.put("registry_listener_phase", "DEFERRED_TO_DEDICATED_SERVER_QUALIFICATION");
     result.put("production_authority", false);
+    result.put("capture_kind", "OFFLINE_TRANSFORM_CAPTURE");
     result.put("server_main_called", false);
     result.put("transformed_classes", ObservationAgent.hashes());
     result.put("transformed_class_loaders", ObservationAgent.loaders());
 
-    // ---- the same-process chain, and an INDEPENDENT definition witness ----
-    // Both are emitted here, after the required classes are defined, because
-    // both are statements about what this launch did. Neither is derived from
-    // the other: the chain is built from the writers' own records, the witness
-    // from the passive agent's record of the loader's definitions. A chain that
-    // could only confirm itself would prove nothing, so the engine is given
-    // both and is free to disagree with either.
-    int boundDefinitions = LoaderTransformChain.bindDefinitions(
-            Launch.classLoader, LiveHookSupport.boundAcquisition());
-    result.put("definitions_bound_to_classes", Integer.valueOf(boundDefinitions));
-    List<String> downstream = LoaderTransformChain.downstreamTransformers();
-    result.put("downstream_transformers_after_live_writers", downstream);
-    result.put("loader_identity", LoaderTransformChain.loaderIdentity());
-    String chainProperty = System.getProperty("rustcraft.transformationChain");
-    if (chainProperty != null && chainProperty.length() > 0) {
-      try {
-        String document = LoaderTransformChain.forThisLaunch().render();
-        Path chainOut = Paths.get(chainProperty);
-        Files.createDirectories(chainOut.getParent());
-        Files.write(chainOut, document.getBytes(StandardCharsets.UTF_8));
-        result.put("transformation_chain_status", "RENDERED");
-        result.put("transformation_chain_sha256", LiveHookSupport.sha256(
-                document.getBytes(StandardCharsets.UTF_8)));
-      } catch (Throwable incomplete) {
-        // A chain that cannot be proven is not an error here: the receipt says
-        // exactly why, and the engine reads an absent chain as INCOMPLETE
-        // rather than as a defect.
-        result.put("transformation_chain_status", "INCOMPLETE: " + incomplete);
-      }
-    }
-    // Why each definition stands where it does. A chain that renders nothing
-    // is indistinguishable, from the receipt alone, between "the writers never
-    // ran" and "the writers ran and their records are incomplete"; naming the
-    // per-definition state is the difference between a gap in the evidence and
-    // a bug in the evidence.
-    List<Object> acquisitionRows = new ArrayList<Object>();
-    if (LiveHookSupport.boundAcquisition() != null) {
-      for (com.rustcraft.qualification.SameProcessAcquisition.Definition definition
-          : LiveHookSupport.boundAcquisition().definitions()) {
-        Map<String, Object> row = new TreeMap<String, Object>();
-        row.put("ordinal", Integer.valueOf(definition.ordinal));
-        row.put("binary_name", definition.binaryName);
-        row.put("hook_placement", definition.hookPlacement);
-        row.put("definition_succeeded", Boolean.valueOf(definition.definitionSucceeded));
-        row.put("has_post_writer_buffer",
-                Boolean.valueOf(definition.postWriterRawSha256 != null));
-        row.put("has_session_provenance", Boolean.valueOf(definition.session != null));
-        row.put("certifiable", Boolean.valueOf(definition.certifiable()));
-        row.put("failure", definition.failure);
-        acquisitionRows.add(row);
-      }
-    }
-    result.put("session_acquisition_definitions", acquisitionRows);
-    // The engine does not take the writers' word for any class identity: it
-    // reparses the bytes itself. So the pre-writer and post-writer buffers have
-    // to leave this process as FILES, written from the same records the chain
-    // is built from, or there is nothing for it to recompute and every
-    // certificate comparison would be against a value this run asserted.
-    String observationDir = System.getProperty("rustcraft.observationDir");
-    if (observationDir != null && observationDir.length() > 0
-            && LiveHookSupport.boundAcquisition() != null) {
-      Path root = Paths.get(observationDir);
-      for (com.rustcraft.qualification.SameProcessAcquisition.Definition definition
-          : LiveHookSupport.boundAcquisition().definitions()) {
-        String relative = definition.binaryName.replace('.', '/') + ".class";
-        writeClass(root.resolve("pre").resolve(relative), definition.preWriterBytes);
-        writeClass(root.resolve("classes").resolve(relative), definition.postWriterBuffer());
-      }
-      result.put("observation_dir", observationDir);
-    }
-    result.put("entry_observer_failures", new TreeMap<String, String>(
-            com.rustcraft.qualification.LoaderTransformChain.EntryObserver.failures()));
-    // The frame/hierarchy witness is the GENERIC one, the same machinery Clean
-    // Forge uses, running in this process against this loader and these defined
-    // buffers. It is not a second, weaker Revelation-specific proof: the
-    // obligations it answers (which types resolve, which are assignable) are
-    // questions, and the answers come from the real loader here.
-    String frameTypes = System.getProperty("rustcraft.frameTypes");
-    String frameQueries = System.getProperty("rustcraft.frameQueries");
-    if (frameTypes != null && frameQueries != null) {
-      try {
-        result.put("frame_relation_witness",
-                com.rustcraft.livetransformer.FrameRelationWitness.run(
-                        System.getProperty("rustcraft.definedDump"),
-                        ObservationAgent.hashes(), frameTypes, frameQueries));
-        result.put("frame_witness", "GENERIC_FRAME_RELATION_WITNESS_V1");
-      } catch (Throwable incomplete) {
-        result.put("frame_relation_witness_status", "INCOMPLETE: " + incomplete);
-      }
-    } else {
-      result.put("frame_relation_witness_status", "INCOMPLETE_NO_FRAME_INPUTS");
-    }
-    result.put("loader_definition_witness", LoaderDefinitionWitness.witness(
-            ObservationAgent.hashes(), ObservationAgent.loaders(),
-            LoaderTransformChain.loaderIdentity(),
-            LiveHookSupport.boundAcquisition()));
-    Path out = Paths.get(System.getProperty("rustcraft.qualificationResult"));
-    Files.createDirectories(out.getParent());
-    Files.write(out, new GsonBuilder().setPrettyPrinting().create().toJson(result)
-        .getBytes(StandardCharsets.UTF_8));
+    // ---- the shared end-of-launch evidence producer ------------------
+    // ONE producer for both launch shapes: this offline oracle and a real FML
+    // server launch call the same code, so the offline receipt and a live
+    // receipt can never drift into subtly different evidence formats.
+    com.rustcraft.qualification.SessionEvidenceFlush.emit(result);
     System.out.println("RUSTCRAFT_REV_OFFLINE_TRANSFORMATION_QUALIFICATION_COMPLETE");
   }
 }

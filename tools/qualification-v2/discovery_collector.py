@@ -121,7 +121,10 @@ def main() -> int:
         "schema": "RUSTCRAFT_FRESH_OBSERVATION_V2",
         "session": request["session"], "challenge": request["challenge"],
         "request_sha256": request_sha,
-        "capture_kind": "OFFLINE_TRANSFORM_CAPTURE",
+        # Honest transcription: the launch states its own capture kind (offline
+        # oracle or real FML server); the engine accepts exactly the two
+        # explicit kinds and rejects anything else.
+        "capture_kind": receipt.get("capture_kind", "OFFLINE_TRANSFORM_CAPTURE"),
         "runtime_identity": {"registry_identity_sha256": sha(config["vanilla_jar"]),
                              "java_runtime_version": receipt.get("java_runtime_version", ""),
                              "qualification_profile": config["runtime_profile"],

@@ -506,8 +506,9 @@ class QualificationEngine:
              ("pre_classes", "writer_matrix", "negative_controls", "live", "frame_relation_witness", "session_acquisition", "session_certificates", "transformation_chain"))
         if observed["schema"] != "RUSTCRAFT_FRESH_OBSERVATION_V2" or observed["session"] != self.session or observed["challenge"] != self.challenge or observed["request_sha256"] != self.request_sha256:
             raise Invalid("stale/cross-session/request-substituted observation")
-        if observed["capture_kind"] != "OFFLINE_TRANSFORM_CAPTURE":
-            raise Invalid("this engine adapter only accepts explicit offline transformed capture")
+        if observed["capture_kind"] not in ("OFFLINE_TRANSFORM_CAPTURE", "REAL_FML_TRANSFORM_CAPTURE"):
+            raise Invalid("this engine adapter only accepts explicit transformed capture"
+                          " (offline oracle or real FML server)")
         if sha(request_path) != self.request_sha256:
             raise Invalid("collector changed its input request")
         self.observation_sha256 = observed_hash
