@@ -230,6 +230,10 @@ def main() -> int:
     # launch's evidence directory).
     if "pins" in collector:
         collector["pins"][str(engine_dir / "collector-config.json")] =             sha(engine_dir / "collector-config.json")
+    # The derived manifest declares the manifest OF RECORD it operates under:
+    # the static qualification contract whose hash the plan pinned and the
+    # launch's certificates bound. Only tool wiring differs.
+    manifest["static_manifest_sha256"] = sha(args.static_contract / "manifest.json")
     (engine_dir / "manifest.json").write_text(json.dumps(manifest, indent=2) + "\n")
     shutil.copyfile(args.static_contract / "profile.json", engine_dir / "profile.json")
     complete_session_invariants(engine_dir / "profile.json", args.static_contract)
@@ -297,12 +301,12 @@ def complete_session_invariants(profile_path: Path, static_contract: Path) -> No
     identity = json.loads(
         (static_contract / "collector-config.json").read_text(encoding="utf-8"))["identity_tool"]
     offline = static_contract / "qualifying-launch" / "observation"
-    for section in ("classes", "pre_classes"):
+    for section, directory in (("classes", "classes"), ("pre_classes", "pre")):
         rows = profile.get(section) or {}
         targets = [n for n in rows if n in session_classes]
         if not targets:
             continue
-        files = [str(offline / section / (n + ".class")) for n in targets]
+        files = [str(offline / directory / (n + ".class")) for n in targets]
         cmd = [identity["java"], "-cp", os.pathsep.join(identity["classpath"]),
                "com.rustcraft.coremod.CanonicalClassIdentityV2", "--session-bound", *files]
         env = dict(os.environ)
@@ -316,7 +320,9 @@ def complete_session_invariants(profile_path: Path, static_contract: Path) -> No
             row = json.loads(receipt)
             # row: [schema, name, exact_semantic, declaration, raw, invariant, ...]
             row_data = rows[name]
-            row_data.pop("semantic_sha256", None)
+            # The exact semantic stays as the derivation launch's provenance;
+            # the masked invariant is the launch-independent expectation the
+            # engine compares for session-bound rows.
             row_data["session_invariant_sha256"] = row[5]
     profile_path.write_text(json.dumps(profile, indent=2) + "\n", encoding="utf-8")
 

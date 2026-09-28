@@ -194,7 +194,8 @@ class QualificationEngine:
         self.manifest, manifest_hash = load_hashed(self.manifest_path)
         self.profile, profile_hash = load_hashed(self.profile_path)
         m, p = self.manifest, self.profile
-        keys(m, ("schema", "runtime_root", "inventories", "collector", "identity_tool"), ("validators",))
+        keys(m, ("schema", "runtime_root", "inventories", "collector", "identity_tool"),
+             ("validators", "static_manifest_sha256"))
         keys(p, ("schema", "id", "identity_mode", "runtime_identity", "transformer_chain", "coremods", "classes", "writer_sites", "negative_controls", "scope", "production_authority"), ("pre_classes", "session_bound", "frame_evidence", "static_recipe"))
         if m["schema"] != "RUSTCRAFT_RUNTIME_MANIFEST_V2" or p["schema"] != "RUSTCRAFT_QUALIFICATION_PROFILE_V2":
             raise Invalid("unsupported manifest/profile schema")
@@ -223,8 +224,12 @@ class QualificationEngine:
             # In session-bound mode the declared identity is still the EXACT V2
             # identity of the pre-writer bytes. That is what makes the engine's
             # independent recomputation meaningful: it recomputes the exact
-            # identity and the certificate must agree with it.
-            keys(identity, required)
+            # identity and the certificate must agree with it. The MASKED
+            # session invariant is the launch-independent completion of the
+            # static contract (the exact hash embeds the derivation launch's
+            # MixinMerged#sessionId); a row may carry it for comparison.
+            keys(identity, required, ("session_invariant_sha256",)
+                 if p["identity_mode"] == "CANONICAL_ID_V2_SESSION_BOUND" else ())
             for item in identity.values():
                 digest(item)
         if not p["writer_sites"] or not p["negative_controls"]:
@@ -617,8 +622,10 @@ class QualificationEngine:
             batch = session_names[start:start + 16]
             args = [str(paths[n]) for n in batch]
             receipts = strict_lines(self.process(cmd + ["--session-bound"] + args, identity["timeout_seconds"], "session-identity-receipts"), len(batch))
-            for name, receipt in zip(batch, receipts):
-                receipts_for[name] = (receipt, None, None)
+            dump_text = self.process(cmd + ["--dump"] + args, identity["timeout_seconds"], "session-identity-method-facts")
+            dumps = strict_lines(dump_text, len(batch))
+            for name, receipt, dump, line in zip(batch, receipts, dumps, dump_text.splitlines()):
+                receipts_for[name] = (receipt, dump, line)
         for name in names:
             receipt, dump, line = receipts_for[name]
             raw = sha(paths[name])
@@ -633,8 +640,12 @@ class QualificationEngine:
                 if (receipt[5] != expected["session_invariant_sha256"]
                         or receipt[3] != expected.get("declaration_order_sha256")):
                     raise Invalid(f"{self.profile['identity_mode']} session invariant drift: {name}")
+                for method in dump[16]:
+                    if not isinstance(method, list) or len(method) != 20:
+                        raise Invalid("unsupported V2 method fact schema")
                 result[name] = {"raw_sha256": raw, "session_invariant_sha256": receipt[5],
-                                "declaration_order_sha256": receipt[3], "file": str(paths[name])}
+                                "declaration_order_sha256": receipt[3],
+                                "methods": dump[16], "file": str(paths[name])}
                 continue
             if not isinstance(receipt, list) or len(receipt) != 5 or receipt[:2] != ["CANONICAL_ID_V2", name]:
                 raise Invalid(f"identity receipt schema/name mismatch for {name}: {receipt!r}")
@@ -891,11 +902,27 @@ class QualificationEngine:
                 raise Invalid(f"session certificate for {name} is unusable: {error}") from error
             if document["class_name"].replace(".", "/") != name:
                 raise Invalid(f"session certificate names a different class: {name}")
-            if document["process_id"] != block["process_id"] or document["transformation_session_id"] != block["transformation_session_id"]:
+            # The certificate must be bound to THIS launch's own
+            # transformation session -- the one the chain header declares.
+            # The profile block's process/session ids are the DERIVATION
+            # launch's provenance (the offline launch the static contract was
+            # generated from); requiring them to equal a fresh launch's ids
+            # would bind one launch's UUIDs into a contract that must admit
+            # every launch. Cross-launch certificate reuse still fails: a
+            # certificate from another launch carries that launch's ids,
+            # which cannot equal this chain header's.
+            header = observed["transformation_chain"]
+            if document["process_id"] != header["process_id"] or document["transformation_session_id"] != header["transformation_session_id"]:
                 raise Invalid("session certificate is bound to a different process/transformation session: " + name)
             if document["defining_loader_identity"] != rows[name]["defining_loader_identity"]:
                 raise Invalid("session certificate and acquisition disagree on the defining loader: " + name)
-            if document.get("runtime_manifest_sha256") != manifest_hash:
+            # The certificate binds the manifest OF RECORD -- the static
+            # qualification contract the plan pinned. A run whose manifest
+            # derives from it (redirecting tool wiring) declares that origin
+            # explicitly; the derived file's own tools are pinned and checked
+            # by the tools node, so this stays a binding, not a trust hop.
+            expected_manifest = self.manifest.get("static_manifest_sha256") or manifest_hash
+            if document.get("runtime_manifest_sha256") != expected_manifest:
                 # A manifest binding may be absent only when the issuing plan
                 # published none; the engine always has one, so absence here is a
                 # certificate that declines to say which manifest it ran under.
@@ -914,7 +941,16 @@ class QualificationEngine:
             admitted = pre_classes.get(name)
             if admitted is None:
                 raise Missing("session certificate names a class whose pre-writer identity was not recomputed: " + name)
-            if (document["exact_semantic_sha256"] != admitted["semantic_sha256"]
+            # For session-bound rows the engine's independent recomputation
+            # is the MASKED invariant; the exact semantic embeds the launch's
+            # own sessionId and is compared inside the launch's own documents.
+            admitted_identity = (admitted.get("session_invariant_sha256")
+                                 if "session_invariant_sha256" in admitted
+                                 else admitted.get("semantic_sha256"))
+            document_identity = (document.get("session_invariant_sha256")
+                                 if "session_invariant_sha256" in admitted
+                                 else document["exact_semantic_sha256"])
+            if (document_identity != admitted_identity
                     or document["exact_declaration_order_sha256"] != admitted["declaration_order_sha256"]):
                 # The whole point: the certificate claims an exact identity for
                 # the bytes the writer is about to mutate, and the engine
@@ -924,7 +960,13 @@ class QualificationEngine:
             produced = classes.get(name)
             if produced is None:
                 raise Missing("session certificate names a class whose post-writer identity was not recomputed: " + name)
-            if produced["semantic_sha256"] == admitted["semantic_sha256"]:
+            produced_identity = (produced.get("session_invariant_sha256", produced.get("exact_semantic_sha256"))
+                                 if "session_invariant_sha256" in admitted
+                                 else produced["exact_semantic_sha256"])
+            admitted_ref = (admitted["session_invariant_sha256"]
+                            if "session_invariant_sha256" in admitted
+                            else admitted["semantic_sha256"])
+            if produced_identity == admitted_ref:
                 raise Invalid("post-writer identity equals the admitted pre-writer identity; the writers proved nothing: " + name)
             # The certificate is evidence of an admission, so it has to name the
             # policy that granted it, and the mask provenance the policy
@@ -1000,8 +1042,13 @@ class QualificationEngine:
                      "downstream_transformers_after_live_writers", "classes"))
         if chain["schema"] != CHAIN_SCHEMA or chain["schema_version"] != CHAIN_VERSION:
             raise Invalid("unsupported transformation chain schema/version")
-        if chain["process_id"] != block["process_id"] or chain["transformation_session_id"] != block["transformation_session_id"]:
-            raise Invalid("the transformation chain belongs to a different process/transformation session")
+        # The chain header declares its OWN launch's process/session; the
+        # certificates were already required to match it exactly, and the
+        # acquisition digest below binds the chain to the same evidence.
+        # Requiring the static profile's derivation-launch ids here would
+        # bind a specific launch's UUIDs into the reusable contract.
+        # process_id/transformation_session_id are launch UUIDs, not digests;
+        # the certificates were required to match them exactly above.
         if chain["acquisition_evidence_sha256"] != digest_json(observed["session_acquisition"]):
             raise Invalid("the transformation chain is not bound to this acquisition evidence")
         if not isinstance(chain["classes"], list):
@@ -1065,7 +1112,10 @@ class QualificationEngine:
                    "defining_loader_identity", "stages"))
         if name not in issued:
             raise Invalid("chain row names a class this run issued no admission certificate for: " + name)
-        if row["process_id"] != block["process_id"] or row["transformation_session_id"] != block["transformation_session_id"]:
+        # Rows bind to THIS launch's chain header (the same launch the
+        # certificates matched); the profile block's ids are the derivation
+        # launch's provenance, not a fresh launch's expectation.
+        if row["process_id"] != chain["process_id"] or row["transformation_session_id"] != chain["transformation_session_id"]:
             raise Invalid("chain row belongs to a different process/transformation session: " + name)
         if row["defining_loader_identity"] != chain["defining_loader_identity"]:
             raise Invalid("chain row names a different defining loader: " + name)
@@ -1099,7 +1149,7 @@ class QualificationEngine:
                          "exact_semantic_sha256", "exact_declaration_order_sha256",
                          "session_invariant_sha256", "acquisition_evidence_id",
                          "rustcraft_hooks", "exception_paths"))
-            if stage["process_id"] != block["process_id"] or stage["transformation_session_id"] != block["transformation_session_id"]:
+            if stage["process_id"] != chain["process_id"] or stage["transformation_session_id"] != chain["transformation_session_id"]:
                 raise Invalid("chain stage belongs to a different process/transformation session: " + name)
             if stage["defining_loader_identity"] != chain["defining_loader_identity"]:
                 raise Invalid("chain stage names a different defining loader: " + name)

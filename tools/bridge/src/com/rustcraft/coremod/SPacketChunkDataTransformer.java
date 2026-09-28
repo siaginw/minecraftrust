@@ -92,6 +92,11 @@ public class SPacketChunkDataTransformer implements IClassTransformer {
             System.err.println("[RustCraft] Failed to transform SPacketChunkData: " + t.getMessage());
             lastTransformStatus = "TRANSFORM_ERROR: " + t.getMessage();
             LiveHookSupport.recordNonAdmission(transformedName, String.valueOf(t.getMessage()));
+            if (t instanceof LiveHookSupport.ProfileFailure) {
+                // Admission integrity: abort this attempt so the defining
+                // pass (with provenance) wins the definition.
+                throw (LiveHookSupport.ProfileFailure) t;
+            }
             return basicClass; // Safe fallback: return unmodified bytecode
         }
     }

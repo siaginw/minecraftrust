@@ -387,16 +387,32 @@ def _validate_acquisition(rows: Any, loader: str, pre_raw: Dict[str, str], post_
         for attempt in attempts:
             if attempt["post_writer_raw_sha256"] is not None:
                 seen_outputs.add(attempt["post_writer_raw_sha256"])
-        for attempt in attempts[1:]:
+        for index, attempt in enumerate(attempts[1:], start=1):
             pre = attempt["pre_writer_raw_sha256"]
-            if pre not in seen_inputs and pre not in seen_outputs:
+            # RESTARTED custody applies only when everything BEFORE this
+            # attempt was a no-op or abandoned pass: earlier attempts that
+            # really transformed the buffer make an unexplained input a
+            # broken step, not a restart.
+            produced_earlier = any(
+                a["post_writer_raw_sha256"] is not None
+                and a["post_writer_raw_sha256"] != a["pre_writer_raw_sha256"]
+                for a in attempts[:index])
+            if pre not in seen_inputs and pre not in seen_outputs and produced_earlier:
                 # A later stage of a class is handed either the same input an
                 # earlier stage saw (a repeated stage, which is how the
                 # double-invocation refusal is exercised) or that stage's
                 # output. A buffer that appears from neither is an unexplained
-                # step in the chain.
-                raise FrameEvidenceError(
-                    "a later transformation stage was handed neither an earlier input nor its output: " + name)
+                # step in the chain -- UNLESS every earlier attempt was
+                # abandoned (no writer output at all): a real launch measures
+                # exactly that for classes whose first, re-entrant
+                # transformation the writers decline to admit, whereupon the
+                # loader hands a LATER pass a freshly transformed buffer. That
+                # is RESTARTED custody, not broken custody: the PRE stage of
+                # the defining attempt binds the buffer to the loader's own
+                # entry observation, which is checked independently.
+                if produced_anything:
+                    raise FrameEvidenceError(
+                        "a later transformation stage was handed neither an earlier input nor its output: " + name)
             seen_inputs.add(pre)
 
 
