@@ -52,6 +52,9 @@ def main() -> int:
     parser.add_argument("--stability-s", type=float, default=20.0)
     parser.add_argument("--boot-timeout-s", type=int, default=1800)
     args = parser.parse_args()
+    args.static_contract = args.static_contract.resolve()
+    args.srg_jar = args.srg_jar.resolve()
+    args.mod_versions = args.mod_versions.resolve()
 
     out = args.output.resolve()
     if out.exists():
@@ -213,8 +216,23 @@ def main() -> int:
     for index, item in enumerate(collector["command"]):
         if str(item).endswith("collector-config.json"):
             collector["command"][index] = str(engine_dir / "collector-config.json")
+    # THIS run's tool pin: the collector transcribes the launch's own capture
+    # kind, which changed the script; a run's manifest pins the tools it
+    # actually uses, and the engine verifies the on-disk tool against the
+    # pin. The static contract (recipe, policies, plan) is untouched.
+    if "pins" in collector:
+        collector_path = ROOT / "tools/qualification-v2/discovery_collector.py"
+        for pinned in list(collector["pins"]):
+            if str(pinned).endswith("discovery_collector.py"):
+                collector["pins"][pinned] = sha(collector_path)
+    # Every file argument of the collector command must be pinned, including
+    # this run's own config (which redirects the SAME collector at THIS
+    # launch's evidence directory).
+    if "pins" in collector:
+        collector["pins"][str(engine_dir / "collector-config.json")] =             sha(engine_dir / "collector-config.json")
     (engine_dir / "manifest.json").write_text(json.dumps(manifest, indent=2) + "\n")
     shutil.copyfile(args.static_contract / "profile.json", engine_dir / "profile.json")
+    complete_session_invariants(engine_dir / "profile.json", args.static_contract)
 
     engine_env = dict(os.environ)
     engine_env["MSYS2_ARG_CONV_EXCL"] = "*"
@@ -255,6 +273,52 @@ def main() -> int:
         "writer_ordering": (receipt.get("writer_ordering") or "")[:160],
     }, indent=2))
     return 0 if admitted else 1
+
+
+def complete_session_invariants(profile_path: Path, static_contract: Path) -> None:
+    """Complete the static profile's launch-independent form.
+
+    The profile's classes/pre_classes rows for session-bound classes carried
+    only the EXACT semantic hash of the offline qualifying launch -- a
+    launch-scoped value (it embeds that launch's MixinMerged#sessionId) that
+    cannot be the expectation for any other launch. The launch-independent
+    completion is the MASKED session invariant, recomputed here with the
+    pinned identity tool from the SAME offline evidence the profile was
+    derived from. Exact-mode rows are untouched; the admission policies'
+    own expected invariants stay the pre-writer authority.
+    """
+    import subprocess
+    profile = json.loads(profile_path.read_text(encoding="utf-8"))
+    if profile.get("identity_mode") != "CANONICAL_ID_V2_SESSION_BOUND":
+        return
+    session_classes = set(profile.get("session_bound", {}).get("classes", []))
+    if not session_classes:
+        return
+    identity = json.loads(
+        (static_contract / "collector-config.json").read_text(encoding="utf-8"))["identity_tool"]
+    offline = static_contract / "qualifying-launch" / "observation"
+    for section in ("classes", "pre_classes"):
+        rows = profile.get(section) or {}
+        targets = [n for n in rows if n in session_classes]
+        if not targets:
+            continue
+        files = [str(offline / section / (n + ".class")) for n in targets]
+        cmd = [identity["java"], "-cp", os.pathsep.join(identity["classpath"]),
+               "com.rustcraft.coremod.CanonicalClassIdentityV2", "--session-bound", *files]
+        env = dict(os.environ)
+        env["MSYS2_ARG_CONV_EXCL"] = "*"
+        completed = subprocess.run(cmd, capture_output=True, text=True, env=env, timeout=600)
+        receipts = completed.stdout.strip().splitlines()
+        if completed.returncode or len(receipts) != len(targets):
+            raise SystemExit("session invariant derivation failed for " + section
+                             + ": " + completed.stderr[:200])
+        for name, receipt in zip(targets, receipts):
+            row = json.loads(receipt)
+            # row: [schema, name, exact_semantic, declaration, raw, invariant, ...]
+            row_data = rows[name]
+            row_data.pop("semantic_sha256", None)
+            row_data["session_invariant_sha256"] = row[5]
+    profile_path.write_text(json.dumps(profile, indent=2) + "\n", encoding="utf-8")
 
 
 if __name__ == "__main__":

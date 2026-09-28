@@ -515,10 +515,60 @@ class QualificationEngine:
         return observed
 
     def runtime(self, observed):
-        for name in ("runtime_identity", "transformer_chain", "coremods"):
-            if observed[name] != self.profile[name]:
-                raise Invalid(f"fresh {name} differs from profile")
-        return {name: observed[name] for name in ("runtime_identity", "transformer_chain", "coremods")}
+        # runtime_identity is path-free where it is identity (registry digest,
+        # java version, profile id) and carries only the PINNED runtime root,
+        # so strict equality is correct for it. The two structural lists are
+        # compared launch-shape-tolerantly, because the offline profile is a
+        # LIFECYCLE-FREE artifact: a real server launch runs the mod lifecycle,
+        # which registers additional FML-owned transformers (measured:
+        # ModAPITransformer) and reports coremod jar locations from ITS OWN
+        # game directory. Machine-local path prefixes and lifecycle-dependent
+        # additions are provenance, not identity -- the same rule the static
+        # recipe binding already follows -- but additions are RECORDED here,
+        # never silently ignored.
+        if observed["runtime_identity"] != self.profile["runtime_identity"]:
+            raise Invalid("fresh runtime_identity differs from profile")
+        additions = self._chain_additions(observed["transformer_chain"],
+                                           self.profile["transformer_chain"])
+        self._coremod_shape_check(observed["coremods"], self.profile["coremods"])
+        return {"runtime_identity": observed["runtime_identity"],
+                "transformer_chain": observed["transformer_chain"],
+                "coremods": observed["coremods"],
+                "transformer_chain_additions": additions}
+
+    def _chain_additions(self, observed, profiled):
+        """The profiled chain must appear IN ORDER inside the observed chain.
+
+        Returns the observed-but-not-profiled transformers for the record. A
+        missing profiled transformer, or one out of order, rejects.
+        """
+        observed, profiled = list(observed), list(profiled)
+        cursor = 0
+        matched = []
+        for transformer in profiled:
+            while cursor < len(observed) and observed[cursor] != transformer:
+                cursor += 1
+            if cursor == len(observed):
+                raise Invalid("fresh transformer chain is missing the profiled "
+                              f"transformer {transformer} in order")
+            matched.append(cursor)
+            cursor += 1
+        return [t for i, t in enumerate(observed) if i not in set(matched)]
+
+    def _coremod_shape_check(self, observed, profiled):
+        """Coremods compare by plugin class and jar NAME: the absolute jar
+        location is the launch's own game directory, machine-local by
+        construction, while the plugin inventory is runtime identity."""
+        def shape(entry):
+            location = entry.get("location", "") if isinstance(entry, dict) else ""
+            base = location.replace("\\", "/").rsplit("/", 1)[-1]
+            return (entry.get("class") if isinstance(entry, dict) else str(entry), base)
+        observed_shape, profiled_shape = {shape(e) for e in observed}, {shape(e) for e in profiled}
+        if observed_shape != profiled_shape:
+            only_observed = sorted(observed_shape - profiled_shape)
+            only_profiled = sorted(profiled_shape - observed_shape)
+            raise Invalid(f"fresh coremods differ from profile: only-observed={only_observed[:4]} "
+                          f"only-profiled={only_profiled[:4]}")
 
     def classes(self, observed, section="classes"):
         if not self.profile.get(section) or not observed.get(section):
@@ -543,31 +593,64 @@ class QualificationEngine:
             raise Invalid("unreported or aliased class files in observation directory")
         identity = self.manifest["identity_tool"]
         cmd = [identity["java"], "-cp", os.pathsep.join(x["path"] for x in identity["classpath"]), "com.rustcraft.coremod.CanonicalClassIdentityV2"]
+        # Session-bound classes compare by their MASKED session invariant: the
+        # exact semantic embeds the launch-scoped MixinMerged#sessionId, so
+        # exact-hash expectations bind one launch's UUID into a contract that
+        # must admit every launch's fresh provenance. The invariant rows are
+        # the launch-independent completion of the static contract.
+        session_bound_classes = set(self.profile.get("session_bound", {}).get("classes", []))
         result = {}
         names = sorted(paths)
-        for start in range(0, len(names), 16):
-            batch = names[start:start + 16]
+        session_names = [n for n in names if n.replace(".", "/") in session_bound_classes
+                         and "session_invariant_sha256" in self.profile[section][n]]
+        plain_names = [n for n in names if n not in session_names]
+        receipts_for = {}
+        for start in range(0, len(plain_names), 16):
+            batch = plain_names[start:start + 16]
             args = [str(paths[n]) for n in batch]
             receipts = strict_lines(self.process(cmd + args, identity["timeout_seconds"], "identity-receipts"), len(batch))
             dump_text = self.process(cmd + ["--dump"] + args, identity["timeout_seconds"], "identity-method-facts")
             dumps = strict_lines(dump_text, len(batch))
             for name, receipt, dump, line in zip(batch, receipts, dumps, dump_text.splitlines()):
-                if not isinstance(receipt, list) or len(receipt) != 5 or receipt[:2] != ["CANONICAL_ID_V2", name]:
-                    raise Invalid(f"identity receipt schema/name mismatch for {name}: {receipt!r}")
-                for value in receipt[2:]:
+                receipts_for[name] = (receipt, dump, line)
+        for start in range(0, len(session_names), 16):
+            batch = session_names[start:start + 16]
+            args = [str(paths[n]) for n in batch]
+            receipts = strict_lines(self.process(cmd + ["--session-bound"] + args, identity["timeout_seconds"], "session-identity-receipts"), len(batch))
+            for name, receipt in zip(batch, receipts):
+                receipts_for[name] = (receipt, None, None)
+        for name in names:
+            receipt, dump, line = receipts_for[name]
+            raw = sha(paths[name])
+            if name in session_names:
+                if not isinstance(receipt, list) or len(receipt) < 6 or receipt[:2] != ["CANONICAL_ID_V2_SESSION_BOUND", name]:
+                    raise Invalid(f"session-bound receipt schema/name mismatch for {name}: {receipt!r}")
+                for value in receipt[2:6]:
                     digest(value)
-                if not isinstance(dump, list) or len(dump) != 19 or dump[0] != "CANONICAL_ID_V2" or dump[3] != name:
-                    raise Invalid("identity dump schema/name mismatch")
-                raw = sha(paths[name])
-                if receipt[4] != raw or receipt[2] != hashlib.sha256(line.encode("utf-8")).hexdigest():
-                    raise Invalid("identity output not bound to observed bytes/dump")
-                actual = dict(raw_sha256=raw, semantic_sha256=receipt[2], declaration_order_sha256=receipt[3])
-                if any(actual[k] != v for k, v in self.profile[section][name].items()):
-                    raise Invalid(f"{self.profile['identity_mode']} class identity drift: {name}")
-                for method in dump[16]:
-                    if not isinstance(method, list) or len(method) != 20:
-                        raise Invalid("unsupported V2 method fact schema")
-                result[name] = {**actual, "methods": dump[16], "file": str(paths[name])}
+                if receipt[4] != raw:
+                    raise Invalid("session identity not bound to observed bytes")
+                expected = self.profile[section][name]
+                if (receipt[5] != expected["session_invariant_sha256"]
+                        or receipt[3] != expected.get("declaration_order_sha256")):
+                    raise Invalid(f"{self.profile['identity_mode']} session invariant drift: {name}")
+                result[name] = {"raw_sha256": raw, "session_invariant_sha256": receipt[5],
+                                "declaration_order_sha256": receipt[3], "file": str(paths[name])}
+                continue
+            if not isinstance(receipt, list) or len(receipt) != 5 or receipt[:2] != ["CANONICAL_ID_V2", name]:
+                raise Invalid(f"identity receipt schema/name mismatch for {name}: {receipt!r}")
+            for value in receipt[2:]:
+                digest(value)
+            if not isinstance(dump, list) or len(dump) != 19 or dump[0] != "CANONICAL_ID_V2" or dump[3] != name:
+                raise Invalid("identity dump schema/name mismatch")
+            if receipt[4] != raw or receipt[2] != hashlib.sha256(line.encode("utf-8")).hexdigest():
+                raise Invalid("identity output not bound to observed bytes/dump")
+            actual = dict(raw_sha256=raw, semantic_sha256=receipt[2], declaration_order_sha256=receipt[3])
+            if any(actual[k] != v for k, v in self.profile[section][name].items()):
+                raise Invalid(f"{self.profile['identity_mode']} class identity drift: {name}")
+            for method in dump[16]:
+                if not isinstance(method, list) or len(method) != 20:
+                    raise Invalid("unsupported V2 method fact schema")
+            result[name] = {**actual, "methods": dump[16], "file": str(paths[name])}
         self.observed_class_paths = getattr(self, "observed_class_paths", {})
         self.observed_class_paths.update({row["file"]: row["raw_sha256"] for row in result.values()})
         return result
