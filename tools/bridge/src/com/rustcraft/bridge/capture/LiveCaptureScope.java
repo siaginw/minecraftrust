@@ -18,6 +18,23 @@ public final class LiveCaptureScope {
     public static final String VANILLA_U16 = "VANILLA_U16";
 
     public final String profileId, certificateId, storageFamily, generatorFamily;
+
+    /**
+     * Whether a registry whose ids exceed the u16 transport is tolerated with
+     * the decision deferred to each candidate chunk, rather than refusing the
+     * runtime outright.
+     *
+     * <p>Default false, which is the historical behaviour and leaves every
+     * existing caller byte-for-byte unchanged. The real Revelation runtime
+     * carries registry max id 77,663 while 84.1% of its 35,711 states fit
+     * u16, so a registry-level refusal would reject every capture of a runtime
+     * whose chunks are mostly comparable. Under this policy the registry is
+     * only bound for IDENTITY (it must not change mid-scope); the width
+     * decision is made per chunk by {@link ShadowScopeGate}, which excludes a
+     * chunk containing any state above 65535 and never widens the transport.
+     * </p>
+     */
+    public final boolean perChunkStateIdLimit;
     public final String providerClass, worldClass, chunkClass, sectionClass, containerClass;
     public final String nibbleClass, packetClass, registryClass, generatorClass;
     public final int dimension, stateWidthBits;
@@ -29,6 +46,19 @@ public final class LiveCaptureScope {
             String containerClass, String nibbleClass, String packetClass, String registryClass,
             String storageFamily, long registryEpoch, int stateWidthBits,
             String generatorFamily, String generatorClass, boolean skylight, boolean detachedDiagnostic) {
+        this(profileId, certificateId, dimension, providerClass, worldClass, chunkClass,
+                sectionClass, containerClass, nibbleClass, packetClass, registryClass,
+                storageFamily, registryEpoch, stateWidthBits, generatorFamily, generatorClass,
+                skylight, detachedDiagnostic, false);
+    }
+
+    public LiveCaptureScope(String profileId, String certificateId, int dimension,
+            String providerClass, String worldClass, String chunkClass, String sectionClass,
+            String containerClass, String nibbleClass, String packetClass, String registryClass,
+            String storageFamily, long registryEpoch, int stateWidthBits,
+            String generatorFamily, String generatorClass, boolean skylight,
+            boolean detachedDiagnostic, boolean perChunkStateIdLimit) {
+        this.perChunkStateIdLimit = perChunkStateIdLimit;
         this.profileId = text(profileId); this.certificateId = text(certificateId);
         this.dimension = dimension;
         this.providerClass = text(providerClass); this.worldClass = text(worldClass);
@@ -124,12 +154,32 @@ public final class LiveCaptureScope {
             }
             decoded = ((ArrayList<?>) list).toArray();
             int size = aliases.size();
-            if (size < 2 || size > 65536 || decoded.length > 65536)
+            if (size < 2) throw new ScopeFailure("REGISTRY_EXCEEDS_U16");
+            if (scope.perChunkStateIdLimit) {
+                // Registry-level WIDTH is no longer the gate: a modded registry
+                // may legitimately assign ids above the u16 transport (the real
+                // Revelation runtime's max id is 77,663). The registry is still
+                // bound for identity below -- it must not change mid-scope --
+                // and each candidate CHUNK is gated per state by
+                // ShadowScopeGate, which excludes any chunk containing a state
+                // above 65535. The transport width does not change.
+                if (decoded.length > 1 << 20)
+                    throw new ScopeFailure("REGISTRY_EXCEEDS_U16");
+            } else if (size > 65536 || decoded.length > 65536) {
                 throw new ScopeFailure("REGISTRY_EXCEEDS_U16");
+            }
             int bits = Math.max(9, 32 - Integer.numberOfLeadingZeros(size - 1));
             if (bits != scope.stateWidthBits) throw new ScopeFailure("STATE_WIDTH_MISMATCH");
-            for (Integer id : aliases.values())
-                if (id < 0 || id >= (1 << scope.stateWidthBits)) throw new ScopeFailure("REGISTRY_ID_OUT_OF_WIDTH");
+            if (!scope.perChunkStateIdLimit)
+                for (Integer id : aliases.values())
+                    if (id < 0 || id >= (1 << scope.stateWidthBits))
+                        throw new ScopeFailure("REGISTRY_ID_OUT_OF_WIDTH");
+            else
+                // Under the per-chunk policy ids may exceed the width in the
+                // registry; only their sign is still bound here, because a
+                // negative id is a broken registry rather than a wide one.
+                for (Integer id : aliases.values())
+                    if (id < 0) throw new ScopeFailure("REGISTRY_ID_OUT_OF_WIDTH");
             checkRegistry(scope.registryEpoch);
         }
 
