@@ -110,7 +110,10 @@ if S:
     prof=json.loads(pathlib.Path(c['profile']).read_text())
     block=prof['session_bound']
     policy=sbpolicy.validate(copy.deepcopy(block['admission_policies'][S['class_name']]))
-    recipe=cert.recipe_binding_sha256({k:v for k,v in prof.items() if k!='session_bound'})
+    # The canonical static contract, not the whole profile: the profile carries
+    # per-launch identities that do not exist until after the run, so a binding
+    # over it could never be known when the policy was written.
+    recipe=cert.recipe_binding_sha256(prof['static_recipe'])
     manifest_sha=sha(c['manifest'])
     refusals=[]
     if policy['recipe_sha256']!=recipe: refusals.append('RECIPE_MISMATCH: policy is bound to another recipe')
@@ -425,8 +428,29 @@ class EngineFixture:
         manifest_sha = sha(self.manifest_path)
         self.profile["frame_evidence"] = {"required_classes": [SESSION_CLASS]}
         self.profile["identity_mode"] = "CANONICAL_ID_V2_SESSION_BOUND"
-        recipe = certificate.recipe_binding_sha256(
-            {k: v for k, v in self.profile.items() if k != "session_bound"})
+        # The static qualification contract: the one canonical document that
+        # says what was authorized BEFORE the run. The engine recomputes the
+        # binding from this rather than from the profile, because the profile
+        # carries per-launch identities that cannot exist before the launch.
+        static_recipe = {
+            "schema_version": 2, "kind": "RUSTCRAFT_V2_WRITER_PLAN_RECIPE",
+            "identity_mode": "CANONICAL_ID_V2_SESSION_BOUND",
+            "all_required_observed": True,
+            "required_hooks_manifest_sha256": manifest_sha,
+            "required_hooks": [{"id": site["id"], "status": "OBSERVED"}
+                                for site in self.profile["writer_sites"]],
+            "expected_class_identities": {SESSION_CLASS.replace("/", "."): {
+                "schema": "CANONICAL_ID_V2_SESSION_BOUND",
+                "class_name": SESSION_CLASS,
+                "declaration_order_sha256": facts["pre_order"],
+                "session_invariant_sha256": facts["invariant"]}},
+            "session_bound_classes": [SESSION_CLASS.replace("/", ".")],
+        }
+        # The policies ride in the recipe but are stripped from the binding:
+        # each policy carries a recipe_sha256, so including them would make the
+        # binding self-referential. The real generated recipe has the same shape.
+        static_recipe["session_admission_policies"] = {SESSION_CLASS: {}}
+        recipe = certificate.recipe_binding_sha256(static_recipe)
         policy = admission_policy.build(
             class_name=SESSION_CLASS.replace("/", "."),
             expected_session_invariant_sha256=facts["invariant"],
@@ -439,6 +463,9 @@ class EngineFixture:
             recipe_sha256=recipe,
             required_hook_ids=[SESSION_HOOK_ID],
             expected_loader_class=LOADER_CLASS)
+        static_recipe["session_admission_policies"] = {SESSION_CLASS: policy}
+        recipe = certificate.recipe_binding_sha256(static_recipe)
+        self.profile["static_recipe"] = static_recipe
         self.profile["session_bound"] = {
             "schema": "RUSTCRAFT_SESSION_BOUND_PROFILE_V1", "schema_version": 1,
             "recipe_sha256": recipe, "process_id": PROCESS_ID,
@@ -744,6 +771,106 @@ class EngineIntegrationControls(unittest.TestCase):
         # well-formed document; only the binding it makes is wrong.
         admission_policy.validate(policy)
         fixture.write()
+
+    def test_static_recipe_binding_is_launch_independent(self):
+        """The static binding must not move with anything the run produces.
+
+        The correction is about WHERE the binding is computed. It used to be a
+        hash of the whole profile minus the session block, and that document
+        carries the qualifying launch's own class identities -- so a real run
+        could never match the digest its own pre-launch policy carried. These
+        controls pin both halves: launch facts leave the static binding alone,
+        and every static fact that authorization depends on moves it.
+        """
+        fixture = self.session_fixture()
+        recipe = fixture.profile["static_recipe"]
+        base = certificate.recipe_binding_sha256(recipe)
+
+        # -- launch-specific values, which must NOT move it -----------------
+        for label, mutate in (
+            ("process id", lambda r, p: p["session_bound"].__setitem__("process_id", "7" * 8 + "-7777-4777-8777-" + "7" * 12)),
+            ("transformation session id", lambda r, p: p["session_bound"].__setitem__("transformation_session_id", "8" * 8 + "-8888-4888-8888-" + "8" * 12)),
+        ):
+            with self.subTest(vary=label):
+                mutated = copy.deepcopy(recipe)
+                block = copy.deepcopy(fixture.profile["session_bound"])
+                mutate(mutated, {"session_bound": block})
+                self.assertEqual(certificate.recipe_binding_sha256(mutated), base,
+                                 label + " must not change what was authorized before the run")
+
+        # A session-bound class's exact bytes are per-launch: the raw and
+        # semantic digests move every launch, the invariant does not. Only the
+        # invariant is static, so only it may be in the binding.
+        with self.subTest(vary="per-launch session-bound exact digests"):
+            mutated = copy.deepcopy(recipe)
+            identity = mutated["expected_class_identities"][
+                mutated["session_bound_classes"][0]]
+            self.assertNotIn("raw_sha256", identity)
+            self.assertNotIn("semantic_sha256", identity)
+            self.assertIn("session_invariant_sha256", identity)
+            self.assertEqual(certificate.recipe_binding_sha256(mutated), base)
+
+        # -- static facts, every one of which MUST move it -------------------
+        for label, mutate in (
+            ("hook manifest pin", lambda r: r.__setitem__("required_hooks_manifest_sha256", "0" * 64)),
+            ("hook descriptor", lambda r: r["required_hooks"][0].__setitem__("id", "Z99")),
+            ("hook inventory removed", lambda r: r.__setitem__("required_hooks", [])),
+            ("exact-class identity", lambda r: r["expected_class_identities"].__setitem__(
+                "net/minecraft/util/BitArray", {"schema": "CANONICAL_ID_V2",
+                                                "class_name": "net/minecraft/util/BitArray",
+                                                "raw_sha256": "1" * 64,
+                                                "semantic_sha256": "2" * 64,
+                                                "declaration_order_sha256": "3" * 64})),
+            ("session invariant", lambda r: r["expected_class_identities"][
+                r["session_bound_classes"][0]].__setitem__("session_invariant_sha256", "4" * 64)),
+            ("declaration order", lambda r: r["expected_class_identities"][
+                r["session_bound_classes"][0]].__setitem__("declaration_order_sha256", "5" * 64)),
+            ("session-bound inventory", lambda r: r.__setitem__("session_bound_classes", [])),
+        ):
+            with self.subTest(vary=label):
+                mutated = copy.deepcopy(recipe)
+                mutate(mutated)
+                self.assertNotEqual(certificate.recipe_binding_sha256(mutated), base,
+                                    label + " must change what was authorized")
+
+    def test_admission_policy_is_bound_by_its_own_hash(self):
+        """A changed policy is caught -- but by the certificate, not the recipe.
+
+        The static binding deliberately EXCLUDES the admission policies. Each
+        policy carries a recipe_sha256, so folding them into the hash the
+        policies are bound to would be self-referential and unsatisfiable.
+
+        The policy is therefore bound at the point of use instead: every
+        certificate carries policy_sha256, and the engine refuses a certificate
+        whose policy_sha256 is not the hash of the policy it is checked against.
+        So a policy that changed after the plan was generated is caught, and the
+        recipe hash stays stable -- which is the whole point of the correction.
+        """
+        fixture = self.session_fixture()
+        policy = fixture.profile["static_recipe"]["session_admission_policies"][SESSION_CLASS]
+        mutated = dict(policy, expected_masked_occurrence_count=policy["expected_masked_occurrence_count"] + 1)
+        self.assertNotEqual(admission_policy.policy_sha256(policy),
+                            admission_policy.policy_sha256(mutated),
+                            "a changed policy has a different hash")
+        result = self.session_fixture(mode="cert-foreign-policy").run()
+        nodes = {n["id"]: n for n in result["evidence"]}
+        self.assertNotEqual(nodes["session_evidence"]["status"], "PASS",
+                            "a certificate naming another policy must be refused")
+
+    def test_tampered_run_evidence_still_fails_with_a_stable_recipe(self):
+        """Correcting the binding must not make run evidence optional.
+
+        The static recipe is unchanged by anything the run produces, so a run
+        whose BYTES have been tampered with still has the same recipe binding --
+        and must still be caught by the node that actually looks at the bytes.
+        That is the difference between separating two layers and dropping one.
+        """
+        result = self.session_fixture(mode="cert-post-identity").run()
+        nodes = {n["id"]: n for n in result["evidence"]}
+        self.assertEqual(nodes["definitions"]["status"], "PASS",
+                         "the static contract is unaffected by run evidence")
+        self.assertNotEqual(nodes["session_evidence"]["status"], "PASS",
+                            "tampered run evidence must still fail its own node")
 
     def test_final_defined_confirmation_semantics(self):
         """FINAL_DEFINED is a witnessed definition event, not another edge.

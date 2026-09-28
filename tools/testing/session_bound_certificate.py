@@ -239,21 +239,27 @@ def from_identity(*, process_id: str, transformation_session_id: str,
 
 
 def recipe_binding_sha256(recipe: Dict[str, Any]) -> str:
-    """Hash of a writer-plan recipe with the certificate block removed.
+    """The canonical static-recipe binding. Delegates; see below.
 
-    The certificates themselves carry a `recipe_sha256`; hashing the recipe
-    *without* them keeps that binding non-circular while still binding every
-    other recipe field -- hook inventory, manifest hash, identity mode, the
-    declared session-bound class list and the runtime binding -- to each
-    certificate.
-    """
-    if not isinstance(recipe, dict):
-        raise CertificateError("recipe must be a JSON object")
-    stripped = {k: v for k, v in recipe.items()
-                if k not in ("session_certificates", "recipe_binding_sha256")}
-    return hashlib.sha256(
-        json.dumps(stripped, sort_keys=True, separators=(",", ":"),
-                   ensure_ascii=False).encode("utf-8")).hexdigest()
+    There used to be a second definition of this hash in this module, and it
+    disagreed with the one the plan generator uses: it stripped only the
+    certificate block, while the generator strips the admission policies too.
+    A policy carries a `recipe_sha256`, so including the policies in the hash
+    makes the binding self-referential and no policy could ever match it. The
+    engine imported this version, so it computed a digest that the plan, the
+    policies and the driver could not produce -- two definitions of "recipe"
+    differing only in a list of stripped keys.
+
+    There is now ONE definition, in session_bound_policy, and this is an alias
+    so the existing callers keep working."""
+    # This module is imported both as part of the package and as a bare module,
+    # so the canonical definition has to be reachable either way.
+    try:
+        from tools.testing.session_bound_policy import (
+            recipe_binding_sha256 as _canonical)
+    except ImportError:
+        from session_bound_policy import recipe_binding_sha256 as _canonical
+    return _canonical(recipe)
 
 
 def describe(document: Dict[str, Any]) -> List[str]:

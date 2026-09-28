@@ -193,7 +193,7 @@ class QualificationEngine:
         self.profile, profile_hash = load_hashed(self.profile_path)
         m, p = self.manifest, self.profile
         keys(m, ("schema", "runtime_root", "inventories", "collector", "identity_tool"), ("validators",))
-        keys(p, ("schema", "id", "identity_mode", "runtime_identity", "transformer_chain", "coremods", "classes", "writer_sites", "negative_controls", "scope", "production_authority"), ("pre_classes", "session_bound", "frame_evidence"))
+        keys(p, ("schema", "id", "identity_mode", "runtime_identity", "transformer_chain", "coremods", "classes", "writer_sites", "negative_controls", "scope", "production_authority"), ("pre_classes", "session_bound", "frame_evidence", "static_recipe"))
         if m["schema"] != "RUSTCRAFT_RUNTIME_MANIFEST_V2" or p["schema"] != "RUSTCRAFT_QUALIFICATION_PROFILE_V2":
             raise Invalid("unsupported manifest/profile schema")
         if p["identity_mode"] not in IDENTITY_MODES or p["production_authority"] is not False:
@@ -297,12 +297,50 @@ class QualificationEngine:
                 raise Invalid(f"admission policy for {name} is unusable: {error}") from error
             if block["admission_policies"][name]["class_name"].replace(".", "/") != name:
                 raise Invalid(f"admission policy names a different class: {name}")
-        # Non-circular binding: the recipe hash covers the whole profile minus the
-        # block that carries it, so a certificate cannot be swapped for one
-        # issued against a different hook inventory, manifest or class set.
-        expected = recipe_binding_sha256({k: v for k, v in profile.items() if k != "session_bound"})
+        # The static qualification contract, and only that.
+        #
+        # This used to hash the profile minus the session block. That document
+        # carries `classes`, `pre_classes` and `writer_sites`, which for a
+        # session-bound class contain the qualifying launch's own bytes -- so the
+        # digest could not exist until after the run the static policy had to
+        # authorize, and no ordering of the driver could satisfy it. A
+        # pre-launch authorization contract may not hash future runtime
+        # evidence.
+        #
+        # The profile therefore carries an explicit `static_recipe`: the one
+        # canonical document describing what was authorized BEFORE the run. The
+        # engine recomputes the binding from it rather than trusting the value
+        # written into the plan, the policies and this block, and then checks
+        # that the contract still describes the profile it is attached to.
+        contract = profile.get("static_recipe")
+        if contract is None:
+            raise Missing("a session-bound profile must declare its static qualification contract")
+        if not isinstance(contract, dict):
+            raise Invalid("the static qualification contract must be an object")
+        expected = recipe_binding_sha256(contract)
         if block["recipe_sha256"] != expected:
-            raise Invalid("session evidence recipe binding does not cover this profile")
+            raise Invalid("session evidence recipe binding does not cover the static contract")
+        if contract.get("identity_mode") != profile["identity_mode"]:
+            raise Invalid("the static contract and the profile disagree about identity mode")
+        contract_classes = {n.replace(".", "/") for n in contract.get("session_bound_classes", [])}
+        if contract_classes != set(block["classes"]):
+            raise Invalid("the static contract's session-bound classes differ from the block's")
+        # A subset, not an equality: the contract declares every hook including
+        # the diagnostic-only ones that place nothing and are therefore not
+        # writer sites. What has to hold is that no writer site is unbacked by
+        # the contract -- a placement the static contract never described is a
+        # placement nothing authorized.
+        contract_hooks = {hook["id"] for hook in contract.get("required_hooks", [])}
+        unbacked = {site["id"] for site in profile.get("writer_sites", [])} - contract_hooks
+        if unbacked:
+            raise Invalid("the profile places hooks the static contract does not declare: "
+                          + ", ".join(sorted(unbacked)))
+        # The contract keys its identity inventory by binary name, the block by
+        # internal name; the class is the same one either way.
+        identities = {n.replace(".", "/") for n in contract.get("expected_class_identities", {})}
+        for name in block["classes"]:
+            if name not in identities:
+                raise Invalid("the static contract does not bind the class " + name)
         return block
 
     def declared_frame_requirement(self, profile):

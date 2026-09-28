@@ -430,8 +430,11 @@ def main() -> int:
         # policy covers the generated plan, and the transforming JVM enforced
         # that one when it admitted these bytes. Both are recorded so the
         # distinction is visible rather than implied.
-        profile_binding = policy_schema.recipe_binding_sha256(
-            {k: v for k, v in engine_profile.items() if k != "session_bound"})
+        # The block binds the same digest the policies and the generated plan
+        # carry: the canonical hash of the static recipe, computed once. The
+        # profile carries that recipe verbatim so the engine can recompute it.
+        profile_binding = policy_schema.recipe_binding_sha256(recipe)
+        engine_profile["static_recipe"] = recipe
         engine_profile["session_bound"] = {
             "schema": "RUSTCRAFT_SESSION_BOUND_PROFILE_V1",
             "schema_version": 1,

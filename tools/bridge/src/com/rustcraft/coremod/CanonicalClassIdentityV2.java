@@ -227,6 +227,13 @@ public final class CanonicalClassIdentityV2 {
         } catch (java.io.IOException failure) {
             throw new IdentityFailure("malformed classfile", failure);
         }
+        // The mask sites are a SET: the order they were discovered in is an
+        // artifact of how the class happens to be laid out, and both the
+        // admission policy and the certificate require them sorted. Reported
+        // unsorted, a real multi-site class produced a certificate neither
+        // schema would accept -- while a single-site fixture always was,
+        // which is why it only showed up against a real runtime.
+        Collections.sort(locationsRef);
         return new Result(classNameRef[0], exactCanonicalRef[0], declarationOrderRef[0], bytes,
                 invariantRef[0], valuesRef, locationsRef, occurrenceRef[0]);
     }
