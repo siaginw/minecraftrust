@@ -6,6 +6,7 @@ fake jars so a change in either is caught before any server boot.
 """
 from __future__ import annotations
 
+import json
 import struct
 import sys
 import unittest
@@ -14,7 +15,8 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from derive_mod_versions import (  # noqa: E402
-    annotation_elements, mcmod_info, metadata_containers, version_properties,
+    annotation_elements, fml_annotation_cache, mcmod_info,
+    metadata_containers, version_properties,
 )
 
 MOD = "Lnet/minecraftforge/fml/common/Mod;"
@@ -132,6 +134,29 @@ class JarSourceTests(unittest.TestCase):
                                       "# comment\nother.version=9.9\nwand.version=0.11.1\n"})
         self.assertEqual(version_properties(jar),
                          {"other.version": "9.9", "wand.version": "0.11.1"})
+
+    def test_annotation_cache_is_jar_scoped(self):
+        # ProjectRed ships one shared cache in the base jar naming every
+        # @Mod of the family; only the classes actually IN the jar may be
+        # honored from it. The foreign entries are inert to FML and must be
+        # inert here, or the sub-mods resolve against the wrong jar.
+        cache = {
+            "mrtjp/projectred/ProjectRedCore": {"annotations": [
+                {"name": "Lnet/minecraftforge/fml/common/Mod;",
+                 "values": {"modid": {"value": "projectred-core"},
+                            "version": {"value": None}}}]},
+            "mrtjp/projectred/ProjectRedExpansion": {"annotations": [
+                {"name": "Lnet/minecraftforge/fml/common/Mod;",
+                 "values": {"modid": {"value": "projectred-expansion"},
+                            "version": {"value": None}}}]},
+        }
+        jar = self._jar("base.jar", {
+            "mrtjp/projectred/ProjectRedCore.class": b"\x00" * 8,
+            "META-INF/fml_cache_annotation.json": json.dumps(cache),
+        })
+        found = fml_annotation_cache(jar)
+        self.assertIn("projectred-core", found)
+        self.assertNotIn("projectred-expansion", found)
 
     def test_container_metadata_version_precedes_the_field_name(self):
         # javac order: LDC value, then PUTFIELD name. The container pattern

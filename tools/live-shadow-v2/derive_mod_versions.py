@@ -75,17 +75,27 @@ def pool_strings(data: bytes):
 
 
 def fml_annotation_cache(path: Path) -> dict:
-    """(modid -> {"version", "name"}) from FML's own annotation cache, if any."""
+    """(modid -> {"version", "name"}) from FML's own annotation cache, if any.
+
+    Entries are jar-scoped, as FML's discovery is: a cache entry names the
+    class it parsed, and a class that is not in THIS jar never loads from
+    THIS jar. Multi-jar gradle builds (ProjectRed) ship one shared cache in
+    the base jar listing every @Mod of the family; honoring those entries
+    would resolve the sub-mods against the wrong jar's metadata.
+    """
     out = {}
     try:
         with zipfile.ZipFile(path) as archive:
             if "META-INF/fml_cache_annotation.json" not in archive.namelist():
                 return out
+            names = set(archive.namelist())
             cache = json.loads(archive.read("META-INF/fml_cache_annotation.json")
                                .decode("utf-8", "replace"))
     except (OSError, ValueError, zipfile.BadZipFile):
         return out
-    for info in cache.values() if isinstance(cache, dict) else []:
+    for cls, info in cache.items() if isinstance(cache, dict) else []:
+        if cls + ".class" not in names:
+            continue
         for annotation in info.get("annotations", []):
             if annotation.get("name") != MOD_ANNOTATION:
                 continue
