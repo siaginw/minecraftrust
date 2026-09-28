@@ -98,11 +98,7 @@ def launch(server: Path, log: Path, *, srg_jar: Path | None, session: dict,
             "-Drustcraft.liveWriterDiagnostic=true",
             "-Drustcraft.session.processId=" + session["process_id"],
             "-Drustcraft.session.transformationSessionId=" + session["session_id"],
-            "-Drustcraft.observationDir=" + str(server / "observation"),
-            # FML network debug: the handshake codec logs what it actually
-            # received, which settles byte-framing questions from the server's
-            # side instead of inferring them from a stack trace.
-            "-Dfml.debugNetworkHandshake=true"]
+            "-Drustcraft.observationDir=" + str(server / "observation")]
     if srg_jar is not None:
         args += ["-Drustcraft.srgJar=" + str(srg_jar)]
     classpath = [str(server / "rustcraft-campaign.jar"),
@@ -168,6 +164,16 @@ def main() -> int:
     session = {"process_id": str(uuid.uuid4()), "session_id": str(uuid.uuid4())}
     (out / "launch-session.json").write_text(json.dumps(session, indent=2) + "\n")
 
+    port_held = None
+    for line in subprocess.run(["netstat", "-ano"], capture_output=True, text=True).stdout.splitlines():
+        if ":25599" in line and "LISTENING" in line:
+            port_held = line.split()[-1]
+    if port_held:
+        print(json.dumps({"status": "FAIL", "reason": "PORT_ALREADY_HELD",
+                          "holder_pid": port_held,
+                          "hint": "a previous probe left a server on this port; kill it and retry"}))
+        return 1
+
     server, prepare_info = prepare_server(
         args.runtime_root, out, forge_jar=args.forge_jar, vanilla_jar=args.vanilla_jar,
         campaign_jar=args.campaign_jar, world_source=args.world_source)
@@ -197,10 +203,41 @@ def main() -> int:
         (out / "join-receipt.json").write_text(json.dumps(receipt, indent=2, sort_keys=True) + "\n")
         return 1
 
+    # The client mod inventory is DERIVED from the runtime's own evidence --
+    # the server prints it during startup -- never hardcoded per pack. For a
+    # Forge runtime the line names every mod FML will check for.
+    client_mods: list[tuple[str, str]] = []
+    if args.forge:
+        log_text = jvm_log.read_text(encoding="utf-8", errors="replace")
+        import re as _re
+        inventory = _re.search(r"missing mods \[([^\]]+)\]", log_text)
+        if inventory is None:
+            receipt["verdict"] = "FAIL"
+            receipt["failure"] = ("could not derive the client mod inventory from the "
+                                   "server log; refusing to fabricate one")
+            stop(process, timeout_s=120)
+            (out / "join-receipt.json").write_text(
+                json.dumps(receipt, indent=2, sort_keys=True) + "\n")
+            return 1
+        versions = {
+            "minecraft": "1.12.2",
+            "FML": "8.0.99.99",
+            "forge": args.forge_jar.split("-")[-1].replace(".jar", "")
+            if "-" in args.forge_jar else "0.0",
+            "mcp": "9.42",
+        }
+        client_mods = [(name.strip(), versions.get(name.strip(), "1.0"))
+                       for name in inventory.group(1).split(",")]
+        receipt["client_mod_inventory"] = {
+            "derivation": "server-startup-log:missing-mods-line",
+            "mods": [{"modid": m, "version": v} for m, v in client_mods],
+        }
+
     # ONE bounded attempt. No retry loop: a materially different attempt is a
     # new run with its own receipt, decided by a human, not by this loop.
     probe = run_probe("127.0.0.1", PORT, args.username,
-                      expect_forge=args.forge, stability_s=args.stability_s)
+                      expect_forge=args.forge, stability_s=args.stability_s,
+                      client_mods=client_mods)
     (out / "probe.json").write_text(json.dumps(probe, indent=2, sort_keys=True) + "\n")
 
     stop(process)
@@ -218,7 +255,8 @@ def main() -> int:
                 "it is recorded, and that it happened to a disposable copy",
     }
 
-    receipt["probe"] = {k: probe[k] for k in ("verdict", "checks", "failure", "packets_in")}
+    receipt["probe"] = {k: probe.get(k) for k in
+                        ("verdict", "checks", "failure", "packets_in", "bytes_in")}
     receipt["fml"] = probe.get("fml")
     receipt["channels"] = probe.get("channels")
     receipt["classification"] = probe.get("classification")

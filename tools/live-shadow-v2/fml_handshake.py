@@ -29,6 +29,19 @@ from protocol340 import read_string, read_varint, varint, write_string
 FML_CHANNEL = "FML|HS"
 FML_PROTOCOL_VERSION = 2
 
+#: The channel set every genuine Forge client registers on ServerHello, in the
+#: order FMLHandshakeMessage.makeCustomChannelRegistration builds it: the three
+#: built-ins first, then any registered channel names. A headless client with
+#: no mod channels registers exactly the built-ins. NUL-joined, raw bytes, no
+#: length prefix -- the payload IS the joined string, per the real encoder.
+FML_BUILTIN_CHANNELS = ("FML|HS", "FML", "FML|MP")
+
+
+def channel_registration(channels=()) -> bytes:
+    """The REGISTER payload a genuine client sends: NUL-joined channel names."""
+    names = list(FML_BUILTIN_CHANNELS) + [c for c in channels if c not in FML_BUILTIN_CHANNELS]
+    return chr(0).join(names).encode("utf-8")
+
 DISC_SERVER_HELLO = 0
 DISC_CLIENT_HELLO = 1
 DISC_MOD_LIST = 2
@@ -92,8 +105,13 @@ class FmlHandshake:
                     "ServerHello while in %s" % self.state, self.state)
             version = body[0] if body else -1
             self._record(S_WAIT_SERVER_HELLO, S_HELLO_SENT,
-                         "ServerHello(fml=%d) -> ClientHello" % version)
-            # ClientHello: discriminator 1 + the FML protocol version.
+                         "ServerHello(fml=%d) -> ClientHello + REGISTER" % version)
+            # The genuine client sends TWO things on ServerHello, per
+            # FMLHandshakeClientState$2: its ClientHello, then a channel
+            # registration on the REGISTER channel. This machine returns the
+            # FML|HS reply; the caller sends the registration from
+            # channel_registration() -- it is a different channel, so it cannot
+            # ride in this payload.
             return bytes([DISC_CLIENT_HELLO, FML_PROTOCOL_VERSION])
 
         if discriminator == DISC_MOD_LIST:
@@ -150,6 +168,23 @@ class FmlHandshake:
             "registry_messages": self.registry_messages,
             "reject_reason": self.reject_reason,
         }
+
+
+def render_client_mod_list(mods: list[tuple[str, str]]) -> bytes:
+    """The client's ModList message: discriminator 2 + count + (id, version)*.
+
+    The inventory must be DERIVED from the runtime's own evidence (the server
+    logs its mod list during startup), never hardcoded per pack. The shape
+    mirrors FMLHandshakeMessage$ModList.toBytes: discriminator byte 2, a VarInt
+    count, then per mod a modid String and a version String.
+    """
+    out = bytearray([DISC_MOD_LIST])
+    out += varint(len(mods))
+    from protocol340 import write_string
+    for modid, version in mods:
+        out += write_string(modid)
+        out += write_string(version)
+    return bytes(out)
 
 
 def _parse_mod_list(body: bytes) -> list[tuple[str, str]]:

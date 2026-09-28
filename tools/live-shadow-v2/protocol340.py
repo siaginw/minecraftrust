@@ -111,15 +111,20 @@ class Frame:
             import zlib
             # Once compression is enabled every frame carries a data-length
             # varint: 0 when the body is sent uncompressed (below threshold),
-            # the compressed size otherwise. Omitting it on the uncompressed
-            # path makes the server parse our body as that varint -- which is
-            # an IndexOutOfBoundsException on its side and a disconnect.
+            # the compressed size otherwise. THE OUTER PACKET LENGTH MUST COUNT
+            # THAT VARINT. It previously did not, so the server's frame decoder
+            # consumed one byte too few, orphaned the final payload byte, and
+            # FML received a one-byte handshake message whose fromBytes then
+            # read from an empty remainder -- the exact "empty buffer" failure
+            # every live probe died of. Found by replaying the emitted frame
+            # through the real vanilla decoder, not by inspection.
             if len(payload) < self.threshold:
-                body = varint(len(payload)) + varint(0) + payload
+                body = varint(len(payload) + 1) + varint(0) + payload
             else:
                 compressor = zlib.compressobj(1)
                 compressed = compressor.compress(payload) + compressor.flush()
-                body = varint(len(payload)) + varint(len(compressed)) + compressed
+                header_len = len(varint(len(compressed)))
+                body = varint(len(compressed) + header_len)                     + varint(len(compressed)) + compressed
         else:
             body = varint(len(payload)) + payload
         self.sock.sendall(body)

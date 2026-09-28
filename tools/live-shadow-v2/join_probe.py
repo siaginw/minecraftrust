@@ -15,7 +15,8 @@ from __future__ import annotations
 import json
 import time
 
-from fml_handshake import FML_CHANNEL, FmlHandshake, HandshakeRejected
+from fml_handshake import (FML_CHANNEL, FmlHandshake, HandshakeRejected,
+                           channel_registration, render_client_mod_list)
 from protocol340 import (CB_CHUNK_DATA, CB_DISCONNECT_LOGIN, CB_DISCONNECT_PLAY,
                          CB_JOIN_GAME, CB_KEEP_ALIVE, CB_PLUGIN_MESSAGE,
                          CB_PLAYER_POS_LOOK, Frame, SB_CLIENT_SETTINGS,
@@ -42,9 +43,10 @@ class ProbeFailure(RuntimeError):
 
 
 def run_probe(host: str, port: int, username: str, *, expect_forge: bool,
+              client_mods: list[tuple[str, str]] | None = None,
               connect_timeout_s: float = 15.0, login_timeout_s: float = 60.0,
-              stability_s: float = 20.0, max_packets: int = 4096,
-              max_bytes: int = 64 << 20) -> dict:
+              stability_s: float = 20.0, max_packets: int = 65536,
+              max_bytes: int = 256 << 20) -> dict:
     """One bounded join attempt. Returns the receipt dict; never retries.
 
     `expect_forge` selects whether the login carries the FML marker and the
@@ -60,7 +62,11 @@ def run_probe(host: str, port: int, username: str, *, expect_forge: bool,
         "bound": {"connect_timeout_s": connect_timeout_s,
                   "login_timeout_s": login_timeout_s,
                   "stability_s": stability_s,
-                  "max_packets": max_packets, "max_bytes": max_bytes},
+                  "max_packets": max_packets, "max_bytes": max_bytes,
+                  "note": "a Forge join streams tens of thousands of packets "
+                          "post-PLAY (spawn chunks, entities, registry); the "
+                          "bound exists to stop runaway traffic, not to end a "
+                          "healthy hold"},
         "observed": {},
         "fml": None,
         "channels": {"registered": [], "unknown": []},
@@ -118,7 +124,7 @@ def run_probe(host: str, port: int, username: str, *, expect_forge: bool,
                     # channel as PLAY-only meant the ServerHello was dropped
                     # and the handshake never began.
                     _handle_plugin(frame, packet_id, body, handshake,
-                                   observed, registered, receipt)
+                                   observed, registered, receipt, client_mods)
                     continue
                 continue
 
@@ -146,7 +152,7 @@ def run_probe(host: str, port: int, username: str, *, expect_forge: bool,
                 continue
             if packet_id == CB_PLUGIN_MESSAGE:
                 _handle_plugin(frame, packet_id, body, handshake,
-                               observed, registered, receipt)
+                               observed, registered, receipt, client_mods)
                 continue
             if packet_id == CB_CHUNK_DATA:
                 observed["chunk_packets"] = observed.get("chunk_packets", 0) + 1
@@ -228,7 +234,8 @@ def run_probe(host: str, port: int, username: str, *, expect_forge: bool,
 
 
 def _handle_plugin(frame, packet_id: int, body: bytes, handshake: FmlHandshake,
-                    observed: dict, registered: set, receipt: dict) -> None:
+                    observed: dict, registered: set, receipt: dict,
+                    client_mods=None) -> None:
     """One clientbound plugin message, from either LOGIN or PLAY.
 
     Shared so the FML|HS handshake works wherever Forge chooses to start it;
@@ -236,6 +243,25 @@ def _handle_plugin(frame, packet_id: int, body: bytes, handshake: FmlHandshake,
     """
     channel, offset = _read_channel(body)
     payload = body[offset:]
+    if channel == FML_CHANNEL and handshake.state == "WAIT_SERVER_HELLO":
+        # The genuine client's ServerHello response is TWO messages on two
+        # channels: ClientHello on FML|HS, and the channel registration on
+        # REGISTER. Driving both from here keeps the ordering identical to
+        # FMLHandshakeClientState$2 while the state machine owns correctness.
+        reply = handshake.on_server_message(payload)
+        if reply is not None:
+            frame.send(SB_PLUGIN_MESSAGE, write_string(FML_CHANNEL) + reply)
+        frame.send(SB_PLUGIN_MESSAGE,
+                   write_string("REGISTER") + channel_registration())
+        # The server only sends ITS mod list after receiving the client's --
+        # FMLHandshakeServerState$2 advances and replies on the ModList branch,
+        # and never on the ClientHello branch. So the client's own ModList is
+        # sent unprompted, third in the genuine sequence: ClientHello, REGISTER,
+        # ModList. The inventory is caller-derived from the runtime's evidence.
+        frame.send(SB_PLUGIN_MESSAGE,
+                   write_string(FML_CHANNEL)
+                   + render_client_mod_list(list(client_mods or [])))
+        return
     if channel == FML_CHANNEL:
         reply = handshake.on_server_message(payload)
         if reply is not None:

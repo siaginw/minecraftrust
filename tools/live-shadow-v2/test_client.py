@@ -57,6 +57,85 @@ class FramingControls(unittest.TestCase):
         self.assertEqual(proto.fml_marker("localhost"), "localhost\0FML\0")
 
 
+class FrameLengthControls(unittest.TestCase):
+    """The frame-length bug that cost ten live attempts.
+
+    The outer packet length must count the compression data-length varint.
+    Omitting it truncates the frame by one byte; the server's FML codec then
+    receives a one-byte handshake message and reads from an empty remainder.
+    Found by replaying the emitted frame through the real vanilla decoder
+    (ReplayServerDecode), not by inspection. These controls pin both threshold
+    states and the exact bug.
+    """
+
+    def _frame(self, threshold: int, payload: bytes) -> bytes:
+        """The client's exact framing, lifted from protocol340._write_frame."""
+        import protocol340 as proto
+        if threshold >= 0:
+            import zlib
+            if len(payload) < threshold:
+                return proto.varint(len(payload) + 1) + proto.varint(0) + payload
+            compressor = zlib.compressobj(1)
+            compressed = compressor.compress(payload) + compressor.flush()
+            header = proto.varint(len(compressed))
+            return proto.varint(len(compressed) + len(header)) + header + compressed
+        return proto.varint(len(payload)) + payload
+
+    def _parse(self, frame: bytes) -> tuple[int, bytes, bytes]:
+        """Server-side view: (data_length, packet_id, body)."""
+        import protocol340 as proto
+        packet_len, off = proto.read_varint(frame)
+        inner = frame[off:off + packet_len]
+        self.assertEqual(packet_len, len(inner),
+                         "the declared frame length must match the bytes available")
+        data_len, off = proto.read_varint(inner)
+        packet_id, off = proto.read_varint(inner, off)
+        return data_len, packet_id, inner[off:]
+
+    def test_uncompressed_frame_length_counts_the_data_length_varint(self):
+        """The exact bug: threshold on, body below threshold."""
+        payload = proto.varint(0x09) + proto.write_string("FML|HS") + bytes([1, 2])
+        frame = self._frame(256, payload)
+        data_len, packet_id, body = self._parse(frame)
+        self.assertEqual((data_len, packet_id), (0, 0x09))
+        self.assertEqual(body, proto.write_string("FML|HS") + bytes([1, 2]),
+                         "the payload byte the live server lost must be inside the frame")
+
+    def test_compressed_frame_length_counts_the_data_length_varint(self):
+        import zlib
+        big = b"x" * 4096  # above any small threshold, forces the compressed path
+        payload = proto.varint(0x09) + big
+        frame = self._frame(256, payload)
+        packet_len, off = proto.read_varint(frame)
+        inner = frame[off:off + packet_len]
+        self.assertEqual(packet_len, len(inner))
+        data_len, off2 = proto.read_varint(inner)
+        self.assertGreater(data_len, 0)
+        self.assertEqual(zlib.decompress(inner[off2:]), payload)
+
+    def test_threshold_off_has_no_data_length_varint(self):
+        payload = proto.varint(0x00) + proto.write_string("RustCraftProbe")
+        frame = self._frame(-1, payload)
+        packet_len, off = proto.read_varint(frame)
+        self.assertEqual(frame[off:], payload,
+                         "without compression the frame is length + payload")
+
+    def test_one_byte_short_frame_reproduces_the_live_failure(self):
+        """The old, buggy length -- the exact shape every live probe died of."""
+        payload = proto.varint(0x09) + proto.write_string("FML|HS") + bytes([1, 2])
+        buggy = proto.varint(len(payload)) + proto.varint(0) + payload
+        packet_len, off = proto.read_varint(buggy)
+        available = len(buggy) - off
+        self.assertEqual(packet_len, available - 1,
+                         "the buggy length declares one byte less than the frame carries")
+        inner = buggy[off:off + packet_len]
+        _, o = proto.read_varint(inner)
+        _, o = proto.read_varint(inner, o)
+        body = inner[o:]
+        self.assertEqual(body, proto.write_string("FML|HS") + bytes([1]),
+                         "the server sees a one-byte FML payload: discriminator only")
+
+
 class HandshakeControls(unittest.TestCase):
 
     def _body(self, discriminator: int, rest: bytes = b"") -> bytes:
