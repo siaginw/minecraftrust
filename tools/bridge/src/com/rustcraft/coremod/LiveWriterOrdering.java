@@ -11,109 +11,150 @@ import java.util.List;
  * chain" by explicit contract (see RevQualifyRuntime), so their input is the
  * post-FML, post-Mixin buffer carrying the launch-scoped
  * MixinMerged#sessionId provenance the session-bound identity consumes. A
- * real FML launch registers coremod transformers in wrapper discovery order,
- * which measured BEFORE Phosphor's MixinTweaker on the first live attempt —
- * the writers then saw pre-Mixin bytes and failed closed.</p>
+ * real FML launch registers foreign transformers continuously while
+ * launchwrapper processes tweaks — classes load BETWEEN tweak invocations,
+ * so a writer can be invoked long before the chain is complete. A one-shot
+ * placement is therefore wrong: this guard re-checks the tail on EVERY
+ * writer invocation (a linear scan of a small list) and re-places the
+ * writers whenever a later foreign registration displaced them.</p>
  *
- * <p>This class reorders ONLY instances of the three qualified writer classes
- * (exact class-name match — the same names the coremod registers), and does
- * it with index-wise {@code set()} rewrites: the same list size, so no
- * structural modification, so the loader's own for-each iteration (which is
- * invoking a writer right now) is unaffected. All class loading during
- * startup is confined to the main thread; launchwrapper finishes every
- * tweak's registration before the first game class loads, so by the time any
- * TARGET class reaches the writers the placement has long since settled.</p>
+ * <p>Placement uses index-wise {@code set()} rewrites on the loader's own
+ * field-backed list (the published getTransformers() view is unmodifiable):
+ * the same list size, so no structural modification, so the loader's active
+ * iterator is unaffected. The rotation is stable — foreign transformers keep
+ * their relative registration order — so every class experiences the same
+ * foreign sequence as the qualified topology, with the writers last.</p>
+ *
+ * <p>On rotation the guard returns TRUE and the calling writer DEFERS
+ * (returns the bytes unchanged): the loader's current pass continues through
+ * the remaining foreign transformers and then reaches the writers again at
+ * the tail with the fully transformed bytes. Processing at the stale
+ * position would both read pre-foreign bytes and be applied a second time on
+ * the tail revisit.</p>
  *
  * <p>Generic by construction: no runtime name, no pack name, no identity-mode
- * branch. In a runtime whose transformers already leave the writers last
- * (Clean Forge) this is a measured no-op. The measured before/after order is
- * recorded for the evidence flush — the placement is a fact the receipt
- * states, never one it assumes.</p>
+ * branch. In a runtime whose transformers leave the writers last this is a
+ * measured no-op. The measured order is recorded for the evidence flush —
+ * the placement is a fact the receipt states, never one it assumes.</p>
  */
 public final class LiveWriterOrdering {
 
-    /** Exactly the transformer classes LiveShadowCoreMod registers. */
+    /** Exactly the transformer classes the tweaker/coremod registers. */
     private static final String[] WRITER_CLASSES = {
             "com.rustcraft.coremod.SPacketChunkDataTransformer",
             "com.rustcraft.coremod.LiveChunkOwnershipTransformer",
             "com.rustcraft.coremod.LiveChunkPublicationTransformer",
     };
 
-    private static volatile boolean settled;
-    private static volatile String measured;
+    private static volatile String measured = "NOT_YET_MEASURED";
+    /** The launch target: the first class launchwrapper loads AFTER every
+     *  tweak has registered. Classes before it are bootstrap classes the
+     *  offline launch defined without our hooks; our writers must do the
+     *  same. Resolved from Launch's own field, so no launch shape is
+     *  hardcoded. */
+    private static volatile String armTarget;
+    private static volatile boolean armed;
 
     private LiveWriterOrdering() { }
 
+    /** The tweaker states its own launch target before any class loads. */
+    public static void armOn(String launchTarget) {
+        if (launchTarget != null && launchTarget.length() > 0) armTarget = launchTarget;
+    }
+
+    /**
+     * TRUE when this class must pass through UNCHANGED because it belongs to
+     * the bootstrap phase (before the launch target, which is the first
+     * class loaded after the transformer chain is complete). The launch
+     * target itself ARMS the writers and is processed.
+     */
+    public static boolean deferClass(String transformedName) {
+        if (armed || transformedName == null) return false;
+        String target = armTarget;
+        if (target == null) {
+            // The tweaker normally sets this explicitly. The blackboard is
+            // the fallback launchwrapper itself documents; an empty target
+            // would keep the writers inert, which the flush reports loudly
+            // rather than silently processing bootstrap classes.
+            try {
+                java.util.Map<String, Object> blackboard =
+                        (java.util.Map<String, Object>) Class.forName(
+                                "net.minecraft.launchwrapper.Launch")
+                                .getField("blackboard").get(null);
+                Object value = blackboard.get("launchTarget");
+                target = value == null ? "" : String.valueOf(value);
+            } catch (Throwable unavailable) {
+                target = "";
+            }
+            armTarget = target;
+        }
+        if (transformedName.equals(target)) {
+            armed = true;
+            return false;
+        }
+        return true;
+    }
+
     /**
      * Ensures the writer instances occupy the tail of the chain. Called at
-     * the top of each writer's {@code transform()} (idempotent, cheap once
-     * settled). The loader is the defining LaunchClassLoader, resolved the
-     * same way LiveHookSupport resolves it.
+     * the top of each writer's {@code transform()}. Returns TRUE when this
+     * invocation arrived at a stale position and the writer must DEFER;
+     * false means the qualified topology holds — process normally.
      */
-    public static void ensureWritersLast() {
-        Object loader = null;
+    public static boolean ensureWritersLast() {
+        Object loader;
         try {
             loader = Class.forName("net.minecraft.launchwrapper.Launch")
                     .getField("classLoader").get(null);
         } catch (Throwable notForge) {
-            settled = true;
             measured = "UNAVAILABLE: no LaunchWrapper loader";
-            return;
+            return false;
         }
-        ensureWritersLast(loader);
-    }
-
-    private static void ensureWritersLast(Object loader) {
-        if (settled || loader == null) return;
+        if (loader == null) return false;
         try {
-            List<Object> live = transformers(loader);
-            if (live == null) {
-                measured = "UNAVAILABLE: transformer list not reachable";
-                settled = true;
-                return;
-            }
             synchronized (LiveWriterOrdering.class) {
-                if (settled) return;
+                List<Object> live = transformers(loader);
+                if (live == null) {
+                    measured = "UNAVAILABLE: transformer list not reachable";
+                    return false;
+                }
                 int liveSize = live.size();
-                List<Object> order = new ArrayList<Object>(live);
-                List<Object> ours = new ArrayList<Object>();
-                for (int i = order.size() - 1; i >= 0; i--)
-                    if (isWriter(order.get(i))) ours.add(0, order.remove(i));
-                if (ours.isEmpty()) {
+                int ours = 0;
+                for (Object transformer : live) if (isWriter(transformer)) ours++;
+                if (ours == 0) {
                     measured = "UNAVAILABLE: no writer instances in the chain";
-                    settled = true;
-                    return;
+                    return false;
                 }
-                if (live.size() != liveSize) {
-                    // A foreign transformer registered while we composed the
-                    // new order. Not settled: the next writer invocation
-                    // retries against the fuller list.
-                    return;
-                }
-                boolean already = liveSize == ours.size();
+                boolean already = ours == liveSize;
                 if (!already) {
-                    int tail = liveSize - ours.size();
-                    for (int i = 0; i < ours.size(); i++)
-                        if (live.get(tail + i) != ours.get(i)) already = false;
+                    already = true;
+                    int tail = liveSize - ours;
+                    for (int i = 0; i < tail; i++)
+                        if (isWriter(live.get(i))) already = false;
+                    for (int i = tail; i < liveSize; i++)
+                        if (!isWriter(live.get(i))) already = false;
                 }
-                if (already) {
-                    // The qualified topology is already in place.
-                } else {
-                    order.addAll(ours);
-                    for (int i = 0; i < order.size(); i++)
-                        if (live.get(i) != order.get(i)) live.set(i, order.get(i));
-                }
+                if (already) return false;
+                if (live.size() != liveSize)
+                    return true; // foreign registration mid-guard: retry next call
+                List<Object> order = new ArrayList<Object>(live);
+                List<Object> tail = new ArrayList<Object>();
+                for (int i = order.size() - 1; i >= 0; i--)
+                    if (isWriter(order.get(i))) tail.add(0, order.remove(i));
+                order.addAll(tail);
+                for (int i = 0; i < order.size(); i++)
+                    if (live.get(i) != order.get(i)) live.set(i, order.get(i));
                 StringBuilder names = new StringBuilder();
                 for (int i = 0; i < live.size(); i++) {
                     if (i > 0) names.append(',');
                     names.append(live.get(i).getClass().getName());
                 }
-                measured = (already ? "ALREADY_LAST " : "MOVED_TO_LAST ") + names;
-                settled = true;
+                measured = "MOVED_TO_LAST " + names;
+                return true; // stale position: defer, the tail visit processes
             }
         } catch (Throwable failure) {
             measured = "UNAVAILABLE: " + failure;
-            settled = true;
+            return false;
         }
     }
 
@@ -128,18 +169,19 @@ public final class LiveWriterOrdering {
         return false;
     }
 
+    /**
+     * The LIVE, mutable transformer list. The published getTransformers()
+     * view is deliberately unmodifiable (set() throws
+     * UnsupportedOperationException), so the loader's own field is the only
+     * route that can actually place the writers. No live list, no placement.
+     */
     @SuppressWarnings("unchecked")
     private static List<Object> transformers(Object loader) {
-        try {
-            return (List<Object>) loader.getClass().getMethod("getTransformers").invoke(loader);
-        } catch (Throwable notPublished) {
-            // fall through to the loader's own field
-        }
         try {
             java.lang.reflect.Field field = loader.getClass().getDeclaredField("transformers");
             field.setAccessible(true);
             return (List<Object>) field.get(loader);
-        } catch (Throwable unreachable) {
+        } catch (Throwable noField) {
             return null;
         }
     }

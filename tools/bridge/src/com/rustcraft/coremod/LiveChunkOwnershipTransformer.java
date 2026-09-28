@@ -40,9 +40,16 @@ public class LiveChunkOwnershipTransformer implements IClassTransformer {
 
     @Override
     public byte[] transform(String name, String transformedName, byte[] basicClass) {
+        // Bootstrap gate: classes loaded before the launch target belong to
+        // the phase the offline launch defined without our hooks.
+        if (LiveWriterOrdering.deferClass(transformedName)) return basicClass;
         // The qualified topology places the writers AFTER the complete FML
         // chain (the offline contract); ensure it holds in a real launch too.
-        LiveWriterOrdering.ensureWritersLast();
+        // A rotation defers THIS invocation: the loader's current pass
+        // reaches the writers again at the tail, with the fully transformed
+        // bytes -- processing here would both read pre-foreign bytes and be
+        // applied a second time on the tail revisit.
+        if (LiveWriterOrdering.ensureWritersLast()) return basicClass;
         if (basicClass == null || !enabled()) return basicClass;
         LiveWriterPlan.Hook[] hooks = LiveHookSupport.hooksFor("OWNERSHIP", transformedName);
         if (hooks.length == 0) return basicClass;
@@ -71,12 +78,16 @@ public class LiveChunkOwnershipTransformer implements IClassTransformer {
             LiveHookSupport.completeAcquisition(attempt, result,
                     SameProcessAcquisition.HookPlacement.PLACED);
             return result;
-        } catch (LiveHookSupport.ProfileFailure failure) {
-            lastStatus = "PROFILE_FAILURE: " + failure.getMessage();
-            LiveHookSupport.completeAcquisition(attempt, null,
-                    SameProcessAcquisition.HookPlacement.REFUSED);
-            throw failure; // fail closed: the runtime is not transformed
-        } catch (Throwable failure) {
+                } catch (LiveHookSupport.ProfileFailure failure) {
+            // Not admitted in this launch: record the refusal and flow the
+            // class through UNHOOKED. Throwing would abort a REAL server's
+            // class load; the qualification engine fails the missing hook
+            // placements from the recorded evidence instead.
+            LiveHookSupport.recordNonAdmission(transformedName,
+                    String.valueOf(failure.getMessage()));
+            System.err.println("[RustCraft] writer non-admission for " + transformedName
+                    + ": " + failure.getMessage());
+            return basicClass;        } catch (Throwable failure) {
             lastStatus = "TRANSFORM_ERROR[" + transformedName + "]: " + failure;
             throw (LiveHookSupport.ProfileFailure) new LiveHookSupport.ProfileFailure(
                     "unexpected transform error for " + transformedName + ": " + failure).initCause(failure);

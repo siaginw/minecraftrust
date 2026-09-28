@@ -21,9 +21,16 @@ public class SPacketChunkDataTransformer implements IClassTransformer {
 
     @Override
     public byte[] transform(String name, String transformedName, byte[] basicClass) {
+        // Bootstrap gate: classes loaded before the launch target belong to
+        // the phase the offline launch defined without our hooks.
+        if (LiveWriterOrdering.deferClass(transformedName)) return basicClass;
         // The qualified topology places the writers AFTER the complete FML
         // chain (the offline contract); ensure it holds in a real launch too.
-        LiveWriterOrdering.ensureWritersLast();
+        // A rotation defers THIS invocation: the loader's current pass
+        // reaches the writers again at the tail, with the fully transformed
+        // bytes -- processing here would both read pre-foreign bytes and be
+        // applied a second time on the tail revisit.
+        if (LiveWriterOrdering.ensureWritersLast()) return basicClass;
         if (!TARGET_CLASS_DEOBF.equals(transformedName) && !TARGET_CLASS_OBF.equals(name)) {
             return basicClass;
         }
@@ -84,6 +91,7 @@ public class SPacketChunkDataTransformer implements IClassTransformer {
         } catch (Throwable t) {
             System.err.println("[RustCraft] Failed to transform SPacketChunkData: " + t.getMessage());
             lastTransformStatus = "TRANSFORM_ERROR: " + t.getMessage();
+            LiveHookSupport.recordNonAdmission(transformedName, String.valueOf(t.getMessage()));
             return basicClass; // Safe fallback: return unmodified bytecode
         }
     }

@@ -45,6 +45,11 @@ public final class LiveSessionAdmissionTweaker implements ITweaker {
 
     @Override
     public void injectIntoClassLoader(LaunchClassLoader cl) {
+        // Before ANY class can flow through the loader during the delegate's
+        // own processing: the writers defer every bootstrap class until this
+        // target -- the first class launchwrapper loads after the chain is
+        // complete -- arrives.
+        LiveWriterOrdering.armOn(delegate.getLaunchTarget());
         delegate.injectIntoClassLoader(cl);
         // Scope-correct: transformer-support packages load from the parent
         // classpath (the campaign jar is on -cp). Left in the launch loader

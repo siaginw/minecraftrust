@@ -473,6 +473,22 @@ public final class LiveHookSupport {
      * policy's hash, and the full certificate JSON so the engine can re-verify
      * every field rather than trust this array.</p>
      */
+    /**
+     * Classes the writers could NOT admit in this launch, with the refusal
+     * reason. A ProfileFailure during transform means "this class is not
+     * admitted" -- in a real launch the alternative (throwing) would take
+     * the whole server down. The class flows through UNHOOKED (Java-only),
+     * the non-admission is recorded here, and the evidence flush reports it
+     * so the qualification engine fails the missing hook placements
+     * honestly. The integrity lives in the engine's checks, not in a crash.
+     */
+    public static final java.util.concurrent.ConcurrentHashMap<String, String> WRITER_NON_ADMISSIONS =
+            new java.util.concurrent.ConcurrentHashMap<String, String>();
+
+    public static void recordNonAdmission(String className, String reason) {
+        WRITER_NON_ADMISSIONS.putIfAbsent(className, reason);
+    }
+
     public static final Map<String, String[]> SESSION_BOUND_EVIDENCE =
             new java.util.concurrent.ConcurrentHashMap<String, String[]>();
 

@@ -113,6 +113,11 @@ public final class SessionEvidenceFlush {
                 }
                 result.put("observation_dir", observationDir);
             }
+            // Classes the writers could not admit this launch, with reasons.
+            // The engine fails the missing hook placements from this record:
+            // integrity lives in the checks, not in a crashed server.
+            result.put("writer_non_admissions",
+                    new TreeMap<String, String>(LiveHookSupport.WRITER_NON_ADMISSIONS));
             result.put("entry_observer_failures", new TreeMap<String, String>(
                     LoaderTransformChain.EntryObserver.failures()));
             // The frame/hierarchy witness is the GENERIC one, the same machinery
