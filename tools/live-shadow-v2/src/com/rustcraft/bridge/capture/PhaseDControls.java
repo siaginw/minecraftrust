@@ -189,6 +189,33 @@ public final class PhaseDControls {
         check(journal.count(ShadowEventJournal.Outcome.COMPARE_MISMATCH) == 1,
                 "the mismatch is recorded");
 
+        // ---- 12b/13b. the live comparison contract is SEMANTIC -----------
+        // The Java wire palette is stateful (vanilla section palettes retain
+        // entries from replaced blocks): two byte streams can encode
+        // identical logical sections with different palette cardinality. The
+        // semantic gate must pass such a pair (recording byteExact=false)
+        // and reject a genuinely different logical cell.
+        byte[] javaStateful = sectionBody(new int[]{0, 1, 2, 5});  // 5 = stale entry
+        byte[] rustMinimal = sectionBody(new int[]{0, 1, 2});
+        ShadowEventComparator.JavaSide statefulSide =
+                new ShadowEventComparator.JavaSide(javaStateful, 0x0001);
+        ShadowEventComparator.RustSide minimalSide =
+                new ShadowEventComparator.RustSide(rustMinimal, 0x0001);
+        ShadowEventComparator.SemanticComparison semanticPair =
+                ShadowEventComparator.compareSemantic(statefulSide, minimalSide, true, true, 13);
+        check(semanticPair.semanticEqual && !semanticPair.byteExact,
+                "byte-different palette representations of identical logical sections "
+                        + "pass semantically with byteExact=false recorded");
+        byte[] rustDifferentCell = sectionBody(new int[]{0, 1, 3});  // cell 2 logically differs
+        ShadowEventComparator.RustSide differentCellSide =
+                new ShadowEventComparator.RustSide(rustDifferentCell, 0x0001);
+        ShadowEventComparator.SemanticComparison semanticDiff =
+                ShadowEventComparator.compareSemantic(statefulSide, differentCellSide,
+                        true, true, 13);
+        check(!semanticDiff.semanticEqual
+                        && semanticDiff.firstSemanticDivergence.contains("cell=2"),
+                "a genuinely different logical cell is COMPARE_MISMATCH at the exact cell");
+
         // ---- 14/15/16. denominator discipline ----------------------------
         journal.recordOutcome(331L, 7L, ShadowEventJournal.Outcome.COMPARE_PASS, null, "control");
         long denominator = journal.parityDenominator();
@@ -289,6 +316,44 @@ public final class PhaseDControls {
                 new LiveChunkBindings.BindingIdentity(7L, 1L, 2L, 3L, 4L);
         return new SealedLiveCapture(eventId, identity, snapshot,
                 new byte[]{1}, 1, true, 0, 0);
+    }
+
+    /**
+     * One hand-encoded full-chunk wire body with a single section at y=0:
+     * bits=4 local palette, 4096 cells cycling palette indices 0..2, constant
+     * light planes, constant biomes. Entries in the palette beyond index 2
+     * are never referenced by a cell -- they model vanilla's stale palette
+     * entries left behind by replaced blocks.
+     */
+    private static byte[] sectionBody(int[] palette) {
+        java.io.ByteArrayOutputStream out = new java.io.ByteArrayOutputStream();
+        out.write(4);                                   // bits per block
+        writeVarint(out, palette.length);               // palette length
+        for (int id : palette) writeVarint(out, id);
+        int wordCount = (4096 * 4 + 63) / 64;           // 256 words
+        writeVarint(out, wordCount);
+        long[] words = new long[wordCount];
+        for (int cell = 0; cell < 4096; cell++) {
+            int index = cell % 3;
+            long position = (long) cell * 4;
+            int word = (int) (position / 64), shift = (int) (position % 64);
+            words[word] |= (long) index << shift;
+        }
+        java.nio.ByteBuffer packed = java.nio.ByteBuffer.allocate(wordCount * 8);
+        for (long word : words) packed.putLong(word);   // big-endian words
+        out.write(packed.array(), 0, packed.array().length);
+        for (int i = 0; i < 2048; i++) out.write(0x11); // block light
+        for (int i = 0; i < 2048; i++) out.write(0x22); // sky light
+        for (int i = 0; i < 256; i++) out.write(0x33);  // biomes
+        return out.toByteArray();
+    }
+
+    private static void writeVarint(java.io.ByteArrayOutputStream out, int value) {
+        while ((value & ~0x7F) != 0) {
+            out.write((value & 0x7F) | 0x80);
+            value >>>= 7;
+        }
+        out.write(value);
     }
 
     private static String repeated(char c, int length) {

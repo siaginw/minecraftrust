@@ -88,7 +88,8 @@ def prepare_server(runtime_root: Path, out: Path, *, forge_jar: str,
 
 
 def launch(server: Path, log: Path, *, srg_jar: Path | None, session: dict,
-           forge_jar_name: str, vanilla_jar_name: str) -> subprocess.Popen:
+           forge_jar_name: str, vanilla_jar_name: str,
+           extra_java_args: list[str] | None = None) -> subprocess.Popen:
     args = [str(JAVA), "-Xmx6G", "-Dfml.queryResult=confirm",
             "-Drustcraft.dumpDir=" + str(server / "transformed"),
             "-Drustcraft.definedDump=" + str(server / "transformed"),
@@ -101,6 +102,8 @@ def launch(server: Path, log: Path, *, srg_jar: Path | None, session: dict,
             "-Drustcraft.observationDir=" + str(server / "observation")]
     if srg_jar is not None:
         args += ["-Drustcraft.srgJar=" + str(srg_jar)]
+    if extra_java_args:
+        args += list(extra_java_args)
     classpath = [str(server / "rustcraft-campaign.jar"),
                  str(server / forge_jar_name), str(server / vanilla_jar_name)]
     classpath += [str(p) for p in sorted((server / "libraries").rglob("*.jar"))]

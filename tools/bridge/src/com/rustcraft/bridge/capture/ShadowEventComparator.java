@@ -146,6 +146,203 @@ public final class ShadowEventComparator {
         return sb.toString();
     }
 
+    // ------------------------------------------------------------------
+    // Semantic comparison (the live comparison contract)
+    // ------------------------------------------------------------------
+
+    /**
+     * Strict Protocol-340 section reader, ported line-for-line from the
+     * independent Python decoder (tools/testing/packet_decoder.py): bounded
+     * 4..8-bit local palettes, 9..16-bit global width, canonical varints,
+     * exact word counts, no trailing bytes. Any deviation throws.
+     */
+    static final class WireReader {
+        private final byte[] data;
+        private int offset;
+        WireReader(byte[] data) { this.data = data; }
+        int offset() { return offset; }
+        byte[] take(int size) {
+            if (size < 0 || size > data.length - offset)
+                throw new IllegalArgumentException("truncated payload");
+            byte[] out = java.util.Arrays.copyOfRange(data, offset, offset + size);
+            offset += size;
+            return out;
+        }
+        long varint() {
+            long value = 0;
+            for (int index = 0; index < 5; index++) {
+                if (offset >= data.length) throw new IllegalArgumentException("truncated varint");
+                int unsigned = data[offset] & 0xFF;
+                offset++;
+                if (index == 4 && (unsigned & 0xF0) != 0)
+                    throw new IllegalArgumentException("varint exceeds unsigned 32-bit");
+                value |= (long) (unsigned & 0x7F) << (7 * index);
+                if (unsigned < 0x80) {
+                    if (index > 0 && value < (1L << (7 * index)))
+                        throw new IllegalArgumentException("noncanonical varint");
+                    return value;
+                }
+            }
+            throw new IllegalArgumentException("unterminated varint");
+        }
+    }
+
+    /** One decoded section: logical global-id cells plus light planes. */
+    static final class DecodedSection {
+        final int y, bits;
+        final int[] palette;      // global ids; empty when the width is global
+        final int[] states;       // 4096 logical global ids
+        final byte[] blockLight, skyLight;
+        DecodedSection(int y, int bits, int[] palette, int[] states,
+                       byte[] blockLight, byte[] skyLight) {
+            this.y = y; this.bits = bits; this.palette = palette; this.states = states;
+            this.blockLight = blockLight; this.skyLight = skyLight;
+        }
+    }
+
+    static DecodedSection[] decode(byte[] body, int mask, boolean fullChunk,
+                                   boolean skylight, int globalBits) {
+        WireReader reader = new WireReader(body);
+        java.util.List<DecodedSection> sections = new java.util.ArrayList<DecodedSection>();
+        for (int y = 0; y < 16; y++) {
+            if ((mask & (1 << y)) == 0) continue;
+            int bits = reader.take(1)[0] & 0xFF;
+            if (bits < 4 || bits > 16) throw new IllegalArgumentException("unsupported wire width");
+            long count = reader.varint();
+            int[] palette = new int[0];
+            if (bits <= 8) {
+                if (count < 1 || count > (1L << bits))
+                    throw new IllegalArgumentException("invalid local palette length");
+                palette = new int[(int) count];
+                java.util.HashSet<Integer> distinct = new java.util.HashSet<Integer>();
+                for (int i = 0; i < count; i++) {
+                    palette[i] = (int) reader.varint();
+                    if (!distinct.add(palette[i]))
+                        throw new IllegalArgumentException("duplicate local palette entry");
+                }
+            } else {
+                if (bits != globalBits || count != 0)
+                    throw new IllegalArgumentException("global palette width or length mismatch");
+            }
+            long wordCount = reader.varint();
+            long expectedWords = (4096L * bits + 63) / 64;
+            if (wordCount != expectedWords)
+                throw new IllegalArgumentException("incorrect wire word count");
+            byte[] packed = reader.take((int) (wordCount * 8));
+            long[] words = new long[(int) wordCount];
+            for (int w = 0; w < wordCount; w++)
+                for (int b = 0; b < 8; b++)
+                    words[w] = (words[w] << 8) | (packed[w * 8 + b] & 0xFFL);
+            int[] states = new int[4096];
+            for (int cell = 0; cell < 4096; cell++) {
+                long position = (long) cell * bits;
+                int word = (int) (position / 64), shift = (int) (position % 64);
+                long value = words[word] >>> shift;
+                if (shift + bits > 64) value |= words[word + 1] << (64 - shift);
+                value &= (1L << bits) - 1;
+                if (bits <= 8) {
+                    if (value >= palette.length)
+                        throw new IllegalArgumentException("palette index out of range");
+                    states[cell] = palette[(int) value];
+                } else {
+                    states[cell] = (int) value;
+                }
+            }
+            byte[] blockLight = reader.take(2048);
+            byte[] skyLight = skylight ? reader.take(2048) : null;
+            sections.add(new DecodedSection(y, bits, palette, states, blockLight, skyLight));
+        }
+        if (fullChunk) reader.take(256); // biomes (compared at packet level below)
+        if (reader.offset() != body.length)
+            throw new IllegalArgumentException("trailing payload bytes or unadvertised sections");
+        return sections.toArray(new DecodedSection[0]);
+    }
+
+    /** Semantic comparison outcome: the Phase-D live comparison contract. */
+    public static final class SemanticComparison {
+        public final boolean maskEqual;
+        /** Recorded observed fact, never the pass criterion on the live path. */
+        public final boolean byteExact;
+        public final boolean semanticEqual;
+        /** Cell-level first divergence when semantic equality fails. */
+        public final String firstSemanticDivergence;
+        public final long compareNanos;
+        SemanticComparison(boolean maskEqual, boolean byteExact, boolean semanticEqual,
+                           String divergence, long nanos) {
+            this.maskEqual = maskEqual; this.byteExact = byteExact;
+            this.semanticEqual = semanticEqual; this.firstSemanticDivergence = divergence;
+            this.compareNanos = nanos;
+        }
+    }
+
+    /**
+     * The live comparison: mask equality plus decoded logical equality --
+     * per-section 4096 logical global ids, block light, sky light, biomes --
+     * because the Java wire palette is STATEFUL (vanilla section palettes
+     * retain entries from replaced blocks, so two byte streams can encode
+     * identical logical sections with different palette cardinality/order;
+     * proven on live smoke artifacts where Java carried 29 palette entries
+     * against Rust's minimal 21 with every logical cell equal). Exact byte
+     * equality is recorded per event as an observed fact.
+     */
+    public static SemanticComparison compareSemantic(JavaSide java, RustSide rust,
+                                                     boolean fullChunk, boolean skylight,
+                                                     int globalBits) {
+        long start = System.nanoTime();
+        boolean maskEqual = java.mask == rust.mask;
+        boolean byteExact = maskEqual
+                && java.payload.length == rust.payload.length
+                && Arrays.equals(java.payload, rust.payload);
+        try {
+            DecodedSection[] javaSections = decode(java.payload, java.mask, fullChunk, skylight, globalBits);
+            DecodedSection[] rustSections = decode(rust.payload, rust.mask, fullChunk, skylight, globalBits);
+            if (javaSections.length != rustSections.length)
+                return new SemanticComparison(maskEqual, byteExact, false,
+                        "section count " + javaSections.length + " vs " + rustSections.length,
+                        System.nanoTime() - start);
+            for (int s = 0; s < javaSections.length; s++) {
+                DecodedSection a = javaSections[s], b = rustSections[s];
+                if (a.y != b.y)
+                    return new SemanticComparison(maskEqual, byteExact, false,
+                            "section order at " + s + ": y=" + a.y + " vs y=" + b.y,
+                            System.nanoTime() - start);
+                if (!Arrays.equals(a.states, b.states)) {
+                    for (int cell = 0; cell < 4096; cell++)
+                        if (a.states[cell] != b.states[cell])
+                            return new SemanticComparison(maskEqual, byteExact, false,
+                                    "section y=" + a.y + " cell=" + cell + " javaState="
+                                            + a.states[cell] + " rustState=" + b.states[cell],
+                                    System.nanoTime() - start);
+                }
+                if (!Arrays.equals(a.blockLight, b.blockLight))
+                    return new SemanticComparison(maskEqual, byteExact, false,
+                            "section y=" + a.y + " block light differs", System.nanoTime() - start);
+                if (skylight && !Arrays.equals(a.skyLight, b.skyLight))
+                    return new SemanticComparison(maskEqual, byteExact, false,
+                            "section y=" + a.y + " sky light differs", System.nanoTime() - start);
+            }
+            if (fullChunk) {
+                // Biomes trail the section stream (256 bytes) in both bodies.
+                int javaBiomesAt = java.payload.length - 256;
+                int rustBiomesAt = rust.payload.length - 256;
+                if (javaBiomesAt < 0 || rustBiomesAt < 0)
+                    return new SemanticComparison(maskEqual, byteExact, false,
+                            "body too short for biomes", System.nanoTime() - start);
+                for (int i = 0; i < 256; i++)
+                    if (java.payload[javaBiomesAt + i] != rust.payload[rustBiomesAt + i])
+                        return new SemanticComparison(maskEqual, byteExact, false,
+                                "biome[" + i + "] differs", System.nanoTime() - start);
+            }
+            boolean semanticEqual = maskEqual;
+            return new SemanticComparison(maskEqual, byteExact, semanticEqual, null,
+                    System.nanoTime() - start);
+        } catch (RuntimeException malformed) {
+            return new SemanticComparison(maskEqual, byteExact, false,
+                    "undecodable payload: " + malformed.getMessage(),
+                    System.nanoTime() - start);
+        }
+    }
+
     static String sha256Hex(byte[] body) {
         try {
             MessageDigest md = MessageDigest.getInstance("SHA-256");

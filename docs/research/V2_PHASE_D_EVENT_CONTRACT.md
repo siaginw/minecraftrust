@@ -121,18 +121,33 @@ application path is unaffected.
 
 `ShadowEventComparator` compares, within the admitted scope:
 - mask equality (Java packet mask == sealed accepted mask == Rust emitted mask)
-- length equality
-- exact byte equality of the payload
+- SEMANTIC equality: both payloads decoded by the strict Protocol-340 reader
+  (ported line-for-line from the independent Python decoder) and compared
+  per-section — all 4096 logical global state ids, block light, sky light —
+  plus biomes for full chunks
+- exact byte equality is RECORDED per event as an observed fact
+  (`byteExact`), never the live pass criterion
 
-Inputs are typed (`JavaSide` / `RustSide`) so the two results cannot be
-swapped accidentally. Exact equality is required; there are no
-intentionally-nondeterministic fields in this scope and no masks. A
-mismatch preserves bounded first-divergence evidence: eventId, identity
-tuple, input snapshot sha256, Java/Rust output sha256, lengths, masks,
-first differing offset, ±16 bounded byte context, both sides' bytes as
-full artifacts (bounded smoke), and the comparison timings. The logical
-region (section data / lighting / biome / tile-entity) is reported where it
-can be located; it is `REGION_NOT_LOCALIZED` otherwise — never guessed.
+Why semantic: the Java wire palette is STATEFUL. Vanilla section palettes
+retain entries from replaced blocks (world generation places and replaces;
+`idFor` adds on miss and nothing removes), so the Java packet's palette can
+carry entries the current logical cells never reference, while the Rust
+owned encode builds a minimal palette from the sealed state. Proven on the
+first live smoke's preserved artifacts (event 1, chunk -6/-8): Java palette
+29 entries vs Rust 21, javaLen 31,628 vs rustLen 31,612, and the independent
+decoder shows every logical cell, both light planes and biomes IDENTICAL.
+Byte-different, semantically equal is the expected wire behavior of two
+palette histories — not a Rust defect and not a pass-criterion failure.
+
+`COMPARE_MISMATCH` requires a genuine logical divergence (cell-level first
+divergence: section y, cell index, both global ids; or light/biome plane).
+Undecodable payloads are INFRA_FAILURE, never parity. Inputs are typed
+(`JavaSide` / `RustSide`) so the two results cannot be swapped accidentally.
+A mismatch preserves bounded first-divergence evidence: eventId, identity
+tuple, Java/Rust output sha256, lengths, masks, the cell-level divergence,
+±16 bounded byte context and full bodies as artifacts (bounded smoke), and
+the comparison timings. The logical region is reported where it can be
+located and never guessed.
 
 ## 8. Taxonomy and counters
 

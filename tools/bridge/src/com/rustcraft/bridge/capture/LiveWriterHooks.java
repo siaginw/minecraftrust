@@ -272,7 +272,8 @@ public final class LiveWriterHooks {
             String processId = System.getProperty("rustcraft.session.processId");
             String sessionId = System.getProperty("rustcraft.session.transformationSessionId");
             if (processId == null || sessionId == null || scope == null) return;
-            PhaseDScopePolicy.RegistryFacts facts = PhaseDScopePolicy.registryFacts(runtimeLoader);
+            PhaseDScopePolicy.RegistryFacts facts =
+                    PhaseDScopePolicy.registryFacts(runtimeLoader, System.err);
             if (facts == null) return;
             SessionCompatibilityContract contract = SessionCompatibilityContract.establish(
                     processId, sessionId, scope.profileId,

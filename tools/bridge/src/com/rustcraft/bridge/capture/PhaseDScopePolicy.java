@@ -69,7 +69,7 @@ public final class PhaseDScopePolicy {
      * runtime then keeps the historical behavior: no live scope).
      */
     public static LiveCaptureScope overworldPerChunk(ClassLoader runtimeLoader, String planProfile) {
-        RegistryFacts facts = registryFacts(runtimeLoader);
+        RegistryFacts facts = registryFacts(runtimeLoader, System.err);
         if (facts == null || facts.widthBits > 16) return null;
         return new LiveCaptureScope(
                 planProfile + "/PHASE_D_OVERWORLD_PER_CHUNK",
@@ -105,19 +105,38 @@ public final class PhaseDScopePolicy {
      * session establishment only.
      */
     public static RegistryFacts registryFacts(ClassLoader runtimeLoader) {
+        return registryFacts(runtimeLoader, null);
+    }
+
+    /** Same facts, with the failure reason reported to the given log sink. */
+    public static RegistryFacts registryFacts(ClassLoader runtimeLoader,
+                                              java.io.PrintStream diagnostics) {
         try {
             Class<?> block = Class.forName("net.minecraft.block.Block", false, runtimeLoader);
             Field registryField = block.getDeclaredField("field_176229_d");
             registryField.setAccessible(true);
             Object registry = registryField.get(null);
-            Field mapField = registry.getClass().getDeclaredField("field_148749_a");
+            if (diagnostics != null) diagnostics.println(
+                    "[RustCraft] registry facts: registry class = "
+                            + registry.getClass().getName());
+            // Same declaring-class access the scope binding uses: the fields
+            // live on net.minecraft.util.ObjectIntIdentityMap, and lookup goes
+            // through the declaring class rather than the concrete object's
+            // class so a patched/subclassed runtime cannot hide them.
+            Class<?> mapClass = Class.forName("net.minecraft.util.ObjectIntIdentityMap",
+                    false, registry.getClass().getClassLoader());
+            Field mapField = mapClass.getDeclaredField("field_148749_a");
             mapField.setAccessible(true);
-            Field listField = registry.getClass().getDeclaredField("field_148748_b");
+            Field listField = mapClass.getDeclaredField("field_148748_b");
             listField.setAccessible(true);
             Map<?, ?> map = (Map<?, ?>) mapField.get(registry);
             ArrayList<?> list = (ArrayList<?>) listField.get(registry);
-            if (map.getClass() != IdentityHashMap.class || list.getClass() != ArrayList.class)
+            if (map.getClass() != IdentityHashMap.class || list.getClass() != ArrayList.class) {
+                if (diagnostics != null) diagnostics.println(
+                        "[RustCraft] registry facts: unexpected backing "
+                                + map.getClass().getName());
                 return null;
+            }
             int size = map.size();
             int bits = Math.max(9, 32 - Integer.numberOfLeadingZeros(size - 1));
             MessageDigest md = MessageDigest.getInstance("SHA-256");
@@ -134,6 +153,8 @@ public final class PhaseDScopePolicy {
                     .append(Character.forDigit(b & 0xF, 16));
             return new RegistryFacts(size, bits, hex.toString());
         } catch (Exception unreadable) {
+            if (diagnostics != null) diagnostics.println(
+                    "[RustCraft] registry facts unreadable: " + unreadable);
             return null;
         }
     }

@@ -62,6 +62,12 @@ public final class SealedLiveCapture {
     /** The requested section filter captured with this event. */
     public int requestedFilter() { return owned.requestedFilter; }
 
+    /** The sealed snapshot's skylight flag (the dimension's storage truth). */
+    public boolean sealedSkylight() { return owned.skylight; }
+
+    /** The sealed snapshot's global palette width (the transport's header fact). */
+    public int sealedGlobalPaletteBits() { return owned.globalPaletteBits; }
+
     /** The sealed capture's own accepted section mask. */
     public int sealedMask() { return owned.acceptedMask; }
 
