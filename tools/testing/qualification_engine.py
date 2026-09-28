@@ -20,6 +20,7 @@ import uuid
 
 try:
     from tools.testing.qualification_certificate import Evidence, EvidenceStatus as S, Maturity as M, digest_json, evaluate
+    from tools.testing.manifest_identity import canonical_manifest_identity
     from tools.testing.session_bound_certificate import (
         CertificateError, recipe_binding_sha256, validate as validate_certificate)
     from tools.testing.session_bound_policy import (
@@ -28,6 +29,7 @@ try:
         FrameEvidenceError, describe as describe_frames, validate as validate_frames)
 except ModuleNotFoundError:
     from qualification_certificate import Evidence, EvidenceStatus as S, Maturity as M, digest_json, evaluate
+    from manifest_identity import canonical_manifest_identity
     from session_bound_certificate import (
         CertificateError, recipe_binding_sha256, validate as validate_certificate)
     from session_bound_policy import (
@@ -743,7 +745,16 @@ class QualificationEngine:
         acquisition = observed.get("session_acquisition")
         if acquisition is None:
             raise Missing("no same-process acquisition evidence accompanies the session certificates")
-        manifest_hash = self.initial_inputs[str(self.manifest_path)]
+        # Two identities, deliberately distinct:
+        #   raw file hash  -- drift/tamper detection for the manifest document
+        #                     itself (the `unchanged` node)
+        #   canonical id   -- what the static recipe and the runtime-issued
+        #                     certificates are bound to, which must be
+        #                     location-independent because the manifest embeds
+        #                     machine-local command lines as execution
+        #                     provenance
+        manifest_hash = canonical_manifest_identity(self.manifest)
+        self.canonical_manifest_id = manifest_hash
         acquisition_hash = digest_json(acquisition)
         rows = {}
         if not isinstance(acquisition, list):

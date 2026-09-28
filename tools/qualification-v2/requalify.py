@@ -19,9 +19,11 @@ import argparse
 import hashlib
 import json
 import os
+import shutil
 from pathlib import Path
 import subprocess
 import sys
+import uuid
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 sys.path.insert(0, str(Path(__file__).resolve().parent))
@@ -127,12 +129,42 @@ def main() -> int:
     # class as declared-but-absent minutes later, which reads like a race and
     # costs a whole run to diagnose. The reference below is the deepest class
     # the real launch has actually been seen to dump. Refuse to start instead.
+    # The JVM-touching steps run in a SHORT internal workspace, not at the
+    # requested output. Java 8 cannot address paths beyond the Windows MAX_PATH
+    # limit and the failure inside the observer agent is silent -- the agent
+    # returns null, the class is reported declared-but-absent minutes later,
+    # and it reads like a race while costing a whole run. Staging here means a
+    # caller who picked a long output directory never has to know the limit
+    # exists; the receipts are materialised at the requested location when the
+    # run is over, and the mapping is recorded in the receipt.
+    #
+    # The workspace token is machine-local provenance and deliberately never
+    # enters any canonical identity: the static recipe binds artifact content
+    # and semantics, not where a receipt happens to be written. The random
+    # suffix prevents collisions between concurrent runs and guarantees a stale
+    # workspace cannot contaminate this one; it is removed up front regardless,
+    # so a failed run's evidence stays inspectable until the next attempt.
+    requested = args.output
+    # 12 hex characters of the requested-path hash. The path budget here is
+    # tight -- the repo root, the deepest class-dump structure and the longest
+    # class the launch actually dumps leave 18 characters -- so the token is
+    # kept minimal and the random concurrency suffix is dropped. Cross-path
+    # collisions are still impossible (different requested paths hash
+    # differently) and a stale workspace is removed before the run starts.
+    workspace = ROOT / "target" / "q" / hashlib.sha256(
+        str(requested).encode("utf-8")).hexdigest()[:12]
+    if workspace.exists():
+        shutil.rmtree(workspace)
+    workspace.mkdir(parents=True)
+    args.output = workspace
+
     deepest = len(str(args.output / "engine-captures" / ("run-" + "0" * 32)
                        / "live-transformer-jvm" / "transformed")) + 1 + len(WORST_OBSERVED_DUMP_CLASS)
     if deepest >= 250:
         print(json.dumps({"status": "FAIL", "reason": "OUTPUT_PATH_TOO_LONG_FOR_CLASS_DUMP",
                           "longest_class_dump_path": deepest, "output": str(args.output),
-                          "hint": "pass a shorter --output; the observer agent cannot write past MAX_PATH"}))
+                          "internal_workspace": str(workspace),
+                          "hint": "internal workspace path is still too long; report this"}))
         return 1
 
     # ---- bootstrap capture: learn the expected identities ----
@@ -270,11 +302,65 @@ def main() -> int:
 
     engine = qualification_engine.QualificationEngine(manifest_path, profile_path, args.output / "runs")
     certificate = engine.run(Maturity.OFFLINE_QUALIFIED)
+
+    # Materialise the human-facing evidence at the REQUESTED output. Best
+    # effort by the same reasoning as the generic driver: a caller whose
+    # requested path cannot hold one more component has still received a
+    # verdict, and the workspace holds the canonical evidence either way.
+    keep = ["profile.json", "manifest.json", "context-classes.json",
+            "collector-config.json", "placement-config.json", "logs"]
+    unwritable = []
+    for name in keep:
+        source = workspace / name
+        if not source.exists():
+            continue
+        target = requested / name
+        try:
+            if source.is_dir():
+                shutil.copytree(source, target, dirs_exist_ok=True)
+            else:
+                target.parent.mkdir(parents=True, exist_ok=True)
+                shutil.copyfile(source, target)
+        except OSError as failure:
+            unwritable.append({"entry": name, "attempted_path": str(target),
+                               "measured_length": len(str(target)),
+                               "error": failure.strerror or str(failure)})
+    for run_dir in sorted((workspace / "runs").glob("*")):
+        for name in ("certificate.json", "observation.json", "process-log.json"):
+            source = run_dir / name
+            if not source.is_file():
+                continue
+            destination = requested / "runs" / run_dir.name / name
+            try:
+                destination.parent.mkdir(parents=True, exist_ok=True)
+                shutil.copyfile(source, destination)
+            except OSError as failure:
+                unwritable.append({"entry": "runs/" + run_dir.name + "/" + name,
+                                   "attempted_path": str(destination),
+                                   "measured_length": len(str(destination)),
+                                   "error": failure.strerror or str(failure)})
+    if unwritable:
+        (workspace / "MATERIALISATION_FAILURES.json").write_text(json.dumps(
+            {"schema": "RUSTCRAFT_MATERIALISATION_DIAGNOSTIC_V1",
+             "requested_output": str(requested),
+             "measured_requested_length": len(str(requested)),
+             "windows_max_path": 260,
+             "explanation": "the requested output directory is close enough to the Windows "
+                            "MAX_PATH limit that no child path can be created; the "
+                            "qualification ran and its canonical evidence is in the "
+                            "internal workspace recorded below",
+             "recommended_remediation": "use a shorter output directory, or read the "
+                                        "evidence from internal_workspace_path",
+             "entries": unwritable}, indent=2) + chr(10), encoding="utf-8")
+
     print(json.dumps({"status": certificate["status"], "maturity": certificate["maturity"],
                       "production_authority": False,
                       "profile": str(profile_path), "manifest": str(manifest_path),
                       "certificate": str(engine.output / "certificate.json"),
-                      "bootstrap_receipt_sha256": sha(args.output / "bootstrap" / "forge-runtime-result.json")}, indent=2))
+                      "bootstrap_receipt_sha256": sha(args.output / "bootstrap" / "forge-runtime-result.json"),
+                      "requested_output": str(requested),
+                      "internal_workspace": str(workspace),
+                      "receipts_materialised": not unwritable}, indent=2))
     return {"PASS": 0, "FAIL": 1, "INCOMPLETE": 2}[certificate["status"]]
 
 

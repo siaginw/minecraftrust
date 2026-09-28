@@ -43,6 +43,7 @@ import session_bound_policy as policy_schema  # noqa: E402
 import writer_sites  # noqa: E402
 import transformer_verify  # noqa: E402
 from text_digest import normalized_sha256  # noqa: E402
+from manifest_identity import canonical_manifest_identity  # noqa: E402
 from rev_mixed_recipe import derive_split  # noqa: E402
 import qualification_engine  # noqa: E402
 from qualification_certificate import Maturity  # noqa: E402
@@ -120,10 +121,36 @@ def main() -> int:
             if bash.startswith(prefix):
                 bash = "C:\\" + bash[len(prefix):].replace("/", "\\")
                 break
-    out = args.output.resolve()
-    if out.exists():
-        raise SystemExit("qualification output must be fresh: " + str(out))
-    out.mkdir(parents=True)
+    # Two locations, with different jobs.
+    #
+    # `requested` is where the caller asked for the result and may be long,
+    # contain spaces, or both. `work` is a SHORT internal workspace where every
+    # JVM-touching step actually runs.
+    #
+    # The split exists because Java 8 cannot address paths beyond the Windows
+    # MAX_PATH limit, so class dumps and compiler output silently vanish for a
+    # caller who picked a long output directory. Running in a short workspace
+    # and materialising the receipts afterwards means the caller never has to
+    # know that limit exists.
+    #
+    # The workspace token is deliberately NOT part of any canonical identity:
+    # it is machine-local execution provenance. A random suffix prevents
+    # collisions between concurrent runs and guarantees a stale workspace from
+    # an earlier attempt cannot contaminate this one; it is removed up front
+    # regardless, so a failed run's evidence is inspectable until the next run
+    # of the same output begins.
+    requested = args.output.resolve()
+    if requested.exists() and any(requested.iterdir()):
+        raise SystemExit("qualification output must be fresh: " + str(requested))
+    short_repo = ROOT.resolve()
+    work = short_repo / "target" / "q" / (
+        hashlib.sha256(str(requested).encode("utf-8")).hexdigest()[:12]
+        + "-" + uuid.uuid4().hex[:8])
+    if work.exists():
+        shutil.rmtree(work)
+    work.mkdir(parents=True)
+    out = work
+    requested.mkdir(parents=True, exist_ok=True)
     logs = out / "logs"
     runtime_root = args.runtime_root.resolve()
     java = args.java_home.resolve() / "bin" / "java.exe"
@@ -252,7 +279,14 @@ def main() -> int:
                                             extra=(placement_config_path,))},
     }
     manifest_out.write_text(json.dumps(early_manifest, indent=2) + CHAIN_NL, encoding="utf-8")
-    runtime_manifest_sha = sha(manifest_out)
+    # The static contract is bound to the manifest's CANONICAL identity, not its
+    # raw file hash. The manifest is execution provenance: it names the runtime
+    # root, the toolchain and the workspace by absolute path so its
+    # subprocesses can run, and those paths move with every run. The canonical
+    # identity projects them away and keeps the artifact inventory, toolchain
+    # content and schema -- so the same qualification at two output locations
+    # yields the same static recipe, plan bytes and policy identities.
+    runtime_manifest_sha = canonical_manifest_identity(early_manifest)
 
     recipe = {
         "schema_version": 2, "kind": "RUSTCRAFT_V2_WRITER_PLAN_RECIPE",
@@ -450,6 +484,27 @@ def main() -> int:
     profile_out = out / "profile.json"
     profile_out.write_text(json.dumps(engine_profile, indent=2) + CHAIN_NL, encoding="utf-8")
 
+    # Reproducibility receipt. The first group is the canonical static
+    # contract and must be identical across path-only changes; the second is
+    # machine-local execution provenance and is expected to differ. Recording
+    # both in one place is what makes a future reproducibility bug obvious
+    # instead of mysterious.
+    (out / "reproducibility.json").write_text(json.dumps({
+        "schema": "RUSTCRAFT_REPRODUCIBILITY_RECEIPT_V1",
+        "canonical": {
+            "static_recipe_sha256": binding,
+            "writer_plan_sha256": sha(plan_path),
+            "runtime_manifest_identity": runtime_manifest_sha,
+        },
+        "execution_provenance": {
+            "requested_output_path": str(requested),
+            "internal_workspace_path": str(work),
+            "runtime_root": str(args.runtime_root),
+            "worktree_root": str(ROOT),
+            "java_path": str(args.java_home / "bin" / "java.exe"),
+        },
+    }, indent=2) + CHAIN_NL, encoding="utf-8")
+
     (out / "discovery.json").write_text(json.dumps({
         "schema": "RUSTCRAFT_DISCOVERY_V1",
         "discovery_launches": 2,
@@ -463,14 +518,81 @@ def main() -> int:
 
     engine = qualification_engine.QualificationEngine(manifest_out, profile_out, out / "runs")
     certificate = engine.run(Maturity.OFFLINE_QUALIFIED)
+
+    # Materialise the human-facing evidence at the REQUESTED output. Everything
+    # copied here is a receipt or a static artifact; the heavy class dumps stay
+    # in the workspace, where the JVM put them.
+    # Materialise the human-facing evidence at the REQUESTED output. This is
+    # best-effort by design: a caller who picked a path so long that even one
+    # more path component exceeds the Windows limit has already made it
+    # impossible to write anything under that directory, and the qualification
+    # verdict must not be lost because of it. The workspace is the authoritative
+    # location for the canonical evidence either way, and every failure below is
+    # reported with the measured length rather than swallowed.
+    keep = ["recipe.json", "LiveWriterPlan.java", "LiveWriterPlan.repeat.java",
+            "discovery.json", "reproducibility.json", "profile.json", "manifest.json",
+            "collector-config.json", "placement-config.json", "logs"]
+    unwritable = []
+    for name in keep:
+        source = out / name
+        if not source.exists():
+            continue
+        target = requested / name
+        try:
+            if source.is_dir():
+                shutil.copytree(source, target, dirs_exist_ok=True)
+            else:
+                target.parent.mkdir(parents=True, exist_ok=True)
+                shutil.copyfile(source, target)
+        except OSError as failure:
+            unwritable.append({"entry": name,
+                               "attempted_path": str(target),
+                               "measured_length": len(str(target)),
+                               "error": failure.strerror or str(failure)})
+    for run_dir in sorted((out / "runs").glob("*")):
+        target = requested / "runs" / run_dir.name
+        for name in ("certificate.json", "observation.json", "process-log.json"):
+            if not (run_dir / name).is_file():
+                continue
+            destination = target / name
+            try:
+                destination.parent.mkdir(parents=True, exist_ok=True)
+                shutil.copyfile(run_dir / name, destination)
+            except OSError as failure:
+                unwritable.append({"entry": "runs/" + run_dir.name + "/" + name,
+                                   "attempted_path": str(destination),
+                                   "measured_length": len(str(destination)),
+                                   "error": failure.strerror or str(failure)})
+    if unwritable:
+        (out / "MATERIALISATION_FAILURES.json").write_text(
+            json.dumps({"schema": "RUSTCRAFT_MATERIALISATION_DIAGNOSTIC_V1",
+                        "requested_output": str(requested),
+                        "measured_requested_length": len(str(requested)),
+                        "windows_max_path": 260,
+                        "explanation": "the requested output directory is close enough to the "
+                                       "Windows MAX_PATH limit that no child path can be created; "
+                                       "the qualification itself ran and its canonical evidence is "
+                                       "in the internal workspace recorded below",
+                        "recommended_remediation": "use a shorter output directory, or read the "
+                                                   "evidence from internal_workspace_path",
+                        "entries": unwritable}, indent=2) + CHAIN_NL, encoding="utf-8")
+
     print(json.dumps({
         "status": certificate["status"], "maturity": certificate["maturity"],
         "production_authority": False,
         "recipe_sha256": binding,
-        "engine_profile_sha256": engine_profile["session_bound"]["recipe_sha256"],
-        "plan_sha256": sha(plan_path),
-        "profile": str(profile_out), "manifest": str(manifest_out),
+        "writer_plan_sha256": sha(plan_path),
+        "runtime_manifest_identity": runtime_manifest_sha,
+        # The workspace is where the canonical evidence lives. A caller whose
+        # requested path is too long for even one more component will not have
+        # the copies, so naming the requested location here would point at
+        # files that do not exist.
+        "profile": str(profile_out),
+        "manifest": str(manifest_out),
         "certificate": str(engine.output / "certificate.json"),
+        "requested_output": str(requested),
+        "internal_workspace": str(work),
+        "receipts_materialised": not unwritable,
     }, indent=2))
     return {"PASS": 0, "FAIL": 1, "INCOMPLETE": 2}[certificate["status"]]
 

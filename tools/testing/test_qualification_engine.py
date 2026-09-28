@@ -29,6 +29,10 @@ from tools.testing import session_bound_certificate as certificate
 from tools.testing import session_bound_policy as admission_policy
 from tools.testing.qualification_engine import QualificationEngine, Invalid, Missing, parse_json, sha, strict_lines
 from tools.testing.qualification_certificate import Maturity as M, digest_json
+try:
+    from tools.testing.manifest_identity import canonical_manifest_identity
+except ImportError:
+    from manifest_identity import canonical_manifest_identity
 
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
@@ -114,7 +118,9 @@ if S:
     # per-launch identities that do not exist until after the run, so a binding
     # over it could never be known when the policy was written.
     recipe=cert.recipe_binding_sha256(prof['static_recipe'])
-    manifest_sha=sha(c['manifest'])
+    from tools.testing.manifest_identity import canonical_manifest_identity
+    manifest_doc=json.loads(pathlib.Path(c['manifest']).read_text())
+    manifest_sha=canonical_manifest_identity(manifest_doc)
     refusals=[]
     if policy['recipe_sha256']!=recipe: refusals.append('RECIPE_MISMATCH: policy is bound to another recipe')
     refusals+=sbpolicy.admits(policy,session_invariant_sha256=S['invariant'],declaration_order_sha256=S['pre_order'],masked_locations=S['masked_locations'],masked_occurrence_count=len(S['masked_locations']),distinct_masked_uuid_count=1,loader_class=LOADER,runtime_profile=S['runtime_profile'],recipe_sha256=recipe,manifest_sha256=manifest_sha)
@@ -425,7 +431,11 @@ class EngineFixture:
         self.manifest["collector"] = self.command(self.collector, ["--config", str(self.config)], [self.config])
         self.manifest["collector"]["environment"] = {"PYTHONPATH": str(REPO_ROOT)}
         self.manifest_path.write_text(json.dumps(self.manifest), encoding="utf-8")
-        manifest_sha = sha(self.manifest_path)
+        # The static contract binds the manifest by its CANONICAL identity, not
+        # its raw file hash: the manifest is execution provenance and carries
+        # machine-local paths, so a raw hash would make the authorization
+        # location-dependent.
+        manifest_sha = canonical_manifest_identity(self.manifest)
         self.profile["frame_evidence"] = {"required_classes": [SESSION_CLASS]}
         self.profile["identity_mode"] = "CANONICAL_ID_V2_SESSION_BOUND"
         # The static qualification contract: the one canonical document that
@@ -480,6 +490,14 @@ class EngineFixture:
         return dict(command=[str(executable), str(script), *args], pins={str(p): sha(p) for p in (executable, script, *extra)}, environment={}, timeout_seconds=30)
 
     def write(self):
+        # No refresh here, deliberately. The policy's manifest identity is
+        # computed once when the policy is built, and it must still be correct
+        # at the end: the canonical identity is stable across the fixture's
+        # wiring-up because it excludes run products (the profile, the plan) and
+        # the manifest itself. An earlier version refreshed the value here as a
+        # band-aid for an instability -- and the refresh silently overwrote
+        # deliberately-mutated policies, defeating the very controls that prove
+        # a wrong binding is refused.
         self.manifest_path.write_text(json.dumps(self.manifest), encoding="utf-8")
         self.profile_path.write_text(json.dumps(self.profile), encoding="utf-8")
 
