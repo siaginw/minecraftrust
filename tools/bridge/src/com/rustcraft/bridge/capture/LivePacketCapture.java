@@ -140,6 +140,15 @@ public final class LivePacketCapture {
     public static final AtomicLong VALIDATION_FAILED = new AtomicLong();
     public static final AtomicLong ABORTED = new AtomicLong();
 
+    // Phase-D component timings: measured separately from the Rust encode
+    // (which the consumer times). Component measurements only -- no
+    // end-to-end performance claim is made or implied by them.
+    public static final AtomicLong BEGIN_NANOS_TOTAL = new AtomicLong();
+    public static final AtomicLong BEGIN_COUNT = new AtomicLong();
+    public static final AtomicLong COMMIT_NANOS_TOTAL = new AtomicLong();
+    public static final AtomicLong COMMIT_COUNT = new AtomicLong();
+    public static final AtomicLong ENQUEUE_NANOS_TOTAL = new AtomicLong();
+
     private LivePacketCapture() { }
 
     /**
@@ -153,6 +162,7 @@ public final class LivePacketCapture {
         if (session == null) {
             return null; // default OFF: inert, nothing allocated
         }
+        long beginStart = System.nanoTime();
         SEEN.incrementAndGet();
         if (chunk == null || packet == null || (filter & ~0xFFFF) != 0) {
             REJECTED.incrementAndGet();
@@ -204,15 +214,21 @@ public final class LivePacketCapture {
         try {
             CaptureDraft draft = CaptureDraft.extract(source, attempt, binding, filter);
             ADMITTED.incrementAndGet();
+            BEGIN_NANOS_TOTAL.addAndGet(System.nanoTime() - beginStart);
+            BEGIN_COUNT.incrementAndGet();
             return new AttemptToken(session, attempt, draft);
         } catch (Rejection rejection) {
             // Discard + release exactly once; the constructor still runs Java-only.
             session.gate.endCapture(attempt, rejection);
             REJECTED.incrementAndGet();
+            BEGIN_NANOS_TOTAL.addAndGet(System.nanoTime() - beginStart);
+            BEGIN_COUNT.incrementAndGet();
             return rejected(session, rejection.reason, rejection.getMessage());
         } catch (Throwable failure) {
             session.gate.endCapture(attempt, failure);
             REJECTED.incrementAndGet();
+            BEGIN_NANOS_TOTAL.addAndGet(System.nanoTime() - beginStart);
+            BEGIN_COUNT.incrementAndGet();
             return rejected(session, RejectionReason.EXTRACTION_FAILED, String.valueOf(failure));
         }
     }
@@ -228,6 +244,7 @@ public final class LivePacketCapture {
         if (attemptToken == null || attemptToken.consumed) return;
         attemptToken.consumed = true; // seal-at-most-once: a replayed commit is a no-op
         LiveWriterHooks.Session session = attemptToken.session;
+        long commitStart = System.nanoTime();
         try {
             CaptureDraft draft = attemptToken.draft;
             LiveWriterGate.CaptureAttempt outcome = attemptToken.attempt;
@@ -238,12 +255,23 @@ public final class LivePacketCapture {
             if (!session.gate.endCapture(outcome, null)) {
                 VALIDATION_FAILED.incrementAndGet();
                 REJECTED.incrementAndGet();
+                COMMIT_NANOS_TOTAL.addAndGet(System.nanoTime() - commitStart);
+                COMMIT_COUNT.incrementAndGet();
                 return;
             }
             SEALED.incrementAndGet();
+            long enqueueStart = System.nanoTime();
             LiveComparisonQueue.OfferResult offer = LiveComparisonQueue.offer(sealed);
+            ENQUEUE_NANOS_TOTAL.addAndGet(System.nanoTime() - enqueueStart);
             if (offer.accepted) ENQUEUED.incrementAndGet();
-            else QUEUE_DROPPED.incrementAndGet();
+            else {
+                QUEUE_DROPPED.incrementAndGet();
+                // Phase D: a dropped event never disappears silently; the full
+                // identity is recorded with the drop reason.
+                journalDropped(sealed, offer.reason == LiveComparisonQueue.DropReason.FULL
+                        || offer.reason == LiveComparisonQueue.DropReason.BYTES
+                        ? "BACKPRESSURE" : "INACTIVE");
+            }
         } catch (Rejection rejection) {
             releaseQuietly(attemptToken, rejection);
             VALIDATION_FAILED.incrementAndGet();
@@ -252,6 +280,25 @@ public final class LivePacketCapture {
             releaseQuietly(attemptToken, failure);
             VALIDATION_FAILED.incrementAndGet();
             REJECTED.incrementAndGet();
+        } finally {
+            COMMIT_NANOS_TOTAL.addAndGet(System.nanoTime() - commitStart);
+            COMMIT_COUNT.incrementAndGet();
+        }
+    }
+
+    /** Queue-drop record; journal absent means historical behavior. */
+    private static void journalDropped(SealedLiveCapture sealed, String reason) {
+        ShadowEventJournal journal = ShadowEventJournal.instance();
+        if (journal == null) return;
+        try {
+            journal.recordOutcome(sealed.gateEventId(),
+                    sealed.identity().sessionId,
+                    ShadowEventJournal.Outcome.DROPPED, reason,
+                    "queue drop at commit; javaLen=" + sealed.javaPayloadLength()
+                            + " mask=" + sealed.javaMask());
+        } catch (Throwable evidenceFailure) {
+            System.err.println("[RustCraft] phase-d journal drop record failed: "
+                    + evidenceFailure);
         }
     }
 

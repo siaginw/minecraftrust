@@ -24,6 +24,8 @@ public final class SealedLiveCapture {
     private final boolean javaFullChunk;
     private final int packetX;
     private final int packetZ;
+    /** Phase-D telemetry: seal time, so queue wait is measurable downstream. */
+    private final long sealedAtNanos;
 
     SealedLiveCapture(long gateEventId, LiveChunkBindings.BindingIdentity identity,
                       OwnedPacketSnapshot owned, byte[] javaPayload, int javaMask,
@@ -36,10 +38,14 @@ public final class SealedLiveCapture {
         this.javaFullChunk = javaFullChunk;
         this.packetX = packetX;
         this.packetZ = packetZ;
+        this.sealedAtNanos = System.nanoTime();
     }
 
     /** Gate-minted packet/capture event identity for this one event. */
     public long gateEventId() { return gateEventId; }
+
+    /** Seal timestamp (nanos); the consumer's queue-wait measurement reads it. */
+    public long sealedAtNanos() { return sealedAtNanos; }
 
     public LiveChunkBindings.BindingIdentity identity() { return identity; }
 

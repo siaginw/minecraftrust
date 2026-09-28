@@ -48,6 +48,17 @@ public final class LiveShadowCampaignConsumer {
         public void increment() { value++; }
     }
 
+    // ---- Phase D: bounded smoke cap + component timings --------------------
+    // Once the cap is reached further sealed events are recorded DROPPED_CAPPED
+    // (identity preserved, never parity). The smoke proves the pipeline; it is
+    // not a campaign and does not chase counts.
+    private static final long MAX_EVENTS =
+            Long.getLong("rustcraft.liveShadowMaxEvents", 64).longValue();
+    public static final AtomicHolder RUST_ENCODE_NANOS_TOTAL = new AtomicHolder();
+    public static final AtomicHolder COMPARE_NANOS_TOTAL = new AtomicHolder();
+    public static final AtomicHolder QUEUE_WAIT_NANOS_TOTAL = new AtomicHolder();
+    public static final AtomicHolder TIMED_EVENTS = new AtomicHolder();
+
     private static volatile boolean started;
     private static volatile boolean mismatchSeen;
     private static PrintWriter jsonl;
@@ -260,6 +271,16 @@ public final class LiveShadowCampaignConsumer {
     private static void compareAndRecord(SealedLiveCapture sealed) {
         Map<String, Object> record = new LinkedHashMap<String, Object>();
         try {
+            ShadowEventJournal journal = ShadowEventJournal.instance();
+            // Phase-D bounded smoke cap: once reached, further events are
+            // recorded DROPPED_CAPPED with full identity; never compared,
+            // never parity, never silent.
+            if (journal != null && COMPARED.get() >= MAX_EVENTS) {
+                journal.recordOutcome(sealed.gateEventId(), sealed.identity().sessionId,
+                        ShadowEventJournal.Outcome.DROPPED, "CAPPED",
+                        "event cap " + MAX_EVENTS + " reached; smoke is bounded by design");
+                return;
+            }
             byte[] transport = sealed.toTransportBytes();
             record.put("gateEventId", sealed.gateEventId());
             record.put("sessionId", sealed.identity().sessionId);
@@ -278,17 +299,43 @@ public final class LiveShadowCampaignConsumer {
             record.put("bindingRevoked", sealed.identity().ownedEncodeGeneration < 0);
             record.put("ioAdopted", sealed.ioAdopted());
 
-            // Independent Rust replay of the exact scope-3 transport.
+            // Phase-D completion registry: mint + contract check. A refusal
+            // disqualifies the event -- it is never compared.
+            if (journal != null) {
+                ShadowEventJournal.RefusedCompletion refusal =
+                        journal.mint(sealed.gateEventId(), sealed.identity().sessionId);
+                if (refusal != null) {
+                    journal.recordOutcome(sealed.gateEventId(), sealed.identity().sessionId,
+                            ShadowEventJournal.Outcome.DISQUALIFIED, "COMPLETION_REGISTRY",
+                            "refusal=" + refusal.refusal);
+                    REPLAY_FAILURE.increment();
+                    fail("completion registry refused event " + sealed.gateEventId()
+                            + ": " + refusal.refusal, sealed, record, transport, null, -1);
+                    return;
+                }
+            }
+
+            // Independent Rust replay of the exact scope-3 transport (timed:
+            // component measurement of the shadow encode only).
             if (transport.length > NATIVE_CAPACITY) throw new IllegalStateException("transport too large");
             if (nativeInput != 0) MEMORY.freeMemory(nativeInput);
             nativeInput = MEMORY.allocateMemory(transport.length);
             for (int i = 0; i < transport.length; i++) MEMORY.putByte(nativeInput + i, transport[i]);
             MEMORY.setMemory(nativeOutput, NATIVE_CAPACITY, (byte) 0xCC);
+            long encodeStart = System.nanoTime();
             long packed = com.rustcraft.bridge.capture.OwnedSnapshotBridge.encodeOwnedV1(
                     nativeInput, transport.length, nativeOutput, NATIVE_CAPACITY);
+            long encodeNanos = System.nanoTime() - encodeStart;
+            RUST_ENCODE_NANOS_TOTAL.set(RUST_ENCODE_NANOS_TOTAL.get() + encodeNanos);
+            QUEUE_WAIT_NANOS_TOTAL.set(QUEUE_WAIT_NANOS_TOTAL.get()
+                    + (encodeStart - sealed.sealedAtNanos()));
             PacketEncodeResultV2 result = PacketEncodeResultV2.decode(packed);
             if (!result.isSuccess()) {
                 REPLAY_FAILURE.increment();
+                if (journal != null) journal.recordOutcome(sealed.gateEventId(),
+                        sealed.identity().sessionId,
+                        ShadowEventJournal.Outcome.INFRA_FAILURE, "RUST_ENCODE",
+                        String.valueOf(result.failure()));
                 record.put("rustFailure", String.valueOf(result.failure()));
                 fail("rust replay failed", sealed, record, transport, null, -1);
                 return;
@@ -299,16 +346,28 @@ public final class LiveShadowCampaignConsumer {
             for (int i = 0; i < rustLen; i++) rustBody[i] = MEMORY.getByte(nativeOutput + i);
             byte[] javaBody = sealed.javaPayload();
 
-            boolean maskEqual = rustMask == sealed.javaMask() && rustMask == sealed.sealedMask();
-            boolean lenEqual = rustLen == javaBody.length;
-            boolean byteEqual = Arrays.equals(rustBody, javaBody);
+            // Phase-D comparator: typed sides, exact equality, first divergence.
+            ShadowEventComparator.JavaSide javaSide =
+                    new ShadowEventComparator.JavaSide(javaBody, sealed.javaMask());
+            ShadowEventComparator.RustSide rustSide =
+                    new ShadowEventComparator.RustSide(rustBody, rustMask);
+            ShadowEventComparator.Comparison comparison =
+                    ShadowEventComparator.compareStatic(javaSide, rustSide);
+            COMPARE_NANOS_TOTAL.set(COMPARE_NANOS_TOTAL.get() + comparison.compareNanos);
+            TIMED_EVENTS.increment();
+
+            boolean maskEqual = rustMask == sealed.javaMask() && rustMask == sealed.sealedMask()
+                    && comparison.maskEqual;
+            boolean lenEqual = rustLen == javaBody.length && comparison.lengthEqual;
+            boolean byteEqual = Arrays.equals(rustBody, javaBody) && comparison.byteEqual;
             if (sealed.ioAdopted() && maskEqual && lenEqual && byteEqual) {
                 IO_ADOPTED_COMPARED.increment();
             }
             record.put("rustMask", rustMask);
             record.put("rustLen", rustLen);
             record.put("javaLen", javaBody.length);
-            record.put("ioAdopted", sealed.ioAdopted());
+            record.put("rustEncodeNanos", encodeNanos);
+            record.put("compareNanos", comparison.compareNanos);
             record.put("maskEqual", maskEqual);
             record.put("lenEqual", lenEqual);
             record.put("byteEqual", byteEqual);
@@ -317,6 +376,24 @@ public final class LiveShadowCampaignConsumer {
             if (!lenEqual) LENGTH_MISMATCH.increment();
             if (!byteEqual) BYTE_MISMATCH.increment();
             COMPARED.increment();
+
+            if (journal != null) {
+                if (maskEqual && lenEqual && byteEqual) {
+                    journal.recordOutcome(sealed.gateEventId(), sealed.identity().sessionId,
+                            ShadowEventJournal.Outcome.COMPARE_PASS, null,
+                            "javaLen=" + javaBody.length + " mask=" + rustMask);
+                } else {
+                    ShadowEventComparator.FirstDivergence d = comparison.firstDivergence;
+                    journal.recordOutcome(sealed.gateEventId(), sealed.identity().sessionId,
+                            ShadowEventJournal.Outcome.COMPARE_MISMATCH, "FIRST_DIVERGENCE",
+                            d == null ? "mask/length divergence" :
+                                    "offset=" + d.offset + " javaLen=" + d.javaLength
+                                    + " rustLen=" + d.rustLength + " region=" + d.region
+                                    + " javaSha256=" + d.javaSha256
+                                    + " rustSha256=" + d.rustSha256
+                                    + " context=" + d.contextHex);
+                }
+            }
 
             synchronized (LiveShadowCampaignConsumer.class) {
                 jsonl.println(json(record));
@@ -327,6 +404,11 @@ public final class LiveShadowCampaignConsumer {
             }
         } catch (Throwable failure) {
             REPLAY_FAILURE.increment();
+            ShadowEventJournal journal = ShadowEventJournal.instance();
+            if (journal != null) journal.recordOutcome(sealed.gateEventId(),
+                    sealed.identity().sessionId,
+                    ShadowEventJournal.Outcome.INFRA_FAILURE, "REPLAY_EXCEPTION",
+                    String.valueOf(failure));
             try {
                 fail("replay exception: " + failure, sealed, record, null, null, -1);
             } catch (Throwable ignored) { }
@@ -411,6 +493,34 @@ public final class LiveShadowCampaignConsumer {
             receipt.put("ioAdoptedCompared", IO_ADOPTED_COMPARED.get());
             receipt.put("teRejections", LivePacketCapture.TE_PRESENT_REJECTIONS.get());
             receipt.put("lastTeRejection", LivePacketCapture.lastTeRejectionEvidence());
+            // ---- Phase-D: taxonomy, denominator, component timings, scope ----
+            ShadowEventJournal journal = ShadowEventJournal.instance();
+            if (journal != null) {
+                journal.validate();
+                receipt.put("phaseDTaxonomy", journal.taxonomyJson());
+                receipt.put("phaseDJournalRecords", journal.recordsSize());
+                receipt.put("phaseDProtocolViolations", journal.protocolViolations());
+                SessionCompatibilityContract contract = journal.contract();
+                if (contract != null) receipt.put("phaseDContract", contract.toJson());
+            } else {
+                receipt.put("phaseDTaxonomy", "journal-unbound");
+            }
+            receipt.put("phaseDMaxEvents", MAX_EVENTS);
+            receipt.put("phaseDShadowScopeTelemetry", ShadowScopeGate.telemetryJson());
+            long timed = TIMED_EVENTS.get();
+            receipt.put("phaseDTimings", "{\"capture_begin_nanos_total\":"
+                    + LivePacketCapture.BEGIN_NANOS_TOTAL.get()
+                    + ",\"capture_begin_count\":" + LivePacketCapture.BEGIN_COUNT.get()
+                    + ",\"capture_commit_nanos_total\":" + LivePacketCapture.COMMIT_NANOS_TOTAL.get()
+                    + ",\"capture_commit_count\":" + LivePacketCapture.COMMIT_COUNT.get()
+                    + ",\"enqueue_nanos_total\":" + LivePacketCapture.ENQUEUE_NANOS_TOTAL.get()
+                    + ",\"rust_encode_nanos_total\":" + RUST_ENCODE_NANOS_TOTAL.get()
+                    + ",\"compare_nanos_total\":" + COMPARE_NANOS_TOTAL.get()
+                    + ",\"queue_wait_nanos_total\":" + QUEUE_WAIT_NANOS_TOTAL.get()
+                    + ",\"timed_events\":" + timed
+                    + ",\"claim_limit\":\"component measurements only; no end-to-end"
+                    + " performance claim is made or implied\"}");
+            receipt.put("queueCapacity", LiveComparisonQueue.capacityForReceipt());
             receipt.put("uptimeMillis", System.currentTimeMillis() - startedAtMillis);
             Path out = Paths.get(System.getProperty("rustcraft.liveShadowOut", "live-shadow-events.jsonl"))
                     .toAbsolutePath().resolveSibling("live-shadow-receipt.json");

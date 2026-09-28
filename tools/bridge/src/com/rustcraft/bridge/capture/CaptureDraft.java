@@ -56,8 +56,7 @@ final class CaptureDraft {
             if ((mask & (1 << y)) == 0) continue;
             CaptureSource.Section section = begin.section(y);
             // Fail-closed support boundaries, enforced at capture time: no NEID/JEID
-            // representation, no nonzero extended high bits, no state beyond the
-            // native u16 width, and exact array shapes.
+            // representation, no nonzero extended high bits, and exact array shapes.
             if (section.extendedHigh != null) {
                 for (byte value : section.extendedHigh) if (value != 0) {
                     throw LivePacketCapture.reject(LivePacketCapture.RejectionReason.EXTENDED_ID,
@@ -73,19 +72,81 @@ final class CaptureDraft {
                 throw LivePacketCapture.reject(LivePacketCapture.RejectionReason.INVALID_INPUT,
                         "malformed sky light in section " + y);
             }
-            for (long state : section.logicalStates) {
-                if (state < 0 || state > 65535) {
-                    throw LivePacketCapture.reject(LivePacketCapture.RejectionReason.EXTENDED_ID,
-                            "state outside native u16 width in section " + y);
-                }
-            }
             states[y] = section.logicalStates.clone();
             block[y] = section.blockLight.clone();
             if (begin.skylight) sky[y] = section.skyLight == null ? null : section.skyLight.clone();
         }
+        // Phase D: the u16 decision routes through ShadowScopeGate -- the same
+        // single place the rule lives everywhere else -- so the exclusion is
+        // structured (HIGH_STATE_ID, first offending id) and counted in the
+        // gate's telemetry. An excluded chunk falls back to Java-only; the
+        // journal records the exclusion with full identity so it never
+        // disappears silently.
+        ShadowScopeGate.Result scope = ShadowScopeGate.evaluateCounted(project(states));
+        if (!scope.eligible) {
+            journalExcluded(attempt.eventId(), binding, scope.reason,
+                    "firstOffendingStateId=" + scope.firstOffendingStateId
+                            + " entriesInspected=" + scope.entriesInspected);
+            if ("HIGH_STATE_ID".equals(scope.reason)) {
+                throw LivePacketCapture.reject(LivePacketCapture.RejectionReason.EXTENDED_ID,
+                        "state outside native u16 width (firstOffending="
+                                + scope.firstOffendingStateId + ")");
+            }
+            throw LivePacketCapture.reject(LivePacketCapture.RejectionReason.INVALID_INPUT,
+                    "scope coherence: " + scope.reason);
+        }
+        // Phase D admission restriction: a section whose DISTINCT state count
+        // exceeds 256 serializes on the Java wire through the runtime global
+        // palette, whose width the u16 transport cannot carry on wide
+        // registries. Such chunks are excluded with a named reason, never
+        // compared, never counted as parity. No transport widening occurs.
+        for (int y = 0; y < 16; y++) {
+            if (states[y] == null) continue;
+            if (distinctCount(states[y]) > 256) {
+                journalExcluded(attempt.eventId(), binding, "GLOBAL_PALETTE_SECTION",
+                        "section y=" + y + " exceeds the 256-entry section-palette range");
+                throw LivePacketCapture.reject(LivePacketCapture.RejectionReason.UNSUPPORTED_STORAGE,
+                        "section " + y + " requires the runtime global palette (width beyond transport)");
+            }
+        }
         byte[] biomes = begin.biomes.clone();
         return new CaptureDraft(source, attempt, binding, filter, begin, mask,
                 states, block, sky, biomes);
+    }
+
+    /** int[] projection of the selected sections for the Phase-B gate. */
+    private static int[][] project(long[][] states) {
+        int[][] projected = new int[16][];
+        for (int y = 0; y < 16; y++) {
+            if (states[y] == null) continue;
+            int[] column = new int[states[y].length];
+            for (int i = 0; i < column.length; i++) column[i] = (int) states[y][i];
+            projected[y] = column;
+        }
+        return projected;
+    }
+
+    /** Distinct logical states in one section (sort-based, bounded 4096). */
+    private static int distinctCount(long[] sectionStates) {
+        long[] sorted = sectionStates.clone();
+        java.util.Arrays.sort(sorted);
+        int distinct = sorted.length == 0 ? 0 : 1;
+        for (int i = 1; i < sorted.length; i++) if (sorted[i] != sorted[i - 1]) distinct++;
+        return distinct;
+    }
+
+    /** Capture-side exclusion record; journal absent means historical behavior. */
+    private static void journalExcluded(long eventId, LiveChunkBindings.Binding binding,
+                                        String reason, String detail) {
+        ShadowEventJournal journal = ShadowEventJournal.instance();
+        if (journal == null) return;
+        try {
+            journal.recordOutcome(eventId, binding.sessionId(),
+                    ShadowEventJournal.Outcome.EXCLUDED, reason, detail);
+        } catch (Throwable evidenceFailure) {
+            System.err.println("[RustCraft] phase-d journal exclusion record failed: "
+                    + evidenceFailure);
+        }
     }
 
     /**

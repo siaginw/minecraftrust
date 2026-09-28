@@ -225,17 +225,69 @@ public final class LiveWriterHooks {
     /** Production entry: the qualified MinecraftServer.run bootstrap hook. */
     public static void diagnosticSessionStart() {
         if (session != null) return; // one session per JVM; never reset
-        // Explicit historical Clean policy only. A Revelation/unknown generated
-        // plan cannot inherit Clean provenance or scope before H23 qualification.
-        LiveCaptureScope scope = LegacyCaptureScopes.selectedLegacyPlan(LiveWriterHooks.class.getClassLoader());
+        ClassLoader bridgeLoader = LiveWriterHooks.class.getClassLoader();
+        ClassLoader runtimeLoader = Thread.currentThread().getContextClassLoader();
+        // Explicit historical Clean policy only, UNLESS Phase D explicitly
+        // requests the Overworld per-chunk scope under an admitted plan
+        // profile. A Revelation/unknown generated plan cannot inherit Clean
+        // provenance or scope; the Phase-D path carries its own profile-bound
+        // scope and never weakens the historical selection.
+        LiveCaptureScope scope = LegacyCaptureScopes.selectedLegacyPlan(bridgeLoader);
+        if (PhaseDScopePolicy.requested()) {
+            String planProfile = PhaseDScopePolicy.installedPlanProfile(bridgeLoader);
+            if (!PhaseDScopePolicy.admittedPlanProfile(planProfile)) {
+                System.err.println("[RustCraft] phase-d scope refused: plan profile '"
+                        + planProfile + "' is not admitted; keeping historical selection");
+            } else {
+                LiveCaptureScope overworld = PhaseDScopePolicy.overworldPerChunk(runtimeLoader, planProfile);
+                if (overworld == null) {
+                    System.err.println("[RustCraft] phase-d scope unavailable (registry unreadable"
+                            + " or wider than the u16 transport); keeping historical selection");
+                } else {
+                    scope = overworld;
+                }
+            }
+        }
         LivePacketCapture.installSourceFactory(scope == null ? null
-                : scope.sourceFactory(Thread.currentThread().getContextClassLoader()));
+                : scope.sourceFactory(runtimeLoader));
         LiveWriterGate gate = new LiveWriterGate(Thread.currentThread());
         PrivateBuildTickets tickets = new PrivateBuildTickets(gate);
         LiveChunkBindings bindings = new LiveChunkBindings(gate, tickets);
         gate.attach(tickets, bindings);
         gate.enable();
         session = new Session(gate, tickets, bindings);
+        establishPhaseDJournal(scope, runtimeLoader);
+    }
+
+    /**
+     * Phase-D session establishment: the SessionCompatibilityContract is
+     * created ONCE here (registry facts read reflectively, one pass) and the
+     * journal binds to it. No per-packet work happens in this method; when
+     * the facts are unavailable the journal stays unbound and the consumer
+     * keeps its historical behavior. Never throws: the shadow path fails
+     * toward evidence, not toward behavior change.
+     */
+    private static void establishPhaseDJournal(LiveCaptureScope scope, ClassLoader runtimeLoader) {
+        try {
+            String processId = System.getProperty("rustcraft.session.processId");
+            String sessionId = System.getProperty("rustcraft.session.transformationSessionId");
+            if (processId == null || sessionId == null || scope == null) return;
+            PhaseDScopePolicy.RegistryFacts facts = PhaseDScopePolicy.registryFacts(runtimeLoader);
+            if (facts == null) return;
+            SessionCompatibilityContract contract = SessionCompatibilityContract.establish(
+                    processId, sessionId, scope.profileId,
+                    facts.size, facts.widthBits, facts.digestSha256);
+            String out = System.getProperty("rustcraft.liveShadowOut", "live-shadow-events.jsonl");
+            String journalPath = System.getProperty("rustcraft.liveShadowJournal",
+                    java.nio.file.Paths.get(out).toAbsolutePath().resolveSibling(
+                            "shadow-journal.jsonl").toString());
+            ShadowEventJournal bound = ShadowEventJournal.bind(contract, journalPath);
+            if (bound == null)
+                System.err.println("[RustCraft] phase-d journal could not bind; "
+                        + "shadow outcomes will keep the historical counters only");
+        } catch (Throwable failure) {
+            System.err.println("[RustCraft] phase-d session establishment failed: " + failure);
+        }
     }
 
     public static void diagnosticSessionEnd(Throwable throwable) {

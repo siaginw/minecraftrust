@@ -74,8 +74,16 @@ public final class LiveCaptureScope {
         if (generatorClass == null && (!detachedDiagnostic || !"ABSENT_DETACHED_DIAGNOSTIC".equals(generatorFamily)))
             throw new IllegalArgumentException("absent generator requires explicit detached diagnostic policy");
         if (generatorClass != null) text(generatorClass);
-        if (generatorClass != null && (!"MINECRAFT_1_12_FLAT".equals(generatorFamily)
-                || !"net.minecraft.world.gen.ChunkGeneratorFlat".equals(generatorClass)))
+        // Explicitly enumerated generator surfaces. Phase D admits the vanilla
+        // Overworld generator in addition to the historical flat campaign
+        // surface: join-probe worlds generate Overworld terrain. Each family
+        // names exactly one accepted implementation class; anything else is
+        // unimplemented, not inferred.
+        if (generatorClass != null && !(
+                ("MINECRAFT_1_12_FLAT".equals(generatorFamily)
+                        && "net.minecraft.world.gen.ChunkGeneratorFlat".equals(generatorClass))
+                || ("MINECRAFT_1_12_OVERWORLD".equals(generatorFamily)
+                        && "net.minecraft.world.gen.ChunkGeneratorOverworld".equals(generatorClass))))
             throw new IllegalArgumentException("unimplemented generator family");
     }
 

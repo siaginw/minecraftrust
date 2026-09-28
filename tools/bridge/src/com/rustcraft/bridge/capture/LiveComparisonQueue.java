@@ -121,6 +121,9 @@ public final class LiveComparisonQueue {
         } while (!HIGH_WATER_BYTES.compareAndSet(seenBytes, bytes));
     }
 
+    /** Phase-D receipt fact: the configured bound (constant for the JVM). */
+    public static int capacityForReceipt() { return CAPACITY; }
+
     /** Session-end clear: only reachable on a fully quiesced diagnostic shutdown. */
     static void clearForSessionEnd() {
         QUEUE.clear();
