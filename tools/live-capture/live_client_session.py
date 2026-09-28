@@ -26,10 +26,39 @@ SB_TELEPORT_CONFIRM = 0x00
 SB_CLIENT_SETTINGS = 0x04
 SB_KEEP_ALIVE = 0x0B          # 1.12.2 serverbound Keep Alive
 SB_PLAYER_POSITION = 0x0D     # 1.12.2 serverbound Player Position
+SB_CUSTOM_PAYLOAD = 0x09      # 1.12.2 serverbound Custom Payload
 
 
 def varint_wrap(n):
     return probe.varint(n)
+
+
+def handle_fml(c, chan, body, summary):
+    """Minimal FML|HS client: accept the server mod list, ack the phases, and
+    ride out the registry stream. Keeps the vanilla-protocol probe admissible
+    on modded Forge servers that require the FML marker."""
+    if chan != b"FML|HS" or not body:
+        return False
+    disc = body[0]
+    if disc == 0:  # ServerHello -> ClientHello + empty ModList
+        c.send(SB_CUSTOM_PAYLOAD, s("FML|HS") + b"\x01\x02")
+        c.send(SB_CUSTOM_PAYLOAD, s("FML|HS") + b"\x02" + varint_wrap(0))
+        summary["fml"] = "hello-acked"
+        return True
+    if disc == 2:  # server ModList -> Ack(2)
+        c.send(SB_CUSTOM_PAYLOAD, s("FML|HS") + b"?\x02")
+        summary["fml"] = "modlist-acked"
+        return True
+    if disc == 3:  # RegistryData stream -> Ack(3) on the final packet
+        has_more = body[1] if len(body) > 1 else 0
+        if not has_more:
+            c.send(SB_CUSTOM_PAYLOAD, s("FML|HS") + b"\xff\x03")
+            summary["fml"] = "registry-acked"
+        return True
+    if disc == 0xFF:
+        summary["fml"] = "server-ack-" + str(body[1] if len(body) > 1 else -1)
+        return True
+    return False
 
 
 def run_session(port: int, duration_s: int, move: bool, sink_path: str,
@@ -38,7 +67,7 @@ def run_session(port: int, duration_s: int, move: bool, sink_path: str,
     summary = {"joined": False, "chunkPackets": 0, "keepAlives": 0,
                "teleports": 0, "positionsSent": 0, "errors": [], "frames": 0}
     c = probe.Conn(probe.HOST, port)
-    c.send(0x00, varint_wrap(probe.PROTO) + probe.s("localhost") + struct.pack(">H", port) + varint_wrap(2))
+    c.send(0x00, varint_wrap(probe.PROTO) + probe.s("localhost\0FML\0") + struct.pack(">H", port) + varint_wrap(2))
     c.state = "LOGIN"
     fl = probe.fl
     with open(sink_path, "w") as sink:
@@ -55,6 +84,11 @@ def run_session(port: int, duration_s: int, move: bool, sink_path: str,
                 summary["errors"].append("closed: %s" % closed)
                 break
             summary["frames"] += 1
+            if c.state == "PLAY" and pid == 0x18:  # CustomPayload: FML|HS ride
+                chan, off = probe.read_str(p)
+                if handle_fml(c, chan, p[off:], summary):
+                    summary["fmlHandled"] = summary.get("fmlHandled", 0) + 1
+                    continue
             if c.state == "LOGIN":
                 if pid == 0x03:
                     c.compressed = True
@@ -133,3 +167,4 @@ if __name__ == "__main__":
         spawn = {"x": parts[0], "y": parts[1], "z": parts[2]}
     print(json.dumps(run_session(port, duration, move, sink, out, spawn_pos=spawn,
                                  direction=direction)))
+# MARKER_TEST
