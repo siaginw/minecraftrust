@@ -197,6 +197,29 @@ ignored, not currently called by any lane):
 - `tools/guarded-runtime-experiment/`
 - `tools/retention-audit/`
 
+### Branches and worktrees
+
+`main` is the active development line; the hardened branch that built V2 was
+fast-forwarded onto it and then retired (it added nothing but the V2 work, and
+`main` had no unique commits to lose).
+
+Historical lines are kept as archival references, not deleted:
+
+- `archive/issue1-jni-v2` — the Issue #1 / Revelation V1 committed line.
+- `archive/revelation-v1-shadow` — the two uncommitted Revelation V1
+  prototypes, preserved byte-for-byte in one commit.
+- `archive/pre-hardening-main` (tag) — local `main` before the promotion.
+
+`D:\minecraftrust` is retained as an **archived** worktree, not an active one.
+It is kept because its ignored `target/` and `.rustcraft-local/` directories
+hold roughly a thousand files of V1 campaign evidence — receipts, logs and
+build outputs — that exist nowhere else and are not in git, so removing the
+directory would destroy them. Its two intentional uncommitted sources are
+already preserved in `archive/revelation-v1-shadow`; everything else untracked
+there is `__pycache__`.
+
+The V2 checkpoint is tagged `rustcraft/revelation-v2-offline-qualified`.
+
 ---
 
 ## ROADMAP
