@@ -199,7 +199,11 @@ public final class TransformationChainEvidence {
             String json = evidence[evidence.length - 1];
             if (!first) out.append(',');
             first = false;
-            out.append(canonicalString(definition.binaryName)).append(':').append(json);
+            // Keyed by the INTERNAL name. The engine keys its class inventory
+            // that way and compares the certificate set against it directly,
+            // without normalising -- so a dotted key here is a class the engine
+            // concludes was never certified.
+            out.append(canonicalString(definition.binaryName.replace('.', '/'))).append(':').append(json);
         }
         return out.append('}').toString();
     }
