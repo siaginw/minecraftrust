@@ -109,22 +109,24 @@ class Frame:
     def _write_frame(self, payload: bytes) -> None:
         if self.threshold >= 0:
             import zlib
-            # Once compression is enabled every frame carries a data-length
-            # varint: 0 when the body is sent uncompressed (below threshold),
-            # the compressed size otherwise. THE OUTER PACKET LENGTH MUST COUNT
-            # THAT VARINT. It previously did not, so the server's frame decoder
-            # consumed one byte too few, orphaned the final payload byte, and
-            # FML received a one-byte handshake message whose fromBytes then
-            # read from an empty remainder -- the exact "empty buffer" failure
-            # every live probe died of. Found by replaying the emitted frame
-            # through the real vanilla decoder, not by inspection.
+            # Ground truth: vanilla's compression encoder (gv) and decoder
+            # (gu). Every frame carries a data-length VarInt: 0 for the
+            # passthrough branch, and the UNCOMPRESSED SIZE for the compressed
+            # branch -- never the compressed size. The decoder allocates
+            # new byte[dataLength] and calls Inflater.inflate ONCE, not in a
+            # loop, so a dataLength naming the compressed size silently
+            # truncates the decompressed packet to that many bytes. That was
+            # the Revelation ModList failure: 3847 packet bytes truncated to
+            # the declared 2282, leaving FML ~2273 payload bytes.
+            # The OUTER packet length counts everything after it: the
+            # data-length VarInt plus the (possibly compressed) body.
             if len(payload) < self.threshold:
                 body = varint(len(payload) + 1) + varint(0) + payload
             else:
                 compressor = zlib.compressobj(1)
                 compressed = compressor.compress(payload) + compressor.flush()
-                header_len = len(varint(len(compressed)))
-                body = varint(len(compressed) + header_len)                     + varint(len(compressed)) + compressed
+                header = varint(len(payload))
+                body = varint(len(header) + len(compressed)) + header + compressed
         else:
             body = varint(len(payload)) + payload
         self.sock.sendall(body)
@@ -138,17 +140,18 @@ class Frame:
             raise ValueError("frame length out of bounds: %d" % length)
         data = self._read_exact(length)
         if self.threshold >= 0:
+            # The declared length is the UNCOMPRESSED size (see _write_frame);
+            # the decoder trusts it for its allocation, so we verify against it.
             expected, offset = read_varint(data)
             if expected == 0:
-                # Uncompressed frame: the packet-length prefix counts the
-                # data-length varint, so `offset` bytes are overhead and the
-                # payload is the remainder -- NOT the whole frame.
                 payload = data[offset:]
             else:
                 import zlib
                 payload = zlib.decompress(data[offset:])
                 if len(payload) != expected:
-                    raise ValueError("decompressed length mismatch")
+                    raise ValueError(
+                        "decompressed %d bytes; frame declared %d -- a mismatch "
+                        "means one side is using the compressed size" % (len(payload), expected))
         else:
             payload = data
         if not payload:
