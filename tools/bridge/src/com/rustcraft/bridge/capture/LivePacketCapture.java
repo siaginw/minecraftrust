@@ -162,6 +162,9 @@ public final class LivePacketCapture {
         if (session == null) {
             return null; // default OFF: inert, nothing allocated
         }
+        // The Phase-D overworld scope binds at the FIRST capture, when a real
+        // server's registries are final (see LiveWriterHooks).
+        LiveWriterHooks.establishPhaseDShadowIfPending();
         long beginStart = System.nanoTime();
         SEEN.incrementAndGet();
         if (chunk == null || packet == null || (filter & ~0xFFFF) != 0) {

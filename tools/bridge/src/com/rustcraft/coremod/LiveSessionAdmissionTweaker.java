@@ -45,6 +45,9 @@ public final class LiveSessionAdmissionTweaker implements ITweaker {
 
     @Override
     public void injectIntoClassLoader(LaunchClassLoader cl) {
+        System.err.println("[RustCraft] admission tweaker inject: target="
+                + delegate.getLaunchTarget() + " diagnostic="
+                + Boolean.getBoolean("rustcraft.liveWriterDiagnostic"));
         // Before ANY class can flow through the loader during the delegate's
         // own processing: the writers defer every bootstrap class until this
         // target -- the first class launchwrapper loads after the chain is
@@ -88,6 +91,17 @@ public final class LiveSessionAdmissionTweaker implements ITweaker {
                 cl.registerTransformer(name);
             }
             registerEvidenceFlushHook(sessionBound);
+            // The shadow consumer starts here in the tweaker launch shape
+            // (the coremod shape starts it in injectData). It requires the
+            // DLL property; without it this is an admission-only launch.
+            if (System.getProperty("rustcraft.liveShadowDll") != null) {
+                try {
+                    com.rustcraft.bridge.capture.LiveShadowCampaignConsumer.start();
+                } catch (Throwable consumerFailure) {
+                    System.err.println("[live-capture] consumer failed to start: "
+                            + consumerFailure);
+                }
+            }
         } catch (Throwable failure) {
             System.err.println("[RustCraft] live session admission tweaker failed: " + failure);
         }

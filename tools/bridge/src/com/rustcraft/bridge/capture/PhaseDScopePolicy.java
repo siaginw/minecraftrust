@@ -113,24 +113,79 @@ public final class PhaseDScopePolicy {
                                               java.io.PrintStream diagnostics) {
         try {
             Class<?> block = Class.forName("net.minecraft.block.Block", false, runtimeLoader);
-            Field registryField = block.getDeclaredField("field_176229_d");
-            registryField.setAccessible(true);
-            Object registry = registryField.get(null);
+            // The registry the SCOPE BINDING will read is Block.field_176229_d
+            // by NAME (LiveCaptureScope.currentRegistry); the facts MUST come
+            // from the very same field or the derived width disagrees with the
+            // binding's own computation (measured: STATE_WIDTH_MISMATCH when
+            // a by-type scan happened to pick a different ObjectIntIdentityMap
+            // static). The name lookup is validated by reading the backing
+            // map through the ObjectIntIdentityMap class -- a wrong-typed
+            // value cannot pass it.
+            Class<?> mapClassProbe = Class.forName("net.minecraft.util.ObjectIntIdentityMap",
+                    false, block.getClassLoader());
+            Object registry = null;
+            try {
+                Field named = block.getDeclaredField("field_176229_d");
+                named.setAccessible(true);
+                Object value = named.get(null);
+                if (value != null && mapClassProbe.isInstance(value)) registry = value;
+            } catch (Throwable nameLookupFailed) {
+                // fall through to the type-matched scan
+            }
+            if (registry == null) {
+                for (Field candidate : block.getDeclaredFields()) {
+                    if (!Modifier.isStatic(candidate.getModifiers())) continue;
+                    if (!candidate.getType().getName().equals("net.minecraft.util.ObjectIntIdentityMap"))
+                        continue;
+                    candidate.setAccessible(true);
+                    Object value = candidate.get(null);
+                    if (value != null && mapClassProbe.isInstance(value)) { registry = value; break; }
+                }
+            }
+            if (registry == null) {
+                if (diagnostics != null) diagnostics.println(
+                        "[RustCraft] registry facts: no static ObjectIntIdentityMap field on Block");
+                return null;
+            }
             if (diagnostics != null) diagnostics.println(
                     "[RustCraft] registry facts: registry class = "
                             + registry.getClass().getName());
-            // Same declaring-class access the scope binding uses: the fields
-            // live on net.minecraft.util.ObjectIntIdentityMap, and lookup goes
-            // through the declaring class rather than the concrete object's
-            // class so a patched/subclassed runtime cannot hide them.
             Class<?> mapClass = Class.forName("net.minecraft.util.ObjectIntIdentityMap",
                     false, registry.getClass().getClassLoader());
-            Field mapField = mapClass.getDeclaredField("field_148749_a");
-            mapField.setAccessible(true);
-            Field listField = mapClass.getDeclaredField("field_148748_b");
-            listField.setAccessible(true);
+            Field mapField = null;
+            Field listField = null;
+            for (Field candidate : mapClass.getDeclaredFields()) {
+                candidate.setAccessible(true);
+                Class<?> type = candidate.getType();
+                if (type.getName().equals("java.util.IdentityHashMap") && mapField == null)
+                    mapField = candidate;
+                // The list's DECLARED type is java.util.List on this runtime
+                // (measured); matching ArrayList alone silently missed it.
+                if ((type.getName().equals("java.util.List")
+                        || type.getName().equals("java.util.ArrayList")) && listField == null)
+                    listField = candidate;
+            }
+            if (mapField == null || listField == null) {
+                if (diagnostics != null) {
+                    diagnostics.println(
+                            "[RustCraft] registry facts: backing map/list fields not found by type;"
+                            + " registry object class=" + registry.getClass().getName()
+                            + " loader=" + registry.getClass().getClassLoader());
+                    for (Field candidate : mapClass.getDeclaredFields())
+                        diagnostics.println("[RustCraft] registry facts: field "
+                                + candidate.getName() + " : " + candidate.getType().getName());
+                    for (Field candidate : block.getDeclaredFields())
+                        if (Modifier.isStatic(candidate.getModifiers()))
+                            diagnostics.println("[RustCraft] registry facts: Block static "
+                                    + candidate.getName() + " : " + candidate.getType().getName());
+                }
+                return null;
+            }
             Map<?, ?> map = (Map<?, ?>) mapField.get(registry);
             ArrayList<?> list = (ArrayList<?>) listField.get(registry);
+            if (diagnostics != null) diagnostics.println(
+                    "[RustCraft] registry facts: map.size=" + map.size()
+                    + " list.size=" + list.size() + " at=" + System.currentTimeMillis());
             if (map.getClass() != IdentityHashMap.class || list.getClass() != ArrayList.class) {
                 if (diagnostics != null) diagnostics.println(
                         "[RustCraft] registry facts: unexpected backing "

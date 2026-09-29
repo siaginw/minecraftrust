@@ -37,11 +37,18 @@ public final class LiveForgeCaptureSource implements LivePacketCapture.LiveCaptu
     public static LiveForgeCaptureSource forChunk(Object chunk, LiveChunkBindings.Binding binding,
             LiveWriterGate gate, int filter, LiveCaptureScope.RuntimeBinding runtime) {
         try {
-            if (chunk == null || binding == null || gate == null || runtime == null || (filter & ~0xffff) != 0)
+            if (chunk == null || binding == null || gate == null || runtime == null || (filter & ~0xffff) != 0) {
+                System.err.println("[RustCraft] forChunk null: chunk=" + (chunk == null)
+                        + " binding=" + (binding == null) + " gate=" + (gate == null)
+                        + " runtime=" + (runtime == null) + " filter=0x" + Integer.toHexString(filter));
                 return null;
+            }
             Object world = runtime.field(chunk, CHUNK, "field_76637_e", "Lnet/minecraft/world/World;");
             runtime.checkWorld(chunk, world);
             return new LiveForgeCaptureSource(chunk, world, binding, gate, filter, runtime);
+        } catch (LiveCaptureScope.ScopeFailure unsupported) {
+            System.err.println("[RustCraft] capture scope rejected chunk: " + unsupported.reason);
+            return null;
         } catch (Exception unsupported) { return null; }
     }
 

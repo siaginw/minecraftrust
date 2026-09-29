@@ -239,13 +239,15 @@ public final class LiveWriterHooks {
                 System.err.println("[RustCraft] phase-d scope refused: plan profile '"
                         + planProfile + "' is not admitted; keeping historical selection");
             } else {
-                LiveCaptureScope overworld = PhaseDScopePolicy.overworldPerChunk(runtimeLoader, planProfile);
-                if (overworld == null) {
-                    System.err.println("[RustCraft] phase-d scope unavailable (registry unreadable"
-                            + " or wider than the u16 transport); keeping historical selection");
-                } else {
-                    scope = overworld;
-                }
+                // A REAL server's block-state registry is NOT final at this
+                // point (measured: 5,485 vanilla states at bootstrap vs
+                // 157,010 after mod loading) -- the Phase-D scope and its
+                // compatibility contract bind LAZILY at the FIRST capture,
+                // when the runtime's registries are final. The session, gate
+                // and bindings still start here.
+                phaseDPending = planProfile;
+                System.err.println("[RustCraft] phase-d scope deferred to first capture"
+                        + " (registry not final at session start)");
             }
         }
         LivePacketCapture.installSourceFactory(scope == null ? null
@@ -256,7 +258,40 @@ public final class LiveWriterHooks {
         gate.attach(tickets, bindings);
         gate.enable();
         session = new Session(gate, tickets, bindings);
-        establishPhaseDJournal(scope, runtimeLoader);
+        if (phaseDPending == null) establishPhaseDJournal(scope, runtimeLoader);
+    }
+
+    /** Set when the Phase-D overworld scope is requested but the runtime's
+     *  registry is not final yet; cleared once lazily established. */
+    static volatile String phaseDPending;
+
+    /**
+     * Lazy Phase-D shadow establishment, invoked at the FIRST capture attempt
+     * (LivePacketCapture.begin). By then a real server has finished mod
+     * loading and the block-state registry is final; deriving the scope's
+     * width and the compatibility contract from the final registry is the
+     * only derivation the scope binding will agree with.
+     */
+    static void establishPhaseDShadowIfPending() {
+        String pending = phaseDPending;
+        if (pending == null || session == null) return;
+        synchronized (LiveWriterHooks.class) {
+            if (phaseDPending == null) return;
+            ClassLoader bridgeLoader = LiveWriterHooks.class.getClassLoader();
+            ClassLoader runtimeLoader = Thread.currentThread().getContextClassLoader();
+            LiveCaptureScope overworld =
+                    PhaseDScopePolicy.overworldPerChunk(runtimeLoader, phaseDPending);
+            if (overworld == null) {
+                System.err.println("[RustCraft] phase-d scope unavailable at first capture"
+                        + " (registry unreadable or wider than the u16 transport)");
+                phaseDPending = null;
+                return;
+            }
+            System.err.println("[RustCraft] phase-d scope established at first capture");
+            LivePacketCapture.installSourceFactory(overworld.sourceFactory(runtimeLoader));
+            establishPhaseDJournal(overworld, runtimeLoader);
+            phaseDPending = null;
+        }
     }
 
     /**

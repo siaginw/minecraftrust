@@ -106,6 +106,7 @@ public final class LiveCaptureScope {
                     if (runtime == null) runtime = bindRuntime(trustedRuntimeLoader);
                     return LiveForgeCaptureSource.forChunk(chunk, binding, gate, filter, runtime);
                 } catch (Exception unsupported) {
+                    System.err.println("[RustCraft] capture source factory rejected: " + unsupported);
                     return null;
                 }
             }
@@ -177,7 +178,9 @@ public final class LiveCaptureScope {
                 throw new ScopeFailure("REGISTRY_EXCEEDS_U16");
             }
             int bits = Math.max(9, 32 - Integer.numberOfLeadingZeros(size - 1));
-            if (bits != scope.stateWidthBits) throw new ScopeFailure("STATE_WIDTH_MISMATCH");
+            if (bits != scope.stateWidthBits) throw new ScopeFailure("STATE_WIDTH_MISMATCH"
+                    + ": binding sees " + size + " entries -> " + bits
+                    + " bits, scope pinned " + scope.stateWidthBits + " bits");
             if (!scope.perChunkStateIdLimit)
                 for (Integer id : aliases.values())
                     if (id < 0 || id >= (1 << scope.stateWidthBits))

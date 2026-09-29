@@ -27,7 +27,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
-from run_join_probe import launch, prepare_server, sha, stop, wait_for  # noqa: E402
+from run_join_probe import JAVA, launch, prepare_server, sha, stop, wait_for  # noqa: E402
 from join_probe import run_probe  # noqa: E402
 import taxonomy  # noqa: E402
 
@@ -51,6 +51,11 @@ def main() -> int:
     parser.add_argument("--post-done-settle-s", type=float, default=30.0)
     parser.add_argument("--stability-s", type=float, default=20.0)
     parser.add_argument("--boot-timeout-s", type=int, default=1800)
+    parser.add_argument("--admitted", action="store_true",
+                        help="launch through the V2 session-bound admission tweaker "
+                             "(the qualified session-bound plan must be admitted before "
+                             "any shadow capture can exist)")
+    parser.add_argument("--static-contract", type=Path, default=None)
     args = parser.parse_args()
 
     out = args.output.resolve()
@@ -73,6 +78,8 @@ def main() -> int:
     server, prepare_info = prepare_server(
         args.runtime_root, out, forge_jar=args.forge_jar, vanilla_jar=args.vanilla_jar,
         campaign_jar=args.campaign_jar.resolve(), world_source=None)
+    if args.admitted and args.srg_jar is not None:
+        args.srg_jar = args.srg_jar.resolve()
     # The JVM resolves -D paths against ITS working directory (the disposable
     # server copy); every artifact reference must be absolute.
     if args.srg_jar is not None:
@@ -81,15 +88,22 @@ def main() -> int:
     # FML discovers coremods by the FMLCorePlugin manifest in the MODS
     # directory, not the classpath: the campaign jar must live in mods/ for
     # the writers (and the shadow consumer) to load at all.
-    (server / "mods").mkdir(exist_ok=True)
-    shutil.copyfile(args.campaign_jar, server / "mods" / "rustcraft-live-coremod.jar")
+    if not args.admitted:
+        # The coremod shape loads via mods/; the admitted shape loads through
+        # the tweaker only (a second registration would duplicate writers).
+        (server / "mods").mkdir(exist_ok=True)
+        shutil.copyfile(args.campaign_jar, server / "mods" / "rustcraft-live-coremod.jar")
     # The shadow pipeline needs the DLL inside the disposable server copy.
     shutil.copyfile(args.dll, server / "rustcraft_ffi.dll")
     # run_join_probe's server.properties pins port 25599; the smoke runs on its
     # own port so it can never collide with a join probe.
     properties = (server / "server.properties").read_text()
+    # The Phase-D scope admits the VANILLA overworld generator; the pack's
+    # forge.cfg may default the world type to a modded generator. This world
+    # is ours and disposable: state the vanilla default explicitly.
     (server / "server.properties").write_text(
-        properties.replace("server-port=25599", "server-port=%d" % PORT))
+        properties.replace("server-port=25599", "server-port=%d" % PORT)
+        + ("level-type=DEFAULT" + chr(10) if args.admitted else ""))
 
     smoke_out = out / "live-shadow-events.jsonl"
     extra = [
@@ -102,11 +116,39 @@ def main() -> int:
         "-Drustcraft.liveShadowQueueMaxBytes=%d" % args.queue_max_bytes,
         "-Drustcraft.observationDir=" + str(server / "observation"),
     ]
+    if args.admitted:
+        extra = ["-Drustcraft.session.processId=" + session["process_id"],
+                 "-Drustcraft.session.transformationSessionId=" + session["session_id"],
+                 "-Drustcraft.srgJar=" + str(args.srg_jar)] + extra
+    if args.admitted:
+        # The V2 session-bound admission launch shape: the tweaker (not the
+        # coremod) bootstraps the session environment, entry observer and
+        # writers, and the runtime states its own profile claim. The writers
+        # must be ADMITTED for the session-bound plan before any shadow
+        # capture can exist.
+        import json as _json
+        extra += ["-Drustcraft.profile=" + _json.loads(
+            args.static_contract.joinpath("profile.json").read_text(encoding="utf-8"))["id"]
+            if args.static_contract else "FORGE_2846_FTB_REVELATION_3_4_0_SERVER_TRANSFORMED_OFFLINE_V1"]
 
     jvm_log = out / "server.log"
-    process = launch(server, jvm_log, srg_jar=args.srg_jar, session=session,
-                     forge_jar_name=args.forge_jar, vanilla_jar_name=args.vanilla_jar,
-                     extra_java_args=extra)
+    if args.admitted:
+        import os as _os
+        campaign = (server / "rustcraft-campaign.jar").resolve()
+        classpath = [str(campaign), str(server / args.forge_jar), str(server / args.vanilla_jar)]
+        classpath += [str(q) for q in sorted((server / "libraries").rglob("*.jar"))]
+        argv = [str(JAVA), "-Xmx6G", "-javaagent:" + str(campaign),
+                "-Dfml.queryResult=confirm",
+                "-Drustcraft.liveWriterDiagnostic=true"] + extra + [
+            "-cp", _os.pathsep.join(classpath),
+            "net.minecraft.launchwrapper.Launch", "--tweakClass",
+            "com.rustcraft.coremod.LiveSessionAdmissionTweaker", "--gameDir", str(server)]
+        process = subprocess.Popen(argv, cwd=str(server), stdout=jvm_log.open("wb"),
+                                   stderr=subprocess.STDOUT, stdin=subprocess.PIPE)
+    else:
+        process = launch(server, jvm_log, srg_jar=args.srg_jar, session=session,
+                         forge_jar_name=args.forge_jar, vanilla_jar_name=args.vanilla_jar,
+                         extra_java_args=extra)
 
     receipt: dict = {
         "schema": "RUSTCRAFT_V2_PHASE_D_LIVE_SHADOW_SMOKE_V1",

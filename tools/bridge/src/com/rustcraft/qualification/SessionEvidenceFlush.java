@@ -54,7 +54,7 @@ public final class SessionEvidenceFlush {
             // definitions. A chain that could only confirm itself would prove
             // nothing, so the engine is given both and may disagree with either.
             int boundDefinitions = LoaderTransformChain.bindDefinitions(
-                    loader, LiveHookSupport.boundAcquisition());
+                    loader, LiveHookSupport.boundAcquisition(), agentHashes());
             result.put("definitions_bound_to_classes", Integer.valueOf(boundDefinitions));
             result.put("downstream_transformers_after_live_writers",
                     LoaderTransformChain.downstreamTransformers());
