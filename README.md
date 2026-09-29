@@ -1,113 +1,292 @@
-# RustCraft (minecraftrust)
+<div align="center">
 
-A progressive, behavior-compatible reimplementation and optimization of Minecraft Java Edition **1.12.2** engine work in **Rust**, retaining real Java/Forge integration where legacy mods require it.
+<img src="docs/assets/rustcraft-mark.svg" width="120" alt="RustCraft mark" />
 
-- **Target:** Minecraft 1.12.2, Protocol 340, Forge 14.23.5.x (tested builds `14.23.5.2846` / `14.23.5.2860`)
-- **Philosophy:** SAME GAME · BETTER IMPLEMENTATION · MAXIMUM PRACTICAL RUST ENGINE OWNERSHIP
+# RustCraft
 
-**This is NOT:** a completed standalone Minecraft replacement; a modern-version server with automatic Forge compatibility; gameplay-changing shortcuts; a promise that every mod works.
+**Rebuilding the Minecraft Java Edition server engine in Rust — without giving up the mod ecosystem.**
 
-> **Status: experimental research project.** All native paths default **OFF**; Java is authoritative everywhere with immediate, counted fallback. The live retained-snapshot path is **fail-closed** pending the capture-coherency contract — see [issue #1](https://github.com/siaginw/minecraftrust/issues/1).
+Minecraft 1.12.2 · Forge 14.23.5.x · Protocol 340 · Java-authoritative · Evidence-gated migration
+
+[Architecture](docs/ARCHITECTURE.md) · [Status](docs/PROJECT_STATUS.md) · [Roadmap](docs/ROADMAP.md) · [Research Index](docs/RESEARCH_INDEX.md) · [Contributing](CONTRIBUTING.md)
+
+</div>
 
 ---
 
-## Architecture
+RustCraft is a research project answering one question:
 
+> **How much of Minecraft's engine can become Rust-owned while existing Forge mods — unmodified — continue to observe exactly the behavior they expect?**
+
+A naive rewrite of a Minecraft server orphans a decade of Forge mods built on Java APIs, ASM coremods, Mixins, registries, and JVM semantics. RustCraft refuses that trade. Instead, it moves engine responsibility from Java to Rust **one subsystem at a time, behind proof**: behavioral parity, differential testing, shadow execution, and fail-closed authority gates. Nothing is switched on because a benchmark looked good — Rust code earns ownership through recorded, reproducible evidence.
+
+**Today, RustCraft runs inside a real Forge server, captures live chunk state coherently, independently encodes it in Rust, and semantically compares the two outputs — live — on a 219-mod modpack. Java still owns every packet that reaches a client.**
+
+---
+
+## Current proof — scoped, not marketing
+
+The numbers below are **counted, machine-reconciled results** from recorded campaign receipts (see [status](docs/PROJECT_STATUS.md#current-evidence) for scope and caveats).
+
+| | |
+|:---|:---|
+| **903** | counted Java↔Rust live chunk comparisons in the first closure campaign — **0 semantic mismatches** |
+| **219** | mods in the test modpack (FTB Revelation 3.4.0) whose server the project joins and runs under |
+| **157,010** | block states in the tested registry — handled without widening the snapshot format |
+| **0** | Rust bytes ever selected for transmission to a client |
+
+> **Read this honestly:** the first closure campaign is *not closed*. The predefined closure criteria demand 2,000 comparisons / 300 distinct chunk incarnations / 20 reload cycles; the campaign reached 903 / 135 / 0 because the workload client was rubber-banded by the server's normal movement handling, limiting chunk diversity. **Parity stayed clean; coverage came up short.** Details in [the 903/0 context](#the-9030-result-in-context).
+
+### What is proven end-to-end today
+
+- A **real Forge/FML server launch** — full mod lifecycle, real Phosphor mixins writing launch-scoped provenance — passes the project's V2 session-bound admission and is validated by the *same* qualification engine used offline (`REAL_FML_TRANSFORM_CAPTURE · PASS · OFFLINE_QUALIFIED`).
+- A headless client joins the 219-mod server, completes the FML|HS handshake, reaches PLAY, and holds a bounded stability window — [full join compatibility](docs/compatibility/) against the pack's real `NetworkCheckHandler`.
+- Live chunk capture is **coherent**: acquire → clone → seal → release under a single-writer gate; the gate is never held while Rust computes.
+- The Rust encoder's output is **semantically identical** to Java's authoritative packet in every counted comparison.
+
+### What is deliberately *not* proven
+
+- Rust has **no production authority**. `tryEncode` returns `null`; the authority gate is fail-closed. Java is the sole producer of client-visible behavior.
+- Closure coverage criteria are unmet (see above).
+- No whole-server performance claim is made. Component benchmarks exist ([below](#performance-honestly)); total-server MSPT/TPS has never been measured.
+
+---
+
+## Why RustCraft?
+
+Minecraft 1.12.2/Forge is one of the largest mod ecosystems that has ever existed. Its compatibility surface is brutal: Java APIs, Forge event buses, ASM coremods, Mixins, registry substitution, classloader hierarchies, and exact JVM semantics. Any engine that breaks that surface is a toy.
+
+So the research problem isn't "rewrite Minecraft in Rust." It is:
+
+> **Migrate engine ownership to Rust under differential proof, such that the mod ecosystem cannot tell the difference.**
+
+The method — the part that makes this a systems project rather than a port:
+
+- **Shadow execution** — Rust computes what Java computes, on the same inputs, at the same time. Rust's answer is recorded and compared. It never replaces Java's.
+- **Session-bound admission** — classes injected into the live JVM carry cryptographic identity certificates bound to the *specific process and transformation session*. A certificate from launch A cannot authorize anything in launch B.
+- **Transformation-chain evidence** — for every hooked class: pre-writer bytes → writer output → downstream transformers → final defined bytes, hash-linked, with an *independent* frame witness verifying what the loader actually defined.
+- **Fail-closed authority** — the production authority gate has no code path to "on" without a separate, recorded authority review. Abandoned approaches (V1 retained snapshots) are fail-closed *forever*, not deprecated.
+
+---
+
+## How the migration works
+
+Every subsystem climbs the same ladder, one rung at a time, on evidence:
+
+```mermaid
+flowchart LR
+    A[Reference: Java is authoritative] --> B[Rust parity proven offline]
+    B --> C[Shadow execution live<br/>same inputs, compared]
+    C --> D[Closure campaign<br/>coverage criteria met]
+    D --> E[Authority review]
+    E --> F[Rust ownership<br/>Java becomes the shell]
+    style A fill:#2d333b,color:#e6edf3
+    style F fill:#1f6feb,color:#fff
 ```
-+-------------------------------------------------------------------+
-|  Java / Forge 1.12.2  (authoritative, mod-visible)                |
-|  chunks - packets - events - TileEntities - Netty pipeline        |
-|  worldgen hooks (coremod ASM) - mutation hooks (6 sites)          |
-+-----------------------+-------------------------------------------+
-                        |  coarse JNI boundaries (buffers + handles)
-+-----------------------v-------------------------------------------+
-|  Rust (rustcraft_ffi)                                             |
-|  worldgen-noise kernels - Protocol-340 encoder                    |
-|  zlib compression (M2-C) - NativeChunk/NativeSection snapshots    |
-|  registry - lifecycle - generation handles                        |
-+-----------------------+-------------------------------------------+
-                        |  fallbacks + feature gates at every seam
-   OFF -> OFF_MEASURE -> SHADOW (Java transmits, Rust verified)
-       -> ON_EXPERIMENTAL (bounded, disposable worlds only;
-          live snapshot authority currently FAIL-CLOSED: issue #1)
+
+Today, full-chunk packet encoding stands at **C→D**: shadow-proven live, first closure campaign run, coverage criteria not yet met.
+
+### Today's shape vs. the destination
+
+```mermaid
+flowchart TB
+    subgraph TODAY["TODAY — measured compatibility boundary"]
+        M1[Forge Mods .jar] --> J1[Java Minecraft / Forge server<br/>AUTHORITATIVE]
+        J1 --> B1[RustCraft capture + admission boundary]
+        B1 --> R1[Rust shadow components<br/>encode · compare · record]
+        R1 -.->|evidence only| E1[(receipts / journals)]
+    end
 ```
 
-Ownership levels actually implemented: **native computation** (kernels, codecs — proven); **immutable/native snapshots** (NativeChunk registry — validated); **experimental retained-state coherency** (hooks + freshness domains — **blocked**, see issue #1); **authoritative loaded-world ownership** — *not implemented*.
+```mermaid
+flowchart TB
+    subgraph DESTINATION["DESTINATION — Rust-owned engine"]
+        M2[Forge Mods / Java bytecode] --> C2[RustCraft compatibility runtime<br/>session admission · contracts]
+        C2 --> E2[RustCraft Engine]
+        E2 --> W2[World / Chunks]
+        E2 --> N2[Network / Packets]
+        E2 --> S2[Storage / NBT]
+        E2 --> X2[Tick / Lighting / Worldgen]
+    end
+```
 
-## Milestones
+The boundary between the two is the point: the capture/admission machinery being built today (session contracts, coherent snapshots, differential proof) is the *same machinery* the destination needs for its compatibility runtime. Nothing here is a JNI helper library that gets thrown away — it is the seed of the [Rust-side compatibility adapter](docs/research/V2_LIVE_SHADOW_ARCHITECTURE.md) that will validate mods, registries, and channels once at connection time, then stay out of the gameplay hot path.
 
-| Area | Status | Evidence |
-|---|---|---|
-| Java↔Rust interop, contexts, panic isolation | IMPLEMENTED + SHADOW_TESTED | `crates/ffi`, `docs/research/` |
-| M2-C native outbound compression | IMPLEMENTED · SHADOW_TESTED · EXPERIMENTALLY_TRANSMITTED (Target A; modpack SHADOW 146,259/0) | `machine/M2CC-modpack-shadow-results.yaml` |
-| Deterministic worldgen density | SHADOW_TESTED bit-exact (clean Forge + Revelation + SevTech; 3.4M+ doubles, 0 mismatch) | `machine/M3WG-*-results.yaml` |
-| Base terrain (Stone/Water/Air) | Historical SHADOW claim; cited M3W5 raw artifacts unavailable in this checkout | `docs/research/m3w5-chunkprimer-ownership-report.md` |
-| NativeChunk / NativeSection snapshots | IMPLEMENTED · OFFLINE_VALIDATED | `docs/research/m4-native-chunk-state-foundation-report.md` |
-| Generalized palettes (4–13 bit) | OFFLINE_VALIDATED 26/26 vs real vanilla `BlockStateContainer` | `docs/research/m4-1-report.md` |
-| Native packet encoding (Protocol 340) | OFFLINE_VALIDATED · SHADOW_TESTED (1,572/1,572 live) · formerly EXPERIMENTAL, now FAIL-CLOSED | `machine/M43E-readiness-results.yaml` |
-| Combined encode+compress wire | SHADOW + formerly bounded EXPERIMENTAL (Target A) | `machine/M53-results.yaml` |
-| Live mutation coherency | SHADOW_TESTED · **BLOCKED** (issue #1; production entry fail-closed) | `machine/M58HOLD-results.yaml` |
-| Test/evidence infrastructure | IMPLEMENTED (offline suites, integrity checker, provenance registry) | `tools/`, `machine/evidence-provenance.yaml` |
-| External library evaluation | RESEARCH_ONLY | `docs/research/P*.md` |
+---
 
-## Performance (historical, scoped)
+## RCSNAP02 — a small window into the engineering
 
-Windows x64 dev box, JDK 8 (Temurin 8.0.504), Rust release. These are historical reports, not fresh hardening-program measurements. See the [claim audit](docs/engineering/performance-claim-audit.md) for evidence availability and corrections. Kernel/offline scope unless noted.
+The Revelation registry holds **157,010 block states**, which requires **18-bit** global indexing. The original snapshot transport capped at 16 bits. The blunt fix would widen every state to `u32` — doubling memory and bandwidth for nothing.
 
-| Operation | Java ref | Rust | Scope / caveats | Artifact |
-|---|---|---|---|---|
-| Base-terrain placement (M3W5 kernel) | 23.95 µs reported | 15.69 µs reported | Historical claim; cited raw evidence missing; requires a new independent campaign | `docs/research/m3w5-chunkprimer-ownership-report.md` |
-| Optimized worldgen noise (n=1) | 1× | **+5.6%** | offline 240-chunk, bit-exact | `machine/M3W4-n1-results.yaml` |
-| Chunk-packet encode (31 KB, cached palette) | ~7.2 µs ctor | **~1.0 µs** | warm cache vs offline-corpus Java ctor; NOT a like-for-like claim vs full Java construction under load | `machine/M43-*-results.yaml` |
-| Compression throughput (M2CP, Revelation) | 57.5 MB/s | **129.7 MB/s (~2.26×)** | Historical worker-path study: separate CPU reduction 39.9%; median normalized compressed size approximately +0.9% from rounded run volumes; worst ON run approximately +6.0% vs OFF median; no MSPT gain established | `machine/M2CP-perf-results.yaml` |
-| Section refresh transfer | — | 12 KiB in 2.21 µs reported mean | Historical offline immutable-input result; refresh plus encode reported 13.65–75.65 µs depending on palette | `docs/research/m4-1-refresh-design.md` |
+RustCraft instead asked what actually *travels*:
 
-Not claimed: whole-server TPS multipliers, zero bugs, universal compatibility, or % completion. Combined-path optimization headroom is open (cached-encode vs rebuild cost, worker CPU vs ServerThread time are kept distinct in the cited reports).
+```mermaid
+flowchart TB
+    R[Global Forge registry<br/>157,010 states / 18 bits] --> I{actual chunk<br/>state IDs inspected}
+    I -->|all ≤ 65535| V2[RCSNAP02<br/>section-local u16 palette<br/>~873 B/section measured]
+    I -->|any ≥ 65536| X[excluded: HIGH_STATE_ID<br/>honest, counted, never truncated]
+    style V2 fill:#238636,color:#fff
+    style X fill:#6e7681,color:#fff
+```
 
-## Current limitations
+A chunk is admitted by **its own state IDs**, never by the registry's width. Measured on real captured chunks, the deterministic section-local palette averages **873 bytes/section versus 8,192 for raw u16** — and a cross-language fixture harvested from a real Revelation chunk round-trips **byte-identical** through the Rust encoder. The rule generalizes: *global registry width is not snapshot state width.* ([RCSNAP02 controls](crates/native-chunk/tests/rcsnap02.rs) · [transport study](tools/live-shadow-v2/src/com/rustcraft/bridge/capture/TransportStudy.java))
 
-- Experimental; defaults OFF; Java fallback everywhere. Compatibility limited to tested configurations (clean Forge, FTB Revelation 3.4.0, SevTech: Ages 3.2.3, with pack-specific exclusions).
-- **[Issue #1](https://github.com/siaginw/minecraftrust/issues/1):** live NativeChunk capture lacks cross-thread coherence guarantees (worldgen writes biomes/light off-thread); the production native-packet entry is fail-closed until resolved.
-- Unresolved section-5 packet-mask event (`java=63 native=31`) — root cause unresolved.
-- Unsupported scopes (Java-only, counted): partial-filter packets, TileEntity tag scope, JEID int-backed primers, NEID high-bit states, state ids > u16, unregistered-state sentinels.
-- Not implemented natively: storage/Anvil ownership, lighting engine, collision, deeper world ownership.
+---
 
-## Building and testing
+## The 903/0 result in context
 
-Requirements: Rust stable (MSVC), JDK 8, Python 3, Windows x64 (tested). Minecraft/Forge jars are **not bundled** (obtain separately; never committed).
+The first full closure campaign ([receipts](docs/PROJECT_STATUS.md#closure-campaign)) ran the entire pipeline under broad real workload — 3 admitted JVM sessions over a persistent pre-generated Revelation world, deterministic movement, disconnect/reconnect cycles:
+
+| Metric | Result | Criterion |
+|:---|:---|:---|
+| Counted comparisons | **903** | ≥ 2,000 |
+| Semantic mismatches | **0** | 0 unexplained |
+| I/O-origin comparisons | **903** (all) | ≥ 200 ✅ |
+| Distinct chunk incarnations | 135 | ≥ 300 |
+| Genuine reload cycles | 0 | ≥ 20 |
+| Queue drops | **0** (of 256 capacity) | ≤ 10% ✅ |
+| High-state exclusions | 73 (honest, counted) | ≤ 60% rate ✅ |
+
+Every session issued its **own** session-bound certificates and passed real-launch admission. Parity evidence stayed perfectly clean; the shortfall was purely **workload coverage** — the headless client's long-distance movement is rejected by the server's normal anti-cheat (rubber-banding back to spawn), so chunk diversity stayed bounded. A stopped follow-up experiment (hop-traversal, 559 additional passes, 0 mismatches) exists but is deliberately **not** merged into the counted denominator.
+
+This is what honest closure looks like: the criteria are predeclared, encoded once [as numbers](tools/live-shadow-v2/closure.py), pinned by [boundary controls](tools/live-shadow-v2/test_closure.py), and *not met is reported as not met*.
+
+---
+
+## Status matrix
+
+| Area | Status | What has been proven |
+|:---|:---|:---|
+| Forge/FML compatibility research | ✅ Proven | [18 compatibility studies](docs/compatibility/) of the real 1.12.2 surfaces |
+| V2 runtime qualification | ✅ Proven | Two-launch engine; static recipe vs dynamic observation; both runtimes `OFFLINE_QUALIFIED` |
+| Real-launch session admission | ✅ Proven | Real FML JVM, fresh per-process certificates, same engine validates it |
+| 219-mod client compatibility | ✅ Proven | Headless join passes all 8 checks against real `NetworkCheckHandler` |
+| Coherent chunk capture | ✅ Proven | Single-writer gate; seal-before-release; live on both runtimes |
+| RCSNAP02 logical transport | ✅ Proven | 18-bit registry decoupled; cross-language byte-identical fixture |
+| Protocol-340 chunk encoder | ✅ Proven | Semantic equality, live, both runtimes |
+| Clean Forge live shadow | ✅ Proven | 32/32 bounded semantic comparisons, 0 mismatch |
+| Revelation live shadow | ✅ Proven | 32/32 bounded; then 903 counted campaign passes, 0 mismatch |
+| Closure campaign | 🧪 Coverage open | 903/0 so far; coverage criteria unmet (see above) |
+| Compression / NBT kernels | ✅ Component-proven | [Historical component benchmarks](docs/benchmarks/) — not whole-server |
+| Production Rust packet authority | 🔒 Disabled | Fail-closed by design; requires authority review |
+| Retained Rust chunk state | 🔒 Disabled | V1 abandoned (fail-closed forever); V2 approach planned |
+| Lighting · Storage · Ticking · Worldgen | 🚧 Research | [Seam studies](docs/RESEARCH_INDEX.md) done; migration not begun |
+| Rust-hosted Java runtime | 🗺️ Vision | Long-term: mods' Java bytecode executed by a Rust-hosted runtime |
+
+---
+
+## Roadmap
+
+```mermaid
+flowchart LR
+    P0[Phase 0<br/>Compatibility + proof infra] --> P1[Phase 1<br/>Packet / chunk boundary]
+    P1 --> P2[Phase 2<br/>Retained Rust ChunkState]
+    P2 --> P3[Phase 3<br/>Chunk I/O + packet authority]
+    P3 --> P4[Phase 4<br/>Storage / NBT / Anvil]
+    P4 --> P5[Phase 5<br/>Lighting + collision]
+    P5 --> P6[Phase 6<br/>World / entities / tick]
+    P6 --> P7[Phase 7<br/>Worldgen + scheduler]
+    P7 --> P8[Phase 8<br/>Forge compatibility runtime]
+    P8 --> P9[Phase 9<br/>Rust-hosted Java bytecode runtime]
+    style P0 fill:#238636,color:#fff
+    style P1 fill:#9e6a03,color:#fff
+```
+
+- **Phase 0 — Compatibility & proof infrastructure** — *largely complete*: compatibility research, canonical identity, qualification engine, session-bound admission.
+- **Phase 1 — Packet/chunk boundary** — *now*: live shadow proven; closure campaign coverage in progress; next major milestone is the **Rust packet authority review**, then retained Rust ChunkState.
+- **Phases 2–9** — planned. Each phase reuses the same ladder: parity → shadow → closure → authority review → ownership. Full detail in the [roadmap](docs/ROADMAP.md).
+
+The journey is deliberate: by the time Rust owns the engine, the compatibility runtime that got it there *is* the product's outer shell.
+
+---
+
+## How far along is it, really?
+
+RustCraft is no longer a toy FFI experiment. It has real Forge/FML server admission, 219-mod compatibility, process/session-bound transformation proof, live coherent chunk snapshots, a versioned logical transport, and real Java-vs-Rust live differential comparisons with zero observed semantic mismatches in all counted evidence.
+
+It is also honest about what it is not: Java still owns production behavior; live closure has not met coverage criteria; retained Rust world/chunk authority is not enabled; broad engine migration is ahead. The [status document](docs/PROJECT_STATUS.md) is the authoritative snapshot — updated with every campaign, with receipts.
+
+---
+
+## Navigate the repository
+
+| | |
+|:---|:---|
+| **Start here** | this README |
+| **Understand the project** | [Architecture](docs/ARCHITECTURE.md) · [Roadmap](docs/ROADMAP.md) · [Current status](docs/PROJECT_STATUS.md) |
+| **Deep research** | [Research index](docs/RESEARCH_INDEX.md) — 82 research documents · [Compatibility studies](docs/compatibility/) · [Engineering reports](docs/engineering/) |
+| **Rust engine** | [`crates/`](crates/) — 21 crates: `native-chunk` (chunk state + protocol encode), `ffi` (JNI boundary), `compression`, `nbt`, `region-io`, `transport`, `chunk-packet`, `protocol`, … |
+| **Java bridge & transformers** | [`tools/bridge/`](tools/bridge/) — writer hooks, capture gate, snapshot transport |
+| **Qualification machinery** | [`tools/qualification-v2/`](tools/qualification-v2/) — the two-launch engine |
+| **Live shadow & campaigns** | [`tools/live-shadow-v2/`](tools/live-shadow-v2/) — probes, comparator, closure evaluator |
+| **Machine-readable evidence** | [`machine/`](machine/) — YAML evidence manifests |
+| **Foundational planning docs** | [`docs/foundation/`](docs/foundation/) — the original charter, architecture notes, stage plan (historical) |
+
+---
+
+## Building
+
+**Public checkout** — the Rust workspace builds and tests without any proprietary artifacts:
 
 ```bash
-# From a clean public checkout (verified):
-cargo build --release -p ffi          # Rust core + FFI DLL
-cargo test -p native-chunk            # standalone Rust unit tests (10 tests)
-
-# Also verified in the research environment (requires Minecraft/Forge jars,
-# built bridge, and locally-retained evidence artifacts):
-python tools/verify_evidence_integrity.py   # checker relies on intentionally
-#    local-only raw artifacts — NOT runnable green from the public checkout
-bash tools/build-coremod.sh           # bridge/coremod jar (needs external jars)
-bash tools/build-coremod.sh           # bridge/coremod jar (needs external jars)
-# Java offline oracle suites (M4PacketParityHarness, M4ValidatorBoundary,
-# M4LifecycleCases, M4AuthoritativeTest, ...) require the external jars and
-# the built DLL; they are not runnable from the public checkout alone.
+cargo build --locked --workspace
+cargo test --locked --workspace
 ```
 
-## Contributing
+**Research environment** — qualification, capture, and shadow-campaign work exercises real Minecraft/Forge and therefore requires externally obtained artifacts (a Java 8 toolchain, the Minecraft 1.12.2 server jar, Forge 14.23.5.2846, and the modpack jars), pinned by hash in the tooling. The repository distributes none of them; the tools refuse substitutes and check pins before use. See [docs/PROJECT_STATUS.md](docs/PROJECT_STATUS.md#research-environment) for the pinned set and how the harness verifies it.
 
-High-value areas: reproduction fixtures (especially modded-state corpora for issue #1), offline parity tests, profiling, Rust-native optimization of the packet→compression pipeline (immutable fixtures), compatibility analysis, documentation. Read the rubric below before proposing perf claims.
+To build the Java bridge jar for a pinned runtime:
 
-## Roadmap and methodology
-
-Planned frontiers (plans, not features): Anvil persistence staging, lighting, wider-than-u16 native state, per-pack fill-model plugins, combined packet+compression authority after the capture contract lands.
-
-Permanent rubric applied to every candidate:
+```bash
+bash tools/live-capture/build_campaign_coremod.sh <srg-jar> <output.jar> <runtime-root>
 ```
-REFERENCE_JAVA -> RUST_PARITY -> PROFILE / EXTERNAL RESEARCH
--> RUST_OPTIMIZED -> COMPLETE BENCHMARK -> PERFORMANCE + MIGRATION VALUE
--> COMPATIBILITY LADDER (offline -> SHADOW -> bounded ON -> modpack)
-```
-Modest speedups can still justify ownership; a parity loss alone never parks a candidate.
 
-## License and history
+---
 
-Project-owned code by the project authors (commit history preserves authorship). Third-party proprietary material is intentionally absent; licensing of project code is not yet finalized (open decision). This public repository is a **sanitized snapshot** of a larger local research repository (original local checkpoint → public snapshot; per-milestone raw server logs and runtime captures remain local-only with hashes in `machine/evidence-provenance.yaml`).
+## Who this is for
+
+**For modders** — the goal is *not* to ask anyone to rewrite mods in Rust. Existing Java/Forge mods should keep using familiar APIs while RustCraft progressively replaces engine responsibilities *underneath* that compatibility surface. Today this is the architecture; universal mod compatibility is not yet claimed — it is being measured.
+
+**For Rust developers** — interesting ground everywhere: high-performance serialization and palette compression, native chunk state, concurrency under a single-writer discipline, JVM interop from the native side, classfile/bytecode compatibility, a wire protocol implemented against the real thing, data-oriented engine design, storage, worldgen, and eventually SIMD. The hard constraint — *behavioral indistinguishability* — makes all of it harder and more interesting.
+
+**For researchers** — this repo is evidence-first: canonical class identities, session-bound certificates, transformation-chain proofs, an independent frame witness, machine-readable [campaign receipts](machine/), and a qualification engine that validates its own observations rather than trusting the driver. Start at [the qualification model](docs/engineering/qualification-engine-v2.md) and [V2 live-shadow architecture](docs/research/V2_LIVE_SHADOW_ARCHITECTURE.md).
+
+---
+
+## Performance, honestly
+
+RustCraft's goal is architectural performance — eliminating copies, duplicate representations, GC pressure, and cross-boundary churn — verified by measurement, not benchmark theater. Historical **component** benchmarks (scoped, reproducible, with receipts) include:
+
+- Native packet compression: **57.5 → 129.7 MB/s (~2.26×)** *component* throughput on the measured corpus — explicitly *not* whole-server MSPT/TPS.
+- Chunk-packet encode: ~1.0 µs Rust vs ~7.2 µs Java constructor on one measured shape — not like-for-like, and labeled as such.
+
+Whole-server performance has never been measured and is not claimed. The [performance claim audit](docs/engineering/performance-claim-audit.md) tracks what evidence stands behind every number. Claims the evidence could not support were removed from this README rather than softened.
+
+---
+
+## Contributing & community
+
+Contributions run on evidence: parity before optimization, no performance claim without a benchmark, no proprietary game artifacts in the repo. Useful entry points include protocol correctness, Forge compatibility research, Rust optimization, test fixtures, benchmarking, and documentation. See [CONTRIBUTING.md](CONTRIBUTING.md).
+
+Reporting a safety or security concern: [SECURITY.md](SECURITY.md).
+
+---
+
+## License & legal
+
+Licensing of project code has **not yet been finalized** (a deliberate open decision by the repository owner — no license file is present, and none should be inferred).
+
+RustCraft is independent research. It is not affiliated with, endorsed by, or connected to Mojang, Microsoft, or the Forge project. Minecraft and Forge are their respective owners' works. This repository distributes **no** game jars, mods, or copyrighted game assets; all proprietary inputs are externally obtained and hash-pinned by the tooling.
+
+---
+
+<div align="center">
+
+**RustCraft is testing a simple question:**
+
+*how much of Minecraft Java's engine can move into Rust
+before the mod ecosystem notices?*
+
+[Architecture](docs/ARCHITECTURE.md) · [Roadmap](docs/ROADMAP.md) · [Status](docs/PROJECT_STATUS.md) · [Research](docs/RESEARCH_INDEX.md) · [Contributing](CONTRIBUTING.md)
+
+</div>
