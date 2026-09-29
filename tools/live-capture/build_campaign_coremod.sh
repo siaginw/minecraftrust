@@ -67,6 +67,7 @@ SOURCES=(
   "$ROOT/tools/bridge/src/com/rustcraft/bridge/capture/LegacyCaptureScopes.java"
   "$ROOT/tools/bridge/src/com/rustcraft/bridge/capture/ShadowScopeGate.java"
   "$ROOT/tools/bridge/src/com/rustcraft/bridge/capture/ShadowEventJournal.java"
+  "$ROOT/tools/bridge/src/com/rustcraft/bridge/capture/RevelationFixtureHarvest.java"
   "$ROOT/tools/bridge/src/com/rustcraft/bridge/capture/ShadowEventComparator.java"
   "$ROOT/tools/bridge/src/com/rustcraft/bridge/capture/SessionCompatibilityContract.java"
   "$ROOT/tools/bridge/src/com/rustcraft/bridge/capture/PhaseDScopePolicy.java"

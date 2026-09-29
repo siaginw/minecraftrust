@@ -210,7 +210,10 @@ final class CaptureDraft {
     static void validateBegin(CaptureSource.View begin, LiveChunkBindings.Binding binding, int filter) {
         if (begin == null || begin.sectionSlots() != 16 || (filter & ~0xFFFF) != 0
                 || begin.biomes == null || begin.biomes.length != 256
-                || begin.globalPaletteBits < 9 || begin.globalPaletteBits > 16
+                // The source width is the runtime registry's width (18 bits
+                // measured on Revelation) -- a consistency fact, not the
+                // eligibility rule: eligibility is per actual state id.
+                || begin.globalPaletteBits < 9 || begin.globalPaletteBits > 20
                 || begin.storageModel != CaptureContract.StorageModel.VANILLA_U16
                 || begin.provenance == null || begin.provenance.isEmpty()) {
             throw LivePacketCapture.reject(LivePacketCapture.RejectionReason.INVALID_INPUT,

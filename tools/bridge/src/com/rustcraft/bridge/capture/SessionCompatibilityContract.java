@@ -51,9 +51,11 @@ public final class SessionCompatibilityContract {
     public static SessionCompatibilityContract establish(String processId, String sessionId,
             String scopeProfileId, int registrySize, int stateWidthBits,
             String registryDigestSha256) {
+        // The width bound is the RUNTIME registry's (18 bits measured on
+        // Revelation): SOURCE TELEMETRY, not a transport constraint.
         if (processId == null || processId.isEmpty() || sessionId == null || sessionId.isEmpty()
                 || scopeProfileId == null || scopeProfileId.isEmpty()
-                || registrySize <= 0 || stateWidthBits < 9 || stateWidthBits > 16
+                || registrySize <= 0 || stateWidthBits < 9 || stateWidthBits > 20
                 || registryDigestSha256 == null
                 || !registryDigestSha256.matches("[0-9a-f]{64}")) {
             throw new IllegalArgumentException(

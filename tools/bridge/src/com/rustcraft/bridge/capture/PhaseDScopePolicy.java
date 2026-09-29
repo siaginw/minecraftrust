@@ -70,7 +70,9 @@ public final class PhaseDScopePolicy {
      */
     public static LiveCaptureScope overworldPerChunk(ClassLoader runtimeLoader, String planProfile) {
         RegistryFacts facts = registryFacts(runtimeLoader, System.err);
-        if (facts == null || facts.widthBits > 16) return null;
+        // Width up to 20 = the scope binding's own per-chunk registry cap.
+        // The width is TELEMETRY: a chunk is admitted by its ACTUAL state ids.
+        if (facts == null || facts.widthBits > 20) return null;
         return new LiveCaptureScope(
                 planProfile + "/PHASE_D_OVERWORLD_PER_CHUNK",
                 "PHASE_D_LIVE_SHADOW_SMOKE_NOT_V2_NOT_AUTHORIZING",
@@ -83,7 +85,7 @@ public final class PhaseDScopePolicy {
                 "net.minecraft.world.chunk.NibbleArray",
                 "net.minecraft.network.play.server.SPacketChunkData",
                 "net.minecraftforge.registries.GameData$BlockCallbacks$1",
-                LiveCaptureScope.VANILLA_U16, 1L, facts.widthBits,
+                LiveCaptureScope.VANILLA_U16, 1L, facts.widthBits, facts.size,
                 GENERATOR_FAMILY, "net.minecraft.world.gen.ChunkGeneratorOverworld",
                 true, false, true);
     }

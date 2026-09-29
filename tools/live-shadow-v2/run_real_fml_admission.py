@@ -51,6 +51,9 @@ def main() -> int:
     parser.add_argument("--post-done-settle-s", type=float, default=45.0)
     parser.add_argument("--stability-s", type=float, default=20.0)
     parser.add_argument("--boot-timeout-s", type=int, default=1800)
+    parser.add_argument("--harvest-fixture", type=Path, default=None,
+                        help="also harvest the RCSNAP02 cross-language fixture "
+                             "from real chunk (0,0) after Done (diagnostic only)")
     args = parser.parse_args()
     args.static_contract = args.static_contract.resolve()
     args.srg_jar = args.srg_jar.resolve()
@@ -110,7 +113,9 @@ def main() -> int:
         # check (Forge build, pre-hook hashes, invariants) verifies it.
         "-Drustcraft.profile=" + json.loads(
             (args.static_contract / "profile.json").read_text(encoding="utf-8"))["id"],
-    ]
+    ] + ([] if args.harvest_fixture is None else [
+        "-Drustcraft.harvestFixture=" + str(args.harvest_fixture.resolve()),
+    ])
     classpath = [str(campaign), str(server / args.forge_jar), str(server / args.vanilla_jar)]
     classpath += [str(p) for p in sorted((server / "libraries").rglob("*.jar"))]
     jvm_args += ["-cp", os.pathsep.join(classpath),

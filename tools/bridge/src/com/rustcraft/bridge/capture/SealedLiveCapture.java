@@ -84,8 +84,18 @@ public final class SealedLiveCapture {
     /** Cloned on every read: the sealed bytes are never shared mutable state. */
     public byte[] javaPayload() { return javaPayload.clone(); }
 
-    /** Owned RCSNAP01 scope-3 transport (big-endian, fully self-contained). */
-    public byte[] toTransportBytes() { return owned.toTransportBytes(); }
+    /**
+     * Owned scope-3 transport (big-endian, fully self-contained). Version
+     * selection is explicit and deterministic: the V1 schema's body cannot
+     * express a source whose global registry exceeds 16 bits (its header
+     * field IS the transport width there), so a snapshot captured from a
+     * wider registry -- measured 18 bits on Revelation -- travels as V2,
+     * whose logical representation is decoupled from the source width.
+     */
+    public byte[] toTransportBytes() {
+        return owned.globalPaletteBits > 16
+                ? owned.toTransportBytesV2() : owned.toTransportBytes();
+    }
 
     /** True when this capture's chunk was adopted through the live IO-ticket path. */
     public boolean ioAdopted() { return LiveWriterHooks.isIoAdoptedChunkId(identity.chunkId); }

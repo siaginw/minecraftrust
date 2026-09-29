@@ -104,7 +104,7 @@ public final class LiveForgeCaptureSource implements LivePacketCapture.LiveCaptu
                     (Integer) runtime.field(chunk, CHUNK, "field_76647_h", "I"),
                     binding.incarnation(), binding.ownedEncodeGeneration(), gate.epoch(), filter,
                     filter == 0xffff, scope.skylight, CaptureContract.StorageModel.VANILLA_U16,
-                    scope.stateWidthBits, provenance, extracted, biomes);
+                    scope.stateWidthBits, scope.registrySize, provenance, extracted, biomes);
         } catch (LivePacketCapture.Rejection failure) { throw failure; }
         catch (Exception failure) { throw new IllegalStateException("qualified chunk extraction failed", failure); }
     }

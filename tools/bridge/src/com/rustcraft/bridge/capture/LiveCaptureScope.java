@@ -38,6 +38,8 @@ public final class LiveCaptureScope {
     public final String providerClass, worldClass, chunkClass, sectionClass, containerClass;
     public final String nibbleClass, packetClass, registryClass, generatorClass;
     public final int dimension, stateWidthBits;
+    /** Registry cardinality at scope derivation: TELEMETRY ONLY (V2). */
+    public final long registrySize;
     public final long registryEpoch;
     public final boolean skylight, detachedDiagnostic;
 
@@ -58,7 +60,20 @@ public final class LiveCaptureScope {
             String storageFamily, long registryEpoch, int stateWidthBits,
             String generatorFamily, String generatorClass, boolean skylight,
             boolean detachedDiagnostic, boolean perChunkStateIdLimit) {
+        this(profileId, certificateId, dimension, providerClass, worldClass, chunkClass,
+                sectionClass, containerClass, nibbleClass, packetClass, registryClass,
+                storageFamily, registryEpoch, stateWidthBits, 0L, generatorFamily,
+                generatorClass, skylight, detachedDiagnostic, perChunkStateIdLimit);
+    }
+
+    public LiveCaptureScope(String profileId, String certificateId, int dimension,
+            String providerClass, String worldClass, String chunkClass, String sectionClass,
+            String containerClass, String nibbleClass, String packetClass, String registryClass,
+            String storageFamily, long registryEpoch, int stateWidthBits, long registrySize,
+            String generatorFamily, String generatorClass, boolean skylight,
+            boolean detachedDiagnostic, boolean perChunkStateIdLimit) {
         this.perChunkStateIdLimit = perChunkStateIdLimit;
+        this.registrySize = registrySize;
         this.profileId = text(profileId); this.certificateId = text(certificateId);
         this.dimension = dimension;
         this.providerClass = text(providerClass); this.worldClass = text(worldClass);
@@ -69,7 +84,12 @@ public final class LiveCaptureScope {
         this.stateWidthBits = stateWidthBits; this.generatorFamily = text(generatorFamily);
         this.generatorClass = generatorClass; this.skylight = skylight;
         this.detachedDiagnostic = detachedDiagnostic;
-        if (registryEpoch <= 0 || stateWidthBits < 9 || stateWidthBits > 16)
+        if (registryEpoch <= 0 || stateWidthBits < 9
+                || stateWidthBits > (perChunkStateIdLimit ? 20 : 16))
+            // Under the per-chunk policy the width is the RUNTIME's registry
+            // width -- measured at 18 bits on Revelation -- carried as
+            // telemetry while the u16 logical domain stays the admitted
+            // domain. Non-perChunk scopes keep the historical 9..16 contract.
             throw new IllegalArgumentException("invalid registry epoch/state width");
         if (generatorClass == null && (!detachedDiagnostic || !"ABSENT_DETACHED_DIAGNOSTIC".equals(generatorFamily)))
             throw new IllegalArgumentException("absent generator requires explicit detached diagnostic policy");

@@ -91,6 +91,8 @@ public final class LiveSessionAdmissionTweaker implements ITweaker {
                 cl.registerTransformer(name);
             }
             registerEvidenceFlushHook(sessionBound);
+            // Cross-language fixture harvest (diagnostic only, real chunk).
+            com.rustcraft.bridge.capture.RevelationFixtureHarvest.maybeSchedule();
             // The shadow consumer starts here in the tweaker launch shape
             // (the coremod shape starts it in injectData). It requires the
             // DLL property; without it this is an admission-only launch.

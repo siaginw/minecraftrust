@@ -44,6 +44,9 @@ public interface CaptureSource {
         public final boolean fullChunk, skylight;
         public final StorageModel storageModel;
         public final int globalPaletteBits;
+        /** Source registry cardinality: TELEMETRY ONLY. The transport's V2
+         *  representation depends on the logical state ids, not on this. */
+        public final long globalRegistrySize;
         public final String provenance;
         public final byte[] biomes;
         private final Section[] sections;
@@ -53,6 +56,18 @@ public interface CaptureSource {
                     long mutationEpoch, int requestedFilter, boolean fullChunk,
                     boolean skylight, StorageModel storageModel, int globalPaletteBits,
                     String provenance, Section[] sections, byte[] biomes) {
+            this(chunkIdentity, storageIdentity, dimension, chunkX, chunkZ,
+                    incarnation, generation, mutationEpoch, requestedFilter,
+                    fullChunk, skylight, storageModel, globalPaletteBits, 0L,
+                    provenance, sections, biomes);
+        }
+
+        public View(Object chunkIdentity, Object storageIdentity, int dimension,
+                    int chunkX, int chunkZ, long incarnation, long generation,
+                    long mutationEpoch, int requestedFilter, boolean fullChunk,
+                    boolean skylight, StorageModel storageModel, int globalPaletteBits,
+                    long globalRegistrySize, String provenance, Section[] sections,
+                    byte[] biomes) {
             this.chunkIdentity = chunkIdentity;
             this.storageIdentity = storageIdentity;
             this.dimension = dimension;
@@ -66,6 +81,7 @@ public interface CaptureSource {
             this.skylight = skylight;
             this.storageModel = storageModel;
             this.globalPaletteBits = globalPaletteBits;
+            this.globalRegistrySize = globalRegistrySize;
             this.provenance = provenance;
             this.sections = sections == null ? null : sections.clone();
             this.biomes = biomes;
