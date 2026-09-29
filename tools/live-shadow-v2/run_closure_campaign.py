@@ -44,9 +44,8 @@ PORT = 25596
 def campaign_path(seed: int):
     """Deterministic traversal plan: outward spiral legs with reversals.
 
-    Each leg is (dx, dz, blocks). The client walks the legs in order,
-    producing region crossings, revisits and unloads by distance alone --
-    the server's own view-distance machinery does the loading/unloading.
+    Each leg is (x0, z0, x1, z1). The client issues position updates along
+    the leg and the server's own view-distance machinery loads/unloads.
     """
     legs = []
     x, z = 0, 0
@@ -62,11 +61,32 @@ def campaign_path(seed: int):
                 legs.append((x, z, nx, nz))
             x, z = nx, nz
         ring += 1
-    # Reversal legs revisit the path back to spawn (unload/reload pressure).
     for target in ((0, 0), (-512, -512), (0, 0)):
         if (x, z) != target:
             legs.append((x, z, target[0], target[1]))
             x, z = target
+    return legs
+
+
+def hop_plan(seed: int, rounds: int = 4):
+    """Deterministic hop traversal: spawn -> distant point -> spawn.
+
+    Each hop is a single position update followed by a settle window, so
+    the server genuinely loads the destination's chunks and unloads the
+    origin's (view distance 6); hopping back reloads them under NEW
+    incarnations -- the existing unload/reload evidence the closure
+    criterion demands. Generic protocol-valid movement, no gameplay
+    automation.
+    """
+    legs = []
+    directions = [(1, 1), (-1, 1), (-1, -1), (1, -1), (1, 0), (0, 1), (-1, 0), (0, -1)]
+    for _ in range(seed % 8):
+        directions.append(directions.pop(0))
+    for round_index in range(rounds):
+        for dx, dz in directions[:4 + (round_index % 4)]:
+            distance = 768 + 256 * ((round_index + seed) % 3)
+            legs.append((0, 0, dx * distance, dz * distance))
+            legs.append((dx * distance, dz * distance, 0, 0))
     return legs
 
 
@@ -143,7 +163,8 @@ def run_session(args, index: int) -> dict:
     try:
         workload = run_workload("127.0.0.1", PORT, "Campaign%d" % index,
                                 client_mods=client_mods_from_log(jvm_log, args),
-                                legs=campaign_path(args.seed + index),
+                                legs=(hop_plan(args.seed + index) if args.hop_mode
+                                      else campaign_path(args.seed + index)),
                                 step_blocks=args.step_blocks,
                                 reconnects=args.reconnects,
                                 settle_s=args.leg_settle_s,
@@ -276,6 +297,8 @@ def main() -> int:
     parser.add_argument("--reconnects", type=int, default=2)
     parser.add_argument("--step-blocks", type=int, default=64)
     parser.add_argument("--leg-settle-s", type=float, default=8.0)
+    parser.add_argument("--hop-mode", action="store_true",
+                        help="hop traversal (spawn <-> distant) instead of the walking spiral")
     parser.add_argument("--post-done-settle-s", type=float, default=45.0)
     parser.add_argument("--boot-timeout-s", type=int, default=1800)
     args = parser.parse_args()
@@ -355,7 +378,9 @@ def main() -> int:
         "schema": "RUSTCRAFT_V2_LIVE_SHADOW_CAMPAIGN_RECEIPT_V1",
         "campaign_id": "rev-fullchunk-closure-%s" % uuid.uuid4().hex[:12],
         "seed": args.seed,
-        "movement_plan": [list(leg) for leg in campaign_path(args.seed)],
+        "movement_plan": [list(leg) for leg in (hop_plan(args.seed) if args.hop_mode
+                                                else campaign_path(args.seed))],
+        "hop_mode": args.hop_mode,
         "runtime_root": str(args.runtime_root),
         "canonical_profile_sha256": sha(args.canonical_profile),
         "campaign_jar_sha256": sha(args.campaign_jar),
