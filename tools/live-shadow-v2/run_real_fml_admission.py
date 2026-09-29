@@ -51,6 +51,9 @@ def main() -> int:
     parser.add_argument("--post-done-settle-s", type=float, default=45.0)
     parser.add_argument("--stability-s", type=float, default=20.0)
     parser.add_argument("--boot-timeout-s", type=int, default=1800)
+    parser.add_argument("--canonical-profile", type=Path, default=None,
+                        help="the canonicalized qualification profile (session-invariant "
+                             "rows complete; consumed UNCHANGED)")
     parser.add_argument("--harvest-fixture", type=Path, default=None,
                         help="also harvest the RCSNAP02 cross-language fixture "
                              "from real chunk (0,0) after Done (diagnostic only)")
@@ -240,8 +243,11 @@ def main() -> int:
     # launch's certificates bound. Only tool wiring differs.
     manifest["static_manifest_sha256"] = sha(args.static_contract / "manifest.json")
     (engine_dir / "manifest.json").write_text(json.dumps(manifest, indent=2) + "\n")
-    shutil.copyfile(args.static_contract / "profile.json", engine_dir / "profile.json")
-    complete_session_invariants(engine_dir / "profile.json", args.static_contract)
+    if args.canonical_profile is not None:
+        shutil.copyfile(args.canonical_profile.resolve(), engine_dir / "profile.json")
+    else:
+        shutil.copyfile(args.static_contract / "profile.json", engine_dir / "profile.json")
+        complete_session_invariants(engine_dir / "profile.json", args.static_contract)
 
     engine_env = dict(os.environ)
     engine_env["MSYS2_ARG_CONV_EXCL"] = "*"
@@ -285,16 +291,18 @@ def main() -> int:
 
 
 def complete_session_invariants(profile_path: Path, static_contract: Path) -> None:
-    """Complete the static profile's launch-independent form.
+    """Legacy fallback completion for contracts predating the canonical
+    profile. The canonical artifact (canonicalize_profile.py) carries the
+    masked session-invariant rows natively; a profile that already has
+    them is consumed UNCHANGED and this function does nothing.
 
-    The profile's classes/pre_classes rows for session-bound classes carried
-    only the EXACT semantic hash of the offline qualifying launch -- a
-    launch-scoped value (it embeds that launch's MixinMerged#sessionId) that
-    cannot be the expectation for any other launch. The launch-independent
-    completion is the MASKED session invariant, recomputed here with the
-    pinned identity tool from the SAME offline evidence the profile was
-    derived from. Exact-mode rows are untouched; the admission policies'
-    own expected invariants stay the pre-writer authority.
+    The profile's classes/pre_classes rows for session-bound classes
+    originally carried only the EXACT semantic hash of the offline
+    qualifying launch -- a launch-scoped value (it embeds that launch's
+    MixinMerged#sessionId) that cannot be the expectation for any other
+    launch. The launch-independent completion is the MASKED session
+    invariant, recomputed with the pinned identity tool from the SAME
+    offline evidence the profile was derived from.
     """
     import subprocess
     profile = json.loads(profile_path.read_text(encoding="utf-8"))
@@ -303,6 +311,11 @@ def complete_session_invariants(profile_path: Path, static_contract: Path) -> No
     session_classes = set(profile.get("session_bound", {}).get("classes", []))
     if not session_classes:
         return
+    if any("session_invariant_sha256" in row
+           for section in ("classes", "pre_classes")
+           for name, row in (profile.get(section) or {}).items()
+           if name in session_classes):
+        return  # canonical profile: consumed unchanged
     identity = json.loads(
         (static_contract / "collector-config.json").read_text(encoding="utf-8"))["identity_tool"]
     offline = static_contract / "qualifying-launch" / "observation"
