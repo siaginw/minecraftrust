@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="docs/assets/rustcraft-mark.svg" width="120" alt="RustCraft mark" />
+<img src="docs/assets/rustcraft-logo.png" width="160" alt="RustCraft logo" />
 
 # RustCraft
 
