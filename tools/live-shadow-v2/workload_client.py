@@ -19,12 +19,23 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from fml_handshake import (  # noqa: E402
     FmlHandshake, HandshakeRejected, channel_registration, render_client_mod_list)
-from protocol340 import Frame, login_start_packet  # noqa: E402
+from protocol340 import (  # noqa: E402
+    Frame, fml_marker, handshake_packet, login_start_packet)
 
-SB_KEEP_ALIVE = 0x0B
-SB_CONFIRM_TELEPORT = 0x00
-SB_PLAYER_POSITION = 0x0C
-SB_CLIENT_SETTINGS = 0x15
+# Serverbound ids pinned from protocol340 (the clientbound plugin message
+# is 0x18; using it serverbound desynchronises the server's frame decoder
+# and every later byte is read as a packet id -- measured "Bad packet id").
+from protocol340 import (  # noqa: E402
+    SB_CLIENT_SETTINGS as SB_CLIENT_SETTINGS_ID,
+    SB_CONFIRM_TELEPORT as SB_CONFIRM_TELEPORT_ID,
+    SB_KEEP_ALIVE as SB_KEEP_ALIVE_ID,
+    SB_PLAYER_POSITION as SB_PLAYER_POSITION_ID,
+    SB_PLUGIN_MESSAGE)
+SB_KEEP_ALIVE = SB_KEEP_ALIVE_ID
+SB_CONFIRM_TELEPORT = SB_CONFIRM_TELEPORT_ID
+SB_PLAYER_POSITION = SB_PLAYER_POSITION_ID
+SB_CLIENT_SETTINGS = SB_CLIENT_SETTINGS_ID
+SB_PLUGIN_MSG = SB_PLUGIN_MESSAGE
 CB_KEEP_ALIVE = 0x1F
 CB_JOIN_GAME = 0x23
 CB_PLAYER_POS_LOOK = 0x2F
@@ -74,39 +85,49 @@ def _channel_body(channel: str, payload: bytes) -> bytes:
 
 
 def _plugin(frame, body, handshake, observed, registered, client_mods):
-    """Mirror of the join probe's plugin handling: the state machine owns
-    FML|HS correctness; REGISTER payloads record channel names."""
+    """The join probe's proven plugin sequence, unchanged in semantics: on
+    ServerHello the genuine client sends ClientHello, REGISTER, then its own
+    ModList; every other server message gets exactly the state machine's
+    reply."""
     try:
         channel, rest = _channel_from(body)
     except (IndexError, ValueError):
         return
     if channel == "FML|HS":
-        try:
+        if handshake.state == "WAIT_SERVER_HELLO":
             reply = handshake.on_server_message(rest)
-        except HandshakeRejected as rejected:
-            raise WorkloadFailure(str(rejected))
-        # The genuine client sends its channel registration alongside
-        # ClientHello, per FMLHandshakeClientState$2.
-        if handshake.state == "HELLO_SENT":
-            frame.send(CB_PLUGIN_MESSAGE, _channel_body(
+            if reply is not None:
+                frame.send(SB_PLUGIN_MSG, _channel_body("FML|HS", reply))
+            frame.send(SB_PLUGIN_MSG, _channel_body(
                 "REGISTER", channel_registration()))
+            frame.send(SB_PLUGIN_MSG, _channel_body(
+                "FML|HS", render_client_mod_list(list(client_mods or []))))
+            return
+        reply = handshake.on_server_message(rest)
         if reply is not None:
-            frame.send(CB_PLUGIN_MESSAGE, _channel_body("FML|HS", reply))
-            if handshake.state == "MODLIST_SENT" and client_mods:
-                frame.send(CB_PLUGIN_MESSAGE, _channel_body(
-                    "FML|HS", render_client_mod_list(client_mods)))
-    elif channel == "REGISTER":
-        for name in rest.split(chr(0)):
+            frame.send(SB_PLUGIN_MSG, _channel_body("FML|HS", reply))
+        if handshake.complete:
+            observed["fml_handshake_complete"] = True
+        return
+    if channel in ("REGISTER", "UNREGISTER"):
+        for name in rest.decode("utf-8", "replace").split(chr(0)):
             if name:
                 registered.add(name)
+        return
+    registered.add(channel)
 
 
 def _connect_and_join(host: str, port: int, username: str, client_mods):
     """One full login -> FML handshake -> PLAY; returns (frame, observed)."""
-    frame = Frame(host, port, timeout_s=30)
+    frame = Frame(host, port, 30)
     handshake = FmlHandshake()
     observed = {"keepalives": 0, "teleports": 0, "chunk_packets": 0}
     registered = set()
+    # The protocol handshake with the FML marker hostname precedes login --
+    # skipping it makes the first frame a login_start with no handshake and
+    # the server closes the connection (measured, campaign attempt 3).
+    frame.send(0x00, handshake_packet(fml_marker(host), port, 2))
+    frame.state = "LOGIN"
     frame.send(0x00, login_start_packet(username))
     deadline = time.time() + 180
     joined = False
@@ -115,9 +136,14 @@ def _connect_and_join(host: str, port: int, username: str, client_mods):
             packet_id, body = frame.read_frame()
         except TimeoutError:
             raise WorkloadFailure("join timed out")
+        except (ConnectionError, OSError) as error:
+            raise WorkloadFailure("join transport: %s" % error)
         if frame.state == "LOGIN":
-            if packet_id == 0x03:  # SetCompression
-                frame.threshold = body[0] if body else 0
+            if packet_id == 0x03:  # SetCompression: the threshold is a
+                # VarInt; reading its first byte alone is wrong for values
+                # >= 128 (vanilla default 256) and desynchronises every
+                # subsequent frame (measured: server "Bad packet id").
+                frame.threshold = _varint_from(body)[0] if body else 0
                 continue
             if packet_id == 0x02:  # LoginSuccess
                 frame.state = "PLAY"
@@ -163,8 +189,8 @@ def _drain(frame, seconds: float, observed):
             packet_id, body = frame.read_frame()
         except TimeoutError:
             continue
-        except (ConnectionError, OSError):
-            raise WorkloadFailure("connection lost during drain")
+        except (ConnectionError, OSError) as error:
+            raise WorkloadFailure("drain transport: %s" % error)
         if packet_id == CB_KEEP_ALIVE:
             frame.send(SB_KEEP_ALIVE, body[:8])
             observed["keepalives"] += 1
@@ -187,7 +213,7 @@ def _walk_leg(frame, x0, z0, x1, z1, step_blocks, observed):
     for i in range(1, steps + 1):
         x = x0 + dx * i / steps
         z = z0 + dz * i / steps
-        payload = struct.pack(">ddbbb", x, y, z, 0.0, 0.0, True, True)
+        payload = struct.pack(">ddd?", x, y, z, True)
         frame.send(SB_PLAYER_POSITION, payload)
         time.sleep(0.05)
         _drain(frame, 0.05, observed)

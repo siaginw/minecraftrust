@@ -79,16 +79,26 @@ def run_session(args, index: int) -> dict:
     session = {"process_id": str(uuid.uuid4()), "session_id": str(uuid.uuid4())}
     (out / "launch-session.json").write_text(json.dumps(session, indent=2) + "\n")
 
+    # A persistent, pre-generated world (the admission/harvest run's real
+    # Revelation world) is the campaign's reproducible terrain: every session
+    # boots a DISPOSABLE COPY, so chunk loads are disk-origin I/O (the
+    # closure criterion's own evidence path) and no session's first boot
+    # churns worldgen -- measured to trip the coherence gate's off-owner
+    # containment on a fresh world.
+    world = args.world_source.resolve() if args.world_source is not None else None
     server, prepare_info = prepare_server(
         args.runtime_root, out, forge_jar=args.forge_jar,
         vanilla_jar=args.vanilla_jar, campaign_jar=args.campaign_jar.resolve(),
-        world_source=None)
+        world_source=world)
     properties = (server / "server.properties").read_text()
     (server / "server.properties").write_text(
         properties.replace("server-port=25599", "server-port=%d" % PORT)
         + "level-type=DEFAULT" + chr(10))
 
     campaign = (server / "rustcraft-campaign.jar").resolve()
+    # The shadow pipeline needs the DLL inside the disposable server copy
+    # (the tweaker's consumer loads it by absolute path).
+    shutil.copyfile(args.dll.resolve(), server / "rustcraft_ffi.dll")
     smoke_out = out / "live-shadow-events.jsonl"
     extra = [
         "-Drustcraft.liveShadowOut=" + str(smoke_out),
@@ -128,17 +138,23 @@ def run_session(args, index: int) -> dict:
 
     # ---- deterministic workload via the headless client --------------------
     sys.path.insert(0, str(Path(__file__).resolve().parent))
-    from workload_client import run_workload
-    workload = run_workload("127.0.0.1", PORT, "Campaign%d" % index,
-                            client_mods=client_mods_from_log(jvm_log, args),
-                            legs=campaign_path(args.seed + index),
-                            step_blocks=args.step_blocks,
-                            reconnects=args.reconnects,
-                            settle_s=args.leg_settle_s,
-                            trace_path=out / "workload-trace.json")
-    (out / "workload.json").write_text(json.dumps(workload, indent=2) + "\n")
-
-    stop(process, timeout_s=600)
+    from workload_client import WorkloadFailure, run_workload
+    workload = None
+    try:
+        workload = run_workload("127.0.0.1", PORT, "Campaign%d" % index,
+                                client_mods=client_mods_from_log(jvm_log, args),
+                                legs=campaign_path(args.seed + index),
+                                step_blocks=args.step_blocks,
+                                reconnects=args.reconnects,
+                                settle_s=args.leg_settle_s,
+                                trace_path=out / "workload-trace.json")
+    except WorkloadFailure as failure:
+        # Record and still stop the server: an orphaned JVM on the campaign
+        # port poisons every later attempt.
+        workload = {"verdict": "FAIL", "failure": str(failure)}
+    finally:
+        (out / "workload.json").write_text(json.dumps(workload, indent=2) + "\n")
+        stop(process, timeout_s=600)
     for _ in range(120):
         if process.poll() is not None:
             break
@@ -245,8 +261,11 @@ def main() -> int:
     parser.add_argument("--vanilla-jar", required=True)
     parser.add_argument("--campaign-jar", type=Path, required=True)
     parser.add_argument("--srg-jar", type=Path, required=True)
+    parser.add_argument("--dll", type=Path, required=True)
     parser.add_argument("--canonical-profile", type=Path, required=True)
     parser.add_argument("--mod-versions", type=Path, required=True)
+    parser.add_argument("--world-source", type=Path, default=None,
+                        help="pre-generated world each session boots a disposable copy of")
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--sessions", type=int, default=2)
     parser.add_argument("--seed", type=int, default=20260929)
