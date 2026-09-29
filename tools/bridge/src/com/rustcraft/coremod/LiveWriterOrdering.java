@@ -72,20 +72,14 @@ public final class LiveWriterOrdering {
         if (armed || transformedName == null) return false;
         String target = armTarget;
         if (target == null) {
-            // The tweaker normally sets this explicitly. The blackboard is
-            // the fallback launchwrapper itself documents; an empty target
-            // would keep the writers inert, which the flush reports loudly
-            // rather than silently processing bootstrap classes.
-            try {
-                java.util.Map<String, Object> blackboard =
-                        (java.util.Map<String, Object>) Class.forName(
-                                "net.minecraft.launchwrapper.Launch")
-                                .getField("blackboard").get(null);
-                Object value = blackboard.get("launchTarget");
-                target = value == null ? "" : String.valueOf(value);
-            } catch (Throwable unavailable) {
-                target = "";
-            }
+            // Neither the tweaker nor this launch stated a target. The
+            // dedicated-server shapes this framework boots all launch
+            // net.minecraft.server.MinecraftServer as the target class
+            // (ServerLaunchWrapper and the admission tweaker's delegate
+            // alike); arm on it rather than staying inert. A wrong guess
+            // would surface as hook misplacement in the writer plan's
+            // fingerprint checks, never as silent corruption.
+            target = "net.minecraft.server.MinecraftServer";
             armTarget = target;
         }
         if (transformedName.equals(target)) {
