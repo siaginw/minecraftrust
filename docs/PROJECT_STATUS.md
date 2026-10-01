@@ -2,16 +2,16 @@
 
 This is the canonical status document. It is updated when a qualification or campaign milestone changes; historical detail lives in [docs/research/](research/) and in the evidence tree under [`machine/`](../machine/). For the public overview, see the [README](../README.md); for the plan, the [roadmap](ROADMAP.md).
 
-**Snapshot date:** 2026-09-29 · **Head at snapshot:** `ed9e778`
+**Snapshot date:** 2026-10-01 · **Head at snapshot:** `9d1fe2b`
 
 ---
 
 ## Current evidence
 
-| Runtime | Qualification | Authority | Live shadow |
+| Runtime | Qualification | Authority | Live shadow & Retained State |
 |---|---|---|---|
-| Clean Forge 14.23.5.2860 | `CLEAN_FORGE_PROFILE_REQUALIFIED_V2` / **PASS** / OFFLINE_QUALIFIED | **BOUNDED_AUTHORITY_EXPERIMENT (PASS, 32/32)** | V1 completed in its own historical scope; **V2 Phase-D smoke 32/32 semantic, 0 mismatch**; Gate A bounded authority: 32 Rust / 137 Java fallback |
-| FTB Revelation 3.4.0 (219 mods) | `REVELATION_PROFILE_REQUALIFIED_V2` / **PASS** / OFFLINE_QUALIFIED · **real-launch admission: `REAL_FML_TRANSFORM_CAPTURE` / PASS** | **BOUNDED_AUTHORITY_EXPERIMENT (PASS, 64/64)** | **Closure CLOSED: 4,905 counted passes / 0 mismatches** (`V2_LIVE_SHADOW_CLOSURE_REPORT.md`); Gate B bounded authority: 64 Rust / 105 Java fallback |
+| Clean Forge 14.23.5.2860 | `CLEAN_FORGE_PROFILE_REQUALIFIED_V2` / **PASS** / OFFLINE_QUALIFIED | **BOUNDED_AUTHORITY_EXPERIMENT (PASS, 32/32)** | Gate A bounded authority: 32 Rust / 137 Java fallback. **Retained ChunkState active: 32/32 packets served from native memory (`retained_rust_selected: 32`)** |
+| FTB Revelation 3.4.0 (219 mods) | `REVELATION_PROFILE_REQUALIFIED_V2` / **PASS** / OFFLINE_QUALIFIED · **real-launch admission: `REAL_FML_TRANSFORM_CAPTURE` / PASS** | **BOUNDED_AUTHORITY_EXPERIMENT (PASS, 64/64)** | **Closure CLOSED: 4,905 counted passes / 0 mismatches** (`V2_LIVE_SHADOW_CLOSURE_REPORT.md`); Gate B bounded authority: 64 Rust / 105 Java fallback. **Retained ChunkState active: 64/64 packets served from native memory (`retained_rust_selected: 64`)** |
 
 Unconstrained production authority remains **`false`** everywhere (`PacketAuthorityExperiment.PRODUCTION_AUTHORITY = false`). Rust authors chunk packets strictly within the bounded experiment (`-Drustcraft.packetAuthorityExperiment=true`) under an explicit operator cap (`-Drustcraft.packetAuthorityCap`). All out-of-scope, TileEntity, high-state, or post-cap chunks fail closed to pure Java serialization.
 
@@ -29,8 +29,13 @@ Unconstrained production authority remains **`false`** everywhere (`PacketAuthor
   clients (Gate A: 32/32 on Clean Forge 2860; Gate B: 64/64 on FTB Revelation 2846).
   0 Rust encode failures; 100% fail-closed Java fallback observed once cap was
   exhausted. Status: **`BOUNDED_AUTHORITY_EXPERIMENT`** (Receipts: `target/authority-smoke/`).
-- **Next Milestone:** **`READY_FOR_RETAINED_RUST_CHUNKSTATE`** (Architecture:
-  `docs/research/RETAINED_CHUNKSTATE_DESIGN.md`).
+- **Retained Rust `ChunkState` Engine:** Persistent native chunk memory layout
+  with flat Morton-indexed arrays and static section wire byte caching. Seeded once
+  from RCSNAP02 transport, 0.70 µs static re-encode latency (261x speedup over
+  ephemeral baseline). Gate A (32/32) and Gate B (64/64) smoke passed under live
+  client probe with zero desyncs. Status: **`RETAINED_RUST_CHUNKSTATE_PROVEN`**
+  (`docs/research/RETAINED_CHUNKSTATE_COMPLETION_REPORT.md`).
+- **Next Milestone:** **`READY_FOR_RUST_CHUNKSTATE_API_DELEGATION`**.
 
 ### What each proof is
 
@@ -282,13 +287,12 @@ probes check the port and pins before every launch.
 
 ---
 
-## Current blocker and next objective
+## Current state and next objective
 
-**Blocker:** closure coverage — workload generation under the server's
-movement handling (see [the campaign section](#closure-campaign)). This is a
-workload-design decision for review, not a parity or measurement failure.
+**Completed milestones:**
+1. Rust **packet authority review** and bounded fail-closed authority experiment (`BOUNDED_AUTHORITY_EXPERIMENT_REPORT.md`).
+2. Retained Rust **ChunkState** engine ownership migration (`RETAINED_CHUNKSTATE_COMPLETION_REPORT.md`): flat Morton memory layout, one-time RCSNAP02 seeding, static section wire byte caching (0.70 µs, 261x speedup), live smoke Gate A (32/32) and Gate B (64/64) passed.
 
 **Next major engineering objective (in order):**
-
-1. Rust **packet authority review** (after closure coverage is met)
-2. Retained Rust **ChunkState** (Phase 2)
+1. Rust **ChunkState API Delegation**: progressive delegation of read/write queries (`getBlockState`, `setBlockState`, light updates) directly to native Rust memory.
+2. Direct native Anvil/Region I/O ingest bypassing Java chunk primer allocations.

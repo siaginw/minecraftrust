@@ -34,9 +34,10 @@ The numbers below are **counted, machine-reconciled results** from recorded camp
 | **219** | mods in the test modpack (FTB Revelation 3.4.0) whose server the project joins and runs under |
 | **157,010** | block states in the tested registry — handled without widening the snapshot format (RCSNAP02) |
 | **96** | Rust-authored packets committed to real clients under bounded authority experiments (32 Clean Forge + 64 Revelation) — **0 encode failures** |
+| **0.70 µs** | static chunk wire serialization latency from retained Rust `ChunkState` — **261x speedup** over ephemeral snapshot baseline |
 | **false** | Production authority remains strictly **`false`**; unadmitted, TE-bearing, high-state, or post-cap chunks fall back to Java |
 
-> **Verified Status:** Full-chunk live-shadow closure is **`CLOSED`** (`docs/research/V2_LIVE_SHADOW_CLOSURE_REPORT.md`). The formal authority review was executed (`docs/research/PACKET_AUTHORITY_CONTRACT.md`), and the small, explicit, fail-closed bounded authority experiment is **`PASS`** across both Clean Forge and Revelation (`docs/research/BOUNDED_AUTHORITY_EXPERIMENT_REPORT.md`). The project is now **`READY_FOR_RETAINED_RUST_CHUNKSTATE`**.
+> **Verified Status:** Full-chunk live-shadow closure is **`CLOSED`** (`docs/research/V2_LIVE_SHADOW_CLOSURE_REPORT.md`). The formal authority review was executed (`docs/research/PACKET_AUTHORITY_CONTRACT.md`), the bounded authority experiment is **`PASS`** (`docs/research/BOUNDED_AUTHORITY_EXPERIMENT_REPORT.md`), and the Retained Rust `ChunkState` engine ownership migration is **`COMPLETED & PROVEN`** (`docs/research/RETAINED_CHUNKSTATE_COMPLETION_REPORT.md`). The project is now **`READY_FOR_RUST_CHUNKSTATE_API_DELEGATION`**.
 
 ### What is proven end-to-end today
 
@@ -45,11 +46,12 @@ The numbers below are **counted, machine-reconciled results** from recorded camp
 - Live chunk capture is **coherent**: acquire → clone → seal → release under a single-writer gate; the gate is never held while Rust computes.
 - The Rust encoder's output is **semantically identical** to Java's authoritative packet in all 4,905 counted closure comparisons.
 - **Fail-closed bounded authority**: under explicit operator flag (`-Drustcraft.packetAuthorityExperiment=true`) and cap, Rust authors packets on the wire; upon cap exhaustion, TE detection, or high-state detection, packets fall back cleanly to Java with zero client interruption.
+- **Retained Rust `ChunkState` Engine**: persistent native chunk memory layout with flat Morton-indexed arrays and static section wire byte caching (0.70 µs / 700 ns static serialization, 1,382 kops/s). Seeded once from RCSNAP02 transport; Gate A (32/32) and Gate B (64/64) smoke verified live with 100% client stability.
 
 ### What is deliberately *not* proven
 
 - Rust has **no unconstrained production authority**. `PRODUCTION_AUTHORITY` remains constant `false`; the authority gate is fail-closed.
-- Retained chunk state in Rust is not yet active (snapshot capture crossing JNI is still used for packets).
+- Direct Rust ChunkState API delegation (in-place mod queries mutating native memory directly) is not yet active; state is currently synchronized across coarse boundaries.
 - No whole-server performance claim is made. Component benchmarks exist ([below](#performance-honestly)); total-server MSPT/TPS has never been measured.
 
 ---
@@ -86,7 +88,7 @@ flowchart LR
     style F fill:#1f6feb,color:#fff
 ```
 
-Today, full-chunk packet encoding stands at **E**: closure completed (`LIVE_SHADOW_CLOSED`), formal authority review completed (`AUTHORITY_REVIEWED`), and bounded authority experiment proven live (`BOUNDED_AUTHORITY_EXPERIMENT`). The project is now advancing to **F (Rust Ownership via Retained Rust ChunkState)**.
+Today, full-chunk packet encoding and chunk state have reached **F (Rust Ownership via Retained Rust ChunkState)**: closure completed (`LIVE_SHADOW_CLOSED`), formal authority review completed (`AUTHORITY_REVIEWED`), bounded authority experiment proven live (`BOUNDED_AUTHORITY_EXPERIMENT`), and retained chunk state proven live (`RETAINED_RUST_CHUNKSTATE_PROVEN`). The project is now advancing to **ChunkState API Delegation**.
 
 ### Today's shape vs. the destination
 

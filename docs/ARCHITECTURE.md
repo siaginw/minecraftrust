@@ -65,15 +65,15 @@ The ladder is enforced by code, not convention: capability states with unreachab
 
 | Area | Where | State |
 |:---|:---|:---|
-| Chunk state & protocol encode | [`crates/native-chunk`](../crates/native-chunk/) | Shadow-proven live |
-| Snapshot transport (RCSNAP01/02) | [`crates/native-chunk/src/packet_snapshot.rs`](../crates/native-chunk/src/packet_snapshot.rs) | Both versions live |
+| Chunk state & protocol encode | [`crates/native-chunk`](../crates/native-chunk/) | Retained state live (Morton layout, wire cache, 0.70 µs encode) |
+| Snapshot transport (RCSNAP01/02) | [`crates/native-chunk/src/packet_snapshot.rs`](../crates/native-chunk/src/packet_snapshot.rs) | Live (used for one-time initial chunk seeding) |
 | Compression | [`crates/compression`](../crates/compression/) | Component-proven |
 | NBT | [`crates/nbt`](../crates/nbt/) | Component-proven |
 | Region/Anvil I/O | [`crates/region-io`](../crates/region-io/) | Research |
-| JNI boundary | [`crates/ffi`](../crates/ffi/) | Live (shadow only) |
+| JNI boundary | [`crates/ffi`](../crates/ffi/) | Live (bounded authority, `seedFromTransport`, `encodePacketPayloadV2`) |
 | Writer hooks & capture gate | [`tools/bridge`](../tools/bridge/) | Live on both runtimes |
 | Qualification engine | [`tools/qualification-v2`](../tools/qualification-v2/) | Proven (two-launch) |
-| Live shadow & campaigns | [`tools/live-shadow-v2`](../tools/live-shadow-v2/) | Live; closure coverage open |
+| Live shadow & campaigns | [`tools/live-shadow-v2`](../tools/live-shadow-v2/) | Closed (4,905 passes, 0 mismatches) |
 
 ## Key mechanisms worth reading about
 
