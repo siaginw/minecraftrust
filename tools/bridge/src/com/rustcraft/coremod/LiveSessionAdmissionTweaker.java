@@ -93,6 +93,8 @@ public final class LiveSessionAdmissionTweaker implements ITweaker {
             registerEvidenceFlushHook(sessionBound);
             // Cross-language fixture harvest (diagnostic only, real chunk).
             com.rustcraft.bridge.capture.RevelationFixtureHarvest.maybeSchedule();
+            // Test-only campaign teleport controller (default OFF).
+            com.rustcraft.bridge.capture.CampaignTeleportController.maybeSchedule();
             // The shadow consumer starts here in the tweaker launch shape
             // (the coremod shape starts it in injectData). It requires the
             // DLL property; without it this is an admission-only launch.

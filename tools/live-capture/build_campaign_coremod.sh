@@ -16,8 +16,10 @@ OUT_JAR="$2"
 # pwd -W on MSYS/Git Bash; javac.exe is a Windows binary and cannot open a
 # /d/... path, so a POSIX ROOT fails before a single source is read.
 ROOT="$(cd "$(dirname "$0")/../.." && pwd -W 2>/dev/null || pwd)"
-RT="${3:-D:/rustcraft-runtime-targets/clean-forge-2860/server}"
-JAVA_HOME="D:/rustcraft-toolchains/temurin8/jdk8u504-b01"
+JAVA_HOME="${JAVA_HOME:-D:/rustcraft-toolchains/temurin8/jdk8u504-b01}"
+if [ ! -d "$JAVA_HOME" ] && [ -d "C:/Program Files/Eclipse Adoptium/jdk-8.0.504.1-hotspot" ]; then
+  JAVA_HOME="C:/Program Files/Eclipse Adoptium/jdk-8.0.504.1-hotspot"
+fi
 JAVAC="$JAVA_HOME/bin/javac.exe"
 JAR="$JAVA_HOME/bin/jar.exe"
 # The ASM jar is a parameter rather than a constant for one reason: the two
@@ -68,6 +70,7 @@ SOURCES=(
   "$ROOT/tools/bridge/src/com/rustcraft/bridge/capture/ShadowScopeGate.java"
   "$ROOT/tools/bridge/src/com/rustcraft/bridge/capture/ShadowEventJournal.java"
   "$ROOT/tools/bridge/src/com/rustcraft/bridge/capture/RevelationFixtureHarvest.java"
+  "$ROOT/tools/bridge/src/com/rustcraft/bridge/capture/CampaignTeleportController.java"
   "$ROOT/tools/bridge/src/com/rustcraft/bridge/capture/ShadowEventComparator.java"
   "$ROOT/tools/bridge/src/com/rustcraft/bridge/capture/SessionCompatibilityContract.java"
   "$ROOT/tools/bridge/src/com/rustcraft/bridge/capture/PhaseDScopePolicy.java"
