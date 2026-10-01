@@ -244,3 +244,60 @@ fn bench_retained_vs_ephemeral_chunkstate() {
         speedup_static
     );
 }
+
+#[test]
+fn test_lifecycle_memory_bounded_accounting() {
+    use native_chunk::registry::ChunkRegistry;
+    let registry = ChunkRegistry::new();
+    let transport = build_test_transport();
+
+    // Perform 100 cycles of load -> seed -> mutate -> encode -> unload -> reload
+    for cycle in 0..100 {
+        let gen_id = registry.next_generation_id();
+        let mut chunk = NativeChunk::from_transport(&transport).expect("from_transport succeeds");
+        chunk.generation_id = gen_id;
+        let handle = registry.insert(chunk);
+
+        // Mutate section
+        let mutated = [42u16; 4096];
+        registry
+            .refresh_section(handle.key, 0, &mutated, None, None)
+            .unwrap();
+
+        // Encode
+        let chunk_arc = registry.get(&handle).unwrap();
+        let mut out = [0u8; 131072];
+        let mut off = 0;
+        let _ = chunk_arc
+            .write()
+            .unwrap()
+            .encode_packet_payload(true, true, &mut out, &mut off)
+            .unwrap();
+
+        // Check retention before unload: exactly 1 chunk, 8 sections
+        let (chunks, sections, _) = registry.retention();
+        assert_eq!(chunks, 1, "Cycle {}: exactly 1 chunk resident", cycle);
+        assert_eq!(sections, 8, "Cycle {}: exactly 8 sections resident", cycle);
+
+        // Unload
+        registry.remove(handle.key).expect("unload succeeds");
+        let (chunks_after, sections_after, bytes_after) = registry.retention();
+        assert_eq!(chunks_after, 0, "Cycle {}: 0 chunks after unload", cycle);
+        assert_eq!(
+            sections_after, 0,
+            "Cycle {}: 0 sections after unload",
+            cycle
+        );
+        assert_eq!(
+            bytes_after, 0,
+            "Cycle {}: 0 bytes retained after unload",
+            cycle
+        );
+    }
+
+    // After 100 cycles, verify zero memory leakage
+    let (final_chunks, final_sections, final_bytes) = registry.retention();
+    assert_eq!(final_chunks, 0, "No monotonic chunk leak");
+    assert_eq!(final_sections, 0, "No monotonic section leak");
+    assert_eq!(final_bytes, 0, "No monotonic byte leak");
+}

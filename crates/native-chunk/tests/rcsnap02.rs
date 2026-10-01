@@ -414,3 +414,134 @@ fn control_retained_native_chunk_from_transport() {
     assert_eq!(handle.key, ChunkKey::new(0, 0, 0));
     assert!(registry.get(&handle).is_some());
 }
+
+#[test]
+fn control_retained_living_mutation_parity_and_lifecycle() {
+    // 1. Initial Seeding: build transport with air + stone + water
+    let mut initial_states = [0u32; 4096];
+    for i in 0..1000 {
+        initial_states[i] = 16; // stone
+    }
+    for i in 1000..2000 {
+        initial_states[i] = 144; // water
+    }
+    let mut transport = header(157_010, 18, 1, true, true);
+    section(&mut transport, 0, &initial_states, 2000);
+    transport.extend_from_slice(&[0x44u8; 256]); // biomes
+
+    let registry = ChunkRegistry::new();
+    let gen_id = registry.next_generation_id();
+    let mut chunk = NativeChunk::from_transport(&transport).expect("from_transport succeeds");
+    chunk.generation_id = gen_id;
+    let handle = registry.insert(chunk);
+    assert_eq!(handle.generation_id, gen_id);
+
+    // Initial encode from retained state (populates wire cache)
+    let chunk_arc = registry.get(&handle).expect("chunk registered");
+    let mut out1 = [0u8; 32768];
+    let mut off1 = 0;
+    let res1 = chunk_arc
+        .write()
+        .unwrap()
+        .encode_packet_payload(true, true, &mut out1, &mut off1)
+        .expect("encode 1 succeeds");
+
+    // Second encode (wire cache hit)
+    let mut out2 = [0u8; 32768];
+    let mut off2 = 0;
+    let res2 = chunk_arc
+        .write()
+        .unwrap()
+        .encode_packet_payload(true, true, &mut out2, &mut off2)
+        .expect("encode 2 succeeds");
+    assert_eq!(res1.bytes_written, res2.bytes_written);
+    assert_eq!(&out1[..off1], &out2[..off2], "Wire cache hit must match");
+
+    // 2. Normal Living Mutation on the SAME Chunk: Air -> Solid mutation
+    let mut mutated_states = initial_states;
+    mutated_states[2000] = 1; // place stone at formerly air block 2000
+    mutated_states[0] = 0; // turn stone block 0 into air (Solid -> Air)
+    mutated_states[1500] = 42; // change water to diamond block 42 (Solid -> Different state)
+
+    let mut mutated_states_u16 = [0u16; 4096];
+    for i in 0..4096 {
+        mutated_states_u16[i] = mutated_states[i] as u16;
+    }
+
+    let remaining_dirty = registry
+        .refresh_section(handle.key, 0, &mutated_states_u16, None, None)
+        .expect("refresh succeeds");
+    assert_eq!(remaining_dirty, 0, "No remaining dirty sections");
+
+    // Re-query handle: generation must be identical (no re-seeding)
+    let gen_after_mutation = registry.find_generation(handle.key);
+    assert_eq!(
+        gen_after_mutation, gen_id,
+        "Retained handle/generation must remain unchanged across living mutation"
+    );
+
+    // Encode from mutated living state
+    let mut out_mut = [0u8; 32768];
+    let mut off_mut = 0;
+    let res_mut = chunk_arc
+        .write()
+        .unwrap()
+        .encode_packet_payload(true, true, &mut out_mut, &mut off_mut)
+        .expect("encode after mutation succeeds");
+    assert_ne!(
+        &out1[..off1],
+        &out_mut[..off_mut],
+        "Mutated retained state must produce new packet payload (wire cache invalidated)"
+    );
+
+    // 3. Oracle comparison: build fresh transport from mutated state
+    let mut oracle_transport = header(157_010, 18, 1, true, true);
+    section(&mut oracle_transport, 0, &mutated_states, 2000);
+    oracle_transport.extend_from_slice(&[0x44u8; 256]);
+    let oracle_snapshot =
+        OwnedPacketSnapshot::from_transport(&oracle_transport).expect("oracle transport valid");
+    let mut oracle_buf = [0u8; 32768];
+    let oracle_res = oracle_snapshot
+        .encode(&mut oracle_buf)
+        .expect("oracle encode succeeds");
+
+    assert_eq!(res_mut.bytes_written, oracle_res.bytes_written);
+    assert_eq!(res_mut.emitted_mask, oracle_res.emitted_mask);
+    assert_eq!(
+        &out_mut[..off_mut],
+        &oracle_buf[..oracle_res.bytes_written],
+        "Mutated retained chunk must be byte-identical to Java/snapshot oracle without re-seeding!"
+    );
+
+    // 4. Lifecycle Proof: Unload evicts state
+    let removed = registry.remove(handle.key);
+    assert!(removed.is_some(), "Unload successfully evicted chunk");
+    assert_eq!(
+        registry.find_generation(handle.key),
+        0,
+        "find_generation returns 0 after unload"
+    );
+    assert!(
+        registry.get(&handle).is_none(),
+        "registry.get rejects handle after unload"
+    );
+
+    // Reload with new incarnation/generation
+    let new_gen_id = registry.next_generation_id();
+    assert_ne!(
+        new_gen_id, gen_id,
+        "New incarnation must have distinct generation"
+    );
+    let mut reloaded_chunk =
+        NativeChunk::from_transport(&transport).expect("reloaded from transport");
+    reloaded_chunk.generation_id = new_gen_id;
+    let new_handle = registry.insert(reloaded_chunk);
+    assert_eq!(new_handle.generation_id, new_gen_id);
+
+    // Stale handle with old generation MUST fail closed
+    assert!(
+        registry.get(&handle).is_none(),
+        "Stale handle from previous incarnation MUST be rejected!"
+    );
+    assert!(registry.get(&new_handle).is_some(), "New handle succeeds");
+}
