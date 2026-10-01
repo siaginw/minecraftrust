@@ -1,6 +1,6 @@
 //! Owned, versioned offline packet input. This is not a live capture adapter.
 //! All states remain u32 until explicit native-width/registry checks succeed.
-use crate::{NativeChunk, NativeSection, PacketEncodeResult};
+use crate::{ChunkLifecycle, NativeChunk, NativeSection, PacketEncodeResult};
 use std::collections::BTreeSet;
 
 pub const SNAPSHOT_MAGIC: &[u8; 8] = b"RCSNAP01";
@@ -480,16 +480,10 @@ impl OwnedPacketSnapshot {
         })
     }
 
-    /// Materialize a private, unregistered NativeChunk for this encode only.
-    /// Repeated calls cannot observe later Java arrays or retained native state.
-    /// The explicit registry width belongs to the snapshot, not a global setter.
-    pub fn encode(&self, output: &mut [u8]) -> Result<PacketEncodeResult, SnapshotRejection> {
+    /// Materialize a persistent or private NativeChunk from this owned packet snapshot.
+    /// Used for initial seeding into the retained chunk registry or for one-shot encoding.
+    pub fn to_native_chunk(&self) -> Result<NativeChunk, SnapshotRejection> {
         let m = &self.metadata;
-        // The direct-mode width for sections whose palette exceeds the local
-        // range. V1's width was the transport contract; V2's logical domain
-        // is u16, for which 16 bits are always sufficient -- the SOURCE
-        // registry's wider width (18 measured) never reaches the encoder.
-        let direct_bits: u8 = if m.version >= 2 { 16 } else { m.global_palette_bits };
         let mut chunk = NativeChunk::new(m.dimension, m.chunk_x, m.chunk_z, m.generation);
         chunk.primary_bit_mask = m.accepted_mask;
         if let Some(biomes) = self.biomes {
@@ -506,10 +500,19 @@ impl OwnedPacketSnapshot {
                 Some(&section.block_light),
                 section.sky_light.as_ref(),
             );
-            // Direct private construction avoids retained-registry accounting
-            // and preserves present-empty sections in partial packets.
             chunk.sections[section.y as usize] = Some(native);
         }
+        chunk.lifecycle = ChunkLifecycle::ActiveNative;
+        Ok(chunk)
+    }
+
+    /// Materialize a private, unregistered NativeChunk for this encode only.
+    /// Repeated calls cannot observe later Java arrays or retained native state.
+    /// The explicit registry width belongs to the snapshot, not a global setter.
+    pub fn encode(&self, output: &mut [u8]) -> Result<PacketEncodeResult, SnapshotRejection> {
+        let m = &self.metadata;
+        let direct_bits: u8 = if m.version >= 2 { 16 } else { m.global_palette_bits };
+        let mut chunk = self.to_native_chunk()?;
         let mut offset = 0;
         chunk
             .encode_owned_packet_payload(

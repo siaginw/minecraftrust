@@ -154,6 +154,13 @@ impl NativeChunk {
         chunk
     }
 
+    /// Constructs a NativeChunk from RCSNAP01 or RCSNAP02 transport bytes.
+    /// Used for initial seeding into the retained chunk registry.
+    pub fn from_transport(bytes: &[u8]) -> Result<Self, crate::SnapshotRejection> {
+        let snapshot = crate::OwnedPacketSnapshot::from_transport(bytes)?;
+        snapshot.to_native_chunk()
+    }
+
     /// Materializes the NativeChunk back into a ChunkPrimer `[u16; 65536]`.
     ///
     /// Provides exact 100% bit-exact reconstruction of the original ChunkPrimer.
