@@ -83,7 +83,10 @@ pub unsafe extern "system" fn Java_com_rustcraft_bridge_NativeChunkBridge_seedFr
     let mut call = GLOBAL_FFI_METRICS.begin_call(metrics::Operation::ChunkSeedFromTransport);
     call.bytes = metrics::ByteMeasurements::NO_BULK;
     let outcome = catch_unwind(std::panic::AssertUnwindSafe(|| {
-        if transport_addr == 0 || transport_len <= 0 || transport_len as usize > native_chunk::packet_snapshot::MAX_SNAPSHOT_BYTES {
+        if transport_addr == 0
+            || transport_len <= 0
+            || transport_len as usize > native_chunk::packet_snapshot::MAX_SNAPSHOT_BYTES
+        {
             return -1i64;
         }
         let bytes = std::slice::from_raw_parts(transport_addr as *const u8, transport_len as usize);

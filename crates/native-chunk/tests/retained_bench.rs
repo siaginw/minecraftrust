@@ -45,7 +45,7 @@ fn build_test_transport() -> Vec<u8> {
         out.push(0);
         out.extend_from_slice(&4096u16.to_be_bytes()); // refcount
         out.extend_from_slice(&4u16.to_be_bytes()); // palette len = 4
-        // Palette: stone (1), dirt (3), grass (2), cobblestone (4)
+                                                    // Palette: stone (1), dirt (3), grass (2), cobblestone (4)
         out.extend_from_slice(&1u16.to_be_bytes());
         out.extend_from_slice(&3u16.to_be_bytes());
         out.extend_from_slice(&2u16.to_be_bytes());
@@ -107,7 +107,11 @@ fn bench_retained_vs_ephemeral_chunkstate() {
     println!("\n================================================================================");
     println!("  RUSTCRAFT ENGINE-OWNERSHIP BENCHMARK: RETAINED CHUNKSTATE VS EPHEMERAL SNAPSHOT");
     println!("================================================================================");
-    println!("Transport payload: {} bytes | Sections: 8 | Samples per arm: {}", transport.len(), iters);
+    println!(
+        "Transport payload: {} bytes | Sections: 8 | Samples per arm: {}",
+        transport.len(),
+        iters
+    );
 
     // Warmup
     for _ in 0..200 {
@@ -132,7 +136,9 @@ fn bench_retained_vs_ephemeral_chunkstate() {
         let mut chunk = NativeChunk::from_transport(&transport).unwrap();
         let t0 = Instant::now();
         let mut off = 0;
-        let res = chunk.encode_packet_payload(true, true, &mut out, &mut off).unwrap();
+        let res = chunk
+            .encode_packet_payload(true, true, &mut out, &mut off)
+            .unwrap();
         std::hint::black_box(&out[..res.bytes_written]);
         samples_retained_cold.push(t0.elapsed().as_nanos() as f64 / 1000.0);
     }
@@ -141,13 +147,17 @@ fn bench_retained_vs_ephemeral_chunkstate() {
     // 3. Arm C: Retained Chunk Static Re-Encode (fast path reusing wire cache)
     let mut retained_chunk = NativeChunk::from_transport(&transport).unwrap();
     let mut off = 0;
-    let _ = retained_chunk.encode_packet_payload(true, true, &mut out, &mut off).unwrap(); // warm cache
+    let _ = retained_chunk
+        .encode_packet_payload(true, true, &mut out, &mut off)
+        .unwrap(); // warm cache
 
     let mut samples_retained_static = Vec::with_capacity(iters);
     for _ in 0..iters {
         let t0 = Instant::now();
         let mut off = 0;
-        let res = retained_chunk.encode_packet_payload(true, true, &mut out, &mut off).unwrap();
+        let res = retained_chunk
+            .encode_packet_payload(true, true, &mut out, &mut off)
+            .unwrap();
         std::hint::black_box(&out[..res.bytes_written]);
         samples_retained_static.push(t0.elapsed().as_nanos() as f64 / 1000.0);
     }
@@ -156,10 +166,17 @@ fn bench_retained_vs_ephemeral_chunkstate() {
     // 4. Arm D: Retained Chunk with Single-Block Mutation
     let mut samples_retained_single_mut = Vec::with_capacity(iters);
     for i in 0..iters {
-        retained_chunk.sections[0].as_mut().unwrap().set_block(i % 16, (i / 16) % 16, 0, (i % 20 + 1) as u16);
+        retained_chunk.sections[0].as_mut().unwrap().set_block(
+            i % 16,
+            (i / 16) % 16,
+            0,
+            (i % 20 + 1) as u16,
+        );
         let t0 = Instant::now();
         let mut off = 0;
-        let res = retained_chunk.encode_packet_payload(true, true, &mut out, &mut off).unwrap();
+        let res = retained_chunk
+            .encode_packet_payload(true, true, &mut out, &mut off)
+            .unwrap();
         std::hint::black_box(&out[..res.bytes_written]);
         samples_retained_single_mut.push(t0.elapsed().as_nanos() as f64 / 1000.0);
     }
@@ -170,12 +187,19 @@ fn bench_retained_vs_ephemeral_chunkstate() {
     for i in 0..iters {
         for s in 0..4 {
             for b in 0..5 {
-                retained_chunk.sections[s].as_mut().unwrap().set_block(b, b, 0, ((i + s + b) % 50 + 1) as u16);
+                retained_chunk.sections[s].as_mut().unwrap().set_block(
+                    b,
+                    b,
+                    0,
+                    ((i + s + b) % 50 + 1) as u16,
+                );
             }
         }
         let t0 = Instant::now();
         let mut off = 0;
-        let res = retained_chunk.encode_packet_payload(true, true, &mut out, &mut off).unwrap();
+        let res = retained_chunk
+            .encode_packet_payload(true, true, &mut out, &mut off)
+            .unwrap();
         std::hint::black_box(&out[..res.bytes_written]);
         samples_retained_burst.push(t0.elapsed().as_nanos() as f64 / 1000.0);
     }
@@ -201,9 +225,22 @@ fn bench_retained_vs_ephemeral_chunkstate() {
     let speedup_burst = stats_ephemeral.p50_us / stats_retained_burst.p50_us;
 
     println!("\nSpeedup Factors vs Ephemeral Snapshot Baseline:");
-    println!("  Static Wire Cache Speedup:        {:.2}x faster", speedup_static);
-    println!("  Single-Block Mutation Speedup:    {:.2}x faster", speedup_single);
-    println!("  Burst Mutation (4 secs) Speedup:  {:.2}x faster", speedup_burst);
+    println!(
+        "  Static Wire Cache Speedup:        {:.2}x faster",
+        speedup_static
+    );
+    println!(
+        "  Single-Block Mutation Speedup:    {:.2}x faster",
+        speedup_single
+    );
+    println!(
+        "  Burst Mutation (4 secs) Speedup:  {:.2}x faster",
+        speedup_burst
+    );
 
-    assert!(speedup_static >= 2.0, "Static wire cache speedup must be at least 2.0x, got {:.2}x", speedup_static);
+    assert!(
+        speedup_static >= 2.0,
+        "Static wire cache speedup must be at least 2.0x, got {:.2}x",
+        speedup_static
+    );
 }

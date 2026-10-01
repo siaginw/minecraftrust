@@ -357,7 +357,11 @@ impl OwnedPacketSnapshot {
         let count = r.u16()? as usize;
         let expected = accepted_mask.count_ones() as usize;
         if count != expected {
-            return Err(if count < expected { MissingSection } else { MaskMismatch });
+            return Err(if count < expected {
+                MissingSection
+            } else {
+                MaskMismatch
+            });
         }
         let source_registry_size = r.u32()?;
         let source_registry_required_bits = r.u8()?;
@@ -511,17 +515,15 @@ impl OwnedPacketSnapshot {
     /// The explicit registry width belongs to the snapshot, not a global setter.
     pub fn encode(&self, output: &mut [u8]) -> Result<PacketEncodeResult, SnapshotRejection> {
         let m = &self.metadata;
-        let direct_bits: u8 = if m.version >= 2 { 16 } else { m.global_palette_bits };
+        let direct_bits: u8 = if m.version >= 2 {
+            16
+        } else {
+            m.global_palette_bits
+        };
         let mut chunk = self.to_native_chunk()?;
         let mut offset = 0;
         chunk
-            .encode_owned_packet_payload(
-                m.skylight,
-                m.full_chunk,
-                output,
-                &mut offset,
-                direct_bits,
-            )
+            .encode_owned_packet_payload(m.skylight, m.full_chunk, output, &mut offset, direct_bits)
             .map_err(|error| match error {
                 "Packet mask selects a missing section" => SnapshotRejection::MissingSection,
                 "Output buffer overflow" | "Output buffer overflow writing biomes" => {

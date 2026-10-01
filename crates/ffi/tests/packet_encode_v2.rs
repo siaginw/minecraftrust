@@ -336,7 +336,7 @@ fn seed_from_transport_and_retained_encode_v2() {
     transport.extend_from_slice(&256u16.to_be_bytes()); // word count = 256
     transport.extend_from_slice(&[0u8; 256 * 8]); // all zeros (index 0)
     transport.extend_from_slice(&[0u8; 2048]); // block light
-    // full chunk -> biomes
+                                               // full chunk -> biomes
     transport.extend_from_slice(&[42u8; 256]);
 
     // 2. Invoke seedFromTransport
@@ -348,7 +348,11 @@ fn seed_from_transport_and_retained_encode_v2() {
             transport.len() as i32,
         )
     };
-    assert!(gen_id > 0, "seedFromTransport must return valid generation_id, got {}", gen_id);
+    assert!(
+        gen_id > 0,
+        "seedFromTransport must return valid generation_id, got {}",
+        gen_id
+    );
 
     // 3. Directly encode from retained state via encode_v2
     let mut out1 = vec![0u8; CAPACITY];
@@ -366,7 +370,10 @@ fn seed_from_transport_and_retained_encode_v2() {
             out1.len() as i32,
         )
     };
-    assert!(res1 > 0 && res1 & PACKET_V2_SUCCESS_TAG != 0, "encode_v2 must succeed");
+    assert!(
+        res1 > 0 && res1 & PACKET_V2_SUCCESS_TAG != 0,
+        "encode_v2 must succeed"
+    );
     let (count1, mask1) = success(res1);
     assert_eq!(mask1, 1);
     assert!(count1 > 0);
@@ -388,5 +395,9 @@ fn seed_from_transport_and_retained_encode_v2() {
         )
     };
     assert_eq!(res1, res2);
-    assert_eq!(&out1[..count1], &out2[..count1], "Retained re-encode must match byte-for-byte");
+    assert_eq!(
+        &out1[..count1],
+        &out2[..count1],
+        "Retained re-encode must match byte-for-byte"
+    );
 }

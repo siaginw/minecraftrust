@@ -9,11 +9,11 @@
 //! - Consumers read snapshot_generation; if it differs from mutation_generation at read time,
 //!   the snapshot is stale and should be re-acquired.
 
-use crate::section::NativeSection;
 use crate::registry::{STATS_SECTIONS_ALLOCATED, STATS_SECTIONS_RELEASED};
+use crate::section::NativeSection;
 
 pub const CHUNK_PRIMER_SIZE: usize = 65536; // 16 * 16 * 256 u16
-pub const BIOME_ARRAY_SIZE: usize = 256;    // 16 * 16 u8
+pub const BIOME_ARRAY_SIZE: usize = 256; // 16 * 16 u8
 
 /// Metadata for one successfully serialized chunk payload.
 ///
@@ -74,8 +74,8 @@ impl NativeChunk {
             snapshot_generation: 0,
             dirty_sections: 0,
             sections: [
-                None, None, None, None, None, None, None, None,
-                None, None, None, None, None, None, None, None,
+                None, None, None, None, None, None, None, None, None, None, None, None, None, None,
+                None, None,
             ],
             biomes: [0u8; BIOME_ARRAY_SIZE],
             height_map: [0u16; 256],
@@ -243,10 +243,13 @@ impl NativeChunk {
         for s in 0..16 {
             let bit = 1u16 << s;
             if (selected_mask & bit) != 0 {
-                let sec = self.sections[s].as_mut()
+                let sec = self.sections[s]
+                    .as_mut()
                     .ok_or("Packet mask selects a missing section")?;
                 match global_bits {
-                    Some(bits) => sec.encode_wire_with_global_bits(out, &mut cursor, skylight, bits)?,
+                    Some(bits) => {
+                        sec.encode_wire_with_global_bits(out, &mut cursor, skylight, bits)?
+                    }
                     None => sec.encode_wire(out, &mut cursor, skylight)?,
                 }
                 emitted_mask |= bit;
@@ -306,20 +309,26 @@ impl NativeChunk {
         let start = *offset;
         let active_sections = self.primary_bit_mask.count_ones() as usize;
         // Header: section count (u8)
-        if *offset + 1 > out.len() { return Err("Overflow"); }
+        if *offset + 1 > out.len() {
+            return Err("Overflow");
+        }
         out[*offset] = active_sections as u8;
         *offset += 1;
 
         for s in 0..16 {
             if let Some(ref sec) = self.sections[s] {
                 // Section header: Y index (u8), non_air_count (u16)
-                if *offset + 3 > out.len() { return Err("Overflow"); }
+                if *offset + 3 > out.len() {
+                    return Err("Overflow");
+                }
                 out[*offset] = s as u8;
                 out[*offset + 1..*offset + 3].copy_from_slice(&sec.non_air_count.to_be_bytes());
                 *offset += 3;
 
                 // 4096 bytes of block IDs (low 8 bits)
-                if *offset + 4096 > out.len() { return Err("Overflow"); }
+                if *offset + 4096 > out.len() {
+                    return Err("Overflow");
+                }
                 for idx in 0..4096 {
                     let state = sec.get_block_by_index(idx);
                     out[*offset + idx] = (state & 0xFF) as u8;
@@ -327,12 +336,16 @@ impl NativeChunk {
                 *offset += 4096;
 
                 // 2048 bytes of block light
-                if *offset + 2048 > out.len() { return Err("Overflow"); }
+                if *offset + 2048 > out.len() {
+                    return Err("Overflow");
+                }
                 out[*offset..*offset + 2048].copy_from_slice(&sec.block_light);
                 *offset += 2048;
 
                 // 2048 bytes of sky light
-                if *offset + 2048 > out.len() { return Err("Overflow"); }
+                if *offset + 2048 > out.len() {
+                    return Err("Overflow");
+                }
                 out[*offset..*offset + 2048].copy_from_slice(&sec.sky_light);
                 *offset += 2048;
             }
@@ -399,7 +412,11 @@ impl NativeChunk {
         // packets exclude empty sections (isFullChunk && isEmpty -> skip), so the
         // mask bit must drop. Partial-filter packets would need separate
         // presence tracking (unsupported, documented M4.2A B3).
-        if self.sections[y].as_ref().map(|s| s.non_air_count == 0).unwrap_or(false) {
+        if self.sections[y]
+            .as_ref()
+            .map(|s| s.non_air_count == 0)
+            .unwrap_or(false)
+        {
             self.primary_bit_mask &= !(1u16 << y);
             self.sections[y] = None;
             STATS_SECTIONS_RELEASED.fetch_add(1, std::sync::atomic::Ordering::Relaxed);

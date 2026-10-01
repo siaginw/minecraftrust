@@ -1,12 +1,14 @@
-pub mod section;
 pub mod chunk;
-pub mod registry;
 pub mod packet_snapshot;
+pub mod registry;
+pub mod section;
 
-pub use section::{NativeSection, SectionFlags};
-pub use chunk::{NativeChunk, ChunkLifecycle, PacketEncodeResult, CHUNK_PRIMER_SIZE, BIOME_ARRAY_SIZE};
-pub use registry::{ChunkRegistry, ChunkHandle, ChunkKey};
+pub use chunk::{
+    ChunkLifecycle, NativeChunk, PacketEncodeResult, BIOME_ARRAY_SIZE, CHUNK_PRIMER_SIZE,
+};
 pub use packet_snapshot::{OwnedPacketSnapshot, SnapshotRejection};
+pub use registry::{ChunkHandle, ChunkKey, ChunkRegistry};
+pub use section::{NativeSection, SectionFlags};
 
 #[cfg(test)]
 mod tests {
@@ -71,14 +73,22 @@ mod tests {
         let mut off2 = 0;
         assert!(sec.encode_wire(&mut buf2, &mut off2, true).is_ok());
         assert_eq!(off1, off2);
-        assert_eq!(&buf1[..off1], &buf2[..off2], "Cache hit must produce byte-identical wire data");
+        assert_eq!(
+            &buf1[..off1],
+            &buf2[..off2],
+            "Cache hit must produce byte-identical wire data"
+        );
 
         // Mutate section -> invalidates cache
         sec.set_block(2, 0, 0, 3);
         let mut buf3 = [0u8; 8192];
         let mut off3 = 0;
         assert!(sec.encode_wire(&mut buf3, &mut off3, true).is_ok());
-        assert_ne!(&buf1[..off1], &buf3[..off3], "Mutated section must produce new wire data");
+        assert_ne!(
+            &buf1[..off1],
+            &buf3[..off3],
+            "Mutated section must produce new wire data"
+        );
     }
 
     #[test]
@@ -187,7 +197,10 @@ mod tests {
         chunk.mark_mutation();
         assert_eq!(chunk.mutation_generation(), 2);
         assert_eq!(chunk.lifecycle, ChunkLifecycle::Dirty);
-        assert!(!chunk.end_snapshot(token), "old snapshot token must be stale");
+        assert!(
+            !chunk.end_snapshot(token),
+            "old snapshot token must be stale"
+        );
 
         // New snapshot sees the new generation
         let token2 = chunk.begin_snapshot();
@@ -197,7 +210,9 @@ mod tests {
         // All three consumers validate consistency on the happy path
         let mut pkt = [0u8; 32768];
         let mut off = 0;
-        assert!(chunk.encode_packet_payload(true, true, &mut pkt, &mut off).is_ok());
+        assert!(chunk
+            .encode_packet_payload(true, true, &mut pkt, &mut off)
+            .is_ok());
         assert!(chunk.stage_persistence(&mut pkt, &mut off).is_ok());
         let _ = chunk.occupancy_summary();
 
@@ -232,16 +247,26 @@ mod tests {
 
         // Refresh section 1: new data arrives from Java (u16[4096] layer-major)
         let mut new_states = [0u16; 4096];
-        for i in 0..2048 { new_states[i] = 3; }
+        for i in 0..2048 {
+            new_states[i] = 3;
+        }
         let bl = [7u8; 2048];
         let sl = [15u8; 2048];
         chunk.refresh_section(1, &new_states, Some(&bl), Some(&sl));
         assert_eq!(chunk.dirty_mask(), 0b01, "section 1 bit cleared");
-        assert_eq!(chunk.lifecycle, ChunkLifecycle::Dirty, "section 0 still dirty");
+        assert_eq!(
+            chunk.lifecycle,
+            ChunkLifecycle::Dirty,
+            "section 0 still dirty"
+        );
         assert!(chunk.sections[1].is_some());
         assert_eq!(chunk.sections[1].as_ref().unwrap().non_air_count, 2048);
         assert_eq!(chunk.sections[1].as_ref().unwrap().block_light[0], 7);
-        assert_eq!(chunk.primary_bit_mask & (1 << 1), 1 << 1, "mask gained section 1");
+        assert_eq!(
+            chunk.primary_bit_mask & (1 << 1),
+            1 << 1,
+            "mask gained section 1"
+        );
 
         // Refresh section 0 with all-air: section deactivates in mask
         let air = [0u16; 4096];
@@ -249,12 +274,18 @@ mod tests {
         assert_eq!(chunk.dirty_mask(), 0);
         assert!(chunk.sections[0].is_none(), "all-air section released");
         assert_eq!(chunk.primary_bit_mask, 1 << 1);
-        assert_eq!(chunk.lifecycle, ChunkLifecycle::ActiveNative, "fully refreshed");
+        assert_eq!(
+            chunk.lifecycle,
+            ChunkLifecycle::ActiveNative,
+            "fully refreshed"
+        );
 
         // Refreshed section encodes cleanly (palette rebuilt after replace)
         let mut pkt = [0u8; 32768];
         let mut off = 0;
-        assert!(chunk.encode_packet_payload(true, true, &mut pkt, &mut off).is_ok());
+        assert!(chunk
+            .encode_packet_payload(true, true, &mut pkt, &mut off)
+            .is_ok());
         assert!(off > 0);
     }
 
@@ -277,7 +308,10 @@ mod tests {
 
         // Unloading dim -1 must not touch dim 0
         assert!(registry.remove(b.key).is_some());
-        assert!(registry.get(&a).is_some(), "dim 0 chunk must survive dim -1 unload");
+        assert!(
+            registry.get(&a).is_some(),
+            "dim 0 chunk must survive dim -1 unload"
+        );
         assert_eq!(registry.count(), 1);
 
         // Generation handles stay per-dimension-correct
@@ -350,7 +384,9 @@ mod tests {
 
         let mut pkt = [0u8; 32768];
         let mut off = 0;
-        assert!(chunk.encode_packet_payload(true, true, &mut pkt, &mut off).is_ok());
+        assert!(chunk
+            .encode_packet_payload(true, true, &mut pkt, &mut off)
+            .is_ok());
     }
 
     #[test]
@@ -367,7 +403,9 @@ mod tests {
         // Java-side light engine ran: same states, new light values.
         let same_states = {
             let mut s = [0u16; 4096];
-            for i in 0..4096 { s[i] = chunk.sections[0].as_ref().unwrap().get_block_by_index(i); }
+            for i in 0..4096 {
+                s[i] = chunk.sections[0].as_ref().unwrap().get_block_by_index(i);
+            }
             s
         };
         let new_bl = [5u8; 2048];
@@ -375,8 +413,11 @@ mod tests {
         chunk.mark_section_mutation(0); // light change rides the section dirty bit
         chunk.refresh_section(0, &same_states, Some(&new_bl), Some(&new_sl));
 
-        assert_eq!(chunk.sections[0].as_ref().unwrap().non_air_count, 256,
-            "states untouched by light-only refresh");
+        assert_eq!(
+            chunk.sections[0].as_ref().unwrap().non_air_count,
+            256,
+            "states untouched by light-only refresh"
+        );
         assert_eq!(chunk.sections[0].as_ref().unwrap().block_light[0], 5);
         assert_eq!(chunk.sections[0].as_ref().unwrap().sky_light[2047], 9);
         assert_eq!(chunk.dirty_mask(), 0);
@@ -384,9 +425,19 @@ mod tests {
         // Light bytes appear verbatim in the encoded packet.
         let mut pkt = [0u8; 32768];
         let mut off = 0;
-        assert!(chunk.encode_packet_payload(true, true, &mut pkt, &mut off).is_ok());
+        assert!(chunk
+            .encode_packet_payload(true, true, &mut pkt, &mut off)
+            .is_ok());
         let pkt = &pkt[..off];
-        assert!(pkt.windows(2048).any(|w| w[0] == 5 && w.iter().all(|&b| b == 5)), "block light payload present");
-        assert!(pkt.windows(2048).any(|w| w[0] == 9 && w.iter().all(|&b| b == 9)), "sky light payload present");
+        assert!(
+            pkt.windows(2048)
+                .any(|w| w[0] == 5 && w.iter().all(|&b| b == 5)),
+            "block light payload present"
+        );
+        assert!(
+            pkt.windows(2048)
+                .any(|w| w[0] == 9 && w.iter().all(|&b| b == 9)),
+            "sky light payload present"
+        );
     }
 }

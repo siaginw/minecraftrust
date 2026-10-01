@@ -8,7 +8,7 @@ pub const LIGHT_ARRAY_SIZE: usize = 2048;
 
 // Palette bit width limits per 1.12.2 spec
 const MIN_BITS: u8 = 4;
-const MAX_LOCAL_BITS: u8 = 8;     // Local palette max (256 states)
+const MAX_LOCAL_BITS: u8 = 8; // Local palette max (256 states)
 /// Global palette bit width. Vanilla computes ceil(log2(Block.BLOCK_STATE_IDS.size()))
 /// at runtime (13 for the ~8k-state vanilla 1.12.2 registry; larger under mods).
 /// The bridge sets the live value via set_global_palette_bits() at boot.
@@ -27,18 +27,18 @@ pub fn global_palette_bits() -> u8 {
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 #[repr(u8)]
 pub enum PaletteMode {
-    Linear = 0,      // 4-bit, array-backed
-    HashMap = 1,     // 5-8 bit, hashmap-backed
-    Global = 2,      // >8 bit, global registry IDs
+    Linear = 0,  // 4-bit, array-backed
+    HashMap = 1, // 5-8 bit, hashmap-backed
+    Global = 2,  // >8 bit, global registry IDs
 }
 
 pub struct SectionFlags;
 
 impl SectionFlags {
     pub const NON_AIR: u8 = 1 << 0;
-    pub const WATER: u8   = 1 << 1;
-    pub const STONE: u8   = 1 << 2;
-    pub const SOLID: u8   = 1 << 3;
+    pub const WATER: u8 = 1 << 1;
+    pub const STONE: u8 = 1 << 2;
+    pub const SOLID: u8 = 1 << 3;
     pub const HAS_TICK: u8 = 1 << 4;
     pub const PALETTE_DIRTY: u8 = 1 << 5;
 }
@@ -49,7 +49,7 @@ pub struct NativeSection {
     // === ENGINE REPRESENTATION (Authoritative) ===
     /// Global block state IDs for all 4096 positions.
     /// Uses u16 covering Block.BLOCK_STATE_IDS (max ~4000 in 1.12.2).
-    pub states: [u16; SECTION_BLOCK_COUNT],  // 8,192 bytes
+    pub states: [u16; SECTION_BLOCK_COUNT], // 8,192 bytes
 
     // === DERIVED CACHES (Wire format, built on demand) ===
     /// Cached local palette for Protocol 340 wire encoding.
@@ -61,8 +61,8 @@ pub struct NativeSection {
     wire_cache_noskylight: Option<Vec<u8>>,
 
     // === LIGHTING & METADATA ===
-    pub block_light: [u8; LIGHT_ARRAY_SIZE],   // 2,048 bytes
-    pub sky_light: [u8; LIGHT_ARRAY_SIZE],     // 2,048 bytes
+    pub block_light: [u8; LIGHT_ARRAY_SIZE], // 2,048 bytes
+    pub sky_light: [u8; LIGHT_ARRAY_SIZE],   // 2,048 bytes
     pub non_air_count: u16,
     pub flags: u8,
     pub y_index: u8,
@@ -161,8 +161,12 @@ impl NativeSection {
         if global_state_id != 0 {
             self.flags |= SectionFlags::NON_AIR;
             // Vanilla IDs: Stone=16, Water=144 (these are stable in 1.12.2)
-            if global_state_id == 16 { self.flags |= SectionFlags::STONE; }
-            if global_state_id == 144 { self.flags |= SectionFlags::WATER; }
+            if global_state_id == 16 {
+                self.flags |= SectionFlags::STONE;
+            }
+            if global_state_id == 144 {
+                self.flags |= SectionFlags::WATER;
+            }
         }
 
         // Invalidate palette cache & wire cache
@@ -198,8 +202,12 @@ impl NativeSection {
             if id != 0 {
                 non_air += 1;
                 self.flags |= SectionFlags::NON_AIR;
-                if id == 16 { self.flags |= SectionFlags::STONE; }
-                if id == 144 { self.flags |= SectionFlags::WATER; }
+                if id == 16 {
+                    self.flags |= SectionFlags::STONE;
+                }
+                if id == 144 {
+                    self.flags |= SectionFlags::WATER;
+                }
             }
         }
         self.non_air_count = non_air;
@@ -215,14 +223,20 @@ impl NativeSection {
 
     /// Ensures palette cache is up to date, rebuilding if dirty.
     fn ensure_palette(&mut self, global_bits: Option<u8>) {
-        let compatible_cache = self.palette_cache.as_ref().map(|cache| {
-            global_bits.map(|bits| cache.mode != PaletteMode::Global || cache.bits == bits)
-                .unwrap_or(true)
-        }).unwrap_or(false);
+        let compatible_cache = self
+            .palette_cache
+            .as_ref()
+            .map(|cache| {
+                global_bits
+                    .map(|bits| cache.mode != PaletteMode::Global || cache.bits == bits)
+                    .unwrap_or(true)
+            })
+            .unwrap_or(false);
         if compatible_cache && (self.flags & SectionFlags::PALETTE_DIRTY) == 0 {
             return;
         }
-        self.palette_cache = Some(self.build_local_palette(global_bits.unwrap_or_else(global_palette_bits)));
+        self.palette_cache =
+            Some(self.build_local_palette(global_bits.unwrap_or_else(global_palette_bits)));
         self.flags &= !SectionFlags::PALETTE_DIRTY;
     }
 
@@ -262,7 +276,10 @@ impl NativeSection {
         let (bits, mode) = if palette_len <= (1usize << MIN_BITS) {
             (MIN_BITS, PaletteMode::Linear)
         } else if palette_len <= (1usize << MAX_LOCAL_BITS) {
-            (palette_len.next_power_of_two().trailing_zeros() as u8, PaletteMode::HashMap)
+            (
+                palette_len.next_power_of_two().trailing_zeros() as u8,
+                PaletteMode::HashMap,
+            )
         } else {
             (global_bits, PaletteMode::Global)
         };
@@ -321,7 +338,9 @@ impl NativeSection {
             let local_idx = if global_id == 0 {
                 0
             } else {
-                palette[1..].iter().position(|&p| p == global_id as u32)
+                palette[1..]
+                    .iter()
+                    .position(|&p| p == global_id as u32)
                     .map(|p| p + 1)
                     .unwrap_or(0) as u64
             };
@@ -411,7 +430,11 @@ impl NativeSection {
         };
         let needed = 1
             + Self::varint_size(palette_len as i32)
-            + if local_palette.mode == PaletteMode::Global { 0 } else { palette_len as usize * 5 }
+            + if local_palette.mode == PaletteMode::Global {
+                0
+            } else {
+                palette_len as usize * 5
+            }
             + Self::varint_size(local_palette.words.len() as i32)
             + local_palette.words.len() * 8
             + LIGHT_ARRAY_SIZE
@@ -473,7 +496,9 @@ impl NativeSection {
         loop {
             len += 1;
             val = ((val as u32) >> 7) as i32;
-            if val == 0 { break; }
+            if val == 0 {
+                break;
+            }
         }
         len
     }
@@ -483,10 +508,14 @@ impl NativeSection {
         loop {
             let mut temp = (val as u32 & 0x7F) as u8;
             val = ((val as u32) >> 7) as i32;
-            if val != 0 { temp |= 0x80; }
+            if val != 0 {
+                temp |= 0x80;
+            }
             out[*offset] = temp;
             *offset += 1;
-            if val == 0 { break; }
+            if val == 0 {
+                break;
+            }
         }
     }
 
@@ -498,9 +527,17 @@ impl NativeSection {
     pub fn fill(&mut self, global_state_id: u16) {
         self.states.fill(global_state_id);
         self.non_air_count = if global_state_id == 0 { 0 } else { 4096 };
-        self.flags = if global_state_id == 0 { 0 } else { SectionFlags::NON_AIR };
-        if global_state_id == 16 { self.flags |= SectionFlags::STONE; }
-        if global_state_id == 144 { self.flags |= SectionFlags::WATER; }
+        self.flags = if global_state_id == 0 {
+            0
+        } else {
+            SectionFlags::NON_AIR
+        };
+        if global_state_id == 16 {
+            self.flags |= SectionFlags::STONE;
+        }
+        if global_state_id == 144 {
+            self.flags |= SectionFlags::WATER;
+        }
         self.flags |= SectionFlags::PALETTE_DIRTY;
         self.palette_cache = None;
         self.invalidate_wire_cache();
@@ -516,7 +553,9 @@ impl NativeSection {
     pub fn recalculate_counts(&mut self) {
         let mut non_air = 0u16;
         for &id in &self.states {
-            if id != 0 { non_air += 1; }
+            if id != 0 {
+                non_air += 1;
+            }
         }
         self.non_air_count = non_air;
         if non_air > 0 {
@@ -532,8 +571,8 @@ impl NativeSection {
 struct LocalPalette {
     bits: u8,
     mode: PaletteMode,
-    palette: Vec<u32>,      // Global state IDs in palette order
-    words: Vec<u64>,        // Packed bit array (1.12.2 BitArray layout)
+    palette: Vec<u32>, // Global state IDs in palette order
+    words: Vec<u64>,   // Packed bit array (1.12.2 BitArray layout)
 }
 impl NativeSection {
     /// M5.2: light-array access for packet-time freshness checks.

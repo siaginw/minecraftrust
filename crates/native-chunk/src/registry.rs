@@ -1,9 +1,9 @@
 //! Thread-safe native chunk registry and generation handle tracking.
 
+use crate::chunk::{ChunkLifecycle, NativeChunk};
 use std::collections::HashMap;
 use std::sync::atomic::{AtomicU64, Ordering};
 use std::sync::{Arc, RwLock};
-use crate::chunk::{NativeChunk, ChunkLifecycle};
 
 /// M4.2A E: allocation/retention accounting, process-wide.
 pub static STATS_SECTIONS_ALLOCATED: AtomicU64 = AtomicU64::new(0);
@@ -70,11 +70,17 @@ impl ChunkRegistry {
         let mut map = self.chunks.write().unwrap();
         if let Some(old) = map.get(&key) {
             // replacing a live chunk releases its sections
-            STATS_SECTIONS_RELEASED.fetch_add(old.read().unwrap().active_section_count() as u64, Ordering::Relaxed);
+            STATS_SECTIONS_RELEASED.fetch_add(
+                old.read().unwrap().active_section_count() as u64,
+                Ordering::Relaxed,
+            );
         }
         STATS_SECTIONS_ALLOCATED.fetch_add(new_sections, Ordering::Relaxed);
         map.insert(key, Arc::new(RwLock::new(chunk)));
-        ChunkHandle { key, generation_id: gen_id }
+        ChunkHandle {
+            key,
+            generation_id: gen_id,
+        }
     }
 
     /// Retrieves an Arc reference to the NativeChunk if the generation matches and state is valid.
@@ -82,7 +88,9 @@ impl ChunkRegistry {
         let map = self.chunks.read().unwrap();
         if let Some(chunk_arc) = map.get(&handle.key) {
             let chunk = chunk_arc.read().unwrap();
-            if chunk.generation_id == handle.generation_id && chunk.lifecycle != ChunkLifecycle::Invalidated {
+            if chunk.generation_id == handle.generation_id
+                && chunk.lifecycle != ChunkLifecycle::Invalidated
+            {
                 return Some(Arc::clone(chunk_arc));
             }
         }
@@ -146,7 +154,11 @@ impl ChunkRegistry {
     }
 
     /// Read-only view of the backing map (FFI internals).
-    pub fn chunks_map(&self) -> &std::sync::RwLock<std::collections::HashMap<ChunkKey, std::sync::Arc<std::sync::RwLock<NativeChunk>>>> {
+    pub fn chunks_map(
+        &self,
+    ) -> &std::sync::RwLock<
+        std::collections::HashMap<ChunkKey, std::sync::Arc<std::sync::RwLock<NativeChunk>>>,
+    > {
         &self.chunks
     }
 
@@ -160,7 +172,10 @@ impl ChunkRegistry {
     pub fn remove(&self, key: ChunkKey) -> Option<Arc<RwLock<NativeChunk>>> {
         let mut map = self.chunks.write().unwrap();
         if let Some(arc) = map.remove(&key) {
-            STATS_SECTIONS_RELEASED.fetch_add(arc.read().unwrap().active_section_count() as u64, Ordering::Relaxed);
+            STATS_SECTIONS_RELEASED.fetch_add(
+                arc.read().unwrap().active_section_count() as u64,
+                Ordering::Relaxed,
+            );
             STATS_CHUNKS_EVICTED.fetch_add(1, Ordering::Relaxed);
             Some(arc)
         } else {
@@ -175,7 +190,11 @@ impl ChunkRegistry {
         match map.get(&key) {
             Some(arc) => {
                 let c = arc.read().unwrap();
-                if c.lifecycle == crate::chunk::ChunkLifecycle::Invalidated { 0 } else { c.generation_id }
+                if c.lifecycle == crate::chunk::ChunkLifecycle::Invalidated {
+                    0
+                } else {
+                    c.generation_id
+                }
             }
             None => 0,
         }
@@ -188,7 +207,11 @@ impl ChunkRegistry {
         for arc in map.values() {
             sections += arc.read().unwrap().active_section_count() as u64;
         }
-        (map.len() as u64, sections, sections * SECTION_RESIDENT_BYTES)
+        (
+            map.len() as u64,
+            sections,
+            sections * SECTION_RESIDENT_BYTES,
+        )
     }
 
     /// Returns count of registered chunks.
@@ -204,12 +227,14 @@ impl ChunkRegistry {
     pub fn clear(&self) {
         let mut map = self.chunks.write().unwrap();
         for arc in map.values() {
-            STATS_SECTIONS_RELEASED.fetch_add(arc.read().unwrap().active_section_count() as u64, Ordering::Relaxed);
+            STATS_SECTIONS_RELEASED.fetch_add(
+                arc.read().unwrap().active_section_count() as u64,
+                Ordering::Relaxed,
+            );
         }
         map.clear();
     }
 }
-
 
 fn chunk_active_sections(c: &NativeChunk) -> usize {
     c.sections.iter().filter(|s| s.is_some()).count()
@@ -221,4 +246,3 @@ impl NativeChunk {
         chunk_active_sections(self)
     }
 }
-

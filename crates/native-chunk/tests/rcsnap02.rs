@@ -6,9 +6,9 @@
 //! exercises the decoder, not a mock.
 
 use native_chunk::packet_snapshot::{
-    OwnedPacketSnapshot, SnapshotRejection, SNAPSHOT_MAGIC_V2, MAX_SNAPSHOT_BYTES,
+    OwnedPacketSnapshot, SnapshotRejection, MAX_SNAPSHOT_BYTES, SNAPSHOT_MAGIC_V2,
 };
-use native_chunk::{NativeChunk, ChunkRegistry, ChunkKey};
+use native_chunk::{ChunkKey, ChunkRegistry, NativeChunk};
 
 fn header(registry_size: u32, source_bits: u8, mask: u16, full: bool, skylight: bool) -> Vec<u8> {
     let mut out = Vec::new();
@@ -203,7 +203,10 @@ fn control_14_malformed_palette_length_rejected() {
     body.extend_from_slice(&4096u16.to_be_bytes()); // refcount
     body.extend_from_slice(&4097u16.to_be_bytes()); // palette_len over bound
     transport.extend_from_slice(&body);
-    assert!(matches!(decode(&transport), Err(SnapshotRejection::MalformedSnapshot)));
+    assert!(matches!(
+        decode(&transport),
+        Err(SnapshotRejection::MalformedSnapshot)
+    ));
 }
 
 #[test]
@@ -228,7 +231,10 @@ fn control_15_out_of_range_palette_index_rejected() {
     transport.extend_from_slice(&body);
     transport.extend_from_slice(&[0x11u8; 2048]);
     transport.extend_from_slice(&[0x22u8; 2048]);
-    assert!(matches!(decode(&transport), Err(SnapshotRejection::MalformedSnapshot)));
+    assert!(matches!(
+        decode(&transport),
+        Err(SnapshotRejection::MalformedSnapshot)
+    ));
 }
 
 #[test]
@@ -237,7 +243,10 @@ fn control_16_truncated_packed_data_rejected() {
     let mut transport = header(157_010, 18, 1, false, true);
     section(&mut transport, 0, &states, 4096);
     transport.truncate(transport.len() - 3000); // cut into packed/light area
-    assert!(matches!(decode(&transport), Err(SnapshotRejection::MalformedSnapshot)));
+    assert!(matches!(
+        decode(&transport),
+        Err(SnapshotRejection::MalformedSnapshot)
+    ));
 }
 
 #[test]
@@ -246,17 +255,26 @@ fn control_17_extra_section_bytes_rejected() {
     let mut transport = header(157_010, 18, 1, false, true);
     section(&mut transport, 0, &states, 4096);
     transport.extend_from_slice(&[0xEEu8; 8]); // trailing bytes
-    assert!(matches!(decode(&transport), Err(SnapshotRejection::MalformedSnapshot)));
+    assert!(matches!(
+        decode(&transport),
+        Err(SnapshotRejection::MalformedSnapshot)
+    ));
 }
 
 #[test]
 fn control_18_unknown_version_rejected() {
     let mut transport = header(157_010, 18, 0, false, true);
     transport[8..10].copy_from_slice(&3u16.to_be_bytes()); // version 3
-    assert!(matches!(decode(&transport), Err(SnapshotRejection::MalformedSnapshot)));
+    assert!(matches!(
+        decode(&transport),
+        Err(SnapshotRejection::MalformedSnapshot)
+    ));
     let mut v1_magic = transport.clone();
     v1_magic[8..10].copy_from_slice(&1u16.to_be_bytes()); // V2 body, V1 magic
-    assert!(matches!(decode(&v1_magic), Err(SnapshotRejection::MalformedSnapshot)));
+    assert!(matches!(
+        decode(&v1_magic),
+        Err(SnapshotRejection::MalformedSnapshot)
+    ));
     let _ = SNAPSHOT_MAGIC_V2;
 }
 
@@ -301,7 +319,10 @@ fn control_refcount_mismatch_rejected() {
     let states = mixed(&[1, 2, 3]);
     let mut transport = header(157_010, 18, 1, false, true);
     section(&mut transport, 0, &states, 4095); // wrong refcount
-    assert!(matches!(decode(&transport), Err(SnapshotRejection::RefcountMismatch)));
+    assert!(matches!(
+        decode(&transport),
+        Err(SnapshotRejection::RefcountMismatch)
+    ));
 }
 
 #[test]
@@ -315,7 +336,10 @@ fn control_duplicate_palette_entry_rejected() {
     body.extend_from_slice(&7u16.to_be_bytes());
     body.extend_from_slice(&7u16.to_be_bytes()); // duplicate
     transport.extend_from_slice(&body);
-    assert!(matches!(decode(&transport), Err(SnapshotRejection::MalformedSnapshot)));
+    assert!(matches!(
+        decode(&transport),
+        Err(SnapshotRejection::MalformedSnapshot)
+    ));
 }
 
 #[test]
@@ -329,7 +353,10 @@ fn control_index_width_insufficient_rejected() {
     // section body that starts at `before + 2 (y+0) + 2 (refcount) + 2 (len) + 10`.
     let bits_at = before + 2 + 2 + 2 + 5 * 2;
     transport[bits_at] = 2; // 1<<2 = 4 < palette_len 5
-    assert!(matches!(decode(&transport), Err(SnapshotRejection::MalformedSnapshot)));
+    assert!(matches!(
+        decode(&transport),
+        Err(SnapshotRejection::MalformedSnapshot)
+    ));
 }
 
 #[test]
@@ -342,10 +369,13 @@ fn control_retained_native_chunk_from_transport() {
     // 1. One-shot decode via OwnedPacketSnapshot
     let snapshot = OwnedPacketSnapshot::from_transport(&transport).expect("valid transport");
     let mut ephemeral_buf = [0u8; 32768];
-    let ephemeral_res = snapshot.encode(&mut ephemeral_buf).expect("encode succeeds");
+    let ephemeral_res = snapshot
+        .encode(&mut ephemeral_buf)
+        .expect("encode succeeds");
 
     // 2. Persistent NativeChunk seeded from transport
-    let mut retained_chunk = NativeChunk::from_transport(&transport).expect("from_transport succeeds");
+    let mut retained_chunk =
+        NativeChunk::from_transport(&transport).expect("from_transport succeeds");
     assert_eq!(retained_chunk.dim, 0);
     assert_eq!(retained_chunk.cx, 0);
     assert_eq!(retained_chunk.cz, 0);
@@ -354,19 +384,29 @@ fn control_retained_native_chunk_from_transport() {
     // First retained encode (populates wire cache)
     let mut retained_buf1 = [0u8; 32768];
     let mut off1 = 0;
-    let retained_res1 = retained_chunk.encode_packet_payload(true, true, &mut retained_buf1, &mut off1).expect("retained encode succeeds");
+    let retained_res1 = retained_chunk
+        .encode_packet_payload(true, true, &mut retained_buf1, &mut off1)
+        .expect("retained encode succeeds");
     assert_eq!(retained_res1.bytes_written, ephemeral_res.bytes_written);
     assert_eq!(retained_res1.emitted_mask, ephemeral_res.emitted_mask);
-    assert_eq!(&retained_buf1[..off1], &ephemeral_buf[..ephemeral_res.bytes_written],
-        "Retained chunk encode must be byte-identical to snapshot encode");
+    assert_eq!(
+        &retained_buf1[..off1],
+        &ephemeral_buf[..ephemeral_res.bytes_written],
+        "Retained chunk encode must be byte-identical to snapshot encode"
+    );
 
     // Second retained encode (fast path: hits wire cache)
     let mut retained_buf2 = [0u8; 32768];
     let mut off2 = 0;
-    let retained_res2 = retained_chunk.encode_packet_payload(true, true, &mut retained_buf2, &mut off2).expect("retained re-encode succeeds");
+    let retained_res2 = retained_chunk
+        .encode_packet_payload(true, true, &mut retained_buf2, &mut off2)
+        .expect("retained re-encode succeeds");
     assert_eq!(retained_res2.bytes_written, retained_res1.bytes_written);
-    assert_eq!(&retained_buf1[..off1], &retained_buf2[..off2],
-        "Retained re-encode must be byte-identical via wire cache");
+    assert_eq!(
+        &retained_buf1[..off1],
+        &retained_buf2[..off2],
+        "Retained re-encode must be byte-identical via wire cache"
+    );
 
     // 3. Register in ChunkRegistry and verify handle lifecycle
     let registry = ChunkRegistry::new();
