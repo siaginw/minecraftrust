@@ -3,6 +3,8 @@
 //! Engine representation uses canonical global block state IDs (u16).
 //! Wire representation (Protocol 340) is derived on-demand via cached local palette.
 
+use std::sync::atomic::{AtomicU16, Ordering};
+
 pub const SECTION_BLOCK_COUNT: usize = 4096;
 pub const LIGHT_ARRAY_SIZE: usize = 2048;
 
@@ -16,12 +18,12 @@ static GLOBAL_PALETTE_BITS: std::sync::atomic::AtomicU8 = std::sync::atomic::Ato
 
 pub fn set_global_palette_bits(bits: u8) {
     if (5..=16).contains(&bits) {
-        GLOBAL_PALETTE_BITS.store(bits, std::sync::atomic::Ordering::Relaxed);
+        GLOBAL_PALETTE_BITS.store(bits, Ordering::Relaxed);
     }
 }
 
 pub fn global_palette_bits() -> u8 {
-    GLOBAL_PALETTE_BITS.load(std::sync::atomic::Ordering::Relaxed)
+    GLOBAL_PALETTE_BITS.load(Ordering::Relaxed)
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -44,12 +46,12 @@ impl SectionFlags {
 }
 
 #[repr(C, align(64))]
-#[derive(Clone)]
 pub struct NativeSection {
     // === ENGINE REPRESENTATION (Authoritative) ===
     /// Global block state IDs for all 4096 positions.
-    /// Uses u16 covering Block.BLOCK_STATE_IDS (max ~4000 in 1.12.2).
-    pub states: [u16; SECTION_BLOCK_COUNT], // 8,192 bytes
+    /// Uses AtomicU16 ([u16; 4096] in memory layout) providing sound cross-language
+    /// and concurrent access without Unchecked Data Race undefined behavior.
+    pub states: [AtomicU16; SECTION_BLOCK_COUNT], // 8,192 bytes (exact layout as [u16; 4096])
 
     // === DERIVED CACHES (Wire format, built on demand) ===
     /// Cached local palette for Protocol 340 wire encoding.
@@ -72,8 +74,11 @@ pub struct NativeSection {
 impl NativeSection {
     /// Creates a fresh native section initialized to Air (state 0).
     pub fn new(y_index: u8) -> Self {
+        // Safe transmutation of zeroed u16 array to AtomicU16 array
+        let raw = [0u16; SECTION_BLOCK_COUNT];
+        let states: [AtomicU16; SECTION_BLOCK_COUNT] = unsafe { std::mem::transmute(raw) };
         Self {
-            states: [0u16; SECTION_BLOCK_COUNT],
+            states,
             palette_cache: None,
             wire_cache_skylight: None,
             wire_cache_noskylight: None,
@@ -84,6 +89,18 @@ impl NativeSection {
             y_index,
             _pad: [0, 0],
         }
+    }
+
+    /// Access states as plain u16 slice (safe because AtomicU16 is #[repr(transparent)] over UnsafeCell<u16>).
+    #[inline(always)]
+    pub fn states_as_slice(&self) -> &[u16; SECTION_BLOCK_COUNT] {
+        unsafe { &*(self.states.as_ptr() as *const [u16; SECTION_BLOCK_COUNT]) }
+    }
+
+    /// Access states as mutable u16 slice when exclusive &mut self is held.
+    #[inline(always)]
+    pub fn states_as_mut_slice(&mut self) -> &mut [u16; SECTION_BLOCK_COUNT] {
+        unsafe { &mut *(self.states.as_mut_ptr() as *mut [u16; SECTION_BLOCK_COUNT]) }
     }
 
     #[inline(always)]
@@ -123,13 +140,13 @@ impl NativeSection {
     /// Gets global block state ID at (x, y, z).
     #[inline(always)]
     pub fn get_block(&self, x: usize, y: usize, z: usize) -> u16 {
-        self.states[Self::block_index(x, y, z)]
+        self.states[Self::block_index(x, y, z)].load(Ordering::Acquire)
     }
 
     /// Gets global block state ID by section index.
     #[inline(always)]
     pub fn get_block_by_index(&self, idx: usize) -> u16 {
-        self.states[idx]
+        self.states[idx].load(Ordering::Acquire)
     }
 
     /// Sets a block state at (x, y, z) using global registry ID.
@@ -143,12 +160,12 @@ impl NativeSection {
     /// Invalidates palette cache.
     #[inline(always)]
     pub fn set_block_by_index(&mut self, idx: usize, global_state_id: u16) -> bool {
-        let old_id = self.states[idx];
+        let old_id = self.states[idx].load(Ordering::Relaxed);
         if old_id == global_state_id {
             return false; // No change
         }
 
-        self.states[idx] = global_state_id;
+        self.states[idx].store(global_state_id, Ordering::Release);
 
         // Update non_air_count
         if old_id == 0 && global_state_id != 0 {
@@ -188,7 +205,7 @@ impl NativeSection {
         block_light: Option<&[u8; LIGHT_ARRAY_SIZE]>,
         sky_light: Option<&[u8; LIGHT_ARRAY_SIZE]>,
     ) -> u16 {
-        self.states.copy_from_slice(states);
+        self.states_as_mut_slice().copy_from_slice(states);
         if let Some(bl) = block_light {
             self.block_light.copy_from_slice(bl);
         }
@@ -243,11 +260,12 @@ impl NativeSection {
     /// Builds local palette from canonical global states.
     /// Returns None if section is all Air.
     fn build_local_palette(&self, global_bits: u8) -> LocalPalette {
+        let states = self.states_as_slice();
         // Collect unique global state IDs
         let mut unique_ids = [0u16; 256];
         let mut unique_count = 0usize;
 
-        for &id in &self.states {
+        for &id in states {
             if id == 0 {
                 continue; // Air handled separately (always palette[0])
             }
@@ -285,7 +303,7 @@ impl NativeSection {
         };
 
         // Pack into BitArray matching 1.12.2 wire layout
-        let words = Self::pack_states_to_words(&self.states, &palette, bits, mode);
+        let words = Self::pack_states_to_words(states, &palette, bits, mode);
 
         LocalPalette {
             bits,
@@ -525,7 +543,7 @@ impl NativeSection {
 
     /// Fills entire section with a single global state ID.
     pub fn fill(&mut self, global_state_id: u16) {
-        self.states.fill(global_state_id);
+        self.states_as_mut_slice().fill(global_state_id);
         self.non_air_count = if global_state_id == 0 { 0 } else { 4096 };
         self.flags = if global_state_id == 0 {
             0
@@ -552,7 +570,7 @@ impl NativeSection {
     /// Recalculates non_air_count from states (for validation).
     pub fn recalculate_counts(&mut self) {
         let mut non_air = 0u16;
-        for &id in &self.states {
+        for &id in self.states_as_slice() {
             if id != 0 {
                 non_air += 1;
             }

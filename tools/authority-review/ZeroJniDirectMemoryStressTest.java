@@ -273,10 +273,11 @@ public class ZeroJniDirectMemoryStressTest {
         assertTrue(sec0Ptr != 0, "Sec0 pointer valid");
 
         int numReaders = 4;
-        int totalReadsTarget = 2_000_000;
-        int totalWritesTarget = 50_000;
+        int totalReadsTarget = 5_000_000;
+        int totalWritesTarget = 500_000;
 
-        AtomicBoolean running = new AtomicBoolean(true);
+        AtomicBoolean readersDone = new AtomicBoolean(false);
+        AtomicBoolean writerDone = new AtomicBoolean(false);
         AtomicLong totalReads = new AtomicLong(0);
         AtomicLong totalWrites = new AtomicLong(0);
         List<Throwable> errors = new CopyOnWriteArrayList<>();
@@ -287,7 +288,7 @@ public class ZeroJniDirectMemoryStressTest {
         for (int r = 0; r < numReaders; r++) {
             pool.submit(() -> {
                 Random rnd = new Random();
-                while (running.get()) {
+                while (!readersDone.get() || !writerDone.get()) {
                     try {
                         int x = rnd.nextInt(16);
                         int y = rnd.nextInt(16);
@@ -298,8 +299,7 @@ public class ZeroJniDirectMemoryStressTest {
                             break;
                         }
                         if (totalReads.incrementAndGet() >= totalReadsTarget) {
-                            running.set(false);
-                            break;
+                            readersDone.set(true);
                         }
                     } catch (Throwable t) {
                         errors.add(t);
@@ -312,7 +312,7 @@ public class ZeroJniDirectMemoryStressTest {
         // Writer
         pool.submit(() -> {
             Random rnd = new Random();
-            while (running.get()) {
+            while (!writerDone.get()) {
                 try {
                     int x = rnd.nextInt(16);
                     int y = rnd.nextInt(16);
@@ -320,7 +320,7 @@ public class ZeroJniDirectMemoryStressTest {
                     int newState = rnd.nextInt(500) + 1;
                     NativeChunkBridge.setBlockState(dim, cx, cz, x, y, z, newState);
                     if (totalWrites.incrementAndGet() >= totalWritesTarget) {
-                        running.set(false);
+                        writerDone.set(true);
                         break;
                     }
                 } catch (Throwable t) {
@@ -331,8 +331,8 @@ public class ZeroJniDirectMemoryStressTest {
         });
 
         pool.shutdown();
-        boolean finished = pool.awaitTermination(30, TimeUnit.SECONDS);
-        assertTrue(finished, "Stress test threads finished within 30s");
+        boolean finished = pool.awaitTermination(60, TimeUnit.SECONDS);
+        assertTrue(finished, "Stress test threads finished within 60s");
 
         assertTrue(errors.isEmpty(), "Zero concurrency errors encountered, got: " + errors);
         System.out.println("    [PASS] Executed " + String.format("%,d", totalReads.get()) + " concurrent direct reads & "

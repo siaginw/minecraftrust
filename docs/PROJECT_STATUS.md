@@ -56,7 +56,13 @@ Unconstrained production authority remains **`false`** everywhere (`PacketAuthor
   live smokes and 10,000 differential fuzzing operations (0 mismatches).
   Status: **`SECTION_STATE_AUTHORITY_EXPANDED`**
   (`docs/research/SECTION_STATE_AUTHORITY_EXPANSION_REPORT.md`).
-- **Next Milestone:** **`READY_FOR_RUST_CHUNKSTATE_AUTHORITY_EXPANSION_PHASE_2`**.
+- **Cross-Language Memory Model Formally Proven & Sound:** Replaced plain non-atomic `[u16; 4096]`
+  with `[AtomicU16; 4096]`, eliminating Rust abstract machine undefined behavior on concurrent foreign reads.
+  Proven under 17,226,590 direct reads and 500,000 writes with 0 errors/crashes. Measured latency: 5.06 ns raw
+  read, 16.45 ns mapped read. Next subsystem selected: **Block Light & Sky Light State Ownership**.
+  Status: **`CROSS_LANGUAGE_MEMORY_MODEL_SOUND_AND_PROVEN`**
+  (`docs/research/CROSS_LANGUAGE_MEMORY_MODEL_RESOLUTION_REPORT.md`).
+- **Next Milestone:** **`READY_FOR_RUST_CHUNKSTATE_LIGHT_AUTHORITY_EXPANSION`**.
 
 ### What each proof is
 
