@@ -27,17 +27,16 @@ Prove the machine that proves everything else.
 - Session-bound admission with per-process certificates
 - Exception-contract verification (scoped rethrow / isolated callee / caller isolation) from bytecode
 
-## Phase 1 — Packet / chunk boundary · 🧪 now
-
+## Phase 1 — Packet / chunk boundary · ✅ complete
+ 
 Own the first real subsystem: full-chunk `SPacketChunkData` encoding.
 
-- **Done:** live coherent capture on both runtimes; RCSNAP02 logical transport; bounded Phase-D smokes green on Clean Forge (32/32) and Revelation (32/32); first closure campaign **903 counted passes / 0 mismatches**; real FML launch admission (`REAL_FML_TRANSFORM_CAPTURE · OFFLINE_QUALIFIED`).
-- **Open:** closure coverage criteria (2,000 comparisons / 300 incarnations / 20 reload cycles). The measured limiter is workload-client chunk diversity under the server's movement handling — a workload-generation problem, not a parity failure.
-- **Next:** extend the workload within the same predeclared campaign semantics → **Rust packet authority review**.
+- **Done:** live coherent capture on both runtimes; RCSNAP02 logical transport; bounded Phase-D smokes green on Clean Forge (32/32) and Revelation (32/32); real FML launch admission (`REAL_FML_TRANSFORM_CAPTURE · OFFLINE_QUALIFIED`); full closure campaign passed across 2 fresh JVM sessions (**4,905 counted passes / 0 mismatches**, `LIVE_SHADOW_CLOSED`); formal authority review completed (`AUTHORITY_REVIEWED`, `docs/research/PACKET_AUTHORITY_CONTRACT.md`); small, explicit, fail-closed bounded authority experiment completed with 0 errors across Gate A (Clean Forge 2860, 32/32) and Gate B (FTB Revelation 2846, 64/64) (`docs/research/BOUNDED_AUTHORITY_EXPERIMENT_REPORT.md`).
+- **Status:** **`READY_FOR_RETAINED_RUST_CHUNKSTATE`**.
 
-## Phase 2 — Retained Rust ChunkState · 🗺️ planned
+## Phase 2 — Retained Rust ChunkState · 🧪 active focus
 
-The first *ownership* milestone: chunk state that lives in Rust, with Java observing a view. The V1 attempt was deliberately abandoned and fail-closed ([why](PROJECT_STATUS.md#abandoned--fail-closed)); the V2 design reuses the coherent-capture and session-contract machinery proven in Phase 1.
+The first *ownership* milestone: chunk state that lives in Rust, with Java observing a view. The V1 attempt was deliberately abandoned and fail-closed ([why](PROJECT_STATUS.md#abandoned--fail-closed)); the V2 design reuses the coherent-capture and session-contract machinery proven in Phase 1. Complete architectural specification authored in `docs/research/RETAINED_CHUNKSTATE_DESIGN.md`.
 
 ## Phase 3 — Chunk reads/writes + packet authority · 🗺️ planned
 

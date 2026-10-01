@@ -329,7 +329,7 @@ public final class LivePacketCapture {
 
     // ------------------------------------------------------------------
 
-    private static final class AttemptToken {
+    static final class AttemptToken {
         final LiveWriterHooks.Session session;
         final LiveWriterGate.CaptureAttempt attempt;
         final CaptureDraft draft;

@@ -75,6 +75,7 @@ SOURCES=(
   "$ROOT/tools/bridge/src/com/rustcraft/bridge/capture/SessionCompatibilityContract.java"
   "$ROOT/tools/bridge/src/com/rustcraft/bridge/capture/PhaseDScopePolicy.java"
   "$ROOT/tools/bridge/src/com/rustcraft/bridge/capture/LiveShadowCampaignConsumer.java"
+  "$ROOT/tools/bridge/src/com/rustcraft/bridge/capture/PacketAuthorityExperiment.java"
   "$ROOT/tools/bridge/src/com/rustcraft/bridge/PacketEncodeResultV2.java"
   "$ROOT/tools/bridge/src/com/rustcraft/bridge/NativeChunkPacket.java"
   "$ROOT/tools/bridge/src/com/rustcraft/bridge/NativeChunkBridge.java"

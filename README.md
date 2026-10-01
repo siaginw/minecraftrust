@@ -30,24 +30,26 @@ The numbers below are **counted, machine-reconciled results** from recorded camp
 
 | | |
 |:---|:---|
-| **903** | counted Java↔Rust live chunk comparisons in the first closure campaign — **0 semantic mismatches** |
+| **4,905** | counted Java↔Rust live chunk comparisons across 2 fresh JVM sessions in closure campaign — **0 semantic mismatches** |
 | **219** | mods in the test modpack (FTB Revelation 3.4.0) whose server the project joins and runs under |
-| **157,010** | block states in the tested registry — handled without widening the snapshot format |
-| **0** | Rust bytes ever selected for transmission to a client |
+| **157,010** | block states in the tested registry — handled without widening the snapshot format (RCSNAP02) |
+| **96** | Rust-authored packets committed to real clients under bounded authority experiments (32 Clean Forge + 64 Revelation) — **0 encode failures** |
+| **false** | Production authority remains strictly **`false`**; unadmitted, TE-bearing, high-state, or post-cap chunks fall back to Java |
 
-> **Read this honestly:** the first closure campaign is *not closed*. The predefined closure criteria demand 2,000 comparisons / 300 distinct chunk incarnations / 20 reload cycles; the campaign reached 903 / 135 / 0 because the workload client was rubber-banded by the server's normal movement handling, limiting chunk diversity. **Parity stayed clean; coverage came up short.** Details in [the 903/0 context](#the-9030-result-in-context).
+> **Verified Status:** Full-chunk live-shadow closure is **`CLOSED`** (`docs/research/V2_LIVE_SHADOW_CLOSURE_REPORT.md`). The formal authority review was executed (`docs/research/PACKET_AUTHORITY_CONTRACT.md`), and the small, explicit, fail-closed bounded authority experiment is **`PASS`** across both Clean Forge and Revelation (`docs/research/BOUNDED_AUTHORITY_EXPERIMENT_REPORT.md`). The project is now **`READY_FOR_RETAINED_RUST_CHUNKSTATE`**.
 
 ### What is proven end-to-end today
 
 - A **real Forge/FML server launch** — full mod lifecycle, real Phosphor mixins writing launch-scoped provenance — passes the project's V2 session-bound admission and is validated by the *same* qualification engine used offline (`REAL_FML_TRANSFORM_CAPTURE · PASS · OFFLINE_QUALIFIED`).
 - A headless client joins the 219-mod server, completes the FML|HS handshake, reaches PLAY, and holds a bounded stability window — [full join compatibility](docs/compatibility/) against the pack's real `NetworkCheckHandler`.
 - Live chunk capture is **coherent**: acquire → clone → seal → release under a single-writer gate; the gate is never held while Rust computes.
-- The Rust encoder's output is **semantically identical** to Java's authoritative packet in every counted comparison.
+- The Rust encoder's output is **semantically identical** to Java's authoritative packet in all 4,905 counted closure comparisons.
+- **Fail-closed bounded authority**: under explicit operator flag (`-Drustcraft.packetAuthorityExperiment=true`) and cap, Rust authors packets on the wire; upon cap exhaustion, TE detection, or high-state detection, packets fall back cleanly to Java with zero client interruption.
 
 ### What is deliberately *not* proven
 
-- Rust has **no production authority**. `tryEncode` returns `null`; the authority gate is fail-closed. Java is the sole producer of client-visible behavior.
-- Closure coverage criteria are unmet (see above).
+- Rust has **no unconstrained production authority**. `PRODUCTION_AUTHORITY` remains constant `false`; the authority gate is fail-closed.
+- Retained chunk state in Rust is not yet active (snapshot capture crossing JNI is still used for packets).
 - No whole-server performance claim is made. Component benchmarks exist ([below](#performance-honestly)); total-server MSPT/TPS has never been measured.
 
 ---
@@ -84,7 +86,7 @@ flowchart LR
     style F fill:#1f6feb,color:#fff
 ```
 
-Today, full-chunk packet encoding stands at **C→D**: shadow-proven live, first closure campaign run, coverage criteria not yet met.
+Today, full-chunk packet encoding stands at **E**: closure completed (`LIVE_SHADOW_CLOSED`), formal authority review completed (`AUTHORITY_REVIEWED`), and bounded authority experiment proven live (`BOUNDED_AUTHORITY_EXPERIMENT`). The project is now advancing to **F (Rust Ownership via Retained Rust ChunkState)**.
 
 ### Today's shape vs. the destination
 

@@ -10,33 +10,27 @@ This is the canonical status document. It is updated when a qualification or cam
 
 | Runtime | Qualification | Authority | Live shadow |
 |---|---|---|---|
-| Clean Forge 14.23.5.2860 | `CLEAN_FORGE_PROFILE_REQUALIFIED_V2` / **PASS** / OFFLINE_QUALIFIED | **OFF** | V1 completed in its own historical scope; **V2 Phase-D smoke 32/32 semantic, 0 mismatch** |
-| FTB Revelation 3.4.0 (219 mods) | `REVELATION_PROFILE_REQUALIFIED_V2` / **PASS** / OFFLINE_QUALIFIED · **real-launch admission: `REAL_FML_TRANSFORM_CAPTURE` / PASS** | **OFF** | **V2 Phase-D smoke 32/32 semantic, 0 mismatch; first closure campaign 903 counted passes / 0 mismatches — coverage open** |
+| Clean Forge 14.23.5.2860 | `CLEAN_FORGE_PROFILE_REQUALIFIED_V2` / **PASS** / OFFLINE_QUALIFIED | **BOUNDED_AUTHORITY_EXPERIMENT (PASS, 32/32)** | V1 completed in its own historical scope; **V2 Phase-D smoke 32/32 semantic, 0 mismatch**; Gate A bounded authority: 32 Rust / 137 Java fallback |
+| FTB Revelation 3.4.0 (219 mods) | `REVELATION_PROFILE_REQUALIFIED_V2` / **PASS** / OFFLINE_QUALIFIED · **real-launch admission: `REAL_FML_TRANSFORM_CAPTURE` / PASS** | **BOUNDED_AUTHORITY_EXPERIMENT (PASS, 64/64)** | **Closure CLOSED: 4,905 counted passes / 0 mismatches** (`V2_LIVE_SHADOW_CLOSURE_REPORT.md`); Gate B bounded authority: 64 Rust / 105 Java fallback |
 
-Production authority is **OFF** everywhere. Java remains authoritative;
-`M4NativeStatePayload.tryEncode` returns `null`;
-`CaptureContract.productionAuthorityEligible()` returns `false`; no Rust chunk
-packet has ever reached the production wire.
+Unconstrained production authority remains **`false`** everywhere (`PacketAuthorityExperiment.PRODUCTION_AUTHORITY = false`). Rust authors chunk packets strictly within the bounded experiment (`-Drustcraft.packetAuthorityExperiment=true`) under an explicit operator cap (`-Drustcraft.packetAuthorityCap`). All out-of-scope, TileEntity, high-state, or post-cap chunks fail closed to pure Java serialization.
 
 ### Claim hygiene — read before quoting any number
 
-- **Counted closure campaign (Revelation, V2):** 903 COMPARE_PASS / 0
-  COMPARE_MISMATCH / 0 INFRA_FAILURE / 0 DISQUALIFIED. Closure is **not met**:
-  the predeclared criteria require ≥2,000 comparisons, ≥300 distinct chunk
-  incarnations, and ≥20 reload cycles; measured 903 / 135 / 0. The measured
-  limiter was workload-client chunk diversity under the server's normal
-  movement handling — not an observed parity failure. A stopped hop-traversal
-  experiment added 559 passes (0 mismatches) and is **not** merged into the
-  counted denominator; its receipts are preserved separately.
-- **Clean Forge V1 live shadow:** 2,372/2,372 byte-identical within its own
-  qualified historical scope.
-- **Revelation V1:** no completed live shadow and no parity claim; prototypes
-  archived at `archive/revelation-v1-shadow`.
-- **OFFLINE_QUALIFIED** (V2) means the transformation, identity, admission,
-  chain and frame evidence for a pinned runtime was proven in-process and
-  independently witnessed. It does not mean production-authoritative, and until
-  the Phase-D smokes and closure campaign above it did not mean live-parity
-  either.
+- **Live-Shadow Closure Campaign (Revelation, V2):** 4,905 COMPARE_PASS / 0
+  COMPARE_MISMATCH / 0 DROPPED / 475 EXCLUDED across 2 independent JVM sessions.
+  Predeclared criteria exceeded: denominator 4,905 (threshold 2,000), 4,546
+  incarnations (threshold 300), 491 reload cycles (threshold 20), 4,885 I/O-origin
+  comparisons (threshold 200). Status: **`LIVE_SHADOW_CLOSED`**.
+- **Formal Authority Review:** Executed and documented in
+  `docs/research/PACKET_AUTHORITY_CONTRACT.md`. Binding receipt verified in
+  `target/authority-review/closure-input-receipt.json`. Status: **`AUTHORITY_REVIEWED`**.
+- **Bounded Authority Experiment:** 96 total Rust-authored packets reached real
+  clients (Gate A: 32/32 on Clean Forge 2860; Gate B: 64/64 on FTB Revelation 2846).
+  0 Rust encode failures; 100% fail-closed Java fallback observed once cap was
+  exhausted. Status: **`BOUNDED_AUTHORITY_EXPERIMENT`** (Receipts: `target/authority-smoke/`).
+- **Next Milestone:** **`READY_FOR_RETAINED_RUST_CHUNKSTATE`** (Architecture:
+  `docs/research/RETAINED_CHUNKSTATE_DESIGN.md`).
 
 ### What each proof is
 

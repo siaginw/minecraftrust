@@ -163,6 +163,23 @@ final class CaptureDraft {
         }
     }
 
+    /**
+     * Creates an immutable OwnedPacketSnapshot for the Rust authority experiment
+     * directly under the held gate without requiring a pre-built Java packet.
+     */
+    OwnedPacketSnapshot createOwnedSnapshot() {
+        validateForSeal();
+        OwnedPacketSnapshot.Section[] owned = new OwnedPacketSnapshot.Section[16];
+        for (int y = 0; y < 16; y++) {
+            if ((acceptedMask & (1 << y)) == 0) continue;
+            CaptureSource.Section section = begin.section(y);
+            owned[y] = new OwnedPacketSnapshot.Section(y, states[y], blockLight[y],
+                    skyLight[y], null, section.empty, section.blockRefCount);
+        }
+        return new OwnedPacketSnapshot(begin, end, context(),
+                owned, biomes, acceptedMask, true, CaptureContract.Scope.LIVE_SHADOW_OWNED_V1);
+    }
+
     SealedLiveCapture seal(Object packet, long gateEventId) {
         LivePacketCapture.JavaPacketView java = source.javaPacket(packet);
         if (java == null || java.payload() == null || java.payload().length == 0) {

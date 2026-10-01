@@ -236,6 +236,20 @@ public class SPacketChunkDataTransformer implements IClassTransformer {
                 "com/rustcraft/bridge/capture/LiveWriterHooks", "packetCaptureObserve",
                 "(Ljava/lang/Object;Ljava/lang/Object;I)Ljava/lang/Object;", false));
         observe.add(new VarInsnNode(Opcodes.ASTORE, tokenLocal));
+
+        // Authority experiment branch: if enabled and successful, return immediately
+        LabelNode continueJava = new LabelNode();
+        observe.add(new VarInsnNode(Opcodes.ALOAD, tokenLocal));
+        observe.add(new VarInsnNode(Opcodes.ALOAD, 0));
+        observe.add(new VarInsnNode(Opcodes.ALOAD, 1));
+        observe.add(new VarInsnNode(Opcodes.ILOAD, 2));
+        observe.add(new MethodInsnNode(Opcodes.INVOKESTATIC,
+                "com/rustcraft/bridge/capture/PacketAuthorityExperiment", "tryAuthority",
+                "(Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;I)Z", false));
+        observe.add(new JumpInsnNode(Opcodes.IFEQ, continueJava));
+        observe.add(new InsnNode(Opcodes.RETURN));
+        observe.add(continueJava);
+
         mn.instructions.insert(anchors.get(0) /* Object.<init> at BCI 1 */, observe);
 
         // Commit before the normal return (BCI 200).

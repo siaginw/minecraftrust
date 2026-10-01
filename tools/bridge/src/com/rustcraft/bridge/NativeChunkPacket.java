@@ -276,6 +276,13 @@ public class NativeChunkPacket {
         Chunk chunkIn = (Chunk) chunkObj;
         try { com.rustcraft.bridge.M4PacketCompare.onPacketConstructing(packet, chunkIn); } catch (Throwable ignore) { }
 
+        // Bounded Rust-authority experiment: small, explicit, fail-closed
+        if (com.rustcraft.bridge.capture.PacketAuthorityExperiment.enabled()) {
+            boolean handled = com.rustcraft.bridge.capture.PacketAuthorityExperiment.tryAuthority(
+                    null, packet, chunkIn, changedSectionFilter);
+            if (handled) return true;
+        }
+
         // M4.3 native-state authoritative source (isolated from the M1 staging
         // path): when enabled, eligible packets take their payload from the
         // synchronized NativeChunk registry; ANY miss falls back to the

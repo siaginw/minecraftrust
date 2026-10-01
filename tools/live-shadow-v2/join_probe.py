@@ -193,6 +193,8 @@ def run_probe(host: str, port: int, username: str, *, expect_forge: bool,
             if packet_id == CB_KEEP_ALIVE:
                 frame.send(SB_KEEP_ALIVE, body[:8])
                 observed["keepalive_exchanged"] = True
+            elif packet_id == CB_CHUNK_DATA:
+                observed["chunk_packets"] = observed.get("chunk_packets", 0) + 1
             elif packet_id == CB_DISCONNECT_PLAY:
                 reason, _ = _read_chat(body)
                 raise ProbeFailure("disconnect during stability: " + reason)
