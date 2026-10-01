@@ -9,7 +9,7 @@
 //! - Consumers read snapshot_generation; if it differs from mutation_generation at read time,
 //!   the snapshot is stale and should be re-acquired.
 
-use crate::registry::{STATS_SECTIONS_ALLOCATED, STATS_SECTIONS_RELEASED};
+use crate::registry::STATS_SECTIONS_ALLOCATED;
 use crate::section::NativeSection;
 
 pub const CHUNK_PRIMER_SIZE: usize = 65536; // 16 * 16 * 256 u16
@@ -425,19 +425,11 @@ impl NativeChunk {
         }
         if let Some(ref mut sec) = self.sections[y] {
             sec.replace_states(states, block_light, sky_light);
-        }
-        // All-air refreshed section deactivates in the mask: vanilla full-chunk
-        // packets exclude empty sections (isFullChunk && isEmpty -> skip), so the
-        // mask bit must drop. Partial-filter packets would need separate
-        // presence tracking (unsupported, documented M4.2A B3).
-        if self.sections[y]
-            .as_ref()
-            .map(|s| s.non_air_count == 0)
-            .unwrap_or(false)
-        {
-            self.primary_bit_mask &= !(1u16 << y);
-            self.sections[y] = None;
-            STATS_SECTIONS_RELEASED.fetch_add(1, std::sync::atomic::Ordering::Relaxed);
+            if sec.non_air_count == 0 {
+                self.primary_bit_mask &= !(1u16 << y);
+            } else {
+                self.primary_bit_mask |= 1u16 << y;
+            }
         }
         self.dirty_sections &= !(1u16 << y);
         self.mutation_generation = self.mutation_generation.wrapping_add(1);

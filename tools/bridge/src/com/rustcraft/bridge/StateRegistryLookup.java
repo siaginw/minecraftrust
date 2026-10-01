@@ -117,11 +117,26 @@ public final class StateRegistryLookup {
 
     /**
      * Direct memory read: reads 16-bit global block state ID from native section states array at (x, y, z).
-     * Zero JNI overhead.
+     * Zero JNI overhead. Uses memory load fence to prevent load reordering across architectures.
      */
     public static int readStateId(long sectionPtr, int x, int y, int z) {
         int idx = ((y & 15) << 8) | ((z & 15) << 4) | (x & 15);
-        return UNSAFE.getShort(sectionPtr + ((long) idx << 1)) & 0xFFFF;
+        if (UNSAFE != null) {
+            UNSAFE.loadFence();
+            return UNSAFE.getShort(sectionPtr + ((long) idx << 1)) & 0xFFFF;
+        }
+        return 0;
+    }
+
+    /**
+     * Volatile direct memory read: reads 16-bit global block state ID with acquire semantics.
+     */
+    public static int readStateIdVolatile(long sectionPtr, int x, int y, int z) {
+        int idx = ((y & 15) << 8) | ((z & 15) << 4) | (x & 15);
+        if (UNSAFE != null) {
+            return UNSAFE.getShortVolatile(null, sectionPtr + ((long) idx << 1)) & 0xFFFF;
+        }
+        return 0;
     }
 
     /**

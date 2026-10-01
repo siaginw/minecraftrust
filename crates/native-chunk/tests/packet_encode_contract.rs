@@ -223,7 +223,7 @@ fn empty_nonempty_refresh_transitions_keep_mask_and_payload_consistent() {
     assert_encoded(&mut chunk, 0x0021, true, true);
     chunk.mark_section_mutation(5);
     chunk.refresh_section(5, &[0; 4096], None, None);
-    assert!(chunk.sections[5].is_none());
+    assert_eq!(chunk.sections[5].as_ref().map(|s| s.non_air_count).unwrap_or(0), 0);
     assert_eq!(chunk.primary_bit_mask, 1);
     assert_encoded(&mut chunk, 1, true, true);
     chunk.mark_section_mutation(5);

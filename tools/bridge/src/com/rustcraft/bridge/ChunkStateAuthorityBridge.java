@@ -91,6 +91,7 @@ public final class ChunkStateAuthorityBridge {
     private static Field chunkHeightMap;
     private static Field chunkWorld;
     private static Field chunkStorageArrays;
+    private static Field chunkLoaded;
     private static Method chunkRelightBlock;
     private static Method chunkCreateNewTileEntity;
     private static volatile boolean reflectionInitialized = false;
@@ -214,6 +215,19 @@ public final class ChunkStateAuthorityBridge {
         }
     }
 
+    private static boolean isChunkLoaded(Chunk chunk) {
+        if (chunk == null) return false;
+        try {
+            ensureReflection();
+            if (chunkLoaded != null) {
+                return chunkLoaded.getBoolean(chunk);
+            }
+            return true; // Fallback if field inaccessible
+        } catch (Throwable t) {
+            return true;
+        }
+    }
+
     private static void ensureReflection() {
         if (reflectionInitialized) return;
         synchronized (ChunkStateAuthorityBridge.class) {
@@ -250,6 +264,20 @@ public final class ChunkStateAuthorityBridge {
                     chunkStorageArrays = Chunk.class.getDeclaredField("storageArrays");
                 }
                 chunkStorageArrays.setAccessible(true);
+
+                // Loaded flag: field_76636_d / loaded
+                try {
+                    chunkLoaded = Chunk.class.getDeclaredField("field_76636_d");
+                } catch (NoSuchFieldException e) {
+                    try {
+                        chunkLoaded = Chunk.class.getDeclaredField("loaded");
+                    } catch (NoSuchFieldException e2) {
+                        chunkLoaded = null;
+                    }
+                }
+                if (chunkLoaded != null) {
+                    chunkLoaded.setAccessible(true);
+                }
 
                 // relightBlock: func_76595_e(int, int, int)
                 try {
@@ -302,6 +330,22 @@ public final class ChunkStateAuthorityBridge {
         return RECORDS.get(chunkKey(dim, cx, cz));
     }
 
+    /**
+     * Unregisters chunk from Rust semantic authority, clearing record and zeroing pointer table.
+     * Prevents any subsequent Use-After-Free or stale generation reads.
+     */
+    public static void unregisterChunkAuthority(int dim, int cx, int cz) {
+        String key = chunkKey(dim, cx, cz);
+        ChunkAuthorityRecord record = RECORDS.remove(key);
+        if (record != null) {
+            record.mode = AuthoritativeMode.DEMOTED;
+            record.generationId = 0;
+            for (int i = 0; i < 16; i++) {
+                record.sectionPointers[i] = 0;
+            }
+        }
+    }
+
     public static void demoteChunk(int dim, int cx, int cz, String reason) {
         String key = chunkKey(dim, cx, cz);
         ChunkAuthorityRecord r = RECORDS.get(key);
@@ -342,8 +386,12 @@ public final class ChunkStateAuthorityBridge {
             World w = (World) chunkWorld.get(chunk);
             if (w == null || getDimension(w) != 0) return null;
             int dim = 0;
+            if (!isChunkLoaded(chunk)) {
+                NativeChunkBridge.JAVA_READS.incrementAndGet();
+                return null;
+            }
             ChunkAuthorityRecord record = RECORDS.get(chunkKey(dim, chunk.field_76635_g, chunk.field_76647_h));
-            if (record == null || (record.mode != AuthoritativeMode.RUST_AUTHORITATIVE && record.mode != AuthoritativeMode.RUST_MIRRORED)) {
+            if (record == null || record.generationId <= 0 || (record.mode != AuthoritativeMode.RUST_AUTHORITATIVE && record.mode != AuthoritativeMode.RUST_MIRRORED)) {
                 NativeChunkBridge.JAVA_READS.incrementAndGet();
                 return null;
             }
@@ -385,8 +433,12 @@ public final class ChunkStateAuthorityBridge {
             int dim = 0;
             int cx = chunk.field_76635_g;
             int cz = chunk.field_76647_h;
+            if (!isChunkLoaded(chunk)) {
+                NativeChunkBridge.JAVA_WRITES.incrementAndGet();
+                return MutationResult.UNHANDLED;
+            }
             ChunkAuthorityRecord record = RECORDS.get(chunkKey(dim, cx, cz));
-            if (record == null || (record.mode != AuthoritativeMode.RUST_AUTHORITATIVE && record.mode != AuthoritativeMode.RUST_MIRRORED)) {
+            if (record == null || record.generationId <= 0 || (record.mode != AuthoritativeMode.RUST_AUTHORITATIVE && record.mode != AuthoritativeMode.RUST_MIRRORED)) {
                 NativeChunkBridge.JAVA_WRITES.incrementAndGet();
                 return MutationResult.UNHANDLED;
             }

@@ -137,6 +137,7 @@ public final class ChunkMutationTracker {
             int dim = st[0];
             long[] k = chunkCoords(chunk);
             UNLOAD_QUEUE.add(new int[] { dim, (int) k[0], (int) k[1] });
+            ChunkStateAuthorityBridge.unregisterChunkAuthority(dim, (int) k[0], (int) k[1]);
         }
     }
 

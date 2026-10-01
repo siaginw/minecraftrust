@@ -448,35 +448,44 @@ public class ChunkStateAuthorityTest {
         long sec0Ptr = NativeChunkBridge.getSectionPointer(dim, cx, cz, 0);
 
         // --- Benchmark 1: Direct Memory (Zero-JNI) Reads ---
-        int readSamples = 200000;
-        long[] readLatencies = new long[readSamples];
+        int readSamples = 500000;
+        int batchSize = 10000;
+        int batches = readSamples / batchSize;
+        double[] readBatchNs = new double[batches];
 
         // Warmup
-        for (int i = 0; i < 20000; i++) {
+        for (int i = 0; i < 50000; i++) {
             StateRegistryLookup.readStateId(sec0Ptr, i & 15, (i >> 4) & 15, (i >> 8) & 15);
         }
 
         long t0 = System.nanoTime();
-        for (int i = 0; i < readSamples; i++) {
+        for (int b = 0; b < batches; b++) {
             long start = System.nanoTime();
-            int s = StateRegistryLookup.readStateId(sec0Ptr, i & 15, (i >> 4) & 15, (i >> 8) & 15);
+            int sum = 0;
+            for (int i = 0; i < batchSize; i++) {
+                sum += StateRegistryLookup.readStateId(sec0Ptr, i & 15, (i >> 4) & 15, (i >> 8) & 15);
+            }
             long end = System.nanoTime();
-            readLatencies[i] = end - start;
+            readBatchNs[b] = (double) (end - start) / batchSize;
         }
         long t1 = System.nanoTime();
 
-        Arrays.sort(readLatencies);
-        long rP50 = readLatencies[(int) (readSamples * 0.50)];
-        long rP95 = readLatencies[(int) (readSamples * 0.95)];
-        long rP99 = readLatencies[(int) (readSamples * 0.99)];
+        Arrays.sort(readBatchNs);
+        double rP50 = readBatchNs[(int) (batches * 0.50)];
+        double rP95 = readBatchNs[(int) (batches * 0.95)];
+        double rP99 = readBatchNs[(int) (batches * 0.99)];
         double readOpsSec = (readSamples / ((t1 - t0) / 1e9));
+        double avgReadNs = ((t1 - t0) * 1.0) / readSamples;
 
         System.out.println("    [DIRECT READS] Throughput: " + String.format("%,.0f", readOpsSec) + " ops/sec"
-                + " | p50: " + rP50 + " ns | p95: " + rP95 + " ns | p99: " + rP99 + " ns");
+                + " | avg: " + String.format("%.2f", avgReadNs) + " ns/op | p50: " + String.format("%.2f", rP50) + " ns/op"
+                + " | p95: " + String.format("%.2f", rP95) + " ns/op | p99: " + String.format("%.2f", rP99) + " ns/op");
 
         // --- Benchmark 2: Authoritative setBlockState Writes ---
         int writeSamples = 50000;
-        long[] writeLatencies = new long[writeSamples];
+        int writeBatchSize = 1000;
+        int writeBatches = writeSamples / writeBatchSize;
+        double[] writeBatchNs = new double[writeBatches];
 
         // Warmup
         for (int i = 0; i < 5000; i++) {
@@ -484,21 +493,25 @@ public class ChunkStateAuthorityTest {
         }
 
         t0 = System.nanoTime();
-        for (int i = 0; i < writeSamples; i++) {
+        for (int b = 0; b < writeBatches; b++) {
             long start = System.nanoTime();
-            long res = NativeChunkBridge.setBlockState(dim, cx, cz, i & 15, (i >> 4) & 15, (i >> 8) & 15, ((i + 1) & 0xFF) + 1);
+            for (int i = 0; i < writeBatchSize; i++) {
+                NativeChunkBridge.setBlockState(dim, cx, cz, i & 15, (i >> 4) & 15, (i >> 8) & 15, ((i + 1) & 0xFF) + 1);
+            }
             long end = System.nanoTime();
-            writeLatencies[i] = end - start;
+            writeBatchNs[b] = (double) (end - start) / writeBatchSize;
         }
         t1 = System.nanoTime();
 
-        Arrays.sort(writeLatencies);
-        long wP50 = writeLatencies[(int) (writeSamples * 0.50)];
-        long wP95 = writeLatencies[(int) (writeSamples * 0.95)];
-        long wP99 = writeLatencies[(int) (writeSamples * 0.99)];
+        Arrays.sort(writeBatchNs);
+        double wP50 = writeBatchNs[(int) (writeBatches * 0.50)];
+        double wP95 = writeBatchNs[(int) (writeBatches * 0.95)];
+        double wP99 = writeBatchNs[(int) (writeBatches * 0.99)];
         double writeOpsSec = (writeSamples / ((t1 - t0) / 1e9));
+        double avgWriteNs = ((t1 - t0) * 1.0) / writeSamples;
 
         System.out.println("    [AUTHORITATIVE WRITES] Throughput: " + String.format("%,.0f", writeOpsSec) + " ops/sec"
-                + " | p50: " + wP50 + " ns | p95: " + wP95 + " ns | p99: " + wP99 + " ns");
+                + " | avg: " + String.format("%.2f", avgWriteNs) + " ns/op | p50: " + String.format("%.2f", wP50) + " ns/op"
+                + " | p95: " + String.format("%.2f", wP95) + " ns/op | p99: " + String.format("%.2f", wP99) + " ns/op");
     }
 }

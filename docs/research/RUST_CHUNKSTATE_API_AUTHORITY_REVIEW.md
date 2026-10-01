@@ -36,14 +36,16 @@ Java-Visible     Network Packet
    Mutations commit to Rust native memory FIRST. Java storage does not run independent state logic; optional compatibility mirroring is strictly downstream projection.
 3. **Zero JNI Overhead on Hot Reads (`getBlockState`):**
    `getBlockState` reads directly from native resident section memory via `sun.misc.Unsafe` direct memory pointers (`readStateId` / `getBlockStateDirect`) and resolves canonical Java `IBlockState` references in O(1) time without crossing JNI.
-   - **Throughput:** **16,899,885 ops/sec**
-   - **p50 Latency:** **0 ns** (amortized in L1/L2 cache)
-   - **p95 / p99 Latency:** **100 ns**
+   - **Throughput:** **110,749,330 ops/sec** (raw memory read: **360,984,766 ops/sec**)
+   - **Average Latency:** **9.03 ns/op** (raw direct memory: **2.77 ns/op**; direct lookup: **4.40 ns/op**)
+   - **p50 Latency:** **2.76 ns/op**
+   - **p95 / p99 Latency:** **35.85 ns / 36.12 ns** (Timer resolution corrected; previous "0 ns" claim was an OS timer granularity artifact)
 4. **Authoritative Writes (`setBlockState`):**
    `setBlockState` executes in Rust native memory via packed 64-bit FFI boundary, updating section allocation, non-air block counts, and wire cache invalidation in a single atomic pass, then returns facts to Java to orchestrate vanilla/Forge lifecycle side effects (`breakBlock`, `shouldRefresh`, `relightBlock`, `checkLightFor`, `onBlockAdded`) in exact reference sequence.
-   - **Throughput:** **5,865,103 ops/sec**
-   - **p50 Latency:** **100 ns**
-   - **p95 / p99 Latency:** **200 ns**
+   - **Throughput:** **9,816,047 ops/sec**
+   - **Average Latency:** **101.87 ns/op**
+   - **p50 Latency:** **96.10 ns/op**
+   - **p95 / p99 Latency:** **124.40 ns / 138.90 ns**
 5. **Differential Oracle & Fuzzing:**
    - **10,000 randomized operation sequences** (5,071 writes, 4,929 reads) executed against an isolated Java reference oracle with **0 MISMATCHES**.
 6. **Mutation -> Packet End-to-End Proof (No Reseed):**

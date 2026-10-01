@@ -37,11 +37,17 @@ Unconstrained production authority remains **`false`** everywhere (`PacketAuthor
   (`docs/research/RETAINED_CHUNKSTATE_COMPLETION_REPORT.md`).
 - **Semantic Engine Ownership Inversion (`ChunkState` API):** Rust NativeChunk
   is the authoritative source of truth for admitted block reads/writes (`Chunk.getBlockState`
-  and `Chunk.setBlockState`). Zero-JNI direct memory reads via Unsafe yield 16.9M ops/sec
-  with 0 ns p50. Authoritative mutations commit in Rust first, dispatching Forge
+  and `Chunk.setBlockState`). Zero-JNI direct memory reads via Unsafe yield 110.7M ops/sec
+  with 2.76 ns p50 (raw direct read: 360M ops/s, 2.77 ns avg). Authoritative mutations commit in Rust first, dispatching Forge
   callbacks in exact sequence. 10,000 differential fuzz operations pass with 0 divergences.
   Status: **`RUST_CHUNKSTATE_API_OWNERSHIP_PROVEN`**
   (`docs/research/RUST_CHUNKSTATE_API_AUTHORITY_REVIEW.md`).
+- **Zero-JNI Direct-Memory Architecture Hardened & Validated:** Pointer lifetime proof
+  confirmed across multi-threaded concurrency (4 readers, 1 writer, 0 crashes), 100 rapid unload/reload
+  cycles with immediate Java record eviction and pointer zeroing, and section-emptying retention (no UAF).
+  Sub-microsecond batched profiling eliminates OS timer 0 ns artifacts.
+  Status: **`ZERO_JNI_DIRECT_MEMORY_VALIDATED`**
+  (`docs/research/ZERO_JNI_DIRECT_MEMORY_VALIDATION_REPORT.md`).
 - **Next Milestone:** **`READY_FOR_RUST_CHUNKSTATE_AUTHORITY_EXPANSION`**.
 
 ### What each proof is

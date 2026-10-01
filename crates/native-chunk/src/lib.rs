@@ -269,12 +269,13 @@ mod tests {
             "mask gained section 1"
         );
 
-        // Refresh section 0 with all-air: section deactivates in mask
+        // Refresh section 0 with all-air: section deactivates in mask while retaining
+        // resident buffer for zero-JNI direct pointer stability
         let air = [0u16; 4096];
         chunk.refresh_section(0, &air, None, None);
         assert_eq!(chunk.dirty_mask(), 0);
-        assert!(chunk.sections[0].is_none(), "all-air section released");
-        assert_eq!(chunk.primary_bit_mask, 1 << 1);
+        assert!(chunk.sections[0].is_some(), "all-air section preserved in resident memory for pointer stability");
+        assert_eq!(chunk.primary_bit_mask, 1 << 1, "all-air section deactivated from packet mask");
         assert_eq!(
             chunk.lifecycle,
             ChunkLifecycle::ActiveNative,
