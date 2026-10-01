@@ -73,6 +73,8 @@ public final class NativeChunkBridge {
 
     public static native long registerPrimer(int dim, int cx, int cz, long primerAddr, long biomeAddr);
 
+    public static native long seedFromTransport(long transportAddr, int transportLen);
+
     public static native int materializePrimer(int dim, int cx, int cz, long generationId, long primerOutAddr);
 
     public static native int getPrimaryBitMask(int dim, int cx, int cz, long generationId);

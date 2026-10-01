@@ -71,6 +71,8 @@ public final class PacketAuthorityExperiment {
     public static final AtomicLong CAP_EXHAUSTED = new AtomicLong();
     public static final AtomicLong FALLBACK_SESSION_UNADMITTED = new AtomicLong();
     public static final AtomicLong FALLBACK_RECEIPT_INVALID = new AtomicLong();
+    public static final AtomicLong RETAINED_RUST_SELECTED = new AtomicLong();
+    public static final AtomicLong RETAINED_SEEDED = new AtomicLong();
 
     private static final AtomicBoolean RECEIPT_VERIFIED = new AtomicBoolean(false);
     private static final AtomicBoolean RECEIPT_CHECK_ATTEMPTED = new AtomicBoolean(false);
@@ -135,6 +137,8 @@ public final class PacketAuthorityExperiment {
         CAP_EXHAUSTED.set(0);
         FALLBACK_SESSION_UNADMITTED.set(0);
         FALLBACK_RECEIPT_INVALID.set(0);
+        RETAINED_RUST_SELECTED.set(0);
+        RETAINED_SEEDED.set(0);
         RECEIPT_VERIFIED.set(false);
         RECEIPT_CHECK_ATTEMPTED.set(false);
         receiptFailureReason = null;
@@ -325,7 +329,36 @@ public final class PacketAuthorityExperiment {
             long inAddr = getBufferAddress(inBuf);
             long outAddr = getBufferAddress(outBuf);
 
-            long packed = OwnedSnapshotBridge.encodeOwnedV1(inAddr, transport.length, outAddr, BUFFER_CAPACITY);
+            // Retained Rust ChunkState: Check if chunk is registered in native memory
+            int dim = snapshot.dimension;
+            long genId = com.rustcraft.bridge.NativeChunkBridge.findGeneration(dim, snapshot.chunkX, snapshot.chunkZ);
+            if (genId <= 0) {
+                // Not yet registered: seed persistent NativeChunk from transport
+                genId = com.rustcraft.bridge.NativeChunkBridge.seedFromTransport(inAddr, transport.length);
+                if (genId > 0) {
+                    RETAINED_SEEDED.incrementAndGet();
+                }
+            }
+
+            long packed = -1;
+            boolean fromRetained = false;
+            if (genId > 0) {
+                // Retained encode from living native state
+                packed = com.rustcraft.bridge.NativeChunkBridge.encodePacketPayloadV2(
+                        dim, snapshot.chunkX, snapshot.chunkZ, genId,
+                        (byte) (snapshot.skylight ? 1 : 0),
+                        (byte) (snapshot.fullChunk ? 1 : 0),
+                        outAddr, BUFFER_CAPACITY);
+                if (packed > 0 && PacketEncodeResultV2.decode(packed).isSuccess()) {
+                    fromRetained = true;
+                    RETAINED_RUST_SELECTED.incrementAndGet();
+                }
+            }
+
+            if (!fromRetained) {
+                // Fallback to verified ephemeral owned encode
+                packed = OwnedSnapshotBridge.encodeOwnedV1(inAddr, transport.length, outAddr, BUFFER_CAPACITY);
+            }
             PacketEncodeResultV2 result = PacketEncodeResultV2.decode(packed);
             if (!result.isSuccess()) {
                 System.err.println("[RustCraft-Authority] Rust encode returned non-success status: " + result.failure());
@@ -519,6 +552,8 @@ public final class PacketAuthorityExperiment {
             counters.put("cap_exhausted", CAP_EXHAUSTED.get());
             counters.put("fallback_session_unadmitted", FALLBACK_SESSION_UNADMITTED.get());
             counters.put("fallback_receipt_invalid", FALLBACK_RECEIPT_INVALID.get());
+            counters.put("retained_rust_selected", RETAINED_RUST_SELECTED.get());
+            counters.put("retained_seeded", RETAINED_SEEDED.get());
             receipt.put("counters", counters);
             receipt.put("timestamp_millis", System.currentTimeMillis());
 
