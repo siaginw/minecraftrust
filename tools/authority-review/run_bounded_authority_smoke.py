@@ -273,7 +273,12 @@ def main() -> int:
     cap_exhausted = counters.get("cap_exhausted", 0)
     rust_encode_failure = counters.get("rust_encode_failure", 0)
 
+    retained_rust_selected = counters.get("retained_rust_selected", 0)
+    retained_seeded = counters.get("retained_seeded", 0)
+
     print(f"[metrics] rust_selected: {rust_selected}")
+    print(f"[metrics] retained_rust_selected: {retained_rust_selected}")
+    print(f"[metrics] retained_seeded: {retained_seeded}")
     print(f"[metrics] java_selected: {java_selected}")
     print(f"[metrics] cap_exhausted: {cap_exhausted}")
     print(f"[metrics] rust_encode_failure: {rust_encode_failure}")
