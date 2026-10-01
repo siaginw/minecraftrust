@@ -55,6 +55,10 @@ pub struct NativeSection {
     /// Cached local palette for Protocol 340 wire encoding.
     /// None = needs rebuild; Some = valid cache.
     palette_cache: Option<LocalPalette>,
+    /// Derived wire byte slice cache (skylight=true). Reused across clients for static sections.
+    wire_cache_skylight: Option<Vec<u8>>,
+    /// Derived wire byte slice cache (skylight=false).
+    wire_cache_noskylight: Option<Vec<u8>>,
 
     // === LIGHTING & METADATA ===
     pub block_light: [u8; LIGHT_ARRAY_SIZE],   // 2,048 bytes
@@ -71,6 +75,8 @@ impl NativeSection {
         Self {
             states: [0u16; SECTION_BLOCK_COUNT],
             palette_cache: None,
+            wire_cache_skylight: None,
+            wire_cache_noskylight: None,
             block_light: [0u8; LIGHT_ARRAY_SIZE],
             sky_light: [0xFFu8; LIGHT_ARRAY_SIZE], // Default sky light 15
             non_air_count: 0,
@@ -78,6 +84,12 @@ impl NativeSection {
             y_index,
             _pad: [0, 0],
         }
+    }
+
+    #[inline(always)]
+    fn invalidate_wire_cache(&mut self) {
+        self.wire_cache_skylight = None;
+        self.wire_cache_noskylight = None;
     }
 
     // ============================================================
@@ -153,9 +165,10 @@ impl NativeSection {
             if global_state_id == 144 { self.flags |= SectionFlags::WATER; }
         }
 
-        // Invalidate palette cache
+        // Invalidate palette cache & wire cache
         self.flags |= SectionFlags::PALETTE_DIRTY;
         self.palette_cache = None;
+        self.invalidate_wire_cache();
 
         true
     }
@@ -192,6 +205,7 @@ impl NativeSection {
         self.non_air_count = non_air;
         self.flags |= SectionFlags::PALETTE_DIRTY;
         self.palette_cache = None;
+        self.invalidate_wire_cache();
         non_air
     }
 
@@ -368,6 +382,23 @@ impl NativeSection {
         skylight: bool,
         global_bits: Option<u8>,
     ) -> Result<(), &'static str> {
+        // Fast path: if wire bytes are already cached and palette is clean, reuse!
+        if (self.flags & SectionFlags::PALETTE_DIRTY) == 0 {
+            let cached = if skylight {
+                &self.wire_cache_skylight
+            } else {
+                &self.wire_cache_noskylight
+            };
+            if let Some(ref wire) = cached {
+                if *offset + wire.len() > out.len() {
+                    return Err("Output buffer overflow");
+                }
+                out[*offset..*offset + wire.len()].copy_from_slice(wire);
+                *offset += wire.len();
+                return Ok(());
+            }
+        }
+
         self.ensure_palette(global_bits);
 
         let local_palette = self.palette_cache.as_ref().unwrap();
@@ -389,6 +420,8 @@ impl NativeSection {
         if *offset + needed > out.len() {
             return Err("Output buffer overflow");
         }
+
+        let start_offset = *offset;
 
         // 1. bits_per_block
         out[*offset] = local_palette.bits;
@@ -422,6 +455,13 @@ impl NativeSection {
         if skylight {
             out[*offset..*offset + LIGHT_ARRAY_SIZE].copy_from_slice(&self.sky_light);
             *offset += LIGHT_ARRAY_SIZE;
+        }
+
+        let written_bytes = out[start_offset..*offset].to_vec();
+        if skylight {
+            self.wire_cache_skylight = Some(written_bytes);
+        } else {
+            self.wire_cache_noskylight = Some(written_bytes);
         }
 
         Ok(())
@@ -463,6 +503,7 @@ impl NativeSection {
         if global_state_id == 144 { self.flags |= SectionFlags::WATER; }
         self.flags |= SectionFlags::PALETTE_DIRTY;
         self.palette_cache = None;
+        self.invalidate_wire_cache();
     }
 
     /// Checks if section contains any non-air blocks.
