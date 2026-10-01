@@ -20,7 +20,8 @@ import java.util.List;
  */
 public class ChunkStateAuthorityTransformer implements IClassTransformer {
 
-    private static final String TARGET_CLASS = "net.minecraft.world.chunk.Chunk";
+    private static final String TARGET_CHUNK = "net.minecraft.world.chunk.Chunk";
+    private static final String TARGET_STORAGE = "net.minecraft.world.chunk.storage.ExtendedBlockStorage";
 
     public static volatile int transformCount = 0;
     public static volatile String lastStatus = "NOT_ATTEMPTED";
@@ -31,7 +32,10 @@ public class ChunkStateAuthorityTransformer implements IClassTransformer {
 
     @Override
     public byte[] transform(String name, String transformedName, byte[] basicClass) {
-        if (!TARGET_CLASS.equals(transformedName) || basicClass == null) {
+        if (basicClass == null) {
+            return null;
+        }
+        if (!TARGET_CHUNK.equals(transformedName) && !TARGET_STORAGE.equals(transformedName)) {
             return basicClass;
         }
         if (!enabled()) {
@@ -46,16 +50,36 @@ public class ChunkStateAuthorityTransformer implements IClassTransformer {
 
             int patched = 0;
 
-            for (MethodNode mn : (List<MethodNode>) cn.methods) {
-                // getBlockState(int, int, int) -> func_186032_a(III)LIBlockState;
-                if (isGetBlockState(mn)) {
-                    injectGetBlockStateHook(mn);
-                    patched++;
+            if (TARGET_CHUNK.equals(transformedName)) {
+                for (MethodNode mn : (List<MethodNode>) cn.methods) {
+                    // getBlockState(int, int, int) -> func_186032_a(III)LIBlockState;
+                    if (isGetBlockState(mn)) {
+                        injectGetBlockStateHook(mn);
+                        patched++;
+                    }
+                    // setBlockState(BlockPos, IBlockState) -> func_177436_a(LBlockPos;LIBlockState;)LIBlockState;
+                    else if (isSetBlockState(mn)) {
+                        injectSetBlockStateHook(mn);
+                        patched++;
+                    }
+                    // setStorageArrays(ExtendedBlockStorage[]) -> func_76602_a([LExtendedBlockStorage;)V
+                    else if (isSetStorageArrays(mn)) {
+                        injectSetStorageArraysHook(mn);
+                        patched++;
+                    }
                 }
-                // setBlockState(BlockPos, IBlockState) -> func_177436_a(LBlockPos;LIBlockState;)LIBlockState;
-                else if (isSetBlockState(mn)) {
-                    injectSetBlockStateHook(mn);
-                    patched++;
+            } else if (TARGET_STORAGE.equals(transformedName)) {
+                for (MethodNode mn : (List<MethodNode>) cn.methods) {
+                    // get(int, int, int) -> func_177485_a(III)LIBlockState;
+                    if (isStorageGet(mn)) {
+                        injectStorageGetHook(mn);
+                        patched++;
+                    }
+                    // set(int, int, int, IBlockState) -> func_177484_a(IIILIBlockState;)V
+                    else if (isStorageSet(mn)) {
+                        injectStorageSetHook(mn);
+                        patched++;
+                    }
                 }
             }
 
@@ -71,7 +95,7 @@ public class ChunkStateAuthorityTransformer implements IClassTransformer {
             return basicClass;
 
         } catch (Throwable t) {
-            System.err.println("[RustCraft] Failed to transform Chunk for State Authority: " + t.getMessage());
+            System.err.println("[RustCraft] Failed to transform " + transformedName + " for State Authority: " + t.getMessage());
             lastStatus = "TRANSFORM_ERROR: " + t.getMessage();
             return basicClass;
         }
@@ -150,6 +174,88 @@ public class ChunkStateAuthorityTransformer implements IClassTransformer {
 
         hook.add(continueOriginal);
         hook.add(new InsnNode(Opcodes.POP)); // Discard MutationResult
+
+        mn.instructions.insert(hook);
+    }
+
+    private boolean isSetStorageArrays(MethodNode mn) {
+        return ("func_76602_a".equals(mn.name) || "setStorageArrays".equals(mn.name))
+                && "([Lnet/minecraft/world/chunk/storage/ExtendedBlockStorage;)V".equals(mn.desc);
+    }
+
+    private boolean isStorageGet(MethodNode mn) {
+        return ("func_177485_a".equals(mn.name) || "get".equals(mn.name))
+                && "(III)Lnet/minecraft/block/state/IBlockState;".equals(mn.desc);
+    }
+
+    private boolean isStorageSet(MethodNode mn) {
+        return ("func_177484_a".equals(mn.name) || "set".equals(mn.name))
+                && "(IIILnet/minecraft/block/state/IBlockState;)V".equals(mn.desc);
+    }
+
+    private void injectSetStorageArraysHook(MethodNode mn) {
+        InsnList hook = new InsnList();
+        // ChunkStateAuthorityBridge.onStorageArraysReplaced(this, newStorageArrays);
+        hook.add(new VarInsnNode(Opcodes.ALOAD, 0)); // this (Chunk)
+        hook.add(new VarInsnNode(Opcodes.ALOAD, 1)); // newStorageArrays
+        hook.add(new MethodInsnNode(
+                Opcodes.INVOKESTATIC,
+                "com/rustcraft/bridge/ChunkStateAuthorityBridge",
+                "onStorageArraysReplaced",
+                "(Lnet/minecraft/world/chunk/Chunk;[Lnet/minecraft/world/chunk/storage/ExtendedBlockStorage;)V",
+                false
+        ));
+        mn.instructions.insert(hook);
+    }
+
+    private void injectStorageGetHook(MethodNode mn) {
+        InsnList hook = new InsnList();
+        LabelNode continueOriginal = new LabelNode();
+
+        // IBlockState state = ChunkStateAuthorityBridge.getSectionBlockState(this, x, y, z);
+        // if (state != null) return state;
+        hook.add(new VarInsnNode(Opcodes.ALOAD, 0)); // this (ExtendedBlockStorage)
+        hook.add(new VarInsnNode(Opcodes.ILOAD, 1)); // x
+        hook.add(new VarInsnNode(Opcodes.ILOAD, 2)); // y
+        hook.add(new VarInsnNode(Opcodes.ILOAD, 3)); // z
+        hook.add(new MethodInsnNode(
+                Opcodes.INVOKESTATIC,
+                "com/rustcraft/bridge/ChunkStateAuthorityBridge",
+                "getSectionBlockState",
+                "(Lnet/minecraft/world/chunk/storage/ExtendedBlockStorage;III)Lnet/minecraft/block/state/IBlockState;",
+                false
+        ));
+        hook.add(new InsnNode(Opcodes.DUP));
+        hook.add(new JumpInsnNode(Opcodes.IFNULL, continueOriginal));
+        hook.add(new InsnNode(Opcodes.ARETURN)); // Return Rust authoritative state
+
+        hook.add(continueOriginal);
+        hook.add(new InsnNode(Opcodes.POP)); // Discard null
+
+        mn.instructions.insert(hook);
+    }
+
+    private void injectStorageSetHook(MethodNode mn) {
+        InsnList hook = new InsnList();
+        LabelNode continueOriginal = new LabelNode();
+
+        // if (ChunkStateAuthorityBridge.trySetSectionBlockState(this, x, y, z, state)) return;
+        hook.add(new VarInsnNode(Opcodes.ALOAD, 0)); // this (ExtendedBlockStorage)
+        hook.add(new VarInsnNode(Opcodes.ILOAD, 1)); // x
+        hook.add(new VarInsnNode(Opcodes.ILOAD, 2)); // y
+        hook.add(new VarInsnNode(Opcodes.ILOAD, 3)); // z
+        hook.add(new VarInsnNode(Opcodes.ALOAD, 4)); // state
+        hook.add(new MethodInsnNode(
+                Opcodes.INVOKESTATIC,
+                "com/rustcraft/bridge/ChunkStateAuthorityBridge",
+                "trySetSectionBlockState",
+                "(Lnet/minecraft/world/chunk/storage/ExtendedBlockStorage;IIILnet/minecraft/block/state/IBlockState;)Z",
+                false
+        ));
+        hook.add(new JumpInsnNode(Opcodes.IFEQ, continueOriginal));
+        hook.add(new InsnNode(Opcodes.RETURN)); // Early return: committed to Rust
+
+        hook.add(continueOriginal);
 
         mn.instructions.insert(hook);
     }

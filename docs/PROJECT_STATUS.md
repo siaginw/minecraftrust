@@ -48,7 +48,15 @@ Unconstrained production authority remains **`false`** everywhere (`PacketAuthor
   Sub-microsecond batched profiling eliminates OS timer 0 ns artifacts.
   Status: **`ZERO_JNI_DIRECT_MEMORY_VALIDATED`**
   (`docs/research/ZERO_JNI_DIRECT_MEMORY_VALIDATION_REPORT.md`).
-- **Next Milestone:** **`READY_FOR_RUST_CHUNKSTATE_AUTHORITY_EXPANSION`**.
+- **Section Compatibility Layer Authority Expansion (Phase 2):** Semantic ownership expanded
+  from `Chunk` methods to section storage `ExtendedBlockStorage.get` (`func_177485_a`) and
+  `ExtendedBlockStorage.set` (`func_177484_a`). Mod ecosystem audit of 193 FTB Revelation jars confirmed
+  targeting `ExtendedBlockStorage` avoids ASM bytecode collisions with NotEnoughIDs, FoamFix, and Phosphor.
+  Zero-overhead zero-JNI reads operate at 2.74-4.52 ns/op. Validated under Gate A (32/32) and Gate C (64/64)
+  live smokes and 10,000 differential fuzzing operations (0 mismatches).
+  Status: **`SECTION_STATE_AUTHORITY_EXPANDED`**
+  (`docs/research/SECTION_STATE_AUTHORITY_EXPANSION_REPORT.md`).
+- **Next Milestone:** **`READY_FOR_RUST_CHUNKSTATE_AUTHORITY_EXPANSION_PHASE_2`**.
 
 ### What each proof is
 

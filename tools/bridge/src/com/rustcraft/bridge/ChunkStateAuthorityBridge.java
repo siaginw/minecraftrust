@@ -113,6 +113,19 @@ public final class ChunkStateAuthorityBridge {
         }
     }
 
+    // Telemetry Counters
+    public static final AtomicLong CHUNK_API_RUST_READ = new AtomicLong();
+    public static final AtomicLong CHUNK_API_RUST_WRITE = new AtomicLong();
+    public static final AtomicLong SECTION_API_RUST_READ = new AtomicLong();
+    public static final AtomicLong SECTION_API_RUST_WRITE = new AtomicLong();
+    public static final AtomicLong CONTAINER_MATERIALIZATIONS = new AtomicLong();
+    public static final AtomicLong CONTAINER_CACHE_HITS = new AtomicLong();
+    public static final AtomicLong REFLECTION_READS = new AtomicLong();
+    public static final AtomicLong REFLECTION_WRITES = new AtomicLong();
+    public static final AtomicLong BYPASS_DETECTED = new AtomicLong();
+    public static final AtomicLong FOREIGN_THREAD_READS = new AtomicLong();
+    public static final AtomicLong SERVER_THREAD_READS = new AtomicLong();
+
     private ChunkStateAuthorityBridge() {}
 
     public static boolean isEnabled() {
@@ -336,6 +349,7 @@ public final class ChunkStateAuthorityBridge {
      */
     public static void unregisterChunkAuthority(int dim, int cx, int cz) {
         String key = chunkKey(dim, cx, cz);
+        unbindChunkStorages(dim, cx, cz);
         ChunkAuthorityRecord record = RECORDS.remove(key);
         if (record != null) {
             record.mode = AuthoritativeMode.DEMOTED;
@@ -402,8 +416,16 @@ public final class ChunkStateAuthorityBridge {
                 return null; // Bounded experiment cap reached
             }
 
+            String threadName = Thread.currentThread().getName();
+            if (threadName.startsWith("Server thread")) {
+                SERVER_THREAD_READS.incrementAndGet();
+            } else {
+                FOREIGN_THREAD_READS.incrementAndGet();
+            }
+
             long secPtr = record.sectionPointers[y >> 4];
             NativeChunkBridge.RUST_READS.incrementAndGet();
+            CHUNK_API_RUST_READ.incrementAndGet();
             if (secPtr == 0) {
                 return StateRegistryLookup.getAirState();
             }
@@ -412,6 +434,169 @@ public final class ChunkStateAuthorityBridge {
         } catch (Throwable t) {
             NativeChunkBridge.JAVA_READS.incrementAndGet();
             return null;
+        }
+    }
+
+    private static final Map<ExtendedBlockStorage, SectionAuthorityBinding> SECTION_BINDINGS = new ConcurrentHashMap<>();
+    private static final Map<String, ExtendedBlockStorage[]> CHUNK_STORAGES = new ConcurrentHashMap<>();
+
+    public static final class SectionAuthorityBinding {
+        public final ChunkAuthorityRecord chunkRecord;
+        public final int secY;
+        public SectionAuthorityBinding(ChunkAuthorityRecord chunkRecord, int secY) {
+            this.chunkRecord = chunkRecord;
+            this.secY = secY;
+        }
+    }
+
+    public static void bindStorage(ExtendedBlockStorage storage, ChunkAuthorityRecord record, int secY) {
+        if (storage != null && record != null) {
+            SECTION_BINDINGS.put(storage, new SectionAuthorityBinding(record, secY));
+        }
+    }
+
+    public static void unbindStorage(ExtendedBlockStorage storage) {
+        if (storage != null) {
+            SECTION_BINDINGS.remove(storage);
+        }
+    }
+
+    public static void bindChunkStorages(Chunk chunk, ChunkAuthorityRecord record) {
+        if (chunk == null || record == null) return;
+        try {
+            ensureReflection();
+            if (chunkStorageArrays != null) {
+                ExtendedBlockStorage[] storages = (ExtendedBlockStorage[]) chunkStorageArrays.get(chunk);
+                if (storages != null) {
+                    CHUNK_STORAGES.put(chunkKey(record.dim, record.cx, record.cz), storages);
+                    for (int y = 0; y < storages.length; y++) {
+                        if (storages[y] != null) {
+                            bindStorage(storages[y], record, y);
+                        }
+                    }
+                }
+            }
+        } catch (Throwable t) {
+            // Non-fatal: section-level access will fall back to container
+        }
+    }
+
+    public static void unbindChunkStorages(int dim, int cx, int cz) {
+        ExtendedBlockStorage[] storages = CHUNK_STORAGES.remove(chunkKey(dim, cx, cz));
+        if (storages != null) {
+            for (ExtendedBlockStorage storage : storages) {
+                if (storage != null) {
+                    unbindStorage(storage);
+                }
+            }
+        }
+    }
+
+    public static void onStorageArraysReplaced(Chunk chunk, ExtendedBlockStorage[] newStorages) {
+        if (chunk == null) return;
+        try {
+            int dim = 0; // Overworld scope
+            String key = chunkKey(dim, chunk.field_76635_g, chunk.field_76647_h);
+            ChunkAuthorityRecord record = RECORDS.get(key);
+            if (record != null) {
+                unbindChunkStorages(dim, chunk.field_76635_g, chunk.field_76647_h);
+                if (newStorages != null) {
+                    CHUNK_STORAGES.put(key, newStorages);
+                    for (int y = 0; y < newStorages.length; y++) {
+                        if (newStorages[y] != null) {
+                            bindStorage(newStorages[y], record, y);
+                        }
+                    }
+                }
+            }
+        } catch (Throwable t) {
+            // Non-fatal
+        }
+    }
+
+    /**
+     * Section-level getBlockState entry hook for ExtendedBlockStorage.get / func_177485_a.
+     * Backed directly by Rust native memory via zero-JNI direct read.
+     */
+    public static IBlockState getSectionBlockState(ExtendedBlockStorage storage, int x, int y, int z) {
+        if (!experimentEnabled || storage == null) return null;
+        try {
+            SectionAuthorityBinding binding = SECTION_BINDINGS.get(storage);
+            if (binding == null) {
+                return null; // Unbound storage: fallback to Java BlockStateContainer
+            }
+            ChunkAuthorityRecord record = binding.chunkRecord;
+            if (record == null || record.generationId <= 0 || (record.mode != AuthoritativeMode.RUST_AUTHORITATIVE && record.mode != AuthoritativeMode.RUST_MIRRORED)) {
+                return null;
+            }
+
+            long currentOps = TOTAL_OPERATIONS.incrementAndGet();
+            if (currentOps > authorityCap) {
+                return null;
+            }
+
+            long secPtr = record.sectionPointers[binding.secY];
+            SECTION_API_RUST_READ.incrementAndGet();
+            NativeChunkBridge.RUST_READS.incrementAndGet();
+            if (secPtr == 0) {
+                return StateRegistryLookup.getAirState();
+            }
+
+            return StateRegistryLookup.getBlockStateDirect(secPtr, x, y, z);
+        } catch (Throwable t) {
+            return null;
+        }
+    }
+
+    /**
+     * Section-level setBlockState entry hook for ExtendedBlockStorage.set / func_177484_a.
+     * Intercepts bypass writes and commits directly to Rust authority.
+     */
+    public static boolean trySetSectionBlockState(ExtendedBlockStorage storage, int x, int y, int z, IBlockState newState) {
+        if (!experimentEnabled || storage == null || newState == null) return false;
+        try {
+            SectionAuthorityBinding binding = SECTION_BINDINGS.get(storage);
+            if (binding == null) {
+                return false;
+            }
+            ChunkAuthorityRecord record = binding.chunkRecord;
+            if (record == null || record.generationId <= 0 || (record.mode != AuthoritativeMode.RUST_AUTHORITATIVE && record.mode != AuthoritativeMode.RUST_MIRRORED)) {
+                return false;
+            }
+
+            long currentOps = TOTAL_OPERATIONS.incrementAndGet();
+            if (currentOps > authorityCap) {
+                return false;
+            }
+
+            int newStateId = StateRegistryLookup.getId(newState);
+            if (newStateId < 0 || newStateId > 65535) {
+                NativeChunkBridge.HIGH_STATE_FALLBACK.incrementAndGet();
+                NativeChunkBridge.FALLBACKS.incrementAndGet();
+                return false;
+            }
+
+            int worldY = (binding.secY << 4) | (y & 15);
+            long packed = NativeChunkBridge.setBlockState(record.dim, record.cx, record.cz, x & 15, worldY, z & 15, newStateId);
+            int status = (byte) (packed & 0xFF);
+            if (status == 1) {
+                return true; // NO_OP
+            }
+            if (status < 0) {
+                return false;
+            }
+
+            SECTION_API_RUST_WRITE.incrementAndGet();
+            NativeChunkBridge.RUST_WRITES.incrementAndGet();
+            boolean sectionCreated = (packed & (1L << 8)) != 0;
+            if (sectionCreated) {
+                NativeChunkBridge.SECTION_CREATIONS.incrementAndGet();
+                record.sectionPointers[binding.secY] = NativeChunkBridge.getSectionPointer(record.dim, record.cx, record.cz, binding.secY);
+            }
+            record.dirty = true;
+            return true;
+        } catch (Throwable t) {
+            return false;
         }
     }
 
@@ -498,6 +683,7 @@ public final class ChunkStateAuthorityBridge {
 
             // Successfully committed in Rust!
             NativeChunkBridge.RUST_WRITES.incrementAndGet();
+            CHUNK_API_RUST_WRITE.incrementAndGet();
             boolean sectionCreated = (packed & (1L << 8)) != 0;
             boolean sectionBecameEmpty = (packed & (1L << 9)) != 0;
             int oldStateId = (int) ((packed >>> 16) & 0xFFFFL);
@@ -523,6 +709,7 @@ public final class ChunkStateAuthorityBridge {
                         if (storage == null && sectionCreated) {
                             storage = new ExtendedBlockStorage(secY << 4, hasSkyLight(world));
                             storages[secY] = storage;
+                            bindStorage(storage, record, secY);
                         }
                         if (storage != null) {
                             storage.func_177484_a(x, y & 15, z, newState);
