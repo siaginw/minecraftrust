@@ -3,7 +3,7 @@
 //! Engine representation uses canonical global block state IDs (u16).
 //! Wire representation (Protocol 340) is derived on-demand via cached local palette.
 
-use std::sync::atomic::{AtomicU16, Ordering};
+use std::sync::atomic::{AtomicU16, AtomicU8, Ordering};
 
 pub const SECTION_BLOCK_COUNT: usize = 4096;
 pub const LIGHT_ARRAY_SIZE: usize = 2048;
@@ -63,8 +63,8 @@ pub struct NativeSection {
     wire_cache_noskylight: Option<Vec<u8>>,
 
     // === LIGHTING & METADATA ===
-    pub block_light: [u8; LIGHT_ARRAY_SIZE], // 2,048 bytes
-    pub sky_light: [u8; LIGHT_ARRAY_SIZE],   // 2,048 bytes
+    pub block_light: [AtomicU8; LIGHT_ARRAY_SIZE], // 2,048 bytes
+    pub sky_light: [AtomicU8; LIGHT_ARRAY_SIZE],   // 2,048 bytes
     pub non_air_count: u16,
     pub flags: u8,
     pub y_index: u8,
@@ -77,13 +77,17 @@ impl NativeSection {
         // Safe transmutation of zeroed u16 array to AtomicU16 array
         let raw = [0u16; SECTION_BLOCK_COUNT];
         let states: [AtomicU16; SECTION_BLOCK_COUNT] = unsafe { std::mem::transmute(raw) };
+        let raw_bl = [0u8; LIGHT_ARRAY_SIZE];
+        let block_light: [AtomicU8; LIGHT_ARRAY_SIZE] = unsafe { std::mem::transmute(raw_bl) };
+        let raw_sl = [0xFFu8; LIGHT_ARRAY_SIZE]; // Default sky light 15
+        let sky_light: [AtomicU8; LIGHT_ARRAY_SIZE] = unsafe { std::mem::transmute(raw_sl) };
         Self {
             states,
             palette_cache: None,
             wire_cache_skylight: None,
             wire_cache_noskylight: None,
-            block_light: [0u8; LIGHT_ARRAY_SIZE],
-            sky_light: [0xFFu8; LIGHT_ARRAY_SIZE], // Default sky light 15
+            block_light,
+            sky_light,
             non_air_count: 0,
             flags: 0,
             y_index,
@@ -101,6 +105,30 @@ impl NativeSection {
     #[inline(always)]
     pub fn states_as_mut_slice(&mut self) -> &mut [u16; SECTION_BLOCK_COUNT] {
         unsafe { &mut *(self.states.as_mut_ptr() as *mut [u16; SECTION_BLOCK_COUNT]) }
+    }
+
+    /// Access block_light as plain u8 slice (AtomicU8 is #[repr(transparent)] over UnsafeCell<u8>).
+    #[inline(always)]
+    pub fn block_light_as_slice(&self) -> &[u8; LIGHT_ARRAY_SIZE] {
+        unsafe { &*(self.block_light.as_ptr() as *const [u8; LIGHT_ARRAY_SIZE]) }
+    }
+
+    /// Access block_light as mutable u8 slice when exclusive &mut self is held.
+    #[inline(always)]
+    pub fn block_light_as_mut_slice(&mut self) -> &mut [u8; LIGHT_ARRAY_SIZE] {
+        unsafe { &mut *(self.block_light.as_mut_ptr() as *mut [u8; LIGHT_ARRAY_SIZE]) }
+    }
+
+    /// Access sky_light as plain u8 slice (AtomicU8 is #[repr(transparent)] over UnsafeCell<u8>).
+    #[inline(always)]
+    pub fn sky_light_as_slice(&self) -> &[u8; LIGHT_ARRAY_SIZE] {
+        unsafe { &*(self.sky_light.as_ptr() as *const [u8; LIGHT_ARRAY_SIZE]) }
+    }
+
+    /// Access sky_light as mutable u8 slice when exclusive &mut self is held.
+    #[inline(always)]
+    pub fn sky_light_as_mut_slice(&mut self) -> &mut [u8; LIGHT_ARRAY_SIZE] {
+        unsafe { &mut *(self.sky_light.as_mut_ptr() as *mut [u8; LIGHT_ARRAY_SIZE]) }
     }
 
     #[inline(always)]
@@ -147,6 +175,106 @@ impl NativeSection {
     #[inline(always)]
     pub fn get_block_by_index(&self, idx: usize) -> u16 {
         self.states[idx].load(Ordering::Acquire)
+    }
+
+    // ============================================================
+    // LIGHTING ACCESS (NibbleArray 4-bit values: 0..15)
+    // ============================================================
+
+    /// Gets block light nibble at (x, y, z) (0..15).
+    #[inline(always)]
+    pub fn get_block_light(&self, x: usize, y: usize, z: usize) -> u8 {
+        self.get_block_light_by_index(Self::block_index(x, y, z))
+    }
+
+    /// Gets block light nibble by section block index (0..4095).
+    #[inline(always)]
+    pub fn get_block_light_by_index(&self, idx: usize) -> u8 {
+        let byte_val = self.block_light[idx >> 1].load(Ordering::Acquire);
+        if (idx & 1) == 0 {
+            byte_val & 0x0F
+        } else {
+            (byte_val >> 4) & 0x0F
+        }
+    }
+
+    /// Sets block light nibble at (x, y, z) atomically via CAS loop.
+    /// Invalidates wire cache if value changed. Returns true if modified.
+    #[inline(always)]
+    pub fn set_block_light(&self, x: usize, y: usize, z: usize, val: u8) -> bool {
+        self.set_block_light_by_index(Self::block_index(x, y, z), val)
+    }
+
+    /// Sets block light nibble by section block index atomically via CAS loop.
+    pub fn set_block_light_by_index(&self, idx: usize, val: u8) -> bool {
+        let byte_idx = idx >> 1;
+        let is_odd = (idx & 1) != 0;
+        let val_nibble = val & 0x0F;
+        let cell = &self.block_light[byte_idx];
+        let mut cur = cell.load(Ordering::Relaxed);
+        loop {
+            let old_nibble = if is_odd { (cur >> 4) & 0x0F } else { cur & 0x0F };
+            if old_nibble == val_nibble {
+                return false;
+            }
+            let next = if is_odd {
+                (cur & 0x0F) | (val_nibble << 4)
+            } else {
+                (cur & 0xF0) | val_nibble
+            };
+            match cell.compare_exchange_weak(cur, next, Ordering::Release, Ordering::Relaxed) {
+                Ok(_) => return true,
+                Err(actual) => cur = actual,
+            }
+        }
+    }
+
+    /// Gets sky light nibble at (x, y, z) (0..15).
+    #[inline(always)]
+    pub fn get_sky_light(&self, x: usize, y: usize, z: usize) -> u8 {
+        self.get_sky_light_by_index(Self::block_index(x, y, z))
+    }
+
+    /// Gets sky light nibble by section block index (0..4095).
+    #[inline(always)]
+    pub fn get_sky_light_by_index(&self, idx: usize) -> u8 {
+        let byte_val = self.sky_light[idx >> 1].load(Ordering::Acquire);
+        if (idx & 1) == 0 {
+            byte_val & 0x0F
+        } else {
+            (byte_val >> 4) & 0x0F
+        }
+    }
+
+    /// Sets sky light nibble at (x, y, z) atomically via CAS loop.
+    /// Returns true if modified.
+    #[inline(always)]
+    pub fn set_sky_light(&self, x: usize, y: usize, z: usize, val: u8) -> bool {
+        self.set_sky_light_by_index(Self::block_index(x, y, z), val)
+    }
+
+    /// Sets sky light nibble by section block index atomically via CAS loop.
+    pub fn set_sky_light_by_index(&self, idx: usize, val: u8) -> bool {
+        let byte_idx = idx >> 1;
+        let is_odd = (idx & 1) != 0;
+        let val_nibble = val & 0x0F;
+        let cell = &self.sky_light[byte_idx];
+        let mut cur = cell.load(Ordering::Relaxed);
+        loop {
+            let old_nibble = if is_odd { (cur >> 4) & 0x0F } else { cur & 0x0F };
+            if old_nibble == val_nibble {
+                return false;
+            }
+            let next = if is_odd {
+                (cur & 0x0F) | (val_nibble << 4)
+            } else {
+                (cur & 0xF0) | val_nibble
+            };
+            match cell.compare_exchange_weak(cur, next, Ordering::Release, Ordering::Relaxed) {
+                Ok(_) => return true,
+                Err(actual) => cur = actual,
+            }
+        }
     }
 
     /// Sets a block state at (x, y, z) using global registry ID.
@@ -207,10 +335,10 @@ impl NativeSection {
     ) -> u16 {
         self.states_as_mut_slice().copy_from_slice(states);
         if let Some(bl) = block_light {
-            self.block_light.copy_from_slice(bl);
+            self.block_light_as_mut_slice().copy_from_slice(bl);
         }
         if let Some(sl) = sky_light {
-            self.sky_light.copy_from_slice(sl);
+            self.sky_light_as_mut_slice().copy_from_slice(sl);
         }
 
         let mut non_air = 0u16;
@@ -489,12 +617,12 @@ impl NativeSection {
         }
 
         // 6. block_light
-        out[*offset..*offset + LIGHT_ARRAY_SIZE].copy_from_slice(&self.block_light);
+        out[*offset..*offset + LIGHT_ARRAY_SIZE].copy_from_slice(self.block_light_as_slice());
         *offset += LIGHT_ARRAY_SIZE;
 
         // 7. sky_light (if dimension has skylight)
         if skylight {
-            out[*offset..*offset + LIGHT_ARRAY_SIZE].copy_from_slice(&self.sky_light);
+            out[*offset..*offset + LIGHT_ARRAY_SIZE].copy_from_slice(self.sky_light_as_slice());
             *offset += LIGHT_ARRAY_SIZE;
         }
 
@@ -595,6 +723,6 @@ struct LocalPalette {
 impl NativeSection {
     /// M5.2: light-array access for packet-time freshness checks.
     pub fn light_arrays(&self) -> (&[u8; 2048], &[u8; 2048]) {
-        (&self.block_light, &self.sky_light)
+        (self.block_light_as_slice(), self.sky_light_as_slice())
     }
 }

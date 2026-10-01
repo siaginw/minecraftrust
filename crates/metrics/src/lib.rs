@@ -77,6 +77,8 @@ pub enum Operation {
     ChunkGetBlockState = 325,
     ChunkGetSectionPointers = 326,
     ChunkGetSectionPointer = 327,
+    ChunkGetSectionLightPointers = 328,
+    ChunkGetSectionLightPointer = 329,
 }
 
 impl Operation {
@@ -144,6 +146,8 @@ impl Operation {
         Self::ChunkGetBlockState,
         Self::ChunkGetSectionPointers,
         Self::ChunkGetSectionPointer,
+        Self::ChunkGetSectionLightPointers,
+        Self::ChunkGetSectionLightPointer,
     ];
 }
 

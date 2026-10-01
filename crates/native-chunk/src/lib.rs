@@ -262,7 +262,7 @@ mod tests {
         );
         assert!(chunk.sections[1].is_some());
         assert_eq!(chunk.sections[1].as_ref().unwrap().non_air_count, 2048);
-        assert_eq!(chunk.sections[1].as_ref().unwrap().block_light[0], 7);
+        assert_eq!(chunk.sections[1].as_ref().unwrap().block_light_as_slice()[0], 7);
         assert_eq!(
             chunk.primary_bit_mask & (1 << 1),
             1 << 1,
@@ -420,8 +420,8 @@ mod tests {
             256,
             "states untouched by light-only refresh"
         );
-        assert_eq!(chunk.sections[0].as_ref().unwrap().block_light[0], 5);
-        assert_eq!(chunk.sections[0].as_ref().unwrap().sky_light[2047], 9);
+        assert_eq!(chunk.sections[0].as_ref().unwrap().block_light_as_slice()[0], 5);
+        assert_eq!(chunk.sections[0].as_ref().unwrap().sky_light_as_slice()[2047], 9);
         assert_eq!(chunk.dirty_mask(), 0);
 
         // Light bytes appear verbatim in the encoded packet.

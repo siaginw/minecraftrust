@@ -357,14 +357,14 @@ impl NativeChunk {
                 if *offset + 2048 > out.len() {
                     return Err("Overflow");
                 }
-                out[*offset..*offset + 2048].copy_from_slice(&sec.block_light);
+                out[*offset..*offset + 2048].copy_from_slice(sec.block_light_as_slice());
                 *offset += 2048;
 
                 // 2048 bytes of sky light
                 if *offset + 2048 > out.len() {
                     return Err("Overflow");
                 }
-                out[*offset..*offset + 2048].copy_from_slice(&sec.sky_light);
+                out[*offset..*offset + 2048].copy_from_slice(sec.sky_light_as_slice());
                 *offset += 2048;
             }
         }
@@ -599,6 +599,52 @@ impl NativeChunk {
             };
         }
     }
+
+    /// Exposes raw pointer to section's [AtomicU8; 2048] block light array for zero-JNI direct read.
+    /// Returns 0 if section is absent.
+    #[inline(always)]
+    pub fn get_section_block_light_pointer(&self, section_y: usize) -> usize {
+        if section_y >= 16 {
+            return 0;
+        }
+        match &self.sections[section_y] {
+            Some(sec) => sec.block_light.as_ptr() as usize,
+            None => 0,
+        }
+    }
+
+    /// Exposes raw pointer to section's [AtomicU8; 2048] sky light array for zero-JNI direct read.
+    /// Returns 0 if section is absent.
+    #[inline(always)]
+    pub fn get_section_sky_light_pointer(&self, section_y: usize) -> usize {
+        if section_y >= 16 {
+            return 0;
+        }
+        match &self.sections[section_y] {
+            Some(sec) => sec.sky_light.as_ptr() as usize,
+            None => 0,
+        }
+    }
+
+    /// Fills arrays of 16 block light and 16 sky light pointers for zero-JNI direct access table.
+    pub fn get_section_light_pointers(
+        &self,
+        out_block_light: &mut [usize; 16],
+        out_sky_light: &mut [usize; 16],
+    ) {
+        for s in 0..16 {
+            match &self.sections[s] {
+                Some(sec) => {
+                    out_block_light[s] = sec.block_light.as_ptr() as usize;
+                    out_sky_light[s] = sec.sky_light.as_ptr() as usize;
+                }
+                None => {
+                    out_block_light[s] = 0;
+                    out_sky_light[s] = 0;
+                }
+            }
+        }
+    }
 }
 
 #[cfg(test)]
@@ -729,5 +775,63 @@ mod tests {
 
         // Payloads must differ because state changed
         assert_ne!(buf1[..offset1], buf2[..offset2]);
+    }
+
+    #[test]
+    fn test_authoritative_light_mutations_and_pointers() {
+        let mut chunk = NativeChunk::new(0, 1, 2, 202);
+        // Initially empty
+        let mut bl_ptrs = [0usize; 16];
+        let mut sl_ptrs = [0usize; 16];
+        chunk.get_section_light_pointers(&mut bl_ptrs, &mut sl_ptrs);
+        for i in 0..16 {
+            assert_eq!(bl_ptrs[i], 0);
+            assert_eq!(sl_ptrs[i], 0);
+        }
+
+        // Add a block to section 3 to allocate it
+        chunk.set_block_state(0, 48, 0, 1);
+        chunk.get_section_light_pointers(&mut bl_ptrs, &mut sl_ptrs);
+        assert_ne!(bl_ptrs[3], 0);
+        assert_ne!(sl_ptrs[3], 0);
+        assert_eq!(bl_ptrs[0], 0);
+
+        // Section 3 light pointers match get_section_block_light_pointer / sky_light_pointer
+        assert_eq!(chunk.get_section_block_light_pointer(3), bl_ptrs[3]);
+        assert_eq!(chunk.get_section_sky_light_pointer(3), sl_ptrs[3]);
+
+        let sec = chunk.sections[3].as_ref().unwrap();
+        // Check default sky light (15 everywhere in newly allocated section)
+        assert_eq!(sec.get_sky_light(0, 0, 0), 15);
+        assert_eq!(sec.get_sky_light(15, 15, 15), 15);
+        // Check default block light (0 everywhere)
+        assert_eq!(sec.get_block_light(0, 0, 0), 0);
+        assert_eq!(sec.get_block_light(7, 8, 9), 0);
+
+        // Mutate block light
+        assert!(sec.set_block_light(7, 8, 9, 14));
+        assert_eq!(sec.get_block_light(7, 8, 9), 14);
+        // Mutating to same value returns false (no-op)
+        assert!(!sec.set_block_light(7, 8, 9, 14));
+
+        // Direct memory read via pointer matches
+        let idx = NativeSection::block_index(7, 8, 9);
+        let byte_offset = idx >> 1;
+        let is_odd = (idx & 1) != 0;
+        let raw_byte = unsafe { *((bl_ptrs[3] as *const u8).add(byte_offset)) };
+        let nibble = if is_odd { (raw_byte >> 4) & 0x0F } else { raw_byte & 0x0F };
+        assert_eq!(nibble, 14);
+
+        // Mutate adjacent nibble in same byte (verify no tearing)
+        let adj_idx = idx ^ 1;
+        let (adj_x, adj_y, adj_z) = NativeSection::index_to_xyz(adj_idx);
+        assert!(sec.set_block_light(adj_x, adj_y, adj_z, 9));
+        assert_eq!(sec.get_block_light(adj_x, adj_y, adj_z), 9);
+        assert_eq!(sec.get_block_light(7, 8, 9), 14); // Original still 14
+
+        // Sky light mutation
+        assert!(sec.set_sky_light(0, 0, 0, 7));
+        assert_eq!(sec.get_sky_light(0, 0, 0), 7);
+        assert_eq!(sec.get_sky_light(1, 0, 0), 15);
     }
 }

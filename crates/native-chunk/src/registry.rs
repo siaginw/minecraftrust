@@ -290,6 +290,48 @@ impl ChunkRegistry {
         }
         false
     }
+
+    /// Retrieves pointer to section Y's block_light array under read lock.
+    pub fn get_section_block_light_pointer(&self, key: ChunkKey, section_y: usize) -> usize {
+        let map = self.chunks.read().unwrap();
+        if let Some(arc) = map.get(&key) {
+            let chunk = arc.read().unwrap();
+            if chunk.lifecycle != ChunkLifecycle::Invalidated {
+                return chunk.get_section_block_light_pointer(section_y);
+            }
+        }
+        0
+    }
+
+    /// Retrieves pointer to section Y's sky_light array under read lock.
+    pub fn get_section_sky_light_pointer(&self, key: ChunkKey, section_y: usize) -> usize {
+        let map = self.chunks.read().unwrap();
+        if let Some(arc) = map.get(&key) {
+            let chunk = arc.read().unwrap();
+            if chunk.lifecycle != ChunkLifecycle::Invalidated {
+                return chunk.get_section_sky_light_pointer(section_y);
+            }
+        }
+        0
+    }
+
+    /// Fills arrays of 16 block light and 16 sky light pointers under read lock.
+    pub fn get_section_light_pointers(
+        &self,
+        key: ChunkKey,
+        out_block_light: &mut [usize; 16],
+        out_sky_light: &mut [usize; 16],
+    ) -> bool {
+        let map = self.chunks.read().unwrap();
+        if let Some(arc) = map.get(&key) {
+            let chunk = arc.read().unwrap();
+            if chunk.lifecycle != ChunkLifecycle::Invalidated {
+                chunk.get_section_light_pointers(out_block_light, out_sky_light);
+                return true;
+            }
+        }
+        false
+    }
 }
 
 fn chunk_active_sections(c: &NativeChunk) -> usize {

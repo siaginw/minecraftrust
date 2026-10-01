@@ -1121,6 +1121,98 @@ pub unsafe extern "system" fn Java_com_rustcraft_bridge_NativeChunkBridge_getSec
     code
 }
 
+/// Zero-JNI setup: populates arrays of 16 block light and 16 sky light pointers.
+/// out_bl_ptrs_addr: address of 16-element long array (128 bytes) for block light.
+/// out_sl_ptrs_addr: address of 16-element long array (128 bytes) for sky light.
+/// Returns 1 on success, 0 if chunk not registered.
+#[no_mangle]
+pub unsafe extern "system" fn Java_com_rustcraft_bridge_NativeChunkBridge_getSectionLightPointers(
+    _env: *mut c_void,
+    _clazz: *mut c_void,
+    dim: i32,
+    cx: i32,
+    cz: i32,
+    out_bl_ptrs_addr: i64,
+    out_sl_ptrs_addr: i64,
+) -> i32 {
+    let mut call = GLOBAL_FFI_METRICS.begin_call(metrics::Operation::ChunkGetSectionLightPointers);
+    call.bytes = metrics::ByteMeasurements::NO_BULK;
+    let outcome = catch_unwind(std::panic::AssertUnwindSafe(|| {
+        if out_bl_ptrs_addr == 0 || out_sl_ptrs_addr == 0 {
+            return -1;
+        }
+        let out_bl = std::slice::from_raw_parts_mut(out_bl_ptrs_addr as *mut usize, 16);
+        let out_sl = std::slice::from_raw_parts_mut(out_sl_ptrs_addr as *mut usize, 16);
+        let reg = get_registry();
+        let key = ChunkKey::new(dim, cx, cz);
+        let mut bl_ptrs = [0usize; 16];
+        let mut sl_ptrs = [0usize; 16];
+        if reg.get_section_light_pointers(key, &mut bl_ptrs, &mut sl_ptrs) {
+            out_bl.copy_from_slice(&bl_ptrs);
+            out_sl.copy_from_slice(&sl_ptrs);
+            1
+        } else {
+            0
+        }
+    }));
+    let panicked = outcome.is_err();
+    let code = outcome.unwrap_or(-99);
+    call.fallback_reason = if panicked {
+        metrics::FallbackReason::Panic
+    } else {
+        match code {
+            1 => metrics::FallbackReason::None,
+            0 => metrics::FallbackReason::MissingState,
+            _ => metrics::FallbackReason::InvalidArgument,
+        }
+    };
+    if panicked {
+        call.bytes.output_bytes = Some(0);
+        call.bytes.copied_bytes = None;
+    }
+    code
+}
+
+/// Returns raw pointer to section Y's light array (is_skylight: 0 for block light, 1 for sky light).
+/// Returns 0 if absent / not registered.
+#[no_mangle]
+pub unsafe extern "system" fn Java_com_rustcraft_bridge_NativeChunkBridge_getSectionLightPointer(
+    _env: *mut c_void,
+    _clazz: *mut c_void,
+    dim: i32,
+    cx: i32,
+    cz: i32,
+    section_y: i32,
+    is_skylight: i32,
+) -> i64 {
+    let mut call = GLOBAL_FFI_METRICS.begin_call(metrics::Operation::ChunkGetSectionLightPointer);
+    call.bytes = metrics::ByteMeasurements::NO_BULK;
+    let outcome = catch_unwind(std::panic::AssertUnwindSafe(|| {
+        if section_y < 0 || section_y >= 16 {
+            return 0i64;
+        }
+        let reg = get_registry();
+        let key = ChunkKey::new(dim, cx, cz);
+        if is_skylight != 0 {
+            reg.get_section_sky_light_pointer(key, section_y as usize) as i64
+        } else {
+            reg.get_section_block_light_pointer(key, section_y as usize) as i64
+        }
+    }));
+    let panicked = outcome.is_err();
+    let code = outcome.unwrap_or(0i64);
+    call.fallback_reason = if panicked {
+        metrics::FallbackReason::Panic
+    } else {
+        metrics::FallbackReason::None
+    };
+    if panicked {
+        call.bytes.output_bytes = Some(0);
+        call.bytes.copied_bytes = None;
+    }
+    code
+}
+
 // ====================================================================
 // M-CK3: Rust outbound frame engine (offline; immutable packet bodies)
 // ====================================================================
