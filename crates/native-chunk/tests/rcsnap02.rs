@@ -8,6 +8,7 @@
 use native_chunk::packet_snapshot::{
     OwnedPacketSnapshot, SnapshotRejection, SNAPSHOT_MAGIC_V2, MAX_SNAPSHOT_BYTES,
 };
+use native_chunk::{NativeChunk, ChunkRegistry, ChunkKey};
 
 fn header(registry_size: u32, source_bits: u8, mask: u16, full: bool, skylight: bool) -> Vec<u8> {
     let mut out = Vec::new();
@@ -329,4 +330,47 @@ fn control_index_width_insufficient_rejected() {
     let bits_at = before + 2 + 2 + 2 + 5 * 2;
     transport[bits_at] = 2; // 1<<2 = 4 < palette_len 5
     assert!(matches!(decode(&transport), Err(SnapshotRejection::MalformedSnapshot)));
+}
+
+#[test]
+fn control_retained_native_chunk_from_transport() {
+    let states = mixed(&[1, 16, 144, 42]);
+    let mut transport = header(157_010, 18, 1, true, true);
+    section(&mut transport, 0, &states, 4096);
+    transport.extend_from_slice(&[0x33u8; 256]);
+
+    // 1. One-shot decode via OwnedPacketSnapshot
+    let snapshot = OwnedPacketSnapshot::from_transport(&transport).expect("valid transport");
+    let mut ephemeral_buf = [0u8; 32768];
+    let ephemeral_res = snapshot.encode(&mut ephemeral_buf).expect("encode succeeds");
+
+    // 2. Persistent NativeChunk seeded from transport
+    let mut retained_chunk = NativeChunk::from_transport(&transport).expect("from_transport succeeds");
+    assert_eq!(retained_chunk.dim, 0);
+    assert_eq!(retained_chunk.cx, 0);
+    assert_eq!(retained_chunk.cz, 0);
+    assert_eq!(retained_chunk.primary_bit_mask, 1);
+
+    // First retained encode (populates wire cache)
+    let mut retained_buf1 = [0u8; 32768];
+    let mut off1 = 0;
+    let retained_res1 = retained_chunk.encode_packet_payload(true, true, &mut retained_buf1, &mut off1).expect("retained encode succeeds");
+    assert_eq!(retained_res1.bytes_written, ephemeral_res.bytes_written);
+    assert_eq!(retained_res1.emitted_mask, ephemeral_res.emitted_mask);
+    assert_eq!(&retained_buf1[..off1], &ephemeral_buf[..ephemeral_res.bytes_written],
+        "Retained chunk encode must be byte-identical to snapshot encode");
+
+    // Second retained encode (fast path: hits wire cache)
+    let mut retained_buf2 = [0u8; 32768];
+    let mut off2 = 0;
+    let retained_res2 = retained_chunk.encode_packet_payload(true, true, &mut retained_buf2, &mut off2).expect("retained re-encode succeeds");
+    assert_eq!(retained_res2.bytes_written, retained_res1.bytes_written);
+    assert_eq!(&retained_buf1[..off1], &retained_buf2[..off2],
+        "Retained re-encode must be byte-identical via wire cache");
+
+    // 3. Register in ChunkRegistry and verify handle lifecycle
+    let registry = ChunkRegistry::new();
+    let handle = registry.insert(retained_chunk);
+    assert_eq!(handle.key, ChunkKey::new(0, 0, 0));
+    assert!(registry.get(&handle).is_some());
 }
