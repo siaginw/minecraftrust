@@ -104,6 +104,25 @@ class ClosureControls(unittest.TestCase):
         self.assertEqual(closure.MIN_INCARNATIONS, 300)
         self.assertEqual(closure.MIN_RELOADS, 20)
 
+    def test_reload_cycles_counted_by_coordinate_multi_incarnation(self):
+        import tempfile
+        import json
+        from pathlib import Path
+        from run_closure_campaign import session_metrics
+        with tempfile.TemporaryDirectory() as tmpdir:
+            tmppath = Path(tmpdir)
+            events_file = tmppath / "live-shadow-events.jsonl"
+            rows = [
+                {"worldId": 1, "chunkId": 100, "chunkX": 10, "chunkZ": 20, "incarnation": 1, "ioAdopted": False},
+                {"worldId": 1, "chunkId": 101, "chunkX": 11, "chunkZ": 20, "incarnation": 1, "ioAdopted": False},
+                {"worldId": 1, "chunkId": 102, "chunkX": 10, "chunkZ": 20, "incarnation": 2, "ioAdopted": True},
+            ]
+            events_file.write_text("\n".join(json.dumps(r) for r in rows) + "\n")
+            m = session_metrics(tmppath)
+            self.assertEqual(m["reload_cycles"], 1)
+            self.assertEqual(m["identities"], 3)
+            self.assertEqual(m["io_origin_comparisons"], 1)
+
 
 if __name__ == "__main__":
     unittest.main()

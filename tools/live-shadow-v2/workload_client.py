@@ -161,8 +161,10 @@ def _connect_and_join(host: str, port: int, username: str, client_mods):
             observed["keepalives"] += 1
             continue
         if packet_id == CB_PLAYER_POS_LOOK:
-            teleport_id = _varint_from(body)[0]
+            x, y, z = struct.unpack(">ddd", body[:24]) if len(body) >= 24 else (0.0, 0.0, 0.0)
+            teleport_id = _varint_from(body[33:])[0] if len(body) > 33 else 0
             frame.send(SB_CONFIRM_TELEPORT, varint(teleport_id))
+            frame.send(SB_PLAYER_POSITION, struct.pack(">ddd?", x, y, z, True))
             observed["teleports"] += 1
             frame.send(SB_CLIENT_SETTINGS,
                        write_string("en_US") + bytes([8]) + varint(0)
@@ -195,13 +197,51 @@ def _drain(frame, seconds: float, observed):
             frame.send(SB_KEEP_ALIVE, body[:8])
             observed["keepalives"] += 1
         elif packet_id == CB_PLAYER_POS_LOOK:
-            teleport_id = _varint_from(body)[0]
+            x, y, z = struct.unpack(">ddd", body[:24]) if len(body) >= 24 else (0.0, 0.0, 0.0)
+            teleport_id = _varint_from(body[33:])[0] if len(body) > 33 else 0
             frame.send(SB_CONFIRM_TELEPORT, varint(teleport_id))
+            frame.send(SB_PLAYER_POSITION, struct.pack(">ddd?", x, y, z, True))
             observed["teleports"] += 1
         elif packet_id == CB_DISCONNECT_PLAY:
             raise WorkloadFailure("disconnect during drain")
         else:
             observed["chunk_packets"] += 1
+
+
+def _drain_until_teleport_complete(frame, status_path: Path, timeout_s: float, observed):
+    """Consume server output while server-side teleport controller runs, answering keep-alives and confirming teleports."""
+    deadline = time.time() + timeout_s
+    frame.sock.settimeout(1.0)
+    while time.time() < deadline:
+        if status_path is not None and status_path.is_file():
+            try:
+                data = json.loads(status_path.read_text(encoding="utf-8"))
+                if data.get("status") in ("COMPLETE", "ERROR"):
+                    # Give an extra settle window to drain trailing chunk packets
+                    _drain(frame, 5.0, observed)
+                    return data
+            except Exception:
+                pass
+        try:
+            packet_id, body = frame.read_frame()
+        except TimeoutError:
+            continue
+        except (ConnectionError, OSError) as error:
+            raise WorkloadFailure("drain transport: %s" % error)
+        if packet_id == CB_KEEP_ALIVE:
+            frame.send(SB_KEEP_ALIVE, body[:8])
+            observed["keepalives"] += 1
+        elif packet_id == CB_PLAYER_POS_LOOK:
+            x, y, z = struct.unpack(">ddd", body[:24]) if len(body) >= 24 else (0.0, 0.0, 0.0)
+            teleport_id = _varint_from(body[33:])[0] if len(body) > 33 else 0
+            frame.send(SB_CONFIRM_TELEPORT, varint(teleport_id))
+            frame.send(SB_PLAYER_POSITION, struct.pack(">ddd?", x, y, z, True))
+            observed["teleports"] += 1
+        elif packet_id == CB_DISCONNECT_PLAY:
+            raise WorkloadFailure("disconnect during drain")
+        else:
+            observed["chunk_packets"] += 1
+    raise WorkloadFailure("server teleport timed out after %.1fs" % timeout_s)
 
 
 def _walk_leg(frame, x0, z0, x1, z1, step_blocks, observed):
@@ -222,7 +262,9 @@ def _walk_leg(frame, x0, z0, x1, z1, step_blocks, observed):
 
 
 def run_workload(host, port, username, *, client_mods, legs, step_blocks,
-                 reconnects, settle_s, trace_path):
+                 reconnects, settle_s, trace_path,
+                 teleport_status_path: Path | None = None,
+                 teleport_timeout_s: float = 300.0):
     """The deterministic campaign workload for ONE server session."""
     trace = {"username": username, "legs": [list(leg) for leg in legs],
              "reconnects": reconnects, "events": []}
@@ -236,9 +278,14 @@ def run_workload(host, port, username, *, client_mods, legs, step_blocks,
                                                 client_mods)
             trace["events"].append({"pass": attempt, "joined": True})
             _drain(frame, settle_s, observed)
-            for (x0, z0, x1, z1) in legs:
-                _walk_leg(frame, x0, z0, x1, z1, step_blocks, observed)
-                _drain(frame, settle_s, observed)
+            if teleport_status_path is not None:
+                teleport_result = _drain_until_teleport_complete(
+                    frame, teleport_status_path, teleport_timeout_s, observed)
+                trace["events"].append({"pass": attempt, "teleport_result": teleport_result})
+            else:
+                for (x0, z0, x1, z1) in legs:
+                    _walk_leg(frame, x0, z0, x1, z1, step_blocks, observed)
+                    _drain(frame, settle_s, observed)
             for key in observed_total:
                 observed_total[key] += observed.get(key, 0)
         except WorkloadFailure as failure:
@@ -252,7 +299,10 @@ def run_workload(host, port, username, *, client_mods, legs, step_blocks,
                 frame.close()
         time.sleep(2)
     trace["observed"] = observed_total
-    trace["verdict"] = "PASS" if observed_total.get("legs_walked", 0) >= len(legs) else "PARTIAL"
+    if teleport_status_path is not None:
+        trace["verdict"] = "PASS" if observed_total.get("teleports", 0) > 0 else "PARTIAL"
+    else:
+        trace["verdict"] = "PASS" if observed_total.get("legs_walked", 0) >= len(legs) else "PARTIAL"
     if trace_path is not None:
         trace_path.write_text(json.dumps(trace, indent=2) + "\n")
     return trace

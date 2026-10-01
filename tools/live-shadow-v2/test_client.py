@@ -219,5 +219,17 @@ class HandshakeControls(unittest.TestCase):
         self.assertFalse(h.summary()["complete"])
 
 
+class TeleportConfirmationControls(unittest.TestCase):
+    def test_teleport_id_extracted_from_offset_33(self):
+        import struct
+        from workload_client import _varint_from
+        # SPacketPlayerPosLook layout: x(8B), y(8B), z(8B), yaw(4B), pitch(4B), flags(1B), teleportId(VarInt)
+        prefix = struct.pack(">dddffB", 1024.5, 80.0, 1024.5, 0.0, 0.0, 0)
+        self.assertEqual(len(prefix), 33)
+        body = prefix + proto.varint(42)
+        teleport_id = _varint_from(body[33:])[0] if len(body) > 33 else 0
+        self.assertEqual(teleport_id, 42)
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=1)

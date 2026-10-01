@@ -120,6 +120,21 @@ def run_session(args, index: int) -> dict:
     # (the tweaker's consumer loads it by absolute path).
     shutil.copyfile(args.dll.resolve(), server / "rustcraft_ffi.dll")
     smoke_out = out / "live-shadow-events.jsonl"
+    teleport_status = None
+    teleport_extra = []
+    if getattr(args, "server_teleport", False):
+        teleport_status = out / "teleport-status.json"
+        teleport_extra = [
+            "-Drustcraft.closureCampaignTeleport=true",
+            "-Drustcraft.closureCampaignTeleportStatus=" + str(teleport_status),
+            "-Drustcraft.closureCampaignTeleportIntervalMs=%d" % args.teleport_interval_ms,
+            "-Drustcraft.closureCampaignTeleportInitialDelayMs=%d" % args.teleport_initial_delay_ms,
+            "-Drustcraft.closureCampaignSeed=%d" % (args.seed + index),
+            "-Drustcraft.closureCampaignTeleportRounds=%d" % args.teleport_rounds,
+        ]
+        if args.teleport_points:
+            teleport_extra.append("-Drustcraft.closureCampaignTeleportPoints=" + args.teleport_points)
+
     extra = [
         "-Drustcraft.liveShadowOut=" + str(smoke_out),
         "-Drustcraft.liveShadowDll=" + str(server / "rustcraft_ffi.dll"),
@@ -132,9 +147,12 @@ def run_session(args, index: int) -> dict:
         "-Drustcraft.session.processId=" + session["process_id"],
         "-Drustcraft.session.transformationSessionId=" + session["session_id"],
         "-Drustcraft.srgJar=" + str(args.srg_jar.resolve()),
-        "-Drustcraft.profile=" + json.loads(
-            args.canonical_profile.read_text(encoding="utf-8"))["id"],
-    ]
+        "-Drustcraft.profile=" + str(
+            json.loads(args.canonical_profile.read_text(encoding="utf-8")).get("id")
+            or (json.loads(args.canonical_profile.read_text(encoding="utf-8")).get("qualification") or {}).get("profile")
+            or json.loads(args.canonical_profile.read_text(encoding="utf-8")).get("kind")
+        ),
+    ] + teleport_extra
     classpath = [str(campaign), str(server / args.forge_jar), str(server / args.vanilla_jar)]
     classpath += [str(p) for p in sorted((server / "libraries").rglob("*.jar"))]
     argv = [str(JAVA), "-Xmx6G", "-javaagent:" + str(campaign),
@@ -149,7 +167,7 @@ def run_session(args, index: int) -> dict:
     process = subprocess.Popen(argv, cwd=str(server), stdout=jvm_log.open("wb"),
                                stderr=subprocess.STDOUT, stdin=subprocess.PIPE)
 
-    booted = wait_for(jvm_log, r"Done \([0-9.]+s\)", args.boot_timeout_s)
+    booted = wait_for(jvm_log, r"Done \([0-9.]+s\)", args.boot_timeout_s, process=process)
     if not booted:
         stop(process, timeout_s=120)
         return {"session": index, "booted": False}
@@ -168,7 +186,9 @@ def run_session(args, index: int) -> dict:
                                 step_blocks=args.step_blocks,
                                 reconnects=args.reconnects,
                                 settle_s=args.leg_settle_s,
-                                trace_path=out / "workload-trace.json")
+                                trace_path=out / "workload-trace.json",
+                                teleport_status_path=teleport_status,
+                                teleport_timeout_s=args.teleport_timeout_s)
     except WorkloadFailure as failure:
         # Record and still stop the server: an orphaned JVM on the campaign
         # port poisons every later attempt.
@@ -234,6 +254,7 @@ def session_metrics(session_dir: Path) -> dict:
     identities = set()
     io_origin = 0
     rcnsnap = {"01": 0, "02": 0}
+    by_chunk_coord = {}
     details = session_dir / "live-shadow-events.jsonl"
     if details.is_file():
         for line in details.read_text(encoding="utf-8", errors="replace").splitlines():
@@ -247,19 +268,20 @@ def session_metrics(session_dir: Path) -> dict:
             identities.add(key)
             if row.get("ioAdopted"):
                 io_origin += 1
+            # Track coordinates across incarnations for reload cycle detection
+            coord_key = (row.get("worldId"), row.get("chunkX"), row.get("chunkZ"))
+            if row.get("incarnation") is not None and None not in coord_key:
+                by_chunk_coord.setdefault(coord_key, set()).add(row.get("incarnation"))
             # Transport version: from the journal detail where recorded.
     for event in events:
         if event.get("outcome") in taxonomy.COMPARED:
             detail = str(event.get("detail", ""))
             rcnsnap["02" if "byteExact" in detail else "01"] += 1
 
-    # Reload cycles: chunks whose identity (worldId, chunkId) appears with
+    # Reload cycles: chunk coordinates whose identity appears with
     # MORE THAN ONE incarnation -- an incarnation change is the existing
     # evidence that the server unloaded and re-created the chunk.
-    by_chunk = {}
-    for row_key in identities:
-        by_chunk.setdefault((row_key[0], row_key[1]), set()).add(row_key[2])
-    reload_cycles = sum(1 for versions in by_chunk.values() if len(versions) > 1)
+    reload_cycles = sum(1 for versions in by_chunk_coord.values() if len(versions) > 1)
 
     observed = sum(outcomes.values())
     unexplained = outcomes["COMPARE_MISMATCH"]  # runner policy: first mismatch stops
@@ -299,6 +321,18 @@ def main() -> int:
     parser.add_argument("--leg-settle-s", type=float, default=8.0)
     parser.add_argument("--hop-mode", action="store_true",
                         help="hop traversal (spawn <-> distant) instead of the walking spiral")
+    parser.add_argument("--server-teleport", action="store_true",
+                        help="use server-side CampaignTeleportController")
+    parser.add_argument("--teleport-points", default=None,
+                        help="semicolon-separated x,y,z waypoints for teleport controller")
+    parser.add_argument("--teleport-interval-ms", type=int, default=5000,
+                        help="dwell time per teleport waypoint in ms")
+    parser.add_argument("--teleport-initial-delay-ms", type=int, default=10000,
+                        help="initial delay before first teleport in ms")
+    parser.add_argument("--teleport-rounds", type=int, default=4,
+                        help="number of rounds of teleport exploration")
+    parser.add_argument("--teleport-timeout-s", type=float, default=600.0,
+                        help="timeout for server-side teleport sequence")
     parser.add_argument("--post-done-settle-s", type=float, default=45.0)
     parser.add_argument("--boot-timeout-s", type=int, default=1800)
     args = parser.parse_args()
@@ -378,8 +412,12 @@ def main() -> int:
         "schema": "RUSTCRAFT_V2_LIVE_SHADOW_CAMPAIGN_RECEIPT_V1",
         "campaign_id": "rev-fullchunk-closure-%s" % uuid.uuid4().hex[:12],
         "seed": args.seed,
-        "movement_plan": [list(leg) for leg in (hop_plan(args.seed) if args.hop_mode
-                                                else campaign_path(args.seed))],
+        "movement_plan": (
+            "server_teleport_points: %s" % (args.teleport_points or "deterministic")
+            if args.server_teleport
+            else [list(leg) for leg in (hop_plan(args.seed) if args.hop_mode else campaign_path(args.seed))]
+        ),
+        "server_teleport": args.server_teleport,
         "hop_mode": args.hop_mode,
         "runtime_root": str(args.runtime_root),
         "canonical_profile_sha256": sha(args.canonical_profile),

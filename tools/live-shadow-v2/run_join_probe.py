@@ -33,7 +33,11 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from join_probe import run_probe  # noqa: E402
 
-JAVA = Path("D:/rustcraft-toolchains/temurin8/jdk8u504-b01/bin/java.exe")
+JAVA = Path(os.environ.get("JAVA_HOME", "D:/rustcraft-toolchains/temurin8/jdk8u504-b01")) / "bin" / "java.exe"
+if not JAVA.exists():
+    fallback = Path("C:/Program Files/Eclipse Adoptium/jdk-8.0.504.1-hotspot/bin/java.exe")
+    if fallback.exists():
+        JAVA = fallback
 PORT = 25599
 
 
@@ -114,10 +118,13 @@ def launch(server: Path, log: Path, *, srg_jar: Path | None, session: dict,
                             stderr=subprocess.STDOUT, stdin=subprocess.PIPE)
 
 
-def wait_for(log: Path, pattern: str, timeout_s: int) -> bool:
+def wait_for(log: Path, pattern: str, timeout_s: int,
+             process: subprocess.Popen | None = None) -> bool:
     compiled = re.compile(pattern)
     deadline = time.time() + timeout_s
     while time.time() < deadline:
+        if process is not None and process.poll() is not None:
+            return False
         try:
             if compiled.search(log.read_text(encoding="utf-8", errors="replace")):
                 return True
