@@ -55,6 +55,33 @@ mod tests {
     }
 
     #[test]
+    fn test_wire_cache_hit_and_invalidation() {
+        let mut sec = NativeSection::new(1);
+        sec.set_block(0, 0, 0, 1);
+        sec.set_block(1, 0, 0, 2);
+
+        // First encode (populates cache)
+        let mut buf1 = [0u8; 8192];
+        let mut off1 = 0;
+        assert!(sec.encode_wire(&mut buf1, &mut off1, true).is_ok());
+        assert!(off1 > 0);
+
+        // Second encode (fast path: cache hit)
+        let mut buf2 = [0u8; 8192];
+        let mut off2 = 0;
+        assert!(sec.encode_wire(&mut buf2, &mut off2, true).is_ok());
+        assert_eq!(off1, off2);
+        assert_eq!(&buf1[..off1], &buf2[..off2], "Cache hit must produce byte-identical wire data");
+
+        // Mutate section -> invalidates cache
+        sec.set_block(2, 0, 0, 3);
+        let mut buf3 = [0u8; 8192];
+        let mut off3 = 0;
+        assert!(sec.encode_wire(&mut buf3, &mut off3, true).is_ok());
+        assert_ne!(&buf1[..off1], &buf3[..off3], "Mutated section must produce new wire data");
+    }
+
+    #[test]
     fn test_chunk_primer_bidirectional_roundtrip() {
         let mut primer = [0u16; CHUNK_PRIMER_SIZE];
         let mut biomes = [0u8; BIOME_ARRAY_SIZE];
