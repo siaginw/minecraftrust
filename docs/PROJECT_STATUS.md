@@ -59,10 +59,18 @@ Unconstrained production authority remains **`false`** everywhere (`PacketAuthor
 - **Cross-Language Memory Model Formally Proven & Sound:** Replaced plain non-atomic `[u16; 4096]`
   with `[AtomicU16; 4096]`, eliminating Rust abstract machine undefined behavior on concurrent foreign reads.
   Proven under 17,226,590 direct reads and 500,000 writes with 0 errors/crashes. Measured latency: 5.06 ns raw
-  read, 16.45 ns mapped read. Next subsystem selected: **Block Light & Sky Light State Ownership**.
+  read, 16.45 ns mapped read.
   Status: **`CROSS_LANGUAGE_MEMORY_MODEL_SOUND_AND_PROVEN`**
   (`docs/research/CROSS_LANGUAGE_MEMORY_MODEL_RESOLUTION_REPORT.md`).
-- **Next Milestone:** **`READY_FOR_RUST_CHUNKSTATE_LIGHT_AUTHORITY_EXPANSION`**.
+- **Block Light & Sky Light State Ownership Migrated:** Migrated block light and sky light data arrays into
+  Rust `NativeSection` (`[AtomicU8; 2048]`). Lock-free atomic word/byte CAS loops prevent odd/even nibble tearing
+  under concurrent writes from multiple threads. Java reads and writes native light memory directly with zero JNI
+  crossings. Coremod ASM hooks on `ExtendedBlockStorage` (`getExtBlocklightValue`, `setExtBlocklightValue`, `getExtSkylightValue`, `setExtSkylightValue`)
+  cleanly support Phosphor without conflicts. Differential fuzzing across 10,000 operations passed with 0 mismatches
+  against reference `NibbleArray`. Gate A (32/32) and Gate C (64/64) live smokes passed with zero client desyncs.
+  Status: **`RUST_LIGHT_STATE_AUTHORITY_EXPANDED`**
+  (`docs/research/RUST_LIGHT_STATE_AUTHORITY_REPORT.md`).
+- **Next Milestone:** **`READY_FOR_RUST_CHUNKSTATE_BIOME_HEIGHTMAP_EXPANSION`**.
 
 ### What each proof is
 

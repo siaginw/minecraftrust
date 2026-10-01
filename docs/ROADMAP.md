@@ -40,15 +40,15 @@ The first *ownership* milestone: chunk state that lives in Rust, with Java obser
 
 ## Phase 3 — Chunk reads/writes + packet authority · 🧪 active focus
 
-Rust owns chunk mutation paths end-to-end; Java packet construction for chunks retires behind the compatibility surface. First semantic ownership inversion of `getBlockState` and `setBlockState` completed under bounded experiment flags (`-Drustcraft.chunkStateAuthorityExperiment=true`). Remaining: expand authoritative API coverage (biomes, light, heightmaps), promote unbuffered direct packet encoding from authoritative Rust chunks, and evaluate un-gated production authority.
+Rust owns chunk mutation paths end-to-end; Java packet construction for chunks retires behind the compatibility surface. First semantic ownership inversion of `getBlockState` and `setBlockState` completed under bounded experiment flags (`-Drustcraft.chunkStateAuthorityExperiment=true`). Section storage (`ExtendedBlockStorage`) and lighting data (`block_light` and `sky_light` atomic arrays) migrated into Rust ownership. Remaining: expand authoritative API coverage to biomes and heightmaps, promote unbuffered direct packet encoding from authoritative Rust chunks, and evaluate un-gated production authority.
 
 ## Phase 4 — Storage / NBT / Anvil · 🗺️ planned
 
 Region-file I/O and NBT pipelines in Rust ([seam research exists](RESEARCH_INDEX.md)). Differential replay against recorded worlds.
 
-## Phase 5 — Lighting + collision · 🗺️ planned
+## Phase 5 — Lighting propagation algorithms + collision · 🗺️ planned
 
-The Phosphor-informed lighting studies and collision seam work generalize here.
+The Phosphor-informed lighting studies and collision seam work generalize here. (Data array ownership of `block_light` and `sky_light` is already complete in Phase 3; Phase 5 owns the asynchronous propagation algorithms).
 
 ## Phase 6 — World / entities / tick ownership · 🗺️ planned
 
