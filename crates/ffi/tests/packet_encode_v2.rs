@@ -296,3 +296,97 @@ fn returned_metadata_survives_later_native_mask_change() {
         1
     );
 }
+
+#[test]
+fn seed_from_transport_and_retained_encode_v2() {
+    let mut transport = Vec::new();
+    transport.extend_from_slice(b"RCSNAP02");
+    transport.extend_from_slice(&2u16.to_be_bytes()); // version
+    transport.push(1); // full=1, skylight=0
+    transport.push(1); // storage
+    transport.push(14); // source bits
+    transport.push(1); // scope
+    transport.extend_from_slice(&0u16.to_be_bytes());
+    transport.extend_from_slice(&0i32.to_be_bytes()); // dim
+    transport.extend_from_slice(&12345i32.to_be_bytes()); // chunk x
+    transport.extend_from_slice(&(-6789i32).to_be_bytes()); // chunk z
+    transport.extend_from_slice(&1u64.to_be_bytes()); // generation
+    transport.extend_from_slice(&0xffffu16.to_be_bytes()); // filter
+    transport.extend_from_slice(&1u16.to_be_bytes()); // mask (section 0)
+    transport.extend_from_slice(&1u64.to_be_bytes()); // event
+    transport.extend_from_slice(&1u64.to_be_bytes()); // owner
+    transport.extend_from_slice(&1u64.to_be_bytes()); // capture
+    transport.extend_from_slice(&1u64.to_be_bytes()); // epoch start
+    transport.extend_from_slice(&1u64.to_be_bytes()); // epoch end
+    transport.extend_from_slice(&1u64.to_be_bytes()); // inc start
+    transport.extend_from_slice(&1u64.to_be_bytes()); // inc end
+    transport.extend_from_slice(&[0u8; 32]); // digest
+    assert_eq!(transport.len(), 128);
+    transport.extend_from_slice(&1u16.to_be_bytes()); // section count
+    transport.extend_from_slice(&8602u32.to_be_bytes()); // registry size
+    transport.push(14); // bits
+
+    // Section 0: y=0, states (uniform state 1 = stone)
+    transport.push(0); // y
+    transport.push(0); // unused
+    transport.extend_from_slice(&4096u16.to_be_bytes()); // refcount
+    transport.extend_from_slice(&1u16.to_be_bytes()); // palette len = 1
+    transport.extend_from_slice(&1u16.to_be_bytes()); // palette[0] = 1
+    transport.push(4); // bits = 4
+    transport.extend_from_slice(&256u16.to_be_bytes()); // word count = 256
+    transport.extend_from_slice(&[0u8; 256 * 8]); // all zeros (index 0)
+    transport.extend_from_slice(&[0u8; 2048]); // block light
+    // full chunk -> biomes
+    transport.extend_from_slice(&[42u8; 256]);
+
+    // 2. Invoke seedFromTransport
+    let gen_id = unsafe {
+        rustcraft_ffi::Java_com_rustcraft_bridge_NativeChunkBridge_seedFromTransport(
+            null_mut(),
+            null_mut(),
+            transport.as_ptr() as i64,
+            transport.len() as i32,
+        )
+    };
+    assert!(gen_id > 0, "seedFromTransport must return valid generation_id, got {}", gen_id);
+
+    // 3. Directly encode from retained state via encode_v2
+    let mut out1 = vec![0u8; CAPACITY];
+    let res1 = unsafe {
+        encode_v2(
+            null_mut(),
+            null_mut(),
+            0,
+            12345,
+            -6789,
+            gen_id,
+            0,
+            1,
+            out1.as_mut_ptr() as i64,
+            out1.len() as i32,
+        )
+    };
+    assert!(res1 > 0 && res1 & PACKET_V2_SUCCESS_TAG != 0, "encode_v2 must succeed");
+    let (count1, mask1) = success(res1);
+    assert_eq!(mask1, 1);
+    assert!(count1 > 0);
+
+    // 4. Second encode (hits wire cache)
+    let mut out2 = vec![0u8; CAPACITY];
+    let res2 = unsafe {
+        encode_v2(
+            null_mut(),
+            null_mut(),
+            0,
+            12345,
+            -6789,
+            gen_id,
+            0,
+            1,
+            out2.as_mut_ptr() as i64,
+            out2.len() as i32,
+        )
+    };
+    assert_eq!(res1, res2);
+    assert_eq!(&out1[..count1], &out2[..count1], "Retained re-encode must match byte-for-byte");
+}

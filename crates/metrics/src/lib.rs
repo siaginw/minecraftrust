@@ -72,6 +72,7 @@ pub enum Operation {
     ChunkGetSectionLight = 320,
     ChunkEncodePacketPayloadV2 = 321,
     OwnedSnapshotEncodeV1 = 322,
+    ChunkSeedFromTransport = 323,
 }
 
 impl Operation {
@@ -134,6 +135,7 @@ impl Operation {
         Self::ChunkGetSectionLight,
         Self::ChunkEncodePacketPayloadV2,
         Self::OwnedSnapshotEncodeV1,
+        Self::ChunkSeedFromTransport,
     ];
 }
 

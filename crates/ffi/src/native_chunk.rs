@@ -69,6 +69,53 @@ pub unsafe extern "system" fn Java_com_rustcraft_bridge_NativeChunkBridge_regist
     code
 }
 
+/// Seeds persistent NativeChunk state from RCSNAP01 or RCSNAP02 transport bytes.
+///
+/// Returns generation_id (>0) on success, or negative error code on failure.
+/// If a chunk already exists at those coordinates, it is replaced and a new generation_id is assigned.
+#[no_mangle]
+pub unsafe extern "system" fn Java_com_rustcraft_bridge_NativeChunkBridge_seedFromTransport(
+    _env: *mut c_void,
+    _clazz: *mut c_void,
+    transport_addr: i64,
+    transport_len: i32,
+) -> i64 {
+    let mut call = GLOBAL_FFI_METRICS.begin_call(metrics::Operation::ChunkSeedFromTransport);
+    call.bytes = metrics::ByteMeasurements::NO_BULK;
+    let outcome = catch_unwind(std::panic::AssertUnwindSafe(|| {
+        if transport_addr == 0 || transport_len <= 0 || transport_len as usize > native_chunk::packet_snapshot::MAX_SNAPSHOT_BYTES {
+            return -1i64;
+        }
+        let bytes = std::slice::from_raw_parts(transport_addr as *const u8, transport_len as usize);
+        call.bytes.input_bytes = Some(bytes.len() as u64);
+        call.bytes.borrowed_bytes = call.bytes.input_bytes;
+
+        let reg = get_registry();
+        let gen_id = reg.next_generation_id();
+        let mut chunk = match NativeChunk::from_transport(bytes) {
+            Ok(c) => c,
+            Err(_) => return -2i64,
+        };
+        chunk.generation_id = gen_id;
+        let handle = reg.insert(chunk);
+        handle.generation_id as i64
+    }));
+    let panicked = outcome.is_err();
+    let code = outcome.unwrap_or(-7);
+    call.fallback_reason = if panicked {
+        metrics::FallbackReason::Panic
+    } else if code > 0 {
+        metrics::FallbackReason::None
+    } else {
+        metrics::FallbackReason::InvalidArgument
+    };
+    if panicked {
+        call.bytes.output_bytes = Some(0);
+        call.bytes.copied_bytes = None;
+    }
+    code
+}
+
 /// Reverse materializes a NativeChunk into a Java ChunkPrimer DirectBuffer.
 ///
 /// Returns 0 on success, or error code <0.
