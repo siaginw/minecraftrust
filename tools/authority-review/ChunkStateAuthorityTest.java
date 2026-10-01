@@ -90,7 +90,13 @@ public class ChunkStateAuthorityTest {
         // 6. Differential Fuzzing Oracle (10,000 operations)
         testDifferentialFuzzing(10000, 42L);
 
-        // 7. Performance Benchmarks
+        // 7. Light State Authority & Direct-Memory Nibble Verification
+        testLightStateAuthority();
+
+        // 8. Light State Differential Fuzzing (10,000 light operations)
+        testLightDifferentialFuzzing(10000, 1337L);
+
+        // 9. Performance Benchmarks
         runPerformanceBenchmarks();
 
         System.out.println("==================================================================");
@@ -427,8 +433,177 @@ public class ChunkStateAuthorityTest {
                 + writeCount + " writes, " + readCount + " reads) with 0 MISMATCHES!");
     }
 
+    private static void testLightStateAuthority() {
+        System.out.println("--> [7/9] Testing Light State Authority & Direct-Memory Nibble Architecture...");
+
+        int dim = 0;
+        int cx = 14;
+        int cz = 15;
+        ByteBuffer pb = ByteBuffer.allocateDirect(65536 * 2).order(ByteOrder.nativeOrder());
+        ByteBuffer bb = ByteBuffer.allocateDirect(256).order(ByteOrder.nativeOrder());
+        long genId = NativeChunkBridge.register(dim, cx, cz,
+                ChunkStateAuthorityBridge.getBufferAddress(pb),
+                ChunkStateAuthorityBridge.getBufferAddress(bb));
+        assertTrue(genId > 0, "Registration must succeed");
+
+        // Populate a block in section 2 to allocate section 2
+        NativeChunkBridge.setBlockState(dim, cx, cz, 4, 35, 7, 1);
+
+        ByteBuffer blBuf = ByteBuffer.allocateDirect(128).order(ByteOrder.nativeOrder());
+        ByteBuffer slBuf = ByteBuffer.allocateDirect(128).order(ByteOrder.nativeOrder());
+        long blAddr = ChunkStateAuthorityBridge.getBufferAddress(blBuf);
+        long slAddr = ChunkStateAuthorityBridge.getBufferAddress(slBuf);
+
+        int ok = NativeChunkBridge.getSectionLightPointers(dim, cx, cz, blAddr, slAddr);
+        assertEquals(1, ok, "getSectionLightPointers must return 1");
+
+        long sec2BlPtr = blBuf.getLong(2 * 8);
+        long sec2SlPtr = slBuf.getLong(2 * 8);
+        long sec0BlPtr = blBuf.getLong(0 * 8);
+
+        assertTrue(sec2BlPtr != 0, "Allocated section 2 block light pointer must be non-zero");
+        assertTrue(sec2SlPtr != 0, "Allocated section 2 sky light pointer must be non-zero");
+        assertEquals(0, sec0BlPtr, "Absent section 0 block light pointer must be 0");
+
+        // 1. Initial State Parity: Block light = 0 everywhere, Sky light = 15 everywhere
+        int initBl = StateRegistryLookup.readLightNibble(sec2BlPtr, 4, 3, 7);
+        assertEquals(0, initBl, "Default block light in newly allocated section must be 0");
+
+        int initSl = StateRegistryLookup.readLightNibble(sec2SlPtr, 4, 3, 7);
+        assertEquals(15, initSl, "Default sky light in newly allocated section must be 15");
+
+        // 2. Direct-Memory Atomic Writes
+        boolean changedBl = StateRegistryLookup.writeLightNibble(sec2BlPtr, 4, 3, 7, 14);
+        assertTrue(changedBl, "Writing new block light value 14 must return true");
+
+        int readBl = StateRegistryLookup.readLightNibble(sec2BlPtr, 4, 3, 7);
+        assertEquals(14, readBl, "Direct-memory read must match written block light 14");
+
+        // 3. No-Op Write
+        boolean noOpBl = StateRegistryLookup.writeLightNibble(sec2BlPtr, 4, 3, 7, 14);
+        assertFalse(noOpBl, "Writing same block light value 14 must return false (no-op)");
+
+        // 4. Non-Tearing Adjacent Nibble Verification (same byte, adjacent odd/even index)
+        // (4, 3, 7) -> index = (3 << 8) | (7 << 4) | 4 = 768 + 112 + 4 = 884 (even index)
+        // Adjacent odd index is 885 -> (5, 3, 7)
+        int adjBefore = StateRegistryLookup.readLightNibble(sec2BlPtr, 5, 3, 7);
+        assertEquals(0, adjBefore, "Adjacent nibble must initially be 0");
+
+        boolean changedAdj = StateRegistryLookup.writeLightNibble(sec2BlPtr, 5, 3, 7, 9);
+        assertTrue(changedAdj, "Writing adjacent odd nibble must return true");
+
+        assertEquals(14, StateRegistryLookup.readLightNibble(sec2BlPtr, 4, 3, 7),
+                "Even nibble must remain 14 after odd nibble write (no tearing)");
+        assertEquals(9, StateRegistryLookup.readLightNibble(sec2BlPtr, 5, 3, 7),
+                "Odd nibble must be 9");
+
+        // 5. Sky Light Atomic Mutation
+        boolean changedSl = StateRegistryLookup.writeLightNibble(sec2SlPtr, 4, 3, 7, 7);
+        assertTrue(changedSl, "Writing sky light value 7 must return true");
+        assertEquals(7, StateRegistryLookup.readLightNibble(sec2SlPtr, 4, 3, 7),
+                "Sky light must read 7");
+        assertEquals(15, StateRegistryLookup.readLightNibble(sec2SlPtr, 5, 3, 7),
+                "Adjacent sky light nibble must remain default 15");
+
+        System.out.println("    [PASS] Light state authority & direct-memory nibble architecture verified.");
+    }
+
+    private static void testLightDifferentialFuzzing(int count, long seed) {
+        System.out.println("--> [8/9] Running Light State Differential Fuzzing (" + count + " operations)...");
+
+        int dim = 0;
+        int cx = 33;
+        int cz = 44;
+        ByteBuffer pb = ByteBuffer.allocateDirect(65536 * 2).order(ByteOrder.nativeOrder());
+        ByteBuffer bb = ByteBuffer.allocateDirect(256).order(ByteOrder.nativeOrder());
+        NativeChunkBridge.register(dim, cx, cz,
+                ChunkStateAuthorityBridge.getBufferAddress(pb),
+                ChunkStateAuthorityBridge.getBufferAddress(bb));
+
+        // Allocate section 1 (Y=16..31)
+        NativeChunkBridge.setBlockState(dim, cx, cz, 0, 16, 0, 1);
+
+        ByteBuffer blBuf = ByteBuffer.allocateDirect(128).order(ByteOrder.nativeOrder());
+        ByteBuffer slBuf = ByteBuffer.allocateDirect(128).order(ByteOrder.nativeOrder());
+        NativeChunkBridge.getSectionLightPointers(dim, cx, cz,
+                ChunkStateAuthorityBridge.getBufferAddress(blBuf),
+                ChunkStateAuthorityBridge.getBufferAddress(slBuf));
+        long blPtr = blBuf.getLong(1 * 8);
+        long slPtr = slBuf.getLong(1 * 8);
+
+        assertTrue(blPtr != 0, "Section 1 block light pointer must exist");
+        assertTrue(slPtr != 0, "Section 1 sky light pointer must exist");
+
+        // Reference Oracle: byte arrays simulating Minecraft NibbleArray
+        byte[] refBlockLight = new byte[2048];
+        byte[] refSkyLight = new byte[2048];
+        Arrays.fill(refSkyLight, (byte) 0xFF); // Default 15
+
+        Random rng = new Random(seed);
+        int writes = 0;
+        int reads = 0;
+
+        for (int op = 0; op < count; op++) {
+            int x = rng.nextInt(16);
+            int y = rng.nextInt(16);
+            int z = rng.nextInt(16);
+            boolean isSky = rng.nextBoolean();
+            long targetPtr = isSky ? slPtr : blPtr;
+            byte[] refArray = isSky ? refSkyLight : refBlockLight;
+
+            int idx = StateRegistryLookup.getSectionIndex(x, y, z);
+            int byteOffset = idx >> 1;
+            boolean isOdd = (idx & 1) != 0;
+
+            if (rng.nextBoolean()) {
+                // WRITE
+                int val = rng.nextInt(16);
+                boolean nativeChanged = StateRegistryLookup.writeLightNibble(targetPtr, x, y, z, val);
+
+                // Update oracle
+                int curByte = refArray[byteOffset] & 0xFF;
+                int curNibble = isOdd ? (curByte >> 4) & 0x0F : curByte & 0x0F;
+                boolean oracleChanged = curNibble != val;
+                assertEquals(oracleChanged ? 1 : 0, nativeChanged ? 1 : 0,
+                        "Change detection mismatch at (" + x + "," + y + "," + z + ")");
+
+                int newByte = isOdd ? ((curByte & 0x0F) | (val << 4)) : ((curByte & 0xF0) | val);
+                refArray[byteOffset] = (byte) newByte;
+                writes++;
+            } else {
+                // READ
+                int nativeVal = StateRegistryLookup.readLightNibble(targetPtr, x, y, z);
+                int curByte = refArray[byteOffset] & 0xFF;
+                int oracleVal = isOdd ? (curByte >> 4) & 0x0F : curByte & 0x0F;
+                assertEquals(oracleVal, nativeVal,
+                        "Light read mismatch at (" + x + "," + y + "," + z + "), isSky=" + isSky);
+                reads++;
+            }
+        }
+
+        // Full array parity check (all 4096 cells)
+        for (int idx = 0; idx < 4096; idx++) {
+            int x = idx & 15;
+            int z = (idx >> 4) & 15;
+            int y = (idx >> 8) & 15;
+            int blNative = StateRegistryLookup.readLightNibble(blPtr, x, y, z);
+            int byteOffset = idx >> 1;
+            int blByte = refBlockLight[byteOffset] & 0xFF;
+            int blOracle = (idx & 1) != 0 ? (blByte >> 4) & 0x0F : blByte & 0x0F;
+            assertEquals(blOracle, blNative, "Post-fuzz block light mismatch at index " + idx);
+
+            int slNative = StateRegistryLookup.readLightNibble(slPtr, x, y, z);
+            int slByte = refSkyLight[byteOffset] & 0xFF;
+            int slOracle = (idx & 1) != 0 ? (slByte >> 4) & 0x0F : slByte & 0x0F;
+            assertEquals(slOracle, slNative, "Post-fuzz sky light mismatch at index " + idx);
+        }
+
+        System.out.println("    [PASS] Light Differential Fuzzing: " + count + " ops (" + writes + " writes, "
+                + reads + " reads) with 0 MISMATCHES across all 4,096 cells!");
+    }
+
     private static void runPerformanceBenchmarks() {
-        System.out.println("--> [7/7] Running Performance Profiling (p50 / p95 / p99)...");
+        System.out.println("--> [9/9] Running Performance Profiling (p50 / p95 / p99)...");
 
         int dim = 0;
         int cx = 20;
