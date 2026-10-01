@@ -73,6 +73,8 @@ public final class ChunkStateAuthorityBridge {
         public volatile long generationId;
         public volatile AuthoritativeMode mode;
         public final long[] sectionPointers = new long[16];
+        public final long[] blockLightPointers = new long[16];
+        public final long[] skyLightPointers = new long[16];
         public volatile boolean dirty;
 
         public ChunkAuthorityRecord(int dim, int cx, int cz, long generationId, AuthoritativeMode mode) {
@@ -118,6 +120,8 @@ public final class ChunkStateAuthorityBridge {
     public static final AtomicLong CHUNK_API_RUST_WRITE = new AtomicLong();
     public static final AtomicLong SECTION_API_RUST_READ = new AtomicLong();
     public static final AtomicLong SECTION_API_RUST_WRITE = new AtomicLong();
+    public static final AtomicLong LIGHT_API_RUST_READ = new AtomicLong();
+    public static final AtomicLong LIGHT_API_RUST_WRITE = new AtomicLong();
     public static final AtomicLong CONTAINER_MATERIALIZATIONS = new AtomicLong();
     public static final AtomicLong CONTAINER_CACHE_HITS = new AtomicLong();
     public static final AtomicLong REFLECTION_READS = new AtomicLong();
@@ -335,6 +339,22 @@ public final class ChunkStateAuthorityBridge {
                 }
             }
         }
+
+        // Fetch light pointers from native memory (block light + sky light)
+        ByteBuffer blBuf = ByteBuffer.allocateDirect(128).order(ByteOrder.nativeOrder());
+        ByteBuffer slBuf = ByteBuffer.allocateDirect(128).order(ByteOrder.nativeOrder());
+        long blAddr = getBufferAddress(blBuf);
+        long slAddr = getBufferAddress(slBuf);
+        if (blAddr != 0 && slAddr != 0) {
+            int okLight = NativeChunkBridge.getSectionLightPointers(dim, cx, cz, blAddr, slAddr);
+            if (okLight > 0) {
+                for (int s = 0; s < 16; s++) {
+                    record.blockLightPointers[s] = blBuf.getLong(s * 8);
+                    record.skyLightPointers[s] = slBuf.getLong(s * 8);
+                }
+            }
+        }
+
         RECORDS.put(key, record);
         return record;
     }
@@ -356,6 +376,8 @@ public final class ChunkStateAuthorityBridge {
             record.generationId = 0;
             for (int i = 0; i < 16; i++) {
                 record.sectionPointers[i] = 0;
+                record.blockLightPointers[i] = 0;
+                record.skyLightPointers[i] = 0;
             }
         }
     }
@@ -592,7 +614,117 @@ public final class ChunkStateAuthorityBridge {
             if (sectionCreated) {
                 NativeChunkBridge.SECTION_CREATIONS.incrementAndGet();
                 record.sectionPointers[binding.secY] = NativeChunkBridge.getSectionPointer(record.dim, record.cx, record.cz, binding.secY);
+                record.blockLightPointers[binding.secY] = NativeChunkBridge.getSectionLightPointer(record.dim, record.cx, record.cz, binding.secY, 0);
+                record.skyLightPointers[binding.secY] = NativeChunkBridge.getSectionLightPointer(record.dim, record.cx, record.cz, binding.secY, 1);
             }
+            record.dirty = true;
+            return true;
+        } catch (Throwable t) {
+            return false;
+        }
+    }
+
+    /**
+     * Authoritative Block Light read: reads directly from native [AtomicU8; 2048] memory.
+     * Returns 0..15 if handled, or -1 to fall back to Java.
+     */
+    public static int getBlockLight(ExtendedBlockStorage storage, int x, int y, int z) {
+        if (!experimentEnabled || storage == null) return -1;
+        try {
+            SectionAuthorityBinding binding = SECTION_BINDINGS.get(storage);
+            if (binding == null) return -1;
+            ChunkAuthorityRecord record = binding.chunkRecord;
+            if (record == null || record.generationId <= 0 || (record.mode != AuthoritativeMode.RUST_AUTHORITATIVE && record.mode != AuthoritativeMode.RUST_MIRRORED)) {
+                return -1;
+            }
+            long currentOps = TOTAL_OPERATIONS.incrementAndGet();
+            if (currentOps > authorityCap) return -1;
+
+            long blPtr = record.blockLightPointers[binding.secY];
+            LIGHT_API_RUST_READ.incrementAndGet();
+            if (blPtr == 0) return 0; // Absent section has 0 block light
+
+            return StateRegistryLookup.readLightNibble(blPtr, x, y, z);
+        } catch (Throwable t) {
+            return -1;
+        }
+    }
+
+    /**
+     * Authoritative Block Light write: writes directly to native [AtomicU8; 2048] memory via atomic CAS.
+     * Returns true if handled, false to fall back to Java.
+     */
+    public static boolean setBlockLight(ExtendedBlockStorage storage, int x, int y, int z, int val) {
+        if (!experimentEnabled || storage == null) return false;
+        try {
+            SectionAuthorityBinding binding = SECTION_BINDINGS.get(storage);
+            if (binding == null) return false;
+            ChunkAuthorityRecord record = binding.chunkRecord;
+            if (record == null || record.generationId <= 0 || (record.mode != AuthoritativeMode.RUST_AUTHORITATIVE && record.mode != AuthoritativeMode.RUST_MIRRORED)) {
+                return false;
+            }
+            long currentOps = TOTAL_OPERATIONS.incrementAndGet();
+            if (currentOps > authorityCap) return false;
+
+            long blPtr = record.blockLightPointers[binding.secY];
+            if (blPtr == 0) return false; // Storage not yet backed by native section
+
+            LIGHT_API_RUST_WRITE.incrementAndGet();
+            StateRegistryLookup.writeLightNibble(blPtr, x, y, z, val);
+            record.dirty = true;
+            return true;
+        } catch (Throwable t) {
+            return false;
+        }
+    }
+
+    /**
+     * Authoritative Sky Light read: reads directly from native [AtomicU8; 2048] memory.
+     * Returns 0..15 if handled, or -1 to fall back to Java.
+     */
+    public static int getSkyLight(ExtendedBlockStorage storage, int x, int y, int z) {
+        if (!experimentEnabled || storage == null) return -1;
+        try {
+            SectionAuthorityBinding binding = SECTION_BINDINGS.get(storage);
+            if (binding == null) return -1;
+            ChunkAuthorityRecord record = binding.chunkRecord;
+            if (record == null || record.generationId <= 0 || (record.mode != AuthoritativeMode.RUST_AUTHORITATIVE && record.mode != AuthoritativeMode.RUST_MIRRORED)) {
+                return -1;
+            }
+            long currentOps = TOTAL_OPERATIONS.incrementAndGet();
+            if (currentOps > authorityCap) return -1;
+
+            long slPtr = record.skyLightPointers[binding.secY];
+            LIGHT_API_RUST_READ.incrementAndGet();
+            if (slPtr == 0) return 15; // Absent section has 15 sky light by default in overworld
+
+            return StateRegistryLookup.readLightNibble(slPtr, x, y, z);
+        } catch (Throwable t) {
+            return -1;
+        }
+    }
+
+    /**
+     * Authoritative Sky Light write: writes directly to native [AtomicU8; 2048] memory via atomic CAS.
+     * Returns true if handled, false to fall back to Java.
+     */
+    public static boolean setSkyLight(ExtendedBlockStorage storage, int x, int y, int z, int val) {
+        if (!experimentEnabled || storage == null) return false;
+        try {
+            SectionAuthorityBinding binding = SECTION_BINDINGS.get(storage);
+            if (binding == null) return false;
+            ChunkAuthorityRecord record = binding.chunkRecord;
+            if (record == null || record.generationId <= 0 || (record.mode != AuthoritativeMode.RUST_AUTHORITATIVE && record.mode != AuthoritativeMode.RUST_MIRRORED)) {
+                return false;
+            }
+            long currentOps = TOTAL_OPERATIONS.incrementAndGet();
+            if (currentOps > authorityCap) return false;
+
+            long slPtr = record.skyLightPointers[binding.secY];
+            if (slPtr == 0) return false;
+
+            LIGHT_API_RUST_WRITE.incrementAndGet();
+            StateRegistryLookup.writeLightNibble(slPtr, x, y, z, val);
             record.dirty = true;
             return true;
         } catch (Throwable t) {
@@ -694,6 +826,8 @@ public final class ChunkStateAuthorityBridge {
             if (sectionCreated) {
                 NativeChunkBridge.SECTION_CREATIONS.incrementAndGet();
                 record.sectionPointers[secY] = NativeChunkBridge.getSectionPointer(dim, cx, cz, secY);
+                record.blockLightPointers[secY] = NativeChunkBridge.getSectionLightPointer(dim, cx, cz, secY, 0);
+                record.skyLightPointers[secY] = NativeChunkBridge.getSectionLightPointer(dim, cx, cz, secY, 1);
             }
             if (sectionBecameEmpty) {
                 NativeChunkBridge.SECTION_EMPTIED.incrementAndGet();

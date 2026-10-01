@@ -80,6 +80,26 @@ public class ChunkStateAuthorityTransformer implements IClassTransformer {
                         injectStorageSetHook(mn);
                         patched++;
                     }
+                    // getExtBlocklightValue(int, int, int) -> func_76670_c(III)I
+                    else if (isGetBlockLight(mn)) {
+                        injectGetBlockLightHook(mn);
+                        patched++;
+                    }
+                    // setExtBlocklightValue(int, int, int, int) -> func_76657_c(IIII)V
+                    else if (isSetBlockLight(mn)) {
+                        injectSetBlockLightHook(mn);
+                        patched++;
+                    }
+                    // getExtSkylightValue(int, int, int) -> func_76674_d(III)I
+                    else if (isGetSkyLight(mn)) {
+                        injectGetSkyLightHook(mn);
+                        patched++;
+                    }
+                    // setExtSkylightValue(int, int, int, int) -> func_76677_d(IIII)V
+                    else if (isSetSkyLight(mn)) {
+                        injectSetSkyLightHook(mn);
+                        patched++;
+                    }
                 }
             }
 
@@ -254,6 +274,130 @@ public class ChunkStateAuthorityTransformer implements IClassTransformer {
         ));
         hook.add(new JumpInsnNode(Opcodes.IFEQ, continueOriginal));
         hook.add(new InsnNode(Opcodes.RETURN)); // Early return: committed to Rust
+
+        hook.add(continueOriginal);
+
+        mn.instructions.insert(hook);
+    }
+
+    private boolean isGetBlockLight(MethodNode mn) {
+        return ("func_76670_c".equals(mn.name) || "getExtBlocklightValue".equals(mn.name))
+                && "(III)I".equals(mn.desc);
+    }
+
+    private boolean isSetBlockLight(MethodNode mn) {
+        return ("func_76657_c".equals(mn.name) || "setExtBlocklightValue".equals(mn.name))
+                && "(IIII)V".equals(mn.desc);
+    }
+
+    private boolean isGetSkyLight(MethodNode mn) {
+        return ("func_76674_d".equals(mn.name) || "getExtSkylightValue".equals(mn.name))
+                && "(III)I".equals(mn.desc);
+    }
+
+    private boolean isSetSkyLight(MethodNode mn) {
+        return ("func_76677_d".equals(mn.name) || "setExtSkylightValue".equals(mn.name))
+                && "(IIII)V".equals(mn.desc);
+    }
+
+    private void injectGetBlockLightHook(MethodNode mn) {
+        InsnList hook = new InsnList();
+        LabelNode continueOriginal = new LabelNode();
+
+        // int light = ChunkStateAuthorityBridge.getBlockLight(this, x, y, z);
+        // if (light >= 0) return light;
+        hook.add(new VarInsnNode(Opcodes.ALOAD, 0)); // this
+        hook.add(new VarInsnNode(Opcodes.ILOAD, 1)); // x
+        hook.add(new VarInsnNode(Opcodes.ILOAD, 2)); // y
+        hook.add(new VarInsnNode(Opcodes.ILOAD, 3)); // z
+        hook.add(new MethodInsnNode(
+                Opcodes.INVOKESTATIC,
+                "com/rustcraft/bridge/ChunkStateAuthorityBridge",
+                "getBlockLight",
+                "(Lnet/minecraft/world/chunk/storage/ExtendedBlockStorage;III)I",
+                false
+        ));
+        hook.add(new InsnNode(Opcodes.DUP));
+        hook.add(new JumpInsnNode(Opcodes.IFLT, continueOriginal)); // if light < 0 (not handled), continue
+        hook.add(new InsnNode(Opcodes.IRETURN)); // return light
+
+        hook.add(continueOriginal);
+        hook.add(new InsnNode(Opcodes.POP)); // Discard -1
+
+        mn.instructions.insert(hook);
+    }
+
+    private void injectSetBlockLightHook(MethodNode mn) {
+        InsnList hook = new InsnList();
+        LabelNode continueOriginal = new LabelNode();
+
+        // if (ChunkStateAuthorityBridge.setBlockLight(this, x, y, z, val)) return;
+        hook.add(new VarInsnNode(Opcodes.ALOAD, 0)); // this
+        hook.add(new VarInsnNode(Opcodes.ILOAD, 1)); // x
+        hook.add(new VarInsnNode(Opcodes.ILOAD, 2)); // y
+        hook.add(new VarInsnNode(Opcodes.ILOAD, 3)); // z
+        hook.add(new VarInsnNode(Opcodes.ILOAD, 4)); // val
+        hook.add(new MethodInsnNode(
+                Opcodes.INVOKESTATIC,
+                "com/rustcraft/bridge/ChunkStateAuthorityBridge",
+                "setBlockLight",
+                "(Lnet/minecraft/world/chunk/storage/ExtendedBlockStorage;IIII)Z",
+                false
+        ));
+        hook.add(new JumpInsnNode(Opcodes.IFEQ, continueOriginal));
+        hook.add(new InsnNode(Opcodes.RETURN)); // Early return
+
+        hook.add(continueOriginal);
+
+        mn.instructions.insert(hook);
+    }
+
+    private void injectGetSkyLightHook(MethodNode mn) {
+        InsnList hook = new InsnList();
+        LabelNode continueOriginal = new LabelNode();
+
+        // int light = ChunkStateAuthorityBridge.getSkyLight(this, x, y, z);
+        // if (light >= 0) return light;
+        hook.add(new VarInsnNode(Opcodes.ALOAD, 0)); // this
+        hook.add(new VarInsnNode(Opcodes.ILOAD, 1)); // x
+        hook.add(new VarInsnNode(Opcodes.ILOAD, 2)); // y
+        hook.add(new VarInsnNode(Opcodes.ILOAD, 3)); // z
+        hook.add(new MethodInsnNode(
+                Opcodes.INVOKESTATIC,
+                "com/rustcraft/bridge/ChunkStateAuthorityBridge",
+                "getSkyLight",
+                "(Lnet/minecraft/world/chunk/storage/ExtendedBlockStorage;III)I",
+                false
+        ));
+        hook.add(new InsnNode(Opcodes.DUP));
+        hook.add(new JumpInsnNode(Opcodes.IFLT, continueOriginal)); // if light < 0, continue
+        hook.add(new InsnNode(Opcodes.IRETURN)); // return light
+
+        hook.add(continueOriginal);
+        hook.add(new InsnNode(Opcodes.POP)); // Discard -1
+
+        mn.instructions.insert(hook);
+    }
+
+    private void injectSetSkyLightHook(MethodNode mn) {
+        InsnList hook = new InsnList();
+        LabelNode continueOriginal = new LabelNode();
+
+        // if (ChunkStateAuthorityBridge.setSkyLight(this, x, y, z, val)) return;
+        hook.add(new VarInsnNode(Opcodes.ALOAD, 0)); // this
+        hook.add(new VarInsnNode(Opcodes.ILOAD, 1)); // x
+        hook.add(new VarInsnNode(Opcodes.ILOAD, 2)); // y
+        hook.add(new VarInsnNode(Opcodes.ILOAD, 3)); // z
+        hook.add(new VarInsnNode(Opcodes.ILOAD, 4)); // val
+        hook.add(new MethodInsnNode(
+                Opcodes.INVOKESTATIC,
+                "com/rustcraft/bridge/ChunkStateAuthorityBridge",
+                "setSkyLight",
+                "(Lnet/minecraft/world/chunk/storage/ExtendedBlockStorage;IIII)Z",
+                false
+        ));
+        hook.add(new JumpInsnNode(Opcodes.IFEQ, continueOriginal));
+        hook.add(new InsnNode(Opcodes.RETURN)); // Early return
 
         hook.add(continueOriginal);
 

@@ -197,6 +197,19 @@ public final class NativeChunkBridge {
      */
     public static native long getSectionPointer(int dim, int cx, int cz, int sectionY);
 
+    /**
+     * M5.3 Light direct pointers setup: writes 16 x 64-bit block light pointers and 16 x 64-bit sky light pointers.
+     * outBlPtrsAddr: address of long[16] buffer for block light.
+     * outSlPtrsAddr: address of long[16] buffer for sky light.
+     * Returns 1 on success, 0 if chunk not registered.
+     */
+    public static native int getSectionLightPointers(int dim, int cx, int cz, long outBlPtrsAddr, long outSlPtrsAddr);
+
+    /**
+     * M5.3 Raw pointer to section Y's light array (isSkylight: 0 for block light, 1 for sky light).
+     */
+    public static native long getSectionLightPointer(int dim, int cx, int cz, int sectionY, int isSkylight);
+
     // --- Safe Invocations & Metrics ---
 
     public static long register(int dim, int cx, int cz, long primerAddr, long biomeAddr) {
