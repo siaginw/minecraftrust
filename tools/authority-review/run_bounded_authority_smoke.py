@@ -154,6 +154,8 @@ def main() -> int:
         f"-Drustcraft.packetAuthorityCap={cap}",
         "-Drustcraft.packetAuthorityReceipt=" + str(closure_receipt),
         "-Drustcraft.packetAuthorityReceiptOut=" + str(exp_receipt_out),
+        "-Drustcraft.chunkStateAuthorityExperiment=true",
+        "-Drustcraft.chunkStateAuthorityCap=1000",
     ]
 
     if target == "C":

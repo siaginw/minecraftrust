@@ -35,7 +35,14 @@ Unconstrained production authority remains **`false`** everywhere (`PacketAuthor
   ephemeral baseline). Gate A (32/32) and Gate B (64/64) smoke passed under live
   client probe with zero desyncs. Status: **`RETAINED_RUST_CHUNKSTATE_PROVEN`**
   (`docs/research/RETAINED_CHUNKSTATE_COMPLETION_REPORT.md`).
-- **Next Milestone:** **`READY_FOR_RUST_CHUNKSTATE_API_DELEGATION`**.
+- **Semantic Engine Ownership Inversion (`ChunkState` API):** Rust NativeChunk
+  is the authoritative source of truth for admitted block reads/writes (`Chunk.getBlockState`
+  and `Chunk.setBlockState`). Zero-JNI direct memory reads via Unsafe yield 16.9M ops/sec
+  with 0 ns p50. Authoritative mutations commit in Rust first, dispatching Forge
+  callbacks in exact sequence. 10,000 differential fuzz operations pass with 0 divergences.
+  Status: **`RUST_CHUNKSTATE_API_OWNERSHIP_PROVEN`**
+  (`docs/research/RUST_CHUNKSTATE_API_AUTHORITY_REVIEW.md`).
+- **Next Milestone:** **`READY_FOR_RUST_CHUNKSTATE_AUTHORITY_EXPANSION`**.
 
 ### What each proof is
 

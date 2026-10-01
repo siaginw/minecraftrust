@@ -234,6 +234,62 @@ impl ChunkRegistry {
         }
         map.clear();
     }
+
+    /// Authoritative getBlockState on registered chunk under read lock.
+    pub fn get_block_state(&self, key: ChunkKey, x: usize, y: usize, z: usize) -> Option<u16> {
+        let map = self.chunks.read().unwrap();
+        if let Some(arc) = map.get(&key) {
+            let chunk = arc.read().unwrap();
+            if chunk.lifecycle != ChunkLifecycle::Invalidated {
+                return Some(chunk.get_block_state(x, y, z));
+            }
+        }
+        None
+    }
+
+    /// Authoritative setBlockState on registered chunk under write lock.
+    pub fn set_block_state(
+        &self,
+        key: ChunkKey,
+        x: usize,
+        y: usize,
+        z: usize,
+        new_state: u16,
+    ) -> Option<crate::chunk::BlockMutationResult> {
+        let map = self.chunks.read().unwrap();
+        if let Some(arc) = map.get(&key) {
+            let mut chunk = arc.write().unwrap();
+            if chunk.lifecycle != ChunkLifecycle::Invalidated {
+                return Some(chunk.set_block_state(x, y, z, new_state));
+            }
+        }
+        None
+    }
+
+    /// Retrieves pointer to section Y's states array under read lock.
+    pub fn get_section_state_pointer(&self, key: ChunkKey, section_y: usize) -> usize {
+        let map = self.chunks.read().unwrap();
+        if let Some(arc) = map.get(&key) {
+            let chunk = arc.read().unwrap();
+            if chunk.lifecycle != ChunkLifecycle::Invalidated {
+                return chunk.get_section_state_pointer(section_y);
+            }
+        }
+        0
+    }
+
+    /// Fills array of 16 section state pointers under read lock.
+    pub fn get_section_state_pointers(&self, key: ChunkKey, out: &mut [usize; 16]) -> bool {
+        let map = self.chunks.read().unwrap();
+        if let Some(arc) = map.get(&key) {
+            let chunk = arc.read().unwrap();
+            if chunk.lifecycle != ChunkLifecycle::Invalidated {
+                chunk.get_section_state_pointers(out);
+                return true;
+            }
+        }
+        false
+    }
 }
 
 fn chunk_active_sections(c: &NativeChunk) -> usize {

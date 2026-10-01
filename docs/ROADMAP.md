@@ -34,13 +34,13 @@ Own the first real subsystem: full-chunk `SPacketChunkData` encoding.
 - **Done:** live coherent capture on both runtimes; RCSNAP02 logical transport; bounded Phase-D smokes green on Clean Forge (32/32) and Revelation (32/32); real FML launch admission (`REAL_FML_TRANSFORM_CAPTURE · OFFLINE_QUALIFIED`); full closure campaign passed across 2 fresh JVM sessions (**4,905 counted passes / 0 mismatches**, `LIVE_SHADOW_CLOSED`); formal authority review completed (`AUTHORITY_REVIEWED`, `docs/research/PACKET_AUTHORITY_CONTRACT.md`); small, explicit, fail-closed bounded authority experiment completed with 0 errors across Gate A (Clean Forge 2860, 32/32) and Gate B (FTB Revelation 2846, 64/64) (`docs/research/BOUNDED_AUTHORITY_EXPERIMENT_REPORT.md`).
 - **Status:** **`READY_FOR_RETAINED_RUST_CHUNKSTATE`**.
 
-## Phase 2 — Retained Rust ChunkState · 🧪 active focus
+## Phase 2 — Retained Rust ChunkState · ✅ complete
 
-The first *ownership* milestone: chunk state that lives in Rust, with Java observing a view. The V1 attempt was deliberately abandoned and fail-closed ([why](PROJECT_STATUS.md#abandoned--fail-closed)); the V2 design reuses the coherent-capture and session-contract machinery proven in Phase 1. Complete architectural specification authored in `docs/research/RETAINED_CHUNKSTATE_DESIGN.md`.
+The first *ownership* milestone: chunk state that lives in Rust, with Java observing a view. The V1 attempt was deliberately abandoned and fail-closed ([why](PROJECT_STATUS.md#abandoned--fail-closed)); the V2 design reuses the coherent-capture and session-contract machinery proven in Phase 1. Complete architectural specification authored in `docs/research/RETAINED_CHUNKSTATE_DESIGN.md`. Retained state verified as living synchronization in `docs/research/RETAINED_LIVING_STATE_VERIFICATION_REPORT.md`. First semantic ownership inversion for `getBlockState` (zero-JNI direct memory pointer) and `setBlockState` (authoritative mutation + Forge lifecycle preservation) proven with 10,000 differential ops (0 mismatches) and live smokes across Clean Forge and FTB Revelation (`docs/research/RUST_CHUNKSTATE_API_AUTHORITY_REVIEW.md`).
 
-## Phase 3 — Chunk reads/writes + packet authority · 🗺️ planned
+## Phase 3 — Chunk reads/writes + packet authority · 🧪 active focus
 
-Rust owns chunk mutation paths end-to-end; Java packet construction for chunks retires behind the compatibility surface.
+Rust owns chunk mutation paths end-to-end; Java packet construction for chunks retires behind the compatibility surface. First semantic ownership inversion of `getBlockState` and `setBlockState` completed under bounded experiment flags (`-Drustcraft.chunkStateAuthorityExperiment=true`). Remaining: expand authoritative API coverage (biomes, light, heightmaps), promote unbuffered direct packet encoding from authoritative Rust chunks, and evaluate un-gated production authority.
 
 ## Phase 4 — Storage / NBT / Anvil · 🗺️ planned
 

@@ -85,7 +85,9 @@ fn test_palette_case(name: &str, state_counts: &[(u16, usize)]) {
 
     for (state_id, count) in state_counts {
         for _ in 0..*count {
-            if idx >= 4096 { break; }
+            if idx >= 4096 {
+                break;
+            }
             section.set_block_by_index(idx, *state_id);
             idx += 1;
         }
@@ -104,14 +106,23 @@ fn test_palette_case(name: &str, state_counts: &[(u16, usize)]) {
     assert!(res.is_ok(), "Wire encode failed for {}", name);
 
     // Verify non_air_count
-    let expected_non_air: u16 = state_counts.iter()
+    let expected_non_air: u16 = state_counts
+        .iter()
         .filter(|(id, _)| *id != 0)
         .map(|(_, c)| *c as u16)
         .sum();
-    assert_eq!(section.non_air_count, expected_non_air, "Non-air count mismatch for {}", name);
+    assert_eq!(
+        section.non_air_count, expected_non_air,
+        "Non-air count mismatch for {}",
+        name
+    );
 
-    println!("  ✓ {} states, non_air={}, wire_bytes={}",
-             state_counts.len(), section.non_air_count, offset);
+    println!(
+        "  ✓ {} states, non_air={}, wire_bytes={}",
+        state_counts.len(),
+        section.non_air_count,
+        offset
+    );
 }
 
 fn test_random_palette(name: &str, num_states: usize) {
@@ -134,6 +145,8 @@ fn test_random_palette(name: &str, num_states: usize) {
     let res = section.encode_wire(&mut wire_buf, &mut offset, true);
     assert!(res.is_ok(), "Wire encode failed for {}", name);
 
-    println!("  ✓ {} unique states, non_air={}, wire_bytes={}",
-             num_states, section.non_air_count, offset);
+    println!(
+        "  ✓ {} unique states, non_air={}, wire_bytes={}",
+        num_states, section.non_air_count, offset
+    );
 }

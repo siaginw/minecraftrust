@@ -22,7 +22,8 @@ public class RustCraftCoreMod implements IFMLLoadingPlugin {
                 "com.rustcraft.coremod.WorldgenShadowTransformer",
                 "com.rustcraft.coremod.ChunkMutationTransformer",
                 "com.rustcraft.coremod.LiveChunkOwnershipTransformer",
-                "com.rustcraft.coremod.LiveChunkPublicationTransformer"
+                "com.rustcraft.coremod.LiveChunkPublicationTransformer",
+                "com.rustcraft.coremod.ChunkStateAuthorityTransformer"
         };
     }
 

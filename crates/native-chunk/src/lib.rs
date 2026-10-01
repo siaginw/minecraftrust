@@ -4,7 +4,8 @@ pub mod registry;
 pub mod section;
 
 pub use chunk::{
-    ChunkLifecycle, NativeChunk, PacketEncodeResult, BIOME_ARRAY_SIZE, CHUNK_PRIMER_SIZE,
+    BlockMutationResult, ChunkLifecycle, NativeChunk, PacketEncodeResult, BIOME_ARRAY_SIZE,
+    CHUNK_PRIMER_SIZE,
 };
 pub use packet_snapshot::{OwnedPacketSnapshot, SnapshotRejection};
 pub use registry::{ChunkHandle, ChunkKey, ChunkRegistry};

@@ -27,6 +27,24 @@ pub struct PacketEncodeResult {
     pub emitted_mask: u16,
 }
 
+/// Result of an authoritative NativeChunk block state mutation.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[repr(C)]
+pub struct BlockMutationResult {
+    pub old_state: u16,
+    pub new_state: u16,
+    pub section_created: bool,
+    pub section_became_empty: bool,
+    pub non_air_count: u16,
+    pub status: i32,
+}
+
+impl BlockMutationResult {
+    pub const STATUS_SUCCESS: i32 = 0;
+    pub const STATUS_NO_OP: i32 = 1;
+    pub const STATUS_OUT_OF_BOUNDS: i32 = -1;
+}
+
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 #[repr(u8)]
 pub enum ChunkLifecycle {
@@ -460,5 +478,264 @@ impl NativeChunk {
     #[inline(always)]
     pub fn snapshot_generation(&self) -> u64 {
         self.snapshot_generation
+    }
+
+    /// Authoritative getBlockState: returns canonical global block state ID at (x, y, z).
+    /// If out of bounds or section is not resident, returns 0 (Air).
+    #[inline(always)]
+    pub fn get_block_state(&self, x: usize, y: usize, z: usize) -> u16 {
+        if x >= 16 || y >= 256 || z >= 16 {
+            return 0;
+        }
+        let sec_idx = y >> 4;
+        match &self.sections[sec_idx] {
+            Some(sec) => sec.get_block(x, y & 15, z),
+            None => 0,
+        }
+    }
+
+    /// Authoritative setBlockState: mutates block state at (x, y, z) to new_state.
+    ///
+    /// Manages section allocation, non-air accounting, wire cache invalidation,
+    /// primary bit mask, and mutation generation counter.
+    pub fn set_block_state(
+        &mut self,
+        x: usize,
+        y: usize,
+        z: usize,
+        new_state: u16,
+    ) -> BlockMutationResult {
+        if x >= 16 || y >= 256 || z >= 16 {
+            return BlockMutationResult {
+                old_state: 0,
+                new_state,
+                section_created: false,
+                section_became_empty: false,
+                non_air_count: 0,
+                status: BlockMutationResult::STATUS_OUT_OF_BOUNDS,
+            };
+        }
+        let sec_idx = y >> 4;
+        let sub_y = y & 15;
+
+        if self.sections[sec_idx].is_none() {
+            if new_state == 0 {
+                // Setting air in an absent section is a no-op
+                return BlockMutationResult {
+                    old_state: 0,
+                    new_state: 0,
+                    section_created: false,
+                    section_became_empty: false,
+                    non_air_count: 0,
+                    status: BlockMutationResult::STATUS_NO_OP,
+                };
+            }
+            // Allocate new resident section
+            let mut sec = Box::new(NativeSection::new(sec_idx as u8));
+            sec.set_block(x, sub_y, z, new_state);
+            let non_air = sec.non_air_count;
+            self.sections[sec_idx] = Some(sec);
+            self.primary_bit_mask |= 1u16 << sec_idx;
+            STATS_SECTIONS_ALLOCATED.fetch_add(1, std::sync::atomic::Ordering::Relaxed);
+            self.mark_mutation();
+            return BlockMutationResult {
+                old_state: 0,
+                new_state,
+                section_created: true,
+                section_became_empty: false,
+                non_air_count: non_air,
+                status: BlockMutationResult::STATUS_SUCCESS,
+            };
+        }
+
+        let sec = self.sections[sec_idx].as_mut().unwrap();
+        let old_state = sec.get_block(x, sub_y, z);
+        if old_state == new_state {
+            return BlockMutationResult {
+                old_state,
+                new_state,
+                section_created: false,
+                section_became_empty: false,
+                non_air_count: sec.non_air_count,
+                status: BlockMutationResult::STATUS_NO_OP,
+            };
+        }
+
+        sec.set_block(x, sub_y, z, new_state);
+        let non_air = sec.non_air_count;
+        let became_empty = non_air == 0;
+
+        if became_empty {
+            // Keep section allocated in storage, but deactivate in primary_bit_mask
+            // so packet serialization skips empty sections
+            self.primary_bit_mask &= !(1u16 << sec_idx);
+        } else {
+            self.primary_bit_mask |= 1u16 << sec_idx;
+        }
+
+        self.mark_mutation();
+
+        BlockMutationResult {
+            old_state,
+            new_state,
+            section_created: false,
+            section_became_empty: became_empty,
+            non_air_count: non_air,
+            status: BlockMutationResult::STATUS_SUCCESS,
+        }
+    }
+
+    /// Exposes raw pointer to section's [u16; 4096] states array for zero-JNI direct read.
+    /// Returns 0 if section is absent.
+    #[inline(always)]
+    pub fn get_section_state_pointer(&self, section_y: usize) -> usize {
+        if section_y >= 16 {
+            return 0;
+        }
+        match &self.sections[section_y] {
+            Some(sec) => sec.states.as_ptr() as usize,
+            None => 0,
+        }
+    }
+
+    /// Fills array of 16 section states pointers (for zero-JNI direct read table).
+    pub fn get_section_state_pointers(&self, out: &mut [usize; 16]) {
+        for s in 0..16 {
+            out[s] = match &self.sections[s] {
+                Some(sec) => sec.states.as_ptr() as usize,
+                None => 0,
+            };
+        }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_authoritative_block_mutations_and_pointers() {
+        let mut chunk = NativeChunk::new(0, 5, -3, 101);
+
+        // 1. Initial empty chunk returns Air (0) everywhere
+        assert_eq!(chunk.get_block_state(0, 0, 0), 0);
+        assert_eq!(chunk.get_block_state(15, 64, 15), 0);
+        assert_eq!(chunk.primary_bit_mask, 0);
+
+        // Direct pointers initially 0
+        let mut ptrs = [0usize; 16];
+        chunk.get_section_state_pointers(&mut ptrs);
+        for p in ptrs {
+            assert_eq!(p, 0);
+        }
+
+        // 2. Setting Air in absent section is a NO-OP
+        let res = chunk.set_block_state(4, 35, 7, 0);
+        assert_eq!(res.status, BlockMutationResult::STATUS_NO_OP);
+        assert!(!res.section_created);
+        assert!(chunk.sections[2].is_none());
+        assert_eq!(chunk.primary_bit_mask, 0);
+
+        // 3. Setting solid block in absent section creates section
+        let gen_before = chunk.mutation_generation();
+        let res = chunk.set_block_state(4, 35, 7, 1); // Stone
+        assert_eq!(res.status, BlockMutationResult::STATUS_SUCCESS);
+        assert!(res.section_created);
+        assert!(!res.section_became_empty);
+        assert_eq!(res.old_state, 0);
+        assert_eq!(res.new_state, 1);
+        assert_eq!(res.non_air_count, 1);
+        assert_eq!(chunk.primary_bit_mask, 1 << 2);
+        assert!(chunk.mutation_generation() > gen_before);
+        assert_eq!(chunk.get_block_state(4, 35, 7), 1);
+
+        // Pointer for section 2 is now valid and non-zero
+        let sec2_ptr = chunk.get_section_state_pointer(2);
+        assert_ne!(sec2_ptr, 0);
+        let mut ptrs2 = [0usize; 16];
+        chunk.get_section_state_pointers(&mut ptrs2);
+        assert_eq!(ptrs2[2], sec2_ptr);
+        assert_eq!(ptrs2[0], 0);
+
+        // Verify direct memory read matches
+        let idx = ((35 & 15) << 8) | ((7 & 15) << 4) | 4;
+        let read_val = unsafe { *((sec2_ptr as *const u16).add(idx)) };
+        assert_eq!(read_val, 1);
+
+        // 4. Setting same state is a NO-OP
+        let gen_same = chunk.mutation_generation();
+        let res_same = chunk.set_block_state(4, 35, 7, 1);
+        assert_eq!(res_same.status, BlockMutationResult::STATUS_NO_OP);
+        assert_eq!(chunk.mutation_generation(), gen_same);
+
+        // 5. Changing to different solid block
+        let res_diff = chunk.set_block_state(4, 35, 7, 3); // Dirt
+        assert_eq!(res_diff.status, BlockMutationResult::STATUS_SUCCESS);
+        assert_eq!(res_diff.old_state, 1);
+        assert_eq!(res_diff.new_state, 3);
+        assert_eq!(res_diff.non_air_count, 1);
+        assert_eq!(chunk.get_block_state(4, 35, 7), 3);
+
+        // 6. Adding another block in same section
+        let res_add = chunk.set_block_state(0, 32, 0, 5); // Wood
+        assert_eq!(res_add.status, BlockMutationResult::STATUS_SUCCESS);
+        assert_eq!(res_add.non_air_count, 2);
+        assert_eq!(chunk.get_block_state(0, 32, 0), 5);
+
+        // 7. Removing one block
+        let res_rem1 = chunk.set_block_state(4, 35, 7, 0);
+        assert_eq!(res_rem1.status, BlockMutationResult::STATUS_SUCCESS);
+        assert_eq!(res_rem1.old_state, 3);
+        assert_eq!(res_rem1.new_state, 0);
+        assert_eq!(res_rem1.non_air_count, 1);
+        assert!(!res_rem1.section_became_empty);
+        assert_eq!(chunk.primary_bit_mask, 1 << 2);
+
+        // 8. Removing last block empties section
+        let res_rem2 = chunk.set_block_state(0, 32, 0, 0);
+        assert_eq!(res_rem2.status, BlockMutationResult::STATUS_SUCCESS);
+        assert_eq!(res_rem2.old_state, 5);
+        assert_eq!(res_rem2.new_state, 0);
+        assert_eq!(res_rem2.non_air_count, 0);
+        assert!(res_rem2.section_became_empty);
+        // Primary bit mask bit is cleared for empty section
+        assert_eq!(chunk.primary_bit_mask & (1 << 2), 0);
+
+        // 9. Out of bounds handling
+        let res_oob1 = chunk.set_block_state(16, 0, 0, 1);
+        assert_eq!(res_oob1.status, BlockMutationResult::STATUS_OUT_OF_BOUNDS);
+        let res_oob2 = chunk.set_block_state(0, 256, 0, 1);
+        assert_eq!(res_oob2.status, BlockMutationResult::STATUS_OUT_OF_BOUNDS);
+        assert_eq!(chunk.get_block_state(16, 0, 0), 0);
+    }
+
+    #[test]
+    fn test_mutation_invalidates_wire_cache_and_packet_observes_it() {
+        let mut chunk = NativeChunk::new(0, 0, 0, 1);
+        // Populate section 1 with state 4
+        chunk.set_block_state(0, 16, 0, 4);
+
+        let mut buf1 = vec![0u8; 131072];
+        let mut offset1 = 0;
+        let res1 = chunk
+            .encode_packet_payload(true, true, &mut buf1, &mut offset1)
+            .unwrap();
+        assert_eq!(res1.emitted_mask, 1 << 1);
+
+        // Mutate block from 4 to 9 in section 1
+        let mut_res = chunk.set_block_state(0, 16, 0, 9);
+        assert_eq!(mut_res.status, BlockMutationResult::STATUS_SUCCESS);
+        assert_eq!(chunk.get_block_state(0, 16, 0), 9);
+
+        // Second packet encode observes new state without reseed
+        let mut buf2 = vec![0u8; 131072];
+        let mut offset2 = 0;
+        let res2 = chunk
+            .encode_packet_payload(true, true, &mut buf2, &mut offset2)
+            .unwrap();
+        assert_eq!(res2.emitted_mask, 1 << 1);
+
+        // Payloads must differ because state changed
+        assert_ne!(buf1[..offset1], buf2[..offset2]);
     }
 }

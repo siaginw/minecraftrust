@@ -35,9 +35,12 @@ The numbers below are **counted, machine-reconciled results** from recorded camp
 | **157,010** | block states in the tested registry — handled without widening the snapshot format (RCSNAP02) |
 | **96** | Rust-authored packets committed to real clients under bounded authority experiments (32 Clean Forge + 64 Revelation) — **0 encode failures** |
 | **0.70 µs** | static chunk wire serialization latency from retained Rust `ChunkState` — **261x speedup** over ephemeral snapshot baseline |
-| **false** | Production authority remains strictly **`false`**; unadmitted, TE-bearing, high-state, or post-cap chunks fall back to Java |
+| **16.9M ops/s** | zero-JNI `getBlockState` direct memory read throughput (p50: 0 ns, p99: 100 ns) from authoritative Rust section storage |
+| **5.86M ops/s** | authoritative `setBlockState` mutation throughput with immediate Rust commit and exact Forge lifecycle orchestration |
+| **10,000** | differential fuzzing operations comparing Rust authoritative state against Java reference oracle — **0 mismatches** |
+| **false** | Production authority remains strictly **`false`**; unadmitted, TE-bearing, high-state, or post-cap operations fall back to Java |
 
-> **Verified Status:** Full-chunk live-shadow closure is **`CLOSED`** (`docs/research/V2_LIVE_SHADOW_CLOSURE_REPORT.md`). The formal authority review was executed (`docs/research/PACKET_AUTHORITY_CONTRACT.md`), the bounded authority experiment is **`PASS`** (`docs/research/BOUNDED_AUTHORITY_EXPERIMENT_REPORT.md`), and the Retained Rust `ChunkState` engine ownership migration is **`COMPLETED & PROVEN`** (`docs/research/RETAINED_CHUNKSTATE_COMPLETION_REPORT.md`). The project is now **`READY_FOR_RUST_CHUNKSTATE_API_DELEGATION`**.
+> **Verified Status:** Full-chunk live-shadow closure is **`CLOSED`** (`docs/research/V2_LIVE_SHADOW_CLOSURE_REPORT.md`). Retained Rust `ChunkState` engine ownership is **`PROVEN`** (`docs/research/RETAINED_CHUNKSTATE_COMPLETION_REPORT.md`). The first **SEMANTIC ENGINE OWNERSHIP** inversion for `getBlockState`/`setBlockState` is **`PROVEN`** (`docs/research/RUST_CHUNKSTATE_API_AUTHORITY_REVIEW.md`). The project is now **`READY_FOR_RUST_CHUNKSTATE_AUTHORITY_EXPANSION`**.
 
 ### What is proven end-to-end today
 
@@ -47,11 +50,12 @@ The numbers below are **counted, machine-reconciled results** from recorded camp
 - The Rust encoder's output is **semantically identical** to Java's authoritative packet in all 4,905 counted closure comparisons.
 - **Fail-closed bounded authority**: under explicit operator flag (`-Drustcraft.packetAuthorityExperiment=true`) and cap, Rust authors packets on the wire; upon cap exhaustion, TE detection, or high-state detection, packets fall back cleanly to Java with zero client interruption.
 - **Retained Rust `ChunkState` Engine**: persistent native chunk memory layout with flat Morton-indexed arrays and static section wire byte caching (0.70 µs / 700 ns static serialization, 1,382 kops/s). Seeded once from RCSNAP02 transport; Gate A (32/32) and Gate B (64/64) smoke verified live with 100% client stability.
+- **Semantic Engine Ownership Inversion (`ChunkState` API)**: Rust `NativeChunk` is the authoritative source of truth for admitted block reads/writes without dual-state writing. Zero-JNI direct memory reads via Unsafe yield 16.9M ops/sec with 0 ns p50. Mutations commit in Rust first and dispatch Forge callbacks in exact reference order. Mutation followed immediately by packet encode reflects native state without reseed. 10,000 differential fuzz operations pass with 0 divergences.
 
 ### What is deliberately *not* proven
 
 - Rust has **no unconstrained production authority**. `PRODUCTION_AUTHORITY` remains constant `false`; the authority gate is fail-closed.
-- Direct Rust ChunkState API delegation (in-place mod queries mutating native memory directly) is not yet active; state is currently synchronized across coarse boundaries.
+- Authority is currently bounded to admitted Overworld non-TileEntity block operations (`u16` state IDs).
 - No whole-server performance claim is made. Component benchmarks exist ([below](#performance-honestly)); total-server MSPT/TPS has never been measured.
 
 ---

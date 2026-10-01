@@ -73,6 +73,10 @@ pub enum Operation {
     ChunkEncodePacketPayloadV2 = 321,
     OwnedSnapshotEncodeV1 = 322,
     ChunkSeedFromTransport = 323,
+    ChunkSetBlockState = 324,
+    ChunkGetBlockState = 325,
+    ChunkGetSectionPointers = 326,
+    ChunkGetSectionPointer = 327,
 }
 
 impl Operation {
@@ -136,6 +140,10 @@ impl Operation {
         Self::ChunkEncodePacketPayloadV2,
         Self::OwnedSnapshotEncodeV1,
         Self::ChunkSeedFromTransport,
+        Self::ChunkSetBlockState,
+        Self::ChunkGetBlockState,
+        Self::ChunkGetSectionPointers,
+        Self::ChunkGetSectionPointer,
     ];
 }
 

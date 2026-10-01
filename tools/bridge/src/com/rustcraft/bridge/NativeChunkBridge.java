@@ -22,6 +22,23 @@ public final class NativeChunkBridge {
     public static final AtomicLong OCCUPANCY_QUERIES = new AtomicLong();
     public static final AtomicLong PERSISTENCE_STAGES = new AtomicLong();
 
+    // M5 Semantic Engine Ownership Telemetry Counters
+    public static final AtomicLong RUST_READS = new AtomicLong();
+    public static final AtomicLong JAVA_READS = new AtomicLong();
+    public static final AtomicLong RUST_WRITES = new AtomicLong();
+    public static final AtomicLong JAVA_WRITES = new AtomicLong();
+    public static final AtomicLong FALLBACKS = new AtomicLong();
+    public static final AtomicLong DEMOTIONS = new AtomicLong();
+    public static final AtomicLong RESYNCS = new AtomicLong();
+    public static final AtomicLong REFLECTION_BYPASS_DETECTED = new AtomicLong();
+    public static final AtomicLong STATE_MAPPING_FAILURE = new AtomicLong();
+    public static final AtomicLong TE_FALLBACK = new AtomicLong();
+    public static final AtomicLong HIGH_STATE_FALLBACK = new AtomicLong();
+    public static final AtomicLong STALE_HANDLE_FALLBACK = new AtomicLong();
+    public static final AtomicLong ERROR_FALLBACK = new AtomicLong();
+    public static final AtomicLong SECTION_CREATIONS = new AtomicLong();
+    public static final AtomicLong SECTION_EMPTIED = new AtomicLong();
+
     static {
         try {
             try {
@@ -156,6 +173,30 @@ public final class NativeChunkBridge {
 
     public static native int getRegisteredCount();
 
+    /**
+     * M5 Authoritative setBlockState:
+     * Sets block state at (x, y, z) in the registered native chunk.
+     * Returns packed long containing status, old state, new state, and section flags.
+     */
+    public static native long setBlockState(int dim, int cx, int cz, int x, int y, int z, int newState);
+
+    /**
+     * M5 Direct getBlockState query (fallback / verification path).
+     * Returns canonical global block state ID (0..65535), or negative error.
+     */
+    public static native int getBlockState(int dim, int cx, int cz, int x, int y, int z);
+
+    /**
+     * M5 Direct pointers setup: writes 16 x 64-bit pointers to resident sections' states arrays.
+     * outPtrsAddr: address of long[16] buffer. Returns 1 on success, 0 if chunk not registered.
+     */
+    public static native int getSectionPointers(int dim, int cx, int cz, long outPtrsAddr);
+
+    /**
+     * M5 Raw pointer to section Y's states array (0 if absent / unregistered).
+     */
+    public static native long getSectionPointer(int dim, int cx, int cz, int sectionY);
+
     // --- Safe Invocations & Metrics ---
 
     public static long register(int dim, int cx, int cz, long primerAddr, long biomeAddr) {
@@ -203,6 +244,21 @@ public final class NativeChunkBridge {
         sb.append("m4_unloaded_chunks=").append(UNLOADED_CHUNKS.get()).append("\n");
         sb.append("m4_occupancy_queries=").append(OCCUPANCY_QUERIES.get()).append("\n");
         sb.append("m4_persistence_stages=").append(PERSISTENCE_STAGES.get()).append("\n");
+        sb.append("m5_rust_reads=").append(RUST_READS.get()).append("\n");
+        sb.append("m5_java_reads=").append(JAVA_READS.get()).append("\n");
+        sb.append("m5_rust_writes=").append(RUST_WRITES.get()).append("\n");
+        sb.append("m5_java_writes=").append(JAVA_WRITES.get()).append("\n");
+        sb.append("m5_fallbacks=").append(FALLBACKS.get()).append("\n");
+        sb.append("m5_demotions=").append(DEMOTIONS.get()).append("\n");
+        sb.append("m5_resyncs=").append(RESYNCS.get()).append("\n");
+        sb.append("m5_reflection_bypass=").append(REFLECTION_BYPASS_DETECTED.get()).append("\n");
+        sb.append("m5_state_mapping_failure=").append(STATE_MAPPING_FAILURE.get()).append("\n");
+        sb.append("m5_te_fallback=").append(TE_FALLBACK.get()).append("\n");
+        sb.append("m5_high_state_fallback=").append(HIGH_STATE_FALLBACK.get()).append("\n");
+        sb.append("m5_stale_handle_fallback=").append(STALE_HANDLE_FALLBACK.get()).append("\n");
+        sb.append("m5_error_fallback=").append(ERROR_FALLBACK.get()).append("\n");
+        sb.append("m5_section_creations=").append(SECTION_CREATIONS.get()).append("\n");
+        sb.append("m5_section_emptied=").append(SECTION_EMPTIED.get()).append("\n");
         if (nativeLoaded) {
             sb.append("m4_current_registered_count=").append(getRegisteredCount()).append("\n");
         }

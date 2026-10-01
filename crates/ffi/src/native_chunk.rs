@@ -921,6 +921,206 @@ pub unsafe extern "system" fn Java_com_rustcraft_bridge_NativeChunkBridge_getSec
     code
 }
 
+/// Authoritative setBlockState (M5 RustChunkState ownership).
+///
+/// Mutates block state at (x, y, z) in the registered native chunk.
+/// Returns packed i64:
+/// - bits 0..7: status as i8 (0 = success/changed, 1 = no-op/same state, -1 = out of bounds, -2 = not registered)
+/// - bit 8: section_created (1 or 0)
+/// - bit 9: section_became_empty (1 or 0)
+/// - bits 16..31: old_state (u16)
+/// - bits 32..47: new_state (u16)
+/// - bits 48..63: non_air_count (u16)
+#[no_mangle]
+pub unsafe extern "system" fn Java_com_rustcraft_bridge_NativeChunkBridge_setBlockState(
+    _env: *mut c_void,
+    _clazz: *mut c_void,
+    dim: i32,
+    cx: i32,
+    cz: i32,
+    x: i32,
+    y: i32,
+    z: i32,
+    new_state: i32,
+) -> i64 {
+    let mut call = GLOBAL_FFI_METRICS.begin_call(metrics::Operation::ChunkSetBlockState);
+    call.bytes = metrics::ByteMeasurements::NO_BULK;
+    let outcome = catch_unwind(std::panic::AssertUnwindSafe(|| {
+        if x < 0
+            || x >= 16
+            || y < 0
+            || y >= 256
+            || z < 0
+            || z >= 16
+            || new_state < 0
+            || new_state > 65535
+        {
+            return -1i8 as i64;
+        }
+        let reg = get_registry();
+        let key = ChunkKey::new(dim, cx, cz);
+        match reg.set_block_state(key, x as usize, y as usize, z as usize, new_state as u16) {
+            Some(res) => {
+                let flags = (if res.section_created { 1u64 << 8 } else { 0 })
+                    | (if res.section_became_empty {
+                        1u64 << 9
+                    } else {
+                        0
+                    });
+                let packed = (res.status as u8 as u64)
+                    | flags
+                    | ((res.old_state as u64) << 16)
+                    | ((res.new_state as u64) << 32)
+                    | ((res.non_air_count as u64) << 48);
+                packed as i64
+            }
+            None => -2i8 as i64,
+        }
+    }));
+    let panicked = outcome.is_err();
+    let code = outcome.unwrap_or(-99i64);
+    call.fallback_reason = if panicked {
+        metrics::FallbackReason::Panic
+    } else {
+        let status = (code & 0xFF) as u8 as i8;
+        match status {
+            0 | 1 => metrics::FallbackReason::None,
+            -1 => metrics::FallbackReason::InvalidArgument,
+            _ => metrics::FallbackReason::MissingState,
+        }
+    };
+    if panicked {
+        call.bytes.output_bytes = Some(0);
+        call.bytes.copied_bytes = None;
+    }
+    code
+}
+
+/// Direct getBlockState query (fallback / verification path).
+/// Returns canonical global block state ID (0..65535), or negative error.
+#[no_mangle]
+pub unsafe extern "system" fn Java_com_rustcraft_bridge_NativeChunkBridge_getBlockState(
+    _env: *mut c_void,
+    _clazz: *mut c_void,
+    dim: i32,
+    cx: i32,
+    cz: i32,
+    x: i32,
+    y: i32,
+    z: i32,
+) -> i32 {
+    let mut call = GLOBAL_FFI_METRICS.begin_call(metrics::Operation::ChunkGetBlockState);
+    call.bytes = metrics::ByteMeasurements::NO_BULK;
+    let outcome = catch_unwind(std::panic::AssertUnwindSafe(|| {
+        if x < 0 || x >= 16 || y < 0 || y >= 256 || z < 0 || z >= 16 {
+            return -1;
+        }
+        let reg = get_registry();
+        let key = ChunkKey::new(dim, cx, cz);
+        match reg.get_block_state(key, x as usize, y as usize, z as usize) {
+            Some(state) => state as i32,
+            None => -2,
+        }
+    }));
+    let panicked = outcome.is_err();
+    let code = outcome.unwrap_or(-99);
+    call.fallback_reason = if panicked {
+        metrics::FallbackReason::Panic
+    } else {
+        match code {
+            0.. => metrics::FallbackReason::None,
+            -1 => metrics::FallbackReason::InvalidArgument,
+            _ => metrics::FallbackReason::MissingState,
+        }
+    };
+    if panicked {
+        call.bytes.output_bytes = Some(0);
+        call.bytes.copied_bytes = None;
+    }
+    code
+}
+
+/// Zero-JNI setup: populates array of 16 pointers to the resident sections' states arrays.
+/// out_ptrs_addr: address of a 16-element long array (128 bytes).
+/// Returns 1 on success, 0 if chunk not registered.
+#[no_mangle]
+pub unsafe extern "system" fn Java_com_rustcraft_bridge_NativeChunkBridge_getSectionPointers(
+    _env: *mut c_void,
+    _clazz: *mut c_void,
+    dim: i32,
+    cx: i32,
+    cz: i32,
+    out_ptrs_addr: i64,
+) -> i32 {
+    let mut call = GLOBAL_FFI_METRICS.begin_call(metrics::Operation::ChunkGetSectionPointers);
+    call.bytes = metrics::ByteMeasurements::NO_BULK;
+    let outcome = catch_unwind(std::panic::AssertUnwindSafe(|| {
+        if out_ptrs_addr == 0 {
+            return -1;
+        }
+        let out = std::slice::from_raw_parts_mut(out_ptrs_addr as *mut usize, 16);
+        let reg = get_registry();
+        let key = ChunkKey::new(dim, cx, cz);
+        let mut ptrs = [0usize; 16];
+        if reg.get_section_state_pointers(key, &mut ptrs) {
+            out.copy_from_slice(&ptrs);
+            1
+        } else {
+            0
+        }
+    }));
+    let panicked = outcome.is_err();
+    let code = outcome.unwrap_or(-99);
+    call.fallback_reason = if panicked {
+        metrics::FallbackReason::Panic
+    } else {
+        match code {
+            1 => metrics::FallbackReason::None,
+            0 => metrics::FallbackReason::MissingState,
+            _ => metrics::FallbackReason::InvalidArgument,
+        }
+    };
+    if panicked {
+        call.bytes.output_bytes = Some(0);
+        call.bytes.copied_bytes = None;
+    }
+    code
+}
+
+/// Returns raw pointer to section Y's states array (0 if absent / not registered).
+#[no_mangle]
+pub unsafe extern "system" fn Java_com_rustcraft_bridge_NativeChunkBridge_getSectionPointer(
+    _env: *mut c_void,
+    _clazz: *mut c_void,
+    dim: i32,
+    cx: i32,
+    cz: i32,
+    section_y: i32,
+) -> i64 {
+    let mut call = GLOBAL_FFI_METRICS.begin_call(metrics::Operation::ChunkGetSectionPointer);
+    call.bytes = metrics::ByteMeasurements::NO_BULK;
+    let outcome = catch_unwind(std::panic::AssertUnwindSafe(|| {
+        if section_y < 0 || section_y >= 16 {
+            return 0i64;
+        }
+        let reg = get_registry();
+        let key = ChunkKey::new(dim, cx, cz);
+        reg.get_section_state_pointer(key, section_y as usize) as i64
+    }));
+    let panicked = outcome.is_err();
+    let code = outcome.unwrap_or(0i64);
+    call.fallback_reason = if panicked {
+        metrics::FallbackReason::Panic
+    } else {
+        metrics::FallbackReason::None
+    };
+    if panicked {
+        call.bytes.output_bytes = Some(0);
+        call.bytes.copied_bytes = None;
+    }
+    code
+}
+
 // ====================================================================
 // M-CK3: Rust outbound frame engine (offline; immutable packet bodies)
 // ====================================================================
