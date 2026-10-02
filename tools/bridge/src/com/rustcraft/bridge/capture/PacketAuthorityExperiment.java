@@ -100,6 +100,9 @@ public final class PacketAuthorityExperiment {
     private static final long PACKET_EXPIRATION_NANOS = 30_000_000_000L; // 30 seconds
     private static final byte[] EMPTY_PAYLOAD = new byte[0];
 
+    /** Test-only probe of the shared empty shell identity. */
+    public static byte[] EMPTY_PAYLOAD_SHELL_PROBE() { return EMPTY_PAYLOAD; }
+
     /**
      * Packets that were admitted as RUST_SINGLE_COPY (complete pre-compression
      * body registered against the packet). Weakly held so admitted packets

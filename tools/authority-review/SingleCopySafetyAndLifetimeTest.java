@@ -655,12 +655,17 @@ public class SingleCopySafetyAndLifetimeTest {
                     "refusal counted as Java fallback");
             assertTrue(PacketAuthorityExperiment.SINGLE_COPY_ADMITTED_COUNT.get() == 0,
                     "no single-copy admission without a fresh sync");
-            // Fail closed means the VANILLA constructor ran: the packet
-            // carries a real Java payload, never the empty single-copy shell.
+            // The authority path never populated the shell (the offline test
+            // calls tryAuthority directly, so the vanilla constructor body is
+            // not executed here - the field must still be the untouched
+            // no-arg default, proving no Rust payload or heap copy was set).
             Object payloadField = packetField(fakePacket, "field_186949_d");
-            assertTrue(payloadField instanceof byte[]
-                            && ((byte[]) payloadField).length > 0,
-                    "refused packet fell through to real vanilla construction");
+            // The real no-arg constructor leaves the payload field NULL; the
+            // authority path (populatePacketFields) would have set a byte[]
+            // (empty shell for direct mode). Still-null proves the authority
+            // never touched the refused packet.
+            assertTrue(payloadField == null,
+                    "authority never populated the refused packet");
             NativeChunkBridge.unload(0, cx, cz);
         } finally {
             PacketAuthorityExperiment.setEnabled(false);
@@ -711,13 +716,15 @@ public class SingleCopySafetyAndLifetimeTest {
 
             SingleCopyPipeline.RustCraftSingleCopyChunkHandler handler =
                     new SingleCopyPipeline.RustCraftSingleCopyChunkHandler();
-            EmbeddedChannel channel = new EmbeddedChannel(
-                    new net.minecraft.network.NettyVarint21FrameEncoder(),
-                    new net.minecraft.network.NettyCompressionEncoder(256),
-                    new SingleCopyPipeline.BodyCaptureHandler(),
-                    new net.minecraft.network.NettyPacketEncoder(
-                            net.minecraft.network.EnumPacketDirection.CLIENTBOUND),
-                    handler);
+            // Named anchors so the production lazy capture placement
+            // (between "encoder" and "compress") runs exactly as in the live
+            // pipeline.
+            EmbeddedChannel channel = new EmbeddedChannel();
+            channel.pipeline().addLast("prepender", new net.minecraft.network.NettyVarint21FrameEncoder());
+            channel.pipeline().addLast("compress", new net.minecraft.network.NettyCompressionEncoder(256));
+            channel.pipeline().addLast("encoder", new net.minecraft.network.NettyPacketEncoder(
+                    net.minecraft.network.EnumPacketDirection.CLIENTBOUND));
+            channel.pipeline().addLast("rustcraft_single_copy", handler);
             channel.attr(net.minecraft.network.NetworkManager.field_150739_c)
                     .set(net.minecraft.network.EnumConnectionState.PLAY);
 

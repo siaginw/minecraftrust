@@ -52,6 +52,10 @@ public class NetworkManagerSingleCopyTransformer implements IClassTransformer {
         }
         if (LiveWriterOrdering.deferClass(transformedName)) return basicClass;
         if (LiveWriterOrdering.ensureWritersLast()) return basicClass;
+        if (transformedName != null && transformedName.endsWith("MinecraftServer")) {
+            System.out.println("[RustCraft-SCDEBUG] NMS transformer sees MinecraftServer name=" + name
+                    + " transformedName=" + transformedName + " bytes=" + (basicClass == null ? -1 : basicClass.length));
+        }
         if (!TARGET_CLASS_DEOBF.equals(transformedName) && !TARGET_CLASS_OBF.equals(name)) {
             return basicClass;
         }

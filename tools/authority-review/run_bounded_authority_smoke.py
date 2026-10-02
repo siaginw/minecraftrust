@@ -55,9 +55,17 @@ def main() -> int:
     parser.add_argument("--disable-authority", action="store_true",
                         help="Disable Rust packet authority for baseline A/B measurement")
     parser.add_argument("--direct-netty", action="store_true",
-                        help="Enable Direct Netty wire emission experiment")
+        help="Enable Direct Netty wire emission experiment")
     parser.add_argument("--direct-shadow", action="store_true",
-                        help="Enable Direct Netty shadow verification mode")
+        help="Enable Direct Netty shadow verification mode")
+    parser.add_argument("--single-copy", action="store_true",
+        help="Enable the single-copy encoder-bypass boundary (direct mode)")
+    parser.add_argument("--single-copy-shadow", action="store_true",
+        help="Enable the single-copy shadow boundary (vanilla transmits; compare)")
+    parser.add_argument("--probe-rounds", type=int, default=1,
+        help="Sequential probe client rounds (fresh joins reload chunks)")
+    parser.add_argument("--min-single-copy", type=int, default=None,
+        help="Minimum single-copy committed/admitted packets (default: cap)")
     args = parser.parse_args()
 
     target = args.target
@@ -168,6 +176,8 @@ def main() -> int:
         "-Drustcraft.chunkStateAuthorityCap=1000",
         "-Drustcraft.directNettyExperiment=" + ("true" if args.direct_netty else "false"),
         "-Drustcraft.directNettyShadow=" + ("true" if args.direct_shadow else "false"),
+        "-Drustcraft.singleCopy=" + ("true" if args.single_copy else "false"),
+        "-Drustcraft.singleCopyShadow=" + ("true" if args.single_copy_shadow else "false"),
     ]
 
     if target == "C":
@@ -253,24 +263,39 @@ def main() -> int:
                 ("mcp", "9.42"),
             ]
 
-        print(f"[probe] Connecting headless probe client ({len(client_mods)} mods in handshake)...")
-        probe_receipt = run_probe(
-            "127.0.0.1", port, f"AuthProbe{target}",
-            expect_forge=True,
-            client_mods=client_mods,
-            connect_timeout_s=20.0,
-            login_timeout_s=120.0,
-            stability_s=args.stability_s
-        )
-
+        probe_receipts = []
+        for probe_round in range(max(1, args.probe_rounds)):
+            print(f"[probe] Round {probe_round + 1}/{args.probe_rounds}: connecting headless probe client "
+                  f"({len(client_mods)} mods in handshake)...")
+            probe_receipt = run_probe(
+                "127.0.0.1", port, f"AuthProbe{target}R{probe_round}",
+                expect_forge=True,
+                client_mods=client_mods,
+                connect_timeout_s=20.0,
+                login_timeout_s=120.0,
+                stability_s=args.stability_s
+            )
+            probe_receipts.append(probe_receipt)
+            print(f"[probe] Round {probe_round + 1} finished: verdict={probe_receipt.get('verdict')} "
+                  f"observed={json.dumps(probe_receipt.get('observed'))}")
+            if probe_receipt.get("verdict") != "PASS":
+                print(f"[ERROR] Client probe failed: {probe_receipt.get('failure')}", file=sys.stderr)
+                return 1
+        probe_receipt = {
+            "verdict": "PASS" if all(r.get("verdict") == "PASS" for r in probe_receipts) else "FAIL",
+            "observed": {
+                "chunk_packets": sum(r.get("observed", {}).get("chunk_packets", 0) for r in probe_receipts),
+                "fml_handshake_complete": all(r.get("observed", {}).get("fml_handshake_complete") for r in probe_receipts),
+                "keepalive_exchanged": all(r.get("observed", {}).get("keepalive_exchanged") for r in probe_receipts),
+                "stability_held": all(r.get("observed", {}).get("stability_held") for r in probe_receipts),
+                "disconnect_clean": all(r.get("observed", {}).get("disconnect_clean") for r in probe_receipts),
+                "rounds": len(probe_receipts),
+            },
+        }
         probe_out = out_dir / "probe-receipt.json"
-        probe_out.write_text(json.dumps(probe_receipt, indent=2, sort_keys=True) + "\n")
-        print(f"[probe] Client probe finished: verdict={probe_receipt.get('verdict')}")
-        print(f"[probe] Observed checks: {json.dumps(probe_receipt.get('observed'), indent=2)}")
-
-        if probe_receipt.get("verdict") != "PASS":
-            print(f"[ERROR] Client probe failed: {probe_receipt.get('failure')}", file=sys.stderr)
-            return 1
+        probe_out.write_text(json.dumps({"rounds": probe_receipts, "summary": probe_receipt},
+                                        indent=2, sort_keys=True) + "\n")
+        print(f"[probe] All rounds finished: {json.dumps(probe_receipt.get('observed'), indent=2)}")
 
     finally:
         print("[stop] Sending stop command to server...")
@@ -355,6 +380,51 @@ def main() -> int:
         assert direct_netty_fallbacks == 0, f"direct_netty_fallbacks must be 0, got {direct_netty_fallbacks}"
         print(f"[direct-netty] PASS: {direct_netty_committed} packets directly emitted into Netty with 0 leaks and 0 fallbacks!")
 
+    single_copy_telemetry = {}
+    raw_telemetry = auth_data.get("single_copy_telemetry", "")
+    for token in str(raw_telemetry).split():
+        if "=" in token:
+            key, _, value = token.partition("=")
+            try:
+                single_copy_telemetry[key] = int(value)
+            except ValueError:
+                single_copy_telemetry[key] = value
+    min_single_copy = args.min_single_copy if args.min_single_copy is not None else cap
+
+    if args.single_copy or args.single_copy_shadow:
+        admitted = counters.get("single_copy_admitted", 0)
+        print(f"[single-copy] admitted: {admitted}")
+        print(f"[single-copy] telemetry: {json.dumps(single_copy_telemetry, indent=2, sort_keys=True)}")
+        assert admitted >= min_single_copy, (
+            f"single_copy_admitted must be >= {min_single_copy}, got {admitted}")
+
+    if args.single_copy:
+        committed = single_copy_telemetry.get("single_copy_committed", 0)
+        bypassed = single_copy_telemetry.get("vanilla_encoder_bypassed", 0)
+        outstanding = single_copy_telemetry.get("outstanding", 1)
+        refusals = single_copy_telemetry.get("stale_refusals", -1)
+        divergences = single_copy_telemetry.get("measure_encode_divergences", -1)
+        fallbacks = counters.get("single_copy_fallbacks", 0)
+        assert committed >= min_single_copy, f"single_copy_committed must be >= {min_single_copy}, got {committed}"
+        assert bypassed == committed, f"every committed packet must bypass the vanilla encoder once ({bypassed} vs {committed})"
+        assert outstanding == 0, f"outstanding single-copy bodies must be 0, got {outstanding}"
+        assert refusals == 0, f"stale_ticket_refusals must be 0, got {refusals}"
+        assert divergences == 0, f"measure_encode_divergences must be 0, got {divergences}"
+        print(f"[single-copy] PASS: {committed} packets committed through the encoder-bypass path, "
+              f"0 outstanding, 0 refusals, 0 divergences, {fallbacks} build fallbacks")
+
+    if args.single_copy_shadow:
+        matches = single_copy_telemetry.get("shadow_matches", 0)
+        mismatches = single_copy_telemetry.get("shadow_mismatches", -1)
+        outstanding = single_copy_telemetry.get("outstanding", 1)
+        committed = single_copy_telemetry.get("single_copy_committed", 0)
+        assert mismatches == 0, f"shadow_mismatches must be 0, got {mismatches}"
+        assert matches >= min_single_copy, f"shadow_matches must be >= {min_single_copy}, got {matches}"
+        assert outstanding == 0, f"outstanding single-copy bodies must be 0, got {outstanding}"
+        assert committed >= matches, f"committed ({committed}) must cover every shadow match ({matches})"
+        print(f"[single-copy-shadow] PASS: {matches} byte-exact body comparisons against the real "
+              f"NettyPacketEncoder output with 0 mismatches and 0 outstanding bodies")
+
     if rust_selected == cap:
         print(f"[metrics] Reached authority cap ({cap})! Fallback to Java was engaged successfully.")
 
@@ -368,6 +438,7 @@ def main() -> int:
         "probe_verdict": probe_receipt.get("verdict"),
         "probe_observed": probe_receipt.get("observed"),
         "authority_receipt": auth_data,
+        "single_copy_telemetry": single_copy_telemetry,
         "timestamp": time.time(),
     }
     summary_path = ROOT / "target" / "authority-smoke" / f"target{target}-smoke-receipt.json"
