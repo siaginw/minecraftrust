@@ -89,8 +89,14 @@ public final class LiveSessionAdmissionTweaker implements ITweaker {
             // NetworkManager, and self-gates on its own properties. Registered
             // BEFORE the counted writers - it is topologically a foreign
             // transformer, and the tail must contain exactly the counted set.
-            if (!"OFF".equalsIgnoreCase(com.rustcraft.bridge.NativeCompressionEncoder.RUNTIME_MODE)
-                    || System.getProperty(com.rustcraft.bridge.NativeCompressionEncoder.CORPUS_PROPERTY) != null) {
+            // Gate on RAW SYSTEM PROPERTIES: touching NativeCompressionEncoder
+            // here would class-load its NettyCompressionEncoder superclass at
+            // tweak time (NoClassDefFoundError observed live) and kill the
+            // whole registration section.
+            if (!"OFF".equalsIgnoreCase(System.getProperty("minecraftrust.native_compress", "OFF"))
+                    || System.getProperty("rustcraft.compressionCorpus") != null
+                    || Boolean.getBoolean("rustcraft.rustCompressionExperiment")
+                    || Boolean.getBoolean("rustcraft.rustCompressionShadow")) {
                 cl.registerTransformer("com.rustcraft.coremod.NetworkManagerCompressionTransformer");
             }
             // The writers register now; their first invocation places them at

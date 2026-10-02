@@ -140,6 +140,16 @@ public class NativeCompressionEncoder extends NettyCompressionEncoder {
 
     private boolean ctxWasLive = false;
 
+    /** Test hook: free the native context behind the handler's back. */
+    public void freeContextForTest() {
+        ctx.free();
+    }
+
+    /** Test hook: whether the native context is currently live. */
+    public boolean isContextLiveForTest() {
+        return ctx.isLive();
+    }
+
     /** Threshold accessor mirroring the vanilla field semantics (read-back used by tests). */
     public int threshold() {
         // vanilla stores threshold in a private field; expose via encode behavior probing

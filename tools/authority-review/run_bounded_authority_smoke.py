@@ -66,6 +66,10 @@ def main() -> int:
         help="Sequential probe client rounds (fresh joins reload chunks)")
     parser.add_argument("--min-single-copy", type=int, default=None,
         help="Minimum single-copy committed/admitted packets (default: cap)")
+    parser.add_argument("--corpus", type=str, default=None,
+        help="Path for the passive compression-corpus tap (all outbound bodies)")
+    parser.add_argument("--native-compress", type=str, default="OFF",
+        help="minecraftrust.native_compress mode (OFF/SHADOW/ON_EXPERIMENTAL/OFF_MEASURE)")
     args = parser.parse_args()
 
     target = args.target
@@ -178,7 +182,10 @@ def main() -> int:
         "-Drustcraft.directNettyShadow=" + ("true" if args.direct_shadow else "false"),
         "-Drustcraft.singleCopy=" + ("true" if args.single_copy else "false"),
         "-Drustcraft.singleCopyShadow=" + ("true" if args.single_copy_shadow else "false"),
+        "-Dminecraftrust.native_compress=" + args.native_compress,
     ]
+    if args.corpus:
+        extra_args.append("-Drustcraft.compressionCorpus=" + args.corpus)
 
     if target == "C":
         profile_id = "FORGE_2846_FTB_REVELATION_3_4_0_SERVER_TRANSFORMED_OFFLINE_V1"
