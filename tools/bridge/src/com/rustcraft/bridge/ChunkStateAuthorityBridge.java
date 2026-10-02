@@ -88,7 +88,7 @@ public final class ChunkStateAuthorityBridge {
         }
     }
 
-    private static final Map<String, ChunkAuthorityRecord> RECORDS = new ConcurrentHashMap<>();
+    private static final Map<Long, ChunkAuthorityRecord> RECORDS = new ConcurrentHashMap<>();
 
     // Reflection handles into Chunk
     private static Field chunkPrecipitationHeightMap;
@@ -158,8 +158,8 @@ public final class ChunkStateAuthorityBridge {
         mirrorMode = mode;
     }
 
-    private static String chunkKey(int dim, int cx, int cz) {
-        return dim + ":" + cx + ":" + cz;
+    private static long chunkKey(int dim, int cx, int cz) {
+        return ((long) cx << 32) | (cz & 0xFFFFFFFFL);
     }
 
     public static long getBufferAddress(ByteBuffer buf) {
@@ -326,7 +326,7 @@ public final class ChunkStateAuthorityBridge {
      */
     public static ChunkAuthorityRecord registerChunkAuthority(int dim, int cx, int cz, long genId) {
         if (genId <= 0) return null;
-        String key = chunkKey(dim, cx, cz);
+        long key = chunkKey(dim, cx, cz);
         ChunkAuthorityRecord record = new ChunkAuthorityRecord(dim, cx, cz, genId,
                 mirrorMode == MirrorMode.EAGER ? AuthoritativeMode.RUST_MIRRORED : AuthoritativeMode.RUST_AUTHORITATIVE);
 
@@ -374,7 +374,7 @@ public final class ChunkStateAuthorityBridge {
      * Prevents any subsequent Use-After-Free or stale generation reads.
      */
     public static void unregisterChunkAuthority(int dim, int cx, int cz) {
-        String key = chunkKey(dim, cx, cz);
+        long key = chunkKey(dim, cx, cz);
         unbindChunkStorages(dim, cx, cz);
         ChunkAuthorityRecord record = RECORDS.remove(key);
         if (record != null) {
@@ -391,7 +391,7 @@ public final class ChunkStateAuthorityBridge {
     }
 
     public static void demoteChunk(int dim, int cx, int cz, String reason) {
-        String key = chunkKey(dim, cx, cz);
+        long key = chunkKey(dim, cx, cz);
         ChunkAuthorityRecord r = RECORDS.get(key);
         if (r != null) {
             r.mode = AuthoritativeMode.DEMOTED;
@@ -468,7 +468,7 @@ public final class ChunkStateAuthorityBridge {
     }
 
     private static final Map<ExtendedBlockStorage, SectionAuthorityBinding> SECTION_BINDINGS = new ConcurrentHashMap<>();
-    private static final Map<String, ExtendedBlockStorage[]> CHUNK_STORAGES = new ConcurrentHashMap<>();
+    private static final Map<Long, ExtendedBlockStorage[]> CHUNK_STORAGES = new ConcurrentHashMap<>();
 
     public static final class SectionAuthorityBinding {
         public final ChunkAuthorityRecord chunkRecord;
@@ -526,7 +526,7 @@ public final class ChunkStateAuthorityBridge {
         if (chunk == null) return;
         try {
             int dim = 0; // Overworld scope
-            String key = chunkKey(dim, chunk.field_76635_g, chunk.field_76647_h);
+            long key = chunkKey(dim, chunk.field_76635_g, chunk.field_76647_h);
             ChunkAuthorityRecord record = RECORDS.get(key);
             if (record != null) {
                 unbindChunkStorages(dim, chunk.field_76635_g, chunk.field_76647_h);
