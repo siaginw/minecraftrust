@@ -49,6 +49,12 @@ public class NetworkManagerCompressionTransformer implements IClassTransformer {
             // capture must not depend on the authority mode.
             || System.getProperty("rustcraft.compressionCorpus") != null;
 
+    /** 1.12.2 notch name for NetworkManager, identified by the unique
+     *  "handleDisconnection() called twice" constant (same proof as the
+     *  single-copy pair). Notch-named runtimes deliver the class under this
+     *  name; SRG/deobf runtimes deliver the name above. */
+    private static final String TARGET_OBF = "gw";
+
     @Override
     public byte[] transform(String name, String transformedName, byte[] basicClass) {
         if (basicClass != null && transformedName != null
@@ -56,9 +62,12 @@ public class NetworkManagerCompressionTransformer implements IClassTransformer {
             // One-shot visibility line: proves this transformer is registered,
             // which name shape the runtime uses, and the swap verdict.
             System.out.println("[RustCraft-Compression] NetworkManager transform: target=" + TARGET
-                    + " transformedName=" + transformedName + " enabled=" + ENABLED);
+                    + " transformedName=" + transformedName + " name=" + name
+                    + " enabled=" + ENABLED);
         }
-        if (!TARGET.equals(transformedName) || basicClass == null) {
+        boolean isTarget = TARGET.equals(transformedName)
+                || (name != null && TARGET_OBF.equals(name));
+        if (!isTarget || basicClass == null) {
             return basicClass;
         }
         if (!ENABLED) {
