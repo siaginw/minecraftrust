@@ -65,11 +65,12 @@ The ladder is enforced by code, not convention: capability states with unreachab
 
 | Area | Where | State |
 |:---|:---|:---|
-| Chunk state & protocol encode | [`crates/native-chunk`](../crates/native-chunk/) | Retained state live; Authoritative block state, lighting, biomes, and heightmap ownership live (88.3M ops/s zero-JNI reads, `AtomicU32` non-tearing lighting, `[u8; 256]` biomes, `[u16; 256]` heightmap with `primary_bit_mask` fast downward scan) |
+| Chunk state & protocol encode | [`crates/native-chunk`](../crates/native-chunk/) | Retained state live; Authoritative block state, lighting, biomes, and heightmap ownership live (108.4M ops/s zero-JNI reads, `AtomicU32` non-tearing lighting, `[u8; 256]` biomes, `[u16; 256]` heightmap with `primary_bit_mask` fast downward scan). **Performance plateau proven** (0.00% exclusive CPU in steady-state JFR; production profile: Thin LTO / CGU 1). |
 | Snapshot transport (RCSNAP01/02) | [`crates/native-chunk/src/packet_snapshot.rs`](../crates/native-chunk/src/packet_snapshot.rs) | Live (used for one-time initial chunk seeding) |
 | Compression | [`crates/compression`](../crates/compression/) | Component-proven |
 | NBT | [`crates/nbt`](../crates/nbt/) | Component-proven |
 | Region/Anvil I/O | [`crates/region-io`](../crates/region-io/) | Research |
+| Direct Netty wire emission | (planned) | Next target — eliminates 84.69% of steady-state chunk-streaming CPU consumed by Java bridge scaffolding |
 | JNI boundary | [`crates/ffi`](../crates/ffi/) | Live (bounded authority, `setBlockState`, `getBlockState`, `getSectionPointers`, `getSectionLightPointers`, `getBiomesPointer`, `getHeightmapPointer`, `encodePacketPayloadV2`) |
 | Writer hooks & capture gate | [`tools/bridge`](../tools/bridge/) | Live on both runtimes (`ChunkStateAuthorityBridge`, `StateRegistryLookup`) |
 | Qualification engine | [`tools/qualification-v2`](../tools/qualification-v2/) | Proven (two-launch) |
