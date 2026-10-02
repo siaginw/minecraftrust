@@ -39,11 +39,17 @@ import java.util.List;
  */
 public final class LiveWriterOrdering {
 
-    /** Exactly the transformer classes the tweaker/coremod registers. */
+    /** Exactly the transformer classes the tweaker/coremod registers. The
+     *  single-copy pair joins the writer group: they register inside the
+     *  writer block and the tail-topology check must treat them as ours, or
+     *  the guard would rotate the chain mid-load and the Publication writer
+     *  would see pre-patch bytes on the arm-target pass. */
     private static final String[] WRITER_CLASSES = {
             "com.rustcraft.coremod.SPacketChunkDataTransformer",
             "com.rustcraft.coremod.LiveChunkOwnershipTransformer",
             "com.rustcraft.coremod.LiveChunkPublicationTransformer",
+            "com.rustcraft.coremod.NetworkManagerSingleCopyTransformer",
+            "com.rustcraft.coremod.NettyPacketEncoderCounterTransformer",
     };
 
     private static volatile String measured = "NOT_YET_MEASURED";
