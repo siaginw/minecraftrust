@@ -112,7 +112,15 @@ public class NetworkManagerSingleCopyTransformer implements IClassTransformer {
 
     private static void injectInstallHook(MethodNode mn) {
         InsnList hook = new InsnList();
-        hook.add(new VarInsnNode(Opcodes.ALOAD, 1)); // ChannelHandlerContext
+        // channelActive(ChannelHandlerContext ctx): pass ctx.channel() (the
+        // Channel), not the context itself.
+        hook.add(new VarInsnNode(Opcodes.ALOAD, 1));
+        hook.add(new MethodInsnNode(
+                Opcodes.INVOKEINTERFACE,
+                "io/netty/channel/ChannelHandlerContext",
+                "channel",
+                "()Lio/netty/channel/Channel;",
+                true));
         hook.add(new MethodInsnNode(
                 Opcodes.INVOKESTATIC,
                 "com/rustcraft/bridge/SingleCopyPipeline",
