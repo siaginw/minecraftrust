@@ -117,6 +117,7 @@ public final class SingleCopyPipeline {
         public final AtomicLong shadowMatches = new AtomicLong();
         public final AtomicLong shadowMismatches = new AtomicLong();
         public final AtomicLong shadowExpectedDivergences = new AtomicLong();
+        public final AtomicLong shadowEncodingDivergences = new AtomicLong();
         public final AtomicLong multiConsumerBodies = new AtomicLong();
         public final AtomicLong releasedViaQuiescence = new AtomicLong();
         public final AtomicLong releasedViaChannelClose = new AtomicLong();
@@ -616,8 +617,19 @@ public final class SingleCopyPipeline {
                     // newer state. Concurrency, not an encoder divergence.
                     T.shadowExpectedDivergences.incrementAndGet();
                 } else {
-                    T.shadowMismatches.incrementAndGet();
-                    logShadowMismatch(expected, actual);
+                    // Byte-different but possibly the same world state: a
+                    // vanilla hashmap palette never shrinks, so a chunk with
+                    // block churn carries stale palette entries the native
+                    // minimal palette omits. Both are valid Protocol-340
+                    // encodings; only a real state difference is a mismatch.
+                    SingleCopyBodyCodec.ParsedBody expectedBody = SingleCopyBodyCodec.parse(expected);
+                    SingleCopyBodyCodec.ParsedBody actualBody = SingleCopyBodyCodec.parse(actual);
+                    if (SingleCopyBodyCodec.decodeEquivalent(expectedBody, actualBody)) {
+                        T.shadowEncodingDivergences.incrementAndGet();
+                    } else {
+                        T.shadowMismatches.incrementAndGet();
+                        logShadowMismatch(expected, actual);
+                    }
                 }
                 EXPECTED.remove();
                 EXPECTED_TICKET.remove();
@@ -769,6 +781,7 @@ public final class SingleCopyPipeline {
                 + " shadow_matches=" + T.shadowMatches.get()
                 + " shadow_mismatches=" + T.shadowMismatches.get()
                 + " shadow_expected_divergences=" + T.shadowExpectedDivergences.get()
+                + " shadow_encoding_divergences=" + T.shadowEncodingDivergences.get()
                 + " measure_failures=" + T.measureFailures.get()
                 + " encode_failures=" + T.encodeFailures.get()
                 + " measure_encode_divergences=" + T.measureEncodeDivergences.get()

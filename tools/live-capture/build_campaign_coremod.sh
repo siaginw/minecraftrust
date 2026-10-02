@@ -100,6 +100,7 @@ SOURCES=(
   "$ROOT/tools/bridge/src/com/rustcraft/coremod/NetworkManagerSingleCopyTransformer.java"
   "$ROOT/tools/bridge/src/com/rustcraft/coremod/NettyPacketEncoderCounterTransformer.java"
   "$ROOT/tools/bridge/src/com/rustcraft/bridge/SingleCopyChunkBody.java"
+  "$ROOT/tools/bridge/src/com/rustcraft/bridge/SingleCopyBodyCodec.java"
   "$ROOT/tools/bridge/src/com/rustcraft/bridge/SingleCopyPipeline.java"
   # LiveHookSupport reaches the same-process acquisition recorder, and the
   # recorder is what the chain producer reads. Omitting them does not build a

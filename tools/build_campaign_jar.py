@@ -124,6 +124,7 @@ def main():
         ROOT / "tools/bridge/src/com/rustcraft/coremod/NetworkManagerSingleCopyTransformer.java",
         ROOT / "tools/bridge/src/com/rustcraft/coremod/NettyPacketEncoderCounterTransformer.java",
         ROOT / "tools/bridge/src/com/rustcraft/bridge/SingleCopyChunkBody.java",
+        ROOT / "tools/bridge/src/com/rustcraft/bridge/SingleCopyBodyCodec.java",
         ROOT / "tools/bridge/src/com/rustcraft/bridge/SingleCopyPipeline.java",
         ROOT / "tools/bridge/src/com/rustcraft/qualification/SameProcessAcquisition.java",
         ROOT / "tools/bridge/src/com/rustcraft/qualification/SessionEvidenceFlush.java",

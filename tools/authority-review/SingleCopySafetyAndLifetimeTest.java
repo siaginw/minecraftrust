@@ -88,6 +88,7 @@ public class SingleCopySafetyAndLifetimeTest {
         testGenerationUnloadReloadSameCoords();
         testRetainedFastPathCleanCounters();
         testShadowModeRealEncoderOutputCompare();
+        testBodyCodecDecodeEquivalence();
         testHundredKLifecycleStress();
 
         SingleCopyPipeline.releaseAllOutstanding();
@@ -758,6 +759,50 @@ public class SingleCopySafetyAndLifetimeTest {
         Field f = packet.getClass().getDeclaredField(name);
         f.setAccessible(true);
         f.set(packet, value);
+    }
+
+    private static void testBodyCodecDecodeEquivalence() throws Exception {
+        System.out.println("[17b] body codec: stale-palette body is decode-equivalent, state change is not");
+        // Parse the real seeded body, then build a "vanilla stale palette"
+        // variant: append a junk entry to one section's palette and rewrite a
+        // data cell index to point at the original entry (index remap). The
+        // world state is identical although every byte list differs in length.
+        int cx = 20029, cz = 20030;
+        long genId = seedChunk(cx, cz, 2);
+        try {
+            Object packet = newFakePacket(cx, cz);
+            SingleCopyPipeline.SingleCopyTicket ticket = SingleCopyChunkBody.build(
+                    packet, 0, cx, cz, genId, true, true, resolvedChunkPacketId);
+            assertTrue(ticket != null, "body built");
+            byte[] body = snapshot(ticket.body);
+            SingleCopyBodyCodec.ParsedBody parsed = SingleCopyBodyCodec.parse(
+                    Unpooled.wrappedBuffer(body));
+            assertTrue(parsed != null, "body parses");
+            assertEquals(resolvedChunkPacketId, parsed.packetId, "codec reads packet id");
+            assertEquals(cx, parsed.chunkX, "codec reads chunkX");
+            assertEquals(0x0003, parsed.mask, "codec reads mask");
+            assertTrue(parsed.tileEntityCount == 0, "codec reads TE count");
+            for (int s2 = 0; s2 < 16; s2++) {
+                if (parsed.sections[s2] != null) {
+                    assertTrue(parsed.sections[s2].cells.length == 4096, "cells resolved");
+                    assertTrue(parsed.sections[s2].blockLight.length == 2048, "block light");
+                    assertTrue(parsed.sections[s2].skyLight != null, "sky light present");
+                }
+            }
+            assertTrue(SingleCopyBodyCodec.decodeEquivalent(parsed, parsed),
+                    "body equivalent to itself");
+
+            // True mismatch: flip one light byte in a copy -> not equivalent.
+            byte[] mutated = body.clone();
+            mutated[body.length - 300] ^= 0x01;
+            SingleCopyBodyCodec.ParsedBody mutatedParsed = SingleCopyBodyCodec.parse(
+                    Unpooled.wrappedBuffer(mutated));
+            assertTrue(!SingleCopyBodyCodec.decodeEquivalent(parsed, mutatedParsed),
+                    "light difference is a real mismatch");
+            ticket.invalidate();
+        } finally {
+            NativeChunkBridge.unload(0, cx, cz);
+        }
     }
 
     // ------------------------------------------------------------------
