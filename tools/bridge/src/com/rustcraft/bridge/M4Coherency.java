@@ -875,19 +875,28 @@ public final class M4Coherency {
 
     static boolean initReflection(Object chunk) throws Exception {
         if (M_GET_STORAGE != null) return true;
+        // Resolve Minecraft classes through the CHUNK's own defining loader.
+        // This bridge loads on the launch classpath, whose loader cannot see
+        // the SRG-named runtime classes (they live on the child transforming
+        // loader); literal `Chunk.class` references and caller-loader
+        // Class.forName silently broke the whole sync path on a real server
+        // while it kept working in the offline harness (SRG jar on -cp).
+        ClassLoader runtimeLoader = chunk.getClass().getClassLoader();
         Class<?> chunkCls = chunk.getClass();
         M_GET_STORAGE = chunkCls.getMethod("func_76587_i");
         M_GET_STORAGE.setAccessible(true);
-        F_EMPTY_STORAGE = net.minecraft.world.chunk.Chunk.class.getField("field_186036_a");
+        Class<?> chunkType = Class.forName("net.minecraft.world.chunk.Chunk", true, runtimeLoader);
+        F_EMPTY_STORAGE = chunkType.getField("field_186036_a");
         F_EMPTY_STORAGE.setAccessible(true);
 
-        Field regF = net.minecraft.block.Block.class.getDeclaredField("field_176229_d");
+        Field regF = Class.forName("net.minecraft.block.Block", true, runtimeLoader)
+                .getDeclaredField("field_176229_d");
         regF.setAccessible(true);
         REG_MAP = regF.get(null);
         M_REG_GET_ID = REG_MAP.getClass().getMethod("func_148747_b", Object.class);
         M_REG_GET_ID.setAccessible(true);
 
-        Class<?> storageCls = Class.forName("net.minecraft.world.chunk.storage.ExtendedBlockStorage");
+        Class<?> storageCls = Class.forName("net.minecraft.world.chunk.storage.ExtendedBlockStorage", true, runtimeLoader);
         M_CONTAINER = storageCls.getMethod("func_186049_g");
         M_CONTAINER.setAccessible(true);
         M_GET_BL = storageCls.getMethod("func_76661_k");
@@ -895,11 +904,11 @@ public final class M4Coherency {
         M_GET_SL = storageCls.getMethod("func_76671_l");
         M_GET_SL.setAccessible(true);
 
-        Class<?> contCls = Class.forName("net.minecraft.world.chunk.BlockStateContainer");
+        Class<?> contCls = Class.forName("net.minecraft.world.chunk.BlockStateContainer", true, runtimeLoader);
         M_GET_STATE = contCls.getMethod("func_186016_a", int.class, int.class, int.class);
         M_GET_STATE.setAccessible(true);
 
-        Class<?> nibCls = Class.forName("net.minecraft.world.chunk.NibbleArray");
+        Class<?> nibCls = Class.forName("net.minecraft.world.chunk.NibbleArray", true, runtimeLoader);
         M_NIBBLE_BYTES = nibCls.getMethod("func_177481_a");
         M_NIBBLE_BYTES.setAccessible(true);
         return true;

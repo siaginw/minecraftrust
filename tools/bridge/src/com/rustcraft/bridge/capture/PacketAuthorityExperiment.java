@@ -504,6 +504,9 @@ public final class PacketAuthorityExperiment {
                                     // thread so the body encodes exactly the state
                                     // the Java packet will read.
                                     try {
+                                        // The coherency reflection initializes per-thread;
+                                        // the server thread needs it before any refresh.
+                                        com.rustcraft.bridge.M4Coherency.initReflectionPublicGate(chunkObj);
                                         com.rustcraft.bridge.M4Coherency.refreshChunkNow(chunkObj);
                                     } catch (Throwable refreshFailure) {
                                         System.err.println("[RustCraft-SingleCopy] retained refresh failed: "
