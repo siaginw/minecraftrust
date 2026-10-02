@@ -3,7 +3,6 @@ package com.rustcraft.bridge;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
-import net.minecraft.network.PacketBuffer;
 
 /**
  * Compression ENGINE shared by both runtime variants of the M2C encoder
@@ -186,7 +185,7 @@ public final class RustCompressionEngine {
             M2C_NATIVE_PACKETS.incrementAndGet();
             M2C_NATIVE_BYTES_TX.addAndGet((long) readable);
             M2C_BYTES_RUST.addAndGet(rustOut.length);
-            new PacketBuffer(out).func_150787_b(readable);
+            writeVarInt(out, readable);
             out.writeBytes(rustOut);
             M2C_RUST_NS.addAndGet(System.nanoTime() - tR0);
             if ((verifyCounter = (verifyCounter + 1) & 0xFF) == 0) {
@@ -254,7 +253,7 @@ public final class RustCompressionEngine {
         try {
             long bound = CompressionCtx.maxOutputLen(readable);
             out.ensureWritable(5 + (int) Math.min(bound, Integer.MAX_VALUE - 5L));
-            new PacketBuffer(out).func_150787_b(readable);
+            writeVarInt(out, readable);
             long inAddr = msg.memoryAddress() + msg.readerIndex();
             long outAddr = out.memoryAddress() + out.writerIndex();
             int outCap = out.writableBytes();
@@ -290,6 +289,17 @@ public final class RustCompressionEngine {
             out.writerIndex(writerIndex0);
             return -1;
         }
+    }
+
+    /** Vanilla PacketBuffer.func_150787_b semantics, inlined: this class is
+     *  loaded by the PARENT classloader (com.rustcraft is launchwrapper-
+     *  excluded), so it must not statically reference Minecraft classes. */
+    private static void writeVarInt(ByteBuf buf, int value) {
+        while ((value & -128) != 0) {
+            buf.writeByte(value & 127 | 128);
+            value >>>= 7;
+        }
+        buf.writeByte(value);
     }
 
     private static byte[] inflate(byte[] compressed, int expectedLen) {
