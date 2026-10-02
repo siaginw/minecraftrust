@@ -38,9 +38,12 @@ fn main() {
     let mut bodies: Vec<&[u8]> = Vec::new();
     let mut off = 0usize;
     while off + 4 <= corpus.len() {
-        let len =
-            u32::from_be_bytes([corpus[off], corpus[off + 1], corpus[off + 2], corpus[off + 3]])
-                as usize;
+        let len = u32::from_be_bytes([
+            corpus[off],
+            corpus[off + 1],
+            corpus[off + 2],
+            corpus[off + 3],
+        ]) as usize;
         off += 4;
         if off + len > corpus.len() {
             break;
@@ -177,25 +180,17 @@ fn bench_backend(
                 }
             }
             Backend::Miniz { level } => {
-                use miniz_oxide::deflate::core::{
-                    compress, create_comp_flags_from_zip_params, CompressorOxide, TDEFLFlush,
-                    TDEFLStatus,
-                };
-                // zlib wrapper via window_bits = 1 (same as compress_to_vec_zlib)
-                let flags = create_comp_flags_from_zip_params(i32::from(*level), 1, 0);
-                let mut compressor = CompressorOxide::new(flags);
-                for (k, &i) in pass_indices.iter().enumerate() {
+                // Vec-based zlib one-shot (alloc included) — a CONSERVATIVE
+                // upper bound for miniz timing; raw-core slice mode rejects
+                // reused finished state in 0.8.9 (BadParam).
+                for (_k, &i) in pass_indices.iter().enumerate() {
                     let body = bodies[i];
                     let t0 = Instant::now();
-                    let (status, _in, n) =
-                        compress(&mut compressor, body, &mut outs[k], TDEFLFlush::Finish);
+                    let compressed = miniz_oxide::deflate::compress_to_vec_zlib(body, *level);
                     let dt = t0.elapsed().as_nanos() as u64;
-                    if status != TDEFLStatus::Done {
-                        panic!("miniz compress failed");
-                    }
                     times.push(dt);
                     in_total += body.len() as u64;
-                    out_total += n as u64;
+                    out_total += compressed.len() as u64;
                 }
             }
         }
