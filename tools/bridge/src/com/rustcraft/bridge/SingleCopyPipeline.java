@@ -4,6 +4,7 @@ import io.netty.buffer.ByteBuf;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelDuplexHandler;
+import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelOutboundHandlerAdapter;
 import io.netty.channel.ChannelPipeline;
 import io.netty.channel.ChannelPromise;
@@ -128,6 +129,7 @@ public final class SingleCopyPipeline {
         public final AtomicLong outstandingBytes = new AtomicLong();
         public volatile long highWaterBodies = 0;
         public volatile long highWaterBytes = 0;
+        public final AtomicLong shadowSetDebug = new AtomicLong();
     }
 
     private static final Telemetry T = new Telemetry();
@@ -431,6 +433,12 @@ public final class SingleCopyPipeline {
             if (ticket != null) {
                 if (SHADOW_MODE) {
                     ensureCapturePlacement(ctx);
+                    if (T.shadowSetDebug.get() < 5) {
+                        T.shadowSetDebug.incrementAndGet();
+                        System.out.println("[SingleCopy-ShadowDbg] EXPECTED set: packet=" + msg.getClass().getName()
+                                + " bodyBytes=" + ticket.body.readableBytes()
+                                + " pipeline=" + ctx.pipeline().names());
+                    }
                     // Shadow: vanilla transmits; the capture handler between
                     // the encoder and compression compares the encoder output
                     // against this packet's frozen body. The body's only
@@ -612,6 +620,23 @@ public final class SingleCopyPipeline {
             return true;
         }
 
+        private ChannelHandlerContext lastCtx;
+
+        @Override
+        public void handlerAdded(ChannelHandlerContext ctx) throws Exception {
+            this.lastCtx = ctx;
+            super.handlerAdded(ctx);
+        }
+
+        private static String head16(ByteBuf buf) {
+            StringBuilder sb = new StringBuilder();
+            int n = Math.min(16, buf.readableBytes());
+            for (int i = 0; i < n; i++) {
+                sb.append(String.format("%02x", buf.getByte(buf.readerIndex() + i) & 0xFF));
+            }
+            return sb.toString();
+        }
+
         private static void logShadowMismatch(ByteBuf expected, ByteBuf actual) {
             int expLen = expected.readableBytes();
             int actLen = actual.readableBytes();
@@ -625,8 +650,10 @@ public final class SingleCopyPipeline {
                 }
             }
             System.err.println(String.format(
-                    "[RustCraft-SingleCopy] SHADOW MISMATCH len expected=%d actual=%d firstDivergence=%s",
-                    expLen, actLen, first < 0 ? "none(len only)" : Integer.toString(first)));
+                    "[RustCraft-SingleCopy] SHADOW MISMATCH len expected=%d actual=%d firstDivergence=%s"
+                            + " expHead=%s actHead=%s",
+                    expLen, actLen, first < 0 ? "none(len only)" : Integer.toString(first),
+                    head16(expected), head16(actual)));
         }
     }
 
