@@ -67,6 +67,21 @@ public class ChunkStateAuthorityTransformer implements IClassTransformer {
                         injectSetStorageArraysHook(mn);
                         patched++;
                     }
+                    // getHeight(int, int) -> func_76611_b(II)I
+                    else if (isGetHeight(mn)) {
+                        injectGetHeightHook(mn);
+                        patched++;
+                    }
+                    // getBiome(BlockPos, BiomeProvider) -> func_177411_a(LBlockPos;LBiomeProvider;)LBiome;
+                    else if (isGetBiome(mn)) {
+                        injectGetBiomeHook(mn);
+                        patched++;
+                    }
+                    // setBiomeArray(byte[]) -> func_76616_a([B)V
+                    else if (isSetBiomeArray(mn)) {
+                        injectSetBiomeArrayHook(mn);
+                        patched++;
+                    }
                 }
             } else if (TARGET_STORAGE.equals(transformedName)) {
                 for (MethodNode mn : (List<MethodNode>) cn.methods) {
@@ -401,6 +416,111 @@ public class ChunkStateAuthorityTransformer implements IClassTransformer {
 
         hook.add(continueOriginal);
 
+        mn.instructions.insert(hook);
+    }
+
+    private boolean isGetHeight(MethodNode mn) {
+        return ("func_76611_b".equals(mn.name) || "getHeightValue".equals(mn.name))
+                && "(II)I".equals(mn.desc);
+    }
+
+    private void injectGetHeightHook(MethodNode mn) {
+        InsnList hook = new InsnList();
+        LabelNode continueOriginal = new LabelNode();
+
+        // int h = ChunkStateAuthorityBridge.getHeight(this, x, z);
+        // if (h >= 0) return h;
+        hook.add(new VarInsnNode(Opcodes.ALOAD, 0)); // this (Chunk)
+        hook.add(new VarInsnNode(Opcodes.ILOAD, 1)); // x
+        hook.add(new VarInsnNode(Opcodes.ILOAD, 2)); // z
+        hook.add(new MethodInsnNode(
+                Opcodes.INVOKESTATIC,
+                "com/rustcraft/bridge/ChunkStateAuthorityBridge",
+                "getHeight",
+                "(Lnet/minecraft/world/chunk/Chunk;II)I",
+                false
+        ));
+        hook.add(new InsnNode(Opcodes.DUP));
+        hook.add(new JumpInsnNode(Opcodes.IFLT, continueOriginal)); // if h < 0, continue
+        hook.add(new InsnNode(Opcodes.IRETURN));
+
+        hook.add(continueOriginal);
+        hook.add(new InsnNode(Opcodes.POP)); // Discard -1
+
+        mn.instructions.insert(hook);
+    }
+
+    private boolean isGetBiome(MethodNode mn) {
+        return ("func_177411_a".equals(mn.name) || "getBiome".equals(mn.name))
+                && "(Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/world/biome/BiomeProvider;)Lnet/minecraft/world/biome/Biome;".equals(mn.desc);
+    }
+
+    private void injectGetBiomeHook(MethodNode mn) {
+        InsnList hook = new InsnList();
+        LabelNode continueOriginal = new LabelNode();
+
+        // int biomeId = ChunkStateAuthorityBridge.getBiome(this, pos.getX() & 15, pos.getZ() & 15);
+        // if (biomeId >= 0) return Biome.getBiome(biomeId, Biomes.DEFAULT);
+        hook.add(new VarInsnNode(Opcodes.ALOAD, 0)); // this (Chunk)
+        hook.add(new VarInsnNode(Opcodes.ALOAD, 1)); // BlockPos
+        hook.add(new MethodInsnNode(
+                Opcodes.INVOKEVIRTUAL,
+                "net/minecraft/util/math/BlockPos",
+                "func_177958_n",
+                "()I",
+                false
+        ));
+        hook.add(new VarInsnNode(Opcodes.ALOAD, 1)); // BlockPos
+        hook.add(new MethodInsnNode(
+                Opcodes.INVOKEVIRTUAL,
+                "net/minecraft/util/math/BlockPos",
+                "func_177952_p",
+                "()I",
+                false
+        ));
+        hook.add(new MethodInsnNode(
+                Opcodes.INVOKESTATIC,
+                "com/rustcraft/bridge/ChunkStateAuthorityBridge",
+                "getBiome",
+                "(Lnet/minecraft/world/chunk/Chunk;II)I",
+                false
+        ));
+        hook.add(new InsnNode(Opcodes.DUP));
+        hook.add(new JumpInsnNode(Opcodes.IFLT, continueOriginal)); // if biomeId < 0, continue
+
+        // Biome.getBiome(biomeId, Biomes.DEFAULT) -> Biome.getBiome(biomeId)
+        hook.add(new MethodInsnNode(
+                Opcodes.INVOKESTATIC,
+                "net/minecraft/world/biome/Biome",
+                "func_150568_d", // Biome.getBiome(int)
+                "(I)Lnet/minecraft/world/biome/Biome;",
+                false
+        ));
+        hook.add(new InsnNode(Opcodes.ARETURN));
+
+        hook.add(continueOriginal);
+        hook.add(new InsnNode(Opcodes.POP)); // Discard -1
+
+        mn.instructions.insert(hook);
+    }
+
+    private boolean isSetBiomeArray(MethodNode mn) {
+        return ("func_76616_a".equals(mn.name) || "setBiomeArray".equals(mn.name))
+                && "([B)V".equals(mn.desc);
+    }
+
+    private void injectSetBiomeArrayHook(MethodNode mn) {
+        InsnList hook = new InsnList();
+        // ChunkStateAuthorityBridge.onBiomeArraySet(this, biomes);
+        hook.add(new VarInsnNode(Opcodes.ALOAD, 0)); // this
+        hook.add(new VarInsnNode(Opcodes.ALOAD, 1)); // byte[]
+        hook.add(new MethodInsnNode(
+                Opcodes.INVOKESTATIC,
+                "com/rustcraft/bridge/ChunkStateAuthorityBridge",
+                "onBiomeArraySet",
+                "(Lnet/minecraft/world/chunk/Chunk;[B)V",
+                false
+        ));
         mn.instructions.insert(hook);
     }
 }

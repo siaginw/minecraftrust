@@ -75,6 +75,8 @@ public final class ChunkStateAuthorityBridge {
         public final long[] sectionPointers = new long[16];
         public final long[] blockLightPointers = new long[16];
         public final long[] skyLightPointers = new long[16];
+        public volatile long biomesPointer;
+        public volatile long heightmapPointer;
         public volatile boolean dirty;
 
         public ChunkAuthorityRecord(int dim, int cx, int cz, long generationId, AuthoritativeMode mode) {
@@ -355,6 +357,10 @@ public final class ChunkStateAuthorityBridge {
             }
         }
 
+        // Fetch biome and heightmap pointers from native memory
+        record.biomesPointer = NativeChunkBridge.getBiomesPointer(dim, cx, cz);
+        record.heightmapPointer = NativeChunkBridge.getHeightmapPointer(dim, cx, cz);
+
         RECORDS.put(key, record);
         return record;
     }
@@ -379,6 +385,8 @@ public final class ChunkStateAuthorityBridge {
                 record.blockLightPointers[i] = 0;
                 record.skyLightPointers[i] = 0;
             }
+            record.biomesPointer = 0;
+            record.heightmapPointer = 0;
         }
     }
 
@@ -730,6 +738,100 @@ public final class ChunkStateAuthorityBridge {
         } catch (Throwable t) {
             return false;
         }
+    }
+
+    /**
+     * Authoritative Biome read: reads directly from native [u8; 256] biomes memory via Unsafe.
+     * Returns 0..255 if handled, or -1 to fall back to Java.
+     */
+    public static int getBiome(Chunk chunk, int x, int z) {
+        if (!experimentEnabled || chunk == null) return -1;
+        try {
+            int dim = 0; // Overworld
+            ChunkAuthorityRecord record = RECORDS.get(chunkKey(dim, chunk.field_76635_g, chunk.field_76647_h));
+            if (record == null || record.generationId <= 0 || (record.mode != AuthoritativeMode.RUST_AUTHORITATIVE && record.mode != AuthoritativeMode.RUST_MIRRORED)) {
+                return -1;
+            }
+            long currentOps = TOTAL_OPERATIONS.incrementAndGet();
+            if (currentOps > authorityCap) return -1;
+
+            long bioPtr = record.biomesPointer;
+            if (bioPtr == 0) return -1;
+
+            int idx = ((z & 15) << 4) | (x & 15);
+            return StateRegistryLookup.getUnsafe().getByte(bioPtr + idx) & 0xFF;
+        } catch (Throwable t) {
+            return -1;
+        }
+    }
+
+    /**
+     * Authoritative Biome write: writes directly to native [u8; 256] biomes memory.
+     * Returns true if handled, false to fall back to Java.
+     */
+    public static boolean setBiome(Chunk chunk, int x, int z, int biomeId) {
+        if (!experimentEnabled || chunk == null) return false;
+        try {
+            int dim = 0;
+            ChunkAuthorityRecord record = RECORDS.get(chunkKey(dim, chunk.field_76635_g, chunk.field_76647_h));
+            if (record == null || record.generationId <= 0 || (record.mode != AuthoritativeMode.RUST_AUTHORITATIVE && record.mode != AuthoritativeMode.RUST_MIRRORED)) {
+                return false;
+            }
+            long currentOps = TOTAL_OPERATIONS.incrementAndGet();
+            if (currentOps > authorityCap) return false;
+
+            long bioPtr = record.biomesPointer;
+            if (bioPtr == 0) return false;
+
+            int idx = ((z & 15) << 4) | (x & 15);
+            StateRegistryLookup.getUnsafe().putByte(bioPtr + idx, (byte) (biomeId & 0xFF));
+            record.dirty = true;
+            return true;
+        } catch (Throwable t) {
+            return false;
+        }
+    }
+
+    /**
+     * Authoritative Heightmap read: reads directly from native [u16; 256] heightmap memory via Unsafe.
+     * Returns 0..256 if handled, or -1 to fall back to Java.
+     */
+    public static int getHeight(Chunk chunk, int x, int z) {
+        if (!experimentEnabled || chunk == null) return -1;
+        try {
+            int dim = 0;
+            ChunkAuthorityRecord record = RECORDS.get(chunkKey(dim, chunk.field_76635_g, chunk.field_76647_h));
+            if (record == null || record.generationId <= 0 || (record.mode != AuthoritativeMode.RUST_AUTHORITATIVE && record.mode != AuthoritativeMode.RUST_MIRRORED)) {
+                return -1;
+            }
+            long currentOps = TOTAL_OPERATIONS.incrementAndGet();
+            if (currentOps > authorityCap) return -1;
+
+            long hmPtr = record.heightmapPointer;
+            if (hmPtr == 0) return -1;
+
+            int idx = ((z & 15) << 4) | (x & 15);
+            return StateRegistryLookup.getUnsafe().getShort(hmPtr + ((long) idx << 1)) & 0xFFFF;
+        } catch (Throwable t) {
+            return -1;
+        }
+    }
+
+    /**
+     * Synchronizes full biome array from Java setBiomeArray into native chunk memory.
+     */
+    public static void onBiomeArraySet(Chunk chunk, byte[] biomes) {
+        if (!experimentEnabled || chunk == null || biomes == null) return;
+        try {
+            int dim = 0;
+            ChunkAuthorityRecord record = RECORDS.get(chunkKey(dim, chunk.field_76635_g, chunk.field_76647_h));
+            if (record != null && record.biomesPointer != 0 && biomes.length == 256) {
+                for (int i = 0; i < 256; i++) {
+                    StateRegistryLookup.getUnsafe().putByte(record.biomesPointer + i, biomes[i]);
+                }
+                record.dirty = true;
+            }
+        } catch (Throwable ignore) {}
     }
 
     /**

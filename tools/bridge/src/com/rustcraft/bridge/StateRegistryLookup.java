@@ -48,6 +48,10 @@ public final class StateRegistryLookup {
         UNSAFE = u;
     }
 
+    public static Unsafe getUnsafe() {
+        return UNSAFE;
+    }
+
     private StateRegistryLookup() {}
 
     /**
@@ -163,43 +167,41 @@ public final class StateRegistryLookup {
     }
 
     /**
-     * Direct memory read of 4-bit light value (0..15) from native [AtomicU8; 2048] light buffer.
-     * Zero JNI overhead. Uses memory load fence to enforce acquire semantics.
+     * Direct memory read of 4-bit light value (0..15) from native [AtomicU32; 512] light buffer.
+     * Zero JNI overhead. Reads 32-bit atomic word directly, operating at exact same width as Rust AtomicU32.
      */
     public static int readLightNibble(long lightPtr, int x, int y, int z) {
         if (lightPtr == 0 || UNSAFE == null) return 0;
         int idx = getSectionIndex(x, y, z);
-        int byteOffset = idx >> 1;
-        UNSAFE.loadFence();
-        int b = UNSAFE.getByte(lightPtr + byteOffset) & 0xFF;
-        return (idx & 1) == 0 ? (b & 0x0F) : ((b >> 4) & 0x0F);
+        int wordIdx = idx >> 3; // 8 nibbles per 32-bit word
+        int shift = (idx & 7) << 2; // (idx % 8) * 4
+        long wordAddr = lightPtr + ((long) wordIdx << 2);
+        int word = UNSAFE.getIntVolatile(null, wordAddr);
+        return (word >>> shift) & 0x0F;
     }
 
     /**
-     * Direct memory write of 4-bit light value (0..15) into native [AtomicU8; 2048] light buffer.
-     * Uses atomic CAS loop via Unsafe.compareAndSwapInt to prevent odd/even byte tearing without crossing JNI.
+     * Direct memory write of 4-bit light value (0..15) into native [AtomicU32; 512] light buffer.
+     * Uses atomic CAS loop via Unsafe.compareAndSwapInt matching Rust's AtomicU32.compare_exchange exactly.
      * Returns true if value was changed, false if already equal.
      */
     public static boolean writeLightNibble(long lightPtr, int x, int y, int z, int val) {
         if (lightPtr == 0 || UNSAFE == null) return false;
         int idx = getSectionIndex(x, y, z);
-        int byteOffset = idx >> 1;
-        long targetAddr = lightPtr + byteOffset;
-        // Align to 4-byte boundary for Unsafe.compareAndSwapInt
-        long alignedAddr = targetAddr & ~3L;
-        int byteShift = (int) (targetAddr & 3L) * 8;
-        int nibbleShift = byteShift + (((idx & 1) != 0) ? 4 : 0);
-        int nibbleMask = 0x0F << nibbleShift;
-        int newBits = (val & 0x0F) << nibbleShift;
+        int wordIdx = idx >> 3;
+        int shift = (idx & 7) << 2;
+        int mask = 0x0F << shift;
+        int newBits = (val & 0x0F) << shift;
+        long wordAddr = lightPtr + ((long) wordIdx << 2);
 
         while (true) {
-            int currentWord = UNSAFE.getIntVolatile(null, alignedAddr);
-            int currentNibble = (currentWord >>> nibbleShift) & 0x0F;
+            int currentWord = UNSAFE.getIntVolatile(null, wordAddr);
+            int currentNibble = (currentWord >>> shift) & 0x0F;
             if (currentNibble == (val & 0x0F)) {
                 return false; // No change
             }
-            int updatedWord = (currentWord & ~nibbleMask) | newBits;
-            if (UNSAFE.compareAndSwapInt(null, alignedAddr, currentWord, updatedWord)) {
+            int updatedWord = (currentWord & ~mask) | newBits;
+            if (UNSAFE.compareAndSwapInt(null, wordAddr, currentWord, updatedWord)) {
                 return true;
             }
         }

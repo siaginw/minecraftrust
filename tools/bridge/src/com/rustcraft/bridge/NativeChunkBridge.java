@@ -210,6 +210,28 @@ public final class NativeChunkBridge {
      */
     public static native long getSectionLightPointer(int dim, int cx, int cz, int sectionY, int isSkylight);
 
+    /**
+     * M5.4 Biome direct pointer: returns raw memory address of chunk's [u8; 256] array.
+     */
+    public static native long getBiomesPointer(int dim, int cx, int cz);
+
+    /**
+     * M5.4 Biome direct read/write: gets or sets biome ID (0..255).
+     */
+    public static native int getBiome(int dim, int cx, int cz, int x, int z);
+    public static native int setBiome(int dim, int cx, int cz, int x, int z, int biomeId);
+
+    /**
+     * M5.4 Heightmap direct pointer: returns raw memory address of chunk's [u16; 256] array.
+     */
+    public static native long getHeightmapPointer(int dim, int cx, int cz);
+
+    /**
+     * M5.4 Heightmap direct query and recompute.
+     */
+    public static native int getHeight(int dim, int cx, int cz, int x, int z);
+    public static native int recomputeHeight(int dim, int cx, int cz, int x, int z);
+
     // --- Safe Invocations & Metrics ---
 
     public static long register(int dim, int cx, int cz, long primerAddr, long biomeAddr) {
