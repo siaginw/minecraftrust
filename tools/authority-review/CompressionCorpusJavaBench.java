@@ -5,8 +5,8 @@ import io.netty.buffer.PooledByteBufAllocator;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.embedded.EmbeddedChannel;
 
+import java.io.File;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -27,7 +27,7 @@ public class CompressionCorpusJavaBench {
             System.err.println("usage: CompressionCorpusJavaBench <corpus.bin> [warmup=1] [passes=3]");
             System.exit(2);
         }
-        byte[] corpus = Files.readAllBytes(Path.of(args[0]));
+        byte[] corpus = Files.readAllBytes(new File(args[0]).toPath());
         int warmup = args.length > 1 ? Integer.parseInt(args[1]) : 1;
         int passes = args.length > 2 ? Integer.parseInt(args[2]) : 3;
 
@@ -55,9 +55,8 @@ public class CompressionCorpusJavaBench {
         // entropy buckets via the JDK level-6 probe
         List<Integer> e0 = new ArrayList<>(), e1 = new ArrayList<>(), e2 = new ArrayList<>();
         {
-            net.minecraft.network.NettyCompressionEncoder probe =
-                    new net.minecraft.network.NettyCompressionEncoder(256);
-            EmbeddedChannel pch = new EmbeddedChannel(probe);
+            Object probe = newEncoder(256);
+            EmbeddedChannel pch = new EmbeddedChannel((io.netty.channel.ChannelHandler) probe);
             for (int i = 0; i < bodies.size(); i++) {
                 byte[] b = bodies.get(i);
                 if (b.length < 256) continue;
@@ -85,9 +84,8 @@ public class CompressionCorpusJavaBench {
             List<Integer> idx = (List<Integer>) entry[1];
             if (idx.isEmpty()) continue;
             // fresh encoder per bucket (one Deflater, reused per packet)
-            net.minecraft.network.NettyCompressionEncoder enc =
-                    new net.minecraft.network.NettyCompressionEncoder(256);
-            EmbeddedChannel ch = new EmbeddedChannel(enc);
+            Object enc = newEncoder(256);
+            EmbeddedChannel ch = new EmbeddedChannel((io.netty.channel.ChannelHandler) enc);
             long[] times = new long[idx.size()];
             long inTotal = 0, outTotal = 0;
             for (int w = 0; w < warmup; w++) {
@@ -140,7 +138,8 @@ public class CompressionCorpusJavaBench {
         return out;
     }
 
-    /** Encode one body through the REAL NettyCompressionEncoder; returns the framed output. */
+    /** Encode one body through the REAL vanilla compressor (notch class gv via
+     *  reflection - the runtime jar is notch-named); returns the framed output. */
     private static byte[] encode(EmbeddedChannel ch, byte[] body) {
         ByteBuf buf = PooledByteBufAllocator.DEFAULT.directBuffer(body.length + 16);
         buf.writeBytes(body);
@@ -150,5 +149,20 @@ public class CompressionCorpusJavaBench {
         frame.readBytes(out);
         frame.release();
         return out;
+    }
+
+    private static Object newEncoder(int threshold) {
+        // SRG study jar carries the SRG name; notch runtimes carry gv.
+        for (String name : new String[] {"net.minecraft.network.NettyCompressionEncoder", "gv"}) {
+            try {
+                Class<?> cls = Class.forName(name);
+                return cls.getConstructor(int.class).newInstance(threshold);
+            } catch (ClassNotFoundException ignore) {
+                // try the next name shape
+            } catch (Throwable t) {
+                throw new IllegalStateException("encoder instantiation failed for " + name, t);
+            }
+        }
+        throw new IllegalStateException("no vanilla compressor class on the classpath");
     }
 }

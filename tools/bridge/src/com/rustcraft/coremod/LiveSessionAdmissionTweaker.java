@@ -135,6 +135,16 @@ public final class LiveSessionAdmissionTweaker implements ITweaker {
             }
             // Ensure PacketAuthorityExperiment class is initialized so its shutdown hook registers
             com.rustcraft.bridge.capture.PacketAuthorityExperiment.enabled();
+            // Compression metrics at shutdown (the coremod dumper is not
+            // registered in this launch shape).
+            if (!"OFF".equalsIgnoreCase(System.getProperty("minecraftrust.native_compress", "OFF"))
+                    || Boolean.getBoolean("rustcraft.rustCompressionExperiment")
+                    || Boolean.getBoolean("rustcraft.rustCompressionShadow")) {
+                Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+                    System.out.println("[RustCraft-Compression] shutdown metrics:");
+                    System.out.println(com.rustcraft.bridge.RustCompressionEngine.dumpMetrics());
+                }, "rustcraft-compression-metrics"));
+            }
         } catch (Throwable failure) {
             System.err.println("[RustCraft] live session admission tweaker failed: " + failure);
         }
