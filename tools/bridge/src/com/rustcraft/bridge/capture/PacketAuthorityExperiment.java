@@ -926,13 +926,19 @@ public final class PacketAuthorityExperiment {
         Object play = PLAY_STATE;
         Object dir = CLIENTBOUND_DIRECTION;
         if (m == null) {
-            Class<?> stateCls = Class.forName("net.minecraft.network.EnumConnectionState");
+            // The bridge loads on the launch classloader; Minecraft classes
+            // live on the child transforming loader. The established runtime
+            // discovery is the thread's context loader (see LiveWriterHooks).
+            ClassLoader runtime = Thread.currentThread().getContextClassLoader();
+            if (runtime == null) {
+                runtime = PacketAuthorityExperiment.class.getClassLoader();
+            }
+            Class<?> stateCls = Class.forName("net.minecraft.network.EnumConnectionState", true, runtime);
             play = stateCls.getField("PLAY").get(null);
-            dir = Class.forName("net.minecraft.network.EnumPacketDirection")
-                    .getField("CLIENTBOUND").get(null);
-            m = stateCls.getMethod("func_179246_a",
-                    Class.forName("net.minecraft.network.EnumPacketDirection"),
-                    Class.forName("net.minecraft.network.Packet"));
+            Class<?> dirCls = Class.forName("net.minecraft.network.EnumPacketDirection", true, runtime);
+            dir = dirCls.getField("CLIENTBOUND").get(null);
+            m = stateCls.getMethod("func_179246_a", dirCls,
+                    Class.forName("net.minecraft.network.Packet", true, runtime));
             PACKET_ID_METHOD = m;
             PLAY_STATE = play;
             CLIENTBOUND_DIRECTION = dir;
