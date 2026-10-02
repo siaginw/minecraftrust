@@ -62,6 +62,14 @@ Phase 2 also encompasses:
 > vs the vanilla Deflater on a 68k-body real corpus, live client-visible authority on Gate A/C, shadow
 > decompression equivalence 6,523/0. Frame prepender stays Java.
 > [RUST_NETWORK_COMPRESSION_AUTHORITY_REPORT.md](research/RUST_NETWORK_COMPRESSION_AUTHORITY_REPORT.md).
+>
+> **NETWORKING_PERFORMANCE_REVISIT (PARKED — do not schedule without a trigger):**
+> networking milestones are closed as of 2026-10-02. Re-evaluate when any trigger
+> holds: high-client JFR shows compression/frame/socket above a meaningful CPU
+> share; a backend materially beats zlib-rs L6 without a bandwidth penalty
+> (libdeflate/zlib-ng follow-up); frame authority or socket/write authority
+> becomes advantageous; high-client fanout saturation needs adaptive
+> compression/backend selection.
 
 Eliminated the intermediate Java packet-buffer allocations and copy boundaries in `SPacketChunkData` by emitting chunk packets directly into Netty's off-heap pooled `ByteBuf`s (`io.netty.buffer.ByteBuf`), and fully removed legacy migration infrastructure on the retained fast path (`CaptureDraft.extract`, `OwnedPacketSnapshot`, `RCSNAP02` transport byte array, `IN_BUF`/`OUT_BUF` intermediaries).
 - **Exact Accounting:** Exactly 1 payload copy in shipped path (Rust wire cache -> Netty direct buffer); 0 JVM heap payload allocations (saves 49,480 B per chunk packet, eliminating ~9.9 MB/s of Young Gen GC churn).
