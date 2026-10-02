@@ -113,7 +113,7 @@ public class BenchAgent {
                 }
                 return classfileBuffer;
             }
-        }, true);
+        });
     }
 
     public static void onTickStart() {

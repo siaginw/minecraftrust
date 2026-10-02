@@ -2,7 +2,7 @@
 
 This is the canonical status document. It is updated when a qualification or campaign milestone changes; historical detail lives in [docs/research/](research/) and in the evidence tree under [`machine/`](../machine/). For the public overview, see the [README](../README.md); for the plan, the [roadmap](ROADMAP.md).
 
-**Snapshot date:** 2026-10-02 · **Head at snapshot:** `bb42bea`
+**Snapshot date:** 2026-10-02 · **Head at snapshot:** single-copy boundary milestone (`SINGLE_COPY_NETTY_PACKET_BODY_PROVEN`; see `git log` for the exact HEAD)
 
 ---
 
@@ -10,8 +10,8 @@ This is the canonical status document. It is updated when a qualification or cam
 
 | Runtime | Qualification | Authority | Live shadow & Retained State |
 |---|---|---|---|
-| Clean Forge 14.23.5.2860 | `CLEAN_FORGE_PROFILE_REQUALIFIED_V2` / **PASS** / OFFLINE_QUALIFIED | **BOUNDED_AUTHORITY_EXPERIMENT (PASS, 32/32)** | Gate A bounded authority: 32 Rust / 137 Java fallback. Retained ChunkState active. **Direct Netty wire emission verified: 32/32 packets emitted directly into Netty pooled ByteBufs with 0 leaks (`outstanding_direct_buffers: 0`), 100% byte parity (`32/32 shadow matches`)** |
-| FTB Revelation 3.4.0 (219 mods) | `REVELATION_PROFILE_REQUALIFIED_V2` / **PASS** / OFFLINE_QUALIFIED · **real-launch admission: `REAL_FML_TRANSFORM_CAPTURE` / PASS** | **BOUNDED_AUTHORITY_EXPERIMENT (PASS, 64/64)** | **Closure CLOSED: 4,905 counted passes / 0 mismatches** (`V2_LIVE_SHADOW_CLOSURE_REPORT.md`); Gate B bounded authority: 64 Rust / 105 Java fallback. Retained ChunkState active. **Direct Netty wire emission verified: 64/64 packets emitted directly into Netty pooled ByteBufs with 0 leaks (`outstanding_direct_buffers: 0`), 100% byte parity under 219 mods (`64/64 shadow matches`)** |
+| Clean Forge 14.23.5.2860 | `CLEAN_FORGE_PROFILE_REQUALIFIED_V2` / **PASS** / OFFLINE_QUALIFIED | **BOUNDED_AUTHORITY_EXPERIMENT (PASS, 32/32)** | Gate A bounded authority: 32 Rust / 137 Java fallback. Retained ChunkState active. **Direct Netty wire emission verified: 32/32 packets emitted directly into Netty pooled ByteBufs with 0 leaks (`outstanding_direct_buffers: 0`), 100% byte parity (`32/32 shadow matches`)**. **Single-copy encoder bypass: 120 packets client-visible with the complete pre-compression body built in ONE payload copy, `NettyPacketEncoder` bypassed (committed == bypassed == 120), 168/168 full-body shadow byte-exact, 1/4/8-client broadcast clean** |
+| FTB Revelation 3.4.0 (219 mods) | `REVELATION_PROFILE_REQUALIFIED_V2` / **PASS** / OFFLINE_QUALIFIED · **real-launch admission: `REAL_FML_TRANSFORM_CAPTURE` / PASS** | **BOUNDED_AUTHORITY_EXPERIMENT (PASS, 64/64)** | **Closure CLOSED: 4,905 counted passes / 0 mismatches** (`V2_LIVE_SHADOW_CLOSURE_REPORT.md`); Gate B bounded authority: 64 Rust / 105 Java fallback. Retained ChunkState active. **Direct Netty wire emission verified: 64/64 packets emitted directly into Netty pooled ByteBufs with 0 leaks (`outstanding_direct_buffers: 0`), 100% byte parity under 219 mods (`64/64 shadow matches`)**. **Single-copy encoder bypass: 276 packets client-visible (committed == bypassed == 276), full-body shadow 339 byte-exact + 28 arbitrated (decode-equivalent / concurrent-mutation, 0 unexplained) under 219 mods** |
 
 Unconstrained production authority remains **`false`** everywhere (`PacketAuthorityExperiment.PRODUCTION_AUTHORITY = false`). Rust authors chunk packets strictly within the bounded experiment (`-Drustcraft.packetAuthorityExperiment=true`) under an explicit operator cap (`-Drustcraft.packetAuthorityCap`). All out-of-scope, TileEntity, high-state, or post-cap chunks fail closed to pure Java serialization.
 
@@ -25,6 +25,18 @@ Unconstrained production authority remains **`false`** everywhere (`PacketAuthor
 - **Formal Authority Review:** Executed and documented in
   `docs/research/PACKET_AUTHORITY_CONTRACT.md`. Binding receipt verified in
   `target/authority-review/closure-input-receipt.json`. Status: **`AUTHORITY_REVIEWED`**.
+- **Single-Copy Netty Packet Body (`SINGLE_COPY_NETTY_PACKET_BODY_PROVEN`):** the
+  admitted `SPacketChunkData` path builds ONE complete immutable pre-compression
+  ByteBuf per packet (native measure -> header -> ONE payload write straight into
+  the final buffer -> TE trailer) and a dedicated outbound handler writes it past
+  `NettyPacketEncoder` into the untouched compression/framing chain. Gate A direct
+  120/120 and Gate C direct 276/276 client-visible (FML handshake, PLAY, chunk
+  decode, KeepAlive, clean disconnect); full-body shadow 168/168 byte-exact on
+  Gate A and 339 byte-exact + 28 arbitrated with 0 unexplained mismatches on Gate
+  C; 100k lifecycle stress green (created == released, outstanding 0); multi-client
+  1/4/8 broadcast green. Server-thread emission benchmark: 0.46-1.51 us vs b3df84c
+  pooled two-copy 0.79-3.62 us (~2.2x). Status: **`SINGLE_COPY_NETTY_PACKET_BODY_PROVEN`**
+  (`docs/research/SINGLE_COPY_NETTY_PACKET_BODY_REPORT.md`).
 - **Bounded Authority Experiment:** 96 total Rust-authored packets reached real
   clients (Gate A: 32/32 on Clean Forge 2860; Gate B: 64/64 on FTB Revelation 2846).
   0 Rust encode failures; 100% fail-closed Java fallback observed once cap was

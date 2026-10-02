@@ -51,6 +51,12 @@ Phase 2 also encompasses:
 
 ## Phase 3 — Direct Netty Wire Emission & True Direct Packet Path · ✅ complete
 
+> **Final seam closed (`SINGLE_COPY_NETTY_PACKET_BODY_PROVEN`, 2026-10-02):** the admitted packet path now
+> builds the COMPLETE pre-compression body as one immutable pooled direct ByteBuf (one payload memcpy) and
+> the outbound handler writes it past `NettyPacketEncoder` into the untouched compression/framing chain —
+> client-visible on Gate A (120) and Gate C (276) with full-body shadow equality. See
+> [SINGLE_COPY_NETTY_PACKET_BODY_REPORT.md](research/SINGLE_COPY_NETTY_PACKET_BODY_REPORT.md).
+
 Eliminated the intermediate Java packet-buffer allocations and copy boundaries in `SPacketChunkData` by emitting chunk packets directly into Netty's off-heap pooled `ByteBuf`s (`io.netty.buffer.ByteBuf`), and fully removed legacy migration infrastructure on the retained fast path (`CaptureDraft.extract`, `OwnedPacketSnapshot`, `RCSNAP02` transport byte array, `IN_BUF`/`OUT_BUF` intermediaries).
 - **Exact Accounting:** Exactly 1 payload copy in shipped path (Rust wire cache -> Netty direct buffer); 0 JVM heap payload allocations (saves 49,480 B per chunk packet, eliminating ~9.9 MB/s of Young Gen GC churn).
 - **Microbenchmarks:** 2.14x packet serialization speedup (4.57 µs vs 9.75 µs baseline; 1.14 µs for synthetic in-place framing).
