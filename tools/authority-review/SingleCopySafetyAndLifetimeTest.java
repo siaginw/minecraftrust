@@ -817,8 +817,8 @@ public class SingleCopySafetyAndLifetimeTest {
         global.writerIndex(global.writerIndex() + 2); // reserve 2-byte len varint
         global.writeByte(18); // global palette bits for a 157k-state registry
         SingleCopyChunkBody.writeVarInt(global, 0); // global palette: empty list
-        SingleCopyChunkBody.writeVarInt(global, 1366); // words: ceil(4096 / floor(64/18))
-        for (int w = 0; w < 1366; w++) {
+        SingleCopyChunkBody.writeVarInt(global, 1152); // words: ceil(4096*18/64)
+        for (int w = 0; w < 1152; w++) {
             global.writeLong(0x00123456789ABCDEFL);
         }
         global.writeZero(2048); // block light

@@ -132,20 +132,22 @@ public final class SingleCopyBodyCodec {
                 if ((out.mask & (1 << s)) == 0) continue;
                 body.readerIndex(cursor);
                 int bits = body.readUnsignedByte();
-                if (bits < 4) { why.append("bits=").append(bits); return null; }
+                if (bits < 4) { why.append("sec").append(s).append(" bits=").append(bits); return null; }
                 int paletteLen = readVarInt(body);
                 if (bits >= 9) {
-                    if (paletteLen != 0) { why.append("global pal=").append(paletteLen); return null; }
+                    if (paletteLen != 0) { why.append("sec").append(s).append(" global pal=")
+                            .append(paletteLen); return null; }
                 } else if (paletteLen <= 0 || paletteLen > (1 << bits)) {
-                    why.append("pal=").append(paletteLen).append(" bits=").append(bits); return null;
+                    why.append("sec").append(s).append(" pal=").append(paletteLen)
+                       .append(" bits=").append(bits); return null;
                 }
                 int[] palette = new int[bits >= 9 ? 0 : paletteLen];
                 for (int i = 0; i < palette.length; i++) palette[i] = readVarInt(body);
                 int words = readVarInt(body);
-                int perLong = 64 / bits;
-                int neededWords = (4096 + perLong - 1) / perLong;
+                int neededWords = (4096 * bits + 63) / 64;
                 if (words != neededWords) {
-                    why.append("words=").append(words).append(" need=").append(neededWords);
+                    why.append("sec").append(s).append(" words=").append(words)
+                       .append(" need=").append(neededWords);
                     return null;
                 }
                 for (int w = 0; w < words; w++) body.readLong();
@@ -161,7 +163,8 @@ public final class SingleCopyBodyCodec {
             if (cursor != payloadStart + declaredLen
                     || payloadStart + declaredLen > body.writerIndex()) {
                 why.append("cursor=").append(cursor).append(" want=")
-                   .append(payloadStart + declaredLen).append(" end=").append(body.writerIndex());
+                   .append(payloadStart + declaredLen).append(" end=").append(body.writerIndex())
+                   .append(" sky=").append(sky).append(" mask=").append(out.mask);
                 return null;
             }
             body.readerIndex(cursor);
@@ -209,11 +212,9 @@ public final class SingleCopyBodyCodec {
                     palette[i] = readVarInt(body);
                 }
                 int words = readVarInt(body);
-                // Vanilla 1.12.2 BitArray: floor(64/bits) entries per long,
-                // array length ceil(4096 / entriesPerLong) - per-long padding,
-                // NOT the plain bit-packing size.
-                int perLong = 64 / bits;
-                int neededWords = (4096 + perLong - 1) / perLong;
+                // Vanilla 1.12.2 BitArray packs entries CONTIGUOUSLY across
+                // long boundaries: length = ceil(4096 * bits / 64).
+                int neededWords = (4096 * bits + 63) / 64;
                 if (words != neededWords) {
                     return null;
                 }
@@ -230,13 +231,19 @@ public final class SingleCopyBodyCodec {
                 }
                 cursor = body.readerIndex();
 
-                int cellsPerLong = 64 / bits;
                 int cellMask = (1 << bits) - 1;
                 int[] cells = new int[4096];
                 for (int i = 0; i < 4096; i++) {
-                    long word = data[i / cellsPerLong];
-                    int shift = (i % cellsPerLong) * bits;
-                    int index = (int) ((word >>> shift) & cellMask);
+                    // Contiguous packing: entry i starts at bit i*bits and
+                    // may straddle two longs (vanilla 1.12.2 BitArray.get).
+                    long startOffset = (long) i * bits;
+                    int arr = (int) (startOffset >> 6);
+                    int bitOff = (int) (startOffset & 0x3F);
+                    long value = data[arr] >>> bitOff;
+                    if (bitOff + bits > 64) {
+                        value |= data[arr + 1] << (64 - bitOff);
+                    }
+                    int index = (int) (value & cellMask);
                     cells[i] = bits >= 9 ? index
                             : (index < palette.length ? palette[index] : -1);
                 }

@@ -629,12 +629,61 @@ public final class SingleCopyPipeline {
                     } else {
                         T.shadowMismatches.incrementAndGet();
                         logShadowMismatch(expected, actual);
+                        logDecodeDifference(expected, actual, expectedBody, actualBody);
                     }
                 }
                 EXPECTED.remove();
                 EXPECTED_TICKET.remove();
             }
             ctx.write(msg, promise);
+        }
+
+        private static void logDecodeDifference(ByteBuf expected, ByteBuf actual,
+                                                SingleCopyBodyCodec.ParsedBody e,
+                                                SingleCopyBodyCodec.ParsedBody a) {
+            if (e == null || a == null) {
+                System.err.println(String.format(
+                        "[RustCraft-SingleCopy] decode-diff: parse failed exp=[%s] act=[%s]",
+                        e == null ? SingleCopyBodyCodec.parseDebug(expected)
+                                  : "ok",
+                        a == null ? SingleCopyBodyCodec.parseDebug(actual)
+                                  : "ok"));
+                return;
+            }
+            System.err.println(String.format(
+                    "[RustCraft-SingleCopy] decode-diff: id %d/%d xyz %d,%d/%d,%d full %b/%b mask %04x/%04x",
+                    e.packetId, a.packetId, e.chunkX, e.chunkZ, a.chunkX, a.chunkZ,
+                    e.fullChunk, a.fullChunk, e.mask, a.mask));
+            for (int sec = 0; sec < 16; sec++) {
+                SingleCopyBodyCodec.ParsedSection es = e.sections[sec];
+                SingleCopyBodyCodec.ParsedSection as = a.sections[sec];
+                if (es == null && as == null) continue;
+                if (es == null || as == null) {
+                    System.err.println("  section " + sec + " present exp=" + (es != null)
+                            + " act=" + (as != null));
+                    continue;
+                }
+                int cellDiff = -1;
+                for (int i = 0; i < 4096; i++) {
+                    if (es.cells[i] != as.cells[i]) { cellDiff = i; break; }
+                }
+                int lightDiff = -1;
+                for (int i = 0; i < 2048; i++) {
+                    if (es.blockLight[i] != as.blockLight[i]) { lightDiff = i; break; }
+                }
+                int skyDiff = -1;
+                if (es.skyLight != null && as.skyLight != null) {
+                    for (int i = 0; i < 2048; i++) {
+                        if (es.skyLight[i] != as.skyLight[i]) { skyDiff = i; break; }
+                    }
+                }
+                System.err.println(String.format(
+                        "  section %d: firstCellDiff=%d (exp=%d act=%d) blockLightDiff=%d skyLightDiff=%d",
+                        sec, cellDiff,
+                        cellDiff >= 0 ? es.cells[cellDiff] : -1,
+                        cellDiff >= 0 ? as.cells[cellDiff] : -1,
+                        lightDiff, skyDiff));
+            }
         }
 
         private static boolean chunkChangedSinceFreeze(SingleCopyTicket ticket) {
