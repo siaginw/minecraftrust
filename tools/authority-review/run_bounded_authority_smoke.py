@@ -315,6 +315,8 @@ def main() -> int:
 
     retained_rust_selected = counters.get("retained_rust_selected", 0)
     retained_seeded = counters.get("retained_seeded", 0)
+    retained_fast_path = counters.get("retained_fast_path", 0)
+    snapshot_seed_path = counters.get("snapshot_seed_path", 0)
     direct_netty_committed = counters.get("direct_netty_committed", 0)
     direct_netty_buffers_allocated = counters.get("direct_netty_buffers_allocated", 0)
     direct_netty_buffers_released = counters.get("direct_netty_buffers_released", 0)
@@ -324,6 +326,8 @@ def main() -> int:
     print(f"[metrics] rust_selected: {rust_selected}")
     print(f"[metrics] retained_rust_selected: {retained_rust_selected}")
     print(f"[metrics] retained_seeded: {retained_seeded}")
+    print(f"[metrics] retained_fast_path: {retained_fast_path}")
+    print(f"[metrics] snapshot_seed_path: {snapshot_seed_path}")
     print(f"[metrics] direct_netty_committed: {direct_netty_committed}")
     print(f"[metrics] direct_netty_buffers_allocated: {direct_netty_buffers_allocated}")
     print(f"[metrics] direct_netty_buffers_released: {direct_netty_buffers_released}")
@@ -336,6 +340,14 @@ def main() -> int:
     assert rust_encode_failure == 0, f"rust_encode_failure must be 0, got {rust_encode_failure}"
     assert rust_selected > 0, f"rust_selected must be > 0 (Rust must have authored packets within bound), got {rust_selected}"
     assert rust_selected <= cap, f"rust_selected ({rust_selected}) must not exceed authority cap ({cap})"
+
+    if args.direct_shadow:
+        shadow_matches = counters.get("direct_netty_shadow_matches", 0)
+        shadow_mismatches = counters.get("direct_netty_shadow_mismatches", 0)
+        print(f"[direct-shadow] shadow_matches: {shadow_matches}, shadow_mismatches: {shadow_mismatches}")
+        assert shadow_mismatches == 0, f"direct_netty_shadow_mismatches must be 0, got {shadow_mismatches}"
+        assert shadow_matches > 0, f"direct_netty_shadow_matches must be > 0, got {shadow_matches}"
+        print(f"[direct-shadow] PASS: {shadow_matches} shadow-verified packets with 0 byte mismatches!")
 
     if args.direct_netty:
         assert direct_netty_committed > 0, f"direct_netty_committed must be > 0, got {direct_netty_committed}"

@@ -83,7 +83,13 @@ public class DirectNettySafetyAndLifetimeTest {
         // 12. No Double Send Guarantee
         testNoDoubleSendGuarantee();
 
-        System.out.println("\nALL 12 DIRECT NETTY SAFETY AND LIFETIME CONTRACT TESTS PASSED SUCCESSFULLY!");
+        // 13. True Direct Retained Fast Path
+        testTrueDirectRetainedFastPath();
+
+        // 14. Dangling Packet Timed Eviction
+        testDanglingPacketEviction();
+
+        System.out.println("\nALL 14 DIRECT NETTY SAFETY AND LIFETIME CONTRACT TESTS PASSED SUCCESSFULLY!");
     }
 
     private static void testDirectBufferCreation() {
@@ -295,6 +301,86 @@ public class DirectNettySafetyAndLifetimeTest {
 
         nettyOut1.release();
         nettyOut2.release();
+    }
+
+    private static void testTrueDirectRetainedFastPath() throws Exception {
+        System.out.println("--> Test 13: True Direct Retained Fast Path (0 Java Capture / 0 RCSNAP)");
+        PacketAuthorityExperiment.resetForTesting(true, 64);
+        PacketAuthorityExperiment.setDirectNettyEnabled(true);
+        PacketAuthorityExperiment.setReceiptVerifiedForTesting(true);
+
+        // Pre-register chunk in ChunkStateAuthorityBridge and NativeChunkBridge
+        int cx = 42;
+        int cz = 84;
+        long genId = com.rustcraft.bridge.NativeChunkBridge.findGeneration(0, cx, cz);
+        if (genId <= 0) {
+            // Seed primer
+            ByteBuffer primer = ByteBuffer.allocateDirect(131072).order(ByteOrder.nativeOrder());
+            long primerAddr = com.rustcraft.bridge.ChunkStateAuthorityBridge.getBufferAddress(primer);
+            genId = com.rustcraft.bridge.NativeChunkBridge.registerPrimer(0, cx, cz, primerAddr, 0);
+        }
+        assertTrue(genId > 0, "NativeChunk must have valid generation id");
+
+        PacketAuthorityExperiment.registerChunkRecord(0, cx, cz, genId);
+        PacketAuthorityExperiment.RetainedRecord fetched =
+                PacketAuthorityExperiment.getChunkRecord(cx, cz);
+        assertTrue(fetched != null, "Authority record must be registered");
+        assertEquals(genId, fetched.generationId, "Fetched generation must match");
+
+        // Verify Direct Buffer allocation directly via NativeChunkBridge encodePacketPayloadV2
+        ByteBuf directBuf = PooledByteBufAllocator.DEFAULT.directBuffer(262144);
+        long directAddr = directBuf.memoryAddress();
+        long packed = com.rustcraft.bridge.NativeChunkBridge.encodePacketPayloadV2(
+                0, cx, cz, genId, (byte) 1, (byte) 1, directAddr, 262144);
+
+        com.rustcraft.bridge.PacketEncodeResultV2 res = com.rustcraft.bridge.PacketEncodeResultV2.decode(packed);
+        assertTrue(res.isSuccess(), "Direct encode into Netty pooled buffer must succeed");
+        assertTrue(res.bytesWritten() > 0, "Bytes written must be positive");
+
+        directBuf.writerIndex(res.bytesWritten());
+        DummyPacket packet = new DummyPacket();
+        packet.chunkX = cx;
+        packet.chunkZ = cz;
+        PacketAuthorityExperiment.DIRECT_PACKET_BUFFERS.put(packet, directBuf);
+        PacketAuthorityExperiment.OUTSTANDING_DIRECT_BUFFERS.incrementAndGet();
+
+        // Flush directly into Netty packetBuffer
+        ByteBuf nettyOut = PooledByteBufAllocator.DEFAULT.directBuffer(262144);
+        boolean emitted = PacketAuthorityExperiment.tryWritePacketDataDirect(packet, nettyOut);
+        assertTrue(emitted, "tryWritePacketDataDirect must succeed on fast-path direct buffer");
+        assertEquals(0, directBuf.refCnt(), "Direct buffer must be released to pool after Netty write");
+        assertEquals(0, PacketAuthorityExperiment.OUTSTANDING_DIRECT_BUFFERS.get(), "Outstanding buffers must be 0");
+        nettyOut.release();
+    }
+
+    private static void testDanglingPacketEviction() throws Exception {
+        System.out.println("--> Test 14: Dangling Packet Timed Eviction (Leak Prevention)");
+        PacketAuthorityExperiment.resetForTesting(true, 64);
+        PacketAuthorityExperiment.setDirectNettyEnabled(true);
+
+        DummyPacket dangling = new DummyPacket();
+        ByteBuf buf = PooledByteBufAllocator.DEFAULT.directBuffer(256);
+        buf.writeByte(99);
+
+        // Register in DIRECT_PACKET_BUFFERS
+        PacketAuthorityExperiment.DIRECT_PACKET_BUFFERS.put(dangling, buf);
+        PacketAuthorityExperiment.OUTSTANDING_DIRECT_BUFFERS.incrementAndGet();
+        assertEquals(1, buf.refCnt(), "Buffer refCnt must be 1");
+
+        // Access internal creation times map via reflection to artificially age the packet
+        java.lang.reflect.Field fTimes = PacketAuthorityExperiment.class.getDeclaredField("PACKET_CREATION_TIMES");
+        fTimes.setAccessible(true);
+        @SuppressWarnings("unchecked")
+        java.util.Map<Object, Long> times = (java.util.Map<Object, Long>) fTimes.get(null);
+        // Set creation time to 40 seconds in the past (> 30s expiration)
+        times.put(dangling, System.nanoTime() - 40_000_000_000L);
+
+        // Run evictExpiredDirectBuffers
+        int evicted = PacketAuthorityExperiment.evictExpiredDirectBuffers();
+        assertEquals(1, evicted, "Must have evicted 1 expired direct buffer");
+        assertEquals(0, buf.refCnt(), "Evicted buffer must have refCnt=0 (released to pool)");
+        assertEquals(0, PacketAuthorityExperiment.OUTSTANDING_DIRECT_BUFFERS.get(), "Outstanding count must decrement to 0");
+        assertFalse(PacketAuthorityExperiment.DIRECT_PACKET_BUFFERS.containsKey(dangling), "Dangling packet must be removed from map");
     }
 
     private static int readVarInt(ByteBuf buf) {

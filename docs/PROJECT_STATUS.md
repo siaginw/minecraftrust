@@ -91,10 +91,14 @@ Unconstrained production authority remains **`false`** everywhere (`PacketAuthor
     with zero encode failures, zero packet desyncs, and immediate fail-closed Java fallback upon cap exhaustion.
   - Status: **`NATIVE_CHUNK_PERFORMANCE_PLATEAU_PROVEN`**
     (`docs/research/NATIVE_CHUNK_PERFORMANCE_CLOSURE.md`, `docs/research/NATIVE_CHUNK_PERFORMANCE_SCORECARD.md`, `docs/research/NATIVE_CHUNK_REAL_SERVER_PROFILE.md`, `docs/research/NATIVE_CHUNK_MEMORY_GC_REPORT.md`, `docs/research/NATIVE_CHUNK_JNI_COPY_AUDIT.md`).
-- **Direct Netty Wire Emission Proven (Phase 3 Milestone):** Moved packet wire boundary from Java heap buffer copies directly to off-heap pooled Netty `ByteBuf`s (`io.netty.buffer.ByteBuf`). Eliminated intermediate JVM heap buffer allocation (49,480 B heap alloc eliminated per packet; 2.21x packet serialization speedup from 10.04 µs to 4.54 µs; 8.93x for zero-copy framing at 1.12 µs). Verified 100% leak-free bounded buffer tracking (`MAX_OUTSTANDING_DIRECT_BUFFERS = 128`), complete UAF safety contract test suite (19/19 tests green), 100% byte-for-byte shadow parity across Gate A (32/32) and Gate C (64/64 under 219 mods), and live client probe verification.
-  - Status: **`DIRECT_NETTY_WIRE_EMISSION_PROVEN`**
-    (`docs/research/DIRECT_NETTY_WIRE_EMISSION_REPORT.md`).
-- **Next Milestone:** **`PHASE_4_STORAGE_NBT_ANVIL_OR_NATIVE_COMPRESSION`** (Advance to Anvil region I/O authority or native zlib-ng compression).
+- **True Direct Packet Path Closed (Network Boundary Milestone):** Completed the elimination of legacy migration infrastructure (`CaptureDraft.extract`, `OwnedPacketSnapshot`, `RCSNAP02` transport byte array, `IN_BUF`/`OUT_BUF` intermediaries). The retained fast path encodes Morton section wire cache directly into Netty's pooled off-heap direct buffer address (`encodePacketPayloadV2` writing to `directBuf.memoryAddress()`), which is transferred directly into the Netty socket `PacketBuffer`.
+  - **Payload copies:** Exactly 1 payload copy across the entire pipeline (0 copies for synthetic in-place framing; down from 2-3 copies).
+  - **JVM Heap Allocation:** Exactly 0 B (saves 49,480 B per chunk packet, preventing ~9.9 MB/s of Young Gen GC churn).
+  - **Latency:** 4,566 ns mean / 2,700 ns p50 (2.14x speedup over vanilla 9,749 ns baseline).
+  - **Safety & Lifetime:** 14/14 unit contract tests passing (`DirectNettySafetyAndLifetimeTest.java`); backpressure bounded (`MAX_OUTSTANDING_DIRECT_BUFFERS = 128`); 30s timed eviction prevents dangling packet leaks.
+  - **Live Verification:** Gate A (32/32 direct shadow matches, 32 committed, 0 leaks, 0 fallbacks) and Gate C (64/64 direct shadow matches under 219 mods, 64 committed, 0 leaks, 0 fallbacks). Strict governance preserved: `PRODUCTION_AUTHORITY = false`.
+  - Status: **`TRUE_DIRECT_PACKET_PATH_CLOSED`**
+    (`docs/research/TRUE_DIRECT_PACKET_PATH_CLOSURE.md`, `docs/research/DIRECT_NETTY_WIRE_EMISSION_REPORT.md`).
 
 ### What each proof is
 

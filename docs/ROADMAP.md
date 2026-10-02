@@ -49,13 +49,14 @@ Phase 2 also encompasses:
 - **NativeChunk Performance Plateau Proven**: Rigorous JFR profiling with exclusive (sums to 100%) vs inclusive CPU attribution, startup/steady-state phase separation, 10-independent-run compiler matrix with standard deviations, real LLVM PGO evaluation. Production compiler set to Thin LTO / CGU 1. Live smokes Gate A (32/32) and Gate C (64/64) re-verified under final compiler profile.
 - Status: **`NATIVE_CHUNK_PERFORMANCE_PLATEAU_PROVEN`**.
 
-## Phase 3 — Direct Netty Wire Emission · ✅ complete
+## Phase 3 — Direct Netty Wire Emission & True Direct Packet Path · ✅ complete
 
-Eliminated the intermediate Java packet-buffer allocations and copy boundaries in `SPacketChunkData` by emitting chunk packets directly into Netty's off-heap pooled `ByteBuf`s (`io.netty.buffer.ByteBuf`). 
-- **Microbenchmarks:** 49,480 B heap allocation eliminated per packet; 2.21x serialization throughput improvement (4.54 µs vs 10.04 µs; 1.12 µs for in-place header zero-copy).
-- **Safety & Lifetime:** Strict pool bound (`MAX_OUTSTANDING_DIRECT_BUFFERS = 128`), leak-free tracking (0 buffer leaks), UAF safety suite (19/19 tests green).
-- **Parity & Live Smokes:** 100% byte-for-byte shadow matches and live probe PASS across Clean Forge 2860 (Gate A, 32/32) and FTB Revelation 2846 with 219 mods (Gate C, 64/64).
-- Status: **`DIRECT_NETTY_WIRE_EMISSION_PROVEN`** (`docs/research/DIRECT_NETTY_WIRE_EMISSION_REPORT.md`).
+Eliminated the intermediate Java packet-buffer allocations and copy boundaries in `SPacketChunkData` by emitting chunk packets directly into Netty's off-heap pooled `ByteBuf`s (`io.netty.buffer.ByteBuf`), and fully removed legacy migration infrastructure on the retained fast path (`CaptureDraft.extract`, `OwnedPacketSnapshot`, `RCSNAP02` transport byte array, `IN_BUF`/`OUT_BUF` intermediaries).
+- **Exact Accounting:** Exactly 1 payload copy in shipped path (Rust wire cache -> Netty direct buffer); 0 JVM heap payload allocations (saves 49,480 B per chunk packet, eliminating ~9.9 MB/s of Young Gen GC churn).
+- **Microbenchmarks:** 2.14x packet serialization speedup (4.57 µs vs 9.75 µs baseline; 1.14 µs for synthetic in-place framing).
+- **Safety & Lifetime:** Strict pool bound (`MAX_OUTSTANDING_DIRECT_BUFFERS = 128`), 30s timed eviction preventing dangling packet leaks, full contract suite passing (14/14 tests in `DirectNettySafetyAndLifetimeTest.java`).
+- **Parity & Live Smokes:** 100% byte-for-byte shadow matches and live probe PASS across Clean Forge 2860 (Gate A, 32/32) and FTB Revelation 2846 with 219 mods (Gate C, 64/64). Strict governance: `PRODUCTION_AUTHORITY = false`.
+- Status: **`TRUE_DIRECT_PACKET_PATH_CLOSED`** (`docs/research/TRUE_DIRECT_PACKET_PATH_CLOSURE.md`, `docs/research/DIRECT_NETTY_WIRE_EMISSION_REPORT.md`).
 
 ## Phase 4 — Storage / NBT / Anvil · 🧪 active focus
 

@@ -77,6 +77,10 @@ public final class PacketAuthorityExperiment {
     public static final AtomicLong FALLBACK_RECEIPT_INVALID = new AtomicLong();
     public static final AtomicLong RETAINED_RUST_SELECTED = new AtomicLong();
     public static final AtomicLong RETAINED_SEEDED = new AtomicLong();
+    public static final AtomicLong RETAINED_FAST_PATH = new AtomicLong();
+    public static final AtomicLong SNAPSHOT_SEED_PATH = new AtomicLong();
+    public static final AtomicLong EPHEMERAL_FALLBACK = new AtomicLong();
+    public static final AtomicLong DIRECT_BUFFER_PRESSURE_FALLBACK = new AtomicLong();
 
     // Direct Netty Counters & Bounded Resource Control
     public static final AtomicLong DIRECT_NETTY_COMMITTED = new AtomicLong();
@@ -91,6 +95,9 @@ public final class PacketAuthorityExperiment {
 
     public static final java.util.Map<Object, io.netty.buffer.ByteBuf> DIRECT_PACKET_BUFFERS =
             new java.util.concurrent.ConcurrentHashMap<>();
+    private static final java.util.Map<Object, Long> PACKET_CREATION_TIMES =
+            new java.util.concurrent.ConcurrentHashMap<>();
+    private static final long PACKET_EXPIRATION_NANOS = 30_000_000_000L; // 30 seconds
     private static final byte[] EMPTY_PAYLOAD = new byte[0];
 
     private static final AtomicBoolean RECEIPT_VERIFIED = new AtomicBoolean(false);
@@ -111,6 +118,144 @@ public final class PacketAuthorityExperiment {
     private static Field packetBuffer;
     private static Field packetTEs;
     private static Field packetFull;
+
+    // Retained chunk registry for True Direct fast path
+    public static final class RetainedRecord {
+        public final int dim;
+        public final int cx;
+        public final int cz;
+        public volatile long generationId;
+        public RetainedRecord(int dim, int cx, int cz, long generationId) {
+            this.dim = dim;
+            this.cx = cx;
+            this.cz = cz;
+            this.generationId = generationId;
+        }
+    }
+    private static final Map<Long, RetainedRecord> REGISTERED_CHUNKS = new java.util.concurrent.ConcurrentHashMap<>();
+
+    public static long chunkKey(int cx, int cz) {
+        return (((long) cx) << 32) | (((long) cz) & 0xFFFFFFFFL);
+    }
+
+    public static void registerChunkRecord(int dim, int cx, int cz, long genId) {
+        REGISTERED_CHUNKS.put(chunkKey(cx, cz), new RetainedRecord(dim, cx, cz, genId));
+    }
+
+    public static RetainedRecord getChunkRecord(int cx, int cz) {
+        return REGISTERED_CHUNKS.get(chunkKey(cx, cz));
+    }
+
+    // Dynamic Chunk reflection fields (no compile-time net.minecraft references)
+    private static volatile boolean chunkReflectionInitialized = false;
+    private static Field chunkFieldX;
+    private static Field chunkFieldZ;
+    private static Field chunkFieldWorld;
+    private static Method chunkMethodTileEntities;
+    private static Field chunkFieldTileEntities;
+
+    private static synchronized void initChunkReflection(Class<?> chunkClass) {
+        if (chunkReflectionInitialized) return;
+        try {
+            chunkFieldX = findAccessibleField(chunkClass, "field_76635_g", "x");
+            chunkFieldZ = findAccessibleField(chunkClass, "field_76647_h", "z");
+            chunkFieldWorld = findAccessibleField(chunkClass, "field_76637_e", "world");
+
+            try {
+                chunkMethodTileEntities = chunkClass.getMethod("func_177434_r");
+            } catch (NoSuchMethodException e) {
+                try {
+                    chunkMethodTileEntities = chunkClass.getMethod("getTileEntityMap");
+                } catch (NoSuchMethodException e2) {
+                    chunkFieldTileEntities = findAccessibleField(chunkClass, "field_150816_i", "tileEntityMap");
+                }
+            }
+            chunkReflectionInitialized = true;
+        } catch (Throwable t) {
+            System.err.println("[RustCraft-Authority] initChunkReflection error: " + t);
+        }
+    }
+
+    private static Field findAccessibleField(Class<?> c, String... names) {
+        Class<?> curr = c;
+        while (curr != null) {
+            for (String name : names) {
+                try {
+                    Field f = curr.getDeclaredField(name);
+                    f.setAccessible(true);
+                    return f;
+                } catch (NoSuchFieldException ignore) {}
+            }
+            curr = curr.getSuperclass();
+        }
+        return null;
+    }
+
+    private static int extractWorldDimension(Object chunk) {
+        try {
+            if (chunkFieldWorld == null) return -999;
+            Object world = chunkFieldWorld.get(chunk);
+            if (world == null) return -999;
+            Field pf = findAccessibleField(world.getClass(), "field_73011_w", "provider");
+            if (pf == null) return -999;
+            Object provider = pf.get(world);
+            if (provider == null) return -999;
+            try {
+                Method m = provider.getClass().getMethod("getDimension");
+                return ((Number) m.invoke(provider)).intValue();
+            } catch (Throwable t1) {
+                try {
+                    Method m1 = provider.getClass().getMethod("func_186058_p");
+                    Object dimType = m1.invoke(provider);
+                    if (dimType != null) {
+                        Method m2 = dimType.getClass().getMethod("func_186068_a");
+                        return ((Number) m2.invoke(dimType)).intValue();
+                    }
+                } catch (Throwable t2) {
+                    Field df = findAccessibleField(provider.getClass(), "dimensionId");
+                    if (df != null) return df.getInt(provider);
+                }
+            }
+        } catch (Throwable ignore) {}
+        return -999;
+    }
+
+    private static boolean extractWorldHasSky(Object chunk) {
+        try {
+            if (chunkFieldWorld == null) return false;
+            Object world = chunkFieldWorld.get(chunk);
+            if (world == null) return false;
+            Field pf = findAccessibleField(world.getClass(), "field_73011_w", "provider");
+            if (pf == null) return false;
+            Object provider = pf.get(world);
+            if (provider == null) return false;
+            try {
+                Method m = provider.getClass().getMethod("func_191066_m");
+                return ((Boolean) m.invoke(provider)).booleanValue();
+            } catch (Throwable t1) {
+                try {
+                    Method m = provider.getClass().getMethod("hasSkyLight");
+                    return ((Boolean) m.invoke(provider)).booleanValue();
+                } catch (Throwable ignore) {}
+            }
+            return true;
+        } catch (Throwable ignore) {}
+        return false;
+    }
+
+    private static boolean isChunkTileEntitiesEmpty(Object chunk) {
+        try {
+            if (chunkMethodTileEntities != null) {
+                Map<?, ?> map = (Map<?, ?>) chunkMethodTileEntities.invoke(chunk);
+                return map == null || map.isEmpty();
+            }
+            if (chunkFieldTileEntities != null) {
+                Map<?, ?> map = (Map<?, ?>) chunkFieldTileEntities.get(chunk);
+                return map == null || map.isEmpty();
+            }
+        } catch (Throwable ignore) {}
+        return false;
+    }
 
     static {
         Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
@@ -177,6 +322,10 @@ public final class PacketAuthorityExperiment {
         FALLBACK_RECEIPT_INVALID.set(0);
         RETAINED_RUST_SELECTED.set(0);
         RETAINED_SEEDED.set(0);
+        RETAINED_FAST_PATH.set(0);
+        SNAPSHOT_SEED_PATH.set(0);
+        EPHEMERAL_FALLBACK.set(0);
+        DIRECT_BUFFER_PRESSURE_FALLBACK.set(0);
         DIRECT_NETTY_COMMITTED.set(0);
         DIRECT_NETTY_FALLBACKS.set(0);
         DIRECT_NETTY_SHADOW_MATCHES.set(0);
@@ -189,6 +338,8 @@ public final class PacketAuthorityExperiment {
             try { b.release(); } catch (Throwable ignore) {}
         }
         DIRECT_PACKET_BUFFERS.clear();
+        PACKET_CREATION_TIMES.clear();
+        REGISTERED_CHUNKS.clear();
         RECEIPT_VERIFIED.set(false);
         RECEIPT_CHECK_ATTEMPTED.set(false);
         receiptFailureReason = null;
@@ -302,6 +453,104 @@ public final class PacketAuthorityExperiment {
             return false;
         }
 
+        // Evict expired direct buffers if any (prevent lingering buffer leaks)
+        evictExpiredDirectBuffers();
+
+        // ------------------------------------------------------------------
+        // TRUE DIRECT RETAINED PACKET FAST PATH:
+        // Qualified, registered, clean NativeChunk -> direct Netty ByteBuf
+        // Bypasses LivePacketCapture, CaptureDraft, OwnedPacketSnapshot, RCSNAP, IN_BUF, OUT_BUF!
+        // ------------------------------------------------------------------
+        if (chunkObj != null && (directNettyEnabled || directNettyShadow)) {
+            initChunkReflection(chunkObj.getClass());
+            if (chunkReflectionInitialized && chunkFieldX != null && chunkFieldZ != null) {
+                try {
+                    int dim = extractWorldDimension(chunkObj);
+                    if (dim == 0 && isChunkTileEntitiesEmpty(chunkObj)) {
+                        int cx = chunkFieldX.getInt(chunkObj);
+                        int cz = chunkFieldZ.getInt(chunkObj);
+                        long key = chunkKey(cx, cz);
+                        RetainedRecord record = REGISTERED_CHUNKS.get(key);
+
+                        if (record != null && record.generationId > 0) {
+                            // Check whether chunk has any pending mutations
+                            int[] work = com.rustcraft.bridge.ChunkMutationTracker.peekWork(chunkObj);
+                            boolean clean = (work == null || (work[1] == 0 && work[2] == 0 && work[3] == 0 && work[4] == 0));
+
+                            if (clean) {
+                                // Fast path admitted!
+                                if (OUTSTANDING_DIRECT_BUFFERS.get() >= MAX_OUTSTANDING_DIRECT_BUFFERS) {
+                                    DIRECT_BUFFER_PRESSURE_FALLBACK.incrementAndGet();
+                                    JAVA_FALLBACK.incrementAndGet();
+                                    JAVA_SELECTED.incrementAndGet();
+                                    return false;
+                                }
+
+                                ensureDllLoaded();
+                                io.netty.buffer.ByteBuf directBuf = io.netty.buffer.PooledByteBufAllocator.DEFAULT.directBuffer(BUFFER_CAPACITY);
+                                long directAddr = directBuf.memoryAddress();
+                                boolean hasSky = extractWorldHasSky(chunkObj);
+
+                                long packed = com.rustcraft.bridge.NativeChunkBridge.encodePacketPayloadV2(
+                                        0, cx, cz, record.generationId,
+                                        (byte) (hasSky ? 1 : 0), (byte) 1,
+                                        directAddr, BUFFER_CAPACITY);
+
+                                PacketEncodeResultV2 result = PacketEncodeResultV2.decode(packed);
+                                if (result.isSuccess()) {
+                                    long selected;
+                                    do {
+                                        selected = RUST_SELECTED.get();
+                                        if (selected >= authorityCap) {
+                                            directBuf.release();
+                                            CAP_EXHAUSTED.incrementAndGet();
+                                            JAVA_SELECTED.incrementAndGet();
+                                            return false;
+                                        }
+                                    } while (!RUST_SELECTED.compareAndSet(selected, selected + 1));
+
+                                    int rustMask = result.emittedMask();
+                                    int rustLen = result.bytesWritten();
+                                    directBuf.writerIndex(rustLen);
+
+                                    DIRECT_NETTY_BUFFERS_ALLOCATED.incrementAndGet();
+                                    OUTSTANDING_DIRECT_BUFFERS.incrementAndGet();
+                                    registerDirectBuffer(packetObj, directBuf);
+
+                                    if (directNettyShadow) {
+                                        byte[] rustPayload = new byte[rustLen];
+                                        directBuf.getBytes(0, rustPayload);
+                                        populatePacketFields(packetObj, cx, cz, rustMask, rustPayload);
+                                    } else {
+                                        populatePacketFields(packetObj, cx, cz, rustMask, EMPTY_PAYLOAD);
+                                    }
+
+                                    RETAINED_FAST_PATH.incrementAndGet();
+                                    RETAINED_RUST_SELECTED.incrementAndGet();
+                                    AUTHORITY_ELIGIBLE.incrementAndGet();
+                                    logAuditEvent(cx, cz, rustMask, rustLen, selected + 1);
+                                    return true;
+                                } else {
+                                    directBuf.release();
+                                    RUST_ENCODE_FAILURE.incrementAndGet();
+                                    JAVA_FALLBACK.incrementAndGet();
+                                    JAVA_SELECTED.incrementAndGet();
+                                    return false;
+                                }
+                            }
+                        }
+                    }
+                } catch (Throwable t) {
+                    System.err.println("[RustCraft-Authority] Retained fast path reflection error: " + t);
+                }
+            }
+        }
+
+        // ------------------------------------------------------------------
+        // SEED OR EPHEMERAL FALLBACK PATH (for un-registered chunks)
+        // ------------------------------------------------------------------
+        SNAPSHOT_SEED_PATH.incrementAndGet();
+
         // Gate 5: Token / Scope Evaluation from S02 Capture Admission
         Object effectiveToken = tokenObj;
         if (effectiveToken == null) {
@@ -371,13 +620,11 @@ public final class PacketAuthorityExperiment {
             }
 
             ByteBuffer inBuf = IN_BUF.get();
-            ByteBuffer outBuf = OUT_BUF.get();
             inBuf.clear();
             inBuf.put(transport);
 
             ensureDllLoaded();
             long inAddr = getBufferAddress(inBuf);
-            long outAddr = getBufferAddress(outBuf);
 
             // Retained Rust ChunkState: Check if chunk is registered in native memory
             int dim = snapshot.dimension;
@@ -387,13 +634,91 @@ public final class PacketAuthorityExperiment {
                 genId = com.rustcraft.bridge.NativeChunkBridge.seedFromTransport(inAddr, transport.length);
                 if (genId > 0) {
                     RETAINED_SEEDED.incrementAndGet();
+                    registerChunkRecord(dim, snapshot.chunkX, snapshot.chunkZ, genId);
                 }
+            } else {
+                registerChunkRecord(dim, snapshot.chunkX, snapshot.chunkZ, genId);
             }
 
+            // Direct Netty Emission Path: Encode directly into pooled Netty ByteBuf
+            if (directNettyEnabled || directNettyShadow) {
+                if (OUTSTANDING_DIRECT_BUFFERS.get() >= MAX_OUTSTANDING_DIRECT_BUFFERS) {
+                    DIRECT_BUFFER_PRESSURE_FALLBACK.incrementAndGet();
+                    JAVA_FALLBACK.incrementAndGet();
+                    JAVA_SELECTED.incrementAndGet();
+                    return false;
+                }
+
+                io.netty.buffer.ByteBuf directBuf = io.netty.buffer.PooledByteBufAllocator.DEFAULT.directBuffer(BUFFER_CAPACITY);
+                long directAddr = directBuf.memoryAddress();
+
+                long packed = -1;
+                boolean fromRetained = false;
+                if (genId > 0) {
+                    packed = com.rustcraft.bridge.NativeChunkBridge.encodePacketPayloadV2(
+                            dim, snapshot.chunkX, snapshot.chunkZ, genId,
+                            (byte) (snapshot.skylight ? 1 : 0),
+                            (byte) (snapshot.fullChunk ? 1 : 0),
+                            directAddr, BUFFER_CAPACITY);
+                    if (packed > 0 && PacketEncodeResultV2.decode(packed).isSuccess()) {
+                        fromRetained = true;
+                        RETAINED_RUST_SELECTED.incrementAndGet();
+                    }
+                }
+
+                if (!fromRetained) {
+                    EPHEMERAL_FALLBACK.incrementAndGet();
+                    packed = OwnedSnapshotBridge.encodeOwnedV1(inAddr, transport.length, directAddr, BUFFER_CAPACITY);
+                }
+
+                PacketEncodeResultV2 result = PacketEncodeResultV2.decode(packed);
+                if (!result.isSuccess()) {
+                    directBuf.release();
+                    System.err.println("[RustCraft-Authority] Rust encode returned non-success status: " + result.failure());
+                    RUST_ENCODE_FAILURE.incrementAndGet();
+                    JAVA_FALLBACK.incrementAndGet();
+                    JAVA_SELECTED.incrementAndGet();
+                    return false;
+                }
+
+                long selected;
+                do {
+                    selected = RUST_SELECTED.get();
+                    if (selected >= authorityCap) {
+                        directBuf.release();
+                        CAP_EXHAUSTED.incrementAndGet();
+                        JAVA_SELECTED.incrementAndGet();
+                        return false;
+                    }
+                } while (!RUST_SELECTED.compareAndSet(selected, selected + 1));
+
+                int rustMask = result.emittedMask();
+                int rustLen = result.bytesWritten();
+                directBuf.writerIndex(rustLen);
+
+                DIRECT_NETTY_BUFFERS_ALLOCATED.incrementAndGet();
+                OUTSTANDING_DIRECT_BUFFERS.incrementAndGet();
+                registerDirectBuffer(packetObj, directBuf);
+
+                if (directNettyShadow) {
+                    byte[] rustPayload = new byte[rustLen];
+                    directBuf.getBytes(0, rustPayload);
+                    populatePacketFields(packetObj, snapshot.chunkX, snapshot.chunkZ, rustMask, rustPayload);
+                } else {
+                    populatePacketFields(packetObj, snapshot.chunkX, snapshot.chunkZ, rustMask, EMPTY_PAYLOAD);
+                }
+
+                AUTHORITY_ELIGIBLE.incrementAndGet();
+                logAuditEvent(snapshot.chunkX, snapshot.chunkZ, rustMask, rustLen, selected + 1);
+                return true;
+            }
+
+            // Legacy non-Direct-Netty path (writes to OUT_BUF -> heap byte[])
+            ByteBuffer outBuf = OUT_BUF.get();
+            long outAddr = getBufferAddress(outBuf);
             long packed = -1;
             boolean fromRetained = false;
             if (genId > 0) {
-                // Retained encode from living native state
                 packed = com.rustcraft.bridge.NativeChunkBridge.encodePacketPayloadV2(
                         dim, snapshot.chunkX, snapshot.chunkZ, genId,
                         (byte) (snapshot.skylight ? 1 : 0),
@@ -406,9 +731,10 @@ public final class PacketAuthorityExperiment {
             }
 
             if (!fromRetained) {
-                // Fallback to verified ephemeral owned encode
+                EPHEMERAL_FALLBACK.incrementAndGet();
                 packed = OwnedSnapshotBridge.encodeOwnedV1(inAddr, transport.length, outAddr, BUFFER_CAPACITY);
             }
+
             PacketEncodeResultV2 result = PacketEncodeResultV2.decode(packed);
             if (!result.isSuccess()) {
                 System.err.println("[RustCraft-Authority] Rust encode returned non-success status: " + result.failure());
@@ -418,7 +744,6 @@ public final class PacketAuthorityExperiment {
                 return false;
             }
 
-            // Gate 8: Atomic Cap Reservation
             long selected;
             do {
                 selected = RUST_SELECTED.get();
@@ -432,41 +757,6 @@ public final class PacketAuthorityExperiment {
             int rustMask = result.emittedMask();
             int rustLen = result.bytesWritten();
 
-            // Direct Netty Emission Path
-            if (directNettyEnabled || directNettyShadow) {
-                if (OUTSTANDING_DIRECT_BUFFERS.get() >= MAX_OUTSTANDING_DIRECT_BUFFERS) {
-                    RUST_SELECTED.decrementAndGet();
-                    CAP_EXHAUSTED.incrementAndGet();
-                    JAVA_FALLBACK.incrementAndGet();
-                    JAVA_SELECTED.incrementAndGet();
-                    return false;
-                }
-
-                io.netty.buffer.ByteBuf directBuf = io.netty.buffer.PooledByteBufAllocator.DEFAULT.directBuffer(rustLen);
-                DIRECT_NETTY_BUFFERS_ALLOCATED.incrementAndGet();
-                OUTSTANDING_DIRECT_BUFFERS.incrementAndGet();
-
-                outBuf.clear();
-                outBuf.limit(rustLen);
-                directBuf.writeBytes(outBuf);
-
-                DIRECT_PACKET_BUFFERS.put(packetObj, directBuf);
-
-                if (directNettyShadow) {
-                    byte[] rustPayload = new byte[rustLen];
-                    outBuf.clear();
-                    outBuf.get(rustPayload);
-                    populatePacketFields(packetObj, snapshot.chunkX, snapshot.chunkZ, rustMask, rustPayload);
-                } else {
-                    populatePacketFields(packetObj, snapshot.chunkX, snapshot.chunkZ, rustMask, EMPTY_PAYLOAD);
-                }
-
-                AUTHORITY_ELIGIBLE.incrementAndGet();
-                logAuditEvent(snapshot.chunkX, snapshot.chunkZ, rustMask, rustLen, selected + 1);
-                return true;
-            }
-
-            // Commit Rust bytes to packet shell (Legacy heap authority path)
             byte[] rustPayload = new byte[rustLen];
             outBuf.clear();
             outBuf.get(rustPayload);
@@ -512,6 +802,7 @@ public final class PacketAuthorityExperiment {
         }
 
         io.netty.buffer.ByteBuf directBuf = DIRECT_PACKET_BUFFERS.remove(packet);
+        PACKET_CREATION_TIMES.remove(packet);
         if (directBuf == null) {
             return false;
         }
@@ -597,6 +888,33 @@ public final class PacketAuthorityExperiment {
                 OUTSTANDING_DIRECT_BUFFERS.decrementAndGet();
             } catch (Throwable ignore) {}
         }
+    }
+
+    public static int evictExpiredDirectBuffers() {
+        if (PACKET_CREATION_TIMES.isEmpty()) return 0;
+        long now = System.nanoTime();
+        int evicted = 0;
+        for (Map.Entry<Object, Long> entry : PACKET_CREATION_TIMES.entrySet()) {
+            if (now - entry.getValue() > PACKET_EXPIRATION_NANOS) {
+                Object packet = entry.getKey();
+                PACKET_CREATION_TIMES.remove(packet);
+                io.netty.buffer.ByteBuf buf = DIRECT_PACKET_BUFFERS.remove(packet);
+                if (buf != null) {
+                    try {
+                        buf.release();
+                        DIRECT_NETTY_BUFFERS_RELEASED.incrementAndGet();
+                        OUTSTANDING_DIRECT_BUFFERS.decrementAndGet();
+                        evicted++;
+                    } catch (Throwable ignore) {}
+                }
+            }
+        }
+        return evicted;
+    }
+
+    private static void registerDirectBuffer(Object packet, io.netty.buffer.ByteBuf directBuf) {
+        DIRECT_PACKET_BUFFERS.put(packet, directBuf);
+        PACKET_CREATION_TIMES.put(packet, System.nanoTime());
     }
 
     private static void writeVarInt(io.netty.buffer.ByteBuf buf, int value) {
@@ -753,6 +1071,10 @@ public final class PacketAuthorityExperiment {
             counters.put("fallback_receipt_invalid", FALLBACK_RECEIPT_INVALID.get());
             counters.put("retained_rust_selected", RETAINED_RUST_SELECTED.get());
             counters.put("retained_seeded", RETAINED_SEEDED.get());
+            counters.put("retained_fast_path", RETAINED_FAST_PATH.get());
+            counters.put("snapshot_seed_path", SNAPSHOT_SEED_PATH.get());
+            counters.put("ephemeral_fallback", EPHEMERAL_FALLBACK.get());
+            counters.put("direct_buffer_pressure_fallback", DIRECT_BUFFER_PRESSURE_FALLBACK.get());
             counters.put("direct_netty_enabled", directNettyEnabled);
             counters.put("direct_netty_shadow", directNettyShadow);
             counters.put("direct_netty_committed", DIRECT_NETTY_COMMITTED.get());
