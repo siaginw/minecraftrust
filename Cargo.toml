@@ -51,5 +51,5 @@ mc-1-12-x = { path = "versions/mc_1_12_x" }
 native-state-vnext = { path = "crates/native-state-vnext" }
 
 [profile.release]
-lto = "fat"
+lto = "thin"
 codegen-units = 1
