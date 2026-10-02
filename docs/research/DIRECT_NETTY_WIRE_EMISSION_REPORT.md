@@ -27,16 +27,17 @@ Under this milestone, we moved RustCraft's wire boundary directly to the network
 
 We authored dedicated JMH/nanosecond microbenchmarks (`tools/authority-review/DirectNettyBenchmark.java` and `tools/authority-review/BufferPoolBenchmark.java`) measuring 100,000 iterations of full-chunk Protocol 340 packet writes across the three pipeline variations:
 
-| Pipeline Architecture | Mean Latency (ns) | Std Dev (ns) | Heap Alloc / Packet | Intermediate Memcpys | Relative Speedup |
+| Pipeline Architecture | Mean Latency (ns) | Std Dev (ns) | Heap Alloc / Packet | Payload Copies | Relative Speedup |
 |---|---|---|---|---|---|
 | **Vanilla Java Copy Boundary** (Heap `byte[]` + Netty writeBytes) | 10,043 ns | ±892 ns | **49,480 B** | 2 | 1.00x (Baseline) |
-| **Direct Pooled Netty ByteBuf** (`PooledByteBufAllocator.DEFAULT`) | **4,538 ns** | ±312 ns | **0 B** | 0 (direct transfer) | **2.21x** |
-| **Zero-Copy In-Place Header Framing** (Netty Direct Buffer) | **1,125 ns** | ±84 ns | **0 B** | 0 | **8.93x** |
+| **Direct Pooled Netty ByteBuf** (`PooledByteBufAllocator.DEFAULT`) *(Shipped)* | **4,538 ns** | ±312 ns | **0 B** | **1** (Native wire cache → Netty buffer) | **2.21x** |
+| **Zero-Copy In-Place Header Framing** (Netty Direct Buffer) *(Synthetic)* | **1,125 ns** | ±84 ns | **0 B** | **0** | **8.93x** |
 
 ### Key Takeaways:
 1. Using Netty's built-in pooled direct allocator eliminates all 49 KB of JVM heap churn per chunk packet.
-2. Cross-thread safety is maintained when Netty transfers outbound buffers across event loop threads without race conditions or memory corruption.
-3. Total packet serialization latency drops from 10.04 µs to 4.54 µs, achieving a **2.21x throughput improvement** while completely relieving Java Young Gen GC.
+2. In the shipped live pipeline, exactly **1 payload copy** occurs (native section wire cache directly into Netty's pooled direct buffer), eliminating JVM heap arrays and thread-local JNI buffer intermediaries.
+3. The in-place 1.12 µs / 8.9x benchmark represents the theoretical ceiling where packet framing and compression are unified into the socket buffer.
+4. Total packet serialization latency drops from 10.04 µs to 4.54 µs, achieving a **2.21x throughput improvement** while completely relieving Java Young Gen GC.
 
 ---
 

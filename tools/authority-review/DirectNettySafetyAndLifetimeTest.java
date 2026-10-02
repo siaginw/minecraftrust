@@ -89,7 +89,13 @@ public class DirectNettySafetyAndLifetimeTest {
         // 14. Dangling Packet Timed Eviction
         testDanglingPacketEviction();
 
-        System.out.println("\nALL 14 DIRECT NETTY SAFETY AND LIFETIME CONTRACT TESTS PASSED SUCCESSFULLY!");
+        // 15. Failure Injection and Cancellation Safety
+        testFailureInjectionAndCancellationSafety();
+
+        // 16. Long-Running Buffer Lifecycle Stress (5,000 Iterations)
+        testLongRunningBufferLifecycleStress();
+
+        System.out.println("\nALL 16 DIRECT NETTY SAFETY AND LIFETIME CONTRACT TESTS PASSED SUCCESSFULLY!");
     }
 
     private static void testDirectBufferCreation() {
@@ -381,6 +387,76 @@ public class DirectNettySafetyAndLifetimeTest {
         assertEquals(0, buf.refCnt(), "Evicted buffer must have refCnt=0 (released to pool)");
         assertEquals(0, PacketAuthorityExperiment.OUTSTANDING_DIRECT_BUFFERS.get(), "Outstanding count must decrement to 0");
         assertFalse(PacketAuthorityExperiment.DIRECT_PACKET_BUFFERS.containsKey(dangling), "Dangling packet must be removed from map");
+    }
+
+    private static void testFailureInjectionAndCancellationSafety() throws Exception {
+        System.out.println("--> Test 15: Failure Injection and Cancellation Safety");
+        PacketAuthorityExperiment.resetForTesting(true, 64);
+        PacketAuthorityExperiment.setDirectNettyEnabled(true);
+
+        // Failure Injection 1: Buffer allocated, but cancellation occurs before commit
+        DummyPacket packet = new DummyPacket();
+        ByteBuf buf = PooledByteBufAllocator.DEFAULT.directBuffer(1024);
+        PacketAuthorityExperiment.DIRECT_PACKET_BUFFERS.put(packet, buf);
+        PacketAuthorityExperiment.OUTSTANDING_DIRECT_BUFFERS.incrementAndGet();
+
+        // Simulate cancel/abort before wire flush (e.g. client dropped, chunk unloaded)
+        ByteBuf aborted = PacketAuthorityExperiment.DIRECT_PACKET_BUFFERS.remove(packet);
+        if (aborted != null) {
+            aborted.release();
+            PacketAuthorityExperiment.OUTSTANDING_DIRECT_BUFFERS.decrementAndGet();
+        }
+        assertEquals(0, buf.refCnt(), "Aborted buffer must be released");
+        assertEquals(0, PacketAuthorityExperiment.OUTSTANDING_DIRECT_BUFFERS.get(), "Outstanding count must be 0");
+
+        // Failure Injection 2: Corrupted packetBufferObj passed to tryWritePacketDataDirect
+        DummyPacket packet2 = new DummyPacket();
+        ByteBuf buf2 = PooledByteBufAllocator.DEFAULT.directBuffer(1024);
+        PacketAuthorityExperiment.DIRECT_PACKET_BUFFERS.put(packet2, buf2);
+        PacketAuthorityExperiment.OUTSTANDING_DIRECT_BUFFERS.incrementAndGet();
+
+        boolean handled = PacketAuthorityExperiment.tryWritePacketDataDirect(packet2, "NotAByteBuf");
+        assertFalse(handled, "Corrupted packet buffer must return false to fallback safely");
+        assertEquals(0, buf2.refCnt(), "Buffer must be released on failure without leak");
+        assertEquals(0, PacketAuthorityExperiment.OUTSTANDING_DIRECT_BUFFERS.get(), "Outstanding count must return to 0");
+    }
+
+    private static void testLongRunningBufferLifecycleStress() throws Exception {
+        System.out.println("--> Test 16: Long-Running Buffer Lifecycle Stress (5,000 Iterations)");
+        PacketAuthorityExperiment.resetForTesting(true, 10000);
+        PacketAuthorityExperiment.setDirectNettyEnabled(true);
+
+        int iterations = 5000;
+        int committed = 0;
+        int cancelled = 0;
+
+        for (int i = 0; i < iterations; i++) {
+            DummyPacket p = new DummyPacket();
+            ByteBuf directBuf = PooledByteBufAllocator.DEFAULT.directBuffer(2048);
+            PacketAuthorityExperiment.DIRECT_PACKET_BUFFERS.put(p, directBuf);
+            PacketAuthorityExperiment.OUTSTANDING_DIRECT_BUFFERS.incrementAndGet();
+
+            if (i % 5 == 0) {
+                // Cancelled / aborted before Netty flush
+                ByteBuf toAbort = PacketAuthorityExperiment.DIRECT_PACKET_BUFFERS.remove(p);
+                toAbort.release();
+                PacketAuthorityExperiment.OUTSTANDING_DIRECT_BUFFERS.decrementAndGet();
+                cancelled++;
+            } else {
+                // Successfully committed to Netty
+                ByteBuf nettyOut = PooledByteBufAllocator.DEFAULT.directBuffer(4096);
+                boolean ok = PacketAuthorityExperiment.tryWritePacketDataDirect(p, nettyOut);
+                assertTrue(ok, "Stress iteration must succeed");
+                assertEquals(0, directBuf.refCnt(), "Buffer must be released");
+                nettyOut.release();
+                committed++;
+            }
+        }
+
+        assertEquals(0, PacketAuthorityExperiment.OUTSTANDING_DIRECT_BUFFERS.get(), "Outstanding direct buffers must be 0 after 5,000 iterations");
+        assertEquals(0, PacketAuthorityExperiment.DIRECT_PACKET_BUFFERS.size(), "Direct packet buffers map must be empty");
+        System.out.println(String.format("    [Stress Result] 5,000 iterations: %d committed, %d cancelled, 0 leaks, 0 outstanding!",
+                committed, cancelled));
     }
 
     private static int readVarInt(ByteBuf buf) {

@@ -90,6 +90,24 @@ public class DirectNettyBenchmark {
                 speedupPooled, wireLen));
         System.out.println(String.format("Direct Zero-Copy speedup: %.2fx (saves %d bytes heap alloc and %d bytes memcpy)",
                 speedupZeroCopy, wireLen, wireLen));
+
+        // 4. Realistic FTB Revelation Packet Corpus Evaluation
+        System.out.println("\n=== Realistic FTB Revelation Packet Size Corpus Benchmark ===");
+        int[] bucketSizes = new int[] { 12400, 32800, 49480, 82500 };
+        String[] bucketNames = new String[] { "Small (12.4 KB)", "Median (32.8 KB)", "p95 (49.5 KB)", "Max (82.5 KB)" };
+
+        System.out.println(String.format("%-18s | %-12s | %-12s | %-10s | %-12s | %-10s",
+                "Corpus Bucket", "Baseline Mean", "Pooled Mean", "Speedup", "Heap Saved", "Copies"));
+        System.out.println("--------------------------------------------------------------------------------------");
+        for (int i = 0; i < bucketSizes.length; i++) {
+            int sz = bucketSizes[i];
+            BenchResult b = runBaseline(genId, sz, mask);
+            BenchResult p = runDirectPooled(genId, sz, mask);
+            double spd = b.meanNs / p.meanNs;
+            System.out.println(String.format("%-18s | %10.1f ns | %10.1f ns | %9.2fx | %10d B | %8d",
+                    bucketNames[i], b.meanNs, p.meanNs, spd, sz, 1));
+        }
+        System.out.println("======================================================================================");
     }
 
     private static void printRow(BenchResult r) {

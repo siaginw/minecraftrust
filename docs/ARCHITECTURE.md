@@ -70,7 +70,7 @@ The ladder is enforced by code, not convention: capability states with unreachab
 | Compression | [`crates/compression`](../crates/compression/) | Component-proven |
 | NBT | [`crates/nbt`](../crates/nbt/) | Component-proven |
 | Region/Anvil I/O | [`crates/region-io`](../crates/region-io/) | Research |
-| Direct Netty wire emission | (planned) | Next target — eliminates 84.69% of steady-state chunk-streaming CPU consumed by Java bridge scaffolding |
+| Direct Netty wire emission & True Direct Fast Path | [`tools/bridge`](../tools/bridge/src/com/rustcraft/bridge/capture/PacketAuthorityExperiment.java) | Live (bounded experiment). Emits directly into off-heap pooled Netty ByteBufs; 0 B JVM heap payload allocation (saves 49 KB/packet); exactly 1 payload copy across pipeline. Bypasses Java capture and transport byte arrays. |
 | JNI boundary | [`crates/ffi`](../crates/ffi/) | Live (bounded authority, `setBlockState`, `getBlockState`, `getSectionPointers`, `getSectionLightPointers`, `getBiomesPointer`, `getHeightmapPointer`, `encodePacketPayloadV2`) |
 | Writer hooks & capture gate | [`tools/bridge`](../tools/bridge/) | Live on both runtimes (`ChunkStateAuthorityBridge`, `StateRegistryLookup`) |
 | Qualification engine | [`tools/qualification-v2`](../tools/qualification-v2/) | Proven (two-launch) |
