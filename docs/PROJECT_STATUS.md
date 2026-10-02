@@ -2,7 +2,7 @@
 
 This is the canonical status document. It is updated when a qualification or campaign milestone changes; historical detail lives in [docs/research/](research/) and in the evidence tree under [`machine/`](../machine/). For the public overview, see the [README](../README.md); for the plan, the [roadmap](ROADMAP.md).
 
-**Snapshot date:** 2026-10-01 · **Head at snapshot:** `9d1fe2b`
+**Snapshot date:** 2026-10-02 · **Head at snapshot:** `059c4c2`
 
 ---
 

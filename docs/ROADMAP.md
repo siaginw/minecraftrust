@@ -5,8 +5,8 @@ Where RustCraft is going, in phases. Each phase climbs the same [ladder](ARCHITE
 ```mermaid
 flowchart LR
     P0[Phase 0<br/>Compatibility + proof infra] --> P1[Phase 1<br/>Packet / chunk boundary]
-    P1 --> P2[Phase 2<br/>Retained Rust ChunkState]
-    P2 --> P3[Phase 3<br/>Chunk I/O + packet authority]
+    P1 --> P2[Phase 2<br/>Retained ChunkState +<br/>Semantic Ownership +<br/>NativeChunk Performance]
+    P2 --> P3[Phase 3<br/>Direct Netty wire emission]
     P3 --> P4[Phase 4<br/>Storage / NBT / Anvil]
     P4 --> P5[Phase 5<br/>Lighting + collision]
     P5 --> P6[Phase 6<br/>World / entities / tick]
@@ -14,7 +14,9 @@ flowchart LR
     P7 --> P8[Phase 8<br/>Forge compatibility runtime]
     P8 --> P9[Phase 9<br/>Rust-hosted Java bytecode runtime]
     style P0 fill:#238636,color:#fff
-    style P1 fill:#9e6a03,color:#fff
+    style P1 fill:#238636,color:#fff
+    style P2 fill:#238636,color:#fff
+    style P3 fill:#9e6a03,color:#fff
 ```
 
 ## Phase 0 — Compatibility & proof infrastructure · ✅ largely complete
@@ -34,13 +36,21 @@ Own the first real subsystem: full-chunk `SPacketChunkData` encoding.
 - **Done:** live coherent capture on both runtimes; RCSNAP02 logical transport; bounded Phase-D smokes green on Clean Forge (32/32) and Revelation (32/32); real FML launch admission (`REAL_FML_TRANSFORM_CAPTURE · OFFLINE_QUALIFIED`); full closure campaign passed across 2 fresh JVM sessions (**4,905 counted passes / 0 mismatches**, `LIVE_SHADOW_CLOSED`); formal authority review completed (`AUTHORITY_REVIEWED`, `docs/research/PACKET_AUTHORITY_CONTRACT.md`); small, explicit, fail-closed bounded authority experiment completed with 0 errors across Gate A (Clean Forge 2860, 32/32) and Gate B (FTB Revelation 2846, 64/64) (`docs/research/BOUNDED_AUTHORITY_EXPERIMENT_REPORT.md`).
 - **Status:** **`READY_FOR_RETAINED_RUST_CHUNKSTATE`**.
 
-## Phase 2 — Retained Rust ChunkState · ✅ complete
+## Phase 2 — Retained ChunkState + Semantic Ownership + NativeChunk Performance · ✅ complete
 
 The first *ownership* milestone: chunk state that lives in Rust, with Java observing a view. The V1 attempt was deliberately abandoned and fail-closed ([why](PROJECT_STATUS.md#abandoned--fail-closed)); the V2 design reuses the coherent-capture and session-contract machinery proven in Phase 1. Complete architectural specification authored in `docs/research/RETAINED_CHUNKSTATE_DESIGN.md`. Retained state verified as living synchronization in `docs/research/RETAINED_LIVING_STATE_VERIFICATION_REPORT.md`. First semantic ownership inversion for `getBlockState` (zero-JNI direct memory pointer) and `setBlockState` (authoritative mutation + Forge lifecycle preservation) proven with 10,000 differential ops (0 mismatches) and live smokes across Clean Forge and FTB Revelation (`docs/research/RUST_CHUNKSTATE_API_AUTHORITY_REVIEW.md`).
 
-## Phase 3 — Chunk reads/writes + packet authority · 🧪 active focus
+Phase 2 also encompasses:
+- **Section Compatibility Layer Expansion**: `ExtendedBlockStorage.get`/`.set` delegated to native state; 193 mod jars audited with zero ASM conflicts.
+- **Cross-Language Memory Model Resolution**: Formally resolved by migrating to `AtomicU16`/`AtomicU32`/`AtomicU8` across all shared data cells; stress-tested under 17M+ reads with 0 UB.
+- **Block/Sky Light Ownership**: `[AtomicU32; 512]` backing arrays for non-tearing nibble-packed lighting; 59.2M concurrent ops/sec.
+- **Biome & Heightmap Ownership**: `[AtomicU8; 256]` biomes and `[AtomicU16; 256]` heightmaps with `primary_bit_mask`-accelerated downward scans; 200K fuzz ops, 0 mismatches.
+- **NativeChunk Performance Plateau Proven**: Rigorous JFR profiling with exclusive (sums to 100%) vs inclusive CPU attribution, startup/steady-state phase separation, 10-independent-run compiler matrix with standard deviations, real LLVM PGO evaluation. Production compiler set to Thin LTO / CGU 1. Live smokes Gate A (32/32) and Gate C (64/64) re-verified under final compiler profile.
+- Status: **`NATIVE_CHUNK_PERFORMANCE_PLATEAU_PROVEN`**.
 
-Rust owns chunk mutation paths end-to-end; Java packet construction for chunks retires behind the compatibility surface. First semantic ownership inversion of `getBlockState` and `setBlockState` completed under bounded experiment flags (`-Drustcraft.chunkStateAuthorityExperiment=true`). Section storage (`ExtendedBlockStorage`), packed lighting data (`AtomicU32` non-tearing arrays), biomes (`[u8; 256]`), and heightmaps (`[u16; 256]` with `primary_bit_mask` accelerated downward scans) migrated into Rust ownership. All direct-memory reads operate at 2.7-11.3 ns/op with zero JNI boundary crossings. Remaining: unbuffered direct wire packet serialization from native living memory and native tile-entity tracking.
+## Phase 3 — Direct Netty Wire Emission · 🧪 active focus
+
+Eliminate the Java-side capture/reflection pipeline that consumes 85% of steady-state chunk-streaming CPU by emitting chunk packets directly from Rust native memory into Netty channels. The wire cache is already proven at 750 ns. The Java scaffolding (`checkRegistry`, `readView`, `CaptureDraft.extract`, ByteBuf staging copies) is the #1 removable CPU cost identified by rigorous JFR exclusive CPU analysis. Remaining: unbuffered direct wire packet serialization from native living memory and native tile-entity tracking.
 
 ## Phase 4 — Storage / NBT / Anvil · 🗺️ planned
 

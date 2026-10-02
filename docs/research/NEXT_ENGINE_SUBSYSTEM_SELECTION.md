@@ -43,12 +43,16 @@ Before expanding semantic authority into new domains, we evaluated the candidate
 - **Verdict**: Medium priority; benefits from zero-JNI block reads already in place.
 
 ### Candidate D: Unbuffered Native SPacketChunkData Wire Emission (Phase 3 Final Seam)
-- **Scope**: Emitting `SPacketChunkData` Netty network buffers directly from `NativeChunk` wire cache into Netty channels, eliminating intermediate Java byte arrays entirely.
+- **Scope**: Emitting `SPacketChunkData` Netty network buffers directly from `NativeChunk` wire cache into Netty channels, eliminating intermediate Java byte arrays and the reflection/capture validation pipeline entirely.
+- **Empirical Evidence from JFR Steady-State Profiling**:
+  - In the steady-state chunk streaming window of FTB Revelation (219 mods), **84.69% of exclusive CPU is consumed inside the Java bridge scaffolding** (`IdentityHashMap.get` via `LiveCaptureScope$RuntimeBinding.checkRegistry`, `readView`, `CaptureDraft.extract`).
+  - Meanwhile, the native chunk packet encoding itself executes in $\sim 750\text{ ns}$ ($\mathbf{0.00\%}$ exclusive CPU).
+  - Emitting directly from native memory into Netty channels bypasses the entire Java-side capture and reflection apparatus.
 - **Pros**:
-  - Closes Phase 3 completely.
-  - Immediate payoff: Static wire cache is already 732 ns; sending it directly over the socket bypasses Java GC allocation.
+  - Closes Phase 3 completely and eliminates 85% of steady-state packet broadcast CPU overhead.
+  - Zero Java GC allocations for chunk packet payloads.
   - Zero mod compatibility risk: Network packet payload bytes are 100% Protocol 340 compliant.
-- **Verdict**: **Recommended Immediate Subsystem** to finalize Phase 3.
+- **Verdict**: **Recommended #1 Highest-Leverage Immediate Subsystem** to finalize Phase 3.
 
 ---
 

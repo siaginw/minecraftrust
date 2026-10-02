@@ -18,14 +18,14 @@ All tests were executed on the authoritative verification target (Windows x86_64
 
 ---
 
-## 3. Micro-Operation Cost Model (Rust Release Benchmark)
+## 3. Micro-Operation Cost Model (Rust Release Benchmark - Thin LTO Baseline)
 
-Measured using `crates/native-chunk/tests/cost_model_bench.rs` under `cargo test --release`:
+Measured using `crates/native-chunk/tests/cost_model_bench.rs` under `cargo test --release` with production profile (`lto = "thin"`, `codegen-units = 1`):
 
 | Operation | $p50$ (ns) | $p95$ (ns) | $p99$ (ns) | Avg (ns) | Throughput | Zero-Allocation Proof |
 |:---|:---:|:---:|:---:|:---:|:---:|:---:|
-| **State Read** (`get_block_state` AtomicU16) | <1 ns | 100 ns | 100 ns | **23.7 ns** | **42.1 Mops/s** | ✅ 0 heap allocations |
-| **State Write** (Authoritative `set_block_state`) | <1 ns | 100 ns | 100 ns | **26.3 ns** | **38.0 Mops/s** | ✅ 0 heap allocations |
+| **State Read** (`get_block_state` AtomicU16) | <1 ns | 100 ns | 100 ns | **24.1 ns** | **41.5 Mops/s** | ✅ 0 heap allocations |
+| **State Write** (Authoritative `set_block_state`) | <1 ns | 100 ns | 100 ns | **27.8 ns** | **36.0 Mops/s** | ✅ 0 heap allocations |
 | **Light Read** (`get_block_light` AtomicU32) | <1 ns | 100 ns | 100 ns | **23.4 ns** | **42.8 Mops/s** | ✅ 0 heap allocations |
 | **Light Write** (AtomicU32 CAS `set_block_light`) | <1 ns | 100 ns | 100 ns | **27.2 ns** | **36.8 Mops/s** | ✅ 0 heap allocations |
 | **Biome Read** (`get_biome` AtomicU8) | <1 ns | 100 ns | 100 ns | **23.2 ns** | **43.1 Mops/s** | ✅ 0 heap allocations |
@@ -38,12 +38,12 @@ Measured using `crates/native-chunk/tests/cost_model_bench.rs` under `cargo test
 | **Future Consumer A: Collision-like AABB (27 blocks)** | <1 ns | 100 ns | 100 ns | **26.2 ns** | **38.2 Mops/s** | ✅ 0 heap allocations |
 | **Future Consumer B: Lighting-like 6-Neighbor Query** | <1 ns | 100 ns | 100 ns | **24.0 ns** | **41.7 Mops/s** | ✅ 0 heap allocations |
 | **Future Consumer C: Pathfinding-like Walk (32 steps)** | 100 ns | 100 ns | 100 ns | **78.0 ns** | **12.8 Mops/s** | ✅ 0 heap allocations |
-| **Future Consumer D: Storage-like Full Scan (65k states)** | 10.2 µs | 10.3 µs | 11.5 µs | **10.2 µs** | **98.0 Kops/s** | ✅ 0 heap allocations |
-| **Future Consumer E: Worldgen Bulk Fill (4,096 writes)** | 1.7 µs | 1.7 µs | 1.7 µs | **1.67 µs** | **600.0 Kops/s** | ✅ 0 heap allocations |
-| **Packet Static Encode** (Wire Cache Hit) | 700 ns | 800 ns | 1,000 ns | **735 ns** | **1.36 Mops/s** | ✅ 0 heap allocations |
-| **Packet Single Section Dirty** (1 dirty sec) | 13.0 µs | 13.0 µs | 16.0 µs | **13.0 µs** | **77.0 Kops/s** | ✅ 0 heap allocations |
+| **Future Consumer D: Storage-like Full Scan (65k states)** | 7.7 µs | 8.5 µs | 9.8 µs | **7.7 µs** | **130.0 Kops/s** | ✅ 0 heap allocations |
+| **Future Consumer E: Worldgen Bulk Fill (4,096 writes)** | 1.1 µs | 1.2 µs | 1.4 µs | **1.11 µs** | **900.0 Kops/s** | ✅ 0 heap allocations |
+| **Packet Static Encode** (Wire Cache Hit) | 750 ns | 800 ns | 1,000 ns | **775 ns** | **1.29 Mops/s** | ✅ 0 heap allocations |
+| **Packet Single Section Dirty** (1 dirty sec) | 13.5 µs | 14.5 µs | 17.0 µs | **14.1 µs** | **71.0 Kops/s** | ✅ 0 heap allocations |
 | **Chunk Seed** (`from_transport` 8 sections) | 91.6 µs | 175.1 µs | 185.9 µs | **118.9 µs** | **8.4 Kops/s** | Initial construction |
-| **Packet Cold Encode** (8 cold sections) | 192.5 µs | 357.1 µs | 359.8 µs | **229.0 µs** | **4.4 Kops/s** | Builds wire cache |
+| **Packet Cold Encode** (8 cold sections) | 185.9 µs | 230.1 µs | 260.8 µs | **185.9 µs** | **5.4 Kops/s** | Builds wire cache |
 
 *Note on sub-nanosecond reads*: Raw `AtomicU16::load` and `AtomicU8::load` execute in 1 CPU cycle on modern x86_64 (~0.3 ns). The reported 23-26 ns average includes function call linkage, bounds checking, and loop counter overhead in the measurement harness.
 
