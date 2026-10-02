@@ -529,6 +529,7 @@ impl NativeChunk {
             self.sections[sec_idx] = Some(sec);
             self.primary_bit_mask |= 1u16 << sec_idx;
             STATS_SECTIONS_ALLOCATED.fetch_add(1, std::sync::atomic::Ordering::Relaxed);
+            self.update_height_on_mutation(x, y, z, 0, new_state);
             self.mark_mutation();
             return BlockMutationResult {
                 old_state: 0,
@@ -565,6 +566,7 @@ impl NativeChunk {
             self.primary_bit_mask |= 1u16 << sec_idx;
         }
 
+        self.update_height_on_mutation(x, y, z, old_state, new_state);
         self.mark_mutation();
 
         BlockMutationResult {
@@ -600,7 +602,7 @@ impl NativeChunk {
         }
     }
 
-    /// Exposes raw pointer to section's [AtomicU8; 2048] block light array for zero-JNI direct read.
+    /// Exposes raw pointer to section's [AtomicU32; 512] block light array for zero-JNI direct read.
     /// Returns 0 if section is absent.
     #[inline(always)]
     pub fn get_section_block_light_pointer(&self, section_y: usize) -> usize {
@@ -613,7 +615,7 @@ impl NativeChunk {
         }
     }
 
-    /// Exposes raw pointer to section's [AtomicU8; 2048] sky light array for zero-JNI direct read.
+    /// Exposes raw pointer to section's [AtomicU32; 512] sky light array for zero-JNI direct read.
     /// Returns 0 if section is absent.
     #[inline(always)]
     pub fn get_section_sky_light_pointer(&self, section_y: usize) -> usize {
@@ -644,6 +646,113 @@ impl NativeChunk {
                 }
             }
         }
+    }
+
+    // ============================================================
+    // BIOME STATE ACCESS & POINTERS
+    // ============================================================
+
+    /// Gets biome ID (0..255) at column (x, z) (0..15).
+    #[inline(always)]
+    pub fn get_biome(&self, x: usize, z: usize) -> u8 {
+        self.biomes[(z << 4) | x]
+    }
+
+    /// Sets biome ID (0..255) at column (x, z). Returns true if modified.
+    #[inline(always)]
+    pub fn set_biome(&mut self, x: usize, z: usize, biome_id: u8) -> bool {
+        let idx = (z << 4) | x;
+        if self.biomes[idx] != biome_id {
+            self.biomes[idx] = biome_id;
+            self.mark_mutation();
+            true
+        } else {
+            false
+        }
+    }
+
+    /// Exposes raw pointer to chunk's [u8; 256] biomes array for direct memory read.
+    #[inline(always)]
+    pub fn get_biomes_pointer(&self) -> usize {
+        self.biomes.as_ptr() as usize
+    }
+
+    /// Replaces the entire 256-byte biome array.
+    pub fn set_biomes(&mut self, biomes: &[u8; BIOME_ARRAY_SIZE]) {
+        self.biomes.copy_from_slice(biomes);
+        self.mark_mutation();
+    }
+
+    // ============================================================
+    // HEIGHTMAP STATE ACCESS & DATA-ORIENTED UPDATE
+    // ============================================================
+
+    /// Gets heightmap value at column (x, z) (highest non-air block Y + 1, or 0 if empty).
+    #[inline(always)]
+    pub fn get_height(&self, x: usize, z: usize) -> u16 {
+        self.height_map[(z << 4) | x]
+    }
+
+    /// Exposes raw pointer to chunk's [u16; 256] heightmap array for direct memory read.
+    #[inline(always)]
+    pub fn get_heightmap_pointer(&self) -> usize {
+        self.height_map.as_ptr() as usize
+    }
+
+    /// Recomputes the height at column (x, z) from native section state directly.
+    /// Fast downward scan skipping absent or empty sections via `primary_bit_mask`.
+    pub fn recompute_height(&mut self, x: usize, z: usize) -> u16 {
+        debug_assert!(x < 16 && z < 16);
+        let col_idx = (z << 4) | x;
+        let mut highest = 0u16;
+
+        // Scan from top section (15) downward to 0
+        for s in (0..16).rev() {
+            // Fast skip if section is empty or unallocated
+            if (self.primary_bit_mask & (1u16 << s)) == 0 {
+                continue;
+            }
+            if let Some(ref sec) = self.sections[s] {
+                let y_base = s * 16;
+                for sub_y in (0..16).rev() {
+                    let state = sec.get_block(x, sub_y, z);
+                    if state != 0 {
+                        highest = (y_base + sub_y + 1) as u16;
+                        self.height_map[col_idx] = highest;
+                        return highest;
+                    }
+                }
+            }
+        }
+
+        self.height_map[col_idx] = highest;
+        highest
+    }
+
+    /// Updates heightmap for column (x, z) after setting a block at `y` with `new_state` and `old_state`.
+    /// Matches exact Minecraft 1.12.2 Chunk.setBlockState logic:
+    /// - If block placed at or above current height: new height is y + 1.
+    /// - If block removed at current top (y == height - 1): performs downward scan to find new top.
+    /// - Otherwise (mutation below top): height remains unchanged.
+    pub fn update_height_on_mutation(&mut self, x: usize, y: usize, z: usize, old_state: u16, new_state: u16) -> u16 {
+        let col_idx = (z << 4) | x;
+        let cur_height = self.height_map[col_idx] as usize;
+
+        if new_state != 0 {
+            // Block added / changed to non-air
+            if y >= cur_height {
+                let new_height = (y + 1) as u16;
+                self.height_map[col_idx] = new_height;
+                return new_height;
+            }
+        } else if old_state != 0 {
+            // Block removed (changed to air)
+            if y + 1 == cur_height {
+                // Top block removed: downward search required
+                return self.recompute_height(x, z);
+            }
+        }
+        cur_height as u16
     }
 }
 
@@ -833,5 +942,54 @@ mod tests {
         assert!(sec.set_sky_light(0, 0, 0, 7));
         assert_eq!(sec.get_sky_light(0, 0, 0), 7);
         assert_eq!(sec.get_sky_light(1, 0, 0), 15);
+    }
+
+    #[test]
+    fn test_authoritative_biomes_and_heightmaps() {
+        let mut chunk = NativeChunk::new(0, 2, 3, 303);
+
+        // 1. Biome Array Verification
+        assert_eq!(chunk.get_biome(5, 7), 0);
+        assert!(chunk.set_biome(5, 7, 24)); // Biome 24
+        assert_eq!(chunk.get_biome(5, 7), 24);
+        assert!(!chunk.set_biome(5, 7, 24)); // No-op
+
+        let bio_ptr = chunk.get_biomes_pointer();
+        assert_ne!(bio_ptr, 0);
+        let deref_bio = unsafe { *((bio_ptr as *const u8).add((7 << 4) | 5)) };
+        assert_eq!(deref_bio, 24);
+
+        // 2. Heightmap Tracking on Mutation
+        assert_eq!(chunk.get_height(4, 4), 0);
+
+        // Place block at Y=10 -> height becomes 11
+        chunk.set_block_state(4, 10, 4, 1);
+        assert_eq!(chunk.get_height(4, 4), 11);
+
+        // Place block higher at Y=64 -> height becomes 65
+        chunk.set_block_state(4, 64, 4, 2);
+        assert_eq!(chunk.get_height(4, 4), 65);
+
+        // Place block lower at Y=30 -> height remains 65
+        chunk.set_block_state(4, 30, 4, 3);
+        assert_eq!(chunk.get_height(4, 4), 65);
+
+        // Remove top block at Y=64 -> downward search finds Y=30 -> height becomes 31
+        chunk.set_block_state(4, 64, 4, 0);
+        assert_eq!(chunk.get_height(4, 4), 31);
+
+        // Remove block at Y=30 -> downward search finds Y=10 -> height becomes 11
+        chunk.set_block_state(4, 30, 4, 0);
+        assert_eq!(chunk.get_height(4, 4), 11);
+
+        // Remove block at Y=10 -> column empty -> height becomes 0
+        chunk.set_block_state(4, 10, 4, 0);
+        assert_eq!(chunk.get_height(4, 4), 0);
+
+        // Direct heightmap memory pointer matches
+        let hm_ptr = chunk.get_heightmap_pointer();
+        assert_ne!(hm_ptr, 0);
+        let deref_hm = unsafe { *((hm_ptr as *const u16).add((4 << 4) | 4)) };
+        assert_eq!(deref_hm, 0);
     }
 }

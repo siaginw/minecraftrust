@@ -332,6 +332,78 @@ impl ChunkRegistry {
         }
         false
     }
+
+    /// Retrieves biome ID at (x, z) under read lock.
+    pub fn get_biome(&self, key: ChunkKey, x: usize, z: usize) -> Option<u8> {
+        let map = self.chunks.read().unwrap();
+        if let Some(arc) = map.get(&key) {
+            let chunk = arc.read().unwrap();
+            if chunk.lifecycle != ChunkLifecycle::Invalidated {
+                return Some(chunk.get_biome(x, z));
+            }
+        }
+        None
+    }
+
+    /// Sets biome ID at (x, z) under write lock.
+    pub fn set_biome(&self, key: ChunkKey, x: usize, z: usize, biome_id: u8) -> bool {
+        let map = self.chunks.read().unwrap();
+        if let Some(arc) = map.get(&key) {
+            let mut chunk = arc.write().unwrap();
+            if chunk.lifecycle != ChunkLifecycle::Invalidated {
+                return chunk.set_biome(x, z, biome_id);
+            }
+        }
+        false
+    }
+
+    /// Retrieves direct pointer to chunk's [u8; 256] biomes array under read lock.
+    pub fn get_biomes_pointer(&self, key: ChunkKey) -> usize {
+        let map = self.chunks.read().unwrap();
+        if let Some(arc) = map.get(&key) {
+            let chunk = arc.read().unwrap();
+            if chunk.lifecycle != ChunkLifecycle::Invalidated {
+                return chunk.get_biomes_pointer();
+            }
+        }
+        0
+    }
+
+    /// Retrieves height at column (x, z) under read lock.
+    pub fn get_height(&self, key: ChunkKey, x: usize, z: usize) -> Option<u16> {
+        let map = self.chunks.read().unwrap();
+        if let Some(arc) = map.get(&key) {
+            let chunk = arc.read().unwrap();
+            if chunk.lifecycle != ChunkLifecycle::Invalidated {
+                return Some(chunk.get_height(x, z));
+            }
+        }
+        None
+    }
+
+    /// Retrieves direct pointer to chunk's [u16; 256] heightmap array under read lock.
+    pub fn get_heightmap_pointer(&self, key: ChunkKey) -> usize {
+        let map = self.chunks.read().unwrap();
+        if let Some(arc) = map.get(&key) {
+            let chunk = arc.read().unwrap();
+            if chunk.lifecycle != ChunkLifecycle::Invalidated {
+                return chunk.get_heightmap_pointer();
+            }
+        }
+        0
+    }
+
+    /// Recomputes height at (x, z) under write lock.
+    pub fn recompute_height(&self, key: ChunkKey, x: usize, z: usize) -> Option<u16> {
+        let map = self.chunks.read().unwrap();
+        if let Some(arc) = map.get(&key) {
+            let mut chunk = arc.write().unwrap();
+            if chunk.lifecycle != ChunkLifecycle::Invalidated {
+                return Some(chunk.recompute_height(x, z));
+            }
+        }
+        None
+    }
 }
 
 fn chunk_active_sections(c: &NativeChunk) -> usize {

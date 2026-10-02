@@ -79,6 +79,12 @@ pub enum Operation {
     ChunkGetSectionPointer = 327,
     ChunkGetSectionLightPointers = 328,
     ChunkGetSectionLightPointer = 329,
+    ChunkGetBiomesPointer = 330,
+    ChunkGetBiome = 331,
+    ChunkSetBiome = 332,
+    ChunkGetHeightmapPointer = 333,
+    ChunkGetHeight = 334,
+    ChunkRecomputeHeight = 335,
 }
 
 impl Operation {
@@ -148,6 +154,12 @@ impl Operation {
         Self::ChunkGetSectionPointer,
         Self::ChunkGetSectionLightPointers,
         Self::ChunkGetSectionLightPointer,
+        Self::ChunkGetBiomesPointer,
+        Self::ChunkGetBiome,
+        Self::ChunkSetBiome,
+        Self::ChunkGetHeightmapPointer,
+        Self::ChunkGetHeight,
+        Self::ChunkRecomputeHeight,
     ];
 }
 

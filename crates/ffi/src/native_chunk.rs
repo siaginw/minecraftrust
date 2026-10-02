@@ -1213,6 +1213,236 @@ pub unsafe extern "system" fn Java_com_rustcraft_bridge_NativeChunkBridge_getSec
     code
 }
 
+/// Returns raw direct memory pointer to chunk's [u8; 256] biomes array (0 if not registered).
+#[no_mangle]
+pub unsafe extern "system" fn Java_com_rustcraft_bridge_NativeChunkBridge_getBiomesPointer(
+    _env: *mut c_void,
+    _clazz: *mut c_void,
+    dim: i32,
+    cx: i32,
+    cz: i32,
+) -> i64 {
+    let mut call = GLOBAL_FFI_METRICS.begin_call(metrics::Operation::ChunkGetBiomesPointer);
+    call.bytes = metrics::ByteMeasurements::NO_BULK;
+    let outcome = catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let reg = get_registry();
+        let key = ChunkKey::new(dim, cx, cz);
+        reg.get_biomes_pointer(key) as i64
+    }));
+    let panicked = outcome.is_err();
+    let code = outcome.unwrap_or(0i64);
+    call.fallback_reason = if panicked {
+        metrics::FallbackReason::Panic
+    } else {
+        metrics::FallbackReason::None
+    };
+    if panicked {
+        call.bytes.output_bytes = Some(0);
+        call.bytes.copied_bytes = None;
+    }
+    code
+}
+
+/// Authoritative biome read: returns 0..255 or negative on error.
+#[no_mangle]
+pub unsafe extern "system" fn Java_com_rustcraft_bridge_NativeChunkBridge_getBiome(
+    _env: *mut c_void,
+    _clazz: *mut c_void,
+    dim: i32,
+    cx: i32,
+    cz: i32,
+    x: i32,
+    z: i32,
+) -> i32 {
+    let mut call = GLOBAL_FFI_METRICS.begin_call(metrics::Operation::ChunkGetBiome);
+    call.bytes = metrics::ByteMeasurements::NO_BULK;
+    let outcome = catch_unwind(std::panic::AssertUnwindSafe(|| {
+        if x < 0 || x >= 16 || z < 0 || z >= 16 {
+            return -1;
+        }
+        let reg = get_registry();
+        let key = ChunkKey::new(dim, cx, cz);
+        match reg.get_biome(key, x as usize, z as usize) {
+            Some(b) => b as i32,
+            None => -2,
+        }
+    }));
+    let panicked = outcome.is_err();
+    let code = outcome.unwrap_or(-99);
+    call.fallback_reason = if panicked {
+        metrics::FallbackReason::Panic
+    } else {
+        match code {
+            0.. => metrics::FallbackReason::None,
+            -1 => metrics::FallbackReason::InvalidArgument,
+            _ => metrics::FallbackReason::MissingState,
+        }
+    };
+    if panicked {
+        call.bytes.output_bytes = Some(0);
+        call.bytes.copied_bytes = None;
+    }
+    code
+}
+
+/// Authoritative biome write: returns 1 if modified, 0 if unchanged, negative on error.
+#[no_mangle]
+pub unsafe extern "system" fn Java_com_rustcraft_bridge_NativeChunkBridge_setBiome(
+    _env: *mut c_void,
+    _clazz: *mut c_void,
+    dim: i32,
+    cx: i32,
+    cz: i32,
+    x: i32,
+    z: i32,
+    biome_id: i32,
+) -> i32 {
+    let mut call = GLOBAL_FFI_METRICS.begin_call(metrics::Operation::ChunkSetBiome);
+    call.bytes = metrics::ByteMeasurements::NO_BULK;
+    let outcome = catch_unwind(std::panic::AssertUnwindSafe(|| {
+        if x < 0 || x >= 16 || z < 0 || z >= 16 || biome_id < 0 || biome_id > 255 {
+            return -1;
+        }
+        let reg = get_registry();
+        let key = ChunkKey::new(dim, cx, cz);
+        if reg.set_biome(key, x as usize, z as usize, biome_id as u8) {
+            1
+        } else {
+            0
+        }
+    }));
+    let panicked = outcome.is_err();
+    let code = outcome.unwrap_or(-99);
+    call.fallback_reason = if panicked {
+        metrics::FallbackReason::Panic
+    } else {
+        match code {
+            0 | 1 => metrics::FallbackReason::None,
+            -1 => metrics::FallbackReason::InvalidArgument,
+            _ => metrics::FallbackReason::MissingState,
+        }
+    };
+    if panicked {
+        call.bytes.output_bytes = Some(0);
+        call.bytes.copied_bytes = None;
+    }
+    code
+}
+
+/// Returns raw direct memory pointer to chunk's [u16; 256] heightmap array (0 if not registered).
+#[no_mangle]
+pub unsafe extern "system" fn Java_com_rustcraft_bridge_NativeChunkBridge_getHeightmapPointer(
+    _env: *mut c_void,
+    _clazz: *mut c_void,
+    dim: i32,
+    cx: i32,
+    cz: i32,
+) -> i64 {
+    let mut call = GLOBAL_FFI_METRICS.begin_call(metrics::Operation::ChunkGetHeightmapPointer);
+    call.bytes = metrics::ByteMeasurements::NO_BULK;
+    let outcome = catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let reg = get_registry();
+        let key = ChunkKey::new(dim, cx, cz);
+        reg.get_heightmap_pointer(key) as i64
+    }));
+    let panicked = outcome.is_err();
+    let code = outcome.unwrap_or(0i64);
+    call.fallback_reason = if panicked {
+        metrics::FallbackReason::Panic
+    } else {
+        metrics::FallbackReason::None
+    };
+    if panicked {
+        call.bytes.output_bytes = Some(0);
+        call.bytes.copied_bytes = None;
+    }
+    code
+}
+
+/// Authoritative height read: returns 0..256 or negative on error.
+#[no_mangle]
+pub unsafe extern "system" fn Java_com_rustcraft_bridge_NativeChunkBridge_getHeight(
+    _env: *mut c_void,
+    _clazz: *mut c_void,
+    dim: i32,
+    cx: i32,
+    cz: i32,
+    x: i32,
+    z: i32,
+) -> i32 {
+    let mut call = GLOBAL_FFI_METRICS.begin_call(metrics::Operation::ChunkGetHeight);
+    call.bytes = metrics::ByteMeasurements::NO_BULK;
+    let outcome = catch_unwind(std::panic::AssertUnwindSafe(|| {
+        if x < 0 || x >= 16 || z < 0 || z >= 16 {
+            return -1;
+        }
+        let reg = get_registry();
+        let key = ChunkKey::new(dim, cx, cz);
+        match reg.get_height(key, x as usize, z as usize) {
+            Some(h) => h as i32,
+            None => -2,
+        }
+    }));
+    let panicked = outcome.is_err();
+    let code = outcome.unwrap_or(-99);
+    call.fallback_reason = if panicked {
+        metrics::FallbackReason::Panic
+    } else {
+        match code {
+            0.. => metrics::FallbackReason::None,
+            -1 => metrics::FallbackReason::InvalidArgument,
+            _ => metrics::FallbackReason::MissingState,
+        }
+    };
+    if panicked {
+        call.bytes.output_bytes = Some(0);
+        call.bytes.copied_bytes = None;
+    }
+    code
+}
+
+/// Recomputes height at (x, z) from native section state directly.
+#[no_mangle]
+pub unsafe extern "system" fn Java_com_rustcraft_bridge_NativeChunkBridge_recomputeHeight(
+    _env: *mut c_void,
+    _clazz: *mut c_void,
+    dim: i32,
+    cx: i32,
+    cz: i32,
+    x: i32,
+    z: i32,
+) -> i32 {
+    let mut call = GLOBAL_FFI_METRICS.begin_call(metrics::Operation::ChunkRecomputeHeight);
+    call.bytes = metrics::ByteMeasurements::NO_BULK;
+    let outcome = catch_unwind(std::panic::AssertUnwindSafe(|| {
+        if x < 0 || x >= 16 || z < 0 || z >= 16 {
+            return -1;
+        }
+        let reg = get_registry();
+        let key = ChunkKey::new(dim, cx, cz);
+        match reg.recompute_height(key, x as usize, z as usize) {
+            Some(h) => h as i32,
+            None => -2,
+        }
+    }));
+    let panicked = outcome.is_err();
+    let code = outcome.unwrap_or(-99);
+    call.fallback_reason = if panicked {
+        metrics::FallbackReason::Panic
+    } else {
+        match code {
+            0.. => metrics::FallbackReason::None,
+            -1 => metrics::FallbackReason::InvalidArgument,
+            _ => metrics::FallbackReason::MissingState,
+        }
+    };
+    if panicked {
+        call.bytes.output_bytes = Some(0);
+        call.bytes.copied_bytes = None;
+    }
+    code
+}
+
 // ====================================================================
 // M-CK3: Rust outbound frame engine (offline; immutable packet bodies)
 // ====================================================================
