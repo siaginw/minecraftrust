@@ -40,9 +40,12 @@ Which parts of the engine Rust can take over, and what each boundary costs: [chu
 | [Owned snapshot transport](research/issue1-owned-snapshot-transport.md) | RCSNAP01 design |
 | [Snapshot fixtures](research/chunk-packet-fixture-v1.md) | The fixture corpus schema |
 | [Differential event replay](research/differential-event-replay.md) | Offline Java-vs-Rust replay methodology |
-| [Retained native state](architecture/retained-native-state.md) | Why V1 retention was abandoned |
 | [Rust Light State Authority](research/RUST_LIGHT_STATE_AUTHORITY_REPORT.md) | Block and sky light data migration into `NativeSection` |
 | [Rust Biome & Heightmap State Authority](research/RUST_BIOME_HEIGHTMAP_AUTHORITY_REPORT.md) | Biome `[u8; 256]` and heightmap `[u16; 256]` state ownership with AtomicU32 resolution |
+| [NativeChunk Performance Research](research/NATIVE_CHUNK_PERFORMANCE_RESEARCH.md) | Ecosystem survey of Valence, FerrumC, Feather, simdnbt, and bitpacking |
+| [NativeChunk Performance Scorecard](research/NATIVE_CHUNK_PERFORMANCE_SCORECARD.md) | Latency percentiles ($p50/p95/p99$), throughput, and memory layout cost model |
+| [NativeChunk Core Completion Report](research/NATIVE_CHUNK_CORE_COMPLETION_REPORT.md) | Optimization pass completion, formal memory hardening, and verification receipts |
+| [Next Engine Subsystem Selection](research/NEXT_ENGINE_SUBSYSTEM_SELECTION.md) | Subsystem candidate evaluation and decision matrix |
 
 ## Protocol
 
