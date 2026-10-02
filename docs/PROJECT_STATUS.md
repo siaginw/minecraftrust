@@ -76,15 +76,21 @@ Unconstrained production authority remains **`false`** everywhere (`PacketAuthor
   differential fuzzing operations (0 mismatches), and live server smokes on Gate A (32/32) and Gate C (64/64).
   Status: **`BIOME_HEIGHTMAP_AUTHORITY_PROVEN`**
   (`docs/research/RUST_BIOME_HEIGHTMAP_AUTHORITY_REPORT.md`).
-- **NativeChunk Core Architecture & Performance Maximized:** Completed a comprehensive engineering pass over
-  the entire Rust `NativeChunk` core. Hardened `[AtomicU8; 256]` biomes and `[AtomicU16; 256]` heightmaps with Acquire/Release
-  semantics, preventing data race undefined behavior with foreign Java Unsafe readers. Implemented register-unrolled 16-element
-  palette lookups for 4-bit palettes in `NativeSection::pack_states_to_words`. Validated zero-allocation static wire caching
-  achieving 732 ns p50 (1.37 Mops/s). Micro-cost model benchmarks in release mode confirm sub-nanosecond atomic loads, 23.6 ns
-  state reads, 26.1 ns writes, and 24.3 ns downward-scanned height recomputations. Java direct memory reads sustain
-  108.4 Million ops/sec (2.76 ns p50). All 75 Rust integration tests and Java differential fuzzing suites passed with 0 mismatches.
-  Status: **`NATIVE_CHUNK_CORE_OPTIMIZED`**
-  (`docs/research/NATIVE_CHUNK_CORE_COMPLETION_REPORT.md`).
+- **NativeChunk Core Performance Maximized & Workload Proven:** Completed a comprehensive engineering
+  pass over the entire Rust `NativeChunk` core backed by real FTB Revelation 3.4.0 server profiles and MCA region surveys.
+  - **Real Revelation Palette Survey (2,970 sections / 500 chunks):** Discovered that 62.2% of Revelation sections have
+    cardinality 17..32 and 8.2% have 33..64 (mean 19.9, median 20.0). Built a 64-element direct lookup table in
+    `NativeSection::pack_states_to_words`, moving **92.3% of modded sections into zero-allocation L1 cache fast paths**.
+  - **Java Bridge Key Allocation Elimination:** Refactored `ChunkStateAuthorityBridge.chunkKey` from String concatenation
+    (`dim + ":" + cx + ":" + cz`) to a packed 64-bit coordinate `((long) cx << 32) | (cz & 0xFFFFFFFFL)` with `Map<Long, ChunkAuthorityRecord>`.
+    Eliminated all Young Gen GC heap churn from bridge queries.
+  - **Future Consumer Benchmark Suite:** Added spatial neighbor queries (3x3: 210 ns, 5x5: 530 ns) and synthetic future-consumer
+    workloads (Collision AABB: 26 ns, Lighting 6-neighbor: 24 ns, Pathfinding 32-step walk: 78 ns, Storage 65k scan: 10.2 µs,
+    Worldgen 4,096 bulk fill: 1.67 µs).
+  - **Live Server Smoke Validation:** Clean Forge 2860 (Gate A) passed 32/32; FTB Revelation 2846 (Gate C, 219 mods) passed 64/64
+    with zero encode failures, zero packet desyncs, and immediate fail-closed Java fallback upon cap exhaustion.
+  - Status: **`NATIVE_CHUNK_PERFORMANCE_MAXIMIZED`**
+    (`docs/research/NATIVE_CHUNK_REAL_SERVER_PROFILE.md`, `docs/research/NATIVE_CHUNK_MEMORY_GC_REPORT.md`, `docs/research/NATIVE_CHUNK_JNI_COPY_AUDIT.md`, `docs/research/NATIVE_CHUNK_PERFORMANCE_SCORECARD.md`).
 - **Next Milestone:** **`READY_FOR_DIRECT_NETTY_WIRE_EMISSION_OR_PHASE_4_STORAGE`**.
 
 ### What each proof is

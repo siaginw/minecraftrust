@@ -24,21 +24,28 @@ Measured using `crates/native-chunk/tests/cost_model_bench.rs` under `cargo test
 
 | Operation | $p50$ (ns) | $p95$ (ns) | $p99$ (ns) | Avg (ns) | Throughput | Zero-Allocation Proof |
 |:---|:---:|:---:|:---:|:---:|:---:|:---:|
-| **State Read** (`get_block_state` AtomicU16) | <1 ns | 100 ns | 100 ns | **23.6 ns** | **42.4 Mops/s** | ✅ 0 heap allocations |
-| **State Write** (Authoritative `set_block_state`) | <1 ns | 100 ns | 100 ns | **26.1 ns** | **38.2 Mops/s** | ✅ 0 heap allocations |
-| **Light Read** (`get_block_light` AtomicU32) | <1 ns | 100 ns | 100 ns | **23.8 ns** | **42.1 Mops/s** | ✅ 0 heap allocations |
-| **Light Write** (AtomicU32 CAS `set_block_light`) | <1 ns | 100 ns | 100 ns | **27.3 ns** | **36.6 Mops/s** | ✅ 0 heap allocations |
-| **Biome Read** (`get_biome` AtomicU8) | <1 ns | 100 ns | 100 ns | **23.6 ns** | **42.4 Mops/s** | ✅ 0 heap allocations |
+| **State Read** (`get_block_state` AtomicU16) | <1 ns | 100 ns | 100 ns | **23.7 ns** | **42.1 Mops/s** | ✅ 0 heap allocations |
+| **State Write** (Authoritative `set_block_state`) | <1 ns | 100 ns | 100 ns | **26.3 ns** | **38.0 Mops/s** | ✅ 0 heap allocations |
+| **Light Read** (`get_block_light` AtomicU32) | <1 ns | 100 ns | 100 ns | **23.4 ns** | **42.8 Mops/s** | ✅ 0 heap allocations |
+| **Light Write** (AtomicU32 CAS `set_block_light`) | <1 ns | 100 ns | 100 ns | **27.2 ns** | **36.8 Mops/s** | ✅ 0 heap allocations |
+| **Biome Read** (`get_biome` AtomicU8) | <1 ns | 100 ns | 100 ns | **23.2 ns** | **43.1 Mops/s** | ✅ 0 heap allocations |
 | **Biome Write** (`set_biome` AtomicU8) | <1 ns | 100 ns | 100 ns | **23.6 ns** | **42.4 Mops/s** | ✅ 0 heap allocations |
-| **Height Read** (`get_height` AtomicU16) | <1 ns | 100 ns | 100 ns | **23.2 ns** | **43.1 Mops/s** | ✅ 0 heap allocations |
-| **Height Recompute** (Downward Scan) | <1 ns | 100 ns | 100 ns | **24.3 ns** | **41.1 Mops/s** | ✅ 0 heap allocations |
-| **Registry Lookup** (`ChunkHandle -> Arc`) | <1 ns | 100 ns | 100 ns | **34.3 ns** | **29.2 Mops/s** | ✅ 0 heap allocations |
-| **Packet Static Encode** (Wire Cache Hit) | 700 ns | 800 ns | 1,000 ns | **732 ns** | **1.37 Mops/s** | ✅ 0 heap allocations |
-| **Packet Single Section Dirty** (1 dirty sec) | 12,600 ns | 12,600 ns | 12,700 ns | **12.5 µs** | **80.0 Kops/s** | ✅ Minimal scratch |
-| **Chunk Seed** (`from_transport` 8 sections) | 97.7 µs | 167.1 µs | 196.8 µs | **121.3 µs** | **8.2 Kops/s** | Initial construction |
-| **Packet Cold Encode** (8 cold sections) | 196.9 µs | 332.8 µs | 377.7 µs | **207.1 µs** | **4.8 Kops/s** | Builds wire cache |
+| **Height Read** (`get_height` AtomicU16) | <1 ns | 100 ns | 100 ns | **23.1 ns** | **43.3 Mops/s** | ✅ 0 heap allocations |
+| **Height Recompute** (Downward Scan) | <1 ns | 100 ns | 100 ns | **24.3 ns** | **41.2 Mops/s** | ✅ 0 heap allocations |
+| **Registry Lookup** (`ChunkHandle -> Arc`) | <1 ns | 100 ns | 100 ns | **35.0 ns** | **28.6 Mops/s** | ✅ 0 heap allocations |
+| **Neighbor Lookup (3x3 Neighborhood, 9 Chunks)** | 200 ns | 300 ns | 300 ns | **210.0 ns** | **4.76 Mops/s** | ✅ 0 heap allocations |
+| **Neighbor Lookup (5x5 Neighborhood, 25 Chunks)** | 500 ns | 600 ns | 600 ns | **530.0 ns** | **1.89 Mops/s** | ✅ 0 heap allocations |
+| **Future Consumer A: Collision-like AABB (27 blocks)** | <1 ns | 100 ns | 100 ns | **26.2 ns** | **38.2 Mops/s** | ✅ 0 heap allocations |
+| **Future Consumer B: Lighting-like 6-Neighbor Query** | <1 ns | 100 ns | 100 ns | **24.0 ns** | **41.7 Mops/s** | ✅ 0 heap allocations |
+| **Future Consumer C: Pathfinding-like Walk (32 steps)** | 100 ns | 100 ns | 100 ns | **78.0 ns** | **12.8 Mops/s** | ✅ 0 heap allocations |
+| **Future Consumer D: Storage-like Full Scan (65k states)** | 10.2 µs | 10.3 µs | 11.5 µs | **10.2 µs** | **98.0 Kops/s** | ✅ 0 heap allocations |
+| **Future Consumer E: Worldgen Bulk Fill (4,096 writes)** | 1.7 µs | 1.7 µs | 1.7 µs | **1.67 µs** | **600.0 Kops/s** | ✅ 0 heap allocations |
+| **Packet Static Encode** (Wire Cache Hit) | 700 ns | 800 ns | 1,000 ns | **735 ns** | **1.36 Mops/s** | ✅ 0 heap allocations |
+| **Packet Single Section Dirty** (1 dirty sec) | 13.0 µs | 13.0 µs | 16.0 µs | **13.0 µs** | **77.0 Kops/s** | ✅ 0 heap allocations |
+| **Chunk Seed** (`from_transport` 8 sections) | 91.6 µs | 175.1 µs | 185.9 µs | **118.9 µs** | **8.4 Kops/s** | Initial construction |
+| **Packet Cold Encode** (8 cold sections) | 192.5 µs | 357.1 µs | 359.8 µs | **229.0 µs** | **4.4 Kops/s** | Builds wire cache |
 
-*Note on sub-nanosecond reads*: Raw `AtomicU16::load` and `AtomicU8::load` execute in 1 CPU cycle on modern x86_64 (~0.3 ns). The reported 23.6 ns average includes function call linkage, bounds checking, and loop counter overhead in the measurement harness.
+*Note on sub-nanosecond reads*: Raw `AtomicU16::load` and `AtomicU8::load` execute in 1 CPU cycle on modern x86_64 (~0.3 ns). The reported 23-26 ns average includes function call linkage, bounds checking, and loop counter overhead in the measurement harness.
 
 ---
 
