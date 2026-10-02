@@ -348,11 +348,6 @@ public final class SingleCopyPipeline {
                 return;
             }
 
-            if (SHADOW_MODE) {
-                // Sits between the packet encoder and the compression stage
-                // (closer to head): sees exactly NettyPacketEncoder's output.
-                pipeline.addBefore("encoder", CAPTURE_NAME, new BodyCaptureHandler());
-            }
             pipeline.addAfter("encoder", HANDLER_NAME, new RustCraftSingleCopyChunkHandler());
             T.installs.incrementAndGet();
 
@@ -396,6 +391,35 @@ public final class SingleCopyPipeline {
         private final ConcurrentMap<Object, SingleCopyTicket> writtenHere =
                 new ConcurrentHashMap<>();
 
+        private volatile boolean captureAfterCompress = false;
+
+        /**
+         * The capture must see NettyPacketEncoder's output BEFORE the
+         * compressor touches it: directly between "encoder" and "compress".
+         * At channelActive the compressor does not exist yet (it registers
+         * with addBefore("encoder") at the login transition, which would bury
+         * an early-placed capture on the head side of compression), so the
+         * capture is placed - and if needed moved - lazily from the event
+         * loop on the first shadow writes.
+         */
+        private void ensureCapturePlacement(ChannelHandlerContext ctx) {
+            ChannelPipeline pipeline = ctx.pipeline();
+            if (pipeline.get(CAPTURE_NAME) == null) {
+                if (pipeline.get("compress") != null) {
+                    pipeline.addAfter("compress", CAPTURE_NAME, new BodyCaptureHandler());
+                    captureAfterCompress = true;
+                } else {
+                    pipeline.addBefore("encoder", CAPTURE_NAME, new BodyCaptureHandler());
+                }
+                return;
+            }
+            if (!captureAfterCompress && pipeline.get("compress") != null) {
+                ChannelHandler capture = pipeline.remove(CAPTURE_NAME);
+                pipeline.addAfter("compress", CAPTURE_NAME, capture);
+                captureAfterCompress = true;
+            }
+        }
+
         @Override
         public void write(ChannelHandlerContext ctx, Object msg, ChannelPromise promise) throws Exception {
             if (msg instanceof ByteBuf) {
@@ -406,6 +430,7 @@ public final class SingleCopyPipeline {
             SingleCopyTicket ticket = TICKETS.get(msg);
             if (ticket != null) {
                 if (SHADOW_MODE) {
+                    ensureCapturePlacement(ctx);
                     // Shadow: vanilla transmits; the capture handler between
                     // the encoder and compression compares the encoder output
                     // against this packet's frozen body. The body's only
