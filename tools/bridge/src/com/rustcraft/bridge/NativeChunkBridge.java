@@ -112,6 +112,20 @@ public final class NativeChunkBridge {
             byte skylight, byte fullChunk,
             long outputBufAddress, int outputBufCapacity);
 
+    /**
+     * Measure-only V2 twin: exact payload byte count and emitted mask the real
+     * encode would produce for the CURRENT chunk state. Writes nothing. Same
+     * packed-long protocol and failure codes as encodePacketPayloadV2 (minus
+     * the capacity codes). This is the length oracle that lets the single-copy
+     * path frame the complete pre-compression packet header — including the
+     * payload-length VarInt — before the payload is encoded straight into the
+     * final buffer (exactly one large payload memory movement). The caller
+     * must still verify the real encode's byte count against this value.
+     */
+    public static native long encodePacketPayloadV2Measure(
+            int dim, int cx, int cz, long generationId,
+            byte skylight, byte fullChunk);
+
     /** Calls V2 once and decodes only that result, without changing Java metrics. */
     public static PacketEncodeResultV2 encodePacketV2(
             int dim, int cx, int cz, long generationId,

@@ -87,14 +87,14 @@ def main() -> int:
         return 1
 
     if target == "A":
-        rt = Path(r"D:\minecraftrust\machine\targetA\server")
+        rt = ROOT / "target" / "authority-smoke" / "runtimeA"
         forge_jar_name = "forge-1.12.2-14.23.5.2860.jar"
         vanilla_jar_name = "minecraft_server.1.12.2.jar"
         campaign_jar = ROOT / "target" / "rustcraft-campaign-A.jar"
         world_source = rt / "world"
         mod_versions_file = None
     else:
-        rt = Path(r"D:\minecraftrust\machine\targetC\server")
+        rt = ROOT / "target" / "authority-smoke" / "runtimeC"
         forge_jar_name = "forge-1.12.2-14.23.5.2846-universal.jar"
         vanilla_jar_name = "minecraft_server.1.12.2.jar"
         campaign_jar = ROOT / "target" / "rustcraft-campaign-C.jar"

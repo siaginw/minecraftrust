@@ -32,12 +32,12 @@ def main():
         return 1
 
     if args.target == "A":
-        rt = Path(r"D:\minecraftrust\machine\targetA\server")
+        rt = ROOT / "target" / "authority-smoke" / "runtimeA"
         asm = rt / "libraries" / "org" / "ow2" / "asm" / "asm-debug-all" / "5.2" / "asm-debug-all-5.2.jar"
         lw = rt / "libraries" / "net" / "minecraft" / "launchwrapper" / "1.12" / "launchwrapper-1.12.jar"
         forge = rt / "forge-1.12.2-14.23.5.2860.jar"
     else:
-        rt = Path(r"D:\minecraftrust\machine\targetC\server")
+        rt = ROOT / "target" / "authority-smoke" / "runtimeC"
         asm = rt / "libraries" / "org" / "ow2" / "asm" / "asm-all" / "5.2" / "asm-all-5.2.jar"
         lw = rt / "libraries" / "net" / "minecraft" / "launchwrapper" / "1.12" / "launchwrapper-1.12.jar"
         forge = rt / "forge-1.12.2-14.23.5.2846-universal.jar"
@@ -121,6 +121,10 @@ def main():
         ROOT / "tools/bridge/src/com/rustcraft/bridge/ChunkStateAuthorityBridge.java",
         ROOT / "tools/bridge/src/com/rustcraft/coremod/ChunkStateAuthorityTransformer.java",
         ROOT / "tools/bridge/src/com/rustcraft/coremod/ChunkMutationTransformer.java",
+        ROOT / "tools/bridge/src/com/rustcraft/coremod/NetworkManagerSingleCopyTransformer.java",
+        ROOT / "tools/bridge/src/com/rustcraft/coremod/NettyPacketEncoderCounterTransformer.java",
+        ROOT / "tools/bridge/src/com/rustcraft/bridge/SingleCopyChunkBody.java",
+        ROOT / "tools/bridge/src/com/rustcraft/bridge/SingleCopyPipeline.java",
         ROOT / "tools/bridge/src/com/rustcraft/qualification/SameProcessAcquisition.java",
         ROOT / "tools/bridge/src/com/rustcraft/qualification/SessionEvidenceFlush.java",
         ROOT / "tools/bridge/src/com/rustcraft/qualification/TransformationChainEvidence.java",

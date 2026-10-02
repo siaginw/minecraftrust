@@ -100,6 +100,22 @@ public final class PacketAuthorityExperiment {
     private static final long PACKET_EXPIRATION_NANOS = 30_000_000_000L; // 30 seconds
     private static final byte[] EMPTY_PAYLOAD = new byte[0];
 
+    /**
+     * Packets that were admitted as RUST_SINGLE_COPY (complete pre-compression
+     * body registered against the packet). Weakly held so admitted packets
+     * never leak; a packet in this set whose single-copy body is gone must
+     * NEVER fall into vanilla serialization (its payload field is an empty
+     * shell) — it fails the write promise instead. This is the enforcement of
+     * the "no malformed empty chunk packet" rule.
+     */
+    private static final java.util.Map<Object, Boolean> SINGLE_COPY_ADMITTED =
+            java.util.Collections.synchronizedMap(new java.util.WeakHashMap<>());
+
+    // Single-copy telemetry mirrors (kept here so the experiment receipt shows
+    // both the b3df84c direct-netty and the single-copy paths side by side).
+    public static final AtomicLong SINGLE_COPY_ADMITTED_COUNT = new AtomicLong();
+    public static final AtomicLong SINGLE_COPY_FALLBACKS = new AtomicLong();
+
     private static final AtomicBoolean RECEIPT_VERIFIED = new AtomicBoolean(false);
     private static final AtomicBoolean RECEIPT_CHECK_ATTEMPTED = new AtomicBoolean(false);
     private static volatile String receiptFailureReason = null;
@@ -119,32 +135,21 @@ public final class PacketAuthorityExperiment {
     private static Field packetTEs;
     private static Field packetFull;
 
-    // Retained chunk registry for True Direct fast path
-    public static final class RetainedRecord {
-        public final int dim;
-        public final int cx;
-        public final int cz;
-        public volatile long generationId;
-        public RetainedRecord(int dim, int cx, int cz, long generationId) {
-            this.dim = dim;
-            this.cx = cx;
-            this.cz = cz;
-            this.generationId = generationId;
-        }
-    }
-    private static final Map<Long, RetainedRecord> REGISTERED_CHUNKS = new java.util.concurrent.ConcurrentHashMap<>();
-
-    public static long chunkKey(int cx, int cz) {
-        return (((long) cx) << 32) | (((long) cz) & 0xFFFFFFFFL);
-    }
-
-    public static void registerChunkRecord(int dim, int cx, int cz, long genId) {
-        REGISTERED_CHUNKS.put(chunkKey(cx, cz), new RetainedRecord(dim, cx, cz, genId));
-    }
-
-    public static RetainedRecord getChunkRecord(int cx, int cz) {
-        return REGISTERED_CHUNKS.get(chunkKey(cx, cz));
-    }
+    // ------------------------------------------------------------------
+    // Lifecycle correction (single-copy task): the Java-side retained-record
+    // map (REGISTERED_CHUNKS, keyed (cx,cz) -> {dim, genId}) is GONE. It could
+    // become an independent stale authority after an unload/reload cycle: the
+    // native registry allocates a fresh monotonic generation id for a
+    // re-registered chunk, but the cached record still carried the dead
+    // generation, so every retained encode failed -3 (StaleGeneration) until
+    // something rewrote the record, and the record itself survived native
+    // unloads forever. The canonical NativeChunk registry is queryable cheaply
+    // (NativeChunkBridge.findGeneration = one HashMap lookup in native
+    // memory), so it is now the ONLY authority for current generation ids:
+    // no cache to invalidate, no stale-handle loops, no old bytes. The
+    // retained fast path queries findGeneration at admission time; the
+    // seed path seeds and re-queries. Neither holds a Java copy of the id.
+    // ------------------------------------------------------------------
 
     // Dynamic Chunk reflection fields (no compile-time net.minecraft references)
     private static volatile boolean chunkReflectionInitialized = false;
@@ -339,7 +344,8 @@ public final class PacketAuthorityExperiment {
         }
         DIRECT_PACKET_BUFFERS.clear();
         PACKET_CREATION_TIMES.clear();
-        REGISTERED_CHUNKS.clear();
+        SINGLE_COPY_ADMITTED.clear();
+        com.rustcraft.bridge.SingleCopyPipeline.resetForTesting();
         RECEIPT_VERIFIED.set(false);
         RECEIPT_CHECK_ATTEMPTED.set(false);
         receiptFailureReason = null;
@@ -458,10 +464,12 @@ public final class PacketAuthorityExperiment {
 
         // ------------------------------------------------------------------
         // TRUE DIRECT RETAINED PACKET FAST PATH:
-        // Qualified, registered, clean NativeChunk -> direct Netty ByteBuf
-        // Bypasses LivePacketCapture, CaptureDraft, OwnedPacketSnapshot, RCSNAP, IN_BUF, OUT_BUF!
+        // Qualified, registered, clean NativeChunk -> complete pre-compression
+        // Netty ByteBuf (single-copy) or payload-only direct ByteBuf (b3df84c
+        // two-copy baseline). Bypasses LivePacketCapture, CaptureDraft,
+        // OwnedPacketSnapshot, RCSNAP, IN_BUF, OUT_BUF.
         // ------------------------------------------------------------------
-        if (chunkObj != null && (directNettyEnabled || directNettyShadow)) {
+        if (chunkObj != null && (singleCopyEnabled() || directNettyEnabled || directNettyShadow)) {
             initChunkReflection(chunkObj.getClass());
             if (chunkReflectionInitialized && chunkFieldX != null && chunkFieldZ != null) {
                 try {
@@ -469,16 +477,25 @@ public final class PacketAuthorityExperiment {
                     if (dim == 0 && isChunkTileEntitiesEmpty(chunkObj)) {
                         int cx = chunkFieldX.getInt(chunkObj);
                         int cz = chunkFieldZ.getInt(chunkObj);
-                        long key = chunkKey(cx, cz);
-                        RetainedRecord record = REGISTERED_CHUNKS.get(key);
 
-                        if (record != null && record.generationId > 0) {
+                        // Canonical generation authority: the native registry
+                        // itself, queried at admission time. No Java-side
+                        // retained record can go stale anymore.
+                        long generationId = com.rustcraft.bridge.NativeChunkBridge
+                                .findGeneration(dim, cx, cz);
+
+                        if (generationId > 0) {
                             // Check whether chunk has any pending mutations
                             int[] work = com.rustcraft.bridge.ChunkMutationTracker.peekWork(chunkObj);
                             boolean clean = (work == null || (work[1] == 0 && work[2] == 0 && work[3] == 0 && work[4] == 0));
 
                             if (clean) {
-                                // Fast path admitted!
+                                if (singleCopyEnabled()) {
+                                    return trySingleCopyAdmission(packetObj, chunkObj, dim, cx, cz,
+                                            generationId, extractWorldHasSky(chunkObj));
+                                }
+                                // b3df84c two-copy retained path (preserved for
+                                // A/B baselines and regression safety).
                                 if (OUTSTANDING_DIRECT_BUFFERS.get() >= MAX_OUTSTANDING_DIRECT_BUFFERS) {
                                     DIRECT_BUFFER_PRESSURE_FALLBACK.incrementAndGet();
                                     JAVA_FALLBACK.incrementAndGet();
@@ -492,7 +509,7 @@ public final class PacketAuthorityExperiment {
                                 boolean hasSky = extractWorldHasSky(chunkObj);
 
                                 long packed = com.rustcraft.bridge.NativeChunkBridge.encodePacketPayloadV2(
-                                        0, cx, cz, record.generationId,
+                                        0, cx, cz, generationId,
                                         (byte) (hasSky ? 1 : 0), (byte) 1,
                                         directAddr, BUFFER_CAPACITY);
 
@@ -634,10 +651,17 @@ public final class PacketAuthorityExperiment {
                 genId = com.rustcraft.bridge.NativeChunkBridge.seedFromTransport(inAddr, transport.length);
                 if (genId > 0) {
                     RETAINED_SEEDED.incrementAndGet();
-                    registerChunkRecord(dim, snapshot.chunkX, snapshot.chunkZ, genId);
                 }
-            } else {
-                registerChunkRecord(dim, snapshot.chunkX, snapshot.chunkZ, genId);
+            }
+
+            // Single-copy emission: complete pre-compression body built on
+            // this thread, one payload movement, consumed by the outbound
+            // handler. The seed path's Java capture already happened (the
+            // chunk was not registered), but the wire emission is identical
+            // to the retained fast path.
+            if (singleCopyEnabled() && genId > 0) {
+                return trySingleCopyAdmission(packetObj, chunkObj, dim, snapshot.chunkX,
+                        snapshot.chunkZ, genId, snapshot.skylight);
             }
 
             // Direct Netty Emission Path: Encode directly into pooled Netty ByteBuf
@@ -783,17 +807,215 @@ public final class PacketAuthorityExperiment {
         }
     }
 
+    // ------------------------------------------------------------------
+    // SINGLE-COPY ADMISSION (complete pre-compression body)
+    // ------------------------------------------------------------------
+
+    public static final String PROPERTY_SINGLE_COPY = "rustcraft.singleCopy";
+    public static final String PROPERTY_SINGLE_COPY_SHADOW = "rustcraft.singleCopyShadow";
+
+    private static volatile boolean singleCopyDirect =
+            Boolean.getBoolean(PROPERTY_SINGLE_COPY);
+    private static volatile boolean singleCopyShadow =
+            Boolean.getBoolean(PROPERTY_SINGLE_COPY_SHADOW);
+
+    public static boolean singleCopyDirectEnabled() {
+        return singleCopyDirect;
+    }
+
+    public static boolean singleCopyShadowEnabled() {
+        return singleCopyShadow;
+    }
+
+    public static boolean singleCopyEnabled() {
+        return singleCopyDirect || singleCopyShadow;
+    }
+
+    public static void setSingleCopyModes(boolean direct, boolean shadow) {
+        singleCopyDirect = direct;
+        singleCopyShadow = shadow;
+    }
+
+    /** Test-only: mark a packet as single-copy admitted (weak set). */
+    public static void markAdmittedForTest(Object packet) {
+        SINGLE_COPY_ADMITTED.put(packet, Boolean.TRUE);
+    }
+
+    /**
+     * Shared single-copy admission for the retained fast path and the seed
+     * path. Builds the complete immutable pre-compression body on THIS thread
+     * (one payload movement), registers the ticket, and:
+     *  - SHADOW: returns false so the untouched Java constructor body runs and
+     *    vanilla transmits; the outbound capture handler byte-compares the
+     *    real NettyPacketEncoder output against the body.
+     *  - DIRECT: populates the packet shell (EMPTY payload + metadata) and
+     *    returns true; the outbound handler consumes the body per write,
+     *    bypassing NettyPacketEncoder.
+     * Any failure releases the body and falls back to the Java path.
+     */
+    private static boolean trySingleCopyAdmission(Object packetObj, Object chunkObj,
+                                                  int dim, int cx, int cz,
+                                                  long generationId, boolean skylight) {
+        ensureDllLoaded();
+
+        int packetId;
+        try {
+            packetId = resolveClientboundPacketId(packetObj);
+        } catch (Throwable t) {
+            System.err.println("[RustCraft-SingleCopy] packet id lookup failed: " + t);
+            SINGLE_COPY_FALLBACKS.incrementAndGet();
+            JAVA_FALLBACK.incrementAndGet();
+            JAVA_SELECTED.incrementAndGet();
+            return false;
+        }
+
+        // Defensive sweep piggybacks on admission traffic (never the primary
+        // lifecycle mechanism).
+        com.rustcraft.bridge.SingleCopyPipeline.sweepExpired();
+
+        com.rustcraft.bridge.SingleCopyPipeline.SingleCopyTicket ticket =
+                com.rustcraft.bridge.SingleCopyChunkBody.build(
+                        packetObj, dim, cx, cz, generationId, skylight, true, packetId);
+        if (ticket == null) {
+            SINGLE_COPY_FALLBACKS.incrementAndGet();
+            JAVA_FALLBACK.incrementAndGet();
+            JAVA_SELECTED.incrementAndGet();
+            return false;
+        }
+
+        // Bounded experiment cap consumed after the body is complete; an
+        // over-cap body is released again immediately.
+        long selected;
+        do {
+            selected = RUST_SELECTED.get();
+            if (selected >= authorityCap) {
+                ticket.invalidate();
+                CAP_EXHAUSTED.incrementAndGet();
+                JAVA_SELECTED.incrementAndGet();
+                return false;
+            }
+        } while (!RUST_SELECTED.compareAndSet(selected, selected + 1));
+
+        RETAINED_RUST_SELECTED.incrementAndGet();
+        AUTHORITY_ELIGIBLE.incrementAndGet();
+        SINGLE_COPY_ADMITTED_COUNT.incrementAndGet();
+        logAuditEvent(cx, cz, ticket.mask, ticket.payloadBytes, selected + 1);
+
+        if (singleCopyShadow) {
+            // Shadow: vanilla constructor + vanilla transmission; the body is
+            // compared against the encoder output by the capture handler.
+            RETAINED_FAST_PATH.incrementAndGet();
+            return false;
+        }
+
+        // Direct: the packet shell must never serialize vanilla bytes again.
+        populatePacketFields(packetObj, cx, cz, ticket.mask, EMPTY_PAYLOAD);
+        SINGLE_COPY_ADMITTED.put(packetObj, Boolean.TRUE);
+        RETAINED_FAST_PATH.incrementAndGet();
+        return true;
+    }
+
+    /** Packet id via the installed EnumConnectionState — the exact lookup
+     *  NettyPacketEncoder performs (func_179246_a). Never hardcoded. */
+    private static volatile java.lang.reflect.Method PACKET_ID_METHOD;
+    private static volatile Object PLAY_STATE;
+    private static volatile Object CLIENTBOUND_DIRECTION;
+
+    private static int resolveClientboundPacketId(Object packet) throws Exception {
+        java.lang.reflect.Method m = PACKET_ID_METHOD;
+        Object play = PLAY_STATE;
+        Object dir = CLIENTBOUND_DIRECTION;
+        if (m == null) {
+            Class<?> stateCls = Class.forName("net.minecraft.network.EnumConnectionState");
+            play = stateCls.getField("PLAY").get(null);
+            dir = Class.forName("net.minecraft.network.EnumPacketDirection")
+                    .getField("CLIENTBOUND").get(null);
+            m = stateCls.getMethod("func_179246_a",
+                    Class.forName("net.minecraft.network.EnumPacketDirection"),
+                    Class.forName("net.minecraft.network.Packet"));
+            PACKET_ID_METHOD = m;
+            PLAY_STATE = play;
+            CLIENTBOUND_DIRECTION = dir;
+        }
+        Object id = m.invoke(play, dir, packet);
+        if (id == null) {
+            throw new IllegalStateException("packet not registered in PLAY/CLIENTBOUND");
+        }
+        return (Integer) id;
+    }
+
     /**
      * Called at the entry of SPacketChunkData.func_148840_b (writePacketData).
      *
-     * If this packet has an authoritative direct Netty ByteBuf registered:
-     * Writes the packet headers, transfers direct bytes into the Netty packet buffer,
-     * releases the direct buffer, and returns true (skipping Java writePacketData body).
+     * SINGLE-COPY GUARD (checked first): a packet admitted as RUST_SINGLE_COPY
+     * carries an EMPTY payload shell — vanilla serialization of it would emit
+     * a malformed empty chunk body. When the packet's body is still alive
+     * (reachable only when the outbound handler is absent, e.g. install
+     * failure), this serves the correct bytes through the b3df84c two-copy
+     * emission. When the body is gone, the write PROMISE FAILS via exception —
+     * never a malformed empty chunk packet on the wire.
      *
-     * If this packet does not have a direct buffer (e.g. fallback or disabled):
-     * Returns false (vanilla Java writePacketData body executes untouched).
+     * LEGACY (b3df84c, unchanged): if this packet has an authoritative payload
+     * direct ByteBuf registered (directNetty mode), write the packet headers,
+     * transfer the direct bytes into the Netty packet buffer, release it, and
+     * return true (skipping the Java writePacketData body).
+     *
+     * Otherwise: returns false (vanilla Java writePacketData body executes
+     * untouched — every plain Java packet).
      */
     public static boolean tryWritePacketDataDirect(Object packet, Object packetBufferObj) {
+        // ---- single-copy admitted packets --------------------------------
+        if (singleCopyDirect && packet != null && SINGLE_COPY_ADMITTED.containsKey(packet)) {
+            com.rustcraft.bridge.SingleCopyPipeline.SingleCopyTicket ticket =
+                    com.rustcraft.bridge.SingleCopyPipeline.ticketFor(packet);
+            if (ticket == null) {
+                // Body already consumed and released (all writes done). A
+                // late write must not serialize the empty shell.
+                throw new IllegalStateException(
+                        "RustCraft single-copy body unavailable for an admitted packet; "
+                                + "refusing malformed empty-payload serialization");
+            }
+            if (!(packetBufferObj instanceof io.netty.buffer.ByteBuf)) {
+                throw new IllegalStateException(
+                        "RustCraft single-copy fallback expected ByteBuf, got "
+                                + packetBufferObj.getClass().getName());
+            }
+            if (!initPacketFields(packet.getClass())) {
+                throw new IllegalStateException(
+                        "RustCraft single-copy fallback cannot resolve packet fields");
+            }
+            io.netty.buffer.ByteBuf pb = (io.netty.buffer.ByteBuf) packetBufferObj;
+            io.netty.buffer.ByteBuf view = ticket.body.retainedDuplicate();
+            try {
+                int cx = packetChunkX.getInt(packet);
+                int cz = packetChunkZ.getInt(packet);
+                boolean full = packetFull.getBoolean(packet);
+                int mask = packetMask.getInt(packet);
+                // Payload slice only: the body also carries the packet-id
+                // VarInt header and the TE trailer, which the vanilla encoder
+                // and this fallback frame themselves.
+                io.netty.buffer.ByteBuf payload = view.slice(ticket.payloadOffset, ticket.payloadBytes);
+                pb.writeInt(cx);
+                pb.writeInt(cz);
+                pb.writeBoolean(full);
+                writeVarInt(pb, mask);
+                writeVarInt(pb, ticket.payloadBytes);
+                pb.writeBytes(payload); // the ONE payload copy this fallback owns
+                writeVarInt(pb, 0);
+            } catch (IllegalAccessException reflectiveFailure) {
+                throw new IllegalStateException(
+                        "RustCraft single-copy fallback cannot read packet fields", reflectiveFailure);
+            } finally {
+                view.release();
+            }
+            com.rustcraft.bridge.SingleCopyPipeline.telemetry()
+                    .packetbufferPayloadCopies.incrementAndGet();
+            com.rustcraft.bridge.SingleCopyPipeline.telemetry()
+                    .fallbackTwoCopyServes.incrementAndGet();
+            return true;
+        }
+
+        // ---- legacy b3df84c direct-netty emission (unchanged) ------------
         if (!directNettyEnabled && !directNettyShadow) {
             return false;
         }
@@ -977,8 +1199,13 @@ public final class PacketAuthorityExperiment {
         }
     }
 
+    private static Class<?> packetFieldsResolvedFor;
+
     private static synchronized boolean initPacketFields(Class<?> packetClass) {
-        if (packetBuffer != null) return true;
+        if (packetBuffer != null && packetFieldsResolvedFor != null
+                && packetFieldsResolvedFor.isAssignableFrom(packetClass)) {
+            return true; // cached fields were resolved on this hierarchy
+        }
         try {
             packetChunkX = findField(packetClass, "field_149284_a", "chunkX", "a");
             packetChunkZ = findField(packetClass, "field_149282_b", "chunkZ", "b");
@@ -986,8 +1213,12 @@ public final class PacketAuthorityExperiment {
             packetBuffer = findField(packetClass, "field_186949_d", "buffer", "d");
             packetTEs = findField(packetClass, "field_189557_e", "tileEntityTags", "e");
             packetFull = findField(packetClass, "field_149279_g", "fullChunk", "g");
-            return packetChunkX != null && packetChunkZ != null && packetMask != null
+            boolean ok = packetChunkX != null && packetChunkZ != null && packetMask != null
                     && packetBuffer != null && packetTEs != null && packetFull != null;
+            if (ok) {
+                packetFieldsResolvedFor = packetClass;
+            }
+            return ok;
         } catch (Throwable t) {
             return false;
         }
@@ -1085,7 +1316,17 @@ public final class PacketAuthorityExperiment {
             counters.put("direct_netty_buffers_released", DIRECT_NETTY_BUFFERS_RELEASED.get());
             counters.put("direct_netty_bytes_transmitted", DIRECT_NETTY_BYTES_TRANSMITTED.get());
             counters.put("outstanding_direct_buffers", OUTSTANDING_DIRECT_BUFFERS.get());
+            counters.put("single_copy_admitted", SINGLE_COPY_ADMITTED_COUNT.get());
+            counters.put("single_copy_fallbacks", SINGLE_COPY_FALLBACKS.get());
+            counters.put("single_copy_direct_mode", singleCopyDirectEnabled());
+            counters.put("single_copy_shadow_mode", singleCopyShadowEnabled());
             receipt.put("counters", counters);
+            try {
+                receipt.put("single_copy_telemetry",
+                        com.rustcraft.bridge.SingleCopyPipeline.telemetrySummary());
+            } catch (Throwable ignore) {
+                // telemetry summary is diagnostic only
+            }
             receipt.put("timestamp_millis", System.currentTimeMillis());
 
             String jsonText = json(receipt);

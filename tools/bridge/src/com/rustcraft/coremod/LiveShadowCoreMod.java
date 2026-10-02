@@ -30,7 +30,11 @@ public class LiveShadowCoreMod implements IFMLLoadingPlugin {
         return new String[]{
                 "com.rustcraft.coremod.SPacketChunkDataTransformer",
                 "com.rustcraft.coremod.LiveChunkOwnershipTransformer",
-                "com.rustcraft.coremod.LiveChunkPublicationTransformer"
+                "com.rustcraft.coremod.LiveChunkPublicationTransformer",
+                // Single-copy outbound boundary (default OFF; no bytecode
+                // modification unless -Drustcraft.singleCopy[Shadow] is set):
+                "com.rustcraft.coremod.NetworkManagerSingleCopyTransformer",
+                "com.rustcraft.coremod.NettyPacketEncoderCounterTransformer"
         };
     }
 
