@@ -40,6 +40,10 @@ public class NetworkManagerCompressionTransformer implements IClassTransformer {
 
     private static final String TARGET = "net.minecraft.network.NetworkManager";
     private static final String VANILLA_ENCODER = "net/minecraft/network/NettyCompressionEncoder";
+    /** 1.12.2 notch name of NettyCompressionEncoder (unique "ConnectionProtocol
+     *  unknown:" constant; verified by class scan of the vanilla jar). Notch
+     *  runtimes reference THIS name inside NetworkManager bytecode. */
+    private static final String VANILLA_ENCODER_OBF = "ha";
     private static final String NATIVE_ENCODER = "com/rustcraft/bridge/NativeCompressionEncoder";
 
     private static final boolean ENABLED =
@@ -85,13 +89,14 @@ public class NetworkManagerCompressionTransformer implements IClassTransformer {
                 for (AbstractInsnNode insn : mn.instructions.toArray()) {
                     if (insn.getOpcode() == Opcodes.NEW) {
                         TypeInsnNode t = (TypeInsnNode) insn;
-                        if (VANILLA_ENCODER.equals(t.desc)) {
+                        if (VANILLA_ENCODER.equals(t.desc) || VANILLA_ENCODER_OBF.equals(t.desc)) {
                             t.desc = NATIVE_ENCODER;
                             patched++;
                         }
                     } else if (insn.getOpcode() == Opcodes.INVOKESPECIAL) {
                         MethodInsnNode m = (MethodInsnNode) insn;
-                        if (VANILLA_ENCODER.equals(m.owner) && "<init>".equals(m.name)) {
+                        if ((VANILLA_ENCODER.equals(m.owner) || VANILLA_ENCODER_OBF.equals(m.owner))
+                                && "<init>".equals(m.name)) {
                             m.owner = NATIVE_ENCODER;
                         }
                     }
