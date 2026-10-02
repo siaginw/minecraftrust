@@ -43,7 +43,11 @@ public class NetworkManagerCompressionTransformer implements IClassTransformer {
     private static final String NATIVE_ENCODER = "com/rustcraft/bridge/NativeCompressionEncoder";
 
     private static final boolean ENABLED =
-            !"OFF".equalsIgnoreCase(System.getProperty("minecraftrust.native_compress", "OFF"));
+            !"OFF".equalsIgnoreCase(System.getProperty("minecraftrust.native_compress", "OFF"))
+            // The passive corpus tap needs the swapped encoder even when the
+            // compression MODE is OFF: the tap lives on the subclass and
+            // capture must not depend on the authority mode.
+            || System.getProperty("rustcraft.compressionCorpus") != null;
 
     @Override
     public byte[] transform(String name, String transformedName, byte[] basicClass) {
