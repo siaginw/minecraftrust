@@ -327,11 +327,10 @@ public class DirectNettySafetyAndLifetimeTest {
         }
         assertTrue(genId > 0, "NativeChunk must have valid generation id");
 
-        PacketAuthorityExperiment.registerChunkRecord(0, cx, cz, genId);
-        PacketAuthorityExperiment.RetainedRecord fetched =
-                PacketAuthorityExperiment.getChunkRecord(cx, cz);
-        assertTrue(fetched != null, "Authority record must be registered");
-        assertEquals(genId, fetched.generationId, "Fetched generation must match");
+        // Lifecycle correction: the Java-side retained-record map is gone; the
+        // native registry IS the authority, so re-query it instead.
+        long currentGen = com.rustcraft.bridge.NativeChunkBridge.findGeneration(0, cx, cz);
+        assertTrue(currentGen == genId, "findGeneration must be the current generation authority");
 
         // Verify Direct Buffer allocation directly via NativeChunkBridge encodePacketPayloadV2
         ByteBuf directBuf = PooledByteBufAllocator.DEFAULT.directBuffer(262144);
