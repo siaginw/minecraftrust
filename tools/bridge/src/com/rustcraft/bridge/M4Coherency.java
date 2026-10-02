@@ -462,6 +462,54 @@ public final class M4Coherency {
     public static volatile boolean FAST_EXTRACTOR_ENABLED = true;
 
     /**
+     * Arbitration for a byte-different shadow compare: extract the chunk's
+     * CURRENT cells and light faithfully (per-cell vanilla read), or null on
+     * any reflection surprise. The capture handler compares this against the
+     * Java-transmitted payload semantics: equal means the transmitted packet
+     * was faithful to the chunk's current state and the frozen body encoded
+     * an earlier state (concurrent mutation - including off-tracker in-place
+     * writes); different means the body matches no Java view (real mismatch).
+     * Index [section] = int[4096] gids; light sections are 2 x 2048 byte
+     * arrays packed as [bl|sl] per section.
+     */
+    public static Object[] extractFaithfulForArbitration(Object chunk) {
+        try {
+            if (M_GET_STORAGE == null) return null;
+            Object[] sections = (Object[]) M_GET_STORAGE.invoke(chunk);
+            if (sections == null || sections.length != 16) return null;
+            Object[] out = new Object[16];
+            for (int y = 0; y < 16; y++) {
+                Object storage = sections[y];
+                if (storage == null
+                        || (F_EMPTY_STORAGE != null && storage == F_EMPTY_STORAGE.get(null))) {
+                    continue;
+                }
+                Object container = M_CONTAINER.invoke(storage);
+                if (container == null) continue;
+                int[] gids = new int[4096];
+                for (int i = 0; i < 4096; i++) {
+                    Object st = M_GET_STATE.invoke(container, i & 15, i >> 8, (i >> 4) & 15);
+                    Integer gid = (Integer) M_REG_GET_ID.invoke(REG_MAP, st);
+                    gids[i] = gid == null ? -1 : gid;
+                }
+                byte[] bl = new byte[2048];
+                byte[] sl = new byte[2048];
+                Object blArr = M_GET_BL.invoke(storage);
+                if (blArr != null) System.arraycopy(M_NIBBLE_BYTES.invoke(blArr), 0, bl, 0, 2048);
+                Object slArr = M_GET_SL.invoke(storage);
+                if (slArr != null) System.arraycopy(M_NIBBLE_BYTES.invoke(slArr), 0, sl, 0, 2048);
+                byte[] light = new byte[4096];
+                System.arraycopy(bl, 0, light, 0, 2048);
+                System.arraycopy(sl, 0, light, 2048, 2048);
+                out[y] = new Object[] { gids, light };
+            }
+            return out;
+        } catch (Throwable t) {
+            return null;
+        }
+    }
+
+    /**
      * Admission gate for Rust packet authority: verify the native registry
      * state equals the FAITHFUL per-cell vanilla view (func_186016_a x
      * registry lookup) for every non-empty section. The refresh push uses the

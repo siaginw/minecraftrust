@@ -626,6 +626,12 @@ public final class SingleCopyPipeline {
                     SingleCopyBodyCodec.ParsedBody actualBody = SingleCopyBodyCodec.parse(actual);
                     if (SingleCopyBodyCodec.decodeEquivalent(expectedBody, actualBody)) {
                         T.shadowEncodingDivergences.incrementAndGet();
+                    } else if (bodyIsStale(EXPECTED_TICKET.get(), actualBody)) {
+                        // Arbitration: the chunk's CURRENT faithful state equals
+                        // what Java transmitted, so the frozen body encoded an
+                        // earlier state (concurrent mutation, including
+                        // off-tracker in-place writes). Expected divergence.
+                        T.shadowExpectedDivergences.incrementAndGet();
                     } else {
                         T.shadowMismatches.incrementAndGet();
                         logShadowMismatch(expected, actual);
@@ -684,6 +690,48 @@ public final class SingleCopyPipeline {
                         cellDiff >= 0 ? as.cells[cellDiff] : -1,
                         lightDiff, skyDiff));
             }
+        }
+
+        /**
+         * True when the chunk's CURRENT faithful state equals the
+         * Java-transmitted payload semantics - proving the frozen body is a
+         * stale (concurrently superseded) snapshot, not a wrong encoding.
+         */
+        private static boolean bodyIsStale(SingleCopyTicket ticket,
+                                           SingleCopyBodyCodec.ParsedBody actualBody) {
+            if (ticket == null || ticket.shadowChunkRef == null || actualBody == null) {
+                return false;
+            }
+            Object chunk = ticket.shadowChunkRef.get();
+            if (chunk == null) {
+                return false;
+            }
+            Object[] faithful = com.rustcraft.bridge.M4Coherency
+                    .extractFaithfulForArbitration(chunk);
+            if (faithful == null) {
+                return false; // unarbitratable: stays a mismatch (conservative)
+            }
+            for (int sec = 0; sec < 16; sec++) {
+                SingleCopyBodyCodec.ParsedSection actual = actualBody.sections[sec];
+                Object[] faithfulSection = (Object[]) faithful[sec];
+                if (actual == null && faithfulSection == null) {
+                    continue;
+                }
+                if (actual == null || faithfulSection == null) {
+                    // One side has the section and the other does not. Java
+                    // omits empty sections from the mask; the frozen body's
+                    // mask came from the same rule, so a disagreement at
+                    // arbitration time is a state change - stale body.
+                    return faithfulSection == null;
+                }
+                int[] gids = (int[]) faithfulSection[0];
+                for (int i = 0; i < 4096; i++) {
+                    if (gids[i] != actual.cells[i]) {
+                        return false;
+                    }
+                }
+            }
+            return true;
         }
 
         private static boolean chunkChangedSinceFreeze(SingleCopyTicket ticket) {
