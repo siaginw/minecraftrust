@@ -385,14 +385,16 @@ public final class M4Coherency {
             }
             try {
                 long t0 = System.nanoTime();
-                if (FULLY_SYNCED.containsKey(chunk)) {
-                    // M4.3B: already synced — this is an event-driven DIRTY refresh
-                    // (population/light churn after onLoad). Clears pending work so
-                    // the next packet finds the snapshot current.
-                    refreshChunkNow(chunk);
+                // Both branches go through refreshChunkNow so EVERY Java ->
+                // native section push takes the per-chunk refresh lock: the
+                // single-copy admission encodes under that same lock, and an
+                // unlocked first-sync push racing the encode produced
+                // single-cell shadow divergences on revisited chunks.
+                boolean synced = FULLY_SYNCED.containsKey(chunk);
+                refreshChunkNow(chunk);
+                if (synced) {
                     DIRTY_REFRESHES.incrementAndGet();
                 } else {
-                    fullSync(chunk);
                     SYNC_DONE.incrementAndGet();
                     Long ts = SYNC_REQUEST_TS.remove(chunk);
                     if (ts != null) SYNC_QUEUE_DELAY_MS_TOTAL.addAndGet(System.currentTimeMillis() - ts);

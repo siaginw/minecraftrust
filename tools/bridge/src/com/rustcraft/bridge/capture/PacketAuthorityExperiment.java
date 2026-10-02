@@ -504,10 +504,20 @@ public final class PacketAuthorityExperiment {
                                     // thread so the body encodes exactly the state
                                     // the Java packet will read.
                                     try {
-                                        // The coherency reflection initializes per-thread;
-                                        // the server thread needs it before any refresh.
-                                        com.rustcraft.bridge.M4Coherency.initReflectionPublicGate(chunkObj);
-                                        com.rustcraft.bridge.M4Coherency.refreshChunkNow(chunkObj);
+                                        // Refresh AND encode under the per-chunk
+                                        // refresh lock: the async coherency worker
+                                        // takes the same lock for its Java -> native
+                                        // pushes, so the body can never encode a
+                                        // half-pushed section.
+                                        synchronized (com.rustcraft.bridge.M4Coherency
+                                                .refreshLockFor(dim, cx, cz)) {
+                                            // The coherency reflection initializes per-thread;
+                                            // the server thread needs it before any refresh.
+                                            com.rustcraft.bridge.M4Coherency.initReflectionPublicGate(chunkObj);
+                                            com.rustcraft.bridge.M4Coherency.refreshChunkNow(chunkObj);
+                                            return trySingleCopyAdmission(packetObj, chunkObj, dim, cx, cz,
+                                                    generationId, extractWorldHasSky(chunkObj));
+                                        }
                                     } catch (Throwable refreshFailure) {
                                         System.err.println("[RustCraft-SingleCopy] retained refresh failed: "
                                                 + refreshFailure);
@@ -516,8 +526,6 @@ public final class PacketAuthorityExperiment {
                                         JAVA_SELECTED.incrementAndGet();
                                         return false;
                                     }
-                                    return trySingleCopyAdmission(packetObj, chunkObj, dim, cx, cz,
-                                            generationId, extractWorldHasSky(chunkObj));
                                 }
                                 // b3df84c two-copy retained path (preserved for
                                 // A/B baselines and regression safety).
