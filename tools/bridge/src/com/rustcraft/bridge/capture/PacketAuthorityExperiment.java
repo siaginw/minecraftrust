@@ -515,6 +515,19 @@ public final class PacketAuthorityExperiment {
                                             // the server thread needs it before any refresh.
                                             com.rustcraft.bridge.M4Coherency.initReflectionPublicGate(chunkObj);
                                             com.rustcraft.bridge.M4Coherency.refreshChunkNow(chunkObj);
+                                            // Prove the native state equals the faithful
+                                            // per-cell vanilla view before the body encodes
+                                            // it: the fast bulk extractor has misread a cell
+                                            // on modded palette layouts and the in-refresh
+                                            // validation shares it, so only this full-rate
+                                            // faithful comparison can admit.
+                                            if (!com.rustcraft.bridge.M4Coherency
+                                                    .verifyExtractionFaithfulForAdmission(chunkObj)) {
+                                                SINGLE_COPY_FALLBACKS.incrementAndGet();
+                                                JAVA_FALLBACK.incrementAndGet();
+                                                JAVA_SELECTED.incrementAndGet();
+                                                return false;
+                                            }
                                             return trySingleCopyAdmission(packetObj, chunkObj, dim, cx, cz,
                                                     generationId, extractWorldHasSky(chunkObj));
                                         }

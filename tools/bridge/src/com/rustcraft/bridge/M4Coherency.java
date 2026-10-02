@@ -461,6 +461,88 @@ public final class M4Coherency {
     private static final long DUAL_VERIFY_EVERY = 8;
     public static volatile boolean FAST_EXTRACTOR_ENABLED = true;
 
+    /**
+     * Admission gate for Rust packet authority: verify the native registry
+     * state equals the FAITHFUL per-cell vanilla view (func_186016_a x
+     * registry lookup) for every non-empty section. The refresh push uses the
+     * fast bulk extractor, and the in-refresh validation shares it, so a
+     * fast-extractor misread on a modded palette layout passes validation yet
+     * diverges from the vanilla packet by a cell (observed live: 48-vs-32 on
+     * revisited Revelation chunks). Full-rate, on the calling thread, under
+     * the per-chunk refresh lock; returns false (caller falls back to the
+     * untouched Java path) on any stable divergence or reflection surprise.
+     */
+    public static boolean verifyExtractionFaithfulForAdmission(Object chunk) {
+        try {
+            if (M_GET_STORAGE == null) return false;
+            Object[] sections = (Object[]) M_GET_STORAGE.invoke(chunk);
+            if (sections == null || sections.length != 16) return false;
+            for (int y = 0; y < 16; y++) {
+                Object storage = sections[y];
+                if (storage == null
+                        || (F_EMPTY_STORAGE != null && storage == F_EMPTY_STORAGE.get(null))) {
+                    continue;
+                }
+                Object container = M_CONTAINER.invoke(storage);
+                if (container == null) return false;
+                int[] fast = fastExtractGlobalIds(container, new int[4096]);
+                if (fast == null) fast = null;
+                int[] slow = new int[4096];
+                for (int i = 0; i < 4096; i++) {
+                    Object st = M_GET_STATE.invoke(container, i & 15, i >> 8, (i >> 4) & 15);
+                    Integer gid = (Integer) M_REG_GET_ID.invoke(REG_MAP, st);
+                    slow[i] = gid == null ? -1 : gid;
+                }
+                if (fast != null && !java.util.Arrays.equals(fast, slow)) {
+                    // Re-read for stability: a concurrent in-place mutation is
+                    // benign (dualVerify precedent); a stable difference is a
+                    // real extractor divergence -> refuse this admission.
+                    int[] slow2 = new int[4096];
+                    for (int j = 0; j < 4096; j++) {
+                        Object st2 = M_GET_STATE.invoke(container, j & 15, j >> 8, (j >> 4) & 15);
+                        Integer gid2 = (Integer) M_REG_GET_ID.invoke(REG_MAP, st2);
+                        slow2[j] = gid2 == null ? -1 : gid2;
+                    }
+                    if (java.util.Arrays.equals(slow, slow2)) {
+                        System.err.println("[RustCraft-SingleCopy] faithful-verify divergence: "
+                                + dumpDivergence(findDim(chunk), chunkX(chunk), chunkZ(chunk),
+                                        y, firstDiffIndex(fast, slow), container, slow, fast));
+                        return false;
+                    }
+                    return false; // unstable state: refuse anyway, fail closed
+                }
+                if (fast == null) {
+                    continue; // extraction fell back to the faithful path already
+                }
+            }
+            return true;
+        } catch (Throwable t) {
+            System.err.println("[RustCraft-SingleCopy] faithful-verify error: " + t);
+            return false;
+        }
+    }
+
+    private static int firstDiffIndex(int[] a, int[] b) {
+        for (int i = 0; i < Math.min(a.length, b.length); i++) {
+            if (a[i] != b[i]) return i;
+        }
+        return -1;
+    }
+
+    private static int findDim(Object chunk) {
+        return ChunkMutationTracker.dimOf(chunk);
+    }
+
+    private static int chunkX(Object chunk) {
+        long[] k = ChunkMutationTracker.chunkCoords(chunk);
+        return k[0] == Long.MIN_VALUE ? -1 : (int) k[0];
+    }
+
+    private static int chunkZ(Object chunk) {
+        long[] k = ChunkMutationTracker.chunkCoords(chunk);
+        return k[0] == Long.MIN_VALUE ? -1 : (int) k[1];
+    }
+
     /** Compare fast vs slow extraction for one section; dump on divergence. */
     static void dualVerify(int dim, int cx, int cz, int y, Object container, Object storage,
                            int[] fastResult) {
