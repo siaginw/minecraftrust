@@ -7,7 +7,7 @@ pub mod tape;
 #[cfg(test)]
 mod tests;
 
-pub use codec::{NbtDecoder, NbtEncoder, NbtError, NbtTag, MAX_DEPTH};
+pub use codec::{validate_root_stream, NbtDecoder, NbtEncoder, NbtError, NbtTag, MAX_DEPTH};
 pub use tape::NbtCursor;
 
 pub trait NbtCodec {

@@ -7,4 +7,6 @@ license.workspace = true
 [dependencies]
 core-types = { workspace = true }
 nbt = { workspace = true }
+flate2 = { version = "=1.1.10", features = ["zlib-rs"], default-features = false }
+sha2 = "0.10"
 

@@ -434,3 +434,19 @@ fn write_compound_payload(
         Err(NbtError::MissingRootCompound)
     }
 }
+
+/// Validate a full root-compound stream WITHOUT building the tree:
+/// skips the root type byte + name, then walks the compound payload spans.
+/// Returns bytes consumed from the start (type byte + name + payload).
+/// Used by the region scanner as a strict integrity check.
+pub fn validate_root_stream(bytes: &[u8]) -> Result<usize, NbtError> {
+    if bytes.is_empty() || bytes[0] != 10 {
+        return Err(NbtError::MissingRootCompound);
+    }
+    let mut cur = crate::tape::NbtCursor::new(bytes);
+    cur.advance_pub(1)?; // root type byte
+    let _ = cur.read_str_slice_pub()?; // root name (MUTF-8 bytes, not decoded)
+    let start = cur.position();
+    cur.skip_payload(10, 0)?;
+    Ok(cur.position() - start)
+}

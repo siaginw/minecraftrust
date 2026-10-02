@@ -86,6 +86,12 @@ impl<'a> NbtCursor<'a> {
                 if len < 0 {
                     return Err(NbtError::NegativeLength(len));
                 }
+                // A zero-length element type consumes NO bytes: a nonzero
+                // list of End elements would make this walk unbounded.
+                // Vanilla's reader rejects it (readError), so do we.
+                if elem_type == 0 && len > 0 {
+                    return Err(NbtError::InvalidListType(elem_type));
+                }
                 for _ in 0..len {
                     self.skip_payload(elem_type, depth + 1)?;
                 }
@@ -116,6 +122,16 @@ impl<'a> NbtCursor<'a> {
             }
             _ => Err(NbtError::InvalidTypeId(tag_type)),
         }
+    }
+
+    /// Advance the cursor (public for the free-function validators).
+    pub fn advance_pub(&mut self, n: usize) -> Result<(), NbtError> {
+        self.advance(n)
+    }
+
+    /// Read a 2-byte length-prefixed raw name slice (public for validators).
+    pub fn read_str_slice_pub(&mut self) -> Result<&'a [u8], NbtError> {
+        self.read_str_slice()
     }
 
     fn advance(&mut self, n: usize) -> Result<(), NbtError> {
