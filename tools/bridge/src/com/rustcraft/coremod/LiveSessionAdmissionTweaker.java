@@ -83,6 +83,16 @@ public final class LiveSessionAdmissionTweaker implements ITweaker {
             // the true entry buffer of this launch.
             System.out.println("[RustCraft] live session admission tweaker: entry observer "
                     + com.rustcraft.qualification.LoaderTransformChain.installAtFront(cl));
+            // Single-copy outbound boundary (self-gating: with the boundary
+            // disabled the transformers return every class unmodified).
+            // Registered BEFORE the qualified writers so the writers remain
+            // the chain tail exactly as qualified - no rotation, no deferred
+            // arm-target pass, and the writers' pre-hook profile inputs are
+            // byte-identical to the qualification run.
+            if (com.rustcraft.bridge.SingleCopyPipeline.enabled()) {
+                cl.registerTransformer("com.rustcraft.coremod.NetworkManagerSingleCopyTransformer");
+                cl.registerTransformer("com.rustcraft.coremod.NettyPacketEncoderCounterTransformer");
+            }
             // The writers register now; their first invocation places them at
             // the chain tail after every foreign transformer has registered.
             for (String name : new String[] {
@@ -90,12 +100,6 @@ public final class LiveSessionAdmissionTweaker implements ITweaker {
                     "com.rustcraft.coremod.LiveChunkOwnershipTransformer",
                     "com.rustcraft.coremod.LiveChunkPublicationTransformer"}) {
                 cl.registerTransformer(name);
-            }
-            // Single-copy outbound boundary (self-gating: with the boundary
-            // disabled the transformers return every class unmodified).
-            if (com.rustcraft.bridge.SingleCopyPipeline.enabled()) {
-                cl.registerTransformer("com.rustcraft.coremod.NetworkManagerSingleCopyTransformer");
-                cl.registerTransformer("com.rustcraft.coremod.NettyPacketEncoderCounterTransformer");
             }
             registerEvidenceFlushHook(sessionBound);
             // Cross-language fixture harvest (diagnostic only, real chunk).
