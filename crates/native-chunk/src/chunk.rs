@@ -301,6 +301,47 @@ impl NativeChunk {
         Ok(result)
     }
 
+    /// Exact byte count `encode_packet_payload` would emit for the current
+    /// section state, without writing output and without touching wire caches.
+    /// Mirrors the encode path section-for-section: same selected-mask
+    /// pre-check, same snapshot discipline, same per-section size rules.
+    /// The caller must still verify the real encode's byte count against this
+    /// value; a mismatch (e.g. a concurrent native refresh between the two
+    /// operations) is a fail-closed fallback, never a malformed packet.
+    pub fn measure_packet_payload(
+        &mut self,
+        skylight: bool,
+        full_chunk: bool,
+    ) -> Result<PacketEncodeResult, &'static str> {
+        let selected_mask = self.primary_bit_mask;
+        for s in 0..16 {
+            if (selected_mask & (1u16 << s)) != 0 && self.sections[s].is_none() {
+                return Err("Packet mask selects a missing section");
+            }
+        }
+
+        let snap = self.begin_snapshot();
+        let mut total = 0usize;
+        for s in 0..16 {
+            if (selected_mask & (1u16 << s)) != 0 {
+                let sec = self.sections[s]
+                    .as_mut()
+                    .ok_or("Packet mask selects a missing section")?;
+                total += sec.measure_wire(skylight);
+            }
+        }
+        if full_chunk {
+            total += BIOME_ARRAY_SIZE;
+        }
+        if !self.end_snapshot(snap) {
+            return Err("Snapshot stale: mutation during packet encode");
+        }
+        Ok(PacketEncodeResult {
+            bytes_written: total,
+            emitted_mask: selected_mask,
+        })
+    }
+
     /// Second Consumer Proof A: Spatial metadata & section occupancy summary.
     ///
     /// Computes active section mask and total non-air blocks in sub-microsecond time.

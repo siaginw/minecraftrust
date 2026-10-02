@@ -6,7 +6,9 @@
 //! Every other encoding is reserved. See docs/research/issue1-jni-v2-contract.md.
 
 use crate::native_chunk::get_registry;
-use native_chunk::{ChunkHandle, ChunkKey, ChunkLifecycle, ChunkRegistry, PacketEncodeResult};
+use native_chunk::{
+    ChunkHandle, ChunkKey, ChunkLifecycle, ChunkRegistry, NativeChunk, PacketEncodeResult,
+};
 use std::ffi::c_void;
 use std::panic::{catch_unwind, UnwindSafe};
 
@@ -168,14 +170,13 @@ fn classify_encode_error(error: &'static str) -> PacketEncodeV2Error {
     }
 }
 
-fn encode_in_registry(
+/// Shared lock/staleness gate for both the encode and the measure paths.
+fn with_live_chunk<T>(
     registry: &ChunkRegistry,
     handle: ChunkHandle,
-    skylight: bool,
-    full_chunk: bool,
-    output: &mut [u8],
-) -> Result<PacketEncodeResult, PacketEncodeV2Error> {
-    // Hold native membership through encoding. This excludes native removal or
+    operation: impl FnOnce(&mut NativeChunk) -> Result<T, &'static str>,
+) -> Result<T, PacketEncodeV2Error> {
+    // Hold native membership through the operation. This excludes native removal or
     // replacement during the operation, but does NOT synchronize Java writers
     // or guarantee publication after this function returns.
     let map = registry
@@ -196,12 +197,35 @@ fn encode_in_registry(
     {
         return Err(PacketEncodeV2Error::StaleGeneration);
     }
+    operation(&mut chunk).map_err(classify_encode_error)
+}
+
+fn encode_in_registry(
+    registry: &ChunkRegistry,
+    handle: ChunkHandle,
+    skylight: bool,
+    full_chunk: bool,
+    output: &mut [u8],
+) -> Result<PacketEncodeResult, PacketEncodeV2Error> {
     let mut offset = 0;
     // Exactly one encoder invocation; no independent mask lookup, recomputation,
     // second serialization, or retry. Both fields pass through this return.
-    chunk
-        .encode_packet_payload(skylight, full_chunk, output, &mut offset)
-        .map_err(classify_encode_error)
+    with_live_chunk(registry, handle, |chunk| {
+        chunk.encode_packet_payload(skylight, full_chunk, output, &mut offset)
+    })
+}
+
+/// Measure path: same registry/staleness gate as the encode, but the chunk is
+/// only scanned for its exact wire length — nothing is written anywhere.
+fn measure_in_registry(
+    registry: &ChunkRegistry,
+    handle: ChunkHandle,
+    skylight: bool,
+    full_chunk: bool,
+) -> Result<PacketEncodeResult, PacketEncodeV2Error> {
+    with_live_chunk(registry, handle, |chunk| {
+        chunk.measure_packet_payload(skylight, full_chunk)
+    })
 }
 
 pub(crate) fn checked_output_address(
@@ -278,6 +302,50 @@ pub unsafe extern "system" fn Java_com_rustcraft_bridge_NativeChunkBridge_encode
     }));
     observe_packed_result(&mut call, packed);
     packed
+}
+
+/// Measure-only V2 twin: returns the exact byte count and emitted mask the
+/// real encode would produce for the CURRENT chunk state, writing nothing.
+///
+/// Same packed-long protocol and failure codes as `encodePacketPayloadV2`
+/// (minus the capacity codes, which cannot occur). This is the length oracle
+/// that lets the Java single-copy path frame the complete pre-compression
+/// packet header (including the payload-length VarInt) BEFORE the payload is
+/// encoded straight into the final buffer — exactly one large payload memory
+/// movement. The caller must still verify the real encode's byte count against
+/// this value and fall back on any mismatch.
+///
+/// # Safety
+/// Writes no memory; only registry locks and the chunk's own palette caches
+/// are touched (idempotent, same discipline as the encode path).
+#[no_mangle]
+pub unsafe extern "system" fn Java_com_rustcraft_bridge_NativeChunkBridge_encodePacketPayloadV2Measure(
+    _env: *mut c_void,
+    _clazz: *mut c_void,
+    dim: i32,
+    cx: i32,
+    cz: i32,
+    generation_id: i64,
+    skylight: u8,
+    full_chunk: u8,
+) -> i64 {
+    result_boundary(std::panic::AssertUnwindSafe(|| {
+        if skylight > 1 || full_chunk > 1 {
+            return Err(PacketEncodeV2Error::InvalidArgument);
+        }
+        if generation_id <= 0 {
+            return Err(PacketEncodeV2Error::StaleGeneration);
+        }
+        measure_in_registry(
+            get_registry(),
+            ChunkHandle {
+                key: ChunkKey::new(dim, cx, cz),
+                generation_id: generation_id as u64,
+            },
+            skylight != 0,
+            full_chunk != 0,
+        )
+    }))
 }
 
 #[cfg(test)]

@@ -170,6 +170,120 @@ fn legacy_length_only_export_keeps_its_abi_and_bytes() {
 }
 
 #[test]
+fn measure_matches_encode_exactly_across_states_and_repeats() {
+    use rustcraft_ffi::Java_com_rustcraft_bridge_NativeChunkBridge_encodePacketPayloadV2Measure as measure_v2;
+
+    for mask in [0, 0x001f, 0x8421, 0xffff] {
+        let fixture = Fixture::new(mask);
+        for sky in [false, true] {
+            for full in [false, true] {
+                // Measure COLD first: sections are palette-dirty with cold
+                // wire caches right after seeding.
+                let packed_cold = unsafe {
+                    measure_v2(
+                        null_mut(),
+                        null_mut(),
+                        fixture.0.key.dim,
+                        fixture.0.key.cx,
+                        fixture.0.key.cz,
+                        fixture.0.generation_id as i64,
+                        sky as u8,
+                        full as u8,
+                    )
+                };
+                let (measured_cold, measured_mask) = success(packed_cold);
+                // First real encode of this state: dirty sections, caches cold.
+                let mut output = vec![0xa5; CAPACITY];
+                let (count, emitted) = success(fixture.call(&mut output, sky, full));
+                assert_eq!(measured_cold, count, "cold measure diverged");
+                assert_eq!(measured_mask, emitted);
+                // Warm the caches with a second encode, then measure again on
+                // the cached-wire fast path.
+                let mut warm = vec![0; CAPACITY];
+                let (count_warm, emitted_warm) = success(fixture.call(&mut warm, sky, full));
+                let packed_warm = unsafe {
+                    measure_v2(
+                        null_mut(),
+                        null_mut(),
+                        fixture.0.key.dim,
+                        fixture.0.key.cx,
+                        fixture.0.key.cz,
+                        fixture.0.generation_id as i64,
+                        sky as u8,
+                        full as u8,
+                    )
+                };
+                let (measured_warm, _) = success(packed_warm);
+                assert_eq!(measured_warm, count_warm, "warm measure diverged");
+                assert_eq!(emitted_warm, emitted);
+                assert_eq!(count_warm, count);
+            }
+        }
+    }
+}
+
+#[test]
+fn measure_measure_encode_stays_exact_after_refresh_and_mutation() {
+    use rustcraft_ffi::Java_com_rustcraft_bridge_NativeChunkBridge_encodePacketPayloadV2Measure as measure_v2;
+
+    let fixture = Fixture::new(0x0005);
+    // Make one section palette-dirty via a state rewrite path (refresh_section
+    // is the dirtying primitive the coherency flusher uses), then verify the
+    // measure -> encode pair still agrees byte-for-byte.
+    get_registry()
+        .get(&fixture.0)
+        .unwrap()
+        .write()
+        .unwrap()
+        .refresh_section(2, &[9; 4096], Some(&[7; 2048]), Some(&[248; 2048]));
+    let mut output = vec![0; CAPACITY];
+    let (count, emitted) = success(fixture.call(&mut output, true, true));
+    let packed = unsafe {
+        measure_v2(
+            null_mut(),
+            null_mut(),
+            fixture.0.key.dim,
+            fixture.0.key.cx,
+            fixture.0.key.cz,
+            fixture.0.generation_id as i64,
+            1,
+            1,
+        )
+    };
+    let (measured, mask) = success(packed);
+    assert_eq!(measured, count);
+    assert_eq!(mask, emitted);
+    assert_eq!(emitted, 0x0005);
+}
+
+#[test]
+fn measure_shares_encode_failure_and_staleness_semantics() {
+    use rustcraft_ffi::Java_com_rustcraft_bridge_NativeChunkBridge_encodePacketPayloadV2Measure as measure_v2;
+
+    let fixture = Fixture::new(0x0003);
+    let measure = |generation: i64, sky: u8, full: u8| unsafe {
+        measure_v2(
+            null_mut(),
+            null_mut(),
+            fixture.0.key.dim,
+            fixture.0.key.cx,
+            fixture.0.key.cz,
+            generation,
+            sky,
+            full,
+        )
+    };
+    // Stale / missing / invalid mirrors of the encode contract.
+    assert_eq!(measure(-1, 0, 0), -3);
+    assert_eq!(measure(0, 0, 0), -3);
+    assert_eq!(measure(fixture.0.generation_id as i64 + 1, 0, 0), -3);
+    assert_eq!(measure(fixture.0.generation_id as i64, 2, 0), -1);
+    assert_eq!(measure(fixture.0.generation_id as i64, 0, 2), -1);
+    get_registry().remove(fixture.0.key);
+    assert_eq!(measure(fixture.0.generation_id as i64, 0, 0), -2);
+}
+
+#[test]
 fn missing_selected_section_is_an_error_then_repair_can_retry() {
     let fixture = Fixture::new(0x001f);
     let entry = get_registry().get(&fixture.0).unwrap();

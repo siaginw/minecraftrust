@@ -677,6 +677,42 @@ impl NativeSection {
         Ok(())
     }
 
+    /// Exact number of bytes {@link encode_wire} would emit, computed without
+    /// writing any output and without touching the wire caches. Clean sections
+    /// report their cached blob length verbatim; dirty sections re-derive the
+    /// palette and sum the same fields the encoder writes (minimal VarInts per
+    /// palette entry, not the 5-byte reservation the encoder uses for capacity
+    /// checks). The caller still verifies measure == encode at runtime; this
+    /// function only has to agree with the encoder on the SAME section state.
+    pub(crate) fn measure_wire(&mut self, skylight: bool) -> usize {
+        if (self.flags & SectionFlags::PALETTE_DIRTY) == 0 {
+            let cached = if skylight {
+                &self.wire_cache_skylight
+            } else {
+                &self.wire_cache_noskylight
+            };
+            if let Some(ref wire) = cached {
+                return wire.len();
+            }
+        }
+
+        self.ensure_palette(None);
+
+        let local_palette = self.palette_cache.as_ref().unwrap();
+        let mut size = 1
+            + Self::varint_size(local_palette.words.len() as i32)
+            + local_palette.words.len() * 8
+            + LIGHT_ARRAY_SIZE
+            + if skylight { LIGHT_ARRAY_SIZE } else { 0 };
+        if local_palette.mode != PaletteMode::Global {
+            size += Self::varint_size(local_palette.palette.len() as i32);
+            for &id in &local_palette.palette {
+                size += Self::varint_size(id as i32);
+            }
+        }
+        size
+    }
+
     #[inline]
     fn varint_size(mut val: i32) -> usize {
         let mut len = 0;
