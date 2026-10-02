@@ -48,6 +48,12 @@ def main() -> int:
                         help="Client stability hold window in seconds")
     parser.add_argument("--boot-timeout-s", type=int, default=1800,
                         help="Server boot timeout in seconds")
+    parser.add_argument("--profile-jfr", action="store_true",
+                        help="Enable Java Flight Recorder stack sampling during run")
+    parser.add_argument("--profile-etw", action="store_true",
+                        help="Enable Windows ETW/WPR CPU stack sampling during run")
+    parser.add_argument("--disable-authority", action="store_true",
+                        help="Disable Rust packet authority for baseline A/B measurement")
     args = parser.parse_args()
 
     target = args.target
@@ -150,7 +156,7 @@ def main() -> int:
         "-Drustcraft.liveShadowScope=OVERWORLD_PER_CHUNK",
         "-Drustcraft.liveShadowDll=" + str(server_dir / "rustcraft_ffi.dll"),
         "-Drustcraft.liveShadowJournal=" + str(out_dir / "shadow-journal.jsonl"),
-        "-Drustcraft.packetAuthorityExperiment=true",
+        "-Drustcraft.packetAuthorityExperiment=" + ("false" if args.disable_authority else "true"),
         f"-Drustcraft.packetAuthorityCap={cap}",
         "-Drustcraft.packetAuthorityReceipt=" + str(closure_receipt),
         "-Drustcraft.packetAuthorityReceiptOut=" + str(exp_receipt_out),
@@ -163,6 +169,14 @@ def main() -> int:
     else:
         profile_id = "FORGE_2860_SERVER_TRANSFORMED_FML_INITIALIZED_OFFLINE_V1"
     extra_args.append("-Drustcraft.profile=" + profile_id)
+
+    jfr_file = out_dir / "server-profile.jfr"
+    if args.profile_jfr:
+        extra_args.extend([
+            "-XX:+UnlockCommercialFeatures",
+            "-XX:+FlightRecorder",
+            f"-XX:StartFlightRecording=settings=profile,filename={jfr_file},dumponexit=true"
+        ])
 
     classpath = [str(server_dir / "rustcraft-campaign.jar"),
                  str(server_dir / forge_jar_name),
@@ -178,6 +192,10 @@ def main() -> int:
         "--tweakClass", "com.rustcraft.coremod.LiveSessionAdmissionTweaker",
         "--gameDir", str(server_dir)
     ]
+
+    if args.profile_etw:
+        print("[etw] Starting Windows Performance Recorder (CPU sampling)...")
+        subprocess.run(["wpr", "-start", "CPU", "-filemode"], check=False)
 
     (out_dir / "launch.json").write_text(json.dumps({"session": session, "argv": argv}, indent=2) + "\n")
 
@@ -253,6 +271,16 @@ def main() -> int:
         stop(process, timeout_s=120)
         log_handle.close()
         print("[stop] Server stopped cleanly.")
+
+        if args.profile_etw:
+            etw_out = out_dir / "server-etw.etl"
+            print(f"[etw] Stopping Windows Performance Recorder -> {etw_out}...")
+            subprocess.run(["wpr", "-stop", str(etw_out)], check=False)
+
+        if args.profile_jfr and jfr_file.exists():
+            print(f"[jfr] JFR recording collected at {jfr_file} ({jfr_file.stat().st_size} bytes)")
+            summary_txt = out_dir / "jfr-summary.txt"
+            subprocess.run(["jfr", "summary", str(jfr_file)], stdout=summary_txt.open("wb"), check=False)
 
     # Inspect and verify authority experiment receipt
     print(f"[receipt] Inspecting authority experiment receipt at {exp_receipt_out}...")

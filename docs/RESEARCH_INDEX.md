@@ -47,6 +47,7 @@ Which parts of the engine Rust can take over, and what each boundary costs: [chu
 | [NativeChunk Real Server Profile](research/NATIVE_CHUNK_REAL_SERVER_PROFILE.md) | FTB Revelation 3.4.0 real server profiling, MCA palette distribution, and CPU stacks |
 | [NativeChunk Memory & GC Report](research/NATIVE_CHUNK_MEMORY_GC_REPORT.md) | Native memory footprint, packed long keys, and Java Young Gen GC churn elimination |
 | [NativeChunk JNI & Copy Audit](research/NATIVE_CHUNK_JNI_COPY_AUDIT.md) | Complete 18-method FFI boundary inventory and zero-copy packet lifecycle audit |
+| [NativeChunk Performance Closure](research/NATIVE_CHUNK_PERFORMANCE_CLOSURE.md) | Rigorous optimization plateau proof, FTB Revelation JFR stack profiling, compiler matrix, and A/B server analysis |
 | [NativeChunk Core Completion Report](research/NATIVE_CHUNK_CORE_COMPLETION_REPORT.md) | Optimization pass completion, formal memory hardening, and verification receipts |
 | [Next Engine Subsystem Selection](research/NEXT_ENGINE_SUBSYSTEM_SELECTION.md) | Subsystem candidate evaluation and decision matrix |
 

@@ -18,7 +18,7 @@ impl Fixture {
         let registry = get_registry();
         let coordinate = NEXT_COORD.fetch_add(1, Ordering::Relaxed);
         let mut chunk = NativeChunk::new(-20001, coordinate, 0, registry.next_generation_id());
-        chunk.biomes.fill(42);
+        chunk.fill_biomes(42);
         for y in 0..16 {
             if mask & (1 << y) != 0 {
                 chunk.refresh_section(

@@ -214,7 +214,7 @@ fn coherent_result_count_comes_from_success_not_capacity_or_mask() {
     let _serial = lock();
     let reg = get_registry();
     let mut chunk = native_chunk::NativeChunk::new(-30102, 0, 0, reg.next_generation_id());
-    chunk.biomes.fill(17);
+    chunk.fill_biomes(17);
     let handle = reg.insert(chunk);
     let mut out = [0xa5u8; 1024];
     let before = GLOBAL_FFI_METRICS.snapshot(Operation::ChunkEncodePacketPayloadV2);

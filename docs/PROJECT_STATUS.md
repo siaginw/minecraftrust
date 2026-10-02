@@ -89,9 +89,9 @@ Unconstrained production authority remains **`false`** everywhere (`PacketAuthor
     Worldgen 4,096 bulk fill: 1.67 µs).
   - **Live Server Smoke Validation:** Clean Forge 2860 (Gate A) passed 32/32; FTB Revelation 2846 (Gate C, 219 mods) passed 64/64
     with zero encode failures, zero packet desyncs, and immediate fail-closed Java fallback upon cap exhaustion.
-  - Status: **`NATIVE_CHUNK_PERFORMANCE_MAXIMIZED`**
-    (`docs/research/NATIVE_CHUNK_REAL_SERVER_PROFILE.md`, `docs/research/NATIVE_CHUNK_MEMORY_GC_REPORT.md`, `docs/research/NATIVE_CHUNK_JNI_COPY_AUDIT.md`, `docs/research/NATIVE_CHUNK_PERFORMANCE_SCORECARD.md`).
-- **Next Milestone:** **`READY_FOR_DIRECT_NETTY_WIRE_EMISSION_OR_PHASE_4_STORAGE`**.
+  - Status: **`NATIVE_CHUNK_PERFORMANCE_PLATEAU_PROVEN`**
+    (`docs/research/NATIVE_CHUNK_PERFORMANCE_CLOSURE.md`, `docs/research/NATIVE_CHUNK_PERFORMANCE_SCORECARD.md`, `docs/research/NATIVE_CHUNK_REAL_SERVER_PROFILE.md`, `docs/research/NATIVE_CHUNK_MEMORY_GC_REPORT.md`, `docs/research/NATIVE_CHUNK_JNI_COPY_AUDIT.md`).
+- **Next Milestone:** **`READY_FOR_DIRECT_NETTY_WIRE_EMISSION_OR_PHASE_4_STORAGE`** (NativeChunk optimization closed; ready to advance to Direct Netty / Off-Heap Packet Authority or Anvil / Region I/O).
 
 ### What each proof is
 
