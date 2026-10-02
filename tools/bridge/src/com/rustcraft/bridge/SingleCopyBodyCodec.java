@@ -102,7 +102,11 @@ public final class SingleCopyBodyCodec {
                 }
                 body.readerIndex(cursor);
                 int bits = body.readUnsignedByte();
-                if (bits < 4 || bits > 16) {
+                // Vanilla minimum is 4 (linear palette); the global palette
+                // width is ceil(log2(registry size)) - 18 for a 157k-state
+                // modded registry, so allow the full u8 range here and let
+                // the framing checks below catch real corruption.
+                if (bits < 4) {
                     return null;
                 }
                 int paletteLen = readVarInt(body);
@@ -118,7 +122,8 @@ public final class SingleCopyBodyCodec {
                     palette[i] = readVarInt(body);
                 }
                 int words = readVarInt(body);
-                if (words <= 0 || words > 4096) {
+                // Vanilla compact packing: floor(64/bits) cells per long.
+                if (words <= 0 || words > (4096 + 63) / Math.max(4, 64 / Math.max(1, bits))) {
                     return null;
                 }
                 long[] data = new long[words];
