@@ -92,6 +92,93 @@ public final class SingleCopyBodyCodec {
         }
     }
 
+    /** Debug-only: parse and report the first rejection reason. */
+    public static String parseDebug(ByteBuf body) {
+        StringBuilder reason = new StringBuilder();
+        int originalReader = body.readerIndex();
+        try {
+            ParsedBody out = new ParsedBody();
+            out.packetId = readVarInt(body);
+            out.chunkX = body.readInt();
+            out.chunkZ = body.readInt();
+            out.fullChunk = body.readBoolean();
+            out.mask = readVarInt(body);
+            long declaredLen = readVarInt(body);
+            int payloadStart = body.readerIndex();
+            ParsedBody r = parsePayloadDebug(body, payloadStart, (int) declaredLen, out, true, reason);
+            if (r == null) {
+                reason.append("[sky=true]");
+                body.readerIndex(payloadStart);
+                reason.setLength(0);
+                r = parsePayloadDebug(body, payloadStart, (int) declaredLen, out, false, reason);
+                if (r == null) {
+                    return "reject(sky=false): " + reason;
+                }
+            }
+            return "ok mask=" + Integer.toHexString(out.mask);
+        } catch (Throwable t) {
+            return "exception: " + t + " at reader=" + body.readerIndex();
+        } finally {
+            body.readerIndex(originalReader);
+        }
+    }
+
+    private static ParsedBody parsePayloadDebug(ByteBuf body, int payloadStart,
+                                                int declaredLen, ParsedBody out, boolean sky,
+                                                StringBuilder why) {
+        try {
+            int cursor = payloadStart;
+            for (int s = 0; s < 16; s++) {
+                if ((out.mask & (1 << s)) == 0) continue;
+                body.readerIndex(cursor);
+                int bits = body.readUnsignedByte();
+                if (bits < 4) { why.append("bits=").append(bits); return null; }
+                int paletteLen = readVarInt(body);
+                if (bits >= 9) {
+                    if (paletteLen != 0) { why.append("global pal=").append(paletteLen); return null; }
+                } else if (paletteLen <= 0 || paletteLen > (1 << bits)) {
+                    why.append("pal=").append(paletteLen).append(" bits=").append(bits); return null;
+                }
+                int[] palette = new int[bits >= 9 ? 0 : paletteLen];
+                for (int i = 0; i < palette.length; i++) palette[i] = readVarInt(body);
+                int words = readVarInt(body);
+                int perLong = 64 / bits;
+                int neededWords = (4096 + perLong - 1) / perLong;
+                if (words != neededWords) {
+                    why.append("words=").append(words).append(" need=").append(neededWords);
+                    return null;
+                }
+                for (int w = 0; w < words; w++) body.readLong();
+                body.skipBytes(2048);
+                if (sky) body.skipBytes(2048);
+                cursor = body.readerIndex();
+            }
+            if (out.fullChunk) {
+                body.readerIndex(cursor);
+                body.skipBytes(256);
+                cursor = body.readerIndex();
+            }
+            if (cursor != payloadStart + declaredLen
+                    || payloadStart + declaredLen > body.writerIndex()) {
+                why.append("cursor=").append(cursor).append(" want=")
+                   .append(payloadStart + declaredLen).append(" end=").append(body.writerIndex());
+                return null;
+            }
+            body.readerIndex(cursor);
+            long te = readVarInt(body);
+            if (te != 0) { why.append("te=").append(te); return null; }
+            if (body.readerIndex() != body.writerIndex()) {
+                why.append("trailing reader=").append(body.readerIndex())
+                   .append(" end=").append(body.writerIndex());
+                return null;
+            }
+            return out;
+        } catch (Throwable t) {
+            why.append("exc=").append(t);
+            return null;
+        }
+    }
+
     private static ParsedBody parsePayload(ByteBuf body, int bodyStart, int payloadStart,
                                            int declaredLen, ParsedBody out, boolean sky) {
         try {
@@ -122,8 +209,12 @@ public final class SingleCopyBodyCodec {
                     palette[i] = readVarInt(body);
                 }
                 int words = readVarInt(body);
-                // Vanilla compact packing: floor(64/bits) cells per long.
-                if (words <= 0 || words > (4096 + 63) / Math.max(4, 64 / Math.max(1, bits))) {
+                // Vanilla 1.12.2 BitArray: floor(64/bits) entries per long,
+                // array length ceil(4096 / entriesPerLong) - per-long padding,
+                // NOT the plain bit-packing size.
+                int perLong = 64 / bits;
+                int neededWords = (4096 + perLong - 1) / perLong;
+                if (words != neededWords) {
                     return null;
                 }
                 long[] data = new long[words];

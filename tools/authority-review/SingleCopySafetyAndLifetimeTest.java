@@ -803,6 +803,39 @@ public class SingleCopySafetyAndLifetimeTest {
         } finally {
             NativeChunkBridge.unload(0, cx, cz);
         }
+
+        // Hand-built global-palette section (bits=18, empty palette, 1152
+        // words) - the shape Revelation bodies carry for >256-unique sections.
+        ByteBuf global = Unpooled.buffer(65536);
+        SingleCopyChunkBody.writeVarInt(global, resolvedChunkPacketId);
+        global.writeInt(cx);
+        global.writeInt(cz);
+        global.writeBoolean(true);
+        SingleCopyChunkBody.writeVarInt(global, 1); // section 0
+        int payloadStart = global.writerIndex();
+        ByteBuf payloadLenSlot = global.duplicate().setIndex(global.writerIndex(), global.writerIndex());
+        global.writerIndex(global.writerIndex() + 2); // reserve 2-byte len varint
+        global.writeByte(18); // global palette bits for a 157k-state registry
+        SingleCopyChunkBody.writeVarInt(global, 0); // global palette: empty list
+        SingleCopyChunkBody.writeVarInt(global, 1366); // words: ceil(4096 / floor(64/18))
+        for (int w = 0; w < 1366; w++) {
+            global.writeLong(0x00123456789ABCDEFL);
+        }
+        global.writeZero(2048); // block light
+        global.writeZero(2048); // sky light
+        global.writeBytes(new byte[256]); // biomes
+        int declared = global.writerIndex() - payloadStart - 2; // payload only
+        SingleCopyChunkBody.writeVarInt(payloadLenSlot, declared);
+        SingleCopyChunkBody.writeVarInt(global, 0); // TE count (excluded from len)
+        SingleCopyBodyCodec.ParsedBody gp = SingleCopyBodyCodec.parse(global);
+        assertTrue(gp != null, "global-palette body parses");
+        if (gp == null) {
+            System.err.println("  [dbg] global body FAILED: " + SingleCopyBodyCodec.parseDebug(global));
+        } else {
+            assertEquals(1, gp.mask, "global body mask");
+            assertTrue(gp.sections[0] != null && gp.sections[0].cells[0] != 0,
+                    "global body cells resolved");
+        }
     }
 
     // ------------------------------------------------------------------
