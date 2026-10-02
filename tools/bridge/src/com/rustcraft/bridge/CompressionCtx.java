@@ -51,6 +51,24 @@ public final class CompressionCtx {
         return n + (n / 8192 + 2) * 5L + 16;
     }
 
+    /**
+     * Raw address-based compress for the direct single-copy pipeline: caller
+     * resolves both addresses (input body ByteBuf and pre-sized output
+     * region), so ZERO Java heap payload bytes are touched. Returns the
+     * compressed length, or <= 0 on failure (error codes as_code(): -1
+     * OutputTooSmall, -2 backend/panic, -3 bad args, -4 dead handle).
+     * Single-owner contract as for compress(byte[]): one channel/event loop.
+     */
+    public int compressDirect(long inAddr, int inLen, long outAddr, int outCap) {
+        long h = handle.get();
+        if (h <= 0) return -4;
+        try {
+            return compress(h, inAddr, inLen, outAddr, outCap);
+        } catch (Throwable t) {
+            return -2;
+        }
+    }
+
     private static volatile Method ADDRESS_M;
     private static long address(ByteBuffer b) {
         try {

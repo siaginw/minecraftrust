@@ -83,6 +83,16 @@ public final class LiveSessionAdmissionTweaker implements ITweaker {
             // the true entry buffer of this launch.
             System.out.println("[RustCraft] live session admission tweaker: entry observer "
                     + com.rustcraft.qualification.LoaderTransformChain.installAtFront(cl));
+            // Compression authority (M2C, default OFF) + the passive corpus
+            // tap (rustcraft.compressionCorpus): the transformer rewrites only
+            // the NettyCompressionEncoder construction site inside
+            // NetworkManager, and self-gates on its own properties. Registered
+            // BEFORE the counted writers - it is topologically a foreign
+            // transformer, and the tail must contain exactly the counted set.
+            if (!"OFF".equalsIgnoreCase(com.rustcraft.bridge.NativeCompressionEncoder.RUNTIME_MODE)
+                    || System.getProperty(com.rustcraft.bridge.NativeCompressionEncoder.CORPUS_PROPERTY) != null) {
+                cl.registerTransformer("com.rustcraft.coremod.NetworkManagerCompressionTransformer");
+            }
             // The writers register now; their first invocation places them at
             // the chain tail after every foreign transformer has registered.
             for (String name : new String[] {
@@ -100,6 +110,7 @@ public final class LiveSessionAdmissionTweaker implements ITweaker {
                 cl.registerTransformer("com.rustcraft.coremod.NetworkManagerSingleCopyTransformer");
                 cl.registerTransformer("com.rustcraft.coremod.NettyPacketEncoderCounterTransformer");
             }
+
             registerEvidenceFlushHook(sessionBound);
             // Cross-language fixture harvest (diagnostic only, real chunk).
             com.rustcraft.bridge.capture.RevelationFixtureHarvest.maybeSchedule();
