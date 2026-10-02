@@ -491,6 +491,25 @@ public final class PacketAuthorityExperiment {
 
                             if (clean) {
                                 if (singleCopyEnabled()) {
+                                    // Freshness gate (M4.2C race, caught by the
+                                    // single-copy full-body shadow): registration
+                                    // light is a DEFAULT until the chunk's first
+                                    // full sync, and the Java light engine's
+                                    // post-registration edits leave no work bits -
+                                    // a clean work mask does NOT imply synced
+                                    // light. Synchronize the native state on this
+                                    // thread so the body encodes exactly the state
+                                    // the Java packet will read.
+                                    try {
+                                        com.rustcraft.bridge.M4Coherency.refreshChunkNow(chunkObj);
+                                    } catch (Throwable refreshFailure) {
+                                        System.err.println("[RustCraft-SingleCopy] retained refresh failed: "
+                                                + refreshFailure);
+                                        SINGLE_COPY_FALLBACKS.incrementAndGet();
+                                        JAVA_FALLBACK.incrementAndGet();
+                                        JAVA_SELECTED.incrementAndGet();
+                                        return false;
+                                    }
                                     return trySingleCopyAdmission(packetObj, chunkObj, dim, cx, cz,
                                             generationId, extractWorldHasSky(chunkObj));
                                 }

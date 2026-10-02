@@ -649,11 +649,24 @@ public final class SingleCopyPipeline {
                     break;
                 }
             }
+            String context = "";
+            if (first >= 0) {
+                StringBuilder e = new StringBuilder();
+                StringBuilder a = new StringBuilder();
+                int from = Math.max(0, first - 4);
+                int to = Math.min(Math.min(expLen, actLen), first + 4);
+                for (int i = from; i < to; i++) {
+                    e.append(String.format("%02x", expected.getByte(expected.readerIndex() + i) & 0xFF));
+                    a.append(String.format("%02x", actual.getByte(actual.readerIndex() + i) & 0xFF));
+                }
+                context = String.format(" exp[%d..%d]=%s act=%s",
+                        from, to - 1, e, a);
+            }
             System.err.println(String.format(
                     "[RustCraft-SingleCopy] SHADOW MISMATCH len expected=%d actual=%d firstDivergence=%s"
-                            + " expHead=%s actHead=%s",
+                            + " expHead=%s actHead=%s%s",
                     expLen, actLen, first < 0 ? "none(len only)" : Integer.toString(first),
-                    head16(expected), head16(actual)));
+                    head16(expected), head16(actual), context));
         }
     }
 

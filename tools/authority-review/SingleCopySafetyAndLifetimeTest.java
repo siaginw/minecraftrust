@@ -626,7 +626,7 @@ public class SingleCopySafetyAndLifetimeTest {
     // ------------------------------------------------------------------
 
     private static void testRetainedFastPathCleanCounters() throws Exception {
-        System.out.println("[16] retained fast path: zero legacy capture machinery");
+        System.out.println("[16] retained path freshness gate: fail-closed on unsynchronizable chunk");
         PacketAuthorityExperiment.resetForTesting(false, 64);
         PacketAuthorityExperiment.setEnabled(true);
         PacketAuthorityExperiment.setCap(64);
@@ -645,21 +645,22 @@ public class SingleCopySafetyAndLifetimeTest {
             Object fakePacket = new net.minecraft.network.play.server.SPacketChunkData();
             boolean admitted = PacketAuthorityExperiment.tryAuthority(
                     null, fakePacket, fakeChunk, 0xFFFF);
-            assertTrue(admitted, "retained single-copy admission");
-
-            assertEquals(0, PacketAuthorityExperiment.SNAPSHOT_SEED_PATH.get(),
-                    "no snapshot seed path");
-            assertEquals(0, PacketAuthorityExperiment.RETAINED_SEEDED.get(),
-                    "no seeding");
-            assertEquals(1, PacketAuthorityExperiment.RETAINED_FAST_PATH.get(),
-                    "retained fast path used");
-            assertEquals(1, PacketAuthorityExperiment.SINGLE_COPY_ADMITTED_COUNT.get(),
-                    "single copy admitted");
-            // The packet shell carries the EMPTY payload, never a Java copy.
+            // The retained admission runs a synchronous freshness sync first
+            // (M4.2C race: registration light is a default until the first
+            // full sync). An unsynchronizable chunk fails CLOSED to the Java
+            // path - the offline FakeChunk cannot satisfy the real section
+            // extraction, so the guard must refuse it.
+            assertTrue(!admitted, "unsynchronizable chunk refused (fail closed)");
+            assertTrue(PacketAuthorityExperiment.JAVA_FALLBACK.get() >= 1,
+                    "refusal counted as Java fallback");
+            assertTrue(PacketAuthorityExperiment.SINGLE_COPY_ADMITTED_COUNT.get() == 0,
+                    "no single-copy admission without a fresh sync");
+            // Fail closed means the VANILLA constructor ran: the packet
+            // carries a real Java payload, never the empty single-copy shell.
             Object payloadField = packetField(fakePacket, "field_186949_d");
             assertTrue(payloadField instanceof byte[]
-                            && ((byte[]) payloadField).length == 0,
-                    "Java payload byte[] is the shared empty shell (no heap copy)");
+                            && ((byte[]) payloadField).length > 0,
+                    "refused packet fell through to real vanilla construction");
             NativeChunkBridge.unload(0, cx, cz);
         } finally {
             PacketAuthorityExperiment.setEnabled(false);
