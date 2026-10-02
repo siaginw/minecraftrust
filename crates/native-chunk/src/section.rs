@@ -69,7 +69,7 @@ pub struct NativeSection {
     /// on the SAME 32-bit atomic word boundaries, eliminating mixed-width atomic hazards.
     pub block_light: [AtomicU32; LIGHT_WORD_COUNT], // 2,048 bytes
     /// Sky light stored as 512 32-bit atomic words (2,048 bytes).
-    pub sky_light: [AtomicU32; LIGHT_WORD_COUNT],   // 2,048 bytes
+    pub sky_light: [AtomicU32; LIGHT_WORD_COUNT], // 2,048 bytes
     pub non_air_count: u16,
     pub flags: u8,
     pub y_index: u8,

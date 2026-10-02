@@ -262,7 +262,10 @@ mod tests {
         );
         assert!(chunk.sections[1].is_some());
         assert_eq!(chunk.sections[1].as_ref().unwrap().non_air_count, 2048);
-        assert_eq!(chunk.sections[1].as_ref().unwrap().block_light_as_slice()[0], 7);
+        assert_eq!(
+            chunk.sections[1].as_ref().unwrap().block_light_as_slice()[0],
+            7
+        );
         assert_eq!(
             chunk.primary_bit_mask & (1 << 1),
             1 << 1,
@@ -274,8 +277,15 @@ mod tests {
         let air = [0u16; 4096];
         chunk.refresh_section(0, &air, None, None);
         assert_eq!(chunk.dirty_mask(), 0);
-        assert!(chunk.sections[0].is_some(), "all-air section preserved in resident memory for pointer stability");
-        assert_eq!(chunk.primary_bit_mask, 1 << 1, "all-air section deactivated from packet mask");
+        assert!(
+            chunk.sections[0].is_some(),
+            "all-air section preserved in resident memory for pointer stability"
+        );
+        assert_eq!(
+            chunk.primary_bit_mask,
+            1 << 1,
+            "all-air section deactivated from packet mask"
+        );
         assert_eq!(
             chunk.lifecycle,
             ChunkLifecycle::ActiveNative,
@@ -420,8 +430,14 @@ mod tests {
             256,
             "states untouched by light-only refresh"
         );
-        assert_eq!(chunk.sections[0].as_ref().unwrap().block_light_as_slice()[0], 5);
-        assert_eq!(chunk.sections[0].as_ref().unwrap().sky_light_as_slice()[2047], 9);
+        assert_eq!(
+            chunk.sections[0].as_ref().unwrap().block_light_as_slice()[0],
+            5
+        );
+        assert_eq!(
+            chunk.sections[0].as_ref().unwrap().sky_light_as_slice()[2047],
+            9
+        );
         assert_eq!(chunk.dirty_mask(), 0);
 
         // Light bytes appear verbatim in the encoded packet.

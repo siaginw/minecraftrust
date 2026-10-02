@@ -11,7 +11,7 @@
 
 use crate::registry::STATS_SECTIONS_ALLOCATED;
 use crate::section::NativeSection;
-use std::sync::atomic::{AtomicU8, AtomicU16, Ordering};
+use std::sync::atomic::{AtomicU16, AtomicU8, Ordering};
 
 pub const CHUNK_PRIMER_SIZE: usize = 65536; // 16 * 16 * 256 u16
 pub const BIOME_ARRAY_SIZE: usize = 256; // 16 * 16 u8
@@ -763,7 +763,14 @@ impl NativeChunk {
     /// - If block placed at or above current height: new height is y + 1.
     /// - If block removed at current top (y == height - 1): performs downward scan to find new top.
     /// - Otherwise (mutation below top): height remains unchanged.
-    pub fn update_height_on_mutation(&mut self, x: usize, y: usize, z: usize, old_state: u16, new_state: u16) -> u16 {
+    pub fn update_height_on_mutation(
+        &mut self,
+        x: usize,
+        y: usize,
+        z: usize,
+        old_state: u16,
+        new_state: u16,
+    ) -> u16 {
         let col_idx = (z << 4) | x;
         let cur_height = self.height_map[col_idx].load(Ordering::Acquire) as usize;
 
@@ -957,7 +964,11 @@ mod tests {
         let byte_offset = idx >> 1;
         let is_odd = (idx & 1) != 0;
         let raw_byte = unsafe { *((bl_ptrs[3] as *const u8).add(byte_offset)) };
-        let nibble = if is_odd { (raw_byte >> 4) & 0x0F } else { raw_byte & 0x0F };
+        let nibble = if is_odd {
+            (raw_byte >> 4) & 0x0F
+        } else {
+            raw_byte & 0x0F
+        };
         assert_eq!(nibble, 14);
 
         // Mutate adjacent nibble in same byte (verify no tearing)

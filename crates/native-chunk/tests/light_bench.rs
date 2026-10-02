@@ -38,7 +38,11 @@ impl LightStorageU8 {
         let cell = &self.bytes[byte_idx];
         let mut cur = cell.load(Ordering::Relaxed);
         loop {
-            let old_nibble = if is_odd { (cur >> 4) & 0x0F } else { cur & 0x0F };
+            let old_nibble = if is_odd {
+                (cur >> 4) & 0x0F
+            } else {
+                cur & 0x0F
+            };
             if old_nibble == val_nibble {
                 return false;
             }
@@ -121,8 +125,16 @@ fn bench_light_representations() {
     let dur_read32 = t0.elapsed();
 
     println!("Sequential Reads ({} iters):", iters);
-    println!("  AtomicU8:  {:?} ({:.2} ns/op)", dur_read8, dur_read8.as_nanos() as f64 / iters as f64);
-    println!("  AtomicU32: {:?} ({:.2} ns/op)", dur_read32, dur_read32.as_nanos() as f64 / iters as f64);
+    println!(
+        "  AtomicU8:  {:?} ({:.2} ns/op)",
+        dur_read8,
+        dur_read8.as_nanos() as f64 / iters as f64
+    );
+    println!(
+        "  AtomicU32: {:?} ({:.2} ns/op)",
+        dur_read32,
+        dur_read32.as_nanos() as f64 / iters as f64
+    );
     assert_eq!(sum8, sum32);
 
     // 2. Sequential Writes (alternating nibble values)
@@ -139,12 +151,25 @@ fn bench_light_representations() {
     let dur_write32 = t0.elapsed();
 
     println!("Sequential Writes ({} iters):", iters);
-    println!("  AtomicU8:  {:?} ({:.2} ns/op)", dur_write8, dur_write8.as_nanos() as f64 / iters as f64);
-    println!("  AtomicU32: {:?} ({:.2} ns/op)", dur_write32, dur_write32.as_nanos() as f64 / iters as f64);
+    println!(
+        "  AtomicU8:  {:?} ({:.2} ns/op)",
+        dur_write8,
+        dur_write8.as_nanos() as f64 / iters as f64
+    );
+    println!(
+        "  AtomicU32: {:?} ({:.2} ns/op)",
+        dur_write32,
+        dur_write32.as_nanos() as f64 / iters as f64
+    );
 
     // Verify parity
     for i in 0..NIBBLES_PER_SECTION {
-        assert_eq!(u8_storage.get(i), u32_storage.get(i), "Mismatch at nibble {}", i);
+        assert_eq!(
+            u8_storage.get(i),
+            u32_storage.get(i),
+            "Mismatch at nibble {}",
+            i
+        );
     }
 
     // 3. Same-Word Contention (Writes targeting nibbles 0..7 in word 0)
@@ -161,13 +186,27 @@ fn bench_light_representations() {
     let dur_cont32 = t0.elapsed();
 
     println!("Same-Word Contention Writes ({} iters):", iters);
-    println!("  AtomicU8:  {:?} ({:.2} ns/op)", dur_cont8, dur_cont8.as_nanos() as f64 / iters as f64);
-    println!("  AtomicU32: {:?} ({:.2} ns/op)", dur_cont32, dur_cont32.as_nanos() as f64 / iters as f64);
+    println!(
+        "  AtomicU8:  {:?} ({:.2} ns/op)",
+        dur_cont8,
+        dur_cont8.as_nanos() as f64 / iters as f64
+    );
+    println!(
+        "  AtomicU32: {:?} ({:.2} ns/op)",
+        dur_cont32,
+        dur_cont32.as_nanos() as f64 / iters as f64
+    );
 
     // 4. Memory size
     println!("Memory Size per Section Light Array:");
-    println!("  AtomicU8:  {} bytes", std::mem::size_of_val(&u8_storage.bytes));
-    println!("  AtomicU32: {} bytes", std::mem::size_of_val(&u32_storage.words));
+    println!(
+        "  AtomicU8:  {} bytes",
+        std::mem::size_of_val(&u8_storage.bytes)
+    );
+    println!(
+        "  AtomicU32: {} bytes",
+        std::mem::size_of_val(&u32_storage.words)
+    );
     assert_eq!(std::mem::size_of_val(&u8_storage.bytes), 2048);
     assert_eq!(std::mem::size_of_val(&u32_storage.words), 2048);
 }
