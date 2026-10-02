@@ -46,6 +46,12 @@ public class NetworkManagerCompressionTransformer implements IClassTransformer {
      *  class-scan verified gv carries the Deflater. */
     private static final String VANILLA_ENCODER_OBF = "gv";
     private static final String NATIVE_ENCODER = "com/rustcraft/bridge/NativeCompressionEncoder";
+    /** Notch-parented variant: extends gv so the vanilla cast and the
+     *  gv.a(int) threshold setter dispatch work on notch runtimes. */
+    private static final String NATIVE_ENCODER_NOTCH =
+            "NativeCompressionEncoderNotch";
+    private static final boolean NOTCH_RUNTIME =
+            Boolean.getBoolean("rustcraft.compressionNotchRuntime");
 
     private static final boolean ENABLED =
             !"OFF".equalsIgnoreCase(System.getProperty("minecraftrust.native_compress", "OFF"))
@@ -87,18 +93,19 @@ public class NetworkManagerCompressionTransformer implements IClassTransformer {
             int patched = 0;
             for (MethodNode mn : (java.util.List<MethodNode>) cn.methods) {
                 if (!methodReferencesCompress(mn)) continue;
+                String replacement = NOTCH_RUNTIME ? NATIVE_ENCODER_NOTCH : NATIVE_ENCODER;
                 for (AbstractInsnNode insn : mn.instructions.toArray()) {
                     if (insn.getOpcode() == Opcodes.NEW) {
                         TypeInsnNode t = (TypeInsnNode) insn;
                         if (VANILLA_ENCODER.equals(t.desc) || VANILLA_ENCODER_OBF.equals(t.desc)) {
-                            t.desc = NATIVE_ENCODER;
+                            t.desc = replacement;
                             patched++;
                         }
                     } else if (insn.getOpcode() == Opcodes.INVOKESPECIAL) {
                         MethodInsnNode m = (MethodInsnNode) insn;
                         if ((VANILLA_ENCODER.equals(m.owner) || VANILLA_ENCODER_OBF.equals(m.owner))
                                 && "<init>".equals(m.name)) {
-                            m.owner = NATIVE_ENCODER;
+                            m.owner = replacement;
                         }
                     }
                 }

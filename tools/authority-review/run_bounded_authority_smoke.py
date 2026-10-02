@@ -183,6 +183,7 @@ def main() -> int:
         "-Drustcraft.singleCopy=" + ("true" if args.single_copy else "false"),
         "-Drustcraft.singleCopyShadow=" + ("true" if args.single_copy_shadow else "false"),
         "-Dminecraftrust.native_compress=" + args.native_compress,
+        "-Drustcraft.compressionNotchRuntime=true",
     ]
     if args.corpus:
         extra_args.append("-Drustcraft.compressionCorpus=" + args.corpus)

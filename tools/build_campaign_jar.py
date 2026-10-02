@@ -57,7 +57,8 @@ def main():
     else:
         plan = ROOT / "tools/bridge/src/com/rustcraft/coremod/LiveWriterPlan.java"
 
-    cp = f"{forge};{SRG_JAR};{asm};{lw}"
+    notch_jar = ROOT / "target" / "authority-smoke" / "runtimeA" / "minecraft_server.1.12.2.jar"
+    cp = f"{forge};{SRG_JAR};{asm};{lw};{notch_jar}"
 
     sources = [
         ROOT / "tools/bridge/src/com/rustcraft/coremod/LiveShadowCoreMod.java",
@@ -123,6 +124,8 @@ def main():
         ROOT / "tools/bridge/src/com/rustcraft/coremod/ChunkMutationTransformer.java",
         ROOT / "tools/bridge/src/com/rustcraft/coremod/NetworkManagerSingleCopyTransformer.java",
         ROOT / "tools/bridge/src/com/rustcraft/coremod/NetworkManagerCompressionTransformer.java",
+        ROOT / "tools/bridge/src/com/rustcraft/bridge/RustCompressionEngine.java",
+        ROOT / "tools/bridge/src/NativeCompressionEncoderNotch.java",
         ROOT / "tools/bridge/src/com/rustcraft/coremod/NettyPacketEncoderCounterTransformer.java",
         ROOT / "tools/bridge/src/com/rustcraft/bridge/SingleCopyChunkBody.java",
         ROOT / "tools/bridge/src/com/rustcraft/bridge/SingleCopyBodyCodec.java",

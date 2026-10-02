@@ -209,9 +209,9 @@ public class CompressionAuthorityOfflineTest {
     private static void testThresholdLifecycle() {
         System.out.println("[6] threshold lifecycle (func_179299_a updates)");
         NativeCompressionEncoder enc = new NativeCompressionEncoder(256);
-        assertEquals(256, enc.threshold(), "initial threshold");
+        assertEquals(256, enc.thresholdForTest(), "initial threshold");
         enc.func_179299_a(1024);
-        assertEquals(1024, enc.threshold(), "updated threshold");
+        assertEquals(1024, enc.thresholdForTest(), "updated threshold");
         byte[] body = new byte[512]; // between 256 and 1024: must now pass through raw
         new Random(17).nextBytes(body);
         EmbeddedChannel ch = newChannel(enc, 1024);

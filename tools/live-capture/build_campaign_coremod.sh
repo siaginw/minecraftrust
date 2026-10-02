@@ -98,6 +98,9 @@ SOURCES=(
   "$ROOT/tools/bridge/src/com/rustcraft/coremod/ChunkMutationTransformer.java"
   # Single-copy outbound boundary (default OFF).
   "$ROOT/tools/bridge/src/com/rustcraft/coremod/NetworkManagerSingleCopyTransformer.java"
+  "$ROOT/tools/bridge/src/com/rustcraft/coremod/NetworkManagerCompressionTransformer.java"
+  "$ROOT/tools/bridge/src/com/rustcraft/bridge/RustCompressionEngine.java"
+  "$ROOT/tools/bridge/src/com/rustcraft/bridge/NativeCompressionEncoderNotch.java"
   "$ROOT/tools/bridge/src/com/rustcraft/coremod/NettyPacketEncoderCounterTransformer.java"
   "$ROOT/tools/bridge/src/com/rustcraft/bridge/SingleCopyChunkBody.java"
   "$ROOT/tools/bridge/src/com/rustcraft/bridge/SingleCopyBodyCodec.java"
