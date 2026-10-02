@@ -62,15 +62,21 @@ Unconstrained production authority remains **`false`** everywhere (`PacketAuthor
   read, 16.45 ns mapped read.
   Status: **`CROSS_LANGUAGE_MEMORY_MODEL_SOUND_AND_PROVEN`**
   (`docs/research/CROSS_LANGUAGE_MEMORY_MODEL_RESOLUTION_REPORT.md`).
-- **Block Light & Sky Light State Ownership Migrated:** Migrated block light and sky light data arrays into
-  Rust `NativeSection` (`[AtomicU8; 2048]`). Lock-free atomic word/byte CAS loops prevent odd/even nibble tearing
-  under concurrent writes from multiple threads. Java reads and writes native light memory directly with zero JNI
-  crossings. Coremod ASM hooks on `ExtendedBlockStorage` (`getExtBlocklightValue`, `setExtBlocklightValue`, `getExtSkylightValue`, `setExtSkylightValue`)
-  cleanly support Phosphor without conflicts. Differential fuzzing across 10,000 operations passed with 0 mismatches
-  against reference `NibbleArray`. Gate A (32/32) and Gate C (64/64) live smokes passed with zero client desyncs.
+- **Block Light & Sky Light State Ownership Migrated & Hardened:** Migrated block light and sky light data arrays into
+  Rust `NativeSection`. Resolved mixed-width atomic hazards by aligning backing storage to `[AtomicU32; 512]` (2,048 bytes),
+  matching Java's 4-byte `compareAndSwapInt` and Rust's `AtomicU32::compare_exchange_weak` on exact word boundaries.
+  Tested under 20,000,000 concurrent reads and 2,000,000 writes across 6 threads with 0 corruption (59.2M ops/sec).
   Status: **`RUST_LIGHT_STATE_AUTHORITY_EXPANDED`**
   (`docs/research/RUST_LIGHT_STATE_AUTHORITY_REPORT.md`).
-- **Next Milestone:** **`READY_FOR_RUST_CHUNKSTATE_BIOME_HEIGHTMAP_EXPANSION`**.
+- **Biome & Heightmap State Ownership Migrated (`[u8; 256]` & `[u16; 256]`):** Biome and heightmap data arrays are now
+  authoritatively stored and mutated in Rust `NativeChunk`. Zero-JNI direct memory pointers (`biomesPointer`, `heightmapPointer`)
+  enable Java `Chunk.getBiome` (~2.7 ns) and `Chunk.getHeightValue` (~2.8 ns) lookups with zero boundary translation overhead.
+  Rust `recompute_height` features data-oriented downward scan acceleration skipping empty 16-block vertical sections via
+  `primary_bit_mask` testing. Validated with 100,000 biome differential fuzzing operations (0 mismatches), 100,000 heightmap
+  differential fuzzing operations (0 mismatches), and live server smokes on Gate A (32/32) and Gate C (64/64).
+  Status: **`BIOME_HEIGHTMAP_AUTHORITY_PROVEN`**
+  (`docs/research/RUST_BIOME_HEIGHTMAP_AUTHORITY_REPORT.md`).
+- **Next Milestone:** **`READY_FOR_RUST_NATIVE_CHUNK_CORE_COMPLETION`**.
 
 ### What each proof is
 

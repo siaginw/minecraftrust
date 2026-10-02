@@ -42,6 +42,7 @@ Which parts of the engine Rust can take over, and what each boundary costs: [chu
 | [Differential event replay](research/differential-event-replay.md) | Offline Java-vs-Rust replay methodology |
 | [Retained native state](architecture/retained-native-state.md) | Why V1 retention was abandoned |
 | [Rust Light State Authority](research/RUST_LIGHT_STATE_AUTHORITY_REPORT.md) | Block and sky light data migration into `NativeSection` |
+| [Rust Biome & Heightmap State Authority](research/RUST_BIOME_HEIGHTMAP_AUTHORITY_REPORT.md) | Biome `[u8; 256]` and heightmap `[u16; 256]` state ownership with AtomicU32 resolution |
 
 ## Protocol
 

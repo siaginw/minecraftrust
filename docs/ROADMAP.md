@@ -40,7 +40,7 @@ The first *ownership* milestone: chunk state that lives in Rust, with Java obser
 
 ## Phase 3 — Chunk reads/writes + packet authority · 🧪 active focus
 
-Rust owns chunk mutation paths end-to-end; Java packet construction for chunks retires behind the compatibility surface. First semantic ownership inversion of `getBlockState` and `setBlockState` completed under bounded experiment flags (`-Drustcraft.chunkStateAuthorityExperiment=true`). Section storage (`ExtendedBlockStorage`) and lighting data (`block_light` and `sky_light` atomic arrays) migrated into Rust ownership. Remaining: expand authoritative API coverage to biomes and heightmaps, promote unbuffered direct packet encoding from authoritative Rust chunks, and evaluate un-gated production authority.
+Rust owns chunk mutation paths end-to-end; Java packet construction for chunks retires behind the compatibility surface. First semantic ownership inversion of `getBlockState` and `setBlockState` completed under bounded experiment flags (`-Drustcraft.chunkStateAuthorityExperiment=true`). Section storage (`ExtendedBlockStorage`), packed lighting data (`AtomicU32` non-tearing arrays), biomes (`[u8; 256]`), and heightmaps (`[u16; 256]` with `primary_bit_mask` accelerated downward scans) migrated into Rust ownership. All direct-memory reads operate at 2.7-11.3 ns/op with zero JNI boundary crossings. Remaining: unbuffered direct wire packet serialization from native living memory and native tile-entity tracking.
 
 ## Phase 4 — Storage / NBT / Anvil · 🗺️ planned
 
