@@ -92,6 +92,8 @@ def main() -> int:
         "-Drustcraft.directNettyExperiment=false",
         "-Drustcraft.directNettyShadow=false",
         "-Drustcraft.singleCopy=true",
+        "-Dminecraftrust.native_compress=ON_EXPERIMENTAL",
+        "-Drustcraft.compressionNotchRuntime=true",
         "-Drustcraft.singleCopyShadow=false",
         "-Drustcraft.profile=FORGE_2860_SERVER_TRANSFORMED_FML_INITIALIZED_OFFLINE_V1",
     ]

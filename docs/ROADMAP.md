@@ -56,6 +56,12 @@ Phase 2 also encompasses:
 > the outbound handler writes it past `NettyPacketEncoder` into the untouched compression/framing chain —
 > client-visible on Gate A (120) and Gate C (276) with full-body shadow equality. See
 > [SINGLE_COPY_NETTY_PACKET_BODY_REPORT.md](research/SINGLE_COPY_NETTY_PACKET_BODY_REPORT.md).
+>
+> **Compression authority re-proven (`RUST_NETWORK_COMPRESSION_AUTHORITY_PROVEN`, 2026-10-02):** the M2C
+> subsystem now runs on the single-copy architecture via a direct zero-heap path; 1.27-2.16x per-packet
+> vs the vanilla Deflater on a 68k-body real corpus, live client-visible authority on Gate A/C, shadow
+> decompression equivalence 6,523/0. Frame prepender stays Java.
+> [RUST_NETWORK_COMPRESSION_AUTHORITY_REPORT.md](research/RUST_NETWORK_COMPRESSION_AUTHORITY_REPORT.md).
 
 Eliminated the intermediate Java packet-buffer allocations and copy boundaries in `SPacketChunkData` by emitting chunk packets directly into Netty's off-heap pooled `ByteBuf`s (`io.netty.buffer.ByteBuf`), and fully removed legacy migration infrastructure on the retained fast path (`CaptureDraft.extract`, `OwnedPacketSnapshot`, `RCSNAP02` transport byte array, `IN_BUF`/`OUT_BUF` intermediaries).
 - **Exact Accounting:** Exactly 1 payload copy in shipped path (Rust wire cache -> Netty direct buffer); 0 JVM heap payload allocations (saves 49,480 B per chunk packet, eliminating ~9.9 MB/s of Young Gen GC churn).

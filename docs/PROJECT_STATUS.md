@@ -25,6 +25,7 @@ Unconstrained production authority remains **`false`** everywhere (`PacketAuthor
 - **Formal Authority Review:** Executed and documented in
   `docs/research/PACKET_AUTHORITY_CONTRACT.md`. Binding receipt verified in
   `target/authority-review/closure-input-receipt.json`. Status: **`AUTHORITY_REVIEWED`**.
+- **Rust Network Compression (`RUST_NETWORK_COMPRESSION_AUTHORITY_PROVEN`):** the M2C subsystem re-proven on the single-copy architecture with a NEW direct zero-heap path (body ByteBuf memory -> JNI -> outbound buffer memory, heap payload bytes 0). Fresh 68,351-body Revelation-corpus matrix: 1.27-2.16x per-packet compressor speedup vs the vanilla Deflater at a vanilla-equivalent ratio (live wire +1.5%). Live: Gate A authority 356 + Gate C 1,184 + multi-client 2,382 Rust-compressed packets (direct 100%, 0 fallbacks), shadow 6,523 comparisons 0 mismatches, 100k stress green. Frame VarInt authority stays Java. Status: **PROVEN, READY_OPTIONAL (default OFF)** (`docs/research/RUST_NETWORK_COMPRESSION_AUTHORITY_REPORT.md`).
 - **Single-Copy Netty Packet Body (`SINGLE_COPY_NETTY_PACKET_BODY_PROVEN`):** the
   admitted `SPacketChunkData` path builds ONE complete immutable pre-compression
   ByteBuf per packet (native measure -> header -> ONE payload write straight into

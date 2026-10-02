@@ -59,6 +59,7 @@ Which parts of the engine Rust can take over, and what each boundary costs: [chu
 | [Direct Netty Wire Emission Report](research/DIRECT_NETTY_WIRE_EMISSION_REPORT.md) | Elimination of heap buffer allocations and intermediate memcpys via off-heap pooled Netty ByteBufs |
 | [True Direct Packet Path Closure](research/TRUE_DIRECT_PACKET_PATH_CLOSURE.md) | Elimination of legacy migration infrastructure, 0 B heap alloc, 1 copy pipeline closure |
 | [Single-Copy Netty Packet Body](research/SINGLE_COPY_NETTY_PACKET_BODY_REPORT.md) | Complete pre-compression body, NettyPacketEncoder bypass, full-body shadow equality, encoder-bypass gates A/C |
+| [Rust Network Compression Authority](research/RUST_NETWORK_COMPRESSION_AUTHORITY_REPORT.md) | Compression layer in Rust (zlib-rs, direct zero-heap), 68k-body corpus matrix, live shadow+authority gates, frame stays Java |
 | [Packet-mask semantics](research/m4-1-palette-semantics-research.md) | Palette behavior from real bytecode |
 | [Protocol-340 collection](protocol-340/) | Wire-level decoders and the packet registry |
 

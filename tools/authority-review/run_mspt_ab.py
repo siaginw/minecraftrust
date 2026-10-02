@@ -53,7 +53,8 @@ def build_agent(out: Path) -> Path:
     return agent
 
 
-def run_phase(name: str, single_copy: bool, port: int, agent: Path) -> dict:
+def run_phase(name: str, single_copy: bool, port: int, agent: Path,
+              compress: bool = False) -> dict:
     out_dir = ROOT / "target" / "authority-smoke" / f"sc-mspt-{name}"
     if out_dir.exists():
         shutil.rmtree(out_dir)
@@ -97,6 +98,8 @@ def run_phase(name: str, single_copy: bool, port: int, agent: Path) -> dict:
             "-Drustcraft.packetAuthorityReceiptOut=" + str(out_dir / "receipt.json"),
             "-Drustcraft.singleCopy=" + ("true" if single_copy else "false"),
             "-Drustcraft.singleCopyShadow=false",
+            "-Dminecraftrust.native_compress=" + ("ON_EXPERIMENTAL" if compress else "OFF"),
+            "-Drustcraft.compressionNotchRuntime=true",
             "-Drustcraft.profile=FORGE_2860_SERVER_TRANSFORMED_FML_INITIALIZED_OFFLINE_V1",
             "-cp", os.pathsep.join(cp),
             "net.minecraft.launchwrapper.Launch",
@@ -151,9 +154,11 @@ def main() -> int:
     out.mkdir(parents=True, exist_ok=True)
     agent = build_agent(out)
 
+    # Compression MSPT A/B: both arms single-copy ON; the toggle is
+    # native_compress OFF (Java Deflater) vs ON_EXPERIMENTAL (Rust).
     result = {
-        "single_copy": run_phase("singlecopy", True, args.port, agent),
-        "baseline": run_phase("baseline", False, args.port, agent),
+        "rust_compression": run_phase("rustcomp", True, args.port, agent, compress=True),
+        "java_compression": run_phase("javacomp", True, args.port, agent, compress=False),
     }
     (out / "mspt-ab.json").write_text(json.dumps(result, indent=2) + "\n")
     print(json.dumps(result, indent=2))
