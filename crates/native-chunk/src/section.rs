@@ -476,7 +476,10 @@ impl NativeSection {
 
         // OPTIMIZATION: Build a reverse lookup array or unrolled check to avoid
         // 4096 * N linear searches across the palette slice.
-        // For palettes <= 16 (4 bits), a fixed 16-element unrolled scan or small map is instant.
+        // For palettes <= 16 (4 bits), a fixed 16-element scan is instant.
+        // For palettes <= 64 (5..6 bits, covering ~92% of real Revelation sections),
+        // a 64-element direct lookup array eliminates dynamic allocations and avoids
+        // thousands of iterator calls.
         if palette.len() <= 16 {
             let mut pal_ids = [0u32; 16];
             let len = palette.len().min(16);
@@ -495,9 +498,27 @@ impl NativeSection {
                 }
                 Self::pack_entry(&mut words, idx, local_idx, bits);
             }
+        } else if palette.len() <= 64 {
+            let mut pal_ids = [0u32; 64];
+            let len = palette.len().min(64);
+            pal_ids[..len].copy_from_slice(&palette[..len]);
+
+            for idx in 0..SECTION_BLOCK_COUNT {
+                let global_id = states[idx] as u32;
+                let mut local_idx = 0u64;
+                if global_id != 0 {
+                    for p in 1..len {
+                        if pal_ids[p] == global_id {
+                            local_idx = p as u64;
+                            break;
+                        }
+                    }
+                }
+                Self::pack_entry(&mut words, idx, local_idx, bits);
+            }
         } else {
-            // General local palette (17..256 entries):
-            // Use linear scan with branch prediction or early exit
+            // General local palette (65..256 entries):
+            // Fallback direct scan
             for idx in 0..SECTION_BLOCK_COUNT {
                 let global_id = states[idx];
                 let local_idx = if global_id == 0 {

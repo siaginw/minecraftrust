@@ -705,7 +705,7 @@ pub unsafe extern "system" fn Java_com_rustcraft_bridge_NativeChunkBridge_setBio
         let map = reg.chunks_map().read().unwrap();
         if let Some(arc) = map.get(&key) {
             let mut chunk = arc.write().unwrap();
-            chunk.biomes.copy_from_slice(biomes);
+            chunk.set_biomes(biomes);
             call.bytes.copied_bytes = Some(256);
             chunk.mark_mutation();
             1
@@ -836,7 +836,7 @@ pub unsafe extern "system" fn Java_com_rustcraft_bridge_NativeChunkBridge_getBio
         match map.get(&key) {
             Some(arc) => {
                 let chunk = arc.read().unwrap();
-                out.copy_from_slice(&chunk.biomes);
+                out.copy_from_slice(chunk.biomes_as_slice());
                 call.bytes.copied_bytes = Some(256);
                 call.bytes.output_bytes = Some(256);
                 1
