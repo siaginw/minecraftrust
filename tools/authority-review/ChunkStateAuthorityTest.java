@@ -96,7 +96,16 @@ public class ChunkStateAuthorityTest {
         // 8. Light State Differential Fuzzing (10,000 light operations)
         testLightDifferentialFuzzing(10000, 1337L);
 
-        // 9. Performance Benchmarks
+        // 9. Biome & Heightmap Authority & Direct Pointers
+        testBiomeAndHeightAuthority();
+
+        // 10. Biome Differential Fuzzing (100,000 operations)
+        testBiomeDifferentialFuzzing(100000, 9999L);
+
+        // 11. Heightmap Differential Fuzzing (100,000 height-affecting block operations)
+        testHeightDifferentialFuzzing(100000, 7777L);
+
+        // 12. Performance Benchmarks
         runPerformanceBenchmarks();
 
         System.out.println("==================================================================");
@@ -602,8 +611,195 @@ public class ChunkStateAuthorityTest {
                 + reads + " reads) with 0 MISMATCHES across all 4,096 cells!");
     }
 
+    private static void testBiomeAndHeightAuthority() {
+        System.out.println("--> [9/12] Testing Biome & Heightmap Authority & Direct Pointers...");
+
+        int dim = 0;
+        int cx = 77;
+        int cz = 88;
+        ByteBuffer pb = ByteBuffer.allocateDirect(65536 * 2).order(ByteOrder.nativeOrder());
+        ByteBuffer bb = ByteBuffer.allocateDirect(256).order(ByteOrder.nativeOrder());
+        long genId = NativeChunkBridge.register(dim, cx, cz,
+                ChunkStateAuthorityBridge.getBufferAddress(pb),
+                ChunkStateAuthorityBridge.getBufferAddress(bb));
+        ChunkStateAuthorityBridge.ChunkAuthorityRecord rec =
+                ChunkStateAuthorityBridge.registerChunkAuthority(dim, cx, cz, genId);
+
+        assertTrue(rec.biomesPointer != 0, "biomesPointer must be non-null");
+        assertTrue(rec.heightmapPointer != 0, "heightmapPointer must be non-null");
+
+        // 1. Biome read/write via Unsafe direct memory
+        int b1 = StateRegistryLookup.getUnsafe().getByte(rec.biomesPointer + ((7 << 4) | 5)) & 0xFF;
+        assertEquals(0, b1, "Initial biome at (5,7) must be 0");
+
+        // Set biome
+        int okBio = NativeChunkBridge.setBiome(dim, cx, cz, 5, 7, 42);
+        assertEquals(1, okBio, "setBiome must return 1 (modified)");
+        int b2 = StateRegistryLookup.getUnsafe().getByte(rec.biomesPointer + ((7 << 4) | 5)) & 0xFF;
+        assertEquals(42, b2, "Direct memory biome at (5,7) must read 42");
+
+        // 2. Heightmap initial value
+        int h1 = StateRegistryLookup.getUnsafe().getShort(rec.heightmapPointer + (((4 << 4) | 4) << 1)) & 0xFFFF;
+        assertEquals(0, h1, "Initial height at (4,4) must be 0");
+
+        // Place block at Y=20 -> height becomes 21
+        NativeChunkBridge.setBlockState(dim, cx, cz, 4, 20, 4, 1);
+        int h2 = StateRegistryLookup.getUnsafe().getShort(rec.heightmapPointer + (((4 << 4) | 4) << 1)) & 0xFFFF;
+        assertEquals(21, h2, "Height after placing block at Y=20 must be 21");
+
+        // Place block at Y=50 -> height becomes 51
+        NativeChunkBridge.setBlockState(dim, cx, cz, 4, 50, 4, 2);
+        int h3 = StateRegistryLookup.getUnsafe().getShort(rec.heightmapPointer + (((4 << 4) | 4) << 1)) & 0xFFFF;
+        assertEquals(51, h3, "Height after placing block at Y=50 must be 51");
+
+        // Remove top block at Y=50 -> downward scan finds Y=20 -> height becomes 21
+        NativeChunkBridge.setBlockState(dim, cx, cz, 4, 50, 4, 0);
+        int h4 = StateRegistryLookup.getUnsafe().getShort(rec.heightmapPointer + (((4 << 4) | 4) << 1)) & 0xFFFF;
+        assertEquals(21, h4, "Height after removing top block must scan down to 21");
+
+        System.out.println("    [PASS] Biome & Heightmap Authority & Direct Pointers verified.");
+    }
+
+    private static void testBiomeDifferentialFuzzing(int count, long seed) {
+        System.out.println("--> [10/12] Running Biome Differential Fuzzing (" + count + " operations)...");
+
+        int dim = 0;
+        int cx = 78;
+        int cz = 89;
+        ByteBuffer pb = ByteBuffer.allocateDirect(65536 * 2).order(ByteOrder.nativeOrder());
+        ByteBuffer bb = ByteBuffer.allocateDirect(256).order(ByteOrder.nativeOrder());
+        long genId = NativeChunkBridge.register(dim, cx, cz,
+                ChunkStateAuthorityBridge.getBufferAddress(pb),
+                ChunkStateAuthorityBridge.getBufferAddress(bb));
+        ChunkStateAuthorityBridge.ChunkAuthorityRecord rec =
+                ChunkStateAuthorityBridge.registerChunkAuthority(dim, cx, cz, genId);
+
+        byte[] refBiomes = new byte[256];
+        Random rng = new Random(seed);
+        int writes = 0;
+        int reads = 0;
+
+        for (int op = 0; op < count; op++) {
+            int x = rng.nextInt(16);
+            int z = rng.nextInt(16);
+            int idx = (z << 4) | x;
+
+            if (rng.nextBoolean()) {
+                // WRITE
+                int val = rng.nextInt(256);
+                int changed = NativeChunkBridge.setBiome(dim, cx, cz, x, z, val);
+                int refChanged = (refBiomes[idx] & 0xFF) != val ? 1 : 0;
+                assertEquals(refChanged, changed, "setBiome return mismatch at (" + x + "," + z + ")");
+                refBiomes[idx] = (byte) val;
+                writes++;
+            } else {
+                // READ direct memory
+                int nativeVal = StateRegistryLookup.getUnsafe().getByte(rec.biomesPointer + idx) & 0xFF;
+                int refVal = refBiomes[idx] & 0xFF;
+                assertEquals(refVal, nativeVal, "Biome read mismatch at (" + x + "," + z + ")");
+                reads++;
+            }
+        }
+
+        // Full array check
+        for (int i = 0; i < 256; i++) {
+            int nativeVal = StateRegistryLookup.getUnsafe().getByte(rec.biomesPointer + i) & 0xFF;
+            int refVal = refBiomes[i] & 0xFF;
+            assertEquals(refVal, nativeVal, "Post-fuzz biome mismatch at index " + i);
+        }
+
+        System.out.println("    [PASS] Biome Differential Fuzzing: " + count + " ops (" + writes + " writes, "
+                + reads + " reads) with 0 MISMATCHES across all 256 entries!");
+    }
+
+    private static void testHeightDifferentialFuzzing(int count, long seed) {
+        System.out.println("--> [11/12] Running Heightmap Differential Fuzzing (" + count + " operations)...");
+
+        int dim = 0;
+        int cx = 79;
+        int cz = 90;
+        ByteBuffer pb = ByteBuffer.allocateDirect(65536 * 2).order(ByteOrder.nativeOrder());
+        ByteBuffer bb = ByteBuffer.allocateDirect(256).order(ByteOrder.nativeOrder());
+        long genId = NativeChunkBridge.register(dim, cx, cz,
+                ChunkStateAuthorityBridge.getBufferAddress(pb),
+                ChunkStateAuthorityBridge.getBufferAddress(bb));
+        ChunkStateAuthorityBridge.ChunkAuthorityRecord rec =
+                ChunkStateAuthorityBridge.registerChunkAuthority(dim, cx, cz, genId);
+
+        // Oracle: 16x16x256 block array and 256 height array
+        short[] refBlocks = new short[16 * 16 * 256];
+        int[] refHeight = new int[256];
+
+        Random rng = new Random(seed);
+        int mutations = 0;
+
+        for (int op = 0; op < count; op++) {
+            int x = rng.nextInt(16);
+            int z = rng.nextInt(16);
+            int colIdx = (z << 4) | x;
+
+            // Pick Y skewed toward current height or random
+            int curH = refHeight[colIdx];
+            int y;
+            int r = rng.nextInt(10);
+            if (r < 3 && curH > 0) {
+                y = curH - 1; // Hammer top removal
+            } else if (r < 5) {
+                y = Math.min(255, curH + rng.nextInt(10)); // Placement above
+            } else {
+                y = rng.nextInt(256); // Arbitrary Y
+            }
+
+            // Decide new state: 0 (air) or 1..5
+            int newState = rng.nextInt(10) < 4 ? 0 : (rng.nextInt(5) + 1);
+            int blockIdx = (colIdx << 8) | y;
+            short oldState = refBlocks[blockIdx];
+
+            if (oldState != newState) {
+                // Update Oracle block
+                refBlocks[blockIdx] = (short) newState;
+
+                // Update Oracle heightmap (exact Minecraft reference logic)
+                if (newState != 0) {
+                    if (y >= curH) {
+                        refHeight[colIdx] = y + 1;
+                    }
+                } else {
+                    if (y + 1 == curH) {
+                        // Scan down
+                        int newTop = 0;
+                        for (int scanY = y - 1; scanY >= 0; scanY--) {
+                            if (refBlocks[(colIdx << 8) | scanY] != 0) {
+                                newTop = scanY + 1;
+                                break;
+                            }
+                        }
+                        refHeight[colIdx] = newTop;
+                    }
+                }
+
+                // Mutate NativeChunk
+                NativeChunkBridge.setBlockState(dim, cx, cz, x, y, z, newState);
+                mutations++;
+            }
+
+            // Verify height at (x, z)
+            int nativeHeight = StateRegistryLookup.getUnsafe().getShort(rec.heightmapPointer + ((long) colIdx << 1)) & 0xFFFF;
+            assertEquals(refHeight[colIdx], nativeHeight, "Height mismatch at op " + op + " (" + x + "," + z + ")");
+        }
+
+        // Full array check
+        for (int col = 0; col < 256; col++) {
+            int nativeHeight = StateRegistryLookup.getUnsafe().getShort(rec.heightmapPointer + ((long) col << 1)) & 0xFFFF;
+            assertEquals(refHeight[col], nativeHeight, "Post-fuzz height mismatch at col " + col);
+        }
+
+        System.out.println("    [PASS] Heightmap Differential Fuzzing: " + count + " ops (" + mutations
+                + " height-affecting mutations) with 0 MISMATCHES across all 256 columns!");
+    }
+
     private static void runPerformanceBenchmarks() {
-        System.out.println("--> [9/9] Running Performance Profiling (p50 / p95 / p99)...");
+        System.out.println("--> [12/12] Running Performance Profiling (p50 / p95 / p99)...");
 
         int dim = 0;
         int cx = 20;
