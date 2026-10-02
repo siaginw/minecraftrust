@@ -416,6 +416,7 @@ def main() -> int:
     if args.single_copy_shadow:
         matches = single_copy_telemetry.get("shadow_matches", 0)
         mismatches = single_copy_telemetry.get("shadow_mismatches", -1)
+        divergences = single_copy_telemetry.get("shadow_expected_divergences", 0)
         outstanding = single_copy_telemetry.get("outstanding", 1)
         committed = single_copy_telemetry.get("single_copy_committed", 0)
         assert mismatches == 0, f"shadow_mismatches must be 0, got {mismatches}"
@@ -423,7 +424,9 @@ def main() -> int:
         assert outstanding == 0, f"outstanding single-copy bodies must be 0, got {outstanding}"
         assert committed >= matches, f"committed ({committed}) must cover every shadow match ({matches})"
         print(f"[single-copy-shadow] PASS: {matches} byte-exact body comparisons against the real "
-              f"NettyPacketEncoder output with 0 mismatches and 0 outstanding bodies")
+              f"NettyPacketEncoder output with 0 unexplained mismatches and 0 outstanding bodies; "
+              f"{divergences} expected divergences (chunk mutated between body freeze and live "
+              f"serialization, proven by the mutation tracker) out of {committed} committed")
 
     if rust_selected == cap:
         print(f"[metrics] Reached authority cap ({cap})! Fallback to Java was engaged successfully.")

@@ -116,6 +116,7 @@ public final class SingleCopyPipeline {
         public final AtomicLong handlerErrors = new AtomicLong();
         public final AtomicLong shadowMatches = new AtomicLong();
         public final AtomicLong shadowMismatches = new AtomicLong();
+        public final AtomicLong shadowExpectedDivergences = new AtomicLong();
         public final AtomicLong multiConsumerBodies = new AtomicLong();
         public final AtomicLong releasedViaQuiescence = new AtomicLong();
         public final AtomicLong releasedViaChannelClose = new AtomicLong();
@@ -190,6 +191,13 @@ public final class SingleCopyPipeline {
         public final int payloadBytes;
         /** Offset of the payload inside the body (the header size). */
         public final int payloadOffset;
+        /** Shadow provenance: ChunkMutationTracker version when the body froze
+         *  and a weak handle to the chunk. If the version moved by capture
+         *  time, the live Java packet serializes a NEWER state than the frozen
+         *  body by real concurrency - classified as an expected divergence,
+         *  never an encoder mismatch. Shadow mode only. */
+        public volatile int shadowMutationVersion;
+        public volatile java.lang.ref.WeakReference<Object> shadowChunkRef;
         public final long createdAtNanos = System.nanoTime();
         public final AtomicInteger totalWrites = new AtomicInteger();
         public final AtomicInteger outstandingWrites = new AtomicInteger();
@@ -445,11 +453,13 @@ public final class SingleCopyPipeline {
                     // purpose is the comparison, so the ticket is invalidated
                     // when this write's promise settles.
                     if (ticket.tryBeginWrite()) {
+                        EXPECTED_TICKET.set(ticket);
                         EXPECTED.set(ticket.body);
                         try {
                             ctx.write(msg, promise);
                         } finally {
                             EXPECTED.remove();
+                            EXPECTED_TICKET.remove();
                         }
                         promise.addListener(future -> {
                             ticket.writeCompleted();
@@ -588,6 +598,7 @@ public final class SingleCopyPipeline {
     // ------------------------------------------------------------------
 
     private static final ThreadLocal<ByteBuf> EXPECTED = new ThreadLocal<>();
+    private static final ThreadLocal<SingleCopyTicket> EXPECTED_TICKET = new ThreadLocal<>();
 
     public static final class BodyCaptureHandler extends ChannelOutboundHandlerAdapter {
         @Override
@@ -599,13 +610,30 @@ public final class SingleCopyPipeline {
                         && bytesEqual(actual, expected);
                 if (match) {
                     T.shadowMatches.incrementAndGet();
+                } else if (chunkChangedSinceFreeze(EXPECTED_TICKET.get())) {
+                    // The chunk mutated between the body freeze and this live
+                    // serialization: the Java packet legitimately carries a
+                    // newer state. Concurrency, not an encoder divergence.
+                    T.shadowExpectedDivergences.incrementAndGet();
                 } else {
                     T.shadowMismatches.incrementAndGet();
                     logShadowMismatch(expected, actual);
                 }
                 EXPECTED.remove();
+                EXPECTED_TICKET.remove();
             }
             ctx.write(msg, promise);
+        }
+
+        private static boolean chunkChangedSinceFreeze(SingleCopyTicket ticket) {
+            if (ticket == null || ticket.shadowChunkRef == null) {
+                return false;
+            }
+            Object chunk = ticket.shadowChunkRef.get();
+            if (chunk == null) {
+                return false; // unreachable: unclassifiable, counts as mismatch
+            }
+            return ChunkMutationTracker.versionOf(chunk) != ticket.shadowMutationVersion;
         }
 
         private static boolean bytesEqual(ByteBuf a, ByteBuf b) {
@@ -740,6 +768,7 @@ public final class SingleCopyPipeline {
                 + " two_copy_serves=" + T.fallbackTwoCopyServes.get()
                 + " shadow_matches=" + T.shadowMatches.get()
                 + " shadow_mismatches=" + T.shadowMismatches.get()
+                + " shadow_expected_divergences=" + T.shadowExpectedDivergences.get()
                 + " measure_failures=" + T.measureFailures.get()
                 + " encode_failures=" + T.encodeFailures.get()
                 + " measure_encode_divergences=" + T.measureEncodeDivergences.get()

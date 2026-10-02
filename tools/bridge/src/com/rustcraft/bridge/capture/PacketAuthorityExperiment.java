@@ -929,6 +929,12 @@ public final class PacketAuthorityExperiment {
         if (singleCopyShadow) {
             // Shadow: vanilla constructor + vanilla transmission; the body is
             // compared against the encoder output by the capture handler.
+            // Stamp freeze provenance so a chunk mutated between this freeze
+            // and the live serialization is classified as an expected
+            // divergence instead of an encoder mismatch.
+            ticket.shadowMutationVersion =
+                    com.rustcraft.bridge.ChunkMutationTracker.versionOf(chunkObj);
+            ticket.shadowChunkRef = new java.lang.ref.WeakReference<>(chunkObj);
             RETAINED_FAST_PATH.incrementAndGet();
             return false;
         }
