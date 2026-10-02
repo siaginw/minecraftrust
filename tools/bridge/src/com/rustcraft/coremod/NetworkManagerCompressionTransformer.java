@@ -51,6 +51,13 @@ public class NetworkManagerCompressionTransformer implements IClassTransformer {
 
     @Override
     public byte[] transform(String name, String transformedName, byte[] basicClass) {
+        if (basicClass != null && transformedName != null
+                && transformedName.endsWith("NetworkManager")) {
+            // One-shot visibility line: proves this transformer is registered,
+            // which name shape the runtime uses, and the swap verdict.
+            System.out.println("[RustCraft-Compression] NetworkManager transform: target=" + TARGET
+                    + " transformedName=" + transformedName + " enabled=" + ENABLED);
+        }
         if (!TARGET.equals(transformedName) || basicClass == null) {
             return basicClass;
         }
