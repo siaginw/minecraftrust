@@ -3,10 +3,11 @@
 //! Engine representation uses canonical global block state IDs (u16).
 //! Wire representation (Protocol 340) is derived on-demand via cached local palette.
 
-use std::sync::atomic::{AtomicU16, AtomicU8, Ordering};
+use std::sync::atomic::{AtomicU16, AtomicU32, AtomicU8, Ordering};
 
 pub const SECTION_BLOCK_COUNT: usize = 4096;
-pub const LIGHT_ARRAY_SIZE: usize = 2048;
+pub const LIGHT_ARRAY_SIZE: usize = 2048; // 2,048 bytes
+pub const LIGHT_WORD_COUNT: usize = 512; // 512 words (4 bytes each)
 
 // Palette bit width limits per 1.12.2 spec
 const MIN_BITS: u8 = 4;
@@ -63,8 +64,12 @@ pub struct NativeSection {
     wire_cache_noskylight: Option<Vec<u8>>,
 
     // === LIGHTING & METADATA ===
-    pub block_light: [AtomicU8; LIGHT_ARRAY_SIZE], // 2,048 bytes
-    pub sky_light: [AtomicU8; LIGHT_ARRAY_SIZE],   // 2,048 bytes
+    /// Block light stored as 512 32-bit atomic words (2,048 bytes).
+    /// Both Rust (compare_exchange) and Java Unsafe (compareAndSwapInt) operate
+    /// on the SAME 32-bit atomic word boundaries, eliminating mixed-width atomic hazards.
+    pub block_light: [AtomicU32; LIGHT_WORD_COUNT], // 2,048 bytes
+    /// Sky light stored as 512 32-bit atomic words (2,048 bytes).
+    pub sky_light: [AtomicU32; LIGHT_WORD_COUNT],   // 2,048 bytes
     pub non_air_count: u16,
     pub flags: u8,
     pub y_index: u8,
@@ -77,10 +82,10 @@ impl NativeSection {
         // Safe transmutation of zeroed u16 array to AtomicU16 array
         let raw = [0u16; SECTION_BLOCK_COUNT];
         let states: [AtomicU16; SECTION_BLOCK_COUNT] = unsafe { std::mem::transmute(raw) };
-        let raw_bl = [0u8; LIGHT_ARRAY_SIZE];
-        let block_light: [AtomicU8; LIGHT_ARRAY_SIZE] = unsafe { std::mem::transmute(raw_bl) };
-        let raw_sl = [0xFFu8; LIGHT_ARRAY_SIZE]; // Default sky light 15
-        let sky_light: [AtomicU8; LIGHT_ARRAY_SIZE] = unsafe { std::mem::transmute(raw_sl) };
+        let raw_bl = [0u32; LIGHT_WORD_COUNT];
+        let block_light: [AtomicU32; LIGHT_WORD_COUNT] = unsafe { std::mem::transmute(raw_bl) };
+        let raw_sl = [0xFFFFFFFFu32; LIGHT_WORD_COUNT]; // Default sky light 15 for all nibbles
+        let sky_light: [AtomicU32; LIGHT_WORD_COUNT] = unsafe { std::mem::transmute(raw_sl) };
         Self {
             states,
             palette_cache: None,
@@ -107,25 +112,25 @@ impl NativeSection {
         unsafe { &mut *(self.states.as_mut_ptr() as *mut [u16; SECTION_BLOCK_COUNT]) }
     }
 
-    /// Access block_light as plain u8 slice (AtomicU8 is #[repr(transparent)] over UnsafeCell<u8>).
+    /// Access block_light as plain byte slice (2,048 bytes).
     #[inline(always)]
     pub fn block_light_as_slice(&self) -> &[u8; LIGHT_ARRAY_SIZE] {
         unsafe { &*(self.block_light.as_ptr() as *const [u8; LIGHT_ARRAY_SIZE]) }
     }
 
-    /// Access block_light as mutable u8 slice when exclusive &mut self is held.
+    /// Access block_light as mutable byte slice when exclusive &mut self is held.
     #[inline(always)]
     pub fn block_light_as_mut_slice(&mut self) -> &mut [u8; LIGHT_ARRAY_SIZE] {
         unsafe { &mut *(self.block_light.as_mut_ptr() as *mut [u8; LIGHT_ARRAY_SIZE]) }
     }
 
-    /// Access sky_light as plain u8 slice (AtomicU8 is #[repr(transparent)] over UnsafeCell<u8>).
+    /// Access sky_light as plain byte slice (2,048 bytes).
     #[inline(always)]
     pub fn sky_light_as_slice(&self) -> &[u8; LIGHT_ARRAY_SIZE] {
         unsafe { &*(self.sky_light.as_ptr() as *const [u8; LIGHT_ARRAY_SIZE]) }
     }
 
-    /// Access sky_light as mutable u8 slice when exclusive &mut self is held.
+    /// Access sky_light as mutable byte slice when exclusive &mut self is held.
     #[inline(always)]
     pub fn sky_light_as_mut_slice(&mut self) -> &mut [u8; LIGHT_ARRAY_SIZE] {
         unsafe { &mut *(self.sky_light.as_mut_ptr() as *mut [u8; LIGHT_ARRAY_SIZE]) }
@@ -179,6 +184,7 @@ impl NativeSection {
 
     // ============================================================
     // LIGHTING ACCESS (NibbleArray 4-bit values: 0..15)
+    // Stored as 512 AtomicU32 words (8 nibbles per word)
     // ============================================================
 
     /// Gets block light nibble at (x, y, z) (0..15).
@@ -190,12 +196,10 @@ impl NativeSection {
     /// Gets block light nibble by section block index (0..4095).
     #[inline(always)]
     pub fn get_block_light_by_index(&self, idx: usize) -> u8 {
-        let byte_val = self.block_light[idx >> 1].load(Ordering::Acquire);
-        if (idx & 1) == 0 {
-            byte_val & 0x0F
-        } else {
-            (byte_val >> 4) & 0x0F
-        }
+        let word_idx = idx >> 3; // 8 nibbles per 32-bit word
+        let shift = (idx & 7) << 2; // 4 bits per nibble
+        let word = self.block_light[word_idx].load(Ordering::Acquire);
+        ((word >> shift) & 0x0F) as u8
     }
 
     /// Sets block light nibble at (x, y, z) atomically via CAS loop.
@@ -207,21 +211,18 @@ impl NativeSection {
 
     /// Sets block light nibble by section block index atomically via CAS loop.
     pub fn set_block_light_by_index(&self, idx: usize, val: u8) -> bool {
-        let byte_idx = idx >> 1;
-        let is_odd = (idx & 1) != 0;
-        let val_nibble = val & 0x0F;
-        let cell = &self.block_light[byte_idx];
+        let word_idx = idx >> 3;
+        let shift = (idx & 7) << 2;
+        let mask = 0x0Fu32 << shift;
+        let val_bits = ((val & 0x0F) as u32) << shift;
+        let cell = &self.block_light[word_idx];
         let mut cur = cell.load(Ordering::Relaxed);
         loop {
-            let old_nibble = if is_odd { (cur >> 4) & 0x0F } else { cur & 0x0F };
-            if old_nibble == val_nibble {
+            let cur_nibble = (cur >> shift) & 0x0F;
+            if cur_nibble == (val & 0x0F) as u32 {
                 return false;
             }
-            let next = if is_odd {
-                (cur & 0x0F) | (val_nibble << 4)
-            } else {
-                (cur & 0xF0) | val_nibble
-            };
+            let next = (cur & !mask) | val_bits;
             match cell.compare_exchange_weak(cur, next, Ordering::Release, Ordering::Relaxed) {
                 Ok(_) => return true,
                 Err(actual) => cur = actual,
@@ -238,12 +239,10 @@ impl NativeSection {
     /// Gets sky light nibble by section block index (0..4095).
     #[inline(always)]
     pub fn get_sky_light_by_index(&self, idx: usize) -> u8 {
-        let byte_val = self.sky_light[idx >> 1].load(Ordering::Acquire);
-        if (idx & 1) == 0 {
-            byte_val & 0x0F
-        } else {
-            (byte_val >> 4) & 0x0F
-        }
+        let word_idx = idx >> 3;
+        let shift = (idx & 7) << 2;
+        let word = self.sky_light[word_idx].load(Ordering::Acquire);
+        ((word >> shift) & 0x0F) as u8
     }
 
     /// Sets sky light nibble at (x, y, z) atomically via CAS loop.
@@ -255,21 +254,18 @@ impl NativeSection {
 
     /// Sets sky light nibble by section block index atomically via CAS loop.
     pub fn set_sky_light_by_index(&self, idx: usize, val: u8) -> bool {
-        let byte_idx = idx >> 1;
-        let is_odd = (idx & 1) != 0;
-        let val_nibble = val & 0x0F;
-        let cell = &self.sky_light[byte_idx];
+        let word_idx = idx >> 3;
+        let shift = (idx & 7) << 2;
+        let mask = 0x0Fu32 << shift;
+        let val_bits = ((val & 0x0F) as u32) << shift;
+        let cell = &self.sky_light[word_idx];
         let mut cur = cell.load(Ordering::Relaxed);
         loop {
-            let old_nibble = if is_odd { (cur >> 4) & 0x0F } else { cur & 0x0F };
-            if old_nibble == val_nibble {
+            let cur_nibble = (cur >> shift) & 0x0F;
+            if cur_nibble == (val & 0x0F) as u32 {
                 return false;
             }
-            let next = if is_odd {
-                (cur & 0x0F) | (val_nibble << 4)
-            } else {
-                (cur & 0xF0) | val_nibble
-            };
+            let next = (cur & !mask) | val_bits;
             match cell.compare_exchange_weak(cur, next, Ordering::Release, Ordering::Relaxed) {
                 Ok(_) => return true,
                 Err(actual) => cur = actual,
