@@ -82,9 +82,15 @@ impl JavaRandom {
 }
 
 /// Static gradient tables (bytecode float literal arrays).
-pub const GRAD_X: [f64; 16] = [1.0, -1.0, 1.0, -1.0, 1.0, -1.0, 1.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, -1.0, 0.0];
-pub const GRAD_Y: [f64; 16] = [1.0, 1.0, -1.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, -1.0, 1.0, -1.0, 1.0, -1.0, 1.0, -1.0];
-pub const GRAD_Z: [f64; 16] = [0.0, 0.0, 0.0, 0.0, 1.0, 1.0, -1.0, -1.0, 1.0, 1.0, -1.0, -1.0, 0.0, 1.0, 0.0, -1.0];
+pub const GRAD_X: [f64; 16] = [
+    1.0, -1.0, 1.0, -1.0, 1.0, -1.0, 1.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, -1.0, 0.0,
+];
+pub const GRAD_Y: [f64; 16] = [
+    1.0, 1.0, -1.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, -1.0, 1.0, -1.0, 1.0, -1.0, 1.0, -1.0,
+];
+pub const GRAD_Z: [f64; 16] = [
+    0.0, 0.0, 0.0, 0.0, 1.0, 1.0, -1.0, -1.0, 1.0, 1.0, -1.0, -1.0, 0.0, 1.0, 0.0, -1.0,
+];
 const GRAD2_X: [f64; 16] = GRAD_X;
 const GRAD2_Z: [f64; 16] = GRAD_Z;
 
@@ -146,7 +152,12 @@ impl Improved {
             perm[j as usize] = t;
             perm[i + 256] = perm[i];
         }
-        Improved { perm, x_off, y_off, z_off }
+        Improved {
+            perm,
+            x_off,
+            y_off,
+            z_off,
+        }
     }
 
     /// In-place accumulation variant used by the batched path: adds octave
@@ -167,8 +178,19 @@ impl Improved {
         noise_scale: f64,
     ) {
         // arr already zeroed by the caller; populate is pure accumulation
-        self.populate(arr, x_off, y_off, z_off, x_size, y_size, z_size,
-                      x_scale, y_scale, z_scale, noise_scale);
+        self.populate(
+            arr,
+            x_off,
+            y_off,
+            z_off,
+            x_size,
+            y_size,
+            z_size,
+            x_scale,
+            y_scale,
+            z_scale,
+            noise_scale,
+        );
     }
 
     /// func_76308_a — the exact batch sampler (2D fast path when y_size==1).
@@ -308,7 +330,10 @@ pub fn floor_long_pub(d: f64) -> i64 {
 impl Octaves {
     pub fn new(rand: &mut JavaRandom, octaves: i32) -> Self {
         let generators = (0..octaves).map(|_| Improved::new(rand)).collect();
-        Octaves { generators, octaves }
+        Octaves {
+            generators,
+            octaves,
+        }
     }
 
     /// func_76304_a — exact.
@@ -350,8 +375,17 @@ impl Octaves {
             d6 += k6r as f64;
             d8 += j7r as f64;
             self.generators[j as usize].populate(
-                &mut out, d6, d7, d8, x_size, y_size, z_size,
-                x_scale * d3, y_scale * d3, z_scale * d3, d3,
+                &mut out,
+                d6,
+                d7,
+                d8,
+                x_size,
+                y_size,
+                z_size,
+                x_scale * d3,
+                y_scale * d3,
+                z_scale * d3,
+                d3,
             );
             d3 /= 2.0;
         }
@@ -373,7 +407,9 @@ impl Octaves {
         z_scale: f64,
         _dropped: f64,
     ) -> Vec<f64> {
-        self.generate3d(arr, x_off, 10, z_off, x_size, 1, z_size, x_scale, 1.0, z_scale)
+        self.generate3d(
+            arr, x_off, 10, z_off, x_size, 1, z_size, x_scale, 1.0, z_scale,
+        )
     }
 }
 
@@ -409,7 +445,18 @@ mod tests {
     fn outputs_finite_and_bounded() {
         let mut r = JavaRandom::new(42);
         let oct = Octaves::new(&mut r, 8);
-        let out = oct.generate3d(None, 1000, 0, -2000, 5, 33, 5, 684.412 / 80.0, 684.412 / 160.0, 684.412 / 80.0);
+        let out = oct.generate3d(
+            None,
+            1000,
+            0,
+            -2000,
+            5,
+            33,
+            5,
+            684.412 / 80.0,
+            684.412 / 160.0,
+            684.412 / 80.0,
+        );
         assert_eq!(out.len(), 5 * 33 * 5);
         for v in out {
             assert!(v.is_finite());
@@ -418,7 +465,7 @@ mod tests {
     }
 }
 
-pub mod simd;
 pub mod field;
 pub mod field_complete;
+pub mod simd;
 pub mod terrain;

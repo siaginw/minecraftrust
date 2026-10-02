@@ -16,7 +16,10 @@ impl fmt::Display for ProtocolError {
         match self {
             Self::UnexpectedEof => write!(f, "unexpected end of buffer/stream"),
             Self::BufferTooSmall { needed, available } => {
-                write!(f, "buffer too small: needed {needed} bytes, had {available}")
+                write!(
+                    f,
+                    "buffer too small: needed {needed} bytes, had {available}"
+                )
             }
             Self::VarIntTooBig => write!(f, "VarInt is wider than 5 bytes"),
             Self::VarLongTooBig => write!(f, "VarLong is wider than 10 bytes"),

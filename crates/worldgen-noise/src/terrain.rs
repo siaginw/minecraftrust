@@ -8,10 +8,10 @@ pub const CHUNK_PRIMER_SIZE: usize = 65536; // 16 * 16 * 256
 pub const DEFAULT_SEA_LEVEL: i32 = 63;
 
 // Canonical Minecraft 1.12.2 block state IDs: (block_id << 4) | meta.
-pub const STATE_AIR: u16 = 0;       // Blocks.AIR.getDefaultState()
-pub const STATE_STONE: u16 = 16;    // Blocks.STONE.getDefaultState() (id 1, meta 0)
+pub const STATE_AIR: u16 = 0; // Blocks.AIR.getDefaultState()
+pub const STATE_STONE: u16 = 16; // Blocks.STONE.getDefaultState() (id 1, meta 0)
 pub const STATE_BEDROCK: u16 = 112; // Blocks.BEDROCK.getDefaultState() (id 7, meta 0)
-pub const STATE_WATER: u16 = 144;   // Blocks.WATER.getDefaultState() (id 9, meta 0)
+pub const STATE_WATER: u16 = 144; // Blocks.WATER.getDefaultState() (id 9, meta 0)
 
 /// Compute the flat index in ChunkPrimer: (x << 12) | (z << 8) | y.
 ///
@@ -261,7 +261,14 @@ mod tests {
                 for y in 0..256usize {
                     let idx = chunk_primer_index(x, y, z);
                     assert!(idx < CHUNK_PRIMER_SIZE);
-                    assert!(seen.insert(idx), "Duplicate index {} at ({}, {}, {})", idx, x, y, z);
+                    assert!(
+                        seen.insert(idx),
+                        "Duplicate index {} at ({}, {}, {})",
+                        idx,
+                        x,
+                        y,
+                        z
+                    );
                 }
             }
         }
@@ -272,7 +279,13 @@ mod tests {
     fn test_pure_air_terrain() {
         let height_map = [-10.0f64; 825];
         let mut primer = [STATE_AIR; CHUNK_PRIMER_SIZE];
-        set_blocks_in_chunk_parity(&height_map, DEFAULT_SEA_LEVEL, STATE_STONE, STATE_WATER, &mut primer);
+        set_blocks_in_chunk_parity(
+            &height_map,
+            DEFAULT_SEA_LEVEL,
+            STATE_STONE,
+            STATE_WATER,
+            &mut primer,
+        );
 
         // Below sea level should be water, above sea level should be air
         for x in 0..16usize {
@@ -293,7 +306,13 @@ mod tests {
     fn test_pure_stone_terrain() {
         let height_map = [10.0f64; 825];
         let mut primer = [STATE_AIR; CHUNK_PRIMER_SIZE];
-        set_blocks_in_chunk_parity(&height_map, DEFAULT_SEA_LEVEL, STATE_STONE, STATE_WATER, &mut primer);
+        set_blocks_in_chunk_parity(
+            &height_map,
+            DEFAULT_SEA_LEVEL,
+            STATE_STONE,
+            STATE_WATER,
+            &mut primer,
+        );
 
         for x in 0..16usize {
             for z in 0..16usize {
@@ -307,8 +326,8 @@ mod tests {
 
     #[test]
     fn test_parity_matches_column_major_on_real_density() {
-        use crate::field_complete::InitNoiseField;
         use crate::field::FieldSettings;
+        use crate::field_complete::InitNoiseField;
 
         let settings = FieldSettings {
             coordinate_scale: 684.412,
@@ -342,8 +361,20 @@ mod tests {
         let mut primer_parity = [STATE_AIR; CHUNK_PRIMER_SIZE];
         let mut primer_opt = [STATE_AIR; CHUNK_PRIMER_SIZE];
 
-        set_blocks_in_chunk_parity(&density, DEFAULT_SEA_LEVEL, STATE_STONE, STATE_WATER, &mut primer_parity);
-        set_blocks_in_chunk_column_major(&density, DEFAULT_SEA_LEVEL, STATE_STONE, STATE_WATER, &mut primer_opt);
+        set_blocks_in_chunk_parity(
+            &density,
+            DEFAULT_SEA_LEVEL,
+            STATE_STONE,
+            STATE_WATER,
+            &mut primer_parity,
+        );
+        set_blocks_in_chunk_column_major(
+            &density,
+            DEFAULT_SEA_LEVEL,
+            STATE_STONE,
+            STATE_WATER,
+            &mut primer_opt,
+        );
 
         let mut mismatches = 0;
         for i in 0..CHUNK_PRIMER_SIZE {
@@ -357,9 +388,13 @@ mod tests {
         let mut water_count = 0;
         let mut air_count = 0;
         for &s in primer_parity.iter() {
-            if s == STATE_STONE { stone_count += 1; }
-            else if s == STATE_WATER { water_count += 1; }
-            else if s == STATE_AIR { air_count += 1; }
+            if s == STATE_STONE {
+                stone_count += 1;
+            } else if s == STATE_WATER {
+                water_count += 1;
+            } else if s == STATE_AIR {
+                air_count += 1;
+            }
         }
 
         println!(
@@ -367,7 +402,11 @@ mod tests {
             stone_count, water_count, air_count, mismatches, CHUNK_PRIMER_SIZE
         );
         assert_eq!(mismatches, 0, "Parity and column_major must be bit-exact");
-        assert!(stone_count > 0, "Stone count must be positive: {}", stone_count);
+        assert!(
+            stone_count > 0,
+            "Stone count must be positive: {}",
+            stone_count
+        );
         assert!(air_count > 0, "Air count must be positive: {}", air_count);
     }
 
@@ -388,8 +427,20 @@ mod tests {
             primer_parity.fill(STATE_AIR);
             primer_opt.fill(STATE_AIR);
 
-            set_blocks_in_chunk_parity(&density, DEFAULT_SEA_LEVEL, STATE_STONE, STATE_WATER, &mut primer_parity);
-            set_blocks_in_chunk_column_major(&density, DEFAULT_SEA_LEVEL, STATE_STONE, STATE_WATER, &mut primer_opt);
+            set_blocks_in_chunk_parity(
+                &density,
+                DEFAULT_SEA_LEVEL,
+                STATE_STONE,
+                STATE_WATER,
+                &mut primer_parity,
+            );
+            set_blocks_in_chunk_column_major(
+                &density,
+                DEFAULT_SEA_LEVEL,
+                STATE_STONE,
+                STATE_WATER,
+                &mut primer_opt,
+            );
 
             for i in 0..CHUNK_PRIMER_SIZE {
                 total_blocks += 1;
@@ -398,9 +449,13 @@ mod tests {
                 }
             }
         }
-        println!("Multi-chunk test: tested {} blocks across 50 chunks, mismatches: {}", total_blocks, total_mismatches);
-        assert_eq!(total_mismatches, 0, "Expected zero mismatches across 50 chunks");
+        println!(
+            "Multi-chunk test: tested {} blocks across 50 chunks, mismatches: {}",
+            total_blocks, total_mismatches
+        );
+        assert_eq!(
+            total_mismatches, 0,
+            "Expected zero mismatches across 50 chunks"
+        );
     }
-
-
 }

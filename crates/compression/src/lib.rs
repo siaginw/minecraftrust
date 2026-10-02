@@ -103,10 +103,17 @@ impl ZlibPacketCompressor {
     ///
     /// Bounds are checked BEFORE any write; on OutputTooSmall nothing is
     /// written and the caller receives the safe bound for retry.
-    pub fn compress_into(&mut self, input: &[u8], output: &mut [u8]) -> Result<usize, CompressError> {
+    pub fn compress_into(
+        &mut self,
+        input: &[u8],
+        output: &mut [u8],
+    ) -> Result<usize, CompressError> {
         let bound = max_output_len(input.len());
         if output.len() < bound {
-            return Err(CompressError::OutputTooSmall { needed: bound, have: output.len() });
+            return Err(CompressError::OutputTooSmall {
+                needed: bound,
+                have: output.len(),
+            });
         }
         let mut written = 0usize;
         let mut consumed = 0usize;
@@ -129,7 +136,10 @@ impl ZlibPacketCompressor {
             }
             if written == output.len() && status != flate2::Status::StreamEnd {
                 // defensive: no space left and stream not finished
-                return Err(CompressError::OutputTooSmall { needed: bound, have: output.len() });
+                return Err(CompressError::OutputTooSmall {
+                    needed: bound,
+                    have: output.len(),
+                });
             }
         }
         // Independent streams per packet (reference: Deflater::reset).

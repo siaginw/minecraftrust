@@ -13,7 +13,9 @@ fn main() {
     let mut xo = vec![0i32; n];
     let mut zo = vec![0i32; n];
     for c in 0..n {
-        rng = rng.wrapping_mul(6364136223846793005).wrapping_add(1442695040888963407);
+        rng = rng
+            .wrapping_mul(6364136223846793005)
+            .wrapping_add(1442695040888963407);
         xo[c] = ((rng >> 33) as i32) % 400_000;
         zo[c] = ((rng >> 13) as i32) % -400_000;
     }
@@ -25,13 +27,19 @@ fn main() {
     for oct in 0..16 {
         // isolate octave oct by comparing full-run then per-octave via direct populate
         // easier: compute scalar full and compare sample i=0..4
-        let scalar = b.octaves.generate3d(None, xo[2], 0, zo[2], xs, ys, zs, xsc, ysc, zsc);
+        let scalar = b
+            .octaves
+            .generate3d(None, xo[2], 0, zo[2], xs, ys, zs, xsc, ysc, zsc);
         let mut diffs = 0;
         for i in 0..8 {
             if batch[2 * len + i].to_bits() != scalar[i].to_bits() {
                 if diffs < 2 {
-                    println!("oct-run diff i={} simd={:x} scalar={:x}", i,
-                        batch[2 * len + i].to_bits(), scalar[i].to_bits());
+                    println!(
+                        "oct-run diff i={} simd={:x} scalar={:x}",
+                        i,
+                        batch[2 * len + i].to_bits(),
+                        scalar[i].to_bits()
+                    );
                 }
                 diffs += 1;
             }
@@ -46,8 +54,12 @@ fn main() {
         let bb = BatchOctaves::new(seed, octn);
         let mut bt = vec![0.0f64; n * len];
         bb.generate3d_batch(&mut bt, n, &xo, 0, &zo, xs, ys, zs, xsc, ysc, zsc);
-        let sc = bb.octaves.generate3d(None, xo[2], 0, zo[2], xs, ys, zs, xsc, ysc, zsc);
-        let d = (0..8).filter(|&i| bt[2 * len + i].to_bits() != sc[i].to_bits()).count();
+        let sc = bb
+            .octaves
+            .generate3d(None, xo[2], 0, zo[2], xs, ys, zs, xsc, ysc, zsc);
+        let d = (0..8)
+            .filter(|&i| bt[2 * len + i].to_bits() != sc[i].to_bits())
+            .count();
         println!("oct_count={} first8 diffs={}", octn, d);
     }
 }

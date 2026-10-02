@@ -44,8 +44,8 @@ pub fn biome_weights() -> [f32; 25] {
 
 /// Biome inputs: per 10x10 grid cell, (min_height, height_variation) floats.
 pub struct BiomeInputs {
-    pub min_height: Vec<f32>,     // func_185355_j per cell
-    pub variation: Vec<f32>,     // func_185360_m per cell
+    pub min_height: Vec<f32>, // func_185355_j per cell
+    pub variation: Vec<f32>,  // func_185360_m per cell
 }
 
 /// clampedLerp = MathHelper.func_151238_b (bytecode-exact).
@@ -73,8 +73,8 @@ pub fn assemble_field(
     g: &[f64],
     q: &mut [f64],
 ) {
-    let mut depth_idx = 0usize;  // walks h[25]
-    let mut idx = 0usize;        // walks e/f/g/q[825]
+    let mut depth_idx = 0usize; // walks h[25]
+    let mut idx = 0usize; // walks e/f/g/q[825]
     for ix in 0..5usize {
         for iz in 0..5usize {
             // ---- biome 5x5 weighting (all f32) ----
@@ -85,8 +85,10 @@ pub fn assemble_field(
             for di in -2i32..=2 {
                 for dj in -2i32..=2 {
                     let cell = (ix as i32 + di + 2) as usize + ((iz as i32 + dj + 2) as usize) * 10;
-                    let mut f7 = s.biome_depth_offset + biomes.min_height[cell] * s.biome_depth_weight;
-                    let mut f8 = s.biome_scale_offset + biomes.variation[cell] * s.biome_scale_weight;
+                    let mut f7 =
+                        s.biome_depth_offset + biomes.min_height[cell] * s.biome_depth_weight;
+                    let mut f8 =
+                        s.biome_scale_offset + biomes.variation[cell] * s.biome_scale_weight;
                     if s.amplified && f7 > 0.0f32 {
                         f7 = 1.0f32 + f7 * 2.0f32;
                         f8 = 1.0f32 + f8 * 4.0f32;
@@ -134,11 +136,7 @@ pub fn assemble_field(
 
             // ---- per-y density ----
             for y in 0..33usize {
-                let mut d4 = (y as f64 - d3)
-                    * (s.lower_limit_scale as f64)
-                    * 128.0
-                    / 256.0
-                    / d2;
+                let mut d4 = (y as f64 - d3) * (s.lower_limit_scale as f64) * 128.0 / 256.0 / d2;
                 if d4 < 0.0 {
                     d4 *= 4.0;
                 }
@@ -166,32 +164,56 @@ pub struct SingleFieldGen {
 
 impl SingleFieldGen {
     pub fn new(seed: i64, octaves: i32) -> Self {
-        SingleFieldGen { batch: crate::simd::BatchOctaves::new(seed, octaves) }
+        SingleFieldGen {
+            batch: crate::simd::BatchOctaves::new(seed, octaves),
+        }
     }
 
     /// out len must be 825. y_size must be 33 (assembly shape).
     #[allow(clippy::too_many_arguments)]
-    pub fn generate3d_single(&self, out: &mut [f64], x_off: i32, y_off: i32, z_off: i32,
-                             x_size: i32, y_size: i32, z_size: i32,
-                             x_scale: f64, y_scale: f64, z_scale: f64) {
+    pub fn generate3d_single(
+        &self,
+        out: &mut [f64],
+        x_off: i32,
+        y_off: i32,
+        z_off: i32,
+        x_size: i32,
+        y_size: i32,
+        z_size: i32,
+        x_scale: f64,
+        y_scale: f64,
+        z_scale: f64,
+    ) {
         let len = (x_size * y_size * z_size) as usize;
         #[cfg(target_arch = "x86_64")]
         {
             if crate::simd::is_avx2() {
-                self.generate3d_single_simd(out, x_off, y_off, z_off, x_size, y_size, z_size,
-                                            x_scale, y_scale, z_scale);
+                self.generate3d_single_simd(
+                    out, x_off, y_off, z_off, x_size, y_size, z_size, x_scale, y_scale, z_scale,
+                );
                 return;
             }
         }
         out.copy_from_slice(&self.batch.octaves.generate3d(
-            None, x_off, y_off, z_off, x_size, y_size, z_size, x_scale, y_scale, z_scale));
+            None, x_off, y_off, z_off, x_size, y_size, z_size, x_scale, y_scale, z_scale,
+        ));
     }
 
     #[cfg(target_arch = "x86_64")]
     #[allow(clippy::too_many_arguments)]
-    fn generate3d_single_simd(&self, out: &mut [f64], x_off: i32, y_off: i32, z_off: i32,
-                              x_size: i32, y_size: i32, z_size: i32,
-                              x_scale: f64, y_scale: f64, z_scale: f64) {
+    fn generate3d_single_simd(
+        &self,
+        out: &mut [f64],
+        x_off: i32,
+        y_off: i32,
+        z_off: i32,
+        x_size: i32,
+        y_size: i32,
+        z_size: i32,
+        x_scale: f64,
+        y_scale: f64,
+        z_scale: f64,
+    ) {
         let len = (x_size * y_size * z_size) as usize;
         for v in out.iter_mut().take(len) {
             *v = 0.0;
@@ -220,8 +242,19 @@ impl SingleFieldGen {
                 if is_avx2() {
                     unsafe {
                         crate::simd::populate_xlanes_avx4(
-                            out, len, t, dx, xsc, d7, dz,
-                            x_size, y_size, z_size, y_scale * d3, z_scale * d3, d3,
+                            out,
+                            len,
+                            t,
+                            dx,
+                            xsc,
+                            d7,
+                            dz,
+                            x_size,
+                            y_size,
+                            z_size,
+                            y_scale * d3,
+                            z_scale * d3,
+                            d3,
                         );
                     }
                     d3 /= 2.0;
@@ -253,11 +286,21 @@ mod tests {
             let x = ((xo >> 33) as i32) % 400_000;
             let z = ((xo >> 13) as i32) % -400_000;
             g.generate3d_single(&mut out, x, 0, z, 5, 33, 5, 684.412, 684.412, 684.412);
-            let scalar = g.batch.octaves.generate3d(None, x, 0, z, 5, 33, 5, 684.412, 684.412, 684.412);
+            let scalar = g
+                .batch
+                .octaves
+                .generate3d(None, x, 0, z, 5, 33, 5, 684.412, 684.412, 684.412);
             for i in 0..825 {
-                assert_eq!(out[i].to_bits(), scalar[i].to_bits(),
-                    "seed={} oct={} i={} xlane={:x} scalar={:x}", seed, oct, i,
-                    out[i].to_bits(), scalar[i].to_bits());
+                assert_eq!(
+                    out[i].to_bits(),
+                    scalar[i].to_bits(),
+                    "seed={} oct={} i={} xlane={:x} scalar={:x}",
+                    seed,
+                    oct,
+                    i,
+                    out[i].to_bits(),
+                    scalar[i].to_bits()
+                );
             }
         }
     }
@@ -267,20 +310,35 @@ mod tests {
     fn assembly_runs_and_biome_weights_match_reference() {
         let w = biome_weights();
         // vanilla reference: center = 10/sqrt(0.2), corners = 10/sqrt(8.2)
-        assert_eq!(w[12].to_bits(), (10.0f32 / ((0.2f64).sqrt() as f32)).to_bits());
-        assert_eq!(w[0].to_bits(), (10.0f32 / ((8.2f64).sqrt() as f32)).to_bits());
+        assert_eq!(
+            w[12].to_bits(),
+            (10.0f32 / ((0.2f64).sqrt() as f32)).to_bits()
+        );
+        assert_eq!(
+            w[0].to_bits(),
+            (10.0f32 / ((8.2f64).sqrt() as f32)).to_bits()
+        );
         let s = FieldSettings {
-            coordinate_scale: 684.412, height_scale: 684.412,
-            depth_noise_scale_x: 200.0, depth_noise_scale_exp: 0.5, depth_noise_scale_z: 200.0,
-            main_noise_scale_x: 80.0, main_noise_scale_y: 160.0, main_noise_scale_z: 80.0,
-            upper_limit_scale: 512.0, lower_limit_scale: 512.0,
-            depth_noise_scale: 200.0 / 400.0, main_depth_scale: 400.0 / 400.0,
-            biome_depth_weight: 1.0, biome_depth_offset: 0.0,
-            biome_scale_weight: 1.0, biome_scale_offset: 0.0,
+            coordinate_scale: 684.412,
+            height_scale: 684.412,
+            depth_noise_scale_x: 200.0,
+            depth_noise_scale_exp: 0.5,
+            depth_noise_scale_z: 200.0,
+            main_noise_scale_x: 80.0,
+            main_noise_scale_y: 160.0,
+            main_noise_scale_z: 80.0,
+            upper_limit_scale: 512.0,
+            lower_limit_scale: 512.0,
+            depth_noise_scale: 200.0 / 400.0,
+            main_depth_scale: 400.0 / 400.0,
+            biome_depth_weight: 1.0,
+            biome_depth_offset: 0.0,
+            biome_scale_weight: 1.0,
+            biome_scale_offset: 0.0,
             amplified: false,
         };
         let biomes = BiomeInputs {
-            min_height: vec![0.125f32; 100],  // plains-like
+            min_height: vec![0.125f32; 100], // plains-like
             variation: vec![0.05f32; 100],
         };
         let h = vec![0.5f64; 25];
@@ -293,7 +351,6 @@ mod tests {
     }
 }
 
-
 /// Borrowed-biome variant of the assembly (zero allocation).
 pub struct BiomeInputsBorrowed<'a> {
     pub min_height: &'a [f32],
@@ -305,7 +362,10 @@ pub fn assemble_field_into(
     s: &FieldSettings,
     weights: &[f32; 25],
     biomes: &BiomeInputsBorrowed,
-    h: &[f64], e: &[f64], f: &[f64], g: &[f64],
+    h: &[f64],
+    e: &[f64],
+    f: &[f64],
+    g: &[f64],
     q: &mut [f64],
 ) {
     let mut depth_idx = 0usize;
@@ -319,8 +379,10 @@ pub fn assemble_field_into(
             for di in -2i32..=2 {
                 for dj in -2i32..=2 {
                     let cell = (ix as i32 + di + 2) as usize + ((iz as i32 + dj + 2) as usize) * 10;
-                    let mut f7 = s.biome_depth_offset + biomes.min_height[cell] * s.biome_depth_weight;
-                    let mut f8 = s.biome_scale_offset + biomes.variation[cell] * s.biome_scale_weight;
+                    let mut f7 =
+                        s.biome_depth_offset + biomes.min_height[cell] * s.biome_depth_weight;
+                    let mut f8 =
+                        s.biome_scale_offset + biomes.variation[cell] * s.biome_scale_weight;
                     if s.amplified && f7 > 0.0f32 {
                         f7 = 1.0f32 + f7 * 2.0f32;
                         f8 = 1.0f32 + f8 * 4.0f32;
@@ -339,15 +401,21 @@ pub fn assemble_field_into(
             variation_sum = variation_sum * 0.9f32 + 0.1f32;
             depth_sum = (depth_sum * 4.0f32 - 1.0f32) / 8.0f32;
             let mut d0 = h[depth_idx] / 8000.0;
-            if d0 < 0.0 { d0 = -d0 * 0.3; }
+            if d0 < 0.0 {
+                d0 = -d0 * 0.3;
+            }
             d0 = d0 * 3.0 - 2.0;
             if d0 < 0.0 {
                 d0 /= 2.0;
-                if d0 < -1.0 { d0 = -1.0; }
+                if d0 < -1.0 {
+                    d0 = -1.0;
+                }
                 d0 /= 1.4;
                 d0 /= 2.0;
             } else {
-                if d0 > 1.0 { d0 = 1.0; }
+                if d0 > 1.0 {
+                    d0 = 1.0;
+                }
                 d0 /= 8.0;
             }
             depth_idx += 1;
@@ -357,10 +425,10 @@ pub fn assemble_field_into(
             d1 = d1 * (s.upper_limit_scale as f64) / 8.0;
             let d3 = (s.upper_limit_scale as f64) + d1 * 4.0;
             for y in 0..33usize {
-                let mut d4 = (y as f64 - d3)
-                    * (s.lower_limit_scale as f64)
-                    * 128.0 / 256.0 / d2;
-                if d4 < 0.0 { d4 *= 4.0; }
+                let mut d4 = (y as f64 - d3) * (s.lower_limit_scale as f64) * 128.0 / 256.0 / d2;
+                if d4 < 0.0 {
+                    d4 *= 4.0;
+                }
                 let d5 = f[idx] / (s.depth_noise_scale as f64);
                 let d6 = g[idx] / (s.main_depth_scale as f64);
                 let d7 = (e[idx] / 10.0 + 1.0) / 2.0;

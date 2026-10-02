@@ -1,6 +1,6 @@
+use crate::mutf8::{decode_mutf8, encode_mutf8};
 use std::collections::HashMap;
 use std::io::{Cursor, Read};
-use crate::mutf8::{decode_mutf8, encode_mutf8};
 
 pub const MAX_DEPTH: usize = 512;
 
@@ -148,7 +148,11 @@ impl NbtDecoder {
     }
 
     /// Decodes a tag payload given its type ID and current recursion depth.
-    pub fn decode_payload(cur: &mut Cursor<&[u8]>, type_id: u8, depth: usize) -> Result<NbtTag, NbtError> {
+    pub fn decode_payload(
+        cur: &mut Cursor<&[u8]>,
+        type_id: u8,
+        depth: usize,
+    ) -> Result<NbtTag, NbtError> {
         if depth > MAX_DEPTH {
             return Err(NbtError::DepthExceeded(depth));
         }
@@ -156,43 +160,51 @@ impl NbtDecoder {
             0 => Ok(NbtTag::End),
             1 => {
                 let mut buf = [0u8; 1];
-                cur.read_exact(&mut buf).map_err(|_| NbtError::UnexpectedEof)?;
+                cur.read_exact(&mut buf)
+                    .map_err(|_| NbtError::UnexpectedEof)?;
                 Ok(NbtTag::Byte(buf[0] as i8))
             }
             2 => {
                 let mut buf = [0u8; 2];
-                cur.read_exact(&mut buf).map_err(|_| NbtError::UnexpectedEof)?;
+                cur.read_exact(&mut buf)
+                    .map_err(|_| NbtError::UnexpectedEof)?;
                 Ok(NbtTag::Short(i16::from_be_bytes(buf)))
             }
             3 => {
                 let mut buf = [0u8; 4];
-                cur.read_exact(&mut buf).map_err(|_| NbtError::UnexpectedEof)?;
+                cur.read_exact(&mut buf)
+                    .map_err(|_| NbtError::UnexpectedEof)?;
                 Ok(NbtTag::Int(i32::from_be_bytes(buf)))
             }
             4 => {
                 let mut buf = [0u8; 8];
-                cur.read_exact(&mut buf).map_err(|_| NbtError::UnexpectedEof)?;
+                cur.read_exact(&mut buf)
+                    .map_err(|_| NbtError::UnexpectedEof)?;
                 Ok(NbtTag::Long(i64::from_be_bytes(buf)))
             }
             5 => {
                 let mut buf = [0u8; 4];
-                cur.read_exact(&mut buf).map_err(|_| NbtError::UnexpectedEof)?;
+                cur.read_exact(&mut buf)
+                    .map_err(|_| NbtError::UnexpectedEof)?;
                 Ok(NbtTag::Float(f32::from_be_bytes(buf)))
             }
             6 => {
                 let mut buf = [0u8; 8];
-                cur.read_exact(&mut buf).map_err(|_| NbtError::UnexpectedEof)?;
+                cur.read_exact(&mut buf)
+                    .map_err(|_| NbtError::UnexpectedEof)?;
                 Ok(NbtTag::Double(f64::from_be_bytes(buf)))
             }
             7 => {
                 let mut len_buf = [0u8; 4];
-                cur.read_exact(&mut len_buf).map_err(|_| NbtError::UnexpectedEof)?;
+                cur.read_exact(&mut len_buf)
+                    .map_err(|_| NbtError::UnexpectedEof)?;
                 let len = i32::from_be_bytes(len_buf);
                 if len < 0 {
                     return Err(NbtError::NegativeLength(len));
                 }
                 let mut data = vec![0u8; len as usize];
-                cur.read_exact(&mut data).map_err(|_| NbtError::UnexpectedEof)?;
+                cur.read_exact(&mut data)
+                    .map_err(|_| NbtError::UnexpectedEof)?;
                 Ok(NbtTag::ByteArray(data))
             }
             8 => {
@@ -201,11 +213,13 @@ impl NbtDecoder {
             }
             9 => {
                 let mut elem_type_buf = [0u8; 1];
-                cur.read_exact(&mut elem_type_buf).map_err(|_| NbtError::UnexpectedEof)?;
+                cur.read_exact(&mut elem_type_buf)
+                    .map_err(|_| NbtError::UnexpectedEof)?;
                 let elem_type = elem_type_buf[0];
 
                 let mut len_buf = [0u8; 4];
-                cur.read_exact(&mut len_buf).map_err(|_| NbtError::UnexpectedEof)?;
+                cur.read_exact(&mut len_buf)
+                    .map_err(|_| NbtError::UnexpectedEof)?;
                 let len = i32::from_be_bytes(len_buf);
                 if len < 0 {
                     return Err(NbtError::NegativeLength(len));
@@ -222,7 +236,8 @@ impl NbtDecoder {
             10 => read_compound(cur, depth),
             11 => {
                 let mut len_buf = [0u8; 4];
-                cur.read_exact(&mut len_buf).map_err(|_| NbtError::UnexpectedEof)?;
+                cur.read_exact(&mut len_buf)
+                    .map_err(|_| NbtError::UnexpectedEof)?;
                 let len = i32::from_be_bytes(len_buf);
                 if len < 0 {
                     return Err(NbtError::NegativeLength(len));
@@ -230,14 +245,16 @@ impl NbtDecoder {
                 let mut ints = Vec::with_capacity(len as usize);
                 let mut buf = [0u8; 4];
                 for _ in 0..len {
-                    cur.read_exact(&mut buf).map_err(|_| NbtError::UnexpectedEof)?;
+                    cur.read_exact(&mut buf)
+                        .map_err(|_| NbtError::UnexpectedEof)?;
                     ints.push(i32::from_be_bytes(buf));
                 }
                 Ok(NbtTag::IntArray(ints))
             }
             12 => {
                 let mut len_buf = [0u8; 4];
-                cur.read_exact(&mut len_buf).map_err(|_| NbtError::UnexpectedEof)?;
+                cur.read_exact(&mut len_buf)
+                    .map_err(|_| NbtError::UnexpectedEof)?;
                 let len = i32::from_be_bytes(len_buf);
                 if len < 0 {
                     return Err(NbtError::NegativeLength(len));
@@ -245,7 +262,8 @@ impl NbtDecoder {
                 let mut longs = Vec::with_capacity(len as usize);
                 let mut buf = [0u8; 8];
                 for _ in 0..len {
-                    cur.read_exact(&mut buf).map_err(|_| NbtError::UnexpectedEof)?;
+                    cur.read_exact(&mut buf)
+                        .map_err(|_| NbtError::UnexpectedEof)?;
                     longs.push(i64::from_be_bytes(buf));
                 }
                 Ok(NbtTag::LongArray(longs))
@@ -257,7 +275,8 @@ impl NbtDecoder {
 
 fn read_string(cur: &mut Cursor<&[u8]>) -> Result<String, NbtError> {
     let mut len_buf = [0u8; 2];
-    cur.read_exact(&mut len_buf).map_err(|_| NbtError::UnexpectedEof)?;
+    cur.read_exact(&mut len_buf)
+        .map_err(|_| NbtError::UnexpectedEof)?;
     let len = u16::from_be_bytes(len_buf) as usize;
     let pos = cur.position() as usize;
     let slice = cur.get_ref();
@@ -276,7 +295,8 @@ fn read_compound(cur: &mut Cursor<&[u8]>, depth: usize) -> Result<NbtTag, NbtErr
     let mut map = HashMap::new();
     let mut type_buf = [0u8; 1];
     loop {
-        cur.read_exact(&mut type_buf).map_err(|_| NbtError::UnexpectedEof)?;
+        cur.read_exact(&mut type_buf)
+            .map_err(|_| NbtError::UnexpectedEof)?;
         let tag_type = type_buf[0];
         if tag_type == 0 {
             break;
@@ -390,7 +410,11 @@ fn write_string(s: &str, out: &mut Vec<u8>) {
     out.extend_from_slice(&str_bytes[..len as usize]);
 }
 
-fn write_compound_payload(compound: &NbtTag, out: &mut Vec<u8>, depth: usize) -> Result<(), NbtError> {
+fn write_compound_payload(
+    compound: &NbtTag,
+    out: &mut Vec<u8>,
+    depth: usize,
+) -> Result<(), NbtError> {
     if depth > MAX_DEPTH {
         return Err(NbtError::DepthExceeded(depth));
     }

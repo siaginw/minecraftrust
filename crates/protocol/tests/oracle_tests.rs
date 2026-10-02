@@ -1,5 +1,5 @@
-use protocol::*;
 use core_types::BlockPos;
+use protocol::*;
 use std::io::Cursor;
 
 #[test]
@@ -20,7 +20,11 @@ fn test_varint_golden_vectors() {
 
     for &(val, expected_bytes) in test_cases {
         // Size
-        assert_eq!(varint_size(val), expected_bytes.len(), "size mismatch for {val}");
+        assert_eq!(
+            varint_size(val),
+            expected_bytes.len(),
+            "size mismatch for {val}"
+        );
 
         // Write
         let mut out = Vec::new();
@@ -54,13 +58,26 @@ fn test_varlong_golden_vectors() {
         (128, &[0x80, 0x01]),
         (255, &[0xff, 0x01]),
         (2147483647, &[0xff, 0xff, 0xff, 0xff, 0x07]),
-        (9223372036854775807, &[0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0x7f]),
-        (-1, &[0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0x01]),
-        (-9223372036854775808, &[0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x01]),
+        (
+            9223372036854775807,
+            &[0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0x7f],
+        ),
+        (
+            -1,
+            &[0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0x01],
+        ),
+        (
+            -9223372036854775808,
+            &[0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x01],
+        ),
     ];
 
     for &(val, expected_bytes) in test_cases {
-        assert_eq!(varlong_size(val), expected_bytes.len(), "size mismatch for {val}");
+        assert_eq!(
+            varlong_size(val),
+            expected_bytes.len(),
+            "size mismatch for {val}"
+        );
 
         let mut out = Vec::new();
         let written = write_varlong(val, &mut out).expect("write failed");

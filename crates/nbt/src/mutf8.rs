@@ -74,8 +74,12 @@ pub fn decode_mutf8(bytes: &[u8]) -> Result<String, Mutf8Error> {
                 if b4 != 0xED || (b5 & 0xF0) != 0xB0 || (b6 & 0xC0) != 0x80 {
                     return Err(Mutf8Error::InvalidSurrogate);
                 }
-                let high = (((b1 as u32 & 0x0F) << 12) | ((b2 as u32 & 0x3F) << 6) | (b3 as u32 & 0x3F)) as u32;
-                let low = (((b4 as u32 & 0x0F) << 12) | ((b5 as u32 & 0x3F) << 6) | (b6 as u32 & 0x3F)) as u32;
+                let high = (((b1 as u32 & 0x0F) << 12)
+                    | ((b2 as u32 & 0x3F) << 6)
+                    | (b3 as u32 & 0x3F)) as u32;
+                let low = (((b4 as u32 & 0x0F) << 12)
+                    | ((b5 as u32 & 0x3F) << 6)
+                    | (b6 as u32 & 0x3F)) as u32;
                 let cp = 0x10000 + ((high - 0xD800) << 10) + (low - 0xDC00);
                 if let Some(ch) = char::from_u32(cp) {
                     out.push(ch);
@@ -84,7 +88,9 @@ pub fn decode_mutf8(bytes: &[u8]) -> Result<String, Mutf8Error> {
                 }
                 i += 6;
             } else {
-                let cp = (((b1 & 0x0F) as u32) << 12) | (((b2 & 0x3F) as u32) << 6) | ((b3 & 0x3F) as u32);
+                let cp = (((b1 & 0x0F) as u32) << 12)
+                    | (((b2 & 0x3F) as u32) << 6)
+                    | ((b3 & 0x3F) as u32);
                 if let Some(ch) = char::from_u32(cp) {
                     out.push(ch);
                 } else {

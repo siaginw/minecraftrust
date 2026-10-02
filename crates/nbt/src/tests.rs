@@ -39,8 +39,14 @@ fn test_mutf8_null_and_surrogates() {
 #[test]
 fn test_arrays_roundtrip() {
     let mut map = HashMap::new();
-    map.insert("byte_arr".to_string(), NbtTag::ByteArray(vec![1, 2, 3, 255]));
-    map.insert("int_arr".to_string(), NbtTag::IntArray(vec![-100, 0, 100, 999999]));
+    map.insert(
+        "byte_arr".to_string(),
+        NbtTag::ByteArray(vec![1, 2, 3, 255]),
+    );
+    map.insert(
+        "int_arr".to_string(),
+        NbtTag::IntArray(vec![-100, 0, 100, 999999]),
+    );
     map.insert(
         "long_arr".to_string(),
         NbtTag::LongArray(vec![-999999999999, 0, 999999999999]),
@@ -106,10 +112,7 @@ fn test_unknown_mod_tag_preservation() {
         "custom_mod:tag_array".to_string(),
         NbtTag::ByteArray(vec![0xAA, 0xBB, 0xCC]),
     );
-    map.insert(
-        "ForgeCaps".to_string(),
-        NbtTag::Compound(mod_caps),
-    );
+    map.insert("ForgeCaps".to_string(), NbtTag::Compound(mod_caps));
 
     let root = NbtTag::Compound(map);
     let mut bytes = Vec::new();

@@ -23,7 +23,7 @@
 //! Contents are opaque here: no packet reinterpretation, no duplicate packet
 //! ID, no chunk-vs-body conflation.
 
-use crate::{ZlibPacketCompressor, VANILLA_LEVEL, max_output_len};
+use crate::{max_output_len, ZlibPacketCompressor, VANILLA_LEVEL};
 
 /// Outbound encoder limit: NettyVarint21FrameEncoder rejects bodies that do
 /// not fit a 3-byte VarInt (verified "unable to fit" in the installed code).
@@ -148,7 +148,12 @@ impl OutboundFrameContext {
     /// returning the frame length. On error nothing is a valid frame
     /// (partial output is never a completed frame) and the compressor is
     /// left reset (independent-stream contract holds after errors).
-    pub fn encode(&mut self, body: &[u8], threshold: i32, out: &mut [u8]) -> Result<usize, FrameError> {
+    pub fn encode(
+        &mut self,
+        body: &[u8],
+        threshold: i32,
+        out: &mut [u8],
+    ) -> Result<usize, FrameError> {
         if body.is_empty() {
             return Err(FrameError::Invalid("empty packet body"));
         }
@@ -160,7 +165,10 @@ impl OutboundFrameContext {
             }
             let total = varint_size(inner) + inner;
             if out.len() < total {
-                return Err(FrameError::OutputTooSmall { needed: total, have: out.len() });
+                return Err(FrameError::OutputTooSmall {
+                    needed: total,
+                    have: out.len(),
+                });
             }
             let mut pos = 0;
             write_varint(inner, out, &mut pos);
@@ -178,7 +186,10 @@ impl OutboundFrameContext {
             }
             let total = varint_size(inner) + inner;
             if out.len() < total {
-                return Err(FrameError::OutputTooSmall { needed: total, have: out.len() });
+                return Err(FrameError::OutputTooSmall {
+                    needed: total,
+                    have: out.len(),
+                });
             }
             let mut pos = 0;
             write_varint(inner, out, &mut pos);
@@ -201,11 +212,17 @@ impl OutboundFrameContext {
             let scratch = &mut self.comp_scratch[..bound];
             match self.compressor.compress_into(body, scratch) {
                 Ok(n) => n,
-                Err(e) => return Err(match e {
-                    crate::CompressError::OutputTooSmall { needed, have } =>
-                        FrameError::OutputTooSmall { needed: needed + 9, have: out.len() },
-                    crate::CompressError::BackendError(s) => FrameError::Backend(s),
-                }),
+                Err(e) => {
+                    return Err(match e {
+                        crate::CompressError::OutputTooSmall { needed, have } => {
+                            FrameError::OutputTooSmall {
+                                needed: needed + 9,
+                                have: out.len(),
+                            }
+                        }
+                        crate::CompressError::BackendError(s) => FrameError::Backend(s),
+                    })
+                }
             }
         };
         // compressor contract: reset after every packet (success or the
@@ -217,7 +234,10 @@ impl OutboundFrameContext {
         }
         let total = varint_size(inner) + inner;
         if out.len() < total {
-            return Err(FrameError::OutputTooSmall { needed: total, have: out.len() });
+            return Err(FrameError::OutputTooSmall {
+                needed: total,
+                have: out.len(),
+            });
         }
         let mut pos = 0;
         write_varint(inner, out, &mut pos);
@@ -352,13 +372,21 @@ mod tests {
     fn empty_body_invalid_and_body_too_large() {
         let mut ctx = OutboundFrameContext::new().unwrap();
         let mut out = vec![0u8; 16];
-        assert!(matches!(ctx.encode(&[], 256, &mut out), Err(FrameError::Invalid(_))));
+        assert!(matches!(
+            ctx.encode(&[], 256, &mut out),
+            Err(FrameError::Invalid(_))
+        ));
         let huge = vec![0u8; MAX_FRAME_BODY + 1];
-        assert!(matches!(ctx.encode(&huge, -1, &mut out), Err(FrameError::BodyTooLarge { .. })));
+        assert!(matches!(
+            ctx.encode(&huge, -1, &mut out),
+            Err(FrameError::BodyTooLarge { .. })
+        ));
         // Compressed path: a huge body COMPRESSES under the limit — must
         // now SUCCEED (boundary semantics fix); the frame is still valid.
         let mut big_out = vec![0u8; MAX_FRAME_BODY * 2 + 64];
-        let n = ctx.encode(&huge, 256, &mut big_out).expect("compressible >limit body must encode");
+        let n = ctx
+            .encode(&huge, 256, &mut big_out)
+            .expect("compressible >limit body must encode");
         assert!(n < huge.len());
         // But a body that cannot compress under the limit fails the exact check:
         // incompressible > limit is caught post-compression (BodyTooLarge).
@@ -373,7 +401,9 @@ mod tests {
         for len in [127usize, 128, 16383, 16384, 2097151] {
             let body = vec![1u8; len];
             let mut out = vec![0u8; len + 16];
-            let n = ctx.encode(&body, -1, &mut out).unwrap_or_else(|e| panic!("len {} -> {:?}", len, e));
+            let n = ctx
+                .encode(&body, -1, &mut out)
+                .unwrap_or_else(|e| panic!("len {} -> {:?}", len, e));
             assert_eq!(n, varint_size(len) + len);
         }
     }

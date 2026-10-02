@@ -1,8 +1,8 @@
 //! NBT binary tag model and codec contract.
 //! Must preserve unknown tags and capability structures.
 
-pub mod mutf8;
 pub mod codec;
+pub mod mutf8;
 pub mod tape;
 #[cfg(test)]
 mod tests;

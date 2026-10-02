@@ -40,7 +40,15 @@ impl FlatTables {
             pgy[i] = crate::GRAD_Y[h];
             pgz[i] = crate::GRAD_Z[h];
         }
-        FlatTables { pgx, pgy, pgz, perm: g.perm.clone(), gx: g.x_off, gy: g.y_off, gz: g.z_off }
+        FlatTables {
+            pgx,
+            pgy,
+            pgz,
+            perm: g.perm.clone(),
+            gx: g.x_off,
+            gy: g.y_off,
+            gz: g.z_off,
+        }
     }
 }
 
@@ -55,8 +63,15 @@ impl BatchOctaves {
     pub fn new(seed: i64, octaves: i32) -> Self {
         let mut rand = JavaRandom::new(seed);
         let oct = Octaves::new(&mut rand, octaves);
-        let tables = oct.generators.iter().map(FlatTables::from_improved).collect();
-        BatchOctaves { octaves: oct, tables }
+        let tables = oct
+            .generators
+            .iter()
+            .map(FlatTables::from_improved)
+            .collect();
+        BatchOctaves {
+            octaves: oct,
+            tables,
+        }
     }
 
     /// Batched func_76304_a for `n` chunks into `out` (n * len, chunk-major).
@@ -86,7 +101,8 @@ impl BatchOctaves {
             let d7 = y_off as f64 * d3 * y_scale;
             #[cfg(target_arch = "x86_64")]
             {
-                if crate::simd::is_avx2() && n > 0 && y_size > 1 { // ySize==1 = vanilla 2D special path: scalar only
+                if crate::simd::is_avx2() && n > 0 && y_size > 1 {
+                    // ySize==1 = vanilla 2D special path: scalar only
                     let mut g0 = 0usize;
                     while g0 < n {
                         let lanes = (n - g0).min(4);
@@ -107,9 +123,21 @@ impl BatchOctaves {
                         }
                         unsafe {
                             populate_batch_avx4(
-                                out, g0, lanes, len, t, &d6, d7, &d8,
-                                x_size, y_size, z_size,
-                                x_scale * d3, y_scale * d3, z_scale * d3, d3,
+                                out,
+                                g0,
+                                lanes,
+                                len,
+                                t,
+                                &d6,
+                                d7,
+                                &d8,
+                                x_size,
+                                y_size,
+                                z_size,
+                                x_scale * d3,
+                                y_scale * d3,
+                                z_scale * d3,
+                                d3,
                             );
                         }
                         g0 += 4;
@@ -131,9 +159,16 @@ impl BatchOctaves {
                 let base = lane * len;
                 g.populate_into(
                     &mut out[base..base + len],
-                    dx, d7, dz,
-                    x_size, y_size, z_size,
-                    x_scale * d3, y_scale * d3, z_scale * d3, d3,
+                    dx,
+                    d7,
+                    dz,
+                    x_size,
+                    y_size,
+                    z_size,
+                    x_scale * d3,
+                    y_scale * d3,
+                    z_scale * d3,
+                    d3,
                 );
             }
             d3 /= 2.0;
@@ -189,7 +224,14 @@ unsafe fn v_lerp(blend: __m256d, a: __m256d, b: __m256d) -> __m256d {
 /// Corner grad dot: (gx*x + gy*y) + gz*z — left-assoc, matching scalar.
 #[cfg(target_arch = "x86_64")]
 #[target_feature(enable = "avx2")]
-unsafe fn v_dot3(gx: __m256d, gy: __m256d, gz: __m256d, x: __m256d, y: __m256d, z: __m256d) -> __m256d {
+unsafe fn v_dot3(
+    gx: __m256d,
+    gy: __m256d,
+    gz: __m256d,
+    x: __m256d,
+    y: __m256d,
+    z: __m256d,
+) -> __m256d {
     let a = _mm256_mul_pd(gx, x);
     let b = _mm256_mul_pd(gy, y);
     let ab = _mm256_add_pd(a, b);
@@ -240,7 +282,11 @@ unsafe fn populate_batch_avx4(
     let mut slab = vec![0.0f64; len * 4];
     let mut last_y = _mm_set1_epi32(-1);
     let (mut c0c, mut c1c, mut c2c, mut c3c) = (
-        _mm256_setzero_pd(), _mm256_setzero_pd(), _mm256_setzero_pd(), _mm256_setzero_pd());
+        _mm256_setzero_pd(),
+        _mm256_setzero_pd(),
+        _mm256_setzero_pd(),
+        _mm256_setzero_pd(),
+    );
 
     let mut idx = 0usize;
     for ix in 0..xs {
@@ -271,12 +317,19 @@ unsafe fn populate_batch_avx4(
                 let dy = _mm256_sub_pd(dy0, yi_f);
                 let v = v_fade(dy);
 
-                let skip = if iy == 0 { zero_i } else { _mm_cmpeq_epi32(cy, last_y) };
+                let skip = if iy == 0 {
+                    zero_i
+                } else {
+                    _mm_cmpeq_epi32(cy, last_y)
+                };
                 // replicate each 32-bit mask lane into its 64-bit pair so the f64 sign
                 // bit equals that lane's flag (castps_pd reads only the upper half!)
                 let lo = _mm_unpacklo_epi32(skip, skip);
                 let hi = _mm_unpackhi_epi32(skip, skip);
-                let skip_pd = _mm256_castsi256_pd(_mm256_insertf128_si256::<1>(_mm256_castsi128_si256(lo), hi));
+                let skip_pd = _mm256_castsi256_pd(_mm256_insertf128_si256::<1>(
+                    _mm256_castsi128_si256(lo),
+                    hi,
+                ));
 
                 // Fast path: when EVERY lane would keep its cache (the common
                 // case in high octaves where yScale*d3 < 1), the expensive
@@ -391,7 +444,8 @@ mod tests {
         }
         for (seed, oct) in [(1i64, 16i32), (4096i64, 8i32), (987654321i64, 10i32)] {
             let b = BatchOctaves::new(seed, oct);
-            let shapes: &[(i32, i32, i32)] = &[(5, 33, 5), (5, 1, 5), (4, 17, 4), (1, 4, 1), (10, 8, 10)];
+            let shapes: &[(i32, i32, i32)] =
+                &[(5, 33, 5), (5, 1, 5), (4, 17, 4), (1, 4, 1), (10, 8, 10)];
             for (xs, ys, zs) in shapes {
                 for scales in [
                     (684.412, 684.412, 684.412),
@@ -403,22 +457,41 @@ mod tests {
                         let mut zo = vec![0i32; n];
                         let mut rng = seed;
                         for c in 0..n {
-                            rng = rng.wrapping_mul(6364136223846793005).wrapping_add(1442695040888963407);
+                            rng = rng
+                                .wrapping_mul(6364136223846793005)
+                                .wrapping_add(1442695040888963407);
                             xo[c] = ((rng >> 33) as i32) % 400_000;
                             zo[c] = ((rng >> 13) as i32) % -400_000;
                         }
                         let mut batch_out = vec![0.0f64; n * len];
-                        b.generate3d_batch(&mut batch_out, n, &xo, 0, &zo, *xs, *ys, *zs,
-                            scales.0, scales.1, scales.2);
+                        b.generate3d_batch(
+                            &mut batch_out,
+                            n,
+                            &xo,
+                            0,
+                            &zo,
+                            *xs,
+                            *ys,
+                            *zs,
+                            scales.0,
+                            scales.1,
+                            scales.2,
+                        );
                         for c in 0..n {
-                            let scalar = b.octaves.generate3d(None, xo[c], 0, zo[c], *xs, *ys, *zs,
-                                scales.0, scales.1, scales.2);
+                            let scalar = b.octaves.generate3d(
+                                None, xo[c], 0, zo[c], *xs, *ys, *zs, scales.0, scales.1, scales.2,
+                            );
                             for i in 0..len {
                                 assert_eq!(
                                     batch_out[c * len + i].to_bits(),
                                     scalar[i].to_bits(),
                                     "seed={} oct={} shape={:?} n={} c={} i={}",
-                                    seed, oct, (xs, ys, zs), n, c, i
+                                    seed,
+                                    oct,
+                                    (xs, ys, zs),
+                                    n,
+                                    c,
+                                    i
                                 );
                             }
                         }
@@ -483,7 +556,11 @@ pub unsafe fn populate_xlanes_avx4(
 
         let mut last_y: i32 = -1;
         let (mut c0c, mut c1c, mut c2c, mut c3c) = (
-            _mm256_setzero_pd(), _mm256_setzero_pd(), _mm256_setzero_pd(), _mm256_setzero_pd());
+            _mm256_setzero_pd(),
+            _mm256_setzero_pd(),
+            _mm256_setzero_pd(),
+            _mm256_setzero_pd(),
+        );
 
         for iz in 0..zs {
             let dz0 = _mm256_add_pd(d8v, _mm256_mul_pd(_mm256_set1_pd(iz as f64), zsc));

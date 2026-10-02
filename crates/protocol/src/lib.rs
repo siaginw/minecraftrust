@@ -9,8 +9,8 @@
 //! - `ProtocolString` (VarInt length-prefixed UTF-8, 32767 cap)
 //! - `WireSlot` (ItemStack format with short ID)
 
-pub mod error;
 pub mod codec;
+pub mod error;
 
-pub use error::ProtocolError;
 pub use codec::*;
+pub use error::ProtocolError;

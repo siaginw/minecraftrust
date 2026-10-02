@@ -48,7 +48,12 @@ pub struct StructureEntry {
 
 impl StructureEntry {
     fn box_contains(&self, x: i32, y: i32, z: i32) -> bool {
-        x >= self.min_x && x <= self.max_x && y >= self.min_y && y <= self.max_y && z >= self.min_z && z <= self.max_z
+        x >= self.min_x
+            && x <= self.max_x
+            && y >= self.min_y
+            && y <= self.max_y
+            && z >= self.min_z
+            && z <= self.max_z
     }
 
     /// Exact vanilla predicate after the start-box prefilter.
@@ -236,17 +241,20 @@ impl SpawnIndex {
     fn set_entry(&mut self, rank: u32, entry: StructureEntry) {
         let idx = rank as usize;
         if self.entries.len() <= idx {
-            self.entries.resize(idx + 1, StructureEntry {
-                rank: 0,
-                valid: false,
-                min_x: 0,
-                min_y: 0,
-                min_z: 0,
-                max_x: 0,
-                max_y: 0,
-                max_z: 0,
-                components: Vec::new(),
-            });
+            self.entries.resize(
+                idx + 1,
+                StructureEntry {
+                    rank: 0,
+                    valid: false,
+                    min_x: 0,
+                    min_y: 0,
+                    min_z: 0,
+                    max_x: 0,
+                    max_y: 0,
+                    max_z: 0,
+                    components: Vec::new(),
+                },
+            );
             self.live.resize(idx + 1, false);
         }
         let old_keys = if self.live.get(idx).copied().unwrap_or(false) {
@@ -264,15 +272,19 @@ impl SpawnIndex {
         self.entries[idx] = entry;
         self.live[idx] = true;
     }
-
-
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
 
-    fn mk(rank: u32, x0: i32, z0: i32, w: i32, comps: &[(i32, i32, i32, i32, i32, i32)]) -> SpawnIndex {
+    fn mk(
+        rank: u32,
+        x0: i32,
+        z0: i32,
+        w: i32,
+        comps: &[(i32, i32, i32, i32, i32, i32)],
+    ) -> SpawnIndex {
         let mut ix = SpawnIndex::new();
         let mut flat = Vec::new();
         for c in comps {
@@ -310,9 +322,29 @@ mod tests {
     #[test]
     fn negative_and_huge_coordinates() {
         let mut ix = SpawnIndex::new();
-        ix.insert(0, true, -100_000, 0, -100_000, -99_000, 255, -99_000, &[-100_000, -99_000, 0, 255, -100_000, -99_000]);
+        ix.insert(
+            0,
+            true,
+            -100_000,
+            0,
+            -100_000,
+            -99_000,
+            255,
+            -99_000,
+            &[-100_000, -99_000, 0, 255, -100_000, -99_000],
+        );
         assert_eq!(ix.query(-99_500, 64, -99_500), 0);
-        ix.insert(1, true, 1_000_000, 0, 1_000_000, 1_001_000, 255, 1_001_000, &[1_000_000, 1_001_000, 0, 255, 1_000_000, 1_001_000]);
+        ix.insert(
+            1,
+            true,
+            1_000_000,
+            0,
+            1_000_000,
+            1_001_000,
+            255,
+            1_001_000,
+            &[1_000_000, 1_001_000, 0, 255, 1_000_000, 1_001_000],
+        );
         assert_eq!(ix.query(1_000_500, 64, 1_000_500), 1);
         assert_eq!(ix.query(0, 64, 0), -1);
     }

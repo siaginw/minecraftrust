@@ -1,6 +1,6 @@
-use std::io::{Read, Write};
-use core_types::BlockPos;
 use crate::error::ProtocolError;
+use core_types::BlockPos;
+use std::io::{Read, Write};
 
 // ---------------------------------------------------------------------------
 // VarInt & VarLong
@@ -146,7 +146,9 @@ pub fn write_bool<W: Write>(val: bool, out: &mut W) -> std::io::Result<()> {
 #[inline]
 pub fn read_bool<R: Read>(reader: &mut R) -> Result<bool, ProtocolError> {
     let mut b = [0u8; 1];
-    reader.read_exact(&mut b).map_err(|_| ProtocolError::UnexpectedEof)?;
+    reader
+        .read_exact(&mut b)
+        .map_err(|_| ProtocolError::UnexpectedEof)?;
     Ok(b[0] != 0)
 }
 
@@ -158,7 +160,9 @@ pub fn write_u8<W: Write>(val: u8, out: &mut W) -> std::io::Result<()> {
 #[inline]
 pub fn read_u8<R: Read>(reader: &mut R) -> Result<u8, ProtocolError> {
     let mut b = [0u8; 1];
-    reader.read_exact(&mut b).map_err(|_| ProtocolError::UnexpectedEof)?;
+    reader
+        .read_exact(&mut b)
+        .map_err(|_| ProtocolError::UnexpectedEof)?;
     Ok(b[0])
 }
 
@@ -170,7 +174,9 @@ pub fn write_i8<W: Write>(val: i8, out: &mut W) -> std::io::Result<()> {
 #[inline]
 pub fn read_i8<R: Read>(reader: &mut R) -> Result<i8, ProtocolError> {
     let mut b = [0u8; 1];
-    reader.read_exact(&mut b).map_err(|_| ProtocolError::UnexpectedEof)?;
+    reader
+        .read_exact(&mut b)
+        .map_err(|_| ProtocolError::UnexpectedEof)?;
     Ok(b[0] as i8)
 }
 
@@ -182,7 +188,9 @@ pub fn write_i16_be<W: Write>(val: i16, out: &mut W) -> std::io::Result<()> {
 #[inline]
 pub fn read_i16_be<R: Read>(reader: &mut R) -> Result<i16, ProtocolError> {
     let mut b = [0u8; 2];
-    reader.read_exact(&mut b).map_err(|_| ProtocolError::UnexpectedEof)?;
+    reader
+        .read_exact(&mut b)
+        .map_err(|_| ProtocolError::UnexpectedEof)?;
     Ok(i16::from_be_bytes(b))
 }
 
@@ -194,7 +202,9 @@ pub fn write_u16_be<W: Write>(val: u16, out: &mut W) -> std::io::Result<()> {
 #[inline]
 pub fn read_u16_be<R: Read>(reader: &mut R) -> Result<u16, ProtocolError> {
     let mut b = [0u8; 2];
-    reader.read_exact(&mut b).map_err(|_| ProtocolError::UnexpectedEof)?;
+    reader
+        .read_exact(&mut b)
+        .map_err(|_| ProtocolError::UnexpectedEof)?;
     Ok(u16::from_be_bytes(b))
 }
 
@@ -206,7 +216,9 @@ pub fn write_i32_be<W: Write>(val: i32, out: &mut W) -> std::io::Result<()> {
 #[inline]
 pub fn read_i32_be<R: Read>(reader: &mut R) -> Result<i32, ProtocolError> {
     let mut b = [0u8; 4];
-    reader.read_exact(&mut b).map_err(|_| ProtocolError::UnexpectedEof)?;
+    reader
+        .read_exact(&mut b)
+        .map_err(|_| ProtocolError::UnexpectedEof)?;
     Ok(i32::from_be_bytes(b))
 }
 
@@ -218,7 +230,9 @@ pub fn write_u32_be<W: Write>(val: u32, out: &mut W) -> std::io::Result<()> {
 #[inline]
 pub fn read_u32_be<R: Read>(reader: &mut R) -> Result<u32, ProtocolError> {
     let mut b = [0u8; 4];
-    reader.read_exact(&mut b).map_err(|_| ProtocolError::UnexpectedEof)?;
+    reader
+        .read_exact(&mut b)
+        .map_err(|_| ProtocolError::UnexpectedEof)?;
     Ok(u32::from_be_bytes(b))
 }
 
@@ -230,7 +244,9 @@ pub fn write_i64_be<W: Write>(val: i64, out: &mut W) -> std::io::Result<()> {
 #[inline]
 pub fn read_i64_be<R: Read>(reader: &mut R) -> Result<i64, ProtocolError> {
     let mut b = [0u8; 8];
-    reader.read_exact(&mut b).map_err(|_| ProtocolError::UnexpectedEof)?;
+    reader
+        .read_exact(&mut b)
+        .map_err(|_| ProtocolError::UnexpectedEof)?;
     Ok(i64::from_be_bytes(b))
 }
 
@@ -242,7 +258,9 @@ pub fn write_u64_be<W: Write>(val: u64, out: &mut W) -> std::io::Result<()> {
 #[inline]
 pub fn read_u64_be<R: Read>(reader: &mut R) -> Result<u64, ProtocolError> {
     let mut b = [0u8; 8];
-    reader.read_exact(&mut b).map_err(|_| ProtocolError::UnexpectedEof)?;
+    reader
+        .read_exact(&mut b)
+        .map_err(|_| ProtocolError::UnexpectedEof)?;
     Ok(u64::from_be_bytes(b))
 }
 
@@ -254,7 +272,9 @@ pub fn write_f32_be<W: Write>(val: f32, out: &mut W) -> std::io::Result<()> {
 #[inline]
 pub fn read_f32_be<R: Read>(reader: &mut R) -> Result<f32, ProtocolError> {
     let mut b = [0u8; 4];
-    reader.read_exact(&mut b).map_err(|_| ProtocolError::UnexpectedEof)?;
+    reader
+        .read_exact(&mut b)
+        .map_err(|_| ProtocolError::UnexpectedEof)?;
     Ok(f32::from_be_bytes(b))
 }
 
@@ -266,7 +286,9 @@ pub fn write_f64_be<W: Write>(val: f64, out: &mut W) -> std::io::Result<()> {
 #[inline]
 pub fn read_f64_be<R: Read>(reader: &mut R) -> Result<f64, ProtocolError> {
     let mut b = [0u8; 8];
-    reader.read_exact(&mut b).map_err(|_| ProtocolError::UnexpectedEof)?;
+    reader
+        .read_exact(&mut b)
+        .map_err(|_| ProtocolError::UnexpectedEof)?;
     Ok(f64::from_be_bytes(b))
 }
 
@@ -342,8 +364,10 @@ pub fn write_string<W: Write>(s: &str, out: &mut W) -> Result<usize, ProtocolErr
             max: MAX_STRING_BYTES,
         });
     }
-    let mut total = write_varint(bytes.len() as i32, out).map_err(|_| ProtocolError::UnexpectedEof)?;
-    out.write_all(bytes).map_err(|_| ProtocolError::UnexpectedEof)?;
+    let mut total =
+        write_varint(bytes.len() as i32, out).map_err(|_| ProtocolError::UnexpectedEof)?;
+    out.write_all(bytes)
+        .map_err(|_| ProtocolError::UnexpectedEof)?;
     total += bytes.len();
     Ok(total)
 }
@@ -363,7 +387,9 @@ pub fn read_string<R: Read>(reader: &mut R, max_chars: usize) -> Result<String, 
     }
 
     let mut buf = vec![0u8; byte_len];
-    reader.read_exact(&mut buf).map_err(|_| ProtocolError::UnexpectedEof)?;
+    reader
+        .read_exact(&mut buf)
+        .map_err(|_| ProtocolError::UnexpectedEof)?;
 
     let s = String::from_utf8(buf).map_err(|_| ProtocolError::InvalidUtf8)?;
     if s.chars().count() > max_chars {
@@ -396,7 +422,9 @@ pub fn read_byte_array<R: Read>(reader: &mut R, max_len: usize) -> Result<Vec<u8
         });
     }
     let mut buf = vec![0u8; len];
-    reader.read_exact(&mut buf).map_err(|_| ProtocolError::UnexpectedEof)?;
+    reader
+        .read_exact(&mut buf)
+        .map_err(|_| ProtocolError::UnexpectedEof)?;
     Ok(buf)
 }
 

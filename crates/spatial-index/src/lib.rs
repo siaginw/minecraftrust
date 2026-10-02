@@ -26,12 +26,16 @@ pub struct LongKeyBuckets {
 
 impl LongKeyBuckets {
     pub fn new() -> Self {
-        Self { map: HashMap::new() }
+        Self {
+            map: HashMap::new(),
+        }
     }
 
     /// Prime capacity for `n` distinct keys (bulk-load path).
     pub fn with_capacity(n: usize) -> Self {
-        Self { map: HashMap::with_capacity(n) }
+        Self {
+            map: HashMap::with_capacity(n),
+        }
     }
 
     /// Add `id` to the bucket at `key`. Idempotent per (key, id).

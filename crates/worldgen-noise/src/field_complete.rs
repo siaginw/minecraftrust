@@ -21,7 +21,7 @@
 //!   caller's buffer.
 
 use crate::field::{assemble_field_into, FieldSettings};
-use crate::{GRAD_X, GRAD_Y, GRAD_Z, JavaRandom, Octaves};
+use crate::{JavaRandom, Octaves, GRAD_X, GRAD_Y, GRAD_Z};
 
 const XS: usize = 5;
 const YS: usize = 33;
@@ -40,8 +40,10 @@ pub struct CompactLevel {
 
 impl CompactLevel {
     fn from_improved(g: &crate::Improved) -> Self {
-        assert!(g.perm.iter().all(|&v| (0..=255).contains(&v)),
-            "perm value out of u8 range — compact layout invalid");
+        assert!(
+            g.perm.iter().all(|&v| (0..=255).contains(&v)),
+            "perm value out of u8 range — compact layout invalid"
+        );
         CompactLevel {
             perm: g.perm.iter().map(|&v| v as u8).collect(),
             x_off: g.x_off,
@@ -59,10 +61,10 @@ pub struct InitNoiseField {
     max: Vec<CompactLevel>,   // 16
     pub settings: FieldSettings,
     // handle-owned scratch (zero alloc in the hot path)
-    h: Vec<f64>,           // 25
-    e: Vec<f64>,           // 825 (main)
-    f: Vec<f64>,           // 825 (min)
-    g: Vec<f64>,           // 825 (max)
+    h: Vec<f64>, // 25
+    e: Vec<f64>, // 825 (main)
+    f: Vec<f64>, // 825 (min)
+    g: Vec<f64>, // 825 (max)
     weights: [f32; 25],
 }
 
@@ -102,9 +104,17 @@ fn octave_offset(off: i32, d3: f64, scale: f64) -> f64 {
 /// One octave layer of ONE field into acc[LEN], specialized scalar kernel.
 /// Exact transcription of NoiseGeneratorImproved's 3D path with fixed shape.
 #[inline]
-fn layer_field(acc: &mut [f64], lv: &CompactLevel,
-               d6: f64, d7: f64, d8: f64,
-               x_scale: f64, y_scale: f64, z_scale: f64, d3: f64) {
+fn layer_field(
+    acc: &mut [f64],
+    lv: &CompactLevel,
+    d6: f64,
+    d7: f64,
+    d8: f64,
+    x_scale: f64,
+    y_scale: f64,
+    z_scale: f64,
+    d3: f64,
+) {
     let inv = 1.0 / d3;
     let perm = &lv.perm;
     let mut idx = 0usize;
@@ -137,14 +147,26 @@ fn layer_field(acc: &mut [f64], lv: &CompactLevel,
                     let b1 = perm[(cx + 1) as usize] as i32 + cy;
                     l2 = perm[b1 as usize] as i32 + cz;
                     l3 = perm[(b1 + 1) as usize] as i32 + cz;
-                    c0 = lerp(u, grad3(perm[l0 as usize], dx, dy, dz),
-                                 grad3(perm[l2 as usize], dx - 1.0, dy, dz));
-                    c1 = lerp(u, grad3(perm[l1 as usize], dx, dy - 1.0, dz),
-                                 grad3(perm[l3 as usize], dx - 1.0, dy - 1.0, dz));
-                    c2 = lerp(u, grad3(perm[(l0 + 1) as usize], dx, dy, dz - 1.0),
-                                 grad3(perm[(l2 + 1) as usize], dx - 1.0, dy, dz - 1.0));
-                    c3 = lerp(u, grad3(perm[(l1 + 1) as usize], dx, dy - 1.0, dz - 1.0),
-                                 grad3(perm[(l3 + 1) as usize], dx - 1.0, dy - 1.0, dz - 1.0));
+                    c0 = lerp(
+                        u,
+                        grad3(perm[l0 as usize], dx, dy, dz),
+                        grad3(perm[l2 as usize], dx - 1.0, dy, dz),
+                    );
+                    c1 = lerp(
+                        u,
+                        grad3(perm[l1 as usize], dx, dy - 1.0, dz),
+                        grad3(perm[l3 as usize], dx - 1.0, dy - 1.0, dz),
+                    );
+                    c2 = lerp(
+                        u,
+                        grad3(perm[(l0 + 1) as usize], dx, dy, dz - 1.0),
+                        grad3(perm[(l2 + 1) as usize], dx - 1.0, dy, dz - 1.0),
+                    );
+                    c3 = lerp(
+                        u,
+                        grad3(perm[(l1 + 1) as usize], dx, dy - 1.0, dz - 1.0),
+                        grad3(perm[(l3 + 1) as usize], dx - 1.0, dy - 1.0, dz - 1.0),
+                    );
                 }
                 acc[idx] += lerp(w, lerp(v, c0, c1), lerp(v, c2, c3)) * inv;
                 idx += 1;
@@ -160,10 +182,19 @@ fn layer_field(acc: &mut [f64], lv: &CompactLevel,
 /// Per-field coordinate math (dx0/dy0/dz0, floors, fades) is computed
 /// separately for each field; per-field FP accumulation order unchanged.
 #[inline]
-fn layer_min_max(acc_f: &mut [f64], acc_g: &mut [f64],
-                 lv_f: &CompactLevel, lv_g: &CompactLevel,
-                 d6: f64, d7: f64, d8: f64,
-                 x_scale: f64, y_scale: f64, z_scale: f64, d3: f64) {
+fn layer_min_max(
+    acc_f: &mut [f64],
+    acc_g: &mut [f64],
+    lv_f: &CompactLevel,
+    lv_g: &CompactLevel,
+    d6: f64,
+    d7: f64,
+    d8: f64,
+    x_scale: f64,
+    y_scale: f64,
+    z_scale: f64,
+    d3: f64,
+) {
     let inv = 1.0 / d3;
     let pf = &lv_f.perm;
     let pg = &lv_g.perm;
@@ -208,14 +239,26 @@ fn layer_min_max(acc_f: &mut [f64], acc_g: &mut [f64],
                     let b1 = pf[(cxf + 1) as usize] as i32 + cyf;
                     let l2 = pf[b1 as usize] as i32 + czf;
                     let l3 = pf[(b1 + 1) as usize] as i32 + czf;
-                    c0f = lerp(uf, grad3(pf[l0 as usize], dxf, dyf, dzf),
-                                  grad3(pf[l2 as usize], dxf - 1.0, dyf, dzf));
-                    c1f = lerp(uf, grad3(pf[l1 as usize], dxf, dyf - 1.0, dzf),
-                                  grad3(pf[l3 as usize], dxf - 1.0, dyf - 1.0, dzf));
-                    c2f = lerp(uf, grad3(pf[(l0 + 1) as usize], dxf, dyf, dzf - 1.0),
-                                  grad3(pf[(l2 + 1) as usize], dxf - 1.0, dyf, dzf - 1.0));
-                    c3f = lerp(uf, grad3(pf[(l1 + 1) as usize], dxf, dyf - 1.0, dzf - 1.0),
-                                  grad3(pf[(l3 + 1) as usize], dxf - 1.0, dyf - 1.0, dzf - 1.0));
+                    c0f = lerp(
+                        uf,
+                        grad3(pf[l0 as usize], dxf, dyf, dzf),
+                        grad3(pf[l2 as usize], dxf - 1.0, dyf, dzf),
+                    );
+                    c1f = lerp(
+                        uf,
+                        grad3(pf[l1 as usize], dxf, dyf - 1.0, dzf),
+                        grad3(pf[l3 as usize], dxf - 1.0, dyf - 1.0, dzf),
+                    );
+                    c2f = lerp(
+                        uf,
+                        grad3(pf[(l0 + 1) as usize], dxf, dyf, dzf - 1.0),
+                        grad3(pf[(l2 + 1) as usize], dxf - 1.0, dyf, dzf - 1.0),
+                    );
+                    c3f = lerp(
+                        uf,
+                        grad3(pf[(l1 + 1) as usize], dxf, dyf - 1.0, dzf - 1.0),
+                        grad3(pf[(l3 + 1) as usize], dxf - 1.0, dyf - 1.0, dzf - 1.0),
+                    );
                 }
                 let dy0g = d7 + iy as f64 * y_scale + lv_g.y_off;
                 let yig = floor_i32(dy0g);
@@ -230,14 +273,26 @@ fn layer_min_max(acc_f: &mut [f64], acc_g: &mut [f64],
                     let b1 = pg[(cxg + 1) as usize] as i32 + cyg;
                     let l2 = pg[b1 as usize] as i32 + czg;
                     let l3 = pg[(b1 + 1) as usize] as i32 + czg;
-                    c0g = lerp(ug, grad3(pg[l0 as usize], dxg, dyg, dzg),
-                                  grad3(pg[l2 as usize], dxg - 1.0, dyg, dzg));
-                    c1g = lerp(ug, grad3(pg[l1 as usize], dxg, dyg - 1.0, dzg),
-                                  grad3(pg[l3 as usize], dxg - 1.0, dyg - 1.0, dzg));
-                    c2g = lerp(ug, grad3(pg[(l0 + 1) as usize], dxg, dyg, dzg - 1.0),
-                                  grad3(pg[(l2 + 1) as usize], dxg - 1.0, dyg, dzg - 1.0));
-                    c3g = lerp(ug, grad3(pg[(l1 + 1) as usize], dxg, dyg - 1.0, dzg - 1.0),
-                                  grad3(pg[(l3 + 1) as usize], dxg - 1.0, dyg - 1.0, dzg - 1.0));
+                    c0g = lerp(
+                        ug,
+                        grad3(pg[l0 as usize], dxg, dyg, dzg),
+                        grad3(pg[l2 as usize], dxg - 1.0, dyg, dzg),
+                    );
+                    c1g = lerp(
+                        ug,
+                        grad3(pg[l1 as usize], dxg, dyg - 1.0, dzg),
+                        grad3(pg[l3 as usize], dxg - 1.0, dyg - 1.0, dzg),
+                    );
+                    c2g = lerp(
+                        ug,
+                        grad3(pg[(l0 + 1) as usize], dxg, dyg, dzg - 1.0),
+                        grad3(pg[(l2 + 1) as usize], dxg - 1.0, dyg, dzg - 1.0),
+                    );
+                    c3g = lerp(
+                        ug,
+                        grad3(pg[(l1 + 1) as usize], dxg, dyg - 1.0, dzg - 1.0),
+                        grad3(pg[(l3 + 1) as usize], dxg - 1.0, dyg - 1.0, dzg - 1.0),
+                    );
                 }
                 acc_f[idx] += lerp(wf, lerp(vf, c0f, c1f), lerp(vf, c2f, c3f)) * inv;
                 acc_g[idx] += lerp(wg, lerp(vg, c0g, c1g), lerp(vg, c2g, c3g)) * inv;
@@ -251,12 +306,20 @@ impl InitNoiseField {
     /// Construct from the four generator seeds (same construction order and
     /// Random consumption as ChunkGeneratorOverworld: depth=16, main=8,
     /// min=16, max=16 — each from its OWN Random(seed)).
-    pub fn new(seed_depth: i64, seed_main: i64, seed_min: i64, seed_max: i64,
-               settings: FieldSettings) -> Self {
+    pub fn new(
+        seed_depth: i64,
+        seed_main: i64,
+        seed_min: i64,
+        seed_max: i64,
+        settings: FieldSettings,
+    ) -> Self {
         let mk = |seed: i64, oct: i32| -> Vec<CompactLevel> {
             let mut r = JavaRandom::new(seed);
             let o = Octaves::new(&mut r, oct);
-            o.generators.iter().map(CompactLevel::from_improved).collect()
+            o.generators
+                .iter()
+                .map(CompactLevel::from_improved)
+                .collect()
         };
         InitNoiseField {
             depth: mk(seed_depth, 16),
@@ -288,8 +351,16 @@ impl InitNoiseField {
                 let d6 = octave_offset(x4, d3, s.depth_noise_scale_x as f64);
                 let d7 = 10.0f64 * d3 * 1.0; // wrapper: yOffset=10, yScale=1.0
                 let d8 = octave_offset(z4, d3, s.depth_noise_scale_exp as f64); // QUIRK: exponent -> zScale
-                layer_2d(arr, lv, d6, d7, d8, s.depth_noise_scale_x as f64 * d3,
-                         s.depth_noise_scale_exp as f64 * d3, d3);
+                layer_2d(
+                    arr,
+                    lv,
+                    d6,
+                    d7,
+                    d8,
+                    s.depth_noise_scale_x as f64 * d3,
+                    s.depth_noise_scale_exp as f64 * d3,
+                    d3,
+                );
                 d3 /= 2.0;
             }
         }
@@ -307,7 +378,17 @@ impl InitNoiseField {
                 let d6 = octave_offset(x4, d3, mnx);
                 let d7 = octave_offset(0, d3, mny); // y offset 0*... = 0 via same math
                 let d8 = octave_offset(z4, d3, mnz);
-                layer_field(&mut self.e, lv, d6, d7, d8, mnx * d3, mny * d3, mnz * d3, d3);
+                layer_field(
+                    &mut self.e,
+                    lv,
+                    d6,
+                    d7,
+                    d8,
+                    mnx * d3,
+                    mny * d3,
+                    mnz * d3,
+                    d3,
+                );
                 d3 /= 2.0;
             }
         }
@@ -326,8 +407,19 @@ impl InitNoiseField {
                 let d6 = octave_offset(x4, d3, a);
                 let d8 = octave_offset(z4, d3, a);
                 // NOTE: y offset for min/max = 0*... normalized = 0.0 exactly
-                layer_min_max(&mut self.f, &mut self.g, &self.min[j], &self.max[j],
-                              d6, 0.0, d8, a * d3, b * d3, a * d3, d3);
+                layer_min_max(
+                    &mut self.f,
+                    &mut self.g,
+                    &self.min[j],
+                    &self.max[j],
+                    d6,
+                    0.0,
+                    d8,
+                    a * d3,
+                    b * d3,
+                    a * d3,
+                    d3,
+                );
                 d3 /= 2.0;
             }
         }
@@ -336,14 +428,30 @@ impl InitNoiseField {
             min_height: &biomes[..100],
             variation: &biomes[100..],
         };
-        assemble_field_into(&self.settings, &self.weights, &bi,
-                            &self.h, &self.e, &self.f, &self.g, out);
+        assemble_field_into(
+            &self.settings,
+            &self.weights,
+            &bi,
+            &self.h,
+            &self.e,
+            &self.f,
+            &self.g,
+            out,
+        );
     }
 }
 
 /// 2D layer (y_size==1 special path), specialized 5x5.
-fn layer_2d(arr: &mut [f64], lv: &CompactLevel, d6: f64, _d7: f64, d8: f64,
-            x_scale: f64, z_scale: f64, d3: f64) {
+fn layer_2d(
+    arr: &mut [f64],
+    lv: &CompactLevel,
+    d6: f64,
+    _d7: f64,
+    d8: f64,
+    x_scale: f64,
+    z_scale: f64,
+    d3: f64,
+) {
     let inv = 1.0 / d3;
     let perm = &lv.perm;
     let mut idx = 0usize;
@@ -367,10 +475,16 @@ fn layer_2d(arr: &mut [f64], lv: &CompactLevel, d6: f64, _d7: f64, d8: f64,
                 let i = (hash & 15) as usize;
                 GRAD_X[i] * x + GRAD_Z[i] * z
             };
-            let l = lerp(u, g2(perm[l0 as usize], dx, dz),
-                            grad3(perm[l1 as usize], dx - 1.0, 0.0, dz));
-            let m = lerp(u, grad3(perm[(l0 + 1) as usize], dx, 0.0, dz - 1.0),
-                            grad3(perm[(l1 + 1) as usize], dx - 1.0, 0.0, dz - 1.0));
+            let l = lerp(
+                u,
+                g2(perm[l0 as usize], dx, dz),
+                grad3(perm[l1 as usize], dx - 1.0, 0.0, dz),
+            );
+            let m = lerp(
+                u,
+                grad3(perm[(l0 + 1) as usize], dx, 0.0, dz - 1.0),
+                grad3(perm[(l1 + 1) as usize], dx - 1.0, 0.0, dz - 1.0),
+            );
             arr[idx] += lerp(w, l, m) * inv;
             idx += 1;
         }
@@ -383,13 +497,22 @@ mod tests {
 
     fn default_settings() -> FieldSettings {
         FieldSettings {
-            coordinate_scale: 684.412, height_scale: 684.412,
-            depth_noise_scale_x: 200.0, depth_noise_scale_exp: 0.5, depth_noise_scale_z: 200.0,
-            main_noise_scale_x: 80.0, main_noise_scale_y: 160.0, main_noise_scale_z: 80.0,
-            upper_limit_scale: 8.5, lower_limit_scale: 12.0,
-            depth_noise_scale: 512.0, main_depth_scale: 512.0,
-            biome_depth_weight: 1.0, biome_depth_offset: 0.0,
-            biome_scale_weight: 1.0, biome_scale_offset: 0.0,
+            coordinate_scale: 684.412,
+            height_scale: 684.412,
+            depth_noise_scale_x: 200.0,
+            depth_noise_scale_exp: 0.5,
+            depth_noise_scale_z: 200.0,
+            main_noise_scale_x: 80.0,
+            main_noise_scale_y: 160.0,
+            main_noise_scale_z: 80.0,
+            upper_limit_scale: 8.5,
+            lower_limit_scale: 12.0,
+            depth_noise_scale: 512.0,
+            main_depth_scale: 512.0,
+            biome_depth_weight: 1.0,
+            biome_depth_offset: 0.0,
+            biome_scale_weight: 1.0,
+            biome_scale_offset: 0.0,
             amplified: false,
         }
     }
@@ -413,7 +536,9 @@ mod tests {
             let biomes = vec![0.125f32; 200];
             let mut xx = seed;
             for trial in 0..3 {
-                xx = xx.wrapping_mul(6364136223846793005).wrapping_add(1442695040888963407);
+                xx = xx
+                    .wrapping_mul(6364136223846793005)
+                    .wrapping_add(1442695040888963407);
                 let x4 = ((xx >> 33) as i32) % 300_000;
                 let z4 = ((xx >> 13) as i32) % -300_000;
                 hnd.complete(x4, z4, &biomes, &mut out);
@@ -424,10 +549,16 @@ mod tests {
                 let a = s.coordinate_scale as f64;
                 let b = s.height_scale as f64;
                 // depth 2D with the drop quirk: zScale = exponent (f_)
-                let h = depth.generate2d(None, x4, z4, 5, 5,
-                        s.depth_noise_scale_x as f64,
-                        s.depth_noise_scale_exp as f64,
-                        s.depth_noise_scale_z as f64);
+                let h = depth.generate2d(
+                    None,
+                    x4,
+                    z4,
+                    5,
+                    5,
+                    s.depth_noise_scale_x as f64,
+                    s.depth_noise_scale_exp as f64,
+                    s.depth_noise_scale_z as f64,
+                );
                 let e = main.generate3d(None, x4, 0, z4, 5, 33, 5, mnx, mny, mnz);
                 let f = min.generate3d(None, x4, 0, z4, 5, 33, 5, a, b, a);
                 let g = max.generate3d(None, x4, 0, z4, 5, 33, 5, a, b, a);
@@ -436,22 +567,56 @@ mod tests {
                     variation: biomes[100..].to_vec(),
                 };
                 let mut q = vec![0.0f64; LEN];
-                crate::field::assemble_field(&s, &crate::field::biome_weights(), &bi,
-                                             &h, &e, &f, &g, &mut q);
+                crate::field::assemble_field(
+                    &s,
+                    &crate::field::biome_weights(),
+                    &bi,
+                    &h,
+                    &e,
+                    &f,
+                    &g,
+                    &mut q,
+                );
                 // component isolation first
-                let heq = h.iter().zip(hnd.h.iter()).take(25)
-                    .filter(|(a, b)| a.to_bits() != b.to_bits()).count();
-                let eeq = e.iter().zip(hnd.e.iter()).take(LEN)
-                    .filter(|(a, b)| a.to_bits() != b.to_bits()).count();
-                let feq = f.iter().zip(hnd.f.iter()).take(LEN)
-                    .filter(|(a, b)| a.to_bits() != b.to_bits()).count();
-                let geq = g.iter().zip(hnd.g.iter()).take(LEN)
-                    .filter(|(a, b)| a.to_bits() != b.to_bits()).count();
-                println!("seed={} trial={} hdiffs={} ediffs={} fdiffs={} gdiffs={}", seed, trial, heq, eeq, feq, geq);
+                let heq = h
+                    .iter()
+                    .zip(hnd.h.iter())
+                    .take(25)
+                    .filter(|(a, b)| a.to_bits() != b.to_bits())
+                    .count();
+                let eeq = e
+                    .iter()
+                    .zip(hnd.e.iter())
+                    .take(LEN)
+                    .filter(|(a, b)| a.to_bits() != b.to_bits())
+                    .count();
+                let feq = f
+                    .iter()
+                    .zip(hnd.f.iter())
+                    .take(LEN)
+                    .filter(|(a, b)| a.to_bits() != b.to_bits())
+                    .count();
+                let geq = g
+                    .iter()
+                    .zip(hnd.g.iter())
+                    .take(LEN)
+                    .filter(|(a, b)| a.to_bits() != b.to_bits())
+                    .count();
+                println!(
+                    "seed={} trial={} hdiffs={} ediffs={} fdiffs={} gdiffs={}",
+                    seed, trial, heq, eeq, feq, geq
+                );
                 for i in 0..LEN {
-                    assert_eq!(out[i].to_bits(), q[i].to_bits(),
-                        "seed={} trial={} i={} new={:x} ref={:x}", seed, trial, i,
-                        out[i].to_bits(), q[i].to_bits());
+                    assert_eq!(
+                        out[i].to_bits(),
+                        q[i].to_bits(),
+                        "seed={} trial={} i={} new={:x} ref={:x}",
+                        seed,
+                        trial,
+                        i,
+                        out[i].to_bits(),
+                        q[i].to_bits()
+                    );
                 }
                 let _ = trial;
             }
@@ -464,13 +629,23 @@ impl InitNoiseField {
     /// generator states (per-level perm[512] + x/y/z offsets, packed per
     /// field in order depth/main/min/max) — exact by construction, no seed
     /// replay. Fails (returns None) if any perm value is out of u8 range.
-    pub fn from_state(oct_depth: usize, oct_main: usize, oct_min: usize, oct_max: usize,
-                      perms: &[u8], offsets: &[f64],
-                      settings: FieldSettings) -> Option<Self> {
+    pub fn from_state(
+        oct_depth: usize,
+        oct_main: usize,
+        oct_min: usize,
+        oct_max: usize,
+        perms: &[u8],
+        offsets: &[f64],
+        settings: FieldSettings,
+    ) -> Option<Self> {
         let mut off_i = 0usize;
         let mut perm_i = 0usize;
-        let mut take = |n_oct: usize, perms: &[u8], offsets: &[f64],
-                        perm_i: &mut usize, off_i: &mut usize| -> Option<Vec<CompactLevel>> {
+        let mut take = |n_oct: usize,
+                        perms: &[u8],
+                        offsets: &[f64],
+                        perm_i: &mut usize,
+                        off_i: &mut usize|
+         -> Option<Vec<CompactLevel>> {
             let mut levels = Vec::with_capacity(n_oct);
             for _ in 0..n_oct {
                 if *perm_i + 512 > perms.len() || *off_i + 3 > offsets.len() {
@@ -485,7 +660,12 @@ impl InitNoiseField {
                 let y_off = offsets[*off_i + 1];
                 let z_off = offsets[*off_i + 2];
                 *off_i += 3;
-                levels.push(CompactLevel { perm, x_off, y_off, z_off });
+                levels.push(CompactLevel {
+                    perm,
+                    x_off,
+                    y_off,
+                    z_off,
+                });
             }
             Some(levels)
         };
@@ -494,7 +674,10 @@ impl InitNoiseField {
         let min = take(oct_min, perms, offsets, &mut perm_i, &mut off_i)?;
         let max = take(oct_max, perms, offsets, &mut perm_i, &mut off_i)?;
         Some(InitNoiseField {
-            depth, main, min, max,
+            depth,
+            main,
+            min,
+            max,
             settings,
             h: vec![0.0; 25],
             e: vec![0.0; LEN],
