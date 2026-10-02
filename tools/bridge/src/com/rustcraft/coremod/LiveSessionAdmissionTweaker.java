@@ -91,6 +91,12 @@ public final class LiveSessionAdmissionTweaker implements ITweaker {
                     "com.rustcraft.coremod.LiveChunkPublicationTransformer"}) {
                 cl.registerTransformer(name);
             }
+            // Single-copy outbound boundary (self-gating: with the boundary
+            // disabled the transformers return every class unmodified).
+            if (com.rustcraft.bridge.SingleCopyPipeline.enabled()) {
+                cl.registerTransformer("com.rustcraft.coremod.NetworkManagerSingleCopyTransformer");
+                cl.registerTransformer("com.rustcraft.coremod.NettyPacketEncoderCounterTransformer");
+            }
             registerEvidenceFlushHook(sessionBound);
             // Cross-language fixture harvest (diagnostic only, real chunk).
             com.rustcraft.bridge.capture.RevelationFixtureHarvest.maybeSchedule();
