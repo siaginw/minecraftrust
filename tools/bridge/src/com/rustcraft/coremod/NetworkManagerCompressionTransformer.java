@@ -40,10 +40,11 @@ public class NetworkManagerCompressionTransformer implements IClassTransformer {
 
     private static final String TARGET = "net.minecraft.network.NetworkManager";
     private static final String VANILLA_ENCODER = "net/minecraft/network/NettyCompressionEncoder";
-    /** 1.12.2 notch name of NettyCompressionEncoder (unique "ConnectionProtocol
-     *  unknown:" constant; verified by class scan of the vanilla jar). Notch
-     *  runtimes reference THIS name inside NetworkManager bytecode. */
-    private static final String VANILLA_ENCODER_OBF = "ha";
+    /** 1.12.2 notch name of NettyCompressionEncoder: the notch NetworkManager
+     *  (gw) constructs `gu` (decoder, java/util/zip/Inflater) and `gv`
+     *  (encoder, java/util/zip/Deflater) inside its LDC-"compress" method;
+     *  class-scan verified gv carries the Deflater. */
+    private static final String VANILLA_ENCODER_OBF = "gv";
     private static final String NATIVE_ENCODER = "com/rustcraft/bridge/NativeCompressionEncoder";
 
     private static final boolean ENABLED =
@@ -110,6 +111,7 @@ public class NetworkManagerCompressionTransformer implements IClassTransformer {
                 return cw.toByteArray();
             }
             lastStatus = "COMPRESS_SITE_NOT_FOUND";
+            System.out.println("[RustCraft-Compression] compress site NOT FOUND");
             return basicClass;
         } catch (Throwable t) {
             lastStatus = "TRANSFORM_ERROR: " + t.getMessage();
