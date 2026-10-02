@@ -491,7 +491,7 @@ impl OwnedPacketSnapshot {
         let mut chunk = NativeChunk::new(m.dimension, m.chunk_x, m.chunk_z, m.generation);
         chunk.primary_bit_mask = m.accepted_mask;
         if let Some(biomes) = self.biomes {
-            chunk.biomes = biomes;
+            chunk.set_biomes(&biomes);
         }
         for section in &self.sections {
             let mut states = [0u16; 4096];

@@ -3,7 +3,7 @@
 //! Engine representation uses canonical global block state IDs (u16).
 //! Wire representation (Protocol 340) is derived on-demand via cached local palette.
 
-use std::sync::atomic::{AtomicU16, AtomicU32, AtomicU8, Ordering};
+use std::sync::atomic::{AtomicU16, AtomicU32, Ordering};
 
 pub const SECTION_BLOCK_COUNT: usize = 4096;
 pub const LIGHT_ARRAY_SIZE: usize = 2048; // 2,048 bytes
@@ -474,19 +474,43 @@ impl NativeSection {
         let word_count = Self::calculate_word_count(bits);
         let mut words = vec![0u64; word_count];
 
-        for idx in 0..SECTION_BLOCK_COUNT {
-            let global_id = states[idx];
-            // Find local palette index (Air=0 always at index 0)
-            let local_idx = if global_id == 0 {
-                0
-            } else {
-                palette[1..]
-                    .iter()
-                    .position(|&p| p == global_id as u32)
-                    .map(|p| p + 1)
-                    .unwrap_or(0) as u64
-            };
-            Self::pack_entry(&mut words, idx, local_idx, bits);
+        // OPTIMIZATION: Build a reverse lookup array or unrolled check to avoid
+        // 4096 * N linear searches across the palette slice.
+        // For palettes <= 16 (4 bits), a fixed 16-element unrolled scan or small map is instant.
+        if palette.len() <= 16 {
+            let mut pal_ids = [0u32; 16];
+            let len = palette.len().min(16);
+            pal_ids[..len].copy_from_slice(&palette[..len]);
+
+            for idx in 0..SECTION_BLOCK_COUNT {
+                let global_id = states[idx] as u32;
+                let mut local_idx = 0u64;
+                if global_id != 0 {
+                    for p in 1..len {
+                        if pal_ids[p] == global_id {
+                            local_idx = p as u64;
+                            break;
+                        }
+                    }
+                }
+                Self::pack_entry(&mut words, idx, local_idx, bits);
+            }
+        } else {
+            // General local palette (17..256 entries):
+            // Use linear scan with branch prediction or early exit
+            for idx in 0..SECTION_BLOCK_COUNT {
+                let global_id = states[idx];
+                let local_idx = if global_id == 0 {
+                    0
+                } else {
+                    palette[1..]
+                        .iter()
+                        .position(|&p| p == global_id as u32)
+                        .map(|p| p + 1)
+                        .unwrap_or(0) as u64
+                };
+                Self::pack_entry(&mut words, idx, local_idx, bits);
+            }
         }
 
         words

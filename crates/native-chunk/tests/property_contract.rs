@@ -117,7 +117,7 @@ fn arbitrary_sparse_presence_capacity_and_retry() {
     property_support::run("mask_presence", strategy, |v| {
         prop_assert_eq!(v.len(), 5);
         let mut chunk = NativeChunk::new(0, 0, 0, 1);
-        chunk.biomes.fill(42);
+        chunk.fill_biomes(42);
         for y in 0..16 {
             if v[1] & (1 << y) != 0 {
                 refresh(&mut chunk, y, true);
@@ -141,7 +141,7 @@ fn fill_clear_refresh_encode_sequences_match_presence_model() {
     let strategy = prop::collection::vec(0u64..768, 1..33);
     property_support::run("mutation_sequence", strategy, |ops| {
         let mut chunk = NativeChunk::new(0, 0, 0, 1);
-        chunk.biomes.fill(42);
+        chunk.fill_biomes(42);
         let mut present = 0u16;
         for &op in ops {
             let y = (op % 16) as u8;

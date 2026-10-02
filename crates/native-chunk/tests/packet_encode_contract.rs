@@ -7,7 +7,7 @@ const BUFFER_SIZE: usize = 256 * 1024;
 
 fn fixture(mask: u16) -> NativeChunk {
     let mut chunk = NativeChunk::new(0, 6, 4, 57);
-    chunk.biomes.fill(BIOME);
+    chunk.fill_biomes(BIOME);
     for y in 0..16 {
         if mask & (1u16 << y) != 0 {
             refresh_fixture_section(&mut chunk, y);

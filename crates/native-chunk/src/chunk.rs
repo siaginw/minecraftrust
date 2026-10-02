@@ -11,6 +11,7 @@
 
 use crate::registry::STATS_SECTIONS_ALLOCATED;
 use crate::section::NativeSection;
+use std::sync::atomic::{AtomicU8, AtomicU16, Ordering};
 
 pub const CHUNK_PRIMER_SIZE: usize = 65536; // 16 * 16 * 256 u16
 pub const BIOME_ARRAY_SIZE: usize = 256; // 16 * 16 u8
@@ -74,13 +75,17 @@ pub struct NativeChunk {
     /// Set by mark_section_mutation; cleared by refresh_section.
     pub dirty_sections: u16,
     pub sections: [Option<Box<NativeSection>>; 16],
-    pub biomes: [u8; BIOME_ARRAY_SIZE],
-    pub height_map: [u16; 256],
+    pub biomes: [AtomicU8; BIOME_ARRAY_SIZE],
+    pub height_map: [AtomicU16; 256],
 }
 
 impl NativeChunk {
     /// Creates an empty NativeChunk with given chunk coordinates.
     pub fn new(dim: i32, cx: i32, cz: i32, generation_id: u64) -> Self {
+        let raw_biomes = [0u8; BIOME_ARRAY_SIZE];
+        let biomes: [AtomicU8; BIOME_ARRAY_SIZE] = unsafe { std::mem::transmute(raw_biomes) };
+        let raw_hm = [0u16; 256];
+        let height_map: [AtomicU16; 256] = unsafe { std::mem::transmute(raw_hm) };
         Self {
             dim,
             cx,
@@ -95,8 +100,8 @@ impl NativeChunk {
                 None, None, None, None, None, None, None, None, None, None, None, None, None, None,
                 None, None,
             ],
-            biomes: [0u8; BIOME_ARRAY_SIZE],
-            height_map: [0u16; 256],
+            biomes,
+            height_map,
         }
     }
 
@@ -113,7 +118,7 @@ impl NativeChunk {
         generation_id: u64,
     ) -> Self {
         let mut chunk = Self::new(dim, cx, cz, generation_id);
-        chunk.biomes.copy_from_slice(biomes);
+        chunk.set_biomes(biomes);
 
         let mut mask = 0u16;
 
@@ -150,8 +155,9 @@ impl NativeChunk {
                             if state != 0 {
                                 sec.set_block(x, sub_y, z, state as u16);
                                 non_air += 1;
-                                if y as u16 > chunk.height_map[(z << 4) | x] {
-                                    chunk.height_map[(z << 4) | x] = y as u16;
+                                let col_idx = (z << 4) | x;
+                                if y as u16 > chunk.height_map[col_idx].load(Ordering::Relaxed) {
+                                    chunk.height_map[col_idx].store(y as u16, Ordering::Relaxed);
                                 }
                             }
                         }
@@ -278,7 +284,7 @@ impl NativeChunk {
             if out.len() - cursor < BIOME_ARRAY_SIZE {
                 return Err("Output buffer overflow writing biomes");
             }
-            out[cursor..cursor + BIOME_ARRAY_SIZE].copy_from_slice(&self.biomes);
+            out[cursor..cursor + BIOME_ARRAY_SIZE].copy_from_slice(self.biomes_as_slice());
             cursor += BIOME_ARRAY_SIZE;
         }
 
@@ -648,6 +654,18 @@ impl NativeChunk {
         }
     }
 
+    /// Access biomes as plain byte slice.
+    #[inline(always)]
+    pub fn biomes_as_slice(&self) -> &[u8; BIOME_ARRAY_SIZE] {
+        unsafe { &*(self.biomes.as_ptr() as *const [u8; BIOME_ARRAY_SIZE]) }
+    }
+
+    /// Access height_map as plain u16 slice.
+    #[inline(always)]
+    pub fn height_map_as_slice(&self) -> &[u16; 256] {
+        unsafe { &*(self.height_map.as_ptr() as *const [u16; 256]) }
+    }
+
     // ============================================================
     // BIOME STATE ACCESS & POINTERS
     // ============================================================
@@ -655,15 +673,16 @@ impl NativeChunk {
     /// Gets biome ID (0..255) at column (x, z) (0..15).
     #[inline(always)]
     pub fn get_biome(&self, x: usize, z: usize) -> u8 {
-        self.biomes[(z << 4) | x]
+        self.biomes[(z << 4) | x].load(Ordering::Acquire)
     }
 
     /// Sets biome ID (0..255) at column (x, z). Returns true if modified.
     #[inline(always)]
     pub fn set_biome(&mut self, x: usize, z: usize, biome_id: u8) -> bool {
         let idx = (z << 4) | x;
-        if self.biomes[idx] != biome_id {
-            self.biomes[idx] = biome_id;
+        let old = self.biomes[idx].load(Ordering::Relaxed);
+        if old != biome_id {
+            self.biomes[idx].store(biome_id, Ordering::Release);
             self.mark_mutation();
             true
         } else {
@@ -671,15 +690,25 @@ impl NativeChunk {
         }
     }
 
-    /// Exposes raw pointer to chunk's [u8; 256] biomes array for direct memory read.
+    /// Exposes raw pointer to chunk's [AtomicU8; 256] biomes array for direct memory read.
     #[inline(always)]
     pub fn get_biomes_pointer(&self) -> usize {
         self.biomes.as_ptr() as usize
     }
 
+    /// Fills the entire biome array with a single biome ID.
+    pub fn fill_biomes(&mut self, biome_id: u8) {
+        for b in &self.biomes {
+            b.store(biome_id, Ordering::Relaxed);
+        }
+        self.mark_mutation();
+    }
+
     /// Replaces the entire 256-byte biome array.
     pub fn set_biomes(&mut self, biomes: &[u8; BIOME_ARRAY_SIZE]) {
-        self.biomes.copy_from_slice(biomes);
+        for (idx, &b) in biomes.iter().enumerate() {
+            self.biomes[idx].store(b, Ordering::Release);
+        }
         self.mark_mutation();
     }
 
@@ -690,10 +719,10 @@ impl NativeChunk {
     /// Gets heightmap value at column (x, z) (highest non-air block Y + 1, or 0 if empty).
     #[inline(always)]
     pub fn get_height(&self, x: usize, z: usize) -> u16 {
-        self.height_map[(z << 4) | x]
+        self.height_map[(z << 4) | x].load(Ordering::Acquire)
     }
 
-    /// Exposes raw pointer to chunk's [u16; 256] heightmap array for direct memory read.
+    /// Exposes raw pointer to chunk's [AtomicU16; 256] heightmap array for direct memory read.
     #[inline(always)]
     pub fn get_heightmap_pointer(&self) -> usize {
         self.height_map.as_ptr() as usize
@@ -718,14 +747,14 @@ impl NativeChunk {
                     let state = sec.get_block(x, sub_y, z);
                     if state != 0 {
                         highest = (y_base + sub_y + 1) as u16;
-                        self.height_map[col_idx] = highest;
+                        self.height_map[col_idx].store(highest, Ordering::Release);
                         return highest;
                     }
                 }
             }
         }
 
-        self.height_map[col_idx] = highest;
+        self.height_map[col_idx].store(highest, Ordering::Release);
         highest
     }
 
@@ -736,13 +765,13 @@ impl NativeChunk {
     /// - Otherwise (mutation below top): height remains unchanged.
     pub fn update_height_on_mutation(&mut self, x: usize, y: usize, z: usize, old_state: u16, new_state: u16) -> u16 {
         let col_idx = (z << 4) | x;
-        let cur_height = self.height_map[col_idx] as usize;
+        let cur_height = self.height_map[col_idx].load(Ordering::Acquire) as usize;
 
         if new_state != 0 {
             // Block added / changed to non-air
             if y >= cur_height {
                 let new_height = (y + 1) as u16;
-                self.height_map[col_idx] = new_height;
+                self.height_map[col_idx].store(new_height, Ordering::Release);
                 return new_height;
             }
         } else if old_state != 0 {
