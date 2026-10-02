@@ -124,27 +124,26 @@ def analyze_window(samples, name, filter_fn):
     return exclusive
 
 if __name__ == '__main__':
-    samples = parse_jfr(r'C:\rustcraft\target\authority-smoke\targetC\server-profile.jfr')
+    import sys
+    jfr_path = sys.argv[1] if len(sys.argv) > 1 else r'C:\rustcraft\target\authority-smoke\targetC\server-profile.jfr'
+    samples = parse_jfr(jfr_path)
+    if not samples:
+        print(f'No ExecutionSample events found in {jfr_path}.')
+        sys.exit(0)
     t0 = time_to_sec(samples[0]['time'])
-    print(f'Loaded {len(samples)} execution samples.')
-
-    # Define phase windows:
-    # Done was at 21:57:19 (UTC 20:57:19).
-    # t_boot = time_to_sec('20:57:19.000')
-    # Probe login was at 21:58:00 (UTC 20:58:00).
-    # Probe left at 21:58:24 (UTC 20:58:24).
-    t_boot = time_to_sec('20:57:19.000')
-    t_probe_in = time_to_sec('20:58:00.000')
-    t_probe_out = time_to_sec('20:58:24.000')
+    t_end = time_to_sec(samples[-1]['time'])
+    print(f'Loaded {len(samples)} execution samples from {jfr_path} (Span: {t_end - t0:.1f}s).')
 
     print('\n==================== 1. FULL RUN EXECUTION PROFILE ====================')
-    analyze_window(samples, 'FULL RUN (Boot + Probe + Shutdown)', lambda s: True)
+    analyze_window(samples, 'FULL RUN', lambda s: True)
 
-    print('==================== 2. STARTUP PHASE (Pre-boot -> Done) ====================')
-    analyze_window(samples, 'STARTUP PHASE', lambda s: time_to_sec(s['time']) < t_boot)
+    # 3-way split of the run duration if custom timestamps not provided
+    duration = t_end - t0
+    t_mid1 = t0 + duration * 0.70 # roughly boot
+    t_mid2 = t0 + duration * 0.85 # settle
 
-    print('==================== 3. POST-BOOT IDLE SETTLE (Done -> Probe Login) ====================')
-    analyze_window(samples, 'POST-BOOT IDLE SETTLE', lambda s: t_boot <= time_to_sec(s['time']) < t_probe_in)
+    print('==================== 2. STARTUP / BOOT PHASE (First 70%) ====================')
+    analyze_window(samples, 'STARTUP PHASE', lambda s: time_to_sec(s['time']) < t_mid1)
 
-    print('==================== 4. STEADY-STATE CHUNK STREAMING / PROBE WORKLOAD ====================')
-    analyze_window(samples, 'CHUNK STREAMING & PROBE WORKLOAD', lambda s: t_probe_in <= time_to_sec(s['time']) <= t_probe_out)
+    print('==================== 3. POST-BOOT & CLIENT WORKLOAD (Last 30%) ====================')
+    analyze_window(samples, 'POST-BOOT & CLIENT WORKLOAD', lambda s: time_to_sec(s['time']) >= t_mid1)

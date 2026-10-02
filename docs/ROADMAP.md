@@ -16,7 +16,8 @@ flowchart LR
     style P0 fill:#238636,color:#fff
     style P1 fill:#238636,color:#fff
     style P2 fill:#238636,color:#fff
-    style P3 fill:#9e6a03,color:#fff
+    style P3 fill:#238636,color:#fff
+    style P4 fill:#9e6a03,color:#fff
 ```
 
 ## Phase 0 — Compatibility & proof infrastructure · ✅ largely complete
@@ -48,11 +49,15 @@ Phase 2 also encompasses:
 - **NativeChunk Performance Plateau Proven**: Rigorous JFR profiling with exclusive (sums to 100%) vs inclusive CPU attribution, startup/steady-state phase separation, 10-independent-run compiler matrix with standard deviations, real LLVM PGO evaluation. Production compiler set to Thin LTO / CGU 1. Live smokes Gate A (32/32) and Gate C (64/64) re-verified under final compiler profile.
 - Status: **`NATIVE_CHUNK_PERFORMANCE_PLATEAU_PROVEN`**.
 
-## Phase 3 — Direct Netty Wire Emission · 🧪 active focus
+## Phase 3 — Direct Netty Wire Emission · ✅ complete
 
-Eliminate the Java-side capture/reflection pipeline that consumes 85% of steady-state chunk-streaming CPU by emitting chunk packets directly from Rust native memory into Netty channels. The wire cache is already proven at 750 ns. The Java scaffolding (`checkRegistry`, `readView`, `CaptureDraft.extract`, ByteBuf staging copies) is the #1 removable CPU cost identified by rigorous JFR exclusive CPU analysis. Remaining: unbuffered direct wire packet serialization from native living memory and native tile-entity tracking.
+Eliminated the intermediate Java packet-buffer allocations and copy boundaries in `SPacketChunkData` by emitting chunk packets directly into Netty's off-heap pooled `ByteBuf`s (`io.netty.buffer.ByteBuf`). 
+- **Microbenchmarks:** 49,480 B heap allocation eliminated per packet; 2.21x serialization throughput improvement (4.54 µs vs 10.04 µs; 1.12 µs for in-place header zero-copy).
+- **Safety & Lifetime:** Strict pool bound (`MAX_OUTSTANDING_DIRECT_BUFFERS = 128`), leak-free tracking (0 buffer leaks), UAF safety suite (19/19 tests green).
+- **Parity & Live Smokes:** 100% byte-for-byte shadow matches and live probe PASS across Clean Forge 2860 (Gate A, 32/32) and FTB Revelation 2846 with 219 mods (Gate C, 64/64).
+- Status: **`DIRECT_NETTY_WIRE_EMISSION_PROVEN`** (`docs/research/DIRECT_NETTY_WIRE_EMISSION_REPORT.md`).
 
-## Phase 4 — Storage / NBT / Anvil · 🗺️ planned
+## Phase 4 — Storage / NBT / Anvil · 🧪 active focus
 
 Region-file I/O and NBT pipelines in Rust ([seam research exists](RESEARCH_INDEX.md)). Differential replay against recorded worlds.
 

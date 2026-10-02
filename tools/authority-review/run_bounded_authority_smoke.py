@@ -54,6 +54,10 @@ def main() -> int:
                         help="Enable Windows ETW/WPR CPU stack sampling during run")
     parser.add_argument("--disable-authority", action="store_true",
                         help="Disable Rust packet authority for baseline A/B measurement")
+    parser.add_argument("--direct-netty", action="store_true",
+                        help="Enable Direct Netty wire emission experiment")
+    parser.add_argument("--direct-shadow", action="store_true",
+                        help="Enable Direct Netty shadow verification mode")
     args = parser.parse_args()
 
     target = args.target
@@ -162,6 +166,8 @@ def main() -> int:
         "-Drustcraft.packetAuthorityReceiptOut=" + str(exp_receipt_out),
         "-Drustcraft.chunkStateAuthorityExperiment=true",
         "-Drustcraft.chunkStateAuthorityCap=1000",
+        "-Drustcraft.directNettyExperiment=" + ("true" if args.direct_netty else "false"),
+        "-Drustcraft.directNettyShadow=" + ("true" if args.direct_shadow else "false"),
     ]
 
     if target == "C":
@@ -293,6 +299,10 @@ def main() -> int:
 
     # Safety assertions
     assert auth_data.get("production_authority") is False, "production_authority MUST be false"
+    if args.disable_authority:
+        assert auth_data.get("experiment_enabled") is False, "experiment_enabled must be false when disabled"
+        print("[baseline] Baseline mode confirmed: Rust packet authority disabled.")
+        return 0
     assert auth_data.get("experiment_enabled") is True, "experiment_enabled must be true"
     assert auth_data.get("receipt_verified") is True, "receipt_verified must be true"
     assert auth_data.get("lifecycle_state") == "BOUNDED_AUTHORITY_EXPERIMENT", "State must be BOUNDED_AUTHORITY_EXPERIMENT"
@@ -305,10 +315,20 @@ def main() -> int:
 
     retained_rust_selected = counters.get("retained_rust_selected", 0)
     retained_seeded = counters.get("retained_seeded", 0)
+    direct_netty_committed = counters.get("direct_netty_committed", 0)
+    direct_netty_buffers_allocated = counters.get("direct_netty_buffers_allocated", 0)
+    direct_netty_buffers_released = counters.get("direct_netty_buffers_released", 0)
+    outstanding_direct_buffers = counters.get("outstanding_direct_buffers", 0)
+    direct_netty_fallbacks = counters.get("direct_netty_fallbacks", 0)
 
     print(f"[metrics] rust_selected: {rust_selected}")
     print(f"[metrics] retained_rust_selected: {retained_rust_selected}")
     print(f"[metrics] retained_seeded: {retained_seeded}")
+    print(f"[metrics] direct_netty_committed: {direct_netty_committed}")
+    print(f"[metrics] direct_netty_buffers_allocated: {direct_netty_buffers_allocated}")
+    print(f"[metrics] direct_netty_buffers_released: {direct_netty_buffers_released}")
+    print(f"[metrics] outstanding_direct_buffers: {outstanding_direct_buffers}")
+    print(f"[metrics] direct_netty_fallbacks: {direct_netty_fallbacks}")
     print(f"[metrics] java_selected: {java_selected}")
     print(f"[metrics] cap_exhausted: {cap_exhausted}")
     print(f"[metrics] rust_encode_failure: {rust_encode_failure}")
@@ -316,6 +336,12 @@ def main() -> int:
     assert rust_encode_failure == 0, f"rust_encode_failure must be 0, got {rust_encode_failure}"
     assert rust_selected > 0, f"rust_selected must be > 0 (Rust must have authored packets within bound), got {rust_selected}"
     assert rust_selected <= cap, f"rust_selected ({rust_selected}) must not exceed authority cap ({cap})"
+
+    if args.direct_netty:
+        assert direct_netty_committed > 0, f"direct_netty_committed must be > 0, got {direct_netty_committed}"
+        assert outstanding_direct_buffers == 0, f"outstanding_direct_buffers must be 0 (no leaks), got {outstanding_direct_buffers}"
+        assert direct_netty_fallbacks == 0, f"direct_netty_fallbacks must be 0, got {direct_netty_fallbacks}"
+        print(f"[direct-netty] PASS: {direct_netty_committed} packets directly emitted into Netty with 0 leaks and 0 fallbacks!")
 
     if rust_selected == cap:
         print(f"[metrics] Reached authority cap ({cap})! Fallback to Java was engaged successfully.")

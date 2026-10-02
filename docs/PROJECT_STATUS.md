@@ -10,8 +10,8 @@ This is the canonical status document. It is updated when a qualification or cam
 
 | Runtime | Qualification | Authority | Live shadow & Retained State |
 |---|---|---|---|
-| Clean Forge 14.23.5.2860 | `CLEAN_FORGE_PROFILE_REQUALIFIED_V2` / **PASS** / OFFLINE_QUALIFIED | **BOUNDED_AUTHORITY_EXPERIMENT (PASS, 32/32)** | Gate A bounded authority: 32 Rust / 137 Java fallback. **Retained ChunkState active: 32/32 packets served from native memory (`retained_rust_selected: 32`)** |
-| FTB Revelation 3.4.0 (219 mods) | `REVELATION_PROFILE_REQUALIFIED_V2` / **PASS** / OFFLINE_QUALIFIED · **real-launch admission: `REAL_FML_TRANSFORM_CAPTURE` / PASS** | **BOUNDED_AUTHORITY_EXPERIMENT (PASS, 64/64)** | **Closure CLOSED: 4,905 counted passes / 0 mismatches** (`V2_LIVE_SHADOW_CLOSURE_REPORT.md`); Gate B bounded authority: 64 Rust / 105 Java fallback. **Retained ChunkState active: 64/64 packets served from native memory (`retained_rust_selected: 64`)** |
+| Clean Forge 14.23.5.2860 | `CLEAN_FORGE_PROFILE_REQUALIFIED_V2` / **PASS** / OFFLINE_QUALIFIED | **BOUNDED_AUTHORITY_EXPERIMENT (PASS, 32/32)** | Gate A bounded authority: 32 Rust / 137 Java fallback. Retained ChunkState active. **Direct Netty wire emission verified: 32/32 packets emitted directly into Netty pooled ByteBufs with 0 leaks (`outstanding_direct_buffers: 0`), 100% byte parity (`32/32 shadow matches`)** |
+| FTB Revelation 3.4.0 (219 mods) | `REVELATION_PROFILE_REQUALIFIED_V2` / **PASS** / OFFLINE_QUALIFIED · **real-launch admission: `REAL_FML_TRANSFORM_CAPTURE` / PASS** | **BOUNDED_AUTHORITY_EXPERIMENT (PASS, 64/64)** | **Closure CLOSED: 4,905 counted passes / 0 mismatches** (`V2_LIVE_SHADOW_CLOSURE_REPORT.md`); Gate B bounded authority: 64 Rust / 105 Java fallback. Retained ChunkState active. **Direct Netty wire emission verified: 64/64 packets emitted directly into Netty pooled ByteBufs with 0 leaks (`outstanding_direct_buffers: 0`), 100% byte parity under 219 mods (`64/64 shadow matches`)** |
 
 Unconstrained production authority remains **`false`** everywhere (`PacketAuthorityExperiment.PRODUCTION_AUTHORITY = false`). Rust authors chunk packets strictly within the bounded experiment (`-Drustcraft.packetAuthorityExperiment=true`) under an explicit operator cap (`-Drustcraft.packetAuthorityCap`). All out-of-scope, TileEntity, high-state, or post-cap chunks fail closed to pure Java serialization.
 
@@ -91,7 +91,10 @@ Unconstrained production authority remains **`false`** everywhere (`PacketAuthor
     with zero encode failures, zero packet desyncs, and immediate fail-closed Java fallback upon cap exhaustion.
   - Status: **`NATIVE_CHUNK_PERFORMANCE_PLATEAU_PROVEN`**
     (`docs/research/NATIVE_CHUNK_PERFORMANCE_CLOSURE.md`, `docs/research/NATIVE_CHUNK_PERFORMANCE_SCORECARD.md`, `docs/research/NATIVE_CHUNK_REAL_SERVER_PROFILE.md`, `docs/research/NATIVE_CHUNK_MEMORY_GC_REPORT.md`, `docs/research/NATIVE_CHUNK_JNI_COPY_AUDIT.md`).
-- **Next Milestone:** **`READY_FOR_DIRECT_NETTY_WIRE_EMISSION_OR_PHASE_4_STORAGE`** (NativeChunk optimization closed; ready to advance to Direct Netty / Off-Heap Packet Authority or Anvil / Region I/O).
+- **Direct Netty Wire Emission Proven (Phase 3 Milestone):** Moved packet wire boundary from Java heap buffer copies directly to off-heap pooled Netty `ByteBuf`s (`io.netty.buffer.ByteBuf`). Eliminated intermediate JVM heap buffer allocation (49,480 B heap alloc eliminated per packet; 2.21x packet serialization speedup from 10.04 µs to 4.54 µs; 8.93x for zero-copy framing at 1.12 µs). Verified 100% leak-free bounded buffer tracking (`MAX_OUTSTANDING_DIRECT_BUFFERS = 128`), complete UAF safety contract test suite (19/19 tests green), 100% byte-for-byte shadow parity across Gate A (32/32) and Gate C (64/64 under 219 mods), and live client probe verification.
+  - Status: **`DIRECT_NETTY_WIRE_EMISSION_PROVEN`**
+    (`docs/research/DIRECT_NETTY_WIRE_EMISSION_REPORT.md`).
+- **Next Milestone:** **`PHASE_4_STORAGE_NBT_ANVIL_OR_NATIVE_COMPRESSION`** (Advance to Anvil region I/O authority or native zlib-ng compression).
 
 ### What each proof is
 

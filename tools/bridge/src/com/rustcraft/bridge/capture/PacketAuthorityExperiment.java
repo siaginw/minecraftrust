@@ -54,9 +54,13 @@ public final class PacketAuthorityExperiment {
     public static final String PROPERTY_RECEIPT_ALT = "rustcraft.authorityInputReceipt";
     public static final String PROPERTY_RECEIPT_OUT = "rustcraft.packetAuthorityReceiptOut";
     public static final String PROPERTY_RECEIPT_OUT_ALT = "rustcraft.authorityReceiptOut";
+    public static final String PROPERTY_DIRECT_NETTY = "rustcraft.directNettyExperiment";
+    public static final String PROPERTY_DIRECT_NETTY_SHADOW = "rustcraft.directNettyShadow";
 
     private static volatile boolean experimentEnabled = Boolean.getBoolean(PROPERTY_EXPERIMENT);
     private static volatile long authorityCap = Long.getLong(PROPERTY_CAP, 64).longValue();
+    private static volatile boolean directNettyEnabled = Boolean.getBoolean(PROPERTY_DIRECT_NETTY);
+    private static volatile boolean directNettyShadow = Boolean.getBoolean(PROPERTY_DIRECT_NETTY_SHADOW);
 
     // --- Accounting Counters ---
     public static final AtomicLong AUTHORITY_ELIGIBLE = new AtomicLong();
@@ -73,6 +77,21 @@ public final class PacketAuthorityExperiment {
     public static final AtomicLong FALLBACK_RECEIPT_INVALID = new AtomicLong();
     public static final AtomicLong RETAINED_RUST_SELECTED = new AtomicLong();
     public static final AtomicLong RETAINED_SEEDED = new AtomicLong();
+
+    // Direct Netty Counters & Bounded Resource Control
+    public static final AtomicLong DIRECT_NETTY_COMMITTED = new AtomicLong();
+    public static final AtomicLong DIRECT_NETTY_FALLBACKS = new AtomicLong();
+    public static final AtomicLong DIRECT_NETTY_SHADOW_MATCHES = new AtomicLong();
+    public static final AtomicLong DIRECT_NETTY_SHADOW_MISMATCHES = new AtomicLong();
+    public static final AtomicLong DIRECT_NETTY_BUFFERS_ALLOCATED = new AtomicLong();
+    public static final AtomicLong DIRECT_NETTY_BUFFERS_RELEASED = new AtomicLong();
+    public static final AtomicLong DIRECT_NETTY_BYTES_TRANSMITTED = new AtomicLong();
+    public static final java.util.concurrent.atomic.AtomicInteger OUTSTANDING_DIRECT_BUFFERS = new java.util.concurrent.atomic.AtomicInteger(0);
+    public static final int MAX_OUTSTANDING_DIRECT_BUFFERS = 128; // Strict bounded pool bound
+
+    public static final java.util.Map<Object, io.netty.buffer.ByteBuf> DIRECT_PACKET_BUFFERS =
+            new java.util.concurrent.ConcurrentHashMap<>();
+    private static final byte[] EMPTY_PAYLOAD = new byte[0];
 
     private static final AtomicBoolean RECEIPT_VERIFIED = new AtomicBoolean(false);
     private static final AtomicBoolean RECEIPT_CHECK_ATTEMPTED = new AtomicBoolean(false);
@@ -97,7 +116,8 @@ public final class PacketAuthorityExperiment {
         Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
             @Override
             public void run() {
-                if (experimentEnabled || RUST_SELECTED.get() > 0 || AUTHORITY_ELIGIBLE.get() > 0) {
+                if (experimentEnabled || RUST_SELECTED.get() > 0 || AUTHORITY_ELIGIBLE.get() > 0 ||
+                    System.getProperty(PROPERTY_RECEIPT_OUT) != null || System.getProperty(PROPERTY_RECEIPT_OUT_ALT) != null) {
                     writeReceipt();
                 }
             }
@@ -122,9 +142,27 @@ public final class PacketAuthorityExperiment {
         authorityCap = cap;
     }
 
+    public static boolean directNettyEnabled() {
+        return directNettyEnabled;
+    }
+
+    public static void setDirectNettyEnabled(boolean enabled) {
+        directNettyEnabled = enabled;
+    }
+
+    public static boolean directNettyShadow() {
+        return directNettyShadow;
+    }
+
+    public static void setDirectNettyShadow(boolean shadow) {
+        directNettyShadow = shadow;
+    }
+
     public static void resetForTesting(boolean enabled, long cap) {
         experimentEnabled = enabled;
         authorityCap = cap;
+        directNettyEnabled = Boolean.getBoolean(PROPERTY_DIRECT_NETTY);
+        directNettyShadow = Boolean.getBoolean(PROPERTY_DIRECT_NETTY_SHADOW);
         AUTHORITY_ELIGIBLE.set(0);
         RUST_SELECTED.set(0);
         JAVA_SELECTED.set(0);
@@ -139,6 +177,18 @@ public final class PacketAuthorityExperiment {
         FALLBACK_RECEIPT_INVALID.set(0);
         RETAINED_RUST_SELECTED.set(0);
         RETAINED_SEEDED.set(0);
+        DIRECT_NETTY_COMMITTED.set(0);
+        DIRECT_NETTY_FALLBACKS.set(0);
+        DIRECT_NETTY_SHADOW_MATCHES.set(0);
+        DIRECT_NETTY_SHADOW_MISMATCHES.set(0);
+        DIRECT_NETTY_BUFFERS_ALLOCATED.set(0);
+        DIRECT_NETTY_BUFFERS_RELEASED.set(0);
+        DIRECT_NETTY_BYTES_TRANSMITTED.set(0);
+        OUTSTANDING_DIRECT_BUFFERS.set(0);
+        for (io.netty.buffer.ByteBuf b : DIRECT_PACKET_BUFFERS.values()) {
+            try { b.release(); } catch (Throwable ignore) {}
+        }
+        DIRECT_PACKET_BUFFERS.clear();
         RECEIPT_VERIFIED.set(false);
         RECEIPT_CHECK_ATTEMPTED.set(false);
         receiptFailureReason = null;
@@ -379,9 +429,44 @@ public final class PacketAuthorityExperiment {
                 }
             } while (!RUST_SELECTED.compareAndSet(selected, selected + 1));
 
-            // Commit Rust bytes to packet shell
             int rustMask = result.emittedMask();
             int rustLen = result.bytesWritten();
+
+            // Direct Netty Emission Path
+            if (directNettyEnabled || directNettyShadow) {
+                if (OUTSTANDING_DIRECT_BUFFERS.get() >= MAX_OUTSTANDING_DIRECT_BUFFERS) {
+                    RUST_SELECTED.decrementAndGet();
+                    CAP_EXHAUSTED.incrementAndGet();
+                    JAVA_FALLBACK.incrementAndGet();
+                    JAVA_SELECTED.incrementAndGet();
+                    return false;
+                }
+
+                io.netty.buffer.ByteBuf directBuf = io.netty.buffer.PooledByteBufAllocator.DEFAULT.directBuffer(rustLen);
+                DIRECT_NETTY_BUFFERS_ALLOCATED.incrementAndGet();
+                OUTSTANDING_DIRECT_BUFFERS.incrementAndGet();
+
+                outBuf.clear();
+                outBuf.limit(rustLen);
+                directBuf.writeBytes(outBuf);
+
+                DIRECT_PACKET_BUFFERS.put(packetObj, directBuf);
+
+                if (directNettyShadow) {
+                    byte[] rustPayload = new byte[rustLen];
+                    outBuf.clear();
+                    outBuf.get(rustPayload);
+                    populatePacketFields(packetObj, snapshot.chunkX, snapshot.chunkZ, rustMask, rustPayload);
+                } else {
+                    populatePacketFields(packetObj, snapshot.chunkX, snapshot.chunkZ, rustMask, EMPTY_PAYLOAD);
+                }
+
+                AUTHORITY_ELIGIBLE.incrementAndGet();
+                logAuditEvent(snapshot.chunkX, snapshot.chunkZ, rustMask, rustLen, selected + 1);
+                return true;
+            }
+
+            // Commit Rust bytes to packet shell (Legacy heap authority path)
             byte[] rustPayload = new byte[rustLen];
             outBuf.clear();
             outBuf.get(rustPayload);
@@ -406,6 +491,120 @@ public final class PacketAuthorityExperiment {
             JAVA_SELECTED.incrementAndGet();
             return false;
         }
+    }
+
+    /**
+     * Called at the entry of SPacketChunkData.func_148840_b (writePacketData).
+     *
+     * If this packet has an authoritative direct Netty ByteBuf registered:
+     * Writes the packet headers, transfers direct bytes into the Netty packet buffer,
+     * releases the direct buffer, and returns true (skipping Java writePacketData body).
+     *
+     * If this packet does not have a direct buffer (e.g. fallback or disabled):
+     * Returns false (vanilla Java writePacketData body executes untouched).
+     */
+    public static boolean tryWritePacketDataDirect(Object packet, Object packetBufferObj) {
+        if (!directNettyEnabled && !directNettyShadow) {
+            return false;
+        }
+        if (packet == null || packetBufferObj == null) {
+            return false;
+        }
+
+        io.netty.buffer.ByteBuf directBuf = DIRECT_PACKET_BUFFERS.remove(packet);
+        if (directBuf == null) {
+            return false;
+        }
+
+        try {
+            if (!(packetBufferObj instanceof io.netty.buffer.ByteBuf)) {
+                System.err.println("[RustCraft-Authority] tryWritePacketDataDirect fallback: packetBufferObj not ByteBuf! "
+                        + "obj=" + (packetBufferObj != null ? packetBufferObj.getClass().getName() : "null")
+                        + " objCL=" + (packetBufferObj != null ? packetBufferObj.getClass().getClassLoader() : "null")
+                        + " objSuper=" + (packetBufferObj != null ? packetBufferObj.getClass().getSuperclass().getName() : "null")
+                        + " byteBufCL=" + io.netty.buffer.ByteBuf.class.getClassLoader());
+                DIRECT_NETTY_FALLBACKS.incrementAndGet();
+                return false;
+            }
+            if (!initPacketFields(packet.getClass())) {
+                System.err.println("[RustCraft-Authority] tryWritePacketDataDirect fallback: initPacketFields failed for "
+                        + packet.getClass().getName());
+                DIRECT_NETTY_FALLBACKS.incrementAndGet();
+                return false;
+            }
+            io.netty.buffer.ByteBuf pb = (io.netty.buffer.ByteBuf) packetBufferObj;
+
+            if (directNettyShadow) {
+                // In shadow mode, compare directBuf bytes with packet.field_186949_d
+                try {
+                    byte[] javaBuf = (byte[]) packetBuffer.get(packet);
+                    if (javaBuf != null && javaBuf.length == directBuf.readableBytes()) {
+                        boolean match = true;
+                        for (int i = 0; i < javaBuf.length; i++) {
+                            if (javaBuf[i] != directBuf.getByte(directBuf.readerIndex() + i)) {
+                                match = false;
+                                break;
+                            }
+                        }
+                        if (match) {
+                            DIRECT_NETTY_SHADOW_MATCHES.incrementAndGet();
+                        } else {
+                            DIRECT_NETTY_SHADOW_MISMATCHES.incrementAndGet();
+                        }
+                    } else {
+                        DIRECT_NETTY_SHADOW_MISMATCHES.incrementAndGet();
+                    }
+                } catch (Throwable t) {
+                    DIRECT_NETTY_SHADOW_MISMATCHES.incrementAndGet();
+                }
+                // In shadow mode, release direct buffer and return false so vanilla writePacketData transmits
+                return false;
+            }
+
+            int cx = packetChunkX.getInt(packet);
+            int cz = packetChunkZ.getInt(packet);
+            boolean full = packetFull.getBoolean(packet);
+            int mask = packetMask.getInt(packet);
+            int len = directBuf.readableBytes();
+
+            // Protocol 340 SPacketChunkData body:
+            // 1. chunkX (int, 4 bytes BE)
+            pb.writeInt(cx);
+            // 2. chunkZ (int, 4 bytes BE)
+            pb.writeInt(cz);
+            // 3. fullChunk (boolean, 1 byte)
+            pb.writeBoolean(full);
+            // 4. availableSections (VarInt)
+            writeVarInt(pb, mask);
+            // 5. dataLength (VarInt)
+            writeVarInt(pb, len);
+            // 6. data bytes (direct to direct transfer inside Netty!)
+            pb.writeBytes(directBuf);
+            // 7. tileEntities size (VarInt = 0)
+            writeVarInt(pb, 0);
+
+            DIRECT_NETTY_COMMITTED.incrementAndGet();
+            DIRECT_NETTY_BYTES_TRANSMITTED.addAndGet(len);
+            return true; // Completely handled!
+        } catch (Throwable t) {
+            System.err.println("[RustCraft-Authority] tryWritePacketDataDirect error: " + t);
+            DIRECT_NETTY_FALLBACKS.incrementAndGet();
+            return false;
+        } finally {
+            try {
+                directBuf.release();
+                DIRECT_NETTY_BUFFERS_RELEASED.incrementAndGet();
+                OUTSTANDING_DIRECT_BUFFERS.decrementAndGet();
+            } catch (Throwable ignore) {}
+        }
+    }
+
+    private static void writeVarInt(io.netty.buffer.ByteBuf buf, int value) {
+        while ((value & -128) != 0) {
+            buf.writeByte(value & 127 | 128);
+            value >>>= 7;
+        }
+        buf.writeByte(value);
     }
 
     private static void logAuditEvent(int cx, int cz, int mask, int bytes, long selectedCount) {
@@ -554,6 +753,16 @@ public final class PacketAuthorityExperiment {
             counters.put("fallback_receipt_invalid", FALLBACK_RECEIPT_INVALID.get());
             counters.put("retained_rust_selected", RETAINED_RUST_SELECTED.get());
             counters.put("retained_seeded", RETAINED_SEEDED.get());
+            counters.put("direct_netty_enabled", directNettyEnabled);
+            counters.put("direct_netty_shadow", directNettyShadow);
+            counters.put("direct_netty_committed", DIRECT_NETTY_COMMITTED.get());
+            counters.put("direct_netty_fallbacks", DIRECT_NETTY_FALLBACKS.get());
+            counters.put("direct_netty_shadow_matches", DIRECT_NETTY_SHADOW_MATCHES.get());
+            counters.put("direct_netty_shadow_mismatches", DIRECT_NETTY_SHADOW_MISMATCHES.get());
+            counters.put("direct_netty_buffers_allocated", DIRECT_NETTY_BUFFERS_ALLOCATED.get());
+            counters.put("direct_netty_buffers_released", DIRECT_NETTY_BUFFERS_RELEASED.get());
+            counters.put("direct_netty_bytes_transmitted", DIRECT_NETTY_BYTES_TRANSMITTED.get());
+            counters.put("outstanding_direct_buffers", OUTSTANDING_DIRECT_BUFFERS.get());
             receipt.put("counters", counters);
             receipt.put("timestamp_millis", System.currentTimeMillis());
 

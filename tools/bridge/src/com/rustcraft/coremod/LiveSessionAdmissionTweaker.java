@@ -62,6 +62,7 @@ public final class LiveSessionAdmissionTweaker implements ITweaker {
         // a chain that can never see a definition.
         cl.addClassLoaderExclusion("com.rustcraft.");
         cl.addTransformerExclusion("com.rustcraft.");
+        cl.addClassLoaderExclusion("io.netty.");
         if (!Boolean.getBoolean("rustcraft.liveWriterDiagnostic")) {
             return; // default OFF: a real launch with no diagnostic changes nothing
         }
@@ -106,6 +107,8 @@ public final class LiveSessionAdmissionTweaker implements ITweaker {
                             + consumerFailure);
                 }
             }
+            // Ensure PacketAuthorityExperiment class is initialized so its shutdown hook registers
+            com.rustcraft.bridge.capture.PacketAuthorityExperiment.enabled();
         } catch (Throwable failure) {
             System.err.println("[RustCraft] live session admission tweaker failed: " + failure);
         }

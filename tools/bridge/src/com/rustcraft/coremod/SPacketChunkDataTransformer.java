@@ -67,7 +67,9 @@ public class SPacketChunkDataTransformer implements IClassTransformer {
                 // Match constructor (Chunk, int) -> (Lnet/minecraft/world/chunk/Chunk;I)V
                 if ("<init>".equals(mn.name) && mn.desc.contains("Lnet/minecraft/world/chunk/Chunk;I")) {
                     transformed = transformConstructor(cn, mn);
-                    break;
+                } else if (("func_148840_b".equals(mn.name) || "writePacketData".equals(mn.name))
+                        && mn.desc.contains("PacketBuffer")) {
+                    transformWritePacketData(cn, mn);
                 }
             }
 
@@ -288,5 +290,38 @@ public class SPacketChunkDataTransformer implements IClassTransformer {
         mn.tryCatchBlocks.add(new org.objectweb.asm.tree.TryCatchBlockNode(
                 tryStart, handler, handler, null));
         lastTransformStatus = "LIVE_OBSERVATION_INSTALLED";
+    }
+
+    /**
+     * Injects direct Netty packet-buffer emission hook at the entry of SPacketChunkData.writePacketData.
+     *
+     * Injected bytecode:
+     *   ALOAD 0  (this)
+     *   ALOAD 1  (packetBuffer)
+     *   INVOKESTATIC com/rustcraft/bridge/capture/PacketAuthorityExperiment.tryWritePacketDataDirect(Ljava/lang/Object;Ljava/lang/Object;)Z
+     *   IFEQ continueOriginal
+     *   RETURN
+     *   continueOriginal:
+     *   [original instructions run unchanged for Java fallback]
+     */
+    private boolean transformWritePacketData(ClassNode cn, MethodNode mn) {
+        InsnList hook = new InsnList();
+        LabelNode continueOriginal = new LabelNode();
+
+        hook.add(new VarInsnNode(Opcodes.ALOAD, 0));
+        hook.add(new VarInsnNode(Opcodes.ALOAD, 1));
+        hook.add(new MethodInsnNode(
+                Opcodes.INVOKESTATIC,
+                "com/rustcraft/bridge/capture/PacketAuthorityExperiment",
+                "tryWritePacketDataDirect",
+                "(Ljava/lang/Object;Ljava/lang/Object;)Z",
+                false
+        ));
+        hook.add(new JumpInsnNode(Opcodes.IFEQ, continueOriginal));
+        hook.add(new InsnNode(Opcodes.RETURN));
+        hook.add(continueOriginal);
+
+        mn.instructions.insert(hook);
+        return true;
     }
 }

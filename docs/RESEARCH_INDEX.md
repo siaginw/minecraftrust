@@ -56,6 +56,7 @@ Which parts of the engine Rust can take over, and what each boundary costs: [chu
 | Document | What it establishes |
 |:---|:---|
 | [Packet buffer pipeline](research/packet-buffer-pipeline.md) | Wire I/O design |
+| [Direct Netty Wire Emission Report](research/DIRECT_NETTY_WIRE_EMISSION_REPORT.md) | Elimination of heap buffer allocations and intermediate memcpys via off-heap pooled Netty ByteBufs |
 | [Packet-mask semantics](research/m4-1-palette-semantics-research.md) | Palette behavior from real bytecode |
 | [Protocol-340 collection](protocol-340/) | Wire-level decoders and the packet registry |
 
