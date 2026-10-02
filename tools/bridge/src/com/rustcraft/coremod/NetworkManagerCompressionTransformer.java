@@ -80,7 +80,7 @@ public class NetworkManagerCompressionTransformer implements IClassTransformer {
             cr.accept(cn, 0);
 
             int patched = 0;
-            for (MethodNode mn : cn.methods) {
+            for (MethodNode mn : (java.util.List<MethodNode>) cn.methods) {
                 if (!methodReferencesCompress(mn)) continue;
                 for (AbstractInsnNode insn : mn.instructions.toArray()) {
                     if (insn.getOpcode() == Opcodes.NEW) {
