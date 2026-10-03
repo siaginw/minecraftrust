@@ -58,8 +58,9 @@ def main() -> int:
     parser.add_argument("--teleport-rounds", type=int, default=4,
                         help="In-server teleport campaign rounds (chunk loads "
                              "-> unload saves; 0 disables)")
-    parser.add_argument("--mode", choices=["SHADOW", "ON_EXPERIMENTAL"],
-                        default="SHADOW")
+    parser.add_argument("--mode", choices=["OFF", "SHADOW", "ON_EXPERIMENTAL"],
+                        default="SHADOW",
+                        help="Region WRITE experiment mode (OFF = vanilla writes)")
     parser.add_argument("--restart-cycles", type=int, default=0,
                         help="After the main session: N boot->Done->stop cycles "
                              "on the SAME server world with the experiment OFF "
@@ -140,11 +141,14 @@ def main() -> int:
         "-Drustcraft.liveShadowScope=OVERWORLD_PER_CHUNK",
         "-Drustcraft.liveShadowDll=" + str(server_dir / "rustcraft_ffi.dll"),
         "-Drustcraft.liveShadowJournal=" + str(out_dir / "shadow-journal.jsonl"),
-        "-Drustcraft.regionWriteExperiment=true",
-        f"-Drustcraft.regionWriteMode={args.mode}",
-        "-Drustcraft.regionWriteMirror=" + str(mirror_root),
         "-Drustcraft.profile=" + profile_id,
     ]
+    if args.mode != "OFF":
+        extra_args += [
+            "-Drustcraft.regionWriteExperiment=true",
+            f"-Drustcraft.regionWriteMode={args.mode}",
+            "-Drustcraft.regionWriteMirror=" + str(mirror_root),
+        ]
     if args.teleport_rounds > 0:
         extra_args += [
             "-Drustcraft.closureCampaignTeleport=true",
@@ -282,16 +286,24 @@ def main() -> int:
     # The shutdown-time transformer status print races the log appender; the
     # boot-time seam print is the reliable transform evidence. The hook
     # metrics (admissions through the injected entry) corroborate it.
-    if not seam_seen:
+    if args.mode != "OFF" and not seam_seen:
         print("[FAIL] transformer never saw the RegionFile seam class")
         failures += 1
-    if metrics["errors"] != "0":
+    if args.mode != "OFF" and metrics["errors"] != "0":
         print(f"[FAIL] hook errors={metrics['errors']}")
         failures += 1
     rust_ok = int(metrics["rustOk"]) if metrics["rustOk"].isdigit() else 0
-    if rust_ok == 0:
+    if args.mode != "OFF" and rust_ok == 0:
         print("[FAIL] no Rust shadow writes recorded")
         failures += 1
+    if args.mode == "OFF":
+        # read-only authority session: vanilla owns writes, so the WRITE
+        # experiment must be absent (verify by absence in the log)
+        if "regionWrite.hook enabled=true" in log_text:
+            print("[FAIL] write hook engaged in write-OFF session")
+            failures += 1
+        rust_ok = 0
+        print("[verify] write-OFF session: write hook absent (vanilla owns writes)")
 
     (out_dir / "region-write-campaign.json").write_text(json.dumps({
         "target": target, "port": port, "mode": args.mode,
