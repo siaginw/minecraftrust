@@ -65,6 +65,9 @@ def main() -> int:
                              "on the SAME server world with the experiment OFF "
                              "(fresh vanilla Forge restarts)")
     parser.add_argument("--output", type=Path, default=None)
+    parser.add_argument("--attribution", action="store_true",
+                        help="Enable the goal-§4 writer-attribution agent "
+                             "(RandomAccessFile write capture with stacks)")
     args = parser.parse_args()
 
     port = args.port or default_port(args.target)
@@ -142,14 +145,27 @@ def main() -> int:
             "-Drustcraft.closureCampaignTeleport=true",
             f"-Drustcraft.closureCampaignTeleportRounds={args.teleport_rounds}",
         ]
+    attribution_jar = ROOT / "target" / "rustcraft-attribution.jar"
+    attribution_dir = out_dir / "attribution"
+    if args.attribution:
+        if not attribution_jar.is_file():
+            print("[ERROR] attribution jar missing; run "
+                  "tools/authority-review/build_attribution_jar.py",
+                  file=sys.stderr)
+            return 1
+        extra_args += [
+            "-Drustcraft.writerAttribution=true",
+            "-Drustcraft.writerAttributionDir=" + str(attribution_dir),
+        ]
 
     classpath = [str(server_dir / "rustcraft-campaign.jar"),
                  str(server_dir / forge_jar),
                  str(server_dir / vanilla_jar)]
     classpath += [str(p) for p in sorted((server_dir / "libraries").rglob("*.jar"))]
-    argv = [str(JAVA), "-Xmx6G",
-            "-javaagent:" + str(server_dir / "rustcraft-campaign.jar"),
-            ] + extra_args + [
+    javaagents = ["-javaagent:" + str(server_dir / "rustcraft-campaign.jar")]
+    if args.attribution:
+        javaagents.append("-javaagent:" + str(attribution_jar))
+    argv = [str(JAVA), "-Xmx6G"] + javaagents + extra_args + [
         "-cp", os.pathsep.join(classpath),
         "net.minecraft.launchwrapper.Launch",
         "--tweakClass", "com.rustcraft.coremod.LiveSessionAdmissionTweaker",

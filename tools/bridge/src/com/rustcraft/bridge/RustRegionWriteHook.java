@@ -65,6 +65,11 @@ public final class RustRegionWriteHook {
             RUST_ERR_BY_CODE[i] = new AtomicLong();
         }
     }
+    /** Last failed write forensics (goal §5 attribution): length / slot / path. */
+    public static volatile long LAST_FAIL_LEN = -1;
+    public static volatile int LAST_FAIL_SLOT = -1;
+    public static volatile String LAST_FAIL_PATH = "";
+    public static final AtomicLong FAIL_EVENTS = new AtomicLong();
     static final String MIRROR_ROOT = System.getProperty("rustcraft.regionWriteMirror", "");
 
     // lifecycle/counters (m1-metrics style)
@@ -81,6 +86,8 @@ public final class RustRegionWriteHook {
     public static final class State {
         public final RegionWriteCtx ctx = new RegionWriteCtx();
         public final AtomicLongArray tickets;
+        /** The path this state's engine is bound to (real or mirror). */
+        public final String regionPath;
         /**
          * Grow-only direct scratch for the deflate payload. Thread-confined
          * BY DESIGN: func_76706_a is synchronized on the RegionFile, so all
@@ -90,7 +97,8 @@ public final class RustRegionWriteHook {
         public ByteBuffer scratch;
         /** true once the process-level admission cap is exhausted. */
         public volatile boolean capped;
-        State(long[] floors) {
+        State(long[] floors, String regionPath) {
+            this.regionPath = regionPath;
             long[] seed = floors != null ? floors : new long[1024];
             tickets = new AtomicLongArray(seed);
             long max = 0;
@@ -159,7 +167,7 @@ public final class RustRegionWriteHook {
                     RUST_OK.incrementAndGet();
                     return false; // vanilla body still writes the real file
                 }
-                tallyFailure(entry);
+                tallyFailure(entry, len, index, st.regionPath);
                 RUST_FAILED.incrementAndGet();
                 return false;
             }
@@ -172,7 +180,7 @@ public final class RustRegionWriteHook {
                 mirrorFreeList(st.ctx, regionFile);
                 return true;
             }
-            tallyFailure(entry);
+            tallyFailure(entry, len, index, st.regionPath);
             RUST_FAILED.incrementAndGet();
             return false; // any failure -> vanilla body runs
         } catch (Throwable t) {
@@ -276,7 +284,7 @@ public final class RustRegionWriteHook {
                 java.io.File pf = new java.io.File(path).getParentFile();
                 if (pf != null) pf.mkdirs();
             }
-            State st = new State(null);
+            State st = new State(null, path);
             if (!st.ctx.ensureCreated(path)) return null;
             long[] floors = st.ctx.floors();
             if (floors != null) {
@@ -404,9 +412,13 @@ public final class RustRegionWriteHook {
                 ? safe : java.io.File.separator + safe);
     }
 
-    private static void tallyFailure(long entry) {
+    private static void tallyFailure(long entry, int len, int index, String path) {
         int code = (int) Math.max(1, Math.min(7, -entry));
         RUST_ERR_BY_CODE[code].incrementAndGet();
+        FAIL_EVENTS.incrementAndGet();
+        LAST_FAIL_LEN = len;
+        LAST_FAIL_SLOT = index;
+        LAST_FAIL_PATH = path;
     }
 
     public static String dumpMetrics() {
@@ -424,6 +436,9 @@ public final class RustRegionWriteHook {
                 + " exitNotes=" + EXIT_NOTES.get()
                 + " errors=" + ERRORS.get()
                 + " ticketSeedMax=" + TICKET_SEED_MAX
-                + errs;
+                + errs
+                + " lastFailLen=" + LAST_FAIL_LEN
+                + " lastFailSlot=" + LAST_FAIL_SLOT
+                + " lastFailPath=" + LAST_FAIL_PATH;
     }
 }
