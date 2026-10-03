@@ -68,6 +68,11 @@ def main() -> int:
     parser.add_argument("--attribution", action="store_true",
                         help="Enable the goal-§4 writer-attribution agent "
                              "(RandomAccessFile write capture with stacks)")
+    parser.add_argument("--read-mode", choices=["OFF", "SHADOW", "ON_EXPERIMENTAL"],
+                        default="OFF",
+                        help="Enable the region READ experiment in this mode")
+    parser.add_argument("--min-reads", type=int, default=0,
+                        help="Minimum Rust-read events for a PASS (shadow)")
     args = parser.parse_args()
 
     port = args.port or default_port(args.target)
@@ -144,6 +149,11 @@ def main() -> int:
         extra_args += [
             "-Drustcraft.closureCampaignTeleport=true",
             f"-Drustcraft.closureCampaignTeleportRounds={args.teleport_rounds}",
+        ]
+    if args.read_mode != "OFF":
+        extra_args += [
+            "-Drustcraft.regionReadExperiment=true",
+            f"-Drustcraft.regionReadMode={args.read_mode}",
         ]
     attribution_jar = ROOT / "target" / "rustcraft-attribution.jar"
     attribution_dir = out_dir / "attribution"
@@ -288,6 +298,51 @@ def main() -> int:
         "transform_count": transform_count,
         "hook_metrics": metrics, "rust_ok": rust_ok,
     }, indent=2, sort_keys=True) + "\n")
+
+    # region READ experiment gates (goals §13-§14, §25-§26, §32)
+    rm = re.search(
+        r"regionRead\.hook enabled=(\S+) mode=(\S+) cap=(\S+) "
+        r"readSelected=(\d+) readSuccess=(\d+) readFailure=(\d+) "
+        r"javaReadFallback=(\d+) missing=(\d+) corrupt=(\d+) "
+        r"unsupportedCompression=(\d+) staleGeneration=(\d+) "
+        r"partialStreamAttempts=(\d+) shadowCompared=(\d+) "
+        r"shadowMismatch=(\d+) errors=(\d+)", log_text)
+    read_metrics = None
+    if args.read_mode != "OFF":
+        if rm is None:
+            print("[FAIL] region-read metrics not found in server log")
+            failures += 1
+        else:
+            read_metrics = dict(zip(
+                ["enabled", "mode", "cap", "readSelected", "readSuccess",
+                 "readFailure", "javaReadFallback", "missing", "corrupt",
+                 "unsupportedCompression", "staleGeneration",
+                 "partialStreamAttempts", "shadowCompared", "shadowMismatch",
+                 "errors"], rm.groups()))
+            print(f"[verify] readMetrics={read_metrics}")
+            reads = int(read_metrics["readSuccess"])
+            if read_metrics["partialStreamAttempts"] != "0":
+                print("[FAIL] partial stream attempts > 0")
+                failures += 1
+            if read_metrics["errors"] != "0":
+                print("[FAIL] read hook errors > 0")
+                failures += 1
+            if args.read_mode == "SHADOW":
+                if int(read_metrics["shadowMismatch"]) != 0:
+                    print("[FAIL] shadow read mismatches > 0")
+                    failures += 1
+                if args.min_reads and reads < args.min_reads:
+                    print(f"[FAIL] shadow reads {reads} < {args.min_reads}")
+                    failures += 1
+            else:
+                if reads == 0:
+                    print("[FAIL] ON read mode admitted 0 reads")
+                    failures += 1
+                fb = int(read_metrics["javaReadFallback"])
+                miss = int(read_metrics["missing"])
+                if fb > miss:
+                    print(f"[FAIL] ON read fallbacks ({fb}) exceed misses ({miss})")
+                    failures += 1
 
     if args.mode == "SHADOW":
         world_region = server_dir / "world" / "region"
