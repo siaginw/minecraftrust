@@ -102,12 +102,17 @@ public class RegionWriteLiveHarness {
     }
 
     public static void main(String[] args) throws Exception {
-        String mode = args[0];                 // SHADOW | ON_EXPERIMENTAL
+        String mode = args[0];                 // SHADOW | ON_EXPERIMENTAL | MULTI
         String srgJar = args[1];
-        String srcRegion = args[2];            // real .mca to copy
+        String srcRegion = args[2];            // real .mca to copy (dir for MULTI)
         String workDir = args[3];
         String mirrorDir = args[4];
         int count = Integer.parseInt(args[5]);
+
+        if ("MULTI".equals(mode)) {
+            multiRegion(srgJar, srcRegion, workDir, count);
+            return;
+        }
 
         if (!Boolean.getBoolean("rustcraft.regionWriteExperiment")) {
             throw new IllegalStateException("harness must run with -Drustcraft.regionWriteExperiment=true");
@@ -153,18 +158,19 @@ public class RegionWriteLiveHarness {
 
         Object region = ctor.newInstance(work.toFile());
 
-        // pick `count` existing chunk slots (deterministic: diagonal)
+        // pick existing chunk slots (deterministic row-major; count<=0 = all)
         List<int[]> slots = new ArrayList<>();
         outer:
         for (int z = 0; z < 32; z++) {
             for (int x = 0; x < 32; x++) {
                 if ((Boolean) hasChunk.invoke(region, x, z)) slots.add(new int[]{x, z});
-                if (slots.size() >= count) break outer;
+                if (count > 0 && slots.size() >= count) break outer;
             }
         }
-        if (slots.size() < count) {
+        int n = count > 0 ? count : slots.size();
+        if (slots.size() < n) {
             throw new IllegalStateException("source region has only " + slots.size()
-                    + " chunks, need " + count);
+                    + " chunks, need " + n);
         }
 
         // 3. drive the real seam with synthetic deflate payloads
@@ -172,7 +178,7 @@ public class RegionWriteLiveHarness {
         int sizes[] = {100, 900, 4096, 20000, 60000};
         java.lang.reflect.Field offField = rfClass.getDeclaredField("field_76716_d");
         offField.setAccessible(true);
-        for (int i = 0; i < count; i++) {
+        for (int i = 0; i < n; i++) {
             int[] slot = slots.get(i);
             byte[] raw = payload(i + 1, sizes[i % sizes.length]);
             byte[] zraw = deflate(raw);
@@ -183,9 +189,12 @@ public class RegionWriteLiveHarness {
             System.out.println("[harness] write i=" + i + " chunk=" + slot[0] + "," + slot[1]
                     + " index=" + index + " rawLen=" + raw.length + " offsetsArr=" + offs[index]);
         }
-        System.out.println("[harness] wrote " + count + " chunks through the seam; hook: "
+        System.out.println("[harness] wrote " + n + " chunks through the seam; hook: "
                 + com.rustcraft.bridge.RustRegionWriteHook.dumpMetrics());
 
+        boolean skipVerify = Boolean.getBoolean("rustcraft.regionWriteSkipVerify");
+        writeExpectedHashes(workDir, expected);
+        if (!skipVerify) {
         if ("SHADOW".equals(mode)) {
             // 4a. real file must still be vanilla-written (per-chunk payload
             //     equals what we wrote); mirror file must hold the SAME payloads.
@@ -221,7 +230,7 @@ public class RegionWriteLiveHarness {
             }
             closeM.invoke(mRegion);
             System.out.println("[harness] SHADOW verified: real(vanilla) + mirror(Rust) "
-                    + "hold identical payloads for " + count + " chunks");
+                    + "hold identical payloads for " + n + " chunks");
         } else if ("ON_EXPERIMENTAL".equals(mode)) {
             // 4b. IN-SESSION read through the TRANSFORMED region (its in-memory
             //     offsets were mirrored by the hook) must return our payloads.
@@ -244,7 +253,7 @@ public class RegionWriteLiveHarness {
                 }
             }
             System.out.println("[harness] ON_EXPERIMENTAL in-session read verified ("
-                    + count + " chunks; Rust-committed offsets coherent)");
+                    + n + " chunks; Rust-committed offsets coherent)");
 
             // 5. FRESH VANILLA re-read: plain parent-loader class on the same
             //    file — proves the on-disk format is exactly vanilla's.
@@ -268,10 +277,11 @@ public class RegionWriteLiveHarness {
         } else {
             throw new IllegalStateException("unknown mode " + mode);
         }
+        } // end !skipVerify
 
         // 6. rewrite a subset a second time (generation tickets + in-place or
         //    relocation paths), then re-verify everything still reads back.
-        int rewrites = Math.min(3, count);
+        int rewrites = Math.min(3, n);
         for (int i = 0; i < rewrites; i++) {
             int[] slot = slots.get(i);
             byte[] raw = payload(1000 + i, 7000);
@@ -279,6 +289,8 @@ public class RegionWriteLiveHarness {
             expected.put(key(slot[0], slot[1]), raw);
             writeSeam.invoke(region, slot[0], slot[1], zraw, zraw.length);
         }
+        writeExpectedHashes(workDir, expected);
+        if (!skipVerify) {
         if ("SHADOW".equals(mode)) {
             // verify mirror file carries the rewrites
             String mirrorPath = com.rustcraft.bridge.RustRegionWriteHook.mirrorPath(
@@ -313,11 +325,144 @@ public class RegionWriteLiveHarness {
             }
             vClose.invoke(vRegion);
         }
+        } // end !skipVerify (rewrites)
         closeM.invoke(region);
 
         System.out.println("[harness] rewrites verified; final hook state: "
                 + com.rustcraft.bridge.RustRegionWriteHook.dumpMetrics());
         System.out.println("REGION_WRITE_HARNESS_PASSED mode=" + mode + " chunks=" + count);
+    }
+
+    static void writeExpectedHashes(String workDir, Map<Long, byte[]> expected)
+            throws IOException {
+        java.security.MessageDigest md;
+        try {
+            md = java.security.MessageDigest.getInstance("SHA-256");
+        } catch (Exception e) {
+            throw new IOException(e);
+        }
+        File out = new File(workDir, "expected-hashes.txt");
+        try (PrintWriter pw = new PrintWriter(out, "UTF-8")) {
+            for (Map.Entry<Long, byte[]> e : expected.entrySet()) {
+                int[] slot = unpack(e.getKey());
+                byte[] h = md.digest(e.getValue());
+                StringBuilder hex = new StringBuilder();
+                for (byte b : h) hex.append(String.format("%02x", b));
+                pw.println(slot[0] + " " + slot[1] + " " + hex);
+            }
+        }
+    }
+
+    /**
+     * MULTI: three region files live at once in one JVM (three engine
+     * registry entries), writes interleaved round-robin, every file verified
+     * by a fresh vanilla read. Proves per-path engine isolation.
+     */
+    static void multiRegion(String srgJar, String srcRegionDir, String workDir, int perFile)
+            throws Exception {
+        byte[] vanilla = readRegionFileBytes(srgJar);
+        com.rustcraft.coremod.RegionFileAuthorityTransformer tx =
+                new com.rustcraft.coremod.RegionFileAuthorityTransformer();
+        byte[] transformed = tx.transform(RF.replace('.', '/'), RF, vanilla);
+        URL[] urls = { new File(srgJar).toURI().toURL() };
+        TransformedRegionLoader loader = new TransformedRegionLoader(transformed, urls,
+                RegionWriteLiveHarness.class.getClassLoader());
+        Class<?> rfClass = loader.loadClass(RF);
+        Constructor<?> ctor = rfClass.getConstructor(File.class);
+        Method writeSeam = rfClass.getDeclaredMethod("func_76706_a",
+                int.class, int.class, byte[].class, int.class);
+        writeSeam.setAccessible(true);
+        Method readOpen = rfClass.getDeclaredMethod("func_76704_a", int.class, int.class);
+        readOpen.setAccessible(true);
+        Method hasChunk = rfClass.getDeclaredMethod("func_76709_c", int.class, int.class);
+        hasChunk.setAccessible(true);
+        Method closeM = rfClass.getDeclaredMethod("func_76708_c");
+
+        Path regionDir = Paths.get(workDir, "region");
+        Files.createDirectories(regionDir);
+        List<Object> regions = new ArrayList<>();
+        List<Map<Long, byte[]>> expected = new ArrayList<>();
+        List<File> files = new ArrayList<>();
+        File[] src = new File(srcRegionDir).listFiles((d, nm) -> nm.endsWith(".mca"));
+        Arrays.sort(src, Comparator.comparing(File::getName));
+        int fileCount = 0;
+        for (File f : src) {
+            if (fileCount >= 3) break;
+            File dst = regionDir.resolve(f.getName()).toFile();
+            Files.copy(f.toPath(), dst.toPath(), StandardCopyOption.REPLACE_EXISTING);
+            Object r = ctor.newInstance(dst);
+            List<int[]> slots = new ArrayList<>();
+            outer:
+            for (int z = 0; z < 32; z++) {
+                for (int x = 0; x < 32; x++) {
+                    if ((Boolean) hasChunk.invoke(r, x, z)) slots.add(new int[]{x, z});
+                    if (slots.size() >= perFile) break outer;
+                }
+            }
+            if (slots.size() < perFile) continue;
+            regions.add(r);
+            files.add(dst);
+            Map<Long, byte[]> exp = new LinkedHashMap<>();
+            expected.add(exp);
+            fileCount++;
+        }
+        if (fileCount < 3) {
+            throw new IllegalStateException("MULTI needs 3 regions with " + perFile + " chunks");
+        }
+
+        // round-robin interleaved writes across the three live engines
+        int sizes[] = {100, 4096, 30000};
+        for (int i = 0; i < perFile; i++) {
+            for (int rIdx = 0; rIdx < fileCount; rIdx++) {
+                byte[] raw = payload(500L * (rIdx + 1) + i, sizes[i % sizes.length]);
+                byte[] zraw = deflate(raw);
+                Object r = regions.get(rIdx);
+                Method hc = hasChunk;
+                // deterministic slot per file
+                List<int[]> slots = slotsOf(r, hc);
+                int[] slot = slots.get(i);
+                writeSeam.invoke(r, slot[0], slot[1], zraw, zraw.length);
+                expected.get(rIdx).put(key(slot[0], slot[1]), raw);
+            }
+        }
+        System.out.println("[harness] MULTI wrote " + (perFile * fileCount) + " chunks "
+                + "across " + fileCount + " live regions; hook: "
+                + com.rustcraft.bridge.RustRegionWriteHook.dumpMetrics());
+
+        for (int rIdx = 0; rIdx < fileCount; rIdx++) {
+            closeM.invoke(regions.get(rIdx));
+            Class<?> vClass = Class.forName(RF);
+            Method vRead = vClass.getDeclaredMethod("func_76704_a", int.class, int.class);
+            vRead.setAccessible(true);
+            Method vClose = vClass.getDeclaredMethod("func_76708_c");
+            Object vRegion = vClass.getConstructor(File.class).newInstance(files.get(rIdx));
+            for (Map.Entry<Long, byte[]> e : expected.get(rIdx).entrySet()) {
+                int[] slot = unpack(e.getKey());
+                DataInputStream in = (DataInputStream) vRead.invoke(vRegion, slot[0], slot[1]);
+                if (in == null) throw new IllegalStateException("MULTI null read "
+                        + files.get(rIdx).getName() + " " + slot[0] + "," + slot[1]);
+                byte[] got = drain(in);
+                in.close();
+                if (!Arrays.equals(got, e.getValue())) {
+                    throw new IllegalStateException("MULTI mismatch in "
+                            + files.get(rIdx).getName() + " at " + slot[0] + "," + slot[1]);
+                }
+            }
+            vClose.invoke(vRegion);
+        }
+        System.out.println("[harness] MULTI verified: " + fileCount
+                + " regions, " + (perFile * fileCount) + " chunks, per-path isolation OK");
+    }
+
+    static List<int[]> slotsOf(Object region, Method hasChunk) throws Exception {
+        List<int[]> slots = new ArrayList<>();
+        for (int z = 0; z < 32; z++) {
+            for (int x = 0; x < 32; x++) {
+                if ((Boolean) hasChunk.invoke(region, x, z)) slots.add(new int[]{x, z});
+                if (slots.size() >= 32) return slots;
+            }
+        }
+        return slots;
     }
 
     static long key(int x, int z) { return ((long) z << 32) | (x & 0xFFFFFFFFL); }

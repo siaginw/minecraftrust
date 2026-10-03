@@ -53,6 +53,11 @@ public final class RustRegionWriteHook {
     public static final boolean SHADOW = !"ON_EXPERIMENTAL".equals(MODE);
     public static final int CAP =
             Integer.getInteger("rustcraft.regionWriteCap", Integer.MAX_VALUE);
+    /** Stress only: decline every Nth Rust admission (vanilla body runs and
+     *  the exit note interleaves fallbacks with admissions). Default 0 = off. */
+    public static final int FAIL_EVERY =
+            Integer.getInteger("rustcraft.regionWriteFailEvery", 0);
+    public static final AtomicLong SIMULATED_FAILURES = new AtomicLong();
     static final String MIRROR_ROOT = System.getProperty("rustcraft.regionWriteMirror", "");
 
     // lifecycle/counters (m1-metrics style)
@@ -127,6 +132,15 @@ public final class RustRegionWriteHook {
             ByteBuffer payload = st.stage(data, len);
             if (payload == null) {
                 RUST_FAILED.incrementAndGet();
+                return false;
+            }
+            if (!SHADOW && FAIL_EVERY > 0
+                    && (RUST_ADMITTED.get() + 1) % FAIL_EVERY == 0) {
+                // stress: decline so the vanilla body runs and the exit note
+                // interleaves a real fallback between Rust admissions
+                SIMULATED_FAILURES.incrementAndGet();
+                RUST_FAILED.incrementAndGet();
+                RUST_ADMITTED.incrementAndGet();
                 return false;
             }
             if (SHADOW) {
