@@ -305,13 +305,30 @@ def main() -> int:
         world_region = server_dir / "world" / "region"
         comparator = ROOT / "tools" / "authority-review" / "compare_region_shadow.py"
         print(f"[verify] comparing real {world_region} vs mirror {mirror_root} "
-              f"(min {min_shadow})")
+              f"(min writes {min_shadow})")
         cmp_run = subprocess.run([sys.executable, str(comparator), str(world_region),
-                                  str(mirror_root), "--min", str(min_shadow)],
+                                  str(mirror_root), "--min", "0"],
                                  capture_output=True, text=True)
         print(cmp_run.stdout.strip())
         if cmp_run.returncode != 0:
+            print("[FAIL] shadow comparator found engine mismatches")
             failures += 1
+        # goal §15: floor counts MEDIATED RUST WRITES; divergences must be
+        # attributed (attribution journal UNKNOWN == 0 when the agent ran)
+        if rust_ok < min_shadow:
+            print(f"[FAIL] shadow rustOk={rust_ok} < {min_shadow}")
+            failures += 1
+        if args.attribution:
+            journals = list(attribution_dir.glob("writer-attribution.jsonl"))
+            classifier = (ROOT / "tools" / "authority-review"
+                          / "classify_writer_attribution.py")
+            cls = subprocess.run([sys.executable, str(classifier)]
+                                 + [str(j) for j in journals],
+                                 capture_output=True, text=True)
+            print(cls.stdout.strip())
+            if cls.returncode != 0:
+                print("[FAIL] UNKNOWN writer writes present in journal")
+                failures += 1
     else:
         # ON_EXPERIMENTAL: Rust wrote the real files; no mirror. Structural
         # scan of every region (bad=0, no overlap) + min-write floor instead.
