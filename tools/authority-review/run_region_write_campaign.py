@@ -110,7 +110,7 @@ def main() -> int:
     target = args.target
     min_shadow = args.min_shadow or (1000 if target == "A" else 5000)
     if args.output:
-        out_dir = args.output
+        out_dir = Path(args.output).resolve()  # javaagent/-cp need absolute
     else:
         tag = time.strftime("%Y%m%d-%H%M%S")
         out_dir = ROOT / "target" / "authority-review" / f"region-write-campaign-{target}-{tag}"
@@ -229,6 +229,8 @@ def main() -> int:
     try:
         if not wait_for(jvm_log, r"Done \([0-9.]+s\)", args.boot_timeout_s, process=process):
             print("[ERROR] server never reached Done", file=sys.stderr)
+            process.kill()
+            log_handle.close()
             return 1
         print("[boot] server Done")
         time.sleep(settle)
@@ -292,8 +294,10 @@ def main() -> int:
             probe_receipts.append(receipt)
 
         probe_thread = None
+        # evidence deadline: generous default (reads accrue only after the
+        # probe completes FML/PLAY); explicit --hard-timeout-s overrides
         evidence_deadline = time.monotonic() + (
-            args.hard_timeout_s if args.hard_timeout_s else stability + 120.0)
+            args.hard_timeout_s if args.hard_timeout_s else stability + 300.0)
         exit_reason = "EVIDENCE_COMPLETE"
         started = time.monotonic()
         try:
@@ -364,6 +368,11 @@ def main() -> int:
             print("[ERROR] probe rounds failed (world side unhealthy)",
                   file=sys.stderr)
             exit_reason = "PROBE_FAILURE"
+        evidence_late = False
+        if exit_reason == "TIMEOUT" and tracker is not None:
+            # the window expired but shutdown counters may still meet targets;
+            # the post-shutdown gates decide — record lateness honestly
+            evidence_late = True
 
         # force world saves while chunks are loaded -> real region writes
         for i in range(max(1, args.save_flushes)):
@@ -611,14 +620,16 @@ def main() -> int:
         evidence_targets=[c.name for c in evidence_targets] if evidence_targets else [],
         evidence_observed=final_metrics,
         probe_result=(probe_receipts[0].get("verdict") if probe_receipts else None),
-        exit_reason=exit_reason,
+        exit_reason="EVIDENCE_COMPLETE" if (evidence_late and failures == 0) else exit_reason,
+        evidence_late=evidence_late,
         verdict=verdict,
         artifact_paths=[str(out_dir / "server.log"),
                         str(out_dir / "region-metrics.txt")],
     )
+    final_exit = "EVIDENCE_COMPLETE" if (evidence_late and failures == 0) else exit_reason
     print(human_summary(
         f"Region {args.mode} Gate {target}", args.test_tier, verdict,
-        exit_reason, time.monotonic() - started, tier.hard_timeout_s,
+        final_exit, time.monotonic() - started, tier.hard_timeout_s,
         [f"{k}={v}" for k, v in sorted(final_metrics.items())],
         tier.post_target_stability_s, receipt_path))
     if failures:

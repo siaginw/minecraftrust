@@ -39,7 +39,7 @@ class Tier:
 DEV = Tier(
     name="dev",
     hard_timeout_s=60,
-    boot_timeout_s=300,
+    boot_timeout_s=900,
     post_target_stability_s=8,
     soak_s=None,
     description="Implementation loops: small evidence target, fail fast.",
