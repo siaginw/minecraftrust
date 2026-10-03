@@ -61,6 +61,7 @@ Which parts of the engine Rust can take over, and what each boundary costs: [chu
 | [Single-Copy Netty Packet Body](research/SINGLE_COPY_NETTY_PACKET_BODY_REPORT.md) | Complete pre-compression body, NettyPacketEncoder bypass, full-body shadow equality, encoder-bypass gates A/C |
 | [Rust Network Compression Authority](research/RUST_NETWORK_COMPRESSION_AUTHORITY_REPORT.md) | Compression layer in Rust (zlib-rs, direct zero-heap), 68k-body corpus matrix, live shadow+authority gates, frame stays Java |
 | [Rust Storage / NBT / Anvil](research/RUST_STORAGE_NBT_ANVIL_REPORT.md) | .mca engine + integrity scanner, shadow reads 76,404/0, region-write authority durability proof, boundary scorecard |
+| [Rust Region Write Authority](research/RUST_REGION_WRITE_AUTHORITY_REPORT.md) | Live in-server region write (seam ayj/func_76706_a), Gate A ON authority 3,928 writes + 25 restart cycles, shadow gates A/C 0 mismatches, external-writer park on Gate C |
 | [Packet-mask semantics](research/m4-1-palette-semantics-research.md) | Palette behavior from real bytecode |
 | [Protocol-340 collection](protocol-340/) | Wire-level decoders and the packet registry |
 

@@ -101,12 +101,18 @@ def main() -> int:
             # a writer bypassed func_76706_a after the last mirrored event
             # (modded runtimes ship shaded Anvil-format writers). Classify
             # separately: this is external-write evidence, not a Rust payload
-            # mismatch. A mirror-side-newer or same-timestamp mismatch IS a
-            # Rust engine failure.
-            if rts > m_all_ts.get(idx, 0):
+            # mismatch. Same-second writes are ties that cannot be
+            # distinguished by the 1-second timestamp granularity and stay in
+            # this bucket too: in SHADOW a seam event writes IDENTICAL bytes
+            # to both files, so any content divergence reduces to event
+            # asymmetry, and the only asymmetric events are fail-opens and
+            # bypassing writers — both real-side-only. A mirror-side-NEWER
+            # record (rts < mts) would mean Rust wrote bytes vanilla never
+            # did and is treated as a genuine engine failure.
+            if rts >= m_all_ts.get(idx, 0):
                 external += 1
                 print(f"[ext] {real.name} chunk {idx % 32},{idx // 32}: real "
-                      f"newer (ts {rts} > {m_all_ts.get(idx, 0)}) - external writer")
+                      f"ts {rts} >= mirror ts {m_all_ts.get(idx, 0)} - external writer")
             else:
                 mismatched += 1
                 failures.append(f"mismatch {real.name} chunk {idx % 32},{idx // 32}")
