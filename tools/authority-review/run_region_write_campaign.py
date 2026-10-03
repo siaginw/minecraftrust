@@ -72,7 +72,7 @@ def main() -> int:
     parser.add_argument("--read-mode", choices=["OFF", "SHADOW", "ON_EXPERIMENTAL"],
                         default="OFF",
                         help="Enable the region READ experiment in this mode")
-    parser.add_argument("--min-reads", type=int, default=0,
+    parser.add_argument("--min-reads", type=int, default=0,  # per-run read-event floor
                         help="Minimum Rust-read events for a PASS (shadow)")
     args = parser.parse_args()
 
