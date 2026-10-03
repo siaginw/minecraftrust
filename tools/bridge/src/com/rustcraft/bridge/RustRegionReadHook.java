@@ -137,6 +137,7 @@ public final class RustRegionReadHook {
                 classify(st.ctx.lastStatus);
                 return false;
             }
+            READ_SUCCESS.incrementAndGet();
             Shadow sh = new Shadow();
             sh.x = x & 31;
             sh.z = z & 31;
