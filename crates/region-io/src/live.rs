@@ -137,6 +137,20 @@ impl LiveRegionFile {
         }
     }
 
+    /// Current sector used-map as 0/1 bytes, one per tracked sector. The
+    /// Java hook rebuilds RegionFile's in-memory free list
+    /// (field_76714_f, `true` = FREE) from this after every engine event:
+    /// vanilla's READ path bounds-checks entries against that list's size()
+    /// and vanilla's own fallback allocator allocates from it, so a Rust
+    /// write that grows the file or occupies sectors must be mirrored or
+    /// in-session reads return null and fallback writes clobber Rust records.
+    pub fn used_map(&self) -> Vec<u8> {
+        match self.inner.lock() {
+            Ok(inner) => inner.used.iter().map(|&b| b as u8).collect(),
+            Err(_) => Vec::new(),
+        }
+    }
+
     /// Record a VANILLA fallback write so the engine's map stays coherent
     /// (task §34 mixed-write stress). `entry` is the raw location entry Java
     /// holds after its own write; `generation` is the Java ticket counter's

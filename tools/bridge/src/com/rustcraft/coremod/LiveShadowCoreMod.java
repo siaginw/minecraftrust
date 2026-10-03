@@ -34,7 +34,10 @@ public class LiveShadowCoreMod implements IFMLLoadingPlugin {
                 // Single-copy outbound boundary (default OFF; no bytecode
                 // modification unless -Drustcraft.singleCopy[Shadow] is set):
                 "com.rustcraft.coremod.NetworkManagerSingleCopyTransformer",
-                "com.rustcraft.coremod.NettyPacketEncoderCounterTransformer"
+                "com.rustcraft.coremod.NettyPacketEncoderCounterTransformer",
+                // LIVE region write authority (default OFF; no bytecode
+                // modification unless -Drustcraft.regionWriteExperiment=true):
+                "com.rustcraft.coremod.RegionFileAuthorityTransformer"
         };
     }
 

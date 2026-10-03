@@ -257,6 +257,43 @@ pub unsafe extern "system" fn Java_com_rustcraft_bridge_RegionWriteCtx_generatio
     }
 }
 
+/// JNI: snapshot the engine's sector used-map as 0/1 bytes. Returns the
+/// sector count or a negative status. The Java hook mirrors this into
+/// RegionFile.field_76714_f (vanilla's free list; inverted polarity: Java
+/// true = free) so in-session reads pass the bounds check and vanilla
+/// fallback writes cannot clobber Rust-occupied sectors.
+#[no_mangle]
+pub unsafe extern "system" fn Java_com_rustcraft_bridge_RegionWriteCtx_usedSnapshot(
+    _env: *mut c_void,
+    _clazz: *mut c_void,
+    handle: i64,
+    out_addr: i64,
+    out_cap: i32,
+) -> i32 {
+    let result = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let eng = match engine(handle) {
+            Some(e) => e,
+            None => return -STATUS_BAD_HANDLE,
+        };
+        if out_addr == 0 {
+            return -STATUS_INVALID_RECORD;
+        }
+        let map = eng.used_map();
+        let n = map.len();
+        // size probe (out_cap <= 0) or retry hint when the buffer is small
+        if out_cap <= 0 || (out_cap as usize) < n {
+            return n as i32;
+        }
+        let out = slice::from_raw_parts_mut(out_addr as *mut u8, n);
+        out.copy_from_slice(&map);
+        n as i32
+    }));
+    match result {
+        Ok(c) => c,
+        Err(_) => -region_io::live::STATUS_IO_ERROR,
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
