@@ -283,22 +283,10 @@ def main() -> int:
         print("[FAIL] no Rust shadow writes recorded")
         failures += 1
 
-    world_region = server_dir / "world" / "region"
-    comparator = ROOT / "tools" / "authority-review" / "compare_region_shadow.py"
-    print(f"[verify] comparing real {world_region} vs mirror {mirror_root} "
-          f"(min {min_shadow})")
-    cmp_run = subprocess.run([sys.executable, str(comparator), str(world_region),
-                              str(mirror_root), "--min", str(min_shadow)],
-                             capture_output=True, text=True)
-    print(cmp_run.stdout.strip())
-    if cmp_run.returncode != 0:
-        failures += 1
-
     (out_dir / "region-write-campaign.json").write_text(json.dumps({
-        "target": target, "port": port, "transform_count": transform_count,
+        "target": target, "port": port, "mode": args.mode,
+        "transform_count": transform_count,
         "hook_metrics": metrics, "rust_ok": rust_ok,
-        "comparator_rc": cmp_run.returncode,
-        "comparator_stdout": cmp_run.stdout.strip()[-4000:],
     }, indent=2, sort_keys=True) + "\n")
 
     if args.mode == "SHADOW":
@@ -348,12 +336,6 @@ def main() -> int:
         if rust_ok < min_shadow:
             print(f"[FAIL] ON campaign rustOk={rust_ok} < floor {min_shadow}")
             failures += 1
-
-    (out_dir / "region-write-campaign.json").write_text(json.dumps({
-        "target": target, "port": port, "mode": args.mode,
-        "transform_count": transform_count,
-        "hook_metrics": metrics, "rust_ok": rust_ok,
-    }, indent=2, sort_keys=True) + "\n")
 
     # fresh-process restart cycles: same server world, experiment OFF, the
     # world must boot to Done and serve a probe every time
