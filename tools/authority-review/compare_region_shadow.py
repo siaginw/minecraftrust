@@ -23,11 +23,11 @@ from pathlib import Path
 SECTOR = 4096
 
 
-def read_region(path: Path) -> dict[int, tuple[bytes, int]]:
-    """chunk index -> (payload_sha_of_decompressed, raw_len) lazily? Return
-    index -> raw record bytes after the type byte."""
+def read_region(path: Path, with_ts: bool = False) -> dict:
+    """chunk index -> decompressed payload bytes (plus the last-write
+    timestamp when with_ts: index -> (payload, ts))."""
     data = path.read_bytes()
-    out: dict[int, bytes] = {}
+    out: dict = {}
     if len(data) < 8192:
         return out
     for i in range(1024):
@@ -38,20 +38,25 @@ def read_region(path: Path) -> dict[int, tuple[bytes, int]]:
             continue
         start = off * SECTOR
         if start + 5 > len(data):
-            out[i] = b"<TRUNCATED>"
-            continue
-        length = struct.unpack(">I", data[start:start + 4])[0]
-        typ = data[start + 4]
-        blob = data[start + 5:start + 4 + length]
-        try:
-            if typ == 2:
-                out[i] = zlib.decompress(blob)
-            elif typ == 1:
-                out[i] = zlib.decompress(blob, -15)
-            else:
-                out[i] = blob  # uncompressed
-        except Exception as e:
-            out[i] = f"<DECOMPRESS_FAIL {e}>".encode()
+            rec = b"<TRUNCATED>"
+        else:
+            length = struct.unpack(">I", data[start:start + 4])[0]
+            typ = data[start + 4]
+            blob = data[start + 5:start + 4 + length]
+            try:
+                if typ == 2:
+                    rec = zlib.decompress(blob)
+                elif typ == 1:
+                    rec = zlib.decompress(blob, -15)
+                else:
+                    rec = blob  # uncompressed
+            except Exception as e:
+                rec = f"<DECOMPRESS_FAIL {e}>".encode()
+        if with_ts:
+            ts = struct.unpack(">I", data[SECTOR + i * 4:SECTOR + i * 4 + 4])[0]
+            out[i] = (rec, ts)
+        else:
+            out[i] = rec
     return out
 
 
@@ -67,7 +72,7 @@ def main() -> int:
     if "--min" in sys.argv:
         min_required = int(sys.argv[sys.argv.index("--min") + 1])
 
-    compared = mismatched = mirror_only = 0
+    compared = mismatched = mirror_only = external = 0
     failures: list[str] = []
     # The JVM's File.getAbsolutePath() lowercases the drive letter and may
     # keep "." segments, so match mirror files case-insensitively on a
@@ -82,23 +87,36 @@ def main() -> int:
             continue
         mirror = candidates[0]
         unmatched_mirrors.discard(mirror.name.lower())
-        r = read_region(real)
-        m = read_region(mirror)
-        for idx, rpayload in r.items():
-            if idx not in m:
+        r_all = read_region(real, with_ts=True)
+        m_all = read_region(mirror, with_ts=True)
+        m_all_ts = {i: ts for i, (_, ts) in m_all.items()}
+        for idx, (rpayload, rts) in r_all.items():
+            if idx not in m_all:
                 continue
-            mpayload = m[idx]
+            mpayload = m_all[idx][0]
             compared += 1
-            if hashlib.sha256(rpayload).digest() != hashlib.sha256(mpayload).digest():
+            if hashlib.sha256(rpayload).digest() == hashlib.sha256(mpayload).digest():
+                continue
+            # A real-side record NEWER than the mirror's last seam write means
+            # a writer bypassed func_76706_a after the last mirrored event
+            # (modded runtimes ship shaded Anvil-format writers). Classify
+            # separately: this is external-write evidence, not a Rust payload
+            # mismatch. A mirror-side-newer or same-timestamp mismatch IS a
+            # Rust engine failure.
+            if rts > m_all_ts.get(idx, 0):
+                external += 1
+                print(f"[ext] {real.name} chunk {idx % 32},{idx // 32}: real "
+                      f"newer (ts {rts} > {m_all_ts.get(idx, 0)}) - external writer")
+            else:
                 mismatched += 1
                 failures.append(f"mismatch {real.name} chunk {idx % 32},{idx // 32}")
-        mirror_only = sum(1 for idx in m if idx not in r)
+        mirror_only = sum(1 for idx in m_all if idx not in r_all)
     if unmatched_mirrors:
         print(f"[info] mirrors with no real counterpart: {len(unmatched_mirrors)}")
     for f in failures[:20]:
         print(f"[FAIL] {f}")
     print(f"REGION_SHADOW_MATCH compared={compared} mismatched={mismatched} "
-          f"mirror_only={mirror_only}")
+          f"external={external} mirror_only={mirror_only}")
     if mismatched or compared < min_required:
         return 1
     return 0

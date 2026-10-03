@@ -204,8 +204,12 @@ def main() -> int:
                 # the save/compare phase below, not the probe socket.
                 obs = receipt.get("observed", {})
                 world_ok = (obs.get("login_completed") and obs.get("fml_handshake_complete")
-                            and obs.get("play_reached")
-                            and obs.get("chunk_packets", 0) >= 500)
+                            and obs.get("play_reached"))
+                if rnd == 0:
+                    # round 1 on a cold server must stream real chunk traffic
+                    world_ok = world_ok and obs.get("chunk_packets", 0) >= 500
+                # later rounds run on a WARM server: few new chunk packets is
+                # expected and healthy
                 print(f"[probe] transport-limited probe (world_ok={world_ok}, "
                       f"failure={receipt.get('failure')!r}) — continuing to "
                       f"save/compare phase")
