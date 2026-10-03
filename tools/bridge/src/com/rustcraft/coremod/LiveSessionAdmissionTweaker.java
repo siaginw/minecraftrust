@@ -107,6 +107,14 @@ public final class LiveSessionAdmissionTweaker implements ITweaker {
                 cl.registerTransformer(
                         "com.rustcraft.coremod.RegionFileAuthorityTransformer");
             }
+            // LIVE region READ authority (RUST_REGION_READ_DECOMPRESSION_
+            // AUTHORITY, default OFF): rewrites only the RegionFile read
+            // seam (and close, for handle lifecycle) and self-gates on
+            // rustcraft.regionReadExperiment.
+            if (Boolean.getBoolean("rustcraft.regionReadExperiment")) {
+                cl.registerTransformer(
+                        "com.rustcraft.coremod.RegionFileReadTransformer");
+            }
             // The writers register now; their first invocation places them at
             // the chain tail after every foreign transformer has registered.
             for (String name : new String[] {
@@ -152,6 +160,16 @@ public final class LiveSessionAdmissionTweaker implements ITweaker {
                     System.out.println("[RustCraft-Compression] shutdown metrics:");
                     System.out.println(com.rustcraft.bridge.RustCompressionEngine.dumpMetrics());
                 }, "rustcraft-compression-metrics"));
+            }
+            // Region-read metrics at shutdown.
+            if (Boolean.getBoolean("rustcraft.regionReadExperiment")) {
+                Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+                    System.out.println("[RustCraft-RegionRead] shutdown metrics:");
+                    System.out.println(com.rustcraft.bridge.RustRegionReadHook.dumpMetrics());
+                    System.out.println("[RustCraft-RegionRead] transformer status="
+                            + com.rustcraft.coremod.RegionFileReadTransformer.transformCount
+                            + " " + com.rustcraft.coremod.RegionFileReadTransformer.lastTransformStatus);
+                }, "rustcraft-region-read-metrics"));
             }
             // Region-write metrics at shutdown (RUST_REGION_WRITE_AUTHORITY
             // campaign; default OFF with the experiment property).

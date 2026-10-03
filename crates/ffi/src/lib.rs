@@ -27,6 +27,8 @@ mod owned_snapshot;
 pub use owned_snapshot::*;
 mod region_write;
 pub use region_write::*;
+mod region_read;
+pub use region_read::*;
 
 #[no_mangle]
 pub extern "C" fn rust_runtime_ping() -> i32 {

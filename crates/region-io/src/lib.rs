@@ -34,6 +34,12 @@ pub use live::{
     STATUS_INVALID_RECORD, STATUS_IO_ERROR, STATUS_NOT_ELIGIBLE, STATUS_STALE_GENERATION,
     STATUS_SUCCESS,
 };
+pub mod live_read;
+pub use live_read::{
+    decompress_stream, RegionReader, READ_CORRUPT_ENTRY, READ_IO_ERROR, READ_MAX_DECOMPRESSED,
+    READ_MISSING, READ_NOT_ELIGIBLE, READ_OUTPUT_TOO_SMALL, READ_SUCCESS,
+    READ_UNSUPPORTED_COMPRESSION,
+};
 
 #[derive(Debug)]
 pub enum RegionError {

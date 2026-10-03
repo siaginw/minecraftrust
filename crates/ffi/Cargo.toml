@@ -22,4 +22,5 @@ region-io = { workspace = true }
 
 [dev-dependencies]
 proptest = { version = "=1.11.0", default-features = false, features = ["std"] }
+flate2 = { version = "=1.1.10", features = ["zlib-rs"], default-features = false }
 

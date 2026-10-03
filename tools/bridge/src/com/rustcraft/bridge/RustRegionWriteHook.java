@@ -80,17 +80,12 @@ public final class RustRegionWriteHook {
      * Registered at state creation, updated per event; dumped by the tweaker
      * shutdown hook and copied into the campaign receipt.
      */
-    public static final java.util.concurrent.ConcurrentHashMap<String, AtomicLong[]>
+    public static final java.util.concurrent.ConcurrentHashMap<String, java.util.concurrent.atomic.AtomicLongArray>
             PROVENANCE = new java.util.concurrent.ConcurrentHashMap<>();
 
-    private static AtomicLong[] provenance(String path) {
+    private static java.util.concurrent.atomic.AtomicLongArray provenance(String path) {
         return PROVENANCE.computeIfAbsent(path,
-                p -> new AtomicLongArray5());
-    }
-
-    private static final class AtomicLongArray5
-            extends java.util.concurrent.atomic.AtomicLongArray {
-        AtomicLongArray5() { super(5); }
+                p -> new java.util.concurrent.atomic.AtomicLongArray(5));
     }
     static final String MIRROR_ROOT = System.getProperty("rustcraft.regionWriteMirror", "");
 
@@ -185,40 +180,40 @@ public final class RustRegionWriteHook {
                 // written by the vanilla body below.
                 long entry = st.ctx.write(x & 31, z & 31, payload, len, ticket);
                 RUST_ADMITTED.incrementAndGet();
-                AtomicLong[] prov = provenance(st.regionPath);
-                prov[0].incrementAndGet();
+                java.util.concurrent.atomic.AtomicLongArray prov = provenance(st.regionPath);
+                prov.incrementAndGet(0);
                 if (entry > 0) {
                     RUST_OK.incrementAndGet();
-                    prov[1].incrementAndGet();
+                    prov.incrementAndGet(1);
                     return false; // vanilla body still writes the real file
                 }
                 tallyFailure(entry, len, index, st.regionPath);
                 RUST_FAILED.incrementAndGet();
-                prov[2].incrementAndGet();
+                prov.incrementAndGet(2);
                 return false;
             }
             // ON_EXPERIMENTAL: Rust writes the REAL file; success skips vanilla.
             long entry = st.ctx.write(x & 31, z & 31, payload, len, ticket);
             RUST_ADMITTED.incrementAndGet();
-            AtomicLong[] prov = provenance(st.regionPath);
-            prov[0].incrementAndGet();
+            java.util.concurrent.atomic.AtomicLongArray prov = provenance(st.regionPath);
+            prov.incrementAndGet(0);
             if (entry > 0) {
                 RUST_OK.incrementAndGet();
-                prov[1].incrementAndGet();
+                prov.incrementAndGet(1);
                 mirrorEntry(regionFile, index, (int) entry);
                 mirrorRunToFreeList(regionFile, (int) entry);
                 return true;
             }
             tallyFailure(entry, len, index, st.regionPath);
             RUST_FAILED.incrementAndGet();
-            prov[2].incrementAndGet();
+            prov.incrementAndGet(2);
             if (entry == RegionWriteCtx.ST_NOT_ELIGIBLE) {
                 // goal §11: the engine detected an uncoordinated writer on
                 // this file (verify-before-free) — JAVA_ONLY for the session,
                 // never re-promoted.
                 REGION_DISQUALIFIED.incrementAndGet();
                 EXTERNAL_WRITER_OBSERVED.incrementAndGet();
-                prov[4].incrementAndGet();
+                prov.incrementAndGet(4);
                 st.capped = true;
             }
             return false; // any failure -> vanilla body runs
@@ -248,8 +243,8 @@ public final class RustRegionWriteHook {
             int rc = st.ctx.noteExternal(x & 31, z & 31, entry, ticket);
             if (rc == RegionWriteCtx.ST_SUCCESS) {
                 EXIT_NOTES.incrementAndGet();
-                AtomicLong[] prov = provenance(st.regionPath);
-                prov[3].incrementAndGet();
+                java.util.concurrent.atomic.AtomicLongArray prov = provenance(st.regionPath);
+                prov.incrementAndGet(3);
                 // No Java-side free-list action: the vanilla body maintains
                 // field_76714_f itself, and every prior Rust commit already
                 // published its run into that same list (mirrorRunToFreeList),
@@ -497,14 +492,14 @@ public final class RustRegionWriteHook {
     /** goal §14: per-region provenance dump (path selected committed failed notes disqualified). */
     public static String dumpProvenance() {
         StringBuilder sb = new StringBuilder();
-        for (java.util.Map.Entry<String, AtomicLong[]> e : PROVENANCE.entrySet()) {
-            AtomicLong[] v = e.getValue();
+        for (java.util.Map.Entry<String, java.util.concurrent.atomic.AtomicLongArray> e : PROVENANCE.entrySet()) {
+            java.util.concurrent.atomic.AtomicLongArray v = e.getValue();
             sb.append("regionProvenance path=").append(e.getKey())
-                    .append(" rustSelected=").append(v[0].get())
-                    .append(" rustCommitted=").append(v[1].get())
-                    .append(" rustFailed=").append(v[2].get())
-                    .append(" exitNotes=").append(v[3].get())
-                    .append(" disqualified=").append(v[4].get())
+                    .append(" rustSelected=").append(v.get(0))
+                    .append(" rustCommitted=").append(v.get(1))
+                    .append(" rustFailed=").append(v.get(2))
+                    .append(" exitNotes=").append(v.get(3))
+                    .append(" disqualified=").append(v.get(4))
                     .append(System.lineSeparator());
         }
         return sb.toString();

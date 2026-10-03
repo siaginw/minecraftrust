@@ -151,6 +151,19 @@ impl LiveRegionFile {
         }
     }
 
+    /// Serializes a closure against this engine's writes: the offline
+    /// counterpart of the RegionFile monitor that serializes the Java hooks
+    /// (both region seams are synchronized, so in production every read and
+    /// write of one file already holds that monitor). A live reader attached
+    /// to the same engine takes this lock around its disk reads, so a read
+    /// observes exactly one committed generation — never a torn mix.
+    pub fn read_lock<R>(&self, f: impl FnOnce() -> R) -> Option<R> {
+        match self.inner.lock() {
+            Ok(_guard) => Some(f()),
+            Err(_) => None, // poisoned: reader must fail closed
+        }
+    }
+
     /// Diagnostic: (used-map sector count, trailing free run, entries whose
     /// committed run extends beyond the used map). Used by the capacity
     /// fuzz to characterize the small-payload CAPACITY_ERROR state.
@@ -560,6 +573,14 @@ impl EngineRegistry {
         if let Ok(mut engines) = self.engines.lock() {
             engines.remove(&canonical);
         }
+    }
+
+    /// Existing engine for a path, if one is registered. Unlike get_or_open
+    /// this never creates an engine (read-only processes must not).
+    pub fn try_get(&self, path: &Path) -> Option<std::sync::Arc<LiveRegionFile>> {
+        let canonical = normalize_key(path);
+        let engines = self.engines.lock().ok()?;
+        engines.get(&canonical).map(std::sync::Arc::clone)
     }
 }
 
