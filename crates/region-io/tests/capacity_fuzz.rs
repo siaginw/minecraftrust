@@ -37,7 +37,11 @@ fn temp(name: &str) -> std::path::PathBuf {
 /// returns the entry it installed (for note_external_write).
 fn vanilla_fallback(path: &std::path::Path, slot: usize, stream: &[u8]) -> u32 {
     // allocate at the current file end
-    let mut f = std::fs::OpenOptions::new().read(true).write(true).open(path).unwrap();
+    let mut f = std::fs::OpenOptions::new()
+        .read(true)
+        .write(true)
+        .open(path)
+        .unwrap();
     let file_len = f.metadata().unwrap().len() as usize;
     let needed = (stream.len() + 5).div_ceil(4096).max(1);
     let start = std::cmp::max(file_len.div_ceil(4096), 2);
@@ -79,12 +83,7 @@ fn fuzz_live_capacity_small_payloads() {
             };
             let stream = zlib_stream(op, raw_len);
             tickets[slot] += 1;
-            match engine.write_chunk(
-                (slot % 32) as u8,
-                (slot / 32) as u8,
-                &stream,
-                tickets[slot],
-            ) {
+            match engine.write_chunk((slot % 32) as u8, (slot / 32) as u8, &stream, tickets[slot]) {
                 Ok(_) => {}
                 Err(region_io::live::STATUS_CAPACITY_ERROR) => {
                     let needed = (stream.len() + 5).div_ceil(4096).max(1);
@@ -93,7 +92,14 @@ fn fuzz_live_capacity_small_payloads() {
                     panic!(
                         "op {} slot {} stream {} needed {}: CAPACITY; \
                          used_len={} tail_free={} runs_beyond_map={} site={:?}",
-                        op, slot, stream.len(), needed, st.0, st.1, st.2, site
+                        op,
+                        slot,
+                        stream.len(),
+                        needed,
+                        st.0,
+                        st.1,
+                        st.2,
+                        site
                     );
                 }
                 Err(c) => panic!("op {} slot {} unexpected status {}", op, slot, c),

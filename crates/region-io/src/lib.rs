@@ -29,10 +29,11 @@ pub const MAX_REGION_BYTES: usize = 16 * 1024 * 1024;
 pub const MAX_PAYLOAD_BYTES: usize = 1024 * 1024;
 
 pub mod live;
-pub use live::{EngineRegistry, LiveRegionFile, WriteStats,
-    STATUS_BAD_HANDLE, STATUS_CAPACITY_ERROR, STATUS_INVALID_RECORD,
-    STATUS_IO_ERROR, STATUS_NOT_ELIGIBLE, STATUS_STALE_GENERATION,
-    STATUS_SUCCESS};
+pub use live::{
+    EngineRegistry, LiveRegionFile, WriteStats, STATUS_BAD_HANDLE, STATUS_CAPACITY_ERROR,
+    STATUS_INVALID_RECORD, STATUS_IO_ERROR, STATUS_NOT_ELIGIBLE, STATUS_STALE_GENERATION,
+    STATUS_SUCCESS,
+};
 
 #[derive(Debug)]
 pub enum RegionError {

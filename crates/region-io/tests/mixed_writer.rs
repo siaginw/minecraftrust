@@ -54,7 +54,11 @@ impl VanillaModelWriter {
                 }
             }
         }
-        Self { path: path.to_path_buf(), used, gen: 0 }
+        Self {
+            path: path.to_path_buf(),
+            used,
+            gen: 0,
+        }
     }
 
     fn write(&mut self, slot: usize, payload: &[u8]) -> u32 {
@@ -67,10 +71,7 @@ impl VanillaModelWriter {
         self.resync_used();
         // the record content is a REAL zlib stream (the scanner decompresses
         // every record); sector need follows the stream length
-        let mut z = flate2::write::ZlibEncoder::new(
-            Vec::new(),
-            flate2::Compression::default(),
-        );
+        let mut z = flate2::write::ZlibEncoder::new(Vec::new(), flate2::Compression::default());
         z.write_all(payload).unwrap();
         let stream = z.finish().unwrap();
         let needed = (stream.len() + 5).div_ceil(SECTOR_BYTES).max(1);
@@ -135,7 +136,8 @@ impl VanillaModelWriter {
             .write(true)
             .open(&self.path)
             .unwrap();
-        f.seek(SeekFrom::Start((start * SECTOR_BYTES) as u64)).unwrap();
+        f.seek(SeekFrom::Start((start * SECTOR_BYTES) as u64))
+            .unwrap();
         let total = (stream.len() + 1) as u32;
         f.write_all(&total.to_be_bytes()).unwrap();
         f.write_all(&[2u8]).unwrap();
@@ -244,7 +246,12 @@ fn coordinated_mixed_writer_interleave_stays_consistent() {
     for slot in 0..8usize {
         let stream = zlib_of(10 + slot as u8, 100 + slot * 37);
         engine
-            .write_chunk((slot % 32) as u8, (slot / 32) as u8, &stream, (slot + 1) as u64)
+            .write_chunk(
+                (slot % 32) as u8,
+                (slot / 32) as u8,
+                &stream,
+                (slot + 1) as u64,
+            )
             .unwrap();
         expected.insert(slot, (10 + slot as u8, 100 + slot * 37));
     }
@@ -307,7 +314,11 @@ fn coordinated_mixed_writer_interleave_stays_consistent() {
         let mut rec = Vec::new();
         z.read_to_end(&mut rec).unwrap();
         assert_eq!(rec.len(), *len, "slot {} length mismatch", slot);
-        assert!(rec.iter().all(|&b| b == *seed), "slot {} content mismatch", slot);
+        assert!(
+            rec.iter().all(|&b| b == *seed),
+            "slot {} content mismatch",
+            slot
+        );
         verified += 1;
     }
     assert!(verified >= 1000, "verified {}", verified);
@@ -375,7 +386,9 @@ fn uncoordinated_write_is_detected_and_region_disqualified() {
 /// global allocator lock.
 #[test]
 fn four_regions_write_concurrently_without_cross_talk() {
-    let paths: Vec<_> = (0..4).map(|i| temp(&format!("parallel-{}.mca", i))).collect();
+    let paths: Vec<_> = (0..4)
+        .map(|i| temp(&format!("parallel-{}.mca", i)))
+        .collect();
     let engines: Vec<Arc<LiveRegionFile>> = paths
         .iter()
         .map(|p| Arc::new(LiveRegionFile::open(p).unwrap()))
@@ -423,7 +436,9 @@ fn hundred_k_mixed_operations_same_region() {
         let entry = vanilla.write(vslot, &payload((round % 251) as u8, len));
         let x = (vslot % 32) as u8;
         let z = (vslot / 32) as u8;
-        engine.note_external_write(x, z, entry, 500_000 + round).unwrap();
+        engine
+            .note_external_write(x, z, entry, 500_000 + round)
+            .unwrap();
         ops += 1;
 
         let rslot = (round as usize * 5 + 2) % 256;
@@ -442,7 +457,11 @@ fn hundred_k_mixed_operations_same_region() {
     assert!(ops >= 100_000, "ops {}", ops);
 
     let report = scan(&path, false).unwrap();
-    assert!(report.bad_entries.is_empty(), "{:?}", report.bad_entries.first());
+    assert!(
+        report.bad_entries.is_empty(),
+        "{:?}",
+        report.bad_entries.first()
+    );
     assert!(report.decompress_failures.is_empty());
     assert!(!report.overlapping_sectors, "overlap after 100k mixed ops");
 }

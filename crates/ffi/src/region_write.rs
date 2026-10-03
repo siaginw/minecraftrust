@@ -95,7 +95,13 @@ pub unsafe extern "system" fn Java_com_rustcraft_bridge_RegionWriteCtx_write(
             Some(e) => e,
             None => return -(STATUS_BAD_HANDLE as i64),
         };
-        if x < 0 || x > 31 || z < 0 || z > 31 || payload_len < 0 || (payload_len > 0 && payload_addr == 0) {
+        if x < 0
+            || x > 31
+            || z < 0
+            || z > 31
+            || payload_len < 0
+            || (payload_len > 0 && payload_addr == 0)
+        {
             return -(STATUS_INVALID_RECORD as i64);
         }
         if generation < 0 {
@@ -411,7 +417,10 @@ mod tests {
             )
         };
         assert!(entry2 > 0, "shared-engine write failed: {entry2}");
-        assert!(entry2 >> 8 != 2, "second state clobbered the existing record");
+        assert!(
+            entry2 >> 8 != 2,
+            "second state clobbered the existing record"
+        );
 
         // close frees + deregisters
         let rc = unsafe {

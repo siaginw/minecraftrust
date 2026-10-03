@@ -156,12 +156,7 @@ impl LiveRegionFile {
             Ok(i) => i,
             Err(_) => return (0, 0, 0),
         };
-        let tail_free = inner
-            .used
-            .iter()
-            .rev()
-            .take_while(|&&u| !u)
-            .count();
+        let tail_free = inner.used.iter().rev().take_while(|&&u| !u).count();
         let beyond = inner
             .runs
             .iter()
@@ -332,18 +327,12 @@ impl LiveRegionFile {
                     // small-payload CAPACITY_ERROR caught by the capacity
                     // fuzz — the source of every campaign err4 event).
                     let current = inner.used.len();
-                    let trailing_free = inner
-                        .used
-                        .iter()
-                        .rev()
-                        .take_while(|&&u| !u)
-                        .count();
+                    let trailing_free = inner.used.iter().rev().take_while(|&&u| !u).count();
                     let extra = needed.saturating_sub(trailing_free);
                     if extra == 0 {
                         // unreachable: a trailing run of `needed` would have
                         // been found by the first-fit scan above
-                        *DEBUG_CAP_LOCK.lock().unwrap() =
-                            Some((needed, current, 0, extra));
+                        *DEBUG_CAP_LOCK.lock().unwrap() = Some((needed, current, 0, extra));
                         return Err(STATUS_CAPACITY_ERROR);
                     }
                     let new_len = current + extra;
@@ -579,7 +568,10 @@ impl EngineRegistry {
 /// filesystem is case-insensitive.
 fn normalize_key(path: &Path) -> PathBuf {
     let parent = path.parent().unwrap_or_else(|| Path::new("."));
-    let name = path.file_name().map(|n| n.to_os_string()).unwrap_or_default();
+    let name = path
+        .file_name()
+        .map(|n| n.to_os_string())
+        .unwrap_or_default();
     match parent.canonicalize() {
         Ok(p) => {
             let joined = p.join(name);
@@ -623,7 +615,10 @@ mod tests {
         let mut f = fs::File::open(&path).unwrap();
         let sector_count = (entry1 & 0xFF) as usize;
         let mut sector = vec![0u8; SECTOR_BYTES * sector_count];
-        f.seek(SeekFrom::Start(((entry1 >> 8) as u64) * SECTOR_BYTES as u64)).unwrap();
+        f.seek(SeekFrom::Start(
+            ((entry1 >> 8) as u64) * SECTOR_BYTES as u64,
+        ))
+        .unwrap();
         f.read_exact(&mut sector).unwrap();
         let total = u32::from_be_bytes([sector[0], sector[1], sector[2], sector[3]]) as usize;
         assert_eq!(total, p1.len() + 1);
@@ -632,7 +627,10 @@ mod tests {
         // [5, 4 + total) inside the sector.
         assert_eq!(&sector[5..total + 4], &p1[..]);
         // stale generation rejected
-        assert_eq!(engine.write_chunk(0, 0, &p1, 1).unwrap_err(), STATUS_STALE_GENERATION);
+        assert_eq!(
+            engine.write_chunk(0, 0, &p1, 1).unwrap_err(),
+            STATUS_STALE_GENERATION
+        );
         // fresh generation accepted; the engine may relocate the run, so
         // read back through the RETURNED entry (the new location).
         let p2 = deflate_frame(&[2u8; 3000]);
@@ -642,7 +640,10 @@ mod tests {
         let mut header = vec![0u8; HEADER_BYTES];
         f2.read_exact(&mut header).unwrap();
         let on_disk = u32::from_be_bytes([header[0], header[1], header[2], header[3]]);
-        assert_eq!(on_disk, entry2, "on-disk location must match the returned entry");
+        assert_eq!(
+            on_disk, entry2,
+            "on-disk location must match the returned entry"
+        );
         let entry = entry2;
         let off = (entry >> 8) as usize * SECTOR_BYTES;
         f2.seek(SeekFrom::Start(off as u64)).unwrap();
@@ -658,7 +659,11 @@ mod tests {
         let engine = LiveRegionFile::open(&path).unwrap();
         // vanilla-style fallback write directly to the file (simulated)
         let payload = [9u8; 2048];
-        let mut f = fs::OpenOptions::new().read(true).write(true).open(&path).unwrap();
+        let mut f = fs::OpenOptions::new()
+            .read(true)
+            .write(true)
+            .open(&path)
+            .unwrap();
         f.seek(SeekFrom::Start(8192)).unwrap();
         let total = (payload.len() + 1) as u32;
         f.write_all(&total.to_be_bytes()).unwrap();
@@ -677,10 +682,17 @@ mod tests {
         // — that is vanilla's own behavior — so exercise the other chunk.
         let p = deflate_frame(&[7u8; 100]);
         let (entry_other, _) = engine.write_chunk(1, 0, &p, 1).unwrap();
-        assert!(entry_other >> 8 != 2, "Rust must not overwrite the fallback chunk");
+        assert!(
+            entry_other >> 8 != 2,
+            "Rust must not overwrite the fallback chunk"
+        );
         // in-place rewrite of the fallback chunk is legitimate reuse
         let (e_self, _) = engine.write_chunk(0, 0, &p, 2).unwrap();
-        assert_eq!(e_self >> 8, 2, "same-chunk rewrite should reuse its own run in place");
+        assert_eq!(
+            e_self >> 8,
+            2,
+            "same-chunk rewrite should reuse its own run in place"
+        );
     }
 
     #[test]
@@ -697,7 +709,11 @@ mod tests {
         let len = fs::metadata(&path).unwrap().len();
         let run_sectors = (last_entry & 0xFF) as u64;
         let expected = ((last_entry >> 8) as u64 + run_sectors) * SECTOR_BYTES as u64;
-        assert_eq!(len, expected.max(HEADER_BYTES as u64), "file grew across rewrites (run leak)");
+        assert_eq!(
+            len,
+            expected.max(HEADER_BYTES as u64),
+            "file grew across rewrites (run leak)"
+        );
     }
 
     #[test]
@@ -720,9 +736,13 @@ mod tests {
         // first attach's committed generation floors.
         let path = temp_region("live-r.4.4.mca");
         let e1 = EngineRegistry::global().get_or_open(&path).unwrap();
-        e1.write_chunk(0, 0, &deflate_frame(&[1u8; 100]), 1).unwrap();
+        e1.write_chunk(0, 0, &deflate_frame(&[1u8; 100]), 1)
+            .unwrap();
         let e2 = EngineRegistry::global().get_or_open(&path).unwrap();
-        assert!(Arc::ptr_eq(&e1, &e2), "registry returned two engines for one file");
+        assert!(
+            Arc::ptr_eq(&e1, &e2),
+            "registry returned two engines for one file"
+        );
         assert_eq!(e2.generations()[0], 1, "floors must be shared");
         EngineRegistry::global().remove(&path);
     }
