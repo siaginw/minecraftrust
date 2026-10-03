@@ -104,10 +104,12 @@ public class RegionWriteBench {
         long total = System.nanoTime() - t0;
         long[] sorted = nanos.clone();
         Arrays.sort(sorted);
-        double p = (q) -> sorted[(int) Math.min(sorted.length - 1,
-                Math.round(q * (sorted.length - 1)))] / 1000.0;
-        System.out.printf(Locale.ROOT,
+        java.util.function.DoubleUnaryOperator p = (q) ->
+                sorted[(int) Math.min(sorted.length - 1,
+                        Math.round(q * (sorted.length - 1)))] / 1000.0;
+        System.out.printf(java.util.Locale.ROOT,
                 "BENCH %s n=%d p50=%.1f p90=%.1f p99=%.1f max=%.1f total_ms=%.1f%n",
-                arm, sorted.length, p(0.50), p(0.90), p(0.99), p(1.0), total / 1e6);
+                arm, sorted.length, p.applyAsDouble(0.50), p.applyAsDouble(0.90),
+                p.applyAsDouble(0.99), p.applyAsDouble(1.0), total / 1e6);
     }
 }

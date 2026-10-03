@@ -86,7 +86,7 @@ def run_arm(arm: str, manifest: Path, out_dir: Path, n: int) -> dict | None:
                        capture_output=True, text=True, timeout=1800)
     for line in r.stdout.splitlines():
         if line.startswith("BENCH "):
-            fields = dict(kv.split("=") for kv in line.split()[1:])
+            fields = dict(kv.split("=", 1) for kv in line.split()[1:] if "=" in kv)
             return fields
     print(f"[ERROR] arm {arm} produced no BENCH line\n{r.stdout[-2000:]}\n{r.stderr[-2000:]}")
     return None
