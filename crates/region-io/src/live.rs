@@ -43,6 +43,9 @@ pub struct WriteStats {
     pub external_syncs: u64,
     pub in_place_reuses: u64,
     pub bytes_written: u64,
+    /// verify-before-free found the on-disk entry diverged from the engine's
+    /// belief: an uncoordinated writer touched this file (goal §10/§11)
+    pub external_write_detected: u64,
 }
 
 pub struct LiveRegionFile {
@@ -62,6 +65,10 @@ struct Inner {
     runs: Vec<u32>,
     /// file length in bytes
     len: usize,
+    /// goal §11 contamination state: an uncoordinated writer was observed on
+    /// this file — authority is refused for the rest of the session (no
+    /// automatic re-promotion)
+    disqualified: bool,
 }
 
 impl LiveRegionFile {
@@ -117,6 +124,7 @@ impl LiveRegionFile {
                 generations: vec![0; LOCATION_ENTRIES],
                 runs,
                 len: data_len,
+                disqualified: false,
             }),
             stats: Mutex::new(WriteStats::default()),
         })
@@ -124,6 +132,15 @@ impl LiveRegionFile {
 
     pub fn path(&self) -> &Path {
         &self.path
+    }
+
+    /// goal §11 contamination state (true = an uncoordinated writer was
+    /// observed and authority is refused for the session).
+    pub fn disqualified(&self) -> bool {
+        match self.inner.lock() {
+            Ok(inner) => inner.disqualified,
+            Err(_) => true, // poisoned: fail closed
+        }
     }
 
     /// Committed generation floors for all 1024 chunks. The Java hook seeds
@@ -204,11 +221,51 @@ impl LiveRegionFile {
         // fast path validation + allocation under the inner lock
         let (start, in_place) = {
             let mut inner = self.inner.lock().map_err(|_| STATUS_IO_ERROR)?;
+            if inner.disqualified {
+                // goal §11: fail closed for the session, no re-promotion
+                if let Ok(mut stats) = self.stats.lock() {
+                    stats.failures = stats.failures.wrapping_add(1);
+                }
+                return Err(STATUS_NOT_ELIGIBLE);
+            }
             if generation <= inner.generations[index] {
                 if let Ok(mut stats) = self.stats.lock() {
                     stats.stale_rejected = stats.stale_rejected.wrapping_add(1);
                 }
                 return Err(STATUS_STALE_GENERATION);
+            }
+            // goal §10/§12 VERIFY-BEFORE-FREE: the engine is about to act on
+            // its belief about this chunk's run. A writer that bypasses the
+            // coordinated seam (note_external_write / the Java hook) would
+            // have moved the on-disk entry out from under us — detect it
+            // BEFORE the stale belief can free live sectors, resync, and
+            // disqualify this file for the session (fail-closed exclusion;
+            // post-hoc file watching alone cannot close the race, so the
+            // region is excluded from authority instead).
+            let claimed = inner.runs[index];
+            if claimed != 0 {
+                let mut on_disk = [0u8; 4];
+                {
+                    let mut f = self.file.lock().map_err(|_| STATUS_IO_ERROR)?;
+                    f.seek(SeekFrom::Start((index * 4) as u64))
+                        .map_err(|_| STATUS_IO_ERROR)?;
+                    f.read_exact(&mut on_disk).map_err(|_| STATUS_IO_ERROR)?;
+                }
+                let disk_entry =
+                    u32::from_be_bytes([on_disk[0], on_disk[1], on_disk[2], on_disk[3]]);
+                if disk_entry != claimed {
+                    if let Ok(mut stats) = self.stats.lock() {
+                        stats.external_write_detected =
+                            stats.external_write_detected.wrapping_add(1);
+                    }
+                    let Inner { used, runs, .. } = &mut *inner;
+                    Self::resync_state(used, &mut Some(runs), &self.path)?;
+                    inner.disqualified = true;
+                    if let Ok(mut stats) = self.stats.lock() {
+                        stats.failures = stats.failures.wrapping_add(1);
+                    }
+                    return Err(STATUS_NOT_ELIGIBLE);
+                }
             }
             // Free the chunk's previous run BEFORE allocating: without this,
             // every rewrite leaks its old sectors and the file grows without
