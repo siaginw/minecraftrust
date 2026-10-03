@@ -159,6 +159,7 @@ public final class LiveSessionAdmissionTweaker implements ITweaker {
                 Runtime.getRuntime().addShutdownHook(new Thread(() -> {
                     System.out.println("[RustCraft-RegionWrite] shutdown metrics:");
                     System.out.println(com.rustcraft.bridge.RustRegionWriteHook.dumpMetrics());
+                    System.out.println(com.rustcraft.bridge.RustRegionWriteHook.dumpProvenance());
                     System.out.println("[RustCraft-RegionWrite] transformer status="
                             + com.rustcraft.coremod.RegionFileAuthorityTransformer.transformCount
                             + " " + com.rustcraft.coremod.RegionFileAuthorityTransformer.lastTransformStatus);
