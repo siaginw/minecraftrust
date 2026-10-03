@@ -130,15 +130,25 @@ def main() -> int:
         from campaign.evidence_db import EvidenceDB
         git_sha_now = os.popen("git rev-parse HEAD").read().strip()
         db = EvidenceDB(ROOT / "target" / "authority-review" / "evidence.db")
-        skip_mode = args.read_mode if args.read_mode != "OFF" else args.mode
-        floor = args.min_reads if args.read_mode != "OFF" else min_shadow
-        counter = ("regionRead.readSuccess" if args.read_mode != "OFF"
-                   else "regionWrite.rustOk")
-        guards = (("regionRead.partialStreamAttempts",)
-                  if args.read_mode != "OFF" else ())
-        skip, seen_n = db.already_evidenced(
-            f"region-{skip_mode.lower()}-{target}", target, skip_mode,
-            git_sha_now, counter, floor, required_zeros=guards)
+        # Combined campaigns need BOTH floors from ONE session: only skip
+        # when a single prior run met both. Solo campaigns keep single-floor
+        # logic. (skip uses "OFF" as the write-mode component when read-only.)
+        write_component = "OFF" if args.mode == "OFF" else args.mode.lower()
+        read_component = args.read_mode.lower()
+        combined = args.mode != "OFF" and args.read_mode != "OFF"
+        if combined:
+            skip = False
+            seen_n = 0
+        else:
+            skip_mode = args.read_mode if args.read_mode != "OFF" else args.mode
+            floor = args.min_reads if args.read_mode != "OFF" else min_shadow
+            counter = ("regionRead.readSuccess" if args.read_mode != "OFF"
+                       else "regionWrite.rustOk")
+            guards = (("regionRead.partialStreamAttempts",)
+                      if args.read_mode != "OFF" else ())
+            skip, seen_n = db.already_evidenced(
+                f"region-{skip_mode.lower()}-{target}", target, skip_mode,
+                git_sha_now, counter, floor, required_zeros=guards)
         if skip:
             print(f"[skip] already evidenced: {counter}={seen_n} >= {floor} "
                   f"at {git_sha_now} - citing stored receipt, skipping boot")
