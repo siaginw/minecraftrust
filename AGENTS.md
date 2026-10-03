@@ -19,9 +19,16 @@ Read this file before writing or modifying tests, campaigns, or runners.
 - Do not weaken proof criteria when shortening: keep the event-count target,
   drop the arbitrary waiting.
 
-Central module: `tools/testing/test_execution_policy.py` (`--test-tier
-dev|standard|milestone|soak`; explicit `--stability-s` / `--boot-timeout-s`
-overrides win). Full policy: `docs/engineering/TEST_EXECUTION_POLICY.md`.
+Central module: `tools/testing/test_execution_policy.py` (campaign surface:
+`tools/campaign/policy.py`; `--test-tier dev|standard|milestone|soak`;
+explicit `--stability-s` / `--boot-timeout-s` / `--hard-timeout-s` overrides
+win). Full policy: `docs/engineering/TEST_EXECUTION_POLICY.md`. Shared
+campaign toolkit: `tools/campaign/` (session/waits/evidence/restart/receipt/
+telemetry) — see `docs/engineering/CAMPAIGN_TOOLING.md`. Before creating or
+modifying a live campaign: use the shared toolkit, choose the narrowest
+tier, define evidence targets explicitly, terminate when targets + stability
+succeed, emit a standard receipt, justify any SOAK, and never introduce an
+unexplained long fixed wait.
 
 Before adding or modifying a RustCraft test campaign, select the narrowest
 test tier that proves the requested property. Routine runs must not use

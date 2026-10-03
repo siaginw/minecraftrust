@@ -161,6 +161,34 @@ public final class LiveSessionAdmissionTweaker implements ITweaker {
                     System.out.println(com.rustcraft.bridge.RustCompressionEngine.dumpMetrics());
                 }, "rustcraft-compression-metrics"));
             }
+            // LIVE region counters: periodic snapshot file for campaign
+            // runners (event-driven completion — goal §15 of the tooling
+            // refactor). Every 2s, key=value lines; runners poll the file
+            // instead of regexing logs. Default OFF with the experiments.
+            final String metricsFile =
+                    System.getProperty("rustcraft.regionMetricsFile");
+            if (metricsFile != null && metricsFile.length() > 0
+                    && (Boolean.getBoolean("rustcraft.regionReadExperiment")
+                        || Boolean.getBoolean("rustcraft.regionWriteExperiment"))) {
+                Thread dumper = new Thread(() -> {
+                    while (true) {
+                        try {
+                            StringBuilder sb = new StringBuilder();
+                            sb.append(com.rustcraft.bridge.RustRegionReadHook.snapshotLines());
+                            sb.append(com.rustcraft.bridge.RustRegionWriteHook.snapshotLines());
+                            java.nio.file.Path out = java.nio.file.Paths.get(metricsFile);
+                            if (out.getParent() != null) {
+                                java.nio.file.Files.createDirectories(out.getParent());
+                            }
+                            java.nio.file.Files.write(out,
+                                    sb.toString().getBytes("UTF-8"));
+                        } catch (Throwable ignore) { }
+                        try { Thread.sleep(2000); } catch (InterruptedException ie) { return; }
+                    }
+                }, "rustcraft-region-metrics-dumper");
+                dumper.setDaemon(true);
+                dumper.start();
+            }
             // Region-read metrics at shutdown.
             if (Boolean.getBoolean("rustcraft.regionReadExperiment")) {
                 Runtime.getRuntime().addShutdownHook(new Thread(() -> {

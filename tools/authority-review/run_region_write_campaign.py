@@ -24,6 +24,7 @@ import re
 import shutil
 import subprocess
 import sys
+import threading
 import time
 import uuid
 from pathlib import Path
@@ -31,9 +32,17 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "tools" / "live-shadow-v2"))
 sys.path.insert(0, str(ROOT / "tools" / "authority-review"))
+sys.path.insert(0, str(ROOT / "tools"))
 
 from run_join_probe import JAVA, prepare_server, stop, wait_for  # noqa: E402
 from join_probe import run_probe  # noqa: E402
+from campaign.waits import hold_stability, wait_for_condition  # noqa: E402
+from campaign.evidence import (  # noqa: E402
+    ALL, CounterAtLeast, ZeroCounter, EvidenceTracker,
+)
+from campaign.telemetry import parse_metrics_snapshot  # noqa: E402
+from campaign.receipt import write_receipt, human_summary  # noqa: E402
+from campaign import policy as campaign_policy  # noqa: E402
 
 SRG_JAR = Path(r"D:\minecraftrust\third_party_reference\minecraft\minecraft_server.1.12.2.srg.jar")
 
@@ -74,11 +83,32 @@ def main() -> int:
                         help="Enable the region READ experiment in this mode")
     parser.add_argument("--min-reads", type=int, default=0,  # per-run read-event floor
                         help="Minimum Rust-read events for a PASS (shadow)")
+    parser.add_argument("--hard-timeout-s", type=int, default=None,
+                        help="Override the evidence deadline ceiling")
+    parser.add_argument("--soak-seconds", type=int, default=None)
+    parser.add_argument("--soak-reason", type=str, default=None)
+    campaign_policy.add_tier_argument(parser)
     args = parser.parse_args()
 
     port = args.port or default_port(args.target)
-    min_shadow = args.min_shadow or (1000 if args.target == "A" else 5000)
+    campaign_policy.require_soak_config(args.test_tier, args.soak_seconds,
+                                        args.soak_reason)
+    # The probe hold is EVENT-DRIVEN: the in-server teleport controller runs
+    # (rounds*16+1) legs at ~8s/leg — the hold scales with that schedule plus
+    # the tier stability window. Explicit --stability-s still wins.
+    expected_legs = args.teleport_rounds * 16 + 1 if args.teleport_rounds > 0 else 0
+    probe_hold_default = (expected_legs * 8 + 45) if expected_legs else 30.0
+    tier = campaign_policy.resolve(
+        args.test_tier,
+        post_target_stability_s=args.stability_s
+        if args.stability_s else None,
+        boot_timeout_s=args.boot_timeout_s,
+        hard_timeout_s=args.hard_timeout_s,
+        soak_s=args.soak_seconds,
+    )
+    args.boot_timeout_s = tier.boot_timeout_s
     target = args.target
+    min_shadow = args.min_shadow or (1000 if target == "A" else 5000)
     if args.output:
         out_dir = args.output
     else:
@@ -148,6 +178,8 @@ def main() -> int:
             "-Drustcraft.regionWriteExperiment=true",
             f"-Drustcraft.regionWriteMode={args.mode}",
             "-Drustcraft.regionWriteMirror=" + str(mirror_root),
+            # LIVE counters for event-driven completion (goal §15)
+            "-Drustcraft.regionMetricsFile=" + str(out_dir / "region-metrics.txt"),
         ]
     if args.teleport_rounds > 0:
         extra_args += [
@@ -158,6 +190,8 @@ def main() -> int:
         extra_args += [
             "-Drustcraft.regionReadExperiment=true",
             f"-Drustcraft.regionReadMode={args.read_mode}",
+            # LIVE counters for event-driven completion (goal §15)
+            "-Drustcraft.regionMetricsFile=" + str(out_dir / "region-metrics.txt"),
         ]
     attribution_jar = ROOT / "target" / "rustcraft-attribution.jar"
     attribution_dir = out_dir / "attribution"
@@ -216,40 +250,120 @@ def main() -> int:
 
         probe_ok = True
         probe_receipts = []
-        stability = args.stability_s or (560.0 if args.teleport_rounds > 0 else 30.0)
-        for rnd in range(max(1, args.probe_rounds)):
-            print(f"[probe] round {rnd + 1}/{args.probe_rounds}")
-            receipt = run_probe("127.0.0.1", port, f"RWP{target}{rnd}",
-                                expect_forge=True, client_mods=client_mods,
-                                connect_timeout_s=20.0, login_timeout_s=120.0,
-                                stability_s=stability)
+        # goal §9/§11: the probe's hold is the EVIDENCE DEADLINE ceiling
+        # (scaled to the teleport-event schedule), never a fixed target.
+        stability = args.stability_s or float(probe_hold_default)
+
+        # EVIDENCE-DRIVEN COMPLETION (goals §10/§18): the JVM dumper thread
+        # writes regionRead.*/regionWrite.* counters every 2s; the campaign
+        # ends when the evidence targets hold + a short stability window
+        # passes — bounded by the evidence deadline.
+        metrics_file = out_dir / "region-metrics.txt"
+        evidence_targets = []
+        if args.read_mode == "SHADOW":
+            evidence_targets += [
+                CounterAtLeast("regionRead.readSelected", args.min_reads),
+                ZeroCounter("regionRead.shadowMismatch"),
+                ZeroCounter("regionRead.partialStreamAttempts"),
+                ZeroCounter("regionRead.errors"),
+            ]
+        elif args.read_mode == "ON_EXPERIMENTAL":
+            evidence_targets += [
+                CounterAtLeast("regionRead.readSuccess", args.min_reads),
+                ZeroCounter("regionRead.partialStreamAttempts"),
+                ZeroCounter("regionRead.errors"),
+            ]
+        if args.mode == "SHADOW":
+            evidence_targets += [CounterAtLeast("regionWrite.rustOk", min_shadow)]
+        evidence = ALL(evidence_targets) if evidence_targets else None
+        tracker = (EvidenceTracker(evidence, lambda: parse_metrics_snapshot(metrics_file),
+                                   lambda: jvm_log.read_text(encoding="utf-8",
+                                                             errors="replace"))
+                   if evidence else None)
+
+        def probe_worker(round_idx: int) -> None:
+            try:
+                receipt = run_probe("127.0.0.1", port, f"RWP{target}{round_idx}",
+                                    expect_forge=True, client_mods=client_mods,
+                                    connect_timeout_s=20.0, login_timeout_s=120.0,
+                                    stability_s=stability)
+            except (OSError, ValueError):
+                receipt = {"verdict": "FAIL", "failure": "probe thread error"}
             probe_receipts.append(receipt)
-            verdict = receipt.get("verdict")
-            print(f"[probe] round {rnd + 1}: verdict={verdict} "
-                  f"observed={json.dumps(receipt.get('observed'))}")
-            if verdict != "PASS":
-                # The probe's stability hold is a NETWORK metric; the
-                # teleport corridor periodically kills the headless client's
-                # transport. The world side stays healthy — judge storage by
-                # the save/compare phase below, not the probe socket.
+
+        probe_thread = None
+        evidence_deadline = time.monotonic() + (
+            args.hard_timeout_s if args.hard_timeout_s else stability + 120.0)
+        exit_reason = "EVIDENCE_COMPLETE"
+        started = time.monotonic()
+        try:
+            for rnd in range(max(1, args.probe_rounds)):
+                print(f"[probe] round {rnd + 1}/{args.probe_rounds}")
+                probe_receipts.clear()
+                probe_thread = threading.Thread(
+                    target=probe_worker, args=(rnd,), daemon=True)
+                probe_thread.start()
+
+                if tracker is not None:
+                    # poll evidence until met or the deadline ceiling hits
+                    while tracker.satisfied_at is None:
+                        if time.monotonic() > evidence_deadline:
+                            exit_reason = "TIMEOUT"
+                            break
+                        if process.poll() is not None:
+                            exit_reason = "SERVER_EXIT"
+                            break
+                        time.sleep(2.0)
+                    if exit_reason == "EVIDENCE_COMPLETE":
+                        # short stability window, re-verified (goal §10)
+                        stable = hold_stability(
+                            tier.post_target_stability_s,
+                            verify=lambda: tracker.poll(time.monotonic()))
+                        wall = time.monotonic() - started
+                        print(f"[evidence] met at {wall:.0f}s + stability "
+                              f"{tier.post_target_stability_s:.0f}s: "
+                              f"{tracker.summary()}")
+                        if not stable:
+                            exit_reason = "ASSERTION_FAILURE"
+                else:
+                    # no evidence targets: legacy timing (probe holds the
+                    # schedule-derived window)
+                    hold_stability(stability, poll_s=5.0)
+
+                # stop the probe: graceful server stop ends the probe hold
+                break_out = exit_reason != "EVIDENCE_COMPLETE" or rnd + 1 >= args.probe_rounds
+                if break_out:
+                    break
+            if tracker is None or exit_reason != "EVIDENCE_COMPLETE":
+                # give the probe its window if evidence never completed
+                if probe_thread is not None:
+                    probe_thread.join(timeout=max(0.0, stability -
+                                                  (time.monotonic() - started)))
+            # probe receipt evaluation (world side; transport limitations are
+            # tolerated — the storage evidence gates decide the verdict)
+            for receipt in probe_receipts:
+                verdict = receipt.get("verdict")
                 obs = receipt.get("observed", {})
-                world_ok = (obs.get("login_completed") and obs.get("fml_handshake_complete")
+                world_ok = (obs.get("login_completed")
+                            and obs.get("fml_handshake_complete")
                             and obs.get("play_reached"))
-                if rnd == 0:
-                    # round 1 on a cold server must stream real chunk traffic
+                if rnd == 0 and verdict != "PASS":
                     world_ok = world_ok and obs.get("chunk_packets", 0) >= 500
-                # later rounds run on a WARM server: few new chunk packets is
-                # expected and healthy
-                print(f"[probe] transport-limited probe (world_ok={world_ok}, "
-                      f"failure={receipt.get('failure')!r}) — continuing to "
-                      f"save/compare phase")
-                if not world_ok:
-                    probe_ok = False
+                print(f"[probe] verdict={verdict} observed={json.dumps(obs)}")
+                if verdict != "PASS":
+                    print(f"[probe] transport-limited probe (world_ok={world_ok}, "
+                          f"failure={receipt.get('failure')!r})")
+                    if not world_ok:
+                        probe_ok = False
+        finally:
+            if probe_thread is not None:
+                probe_thread.join(timeout=10)
         (out_dir / "probe-receipts.json").write_text(
             json.dumps(probe_receipts, indent=2, sort_keys=True) + "\n")
         if not probe_ok:
-            print("[ERROR] probe rounds failed (world side unhealthy)", file=sys.stderr)
-            return 1
+            print("[ERROR] probe rounds failed (world side unhealthy)",
+                  file=sys.stderr)
+            exit_reason = "PROBE_FAILURE"
 
         # force world saves while chunks are loaded -> real region writes
         for i in range(max(1, args.save_flushes)):
@@ -259,7 +373,11 @@ def main() -> int:
                 process.stdin.flush()
             except (OSError, ValueError):
                 pass
-            time.sleep(20.0)
+            # wait for the save to complete instead of a fixed idle
+            wait_for(jvm_log, r"Saved the world", 300)
+            time.sleep(2.0)
+        print(f"[exit] {exit_reason} after "
+              f"{time.monotonic() - started:.0f}s")
     finally:
         print("[stop] stopping server (graceful world save)")
         stop(process, timeout_s=300)
@@ -479,6 +597,30 @@ def main() -> int:
                 break
             print(f"[restart] cycle {cycle}: OK")
 
+    verdict = "PASS" if failures == 0 else "FAIL"
+    final_metrics = parse_metrics_snapshot(out_dir / "region-metrics.txt")
+    receipt_path = write_receipt(
+        out_dir,
+        campaign_name=f"region-{args.mode.lower()}-{target}",
+        target=target, mode=f"write={args.mode},read={args.read_mode}",
+        test_tier=args.test_tier,
+        git_sha=os.popen("git rev-parse HEAD").read().strip(),
+        wall_time_s=round(time.monotonic() - started, 1),
+        hard_timeout_s=tier.hard_timeout_s,
+        stability_s=tier.post_target_stability_s,
+        evidence_targets=[c.name for c in evidence_targets] if evidence_targets else [],
+        evidence_observed=final_metrics,
+        probe_result=(probe_receipts[0].get("verdict") if probe_receipts else None),
+        exit_reason=exit_reason,
+        verdict=verdict,
+        artifact_paths=[str(out_dir / "server.log"),
+                        str(out_dir / "region-metrics.txt")],
+    )
+    print(human_summary(
+        f"Region {args.mode} Gate {target}", args.test_tier, verdict,
+        exit_reason, time.monotonic() - started, tier.hard_timeout_s,
+        [f"{k}={v}" for k, v in sorted(final_metrics.items())],
+        tier.post_target_stability_s, receipt_path))
     if failures:
         print(f"REGION_WRITE_CAMPAIGN_FAILED Gate {target} ({failures} failures)")
         return 1

@@ -466,6 +466,27 @@ public final class RustRegionWriteHook {
         LAST_FAIL_PATH = path;
     }
 
+    /** Machine-polled counter snapshot (key=value lines; goal §15). */
+    public static String snapshotLines() {
+        StringBuilder errs = new StringBuilder();
+        for (int i = 1; i < RUST_ERR_BY_CODE.length; i++) {
+            long n = RUST_ERR_BY_CODE[i].get();
+            if (n != 0) errs.append("regionWrite.err").append(i).append('=')
+                    .append(n).append('\n');
+        }
+        StringBuilder sb = new StringBuilder();
+        sb.append("regionWrite.entryCalls=").append(ENTRY_CALLS.get()).append('\n');
+        sb.append("regionWrite.rustAdmitted=").append(RUST_ADMITTED.get()).append('\n');
+        sb.append("regionWrite.rustOk=").append(RUST_OK.get()).append('\n');
+        sb.append("regionWrite.rustFailed=").append(RUST_FAILED.get()).append('\n');
+        sb.append("regionWrite.exitNotes=").append(EXIT_NOTES.get()).append('\n');
+        sb.append("regionWrite.errors=").append(ERRORS.get()).append('\n');
+        sb.append("regionWrite.regionDisqualified=").append(REGION_DISQUALIFIED.get()).append('\n');
+        sb.append("regionWrite.externalWriterObserved=").append(EXTERNAL_WRITER_OBSERVED.get()).append('\n');
+        sb.append(errs);
+        return sb.toString();
+    }
+
     public static String dumpMetrics() {
         StringBuilder errs = new StringBuilder();
         for (int i = 1; i < RUST_ERR_BY_CODE.length; i++) {

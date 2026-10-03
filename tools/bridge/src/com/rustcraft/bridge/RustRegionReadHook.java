@@ -370,6 +370,23 @@ public final class RustRegionReadHook {
         }
     }
 
+    /** Machine-polled counter snapshot (key=value lines; goal §15). */
+    public static String snapshotLines() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("regionRead.readSelected=").append(READ_SELECTED.get()).append('\n');
+        sb.append("regionRead.readSuccess=").append(READ_SUCCESS.get()).append('\n');
+        sb.append("regionRead.readFailure=").append(READ_FAILURE.get()).append('\n');
+        sb.append("regionRead.javaReadFallback=").append(JAVA_READ_FALLBACK.get()).append('\n');
+        sb.append("regionRead.missing=").append(READ_MISSING.get()).append('\n');
+        sb.append("regionRead.corrupt=").append(READ_CORRUPT.get()).append('\n');
+        sb.append("regionRead.unsupportedCompression=").append(READ_UNSUPPORTED_COMPRESSION.get()).append('\n');
+        sb.append("regionRead.partialStreamAttempts=").append(PARTIAL_STREAM_ATTEMPTS.get()).append('\n');
+        sb.append("regionRead.shadowCompared=").append(SHADOW_COMPARED.get()).append('\n');
+        sb.append("regionRead.shadowMismatch=").append(SHADOW_MISMATCH.get()).append('\n');
+        sb.append("regionRead.errors=").append(ERRORS.get()).append('\n');
+        return sb.toString();
+    }
+
     public static String dumpMetrics() {
         return "regionRead.hook enabled=" + ENABLED + " mode=" + MODE + " cap=" + CAP
                 + " readSelected=" + READ_SELECTED.get()

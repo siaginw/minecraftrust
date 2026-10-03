@@ -2,7 +2,7 @@
 
 This is the canonical status document. It is updated when a qualification or campaign milestone changes; historical detail lives in [docs/research/](research/) and in the evidence tree under [`machine/`](../machine/). For the public overview, see the [README](../README.md); for the plan, the [roadmap](ROADMAP.md).
 
-**Snapshot date:** 2026-10-03 · **Head at snapshot:** `RUST_REGION_WRITE_AUTHORITY_PROVEN_REVELATION_BOUNDED` (bounded live region-read+write authority; see `git log` for the exact HEAD)
+**Snapshot date:** 2026-10-03 · **Head at snapshot:** `RUST_REGION_WRITE_AUTHORITY_PROVEN_REVELATION_BOUNDED` — Region WRITE authority proven (Revelation bounded); Region READ authority IN PROGRESS (Gate A shadow+ON green; Gate C ON pending rerun on the new event-driven tooling); see `git log` for the exact HEAD
 
 ---
 
