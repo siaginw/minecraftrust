@@ -22,7 +22,7 @@ use std::collections::HashMap;
 use std::fs::{self, OpenOptions};
 use std::io::{Read, Seek, SeekFrom, Write};
 use std::path::{Path, PathBuf};
-use std::sync::{Arc, Mutex, OnceLock};
+use std::sync::{Mutex, OnceLock};
 
 use super::{HEADER_BYTES, LOCATION_ENTRIES, MAX_PAYLOAD_BYTES, SECTOR_BYTES};
 
@@ -84,6 +84,9 @@ impl LiveRegionFile {
         if let Some(parent) = path.parent() {
             fs::create_dir_all(parent).map_err(|e| e.to_string())?;
         }
+        // create(true) WITHOUT truncate: the file usually pre-exists with
+        // thousands of vanilla chunks — truncating would destroy the world
+        #[allow(clippy::suspicious_open_options)]
         let mut file = OpenOptions::new()
             .read(true)
             .write(true)
@@ -590,6 +593,7 @@ fn normalize_key(path: &Path) -> PathBuf {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use std::sync::Arc;
 
     fn temp_region(name: &str) -> PathBuf {
         let dir = std::env::temp_dir().join("regionio-live-test");

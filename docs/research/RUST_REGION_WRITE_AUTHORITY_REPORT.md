@@ -132,14 +132,28 @@ ever observed, and partial authority remains valid if one appears.
 
 ## 6. Performance (goal §27-§28)
 
-Save-burst A/B (identical workload, Java-only vs Rust ON): see
-`SAVE_BURST_AB` output in the campaign evidence; per-flush save-completion
-latency and process-CPU/GC/disk-byte deltas are recorded by
-`tools/authority-review/run_save_burst_ab.py`. The coherency mechanism's
-steady-state cost is one 4-byte header read per Rust write
-(verify-before-free) plus one free-list mirror per commit — measured against
-the physical-write win (Rust p50 15.8µs vs vanilla 25.4µs, p90 2.1x) in the
-previous milestone's bench, which remains valid for the engine itself.
+Save-burst A/B (`run_save_burst_ab.py`, identical Gate C workloads: full FML
+probe join, 96-teleport-leg corridor, 4 `save-all flush` bursts, graceful
+stop):
+
+| metric | Java-only | Rust ON authority |
+|--------|-----------|-------------------|
+| chunk packets streamed | 7,525 | 6,504 |
+| first save-burst completion | 6,008 ms | **6,007 ms** |
+| subsequent flushes | 1.0-1.4 ms | 1.2-1.7 ms |
+| process CPU delta (save window) | 118.7 s | 112.0 s |
+| Rust writes in session | — | 9,593 (0 failed) |
+| disk growth (regions) | 94 KB | 233 KB (more unique chunks) |
+
+Burst-level parity: the first flush is disk-bound (full region sweep) and
+the Rust authority adds nothing measurable at burst scale. The intermediate
+measurement that motivated a fix: the original coherency mirror rebuilt
+vanilla's whole free list per write (14.0 s first flush) — replaced by
+incremental O(run) publication into vanilla's own list instance, after
+which parity holds. The physical-write engine win (Rust p50 15.8µs vs
+vanilla 25.4µs, p90 2.1x — previous milestone's bench) still holds for the
+engine itself; §29's direct payload staging remains future work, correctly
+sequenced after coherency.
 
 ## 7. Verdict (goal §33)
 

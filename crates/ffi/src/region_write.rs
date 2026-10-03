@@ -50,6 +50,10 @@ fn path_from_raw(addr: i64, len: i32) -> Option<String> {
 /// JNI: open (or attach to) the live engine for a region file. The path bytes
 /// live at `path_addr` for `path_len` bytes (UTF-8, no NUL). Returns the
 /// engine handle (>0) or 0 on failure.
+///
+/// # Safety
+/// `path_addr` must reference live memory of at least `path_len` bytes for
+/// the duration of the call.
 #[no_mangle]
 pub unsafe extern "system" fn Java_com_rustcraft_bridge_RegionWriteCtx_create(
     _env: *mut c_void,
@@ -61,16 +65,14 @@ pub unsafe extern "system" fn Java_com_rustcraft_bridge_RegionWriteCtx_create(
         Some(p) => p,
         None => return 0,
     };
-    match std::panic::catch_unwind(|| {
+    std::panic::catch_unwind(|| {
         EngineRegistry::global()
             .get_or_open(std::path::Path::new(&path))
             .ok()
             .map(|arc| Box::into_raw(Box::new(arc)) as i64)
             .unwrap_or(0)
-    }) {
-        Ok(h) => h,
-        Err(_) => 0,
-    }
+    })
+    .unwrap_or(0)
 }
 
 /// JNI: admitted write. `payload_addr/len` is the OPAQUE_FINAL_REGION_PAYLOAD
@@ -79,6 +81,10 @@ pub unsafe extern "system" fn Java_com_rustcraft_bridge_RegionWriteCtx_create(
 /// Returns the new location entry (>0; count = entry & 0xFF, sector =
 /// entry >> 8), or a negative status: -1 STALE_GENERATION, -2 INVALID_RECORD,
 /// -3 IO_ERROR, -4 CAPACITY_ERROR, -5 NOT_ELIGIBLE, -6 BAD_HANDLE.
+/// # Safety
+/// Numeric handles/addresses must originate from this module's own
+/// create/prepare calls; raw addresses must reference live memory of
+/// at least the stated capacity for the duration of the call.
 #[no_mangle]
 pub unsafe extern "system" fn Java_com_rustcraft_bridge_RegionWriteCtx_write(
     _env: *mut c_void,
@@ -95,10 +101,8 @@ pub unsafe extern "system" fn Java_com_rustcraft_bridge_RegionWriteCtx_write(
             Some(e) => e,
             None => return -(STATUS_BAD_HANDLE as i64),
         };
-        if x < 0
-            || x > 31
-            || z < 0
-            || z > 31
+        if !(0..=31).contains(&x)
+            || !(0..=31).contains(&z)
             || payload_len < 0
             || (payload_len > 0 && payload_addr == 0)
         {
@@ -126,6 +130,10 @@ pub unsafe extern "system" fn Java_com_rustcraft_bridge_RegionWriteCtx_write(
 /// JNI: vanilla fallback notice. Java completed its own write for (x, z) and
 /// holds `entry`; `generation` is the ticket value Java committed for the
 /// fallback. Returns 0 on success or a negative status.
+/// # Safety
+/// Numeric handles/addresses must originate from this module's own
+/// create/prepare calls; raw addresses must reference live memory of
+/// at least the stated capacity for the duration of the call.
 #[no_mangle]
 pub unsafe extern "system" fn Java_com_rustcraft_bridge_RegionWriteCtx_noteExternal(
     _env: *mut c_void,
@@ -141,7 +149,7 @@ pub unsafe extern "system" fn Java_com_rustcraft_bridge_RegionWriteCtx_noteExter
             Some(e) => e,
             None => return -STATUS_BAD_HANDLE,
         };
-        if x < 0 || x > 31 || z < 0 || z > 31 || entry <= 0 || generation < 0 {
+        if !(0..=31).contains(&x) || !(0..=31).contains(&z) || entry <= 0 || generation < 0 {
             return -STATUS_INVALID_RECORD;
         }
         match eng.note_external_write(x as u8, z as u8, entry as u32, generation as u64) {
@@ -158,6 +166,10 @@ pub unsafe extern "system" fn Java_com_rustcraft_bridge_RegionWriteCtx_noteExter
 /// JNI: close the handle. Drops the Java-side reference AND removes the
 /// engine from the path registry so a later reopen of the same file gets a
 /// fresh engine bound to the new file state. Idempotent (<=0 is a no-op).
+///
+/// # Safety
+/// `handle` must be a value returned by create that has not been closed
+/// (single-owner contract, enforced Java-side by AtomicLong CAS).
 #[no_mangle]
 pub unsafe extern "system" fn Java_com_rustcraft_bridge_RegionWriteCtx_close(
     _env: *mut c_void,
@@ -184,6 +196,10 @@ pub unsafe extern "system" fn Java_com_rustcraft_bridge_RegionWriteCtx_close(
 /// (rust_selected, success, stale_rejected, failures, external_syncs,
 /// in_place_reuses, bytes_written, reserved). Returns the field count (8) or
 /// a negative status.
+/// # Safety
+/// Numeric handles/addresses must originate from this module's own
+/// create/prepare calls; raw addresses must reference live memory of
+/// at least the stated capacity for the duration of the call.
 #[no_mangle]
 pub unsafe extern "system" fn Java_com_rustcraft_bridge_RegionWriteCtx_statsSnapshot(
     _env: *mut c_void,
@@ -233,6 +249,10 @@ pub unsafe extern "system" fn Java_com_rustcraft_bridge_RegionWriteCtx_statsSnap
 /// a freshly-created Java hook state can seed its ticket counters past every
 /// generation this process's engine has already committed. Returns the entry
 /// count (1024) or a negative status.
+/// # Safety
+/// Numeric handles/addresses must originate from this module's own
+/// create/prepare calls; raw addresses must reference live memory of
+/// at least the stated capacity for the duration of the call.
 #[no_mangle]
 pub unsafe extern "system" fn Java_com_rustcraft_bridge_RegionWriteCtx_generationsSnapshot(
     _env: *mut c_void,
@@ -268,6 +288,10 @@ pub unsafe extern "system" fn Java_com_rustcraft_bridge_RegionWriteCtx_generatio
 /// RegionFile.field_76714_f (vanilla's free list; inverted polarity: Java
 /// true = free) so in-session reads pass the bounds check and vanilla
 /// fallback writes cannot clobber Rust-occupied sectors.
+/// # Safety
+/// Numeric handles/addresses must originate from this module's own
+/// create/prepare calls; raw addresses must reference live memory of
+/// at least the stated capacity for the duration of the call.
 #[no_mangle]
 pub unsafe extern "system" fn Java_com_rustcraft_bridge_RegionWriteCtx_usedSnapshot(
     _env: *mut c_void,
