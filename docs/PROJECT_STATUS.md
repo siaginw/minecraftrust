@@ -2,7 +2,7 @@
 
 This is the canonical status document. It is updated when a qualification or campaign milestone changes; historical detail lives in [docs/research/](research/) and in the evidence tree under [`machine/`](../machine/). For the public overview, see the [README](../README.md); for the plan, the [roadmap](ROADMAP.md).
 
-**Snapshot date:** 2026-10-02 · **Head at snapshot:** single-copy boundary milestone (`SINGLE_COPY_NETTY_PACKET_BODY_PROVEN`; see `git log` for the exact HEAD)
+**Snapshot date:** 2026-10-02 · **Head at snapshot:** `RUST_REGION_WRITE_AUTHORITY_PROVEN` (Gate A bounded live region-write authority; see `git log` for the exact HEAD)
 
 ---
 
@@ -108,6 +108,7 @@ Unconstrained production authority remains **`false`** everywhere (`PacketAuthor
     (`docs/research/NATIVE_CHUNK_PERFORMANCE_CLOSURE.md`, `docs/research/NATIVE_CHUNK_PERFORMANCE_SCORECARD.md`, `docs/research/NATIVE_CHUNK_REAL_SERVER_PROFILE.md`, `docs/research/NATIVE_CHUNK_MEMORY_GC_REPORT.md`, `docs/research/NATIVE_CHUNK_JNI_COPY_AUDIT.md`).
 - **True Direct Packet Path Closed (Network Boundary Milestone):** Completed the elimination of legacy migration infrastructure (`CaptureDraft.extract`, `OwnedPacketSnapshot`, `RCSNAP02` transport byte array, `IN_BUF`/`OUT_BUF` intermediaries). The retained fast path encodes Morton section wire cache directly into Netty's pooled off-heap direct buffer address (`encodePacketPayloadV2` writing to `directBuf.memoryAddress()`), which is transferred directly into the Netty socket `PacketBuffer`.
   - **Payload copies:** Exactly 1 payload copy across the entire pipeline (0 copies for synthetic in-place framing; down from 2-3 copies).
+    *(Historical claim for THIS milestone's boundary. Superseded by the later single-copy proof, which builds the complete pre-compression body with ONE payload write into the final buffer — see `SINGLE_COPY_NETTY_PACKET_BODY_REPORT.md`. The two claims measure different boundaries and do not contradict.)*
   - **JVM Heap Allocation:** Exactly 0 B (saves 49,480 B per chunk packet, preventing ~9.9 MB/s of Young Gen GC churn).
   - **Latency:** 4,566 ns mean / 2,700 ns p50 (2.14x speedup over vanilla 9,749 ns baseline).
   - **Safety & Lifetime:** 14/14 unit contract tests passing (`DirectNettySafetyAndLifetimeTest.java`); backpressure bounded (`MAX_OUTSTANDING_DIRECT_BUFFERS = 128`); 30s timed eviction prevents dangling packet leaks.
@@ -370,7 +371,10 @@ probes check the port and pins before every launch.
 **Completed milestones:**
 1. Rust **packet authority review** and bounded fail-closed authority experiment (`BOUNDED_AUTHORITY_EXPERIMENT_REPORT.md`).
 2. Retained Rust **ChunkState** engine ownership migration (`RETAINED_CHUNKSTATE_COMPLETION_REPORT.md`): flat Morton memory layout, one-time RCSNAP02 seeding, static section wire byte caching (0.70 µs, 261x speedup), live smoke Gate A (32/32) and Gate B (64/64) passed.
+3. **Region I/O engine** (`RUST_STORAGE_NBT_ANVIL_REPORT.md`): exact .mca reader/writer/scanner, 76,404 shadow reads byte-exact, write durability proven.
+4. **Bounded live region-write authority** (`RUST_REGION_WRITE_AUTHORITY_REPORT.md`): Gate A live authority (3,928 writes, 25/25 restarts) + writer-attribution-complete shadow proof on both gates; Gate C live authority gated on external-writer coexistence, now resolved by attribution (goal §5: 0 UNKNOWN writers) + verify-before-free disqualification.
 
 **Next major engineering objective (in order):**
-1. Rust **ChunkState API Delegation**: progressive delegation of read/write queries (`getBlockState`, `setBlockState`, light updates) directly to native Rust memory.
-2. Direct native Anvil/Region I/O ingest bypassing Java chunk primer allocations.
+1. **Save-burst performance closure** for region authority (MSPT / save-completion A/B on eligible regions).
+2. **Direct payload staging** at the region seam (eliminate the one heap→direct copy; correctness first, benchmarked separately).
+3. Rust **ChunkState API Delegation**: progressive delegation of read/write queries (`getBlockState`, `setBlockState`, light updates) directly to native Rust memory.
