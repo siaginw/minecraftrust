@@ -24,6 +24,7 @@ from .session import MinecraftServerSession
 from .receipt import write_receipt
 from .telemetry import JsonlEvents, tail_events
 from .restart import run_restart_cycles
+from .evidence_db import EvidenceDB
 
 __all__ = [
     "Tier", "TIERS", "DEFAULT_TIER", "get_tier", "resolve", "add_tier_argument",
@@ -34,4 +35,5 @@ __all__ = [
     "write_receipt",
     "JsonlEvents", "tail_events",
     "run_restart_cycles",
+    "EvidenceDB",
 ]

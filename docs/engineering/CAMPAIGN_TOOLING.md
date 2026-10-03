@@ -58,3 +58,39 @@ sessions/logs). Run before launching any live campaign.
 `run_bounded_authority_smoke.py` (networking/PARKED territory),
 `run_mspt_ab.py`, `run_multi_client_probe.py`, compression-era runners.
 Do not refactor archived/historical scripts for completeness.
+
+
+## Evidence accumulation (sqlite)
+
+`campaign.evidence_db.EvidenceDB` records per-run counters keyed by
+(campaign, gate, mode, git_sha). Two uses:
+
+1. **Cumulative floors**: a big floor (e.g. 20k shadow reads) is met by the
+   SUM across runs built from the same git_sha — several short runs replace
+   one long run; the floor never weakens because the sha pins the code.
+2. **Skip-if-evidenced**: before booting, the runner checks whether a prior
+   run with the same signature already met the floor (with zero-guarded
+   counters). If so it cites the stored receipt and skips the boot entirely
+   (ccache-for-campaigns).
+
+## Prior art (GitHub deep dive)
+
+- [SpongePowered/McTester](https://github.com/spongepowered/mctester) —
+  Minecraft integration tests against a real client; same shape as our
+  probe campaigns.
+- [RCON-driven CI](https://github.com/marketplace/actions/send-rcon-commands-to-minecraft-server)
+  and [RCON client libraries](https://github.com/topics/rcon) — the standard
+  way to drive an ALREADY-RUNNING server from CI without reboots.
+- [testcontainers reuse](https://docs.pytest.org/en/stable/explanation/fixtures.html)
+  / session-scoped fixtures — the warm-boot pattern: boot once per session,
+  connect to the running instance thereafter.
+
+## Next increment (designed, not yet built)
+
+**Warm Gate A daemon + RCON**: boot the Gate A campaign server once with
+RCON enabled; drive save-all/teleport via a tiny RCON client (~50 lines,
+protocol in the links above) instead of stdin probes; spawn-chunk loading
+alone yields ~600 RegionFile reads per boot cycle with zero probes (measured
+625 in the DEV smoke). Remaining per-run taxes after warm reuse: probe
+FML/PLAY (~60-90s, only needed where PLAY itself is the criterion) and the
+world-copy for write campaigns (reads need no fresh copy).
