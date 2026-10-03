@@ -7,9 +7,12 @@
 //! Coordinated mode: every vanilla-model write is followed by
 //! note_external_write BEFORE the next Rust allocation — exactly what the
 //! Java hook guarantees in production (regionWriteExit runs inside the same
-//! RegionFile monitor that serializes writes, on the single server thread;
-//! goal §13). The adversarial test demonstrates why that ordering is
-//! load-bearing by violating it on purpose.
+//! synchronized RegionFile seam that serializes all writers: save
+//! preparation is server-thread work, but func_76706_a is also reached from
+//! AnvilChunkLoader's IThreadedFileIO path, so the per-instance monitor —
+//! not thread identity — is the serialization point; goal §13). The
+//! adversarial test demonstrates why that ordering is load-bearing by
+//! violating it on purpose.
 
 use region_io::live::{LiveRegionFile, STATUS_NOT_ELIGIBLE};
 use region_io::{scan, SECTOR_BYTES};

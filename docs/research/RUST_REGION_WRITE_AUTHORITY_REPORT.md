@@ -66,15 +66,20 @@ campaign scale.
 Writers sharing live region files: exactly two, and both are coordinated.
 
 - **vanilla → Rust**: every vanilla body completion is noted inside the same
-  critical section (`regionWriteExit` runs under the RegionFile monitor on
-  the server thread) → `note_external_write` resyncs the engine from disk.
+  critical section (`regionWriteExit` runs under the RegionFile monitor —
+  save PREPARATION is server-thread work, but `func_76706_a` itself is
+  reached from `AnvilChunkLoader`'s `IThreadedFileIO` path too, so the
+  per-instance synchronized seam, not any thread identity, is what
+  serializes writers) → `note_external_write` resyncs the engine from disk.
 - **Rust → vanilla**: every Rust commit mirrors the entry/timestamp arrays
   AND the engine's used-map into `field_76714_f` (vanilla's free list), so
   vanilla's allocator can never select Rust-occupied sectors.
 - **Race window (§12)**: impossible for the coordinated pair by
-  construction — `func_76706_a` is ACC_SYNCHRONIZED and all chunk saves run
-  on the single server thread (goal §13), so admission, commit, mirror, and
-  note are serialized per file. A post-hoc file watcher cannot close a race
+  construction — `func_76706_a` is ACC_SYNCHRONIZED and every writer
+  (server-thread save preparation and the `ThreadedFileIOBase`/IO-thread
+  flush alike) executes under the SAME per-instance RegionFile monitor, so
+  admission, commit, mirror, and note are serialized per file regardless of
+  thread. A post-hoc file watcher cannot close a race
   it observes too late — so the engine does not rely on one:
 - **Verify-before-free (§10 generic detection, §11 fail-closed)**: before
   freeing a chunk's previous run the engine reads the on-disk location entry
