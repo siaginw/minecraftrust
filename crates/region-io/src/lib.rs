@@ -18,7 +18,7 @@
 
 use std::collections::BTreeMap;
 use std::fs;
-use std::io::{Read, Write};
+use std::io::Write;
 use std::path::{Path, PathBuf};
 
 pub const SECTOR_BYTES: usize = 4096;
@@ -27,6 +27,12 @@ pub const LOCATION_ENTRIES: usize = 1024;
 pub const MAX_REGION_BYTES: usize = 16 * 1024 * 1024;
 /// Vanilla's own decoder cap for a chunk payload.
 pub const MAX_PAYLOAD_BYTES: usize = 1024 * 1024;
+
+pub mod live;
+pub use live::{EngineRegistry, LiveRegionFile, WriteStats,
+    STATUS_BAD_HANDLE, STATUS_CAPACITY_ERROR, STATUS_INVALID_RECORD,
+    STATUS_IO_ERROR, STATUS_NOT_ELIGIBLE, STATUS_STALE_GENERATION,
+    STATUS_SUCCESS};
 
 #[derive(Debug)]
 pub enum RegionError {
