@@ -343,8 +343,11 @@ def main() -> int:
                 if int(read_metrics["shadowMismatch"]) != 0:
                     print("[FAIL] shadow read mismatches > 0")
                     failures += 1
-                if args.min_reads and reads < args.min_reads:
-                    print(f"[FAIL] shadow reads {reads} < {args.min_reads}")
+                # goal §14 floor counts READ EVENTS (readSelected); the
+                # compared subset (chunks present on disk) is reported too
+                selected = int(read_metrics["readSelected"])
+                if args.min_reads and selected < args.min_reads:
+                    print(f"[FAIL] shadow read events {selected} < {args.min_reads}")
                     failures += 1
             else:
                 if reads == 0:
@@ -356,7 +359,22 @@ def main() -> int:
                     print(f"[FAIL] ON read fallbacks ({fb}) exceed misses ({miss})")
                     failures += 1
 
-    if args.mode == "SHADOW":
+    if args.mode == "OFF":
+        # read-only authority session: structural scan only (no write gates)
+        world_region = server_dir / "world" / "region"
+        scanner = ROOT / "target" / "release" / "region_tools.exe"
+        dirty = 0
+        for mca in sorted(world_region.glob("r.*.*.mca")):
+            out = subprocess.run([str(scanner), "scan", str(mca)],
+                                 capture_output=True, text=True)
+            line = out.stdout.strip().splitlines()[-1] if out.stdout.strip() else ""
+            if "bad=0" not in line or "overlap=false" not in line:
+                print(f"[FAIL] scan dirty after read-only campaign: {mca.name}: {line}")
+                failures += 1
+            else:
+                dirty += 1
+        print(f"[verify] read-only structural scan clean on {dirty} region files")
+    elif args.mode == "SHADOW":
         world_region = server_dir / "world" / "region"
         comparator = ROOT / "tools" / "authority-review" / "compare_region_shadow.py"
         print(f"[verify] comparing real {world_region} vs mirror {mirror_root} "
