@@ -34,6 +34,11 @@ pub const STATUS_CAPACITY_ERROR: i32 = 4;
 pub const STATUS_NOT_ELIGIBLE: i32 = 5;
 pub const STATUS_BAD_HANDLE: i32 = 6;
 
+/// Diagnostic capture at the exact CAPACITY_ERROR return sites:
+/// (needed, used_len_at_return, extra_or_shortfall, extra_or_shortfall).
+pub static DEBUG_CAP_LOCK: std::sync::Mutex<Option<(usize, usize, usize, usize)>> =
+    std::sync::Mutex::new(None);
+
 #[derive(Debug, Default, Clone)]
 pub struct WriteStats {
     pub rust_selected: u64,
@@ -141,6 +146,28 @@ impl LiveRegionFile {
             Ok(inner) => inner.disqualified,
             Err(_) => true, // poisoned: fail closed
         }
+    }
+
+    /// Diagnostic: (used-map sector count, trailing free run, entries whose
+    /// committed run extends beyond the used map). Used by the capacity
+    /// fuzz to characterize the small-payload CAPACITY_ERROR state.
+    pub fn debug_capacity_state(&self) -> (usize, usize, usize) {
+        let inner = match self.inner.lock() {
+            Ok(i) => i,
+            Err(_) => return (0, 0, 0),
+        };
+        let tail_free = inner
+            .used
+            .iter()
+            .rev()
+            .take_while(|&&u| !u)
+            .count();
+        let beyond = inner
+            .runs
+            .iter()
+            .filter(|&&e| e != 0 && ((e >> 8) as usize + (e & 0xFF) as usize) > inner.used.len())
+            .count();
+        (inner.used.len(), tail_free, beyond)
     }
 
     /// Committed generation floors for all 1024 chunks. The Java hook seeds
@@ -298,15 +325,25 @@ impl LiveRegionFile {
             let start = match start {
                 Some(s) => s,
                 None => {
-                    // grow by the shortfall
+                    // grow by the shortfall of the TRAILING free run: only
+                    // trailing contiguous free sectors merge with the newly
+                    // added ones, so growing by "free anywhere in the window"
+                    // under-grows and the post-growth scan fails (the
+                    // small-payload CAPACITY_ERROR caught by the capacity
+                    // fuzz — the source of every campaign err4 event).
                     let current = inner.used.len();
-                    let mut extra = needed;
-                    for sector in (current.saturating_sub(needed)..current).rev() {
-                        if !inner.used[sector] {
-                            extra = extra.saturating_sub(1);
-                        }
-                    }
+                    let trailing_free = inner
+                        .used
+                        .iter()
+                        .rev()
+                        .take_while(|&&u| !u)
+                        .count();
+                    let extra = needed.saturating_sub(trailing_free);
                     if extra == 0 {
+                        // unreachable: a trailing run of `needed` would have
+                        // been found by the first-fit scan above
+                        *DEBUG_CAP_LOCK.lock().unwrap() =
+                            Some((needed, current, 0, extra));
                         return Err(STATUS_CAPACITY_ERROR);
                     }
                     let new_len = current + extra;
@@ -325,7 +362,13 @@ impl LiveRegionFile {
                             }
                         }
                     }
-                    found.ok_or(STATUS_CAPACITY_ERROR)?
+                    found.ok_or({
+                        if found.is_none() {
+                            *DEBUG_CAP_LOCK.lock().unwrap() =
+                                Some((needed, inner.used.len(), extra, extra));
+                        }
+                        STATUS_CAPACITY_ERROR
+                    })?
                 }
             };
             (start, old_off != 0 && start == old_off)

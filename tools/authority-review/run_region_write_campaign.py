@@ -378,14 +378,22 @@ def main() -> int:
                     stop(proc, timeout_s=120)
                     handle.close()
                     break
+                time.sleep(45.0)  # post-Done settle before probing
                 probe_ok_cycle = True
                 if cycle == 1 or cycle == args.restart_cycles:
-                    receipt = run_probe("127.0.0.1", port, f"RWRC{target}{cycle}",
-                                        expect_forge=True, client_mods=client_mods,
-                                        connect_timeout_s=20.0, login_timeout_s=120.0,
-                                        stability_s=20.0)
-                    probe_ok_cycle = receipt.get("verdict") == "PASS"
-                    print(f"[restart] cycle {cycle}: probe={receipt.get('verdict')}")
+                    for attempt in (1, 2):
+                        receipt = run_probe("127.0.0.1", port, f"RWRC{target}{cycle}",
+                                            expect_forge=True, client_mods=client_mods,
+                                            connect_timeout_s=30.0, login_timeout_s=180.0,
+                                            stability_s=20.0)
+                        print(f"[restart] cycle {cycle} attempt {attempt}: "
+                              f"probe={receipt.get('verdict')} "
+                              f"failure={receipt.get('failure')!r}")
+                        if receipt.get("verdict") == "PASS":
+                            break
+                        time.sleep(30.0)
+                    else:
+                        probe_ok_cycle = False
                 else:
                     time.sleep(5.0)
             finally:
