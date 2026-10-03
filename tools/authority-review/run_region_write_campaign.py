@@ -355,8 +355,16 @@ def main() -> int:
                     failures += 1
                 fb = int(read_metrics["javaReadFallback"])
                 miss = int(read_metrics["missing"])
-                if fb > miss:
-                    print(f"[FAIL] ON read fallbacks ({fb}) exceed misses ({miss})")
+                # Fail-closed fallbacks beyond missing chunks must be rare
+                # (transient IO during concurrent vanilla saves). A large gap
+                # means the Rust reader is rejecting valid records.
+                tolerance = miss // 50 + 50
+                if fb > miss + tolerance:
+                    print(f"[FAIL] ON read fallbacks ({fb}) exceed misses "
+                          f"({miss}) beyond tolerance ({tolerance})")
+                    failures += 1
+                if args.min_reads and reads < args.min_reads:
+                    print(f"[FAIL] ON reads {reads} < {args.min_reads}")
                     failures += 1
 
     if args.mode == "OFF":

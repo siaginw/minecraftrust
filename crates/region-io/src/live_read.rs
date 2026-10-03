@@ -150,11 +150,15 @@ pub fn decompress_stream(compression: u8, stream: &[u8]) -> Result<Vec<u8>, Stri
             let mut out = Vec::new();
             let mut chunk = vec![0u8; (stream.len().saturating_mul(4)).max(65_536)];
             let mut decoder = Decompress::new(true); // zlib header present
-            let mut input = stream;
+            let mut input: &[u8] = stream;
+            // FlushDecompress::None pauses gracefully when the scratch buffer
+            // fills (Finish would return BufError instead — caught live as
+            // spurious READ_IO_ERROR on high-ratio records); StreamEnd is
+            // still reported when the stream completes.
             loop {
                 let before_out = decoder.total_out();
                 let status = decoder
-                    .decompress(input, &mut chunk, FlushDecompress::Finish)
+                    .decompress(input, &mut chunk, FlushDecompress::None)
                     .map_err(|e| format!("zlib: {e}"))?;
                 // the decoder consumed a prefix of `input`; advance so the
                 // next call continues the stream instead of reprocessing it
@@ -172,9 +176,16 @@ pub fn decompress_stream(compression: u8, stream: &[u8]) -> Result<Vec<u8>, Stri
                         }
                         return Ok(out);
                     }
-                    Status::Ok => {
-                        if produced == 0 {
-                            return Err("zlib: no progress".into());
+                    Status::Ok | Status::BufError => {
+                        // progress required: either more input must be
+                        // consumed or the output must keep draining. If the
+                        // input is exhausted before StreamEnd: truncated.
+                        if produced == 0 && input.is_empty() {
+                            return Err("zlib: truncated stream".into());
+                        }
+                        if produced == 0 && !input.is_empty() && status == Status::BufError {
+                            // scratch full with no drain: grow the scratch
+                            chunk = vec![0u8; chunk.len() * 2];
                         }
                     }
                     _ => return Err("zlib: unexpected status".into()),
