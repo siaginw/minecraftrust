@@ -124,6 +124,28 @@ def main() -> int:
         print(f"[ERROR] DLL missing: {dll}", file=sys.stderr)
         return 1
 
+    # Upgrade #3: skip-if-evidenced - a prior same-signature run that met
+    # the floor (with zero-guarded counters) lets us cite it and skip boot.
+    try:
+        from campaign.evidence_db import EvidenceDB
+        git_sha_now = os.popen("git rev-parse HEAD").read().strip()
+        db = EvidenceDB(ROOT / "target" / "authority-review" / "evidence.db")
+        skip_mode = args.read_mode if args.read_mode != "OFF" else args.mode
+        floor = args.min_reads if args.read_mode != "OFF" else min_shadow
+        counter = ("regionRead.readSuccess" if args.read_mode != "OFF"
+                   else "regionWrite.rustOk")
+        guards = (("regionRead.partialStreamAttempts",)
+                  if args.read_mode != "OFF" else ())
+        skip, seen_n = db.already_evidenced(
+            f"region-{skip_mode.lower()}-{target}", target, skip_mode,
+            git_sha_now, counter, floor, required_zeros=guards)
+        if skip:
+            print(f"[skip] already evidenced: {counter}={seen_n} >= {floor} "
+                  f"at {git_sha_now} - citing stored receipt, skipping boot")
+            return 0
+    except Exception as skip_err:
+        print(f"[skip] evidence-db unavailable ({skip_err}) - full campaign")
+
     if target == "A":
         rt = ROOT / "target" / "authority-smoke" / "runtimeA"
         forge_jar = "forge-1.12.2-14.23.5.2860.jar"
@@ -635,6 +657,15 @@ def main() -> int:
     if failures:
         print(f"REGION_WRITE_CAMPAIGN_FAILED Gate {target} ({failures} failures)")
         return 1
+    # record counters so cumulative floors / skip-if-evidenced work (§3)
+    try:
+        db.record_run(f"region-{args.mode.lower()}-{target}", target,
+                      (args.read_mode if args.read_mode != "OFF" else args.mode),
+                      os.popen("git rev-parse HEAD").read().strip(),
+                      final_metrics, tier=args.test_tier, verdict=verdict,
+                      receipt_path=str(receipt_path))
+    except Exception:
+        pass
     print(f"REGION_WRITE_CAMPAIGN_PASSED Gate {target} mode={args.mode} "
           f"(rustOk={rust_ok})")
     return 0
