@@ -206,7 +206,7 @@ public final class RustRegionWriteHook {
                 RUST_OK.incrementAndGet();
                 prov[1].incrementAndGet();
                 mirrorEntry(regionFile, index, (int) entry);
-                mirrorFreeList(st.ctx, regionFile);
+                mirrorRunToFreeList(regionFile, (int) entry);
                 return true;
             }
             tallyFailure(entry, len, index, st.regionPath);
@@ -250,9 +250,10 @@ public final class RustRegionWriteHook {
                 EXIT_NOTES.incrementAndGet();
                 AtomicLong[] prov = provenance(st.regionPath);
                 prov[3].incrementAndGet();
-                // the engine resynced from disk: publish its view back into
-                // Java so the next fallback allocation sees the real occupancy
-                mirrorFreeList(st.ctx, regionFile);
+                // No Java-side free-list action: the vanilla body maintains
+                // field_76714_f itself, and every prior Rust commit already
+                // published its run into that same list (mirrorRunToFreeList),
+                // so vanilla's fallback allocator sees real occupancy.
             } else {
                 VANILLA_FALLBACKS.incrementAndGet();
             }
@@ -415,17 +416,18 @@ public final class RustRegionWriteHook {
     private static volatile Field F_FREELIST;
 
     /**
-     * Rebuild RegionFile's in-memory sector free list (field_76714_f, one
-     * Boolean per sector, TRUE = free) from the engine's used-map. Vanilla's
-     * READ path returns null when offset+count exceeds the list's size(), and
-     * vanilla's own fallback allocator allocates from it — a Rust write that
-     * grew the file or occupied sectors MUST be mirrored here or in-session
-     * reads break and fallback writes clobber Rust records.
+     * Incremental Rust→vanilla free-list publication (goal §8 direction 2):
+     * after a Rust commit with location `entry`, grow RegionFile's in-memory
+     * sector free list (field_76714_f, TRUE = free) with FREE padding to the
+     * new file end and mark the committed run USED. O(run length) per write.
+     *
+     * The list INSTANCE is vanilla's own (never replaced), so vanilla's
+     * fallback allocator continues to maintain it natively. Initial coherence
+     * needs no action: the engine loaded its map from the same on-disk table
+     * vanilla's constructor did.
      */
-    private static void mirrorFreeList(RegionWriteCtx ctx, Object regionFile) {
+    private static void mirrorRunToFreeList(Object regionFile, int entry) {
         try {
-            byte[] used = ctx.usedMap();
-            if (used == null || used.length == 0) return;
             Field f = F_FREELIST;
             if (f == null) {
                 f = findField(regionFile.getClass(),
@@ -433,11 +435,18 @@ public final class RustRegionWriteHook {
                 if (f == null) return;
                 F_FREELIST = f;
             }
-            java.util.List<Boolean> free = new java.util.ArrayList<Boolean>(used.length);
-            for (int s = 0; s < used.length; s++) {
-                free.add(used[s] != 0 ? Boolean.FALSE : Boolean.TRUE);
+            @SuppressWarnings("unchecked")
+            java.util.List<Boolean> list =
+                    (java.util.List<Boolean>) f.get(regionFile);
+            if (list == null) return;
+            int start = (entry >>> 8) & 0xFFFFFF;
+            int end = start + (entry & 0xFF);
+            while (list.size() < end) {
+                list.add(Boolean.TRUE);
             }
-            f.set(regionFile, free);
+            for (int s = start; s < end; s++) {
+                list.set(s, Boolean.FALSE);
+            }
         } catch (Throwable t) {
             ERRORS.incrementAndGet();
         }

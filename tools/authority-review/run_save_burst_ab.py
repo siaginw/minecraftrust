@@ -104,12 +104,25 @@ def run_session(tag: str, out_dir: Path, port: int, rust_on: bool,
             print(f"[{tag}] boot failed", file=sys.stderr)
             return None
         time.sleep(20.0)
+        # derive the full client mod inventory from the server's own log —
+        # Revelation rejects FML joins that do not present all 219 mods
+        log_text_early = log.read_text(encoding="utf-8", errors="replace")
         client_mods = [("minecraft", "1.12.2"), ("FML", "8.0.99.99"),
                        ("forge", "14.23.5.2846"), ("mcp", "9.42")]
+        mod_versions = ROOT / "target" / "revelation-mod-versions.json"
+        inv = re.search(r"missing mods \[([^\]]+)\]", log_text_early)
+        if inv is not None and mod_versions.is_file():
+            doc = json.loads(mod_versions.read_text(encoding="utf-8"))
+            derived = doc.get("versions", doc)
+            builtins = {"minecraft": "1.12.2", "FML": "8.0.99.99",
+                        "forge": "14.23.5.2846", "mcp": "9.42"}
+            client_mods = [(m.strip(), derived.get(m.strip(),
+                            builtins.get(m.strip(), "1.0")))
+                           for m in inv.group(1).split(",")]
         receipt = run_probe("127.0.0.1", port, f"SB{'R' if rust_on else 'J'}",
                             expect_forge=True, client_mods=client_mods,
-                            connect_timeout_s=20.0, login_timeout_s=120.0,
-                            stability_s=620.0)
+                            connect_timeout_s=30.0, login_timeout_s=180.0,
+                            stability_s=60.0 + legs * 8.0)
         result["probe_verdict"] = receipt.get("verdict")
         result["chunk_packets"] = receipt.get("observed", {}).get("chunk_packets", 0)
 
@@ -163,14 +176,9 @@ def _parse_gc(log: Path) -> dict:
     if not log.is_file():
         return {}
     text = log.read_text(encoding="utf-8", errors="replace")
-    pauses = [float(m) for m in re.findall(
-        r"Pause (?:Young|Full|CMS|PSYoungGen|ParNew|G1)[^\]]*\]\s*([\d.]+)-[\d.]+:"
-        r"\s*([\d.]+)", text) for m in [m[1] if isinstance(m, tuple) else m]] \
-        if False else []
-    # simpler: total GC time lines "real" seconds
     total_gc = sum(float(x) for x in re.findall(r"([0-9.]+) secs\]", text))
-    full = len(re.findall(r"Full GC", text))
-    young = len(re.findall(r"(Pause Young|PSYoungGen|ParNew)", text))
+    full = len(re.findall(r"\[Full GC", text))
+    young = len(re.findall(r"\[(?:Pause Young|PSYoungGen|ParNew)", text))
     return {"gc_total_secs": round(total_gc, 2), "full_gc": full,
             "young_gc": young}
 
@@ -182,14 +190,22 @@ def main() -> int:
     legs = int(sys.argv[1]) if len(sys.argv) > 1 else 96
     flushes = int(sys.argv[2]) if len(sys.argv) > 2 else 4
 
-    j = run_session("java-only", base / "java", 25593, False, legs, flushes)
-    if j is None:
-        print("SAVE_BURST_AB java session failed")
-        return 1
+    rust_only = "--rust-only" in sys.argv
+    j = None
+    if not rust_only:
+        j = run_session("java-only", base / "java", 25593, False, legs, flushes)
+        if j is None:
+            print("SAVE_BURST_AB java session failed")
+            return 1
     r = run_session("rust-authority", base / "rust", 25593, True, legs, flushes)
     if r is None:
         print("SAVE_BURST_AB rust session failed")
         return 1
+    if rust_only:
+        print("RUST  " + json.dumps(r, sort_keys=True))
+        print(f"SAVE_BURST_AB rust_save_total_ms={r['save_total_ms']} "
+              f"rust_flush={r['flush_ms']} rust_disk={r['disk_bytes_written']}")
+        return 0
     print("JAVA  " + json.dumps(j, sort_keys=True))
     print("RUST  " + json.dumps(r, sort_keys=True))
     print(f"SAVE_BURST_AB java_save_total_ms={j['save_total_ms']} "
