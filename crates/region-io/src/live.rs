@@ -22,7 +22,7 @@ use std::collections::HashMap;
 use std::fs::{self, OpenOptions};
 use std::io::{Read, Seek, SeekFrom, Write};
 use std::path::{Path, PathBuf};
-use std::sync::Mutex;
+use std::sync::{Mutex, OnceLock};
 
 use super::{HEADER_BYTES, LOCATION_ENTRIES, MAX_PAYLOAD_BYTES, SECTOR_BYTES};
 
@@ -128,32 +128,31 @@ impl LiveRegionFile {
 
     /// Record a VANILLA fallback write so the engine's map stays coherent
     /// (task §34 mixed-write stress). `entry` is the raw location entry Java
-    /// holds after its own write.
-    pub fn note_external_write(&self, x: u8, z: u8, entry: u32) -> Result<(), String> {
+    /// holds after its own write; `generation` is the Java ticket counter's
+    /// new value for this chunk. Java's counter is the SINGLE SOURCE OF
+    /// TRUTH for generations — the engine never invents or advances tickets
+    /// itself, so the two sides cannot diverge into false STALE rejections.
+    pub fn note_external_write(
+        &self,
+        x: u8,
+        z: u8,
+        entry: u32,
+        generation: u64,
+    ) -> Result<(), String> {
         let mut inner = self.inner.lock().map_err(|_| "map poisoned")?;
         let index = z as usize * 32 + x as usize;
-        // mark the new entry's sectors used; extend for growth
-        let sectors = (entry & 0xFF) as usize;
-        let offset = (entry >> 8) as usize;
-        if offset != 0 && sectors != 0 {
-            let end = (offset + sectors) * SECTOR_BYTES;
-            if end > inner.len {
-                inner.len = end;
-                inner.used.resize(end / SECTOR_BYTES, false);
-            }
-            for s in 0..sectors {
-                let sector = offset + s;
-                if sector < inner.used.len() {
-                    inner.used[sector] = true;
-                }
-            }
+        // full resync from the file: vanilla fallback writes may have grown or
+        // relocated sectors, and per-entry delta tracking is not exact
+        let Inner { used, runs, .. } = &mut *inner;
+        Self::resync_state(used, &mut Some(runs), &self.path).map_err(|e| e.to_string())?;
+        // the file may have grown beyond what resync saw if the fallback write
+        // extended the tail: extend len so find_run growth math stays right
+        let end = (entry >> 8) as usize + (entry & 0xFF) as usize;
+        if end * SECTOR_BYTES > inner.len {
+            inner.len = end * SECTOR_BYTES;
         }
-        // free the run the engine previously believed this chunk held: full
-        // resync from the file (vanilla fallback writes may have grown or
-        // relocated sectors, and per-entry delta tracking is not exact).
-        Self::resync_used(&mut inner.used, &self.path).map_err(|e| e.to_string())?;
         inner.runs[index] = entry;
-        inner.generations[index] = inner.generations[index].wrapping_add(1);
+        inner.generations[index] = generation;
         drop(inner);
         if let Ok(mut stats) = self.stats.lock() {
             stats.external_syncs = stats.external_syncs.wrapping_add(1);
@@ -178,9 +177,12 @@ impl LiveRegionFile {
         let needed = (payload.len() + 5).div_ceil(SECTOR_BYTES).max(1);
 
         // fast path validation + allocation under the inner lock
-        let start = {
+        let (start, in_place) = {
             let mut inner = self.inner.lock().map_err(|_| STATUS_IO_ERROR)?;
             if generation <= inner.generations[index] {
+                if let Ok(mut stats) = self.stats.lock() {
+                    stats.stale_rejected = stats.stale_rejected.wrapping_add(1);
+                }
                 return Err(STATUS_STALE_GENERATION);
             }
             // Free the chunk's previous run BEFORE allocating: without this,
@@ -244,7 +246,7 @@ impl LiveRegionFile {
                     found.ok_or(STATUS_CAPACITY_ERROR)?
                 }
             };
-            start
+            (start, old_off != 0 && start == old_off)
         };
 
         // physical write: payload sectors FIRST, then header entry (vanilla order)
@@ -311,14 +313,18 @@ impl LiveRegionFile {
             stats.rust_selected = stats.rust_selected.wrapping_add(1);
             stats.success = stats.success.wrapping_add(1);
             stats.bytes_written = stats.bytes_written.wrapping_add(payload.len() as u64 + 5);
+            if in_place {
+                stats.in_place_reuses = stats.in_place_reuses.wrapping_add(1);
+            }
         }
         let entry = ((start as u32) << 8) | (needed as u32 & 0xFF);
         Ok((entry, needed as u32))
     }
 
     /// Fallback notice: a vanilla write completed for this chunk. Rust keeps
-    /// its map coherent by re-reading the location entry.
-    pub fn note_vanilla_fallback(&self, x: u8, z: u8) -> Result<(), i32> {
+    /// its map coherent by re-reading the location entry from disk; the Java
+    /// hook passes the new ticket value it committed for this chunk.
+    pub fn note_vanilla_fallback(&self, x: u8, z: u8, generation: u64) -> Result<(), i32> {
         let index = z as usize * 32 + x as usize;
         let mut header = [0u8; 4];
         {
@@ -334,9 +340,15 @@ impl LiveRegionFile {
         let mut inner = self.inner.lock().map_err(|_| STATUS_IO_ERROR)?;
         // everything else that we believed used but is not in the new run and
         // not referenced by any entry cannot be derived cheaply; full resync:
-        Self::resync_used(&mut inner.used, &self.path)?;
-        inner.runs[index] = entry;
-        inner.generations[index] = inner.generations[index].wrapping_add(1);
+        {
+            let Inner { used, runs, .. } = &mut *inner;
+            Self::resync_state(used, &mut Some(runs), &self.path)?;
+        }
+        let end = (entry >> 8) as usize + (entry & 0xFF) as usize;
+        if end * SECTOR_BYTES > inner.len {
+            inner.len = end * SECTOR_BYTES;
+        }
+        inner.generations[index] = generation;
         drop(inner);
         if let Ok(mut stats) = self.stats.lock() {
             stats.external_syncs = stats.external_syncs.wrapping_add(1);
@@ -351,7 +363,7 @@ impl LiveRegionFile {
 
     pub(crate) fn resync_state(
         used: &mut Vec<bool>,
-        runs: &mut Option<Vec<u32>>,
+        runs: &mut Option<&mut Vec<u32>>,
         path: &Path,
     ) -> Result<(), i32> {
         let mut f = fs::File::open(path).map_err(|_| STATUS_IO_ERROR)?;
@@ -407,6 +419,12 @@ impl Default for EngineRegistry {
 impl EngineRegistry {
     pub fn new() -> Self {
         Self::default()
+    }
+
+    /// Process-wide registry: exactly one engine per live region file path.
+    pub fn global() -> &'static EngineRegistry {
+        static REGISTRY: OnceLock<EngineRegistry> = OnceLock::new();
+        REGISTRY.get_or_init(EngineRegistry::new)
     }
 
     pub fn get_or_open(&self, path: &Path) -> Result<std::sync::Arc<LiveRegionFile>, String> {
@@ -502,8 +520,9 @@ mod tests {
         f.write_all(&entry.to_be_bytes()).unwrap();
         drop(f);
         // tell the engine; its map must now treat sector 2 as used. The
-        // simulated fallback above wrote chunk index 0 == chunk (0, 0).
-        engine.note_vanilla_fallback(0, 0).unwrap();
+        // simulated fallback above wrote chunk index 0 == chunk (0, 0); the
+        // Java ticket counter for that chunk advanced to 1.
+        engine.note_vanilla_fallback(0, 0, 1).unwrap();
         // A DIFFERENT chunk's Rust write must not land on sector 2 (the
         // fallback chunk's run). Rewriting (0,0) itself MAY reuse it in place
         // — that is vanilla's own behavior — so exercise the other chunk.
