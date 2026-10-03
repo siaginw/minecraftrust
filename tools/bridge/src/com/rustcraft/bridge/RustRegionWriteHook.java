@@ -70,6 +70,9 @@ public final class RustRegionWriteHook {
     public static volatile int LAST_FAIL_SLOT = -1;
     public static volatile String LAST_FAIL_PATH = "";
     public static final AtomicLong FAIL_EVENTS = new AtomicLong();
+    /** goal §22 live counters: contamination/exclusion state. */
+    public static final AtomicLong REGION_DISQUALIFIED = new AtomicLong();
+    public static final AtomicLong EXTERNAL_WRITER_OBSERVED = new AtomicLong();
     static final String MIRROR_ROOT = System.getProperty("rustcraft.regionWriteMirror", "");
 
     // lifecycle/counters (m1-metrics style)
@@ -182,6 +185,14 @@ public final class RustRegionWriteHook {
             }
             tallyFailure(entry, len, index, st.regionPath);
             RUST_FAILED.incrementAndGet();
+            if (entry == RegionWriteCtx.ST_NOT_ELIGIBLE) {
+                // goal §11: the engine detected an uncoordinated writer on
+                // this file (verify-before-free) — JAVA_ONLY for the session,
+                // never re-promoted.
+                REGION_DISQUALIFIED.incrementAndGet();
+                EXTERNAL_WRITER_OBSERVED.incrementAndGet();
+                st.capped = true;
+            }
             return false; // any failure -> vanilla body runs
         } catch (Throwable t) {
             ERRORS.incrementAndGet();
@@ -439,6 +450,8 @@ public final class RustRegionWriteHook {
                 + errs
                 + " lastFailLen=" + LAST_FAIL_LEN
                 + " lastFailSlot=" + LAST_FAIL_SLOT
-                + " lastFailPath=" + LAST_FAIL_PATH;
+                + " lastFailPath=" + LAST_FAIL_PATH
+                + " regionDisqualified=" + REGION_DISQUALIFIED.get()
+                + " externalWriterObserved=" + EXTERNAL_WRITER_OBSERVED.get();
     }
 }
