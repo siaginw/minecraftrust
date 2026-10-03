@@ -94,5 +94,27 @@ class EvidenceDB:
                  "counters": json.loads(cj), "receipt": rp}
                 for ts, v, cj, rp in cur.fetchall()]
 
+    def flakes(self, campaign: str, gate: str, mode: str,
+               git_sha: str) -> list[str]:
+        """Counters whose verdict flipped PASS/FAIL across same-sha runs —
+        automatic flake detection (deep-dive recommendation #2)."""
+        runs = self.recent_runs(campaign, gate, mode, git_sha)
+        if len(runs) < 2:
+            return []
+        zero_good = ("Mismatch", "partial", "Corrupt", "rustFailed",
+                     "errors", "Disqualified", "EXTERNAL")
+        outcomes: dict[str, set[str]] = {}
+        for r in runs:
+            for k, v in r["counters"].items():
+                try:
+                    n = int(v)
+                except (ValueError, TypeError):
+                    continue
+                if any(z in k for z in zero_good):
+                    outcomes.setdefault(k, set()).add("PASS" if n == 0 else "FAIL")
+                else:
+                    outcomes.setdefault(k, set()).add("PASS" if n > 0 else "FAIL")
+        return sorted(k for k, v in outcomes.items() if len(v) > 1)
+
     def close(self):
         self.conn.close()

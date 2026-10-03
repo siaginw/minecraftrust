@@ -169,7 +169,26 @@ def main() -> int:
         return 1
 
     session = {"process_id": str(uuid.uuid4()), "session_id": str(uuid.uuid4())}
-    server_dir, prep = prepare_server(
+    # Upgrade #4: read-only campaigns (write OFF) reuse one prepared server
+    # dir per target — reads never mutate the world, and the §29 hash check
+    # catches any unexpected mutation. Write campaigns keep the fresh copy.
+    if args.mode == "OFF" and os.environ.get("RUSTCRAFT_REUSE_SERVER") == "1":
+        reuse_dir = ROOT / "target" / "authority-review" / f"warm-server-{target}"
+        if (reuse_dir / "server" / "libraries").is_dir():
+            print(f"[warm] reusing prepared server dir {reuse_dir / 'server'}")
+            server_dir = reuse_dir / "server"
+            _prep_skip = True
+        else:
+            reuse_dir.mkdir(parents=True, exist_ok=True)
+            server_dir, prep = prepare_server(
+                rt, reuse_dir, forge_jar=forge_jar, vanilla_jar=vanilla_jar,
+                campaign_jar=campaign_jar,
+                world_source=world_source if world_source.is_dir() else None)
+            _prep_skip = True
+    else:
+        _prep_skip = False
+    if not _prep_skip:
+        server_dir, prep = prepare_server(
         rt, out_dir, forge_jar=forge_jar, vanilla_jar=vanilla_jar,
         campaign_jar=campaign_jar, world_source=world_source if world_source.is_dir() else None)
     shutil.copyfile(dll, server_dir / "rustcraft_ffi.dll")
@@ -659,7 +678,7 @@ def main() -> int:
         return 1
     # record counters so cumulative floors / skip-if-evidenced work (§3)
     try:
-        db.record_run(f"region-{args.mode.lower()}-{target}", target,
+        db.record_run(f"region-{(args.read_mode if args.read_mode != chr(79)+chr(70)+chr(70) else args.mode).lower()}-{target}", target,
                       (args.read_mode if args.read_mode != "OFF" else args.mode),
                       os.popen("git rev-parse HEAD").read().strip(),
                       final_metrics, tier=args.test_tier, verdict=verdict,
