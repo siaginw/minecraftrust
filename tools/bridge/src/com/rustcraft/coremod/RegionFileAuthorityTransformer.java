@@ -57,23 +57,40 @@ public class RegionFileAuthorityTransformer implements IClassTransformer {
 
     private static final String TARGET_CLASS_DEOBF =
             "net.minecraft.world.chunk.storage.RegionFile";
+    /** 1.12.2 notch name of RegionFile: the only Minecraft class holding a
+     *  java/io/RandomAccessFile (javap-verified on the notch server jar:
+     *  fields b=File, c=RandomAccessFile, d=int[1024] offsets, e=int[1024]
+     *  timestamps, f=List<Boolean> free sectors). At this transformer's chain
+     *  position launchwrapper passes the NOTCH name as both name and
+     *  transformedName — FML's deobfuscation runs later in the chain. */
+    private static final String TARGET_CLASS_OBF = "ayj";
     private static final String HOOK = "com/rustcraft/bridge/RustRegionWriteHook";
     private static final String STATE_FIELD = "rustcraft$rwState";
     private static final String WRITE_DESC = "(II[BI)V";
-    private static final String[] WRITE_NAMES = {"func_76706_a", "write"};
-    private static final String[] CLOSE_NAMES = {"func_76708_c", "close"};
+    /** Write seam: notch "a" (overload disambiguated by the descriptor),
+     *  SRG func_76706_a, dev write. */
+    private static final String[] WRITE_NAMES = {"a", "func_76706_a", "write"};
+    /** close(): notch "c" (throws IOException), SRG func_76708_c, dev close. */
+    private static final String[] CLOSE_NAMES = {"c", "func_76708_c", "close"};
 
     public static volatile int transformCount = 0;
     public static volatile String lastTransformStatus = "NOT_ATTEMPTED";
+    /** Boot-time diagnostics (shutdown log lines race log4j shutdown). */
+    public static volatile boolean seamClassSeen = false;
 
     @Override
     public byte[] transform(String name, String transformedName, byte[] basicClass) {
         if (!com.rustcraft.bridge.RustRegionWriteHook.ENABLED) {
             return basicClass; // default OFF: no bytecode modification
         }
-        if (!TARGET_CLASS_DEOBF.equals(transformedName)) {
+        if (!TARGET_CLASS_DEOBF.equals(transformedName) && !TARGET_CLASS_OBF.equals(name)) {
             return basicClass;
         }
+        seamClassSeen = true;
+        // print DURING BOOT: shutdown-time prints race the log appender
+        System.out.println("[RustCraft-RegionWrite] seam class seen: name=" + name
+                + " transformedName=" + transformedName
+                + " bytes=" + (basicClass == null ? -1 : basicClass.length));
         if (basicClass == null) {
             lastTransformStatus = "NULL_BYTECODE";
             return basicClass;

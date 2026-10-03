@@ -99,6 +99,14 @@ public final class LiveSessionAdmissionTweaker implements ITweaker {
                     || Boolean.getBoolean("rustcraft.rustCompressionShadow")) {
                 cl.registerTransformer("com.rustcraft.coremod.NetworkManagerCompressionTransformer");
             }
+            // LIVE region write authority (RUST_REGION_WRITE_AUTHORITY,
+            // default OFF): rewrites only the RegionFile write/close seams and
+            // self-gates on rustcraft.regionWriteExperiment. Registered with
+            // the foreign transformers, before the counted writers.
+            if (Boolean.getBoolean("rustcraft.regionWriteExperiment")) {
+                cl.registerTransformer(
+                        "com.rustcraft.coremod.RegionFileAuthorityTransformer");
+            }
             // The writers register now; their first invocation places them at
             // the chain tail after every foreign transformer has registered.
             for (String name : new String[] {
@@ -144,6 +152,17 @@ public final class LiveSessionAdmissionTweaker implements ITweaker {
                     System.out.println("[RustCraft-Compression] shutdown metrics:");
                     System.out.println(com.rustcraft.bridge.RustCompressionEngine.dumpMetrics());
                 }, "rustcraft-compression-metrics"));
+            }
+            // Region-write metrics at shutdown (RUST_REGION_WRITE_AUTHORITY
+            // campaign; default OFF with the experiment property).
+            if (Boolean.getBoolean("rustcraft.regionWriteExperiment")) {
+                Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+                    System.out.println("[RustCraft-RegionWrite] shutdown metrics:");
+                    System.out.println(com.rustcraft.bridge.RustRegionWriteHook.dumpMetrics());
+                    System.out.println("[RustCraft-RegionWrite] transformer status="
+                            + com.rustcraft.coremod.RegionFileAuthorityTransformer.transformCount
+                            + " " + com.rustcraft.coremod.RegionFileAuthorityTransformer.lastTransformStatus);
+                }, "rustcraft-region-write-metrics"));
             }
         } catch (Throwable failure) {
             System.err.println("[RustCraft] live session admission tweaker failed: " + failure);
