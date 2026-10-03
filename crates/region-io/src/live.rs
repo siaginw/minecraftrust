@@ -22,7 +22,7 @@ use std::collections::HashMap;
 use std::fs::{self, OpenOptions};
 use std::io::{Read, Seek, SeekFrom, Write};
 use std::path::{Path, PathBuf};
-use std::sync::{Mutex, OnceLock};
+use std::sync::{Arc, Mutex, OnceLock};
 
 use super::{HEADER_BYTES, LOCATION_ENTRIES, MAX_PAYLOAD_BYTES, SECTOR_BYTES};
 
@@ -124,6 +124,17 @@ impl LiveRegionFile {
 
     pub fn path(&self) -> &Path {
         &self.path
+    }
+
+    /// Committed generation floors for all 1024 chunks. The Java hook seeds
+    /// its per-RegionFile ticket counters from this so a closed-and-reopened
+    /// RegionFile instance never re-issues tickets the engine has already
+    /// committed (which would all be rejected as STALE forever).
+    pub fn generations(&self) -> Vec<u64> {
+        match self.inner.lock() {
+            Ok(inner) => inner.generations.clone(),
+            Err(_) => vec![0; LOCATION_ENTRIES],
+        }
     }
 
     /// Record a VANILLA fallback write so the engine's map stays coherent
@@ -428,7 +439,7 @@ impl EngineRegistry {
     }
 
     pub fn get_or_open(&self, path: &Path) -> Result<std::sync::Arc<LiveRegionFile>, String> {
-        let canonical = path.canonicalize().unwrap_or_else(|_| path.to_path_buf());
+        let canonical = normalize_key(path);
         let mut engines = self.engines.lock().map_err(|_| "registry poisoned")?;
         if let Some(engine) = engines.get(&canonical) {
             return Ok(std::sync::Arc::clone(engine));
@@ -439,10 +450,34 @@ impl EngineRegistry {
     }
 
     pub fn remove(&self, path: &Path) {
-        let canonical = path.canonicalize().unwrap_or_else(|_| path.to_path_buf());
+        let canonical = normalize_key(path);
         if let Ok(mut engines) = self.engines.lock() {
             engines.remove(&canonical);
         }
+    }
+}
+
+/// Registry key normalization. `Path::canonicalize` is asymmetric on Windows:
+/// it fails on a not-yet-existing file (first open) and succeeds with a
+/// `\\?\`-prefixed path afterwards (second open) — the same file would get
+/// two engines. Canonicalize the PARENT (always exists after open's
+/// create_dir_all) and join the file name; case-fold on Windows where the
+/// filesystem is case-insensitive.
+fn normalize_key(path: &Path) -> PathBuf {
+    let parent = path.parent().unwrap_or_else(|| Path::new("."));
+    let name = path.file_name().map(|n| n.to_os_string()).unwrap_or_default();
+    match parent.canonicalize() {
+        Ok(p) => {
+            let joined = p.join(name);
+            #[cfg(windows)]
+            {
+                let s = joined.to_string_lossy().to_lowercase();
+                PathBuf::from(s)
+            }
+            #[cfg(not(windows))]
+            joined
+        }
+        Err(_) => path.to_path_buf(),
     }
 }
 
@@ -562,5 +597,19 @@ mod tests {
         // a different chunk fits into nothing new: file must not have grown
         let len = fs::metadata(&path).unwrap().len();
         assert_eq!(len, ((e1 >> 8) as u64 + 1) * SECTOR_BYTES as u64);
+    }
+
+    #[test]
+    fn registry_shares_engine_across_first_and_second_open() {
+        // Windows canonicalize asymmetry (nonexistent vs existing file) must
+        // not yield two engines for one file: the second attach must see the
+        // first attach's committed generation floors.
+        let path = temp_region("live-r.4.4.mca");
+        let e1 = EngineRegistry::global().get_or_open(&path).unwrap();
+        e1.write_chunk(0, 0, &deflate_frame(&[1u8; 100]), 1).unwrap();
+        let e2 = EngineRegistry::global().get_or_open(&path).unwrap();
+        assert!(Arc::ptr_eq(&e1, &e2), "registry returned two engines for one file");
+        assert_eq!(e2.generations()[0], 1, "floors must be shared");
+        EngineRegistry::global().remove(&path);
     }
 }

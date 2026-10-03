@@ -223,6 +223,40 @@ pub unsafe extern "system" fn Java_com_rustcraft_bridge_RegionWriteCtx_statsSnap
     }
 }
 
+/// JNI: snapshot the engine's committed generation floors (1024 LE u64s) so
+/// a freshly-created Java hook state can seed its ticket counters past every
+/// generation this process's engine has already committed. Returns the entry
+/// count (1024) or a negative status.
+#[no_mangle]
+pub unsafe extern "system" fn Java_com_rustcraft_bridge_RegionWriteCtx_generationsSnapshot(
+    _env: *mut c_void,
+    _clazz: *mut c_void,
+    handle: i64,
+    out_addr: i64,
+    out_cap: i32,
+) -> i32 {
+    const COUNT: usize = 1024;
+    let result = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let eng = match engine(handle) {
+            Some(e) => e,
+            None => return -STATUS_BAD_HANDLE,
+        };
+        if out_addr == 0 || out_cap < COUNT as i32 * 8 {
+            return -STATUS_INVALID_RECORD;
+        }
+        let gens = eng.generations();
+        let out = slice::from_raw_parts_mut(out_addr as *mut u8, COUNT * 8);
+        for (i, v) in gens.iter().take(COUNT).enumerate() {
+            out[i * 8..i * 8 + 8].copy_from_slice(&v.to_le_bytes());
+        }
+        COUNT as i32
+    }));
+    match result {
+        Ok(c) => c,
+        Err(_) => -region_io::live::STATUS_IO_ERROR,
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -300,28 +334,32 @@ mod tests {
         assert_eq!(stats[1], 1, "success");
         assert_eq!(stats[2], 1, "stale_rejected");
 
-        // close frees + deregisters
-        let rc = unsafe {
-            Java_com_rustcraft_bridge_RegionWriteCtx_close(
-                std::ptr::null_mut(),
-                std::ptr::null_mut(),
-                h,
-            )
-        };
-        assert_eq!(rc, STATUS_SUCCESS);
-
-        // reopen after close: fresh engine sees the on-disk state written above
-        let (_o2, p2addr, p2len) = jpath(path.to_str().unwrap());
+        // SECOND state attaching while the FIRST is still live shares the
+        // registered engine; its tickets must be seeded from the engine's
+        // committed floors or every write would be rejected STALE forever.
         let h2 = unsafe {
             Java_com_rustcraft_bridge_RegionWriteCtx_create(
                 std::ptr::null_mut(),
                 std::ptr::null_mut(),
-                p2addr,
-                p2len,
+                paddr,
+                plen,
             )
         };
-        assert!(h2 > 0);
-        // a DIFFERENT chunk's write proves the fresh engine loaded the
+        assert!(h2 > 0, "second create failed");
+        let mut floors = [0u64; 1024];
+        let fn_ = unsafe {
+            Java_com_rustcraft_bridge_RegionWriteCtx_generationsSnapshot(
+                std::ptr::null_mut(),
+                std::ptr::null_mut(),
+                h2,
+                floors.as_mut_ptr() as i64,
+                (floors.len() * 8) as i32,
+            )
+        };
+        assert_eq!(fn_, 1024);
+        assert_eq!(floors[0], 1, "generation floor for chunk 0 must be shared");
+
+        // a DIFFERENT chunk's write proves the shared engine loaded the
         // on-disk map: sector 2 (held by the round-1 record) must be avoided
         let entry2 = unsafe {
             Java_com_rustcraft_bridge_RegionWriteCtx_write(
@@ -332,16 +370,64 @@ mod tests {
                 0,
                 payload.as_ptr() as i64,
                 payload.len() as i32,
-                100,
+                (floors[32] + 1) as i64,
             )
         };
-        assert!(entry2 > 0, "post-reopen write failed: {entry2}");
-        assert!(entry2 >> 8 != 2, "fresh engine clobbered the existing record");
+        assert!(entry2 > 0, "shared-engine write failed: {entry2}");
+        assert!(entry2 >> 8 != 2, "second state clobbered the existing record");
+
+        // close frees + deregisters
+        let rc = unsafe {
+            Java_com_rustcraft_bridge_RegionWriteCtx_close(
+                std::ptr::null_mut(),
+                std::ptr::null_mut(),
+                h,
+            )
+        };
+        assert_eq!(rc, STATUS_SUCCESS);
+
         unsafe {
             Java_com_rustcraft_bridge_RegionWriteCtx_close(
                 std::ptr::null_mut(),
                 std::ptr::null_mut(),
                 h2,
+            )
+        };
+
+        // after the LAST handle closes the registry is empty: the next
+        // attach gets a FRESH engine (floors 0, any ticket accepted) bound
+        // to the current on-disk state.
+        let h3 = unsafe {
+            Java_com_rustcraft_bridge_RegionWriteCtx_create(
+                std::ptr::null_mut(),
+                std::ptr::null_mut(),
+                paddr,
+                plen,
+            )
+        };
+        assert!(h3 > 0, "third create failed");
+        let entry3 = unsafe {
+            Java_com_rustcraft_bridge_RegionWriteCtx_write(
+                std::ptr::null_mut(),
+                std::ptr::null_mut(),
+                h3,
+                2,
+                0,
+                payload.as_ptr() as i64,
+                payload.len() as i32,
+                1, // ticket restarts: fresh engine has no committed floors
+            )
+        };
+        assert!(entry3 > 0, "post-close-reopen write failed: {entry3}");
+        assert!(
+            entry3 >> 8 != 2,
+            "fresh engine must still honor the on-disk map"
+        );
+        unsafe {
+            Java_com_rustcraft_bridge_RegionWriteCtx_close(
+                std::ptr::null_mut(),
+                std::ptr::null_mut(),
+                h3,
             )
         };
     }
