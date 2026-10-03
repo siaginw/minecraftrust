@@ -58,6 +58,13 @@ public final class RustRegionWriteHook {
     public static final int FAIL_EVERY =
             Integer.getInteger("rustcraft.regionWriteFailEvery", 0);
     public static final AtomicLong SIMULATED_FAILURES = new AtomicLong();
+    /** Failure breakdown by negative status code (index = -code, 0 unused). */
+    public static final AtomicLong[] RUST_ERR_BY_CODE = new AtomicLong[8];
+    static {
+        for (int i = 0; i < RUST_ERR_BY_CODE.length; i++) {
+            RUST_ERR_BY_CODE[i] = new AtomicLong();
+        }
+    }
     static final String MIRROR_ROOT = System.getProperty("rustcraft.regionWriteMirror", "");
 
     // lifecycle/counters (m1-metrics style)
@@ -152,6 +159,7 @@ public final class RustRegionWriteHook {
                     RUST_OK.incrementAndGet();
                     return false; // vanilla body still writes the real file
                 }
+                tallyFailure(entry);
                 RUST_FAILED.incrementAndGet();
                 return false;
             }
@@ -164,6 +172,7 @@ public final class RustRegionWriteHook {
                 mirrorFreeList(st.ctx, regionFile);
                 return true;
             }
+            tallyFailure(entry);
             RUST_FAILED.incrementAndGet();
             return false; // any failure -> vanilla body runs
         } catch (Throwable t) {
@@ -395,7 +404,17 @@ public final class RustRegionWriteHook {
                 ? safe : java.io.File.separator + safe);
     }
 
+    private static void tallyFailure(long entry) {
+        int code = (int) Math.max(1, Math.min(7, -entry));
+        RUST_ERR_BY_CODE[code].incrementAndGet();
+    }
+
     public static String dumpMetrics() {
+        StringBuilder errs = new StringBuilder();
+        for (int i = 1; i < RUST_ERR_BY_CODE.length; i++) {
+            long n = RUST_ERR_BY_CODE[i].get();
+            if (n != 0) errs.append(" err").append(i).append('=').append(n);
+        }
         return "regionWrite.hook enabled=" + ENABLED + " mode=" + MODE + " cap=" + CAP
                 + " entryCalls=" + ENTRY_CALLS.get()
                 + " rustAdmitted=" + RUST_ADMITTED.get()
@@ -404,6 +423,7 @@ public final class RustRegionWriteHook {
                 + " vanillaFallbacks=" + VANILLA_FALLBACKS.get()
                 + " exitNotes=" + EXIT_NOTES.get()
                 + " errors=" + ERRORS.get()
-                + " ticketSeedMax=" + TICKET_SEED_MAX;
+                + " ticketSeedMax=" + TICKET_SEED_MAX
+                + errs;
     }
 }
