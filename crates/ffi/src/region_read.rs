@@ -160,8 +160,7 @@ pub extern "system" fn Java_com_rustcraft_bridge_RegionReadCtx_schemaVersion(
 
 // status constants re-exported for tests
 pub use region_io::live_read::{
-    READ_CORRUPT_ENTRY as FFI_READ_CORRUPT_ENTRY,
-    READ_IO_ERROR as FFI_READ_IO_ERROR,
+    READ_CORRUPT_ENTRY as FFI_READ_CORRUPT_ENTRY, READ_IO_ERROR as FFI_READ_IO_ERROR,
     READ_UNSUPPORTED_COMPRESSION as FFI_READ_UNSUPPORTED,
 };
 
@@ -203,10 +202,7 @@ mod tests {
         let payload = vec![9u8; 3000];
         let stream = {
             use std::io::Write as IoWrite;
-            let mut z = flate2::write::ZlibEncoder::new(
-                Vec::new(),
-                flate2::Compression::default(),
-            );
+            let mut z = flate2::write::ZlibEncoder::new(Vec::new(), flate2::Compression::default());
             z.write_all(&payload).unwrap();
             z.finish().unwrap()
         };

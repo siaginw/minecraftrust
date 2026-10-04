@@ -308,7 +308,11 @@ fn differential_fuzz_100k_scenarios() {
     for w in 0..WORKERS {
         handles.push(std::thread::spawn(move || {
             let lo = w * per_worker + 1;
-            let hi = if w == WORKERS - 1 { SCENARIOS } else { lo + per_worker - 1 };
+            let hi = if w == WORKERS - 1 {
+                SCENARIOS
+            } else {
+                lo + per_worker - 1
+            };
             let mut failures: Vec<String> = Vec::new();
             for seed in lo..=hi {
                 if let Err(e) = scenario(seed) {

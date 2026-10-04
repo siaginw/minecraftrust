@@ -27,6 +27,8 @@ mod owned_snapshot;
 pub use owned_snapshot::*;
 mod region_write;
 pub use region_write::*;
+mod light_batch;
+pub use light_batch::*;
 mod region_read;
 pub use region_read::*;
 
