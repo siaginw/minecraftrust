@@ -189,6 +189,23 @@ public final class LiveSessionAdmissionTweaker implements ITweaker {
                 dumper.setDaemon(true);
                 dumper.start();
             }
+            // LIVE block-light authority (RUST_BLOCK_LIGHT_PROPAGATION_
+            // AUTHORITY, default OFF): hooks Phosphor's LightingEngine BLOCK
+            // drain; self-gates on rustcraft.lightExperiment.
+            if (Boolean.getBoolean("rustcraft.lightExperiment")) {
+                cl.registerTransformer(
+                        "com.rustcraft.coremod.PhosphorLightTransformer");
+            }
+            // Light metrics at shutdown.
+            if (Boolean.getBoolean("rustcraft.lightExperiment")) {
+                Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+                    System.out.println("[RustCraft-Light] shutdown metrics:");
+                    System.out.println(com.rustcraft.bridge.PhosphorLightHook.dumpMetrics());
+                    System.out.println("[RustCraft-Light] transformer status="
+                            + com.rustcraft.coremod.PhosphorLightTransformer.transformCount
+                            + " " + com.rustcraft.coremod.PhosphorLightTransformer.lastTransformStatus);
+                }, "rustcraft-light-metrics"));
+            }
             // Region-read metrics at shutdown.
             if (Boolean.getBoolean("rustcraft.regionReadExperiment")) {
                 Runtime.getRuntime().addShutdownHook(new Thread(() -> {
