@@ -21,6 +21,7 @@ members = [
     "crates/rustcraft-core",
     "versions/mc_1_12_x",
     "crates/native-state-vnext",
+    "crates/light-engine",
 ]
 
 [workspace.package]
@@ -45,6 +46,7 @@ test-support = { path = "crates/test-support" }
 chunk-packet = { path = "crates/chunk-packet" }
 protocol = { path = "crates/protocol" }
 native-chunk = { path = "crates/native-chunk" }
+light-engine = { path = "crates/light-engine" }
 native-capability = { path = "crates/native-capability" }
 rustcraft-core = { path = "crates/rustcraft-core" }
 mc-1-12-x = { path = "versions/mc_1_12_x" }

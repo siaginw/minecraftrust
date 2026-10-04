@@ -29,6 +29,18 @@ def classify_single_frame(frame: str) -> str:
         return 'compression'
     elif 'anvil' in fl or 'nbt' in fl or 'region' in fl or 'chunkloader' in fl:
         return 'Anvil/NBT'
+    elif ('collision' in fl or 'func_72326_a' in fl or 'axisalignedbb' in fl
+          or 'func_191504_a' in fl or 'func_185908_a' in fl
+          or 'func_180495_p' in fl or 'func_72839_b' in fl):
+        return 'collision'
+    elif ('checklight' in fl or 'func_180500' in fl or 'func_175638' in fl
+          or 'lightengine' in fl or 'relight' in fl or 'phosphor' in fl
+          or 'func_175661_a' in fl or 'nibbles' in fl):
+        return 'lighting'
+    elif 'entitytick' in fl or 'entity.func_70071_h_' in fl or 'entitytracker' in fl:
+        return 'entity-tick'
+    elif 'tileentity' in fl or 'func_147453' in fl or 'func_147455' in fl:
+        return 'TE-tick'
     elif 'worldgen' in fl or 'gen.structure' in fl or 'mapgen' in fl or 'biome' in fl or 'chunkgenerator' in fl:
         return 'worldgen'
     elif 'net.minecraftforge' in fl or 'fml' in fl:
