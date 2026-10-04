@@ -107,6 +107,12 @@ public final class LiveSessionAdmissionTweaker implements ITweaker {
                 cl.registerTransformer(
                         "com.rustcraft.coremod.RegionFileAuthorityTransformer");
             }
+            // LIVE block-light authority: hooks Phosphor's LightingEngine
+            // BLOCK drain; self-gates on rustcraft.lightExperiment.
+            if (Boolean.getBoolean("rustcraft.lightExperiment")) {
+                cl.registerTransformer(
+                        "com.rustcraft.coremod.PhosphorLightTransformer");
+            }
             // LIVE region READ authority (RUST_REGION_READ_DECOMPRESSION_
             // AUTHORITY, default OFF): rewrites only the RegionFile read
             // seam (and close, for handle lifecycle) and self-gates on
@@ -188,13 +194,6 @@ public final class LiveSessionAdmissionTweaker implements ITweaker {
                 }, "rustcraft-region-metrics-dumper");
                 dumper.setDaemon(true);
                 dumper.start();
-            }
-            // LIVE block-light authority (RUST_BLOCK_LIGHT_PROPAGATION_
-            // AUTHORITY, default OFF): hooks Phosphor's LightingEngine BLOCK
-            // drain; self-gates on rustcraft.lightExperiment.
-            if (Boolean.getBoolean("rustcraft.lightExperiment")) {
-                cl.registerTransformer(
-                        "com.rustcraft.coremod.PhosphorLightTransformer");
             }
             // Light metrics at shutdown.
             if (Boolean.getBoolean("rustcraft.lightExperiment")) {
