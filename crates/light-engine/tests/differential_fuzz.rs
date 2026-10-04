@@ -299,17 +299,36 @@ fn scenario(seed: u64) -> Result<(), String> {
 
 #[test]
 fn differential_fuzz_100k_scenarios() {
-    let mut failures = 0;
-    for seed in 1..=100_000u64 {
-        if let Err(e) = scenario(seed) {
-            eprintln!("{e}");
-            failures += 1;
-            if failures >= 3 {
-                break;
+    // 100k scenarios across worker threads (each worker owns a disjoint
+    // seed range; failures collected per worker)
+    const SCENARIOS: u64 = 100_000;
+    const WORKERS: u64 = 8;
+    let per_worker = SCENARIOS / WORKERS;
+    let mut handles = Vec::new();
+    for w in 0..WORKERS {
+        handles.push(std::thread::spawn(move || {
+            let lo = w * per_worker + 1;
+            let hi = if w == WORKERS - 1 { SCENARIOS } else { lo + per_worker - 1 };
+            let mut failures: Vec<String> = Vec::new();
+            for seed in lo..=hi {
+                if let Err(e) = scenario(seed) {
+                    failures.push(e);
+                    if failures.len() >= 3 {
+                        break;
+                    }
+                }
             }
-        }
+            failures
+        }));
     }
-    assert_eq!(failures, 0, "fuzz found divergences");
+    let mut all_failures = Vec::new();
+    for h in handles {
+        all_failures.extend(h.join().unwrap());
+    }
+    for f in all_failures.iter().take(5) {
+        eprintln!("{f}");
+    }
+    assert!(all_failures.is_empty(), "fuzz found divergences");
 }
 
 #[test]
