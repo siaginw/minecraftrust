@@ -87,6 +87,9 @@ def main() -> int:
                         help="Override the evidence deadline ceiling")
     parser.add_argument("--soak-seconds", type=int, default=None)
     parser.add_argument("--soak-reason", type=str, default=None)
+    parser.add_argument("--light-experiment", action="store_true")
+    parser.add_argument("--light-mode", choices=["SHADOW", "ON_EXPERIMENTAL"],
+                        default="SHADOW")
     campaign_policy.add_tier_argument(parser)
     args = parser.parse_args()
 
@@ -244,6 +247,13 @@ def main() -> int:
             # LIVE counters for event-driven completion (goal §15)
             "-Drustcraft.regionMetricsFile=" + str(out_dir / "region-metrics.txt"),
         ]
+    if getattr(args, "light_experiment", False):
+        extra_args += ["-Drustcraft.lightExperiment=true"]
+    if getattr(args, "light_mode", None) and args.light_mode != "SHADOW":
+        for i, a in enumerate(extra_args):
+            if a == "-Drustcraft.lightExperiment=true":
+                extra_args[i] = "-Drustcraft.lightExperiment=true"
+        extra_args.append(f"-Drustcraft.lightMode={args.light_mode}")
     attribution_jar = ROOT / "target" / "rustcraft-attribution.jar"
     attribution_dir = out_dir / "attribution"
     if args.attribution:
