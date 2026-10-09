@@ -309,6 +309,9 @@ def main() -> int:
     parser.add_argument("--packet-authority", action="store_true",
                         help="Enable bounded Rust chunk packet authority "
                              "(§16 combined light+packet composition)")
+    parser.add_argument("--jvm-prop", action="append", default=None,
+                        help="Extra -D property for the server JVM "
+                             "(repeatable; e.g. rustcraft.syncPair=C0:C1)")
     campaign_policy.add_tier_argument(parser)
     args = parser.parse_args()
 
@@ -482,6 +485,12 @@ def main() -> int:
         encoding="utf-8")
 
     jvm_log = out_dir / "server.log"
+    if args.jvm_prop:
+        for jp in args.jvm_prop:
+            if "=" not in jp:
+                print(f"[ERROR] --jvm-prop wants NAME=VALUE, got {jp!r}",
+                      file=sys.stderr)
+                return 2
     extra_args = [
         "-Dfml.queryResult=confirm",
         "-Drustcraft.liveWriterDiagnostic=true",
@@ -494,6 +503,8 @@ def main() -> int:
         "-Drustcraft.liveShadowJournal=" + str(out_dir / "shadow-journal.jsonl"),
         "-Drustcraft.profile=" + profile_id,
     ]
+    if args.jvm_prop:
+        extra_args += ["-D" + jp for jp in args.jvm_prop]
     if args.mode != "OFF":
         extra_args += [
             "-Drustcraft.regionWriteExperiment=true",

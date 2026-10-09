@@ -387,6 +387,28 @@ def main():
     if res.returncode != 0:
         print("CELLKEY REGRESSION FAILED:\n" + res.stderr, file=sys.stderr)
         return res.returncode if res.returncode > 0 else 1
+
+    # OPT-SYNC-006 §9: lease/cache/impl-selector regression (same wiring)
+    sync_test_src = ROOT / "tools" / "bridge" / "test" / "com" / "rustcraft" \
+        / "bridge" / "SyncLeaseRegression.java"
+    res = subprocess.run(
+        [str(JAVAC), "-encoding", "UTF-8", "-source", "8", "-target", "8",
+         "-nowarn", "-cp", str(BUILD_DIR), "-d", str(test_build),
+         str(sync_test_src)],
+        capture_output=True, text=True)
+    if res.returncode != 0:
+        print("SYNCLEASE REGRESSION COMPILE ERROR:\n" + res.stderr,
+              file=sys.stderr)
+        return res.returncode
+    res = subprocess.run(
+        [str(JDK8 / "bin" / "java.exe"), "-cp",
+         str(test_build) + ";" + str(BUILD_DIR),
+         "com.rustcraft.bridge.SyncLeaseRegression"],
+        capture_output=True, text=True)
+    sys.stdout.write(res.stdout)
+    if res.returncode != 0:
+        print("SYNCLEASE REGRESSION FAILED:\n" + res.stderr, file=sys.stderr)
+        return res.returncode if res.returncode > 0 else 1
     return 0
 
 

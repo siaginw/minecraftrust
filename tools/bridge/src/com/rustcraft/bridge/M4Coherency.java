@@ -205,6 +205,261 @@ public final class M4Coherency {
     }
 
     private static volatile Thread FLUSHER;
+
+    // ===================== OPT-SYNC-006 bake-off machinery =====================
+    // C0 = shipped implementation (default; production behavior unchanged).
+    // C1 = reuse pack: leased readback buffer + scratch arrays (A,B),
+    //      ClassValue-cached precheck Method (C), op-scoped ChunkCtx (D).
+    // C2 = C1 + MethodHandle independent-verifier invocation (§8 candidate).
+    static final class SyncImpl {
+        final boolean leases, cachedPre, useCtx, mhVerify;
+        SyncImpl(boolean leases, boolean cachedPre, boolean useCtx, boolean mhVerify) {
+            this.leases = leases; this.cachedPre = cachedPre;
+            this.useCtx = useCtx; this.mhVerify = mhVerify;
+        }
+    }
+    static final SyncImpl IMPL_C0 = new SyncImpl(false, false, false, false);
+    static final SyncImpl IMPL_C1 = new SyncImpl(true, true, true, false);
+    static final SyncImpl IMPL_C2 = new SyncImpl(true, true, true, true);
+    public static volatile SyncImpl ACTIVE_IMPL = IMPL_C0;
+    static {
+        // OPT-SYNC-006 PROMOTION: C2 is the DEFAULT (live A/B 3/3 pairs won,
+        // clean separation: worst-C2 214.0ms < best-C0 222.7ms; DV −26%,
+        // validate −17%, alloc churn −91%; receipt OPT-SYNC-006). The
+        // shipped C0 path stays reproducible with -Drustcraft.syncPath=C0.
+        String p = System.getProperty("rustcraft.syncPath", "C2");
+        if ("C0".equals(p)) ACTIVE_IMPL = IMPL_C0;
+        else if ("C1".equals(p)) ACTIVE_IMPL = IMPL_C1;
+        else if ("C2".equals(p)) ACTIVE_IMPL = IMPL_C2;
+        else System.err.println("[sync-impl] unknown rustcraft.syncPath=" + p + " (C0|C1|C2); using C2");
+        if (!"C2".equals(p)) System.out.println("[sync-impl] rustcraft.syncPath=" + p + " ACTIVE (default is C2)");
+    }
+
+    // per-arm phase timer set: normal runs wrap the EXISTING statics (receipt
+    // continuity); paired bake-off arms wrap the BAKE0_/BAKE1_ statics
+    static final class PhaseSet {
+        final AtomicLong secTotal, secAlloc, pre, extract, dv, stage, jni, validate, absent, sections, alloc;
+        PhaseSet(AtomicLong secTotal, AtomicLong secAlloc, AtomicLong pre, AtomicLong extract,
+                 AtomicLong dv, AtomicLong stage, AtomicLong jni, AtomicLong validate,
+                 AtomicLong absent, AtomicLong sections, AtomicLong alloc) {
+            this.secTotal = secTotal; this.secAlloc = secAlloc; this.pre = pre;
+            this.extract = extract; this.dv = dv; this.stage = stage; this.jni = jni;
+            this.validate = validate; this.absent = absent; this.sections = sections;
+            this.alloc = alloc;
+        }
+    }
+    public static final AtomicLong BAKE0_SEC_TOTAL_NS = new AtomicLong();
+    public static final AtomicLong BAKE0_SEC_ALLOC_NS = new AtomicLong();
+    public static final AtomicLong BAKE0_PRECHECK_NS = new AtomicLong();
+    public static final AtomicLong BAKE0_EXTRACT_NS = new AtomicLong();
+    public static final AtomicLong BAKE0_DV_NS = new AtomicLong();
+    public static final AtomicLong BAKE0_STAGE_NS = new AtomicLong();
+    public static final AtomicLong BAKE0_JNI_NS = new AtomicLong();
+    public static final AtomicLong BAKE0_VALIDATE_NS = new AtomicLong();
+    public static final AtomicLong BAKE0_ABSENT_NS = new AtomicLong();
+    public static final AtomicLong BAKE0_SECTIONS = new AtomicLong();
+    public static final AtomicLong BAKE0_ALLOC_BYTES = new AtomicLong();
+    public static final AtomicLong BAKE1_SEC_TOTAL_NS = new AtomicLong();
+    public static final AtomicLong BAKE1_SEC_ALLOC_NS = new AtomicLong();
+    public static final AtomicLong BAKE1_PRECHECK_NS = new AtomicLong();
+    public static final AtomicLong BAKE1_EXTRACT_NS = new AtomicLong();
+    public static final AtomicLong BAKE1_DV_NS = new AtomicLong();
+    public static final AtomicLong BAKE1_STAGE_NS = new AtomicLong();
+    public static final AtomicLong BAKE1_JNI_NS = new AtomicLong();
+    public static final AtomicLong BAKE1_VALIDATE_NS = new AtomicLong();
+    public static final AtomicLong BAKE1_ABSENT_NS = new AtomicLong();
+    public static final AtomicLong BAKE1_SECTIONS = new AtomicLong();
+    public static final AtomicLong BAKE1_ALLOC_BYTES = new AtomicLong();
+    public static final AtomicLong[] BAKE_DV_RUNS = { new AtomicLong(), new AtomicLong() };
+    static final PhaseSet TS_NORMAL = new PhaseSet(SEC_TOTAL_NS, SEC_ALLOC_NS,
+            PHASE_PRECHECK_NS, PHASE_EXTRACT_NS, DV_VERIFY_NS, PHASE_STAGE_NS,
+            PHASE_JNI_NS, PHASE_VALIDATE_NS, PHASE_ABSENT_NS, null, null);
+    static final PhaseSet TS_BAKE0 = new PhaseSet(BAKE0_SEC_TOTAL_NS, BAKE0_SEC_ALLOC_NS,
+            BAKE0_PRECHECK_NS, BAKE0_EXTRACT_NS, BAKE0_DV_NS, BAKE0_STAGE_NS,
+            BAKE0_JNI_NS, BAKE0_VALIDATE_NS, BAKE0_ABSENT_NS, BAKE0_SECTIONS, BAKE0_ALLOC_BYTES);
+    static final PhaseSet TS_BAKE1 = new PhaseSet(BAKE1_SEC_TOTAL_NS, BAKE1_SEC_ALLOC_NS,
+            BAKE1_PRECHECK_NS, BAKE1_EXTRACT_NS, BAKE1_DV_NS, BAKE1_STAGE_NS,
+            BAKE1_JNI_NS, BAKE1_VALIDATE_NS, BAKE1_ABSENT_NS, BAKE1_SECTIONS, BAKE1_ALLOC_BYTES);
+
+    /// §10 paired in-vivo harness: rustcraft.syncPair=C0:C1 runs BOTH
+    /// implementations back-to-back on the SAME live section objects (the
+    /// strongest common-corpus guarantee), alternating execution order per
+    /// section index to cancel ordering bias. Work counters count once
+    /// (arm 0); correctness counters count on BOTH arms. Double-running a
+    /// section is idempotent (identical bytes written; readback validates
+    /// each arm independently).
+    static final SyncImpl[] PAIR_IMPLS;
+    static final java.util.concurrent.atomic.AtomicInteger PAIR_SEQ =
+            new java.util.concurrent.atomic.AtomicInteger();
+    static {
+        SyncImpl[] pr = null;
+        String ps = System.getProperty("rustcraft.syncPair");
+        if (ps != null) {
+            String[] parts = ps.split(":");
+            SyncImpl a = implByName(parts[0]), b = parts.length > 1 ? implByName(parts[1]) : null;
+            if (a == null || b == null) {
+                System.err.println("[sync-pair] bad rustcraft.syncPair=" + ps + " (want e.g. C0:C1); pairing disabled");
+            } else {
+                pr = new SyncImpl[] { a, b };
+                System.out.println("[sync-pair] paired bake-off: " + ps
+                        + " (order alternates per section; per-arm BAKE0_/BAKE1_ timers)");
+            }
+        }
+        PAIR_IMPLS = pr;
+    }
+    static SyncImpl implByName(String n) {
+        if ("C0".equals(n)) return IMPL_C0;
+        if ("C1".equals(n)) return IMPL_C1;
+        if ("C2".equals(n)) return IMPL_C2;
+        return null;
+    }
+
+    /// §5 op-scoped scratch leasing. Slot model: each PURPOSE has its own
+    /// slot + held flag; slots are independent (gid and dv NEVER alias —
+    /// §6 verifier independence). Re-entrant acquire of a HELD slot yields
+    /// a FRESH instance instead of aliasing (nested-sync safety; counted).
+    /// light slots are ZEROED on lease (null-nibble semantics must not see
+    /// stale tails); int slots are fully-overwritten-by-contract (packed
+    /// decode, fallback extractor, and dualVerify each write all 4096).
+    /// readback: direct 20480 LE, position reset on lease; the native side
+    /// writes exactly 20480 bytes on success (rbr==0) or returns negative.
+    public static final AtomicLong LEASE_ACQ = new AtomicLong();
+    public static final AtomicLong LEASE_REENTRANT_FALLBACK = new AtomicLong();
+    public static final AtomicLong LEASE_RETAINED_BYTES = new AtomicLong();
+
+    static final class SyncScratch {
+        int[] gid; boolean gidHeld;
+        byte[] bl; boolean blHeld;
+        byte[] sl; boolean slHeld;
+        int[] dv; boolean dvHeld;
+        ByteBuffer readback; boolean rbHeld;
+        java.nio.IntBuffer statesView; // absolute-put view over the fixed STATES_TL buffer
+    }
+    static final ThreadLocal<SyncScratch> SCRATCH_TL = new ThreadLocal<SyncScratch>() {
+        @Override protected SyncScratch initialValue() {
+            SyncScratch s = new SyncScratch();
+            s.readback = ByteBuffer.allocateDirect(20480).order(ByteOrder.LITTLE_ENDIAN);
+            LEASE_RETAINED_BYTES.addAndGet(20480);
+            return s;
+        }
+    };
+    static int[] leaseGid(SyncScratch s) {
+        if (s.gid == null) s.gid = new int[4096];
+        if (!s.gidHeld) { s.gidHeld = true; LEASE_ACQ.incrementAndGet(); return s.gid; }
+        LEASE_REENTRANT_FALLBACK.incrementAndGet();
+        return new int[4096];
+    }
+    static void releaseGid(SyncScratch s, int[] a) {
+        if (a == s.gid) s.gidHeld = false;
+    }
+    static byte[] leaseBl(SyncScratch s) {
+        if (s.bl == null) s.bl = new byte[2048];
+        if (!s.blHeld) {
+            s.blHeld = true; LEASE_ACQ.incrementAndGet();
+            java.util.Arrays.fill(s.bl, (byte) 0);
+            return s.bl;
+        }
+        LEASE_REENTRANT_FALLBACK.incrementAndGet();
+        return new byte[2048];
+    }
+    static void releaseBl(SyncScratch s, byte[] a) { if (a == s.bl) s.blHeld = false; }
+    static byte[] leaseSl(SyncScratch s) {
+        if (s.sl == null) s.sl = new byte[2048];
+        if (!s.slHeld) {
+            s.slHeld = true; LEASE_ACQ.incrementAndGet();
+            java.util.Arrays.fill(s.sl, (byte) 0);
+            return s.sl;
+        }
+        LEASE_REENTRANT_FALLBACK.incrementAndGet();
+        return new byte[2048];
+    }
+    static void releaseSl(SyncScratch s, byte[] a) { if (a == s.sl) s.slHeld = false; }
+    static int[] leaseDv(SyncScratch s) {
+        if (s.dv == null) s.dv = new int[4096];
+        if (!s.dvHeld) { s.dvHeld = true; LEASE_ACQ.incrementAndGet(); return s.dv; }
+        LEASE_REENTRANT_FALLBACK.incrementAndGet();
+        return new int[4096];
+    }
+    static void releaseDv(SyncScratch s, int[] a) { if (a == s.dv) s.dvHeld = false; }
+    static ByteBuffer leaseReadback(SyncScratch s) {
+        if (!s.rbHeld) {
+            s.rbHeld = true; LEASE_ACQ.incrementAndGet();
+            s.readback.clear();
+            return s.readback;
+        }
+        LEASE_REENTRANT_FALLBACK.incrementAndGet();
+        return ByteBuffer.allocateDirect(20480).order(ByteOrder.LITTLE_ENDIAN);
+    }
+    static void releaseReadback(SyncScratch s, ByteBuffer b) {
+        if (b == s.readback) s.rbHeld = false;
+    }
+
+    /// §7 reflection caches keyed on RUNTIME class identity. ClassValue
+    /// entries die with the class (and its loader) — no unbounded global
+    /// cache retaining discarded LaunchClassLoader classes. Exact member
+    /// identity: name + parameter types via getMethod; miss => null and
+    /// the caller keeps its fail-open behavior.
+    public static final AtomicLong CV_PRE_HITS = new AtomicLong();
+    public static final AtomicLong CV_PRE_MISSES = new AtomicLong();
+    static final ClassValue<Method> CV_IS_EMPTY = new ClassValue<Method>() {
+        @Override protected Method computeValue(Class<?> c) {
+            try {
+                Method m = c.getMethod("func_76663_a");
+                m.setAccessible(true);
+                return m;
+            } catch (Throwable t) {
+                return null;
+            }
+        }
+    };
+
+    /// §8 C2: MethodHandle plans unreflected from the SAME runtime-class
+    /// Methods (virtual dispatch and access identical to the reflective
+    /// baseline; access established at plan build, per JDK8 unreflect of
+    /// an accessible Method). Null plan => caller falls back to Method.invoke.
+    public static final AtomicLong MH_PLANS_BUILT = new AtomicLong();
+    private static final java.lang.invoke.MethodHandles.Lookup MH_LOOKUP =
+            java.lang.invoke.MethodHandles.lookup();
+    private static final ClassValue<java.lang.invoke.MethodHandle> CV_MH_GET_STATE =
+            new ClassValue<java.lang.invoke.MethodHandle>() {
+                @Override protected java.lang.invoke.MethodHandle computeValue(Class<?> c) {
+                    try {
+                        Method m = c.getMethod("func_186016_a", int.class, int.class, int.class);
+                        m.setAccessible(true);
+                        MH_PLANS_BUILT.incrementAndGet();
+                        return MH_LOOKUP.unreflect(m);
+                    } catch (Throwable t) {
+                        return null;
+                    }
+                }
+            };
+    private static volatile java.lang.invoke.MethodHandle MH_REG_GET_ID;
+    private static java.lang.invoke.MethodHandle regGetIdPlan() {
+        java.lang.invoke.MethodHandle h = MH_REG_GET_ID;
+        if (h == null) {
+            try {
+                Method m = REG_MAP.getClass().getMethod("func_148747_b", Object.class);
+                m.setAccessible(true);
+                h = MH_LOOKUP.unreflect(m);
+                MH_PLANS_BUILT.incrementAndGet();
+                MH_REG_GET_ID = h;
+            } catch (Throwable t) {
+                return null;
+            }
+        }
+        return h;
+    }
+
+    /// §4-D op-scoped chunk context: resolved ONCE per sync op under the
+    /// per-chunk refreshLock (single-threaded within the op; no reuse
+    /// across ops — revalidation happens by construction on the next op).
+    static final class ChunkCtx {
+        final int dim, cx, cz;
+        final long gen;
+        ChunkCtx(int dim, int cx, int cz, long gen) {
+            this.dim = dim; this.cx = cx; this.cz = cz; this.gen = gen;
+        }
+    }
     private static volatile boolean started = false;
 
     private static final int FLUSH_INTERVAL_MS = 2000;
@@ -392,7 +647,7 @@ public final class M4Coherency {
             if (work == null) continue;
             if (REFRESH_DISABLED) break;
             try {
-                handleChunk(chunk, work);
+                handleChunk(chunk, work, null);
             } catch (Throwable t) {
                 WorldgenShadow.recordCoherencyError("handle: " + t, t);
             }
@@ -777,38 +1032,66 @@ public final class M4Coherency {
 
     /** Compare fast vs slow extraction for one section; dump on divergence. */
     static void dualVerify(int dim, int cx, int cz, int y, Object container, Object storage,
-                           int[] fastResult) {
+                           int[] fastResult, int arm, SyncImpl impl) {
         try {
-            if (DUAL_VERIFY_RUNS.incrementAndGet() % DUAL_VERIFY_EVERY != 0) return;
-            int[] slow = new int[4096];
-            for (int i = 0; i < 4096; i++) {
-                Object st = M_GET_STATE.invoke(container, i & 15, i >> 8, (i >> 4) & 15);
-                Integer gid = (Integer) M_REG_GET_ID.invoke(REG_MAP, st);
-                if (gid == null) { UNKNOWN_STATE_REJECTED.incrementAndGet(); slow[i] = -1; }
-                else slow[i] = gid;
+            AtomicLong runs = arm < 0 ? DUAL_VERIFY_RUNS : BAKE_DV_RUNS[arm];
+            if (runs.incrementAndGet() % DUAL_VERIFY_EVERY != 0) return;
+            // §8 C2: MethodHandle invocation vehicle — plans unreflected
+            // from the SAME runtime-class Methods (identical virtual
+            // dispatch + access); null plan falls back to Method.invoke.
+            java.lang.invoke.MethodHandle mhGet = null, mhReg = null;
+            boolean mh = false;
+            if (impl != null && impl.mhVerify) {
+                mhGet = CV_MH_GET_STATE.get(container.getClass());
+                mhReg = regGetIdPlan();
+                mh = mhGet != null && mhReg != null;
             }
-            for (int i = 0; i < 4096; i++) {
-                if (slow[i] != fastResult[i]) {
-                    // M4.3C finding: worker extraction runs concurrently with server
-                    // population — the JAVA STATE ITSELF may change between the fast
-                    // and slow reads (proven live: coal_ore-vs-stone dump). Re-read
-                    // for stability: only a STABLE slow!=fast is a real divergence.
-                    int[] slow2 = new int[4096];
-                    for (int j = 0; j < 4096; j++) {
-                        Object st2 = M_GET_STATE.invoke(container, j & 15, j >> 8, (j >> 4) & 15);
-                        Integer gid2 = (Integer) M_REG_GET_ID.invoke(REG_MAP, st2);
-                        slow2[j] = gid2 == null ? -1 : gid2;
-                    }
-                    if (!java.util.Arrays.equals(slow, slow2)) {
-                        DUAL_MUTATION_INFLIGHT.incrementAndGet();
-                        return; // benign: state moved between reads
-                    }
-                    DUAL_VERIFY_DIVERGE.incrementAndGet();
-                    FAST_EXTRACTOR_ENABLED = false;
-                    DUAL_FIRST_DIVERGENCE = dumpDivergence(dim, cx, cz, y, i, container, slow, fastResult);
-                    System.err.println("[M43C-FAST-DIVERGENCE] " + DUAL_FIRST_DIVERGENCE);
-                    return;
+            // §5 lease: dv scratch NEVER aliases fastResult (§6 — the two
+            // witnesses must be distinct storage); re-entrant acquire is
+            // impossible here (no sync call inside dualVerify) but the
+            // slot model still guards it.
+            SyncScratch sc = (impl != null && impl.leases) ? SCRATCH_TL.get() : null;
+            int[] slow = (sc != null) ? leaseDv(sc) : new int[4096];
+            try {
+                for (int i = 0; i < 4096; i++) {
+                    Object st = mh
+                            ? mhGet.invoke(container, i & 15, i >> 8, (i >> 4) & 15)
+                            : M_GET_STATE.invoke(container, i & 15, i >> 8, (i >> 4) & 15);
+                    Integer gid = mh
+                            ? (Integer) mhReg.invoke(REG_MAP, st)
+                            : (Integer) M_REG_GET_ID.invoke(REG_MAP, st);
+                    if (gid == null) { UNKNOWN_STATE_REJECTED.incrementAndGet(); slow[i] = -1; }
+                    else slow[i] = gid;
                 }
+                for (int i = 0; i < 4096; i++) {
+                    if (slow[i] != fastResult[i]) {
+                        // M4.3C finding: worker extraction runs concurrently with server
+                        // population — the JAVA STATE ITSELF may change between the fast
+                        // and slow reads (proven live: coal_ore-vs-stone dump). Re-read
+                        // for stability: only a STABLE slow!=fast is a real divergence.
+                        int[] slow2 = new int[4096];
+                        for (int j = 0; j < 4096; j++) {
+                            Object st2 = mh
+                                    ? mhGet.invoke(container, j & 15, j >> 8, (j >> 4) & 15)
+                                    : M_GET_STATE.invoke(container, j & 15, j >> 8, (j >> 4) & 15);
+                            Integer gid2 = mh
+                                    ? (Integer) mhReg.invoke(REG_MAP, st2)
+                                    : (Integer) M_REG_GET_ID.invoke(REG_MAP, st2);
+                            slow2[j] = gid2 == null ? -1 : gid2;
+                        }
+                        if (!java.util.Arrays.equals(slow, slow2)) {
+                            DUAL_MUTATION_INFLIGHT.incrementAndGet();
+                            return; // benign: state moved between reads
+                        }
+                        DUAL_VERIFY_DIVERGE.incrementAndGet();
+                        FAST_EXTRACTOR_ENABLED = false;
+                        DUAL_FIRST_DIVERGENCE = dumpDivergence(dim, cx, cz, y, i, container, slow, fastResult);
+                        System.err.println("[M43C-FAST-DIVERGENCE] " + DUAL_FIRST_DIVERGENCE);
+                        return;
+                    }
+                }
+            } finally {
+                if (sc != null) releaseDv(sc, slow);
             }
         } catch (Throwable t) {
             WorldgenShadow.recordCoherencyError("dualVerify: " + t, t);
@@ -867,12 +1150,25 @@ public final class M4Coherency {
     /// nothing. Measured: 67-70% of refreshed sections qualify.
     private static final java.util.concurrent.atomic.AtomicLong SYNC_SKIPPED = new java.util.concurrent.atomic.AtomicLong();
 
-    private static boolean isNativeDefaultSection(Object storage) {
+    private static boolean isNativeDefaultSection(Object storage, boolean useCache) {
         try {
             // EBS.isEmpty = func_76663_a (symbols-verified; live-maintained
-            // by vanilla's incremental set() bookkeeping)
-            java.lang.reflect.Method m = storage.getClass().getMethod("func_76663_a");
-            m.setAccessible(true);
+            // by vanilla's incremental set() bookkeeping). C1 resolves it
+            // through the ClassValue cache keyed on the RUNTIME class (§7);
+            // a cache miss (no such member on that class) keeps the same
+            // fail-open-to-refresh behavior as the old NoSuchMethod path.
+            java.lang.reflect.Method m;
+            if (useCache) {
+                m = CV_IS_EMPTY.get(storage.getClass());
+                if (m == null) {
+                    CV_PRE_MISSES.incrementAndGet();
+                    return false;
+                }
+                CV_PRE_HITS.incrementAndGet();
+            } else {
+                m = storage.getClass().getMethod("func_76663_a");
+                m.setAccessible(true);
+            }
             if (!(Boolean) m.invoke(storage)) {
                 return false;
             }
@@ -974,22 +1270,29 @@ public final class M4Coherency {
             long rs0 = System.nanoTime();
             long[] _k = ChunkMutationTracker.chunkCoords(chunk);
             Object _lock = null;
+            int _dim = ChunkMutationTracker.DIM_UNKNOWN;
             if (_k[0] != Long.MIN_VALUE) {
-                _lock = refreshLock(ChunkMutationTracker.dimOf(chunk), (int) _k[0], (int) _k[1]);
+                _dim = ChunkMutationTracker.dimOf(chunk);
+                _lock = refreshLock(_dim, (int) _k[0], (int) _k[1]);
             }
+            // §4-D: op-scoped ctx for the C1/C2 paths (pair mode keeps
+            // chunk-level code C0-shaped; only the section body is paired)
+            ChunkCtx ctx = (ACTIVE_IMPL.useCtx && PAIR_IMPLS == null
+                    && _k[0] != Long.MIN_VALUE)
+                    ? new ChunkCtx(_dim, (int) _k[0], (int) _k[1], 0L) : null;
             addPhase(S_RESOLVE, CH_RESOLVE_NS, rs0);
             if (_lock != null) {
                 synchronized (_lock) {
-                    return refreshChunkNowSerialized(chunk, op);
+                    return refreshChunkNowSerialized(chunk, op, ctx);
                 }
             }
-            return refreshChunkNowSerialized(chunk, op);
+            return refreshChunkNowSerialized(chunk, op, ctx);
         } finally {
             opEnd(op);
         }
     }
 
-    private static int refreshChunkNowSerialized(Object chunk, long[] op) throws Exception {
+    private static int refreshChunkNowSerialized(Object chunk, long[] op, ChunkCtx ctx) throws Exception {
         // First-touch full synchronization (M4.2C skyLight finding): registration
         // light is a DEFAULT; the Java light engine sets sky light in sections
         // that never had a block mutation (no dirty bit). Until a chunk has been
@@ -999,7 +1302,7 @@ public final class M4Coherency {
         addPhase(S_TRACKER, CH_TRACKER_NS, tk0);
         if (full) {
             op[S_FULL] = 1;
-            return fullSync(chunk);
+            return fullSync(chunk, ctx);
         }
         long tk1 = System.nanoTime();
         int[] work = ChunkMutationTracker.takeWork(chunk);
@@ -1008,12 +1311,12 @@ public final class M4Coherency {
         // carries zero biomes, so the current Java array is pushed on every
         // refresh pass (M4.2B biome[0] finding) before any consumer read.
         if (work == null) {
-            pushBiomes(chunk, null); // no section work: still keep biomes current
+            pushBiomes(chunk, null, ctx); // no section work: still keep biomes current
             return 0;
         }
-        pushBiomes(chunk, work);
+        pushBiomes(chunk, work, ctx);
         long before = SECTIONS_REFRESHED.get();
-        handleChunk(chunk, work);
+        handleChunk(chunk, work, ctx);
         // re-arm the quiescence guard: the refresh just consumed this version's work
         long tk2 = System.nanoTime();
         FULLY_SYNCED.put(chunk, ChunkMutationTracker.versionOf(chunk));
@@ -1025,12 +1328,14 @@ public final class M4Coherency {
     /** First full pull of a chunk: every section (states + light) + biomes,
      *  reusing the handleChunk dirty-loop with a full mask so validation runs
      *  on every synced section. */
-    private static int fullSync(Object chunk) throws Exception {
+    private static int fullSync(Object chunk, ChunkCtx ctxIn) throws Exception {
+        boolean useCtx = ctxIn != null && ACTIVE_IMPL.useCtx;
         long rs0 = System.nanoTime();
-        int dim = ChunkMutationTracker.dimOf(chunk);
+        int dim = useCtx ? ctxIn.dim : ChunkMutationTracker.dimOf(chunk);
         long[] k = (dim == ChunkMutationTracker.DIM_UNKNOWN)
-                ? null : ChunkMutationTracker.chunkCoords(chunk);
-        addPhase(S_RESOLVE, CH_RESOLVE_NS, rs0);
+                ? null : (useCtx ? new long[] { ctxIn.cx, ctxIn.cz }
+                : ChunkMutationTracker.chunkCoords(chunk));
+        if (!useCtx || dim == ChunkMutationTracker.DIM_UNKNOWN) addPhase(S_RESOLVE, CH_RESOLVE_NS, rs0);
         long[] c = OP_CTX.get();
         if (c != null) {
             c[S_DIM] = dim;
@@ -1053,11 +1358,12 @@ public final class M4Coherency {
             return 0; // not registered: nothing to sync
         }
         if (c != null) c[S_GEN] = gen;
+        ChunkCtx ctx = new ChunkCtx(dim, (int) k[0], (int) k[1], gen);
         int[] fullWork = { dim, 0xFFFF, 0xFFFF, 0, 0 };
         long before = SECTIONS_REFRESHED.get();
         long fs0 = System.nanoTime();
-        handleChunk(chunk, fullWork);
-        pushBiomes(chunk, fullWork);
+        handleChunk(chunk, fullWork, ctx);
+        pushBiomes(chunk, fullWork, ctx);
         PHASE_CHUNKSYNC_NS.addAndGet(System.nanoTime() - fs0);
         long tk1 = System.nanoTime();
         FULLY_SYNCED.put(chunk, ChunkMutationTracker.versionOf(chunk));
@@ -1076,20 +1382,27 @@ public final class M4Coherency {
     private static final ThreadLocal<java.nio.ByteBuffer> BIOME_BB_TL = ThreadLocal.withInitial(() ->
             java.nio.ByteBuffer.allocateDirect(256).order(java.nio.ByteOrder.nativeOrder()));
 
-    private static void pushBiomes(Object chunk, int[] work) {
+    private static void pushBiomes(Object chunk, int[] work, ChunkCtx ctx) {
         long b0 = System.nanoTime();
         try {
-            pushBiomesInner(chunk, work);
+            pushBiomesInner(chunk, work, ctx);
         } finally {
             addPhase(S_BIOMES, BIOMES_WALL_NS, b0);
         }
     }
 
-    private static void pushBiomesInner(Object chunk, int[] work) {
+    private static void pushBiomesInner(Object chunk, int[] work, ChunkCtx ctx) {
         try {
-            int dim = (work != null) ? work[0] : ChunkMutationTracker.dimOf(chunk);
+            int dim;
+            long[] k;
+            if (ctx != null && ACTIVE_IMPL.useCtx) {
+                dim = (work != null) ? work[0] : ctx.dim;
+                k = new long[] { ctx.cx, ctx.cz };
+            } else {
+                dim = (work != null) ? work[0] : ChunkMutationTracker.dimOf(chunk);
+                k = ChunkMutationTracker.chunkCoords(chunk);
+            }
             if (dim == ChunkMutationTracker.DIM_UNKNOWN) return;
-            long[] k = ChunkMutationTracker.chunkCoords(chunk);
             if (k[0] == Long.MIN_VALUE) return;
             if (M_GET_BIOMES == null) {
                 M_GET_BIOMES = chunk.getClass().getMethod("func_76605_m");
@@ -1107,9 +1420,11 @@ public final class M4Coherency {
         }
     }
 
-    private static void handleChunk(Object chunk, int[] work) throws Exception {
+    private static void handleChunk(Object chunk, int[] work, ChunkCtx ctxIn) throws Exception {
         long rs0 = System.nanoTime();
-        long[] coords = ChunkMutationTracker.chunkCoords(chunk);
+        boolean useCtx = ctxIn != null && ACTIVE_IMPL.useCtx;
+        long[] coords = useCtx ? new long[] { ctxIn.cx, ctxIn.cz }
+                : ChunkMutationTracker.chunkCoords(chunk);
         int cx = (int) coords[0], cz = (int) coords[1];
         if (cx == Long.MIN_VALUE) return; // unresolvable coords: leave (no silent coverage claim)
         int dim = work[0];
@@ -1128,12 +1443,13 @@ public final class M4Coherency {
 
         // Biome-only change: push the array, sections untouched (M4.2D contract)
         if (work[4] != 0) {
-            pushBiomes(chunk, work);
+            pushBiomes(chunk, work, ctxIn);
         }
         int mask = work[1] | work[2];
         if (mask == 0) return;
 
-        long gen = NativeChunkBridge.findGeneration(dim, cx, cz);
+        long gen = (useCtx && ctxIn.gen > 0) ? ctxIn.gen
+                : NativeChunkBridge.findGeneration(dim, cx, cz);
         if (c != null) c[S_GEN] = gen;
         if (gen <= 0) {
             NOT_REGISTERED_SKIPPED.incrementAndGet();
@@ -1155,26 +1471,73 @@ public final class M4Coherency {
 
     private static void refreshAndValidateSection(int dim, int cx, int cz, long gen,
                                                   int y, Object storage) throws Exception {
+        if (PAIR_IMPLS != null) {
+            // §10 paired in-vivo: BOTH impls run on the SAME live section
+            // objects (identical inputs by construction), execution order
+            // alternating per section index to cancel ordering bias. The
+            // double-run is idempotent (identical bytes written twice; the
+            // readback validates each arm). Work counters count arm 0 only.
+            int seq = PAIR_SEQ.getAndIncrement();
+            if ((seq & 1) == 0) {
+                runSectionBody(PAIR_IMPLS[0], TS_BAKE0, 0, dim, cx, cz, gen, y, storage);
+                runSectionBody(PAIR_IMPLS[1], TS_BAKE1, 1, dim, cx, cz, gen, y, storage);
+            } else {
+                runSectionBody(PAIR_IMPLS[1], TS_BAKE1, 1, dim, cx, cz, gen, y, storage);
+                runSectionBody(PAIR_IMPLS[0], TS_BAKE0, 0, dim, cx, cz, gen, y, storage);
+            }
+            return;
+        }
         long secT0 = System.nanoTime();
         try {
-            refreshAndValidateSectionInner(dim, cx, cz, gen, y, storage);
+            runSectionBody(ACTIVE_IMPL, TS_NORMAL, -1, dim, cx, cz, gen, y, storage);
         } finally {
             addPhase(S_SEC_TOTAL, SEC_TOTAL_NS, secT0);
         }
     }
 
-    private static void refreshAndValidateSectionInner(int dim, int cx, int cz, long gen,
-                                                  int y, Object storage) throws Exception {
+    /** add to a per-arm phase field; normal mode (arm<0) also feeds the
+     * op-trace context so [sync-op-trace] keeps working. */
+    private static void addP(AtomicLong field, int slot, long fromNanos, boolean ctxToo) {
+        long d = System.nanoTime() - fromNanos;
+        field.addAndGet(d);
+        if (ctxToo) {
+            long[] c = OP_CTX.get();
+            if (c != null) c[slot] += d;
+        }
+    }
+
+    private static void runSectionBody(SyncImpl impl, PhaseSet T, int arm, int dim, int cx, int cz,
+                                       long gen, int y, Object storage) throws Exception {
+        final boolean ctxToo = arm < 0; // op-trace ctx only in normal mode
+        final boolean countWork = arm <= 0;
+        long a0 = T.alloc != null ? allocNow() : 0L;
+        long tStart = System.nanoTime();
+        boolean heldGid = false, heldBl = false, heldSl = false;
+        SyncScratch s = impl.leases ? SCRATCH_TL.get() : null;
+        int[] javaGid = null;
+        byte[] javaBl = null, javaSl = null;
+        try {
         long al0 = System.nanoTime();
         ByteBuffer statesBB = STATES_TL.get();
-        java.nio.IntBuffer sc = statesBB.asIntBuffer();
+        java.nio.IntBuffer sc;
+        if (impl.leases) {
+            if (s.statesView == null) s.statesView = statesBB.asIntBuffer();
+            sc = s.statesView; // absolute puts only: no position state
+        } else {
+            sc = statesBB.asIntBuffer();
+        }
         ByteBuffer lightBB = LIGHT_TL.get();
-        ByteBuffer pktBB = PKT_TL.get();
 
-        int[] javaGid = new int[4096];
-        byte[] javaBl = new byte[2048];
-        byte[] javaSl = new byte[2048];
-        addPhase(S_SEC_ALLOC, SEC_ALLOC_NS, al0);
+        if (impl.leases) {
+            javaGid = leaseGid(s); heldGid = true;
+            javaBl = leaseBl(s); heldBl = true;   // zeroed on lease (null-nibble contract)
+            javaSl = leaseSl(s); heldSl = true;
+        } else {
+            javaGid = new int[4096];
+            javaBl = new byte[2048];
+            javaSl = new byte[2048];
+        }
+        addP(T.secAlloc, S_SEC_ALLOC, al0, ctxToo);
         // OPT-SYNC-002 packed representation (method scope: built in the
         // extraction phase, consumed by the transfer phase below)
         java.nio.ByteBuffer packedWords = null;
@@ -1184,18 +1547,18 @@ public final class M4Coherency {
         boolean hasStorage = storage != null
                 && (F_EMPTY_STORAGE == null || storage != F_EMPTY_STORAGE.get(null));
         if (hasStorage) {
-            // OPT-SYNC-005: PRECHECK now times the REAL scan
-            // (isNativeDefaultSection; includes its per-call getMethod +
-            // setAccessible). Absent sections short-circuit as before.
+            // OPT-SYNC-005: PRECHECK times the REAL scan. C1 uses the
+            // ClassValue-cached Method (§7: keyed on runtime class; entries
+            // die with the class/loader).
             long pc1 = System.nanoTime();
-            boolean nativeDefault = isNativeDefaultSection(storage);
-            addPhase(S_PRE, PHASE_PRECHECK_NS, pc1);
+            boolean nativeDefault = isNativeDefaultSection(storage, impl.cachedPre);
+            addP(T.pre, S_PRE, pc1, ctxToo);
             if (nativeDefault) {
                 // OPT-SYNC-001: section IS the native default — the 20 KiB
                 // staging + JNI refresh would write what from_primer already
                 // put there. Skip; validation counters still cover refreshed
                 // sections (skipped sections are bit-equal by construction).
-                SYNC_SKIPPED.incrementAndGet();
+                if (countWork) SYNC_SKIPPED.incrementAndGet();
                 return;
             }
         }
@@ -1286,8 +1649,8 @@ public final class M4Coherency {
                         ? fastExtractGlobalIds(container, javaGid) : null;
                 if (fast != null && dim != Integer.MIN_VALUE) {
                     long dv0 = System.nanoTime();
-                    dualVerify(dim, cx, cz, y, container, storage, javaGid);
-                    addPhase(S_DV, DV_VERIFY_NS, dv0);
+                    dualVerify(dim, cx, cz, y, container, storage, javaGid, arm, impl);
+                    addP(T.dv, S_DV, dv0, ctxToo);
                 }
                 if (fast == null) {
                     for (int i = 0; i < 4096; i++) {
@@ -1304,11 +1667,13 @@ public final class M4Coherency {
                     }
                 }
             }
-            DV_DECISIONS.incrementAndGet();
-            if (DV_DECISIONS.get() == 1) {
-                System.out.println("[dv-probe] first packed-gate: dim=" + dim
-                        + " hasStorage=" + hasStorage
-                        + " packed=" + (packedWords != null));
+            if (countWork) {
+                DV_DECISIONS.incrementAndGet();
+                if (DV_DECISIONS.get() == 1) {
+                    System.out.println("[dv-probe] first packed-gate: dim=" + dim
+                            + " hasStorage=" + hasStorage
+                            + " packed=" + (packedWords != null));
+                }
             }
             if (packedWords != null && dim != Integer.MIN_VALUE) {
                 // §5 independence chain: per-cell container.get ground
@@ -1316,14 +1681,14 @@ public final class M4Coherency {
                 // readback validates native vs the packed decode. Without
                 // this, both comparison sides share the packed decoder.
                 long dv0 = System.nanoTime();
-                dualVerify(dim, cx, cz, y, container, storage, javaGid);
-                addPhase(S_DV, DV_VERIFY_NS, dv0);
+                dualVerify(dim, cx, cz, y, container, storage, javaGid, arm, impl);
+                addP(T.dv, S_DV, dv0, ctxToo);
             }
             Object blArr = M_GET_BL.invoke(storage);
             if (blArr != null) System.arraycopy(M_NIBBLE_BYTES.invoke(blArr), 0, javaBl, 0, 2048);
             Object slArr = M_GET_SL.invoke(storage);
             if (slArr != null) System.arraycopy(M_NIBBLE_BYTES.invoke(slArr), 0, javaSl, 0, 2048);
-            addPhase(S_EXTRACT, PHASE_EXTRACT_NS, ph0);
+            addP(T.extract, S_EXTRACT, ph0, ctxToo);
         }
         // OPT-SYNC-001: ABSENT path — bit-equal native memsets replace
         // the staged 20 KiB zero refresh (states stay 0, block light 0,
@@ -1331,8 +1696,8 @@ public final class M4Coherency {
         if (!hasStorage) {
             long ab0 = System.nanoTime();
             NativeChunkBridge.markSectionAbsent(dim, cx, cz, (byte) y);
-            addPhase(S_ABSENT, PHASE_ABSENT_NS, ab0);
-            SYNC_SKIPPED.incrementAndGet();
+            addP(T.absent, S_ABSENT, ab0, ctxToo);
+            if (countWork) SYNC_SKIPPED.incrementAndGet();
             return;
         }
         // else: section emptied/absent in Java -> refresh to all-air (states stay 0)
@@ -1357,7 +1722,7 @@ public final class M4Coherency {
             lightBB.clear();
             lightBB.put(javaBl).put(javaSl);
             lightBB.clear();
-            addPhase(S_STAGE, PHASE_STAGE_NS, ph1);
+            addP(T.stage, S_STAGE, ph1, ctxToo);
             long ph2 = System.nanoTime();
             // palette table: address the BACKING ByteBuffer (an
             // IntBuffer.rewind() returns Buffer — casting it threw CCE
@@ -1373,17 +1738,17 @@ public final class M4Coherency {
                     dim, cx, cz, (byte) y, packedBits,
                     address(packedWords), packedWords.capacity() / 8,
                     palAddr, palCount, address(lightBB), 4096);
-            addPhase(S_JNI, PHASE_JNI_NS, ph2);
+            addP(T.jni, S_JNI, ph2, ctxToo);
         } else {
             for (int i = 0; i < 4096; i++) sc.put(i, javaGid[i]);
             lightBB.clear();
             lightBB.put(javaBl).put(javaSl);
             lightBB.clear();
-            addPhase(S_STAGE, PHASE_STAGE_NS, ph1);
+            addP(T.stage, S_STAGE, ph1, ctxToo);
             long ph2 = System.nanoTime();
             remaining = NativeChunkBridge.refreshSection(dim, cx, cz, (byte) y,
                     address(statesBB), address(lightBB), address(lightBB) + 2048);
-            addPhase(S_JNI, PHASE_JNI_NS, ph2);
+            addP(T.jni, S_JNI, ph2, ctxToo);
         }
         if (remaining < 0) {
             SECTIONS_VALIDATION_MISMATCH.incrementAndGet();
@@ -1391,7 +1756,7 @@ public final class M4Coherency {
                     + " dim=" + dim + " cx=" + cx + " cz=" + cz + " y=" + y);
             return;
         }
-        SECTIONS_REFRESHED.incrementAndGet();
+        if (countWork) SECTIONS_REFRESHED.incrementAndGet();
 
         long ph3 = System.nanoTime();
         try {
@@ -1402,9 +1767,18 @@ public final class M4Coherency {
         // back through the packet path) at O(section) instead of
         // O(chunk) — the old path re-encoded EVERY section of the chunk
         // per refreshed section (O(sections^2) per chunk).
-        java.nio.ByteBuffer rb = java.nio.ByteBuffer
-                .allocateDirect(20480)
-                .order(java.nio.ByteOrder.LITTLE_ENDIAN);
+        // OPT-SYNC-006 C1: the readback buffer is LEASED (§5): direct
+        // 20480 LE, position reset on lease; native writes exactly 20480
+        // bytes on success (rbr==0) — the fixed-offset compare below is
+        // the full written region. §6: this buffer is the NATIVE witness;
+        // it never aliases javaGid (the packed-decode witness) or the
+        // dualVerify scratch (the per-cell witness).
+        java.nio.ByteBuffer rb;
+        boolean heldRb = false;
+        if (impl.leases) { rb = leaseReadback(s); heldRb = true; }
+        else rb = java.nio.ByteBuffer.allocateDirect(20480)
+                    .order(java.nio.ByteOrder.LITTLE_ENDIAN);
+        try {
         int rbr = NativeChunkBridge.readbackSection(
                 dim, cx, cz, (byte) y, address(rb), rb.capacity());
         if (rbr == -3) {
@@ -1451,8 +1825,28 @@ public final class M4Coherency {
                 }
             }
         }
-        SECTIONS_VALIDATED.incrementAndGet();        } finally {
-            addPhase(S_VALIDATE, PHASE_VALIDATE_NS, ph3);
+        if (countWork) SECTIONS_VALIDATED.incrementAndGet();
+        if (T.sections != null) T.sections.incrementAndGet();
+        } finally {
+            if (heldRb) releaseReadback(s, rb);
+        }
+        } finally {
+            addP(T.validate, S_VALIDATE, ph3, ctxToo);
+        }
+        } finally {
+            if (heldGid) releaseGid(s, javaGid);
+            if (heldBl) releaseBl(s, javaBl);
+            if (heldSl) releaseSl(s, javaSl);
+            long d = System.nanoTime() - tStart;
+            T.secTotal.addAndGet(d);
+            if (ctxToo) {
+                long[] c = OP_CTX.get();
+                if (c != null) c[S_SEC_TOTAL] += d;
+            }
+            if (T.alloc != null) {
+                long da = allocNow() - a0;
+                if (da > 0) T.alloc.addAndGet(da);
+            }
         }
     }
 

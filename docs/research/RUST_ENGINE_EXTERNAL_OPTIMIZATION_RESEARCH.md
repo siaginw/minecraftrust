@@ -138,3 +138,17 @@ Shortlist: C0 current | C1 allocation/reflection-hygiene pack (TL readback-buffe
 per-thread section scratch, cached `isEmpty` Method, single resolve per op — no external dep)
 | C2 = C1 + MethodHandle DV vehicle (JDK8-weak, expected REJECT). Common-corpus bake-off per
 receipt §bakeoff_design; promotion via live Gate C A/B.
+
+## OPT-SYNC-006 — targeted: reuse/lease + runtime-class caches + MH vehicle (researched 2026-10-09)
+
+Reuses the OPT-SYNC-005 survey; only the four implementation-relevant primaries were inspected:
+
+1. Buffer reuse & view/address lifetime:
+   - sanj.dev ByteBuffer performance guide (https://sanj.dev/e2e-lessons/bytebuffers-performance-guide, Sep 2022): reuse direct buffers, slice over re-allocate.
+   - Klipspringer JNI byte-buffer notes (https://klipspringer.avadeaux.net/moving-native-data-in-byte-buffers.html, Apr 2025): direct-buffer addresses are valid for the duration of the native call; no native-side retention after return — the lease model only needs Java-side exclusivity.
+   - Oracle ByteBuffer javadoc (Java SE 8): clear() resets position/limit, does NOT zero contents — the light slots zero-fill on lease exists precisely because of this.
+2. Runtime-class caches: "ClassValue, the cache that dies with the class" (https://belief-driven-design.com/classvalue/): per-Class entries evicted when the defining loader is collected — chosen over any Map<Class,Method> global (no LaunchClassLoader retention). JDK7+, fine on pinned JDK8.
+3. MethodHandle vehicle (C2): JDK8-specific evidence from the 005 survey stands (PVS-Studio ~2x warm best-case; raphw gist — boxing hurts; Timefold measured JDK8 MH SLOWER than reflection). Additional primary: Oracle blog "Method handles: a better way to do Java reflection" (https://blogs.oracle.com/java/method-handles-in-java, 2023) — modern-JDK framing, explicitly NOT a JDK8 claim. Verdict: benchmark the real shape (unreflected virtual get(int,int,int) + boxed-ID registry lookup), no prediction.
+4. JNI boundary: 005 survey (SO/IBM/arXiv/Wix) — per-call floor 10ns–µs; refresh/readback crossings carry proportional work; not the target here.
+
+No new dependencies. C1 is local-only; C2 is local-only (java.lang.invoke, JDK8-bundled).

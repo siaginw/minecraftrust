@@ -1,0 +1,65 @@
+{
+ "bakeoff": {
+  "c0_vs_c1_note": "bake1's arm asymmetry (10-16x on identical code paths) is why single-boot pair numbers are not trusted alone: bake2 (swapped) showed both impls normal \u2014 the anomaly tracked the BOOT, not the impl",
+  "harness": "in-vivo pairing: rustcraft.syncPair=A:B runs BOTH impls back-to-back on the SAME live section objects (identical inputs by construction), order alternating per section index; per-arm BAKE0_/BAKE1_ phase timers + alloc deltas; work counters count arm0 only; correctness counters (mismatch/diverge) count BOTH arms; double-run idempotent (identical bytes; readback validates each arm)",
+  "runs": {
+   "s006-bake1_C0C1": "PASS but DISCARDED for timing: whole-boot anomaly (REGISTER 1436ms vs ~310 clean) concentrated on arm0 (dv 655ms) \u2014 the known one-in-N slow-boot variance, not an impl property; kept as spread evidence",
+   "s006-bake2_C1C0": "CLEAN (REGISTER ~2x single): C1 149.6ms vs C0 155.4ms section-total (-3.7% net); sub-wins validate -8.8ms (readback lease), sec_alloc -4.3ms, precheck -1.9ms; offset by +5.2ms absent-phase noise (identical code both arms => +/-5ms phase noise floor); ALLOC 138MB vs 363MB (-62%)",
+   "s006-bake3_C1C2": "CLEAN (REGISTER 312ms): C2 dv=29.7ms vs C1 dv=40.8ms (-27%); totals 124.9 vs 142.9ms (-12.6%); MH_PLANS_BUILT=2 (cold cost two unreflects)",
+   "s006-bake4_C2C1": "CLEAN (REGISTER 332ms): C2 dv=29.9 vs C1 40.8 (-27%, position-independent); totals 140.5 vs 144.3 (-2.6%)"
+  },
+  "verdict": "C2 >= C1 > C0. C1 = allocation result (-62% churn) + modest time (~-4% section total, within-noise phases excluded); C2 adds a stable -27% DV-phase (MethodHandle vehicle) in BOTH orders. Composed C2 vs C0 ~ -11 to -15% of section work. mism=0, dvdiv=0, DUAL_MUTATION_INFLIGHT=0 in ALL boots; sampling coverage identical per arm (per-arm 1-in-8 counters)"
+ },
+ "candidates": {
+  "C0": "shipped implementation (default; production unchanged unless promoted)",
+  "C1_A_readback_lease": "direct 20480 LE readback buffer leased per thread with slot held-flag; nested acquire => fresh buffer (LEASE_REENTRANT_FALLBACK counter)",
+  "C1_B_scratch": "int[4096] gid + byte[2048] bl/sl + int[4096] dv slots leased per thread; bl/sl ZEROED on lease (null-nibble stale-tail contract; clear() is not zeroing); gid/dv fully-overwritten-by-contract; statesView cached (absolute puts only)",
+  "C1_C_precheck_cache": "CV_IS_EMPTY ClassValue keyed on runtime class; entries die with the class/loader; exact member (func_76663_a); miss => null => original fail-open",
+  "C1_D_ctx": "ChunkCtx (dim,cx,cz,gen) resolved once per op under the per-chunk refreshLock; threaded refreshChunkNow->serialized->fullSync->handleChunk->pushBiomes; C0 arm passes null and keeps the original per-helper resolution",
+  "C2": "C1 + dualVerify invocation via MethodHandles unreflected from the SAME runtime-class Methods (virtual dispatch + access identical); per-class CV_MH_GET_STATE + one regGetIdPlan; null plan falls back to Method.invoke; sampled coverage, stability re-read, divergence handling unchanged"
+ },
+ "decision": {
+  "C0": "REJECTED as default (baseline retained: -Drustcraft.syncPath=C0 reproduces the shipped path)",
+  "C1": "KEPT as a component of C2: allocation result -91% churn (live) with similar-or-better latency; retained cost ~53KB/thread trivial",
+  "C2": "KEPT + PROMOTED to default (selector default flipped C0->C2; confirmation boot s006-confirm). MH verifier: -26% DV live, -27% in both bake orders; JDK8 mixed-evidence prior settled empirically on the real invocation shape",
+  "promotion_gate": "live A/B 3/3 matched pairs + clean separation + full validation (fmt/clippy/workspace tests) + default-selection confirmation boot",
+  "verification_coverage": "unchanged: same 1-in-8 per-arm DV sampling, same stability re-read, same readback full-compare, same mismatch gates (mism=0, dvdiv=0 in all 11 boots this task); independence preserved (three witness storages never alias \u2014 regression-tested)"
+ },
+ "focused_tests": {
+  "SyncLeaseRegression": "23 checks PASS on every jar build (non-aliasing, reentrancy fallback, poison zero-fill, readback position/order/length, exception cleanup, per-thread concurrency, ClassValue separation incl. null-miss, retained accounting); wired into build_campaign_jar.py beside CellKeyRegression",
+  "gates": "runscope lint 50 pre-existing warnings/0 fatal (none in new code); expect 9/9 PASS",
+  "packed_fixtures": "4/4 PASS pre-boot (cargo test -p ffi --test packed_transfer_fixtures)"
+ },
+ "live_ab": {
+  "design": "3 matched pairs, balanced order (C0,C2 / C2,C0 / C0,C2), s004-comparable shape (--teleport-rounds 0, probe-rounds 1, light mutations, world-registry), unique ports 25601-25606, artifact hashes verified pre-run, selection confirmed via [sync-impl] boot print",
+  "pairs": [
+   "pair1: 227.2 -> 214.0 (-5.8%) exact work match",
+   "pair2: 222.7 -> 209.9 (-5.7%) exact work match",
+   "pair3: 228.0 -> 194.1 (-14.9%; C0 arm did 635 regs/3020 refr vs 628/2992 \u2014 delta overstated)"
+  ],
+  "result": "C2 wins 3/3 pairs; CLEAN SEPARATION: worst-C2 214.0ms < best-C0 222.7ms (C0 spread 222.7-228.0, C2 spread 194.1-214.0). Conservative estimate from the two exact-work pairs: -5.7 to -5.8% registration wall; all-pairs mean -8.8%. Phase means: extract 75.5->65.9ms (DV 44.2->32.7 = -26%; extract-minus-DV equal 31.2 vs 31.3); validate 29.7->24.6 (-17%); JNI 50.6->50.9 (unchanged, as designed); OP_ALLOC 365-368MB -> 33MB (-91% churn). mism=0, dvdiv=0, selection print verified in every boot. Retained scratch: ~53KB/thread (LEASE_RETAINED_BYTES). The unreproduced slow-run variability is NOT claimed solved (never reproduced under the new timers; bake1 showed one anomalous BOOT with the same 4.6x signature affecting both impls' windows asymmetrically).",
+  "runs": {
+   "s006-ab1-c0": "227.2ms refr=2992 alloc=365MB",
+   "s006-ab1-c2": "214.0ms refr=2992 alloc=33MB",
+   "s006-ab2-c0": "222.7ms refr=2992 alloc=365MB",
+   "s006-ab2-c2": "209.9ms refr=3004 alloc=33MB",
+   "s006-ab3-c0": "228.0ms refr=3020 alloc=368MB (+7 regs extra work vs its pair)",
+   "s006-ab3-c2": "194.1ms refr=2992 alloc=33MB"
+  }
+ },
+ "opt_id": "OPT-SYNC-006",
+ "ownership_contracts": {
+  "ctx_lifetime": "op-scoped; no cross-op reuse; revalidation-by-construction on the next op; flush-thread caller passes null and resolves in-handleChunk as before",
+  "lease_model": "slot-per-purpose with held flags; distinct slots for gid (packed-decode witness), dv (per-cell independent witness), readback (native witness) \u2014 the three verification witnesses NEVER alias (SyncLeaseRegression check 1: planted wrong value in gid detected by dv)",
+  "native_address_lifetime": "leased buffer address valid for the duration of each JNI call (no native retention after return); readback native side writes exactly 20480 bytes on success (rbr==0) so the fixed-offset full-region compare respects the written length",
+  "retained_memory": "20480B direct + ~53KB arrays per sync thread (LEASE_RETAINED_BYTES); no growth policy needed (fixed section sizes); C0 allocates ~225MB MORE churn per run instead"
+ },
+ "researched_at": "2026-10-09",
+ "revision": {
+  "dll_sha256_16": "252498ee6db5ce35 (unchanged; no FFI change)",
+  "jar_c_sha256_16": "d0604db5a301dc97 (A/B jar; bake1/2 used 699,840/699,871-byte predecessors, bake3/4 the 699,871)",
+  "start": "ba85e12 (post-squash main)"
+ },
+ "schema": 1,
+ "task": "controlled bake-off of C0 (current) vs C1 (reuse pack) vs C2 (C1+MethodHandle verifier); KEEP/REJECT + live Gate C A/B of the winner"
+}

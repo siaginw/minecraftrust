@@ -156,3 +156,28 @@ reconciling timeline closes to 97–97.5% (op-unaccounted 3.0%, sec-unaccounted 
   C1 (hygiene pack) and C2 (MethodHandle DV vehicle — JDK8-weak, expected REJECT) in
   `docs/research/OPT-SYNC-005-receipt.json`. NO production optimization merged in this
   task (goal §8/§9). Receipt: `docs/research/OPT-SYNC-005-receipt.json`.
+
+## OPT-SYNC-006 (2026-10-09) — CLOSED KEPT: C2 promoted as sync default (−6% registration, −91% alloc churn)
+
+The OPT-SYNC-005 bake-off ran: C0 vs C1 vs C2 through a paired in-vivo harness
+(both impls on the SAME live section objects, alternating order) and a live
+Gate C A/B of 3 matched pairs. Receipt: `docs/research/OPT-SYNC-006-receipt.json`.
+
+- **C1 (reuse pack)**: slot-leased scratch arrays + direct readback buffer
+  (three verification witnesses never alias; light slots zeroed on lease —
+  clear() is not zeroing), ClassValue runtime-class caches (die with the
+  loader), op-scoped ChunkCtx. Result: allocation churn −91% live
+  (365→33MB), validate −17%, retained cost ~53KB/thread.
+- **C2 = C1 + MethodHandle verifier**: the JDK8 evidence was mixed, so the
+  real shape was measured: unreflected virtual `get(int,int,int)` + boxed-ID
+  lookup is −26% on the DV phase live (−27% in both bake orders).
+- **Live A/B**: C2 wins 3/3 pairs with clean separation (worst-C2 214.0ms <
+  best-C0 222.7ms); exact-work pairs −5.7/−5.8%. JNI unchanged by design.
+- **Promotion**: selector default flipped to C2; shipped C0 path reproducible
+  via `-Drustcraft.syncPath=C0`. Verification coverage untouched (same 1-in-8
+  sampling, stability re-read, readback full-compare; mism=0, dvdiv=0 in all
+  11 boots). SyncLeaseRegression (23 checks) runs on every jar build.
+- The OPT-SYNC-005 slow-run variability remains UNREPRODUCED and unclaimed;
+  bake1 exhibited one anomalous boot (4.6× registration) affecting both impls'
+  windows asymmetrically — spread evidence, excluded from pair math by the
+  swapped-order fork.
