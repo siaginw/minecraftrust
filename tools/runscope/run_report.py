@@ -285,6 +285,61 @@ def _rel(path, root):
 
 # ----------------------------------------------------------------------
 
+def bakeoff_analysis(run_dir):
+    """OPT-SYNC-006 retro (2026-10-09): guarded paired bake-off table from
+    the BAKE0_/BAKE1_ counters. Guards: (a) per-arm section denominators
+    are checked for ZERO — an unwired counter once made us/s rows divide
+    by 1 silently; (b) the boot-anomaly check replicates the campaign
+    runner's PAIR-ANOMALY gate (REGISTER > 800ms in paired shape, or
+    stage-phase ratio > 3x — ABSENT is excluded: the first arm's
+    markSectionAbsent does the real native transition, the second is an
+    idempotent no-op, so its ~10x first-arm skew exists in EVERY clean
+    boot). Returns None when the run carries no BAKE counters."""
+    metrics = parse_metrics_file(os.path.join(run_dir, "region-metrics.txt"))
+    if not metrics or not any(k.startswith("BAKE0_") for k in metrics):
+        return None
+    phases = ("SEC_ALLOC_NS", "PRECHECK_NS", "EXTRACT_NS", "DV_NS",
+              "STAGE_NS", "JNI_NS", "VALIDATE_NS", "ABSENT_NS")
+    arms = []
+    for arm in ("0", "1"):
+        t = {k[6:]: v for k, v in metrics.items()
+             if k.startswith("BAKE%s_" % arm)}
+        n = int(t.get("SECTIONS", 0))
+        arms.append({
+            "arm": arm,
+            "sections": n,
+            "sections_zero_denominator": n == 0,  # per-us rows invalid
+            "sec_total_ms": int(t.get("SEC_TOTAL_NS", 0)) / 1e6,
+            "alloc_mb": int(t.get("ALLOC_BYTES", 0)) / 1e6,
+            "phases_ms": {p: int(t.get(p, 0)) / 1e6 for p in phases},
+            "phases_us_per_section": (None if n == 0 else
+                {p: int(t.get(p, 0)) / 1000.0 / n for p in phases}),
+        })
+    c0t, c1t = arms[0]["sec_total_ms"], arms[1]["sec_total_ms"]
+    denom = c0t if c0t > 0 else 1.0
+    reg_ms = int(metrics.get("REGISTER_NANOS", 0)) / 1e6
+    s0 = int(metrics.get("BAKE0_STAGE_NS", 0))
+    s1 = int(metrics.get("BAKE1_STAGE_NS", 0))
+    stage_ratio = None
+    lo, hi = min(s0, s1), max(s0, s1)
+    if lo > 300_000:
+        stage_ratio = round(hi / lo, 2)
+    timing_suspect = reg_ms > 800.0 or (stage_ratio is not None
+                                        and stage_ratio > 3.0)
+    return {
+        "arms": arms,
+        "reduction_pct": round((c0t - c1t) / denom * 100, 1),
+        "speedup_x": round(c0t / c1t, 3) if c1t > 0 else None,
+        "register_ms": round(reg_ms, 1),
+        "stage_ratio": stage_ratio,
+        "timing_suspect": timing_suspect,
+        "note": ("reduction=(arm0-arm1)/arm0; speedup=arm0/arm1 — distinct "
+                 "statistics, do not interchange. arm order: see the "
+                 "[sync-pair] boot line. ABSENT first-arm skew is a "
+                 "permanent order artifact, not an anomaly signal"),
+    }
+
+
 def build_report(run_dir, repo_root):
     receipt = _read_json(os.path.join(run_dir, "receipt.json"))
     mutations = _read_json(os.path.join(run_dir, "light-mutations.json"))
@@ -320,6 +375,7 @@ def build_report(run_dir, repo_root):
                 for s in mutations.get("steps", [])],
         },
         "probes": probes,
+        "bakeoff": bakeoff_analysis(run_dir),
         "staged_jars": staged_jar_provenance(run_dir, repo_root, target),
         "mods_duplicates": mods_duplicates(run_dir),
         "transform_diag": transform_diag_tails(run_dir),
@@ -483,6 +539,28 @@ def render_report(r):
                % (j["current_sha256"] or "")[:16])
     if r["mods_duplicates"]:
         ap("MOD-DUPES %s" % ", ".join(d["jar"] for d in r["mods_duplicates"]))
+    bo = r.get("bakeoff")
+    if bo:
+        ap("BAKEOFF  arm0 vs arm1 (paired in-vivo; order alternates per "
+           "section; work counters count arm0)")
+        for a in bo["arms"]:
+            warn = ("  [ZERO-DENOMINATOR: SECTIONS=0 — us/section rows "
+                    "INVALID (unwired counter class)") \
+                if a["sections_zero_denominator"] else ""
+            ap("  arm%s   sections=%-6d total=%8.1fms alloc=%7.1fMB%s" % (
+                a["arm"], a["sections"], a["sec_total_ms"],
+                a["alloc_mb"], warn))
+            ph = a["phases_ms"]
+            ap("         phases_ms: " + " ".join(
+                "%s=%.1f" % (p[:-3].lower(), ph[p]) for p in sorted(ph)))
+        ap("  reduction=%.1f%%  speedup=%.3fx  REGISTER=%.0fms  "
+           "stage_ratio=%s" % (
+               bo["reduction_pct"], bo["speedup_x"], bo["register_ms"],
+               bo["stage_ratio"]))
+        if bo["timing_suspect"]:
+            ap("  [PAIR-ANOMALY] arm TIMING suspect (slow-boot signature; "
+               "do NOT trust arm deltas — rerun swapped; correctness "
+               "counters remain valid)")
     for td in r.get("transform_diag") or []:
         ap("TRANSFORM-DIAG %s (%d lines, tail):" % (td["file"], td["lines"]))
         for l in td["tail"]:

@@ -117,8 +117,10 @@ def main():
     parser = argparse.ArgumentParser(description="Build RustCraft campaign coremod jar")
     parser.add_argument("--target", choices=["A", "C"], default="C",
                         help="Target server runtime (A=Clean Forge 2860, C=Revelation 2846)")
-    parser.add_argument("--output", type=Path, default=DEFAULT_OUT_JAR,
-                        help="Output jar path")
+    parser.add_argument("--output", type=Path, default=None,
+                        help="Output jar path (default: target/rustcraft-campaign"
+                             "{-C for target C}.jar — the name the campaign runner "
+                             "stages for that target)")
     parser.add_argument("--plan", type=Path, default=None,
                         help="Alternative LiveWriterPlan.java file")
     parser.add_argument("--export-self-test", action="store_true",
@@ -127,6 +129,14 @@ def main():
 
     if args.export_self_test:
         return export_check_self_test()
+
+    # retro 2026-10-09: --target C must imply the -C artifact name — the
+    # runner stages rustcraft-campaign-C.jar for Gate C, and a plain
+    # `--target C` build landing on the A name made the stale-jar guard
+    # the only thing standing between two same-named artifacts
+    if args.output is None:
+        suffix = "-C" if args.target == "C" else ""
+        args.output = ROOT / "target" / f"rustcraft-campaign{suffix}.jar"
 
     # JNI-export adjacency lint (retro): a detached #[no_mangle] is the
     # twice-repeated silent-export bug class — fail BEFORE javac

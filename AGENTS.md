@@ -95,7 +95,8 @@ dead), and `region-metrics.txt` carries every hook counter by FIELD name
 via the reflection dump, so new counters need no wiring.
 
 After a run, one command replaces the grep/JSON archaeology (receipt digest,
-STALE staged-jar detection, timeline, exception histogram, light counters;
+STALE staged-jar detection, timeline, exception histogram, light counters,
+guarded paired bake-off table with boot-anomaly quarantine;
 `compare` deltas two runs):
 
 ```bash
@@ -159,7 +160,9 @@ BAKE-OFF → PROMOTE → LIVE A/B → REPROFILE, re-profiling after every win.
 - Campaign/test runners under `tools/authority-review/`; shared helpers in
   `tools/live-shadow-v2/` (`run_join_probe.py`, `join_probe.py`).
 - Evidence before claims: every authority milestone ships receipts, logs,
-  and scan results; documents under `docs/research/` cite them.
+  and scan results; documents under `docs/research/` cite them. Receipts
+  pin provenance by run ID + artifact sha256-16 — git SHAs are secondary
+  context only (history rewrites must not orphan evidence).
 - `PRODUCTION_AUTHORITY` stays false unless a dedicated milestone proves
   otherwise. Networking is PARKED; NBT semantic authority is BLOCKED (H9).
 - Validation before push: `cargo fmt --check`, `cargo clippy --workspace

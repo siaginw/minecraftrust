@@ -587,6 +587,15 @@ def main() -> int:
         "--gameDir", str(server_dir),
     ]
     (out_dir / "launch.json").write_text(json.dumps({"argv": argv}, indent=2) + "\n")
+    # retro 2026-10-09: persist the RUNNER's own invocation beside the
+    # server argv — run-shape flags (teleport rounds, probe rounds, jvm
+    # properties) decide comparability and were previously recoverable
+    # only by deduction from log lines
+    (out_dir / "runner-argv.json").write_text(json.dumps({
+        "runner_argv": sys.argv,
+        "cwd": os.getcwd(),
+        "started_at": time.strftime("%Y-%m-%dT%H:%M:%S"),
+    }, indent=2) + "\n")
 
     print(f"=== RUST_REGION_WRITE campaign, Gate {target}, port {port}, out {out_dir} ===")
     log_handle = jvm_log.open("wb")
@@ -835,6 +844,7 @@ def main() -> int:
     print(f"[verify] transformer status count={transform_count} metrics={metrics}")
 
     failures = 0
+    pair_timing_suspect = False  # retro pair-anomaly gate (paired bake runs)
     seam_seen = "seam class seen" in log_text
     status_m = re.search(
         r"seam class seen: name=(\S+) transformedName=(\S+) bytes=(\d+)", log_text)
@@ -992,10 +1002,42 @@ def main() -> int:
                           f"{hv} (must be > 0 under --light-mutations)")
                     failures += 1
 
+            # retro 2026-10-09 (OPT-SYNC-006 bake1): a paired bake-off run
+            # on an anomalously slow boot concentrates inflation on ONE
+            # arm's timers (dv 655ms vs 41ms on identical code) — the
+            # swapped-order fork proved it tracked the BOOT, not the impl.
+            # Gate the signature mechanically. NOTE: ABSENT is excluded —
+            # the first arm's markSectionAbsent does the real native
+            # transition and the second is an idempotent no-op (4-6ms vs
+            # 0.6ms in EVERY clean boot: a permanent order artifact, not an
+            # anomaly signal). Signals: paired REGISTER > 800ms (clean
+            # paired norm ~300-450ms; the anomalous bake1 boot hit 1436ms)
+            # or stage-phase ratio > 3x (stage is genuinely identical code
+            # in both arms). Correctness evidence stays valid — only the
+            # arm TIMING deltas are quarantined.
+            if mf2 and any(k.startswith("BAKE0_") for k in mf2):
+                b0s = int(mf2.get("BAKE0_STAGE_NS", 0))
+                b1s = int(mf2.get("BAKE1_STAGE_NS", 0))
+                stage_ratio = None
+                lo, hi = min(b0s, b1s), max(b0s, b1s)
+                if lo > 300_000:  # both stage phases measurable (>0.3ms)
+                    stage_ratio = hi / lo
+                reg_ms = int(mf2.get("REGISTER_NANOS", 0)) / 1e6
+                if reg_ms > 800.0 or (stage_ratio is not None and stage_ratio > 3.0):
+                    print(f"[PAIR-ANOMALY] arm TIMING suspect — REGISTER "
+                          f"{reg_ms:.0f}ms (paired norm ~300-450), stage ratio "
+                          f"{stage_ratio}; do NOT trust arm deltas from this "
+                          f"boot (rerun swapped); correctness counters remain "
+                          f"valid")
+                    pair_timing_suspect = True
+                else:
+                    pair_timing_suspect = False
+
     (out_dir / "region-write-campaign.json").write_text(json.dumps({
         "target": target, "port": port, "mode": args.mode,
         "transform_count": transform_count,
         "hook_metrics": metrics, "rust_ok": rust_ok,
+        "pair_timing_suspect": pair_timing_suspect,
     }, indent=2, sort_keys=True) + "\n")
 
     # region READ experiment gates (goals §13-§14, §25-§26, §32)

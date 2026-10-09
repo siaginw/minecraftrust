@@ -232,7 +232,11 @@ public final class M4Coherency {
         else if ("C1".equals(p)) ACTIVE_IMPL = IMPL_C1;
         else if ("C2".equals(p)) ACTIVE_IMPL = IMPL_C2;
         else System.err.println("[sync-impl] unknown rustcraft.syncPath=" + p + " (C0|C1|C2); using C2");
-        if (!"C2".equals(p)) System.out.println("[sync-impl] rustcraft.syncPath=" + p + " ACTIVE (default is C2)");
+        // retro 2026-10-09: ALWAYS print the effective selection — the
+        // intended-candidate check (bake-off/live-A/B §13) must be a grep,
+        // not a deduction from counter signatures
+        System.out.println("[sync-impl] active=" + p
+                + (System.getProperty("rustcraft.syncPath") == null ? " (default)" : ""));
     }
 
     // per-arm phase timer set: normal runs wrap the EXISTING statics (receipt
