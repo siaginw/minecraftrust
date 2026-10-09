@@ -1,0 +1,17 @@
+
+running 1 test
+test broken_handoff_skips_drain ... 
+thread 'broken_handoff_skips_drain' (42164) panicked at tests\lifecycle.rs:83:13:
+assertion `left != right` failed: JAVA_NATIVE_WRITERS_OVERLAP
+  left: Native
+ right: Native
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+FAILED
+
+failures:
+
+failures:
+    broken_handoff_skips_drain
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 24 filtered out; finished in 0.00s
+

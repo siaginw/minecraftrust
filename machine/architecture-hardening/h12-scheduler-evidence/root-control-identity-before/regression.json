@@ -1,0 +1,22 @@
+{
+  "schema": "H12_CONTROL_IDENTITY_PRE_FIX_V1",
+  "status": "EXPECTED_FAILURE",
+  "observed_utc": "2026-09-27T01:39:39.582032+00:00",
+  "exit": 101,
+  "failing_tests": [
+    "foreign_cancellation_is_rejected_before_local_lookup",
+    "foreign_dispatch_is_rejected_before_local_lookup"
+  ],
+  "passing_control": "foreign_completion_cannot_rebind_equal_sequence_numbers",
+  "saved_files": {
+    "target\\semantic-scheduler-prototype\\root-control-identity-before\\lib.rs": "d851f5c422f96a172d667ea7754a3bd396edbe7c6bea1be74c7e2c3aa2924a84",
+    "target\\semantic-scheduler-prototype\\root-control-identity-before\\tests.rs": "170a9021778aef4f26218cd4b380eca17971011f8afb55237ab5e3b6d48f6b7c",
+    "target\\semantic-scheduler-prototype\\root-control-identity-before\\regression.txt": "d9497a47d3f304865aac75904a6553ed6ae5f66c69f39f0cd1c20bd58c8a4f99",
+    "target\\semantic-scheduler-prototype\\root-control-identity-before\\exit.txt": "bdc830287616dae1818ced3e7c186e1387155900ad30d5983ec02da1519c4a95"
+  },
+  "superseded_receipt": {
+    "path": "target\\semantic-scheduler-prototype\\bb570f0a96284ce1913a28cc58159d69\\campaign.json",
+    "sha256": "c436cfc859527702b50b7ac7c821cc795d3e46c7dae2f5840232e9c98b556471"
+  },
+  "scope": "Targeted failing regressions against saved pre-fix source; not a fresh full qualification campaign"
+}

@@ -1,0 +1,33 @@
+   Compiling typenum v1.20.1
+   Compiling zlib-rs v0.6.8
+   Compiling windows-link v0.2.1
+   Compiling core-types v0.1.0 (D:\minecraftrust-astra-hardening\crates\core-types)
+   Compiling cpubits v0.1.1
+   Compiling cpufeatures v0.3.1
+   Compiling bytes v1.12.1
+   Compiling windows-sys v0.61.2
+   Compiling buffers v0.1.0 (D:\minecraftrust-astra-hardening\crates\buffers)
+   Compiling hybrid-array v0.4.15
+   Compiling socket2 v0.6.4
+   Compiling crypto-common v0.2.2
+   Compiling inout v0.2.2
+   Compiling cipher v0.5.2
+   Compiling aes v0.9.3
+   Compiling cfb8 v0.9.1
+   Compiling flate2 v1.1.10
+   Compiling compression v0.1.0 (D:\minecraftrust-astra-hardening\crates\compression)
+warning: unused variable: `have`
+   --> D:\minecraftrust-astra-hardening\crates\compression\src\frame.rs:205:68
+    |
+205 |                     crate::CompressError::OutputTooSmall { needed, have } =>
+    |                                                                    ^^^^ help: try ignoring the field: `have: _`
+    |
+    = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+   Compiling packet-buffer-pipeline-experiment v0.1.0 (D:\minecraftrust-astra-hardening\tools\packet-buffer-pipeline-experiment)
+warning: `compression` (lib) generated 1 warning (run `cargo fix --lib -p compression` to apply 1 suggestion)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 4.74s
+     Running unittests src\lib.rs (target\architecture-hardening\h14-packet-buffer-e8e91da68b34\cargo\debug\deps\packet_buffer_pipeline_experiment-3b2378c11815a21a.exe)
+     Running unittests src\main.rs (target\architecture-hardening\h14-packet-buffer-e8e91da68b34\cargo\debug\deps\packet_buffer_pipeline_experiment-367452b48aede73f.exe)
+     Running tests\contracts.rs (target\architecture-hardening\h14-packet-buffer-e8e91da68b34\cargo\debug\deps\contracts-ca3a436e96825243.exe)
+   Doc-tests packet_buffer_pipeline_experiment

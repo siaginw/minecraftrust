@@ -1,0 +1,1060 @@
+{
+  "schema": "H14_ROOT_REVIEWED_PACKET_PIPELINE_V1",
+  "status": "PROTOTYPE_VALIDATED",
+  "production_authority": false,
+  "root_receipt_sha256": "5cd641526d1eb76e2c163fee502e4d2b03a676ac4807c27d057a95dcfe11d789",
+  "root_timing_summary": [
+    {
+      "shared": 0,
+      "slow": 0,
+      "samples": 5,
+      "wall_ns": {
+        "min": 5897500,
+        "median": 6190900,
+        "max": 6530800
+      }
+    },
+    {
+      "shared": 0,
+      "slow": 1,
+      "samples": 5,
+      "wall_ns": {
+        "min": 81984200,
+        "median": 82287300,
+        "max": 82645200
+      }
+    },
+    {
+      "shared": 1,
+      "slow": 0,
+      "samples": 5,
+      "wall_ns": {
+        "min": 5478000,
+        "median": 6487700,
+        "max": 6754300
+      }
+    },
+    {
+      "shared": 1,
+      "slow": 1,
+      "samples": 5,
+      "wall_ns": {
+        "min": 82347800,
+        "median": 82506300,
+        "max": 82821100
+      }
+    }
+  ],
+  "rust_tests": 14,
+  "job_controls": 4,
+  "java_configurations": 4,
+  "tamper_controls": 2,
+  "pipeline_rows": 24,
+  "handle_rows": 18,
+  "process_checks": 47,
+  "registry_archives": 16,
+  "decision": "KEEP_IMMUTABLE_SHARING_ORDERED_BOUNDED_PIPELINE_PROTOTYPES_RETAIN_STD_ARC",
+  "retained_evidence": [
+    {
+      "source": "target/architecture-hardening/h14-before-partial-send-loop-fix/stderr.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-before-partial-send-loop-fix/stderr.log.txt",
+      "sha256": "6b8c1a7e982838369b798d54195bce93031e3c041b4c8b5b12bd21272e430510"
+    },
+    {
+      "source": "target/architecture-hardening/h14-before-partial-send-loop-fix/stdout.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-before-partial-send-loop-fix/stdout.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h14-before-windows-recv-fix/stderr.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-before-windows-recv-fix/stderr.log.txt",
+      "sha256": "53b59a82abee6c4012493b7dd6328142fbe85ed82a157a46ec2b36fffadeeb5a"
+    },
+    {
+      "source": "target/architecture-hardening/h14-before-windows-recv-fix/stdout.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-before-windows-recv-fix/stdout.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h14-canceled-hole-before/stderr.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-canceled-hole-before/stderr.log.txt",
+      "sha256": "2a120a6ffa017a787a578caddb372497c87d86e53ecfcd78f34f1c1ddaca8323"
+    },
+    {
+      "source": "target/architecture-hardening/h14-canceled-hole-before/stdout.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-canceled-hole-before/stdout.log.txt",
+      "sha256": "036aa490869fe18e82e4c4baeca2478706f453967955e636297aa29171db4ec3"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-7fd10bf88555/accepted-backend-warning-source.stderr.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-7fd10bf88555/accepted-backend-warning-source.stderr.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-7fd10bf88555/accepted-backend-warning-source.stdout.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-7fd10bf88555/accepted-backend-warning-source.stdout.log.txt",
+      "sha256": "d6f62c00e2a83f68c816ef6ff4121181df5949474c1c49d6af10b5e8932900ab"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-7fd10bf88555/backend-features.stderr.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-7fd10bf88555/backend-features.stderr.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-7fd10bf88555/backend-features.stdout.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-7fd10bf88555/backend-features.stdout.log.txt",
+      "sha256": "748c4981cc0359cc87f0e58861ade3e28863503655bd9fd1ffb52393b295c09b"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-7fd10bf88555/bytes-vs-arc.stderr.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-7fd10bf88555/bytes-vs-arc.stderr.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-7fd10bf88555/bytes-vs-arc.stdout.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-7fd10bf88555/bytes-vs-arc.stdout.log.txt",
+      "sha256": "c8d4177005a4d00c9ddbd623d5524a1630e6790eabed76de31f6220a4d1c9d4f"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-7fd10bf88555/cipher-tamper.stderr.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-7fd10bf88555/cipher-tamper.stderr.log.txt",
+      "sha256": "d31c9c1e21f9d96fae742fa96205d41978286f6ac76d40d7cf2c1b39eb224428"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-7fd10bf88555/cipher-tamper.stdout.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-7fd10bf88555/cipher-tamper.stdout.log.txt",
+      "sha256": "663fedb0797d56c53339fc7c71541de087349511fbb0ac7b0fe8ce59e9bf2920"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-7fd10bf88555/clippy.stderr.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-7fd10bf88555/clippy.stderr.log.txt",
+      "sha256": "239c00384cdf17d619fc46062392c91d79a7c40a1246b351343033f1c55f2085"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-7fd10bf88555/clippy.stdout.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-7fd10bf88555/clippy.stdout.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-7fd10bf88555/compile-oracle.stderr.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-7fd10bf88555/compile-oracle.stderr.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-7fd10bf88555/compile-oracle.stdout.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-7fd10bf88555/compile-oracle.stdout.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-7fd10bf88555/format.stderr.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-7fd10bf88555/format.stderr.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-7fd10bf88555/format.stdout.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-7fd10bf88555/format.stdout.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-7fd10bf88555/java-version.stderr.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-7fd10bf88555/java-version.stderr.log.txt",
+      "sha256": "9d65a43706f49fcfdbcece91e737f759110493e82fd1c4886cf49104c2017b0e"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-7fd10bf88555/java-version.stdout.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-7fd10bf88555/java-version.stdout.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-7fd10bf88555/job-controls.stderr.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-7fd10bf88555/job-controls.stderr.log.txt",
+      "sha256": "f07b07df8fa9823e7a8cc65da4d83fc3d0f024fa8ef8b2498bf2f5feb5e4cb2b"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-7fd10bf88555/job-controls.stdout.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-7fd10bf88555/job-controls.stdout.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-7fd10bf88555/measure--1-0-0.stderr.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-7fd10bf88555/measure--1-0-0.stderr.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-7fd10bf88555/measure--1-0-0.stdout.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-7fd10bf88555/measure--1-0-0.stdout.log.txt",
+      "sha256": "28511eaf2a4d1e790524d3de6d6f3ca8f14f2a27978a558a80565e95a144352d"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-7fd10bf88555/measure--1-0-1.stderr.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-7fd10bf88555/measure--1-0-1.stderr.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-7fd10bf88555/measure--1-0-1.stdout.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-7fd10bf88555/measure--1-0-1.stdout.log.txt",
+      "sha256": "8e04eda741308a0bdc5f6481b0e4087aad8c26ccc1b9dfde19258f68d2c931e2"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-7fd10bf88555/measure--1-1-0.stderr.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-7fd10bf88555/measure--1-1-0.stderr.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-7fd10bf88555/measure--1-1-0.stdout.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-7fd10bf88555/measure--1-1-0.stdout.log.txt",
+      "sha256": "4a7ad24b217cc23e8531f345ff288d94b02a0f49c69f1e059eaae26da21690cf"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-7fd10bf88555/measure--1-1-1.stderr.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-7fd10bf88555/measure--1-1-1.stderr.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-7fd10bf88555/measure--1-1-1.stdout.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-7fd10bf88555/measure--1-1-1.stdout.log.txt",
+      "sha256": "dd622c35db628fdcebabb68ee8b73932e33b28516aea28ba02633fe3caa2fd0b"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-7fd10bf88555/measure-0-0-0.stderr.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-7fd10bf88555/measure-0-0-0.stderr.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-7fd10bf88555/measure-0-0-0.stdout.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-7fd10bf88555/measure-0-0-0.stdout.log.txt",
+      "sha256": "713babcb1f567f19a1af7ca0111ce851ca2d1f440b252bf96cde6d83c875b5c0"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-7fd10bf88555/measure-0-0-1.stderr.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-7fd10bf88555/measure-0-0-1.stderr.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-7fd10bf88555/measure-0-0-1.stdout.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-7fd10bf88555/measure-0-0-1.stdout.log.txt",
+      "sha256": "0eb876bd72c483b4b3c2065d173f029b838d60fd45c6f64fdd58e4b74d8b8fb3"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-7fd10bf88555/measure-0-1-0.stderr.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-7fd10bf88555/measure-0-1-0.stderr.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-7fd10bf88555/measure-0-1-0.stdout.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-7fd10bf88555/measure-0-1-0.stdout.log.txt",
+      "sha256": "35ceb1bc79bb467a5ebc56ecc73a686756af9e8573bf868ce2b0c7f84ce62463"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-7fd10bf88555/measure-0-1-1.stderr.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-7fd10bf88555/measure-0-1-1.stderr.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-7fd10bf88555/measure-0-1-1.stdout.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-7fd10bf88555/measure-0-1-1.stdout.log.txt",
+      "sha256": "f8efb9d9856f1d38775e5d19a0a29d8a2db86113e55429279128f92269ba6501"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-7fd10bf88555/measure-1-0-0.stderr.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-7fd10bf88555/measure-1-0-0.stderr.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-7fd10bf88555/measure-1-0-0.stdout.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-7fd10bf88555/measure-1-0-0.stdout.log.txt",
+      "sha256": "4d115394ce950ea578b2632121d2e250346df8804411891ffe513c810f084dde"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-7fd10bf88555/measure-1-0-1.stderr.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-7fd10bf88555/measure-1-0-1.stderr.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-7fd10bf88555/measure-1-0-1.stdout.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-7fd10bf88555/measure-1-0-1.stdout.log.txt",
+      "sha256": "4b73d844a8fe488fbb520aed0f962e69c1191ee24e1ccbea10fef64609a3b734"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-7fd10bf88555/measure-1-1-0.stderr.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-7fd10bf88555/measure-1-1-0.stderr.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-7fd10bf88555/measure-1-1-0.stdout.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-7fd10bf88555/measure-1-1-0.stdout.log.txt",
+      "sha256": "52f90b7feb59267d10bd917562c0da5eacaa6ce04e8a6e2501950e8d6a349a4f"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-7fd10bf88555/measure-1-1-1.stderr.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-7fd10bf88555/measure-1-1-1.stderr.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-7fd10bf88555/measure-1-1-1.stdout.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-7fd10bf88555/measure-1-1-1.stdout.log.txt",
+      "sha256": "2e9728dedd62d334743fd9a4144d9608607bd718543a4aae83eb08547db8cee4"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-7fd10bf88555/measure-2-0-0.stderr.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-7fd10bf88555/measure-2-0-0.stderr.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-7fd10bf88555/measure-2-0-0.stdout.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-7fd10bf88555/measure-2-0-0.stdout.log.txt",
+      "sha256": "4f5e90d5b7107d1ae5041c1b9315083f3dfbbd2427425be6d685f462cd80742d"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-7fd10bf88555/measure-2-0-1.stderr.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-7fd10bf88555/measure-2-0-1.stderr.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-7fd10bf88555/measure-2-0-1.stdout.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-7fd10bf88555/measure-2-0-1.stdout.log.txt",
+      "sha256": "7f86069b100e2e8dd1326fe3d31e03bc78cbe131f7e37cf1228e6935013c7a78"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-7fd10bf88555/measure-2-1-0.stderr.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-7fd10bf88555/measure-2-1-0.stderr.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-7fd10bf88555/measure-2-1-0.stdout.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-7fd10bf88555/measure-2-1-0.stdout.log.txt",
+      "sha256": "31ac36e706ed9b3df87e63116516407b8946ec4ef30ff040a6bda048e318971d"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-7fd10bf88555/measure-2-1-1.stderr.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-7fd10bf88555/measure-2-1-1.stderr.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-7fd10bf88555/measure-2-1-1.stdout.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-7fd10bf88555/measure-2-1-1.stdout.log.txt",
+      "sha256": "589e8e3bd28f430a964de40b934a9d858605bb72760f81e44de88a9fd7660197"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-7fd10bf88555/measure-3-0-0.stderr.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-7fd10bf88555/measure-3-0-0.stderr.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-7fd10bf88555/measure-3-0-0.stdout.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-7fd10bf88555/measure-3-0-0.stdout.log.txt",
+      "sha256": "70d5df3ec796a3e9189b1d07b83ff4dcbdd4a4ee6a051e736a4b7c2073ae9d08"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-7fd10bf88555/measure-3-0-1.stderr.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-7fd10bf88555/measure-3-0-1.stderr.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-7fd10bf88555/measure-3-0-1.stdout.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-7fd10bf88555/measure-3-0-1.stdout.log.txt",
+      "sha256": "d102317526580e7f65ce5089f7549c9aa146b2cfc5f98daff195fbfd2a38bc82"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-7fd10bf88555/measure-3-1-0.stderr.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-7fd10bf88555/measure-3-1-0.stderr.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-7fd10bf88555/measure-3-1-0.stdout.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-7fd10bf88555/measure-3-1-0.stdout.log.txt",
+      "sha256": "72910242f10c96de3abe09f1b9304d0ffd7d52e95600347d4d7d888d544e8df4"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-7fd10bf88555/measure-3-1-1.stderr.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-7fd10bf88555/measure-3-1-1.stderr.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-7fd10bf88555/measure-3-1-1.stdout.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-7fd10bf88555/measure-3-1-1.stdout.log.txt",
+      "sha256": "39c253945e87cd21e72b669fd7986d9c7b4b72038222a9f6c17a47ce79bbb47f"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-7fd10bf88555/measure-4-0-0.stderr.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-7fd10bf88555/measure-4-0-0.stderr.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-7fd10bf88555/measure-4-0-0.stdout.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-7fd10bf88555/measure-4-0-0.stdout.log.txt",
+      "sha256": "cc0a3143d82b1f72b30ef2e8599e4ff91090120e8dc3e6183ccbf9310e8f5a00"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-7fd10bf88555/measure-4-0-1.stderr.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-7fd10bf88555/measure-4-0-1.stderr.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-7fd10bf88555/measure-4-0-1.stdout.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-7fd10bf88555/measure-4-0-1.stdout.log.txt",
+      "sha256": "195a7e38a91917f87b43fe98f509e1566fe874516de360c7748c81cfe71a81c0"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-7fd10bf88555/measure-4-1-0.stderr.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-7fd10bf88555/measure-4-1-0.stderr.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-7fd10bf88555/measure-4-1-0.stdout.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-7fd10bf88555/measure-4-1-0.stdout.log.txt",
+      "sha256": "10996d7c0763c764cc695cd146fe7f5f04f3743dcf993193c5298b2a970f7027"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-7fd10bf88555/measure-4-1-1.stderr.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-7fd10bf88555/measure-4-1-1.stderr.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-7fd10bf88555/measure-4-1-1.stdout.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-7fd10bf88555/measure-4-1-1.stdout.log.txt",
+      "sha256": "5c9b4728bfda89671868a9f89547517d77a10715547156df647c7315e78eebb8"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-7fd10bf88555/metadata.stderr.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-7fd10bf88555/metadata.stderr.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-7fd10bf88555/metadata.stdout.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-7fd10bf88555/metadata.stdout.log.txt",
+      "sha256": "1de1120f3b3dd3999fa3335b4e2185079d861166659260b25ebdf8e7910d8890"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-7fd10bf88555/receipt.json",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-7fd10bf88555/receipt.json",
+      "sha256": "5cd641526d1eb76e2c163fee502e4d2b03a676ac4807c27d057a95dcfe11d789"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-7fd10bf88555/release-build.stderr.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-7fd10bf88555/release-build.stderr.log.txt",
+      "sha256": "09eeebf24842b446c4f62015effa8fb21d082f77ee32ac464c16e1ba554d3d99"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-7fd10bf88555/release-build.stdout.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-7fd10bf88555/release-build.stdout.log.txt",
+      "sha256": "d17b4e90cb03ecb0a50b63392d1ae4ef6dcbf12753063ac908857fe8e62375f0"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-7fd10bf88555/resolve-toolchain.stderr.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-7fd10bf88555/resolve-toolchain.stderr.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-7fd10bf88555/resolve-toolchain.stdout.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-7fd10bf88555/resolve-toolchain.stdout.log.txt",
+      "sha256": "54234bc009f7bc295608f8bb882e03677001147f42f05ce19606c17d2db6473b"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-7fd10bf88555/rust-contracts.stderr.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-7fd10bf88555/rust-contracts.stderr.log.txt",
+      "sha256": "4b1f616125c90d5503cfb5ee9352b03338ccbf21ac8467c862a4e38e36feb588"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-7fd10bf88555/rust-contracts.stdout.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-7fd10bf88555/rust-contracts.stdout.log.txt",
+      "sha256": "f9efff8e684f377bf13c2debe0d1fa12ae72041c260a3cb18df93390dd2d4a21"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-7fd10bf88555/rustc-version.stderr.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-7fd10bf88555/rustc-version.stderr.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-7fd10bf88555/rustc-version.stdout.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-7fd10bf88555/rustc-version.stdout.log.txt",
+      "sha256": "c45e612575abeef05e99e88eb1e7aea52cddab9ad70d4f65ad20eaa65e92a9cf"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-7fd10bf88555/shared-fast-java.stderr.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-7fd10bf88555/shared-fast-java.stderr.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-7fd10bf88555/shared-fast-java.stdout.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-7fd10bf88555/shared-fast-java.stdout.log.txt",
+      "sha256": "de42df2ead506f6374b1897970163117dee29b2e9f896297b9c67afdff5e4f26"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-7fd10bf88555/shared-fast.stderr.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-7fd10bf88555/shared-fast.stderr.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-7fd10bf88555/shared-fast.stdout.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-7fd10bf88555/shared-fast.stdout.log.txt",
+      "sha256": "0a7dbf312ca2d2d934fad76b18d022fe1a334e3d7679e572c618b4a592cce7fd"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-7fd10bf88555/shared-slow-java.stderr.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-7fd10bf88555/shared-slow-java.stderr.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-7fd10bf88555/shared-slow-java.stdout.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-7fd10bf88555/shared-slow-java.stdout.log.txt",
+      "sha256": "de42df2ead506f6374b1897970163117dee29b2e9f896297b9c67afdff5e4f26"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-7fd10bf88555/shared-slow.stderr.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-7fd10bf88555/shared-slow.stderr.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-7fd10bf88555/shared-slow.stdout.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-7fd10bf88555/shared-slow.stdout.log.txt",
+      "sha256": "4165623f5895601854bc99b52c5d218e1e1e85a81f45dfca62edb46df8567530"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-7fd10bf88555/tiny-vectors-java.stderr.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-7fd10bf88555/tiny-vectors-java.stderr.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-7fd10bf88555/tiny-vectors-java.stdout.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-7fd10bf88555/tiny-vectors-java.stdout.log.txt",
+      "sha256": "de42df2ead506f6374b1897970163117dee29b2e9f896297b9c67afdff5e4f26"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-7fd10bf88555/tiny-vectors.stderr.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-7fd10bf88555/tiny-vectors.stderr.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-7fd10bf88555/tiny-vectors.stdout.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-7fd10bf88555/tiny-vectors.stdout.log.txt",
+      "sha256": "dc3725df5cad2dbff92843998a8c384c44c9822d060df6d42e1a65dcf903f9d6"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-7fd10bf88555/unshared-slow-java.stderr.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-7fd10bf88555/unshared-slow-java.stderr.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-7fd10bf88555/unshared-slow-java.stdout.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-7fd10bf88555/unshared-slow-java.stdout.log.txt",
+      "sha256": "de42df2ead506f6374b1897970163117dee29b2e9f896297b9c67afdff5e4f26"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-7fd10bf88555/unshared-slow.stderr.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-7fd10bf88555/unshared-slow.stderr.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-7fd10bf88555/unshared-slow.stdout.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-7fd10bf88555/unshared-slow.stdout.log.txt",
+      "sha256": "7e123c3b702bdc2192e93a0b6bb84d1c6fe3ed86b15e39a3853487466385fd1e"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-7fd10bf88555/zlib-tamper.stderr.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-7fd10bf88555/zlib-tamper.stderr.log.txt",
+      "sha256": "4fac0cdf833b4aab6dfac4b62f8b2e1d61b79422a9a341fad007c4b9affa3031"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-7fd10bf88555/zlib-tamper.stdout.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-7fd10bf88555/zlib-tamper.stdout.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-e8e91da68b34/accepted-backend-warning-source.stderr.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-e8e91da68b34/accepted-backend-warning-source.stderr.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-e8e91da68b34/accepted-backend-warning-source.stdout.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-e8e91da68b34/accepted-backend-warning-source.stdout.log.txt",
+      "sha256": "d6f62c00e2a83f68c816ef6ff4121181df5949474c1c49d6af10b5e8932900ab"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-e8e91da68b34/backend-features.stderr.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-e8e91da68b34/backend-features.stderr.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-e8e91da68b34/backend-features.stdout.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-e8e91da68b34/backend-features.stdout.log.txt",
+      "sha256": "748c4981cc0359cc87f0e58861ade3e28863503655bd9fd1ffb52393b295c09b"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-e8e91da68b34/bytes-vs-arc.stderr.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-e8e91da68b34/bytes-vs-arc.stderr.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-e8e91da68b34/bytes-vs-arc.stdout.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-e8e91da68b34/bytes-vs-arc.stdout.log.txt",
+      "sha256": "32f6ab583e1450b7c8b188e898564693e67b088a145313476d8bd0ae700608d0"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-e8e91da68b34/cipher-tamper.stderr.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-e8e91da68b34/cipher-tamper.stderr.log.txt",
+      "sha256": "d31c9c1e21f9d96fae742fa96205d41978286f6ac76d40d7cf2c1b39eb224428"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-e8e91da68b34/cipher-tamper.stdout.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-e8e91da68b34/cipher-tamper.stdout.log.txt",
+      "sha256": "663fedb0797d56c53339fc7c71541de087349511fbb0ac7b0fe8ce59e9bf2920"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-e8e91da68b34/clippy.stderr.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-e8e91da68b34/clippy.stderr.log.txt",
+      "sha256": "414d25c98b7e6103f1a571d6a792a0054635f77dcec41f4cd7dba62dcfc5a910"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-e8e91da68b34/clippy.stdout.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-e8e91da68b34/clippy.stdout.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-e8e91da68b34/compile-oracle.stderr.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-e8e91da68b34/compile-oracle.stderr.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-e8e91da68b34/compile-oracle.stdout.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-e8e91da68b34/compile-oracle.stdout.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-e8e91da68b34/format.stderr.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-e8e91da68b34/format.stderr.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-e8e91da68b34/format.stdout.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-e8e91da68b34/format.stdout.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-e8e91da68b34/java-version.stderr.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-e8e91da68b34/java-version.stderr.log.txt",
+      "sha256": "9d65a43706f49fcfdbcece91e737f759110493e82fd1c4886cf49104c2017b0e"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-e8e91da68b34/java-version.stdout.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-e8e91da68b34/java-version.stdout.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-e8e91da68b34/job-controls.stderr.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-e8e91da68b34/job-controls.stderr.log.txt",
+      "sha256": "ef172d5a0519dd0d62dafaac5bb2d40e9f9192d6ff076ecb69c635e1f4709d65"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-e8e91da68b34/job-controls.stdout.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-e8e91da68b34/job-controls.stdout.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-e8e91da68b34/measure--1-0-0.stderr.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-e8e91da68b34/measure--1-0-0.stderr.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-e8e91da68b34/measure--1-0-0.stdout.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-e8e91da68b34/measure--1-0-0.stdout.log.txt",
+      "sha256": "b943100e820616e6c6bf1a45876f08b42b80dc0b0d18a2711c988c300761b56c"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-e8e91da68b34/measure--1-0-1.stderr.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-e8e91da68b34/measure--1-0-1.stderr.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-e8e91da68b34/measure--1-0-1.stdout.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-e8e91da68b34/measure--1-0-1.stdout.log.txt",
+      "sha256": "cb7c9d4321bab8b4b3727f7484d64e8103bac2428ce12812b51674447cce599f"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-e8e91da68b34/measure--1-1-0.stderr.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-e8e91da68b34/measure--1-1-0.stderr.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-e8e91da68b34/measure--1-1-0.stdout.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-e8e91da68b34/measure--1-1-0.stdout.log.txt",
+      "sha256": "c4ae8eecb77ed7033c0fbb1b6c7bf42569433e44d2903f2a0dfeca4f980b2e36"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-e8e91da68b34/measure--1-1-1.stderr.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-e8e91da68b34/measure--1-1-1.stderr.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-e8e91da68b34/measure--1-1-1.stdout.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-e8e91da68b34/measure--1-1-1.stdout.log.txt",
+      "sha256": "60b000b1a59c9cc2346f16392a8c103d794bf80e7a4bd2c7d7ae5d9c8167b07b"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-e8e91da68b34/measure-0-0-0.stderr.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-e8e91da68b34/measure-0-0-0.stderr.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-e8e91da68b34/measure-0-0-0.stdout.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-e8e91da68b34/measure-0-0-0.stdout.log.txt",
+      "sha256": "39cfbf804bc199a5c05ab8ca287082e4266f75f0ad03f8ae94dd28f34c75598a"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-e8e91da68b34/measure-0-0-1.stderr.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-e8e91da68b34/measure-0-0-1.stderr.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-e8e91da68b34/measure-0-0-1.stdout.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-e8e91da68b34/measure-0-0-1.stdout.log.txt",
+      "sha256": "e19100c900b3bdc907f99fe2e50d0155755788bfa85488d13cecbde0bfc6f683"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-e8e91da68b34/measure-0-1-0.stderr.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-e8e91da68b34/measure-0-1-0.stderr.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-e8e91da68b34/measure-0-1-0.stdout.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-e8e91da68b34/measure-0-1-0.stdout.log.txt",
+      "sha256": "2d7b74bf7c93bb91df4614709138809f4f75d3fb596ca3d6ca570b08b5feda30"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-e8e91da68b34/measure-0-1-1.stderr.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-e8e91da68b34/measure-0-1-1.stderr.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-e8e91da68b34/measure-0-1-1.stdout.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-e8e91da68b34/measure-0-1-1.stdout.log.txt",
+      "sha256": "15846d6fe1040568cddac0ef267eef48249f24a9b647a2d5a535c5b214c6b244"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-e8e91da68b34/measure-1-0-0.stderr.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-e8e91da68b34/measure-1-0-0.stderr.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-e8e91da68b34/measure-1-0-0.stdout.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-e8e91da68b34/measure-1-0-0.stdout.log.txt",
+      "sha256": "5c30459dcc7613532e47a6afd1b62e778151d7c86ff8b80af5d8bda36acd18c2"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-e8e91da68b34/measure-1-0-1.stderr.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-e8e91da68b34/measure-1-0-1.stderr.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-e8e91da68b34/measure-1-0-1.stdout.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-e8e91da68b34/measure-1-0-1.stdout.log.txt",
+      "sha256": "d83e8937fa4f6fa15ef6cf7e0201c9a2271e33a023881673ed31b3652f561575"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-e8e91da68b34/measure-1-1-0.stderr.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-e8e91da68b34/measure-1-1-0.stderr.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-e8e91da68b34/measure-1-1-0.stdout.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-e8e91da68b34/measure-1-1-0.stdout.log.txt",
+      "sha256": "b7f2dd88f475c025f156bada1605d756f7ab60d8fdfa8ae78a6dafee983af751"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-e8e91da68b34/measure-1-1-1.stderr.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-e8e91da68b34/measure-1-1-1.stderr.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-e8e91da68b34/measure-1-1-1.stdout.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-e8e91da68b34/measure-1-1-1.stdout.log.txt",
+      "sha256": "ce7f8391c794708bad860823a1d79ac00e24e2121e6b556a6ff1fc31947d5561"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-e8e91da68b34/measure-2-0-0.stderr.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-e8e91da68b34/measure-2-0-0.stderr.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-e8e91da68b34/measure-2-0-0.stdout.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-e8e91da68b34/measure-2-0-0.stdout.log.txt",
+      "sha256": "74c259b9f5d2fe7cb70b0d24e396bcf3a888e1037d113f034f8838f964b7fc33"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-e8e91da68b34/measure-2-0-1.stderr.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-e8e91da68b34/measure-2-0-1.stderr.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-e8e91da68b34/measure-2-0-1.stdout.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-e8e91da68b34/measure-2-0-1.stdout.log.txt",
+      "sha256": "f0844a84b672b7d5c933ee48be7f13c87c7d19752cc644e3c26af56f5d8e8e4d"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-e8e91da68b34/measure-2-1-0.stderr.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-e8e91da68b34/measure-2-1-0.stderr.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-e8e91da68b34/measure-2-1-0.stdout.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-e8e91da68b34/measure-2-1-0.stdout.log.txt",
+      "sha256": "0f3db58365181c175954347a65d0afb76dffbb13bc2ec890f61e8dcc5f8ec0dc"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-e8e91da68b34/measure-2-1-1.stderr.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-e8e91da68b34/measure-2-1-1.stderr.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-e8e91da68b34/measure-2-1-1.stdout.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-e8e91da68b34/measure-2-1-1.stdout.log.txt",
+      "sha256": "97c834295a64a29f5f7adc22044b9ca0082704a6bf9396a194b16acf1493a719"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-e8e91da68b34/measure-3-0-0.stderr.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-e8e91da68b34/measure-3-0-0.stderr.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-e8e91da68b34/measure-3-0-0.stdout.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-e8e91da68b34/measure-3-0-0.stdout.log.txt",
+      "sha256": "9c9303c17087fb1c5eb4f5809b7c3a81bed46fd4e32d34a2922b828e0f413b29"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-e8e91da68b34/measure-3-0-1.stderr.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-e8e91da68b34/measure-3-0-1.stderr.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-e8e91da68b34/measure-3-0-1.stdout.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-e8e91da68b34/measure-3-0-1.stdout.log.txt",
+      "sha256": "18a7e4b4da9af190ffa6364c7a9abc9432d842521daf6f02d7469f9305897223"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-e8e91da68b34/measure-3-1-0.stderr.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-e8e91da68b34/measure-3-1-0.stderr.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-e8e91da68b34/measure-3-1-0.stdout.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-e8e91da68b34/measure-3-1-0.stdout.log.txt",
+      "sha256": "cba7ead21d1f621d3999cfb1bf519fcd57113c923ed97dbafb537a67c1cf9dab"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-e8e91da68b34/measure-3-1-1.stderr.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-e8e91da68b34/measure-3-1-1.stderr.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-e8e91da68b34/measure-3-1-1.stdout.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-e8e91da68b34/measure-3-1-1.stdout.log.txt",
+      "sha256": "bcaacd3001d9e85149ff953b4f85bbbe3a5f76c8d5d0da20d3db0fe39f7fe4a3"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-e8e91da68b34/measure-4-0-0.stderr.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-e8e91da68b34/measure-4-0-0.stderr.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-e8e91da68b34/measure-4-0-0.stdout.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-e8e91da68b34/measure-4-0-0.stdout.log.txt",
+      "sha256": "6b9143e11b1f307dd54dd86d05e52b9a33538b4b3701d2a67e96d08d8c514021"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-e8e91da68b34/measure-4-0-1.stderr.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-e8e91da68b34/measure-4-0-1.stderr.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-e8e91da68b34/measure-4-0-1.stdout.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-e8e91da68b34/measure-4-0-1.stdout.log.txt",
+      "sha256": "0376467555d2a987543c485d9cbb4c13d9c0089ed36ee173fa287e5d102a116d"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-e8e91da68b34/measure-4-1-0.stderr.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-e8e91da68b34/measure-4-1-0.stderr.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-e8e91da68b34/measure-4-1-0.stdout.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-e8e91da68b34/measure-4-1-0.stdout.log.txt",
+      "sha256": "2770a29d91100f0eba11399f677605e833d8d6f3431e9f48d461866bf51b6330"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-e8e91da68b34/measure-4-1-1.stderr.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-e8e91da68b34/measure-4-1-1.stderr.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-e8e91da68b34/measure-4-1-1.stdout.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-e8e91da68b34/measure-4-1-1.stdout.log.txt",
+      "sha256": "7c39dd88fbc242586d8ded99c461d40b99d67e0521da3b4274a7136b5de43029"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-e8e91da68b34/metadata.stderr.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-e8e91da68b34/metadata.stderr.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-e8e91da68b34/metadata.stdout.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-e8e91da68b34/metadata.stdout.log.txt",
+      "sha256": "1de1120f3b3dd3999fa3335b4e2185079d861166659260b25ebdf8e7910d8890"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-e8e91da68b34/receipt.json",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-e8e91da68b34/receipt.json",
+      "sha256": "52bce21eb5485b9b9699caf46fbb0e10e588a5bffcccdd6916417f488dc8d70c"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-e8e91da68b34/release-build.stderr.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-e8e91da68b34/release-build.stderr.log.txt",
+      "sha256": "7854b34c3292ca1247108c0e8658e615d86b63a837443dc15ab2e72ce4cd9d6a"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-e8e91da68b34/release-build.stdout.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-e8e91da68b34/release-build.stdout.log.txt",
+      "sha256": "012f5ae14ab35b28499a3fc442e9bb30c3d07fe6c873b517a2881140946d5619"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-e8e91da68b34/resolve-toolchain.stderr.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-e8e91da68b34/resolve-toolchain.stderr.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-e8e91da68b34/resolve-toolchain.stdout.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-e8e91da68b34/resolve-toolchain.stdout.log.txt",
+      "sha256": "54234bc009f7bc295608f8bb882e03677001147f42f05ce19606c17d2db6473b"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-e8e91da68b34/rust-contracts.stderr.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-e8e91da68b34/rust-contracts.stderr.log.txt",
+      "sha256": "d623250aaefd88558a91c27031f6c5cdb506812a3efb9eac900ef0b08d7b9e7b"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-e8e91da68b34/rust-contracts.stdout.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-e8e91da68b34/rust-contracts.stdout.log.txt",
+      "sha256": "ba205c2512dc27fda886a006e92d705c51c8d92c604e653de3404f5904e5ddc8"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-e8e91da68b34/rustc-version.stderr.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-e8e91da68b34/rustc-version.stderr.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-e8e91da68b34/rustc-version.stdout.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-e8e91da68b34/rustc-version.stdout.log.txt",
+      "sha256": "c45e612575abeef05e99e88eb1e7aea52cddab9ad70d4f65ad20eaa65e92a9cf"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-e8e91da68b34/shared-fast-java.stderr.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-e8e91da68b34/shared-fast-java.stderr.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-e8e91da68b34/shared-fast-java.stdout.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-e8e91da68b34/shared-fast-java.stdout.log.txt",
+      "sha256": "de42df2ead506f6374b1897970163117dee29b2e9f896297b9c67afdff5e4f26"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-e8e91da68b34/shared-fast.stderr.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-e8e91da68b34/shared-fast.stderr.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-e8e91da68b34/shared-fast.stdout.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-e8e91da68b34/shared-fast.stdout.log.txt",
+      "sha256": "fb23c6593ac4fa0e6c9c17c930066ae89bfd2e83e2d666c1094959a006a7e11c"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-e8e91da68b34/shared-slow-java.stderr.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-e8e91da68b34/shared-slow-java.stderr.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-e8e91da68b34/shared-slow-java.stdout.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-e8e91da68b34/shared-slow-java.stdout.log.txt",
+      "sha256": "de42df2ead506f6374b1897970163117dee29b2e9f896297b9c67afdff5e4f26"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-e8e91da68b34/shared-slow.stderr.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-e8e91da68b34/shared-slow.stderr.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-e8e91da68b34/shared-slow.stdout.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-e8e91da68b34/shared-slow.stdout.log.txt",
+      "sha256": "c0378752a7af44a95f353a0c1152da40cb789b4302cd12e3de5ddb769ffe693d"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-e8e91da68b34/tiny-vectors-java.stderr.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-e8e91da68b34/tiny-vectors-java.stderr.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-e8e91da68b34/tiny-vectors-java.stdout.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-e8e91da68b34/tiny-vectors-java.stdout.log.txt",
+      "sha256": "de42df2ead506f6374b1897970163117dee29b2e9f896297b9c67afdff5e4f26"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-e8e91da68b34/tiny-vectors.stderr.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-e8e91da68b34/tiny-vectors.stderr.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-e8e91da68b34/tiny-vectors.stdout.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-e8e91da68b34/tiny-vectors.stdout.log.txt",
+      "sha256": "5ae45f2b12472dd69035afbe7c79a8a6b3a26ff7527d4c65c142b54a3cf5c9a4"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-e8e91da68b34/unshared-slow-java.stderr.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-e8e91da68b34/unshared-slow-java.stderr.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-e8e91da68b34/unshared-slow-java.stdout.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-e8e91da68b34/unshared-slow-java.stdout.log.txt",
+      "sha256": "de42df2ead506f6374b1897970163117dee29b2e9f896297b9c67afdff5e4f26"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-e8e91da68b34/unshared-slow.stderr.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-e8e91da68b34/unshared-slow.stderr.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-e8e91da68b34/unshared-slow.stdout.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-e8e91da68b34/unshared-slow.stdout.log.txt",
+      "sha256": "4236003f9f2ed029cac0dffbb27c49e599db4a1bf3bab36edfecec8187488e1b"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-e8e91da68b34/zlib-tamper.stderr.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-e8e91da68b34/zlib-tamper.stderr.log.txt",
+      "sha256": "4fac0cdf833b4aab6dfac4b62f8b2e1d61b79422a9a341fad007c4b9affa3031"
+    },
+    {
+      "source": "target/architecture-hardening/h14-packet-buffer-e8e91da68b34/zlib-tamper.stdout.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-packet-buffer-e8e91da68b34/zlib-tamper.stdout.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h14-pressure-delay-before/stderr.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-pressure-delay-before/stderr.log.txt",
+      "sha256": "45504912f5b3d650f238c5b49b203d87fe25e7608bd49d95ae3beed74a330270"
+    },
+    {
+      "source": "target/architecture-hardening/h14-pressure-delay-before/stdout.log",
+      "retained": "machine/architecture-hardening/h14-packet-buffer-evidence/h14-pressure-delay-before/stdout.log.txt",
+      "sha256": "18499cb453452f9d88440130dc005813c1ad8973661f90d9d05fc1c2e01c0893"
+    }
+  ],
+  "limits": [
+    "Synthetic packet0x7e payload and fixed public keys; no Minecraft gameplay/authentication/JNI integration.",
+    "Java-valid deflate streams need not be byte-identical; independent AES oracle uses validated native frames.",
+    "Explicit application payload copies and Rust allocator requests are measured; backend/crypto/OS/kernel internal copies remain unknown.",
+    "Payload reservations exclude metadata, retained source snapshots, backend contexts and kernel socket queues; child Job adds an overall commit limit.",
+    "Shared host and instrumented allocator; no zero-copy or general production-throughput claim.",
+    "Actual pipeline is standalone and synthetic; production H6/JVM capture/key and scheduler integration remains required.",
+    "Canceled completion abandonment remains fail-closed until teardown; no worker-panic recovery qualification.",
+    "Root timing median reverses initial small sharing advantage; no general end-to-end performance win.",
+    "Continuous stream can send a prefix before fatal error; failure closes connection, no transactional wire rollback."
+  ]
+}

@@ -1,0 +1,814 @@
+{
+  "schema_version": 1,
+  "kind": "H7_BOUNDED_LOOM_LIFECYCLE_MODELS",
+  "status": "PASS_BOUNDED_MODELS_ONLY",
+  "production_authority": false,
+  "runtime_implementation_instrumented_with_loom": false,
+  "root_workspace_dependency_changed": false,
+  "receipt": "machine/architecture-hardening/h7-loom-evidence/h7-loom-0ec46f52cc27/receipt.json",
+  "receipt_sha256": "d16e559cc521b366b58de179964ec6ff777a9b613f319014ae4c8ce917df47c8",
+  "source_binding_count": 16,
+  "tool_binding_count": 11,
+  "dependency_archive_count": 30,
+  "dependency_file_count": 1695,
+  "source_bindings_match_current": true,
+  "before_after_bindings_equal": true,
+  "provenance": "tools/loom-lifecycle-models/provenance.json",
+  "provenance_sha256": "96b3c73dfa83489b17076156a302239db74f07bb976240cd85e794b8cd0b564c",
+  "bounds": {
+    "threads_including_main": 3,
+    "preemptions": 3,
+    "branches_per_execution": 256,
+    "permutation_cap": null,
+    "loom_duration_cap": null,
+    "test_process_deadline_seconds": 30
+  },
+  "positive_model_count": 13,
+  "negative_control_count": 14,
+  "positive_models": [
+    {
+      "name": "handoff_admission_drain",
+      "completed_executions": 43,
+      "log": "target/architecture-hardening/h7-loom-0ec46f52cc27/handoff_admission_drain.log",
+      "log_sha256": "d979c4816bb13a863498b94b0fdff31c0eb22f2c4eda93c3d3debebce0556871"
+    },
+    {
+      "name": "owner_and_candidate_publication",
+      "completed_executions": 34,
+      "log": "target/architecture-hardening/h7-loom-0ec46f52cc27/owner_and_candidate_publication.log",
+      "log_sha256": "d7ad3dd07787187d967a5b2f8c9f322bb882fde2e3bd0117fbaa5d683b6a80ef"
+    },
+    {
+      "name": "worker_revocation",
+      "completed_executions": 34,
+      "log": "target/architecture-hardening/h7-loom-0ec46f52cc27/worker_revocation.log",
+      "log_sha256": "cb5a0ee39164f80a218c316d269dcaaa7310430a11d4b2215f5f24d126a6083d"
+    },
+    {
+      "name": "worker_cancellation",
+      "completed_executions": 34,
+      "log": "target/architecture-hardening/h7-loom-0ec46f52cc27/worker_cancellation.log",
+      "log_sha256": "b88a7b0180892acc0688035a71d83ca4118c2db36dbff29b419f29b2cfab9e33"
+    },
+    {
+      "name": "cancellation_checks_origin",
+      "completed_executions": 34,
+      "log": "target/architecture-hardening/h7-loom-0ec46f52cc27/cancellation_checks_origin.log",
+      "log_sha256": "d5fb5599ca9da44a246c5c0a3fbab6bf92ea4f7c6c17372340bf3ead365aca3f"
+    },
+    {
+      "name": "worker_state_generation",
+      "completed_executions": 34,
+      "log": "target/architecture-hardening/h7-loom-0ec46f52cc27/worker_state_generation.log",
+      "log_sha256": "b8dfe07829461ea23c55976fdb38d1d58204bf09172db22592ac98a508f265c1"
+    },
+    {
+      "name": "worker_registry_epoch",
+      "completed_executions": 34,
+      "log": "target/architecture-hardening/h7-loom-0ec46f52cc27/worker_registry_epoch.log",
+      "log_sha256": "d55b18e3e925879b6da77d058b0953c3535b0cdef5685c314540ad3dd7dbab3f"
+    },
+    {
+      "name": "worker_ownership_generation",
+      "completed_executions": 34,
+      "log": "target/architecture-hardening/h7-loom-0ec46f52cc27/worker_ownership_generation.log",
+      "log_sha256": "4623471fa843f23ec4e9a5863aa4af86fe0d91adeac8901c6f5d2e1fc5b2756f"
+    },
+    {
+      "name": "async_io_unload_adoption",
+      "completed_executions": 34,
+      "log": "target/architecture-hardening/h7-loom-0ec46f52cc27/async_io_unload_adoption.log",
+      "log_sha256": "b58d6d587de1f3d14254cf5d11cd98336c2f527e0296a7db7149e1e993aaf992"
+    },
+    {
+      "name": "slot_reuse_generation",
+      "completed_executions": 34,
+      "log": "target/architecture-hardening/h7-loom-0ec46f52cc27/slot_reuse_generation.log",
+      "log_sha256": "90c7aa35478998c18bf32cca9971fa6f0ff8dcb5ab19006d2efd7d3390b576d8"
+    },
+    {
+      "name": "exhausted_generation_retires",
+      "completed_executions": 34,
+      "log": "target/architecture-hardening/h7-loom-0ec46f52cc27/exhausted_generation_retires.log",
+      "log_sha256": "3c6c6bdeb44b788623e7a2621612b06cfdc0e71833cfcc3eecba1611caab44b7"
+    },
+    {
+      "name": "ready_queue_publication",
+      "completed_executions": 90,
+      "log": "target/architecture-hardening/h7-loom-0ec46f52cc27/ready_queue_publication.log",
+      "log_sha256": "1e0a44bebc04dcf9f1e0efacd7e8a38ef1a9ff5ab69e96bd2d5b0431b3476dea"
+    },
+    {
+      "name": "immutable_snapshot_reclamation",
+      "completed_executions": 48,
+      "log": "target/architecture-hardening/h7-loom-0ec46f52cc27/immutable_snapshot_reclamation.log",
+      "log_sha256": "a5cc09b4ed01d2a1255e831b4427f1abf41331859cf164244a8a32e01734cc0a"
+    }
+  ],
+  "negative_controls": [
+    {
+      "name": "broken_handoff_admission_drain",
+      "invariant_marker": "ADMISSION_AFTER_FREEZE",
+      "exit_code": 101,
+      "log": "target/architecture-hardening/h7-loom-0ec46f52cc27/broken_handoff_admission_drain.log",
+      "log_sha256": "ea9d986a4bc976221f89c2e5d9ba53828955f9ed4f19d4c204268b8c3db810c4"
+    },
+    {
+      "name": "broken_owner_and_candidate_publication",
+      "invariant_marker": "PARTIAL_OWNER_PUBLICATION",
+      "exit_code": 101,
+      "log": "target/architecture-hardening/h7-loom-0ec46f52cc27/broken_owner_and_candidate_publication.log",
+      "log_sha256": "0558d60f37dfaad8220ab330ae0b32182d5a8fb08765cf0c0469ccfab944a4b9"
+    },
+    {
+      "name": "broken_worker_revocation",
+      "invariant_marker": "STALE_RESULT_COMMITTED",
+      "exit_code": 101,
+      "log": "target/architecture-hardening/h7-loom-0ec46f52cc27/broken_worker_revocation.log",
+      "log_sha256": "0bdf9f46190fd616ac912268ca042a9b2dd84d3af3419dcde10c9f383ac4a57b"
+    },
+    {
+      "name": "broken_worker_cancellation",
+      "invariant_marker": "STALE_RESULT_COMMITTED",
+      "exit_code": 101,
+      "log": "target/architecture-hardening/h7-loom-0ec46f52cc27/broken_worker_cancellation.log",
+      "log_sha256": "9ce3c8955ad194d150ae4e9f5ae2e363c4491fb93ae33ed7f08e4efaa9ab85c3"
+    },
+    {
+      "name": "broken_cancellation_checks_origin",
+      "invariant_marker": "FOREIGN_WORK_CANCELLED_LOCAL_JOB",
+      "exit_code": 101,
+      "log": "target/architecture-hardening/h7-loom-0ec46f52cc27/broken_cancellation_checks_origin.log",
+      "log_sha256": "72bfc7252038bf71624e0aad19cf692f999c55fe2ba1e994e7bcb2f5bdf16980"
+    },
+    {
+      "name": "broken_worker_state_generation",
+      "invariant_marker": "STALE_RESULT_COMMITTED",
+      "exit_code": 101,
+      "log": "target/architecture-hardening/h7-loom-0ec46f52cc27/broken_worker_state_generation.log",
+      "log_sha256": "356e1706ba39da2c9db58b5184cc23603c9abaa5b0307c2a0b674cef1cb77445"
+    },
+    {
+      "name": "broken_worker_registry_epoch",
+      "invariant_marker": "STALE_RESULT_COMMITTED",
+      "exit_code": 101,
+      "log": "target/architecture-hardening/h7-loom-0ec46f52cc27/broken_worker_registry_epoch.log",
+      "log_sha256": "8f4f1dc3916e406b5cad95b0c83fe44762f44342c1fe355f045007dbfa25a2a1"
+    },
+    {
+      "name": "broken_worker_ownership_generation",
+      "invariant_marker": "STALE_RESULT_COMMITTED",
+      "exit_code": 101,
+      "log": "target/architecture-hardening/h7-loom-0ec46f52cc27/broken_worker_ownership_generation.log",
+      "log_sha256": "152a896700226222ac3f3a5819e10d0d3a0004057f28ace46fb93723274fee94"
+    },
+    {
+      "name": "broken_async_io_unload_adoption",
+      "invariant_marker": "STALE_RESULT_COMMITTED",
+      "exit_code": 101,
+      "log": "target/architecture-hardening/h7-loom-0ec46f52cc27/broken_async_io_unload_adoption.log",
+      "log_sha256": "2263271da068097c3c5da7c3aa2a5ca8d5957755508975963ae383d3ad6af9f7"
+    },
+    {
+      "name": "broken_slot_reuse_generation",
+      "invariant_marker": "STALE_HANDLE_ALIASED_NEW_SLOT",
+      "exit_code": 101,
+      "log": "target/architecture-hardening/h7-loom-0ec46f52cc27/broken_slot_reuse_generation.log",
+      "log_sha256": "3dc7111e55790688ca66a1b6eb43d162072f9352f182f7f6a8e19ff94237ac88"
+    },
+    {
+      "name": "broken_exhausted_generation_retires",
+      "invariant_marker": "GENERATION_WRAP_ABA",
+      "exit_code": 101,
+      "log": "target/architecture-hardening/h7-loom-0ec46f52cc27/broken_exhausted_generation_retires.log",
+      "log_sha256": "deed225194bdb92137aea7c3825cb8a01648f8efdba74a9c1b4e74952d53c6a5"
+    },
+    {
+      "name": "broken_ready_queue_publication",
+      "invariant_marker": "READY_WITHOUT_PAYLOAD",
+      "exit_code": 101,
+      "log": "target/architecture-hardening/h7-loom-0ec46f52cc27/broken_ready_queue_publication.log",
+      "log_sha256": "0e923f343b39e2fed0fa05971b8e21b54983f5325500bd078a37a79076cc2f21"
+    },
+    {
+      "name": "broken_immutable_snapshot_reclamation",
+      "invariant_marker": "RECLAIMED_LIVE_SNAPSHOT",
+      "exit_code": 101,
+      "log": "target/architecture-hardening/h7-loom-0ec46f52cc27/broken_immutable_snapshot_reclamation.log",
+      "log_sha256": "f49dc2dc9303d9c180932978afdd3ebbab6c43a82d9748327130bbf48481012a"
+    },
+    {
+      "name": "broken_handoff_skips_drain",
+      "invariant_marker": "JAVA_NATIVE_WRITERS_OVERLAP",
+      "exit_code": 101,
+      "log": "target/architecture-hardening/h7-loom-0ec46f52cc27/broken_handoff_skips_drain.log",
+      "log_sha256": "8c34076ec85840a5de017fdffee0bc6823d73fd131746921288acd16d7f5ed6c"
+    }
+  ],
+  "executions_total_across_distinct_positive_models": 521,
+  "counts_note": "Positive model executions are distinct explored schedules, not additional Rust test cases. Each of13 positive test processes completed; each of14 negative test processes deliberately failed with its exact expected invariant marker.",
+  "format": "PASS",
+  "strict_clippy": "PASS -D warnings",
+  "source_mapping_document": "docs/architecture/loom-lifecycle-models.md",
+  "coverage": [
+    "Admission freezes before handoff; issued writers drain",
+    "Owner and staged data publish together",
+    "Revocation, cancellation, state/registry/owner changes reject stale worker adoption",
+    "Origin-bound cancellation rejects foreign colliding job nonce",
+    "Async completion adoption rejects unload/reload (abstract result, no IO backend)",
+    "Slot generations reject ABA; reduced exhausted counter retires",
+    "Prospective READY/queue release-acquire publication",
+    "Immutable Arc reader survives slot removal; single final drop"
+  ],
+  "limitations": [
+    "Abstract state machines; no proof of H4/H6 implementation or JVM synchronization.",
+    "READY queue and async IO adoption are prospective obligations, not implemented engine features.",
+    "Only configured bounded schedules and Loom-supported memory behaviors are checked.",
+    "Tool hashes cover listed binaries, not every MSVC linker/SDK/system library or environment input.",
+    "No full H4/H6 refinement proof; models check reduced contracts rather than source execution.",
+    "No liveness, fairness, starvation, JVM safepoints/aliases, multi-job queues, complete dependency graph, reverse materialization/rollback or live server qualification.",
+    "Reclamation negative control uses safe logical sentinel, not actual use-after-free."
+  ],
+  "earlier_runs": [
+    {
+      "run": "h7-loom-1b972715d4d3",
+      "classification": "RUNNER_SETUP_FAILURE_RETAINED",
+      "reason": "Assumed .cargo-checksum.json exists in modern Cargo cache. Missing file caused FAIL before compilation/models. Replaced assumption with verified cached .crate archive comparison against Cargo.lock and every fetched source file."
+    },
+    {
+      "run": "h7-loom-9e66277719c1",
+      "classification": "PRELIMINARY_PASS_SUPERSEDED",
+      "reason": "12 positive/13 negative campaign before H6 origin-bound WorkId correction and added cancellation-origin model; source-bound raw evidence retained."
+    }
+  ],
+  "retained_runs": [
+    {
+      "run": "h7-loom-1b972715d4d3",
+      "status": "FAIL",
+      "artifacts": [
+        {
+          "original_path": "target/architecture-hardening/h7-loom-1b972715d4d3/dependency-metadata.log",
+          "retained_path": "machine/architecture-hardening/h7-loom-evidence/h7-loom-1b972715d4d3/dependency-metadata.log.txt",
+          "sha256": "a84f24b044f8c82dfd726d819dddb3276d87aec77919e212d7b8030219663eb7"
+        },
+        {
+          "original_path": "target/architecture-hardening/h7-loom-1b972715d4d3/resolve-toolchain.log",
+          "retained_path": "machine/architecture-hardening/h7-loom-evidence/h7-loom-1b972715d4d3/resolve-toolchain.log.txt",
+          "sha256": "54234bc009f7bc295608f8bb882e03677001147f42f05ce19606c17d2db6473b"
+        },
+        {
+          "original_path": "target/architecture-hardening/h7-loom-1b972715d4d3/rustc-version.log",
+          "retained_path": "machine/architecture-hardening/h7-loom-evidence/h7-loom-1b972715d4d3/rustc-version.log.txt",
+          "sha256": "c45e612575abeef05e99e88eb1e7aea52cddab9ad70d4f65ad20eaa65e92a9cf"
+        },
+        {
+          "original_path": "target/architecture-hardening/h7-loom-1b972715d4d3/receipt.json",
+          "retained_path": "machine/architecture-hardening/h7-loom-evidence/h7-loom-1b972715d4d3/receipt.json",
+          "sha256": "6cbffd130f5b7d5be28d449dc237b70844587c825f6ed23026339782eb1a2cf2"
+        }
+      ]
+    },
+    {
+      "run": "h7-loom-9e66277719c1",
+      "status": "PASS_BOUNDED_MODELS_ONLY",
+      "artifacts": [
+        {
+          "original_path": "target/architecture-hardening/h7-loom-9e66277719c1/async_io_unload_adoption.log",
+          "retained_path": "machine/architecture-hardening/h7-loom-evidence/h7-loom-9e66277719c1/async_io_unload_adoption.log.txt",
+          "sha256": "b71b1e26889c2a938aa82c39bd3215d0eea4045528a8c41dd9be45b9fbd7fff5"
+        },
+        {
+          "original_path": "target/architecture-hardening/h7-loom-9e66277719c1/broken_async_io_unload_adoption.log",
+          "retained_path": "machine/architecture-hardening/h7-loom-evidence/h7-loom-9e66277719c1/broken_async_io_unload_adoption.log.txt",
+          "sha256": "2e61752f2425c3c52b6ed812e963791949e21ed3166874c077e4526f0f3ae00b"
+        },
+        {
+          "original_path": "target/architecture-hardening/h7-loom-9e66277719c1/broken_exhausted_generation_retires.log",
+          "retained_path": "machine/architecture-hardening/h7-loom-evidence/h7-loom-9e66277719c1/broken_exhausted_generation_retires.log.txt",
+          "sha256": "07c85ba9841fc0ce3992ef38cd88150ff577183ac58f2b2d024a78f04a8a6c6b"
+        },
+        {
+          "original_path": "target/architecture-hardening/h7-loom-9e66277719c1/broken_handoff_admission_drain.log",
+          "retained_path": "machine/architecture-hardening/h7-loom-evidence/h7-loom-9e66277719c1/broken_handoff_admission_drain.log.txt",
+          "sha256": "3e4e589fb3bc3292c70e56468615e2cdf2035a9c7519650aaffbabfd425b3f68"
+        },
+        {
+          "original_path": "target/architecture-hardening/h7-loom-9e66277719c1/broken_handoff_skips_drain.log",
+          "retained_path": "machine/architecture-hardening/h7-loom-evidence/h7-loom-9e66277719c1/broken_handoff_skips_drain.log.txt",
+          "sha256": "0ed89a5dd54e00ffbe8fc3561cebcd27aff1642e94217e3043a8d2a1bece4f5f"
+        },
+        {
+          "original_path": "target/architecture-hardening/h7-loom-9e66277719c1/broken_immutable_snapshot_reclamation.log",
+          "retained_path": "machine/architecture-hardening/h7-loom-evidence/h7-loom-9e66277719c1/broken_immutable_snapshot_reclamation.log.txt",
+          "sha256": "79e4a8226fe2b7d9328f3e980a476b859c8e4ab84e8924e847adc406e6f56237"
+        },
+        {
+          "original_path": "target/architecture-hardening/h7-loom-9e66277719c1/broken_owner_and_candidate_publication.log",
+          "retained_path": "machine/architecture-hardening/h7-loom-evidence/h7-loom-9e66277719c1/broken_owner_and_candidate_publication.log.txt",
+          "sha256": "6ff119a867cf1a913315244c11bee4c9811892b170a3f99aeb1f6c544aec4509"
+        },
+        {
+          "original_path": "target/architecture-hardening/h7-loom-9e66277719c1/broken_ready_queue_publication.log",
+          "retained_path": "machine/architecture-hardening/h7-loom-evidence/h7-loom-9e66277719c1/broken_ready_queue_publication.log.txt",
+          "sha256": "d5828993115e967b08ff9b03d340ae8d9d08c1df04b5dadfd797c655b93eda37"
+        },
+        {
+          "original_path": "target/architecture-hardening/h7-loom-9e66277719c1/broken_slot_reuse_generation.log",
+          "retained_path": "machine/architecture-hardening/h7-loom-evidence/h7-loom-9e66277719c1/broken_slot_reuse_generation.log.txt",
+          "sha256": "c797fb62c22c7b034f7ae18dfaefa2abdc996ec435038221a99edc4970eb9fb1"
+        },
+        {
+          "original_path": "target/architecture-hardening/h7-loom-9e66277719c1/broken_worker_cancellation.log",
+          "retained_path": "machine/architecture-hardening/h7-loom-evidence/h7-loom-9e66277719c1/broken_worker_cancellation.log.txt",
+          "sha256": "b8f2264ab56277a6e307dce8c5389ea3e6d35324a3218deeb3586ec9e46fb1e6"
+        },
+        {
+          "original_path": "target/architecture-hardening/h7-loom-9e66277719c1/broken_worker_ownership_generation.log",
+          "retained_path": "machine/architecture-hardening/h7-loom-evidence/h7-loom-9e66277719c1/broken_worker_ownership_generation.log.txt",
+          "sha256": "cbb1eb8e07da8d17e2f527e14a55277735d154f7845b6d3126c9909b9294105e"
+        },
+        {
+          "original_path": "target/architecture-hardening/h7-loom-9e66277719c1/broken_worker_registry_epoch.log",
+          "retained_path": "machine/architecture-hardening/h7-loom-evidence/h7-loom-9e66277719c1/broken_worker_registry_epoch.log.txt",
+          "sha256": "89bb25b72f9ff4911312459dff5d54cb771914e6b73e67b4dbdf5fe9e85f805c"
+        },
+        {
+          "original_path": "target/architecture-hardening/h7-loom-9e66277719c1/broken_worker_revocation.log",
+          "retained_path": "machine/architecture-hardening/h7-loom-evidence/h7-loom-9e66277719c1/broken_worker_revocation.log.txt",
+          "sha256": "bdcb185d6fe2721b8519382fe6355c69aa800ed0308b660b1371e81a00576524"
+        },
+        {
+          "original_path": "target/architecture-hardening/h7-loom-9e66277719c1/broken_worker_state_generation.log",
+          "retained_path": "machine/architecture-hardening/h7-loom-evidence/h7-loom-9e66277719c1/broken_worker_state_generation.log.txt",
+          "sha256": "b380414c13961a6d41472c3dfeab41710810d96ed6b30b6ec55c2f072dd629a2"
+        },
+        {
+          "original_path": "target/architecture-hardening/h7-loom-9e66277719c1/build-model-tests.log",
+          "retained_path": "machine/architecture-hardening/h7-loom-evidence/h7-loom-9e66277719c1/build-model-tests.log.txt",
+          "sha256": "61d61c040c3467a24ba065dfd526dca46cce78a53977d3189f8333fb54f17a5f"
+        },
+        {
+          "original_path": "target/architecture-hardening/h7-loom-9e66277719c1/clippy.log",
+          "retained_path": "machine/architecture-hardening/h7-loom-evidence/h7-loom-9e66277719c1/clippy.log.txt",
+          "sha256": "21cdeffbd109fea20e2e50634835aa3b82158b6fb5b25cd8c28bedbf22778a6f"
+        },
+        {
+          "original_path": "target/architecture-hardening/h7-loom-9e66277719c1/dependency-metadata.log",
+          "retained_path": "machine/architecture-hardening/h7-loom-evidence/h7-loom-9e66277719c1/dependency-metadata.log.txt",
+          "sha256": "a84f24b044f8c82dfd726d819dddb3276d87aec77919e212d7b8030219663eb7"
+        },
+        {
+          "original_path": "target/architecture-hardening/h7-loom-9e66277719c1/exhausted_generation_retires.log",
+          "retained_path": "machine/architecture-hardening/h7-loom-evidence/h7-loom-9e66277719c1/exhausted_generation_retires.log.txt",
+          "sha256": "2b0eca04f5cee9d92b4bc91034afcaf73fb7711e5689dbc454526533184919af"
+        },
+        {
+          "original_path": "target/architecture-hardening/h7-loom-9e66277719c1/format.log",
+          "retained_path": "machine/architecture-hardening/h7-loom-evidence/h7-loom-9e66277719c1/format.log.txt",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "original_path": "target/architecture-hardening/h7-loom-9e66277719c1/handoff_admission_drain.log",
+          "retained_path": "machine/architecture-hardening/h7-loom-evidence/h7-loom-9e66277719c1/handoff_admission_drain.log.txt",
+          "sha256": "666942c9f65ab7510c5648185b69f5cc92b1c6497eefea3c69235948219dd785"
+        },
+        {
+          "original_path": "target/architecture-hardening/h7-loom-9e66277719c1/immutable_snapshot_reclamation.log",
+          "retained_path": "machine/architecture-hardening/h7-loom-evidence/h7-loom-9e66277719c1/immutable_snapshot_reclamation.log.txt",
+          "sha256": "9a42d1bb6f1d97ed60798955c31e51261db9383489c2289fe51d2b3e40f6cab6"
+        },
+        {
+          "original_path": "target/architecture-hardening/h7-loom-9e66277719c1/owner_and_candidate_publication.log",
+          "retained_path": "machine/architecture-hardening/h7-loom-evidence/h7-loom-9e66277719c1/owner_and_candidate_publication.log.txt",
+          "sha256": "f8df5c2a51c5a6c881672648693dc58e1c49c1b1fac01539009cab7d1b1d585f"
+        },
+        {
+          "original_path": "target/architecture-hardening/h7-loom-9e66277719c1/ready_queue_publication.log",
+          "retained_path": "machine/architecture-hardening/h7-loom-evidence/h7-loom-9e66277719c1/ready_queue_publication.log.txt",
+          "sha256": "27246de505e49b8236e562a2099005d5c3caeb7cfc0fbefb75ee26c6104f14bd"
+        },
+        {
+          "original_path": "target/architecture-hardening/h7-loom-9e66277719c1/resolve-toolchain.log",
+          "retained_path": "machine/architecture-hardening/h7-loom-evidence/h7-loom-9e66277719c1/resolve-toolchain.log.txt",
+          "sha256": "54234bc009f7bc295608f8bb882e03677001147f42f05ce19606c17d2db6473b"
+        },
+        {
+          "original_path": "target/architecture-hardening/h7-loom-9e66277719c1/rustc-version.log",
+          "retained_path": "machine/architecture-hardening/h7-loom-evidence/h7-loom-9e66277719c1/rustc-version.log.txt",
+          "sha256": "c45e612575abeef05e99e88eb1e7aea52cddab9ad70d4f65ad20eaa65e92a9cf"
+        },
+        {
+          "original_path": "target/architecture-hardening/h7-loom-9e66277719c1/slot_reuse_generation.log",
+          "retained_path": "machine/architecture-hardening/h7-loom-evidence/h7-loom-9e66277719c1/slot_reuse_generation.log.txt",
+          "sha256": "8fc510c933ad4bb5dbf8678007560d88c479219007097842aebc9b0caf7ab6ce"
+        },
+        {
+          "original_path": "target/architecture-hardening/h7-loom-9e66277719c1/test-inventory.log",
+          "retained_path": "machine/architecture-hardening/h7-loom-evidence/h7-loom-9e66277719c1/test-inventory.log.txt",
+          "sha256": "aa36de22a719d626189da20fd75f3c1a7e7560fa97cbed844278651b9f127513"
+        },
+        {
+          "original_path": "target/architecture-hardening/h7-loom-9e66277719c1/worker_cancellation.log",
+          "retained_path": "machine/architecture-hardening/h7-loom-evidence/h7-loom-9e66277719c1/worker_cancellation.log.txt",
+          "sha256": "fab02f26456c2959e9876281540405b6e8aaa28f4b8f7d7405b17b0412dcca6b"
+        },
+        {
+          "original_path": "target/architecture-hardening/h7-loom-9e66277719c1/worker_ownership_generation.log",
+          "retained_path": "machine/architecture-hardening/h7-loom-evidence/h7-loom-9e66277719c1/worker_ownership_generation.log.txt",
+          "sha256": "4bf228b7307815cee086e07d1e97ab61d9ec2e47d9a0bc31ea7f1f3ada175f7c"
+        },
+        {
+          "original_path": "target/architecture-hardening/h7-loom-9e66277719c1/worker_registry_epoch.log",
+          "retained_path": "machine/architecture-hardening/h7-loom-evidence/h7-loom-9e66277719c1/worker_registry_epoch.log.txt",
+          "sha256": "79c5873537c1a89a60f37f430b0c8c0eed38c4e065f82b9ff4879bdb7b9d9caa"
+        },
+        {
+          "original_path": "target/architecture-hardening/h7-loom-9e66277719c1/worker_revocation.log",
+          "retained_path": "machine/architecture-hardening/h7-loom-evidence/h7-loom-9e66277719c1/worker_revocation.log.txt",
+          "sha256": "a94d9f69b79d009f76f9602c6777f4c50ea4a1d6476ac840d27fd7e90bbf6ac5"
+        },
+        {
+          "original_path": "target/architecture-hardening/h7-loom-9e66277719c1/worker_state_generation.log",
+          "retained_path": "machine/architecture-hardening/h7-loom-evidence/h7-loom-9e66277719c1/worker_state_generation.log.txt",
+          "sha256": "92f8c048362764493b3cfa6b55e66c3f09fe2ca0c2a3935819fd6d1b52fb79f9"
+        },
+        {
+          "original_path": "target/architecture-hardening/h7-loom-9e66277719c1/receipt.json",
+          "retained_path": "machine/architecture-hardening/h7-loom-evidence/h7-loom-9e66277719c1/receipt.json",
+          "sha256": "9b268aae90e527bb98c26652dadb86e11fc8536fe23a835b42b286674ab577bd"
+        }
+      ]
+    },
+    {
+      "run": "h7-loom-0ec46f52cc27",
+      "status": "PASS_BOUNDED_MODELS_ONLY",
+      "artifacts": [
+        {
+          "original_path": "target/architecture-hardening/h7-loom-0ec46f52cc27/async_io_unload_adoption.log",
+          "retained_path": "machine/architecture-hardening/h7-loom-evidence/h7-loom-0ec46f52cc27/async_io_unload_adoption.log.txt",
+          "sha256": "b58d6d587de1f3d14254cf5d11cd98336c2f527e0296a7db7149e1e993aaf992"
+        },
+        {
+          "original_path": "target/architecture-hardening/h7-loom-0ec46f52cc27/broken_async_io_unload_adoption.log",
+          "retained_path": "machine/architecture-hardening/h7-loom-evidence/h7-loom-0ec46f52cc27/broken_async_io_unload_adoption.log.txt",
+          "sha256": "2263271da068097c3c5da7c3aa2a5ca8d5957755508975963ae383d3ad6af9f7"
+        },
+        {
+          "original_path": "target/architecture-hardening/h7-loom-0ec46f52cc27/broken_cancellation_checks_origin.log",
+          "retained_path": "machine/architecture-hardening/h7-loom-evidence/h7-loom-0ec46f52cc27/broken_cancellation_checks_origin.log.txt",
+          "sha256": "72bfc7252038bf71624e0aad19cf692f999c55fe2ba1e994e7bcb2f5bdf16980"
+        },
+        {
+          "original_path": "target/architecture-hardening/h7-loom-0ec46f52cc27/broken_exhausted_generation_retires.log",
+          "retained_path": "machine/architecture-hardening/h7-loom-evidence/h7-loom-0ec46f52cc27/broken_exhausted_generation_retires.log.txt",
+          "sha256": "deed225194bdb92137aea7c3825cb8a01648f8efdba74a9c1b4e74952d53c6a5"
+        },
+        {
+          "original_path": "target/architecture-hardening/h7-loom-0ec46f52cc27/broken_handoff_admission_drain.log",
+          "retained_path": "machine/architecture-hardening/h7-loom-evidence/h7-loom-0ec46f52cc27/broken_handoff_admission_drain.log.txt",
+          "sha256": "ea9d986a4bc976221f89c2e5d9ba53828955f9ed4f19d4c204268b8c3db810c4"
+        },
+        {
+          "original_path": "target/architecture-hardening/h7-loom-0ec46f52cc27/broken_handoff_skips_drain.log",
+          "retained_path": "machine/architecture-hardening/h7-loom-evidence/h7-loom-0ec46f52cc27/broken_handoff_skips_drain.log.txt",
+          "sha256": "8c34076ec85840a5de017fdffee0bc6823d73fd131746921288acd16d7f5ed6c"
+        },
+        {
+          "original_path": "target/architecture-hardening/h7-loom-0ec46f52cc27/broken_immutable_snapshot_reclamation.log",
+          "retained_path": "machine/architecture-hardening/h7-loom-evidence/h7-loom-0ec46f52cc27/broken_immutable_snapshot_reclamation.log.txt",
+          "sha256": "f49dc2dc9303d9c180932978afdd3ebbab6c43a82d9748327130bbf48481012a"
+        },
+        {
+          "original_path": "target/architecture-hardening/h7-loom-0ec46f52cc27/broken_owner_and_candidate_publication.log",
+          "retained_path": "machine/architecture-hardening/h7-loom-evidence/h7-loom-0ec46f52cc27/broken_owner_and_candidate_publication.log.txt",
+          "sha256": "0558d60f37dfaad8220ab330ae0b32182d5a8fb08765cf0c0469ccfab944a4b9"
+        },
+        {
+          "original_path": "target/architecture-hardening/h7-loom-0ec46f52cc27/broken_ready_queue_publication.log",
+          "retained_path": "machine/architecture-hardening/h7-loom-evidence/h7-loom-0ec46f52cc27/broken_ready_queue_publication.log.txt",
+          "sha256": "0e923f343b39e2fed0fa05971b8e21b54983f5325500bd078a37a79076cc2f21"
+        },
+        {
+          "original_path": "target/architecture-hardening/h7-loom-0ec46f52cc27/broken_slot_reuse_generation.log",
+          "retained_path": "machine/architecture-hardening/h7-loom-evidence/h7-loom-0ec46f52cc27/broken_slot_reuse_generation.log.txt",
+          "sha256": "3dc7111e55790688ca66a1b6eb43d162072f9352f182f7f6a8e19ff94237ac88"
+        },
+        {
+          "original_path": "target/architecture-hardening/h7-loom-0ec46f52cc27/broken_worker_cancellation.log",
+          "retained_path": "machine/architecture-hardening/h7-loom-evidence/h7-loom-0ec46f52cc27/broken_worker_cancellation.log.txt",
+          "sha256": "9ce3c8955ad194d150ae4e9f5ae2e363c4491fb93ae33ed7f08e4efaa9ab85c3"
+        },
+        {
+          "original_path": "target/architecture-hardening/h7-loom-0ec46f52cc27/broken_worker_ownership_generation.log",
+          "retained_path": "machine/architecture-hardening/h7-loom-evidence/h7-loom-0ec46f52cc27/broken_worker_ownership_generation.log.txt",
+          "sha256": "152a896700226222ac3f3a5819e10d0d3a0004057f28ace46fb93723274fee94"
+        },
+        {
+          "original_path": "target/architecture-hardening/h7-loom-0ec46f52cc27/broken_worker_registry_epoch.log",
+          "retained_path": "machine/architecture-hardening/h7-loom-evidence/h7-loom-0ec46f52cc27/broken_worker_registry_epoch.log.txt",
+          "sha256": "8f4f1dc3916e406b5cad95b0c83fe44762f44342c1fe355f045007dbfa25a2a1"
+        },
+        {
+          "original_path": "target/architecture-hardening/h7-loom-0ec46f52cc27/broken_worker_revocation.log",
+          "retained_path": "machine/architecture-hardening/h7-loom-evidence/h7-loom-0ec46f52cc27/broken_worker_revocation.log.txt",
+          "sha256": "0bdf9f46190fd616ac912268ca042a9b2dd84d3af3419dcde10c9f383ac4a57b"
+        },
+        {
+          "original_path": "target/architecture-hardening/h7-loom-0ec46f52cc27/broken_worker_state_generation.log",
+          "retained_path": "machine/architecture-hardening/h7-loom-evidence/h7-loom-0ec46f52cc27/broken_worker_state_generation.log.txt",
+          "sha256": "356e1706ba39da2c9db58b5184cc23603c9abaa5b0307c2a0b674cef1cb77445"
+        },
+        {
+          "original_path": "target/architecture-hardening/h7-loom-0ec46f52cc27/build-model-tests.log",
+          "retained_path": "machine/architecture-hardening/h7-loom-evidence/h7-loom-0ec46f52cc27/build-model-tests.log.txt",
+          "sha256": "88a5d601219d05d6d8c8cb4ac19e0da1afc22cd42f7156a7cbf3a43f0edbbc58"
+        },
+        {
+          "original_path": "target/architecture-hardening/h7-loom-0ec46f52cc27/cancellation_checks_origin.log",
+          "retained_path": "machine/architecture-hardening/h7-loom-evidence/h7-loom-0ec46f52cc27/cancellation_checks_origin.log.txt",
+          "sha256": "d5fb5599ca9da44a246c5c0a3fbab6bf92ea4f7c6c17372340bf3ead365aca3f"
+        },
+        {
+          "original_path": "target/architecture-hardening/h7-loom-0ec46f52cc27/clippy.log",
+          "retained_path": "machine/architecture-hardening/h7-loom-evidence/h7-loom-0ec46f52cc27/clippy.log.txt",
+          "sha256": "542c00d29b973bd681dbd39a0d12f5aa71355082fcfd1010c33881dc281353ec"
+        },
+        {
+          "original_path": "target/architecture-hardening/h7-loom-0ec46f52cc27/dependency-metadata.log",
+          "retained_path": "machine/architecture-hardening/h7-loom-evidence/h7-loom-0ec46f52cc27/dependency-metadata.log.txt",
+          "sha256": "a84f24b044f8c82dfd726d819dddb3276d87aec77919e212d7b8030219663eb7"
+        },
+        {
+          "original_path": "target/architecture-hardening/h7-loom-0ec46f52cc27/exhausted_generation_retires.log",
+          "retained_path": "machine/architecture-hardening/h7-loom-evidence/h7-loom-0ec46f52cc27/exhausted_generation_retires.log.txt",
+          "sha256": "3c6c6bdeb44b788623e7a2621612b06cfdc0e71833cfcc3eecba1611caab44b7"
+        },
+        {
+          "original_path": "target/architecture-hardening/h7-loom-0ec46f52cc27/format.log",
+          "retained_path": "machine/architecture-hardening/h7-loom-evidence/h7-loom-0ec46f52cc27/format.log.txt",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "original_path": "target/architecture-hardening/h7-loom-0ec46f52cc27/handoff_admission_drain.log",
+          "retained_path": "machine/architecture-hardening/h7-loom-evidence/h7-loom-0ec46f52cc27/handoff_admission_drain.log.txt",
+          "sha256": "d979c4816bb13a863498b94b0fdff31c0eb22f2c4eda93c3d3debebce0556871"
+        },
+        {
+          "original_path": "target/architecture-hardening/h7-loom-0ec46f52cc27/immutable_snapshot_reclamation.log",
+          "retained_path": "machine/architecture-hardening/h7-loom-evidence/h7-loom-0ec46f52cc27/immutable_snapshot_reclamation.log.txt",
+          "sha256": "a5cc09b4ed01d2a1255e831b4427f1abf41331859cf164244a8a32e01734cc0a"
+        },
+        {
+          "original_path": "target/architecture-hardening/h7-loom-0ec46f52cc27/owner_and_candidate_publication.log",
+          "retained_path": "machine/architecture-hardening/h7-loom-evidence/h7-loom-0ec46f52cc27/owner_and_candidate_publication.log.txt",
+          "sha256": "d7ad3dd07787187d967a5b2f8c9f322bb882fde2e3bd0117fbaa5d683b6a80ef"
+        },
+        {
+          "original_path": "target/architecture-hardening/h7-loom-0ec46f52cc27/ready_queue_publication.log",
+          "retained_path": "machine/architecture-hardening/h7-loom-evidence/h7-loom-0ec46f52cc27/ready_queue_publication.log.txt",
+          "sha256": "1e0a44bebc04dcf9f1e0efacd7e8a38ef1a9ff5ab69e96bd2d5b0431b3476dea"
+        },
+        {
+          "original_path": "target/architecture-hardening/h7-loom-0ec46f52cc27/resolve-toolchain.log",
+          "retained_path": "machine/architecture-hardening/h7-loom-evidence/h7-loom-0ec46f52cc27/resolve-toolchain.log.txt",
+          "sha256": "54234bc009f7bc295608f8bb882e03677001147f42f05ce19606c17d2db6473b"
+        },
+        {
+          "original_path": "target/architecture-hardening/h7-loom-0ec46f52cc27/rustc-version.log",
+          "retained_path": "machine/architecture-hardening/h7-loom-evidence/h7-loom-0ec46f52cc27/rustc-version.log.txt",
+          "sha256": "c45e612575abeef05e99e88eb1e7aea52cddab9ad70d4f65ad20eaa65e92a9cf"
+        },
+        {
+          "original_path": "target/architecture-hardening/h7-loom-0ec46f52cc27/slot_reuse_generation.log",
+          "retained_path": "machine/architecture-hardening/h7-loom-evidence/h7-loom-0ec46f52cc27/slot_reuse_generation.log.txt",
+          "sha256": "90c7aa35478998c18bf32cca9971fa6f0ff8dcb5ab19006d2efd7d3390b576d8"
+        },
+        {
+          "original_path": "target/architecture-hardening/h7-loom-0ec46f52cc27/test-inventory.log",
+          "retained_path": "machine/architecture-hardening/h7-loom-evidence/h7-loom-0ec46f52cc27/test-inventory.log.txt",
+          "sha256": "bf6b2b01530351724ef5b0038523d4d55926a039d56d721e1243529bc631d100"
+        },
+        {
+          "original_path": "target/architecture-hardening/h7-loom-0ec46f52cc27/worker_cancellation.log",
+          "retained_path": "machine/architecture-hardening/h7-loom-evidence/h7-loom-0ec46f52cc27/worker_cancellation.log.txt",
+          "sha256": "b88a7b0180892acc0688035a71d83ca4118c2db36dbff29b419f29b2cfab9e33"
+        },
+        {
+          "original_path": "target/architecture-hardening/h7-loom-0ec46f52cc27/worker_ownership_generation.log",
+          "retained_path": "machine/architecture-hardening/h7-loom-evidence/h7-loom-0ec46f52cc27/worker_ownership_generation.log.txt",
+          "sha256": "4623471fa843f23ec4e9a5863aa4af86fe0d91adeac8901c6f5d2e1fc5b2756f"
+        },
+        {
+          "original_path": "target/architecture-hardening/h7-loom-0ec46f52cc27/worker_registry_epoch.log",
+          "retained_path": "machine/architecture-hardening/h7-loom-evidence/h7-loom-0ec46f52cc27/worker_registry_epoch.log.txt",
+          "sha256": "d55b18e3e925879b6da77d058b0953c3535b0cdef5685c314540ad3dd7dbab3f"
+        },
+        {
+          "original_path": "target/architecture-hardening/h7-loom-0ec46f52cc27/worker_revocation.log",
+          "retained_path": "machine/architecture-hardening/h7-loom-evidence/h7-loom-0ec46f52cc27/worker_revocation.log.txt",
+          "sha256": "cb5a0ee39164f80a218c316d269dcaaa7310430a11d4b2215f5f24d126a6083d"
+        },
+        {
+          "original_path": "target/architecture-hardening/h7-loom-0ec46f52cc27/worker_state_generation.log",
+          "retained_path": "machine/architecture-hardening/h7-loom-evidence/h7-loom-0ec46f52cc27/worker_state_generation.log.txt",
+          "sha256": "b8dfe07829461ea23c55976fdb38d1d58204bf09172db22592ac98a508f265c1"
+        },
+        {
+          "original_path": "target/architecture-hardening/h7-loom-0ec46f52cc27/receipt.json",
+          "retained_path": "machine/architecture-hardening/h7-loom-evidence/h7-loom-0ec46f52cc27/receipt.json",
+          "sha256": "d16e559cc521b366b58de179964ec6ff777a9b613f319014ae4c8ce917df47c8"
+        }
+      ]
+    },
+    {
+      "run": "h7-loom-34549a88439d",
+      "status": "PASS_BOUNDED_MODELS_ONLY",
+      "artifacts": [
+        {
+          "original_path": "target/architecture-hardening/h7-loom-34549a88439d/async_io_unload_adoption.log",
+          "retained_path": "machine/architecture-hardening/h7-loom-evidence/h7-loom-34549a88439d/async_io_unload_adoption.log.txt",
+          "sha256": "b58d6d587de1f3d14254cf5d11cd98336c2f527e0296a7db7149e1e993aaf992"
+        },
+        {
+          "original_path": "target/architecture-hardening/h7-loom-34549a88439d/broken_async_io_unload_adoption.log",
+          "retained_path": "machine/architecture-hardening/h7-loom-evidence/h7-loom-34549a88439d/broken_async_io_unload_adoption.log.txt",
+          "sha256": "f0e627871a5704323fabbdc574d99902bbb2fed4c73e9f9bba77c91e89c63b0e"
+        },
+        {
+          "original_path": "target/architecture-hardening/h7-loom-34549a88439d/broken_cancellation_checks_origin.log",
+          "retained_path": "machine/architecture-hardening/h7-loom-evidence/h7-loom-34549a88439d/broken_cancellation_checks_origin.log.txt",
+          "sha256": "dcd50de7ca67154f9713805a24a2ca20aed550b922bb95fa84cdbdb1c0c0255a"
+        },
+        {
+          "original_path": "target/architecture-hardening/h7-loom-34549a88439d/broken_exhausted_generation_retires.log",
+          "retained_path": "machine/architecture-hardening/h7-loom-evidence/h7-loom-34549a88439d/broken_exhausted_generation_retires.log.txt",
+          "sha256": "65e6cfbf1db305fa800b8e3b5bf37e21cb49d54e01053ae3bc211f1072c0ec23"
+        },
+        {
+          "original_path": "target/architecture-hardening/h7-loom-34549a88439d/broken_handoff_admission_drain.log",
+          "retained_path": "machine/architecture-hardening/h7-loom-evidence/h7-loom-34549a88439d/broken_handoff_admission_drain.log.txt",
+          "sha256": "1c12937c1e956e7b2c4bf3d15eebee4d3293e50ec330e4c77cbf4bd02be8cd4f"
+        },
+        {
+          "original_path": "target/architecture-hardening/h7-loom-34549a88439d/broken_handoff_skips_drain.log",
+          "retained_path": "machine/architecture-hardening/h7-loom-evidence/h7-loom-34549a88439d/broken_handoff_skips_drain.log.txt",
+          "sha256": "6813923ed9cdef50b256eb87459a0f499d973394c6ed9ab1a92bc5215a28ccd9"
+        },
+        {
+          "original_path": "target/architecture-hardening/h7-loom-34549a88439d/broken_immutable_snapshot_reclamation.log",
+          "retained_path": "machine/architecture-hardening/h7-loom-evidence/h7-loom-34549a88439d/broken_immutable_snapshot_reclamation.log.txt",
+          "sha256": "c1e1446c22292c013fa0100d336626db802585fc4c905b7877e0c3a67202e7df"
+        },
+        {
+          "original_path": "target/architecture-hardening/h7-loom-34549a88439d/broken_owner_and_candidate_publication.log",
+          "retained_path": "machine/architecture-hardening/h7-loom-evidence/h7-loom-34549a88439d/broken_owner_and_candidate_publication.log.txt",
+          "sha256": "c2264275bae32bb1e021bb0726cf63f32810da8fb963a726578e0ab8c68aad6d"
+        },
+        {
+          "original_path": "target/architecture-hardening/h7-loom-34549a88439d/broken_ready_queue_publication.log",
+          "retained_path": "machine/architecture-hardening/h7-loom-evidence/h7-loom-34549a88439d/broken_ready_queue_publication.log.txt",
+          "sha256": "5b3de16e86933e9158c5cf23ce8507e584db9eeb2959c98814c60b6f7bc6483c"
+        },
+        {
+          "original_path": "target/architecture-hardening/h7-loom-34549a88439d/broken_slot_reuse_generation.log",
+          "retained_path": "machine/architecture-hardening/h7-loom-evidence/h7-loom-34549a88439d/broken_slot_reuse_generation.log.txt",
+          "sha256": "33950a0cfc233545531bf499f257b37b0139a1329070e1180c4615e05cd8b954"
+        },
+        {
+          "original_path": "target/architecture-hardening/h7-loom-34549a88439d/broken_worker_cancellation.log",
+          "retained_path": "machine/architecture-hardening/h7-loom-evidence/h7-loom-34549a88439d/broken_worker_cancellation.log.txt",
+          "sha256": "02a417f7957b8659c415bce5568c2ff7c21d60563d570d9f81e2ab0ec603c76d"
+        },
+        {
+          "original_path": "target/architecture-hardening/h7-loom-34549a88439d/broken_worker_ownership_generation.log",
+          "retained_path": "machine/architecture-hardening/h7-loom-evidence/h7-loom-34549a88439d/broken_worker_ownership_generation.log.txt",
+          "sha256": "5fb200927941edd9ab7508ccb0b67f93e6cf136ee7f02400f96691790ca2af8f"
+        },
+        {
+          "original_path": "target/architecture-hardening/h7-loom-34549a88439d/broken_worker_registry_epoch.log",
+          "retained_path": "machine/architecture-hardening/h7-loom-evidence/h7-loom-34549a88439d/broken_worker_registry_epoch.log.txt",
+          "sha256": "ad8fc37480320b070284e5896abef41e1aa7acbc5591a97faf67d52853a23e9a"
+        },
+        {
+          "original_path": "target/architecture-hardening/h7-loom-34549a88439d/broken_worker_revocation.log",
+          "retained_path": "machine/architecture-hardening/h7-loom-evidence/h7-loom-34549a88439d/broken_worker_revocation.log.txt",
+          "sha256": "4b859cd7085f231730c4e1b66b996e663f8fda1f3f58e867d1293d66098e9842"
+        },
+        {
+          "original_path": "target/architecture-hardening/h7-loom-34549a88439d/broken_worker_state_generation.log",
+          "retained_path": "machine/architecture-hardening/h7-loom-evidence/h7-loom-34549a88439d/broken_worker_state_generation.log.txt",
+          "sha256": "2827b38d256dfddcbbafc838fcc622a0d34538e3610c3d09551c0e3dd0e29de3"
+        },
+        {
+          "original_path": "target/architecture-hardening/h7-loom-34549a88439d/build-model-tests.log",
+          "retained_path": "machine/architecture-hardening/h7-loom-evidence/h7-loom-34549a88439d/build-model-tests.log.txt",
+          "sha256": "5ac8bd5df6e8e3d415c9efb68f2fde2eebf688bba7cccbb9ec495281eeeb144f"
+        },
+        {
+          "original_path": "target/architecture-hardening/h7-loom-34549a88439d/cancellation_checks_origin.log",
+          "retained_path": "machine/architecture-hardening/h7-loom-evidence/h7-loom-34549a88439d/cancellation_checks_origin.log.txt",
+          "sha256": "d5fb5599ca9da44a246c5c0a3fbab6bf92ea4f7c6c17372340bf3ead365aca3f"
+        },
+        {
+          "original_path": "target/architecture-hardening/h7-loom-34549a88439d/clippy.log",
+          "retained_path": "machine/architecture-hardening/h7-loom-evidence/h7-loom-34549a88439d/clippy.log.txt",
+          "sha256": "2a599e22499395390048a525e2218600f3b7286ecc3730e4a317de789934e835"
+        },
+        {
+          "original_path": "target/architecture-hardening/h7-loom-34549a88439d/dependency-metadata.log",
+          "retained_path": "machine/architecture-hardening/h7-loom-evidence/h7-loom-34549a88439d/dependency-metadata.log.txt",
+          "sha256": "a84f24b044f8c82dfd726d819dddb3276d87aec77919e212d7b8030219663eb7"
+        },
+        {
+          "original_path": "target/architecture-hardening/h7-loom-34549a88439d/exhausted_generation_retires.log",
+          "retained_path": "machine/architecture-hardening/h7-loom-evidence/h7-loom-34549a88439d/exhausted_generation_retires.log.txt",
+          "sha256": "3c6c6bdeb44b788623e7a2621612b06cfdc0e71833cfcc3eecba1611caab44b7"
+        },
+        {
+          "original_path": "target/architecture-hardening/h7-loom-34549a88439d/format.log",
+          "retained_path": "machine/architecture-hardening/h7-loom-evidence/h7-loom-34549a88439d/format.log.txt",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "original_path": "target/architecture-hardening/h7-loom-34549a88439d/handoff_admission_drain.log",
+          "retained_path": "machine/architecture-hardening/h7-loom-evidence/h7-loom-34549a88439d/handoff_admission_drain.log.txt",
+          "sha256": "d979c4816bb13a863498b94b0fdff31c0eb22f2c4eda93c3d3debebce0556871"
+        },
+        {
+          "original_path": "target/architecture-hardening/h7-loom-34549a88439d/immutable_snapshot_reclamation.log",
+          "retained_path": "machine/architecture-hardening/h7-loom-evidence/h7-loom-34549a88439d/immutable_snapshot_reclamation.log.txt",
+          "sha256": "a5cc09b4ed01d2a1255e831b4427f1abf41331859cf164244a8a32e01734cc0a"
+        },
+        {
+          "original_path": "target/architecture-hardening/h7-loom-34549a88439d/owner_and_candidate_publication.log",
+          "retained_path": "machine/architecture-hardening/h7-loom-evidence/h7-loom-34549a88439d/owner_and_candidate_publication.log.txt",
+          "sha256": "d7ad3dd07787187d967a5b2f8c9f322bb882fde2e3bd0117fbaa5d683b6a80ef"
+        },
+        {
+          "original_path": "target/architecture-hardening/h7-loom-34549a88439d/ready_queue_publication.log",
+          "retained_path": "machine/architecture-hardening/h7-loom-evidence/h7-loom-34549a88439d/ready_queue_publication.log.txt",
+          "sha256": "1e0a44bebc04dcf9f1e0efacd7e8a38ef1a9ff5ab69e96bd2d5b0431b3476dea"
+        },
+        {
+          "original_path": "target/architecture-hardening/h7-loom-34549a88439d/receipt.json",
+          "retained_path": "machine/architecture-hardening/h7-loom-evidence/h7-loom-34549a88439d/receipt.json",
+          "sha256": "c92a2941b00667a9cb735924297e4408aa2f7a21f2944669ce0ac47887744f3f"
+        },
+        {
+          "original_path": "target/architecture-hardening/h7-loom-34549a88439d/resolve-toolchain.log",
+          "retained_path": "machine/architecture-hardening/h7-loom-evidence/h7-loom-34549a88439d/resolve-toolchain.log.txt",
+          "sha256": "54234bc009f7bc295608f8bb882e03677001147f42f05ce19606c17d2db6473b"
+        },
+        {
+          "original_path": "target/architecture-hardening/h7-loom-34549a88439d/rustc-version.log",
+          "retained_path": "machine/architecture-hardening/h7-loom-evidence/h7-loom-34549a88439d/rustc-version.log.txt",
+          "sha256": "c45e612575abeef05e99e88eb1e7aea52cddab9ad70d4f65ad20eaa65e92a9cf"
+        },
+        {
+          "original_path": "target/architecture-hardening/h7-loom-34549a88439d/slot_reuse_generation.log",
+          "retained_path": "machine/architecture-hardening/h7-loom-evidence/h7-loom-34549a88439d/slot_reuse_generation.log.txt",
+          "sha256": "90c7aa35478998c18bf32cca9971fa6f0ff8dcb5ab19006d2efd7d3390b576d8"
+        },
+        {
+          "original_path": "target/architecture-hardening/h7-loom-34549a88439d/test-inventory.log",
+          "retained_path": "machine/architecture-hardening/h7-loom-evidence/h7-loom-34549a88439d/test-inventory.log.txt",
+          "sha256": "bf6b2b01530351724ef5b0038523d4d55926a039d56d721e1243529bc631d100"
+        },
+        {
+          "original_path": "target/architecture-hardening/h7-loom-34549a88439d/worker_cancellation.log",
+          "retained_path": "machine/architecture-hardening/h7-loom-evidence/h7-loom-34549a88439d/worker_cancellation.log.txt",
+          "sha256": "b88a7b0180892acc0688035a71d83ca4118c2db36dbff29b419f29b2cfab9e33"
+        },
+        {
+          "original_path": "target/architecture-hardening/h7-loom-34549a88439d/worker_ownership_generation.log",
+          "retained_path": "machine/architecture-hardening/h7-loom-evidence/h7-loom-34549a88439d/worker_ownership_generation.log.txt",
+          "sha256": "4623471fa843f23ec4e9a5863aa4af86fe0d91adeac8901c6f5d2e1fc5b2756f"
+        },
+        {
+          "original_path": "target/architecture-hardening/h7-loom-34549a88439d/worker_registry_epoch.log",
+          "retained_path": "machine/architecture-hardening/h7-loom-evidence/h7-loom-34549a88439d/worker_registry_epoch.log.txt",
+          "sha256": "d55b18e3e925879b6da77d058b0953c3535b0cdef5685c314540ad3dd7dbab3f"
+        },
+        {
+          "original_path": "target/architecture-hardening/h7-loom-34549a88439d/worker_revocation.log",
+          "retained_path": "machine/architecture-hardening/h7-loom-evidence/h7-loom-34549a88439d/worker_revocation.log.txt",
+          "sha256": "cb5a0ee39164f80a218c316d269dcaaa7310430a11d4b2215f5f24d126a6083d"
+        },
+        {
+          "original_path": "target/architecture-hardening/h7-loom-34549a88439d/worker_state_generation.log",
+          "retained_path": "machine/architecture-hardening/h7-loom-evidence/h7-loom-34549a88439d/worker_state_generation.log.txt",
+          "sha256": "b8dfe07829461ea23c55976fdb38d1d58204bf09172db22592ac98a508f265c1"
+        }
+      ]
+    }
+  ],
+  "safe_to_commit": "Test-only isolated infrastructure and evidence; parent review still required; no commit/push performed.",
+  "root_review": {
+    "receipt": "machine/architecture-hardening/h7-loom-evidence/h7-loom-34549a88439d/receipt.json",
+    "sha256": "c92a2941b00667a9cb735924297e4408aa2f7a21f2944669ce0ac47887744f3f",
+    "positive_models": 13,
+    "negative_controls_detected": 14,
+    "positive_executions": 521,
+    "review": "Read full model implementation, runner, source correspondence and limits; independent frozen-source campaign PASS."
+  }
+}

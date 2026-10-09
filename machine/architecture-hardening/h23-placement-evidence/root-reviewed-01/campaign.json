@@ -1,0 +1,129 @@
+{
+  "schema": "WRITER_PLACEMENT_V2_CAMPAIGN",
+  "status": "PASS",
+  "production_authority": false,
+  "runtime_qualification": false,
+  "output": "D:\\minecraftrust-astra-hardening\\target\\writer-placement-v2\\root-reviewed-01",
+  "scope": "offline proof controls and exact retained Clean class buffers; no new game execution",
+  "guard_before": {
+    "schema_version": 1,
+    "kind": "HARDENING_ISOLATION_GATE_CHECK",
+    "status": "PASS",
+    "failures": [],
+    "original_observed": {
+      "head": "c4b868db2c9e4b03f745bf93c6ebf4fd8a8519e7",
+      "branch": "issue1-jni-v2",
+      "status": [
+        " M tools/live-capture/live_client_session.py",
+        "?? tools/live-capture/__pycache__/",
+        "?? tools/live-capture/run_rev_shadow.py"
+      ],
+      "files": [
+        {
+          "path": "D:\\minecraftrust\\tools\\live-capture\\live_client_session.py",
+          "sha256": "151c356161695aba3db3c1a8cbd589b5eda2b5a1770dff59ab21b728d36cabfa"
+        },
+        {
+          "path": "D:\\minecraftrust\\tools\\live-capture\\run_rev_shadow.py",
+          "sha256": "2b9b2aca49e57dd0d2a74bec46efcdc0ac7f95762a733276e27ff9dbcb472d93"
+        }
+      ]
+    },
+    "isolated_worktree": "D:\\minecraftrust-astra-hardening",
+    "isolated_head": "ad274e7139f2794e0526d908f1479eb43d71ebfe",
+    "isolated_branch": "astra/architecture-hardening",
+    "production_gate_checks": {
+      "tryEncode_fail_closed": true,
+      "productionAuthorityEligible_false": true
+    },
+    "scope": "read-only original HEAD/status/two paused source hashes plus conservative source guards; runtime authority tests remain required"
+  },
+  "source_hashes": {
+    "D:\\minecraftrust-astra-hardening\\tools\\writer-placement-v2\\capture.py": "5a358bfb434f2eea64de94af3c4af8897ad4f4bc21dd064acbcf6b1940dfb9f5",
+    "D:\\minecraftrust-astra-hardening\\tools\\writer-placement-v2\\classfile.py": "de809aed3f18ad8cafa260768f3d46f1e7d2b549f5d06f0dcdd7cdb8e146a633",
+    "D:\\minecraftrust-astra-hardening\\tools\\writer-placement-v2\\io_utils.py": "b826ac61f3660439ecec15fe74cd3d859e515e81a6c973be14e3138194c6c7e9",
+    "D:\\minecraftrust-astra-hardening\\tools\\writer-placement-v2\\PlacementFixtures.java": "2b8537386da9ae7fa77c2293cb5bd4d6f93721bd59981b89d47fc43137ddc784",
+    "D:\\minecraftrust-astra-hardening\\tools\\writer-placement-v2\\run.py": "054a09ef886e1e2ee39cd8cfce1f845ba6d2c120f8ad3b6211f2f7e074377ff4",
+    "D:\\minecraftrust-astra-hardening\\tools\\writer-placement-v2\\test_validator.py": "b88e0c6d5200644bac6f54aa401c4fef25e1490899642f3a7eef398804fdaf0f",
+    "D:\\minecraftrust-astra-hardening\\tools\\writer-placement-v2\\validate.py": "ca84a407d99f541b6e4fdb6b6fb124d532aa39a833af720ee8e658fd93901b58",
+    "D:\\minecraftrust-astra-hardening\\tools\\writer-placement-v2\\validator.py": "e0f011472879d6d6cb1adb6eedb66fba3d31ff3ae914df7ec25437eaf16603c1",
+    "D:\\minecraftrust-astra-hardening\\docs\\engineering\\v2-writer-placement.md": "038b3b4f47e3ace4d2daf508c19e2953624008b60e40c76304368f98df426b9b",
+    "D:\\minecraftrust-astra-hardening\\tools\\bridge\\src\\com\\rustcraft\\coremod\\CanonicalClassIdentityV2.java": "61749a998cb03e43f093b54c6ba5a069a236d868388fe6452ec1e0133ec4f4f8",
+    "D:\\minecraftrust-astra-hardening\\tools\\testing\\hardening_guard.py": "a2062b3ffbec7edba79bf5f5954fbcb1e9d97492ab9c4bb541833ebb820bdb6d",
+    "D:\\minecraftrust-astra-hardening\\machine\\architecture-hardening\\isolation.json": "8f9b34b55f6ecc1d549da1ec4c42900b4a831a3072a9e4aa6aa2ae39cae53d93"
+  },
+  "tool_and_plan_hashes": {
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\bin\\java.exe": "65ebee06ec47df0c41c4483ac5aa408e55adb47a1613bad56be30bccc4317e85",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\bin\\javac.exe": "9f1dae15ffb49c7363c72351cf61f4889ac6896e3df87c1c5553b81745ae8a07",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\lib\\rt.jar": "1166665601d9b1587682e2540cff6a31b0c7028211d2e07adb9ad30e1699eca3",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\bin\\server\\jvm.dll": "d3f1564b31a25f280d633d33234bdf88fd12dbe0ae34e15e2e89db3f0ca2d407",
+    "D:\\rustcraft-runtime-targets\\clean-forge-2860\\server\\libraries\\org\\ow2\\asm\\asm-debug-all\\5.2\\asm-debug-all-5.2.jar": "254b82bec9da4f8efbc8b1f93ab2b87f7465227a82b36cf3d05d9e77a0e8dd2e",
+    "D:\\minecraftrust-astra-hardening\\tools\\classfile-crosscheck\\target\\debug\\rustcraft-classfile-crosscheck.exe": "d8774f1349a7c29d2647d9fb4f815b66c906a095f5142244b9c02ba606648554",
+    "D:\\minecraftrust-astra-hardening\\tools\\live-capture\\required-live-writer-hooks.json": "738f672dd699ffb1474a4e82047577d73949c7a7e9a67838450852b06782cd32"
+  },
+  "clean_audit_status": "INCOMPLETE",
+  "clean_audit_sha256": "2018f399f2084af94bae0050c41a178378bcd63d3218e6905a5c4035b0dd8f0d",
+  "unit_tests": 18,
+  "actual_classfile_mutations": 27,
+  "clean_missing_call_controls": 66,
+  "fixture_parser_agreements": 29,
+  "clean_parser_agreements": 24,
+  "adapter_controls": [
+    {
+      "case": "positive",
+      "status": "PASS",
+      "witness_sha256": "5c34f3f3df7e927766e21ef78dfc3888ac5e32b5e8495fce5e076b7d21b3bb3c"
+    },
+    {
+      "case": "wrong-observation",
+      "status": "FAIL",
+      "witness_sha256": "86924f6d305cdcf1d943af7c72dc1ab85dcf666ed7b8021d94b4755531777825"
+    },
+    {
+      "case": "clean-incomplete",
+      "status": "INCOMPLETE",
+      "witness_sha256": "1032f6053ce84c0a52d9d49ec5ab735eb1d0edec6e2fdb2d9beafa71a866dca0"
+    }
+  ],
+  "site_status_counts": {
+    "INCOMPLETE": 31,
+    "PASS": 35
+  },
+  "unhooked_frame_rewrite_methods": 86,
+  "unsupported_frame_details": 89,
+  "guard_after": {
+    "schema_version": 1,
+    "kind": "HARDENING_ISOLATION_GATE_CHECK",
+    "status": "PASS",
+    "failures": [],
+    "original_observed": {
+      "head": "c4b868db2c9e4b03f745bf93c6ebf4fd8a8519e7",
+      "branch": "issue1-jni-v2",
+      "status": [
+        " M tools/live-capture/live_client_session.py",
+        "?? tools/live-capture/__pycache__/",
+        "?? tools/live-capture/run_rev_shadow.py"
+      ],
+      "files": [
+        {
+          "path": "D:\\minecraftrust\\tools\\live-capture\\live_client_session.py",
+          "sha256": "151c356161695aba3db3c1a8cbd589b5eda2b5a1770dff59ab21b728d36cabfa"
+        },
+        {
+          "path": "D:\\minecraftrust\\tools\\live-capture\\run_rev_shadow.py",
+          "sha256": "2b9b2aca49e57dd0d2a74bec46efcdc0ac7f95762a733276e27ff9dbcb472d93"
+        }
+      ]
+    },
+    "isolated_worktree": "D:\\minecraftrust-astra-hardening",
+    "isolated_head": "ad274e7139f2794e0526d908f1479eb43d71ebfe",
+    "isolated_branch": "astra/architecture-hardening",
+    "production_gate_checks": {
+      "tryEncode_fail_closed": true,
+      "productionAuthorityEligible_false": true
+    },
+    "scope": "read-only original HEAD/status/two paused source hashes plus conservative source guards; runtime authority tests remain required"
+  },
+  "elapsed_seconds": 10.809088100038934,
+  "retained_bytes": 50444886
+}

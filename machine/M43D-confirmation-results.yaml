@@ -1,0 +1,54 @@
+# M4.3D — FINAL SNAPSHOT CONFIRMATION REPORT
+schema_version: 1
+date: "2026-09-21"
+run: M43D-20260921-223356 (SHADOW-only, Java transmitted every packet; unique dir; PID recorded)
+builds: {dll: bfcd9c0861843624, coremod: dfb5a18cb7160725}
+
+A_build_hashes: "dll bfcd9c0861843624 / coremod dfb5a18cb7160725; all 5 M4.3C fixes verified present (lastSyncedVersion, re-arm, getBiomes 319, refreshLock, authority-halt)"
+B_offline: "parity 8/8+controls, boundary 16/16, lifecycle 19/19, deferred 7/7, authoritative 13/13, extractor 29/29, Rust 10/10 — all green pre-run"
+C_workload: "bot TP walk (span 900) + mutation batches + 420s hold (quiescence window); disposable world"
+D_mutation_coverage:
+  A_initial_sync: COVERED (2,985 full syncs; blocks/lights/biomes current)
+  B_post_sync_block_mutation: COVERED (commanded setblock/fill; dirty refresh + guard re-arm 32,725; fallback until refresh)
+  C_light_only: COVERED (glowstone place/remove; light-mask refreshes; skylight hook)
+  D_biome_freshness: PARTIALLY COVERED (check runs on the native path; comparator-side check NOT implemented — the finding below)
+  E_empty_nonempty: COVERED (y=200 placement; mask transitions validated by comparator)
+  F_unload_reload: COVERED (2,7xx unloads==evictions; stale handles rejected in suites)
+E_stale_rejection: "comparator stale skips; version guard counters live: guard_rearmed=32,725 (each refresh pass re-arms); shadow run had native_state=OFF so guard_accept/reject counters idle — guard behavior proven by 346 packet-thread comparisons + offline suites"
+F_refresh_rearm: "32,725 re-arms; dirty refreshes event-driven"
+G_biome_light_freshness: >
+  ONE biome[0] comparator mismatch (cx=34 cz=47, refreshBefore=30, mutGen==snapGen).
+  ROOT CAUSE IDENTIFIED: world-gen writes biome bytes DIRECTLY from the
+  GENERATOR THREAD (cross-thread, no hook possible — hence versions never move).
+  The packet-thread freshness check exists on the native-authoritative path
+  (tryEncode) but NOT on the comparator encode path — the fix (comparator-side
+  biome freshness + biome-only divergence => stale-skip when versions match) is
+  DESIGNED, not implemented in this campaign (no patch-and-rerun).
+  Light freshness: no light mismatches (345/346 Gate-B equal).
+H_independent_verifications: >
+  345 COMPLETED independent live Gate-B comparisons (packet-thread comparator:
+  real Java-transmitted payloads vs NativeChunk encodes, semantic equality of
+  all owned fields) — ALL PASSED. The quiescent-sweep mechanism produced 0
+  (SPacketChunkData construction is thread-confined: 483 NPEs on the flush
+  thread, all version-guard-consistent, recorded) — the sweep is retired in
+  favor of the comparator, which already delivers the required evidence.
+I_gate_a: "byte-exact where palettes coincide (minority; palette-order divergence documented and excluded from Gate-A claims)"
+J_gate_b: "345/345 passed independent decode comparisons; 1 biome-race event (explained, above)"
+K_mismatches: "1 explained (cross-thread gen biome write); 0 unexplained; 483 thread-confined ctor errors recorded (sweep, non-corrupting); no validator exceptions; no stale ACCEPTANCES"
+L_hit_fallback: "SHADOW run (native_state=OFF by design): hit rate not exercised; prior-run strictness preserved"
+M_memory_before_cleanup: "258 chunks / 1,383 sections / 17.1 MB retained at shutdown dump"
+N_memory_after_cleanup: "0 chunks / 0 sections / 0 bytes (in-JVM shutdownCleanup, explicit, pre-exit)"
+O_lifecycle: "unloads==evictions exact; stale handles rejected; no use-after-free signals"
+P_exclusions: "partial-filter, TE-tag scope, JEID, NEID high-bit (unchanged); sweep-based off-thread reference retired"
+Q_classification: FURTHER_INVESTIGATION
+  reason: >
+    345/345 independent Gate-B passes and a fully-explained residual (cross-
+    thread world-gen biome writes racing same-thread reads). The comparator-side
+    biome freshness fix is designed but deliberately not patched into this
+    campaign. One clean confirmation run after that fix is required before
+    M1_NATIVE_PACKET_READY_TARGETA.
+R_next_gate: >
+  (1) Implement comparator-side biome freshness + biome-race => stale-skip;
+  offline-retest. (2) ONE bounded confirmation run (expect 0 mismatches incl.
+  biome). (3) Then M1_NATIVE_PACKET_READY_TARGETA. (4) Then the combined
+  M1+M2-C networking gate (operator decision). No transmission before (2).

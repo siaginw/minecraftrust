@@ -1,0 +1,94 @@
+   Compiling shlex v2.0.1
+   Compiling autocfg v1.5.1
+   Compiling find-msvc-tools v0.1.14
+   Compiling pkg-config v0.3.34
+   Compiling libc v0.2.189
+   Compiling core-types v0.1.0 (D:\minecraftrust-astra-hardening\crates\core-types)
+   Compiling serde_core v1.0.229
+   Compiling serde_json v1.0.145
+   Compiling zlib-rs v0.6.8
+   Compiling byteorder v1.5.0
+   Compiling ryu v1.0.23
+   Compiling metrics v0.1.0 (D:\minecraftrust-astra-hardening\crates\metrics)
+   Compiling memchr v2.8.3
+   Compiling itoa v1.0.18
+   Compiling allocator-experiment v0.1.0 (D:\minecraftrust-astra-hardening\tools\allocator-experiment)
+   Compiling rustcraft-core v0.1.0 (D:\minecraftrust-astra-hardening\crates\rustcraft-core)
+   Compiling buffers v0.1.0 (D:\minecraftrust-astra-hardening\crates\buffers)
+   Compiling native-capability v0.1.0 (D:\minecraftrust-astra-hardening\crates\native-capability)
+   Compiling protocol v0.1.0 (D:\minecraftrust-astra-hardening\crates\protocol)
+   Compiling bumpalo v3.20.3
+   Compiling cc v1.5.1
+   Compiling num-traits v0.2.19
+   Compiling native-chunk v0.1.0 (D:\minecraftrust-astra-hardening\crates\native-chunk)
+   Compiling native-state-vnext v0.1.0 (D:\minecraftrust-astra-hardening\crates\native-state-vnext)
+   Compiling rpmalloc-sys v0.2.3+b097fd0
+   Compiling hdrhistogram v7.5.4
+   Compiling native-observability v0.1.0 (D:\minecraftrust-astra-hardening\crates\native-observability)
+error: failed to run custom build command for `rpmalloc-sys v0.2.3+b097fd0`
+
+Caused by:
+  process didn't exit successfully: `D:\minecraftrust-astra-hardening\target\architecture-hardening\h17-correctness-01\build-rpmalloc\debug\build\rpmalloc-sys-289b119851358ee1\build-script-build` (exit code: 1)
+  --- stdout
+  cargo:rerun-if-env-changed=LIBRPMALLOC_NO_PKG_CONFIG
+  cargo:rerun-if-env-changed=CC_FORCE_DISABLE
+  CC_FORCE_DISABLE = None
+  cargo:rerun-if-env-changed=VCINSTALLDIR
+  VCINSTALLDIR = None
+  cargo:rerun-if-env-changed=VSTEL_MSBuildProjectFullPath
+  VSTEL_MSBuildProjectFullPath = None
+  cargo:rerun-if-env-changed=VCToolsVersion
+  VCToolsVersion = None
+  cargo:rerun-if-env-changed=VSCMD_ARG_VCVARS_SPECTRE
+  VSCMD_ARG_VCVARS_SPECTRE = None
+  cargo:rerun-if-env-changed=WindowsSdkDir
+  WindowsSdkDir = None
+  cargo:rerun-if-env-changed=WindowsSDKVersion
+  WindowsSDKVersion = None
+  cargo:rerun-if-env-changed=LIB
+  LIB = None
+  PATH = Some(D:\minecraftrust-astra-hardening\target\architecture-hardening\h17-correctness-01\build-rpmalloc\debug;D:\minecraftrust-astra-hardening\target\architecture-hardening\h17-correctness-01\build-rpmalloc\debug\deps;C:\Users\Admin\.rustup\toolchains\stable-x86_64-pc-windows-msvc\lib\rustlib\x86_64-pc-windows-msvc\lib;C:\Users\Admin\.cargo\bin;C:\Users\Admin\.cache\codex-runtimes\codex-primary-runtime\dependencies\native\powershell;C:\Users\Admin\.codex\tmp\arg0\codex-arg0WPtMuV;C:\Users\Admin\.codex\packages\standalone\releases\0.156.1-x86_64-pc-windows-msvc\codex-path;C:\Users\Admin\.cache\codex-runtimes\codex-primary-runtime\dependencies\native\libheif\libheif\bin;C:\Users\Admin\.cache\codex-runtimes\codex-primary-runtime\dependencies\native\jxrlib\jxrlib\bin;C:\Users\Admin\.cache\codex-runtimes\codex-primary-runtime\dependencies\native\poppler\Library\bin;C:\Users\Admin\.cache\codex-runtimes\codex-primary-runtime\dependencies\bin\override;C:\Python314\Scripts\;C:\Python314\;C:\Program Files\Eclipse Adoptium\jdk-21.0.10.7-hotspot\bin;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Program Files\dotnet\;C:\Program Files\nodejs\;C:\ProgramData\chocolatey\bin;C:\Program Files\Git\cmd;C:\Program Files\NVIDIA Corporation\NVIDIA App\NvDLISR;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Program Files\Tailscale\;C:\Users\Admin\AppData\Local\Programs\OpenAI\Codex\bin;C:\Users\Admin\.local\bin;C:\Users\Admin\.cache\codex-runtimes\codex-primary-runtime\dependencies\native\powershell;C:\Users\Admin\AppData\Local\Microsoft\WindowsApps;C:\Users\Admin\AppData\Roaming\npm;C:\Users\Admin\AppData\Local\Microsoft\WinGet\Links;C:\Users\Admin\go\bin;C:\Users\Admin\AppData\Local\Programs\Zed Preview\bin;C:\Users\Admin\.dotnet\tools;C:\Users\Admin\.cache\codex-runtimes\codex-primary-runtime\dependencies\bin\fallback;C:\Users\Admin\.cache\codex-runtimes\codex-primary-runtime\dependencies\node\bin;C:\Users\Admin\.cache\codex-runtimes\codex-primary-runtime\dependencies\native\git\cmd;C:\Users\Admin\AppData\Local\OpenAI\Codex\bin\0ddb895c950eaeba;C:\Users\Admin\.rustup\toolchains\stable-x86_64-pc-windows-msvc\bin)
+  cargo:rerun-if-env-changed=INCLUDE
+  INCLUDE = None
+  cargo:rerun-if-env-changed=VCToolsVersion
+  VCToolsVersion = None
+  cargo:rerun-if-env-changed=VSCMD_ARG_VCVARS_SPECTRE
+  VSCMD_ARG_VCVARS_SPECTRE = None
+  cargo:rerun-if-env-changed=WindowsSdkDir
+  WindowsSdkDir = None
+  cargo:rerun-if-env-changed=WindowsSDKVersion
+  WindowsSDKVersion = None
+  cargo:rerun-if-env-changed=LIB
+  LIB = None
+  PATH = Some(D:\minecraftrust-astra-hardening\target\architecture-hardening\h17-correctness-01\build-rpmalloc\debug;D:\minecraftrust-astra-hardening\target\architecture-hardening\h17-correctness-01\build-rpmalloc\debug\deps;C:\Users\Admin\.rustup\toolchains\stable-x86_64-pc-windows-msvc\lib\rustlib\x86_64-pc-windows-msvc\lib;C:\Users\Admin\.cargo\bin;C:\Users\Admin\.cache\codex-runtimes\codex-primary-runtime\dependencies\native\powershell;C:\Users\Admin\.codex\tmp\arg0\codex-arg0WPtMuV;C:\Users\Admin\.codex\packages\standalone\releases\0.156.1-x86_64-pc-windows-msvc\codex-path;C:\Users\Admin\.cache\codex-runtimes\codex-primary-runtime\dependencies\native\libheif\libheif\bin;C:\Users\Admin\.cache\codex-runtimes\codex-primary-runtime\dependencies\native\jxrlib\jxrlib\bin;C:\Users\Admin\.cache\codex-runtimes\codex-primary-runtime\dependencies\native\poppler\Library\bin;C:\Users\Admin\.cache\codex-runtimes\codex-primary-runtime\dependencies\bin\override;C:\Python314\Scripts\;C:\Python314\;C:\Program Files\Eclipse Adoptium\jdk-21.0.10.7-hotspot\bin;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Program Files\dotnet\;C:\Program Files\nodejs\;C:\ProgramData\chocolatey\bin;C:\Program Files\Git\cmd;C:\Program Files\NVIDIA Corporation\NVIDIA App\NvDLISR;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Program Files\Tailscale\;C:\Users\Admin\AppData\Local\Programs\OpenAI\Codex\bin;C:\Users\Admin\.local\bin;C:\Users\Admin\.cache\codex-runtimes\codex-primary-runtime\dependencies\native\powershell;C:\Users\Admin\AppData\Local\Microsoft\WindowsApps;C:\Users\Admin\AppData\Roaming\npm;C:\Users\Admin\AppData\Local\Microsoft\WinGet\Links;C:\Users\Admin\go\bin;C:\Users\Admin\AppData\Local\Programs\Zed Preview\bin;C:\Users\Admin\.dotnet\tools;C:\Users\Admin\.cache\codex-runtimes\codex-primary-runtime\dependencies\bin\fallback;C:\Users\Admin\.cache\codex-runtimes\codex-primary-runtime\dependencies\node\bin;C:\Users\Admin\.cache\codex-runtimes\codex-primary-runtime\dependencies\native\git\cmd;C:\Users\Admin\AppData\Local\OpenAI\Codex\bin\0ddb895c950eaeba;C:\Users\Admin\.rustup\toolchains\stable-x86_64-pc-windows-msvc\bin)
+  cargo:rerun-if-env-changed=INCLUDE
+  INCLUDE = None
+  cargo:rerun-if-env-changed=CC_x86_64-pc-windows-msvc
+  CC_x86_64-pc-windows-msvc = None
+  cargo:rerun-if-env-changed=CC_x86_64_pc_windows_msvc
+  CC_x86_64_pc_windows_msvc = None
+  cargo:rerun-if-env-changed=HOST_CC
+  HOST_CC = None
+  cargo:rerun-if-env-changed=CC
+  CC = Some(C:\Program Files\Microsoft Visual Studio\18\Community\VC\Tools\MSVC\14.51.36231\bin\Hostx64\x64\cl.exe)
+  cargo:rerun-if-env-changed=CC_ENABLE_DEBUG_OUTPUT
+  cargo:rerun-if-env-changed=CRATE_CC_NO_DEFAULTS
+  CRATE_CC_NO_DEFAULTS = None
+  cargo:rerun-if-env-changed=CFLAGS
+  CFLAGS = None
+  cargo:rerun-if-env-changed=HOST_CFLAGS
+  HOST_CFLAGS = None
+  cargo:rerun-if-env-changed=CFLAGS_x86_64_pc_windows_msvc
+  CFLAGS_x86_64_pc_windows_msvc = None
+  cargo:rerun-if-env-changed=CFLAGS_x86_64-pc-windows-msvc
+  CFLAGS_x86_64-pc-windows-msvc = None
+  rpmalloc.c
+  C:\Users\Admin\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\rpmalloc-sys-0.2.3+b097fd0\rpmalloc\rpmalloc\rpmalloc.h(14): fatal error C1034: stddef.h: no include path set
+
+  --- stderr
+
+
+  error occurred in cc-rs: command did not execute successfully (status code exit code: 2): "C:\\Program Files\\Microsoft Visual Studio\\18\\Community\\VC\\Tools\\MSVC\\14.51.36231\\bin\\Hostx64\\x64\\cl.exe" "-nologo" "-MD" "-O2" "-Z7" "-Brepro" "-W4" "-DENABLE_PRELOAD=1" "-FoD:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h17-correctness-01\\build-rpmalloc\\debug\\build\\rpmalloc-sys-0afb38a5ee974c2f\\out\\37d3d0600103451b-rpmalloc.o" "-c" "C:\\Users\\Admin\\.cargo\\registry\\src\\index.crates.io-1949cf8c6b5b557f\\rpmalloc-sys-0.2.3+b097fd0\\rpmalloc\\rpmalloc\\rpmalloc.c"
+
+
+warning: build failed, waiting for other jobs to finish...

@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "kind": "HARDENING_ISOLATION_GATE_CHECK",
+  "status": "PASS",
+  "failures": [],
+  "original_observed": {
+    "head": "c4b868db2c9e4b03f745bf93c6ebf4fd8a8519e7",
+    "branch": "issue1-jni-v2",
+    "status": [
+      " M tools/live-capture/live_client_session.py",
+      "?? tools/live-capture/__pycache__/",
+      "?? tools/live-capture/run_rev_shadow.py"
+    ],
+    "files": [
+      {
+        "path": "D:\\minecraftrust\\tools\\live-capture\\live_client_session.py",
+        "sha256": "151c356161695aba3db3c1a8cbd589b5eda2b5a1770dff59ab21b728d36cabfa"
+      },
+      {
+        "path": "D:\\minecraftrust\\tools\\live-capture\\run_rev_shadow.py",
+        "sha256": "2b9b2aca49e57dd0d2a74bec46efcdc0ac7f95762a733276e27ff9dbcb472d93"
+      }
+    ]
+  },
+  "isolated_worktree": "D:\\minecraftrust-astra-hardening",
+  "isolated_head": "af4e258f7da9ccd9a4bb232d14a75129efe4a551",
+  "isolated_branch": "astra/architecture-hardening",
+  "production_gate_checks": {
+    "tryEncode_fail_closed": true,
+    "productionAuthorityEligible_false": true
+  },
+  "scope": "read-only original HEAD/status/two paused source hashes plus conservative source guards; runtime authority tests remain required"
+}

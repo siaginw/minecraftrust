@@ -1,0 +1,61 @@
+lifecycle: private build wrote through the bypass -> PASS (backing[0]=42)
+lifecycle: sealed success with qualified fresh-disk source -> PASS (SEALED_SUCCESS/FRESH_DISK_CURRENT)
+lifecycle: owner acquire returns SUCCESS once -> PASS (SUCCESS)
+lifecycle: second acquire is REPLAYED (single-use) -> PASS (REPLAYED)
+lifecycle: consumed SUCCESS ticket admits to a PRIVATE binding -> PASS (null)
+lifecycle: replayed admission of the consumed ticket refused TICKET_REPLAYED -> PASS (TICKET_REPLAYED)
+early-acquire: NOT_YET_SEALED without waiting -> PASS (NOT_YET_SEALED after 0ms)
+early-acquire: ticket stays BUILDING -> PASS (BUILDING)
+creator: impostor recordDiskRoot rejected -> PASS
+creator: impostor sealSuccess rejected -> PASS
+creator: impostor sealFailure rejected -> PASS
+creator: ticket untouched by impostor attempts -> PASS (BUILDING/NONE)
+creator: exact creator still seals after impostor rejections -> PASS (true)
+misuse: second beginIo on a busy worker thread rejected -> PASS (THREAD_BUSY)
+misuse: duplicate loadId rejected session-wide -> PASS (DUPLICATE_LOAD_ID)
+misuse: first ticket remains valid -> PASS
+failed: ticket sealed SEALED_FAILURE -> PASS (SEALED_FAILURE)
+failed: admission refuses the failed ticket -> PASS (TICKET_FAILED)
+failed: no binding was created for the failed incarnation -> PASS
+writefailed: monotonic flag set by the private writer Throwable -> PASS
+writefailed: sealSuccess accepted but published FAILURE -> PASS (SEALED_FAILURE)
+writefailed: acquired completion outcome is FAILURE, never success -> PASS (FAILURE)
+sealed: post-seal write rejected before mutation (permission revoked by sealing) -> PASS (OFF_OWNER_PUBLISHED_WRITE)
+sealed: sealed graph bytes unchanged by the rejected write -> PASS (backing[0]=42)
+sealed: re-sealing the sealed ticket is rejected (one-way) -> PASS
+session: foreign ticket acquire refused SESSION_MISMATCH -> PASS (SESSION_MISMATCH)
+session: foreign ticket admission refused SESSION_MISMATCH -> PASS (SESSION_MISMATCH)
+identity: unacquired sealed ticket refuses admission TICKET_NOT_ACQUIRED -> PASS (TICKET_NOT_ACQUIRED)
+identity: wrong World object refuses admission WORLD_MISMATCH -> PASS (WORLD_MISMATCH)
+identity: unregistered chunk object refuses admission CHUNK_IDENTITY_MISMATCH -> PASS (CHUNK_IDENTITY_MISMATCH)
+identity: exact identities admit to a PRIVATE binding -> PASS (null)
+identity: admission over a live binding refuses INCARNATION_MISMATCH -> PASS (INCARNATION_MISMATCH)
+identity: the live binding was untouched by the refused admission -> PASS
+backing: aliased live backing tainted the ticket -> PASS (ALIASED_BACKING)
+backing: tainted graph refuses admission SOURCE_UNQUALIFIED -> PASS (SOURCE_UNQUALIFIED)
+backing: live backing bytes unchanged by the failed admission flow -> PASS (liveBacking[0]=42)
+backing: unregistered backing taints UNKNOWN_BACKING_PROVENANCE -> PASS (UNKNOWN_BACKING_PROVENANCE)
+pending-nbt: source recorded SHARED_PENDING_NBT -> PASS
+pending-nbt: admission refuses SOURCE_UNQUALIFIED -> PASS (SOURCE_UNQUALIFIED)
+pending-nbt: sticky-INELIGIBLE binding recorded, never READY -> PASS
+pending-nbt: capture falls back NOT_READY for the ineligible incarnation -> PASS (NOT_READY)
+oldversion: non-current DataVersion rejected -> PASS
+oldversion: OLD_DATA_VERSION sticky on the ticket -> PASS
+oldversion: admission refuses SOURCE_UNQUALIFIED -> PASS (SOURCE_UNQUALIFIED)
+oldversion: the old-data-version incarnation is recorded sticky-ineligible -> PASS
+contradiction: second provenance record rejected -> PASS
+contradiction: ticket permanently tainted -> PASS (CONTRADICTORY_SOURCE)
+contradiction: no qualified source remains -> PASS
+double-register: first registration accepted -> PASS
+double-register: same-ticket re-registration is idempotent -> PASS
+double-register: idempotent replay leaves no taint -> PASS (null)
+double-register: idempotent ticket sealed clean and qualified -> PASS (null)
+double-register: cross-ticket registration refused -> PASS
+double-register: cross-ticket relabel attempt tainted the impostor ticket -> PASS (EXISTING_IDENTITY_RELABELED)
+escape: PRIVATE_GRAPH_ESCAPE thrown before the store -> PASS (PRIVATE_GRAPH_ESCAPE)
+escape: session terminally disqualified -> PASS (PRIVATE_GRAPH_ESCAPE)
+escape: worker ticket untouched and still BUILDING -> PASS (BUILDING)
+live-backing: setup published the chunk READY -> PASS
+live-backing: worker alias write rejected PRIVATE_ALIAS_WRITE before mutation -> PASS (PRIVATE_ALIAS_WRITE)
+live-backing: LIVE backing bytes unchanged (42 from the private build only) -> PASS (liveBacking=42,0,0)
+RESULT: 60 pass, 0 fail

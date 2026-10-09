@@ -1,0 +1,9 @@
+{
+  "schema": "H17_FIRST_DIVERGENCE_V1",
+  "stage": "development correctness before benchmarks",
+  "classification": "FIXTURE_ASSUMPTION_DEFAULT_SKYLIGHT",
+  "first_failure": "Independent packet decoder expected zero block and sky light; NativeSection::new initializes sky bytes to0xFF when refresh omits sky arrays.",
+  "source_sha256_before_fix": "c0f6793fae52fab3da9483d2f073c4ebdcdd8a48fc35e2192999a4de44641035",
+  "resolution": "Provide explicit all-zero block and sky light fixture arrays to refresh_section; do not alter existing defaults or encoder.",
+  "allocator_fault": false
+}

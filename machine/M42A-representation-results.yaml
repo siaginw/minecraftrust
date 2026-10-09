@@ -1,0 +1,110 @@
+# M4.2A — Representation and live-snapshot correctness.
+# class: MEASURED + BYTECODE-VERIFIED. Provenance: M42A-REPRESENTATION.
+# All native paths default OFF; SHADOW only; no native packet transmission,
+# no authoritative loaded-world storage, no authoritative persistence.
+schema_version: 1
+date: "2026-09-21"
+base_checkpoint: 08fa2e6
+scope:
+  - verify SevTech comparator before changing terrain
+  - explicit state width / wire coverage, two test gates
+  - honestly-current retained snapshots (Java-side dirty tracking, batch JNI)
+  - offline tests before live work
+  - one bounded Target-A SHADOW mutation check, then stop
+
+sevtech_comparator:
+  jeid_mixin_decompile:
+    jar: machine/targetD/server/mods/JustEnoughIDs-1.0.3-55.jar (installed pack jar, not upstream source)
+    finding: >
+      MixinChunkPrimer adds private int[65536] intData; @Inject at HEAD of
+      getBlockState (func_177856_a) reads intData via BLOCK_STATE_IDS and CANCELS
+      the original; setBlockState writes the RUNTIME REGISTRY STATE ID into intData
+      and CANCELS; findGroundBlockIdx likewise redirected. char[] field_177860_a is
+      never read or written under JEID — a DEAD ARRAY that stays all-air.
+    consequence: "M4.1's char[] oracle was obsolete on SevTech; j=0(air)/r=16(stone) at every cell was a comparator artifact, NOT a terrain-fill divergence"
+  sevpatches: "only patches MinecraftServer spawn-chunk spawning (class inspected); no primer/chunk code"
+  jeid_wire_surface: "MixinSPacketChunkData alters only the BIOME array (int[] varints); section block-state wire stays vanilla protocol 340. MixinBlockStateContainer alters NBT persistence (getDataForNBT), not the packet path"
+  m41_yaml: corrected in place with evidence pointer (original diagnosis retained above correction)
+  logical_oracle_probe:
+    first_run: "resolver hit Forge package-private member (GameData$BlockCallbacks$1); zero comparisons — no evidence, run discarded but retained"
+    hardened_run: >
+      CLEAN: 37,483/37,483 chunks logical-MATCH, 0 mismatches, first-mismatch none.
+      Oracle = JEID intData runtime registry ids mapped through the live registry
+      (stone/water default states resolved by registry-name scan). The M4.1
+      terrain-divergence diagnosis is RETIRED with evidence: the Rust terrain
+      kernel is logically exact under SevTech as-is; no terrain algorithm change
+      was needed or made. Native registration remains 0 in JEID mode (probe-only
+      by design until an int[] ingestion path with checked conversion exists).
+
+state_width_semantics:
+  vanilla_forge:
+    primer_backing: "char[] field_177860_a, one u16 per cell"
+    state_id: "registry id; vanilla registry is GAP-LEGACY: id = (blockId << 4) | meta (stone default = 16, registry 5,365 ids, gaps unassigned)"
+    u16_sufficient: always (inherent ChunkPrimer char[] limit)
+  neid_1_5_4_4_revelation_installed:
+    primer_backing: "char[] = id LOW 16 bits + added byte[] additionalData = HIGH 8 bits (Hooks.chunkPrimer_setBlockState decompiled)"
+    state_id: "24-bit (registry remap)"
+    u16_sufficient: "only when additionalData is all-zero — enforced by a per-chunk width gate (any nonzero high byte => chunk INELIGIBLE for comparison and registration; counted m4_neid_width_ineligible)"
+    revelation_evidence: "38,179/38,179 char[] matches => base-terrain ids fit u16 there (high bytes zero); gate now makes the assumption checked, not assumed"
+  jeid_1_0_3_sevtech_installed:
+    primer_backing: "int[] intData only (char[] dead)"
+    state_id: "32-bit runtime registry ids (repacked)"
+    u16_sufficient: "NO by construction — JEID mode is probe-only; registration disabled until an int[] ingestion path with checked conversion exists"
+  checked_conversion: "from_primer stays u16 (char[]-inherent); eligibility gates on the Java side guarantee no truncation ever reaches native"
+
+global_palette_bits:
+  formula: "MathHelper.log2(size) = ceil(log2(size)) = 32 - nlz(size-1), proven on the REAL method (func_151241_e decompile + boundary run BitsBoundary.java at sizes 1..100000 incl. 4096/8192/65536)"
+  pow2_note: "pow-2 sizes take the isPowerOfTwo branch and do NOT round up: 8192 -> 13, not 14. M4.1's bridge used 32-nlz(size) (bitLength) — wrong at every pow-2 boundary; fixed in bridge + harness"
+  vanilla_value: "13 (registry 5,365)"
+  runtime: "set from live registry size at bridge init (post-Bootstrap); pow-2-safe"
+
+test_gates:
+  gate1_byte_equality_aligned_history:
+    harness: tools/bridge/src/com/rustcraft/bridge/M4WireParityHarness.java
+    result: "26/26 (re-run after dim-scoped ABI + bits fix)"
+  gate2_logical_equality_independent_decoder:
+    harness: tools/bridge/src/com/rustcraft/bridge/M4DecoderGate.java
+    result: "11/11 — plain 1..260 unique, overwrite-churn histories (5/33/200), sparse, all-air chunk (mask==0 => biomes-only packet, vanilla isFullChunk&&isEmpty skip proven from SPacketChunkData bytecode), light pass-through (block 0x00 / sky 0xFF), biome tail pass-through"
+    decoder_independence: "spec-derived Java decoder; palette entries inverted via the real BLOCK_STATE_IDS.getByValue — NOTE: func_176220_d is a BLOCK-id-space lookup (returns block k's default state), not the registry inverse; using it produced false mismatches in the first run and exposed the gap-legacy id scheme"
+  rust_unit: "10/10 (stale-read rejection, snapshot tokens, refresh->mutate->refresh cycles, partial refresh with other sections dirty, light-only refresh, all-air release, unload/reload stale-handle, cross-dimension no-aliasing)"
+
+snapshot_honesty:
+  stage_labeling: "registration happens at setBlocksInChunk RETURN = BASE TERRAIN, pre-surface/pre-population — a base-terrain snapshot is NOT the current loaded chunk; consumers treat it as such (SHADOW proofs only, no transmission)"
+  java_side_dirty_tracking:
+    mechanism: "ChunkMutationTransformer (ASM) -> ChunkMutationTracker (pure Java bitmasks): func_177436_a setBlockState->block mask; func_177431_a setLightFor->light mask; func_76602_a setStorageArrays & func_76616_a setBiomeArray->full invalidation; func_76623_d onChunkUnload->unload queue. NO JNI per block write; masks drained across JNI in batch by M4Coherency (2s flush)"
+    population: "covered via the per-block setBlockState hook (bursts collapse into the mask); no dedicated populate hook needed"
+    unknown_paths: "unresolvable dim => DIM_UNKNOWN => full invalidation (native use disabled for that chunk), never silent coverage"
+  consumer_coherence: "findGeneration(dim,cx,cz) -> extract Java states/light -> refreshSection -> encode under native write lock with snapshot token check (-3 stale rejected, never published) -> independent decode-validate all 4096 cells + both light arrays vs Java"
+  memory_safety: "generation counters are bookkeeping only; safety comes from Arc<RwLock> lifetimes held across reads (unload during encode keeps the chunk alive via Arc) and release on eviction"
+  separately_tracked: "blocks / light / biomes (biome or storage replacement => full invalidate); TileEntity data is JAVA-OWNED and never enters native state — packet consumers must merge TE NBT Java-side or fall back (documented exclusion)"
+  all_air_sections: "full-chunk packets exclude empty sections (bytecode-proven: isFullChunk && storage.isEmpty() -> skip; isEmpty == blockRefCount==0 == our non_air_count) — refreshed-to-air sections are released and drop from the mask, matching vanilla. Partial-filter (changedSectionFilter) packets WOULD include present-but-empty sections; partial emission unsupported and flagged for any future M1 relay work"
+
+ffi_surface: "300-315 (new: 314 findGeneration, 315 getRegistryStats); ALL chunk-scoped exports now dimension-scoped (ABI change, C1)"
+
+live_mutation_check:
+  target: clean Forge Target A, disposable, fresh world
+  mode: "worldgen SHADOW + minecraftrust.m4.coherency=true (hooks default OFF; this property gates ChunkMutationTransformer)"
+  workload: "TP walk (span 6000) + console setblock/fill/glowstone/torch/air mutations in walked chunks + natural unload by walking away"
+  attempts:
+    - "run 1: m42 counters not wired into dump + silent 1.12 setblock — retained, not counted"
+    - "run 2: instrumented; resolveDim failed for every chunk (WorldServer does not declare World.field_73011_w; DIM_UNKNOWN) -> refresh path never executed, 84,697 full-invalidations, 0 refreshes — retained as the finding of that run; fixed hierarchy walk"
+  final_run_verdict: >
+    CLEAN WITH ONE EXPLAINED ANOMALY. Terrain 3,009/3,009 bit-exact, 3,009 registered.
+    Hooks recorded 27,547,981 block sets + 1,921,135 light sets (population bursts collapse
+    into per-section masks; zero JNI per write). Flush: 240 cycles, 2,721 unloads flushed
+    == 2,721 native evictions (m4_stats_chunks_evicted, exact alloc/release arithmetic:
+    15,736 allocated - 14,489 released = 1,247 sections retained across 288 live chunks,
+    15.4 MB). 20,177 sections refreshed; 20,158 independently DECODER-VALIDATED with
+    0 validation mismatches, 0 stale-encode rejections, refresh stayed enabled,
+    0 full invalidations (dimension resolution healthy), 2 unregistered chunks skipped
+    (never silently covered). Anomaly: 19 refreshed sections (0.09%) threw during
+    post-refresh decode-location; root cause by inspection: sections refreshed to
+    all-air legitimately drop from the full-chunk mask (vanilla excludes empty
+    sections) and the locator then parsed into the biome tail. Validator fixed to
+    treat all-air absence as a validated PASS (own counter m42_sections_validated_allair_absent);
+    per-case confirmation deferred to the next bounded run per the stop discipline.
+  raw: machine/raw/M42-coherency-metrics.txt (+ M42-coherency-server.log)
+
+stop_conditions:
+  - "first unexplained decoder mismatch during flush -> REFRESH_DISABLED=true (path stops itself)"
+  - "no automatic relaunch of failed live runs"

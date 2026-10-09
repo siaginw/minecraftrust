@@ -1,0 +1,613 @@
+{
+  "schema": "H23_ROOT_REVIEWED_HOTSPOT_VERIFICATION_V1",
+  "status": "BOUNDED_PREREQUISITE_VALIDATED",
+  "production_authority": false,
+  "root_receipt_sha256": "918808e1f7bb831ae2a78ec2dfc6cabe6d3d629f61dbab97bd5326c1b349ac57",
+  "source_inputs": 17,
+  "tool_inputs": 97,
+  "java_process_controls": 11,
+  "python_tests": 8,
+  "independent_parser_agreements": 8,
+  "fixture_relation_controls": 3,
+  "decision": "KEEP_PINNED_LINK_TRIGGER_REQUIRE_SEPARATE_FRAME_TYPE_BINDING",
+  "retained_evidence": [
+    {
+      "source": "target/hotspot-verification-proof/9181cab24baa4b0ea44dc3ec7f5039c4/campaign.json",
+      "retained": "machine/architecture-hardening/h23-hotspot-verification-evidence/9181cab24baa4b0ea44dc3ec7f5039c4/campaign.json",
+      "sha256": "efa4286a615054c7353780f25896a2afef5906dc2a3645a2d3fc7a63cbbfdd0b"
+    },
+    {
+      "source": "target/hotspot-verification-proof/9181cab24baa4b0ea44dc3ec7f5039c4/fixture-relations.json",
+      "retained": "machine/architecture-hardening/h23-hotspot-verification-evidence/9181cab24baa4b0ea44dc3ec7f5039c4/fixture-relations.json",
+      "sha256": "1b2708a636f3a9c1ebd038209f356d67dce470a9ca46145baa0fb925641528a3"
+    },
+    {
+      "source": "target/hotspot-verification-proof/9181cab24baa4b0ea44dc3ec7f5039c4/logs/compile-identity.process.json",
+      "retained": "machine/architecture-hardening/h23-hotspot-verification-evidence/9181cab24baa4b0ea44dc3ec7f5039c4/logs/compile-identity.process.json",
+      "sha256": "5d5589cf36aea4c48b080c16a59857c730b560257a0bc4a7aad7d133b9432f3a"
+    },
+    {
+      "source": "target/hotspot-verification-proof/9181cab24baa4b0ea44dc3ec7f5039c4/logs/compile-identity.stderr",
+      "retained": "machine/architecture-hardening/h23-hotspot-verification-evidence/9181cab24baa4b0ea44dc3ec7f5039c4/logs/compile-identity.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/hotspot-verification-proof/9181cab24baa4b0ea44dc3ec7f5039c4/logs/compile-identity.stdout",
+      "retained": "machine/architecture-hardening/h23-hotspot-verification-evidence/9181cab24baa4b0ea44dc3ec7f5039c4/logs/compile-identity.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/hotspot-verification-proof/9181cab24baa4b0ea44dc3ec7f5039c4/logs/compile-probes.process.json",
+      "retained": "machine/architecture-hardening/h23-hotspot-verification-evidence/9181cab24baa4b0ea44dc3ec7f5039c4/logs/compile-probes.process.json",
+      "sha256": "72862deb5d4bbe22269451ecf12e569f34e6728564b9d906746e2d612816c206"
+    },
+    {
+      "source": "target/hotspot-verification-proof/9181cab24baa4b0ea44dc3ec7f5039c4/logs/compile-probes.stderr",
+      "retained": "machine/architecture-hardening/h23-hotspot-verification-evidence/9181cab24baa4b0ea44dc3ec7f5039c4/logs/compile-probes.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/hotspot-verification-proof/9181cab24baa4b0ea44dc3ec7f5039c4/logs/compile-probes.stdout",
+      "retained": "machine/architecture-hardening/h23-hotspot-verification-evidence/9181cab24baa4b0ea44dc3ec7f5039c4/logs/compile-probes.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/hotspot-verification-proof/9181cab24baa4b0ea44dc3ec7f5039c4/logs/contract-tests.process.json",
+      "retained": "machine/architecture-hardening/h23-hotspot-verification-evidence/9181cab24baa4b0ea44dc3ec7f5039c4/logs/contract-tests.process.json",
+      "sha256": "43d9131f8d88400ac7cf5281ac365bfa1e68291ca79d6f3b04823396d546d228"
+    },
+    {
+      "source": "target/hotspot-verification-proof/9181cab24baa4b0ea44dc3ec7f5039c4/logs/contract-tests.stderr",
+      "retained": "machine/architecture-hardening/h23-hotspot-verification-evidence/9181cab24baa4b0ea44dc3ec7f5039c4/logs/contract-tests.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/hotspot-verification-proof/9181cab24baa4b0ea44dc3ec7f5039c4/logs/contract-tests.stdout",
+      "retained": "machine/architecture-hardening/h23-hotspot-verification-evidence/9181cab24baa4b0ea44dc3ec7f5039c4/logs/contract-tests.stdout",
+      "sha256": "2dfb40b14971467764057bec1731337e934b0f43389582285192e70b9029a75d"
+    },
+    {
+      "source": "target/hotspot-verification-proof/9181cab24baa4b0ea44dc3ec7f5039c4/logs/generate.process.json",
+      "retained": "machine/architecture-hardening/h23-hotspot-verification-evidence/9181cab24baa4b0ea44dc3ec7f5039c4/logs/generate.process.json",
+      "sha256": "87e8afaae75b2a36f9a6b7d22875b8e2cfe1621eeb56b96c691e7c1530ffb4e8"
+    },
+    {
+      "source": "target/hotspot-verification-proof/9181cab24baa4b0ea44dc3ec7f5039c4/logs/generate.stderr",
+      "retained": "machine/architecture-hardening/h23-hotspot-verification-evidence/9181cab24baa4b0ea44dc3ec7f5039c4/logs/generate.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/hotspot-verification-proof/9181cab24baa4b0ea44dc3ec7f5039c4/logs/generate.stdout",
+      "retained": "machine/architecture-hardening/h23-hotspot-verification-evidence/9181cab24baa4b0ea44dc3ec7f5039c4/logs/generate.stdout",
+      "sha256": "61682222d3f8cc5f81f1f21ecc13d215f0a1114e8cef969da8af6c32aeb0c775"
+    },
+    {
+      "source": "target/hotspot-verification-proof/9181cab24baa4b0ea44dc3ec7f5039c4/logs/probe-bad-dormant.process.json",
+      "retained": "machine/architecture-hardening/h23-hotspot-verification-evidence/9181cab24baa4b0ea44dc3ec7f5039c4/logs/probe-bad-dormant.process.json",
+      "sha256": "a1e1bc335a78e2c5ffc524f05e0e22ca368cffe17e993de10e6613afd1cfad06"
+    },
+    {
+      "source": "target/hotspot-verification-proof/9181cab24baa4b0ea44dc3ec7f5039c4/logs/probe-bad-dormant.stderr",
+      "retained": "machine/architecture-hardening/h23-hotspot-verification-evidence/9181cab24baa4b0ea44dc3ec7f5039c4/logs/probe-bad-dormant.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/hotspot-verification-proof/9181cab24baa4b0ea44dc3ec7f5039c4/logs/probe-bad-dormant.stdout",
+      "retained": "machine/architecture-hardening/h23-hotspot-verification-evidence/9181cab24baa4b0ea44dc3ec7f5039c4/logs/probe-bad-dormant.stdout",
+      "sha256": "9f6828e2cd3b78e6ec09d283aaeaa01b32ebb6dcec7846832bfe870522b3959f"
+    },
+    {
+      "source": "target/hotspot-verification-proof/9181cab24baa4b0ea44dc3ec7f5039c4/logs/probe-bad-frame.process.json",
+      "retained": "machine/architecture-hardening/h23-hotspot-verification-evidence/9181cab24baa4b0ea44dc3ec7f5039c4/logs/probe-bad-frame.process.json",
+      "sha256": "37fd4621df402a44ba22087b088f2a32e43af2a20d6e974310cbf30bcdee8744"
+    },
+    {
+      "source": "target/hotspot-verification-proof/9181cab24baa4b0ea44dc3ec7f5039c4/logs/probe-bad-frame.stderr",
+      "retained": "machine/architecture-hardening/h23-hotspot-verification-evidence/9181cab24baa4b0ea44dc3ec7f5039c4/logs/probe-bad-frame.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/hotspot-verification-proof/9181cab24baa4b0ea44dc3ec7f5039c4/logs/probe-bad-frame.stdout",
+      "retained": "machine/architecture-hardening/h23-hotspot-verification-evidence/9181cab24baa4b0ea44dc3ec7f5039c4/logs/probe-bad-frame.stdout",
+      "sha256": "30c9d6115ff688e5659574c7a0482cd6c943330a0e0c0376cc857d05abe1e1d5"
+    },
+    {
+      "source": "target/hotspot-verification-proof/9181cab24baa4b0ea44dc3ec7f5039c4/logs/probe-changed-byte-pin.process.json",
+      "retained": "machine/architecture-hardening/h23-hotspot-verification-evidence/9181cab24baa4b0ea44dc3ec7f5039c4/logs/probe-changed-byte-pin.process.json",
+      "sha256": "b544ab5c33b63bffb3260dd03f29827a77b72098aee13483c520a7f5a2fddebc"
+    },
+    {
+      "source": "target/hotspot-verification-proof/9181cab24baa4b0ea44dc3ec7f5039c4/logs/probe-changed-byte-pin.stderr",
+      "retained": "machine/architecture-hardening/h23-hotspot-verification-evidence/9181cab24baa4b0ea44dc3ec7f5039c4/logs/probe-changed-byte-pin.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/hotspot-verification-proof/9181cab24baa4b0ea44dc3ec7f5039c4/logs/probe-changed-byte-pin.stdout",
+      "retained": "machine/architecture-hardening/h23-hotspot-verification-evidence/9181cab24baa4b0ea44dc3ec7f5039c4/logs/probe-changed-byte-pin.stdout",
+      "sha256": "8e1db495e63c73e0ddcdf44fe81d21104ce3210c8d50c82e9c53b258af403879"
+    },
+    {
+      "source": "target/hotspot-verification-proof/9181cab24baa4b0ea44dc3ec7f5039c4/logs/probe-disabled-verification.process.json",
+      "retained": "machine/architecture-hardening/h23-hotspot-verification-evidence/9181cab24baa4b0ea44dc3ec7f5039c4/logs/probe-disabled-verification.process.json",
+      "sha256": "46d221308643b369c294ab66e98980e6ed948c222062ff330b0b479290bec95b"
+    },
+    {
+      "source": "target/hotspot-verification-proof/9181cab24baa4b0ea44dc3ec7f5039c4/logs/probe-disabled-verification.stderr",
+      "retained": "machine/architecture-hardening/h23-hotspot-verification-evidence/9181cab24baa4b0ea44dc3ec7f5039c4/logs/probe-disabled-verification.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/hotspot-verification-proof/9181cab24baa4b0ea44dc3ec7f5039c4/logs/probe-disabled-verification.stdout",
+      "retained": "machine/architecture-hardening/h23-hotspot-verification-evidence/9181cab24baa4b0ea44dc3ec7f5039c4/logs/probe-disabled-verification.stdout",
+      "sha256": "80d15385713dac6e2b3c653d1d966f95a37628bcfcd76e4566ccc6166a0a5f13"
+    },
+    {
+      "source": "target/hotspot-verification-proof/9181cab24baa4b0ea44dc3ec7f5039c4/logs/probe-foreign-loader.process.json",
+      "retained": "machine/architecture-hardening/h23-hotspot-verification-evidence/9181cab24baa4b0ea44dc3ec7f5039c4/logs/probe-foreign-loader.process.json",
+      "sha256": "57fc0a06e9a7ce78d7f4484a6cbea050eb04ded36a681f8285968c3d0ff7784d"
+    },
+    {
+      "source": "target/hotspot-verification-proof/9181cab24baa4b0ea44dc3ec7f5039c4/logs/probe-foreign-loader.stderr",
+      "retained": "machine/architecture-hardening/h23-hotspot-verification-evidence/9181cab24baa4b0ea44dc3ec7f5039c4/logs/probe-foreign-loader.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/hotspot-verification-proof/9181cab24baa4b0ea44dc3ec7f5039c4/logs/probe-foreign-loader.stdout",
+      "retained": "machine/architecture-hardening/h23-hotspot-verification-evidence/9181cab24baa4b0ea44dc3ec7f5039c4/logs/probe-foreign-loader.stdout",
+      "sha256": "3f43eda5a09588336ed1ded2ee3dcd22d14c5d395b8cabfb39aa1be2bfa9d3d1"
+    },
+    {
+      "source": "target/hotspot-verification-proof/9181cab24baa4b0ea44dc3ec7f5039c4/logs/probe-null-missing-type.process.json",
+      "retained": "machine/architecture-hardening/h23-hotspot-verification-evidence/9181cab24baa4b0ea44dc3ec7f5039c4/logs/probe-null-missing-type.process.json",
+      "sha256": "39e8484acff57f0b1d870e739cf22ba5030a0eb82cecdf16e80629558b9a1b4d"
+    },
+    {
+      "source": "target/hotspot-verification-proof/9181cab24baa4b0ea44dc3ec7f5039c4/logs/probe-null-missing-type.stderr",
+      "retained": "machine/architecture-hardening/h23-hotspot-verification-evidence/9181cab24baa4b0ea44dc3ec7f5039c4/logs/probe-null-missing-type.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/hotspot-verification-proof/9181cab24baa4b0ea44dc3ec7f5039c4/logs/probe-null-missing-type.stdout",
+      "retained": "machine/architecture-hardening/h23-hotspot-verification-evidence/9181cab24baa4b0ea44dc3ec7f5039c4/logs/probe-null-missing-type.stdout",
+      "sha256": "5b4d1e29f27cb7b3247f9f16627e2a38c585cbcf358b518199a2671f311c5e93"
+    },
+    {
+      "source": "target/hotspot-verification-proof/9181cab24baa4b0ea44dc3ec7f5039c4/logs/probe-null-object.process.json",
+      "retained": "machine/architecture-hardening/h23-hotspot-verification-evidence/9181cab24baa4b0ea44dc3ec7f5039c4/logs/probe-null-object.process.json",
+      "sha256": "036d2fd1f58f82678111341def09ea35a516871c6e241ed35cd3b78624eb7515"
+    },
+    {
+      "source": "target/hotspot-verification-proof/9181cab24baa4b0ea44dc3ec7f5039c4/logs/probe-null-object.stderr",
+      "retained": "machine/architecture-hardening/h23-hotspot-verification-evidence/9181cab24baa4b0ea44dc3ec7f5039c4/logs/probe-null-object.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/hotspot-verification-proof/9181cab24baa4b0ea44dc3ec7f5039c4/logs/probe-null-object.stdout",
+      "retained": "machine/architecture-hardening/h23-hotspot-verification-evidence/9181cab24baa4b0ea44dc3ec7f5039c4/logs/probe-null-object.stdout",
+      "sha256": "55c00fdf6a5024d24eaf665402d2002626f4cf01d205cc498b1c929ae8cc7559"
+    },
+    {
+      "source": "target/hotspot-verification-proof/9181cab24baa4b0ea44dc3ec7f5039c4/logs/probe-valid-max.process.json",
+      "retained": "machine/architecture-hardening/h23-hotspot-verification-evidence/9181cab24baa4b0ea44dc3ec7f5039c4/logs/probe-valid-max.process.json",
+      "sha256": "f5bc53b24ff28ba5a24ae56d6aca9b43b24bbc6ddfcaf5404968c34ede401a5f"
+    },
+    {
+      "source": "target/hotspot-verification-proof/9181cab24baa4b0ea44dc3ec7f5039c4/logs/probe-valid-max.stderr",
+      "retained": "machine/architecture-hardening/h23-hotspot-verification-evidence/9181cab24baa4b0ea44dc3ec7f5039c4/logs/probe-valid-max.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/hotspot-verification-proof/9181cab24baa4b0ea44dc3ec7f5039c4/logs/probe-valid-max.stdout",
+      "retained": "machine/architecture-hardening/h23-hotspot-verification-evidence/9181cab24baa4b0ea44dc3ec7f5039c4/logs/probe-valid-max.stdout",
+      "sha256": "7458759154cb1203a320eff995cc2a64e5be0151b8697fdc9c30be521864765b"
+    },
+    {
+      "source": "target/hotspot-verification-proof/9181cab24baa4b0ea44dc3ec7f5039c4/logs/probe-valid-object.process.json",
+      "retained": "machine/architecture-hardening/h23-hotspot-verification-evidence/9181cab24baa4b0ea44dc3ec7f5039c4/logs/probe-valid-object.process.json",
+      "sha256": "cba65f2d681eccba806a6dd8ac83c03ffb8acd5e2fb7e9313a92139fb9c6a476"
+    },
+    {
+      "source": "target/hotspot-verification-proof/9181cab24baa4b0ea44dc3ec7f5039c4/logs/probe-valid-object.stderr",
+      "retained": "machine/architecture-hardening/h23-hotspot-verification-evidence/9181cab24baa4b0ea44dc3ec7f5039c4/logs/probe-valid-object.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/hotspot-verification-proof/9181cab24baa4b0ea44dc3ec7f5039c4/logs/probe-valid-object.stdout",
+      "retained": "machine/architecture-hardening/h23-hotspot-verification-evidence/9181cab24baa4b0ea44dc3ec7f5039c4/logs/probe-valid-object.stdout",
+      "sha256": "1ec7f8ba486b2c963b9e080cee972734ee7b44ed205302a4235a2437cec5921a"
+    },
+    {
+      "source": "target/hotspot-verification-proof/9181cab24baa4b0ea44dc3ec7f5039c4/logs/probe-valid-refined.process.json",
+      "retained": "machine/architecture-hardening/h23-hotspot-verification-evidence/9181cab24baa4b0ea44dc3ec7f5039c4/logs/probe-valid-refined.process.json",
+      "sha256": "ff9dd4b9f91a8956cb79dd99f73c7a655a5c867f926946ce138a895cd3359aa7"
+    },
+    {
+      "source": "target/hotspot-verification-proof/9181cab24baa4b0ea44dc3ec7f5039c4/logs/probe-valid-refined.stderr",
+      "retained": "machine/architecture-hardening/h23-hotspot-verification-evidence/9181cab24baa4b0ea44dc3ec7f5039c4/logs/probe-valid-refined.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/hotspot-verification-proof/9181cab24baa4b0ea44dc3ec7f5039c4/logs/probe-valid-refined.stdout",
+      "retained": "machine/architecture-hardening/h23-hotspot-verification-evidence/9181cab24baa4b0ea44dc3ec7f5039c4/logs/probe-valid-refined.stdout",
+      "sha256": "a6a669ab020781634f914572cd1d9bc7bfe7117bcb154b111b6bbab1c65eac64"
+    },
+    {
+      "source": "target/hotspot-verification-proof/9181cab24baa4b0ea44dc3ec7f5039c4/logs/probe-valid-top.process.json",
+      "retained": "machine/architecture-hardening/h23-hotspot-verification-evidence/9181cab24baa4b0ea44dc3ec7f5039c4/logs/probe-valid-top.process.json",
+      "sha256": "d37cf3b3d9a599c415e84a3f660bb75ba1c723cf33bae9d5955ff942ee6e9d8c"
+    },
+    {
+      "source": "target/hotspot-verification-proof/9181cab24baa4b0ea44dc3ec7f5039c4/logs/probe-valid-top.stderr",
+      "retained": "machine/architecture-hardening/h23-hotspot-verification-evidence/9181cab24baa4b0ea44dc3ec7f5039c4/logs/probe-valid-top.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/hotspot-verification-proof/9181cab24baa4b0ea44dc3ec7f5039c4/logs/probe-valid-top.stdout",
+      "retained": "machine/architecture-hardening/h23-hotspot-verification-evidence/9181cab24baa4b0ea44dc3ec7f5039c4/logs/probe-valid-top.stdout",
+      "sha256": "a529c2d40ddef3b7215f520d355616973d84ac864f14fc3a0841ede24c0bb46f"
+    },
+    {
+      "source": "target/hotspot-verification-proof/9181cab24baa4b0ea44dc3ec7f5039c4/parser/batch-0000-dump.process.json",
+      "retained": "machine/architecture-hardening/h23-hotspot-verification-evidence/9181cab24baa4b0ea44dc3ec7f5039c4/parser/batch-0000-dump.process.json",
+      "sha256": "837d6e0b8166b69f17b26041934986bba549a9841c155fc55d3196a5ae6a1cd9"
+    },
+    {
+      "source": "target/hotspot-verification-proof/9181cab24baa4b0ea44dc3ec7f5039c4/parser/batch-0000-dump.stderr",
+      "retained": "machine/architecture-hardening/h23-hotspot-verification-evidence/9181cab24baa4b0ea44dc3ec7f5039c4/parser/batch-0000-dump.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/hotspot-verification-proof/9181cab24baa4b0ea44dc3ec7f5039c4/parser/batch-0000-dump.stdout",
+      "retained": "machine/architecture-hardening/h23-hotspot-verification-evidence/9181cab24baa4b0ea44dc3ec7f5039c4/parser/batch-0000-dump.stdout",
+      "sha256": "9714b21aae58e60ebef692b17626526d3820c1e31a047ff36276ff5c2fd97351"
+    },
+    {
+      "source": "target/hotspot-verification-proof/9181cab24baa4b0ea44dc3ec7f5039c4/parser/batch-0000-identity.process.json",
+      "retained": "machine/architecture-hardening/h23-hotspot-verification-evidence/9181cab24baa4b0ea44dc3ec7f5039c4/parser/batch-0000-identity.process.json",
+      "sha256": "faee248d7017ecb5b8448f89dec893e700e1fe69968479342b949e8e8b2e6f7a"
+    },
+    {
+      "source": "target/hotspot-verification-proof/9181cab24baa4b0ea44dc3ec7f5039c4/parser/batch-0000-identity.stderr",
+      "retained": "machine/architecture-hardening/h23-hotspot-verification-evidence/9181cab24baa4b0ea44dc3ec7f5039c4/parser/batch-0000-identity.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/hotspot-verification-proof/9181cab24baa4b0ea44dc3ec7f5039c4/parser/batch-0000-identity.stdout",
+      "retained": "machine/architecture-hardening/h23-hotspot-verification-evidence/9181cab24baa4b0ea44dc3ec7f5039c4/parser/batch-0000-identity.stdout",
+      "sha256": "b2a416405a46264f55eb5f0cdda042ff4c08aacd052c453e9a3a290dadb08681"
+    },
+    {
+      "source": "target/hotspot-verification-proof/9181cab24baa4b0ea44dc3ec7f5039c4/parser/batch-0000-rust.process.json",
+      "retained": "machine/architecture-hardening/h23-hotspot-verification-evidence/9181cab24baa4b0ea44dc3ec7f5039c4/parser/batch-0000-rust.process.json",
+      "sha256": "d61ef66660c75f63dd176ff00c304a123d73f9341a33e7a8d45c376951b863f8"
+    },
+    {
+      "source": "target/hotspot-verification-proof/9181cab24baa4b0ea44dc3ec7f5039c4/parser/batch-0000-rust.stderr",
+      "retained": "machine/architecture-hardening/h23-hotspot-verification-evidence/9181cab24baa4b0ea44dc3ec7f5039c4/parser/batch-0000-rust.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/hotspot-verification-proof/9181cab24baa4b0ea44dc3ec7f5039c4/parser/batch-0000-rust.stdout",
+      "retained": "machine/architecture-hardening/h23-hotspot-verification-evidence/9181cab24baa4b0ea44dc3ec7f5039c4/parser/batch-0000-rust.stdout",
+      "sha256": "a235c940887120a50a370c342ceb492119393134ac78f925c0cd0418bf6a1c81"
+    },
+    {
+      "source": "target/hotspot-verification-proof/9181cab24baa4b0ea44dc3ec7f5039c4/parser/classes.json",
+      "retained": "machine/architecture-hardening/h23-hotspot-verification-evidence/9181cab24baa4b0ea44dc3ec7f5039c4/parser/classes.json",
+      "sha256": "6efc29d97f013fe0dd863e3a12795f3854942e105c1f8fc57f36c6f89cb486d7"
+    },
+    {
+      "source": "target/hotspot-verification-proof/9181cab24baa4b0ea44dc3ec7f5039c4/proof-rows.json",
+      "retained": "machine/architecture-hardening/h23-hotspot-verification-evidence/9181cab24baa4b0ea44dc3ec7f5039c4/proof-rows.json",
+      "sha256": "b2724217e927c436acaf5dc1488a506c94bad4465dfc42f699c8f47ac2c08039"
+    },
+    {
+      "source": "target/hotspot-verification-proof/9181cab24baa4b0ea44dc3ec7f5039c4/unresolved-frame-type-counterexample.json",
+      "retained": "machine/architecture-hardening/h23-hotspot-verification-evidence/9181cab24baa4b0ea44dc3ec7f5039c4/unresolved-frame-type-counterexample.json",
+      "sha256": "6f5efbe5027937b486482725ce719be2ee057570933aba9ed6a906790c10ea54"
+    },
+    {
+      "source": "target/hotspot-verification-proof/root-reviewed-01/campaign.json",
+      "retained": "machine/architecture-hardening/h23-hotspot-verification-evidence/root-reviewed-01/campaign.json",
+      "sha256": "918808e1f7bb831ae2a78ec2dfc6cabe6d3d629f61dbab97bd5326c1b349ac57"
+    },
+    {
+      "source": "target/hotspot-verification-proof/root-reviewed-01/fixture-relations.json",
+      "retained": "machine/architecture-hardening/h23-hotspot-verification-evidence/root-reviewed-01/fixture-relations.json",
+      "sha256": "1b2708a636f3a9c1ebd038209f356d67dce470a9ca46145baa0fb925641528a3"
+    },
+    {
+      "source": "target/hotspot-verification-proof/root-reviewed-01/logs/compile-identity.process.json",
+      "retained": "machine/architecture-hardening/h23-hotspot-verification-evidence/root-reviewed-01/logs/compile-identity.process.json",
+      "sha256": "39a3393969c1248ef165a804a0b8f5e0e28709863fe12cad51f6f5a2eac96df1"
+    },
+    {
+      "source": "target/hotspot-verification-proof/root-reviewed-01/logs/compile-identity.stderr",
+      "retained": "machine/architecture-hardening/h23-hotspot-verification-evidence/root-reviewed-01/logs/compile-identity.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/hotspot-verification-proof/root-reviewed-01/logs/compile-identity.stdout",
+      "retained": "machine/architecture-hardening/h23-hotspot-verification-evidence/root-reviewed-01/logs/compile-identity.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/hotspot-verification-proof/root-reviewed-01/logs/compile-probes.process.json",
+      "retained": "machine/architecture-hardening/h23-hotspot-verification-evidence/root-reviewed-01/logs/compile-probes.process.json",
+      "sha256": "61249b795692630851a4e93f9532fd37dbb994176c57750626c24c9f534cacd6"
+    },
+    {
+      "source": "target/hotspot-verification-proof/root-reviewed-01/logs/compile-probes.stderr",
+      "retained": "machine/architecture-hardening/h23-hotspot-verification-evidence/root-reviewed-01/logs/compile-probes.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/hotspot-verification-proof/root-reviewed-01/logs/compile-probes.stdout",
+      "retained": "machine/architecture-hardening/h23-hotspot-verification-evidence/root-reviewed-01/logs/compile-probes.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/hotspot-verification-proof/root-reviewed-01/logs/contract-tests.process.json",
+      "retained": "machine/architecture-hardening/h23-hotspot-verification-evidence/root-reviewed-01/logs/contract-tests.process.json",
+      "sha256": "65bb9ab5ea59d32b109baa61111702399681ee95f8cbd42bd12f28268dcc80f5"
+    },
+    {
+      "source": "target/hotspot-verification-proof/root-reviewed-01/logs/contract-tests.stderr",
+      "retained": "machine/architecture-hardening/h23-hotspot-verification-evidence/root-reviewed-01/logs/contract-tests.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/hotspot-verification-proof/root-reviewed-01/logs/contract-tests.stdout",
+      "retained": "machine/architecture-hardening/h23-hotspot-verification-evidence/root-reviewed-01/logs/contract-tests.stdout",
+      "sha256": "a46b80e8c6f418795a3ed6641e4a8cafba22140ac3b00323a19d85cf63b53bff"
+    },
+    {
+      "source": "target/hotspot-verification-proof/root-reviewed-01/logs/generate.process.json",
+      "retained": "machine/architecture-hardening/h23-hotspot-verification-evidence/root-reviewed-01/logs/generate.process.json",
+      "sha256": "18d9db228646fc178167dd197ed7023779a94026811992a5ca4b2084c4498db2"
+    },
+    {
+      "source": "target/hotspot-verification-proof/root-reviewed-01/logs/generate.stderr",
+      "retained": "machine/architecture-hardening/h23-hotspot-verification-evidence/root-reviewed-01/logs/generate.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/hotspot-verification-proof/root-reviewed-01/logs/generate.stdout",
+      "retained": "machine/architecture-hardening/h23-hotspot-verification-evidence/root-reviewed-01/logs/generate.stdout",
+      "sha256": "61682222d3f8cc5f81f1f21ecc13d215f0a1114e8cef969da8af6c32aeb0c775"
+    },
+    {
+      "source": "target/hotspot-verification-proof/root-reviewed-01/logs/probe-bad-dormant.process.json",
+      "retained": "machine/architecture-hardening/h23-hotspot-verification-evidence/root-reviewed-01/logs/probe-bad-dormant.process.json",
+      "sha256": "f81d722460247ace716fe6c56e62c9723a863711d9c2dd051e748f24c089ee97"
+    },
+    {
+      "source": "target/hotspot-verification-proof/root-reviewed-01/logs/probe-bad-dormant.stderr",
+      "retained": "machine/architecture-hardening/h23-hotspot-verification-evidence/root-reviewed-01/logs/probe-bad-dormant.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/hotspot-verification-proof/root-reviewed-01/logs/probe-bad-dormant.stdout",
+      "retained": "machine/architecture-hardening/h23-hotspot-verification-evidence/root-reviewed-01/logs/probe-bad-dormant.stdout",
+      "sha256": "1661e6030a5c244c4838a3efac90f5c6f8add5c7b8128f3421218905ab7b011d"
+    },
+    {
+      "source": "target/hotspot-verification-proof/root-reviewed-01/logs/probe-bad-frame.process.json",
+      "retained": "machine/architecture-hardening/h23-hotspot-verification-evidence/root-reviewed-01/logs/probe-bad-frame.process.json",
+      "sha256": "c16acf611ae30aff6a5f1554d096d9e847b4bfebca18f9181e613aaffa164b3c"
+    },
+    {
+      "source": "target/hotspot-verification-proof/root-reviewed-01/logs/probe-bad-frame.stderr",
+      "retained": "machine/architecture-hardening/h23-hotspot-verification-evidence/root-reviewed-01/logs/probe-bad-frame.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/hotspot-verification-proof/root-reviewed-01/logs/probe-bad-frame.stdout",
+      "retained": "machine/architecture-hardening/h23-hotspot-verification-evidence/root-reviewed-01/logs/probe-bad-frame.stdout",
+      "sha256": "f0175ecee2badeefb30c1a90cb9719cea9462359300d39f90bb9ceba7b5071f4"
+    },
+    {
+      "source": "target/hotspot-verification-proof/root-reviewed-01/logs/probe-changed-byte-pin.process.json",
+      "retained": "machine/architecture-hardening/h23-hotspot-verification-evidence/root-reviewed-01/logs/probe-changed-byte-pin.process.json",
+      "sha256": "00ceea439fd96b7d2a794a073f32a843f3adbb84ca3db7a943011c66f961a0e3"
+    },
+    {
+      "source": "target/hotspot-verification-proof/root-reviewed-01/logs/probe-changed-byte-pin.stderr",
+      "retained": "machine/architecture-hardening/h23-hotspot-verification-evidence/root-reviewed-01/logs/probe-changed-byte-pin.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/hotspot-verification-proof/root-reviewed-01/logs/probe-changed-byte-pin.stdout",
+      "retained": "machine/architecture-hardening/h23-hotspot-verification-evidence/root-reviewed-01/logs/probe-changed-byte-pin.stdout",
+      "sha256": "3088c8dcf41aff59e7df67e6ba543084d10b8b8b06bce71e5615bc5a0a324e7c"
+    },
+    {
+      "source": "target/hotspot-verification-proof/root-reviewed-01/logs/probe-disabled-verification.process.json",
+      "retained": "machine/architecture-hardening/h23-hotspot-verification-evidence/root-reviewed-01/logs/probe-disabled-verification.process.json",
+      "sha256": "f596ad01586cf2b781c67dd94db3efb65c19a0098def18fd398d56bb405746a9"
+    },
+    {
+      "source": "target/hotspot-verification-proof/root-reviewed-01/logs/probe-disabled-verification.stderr",
+      "retained": "machine/architecture-hardening/h23-hotspot-verification-evidence/root-reviewed-01/logs/probe-disabled-verification.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/hotspot-verification-proof/root-reviewed-01/logs/probe-disabled-verification.stdout",
+      "retained": "machine/architecture-hardening/h23-hotspot-verification-evidence/root-reviewed-01/logs/probe-disabled-verification.stdout",
+      "sha256": "eee14bffb702cb99a6b5bf24909acbfb0e15ee3bd43bc141977a144bab27fbc8"
+    },
+    {
+      "source": "target/hotspot-verification-proof/root-reviewed-01/logs/probe-foreign-loader.process.json",
+      "retained": "machine/architecture-hardening/h23-hotspot-verification-evidence/root-reviewed-01/logs/probe-foreign-loader.process.json",
+      "sha256": "45e774f359364b90c634361fe8e35a357ae6a19acf74b28ae08c8a445129eeb3"
+    },
+    {
+      "source": "target/hotspot-verification-proof/root-reviewed-01/logs/probe-foreign-loader.stderr",
+      "retained": "machine/architecture-hardening/h23-hotspot-verification-evidence/root-reviewed-01/logs/probe-foreign-loader.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/hotspot-verification-proof/root-reviewed-01/logs/probe-foreign-loader.stdout",
+      "retained": "machine/architecture-hardening/h23-hotspot-verification-evidence/root-reviewed-01/logs/probe-foreign-loader.stdout",
+      "sha256": "be6f7a1b436eec1d114fe4f81dca9f3bd39d588132e3ab2c276d6a2181f03580"
+    },
+    {
+      "source": "target/hotspot-verification-proof/root-reviewed-01/logs/probe-null-missing-type.process.json",
+      "retained": "machine/architecture-hardening/h23-hotspot-verification-evidence/root-reviewed-01/logs/probe-null-missing-type.process.json",
+      "sha256": "03c1c878b1c6b102cfc1c7e2c85a81988430c76303b1e0d9e99ccde9cbc745eb"
+    },
+    {
+      "source": "target/hotspot-verification-proof/root-reviewed-01/logs/probe-null-missing-type.stderr",
+      "retained": "machine/architecture-hardening/h23-hotspot-verification-evidence/root-reviewed-01/logs/probe-null-missing-type.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/hotspot-verification-proof/root-reviewed-01/logs/probe-null-missing-type.stdout",
+      "retained": "machine/architecture-hardening/h23-hotspot-verification-evidence/root-reviewed-01/logs/probe-null-missing-type.stdout",
+      "sha256": "ae44a1a5d001d0cb946cabf66b5040917d3c758d500db757e9fa649497284f13"
+    },
+    {
+      "source": "target/hotspot-verification-proof/root-reviewed-01/logs/probe-null-object.process.json",
+      "retained": "machine/architecture-hardening/h23-hotspot-verification-evidence/root-reviewed-01/logs/probe-null-object.process.json",
+      "sha256": "79586844fecc2a245480c95f3ea6ea1524f7ad3605d627f62513474d0f1086d3"
+    },
+    {
+      "source": "target/hotspot-verification-proof/root-reviewed-01/logs/probe-null-object.stderr",
+      "retained": "machine/architecture-hardening/h23-hotspot-verification-evidence/root-reviewed-01/logs/probe-null-object.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/hotspot-verification-proof/root-reviewed-01/logs/probe-null-object.stdout",
+      "retained": "machine/architecture-hardening/h23-hotspot-verification-evidence/root-reviewed-01/logs/probe-null-object.stdout",
+      "sha256": "5f154c137ef40c07ed4f3f49c4ea4e129d22a130bd9758a024602d4ad853d34c"
+    },
+    {
+      "source": "target/hotspot-verification-proof/root-reviewed-01/logs/probe-valid-max.process.json",
+      "retained": "machine/architecture-hardening/h23-hotspot-verification-evidence/root-reviewed-01/logs/probe-valid-max.process.json",
+      "sha256": "cb942bdb771f1488af8c35b176c095b32fdeb4bc8a03673a76b6a9e6b656ec66"
+    },
+    {
+      "source": "target/hotspot-verification-proof/root-reviewed-01/logs/probe-valid-max.stderr",
+      "retained": "machine/architecture-hardening/h23-hotspot-verification-evidence/root-reviewed-01/logs/probe-valid-max.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/hotspot-verification-proof/root-reviewed-01/logs/probe-valid-max.stdout",
+      "retained": "machine/architecture-hardening/h23-hotspot-verification-evidence/root-reviewed-01/logs/probe-valid-max.stdout",
+      "sha256": "532c8836cc4da7cef7d58bc834d495bd0d6c826af9de47555346c3fe170986e1"
+    },
+    {
+      "source": "target/hotspot-verification-proof/root-reviewed-01/logs/probe-valid-object.process.json",
+      "retained": "machine/architecture-hardening/h23-hotspot-verification-evidence/root-reviewed-01/logs/probe-valid-object.process.json",
+      "sha256": "fa67bb7a0ca0e4c837183ebdbfc3d9adc99c8aeaa8bf0e322a1d17a99723a5e8"
+    },
+    {
+      "source": "target/hotspot-verification-proof/root-reviewed-01/logs/probe-valid-object.stderr",
+      "retained": "machine/architecture-hardening/h23-hotspot-verification-evidence/root-reviewed-01/logs/probe-valid-object.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/hotspot-verification-proof/root-reviewed-01/logs/probe-valid-object.stdout",
+      "retained": "machine/architecture-hardening/h23-hotspot-verification-evidence/root-reviewed-01/logs/probe-valid-object.stdout",
+      "sha256": "4e655995b1918713e134e5812d043b2d5e841284afeefa3085a9cb1ff6f95631"
+    },
+    {
+      "source": "target/hotspot-verification-proof/root-reviewed-01/logs/probe-valid-refined.process.json",
+      "retained": "machine/architecture-hardening/h23-hotspot-verification-evidence/root-reviewed-01/logs/probe-valid-refined.process.json",
+      "sha256": "229dc23b7eec15f6f362fb2021f8e83385d6b1e1a4e99bfbb3cb92a28331d65e"
+    },
+    {
+      "source": "target/hotspot-verification-proof/root-reviewed-01/logs/probe-valid-refined.stderr",
+      "retained": "machine/architecture-hardening/h23-hotspot-verification-evidence/root-reviewed-01/logs/probe-valid-refined.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/hotspot-verification-proof/root-reviewed-01/logs/probe-valid-refined.stdout",
+      "retained": "machine/architecture-hardening/h23-hotspot-verification-evidence/root-reviewed-01/logs/probe-valid-refined.stdout",
+      "sha256": "b34f0b6e66d7bcaf55d236fc08a64c442c39d38ff9ff3c8b5549a9afde516fd1"
+    },
+    {
+      "source": "target/hotspot-verification-proof/root-reviewed-01/logs/probe-valid-top.process.json",
+      "retained": "machine/architecture-hardening/h23-hotspot-verification-evidence/root-reviewed-01/logs/probe-valid-top.process.json",
+      "sha256": "b4b5cd7f5f8f460118010d5d710cc4f7ac7fce808708ac61bff889fe547b50ec"
+    },
+    {
+      "source": "target/hotspot-verification-proof/root-reviewed-01/logs/probe-valid-top.stderr",
+      "retained": "machine/architecture-hardening/h23-hotspot-verification-evidence/root-reviewed-01/logs/probe-valid-top.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/hotspot-verification-proof/root-reviewed-01/logs/probe-valid-top.stdout",
+      "retained": "machine/architecture-hardening/h23-hotspot-verification-evidence/root-reviewed-01/logs/probe-valid-top.stdout",
+      "sha256": "031d937e2b00bfc44415da800caf010399a7d3200523d930139c3d990d8ee72f"
+    },
+    {
+      "source": "target/hotspot-verification-proof/root-reviewed-01/parser/batch-0000-dump.process.json",
+      "retained": "machine/architecture-hardening/h23-hotspot-verification-evidence/root-reviewed-01/parser/batch-0000-dump.process.json",
+      "sha256": "9f6f134d587082d28d022993038f4891577d938335666e1457eb46454b3ed6b1"
+    },
+    {
+      "source": "target/hotspot-verification-proof/root-reviewed-01/parser/batch-0000-dump.stderr",
+      "retained": "machine/architecture-hardening/h23-hotspot-verification-evidence/root-reviewed-01/parser/batch-0000-dump.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/hotspot-verification-proof/root-reviewed-01/parser/batch-0000-dump.stdout",
+      "retained": "machine/architecture-hardening/h23-hotspot-verification-evidence/root-reviewed-01/parser/batch-0000-dump.stdout",
+      "sha256": "9714b21aae58e60ebef692b17626526d3820c1e31a047ff36276ff5c2fd97351"
+    },
+    {
+      "source": "target/hotspot-verification-proof/root-reviewed-01/parser/batch-0000-identity.process.json",
+      "retained": "machine/architecture-hardening/h23-hotspot-verification-evidence/root-reviewed-01/parser/batch-0000-identity.process.json",
+      "sha256": "6cf092ba1e9b011ed6e98609c6ce92c0d0c699a4b8e5c6d287452312c58ae52a"
+    },
+    {
+      "source": "target/hotspot-verification-proof/root-reviewed-01/parser/batch-0000-identity.stderr",
+      "retained": "machine/architecture-hardening/h23-hotspot-verification-evidence/root-reviewed-01/parser/batch-0000-identity.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/hotspot-verification-proof/root-reviewed-01/parser/batch-0000-identity.stdout",
+      "retained": "machine/architecture-hardening/h23-hotspot-verification-evidence/root-reviewed-01/parser/batch-0000-identity.stdout",
+      "sha256": "b2a416405a46264f55eb5f0cdda042ff4c08aacd052c453e9a3a290dadb08681"
+    },
+    {
+      "source": "target/hotspot-verification-proof/root-reviewed-01/parser/batch-0000-rust.process.json",
+      "retained": "machine/architecture-hardening/h23-hotspot-verification-evidence/root-reviewed-01/parser/batch-0000-rust.process.json",
+      "sha256": "84449f4131156845326bb653405183b61b44ed43f83996c1695f18f7ebd08984"
+    },
+    {
+      "source": "target/hotspot-verification-proof/root-reviewed-01/parser/batch-0000-rust.stderr",
+      "retained": "machine/architecture-hardening/h23-hotspot-verification-evidence/root-reviewed-01/parser/batch-0000-rust.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/hotspot-verification-proof/root-reviewed-01/parser/batch-0000-rust.stdout",
+      "retained": "machine/architecture-hardening/h23-hotspot-verification-evidence/root-reviewed-01/parser/batch-0000-rust.stdout",
+      "sha256": "eaec3b3f0af86578a34ccc535ae42b6fd4e6543c70b9d288721061cbd5ed5dfa"
+    },
+    {
+      "source": "target/hotspot-verification-proof/root-reviewed-01/parser/classes.json",
+      "retained": "machine/architecture-hardening/h23-hotspot-verification-evidence/root-reviewed-01/parser/classes.json",
+      "sha256": "3dc6868c63419c27738d845eb99df0346a2a353cd9967767aa4039d19b2541ae"
+    },
+    {
+      "source": "target/hotspot-verification-proof/root-reviewed-01/proof-rows.json",
+      "retained": "machine/architecture-hardening/h23-hotspot-verification-evidence/root-reviewed-01/proof-rows.json",
+      "sha256": "55e95e21e42c15e20b61929f69ad1f55937b13d78755d750a1ad5551906a60f4"
+    },
+    {
+      "source": "target/hotspot-verification-proof/root-reviewed-01/unresolved-frame-type-counterexample.json",
+      "retained": "machine/architecture-hardening/h23-hotspot-verification-evidence/root-reviewed-01/unresolved-frame-type-counterexample.json",
+      "sha256": "f3f4a4d73e78a21d626dff0ad66f061b17f917f2c24d046092c1d18e567f80be"
+    }
+  ],
+  "limits": [
+    "Pinned vendor HotSpot fixture proof only; no actual Forge verification or native authority.",
+    "Local vendor release SOURCE has plus suffix; source lead is not reproducible source-to-binary proof.",
+    "Verifier success does not resolve all frame reference types; explicit complete hierarchy and Class/loader binding still required.",
+    "Three finite fixture relations are demonstrations, not general frame qualification.",
+    "Runtime/game bytecode observers and loader effects need separately accepted scope policies.",
+    "All consulted primary-source files remain hash-bound target-only; immutable upstream URLs and licenses are recorded in provenance."
+  ]
+}

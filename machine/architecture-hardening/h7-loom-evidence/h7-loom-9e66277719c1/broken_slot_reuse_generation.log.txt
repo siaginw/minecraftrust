@@ -1,0 +1,17 @@
+
+running 1 test
+test broken_slot_reuse_generation ... 
+thread 'broken_slot_reuse_generation' (28352) panicked at tests\lifecycle.rs:307:13:
+assertion `left == right` failed: STALE_HANDLE_ALIASED_NEW_SLOT
+  left: 23
+ right: 17
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+FAILED
+
+failures:
+
+failures:
+    broken_slot_reuse_generation
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 24 filtered out; finished in 0.00s
+

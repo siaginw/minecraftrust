@@ -1,0 +1,48 @@
+# M-CK4.2 — COMPLETE FRAME-LENGTH BOUNDARY MATRIX + RETRY CEILING
+schema_version: 1
+date: "2026-09-22"
+binary:
+  dll_sha256: c10ddca1ce3c82255e78154fde657408e82fa354707bc5174deb5b0a6cb62d2c
+  dll_abs_path: D:\minecraftrust\target\release\rustcraft_ffi.dll
+  note: "Rust frame engine unchanged (frame.rs at d01e40e tree); all fixtures re-run against the SAME DLL as M-CK4.1"
+limit_domains_kept_distinct:
+  encoder_wire_limit: "3-byte outer VarInt (0x1FFFFF payload bound) — THIS file"
+  resource_policy: "16 MiB retry-allocation ceiling (OutboundFrameCtx.policyLimit) — MCK4Validation.retryInjectionGate"
+  receiver_limits: "NOT_RUN — decoder-side maxima are a separate domain; not silently assumed equivalent"
+matrix_11_11:
+  A_disabled: >
+    len=MAX-1 (2,097,150) and len=MAX (2,097,151): BOTH accept, Java/Rust bytes
+    EXACTLY equal (deterministic framing), both decode. len=MAX+1 (2,097,152):
+    BOTH reject — installed prepender IllegalArgumentException('unable to fit
+    2097152 into 3'), Rust null with LAST_ERR==ERR_TOO_LARGE(-3).
+  B_enabled_passthrough: >
+    threshold=Integer.MAX_VALUE (every body below threshold -> VarInt(0) passthrough;
+    inner = 1 dataLen byte + bodyLen). bodyLen=MAX-2 (inner MAX-1) and bodyLen=MAX-1
+    (inner MAX): BOTH accept, bytes EXACTLY equal, both decode. bodyLen=MAX
+    (inner MAX+1): BOTH reject with the SIZE contract.
+  C1_compressible_fits: >
+    ~2.39 MiB zeros @256: BOTH accept; both decode to original; framed 2352 B
+    (rustOuter=2350 <= MAX).
+  C2_incompressible_actual_overflow: >
+    PREVIOUSLY NOT_RUN — now executed. Deterministic PRNG(1234) fixture, 2,162,687 B
+    (~2.16 MiB) @256: actual zlib output 2,163,357 B -> framed exceeds MAX. BOTH
+    reject: Java 'unable to fit 2163357 into 3' (the exact installed message),
+    Rust null with LAST_ERR==ERR_TOO_LARGE. Post-rejection recovery BOTH sides:
+    the SAME Rust context encodes a small valid frame; the SAME installed-Java
+    channel (handlers kept installed on the EmbeddedChannel) also still encodes a
+    small valid frame after the failed write.
+  retry_ceiling_second_failure: >
+    N-shot capacity injection (testForceCapacityTimes=2, testForceCapacityValue=64,
+    package-private, property-immune, real JNI path): BOTH the first call AND the
+    retry report real ERR_CAPACITY -> the one-retry ceiling TERMINATES the call
+    null (frameOps delta == 2 real native calls, RETRY_EVENTS delta == 1, native
+    bound 5015 read via the per-context buffer), and the context remains usable
+    afterwards. This exercises the ceiling by a SECOND real failure, not by
+  inspecting the counter.
+assertion_contract: >
+  Accepts: independently decode to the original bytes; disabled/passthrough
+  framings additionally require Java==Rust byte equality. Rejects: must be the
+  expected size/contract failure (Java message 'unable to fit', Rust ERR_TOO_LARGE)
+  — never an arbitrary exception.
+regressions: "MCK42FrameBoundaryGates 11/11; MCK4Validation 20/20 (first-failure retry + output-A retention gates retained green)"
+classification: FRAME_BOUNDARY_MATRIX_COMPLETE

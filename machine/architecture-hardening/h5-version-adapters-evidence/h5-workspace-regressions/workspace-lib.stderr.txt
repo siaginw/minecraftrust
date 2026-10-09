@@ -1,0 +1,189 @@
+   Compiling core-types v0.1.0 (D:\minecraftrust-astra-hardening\crates\core-types)
+   Compiling getrandom v0.3.4
+   Compiling cfg-if v1.0.5
+   Compiling zerocopy v0.8.58
+   Compiling autocfg v1.5.1
+   Compiling zlib-rs v0.6.8
+   Compiling metrics v0.1.0 (D:\minecraftrust-astra-hardening\crates\metrics)
+   Compiling bitflags v2.13.2
+   Compiling regex-syntax v0.8.11
+   Compiling unarray v0.1.4
+   Compiling spatial-index v0.1.0 (D:\minecraftrust-astra-hardening\crates\spatial-index)
+   Compiling worldgen-noise v0.1.0 (D:\minecraftrust-astra-hardening\crates\worldgen-noise)
+   Compiling rustcraft-core v0.1.0 (D:\minecraftrust-astra-hardening\crates\rustcraft-core)
+   Compiling buffers v0.1.0 (D:\minecraftrust-astra-hardening\crates\buffers)
+   Compiling nbt v0.1.0 (D:\minecraftrust-astra-hardening\crates\nbt)
+warning: value assigned to `l0` is never read
+   --> crates\worldgen-noise\src\lib.rs:236:14
+    |
+236 |         let (mut l0, mut l1, mut l2, mut l3): (i32, i32, i32, i32) = (0, 0, 0, 0);
+    |              ^^^^^^ this value is reassigned later and never used
+...
+261 |                         l0 = self.perm[b0b as usize] + cz;
+    |                         --------------------------------- `l0` is overwritten here before the previous value is read
+    |
+    = note: `#[warn(unused_assignments)]` (part of `#[warn(unused)]`) on by default
+
+warning: value assigned to `l1` is never read
+   --> crates\worldgen-noise\src\lib.rs:236:22
+    |
+236 |         let (mut l0, mut l1, mut l2, mut l3): (i32, i32, i32, i32) = (0, 0, 0, 0);
+    |                      ^^^^^^ this value is reassigned later and never used
+...
+262 |                         l1 = self.perm[(b0b + 1) as usize] + cz;
+    |                         --------------------------------------- `l1` is overwritten here before the previous value is read
+
+warning: value assigned to `l2` is never read
+   --> crates\worldgen-noise\src\lib.rs:236:30
+    |
+236 |         let (mut l0, mut l1, mut l2, mut l3): (i32, i32, i32, i32) = (0, 0, 0, 0);
+    |                              ^^^^^^ this value is reassigned later and never used
+...
+264 |                         l2 = self.perm[b1b as usize] + cz;
+    |                         --------------------------------- `l2` is overwritten here before the previous value is read
+
+warning: value assigned to `l3` is never read
+   --> crates\worldgen-noise\src\lib.rs:236:38
+    |
+236 |         let (mut l0, mut l1, mut l2, mut l3): (i32, i32, i32, i32) = (0, 0, 0, 0);
+    |                                      ^^^^^^ this value is reassigned later and never used
+...
+265 |                         l3 = self.perm[(b1b + 1) as usize] + cz;
+    |                         --------------------------------------- `l3` is overwritten here before the previous value is read
+
+warning: unused variable: `len`
+   --> crates\worldgen-noise\src\field.rs:177:13
+    |
+177 |         let len = (x_size * y_size * z_size) as usize;
+    |             ^^^ help: if this is intentional, prefix it with an underscore: `_len`
+    |
+    = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: value assigned to `l0` is never read
+   --> crates\worldgen-noise\src\field_complete.rs:113:10
+    |
+113 |     let (mut l0, mut l1, mut l2, mut l3) = (0i32, 0i32, 0i32, 0i32);
+    |          ^^^^^^ this value is reassigned later and never used
+...
+135 |                     l0 = perm[b0 as usize] as i32 + cz;
+    |                     ---------------------------------- `l0` is overwritten here before the previous value is read
+
+warning: value assigned to `l1` is never read
+   --> crates\worldgen-noise\src\field_complete.rs:113:18
+    |
+113 |     let (mut l0, mut l1, mut l2, mut l3) = (0i32, 0i32, 0i32, 0i32);
+    |                  ^^^^^^ this value is reassigned later and never used
+...
+136 |                     l1 = perm[(b0 + 1) as usize] as i32 + cz;
+    |                     ---------------------------------------- `l1` is overwritten here before the previous value is read
+
+warning: value assigned to `l2` is never read
+   --> crates\worldgen-noise\src\field_complete.rs:113:26
+    |
+113 |     let (mut l0, mut l1, mut l2, mut l3) = (0i32, 0i32, 0i32, 0i32);
+    |                          ^^^^^^ this value is reassigned later and never used
+...
+138 |                     l2 = perm[b1 as usize] as i32 + cz;
+    |                     ---------------------------------- `l2` is overwritten here before the previous value is read
+
+warning: value assigned to `l3` is never read
+   --> crates\worldgen-noise\src\field_complete.rs:113:34
+    |
+113 |     let (mut l0, mut l1, mut l2, mut l3) = (0i32, 0i32, 0i32, 0i32);
+    |                                  ^^^^^^ this value is reassigned later and never used
+...
+139 |                     l3 = perm[(b1 + 1) as usize] as i32 + cz;
+    |                     ---------------------------------------- `l3` is overwritten here before the previous value is read
+
+warning: variable does not need to be mutable
+   --> crates\worldgen-noise\src\field_complete.rs:472:13
+    |
+472 |         let mut take = |n_oct: usize, perms: &[u8], offsets: &[f64],
+    |             ----^^^^
+    |             |
+    |             help: remove this `mut`
+    |
+    = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+   Compiling spawn-index v0.1.0 (D:\minecraftrust-astra-hardening\crates\spawn-index)
+warning: constant `REGION_SIZE` is never used
+  --> crates\spawn-index\src\lib.rs:33:7
+   |
+33 | const REGION_SIZE: i32 = 1 << REGION_SHIFT;
+   |       ^^^^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+   Compiling contracts v0.1.0 (D:\minecraftrust-astra-hardening\crates\contracts)
+   Compiling protocol v0.1.0 (D:\minecraftrust-astra-hardening\crates\protocol)
+   Compiling num-traits v0.2.19
+   Compiling chunk-packet v0.1.0 (D:\minecraftrust-astra-hardening\crates\chunk-packet)
+   Compiling native-chunk v0.1.0 (D:\minecraftrust-astra-hardening\crates\native-chunk)
+   Compiling rand_core v0.9.5
+   Compiling rand_xorshift v0.4.0
+warning: `spawn-index` (lib) generated 1 warning
+   Compiling rand v0.9.5
+   Compiling transport v0.1.0 (D:\minecraftrust-astra-hardening\crates\transport)
+warning: `worldgen-noise` (lib) generated 10 warnings (run `cargo fix --lib -p worldgen-noise` to apply 2 suggestions)
+   Compiling mc-1-12-x v0.1.0 (D:\minecraftrust-astra-hardening\versions\mc_1_12_x)
+warning: unused variable: `chunk_i`
+   --> crates\worldgen-noise\src\terrain.rs:384:13
+    |
+384 |         for chunk_i in 0..50 {
+    |             ^^^^^^^ help: if this is intentional, prefix it with an underscore: `_chunk_i`
+
+   Compiling region-io v0.1.0 (D:\minecraftrust-astra-hardening\crates\region-io)
+   Compiling test-support v0.1.0 (D:\minecraftrust-astra-hardening\crates\test-support)
+warning: `spawn-index` (lib test) generated 1 warning (1 duplicate)
+warning: `worldgen-noise` (lib test) generated 11 warnings (10 duplicates) (run `cargo fix --lib -p worldgen-noise --tests` to apply 1 suggestion)
+   Compiling flate2 v1.1.10
+   Compiling compression v0.1.0 (D:\minecraftrust-astra-hardening\crates\compression)
+warning: unused variable: `have`
+   --> crates\compression\src\frame.rs:205:68
+    |
+205 |                     crate::CompressError::OutputTooSmall { needed, have } =>
+    |                                                                    ^^^^ help: try ignoring the field: `have: _`
+    |
+    = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: `compression` (lib) generated 1 warning (run `cargo fix --lib -p compression` to apply 1 suggestion)
+warning: unused variable: `inner`
+   --> crates\compression\src\frame.rs:291:14
+    |
+291 |         let (inner, u1) = varint_parse(&out);
+    |              ^^^^^ help: if this is intentional, prefix it with an underscore: `_inner`
+
+warning: `compression` (lib test) generated 2 warnings (1 duplicate) (run `cargo fix --lib -p compression --tests` to apply 1 suggestion)
+   Compiling ppv-lite86 v0.2.21
+   Compiling rand_chacha v0.9.0
+   Compiling proptest v1.11.0
+   Compiling ffi v0.1.0 (D:\minecraftrust-astra-hardening\crates\ffi)
+warning: function `AssertUnwindSafeClosure` should have a snake case name
+   --> crates\ffi\src\lib.rs:308:4
+    |
+308 | fn AssertUnwindSafeClosure<F: FnOnce() -> i32>(f: F) -> impl FnOnce() -> i32 {
+    |    ^^^^^^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `assert_unwind_safe_closure`
+    |
+    = note: `#[warn(non_snake_case)]` (part of `#[warn(nonstandard_style)]`) on by default
+
+warning: `ffi` (lib test) generated 1 warning
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 8.25s
+     Running unittests src\lib.rs (target\architecture-hardening\h5-workspace-regressions\build\debug\deps\buffers-e0d68116c430a43b.exe)
+     Running unittests src\lib.rs (target\architecture-hardening\h5-workspace-regressions\build\debug\deps\chunk_packet-0414daa6383169b5.exe)
+     Running unittests src\lib.rs (target\architecture-hardening\h5-workspace-regressions\build\debug\deps\compression-d4adc7de1db19492.exe)
+     Running unittests src\lib.rs (target\architecture-hardening\h5-workspace-regressions\build\debug\deps\contracts-f640806977e56e21.exe)
+     Running unittests src\lib.rs (target\architecture-hardening\h5-workspace-regressions\build\debug\deps\core_types-605f811419870326.exe)
+     Running unittests src\lib.rs (target\architecture-hardening\h5-workspace-regressions\build\debug\deps\rustcraft_ffi-00ec4f6de8820462.exe)
+     Running unittests src\lib.rs (target\architecture-hardening\h5-workspace-regressions\build\debug\deps\mc_1_12_x-8d150e507072beff.exe)
+     Running unittests src\lib.rs (target\architecture-hardening\h5-workspace-regressions\build\debug\deps\metrics-97799a02af332d30.exe)
+     Running unittests src\lib.rs (target\architecture-hardening\h5-workspace-regressions\build\debug\deps\native_capability-d05994099926fa06.exe)
+     Running unittests src\lib.rs (target\architecture-hardening\h5-workspace-regressions\build\debug\deps\native_chunk-26d3e8c223c4665b.exe)
+     Running unittests src\lib.rs (target\architecture-hardening\h5-workspace-regressions\build\debug\deps\nbt-c4d31d5d788e019b.exe)
+     Running unittests src\lib.rs (target\architecture-hardening\h5-workspace-regressions\build\debug\deps\protocol-4df342ed516ef003.exe)
+     Running unittests src\lib.rs (target\architecture-hardening\h5-workspace-regressions\build\debug\deps\region_io-fd0d405b92218028.exe)
+     Running unittests src\lib.rs (target\architecture-hardening\h5-workspace-regressions\build\debug\deps\rustcraft_core-f3f868457354a89d.exe)
+     Running unittests src\lib.rs (target\architecture-hardening\h5-workspace-regressions\build\debug\deps\spatial_index-c571f226cca3a35d.exe)
+     Running unittests src\lib.rs (target\architecture-hardening\h5-workspace-regressions\build\debug\deps\spawn_index-15a6db3e60a7bec2.exe)
+     Running unittests src\lib.rs (target\architecture-hardening\h5-workspace-regressions\build\debug\deps\test_support-e8b8a542164afbc9.exe)
+     Running unittests src\lib.rs (target\architecture-hardening\h5-workspace-regressions\build\debug\deps\transport-468ffa0cdc1a9108.exe)
+     Running unittests src\lib.rs (target\architecture-hardening\h5-workspace-regressions\build\debug\deps\worldgen_noise-963864263dae9bf1.exe)

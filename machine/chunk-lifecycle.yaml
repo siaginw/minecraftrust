@@ -1,0 +1,180 @@
+version: "1.0"
+target: "Minecraft 1.12.2 / Forge 14.23.5.2860"
+subsystem: "chunk_lifecycle"
+authoritative_owner: "ChunkProviderServer (Server thread)"
+status: "MAPPED"
+
+states:
+  UNLOADED:
+    description: "Chunk exists only as compressed NBT on disk or has never been generated. Not present in id2ChunkMap."
+    in_memory: false
+    can_tick: false
+    tracked_by_players: false
+
+  QUEUED_FOR_LOAD:
+    description: "Load request submitted to ChunkIOExecutor. QueuedChunk entry exists in request queue."
+    in_memory: false
+    can_tick: false
+    thread_context: "Server thread (enqueue) / ChunkIOThreadPoolExecutor (worker)"
+
+  LOADING_ASYNC:
+    description: "Worker thread in ChunkIOThreadPoolExecutor reading RegionFile, decompressing zlib, and parsing chunk NBT (blocks, sections, biomes, heightmaps, ForgeCaps)."
+    in_memory: true
+    can_tick: false
+    thread_context: "ChunkIO worker thread"
+    invariants:
+      - "No entity or tile entity construction off-thread."
+      - "No World state mutation or block access off-thread."
+      - "ChunkDataEvent.Load must NOT be fired during this state."
+
+  LOADED_PENDING_SYNC:
+    description: "Worker finished disk/NBT load. QueuedChunk placed into ChunkIOExecutor sync queue awaiting main thread drain."
+    in_memory: true
+    can_tick: false
+    thread_context: "ChunkIOExecutor sync queue"
+
+  GENERATING_TERRAIN:
+    description: "Chunk did not exist on disk. ChunkGeneratorOverworld (or mod IChunkGenerator) is computing noise, heightmaps, stone/water placement, and carvers (caves/ravines)."
+    in_memory: true
+    can_tick: false
+    thread_context: "Server thread"
+    invariants:
+      - "Cannot access or mutate neighbor chunks."
+      - "Only writes to local ChunkPrimer or new Chunk instance."
+
+  GENERATING_FEATURES:
+    description: "Chunk terrain generated or loaded, but terrainPopulated=false. Populating 2x2 chunk quadrant with ores, lakes, trees, structures, and mod generators."
+    in_memory: true
+    can_tick: false
+    thread_context: "Server thread"
+    neighbor_prerequisites:
+      - "(x+1, z), (x, z+1), (x+1, z+1) must be in id2ChunkMap."
+    events_fired:
+      - "PopulateChunkEvent.Pre"
+      - "PopulateChunkEvent.Post"
+      - "GameRegistry.generateWorld (all mod IWorldGenerator hooks)"
+    hazards:
+      - "Cascading worldgen: any block mutation outside the [x+8, z+8] quadrant forces recursive chunk generation."
+
+  ACTIVE_LOADED:
+    description: "Chunk is stored in ChunkProviderServer.id2ChunkMap (Long2ObjectMap). Entities, TileEntities, and TileTicks loaded into world."
+    in_memory: true
+    can_tick: false
+    thread_context: "Server thread"
+    events_fired:
+      - "ChunkDataEvent.Load"
+      - "ChunkEvent.Load"
+
+  ACTIVE_TICKED:
+    description: "Chunk is within player view distance (PlayerChunkMap) or holds an active ForgeChunkManager ticket or is in spawn chunk grid (25x25). Blocks, entities, tile entities, and scheduled ticks update each tick."
+    in_memory: true
+    can_tick: true
+    thread_context: "Server thread"
+    tick_operations:
+      - "WorldServer.updateBlocks (3 random ticks per 16x16x16 section per tick, thunder/ice/snow)"
+      - "World.updateEntities (iterates entityLists, runs entity.onUpdate())"
+      - "World.updateEntities (iterates chunkTileEntityMap, runs ITickable.update())"
+      - "WorldServer.tickUpdates (drains NextTickListEntry scheduled block ticks)"
+
+  QUEUED_FOR_UNLOAD:
+    description: "Chunk has no player watchers, no Forge tickets, and is not a spawn chunk. Key placed into ChunkProviderServer.droppedChunksSet."
+    in_memory: true
+    can_tick: false
+    thread_context: "Server thread"
+    max_drain_per_tick: 100
+
+  SAVING_PENDING:
+    description: "Chunk modified or save requested. Synchronously converted to NBT in AnvilChunkLoader.saveChunk() and placed into chunksToSave map."
+    in_memory: true
+    can_tick: false
+    thread_context: "Server thread (NBT generation) -> ThreadedFileIOBase queue"
+    events_fired:
+      - "ChunkDataEvent.Save"
+
+  WRITING_ASYNC:
+    description: "ThreadedFileIOBase (File IO Thread, priority 1) compressing NBT via zlib and writing sectors to RegionFile."
+    in_memory: true
+    can_tick: false
+    thread_context: "File IO Thread"
+
+  UNLOADED_DORMANT:
+    description: "Chunk removed from id2ChunkMap, but retained in ForgeChunkManager.dormantChunkCache (Guava Cache). Block storage retained in memory; entities/tile entities cleared. Fast resurrection on re-entry."
+    in_memory: true
+    can_tick: false
+    thread_context: "Guava Cache (Server thread access)"
+
+transitions:
+  - from: "UNLOADED"
+    to: "QUEUED_FOR_LOAD"
+    trigger: "Player moves near chunk, or Forge ticket requested, or provideChunk() called."
+    condition: "asyncChunkLoading enabled and chunk exists in region file."
+
+  - from: "QUEUED_FOR_LOAD"
+    to: "LOADING_ASYNC"
+    trigger: "Worker thread picks up QueuedChunk."
+
+  - from: "LOADING_ASYNC"
+    to: "LOADED_PENDING_SYNC"
+    trigger: "Worker completes NBT parse and Chunk allocation."
+
+  - from: "LOADED_PENDING_SYNC"
+    to: "ACTIVE_LOADED"
+    trigger: "Server thread drains ChunkIOExecutor.tick() -> syncCallback()."
+    actions:
+      - "loadEntities()"
+      - "ChunkDataEvent.Load"
+      - "id2ChunkMap.put()"
+      - "Chunk.onLoad()"
+      - "ChunkEvent.Load"
+
+  - from: "UNLOADED"
+    to: "GENERATING_TERRAIN"
+    trigger: "provideChunk() called and chunk not on disk."
+    thread: "Server thread"
+
+  - from: "GENERATING_TERRAIN"
+    to: "GENERATING_FEATURES"
+    trigger: "Terrain noise & primer complete. Chunk.populate() invoked."
+    condition: "All 3 quadrant neighbors (+1,0; 0,+1; +1,+1) loaded."
+
+  - from: "GENERATING_FEATURES"
+    to: "ACTIVE_LOADED"
+    trigger: "Population complete. terrainPopulated set to true."
+
+  - from: "ACTIVE_LOADED"
+    to: "ACTIVE_TICKED"
+    trigger: "Player moves within view distance or Forge ticket assigned."
+
+  - from: "ACTIVE_TICKED"
+    to: "ACTIVE_LOADED"
+    trigger: "All players leave chunk boundary, Forge ticket removed, not spawn chunk."
+
+  - from: "ACTIVE_LOADED"
+    to: "QUEUED_FOR_UNLOAD"
+    trigger: "PlayerChunkMap unbinds watcher or save chunks passes over unreferenced chunk."
+    action: "droppedChunksSet.add(pos.asLong())"
+
+  - from: "QUEUED_FOR_UNLOAD"
+    to: "ACTIVE_LOADED"
+    trigger: "Chunk requested again before unload loop executes."
+    action: "droppedChunksSet.remove(pos.asLong())"
+
+  - from: "QUEUED_FOR_UNLOAD"
+    to: "SAVING_PENDING"
+    trigger: "ChunkProviderServer.tick() unloads up to 100 chunks. If chunk modified, saves to AnvilChunkLoader."
+
+  - from: "SAVING_PENDING"
+    to: "WRITING_ASYNC"
+    trigger: "ThreadedFileIOBase picks up ChunkPos from chunksToSave."
+
+  - from: "WRITING_ASYNC"
+    to: "UNLOADED_DORMANT"
+    trigger: "File IO thread writes sectors and updates RegionFile header. Chunk placed in Forge dormantChunkCache."
+
+  - from: "UNLOADED_DORMANT"
+    to: "ACTIVE_LOADED"
+    trigger: "Chunk requested while still in dormant cache. Re-loads entities from entry.nbt, skipping disk I/O."
+
+  - from: "UNLOADED_DORMANT"
+    to: "UNLOADED"
+    trigger: "Dormant cache eviction (size or time expiry)."

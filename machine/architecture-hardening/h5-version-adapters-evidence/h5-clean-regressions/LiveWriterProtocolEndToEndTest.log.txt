@@ -1,0 +1,15 @@
+e2e: adopted incarnation published READY with exact identity -> PASS
+e2e: private build data transferred to the published graph -> PASS (backing[0]=42)
+e2e: capture admitted and sealed -> PASS (SEALED_COMMITTED)
+e2e: event identity minted once per attempt, entry epoch recorded -> PASS (event=1)
+e2e: one seen/admitted/sealed movement -> PASS
+e2e: reentrant owner mutation invalidated the attempt before the mutation -> PASS (INVALIDATED_BEFORE_MUTATION)
+e2e: next capture after the mutation window commits cleanly -> PASS (SEALED_COMMITTED)
+stale-job: queued job carries immutable ids and an unrevoked token -> PASS
+stale-job: retirement revokes the queued job's token (gate-free consumer view) -> PASS
+stale-job: replacement binding has a different incarnation/chunk identity -> PASS (inc 1->2)
+stale-job: the stale job can never authorize the replacement at the same coordinates -> PASS
+stale-job: only the fresh incarnation captures -> PASS (SEALED_COMMITTED)
+repeatability: three independent sessions produce identical canonical outcomes -> PASS (ACQUIRE=SUCCESS|ADMIT=PRIVATE_FRESH_DISK|PUBLISH=READY|CAPTURE=SEALED_COMMITTED|REENTRANT=INVALIDATED_BEFORE_MUTATION|WRITER_ACTIVE_FALLBACK=true|RETIRED=NO_BINDING|REPLACEMENT=READY vs ACQUIRE=SUCCESS|ADMIT=PRIVATE_FRESH_DISK|PUBLISH=READY|CAPTURE=SEALED_COMMITTED|REENTRANT=INVALIDATED_BEFORE_MUTATION|WRITER_ACTIVE_FALLBACK=true|RETIRED=NO_BINDING|REPLACEMENT=READY vs ACQUIRE=SUCCESS|ADMIT=PRIVATE_FRESH_DISK|PUBLISH=READY|CAPTURE=SEALED_COMMITTED|REENTRANT=INVALIDATED_BEFORE_MUTATION|WRITER_ACTIVE_FALLBACK=true|RETIRED=NO_BINDING|REPLACEMENT=READY)
+repeatability: canonical outcome contains every expected protocol marker -> PASS (ACQUIRE=SUCCESS|ADMIT=PRIVATE_FRESH_DISK|PUBLISH=READY|CAPTURE=SEALED_COMMITTED|REENTRANT=INVALIDATED_BEFORE_MUTATION|WRITER_ACTIVE_FALLBACK=true|RETIRED=NO_BINDING|REPLACEMENT=READY)
+RESULT: 14 pass, 0 fail

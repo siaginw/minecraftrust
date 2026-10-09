@@ -1,0 +1,42 @@
+
+running 28 tests
+test tests::clock_never_wraps_or_goes_backwards ... ok
+test tests::cloned_task_handle_controls_once_and_cannot_alias_later_work ... ok
+test tests::deadlines_apply_before_work_and_before_commit ... ok
+test tests::cancellation_tombstone_keeps_capacity_until_worker_quiescence ... ok
+test tests::foreign_completion_cannot_rebind_equal_sequence_numbers ... ok
+test tests::combined_invalid_admission_and_commit_precedence_is_explicit ... ok
+test tests::foreign_cancellation_is_rejected_before_local_lookup ... ok
+test tests::foreign_dispatch_is_rejected_before_local_lookup ... ok
+test tests::cell_version_exhaustion_is_atomic_and_never_wraps ... ok
+test tests::arithmetic_failure_cpu_failure_and_panic_are_atomic_then_retry ... ok
+test tests::dropped_ticket_and_dropped_completion_are_abandoned ... ok
+test tests::exhausted_generation_and_incarnation_fail_closed ... ok
+test tests::first_terminal_controller_event_is_sticky ... ok
+test tests::handle_retains_origin_after_scheduler_drop_and_recreation ... ok
+test tests::held_expired_head_remains_charged_and_dispatched ... ok
+test tests::intake_and_memory_limits_do_not_consume_sequence ... ok
+test tests::public_bounds_and_authority_are_fixed ... ok
+test tests::qualification_is_owner_scope_and_generation_bound ... ok
+test tests::malformed_outputs_are_rejected_without_partial_commit ... ok
+test tests::ready_later_work_cannot_bypass_head ... ok
+test tests::every_completion_permutation_matches_serial_oracle_at_every_boundary ... ok
+test tests::same_value_external_write_still_invalidates_snapshot ... ok
+test tests::scheduler_drop_requests_cooperative_cancellation ... ok
+test tests::stable_sequence_never_wraps_or_reuses ... ok
+test tests::stale_read_set_rejects_whole_multi_cell_commit ... ok
+test tests::unload_reload_fences_old_incarnation_without_dropping_leases ... ok
+test tests::wall_deadline_is_cooperative_and_deterministically_testable ... ok
+test tests::actual_scoped_workers_match_serial_oracle_at_every_commit ... ok
+
+test result: ok. 28 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+
+running 4 tests
+test src\lib.rs - TaskId (line 138) - compile fail ... ok
+test src\lib.rs - Completion (line 219) - compile fail ... ok
+test src\lib.rs - WorkerTicket (line 210) - compile fail ... ok
+test src\lib.rs - TaskId (line 134) - compile fail ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.06s
+

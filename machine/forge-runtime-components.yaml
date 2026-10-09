@@ -1,0 +1,76 @@
+version: 1
+target_forge_version: "14.23.5.2860"
+target_minecraft_version: "1.12.2"
+
+components:
+  launchwrapper:
+    owning_class: "net.minecraft.launchwrapper.Launch"
+    responsibility: "Classloading supervisor, bytecode transformation pipeline"
+    authoritative_owner: "JAVA_OWNED"
+    critical_invariants:
+      - "AppClassLoader isolates LaunchWrapper and ASM from game code"
+      - "LaunchClassLoader routes all game classes through IClassTransformer chain"
+
+  event_bus:
+    owning_class: "net.minecraftforge.fml.common.eventhandler.EventBus"
+    responsibility: "Publish-subscribe event dispatch across game and mod systems"
+    authoritative_owner: "JAVA_OWNED"
+    sub_buses:
+      - "MinecraftForge.EVENT_BUS"
+      - "MinecraftForge.TERRAIN_GEN_BUS"
+      - "MinecraftForge.ORE_GEN_BUS"
+      - "FMLCommonHandler.instance().bus()"
+    critical_invariants:
+      - "Priorities: HIGHEST(0), HIGH(1), NORMAL(2), LOW(3), LOWEST(4)"
+      - "ListenerList compiles flat IEventListener[] array on register/unregister"
+      - "Dispatch is unrolled array traversal (~1.4 to 1.9 ns/listener)"
+      - "Main game events must be posted exclusively from Server thread"
+
+  registries:
+    owning_class: "net.minecraftforge.registries.RegistryManager"
+    responsibility: "Dynamic namespaced object registries with numeric ID management"
+    authoritative_owner: "JAVA_OWNED"
+    primary_registries:
+      - "minecraft:blocks (0..4095)"
+      - "minecraft:items (0..31999)"
+      - "minecraft:potions"
+      - "minecraft:biomes"
+      - "minecraft:enchantments"
+      - "minecraft:sound_events"
+      - "minecraft:recipes"
+    critical_invariants:
+      - "Single registry per superclass type across JVM"
+      - "Freeze gate locks registry against runtime additions post-initialization"
+      - "World load reconciles numeric IDs dynamically via level.dat snapshot"
+
+  capabilities:
+    owning_class: "net.minecraftforge.common.capabilities.CapabilityManager"
+    responsibility: "Decoupled component interface attachment to carriers"
+    authoritative_owner: "JAVA_OWNED"
+    carrier_types:
+      - "TileEntity"
+      - "Entity"
+      - "ItemStack"
+      - "World"
+      - "Chunk"
+    critical_invariants:
+      - "Capability tokens assigned contiguous integer IDs"
+      - "Linear provider scan in CapabilityDispatcher (3..20 ns in-JVM)"
+      - "Sided queries accept nullable EnumFacing"
+
+  ore_dictionary:
+    owning_class: "net.minecraftforge.oredict.OreDictionary"
+    responsibility: "Item equivalence mapping for crafting and automation"
+    authoritative_owner: "JAVA_OWNED"
+    critical_invariants:
+      - "Bidirectional mapping: name <-> integer ID"
+      - "Wildcard metadata is Short.MAX_VALUE (32767)"
+      - "Constant-time O(1) hash map lookup (~14..20 ns)"
+
+  dimension_manager:
+    owning_class: "net.minecraftforge.common.DimensionManager"
+    responsibility: "Multi-world provider registration and dynamic dimension lifecycle"
+    authoritative_owner: "JAVA_OWNED"
+    critical_invariants:
+      - "Supports arbitrary signed 32-bit integer dimension IDs"
+      - "Overworld (0) never unloads; custom dimensions managed via unload queue"

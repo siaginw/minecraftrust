@@ -1,0 +1,30 @@
+# M4.3E — FINAL M1 READINESS REPORT
+schema_version: 1
+date: "2026-09-21"
+run: M43D-20260921-224956 (SHADOW, Java transmitted; unique dir; PID recorded)
+builds: {dll: bfcd9c0861843624, coremod: e2cd8b612ed59d35}
+A_design: >
+  Biome validity is its own domain: every candidate native full-chunk packet
+  (and every comparator comparison) compares the live Java biome array against
+  the native snapshot AT PACKET TIME (FFI 319 getBiomes, 256-byte compare);
+  stale => re-push (tryEncode + comparator both) and — on the comparator — if
+  the live array has moved past the just-built Java payload's biomes, the
+  comparison is skipped as a gen-thread race (never compared torn). Block/light
+  validity model untouched (version guard, dirty refresh, first-touch sync,
+  per-chunk serialization, stale-handle rejection, unload cleanup).
+B_offline: "16/16 authoritative (3 new biome-domain cases: equal / direct-write stale with versions unchanged / changes twice), 29/29 extractor, 7/7 deferred, 19/19 lifecycle, 8/8 parity, 16/16 boundary, 10/10 Rust"
+C_counts: "attempted 1,573 comparisons; 1,572 completed Gate-B; 1 stale/unready skip; 0 tautological Gate-A claimed"
+D_gate_a: "0 claimed (palette-order divergence documented; not evidence)"
+E_gate_b: "1,572 / 1,572 PASSED — independent decode equality of real Java payloads vs NativeChunk encodes"
+F_biome: "re-pushed 2 live; race-skipped 0; 0 biome mismatches"
+G_block_light: "guard re-arms + dirty refreshes event-driven (prior counters); 0 stale acceptances"
+H_exclusions: "partial-filter/TE/JEID/NEID-high-bit all Java-only and separately counted; retired sweep removed from claims (its 627 ctor NPEs = 100% of native_errors, all caught, zero corruption)"
+I_mismatches: "0 semantic mismatches; 0 unexplained events; 0 validator exceptions; client 30 teleports, 0 decode errors, clean session end"
+J_memory_before: "273 chunks / 19.8 MB retained"
+K_memory_after: "273 removed -> 0 chunks / 0 bytes (in-JVM, pre-exit)"
+L_classification: M1_NATIVE_PACKET_READY_TARGETA
+M_next: >
+  Combined M1 + M2-C native networking gate (operator decision): NativeChunk
+  packet encode + Rust compression on Target A, one bounded campaign; then
+  modpack campaign decisions. Native transmission remains OFF until that gate
+  is authorized; defaults unchanged.

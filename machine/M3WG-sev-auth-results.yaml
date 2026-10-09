@@ -1,0 +1,62 @@
+# M3 WORLDGEN AUTHORITATIVE — SevTech: Ages 3.2.3 (Target D) results (2026-09-21)
+# Twin-world pre-population terrain oracle + live authoritative profile.
+# World J (OFF_MEASURE, pure Java) / World R (ON_EXPERIMENTAL, Rust authoritative).
+# Same seed 123456789, same 140-hop/10k-span corpus, same Forge 14.23.5.2860 / JVM / config.
+mode_java: OFF_MEASURE
+mode_rust: ON_EXPERIMENTAL
+seed: 123456789
+dll_hash: 6db38f407a197cf25945fb9b7bdb8a5cbb9788b7abff3f4732a72feecf15f6b4
+pack: "SevTech: Ages 3.2.3"
+forge: 14.23.5.2860
+mod_count: 262
+
+prepop_oracle:
+  java_lines: 45021
+  rust_lines: 42784
+  in_both: 39765
+  only_java: 5256
+  only_rust: 3019
+  identical: 39765
+  mismatched: 0
+  identical_pct: 100.0
+  coord_diff_note: "Coordinate-only diffs (8275 total) from mod cascading worldgen (SevTech has many structure/worldgen mods) loading boundary chunks at different wall-clock times between the two async runs. Base terrain on every common chunk is 100% identical. NOT density-path parity failures."
+  verdict: "JAVA_PRE_POP == RUST_PRE_POP on all common chunks (39765/39765), zero hash mismatches"
+
+authoritative_safety:
+  calls: 51131
+  eligible: 51131
+  classified_vanilla: 51131
+  classified_custom: 0
+  native_auth: 51131
+  native_errors: 0
+  fallbacks: 0
+  fallback_custom: 0
+  fallback_dim: 0
+  fallback_array: 0
+  fallback_noctx: 0
+  fallback_biomes: 0
+  fallback_exception: 0
+  ctx_created: 2
+  ctx_freed: 2
+  generator: net.minecraft.world.gen.ChunkGeneratorOverworld
+  dimension: "0"
+
+live_profile_rust_stages_ns:  # p50 / p95 / p99
+  elig:   [8500,  28000,  55800]
+  biome:  [1200,  2900,   6700]
+  jni_kernel: [298900, 594500, 1016000]
+  commit: [300,   1200,   2600]
+mean_us:
+  elig: 12.110
+  biome: 1.585
+  jni_kernel: 374.066
+  commit: 0.495
+  full_hook_auth: 389.1
+java_reference_live:
+  calls: 54487
+  mean_us: 349.127
+  p50_ns: 314600
+  p95_ns: 493700
+  p99_ns: 540200
+
+verdict: "PASS — pre-pop exact parity on common corpus, authoritative safety clean (0 errors/0 fallbacks/balanced 2:2), Rust full hook 389.1us (kernel 374.1us) vs Java ref 349.1us. Kernel comparable; slightly higher integration in dense mod biome space. Pre-population base terrain parity confirmed."

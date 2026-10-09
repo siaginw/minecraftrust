@@ -1,0 +1,8 @@
+Exception in thread "main" java.lang.AssertionError: COMPRESSION_DIVERGENCE
+	at PacketPipelineOracle.decoded(PacketPipelineOracle.java:37)
+	at PacketPipelineOracle.main(PacketPipelineOracle.java:51)
+Caused by: java.util.zip.DataFormatException: incorrect data check
+	at java.util.zip.Inflater.inflateBytes(Native Method)
+	at java.util.zip.Inflater.inflate(Inflater.java:259)
+	at PacketPipelineOracle.decoded(PacketPipelineOracle.java:35)
+	... 1 more

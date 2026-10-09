@@ -1,0 +1,29 @@
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.01s
+     Running unittests src\lib.rs (target\debug\deps\protocol-4df342ed516ef003.exe)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests\oracle_tests.rs (target\debug\deps\oracle_tests-de296dca8350b684.exe)
+
+running 10 tests
+test test_big_endian_primitives ... ok
+test test_string_codec ... ok
+test test_uuid_codec ... ok
+test test_varint_too_big_rejected ... ok
+test test_string_limit_rejection ... ok
+test test_slot_codec ... ok
+test test_varint_golden_vectors ... ok
+test test_position_codec ... ok
+test test_varlong_too_big_rejected ... ok
+test test_varlong_golden_vectors ... ok
+
+test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests protocol
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+

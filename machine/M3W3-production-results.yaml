@@ -1,0 +1,60 @@
+# M3W3 production-shape worldgen prototype (operator authorization 2026-09-20).
+# Offline only: no server runs, no live integration, no defaults changed.
+# class: MEASURED. Provenance: M3W3-PRODUCTION-SHAPE.
+schema_version: 1
+date: "2026-09-20"
+builds:
+  dll: {sha256_prefix: 6d3649faafd33f08, note: "adds fieldCreate/fieldAssemble (complete assembly in one call) + singleCreate/singleGen3d (n=1 x-lane kernel) to the superset dll"}
+  crate_additions: "crates/worldgen-noise/src/field.rs — exact initNoiseField assembly port (biome 5x5 f32 weighting, clampedLerp, y>29 fade, all f32→f64 quirks incl. biomeWeights via (float)Math.sqrt((double)f)) + SingleFieldGen n=1 driver; simd.rs — populate_xlanes_avx4 (lanes = x positions of ONE field)"
+directive_1_complete_assembly: # the FULL engine boundary now in Rust
+  parity: {chunks: 60, corpus: "60 seeds x biome grids of REAL vanilla biome floats (plains/desert/ocean/extreme-hills/swamp mixes) x +/-100k coords, settings pulled from the REAL ChunkGeneratorSettings.Factory().build()", result: "COMPLETE-FIELD PARITY: BIT-EXACT (0 mismatches on the full 825-sample density field)"}
+  oracle: "REAL NoiseGeneratorOctaves x4 + exact transcription of the decompiled assembly (noise-src committed); settings via reflection from the live class — zero transcription risk on constants"
+  quirks_replicated: ["main-noise scale ratios computed in f32 then widened (a/h, b/i, a/j)", "the vanilla 2D-wrapper drop quirk means the DEPTH field's effective zScale is the EXPONENT param (f_) and the third param (g) is discarded — harness bug found and fixed against this; vanilla semantic, preserved", "biomeWeights via (float)Math.sqrt((double)f)", "clampedLerp branch order", "y>29 fade uses f32 division"]
+directive_2_single_chunk:
+  design: "x-lane kernel: lanes = the 5 x-positions of a single field (4-wide group + padded lane); dy/dz/cy are lane-UNIFORM (shared y/z iteration) so the y-skip cache decision is a scalar branch (cheaper than the batch kernel's per-lane blend); native output writes strided to the vanilla layout"
+  parity: {fields: 40, mismatches: 0, note: "bit-exact vs the REAL classes through singleGen3d"}
+  performance: {n1_3fields_ns: 438800, note: "the n=1 x-lane path now BEATS the rust parity port (439 vs 383us for fields-only is competitive but the tier includes assembly; see benchmark table) — the missing-target_feature bug was fixed (was 2.34ms)"}
+directive_3_headroom:
+  implemented: ["x-lane n=1 SIMD kernel", "complete assembly in ONE JNI call", "flattened perm→grad tables (carried from M3W2)", "runtime dispatch + scalar fallback", "persistent handles (generator state native)"]
+  not_implemented_documented: ["persistent slab across octave calls inside a field (per-octave vec remains — est. small; the slab is len*4 doubles per octave group)", "per-column gather hoisting beyond the y-skip", "AVX-512 variant (CPU=Zen4 7800X3D SUPPORTS AVX-512; UseAVX=2 in the JDK; not implemented this milestone — documented as remaining headroom, not required for M3 success)", "multi-field fusion in one crossing (3 crossings per chunk remain)"]
+  exhausted_assessment: "the remaining items are incremental (est. 10-30% combined); no known technique class remains unexplored after FastNoise2/rust-simd-noise research + this milestone"
+directive_5_6_request_granularity: # answered from committed evidence, no new runs
+  forge_path: "ChunkProviderServer.func_186025_e/loadChunk -> ChunkIOProvider.run executes generation on the async 'Chunk I/O Executor' threads (M2J captured this directly: chunk-load decomposition on that thread), syncCallback on ServerThread; synchronous provideChunk on ServerThread for sync loads"
+  granularity: "ONE chunk per generateChunk call — the engine never requests multiple chunk NOISE fields together; n=1 IS the production shape"
+  batching_safety: "cross-thread batching would require a queue + waiting: artificial latency for the first chunk, ordering hazards with Forge's per-chunk callbacks (the noise fields are position-pure, but the assembly consumes biome grids per chunk and the engine pipeline expects a returned field per call). CONCLUSION: batching cannot be REQUIRED; n=1 is the criterion (directive's own rule)"
+directive_8_final_benchmark: # COMPLETE initNoiseField incl. depth 2D + 3 fields + assembly + JNI + copies; warmed; per-BATCH medians, divide by n for per-chunk
+  n1: {java_median_ns: 291700, rust_parity_ns: 383200, rust_optimized_ns: 438800}
+  n2: {java: 591900, parity: 779000, optimized: 1133800}
+  n4: {java: 1188100, parity: 1563700, optimized: 1168300}
+  n8: {java: 2378000, parity: 3135000, optimized: 2305100}
+  n16: {java: 4764800, parity: 6255700, optimized: 4619200}
+  per_chunk_reading: "n>=4: optimized beats Java by ~2-6% (292->292/279/289 us at n=4/8/16); n=1: optimized 439us vs Java 292us = 1.50x SLOWER — the x-lane kernel improved n=1 from 3.7x-slower (M3W2 batch path) to 1.50x, but has NOT reached Java parity at n=1"
+  n1_gap_analysis: >
+    At n=1 the x-lane path processes 5 x-lanes as one 4-lane group + 1 padded
+    lane (25% waste) with per-sample scalar stores; HotSpot's JIT runs the
+    scalar loop with perfect branch prediction and no crossing. The remaining
+    gap is structural: ONE chunk's field has only 5 lanes of x-parallelism.
+    The 2D depth field + assembly add fixed per-chunk cost both sides share.
+classification: OPTIMIZATION_NOT_EXHAUSTED
+classification_reasoning: >
+  The complete kernel is now bit-exact end-to-end (noise + assembly) and
+  RUST_OPTIMIZED beats HotSpot at the engine's BATCH shape (n>=4, 2-6%) —
+  but the realistic single-chunk invocation shape (n=1, which Forge's
+  one-chunk-per-call pipeline actually produces) still loses 1.50x despite
+  the new x-lane kernel. Named, plausible, exact-safe techniques remain
+  untested at n=1: persistent per-octave slabs, deeper per-column gather
+  hoisting (the y-skip already amortizes; x-column chains could too),
+  fused 3-field-per-crossing, and an AVX-512 8-wide variant on this
+  AVX-512-capable CPU. Per the decision rule this is
+  OPTIMIZATION_NOT_EXHAUSTED — not RUST_VALID_ARCHITECTURAL (n=1 loses),
+  not NOT_WORTH_IT (research + optimization are demonstrably not exhausted;
+  the sign already flipped once this milestone).
+recommendation: >
+  One more bounded offline optimization pass on the n=1 path (persistent
+  slabs + fused fields + AVX-512) before any live-SHADOW decision. If n=1
+  still loses after that, classify BATCH_DEPENDENT and hand the
+  architectural evaluation (queue-based multi-chunk pipeline) to the
+  operator — the noise fields are position-pure so a look-ahead batch
+  pipeline is semantically safe; whether its latency is acceptable is an
+  engine-design question, not an evidence question.
+stop: "Offline prototype only. No server runs, no live integration, no SHADOW, no default changes."

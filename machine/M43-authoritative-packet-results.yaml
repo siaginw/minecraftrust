@@ -1,0 +1,94 @@
+# M4.3 — AUTHORITATIVE NATIVE PACKET REPORT (clean Forge Target A only).
+# Provenance: M43-AUTHORITATIVE-PACKET. Defaults OFF everywhere; M2-C OFF;
+# vanilla Java compression; no modpack ON; no TE natively encoded.
+schema_version: 1
+date: "2026-09-21"
+base_checkpoints: [4474b00, d32ce1f]
+builds:
+  run1_timing_gap: {coremod: 4ddfcd2a2e1e60ef_typo_note, note: "run M43-20260921-201617: 0 authoritative (all first-sends preceded sync) — preserved as the timing-gap evidence"}
+  run2_authoritative: {dll: 52d5ac424db188ed, coremod: 521770da724d9121}
+  post_run_polish: {coremod: 3c94197864937c06, note: "post-cleanup dump endian fix — NOT live-run"}
+runs:
+  run1: {id: M43-20260921-201617, result: "0 native / 1,589 Java — first-sends precede sync (same class as M4.2D/E gap); stop conditions did not fire because nothing native transmitted; preserved"}
+  run2: {id: M43-20260921-202701, pid_present: true, result: AUTHORITATIVE}
+
+A_responsibility_split: >
+  Verified against the installed SPacketChunkData: RUST OWNS the Protocol-340
+  bulk payload (sections, block light, sky light, biomes) encoded from the
+  synchronized NativeChunk. JAVA OWNS: chunkX/Z + fullChunk flag + effective
+  mask (finishPacketPopulation computes vanilla mask semantics), TileEntity
+  enumeration + getUpdateTag list (100% Java, unchanged M1.4 path), PacketBuffer
+  framing at write time, vanilla compression/Netty. The original Java section
+  serializer does NOT run on the successful native path (constructor body
+  skipped when populatePacket returns true — M1.3/M1.4/M2CE-proven mechanism).
+B_tileentity: >
+  Java-owned by construction: native payloads carry sections/light/biomes only;
+  TE update tags collected by the existing Java shell (offline case: TE chunk —
+  payload native, shell populated, Java TE list size 1). No native TE NBT, no
+  duplicated mod callbacks. Sampled verification SKIPS TE chunks (off-thread
+  getUpdateTag unsafe).
+C_eligibility: >
+  full-chunk filter (65535) + fully-synced + zero pending tracker work
+  (blocks/light/biomes settled; peekWork non-consuming) + registered with current
+  generation + supported mode. ANY miss = immediate untouched-Java fallback with
+  a counted reason; NO packet-thread sync; NO waiting. Stale-generation
+  coordinate reuse uses the CURRENT handle (offline case proves).
+D_offline_regression: >
+  M4AuthoritativeTest 13/13 (eligible full chunk incl. mask equality + semantic
+  equality vs real Java packet; partial-filter/unsynced/pending-work/unregistered
+  fallbacks; coordinate-reuse current-handle; TE chunk shell + tags; auth-sample
+  round-trip). Full suite battery: parity 8/8, boundary 16/16, lifecycle 19/19,
+  deferred 7/7, Rust 10/10. 0 incorrect native-authoritative cases offline.
+E_authoritative_packets: >
+  LIVE: 121 native-authoritative packets transmitted (3,797,574 bytes of Rust
+  payload on the wire) to the connected protocol bot; onLoad-hook early sync
+  (new, 6th hook) landed 1,050 first-touch syncs before player entry for those
+  chunks. Terrain 2,986/2,986 bit-exact; 84,721 sections validated 0 mismatches.
+F_java_fallbacks: 1473
+G_fallback_reasons: "1,422 not-yet-synced first-sends + 29 pending-work + 22 partial-filter; 0 encode failures; 0 errors — every fallback explicit"
+H_client_decode: >
+  Bot session fully healthy: 30 teleports, complete session, clean end-of-session
+  leave (identical baseline to prior runs); 0 decode/decompression/malformed
+  errors; 0 disconnects attributable to M4.3. The bot received and processed the
+  native payloads (its movement validation spans the streamed chunks).
+I_sampled_verification: >
+  Deferred comparator THIS RUN: 213 compared (150 immediate + 63 deferred), all
+  Gate-B equal, 0 mismatches; 638 stale + 721 expired records correctly SKIPPED;
+  queue peak 10.2 MB / 32 MB, 0 pending at end. NOTE: the 121 gate-A 'exact'
+  compares are TAUTOLOGICAL (the comparator re-reads the same populated payload
+  array) and are NOT claimed as evidence; the independent evidence is the 63
+  deferred Java-vs-native semantic matches + 29 immediate + offline suites.
+  Auth-sample mechanism (Java reference built off-thread): 7 enqueued, 6
+  reference-build NPEs (sited: processAuthSamples — off-thread ctor reads
+  non-thread-safe chunk state; counted, non-fatal), 1 stale skip, 0 verified,
+  0 mismatches — recorded as a verifier limitation, not a parity failure.
+J_stale_protection: "version guard + generation guard throughout; 638+1 stale records skipped; 0 stale snapshots transmitted (pending-work fallback blocks unsynced sends)"
+K_tileentity_correctness: "offline TE case 13/13 incl. Java tag list; live TE chunks counted separately (comparator te_chunks=1); no TE omission possible on the native path (Java shell)"
+L_current_java_benchmark: >
+  Matched corpus (32 chunks, mean payload 31,008 B, 6,400 iterations, offline
+  warm): CURRENT JAVA ctor mean 7.15 us, p50 6.10, p95 12.90, p99 15.60
+  (~4.2 MB/s). NOTE: offline warm-JIT Java is far faster than historical
+  live-server ~200 us numbers (allocation pressure/GC); only same-corpus
+  comparisons here are valid.
+M_old_m1_benchmark: "N/A — old M1 staging path not runnable offline through the current build (predictor rejects reflection-driven staging: -7, recorded). Historical timings deliberately NOT reused per directive 11."
+N_native_benchmark: "same corpus: mean 1.05 us, p50 1.00, p95 1.30, p99 1.40 (~28.9 MB/s) — 6.8x the current Java ctor mean"
+O_alloc_copy_jni: >
+  Structural: JAVA path = Java palette serialization + PacketBuffer + byte[]
+  per packet, 0 JNI. NATIVE path = 1 JNI crossing (encodePacket) + one heap
+  byte[] copy of the payload (buffer-ownership rule), no Java per-section work.
+  TE tag cost stays Java-side on both paths (measured separately as m1_te_tag_ns
+  when TE chunks occur).
+P_memory_lifecycle: "registry at shutdown dump: alloc/releases exact; 259 chunks live at stop"
+Q_post_cleanup: "PROVEN LIVE: in-JVM shutdownCleanup removed all 259 chunks -> 0 chunks / 0 sections / 0 bytes retained (explicit measurement, not process-teardown inference); totals-row endian bug in that dump fixed post-run (cosmetic)"
+R_integration_issues:
+  - "run-1 timing gap (sync later than first send) — fixed by onLoad-driven early sync, proven in run 2"
+  - "auth-sample Java-reference build fails off-thread (NPE, sited) — verifier limitation, deferred verification only"
+  - "raw server logs are binary-flagged (grep -a required) — tooling note"
+S_performance_value: "HIGH — 6.8x encode on matched corpus with eligibility overhead near-zero (peek checks only)"
+T_rust_migration_value: "HIGH — NativeChunk now directly feeds an authoritative live networking subsystem; the M1 staging architecture is superseded by registry state"
+U_classification: M1_NATIVE_PACKET_AUTHORITATIVE_TARGETA
+V_next_gate: >
+  (1) Combined native networking gate: NativeChunk packet + Rust M2-C compression
+  (still Target A, still bounded); (2) auth-sample verifier hardening (thread-safe
+  reference build); (3) modpack packet campaigns (Revelation first) remain
+  OFF until authorized. Defaults unchanged; nothing enabled.

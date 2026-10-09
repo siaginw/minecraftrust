@@ -1,0 +1,15 @@
+
+running 1 test
+test broken_immutable_snapshot_reclamation ... 
+thread 'broken_immutable_snapshot_reclamation' (70832) panicked at tests\lifecycle.rs:480:13:
+RECLAIMED_LIVE_SNAPSHOT
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+FAILED
+
+failures:
+
+failures:
+    broken_immutable_snapshot_reclamation
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 26 filtered out; finished in 0.00s
+

@@ -1,0 +1,55 @@
+# M1 validated compatibility scope — operator-approved coverage amendment.
+# Approved by operator 2026-09-19 (takeover session): "Approve documenting
+# Phosphor coverage through Target C... Do not add Phosphor to SevTech just
+# to satisfy the old wording. Document this explicit coverage amendment,
+# preserving the original gate/history."
+#
+# The ORIGINAL GATE-COMPAT-D text in machine/M1-acceptance-gates.yaml is
+# preserved UNCHANGED ("FoamFix and Phosphor Mixins enabled"). This file is
+# the authoritative record of what was actually validated.
+version: 1
+date: "2026-09-19"
+amendment: >-
+  Phosphor (mixin-runtime) coverage is satisfied through Target C. Target D
+  coverage is SevTech + FoamFix WITHOUT Phosphor, and no claim is made that
+  SevTech+Phosphor was tested.
+validated_configurations:
+  - id: SCOPE-A-CLEAN
+    pack: "Clean Forge control"
+    forge: 14.23.5.2860
+    mods: 0
+    foamfix: false
+    phosphor: false
+    evidence: [TARGETA-REAL-SERVER-VALIDATION, TARGETA-SHADOW-PARITY-LIVE-10K,
+               TARGETA-ONEXP-NATIVE-TRANSMISSION, M14R2-TARGET-A-REVALIDATION, M14R2-PARANOID]
+  - id: SCOPE-B-MINIMAL
+    pack: "Minimal corpus (Thermal+AE2+Tinkers+IronChests+JourneyMap)"
+    forge: 14.23.5.2860
+    mods: 12
+    foamfix: false
+    phosphor: false
+    evidence: [TARGET-B-SHADOW, TARGET-B-ONEXP, TARGET-B-PARANOID]
+  - id: SCOPE-C-REVELATION-PHOSPHOR
+    pack: "FTB Revelation 3.4.0 (pack-official Forge .2846)"
+    forge: 14.23.5.2846
+    mods: 193
+    foamfix: "0.10.5 active (method-splice; container class remains vanilla)"
+    phosphor: "0.2.7 active (phosphor-lighting; mixin runtime exercised)"
+    evidence: [TARGET-C-SHADOW-10K, TARGET-C-ONEXP, TARGET-C-PARANOID,
+               M1F-ELECCORE-LEAK-RECONCILIATION]
+    note: "This is the ONLY configuration with Phosphor coverage."
+  - id: SCOPE-D-SEVTECH-NO-PHOSPHOR
+    pack: "SevTech Ages 3.2.3"
+    forge: 14.23.5.2860
+    mods: 262
+    foamfix: "0.10.10 active (method-splice)"
+    phosphor: "NOT INSTALLED"
+    evidence: [TARGET-D-SHADOW-10K, TARGET-D-ONEXP, TARGET-D-PARANOID]
+    note: "GATE-COMPAT-D original wording (FoamFix AND Phosphor) NOT satisfied by this run; amendment above records operator-approved coverage substitution."
+explicitly_NOT_tested:
+  - "SevTech Ages with Phosphor installed (never assembled, never run)"
+  - "FTB Revelation on Forge 14.23.5.2860 (pack ran its official .2846)"
+  - "Real modded-client gameplay (all validation is protocol-bot driven; see M1-final-target-coverage.md §3)"
+  - "FoamFix anarchy/deduplicated container-class variants (no campaign ever produced a non-vanilla container; fallback branch validated only by targeted fixture M1F-NONVANILLA-FALLBACK)"
+  - "Whole-server MSPT/TPS/GC effects (GATE-PERF-SERVER/ALLOC/REGRESS OPEN)"
+validation_method: "protocol-bot driven (FML|HS handshake with real ModList, chunk receive+decode); distinct from modded gameplay - see coverage doc §3"

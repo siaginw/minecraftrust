@@ -1,0 +1,2069 @@
+{
+ "schema_version": 1,
+ "kind": "rev-live-shadow-profile",
+ "target": "FTB Revelation 3.4.0 dedicated server (restored runtime)",
+ "forge_build": "14.23.5.2846",
+ "required_hooks_manifest_sha256": "9fa1e033ef715b335b26eb3d279d2105adb5c872ad0e125e55fde4e9185cc155",
+ "all_required_qualified": true,
+ "identity_mode": "CANONICAL",
+ "identity_requirements": {
+  "minecraft_server_jar_sha256": "fe1f9274e6dad9191bf6e6e8e36ee6ebc737f373603df0946aafcded0d53167e",
+  "forge_universal_jar_sha256": "2484e7e36db090d61e567e75714ce7c16549983516842fe1bd34e809e92efa10",
+  "expected_transformer_chain": [
+   "net.minecraftforge.fml.common.asm.transformers.PatchingTransformer",
+   "org.spongepowered.asm.mixin.transformer.Proxy",
+   "$wrapper.net.minecraftforge.fml.common.asm.transformers.SideTransformer",
+   "$wrapper.net.minecraftforge.fml.common.asm.transformers.EventSubscriptionTransformer",
+   "$wrapper.net.minecraftforge.fml.common.asm.transformers.EventSubscriberTransformer",
+   "$wrapper.net.minecraftforge.fml.common.asm.transformers.SoundEngineFixTransformer",
+   "codechicken.asm.internal.SnifferTransformer",
+   "$wrapper.openmods.core.OpenModsClassTransformer",
+   "net.minecraftforge.fml.common.asm.transformers.DeobfuscationTransformer",
+   "net.minecraftforge.fml.common.asm.transformers.AccessTransformer",
+   "hellfirepvp.astralsorcery.core.AstralTransformer",
+   "pl.asie.foamfix.coremod.FoamFixAT",
+   "invtweaks.forge.asm.ITAccessTransformer",
+   "net.minecraftforge.fml.common.asm.transformers.ModAccessTransformer",
+   "net.minecraftforge.fml.common.asm.transformers.ItemStackTransformer",
+   "net.minecraftforge.fml.common.asm.transformers.ItemBlockTransformer",
+   "net.minecraftforge.fml.common.asm.transformers.ItemBlockSpecialTransformer",
+   "net.minecraftforge.fml.common.asm.transformers.PotionEffectTransformer",
+   "org.spongepowered.asm.mixin.transformer.Proxy",
+   "$wrapper.com.mordenkainen.bedpatch.BedPatchASM",
+   "$wrapper.pl.asie.foamfix.coremod.FoamFixTransformer",
+   "$wrapper.invtweaks.forge.asm.ContainerTransformer",
+   "$wrapper.ru.fewizz.neid.asm.Transformer",
+   "$wrapper.vazkii.quark.base.asm.ClassTransformer",
+   "$wrapper.lumien.resourceloader.asm.ClassTransformer",
+   "$wrapper.pl.asie.splashanimation.core.SplashProgressTransformer",
+   "$wrapper.blusunrize.immersiveengineering.common.asm.IEClassTransformer",
+   "$wrapper.shetiphian.asm.ClassTransformer",
+   "$wrapper.com.therandomlabs.randompatches.core.RPTransformer",
+   "$wrapper.team.chisel.ctm.client.asm.CTMTransformer",
+   "$wrapper.com.enderio.core.common.transform.EnderCoreTransformer",
+   "$wrapper.com.enderio.core.common.transform.SimpleMixinPatcher",
+   "net.minecraftforge.fml.common.asm.transformers.TerminalTransformer",
+   "org.spongepowered.asm.mixin.transformer.Proxy"
+  ],
+  "expected_coremod_plugins": [
+   {
+    "class": "net.minecraftforge.fml.relauncher.FMLCorePlugin",
+    "location": "file:/D:/rustcraft-runtime-targets/revelation-3.4.0/server/forge-1.12.2-14.23.5.2846-universal.jar"
+   },
+   {
+    "class": "net.minecraftforge.classloading.FMLForgePlugin",
+    "location": "file:/D:/rustcraft-runtime-targets/revelation-3.4.0/server/forge-1.12.2-14.23.5.2846-universal.jar"
+   },
+   {
+    "class": "aroma1997.core.coremod.CoreMod",
+    "location": "file:/D:/rustcraft-runtime-targets/revelation-3.4.0/server/mods/Aroma1997Core-1.12.2-2.0.0.2.jar"
+   },
+   {
+    "class": "hellfirepvp.astralsorcery.core.AstralCore",
+    "location": "file:/D:/rustcraft-runtime-targets/revelation-3.4.0/server/mods/astralsorcery-1.12.2-1.10.20.jar"
+   },
+   {
+    "class": "com.mordenkainen.bedpatch.BedPatch",
+    "location": "file:/D:/rustcraft-runtime-targets/revelation-3.4.0/server/mods/bedpatch-2.2-1.12.2.jar"
+   },
+   {
+    "class": "team.chisel.ctm.client.asm.CTMCorePlugin",
+    "location": "file:/D:/rustcraft-runtime-targets/revelation-3.4.0/server/mods/CTM-MC1.12.2-0.3.3.22.jar"
+   },
+   {
+    "class": "pl.asie.foamfix.coremod.FoamFixCore",
+    "location": "file:/D:/rustcraft-runtime-targets/revelation-3.4.0/server/mods/foamfix-0.10.5-1.12.2.jar"
+   },
+   {
+    "class": "net.shadowfacts.forgelin.preloader.ForgelinPlugin",
+    "location": "file:/D:/rustcraft-runtime-targets/revelation-3.4.0/server/mods/Forgelin-1.8.3.jar"
+   },
+   {
+    "class": "invtweaks.forge.asm.FMLPlugin",
+    "location": "file:/D:/rustcraft-runtime-targets/revelation-3.4.0/server/mods/InventoryTweaks-1.63.jar"
+   },
+   {
+    "class": "ru.fewizz.neid.asm.Plugin",
+    "location": "file:/D:/rustcraft-runtime-targets/revelation-3.4.0/server/mods/NotEnoughIDs-1.5.4.4.jar"
+   },
+   {
+    "class": "openmods.core.OpenModsCorePlugin",
+    "location": "file:/D:/rustcraft-runtime-targets/revelation-3.4.0/server/mods/OpenModsLib-1.12.2-0.12.2.jar"
+   },
+   {
+    "class": "vazkii.quark.base.asm.LoadingPlugin",
+    "location": "file:/D:/rustcraft-runtime-targets/revelation-3.4.0/server/mods/Quark-r1.6-177.jar"
+   },
+   {
+    "class": "com.therandomlabs.randompatches.core.RPCore",
+    "location": "file:/D:/rustcraft-runtime-targets/revelation-3.4.0/server/mods/randompatches-1.12.2-1.18.1.1.jar"
+   },
+   {
+    "class": "lumien.resourceloader.asm.LoadingPlugin",
+    "location": "file:/D:/rustcraft-runtime-targets/revelation-3.4.0/server/mods/ResourceLoader-MC1.12.1-1.5.3.jar"
+   },
+   {
+    "class": "pl.asie.splashanimation.core.SplashAnimationCoremod",
+    "location": "file:/D:/rustcraft-runtime-targets/revelation-3.4.0/server/mods/SplashAnimation-0.2.1.jar"
+   },
+   {
+    "class": "com.enderio.core.common.transform.EnderCorePlugin",
+    "location": "file:/D:/rustcraft-runtime-targets/revelation-3.4.0/server/mods/memory_repo/com/enderio/core/EnderCore/1.12.2-0.5.68/EnderCore-1.12.2-0.5.68-core.jar"
+   },
+   {
+    "class": "blusunrize.immersiveengineering.common.asm.IELoadingPlugin",
+    "location": "file:/D:/rustcraft-runtime-targets/revelation-3.4.0/server/mods/memory_repo/blusunrize/ImmersiveEngineering-core/0.12-91/ImmersiveEngineering-core-0.12-91.jar"
+   },
+   {
+    "class": "shetiphian.asm.TweakPlugin",
+    "location": "file:/D:/rustcraft-runtime-targets/revelation-3.4.0/server/mods/memory_repo/shetiphian/asm/ShetiPhian-ASM/1.12.0/ShetiPhian-ASM-1.12.0.jar"
+   },
+   {
+    "class": "me.jellysquid.mods.phosphor.core.PhosphorFMLLoadingPlugin",
+    "location": "file:/D:/rustcraft-runtime-targets/revelation-3.4.0/server/mods/phosphor-forge-mc1.12.2-0.2.7-universal.jar"
+   }
+  ]
+ },
+ "expected_class_hashes": {
+  "net.minecraftforge.common.capabilities.ICapabilityProvider": "71f63611564050394021cdbafed7293f400f20573bdbebee6e42fcd715b4c3ed",
+  "net.minecraftforge.common.capabilities.ICapabilitySerializable": "332ca615865cc507f905515cb1524ccd6c179e9100ffc6ce76a8ee70fabfcd79",
+  "net.minecraftforge.common.chunkio.ChunkIOExecutor": "10533af2e1a65e3275bd1ff14daa263e0c00b862e49191168cfe17bf0ce6f9ee",
+  "net.minecraftforge.common.chunkio.ChunkIOProvider": "0b0886facacc5ea6949022000ef85e2ee6417e4e3128b8fac492723c216c1aa1",
+  "net.minecraftforge.common.config.ConfigCategory": "4504250824f95fbe93d171cf34f357a52fd427cdf375c575e73fb8d8e56c5585",
+  "net.minecraftforge.common.config.Configuration$UnicodeInputStreamReader": "ac281ecfe7837c6abcd2430e3d159e91e6ba71dd398829b23e4c660caa7d877e",
+  "net.minecraftforge.common.config.Configuration": "254a48c8ddfb65655445d40787d5bddb97206a01f925d8e217118a30de70fa64",
+  "net.minecraftforge.common.config.Property$Type": "f17b98ac1e3bcde88fc362db186149ccf4280169646574da8b694490abb28a6c",
+  "net.minecraftforge.common.config.Property": "01a6006f067b5e1fb8fb3b0a821ab49436a0f87ccc48d8a5eee09a9d09f3b95b",
+  "net.minecraftforge.common.util.INBTSerializable": "4098a7809ed9f36f4be9c91176315016db5daf621d9b9b6525b15b24e4f9169e",
+  "net.minecraftforge.fml.client.IDisplayableError": "352fe50b3eabfeba5eb889fb9f6f3d94d6e5784239af747b314fa1e49502a21e",
+  "net.minecraftforge.fml.common.asm.ASMTransformerWrapper$TransformerException": "e8b796f3b5d150d185ed60a0367af1b22c77e27c036bbcc9da007a009b62cf5c",
+  "net.minecraftforge.fml.common.asm.ASMTransformerWrapper$TransformerWrapper": "640b9b9c31c0cb0bd4a869954c63d9bba40a8b1351566a2d5e89f4196fe61470",
+  "net.minecraftforge.fml.common.asm.FMLSanityChecker": "742d8d15f48d33631ecd52bc8a5a00d61e41511f3623269926eff63eb97f9836",
+  "net.minecraftforge.fml.common.asm.transformers.AccessTransformer$1": "6b66c3ded29c6d443ece8bc1032fe795c13f047435b3621d0be185bbfd9a67fb",
+  "net.minecraftforge.fml.common.asm.transformers.AccessTransformer$Modifier": "38eeeb4054af619c7de44c045689d78539d65f72be4f3efaaaa36a2642f79437",
+  "net.minecraftforge.fml.common.asm.transformers.AccessTransformer": "78ab5190c7f979424f8bbc9ed49aa1e1907b26fbd87967dba0d4f9e9341e1fcb",
+  "net.minecraftforge.fml.common.asm.transformers.DeobfuscationTransformer": "fbf00d4a2e3d0957bf633b43584445b3135b6dc554803845854248d488fabc0a",
+  "net.minecraftforge.fml.common.asm.transformers.deobf.FMLDeobfuscatingRemapper": "520eebb132e2ad2180e9e4520dfa1da88f0dd81f73c1a530eed1bcd8d7b8a8d4",
+  "net.minecraftforge.fml.common.asm.transformers.deobf.FMLRemappingAdapter$StaticFixingMethodVisitor": "73b127c5ba827db2ddd00e65735c2b1401c57a78d0bf740324a37445c0cc0e88",
+  "net.minecraftforge.fml.common.asm.transformers.deobf.FMLRemappingAdapter": "ef0fe47d742dc51c05ca11ab1e2a40109b8f5758efc42312629b2707187c01fb",
+  "net.minecraftforge.fml.common.asm.transformers.deobf.LZMAInputSupplier": "12ef9b62c6d5d61ff3e3adbdea06ddf64f306aff99d2e1c170a0cb453ab0aaf7",
+  "net.minecraftforge.fml.common.asm.transformers.EventSubscriberTransformer$SubscribeEventPredicate": "91e82a34ba54474729b12dc2d8612d82ee2e28324a93b55af8b63c39f6520c6b",
+  "net.minecraftforge.fml.common.asm.transformers.EventSubscriberTransformer": "ae8d9ea48eaea969e7269926f46e125d4c0960cc50688609bc0eb65a8db4ad98",
+  "net.minecraftforge.fml.common.asm.transformers.EventSubscriptionTransformer": "002a088e6f618b833f0da86a78ce0a64c028f6018f4835d74945b1e19876acfe",
+  "net.minecraftforge.fml.common.asm.transformers.FieldRedirectTransformer": "50c3e092d99e7de222fdfacbf6bcb3655ee3dcf83d9a264dd22fecdc0a508f00",
+  "net.minecraftforge.fml.common.asm.transformers.ItemBlockSpecialTransformer": "3ed274d83b81eba91a345351694decbf21ce9d54f2ca71456fa49eb082732a9c",
+  "net.minecraftforge.fml.common.asm.transformers.ItemBlockTransformer": "b0bf3917b35e8ba70b3fb306baf2ee1c6527d293d8a969fa3c5e890ba61c439f",
+  "net.minecraftforge.fml.common.asm.transformers.ItemStackTransformer": "78e634cf126f6cd96ba00522ffc04e248e371ff8f83ba89aa36279bb7b33fa2e",
+  "net.minecraftforge.fml.common.asm.transformers.ModAccessTransformer": "4830a42c74870f9c84da3dba45978748cbabb990565cb6605a20b4702dedd331",
+  "net.minecraftforge.fml.common.asm.transformers.PatchingTransformer": "754aa1b8295c0669d604d564c94386717b35249462a2694331bdfa52802098ef",
+  "net.minecraftforge.fml.common.asm.transformers.PotionEffectTransformer": "f73e16c0dcffc7907cc5071e3e41c3efa387934cac8e10539ed62daa9f829ce2",
+  "net.minecraftforge.fml.common.asm.transformers.SideTransformer$LambdaGatherer": "211d9b773b1c0707768ce96b7ea7fe8515597c0484285e54805f9ed35c35c262",
+  "net.minecraftforge.fml.common.asm.transformers.SideTransformer": "e8e56bc8f585b209efa5f00fd001bec3bc62a863373a7b72aabb42ec3fb95fff",
+  "net.minecraftforge.fml.common.asm.transformers.SoundEngineFixTransformer": "b29e70a8bf14ee3d01d69f6d88575075689a6aca08051d695adff335f20578f7",
+  "net.minecraftforge.fml.common.asm.transformers.TerminalTransformer$ExitVisitor$1": "e213734fd91a122db48fdac751a7c9fcabdad80d5148eb3029e38e69b4297022",
+  "net.minecraftforge.fml.common.asm.transformers.TerminalTransformer$ExitVisitor": "727770f15dfb6aba71404fd5d78bc25037f12bb33cad48473e8e0591568e7ccf",
+  "net.minecraftforge.fml.common.asm.transformers.TerminalTransformer": "107bf5d6732c7b12a6a0d28ca21cb30eb9174de276c01789240640dc17a0f699",
+  "net.minecraftforge.fml.common.DummyModContainer": "cfd433623dcf840a988664ae7e2d53c4a3a168d216f23ede22b2ab7f331fbac0",
+  "net.minecraftforge.fml.common.DuplicateModsFoundException": "de0f738bd06eb38cd34929982de3c4a38a03135bfa11770ec4cb2447dfee668b",
+  "net.minecraftforge.fml.common.EnhancedRuntimeException": "03e85f114b5e7851a7039e442ebc6fcd14e6ddbcb4d287d6ac61fc9c913ae5c5",
+  "net.minecraftforge.fml.common.eventhandler.Event": "3f3d6df38d5f20c7d6f164ebfaedd323d75d69d6fdba93c09e668f82ee2ab5e9",
+  "net.minecraftforge.fml.common.event.FMLEvent": "c0858291c65e3e25757787e7a75030e535f50a0e615cd8239ce83689f36aa64f",
+  "net.minecraftforge.fml.common.event.FMLModIdMappingEvent": "ec876c85406b094737c29414c525813312c94c18a3e83a070dc04827464a2c26",
+  "net.minecraftforge.fml.common.FMLLog": "4d99b3cd363866d465e0bccd790ba91929f31f1b96ce5a37872fe607a499cb5d",
+  "net.minecraftforge.fml.common.ICrashCallable": "5659e191a2ae1e4f6a229a54299278da6eb48bc7f3f0fd62d7d5067711080999",
+  "net.minecraftforge.fml.common.ILanguageAdapter": "e15d21f52617880add9f980a35db4a1b470d224468b89c09ce087cc8fd070ce5",
+  "net.minecraftforge.fml.common.Loader": "c82dff31bbf811fb19b0455958146d46b7408765424925c28f9a9d6a607e76f8",
+  "net.minecraftforge.fml.common.LoaderException": "369fdd7e659ae6a9a8fb6287745b24e9f81c7c206869eeec3703f0a5c5ea8cd8",
+  "net.minecraftforge.fml.common.LoaderState$ModState": "b8417f75bf88dec62547d0b0cd44f8c53832cf0edd0f757fc3aba269d9e2f2cd",
+  "net.minecraftforge.fml.common.LoaderState": "19321915a2fd64e773910ec89b79450c5de8bbd8d54e712360021833f72aaa6a",
+  "net.minecraftforge.fml.common.MCPDummyContainer": "535e721c3a476e60654e4ad39184781599adf076c2be52c818b4611b72596c73",
+  "net.minecraftforge.fml.common.MetadataCollection$ArtifactVersionAdapter": "4749668ebf0ec02d3425b468c24d7412e2517fcbb2650e5da471d3c5ba8e8ed2",
+  "net.minecraftforge.fml.common.MetadataCollection": "3c002388cbaa4e65124f30906a49b8d00a7172001afbb6b9308a223781603773",
+  "net.minecraftforge.fml.common.MinecraftDummyContainer": "e3235e54e07fa0e07d616f7b8f5316387a668b05c22678cc6813b5fccbf65f53",
+  "net.minecraftforge.fml.common.MissingModsException": "2c33781030f584f2e0b4b9b6427354fe28fcb661f238c6e4affd4b240ccbef23",
+  "net.minecraftforge.fml.common.Mod$CustomProperty": "226810a3f0ed165b1c7ee32e430223c329c6ff2eacb6883b2c1b1b745e63e5ed",
+  "net.minecraftforge.fml.common.Mod": "81de9840d6be72a0cac1a4b1a43d7d14e128b0dcc428915bb9e4795a0914a75e",
+  "net.minecraftforge.fml.common.ModClassLoader": "a9aefa98cccbb5558548eba8912adee28b4ec40986ab8551fbce4b8049222941",
+  "net.minecraftforge.fml.common.ModContainer": "31768c09716e02b72f0659086223293f3343c625badae818b66480096381935b",
+  "net.minecraftforge.fml.common.ModMetadata": "4f5bf24ca66c2869fa9be726c3a77e406f671e99fe715ef2394898ad1363f74b",
+  "net.minecraftforge.fml.common.MultipleModsErrored": "5a750a50ab4c0bafc06e2c4848872770f667dea9bdac0eed2375de724f79ee2c",
+  "net.minecraftforge.fml.common.patcher.ClassPatch": "0cb255b56080e23f9c3cc08873dcb5bc3e861bad3a3dac986c56c338decc8d64",
+  "net.minecraftforge.fml.common.patcher.ClassPatchManager": "71a042663074c214ec002d29154eb5ef939b9af4ba0331c9dde200e7a80f7423",
+  "net.minecraftforge.fml.common.toposort.ModSortingException": "10682304ab363227531119ed446e6c71a442697ae6b2c375a69c8353dd259ea5",
+  "net.minecraftforge.fml.common.versioning.ArtifactVersion": "181a0ef5ab3cf17b28f02f4b3a9a63ed582632795636fd4341534143a71ffa20",
+  "net.minecraftforge.fml.common.versioning.ComparableVersion$IntegerItem": "e6bcc7ca79e8b57d947d3b3bed96b022b88352193788ec0858d48dea14d6e620",
+  "net.minecraftforge.fml.common.versioning.ComparableVersion$Item": "2e42e6524554ab90ba0c853493a372783f29ac636e2b558f55b199d77577f46b",
+  "net.minecraftforge.fml.common.versioning.ComparableVersion$ListItem": "06c11784bc78a6deff22dbe6c3b64d873996768ff40597b3e8700bcab856bedc",
+  "net.minecraftforge.fml.common.versioning.ComparableVersion": "60e2a38a4b6b66d39de04b4bb26e9c1ba398b4f2e643a25771283d1a2f99b307",
+  "net.minecraftforge.fml.common.versioning.DefaultArtifactVersion": "4fca7ce71437a2704d978775e2ffe9514b476c67af047fcc7b32d9e068cfc1af",
+  "net.minecraftforge.fml.common.versioning.InvalidVersionSpecificationException": "a782fb39d6277173e6df8deaa9906950468078e2b1641c8ab67195083893926c",
+  "net.minecraftforge.fml.common.versioning.Restriction": "ba8780acd062106bec6eb702a6bf745ee144b181df5ec868a369e764fde2e4ed",
+  "net.minecraftforge.fml.common.versioning.VersionParser": "a11d544bfd763bfdaa1e800d42c676b2c8d6d2b88f2708ab33d2fabda8530a88",
+  "net.minecraftforge.fml.common.versioning.VersionRange": "6c5af4e9c54378e5fa745502784ab72c13746061ea9fc4f43b1bc1e0daec51ce",
+  "net.minecraftforge.fml.common.WrongMinecraftVersionException": "e01fd36734b7672ca5d86e9c485d60d9884138b4f49839719201b06f603b6907",
+  "net.minecraftforge.fml.repackage.com.nothome.delta.ByteBufferSeekableSource": "78ebebfa4149ab63e6d7c0a00fab32c83d77a4b03ff1f4058b790556cc2330dd",
+  "net.minecraftforge.fml.repackage.com.nothome.delta.GDiffPatcher": "ae2af3c1d23516a985e8c117676192662f189b6a3f6c679842b5389ba520560c",
+  "net.minecraftforge.fml.repackage.com.nothome.delta.PatchException": "20b8d40518b52e333100964bb43ece5b0dc890cf6f45956128c83a9cc57f0e71",
+  "net.minecraftforge.fml.repackage.com.nothome.delta.SeekableSource": "884b073755bcb4056214c9d6b975ac1e5e11fec1fd3051d1d1949d05d951be8b",
+  "net.minecraftforge.registries.IForgeRegistryEntry": "ae16b0ab39a8b149544fc59d28ba1ababcb2911974d5ce38060af16737dd5eac",
+  "net.minecraft.command.ICommand": "940bc5957f6881011f3ab99f9d6209c2fb023364502aee9ce4f2cc03662d5959",
+  "net.minecraft.command.ICommandSender": "e83d569f53126af1d8467fdad47f6be5d5fad028ecf2c68418c78c224f36011a",
+  "net.minecraft.crash.ICrashReportDetail": "b5e886932bc7e9bbaaceb3f106fa8614dd87b536e6cceabe3174c68be7dccad2",
+  "net.minecraft.nbt.CompressedStreamTools": "4d7005532337ceb2d0d24f6289cd94e1cdc3aefef76f695a538bdce8c3207de4",
+  "net.minecraft.nbt.NBTBase": "a44e0a5b992007360769f3d3ada74bb512bb844f908af9252c10f9e84bff37b4",
+  "net.minecraft.nbt.NBTPrimitive": "541b1b96a9249dcfe2ac3b02e3e9a0e27ae0c11be7efa4060807226d2a3953df",
+  "net.minecraft.nbt.NBTTagByteArray": "4b06f8d8e74f8a9c066c439eec86424dd459b25d597c22a0ae76875b5a5348e3",
+  "net.minecraft.nbt.NBTTagCompound": "c22d2ca1bc53affa5f4912ff452cc5eb8dfa00870d5af6693780e089f44145fa",
+  "net.minecraft.nbt.NBTTagDouble": "43c5bc0be68ce0a649bab951f9effb5cfc5df2bb1b2ec2732eb0deeffc4b229f",
+  "net.minecraft.nbt.NBTTagList": "20aa8d93071bf0c9321ddbbc785cc4b4582f725310fda3b3b598753747fa7873",
+  "net.minecraft.network.Packet": "d252c6f85281772bb6375dc870935e141184bc631765b3194a4494578122bf53",
+  "net.minecraft.network.PacketBuffer": "f582dc836283a10c4f4479a7722b981d0aadf1841b5dbc80b270fa16a8bd6720",
+  "net.minecraft.network.play.server.SPacketChunkData": "f375c6fb4e47f98ef59ea1aaf0c135557743f6ce22fe4f910faf899ee82b3132",
+  "net.minecraft.profiler.ISnooperInfo": "d7851dfcd12630d005bc627403f5900a0f9f8029ec5ca58e8f0b9d9ebe37e5ff",
+  "net.minecraft.server.management.PlayerChunkMap": "c90a30993c3b7743acf82304edae39d812759cd35da5f6f8cd04b78ac29fadd7",
+  "net.minecraft.server.management.PlayerChunkMapEntry": "d37b1cb841b55092ba65611a124034bcfb387a699897fd27dca783aa6f5d065b",
+  "net.minecraft.server.MinecraftServer": "48142a959ec484e24a5ff2bca9e19a72e15063c833810acc0a38aeb11cd95d51",
+  "net.minecraft.tileentity.TileEntity": "2b85a242a7bbcf1b6352b4864d36004c173e60cf5d7a7d7846b54383bb1dbbb3",
+  "net.minecraft.util.BitArray": "14e7638d675d3024f20f20ac53caced56cea409d97a12460b30a9f78df01611c",
+  "net.minecraft.util.datafix.DataFixer": "3706d60a308b429faabc97db8f4ca28f02c0d71f5473227ba1a8c0aa656f9ff4",
+  "net.minecraft.util.datafix.IDataFixer": "ab11d16c138d22c155aa1184710f7ee3aa3419fa4293511479bbc4a35a8673c5",
+  "net.minecraft.util.IObjectIntIterable": "68963516ee4d4351a13a41fcda2353f2fb37f2b0ece4f1db0f2daafb7590d5b3",
+  "net.minecraft.util.IThreadListener": "9526089d922440655249f6e4a1f4197e239d424fc007d75ba13f22f082aff843",
+  "net.minecraft.util.math.BlockPos": "228fcd88a303c9397c810293ed041b9e10c2ead35e5b530a3acef9f104154528",
+  "net.minecraft.util.math.Vec3i": "8973a30a720329d6cd4bfc0296757ba9be2a69f2080b4d0d39717e84a6135bc0",
+  "net.minecraft.util.ObjectIntIdentityMap": "6dfda71116403f3f34fa00a3ad7bf242bbe109b55b1923fcafc4f6de07123a7e",
+  "net.minecraft.util.ReportedException": "aa9d4948c8b68e65b5ecd5e707c05803c4bf74273bd2bf2c5fd4c04d1c2bd4b7",
+  "net.minecraft.world.chunk.BlockStateContainer": "80a1a26ca886401a83ac6f010a686f5b5e2aa48927b1b53f755b99506500ab91",
+  "net.minecraft.world.chunk.BlockStatePaletteHashMap": "4b82b3861ba3ecc94c554d7d75a795a991f285a760bcee6553bc56d5a66e8dfe",
+  "net.minecraft.world.chunk.BlockStatePaletteLinear": "007979e4ac64b43631da96757b9306b632ee805eb46b687f3195de41ef09d319",
+  "net.minecraft.world.chunk.BlockStatePaletteRegistry": "38d742c7ad9c3be6fd92299d611c50d55638abf25b6f5e33452451a53f4cf15c",
+  "net.minecraft.world.chunk.Chunk": "bbc9f8164716f1acb92694cd7e9de4606175ce258ba690f419558fc12d34152c",
+  "net.minecraft.world.chunk.IBlockStatePalette": "bb938374cddf1c3285aafd733c80fa33a012fd65a0bd2bd037777e2a7f8a5c22",
+  "net.minecraft.world.chunk.IBlockStatePaletteResizer": "374dc35749bbfe008cd6eba93c7c9d24a08766d13e69630f09f14be62ac1b755",
+  "net.minecraft.world.chunk.IChunkProvider": "577921aee8bb4e448e8619d6ccc8cfc5888d02051d8c46362239739ec79d2e52",
+  "net.minecraft.world.chunk.NibbleArray": "437f0001a3c649ed44bf77cebccb5060109dbfb6243d05366f1bfa199c1ba0d8",
+  "net.minecraft.world.chunk.storage.AnvilChunkLoader": "a6a29a0cf6f81132f2c82294483c66a9d82a8caef03a1192eb54d947d7e37f8b",
+  "net.minecraft.world.chunk.storage.ExtendedBlockStorage": "6897b9847780809df7fe9a2782eb87bd89b6583595fc2c2e8afd0ff311716b7a",
+  "net.minecraft.world.chunk.storage.IChunkLoader": "01b61e96105faf9d7c18589284398dfd227dbc16ee6d23dc67017b7f7932caee",
+  "net.minecraft.world.gen.ChunkGeneratorFlat": "e9ec6eb3dd488f0e6913067ee35f2eadc2c385022f73b751cec1249ea2c01f39",
+  "net.minecraft.world.gen.ChunkProviderServer": "4e702c57553791135d03bee7090bb65c5869bdfbeea6666cb03f442e5da5ef36",
+  "net.minecraft.world.gen.IChunkGenerator": "d8daf6cfdbc916fc3bd430a845232f7a59bd91978e262f8bd27c7b987d1c7a73",
+  "net.minecraft.world.IBlockAccess": "22afbe6e21f5578a009548630624071ae969e7272afdff2cb3336a65a95a1147",
+  "net.minecraft.world.storage.IThreadedFileIO": "44d318fb2982aeb2347843d698ecfdbda28182c0bce25d2e5c848ceb45198f58",
+  "net.minecraft.world.World": "541aa82353c953b72681655d7f73600cd979ea0abacee8758fa9bda675de5584",
+  "net.minecraft.world.WorldProvider": "e7e491c6542cb86008a3fd3e6c92ee48199a8c24a7e5542af7485fa3a0baa1a0",
+  "net.minecraft.world.WorldProviderSurface": "6f5d6a4a3db6f3476654fd4a95a9a660d93bf6924267fb4bcb535b88c932f200",
+  "net.minecraft.world.WorldServer": "bc38249a16bc5fde9003495b1628e05614d5732dff1abcd702da99966413c529"
+ },
+ "qualification": {
+  "profile": "FORGE_2846_FTB_REVELATION_3_4_0_SERVER_TRANSFORMED_OFFLINE_V1",
+  "minecraft_server_jar_sha256": "fe1f9274e6dad9191bf6e6e8e36ee6ebc737f373603df0946aafcded0d53167e",
+  "java_runtime_version": "1.8.0_504-b01"
+ },
+ "required_hooks": [
+  {
+   "id": "W01",
+   "status": "QUALIFIED",
+   "class": "net.minecraft.world.World",
+   "method": "func_180501_a",
+   "descriptor": "(Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/state/IBlockState;I)Z",
+   "hook_type": "WRITE_BEGIN",
+   "purpose": "world block set (whole operation incl. chunk/TE/light effects)",
+   "affected_domains": [
+    "block states"
+   ],
+   "thread_context": "CANONICAL_OWNER",
+   "insertion_location": "method entry, before any read or write of protected state; balanced catch-all-finally end hook before every return and Throwable (WRITE_END)",
+   "fingerprint": {
+    "kind": "DECLARATION"
+   },
+   "bracket_end_hook_type": "WRITE_END",
+   "qualification_evidence": {
+    "classification": "UNCHANGED_SEMANTIC",
+    "canonical_pre_hook_sha256": "541aa82353c953b72681655d7f73600cd979ea0abacee8758fa9bda675de5584",
+    "raw_observed_sha256": "38af6739e9c046f8d645071b800ab75f1a820cc53bc683d198929c5820be0626",
+    "anchor_validation": "IN_ORDER_FRAGMENT_SCAN_PASS"
+   }
+  },
+  {
+   "id": "W02",
+   "status": "QUALIFIED",
+   "class": "net.minecraft.world.World",
+   "method": "func_175653_a",
+   "descriptor": "(Lnet/minecraft/world/EnumSkyBlock;Lnet/minecraft/util/math/BlockPos;I)V",
+   "hook_type": "WRITE_BEGIN",
+   "purpose": "world light value set",
+   "affected_domains": [
+    "block light",
+    "sky light"
+   ],
+   "thread_context": "CANONICAL_OWNER",
+   "insertion_location": "method entry, before any read or write of protected state; balanced catch-all-finally end hook before every return and Throwable (WRITE_END)",
+   "fingerprint": {
+    "kind": "DECLARATION"
+   },
+   "bracket_end_hook_type": "WRITE_END",
+   "qualification_evidence": {
+    "classification": "UNCHANGED_SEMANTIC",
+    "canonical_pre_hook_sha256": "541aa82353c953b72681655d7f73600cd979ea0abacee8758fa9bda675de5584",
+    "raw_observed_sha256": "38af6739e9c046f8d645071b800ab75f1a820cc53bc683d198929c5820be0626",
+    "anchor_validation": "IN_ORDER_FRAGMENT_SCAN_PASS"
+   }
+  },
+  {
+   "id": "W03",
+   "status": "QUALIFIED",
+   "class": "net.minecraft.world.World",
+   "method": "func_175690_a",
+   "descriptor": "(Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/tileentity/TileEntity;)V",
+   "hook_type": "WRITE_BEGIN",
+   "purpose": "world tile entity set",
+   "affected_domains": [
+    "tileentity restrictions"
+   ],
+   "thread_context": "CANONICAL_OWNER",
+   "insertion_location": "method entry, before any read or write of protected state; balanced catch-all-finally end hook before every return and Throwable (WRITE_END)",
+   "fingerprint": {
+    "kind": "DECLARATION"
+   },
+   "bracket_end_hook_type": "WRITE_END",
+   "qualification_evidence": {
+    "classification": "UNCHANGED_SEMANTIC",
+    "canonical_pre_hook_sha256": "541aa82353c953b72681655d7f73600cd979ea0abacee8758fa9bda675de5584",
+    "raw_observed_sha256": "38af6739e9c046f8d645071b800ab75f1a820cc53bc683d198929c5820be0626",
+    "anchor_validation": "IN_ORDER_FRAGMENT_SCAN_PASS"
+   }
+  },
+  {
+   "id": "W04",
+   "status": "QUALIFIED",
+   "class": "net.minecraft.world.World",
+   "method": "func_175713_t",
+   "descriptor": "(Lnet/minecraft/util/math/BlockPos;)V",
+   "hook_type": "WRITE_BEGIN",
+   "purpose": "world tile entity removal",
+   "affected_domains": [
+    "tileentity restrictions"
+   ],
+   "thread_context": "CANONICAL_OWNER",
+   "insertion_location": "method entry, before any read or write of protected state; balanced catch-all-finally end hook before every return and Throwable (WRITE_END)",
+   "fingerprint": {
+    "kind": "DECLARATION"
+   },
+   "bracket_end_hook_type": "WRITE_END",
+   "qualification_evidence": {
+    "classification": "UNCHANGED_SEMANTIC",
+    "canonical_pre_hook_sha256": "541aa82353c953b72681655d7f73600cd979ea0abacee8758fa9bda675de5584",
+    "raw_observed_sha256": "38af6739e9c046f8d645071b800ab75f1a820cc53bc683d198929c5820be0626",
+    "anchor_validation": "IN_ORDER_FRAGMENT_SCAN_PASS"
+   }
+  },
+  {
+   "id": "W05",
+   "status": "QUALIFIED",
+   "class": "net.minecraft.world.World",
+   "method": "func_180500_c",
+   "descriptor": "(Lnet/minecraft/world/EnumSkyBlock;Lnet/minecraft/util/math/BlockPos;)Z",
+   "hook_type": "WRITE_BEGIN",
+   "purpose": "world light propagation check/update",
+   "affected_domains": [
+    "block light",
+    "sky light"
+   ],
+   "thread_context": "CANONICAL_OWNER",
+   "insertion_location": "method entry, before any read or write of protected state; balanced catch-all-finally end hook before every return and Throwable (WRITE_END)",
+   "fingerprint": {
+    "kind": "DECLARATION"
+   },
+   "bracket_end_hook_type": "WRITE_END",
+   "qualification_evidence": {
+    "classification": "REWRITTEN_METHOD",
+    "canonical_pre_hook_sha256": "541aa82353c953b72681655d7f73600cd979ea0abacee8758fa9bda675de5584",
+    "raw_observed_sha256": "38af6739e9c046f8d645071b800ab75f1a820cc53bc683d198929c5820be0626",
+    "anchor_validation": "IN_ORDER_FRAGMENT_SCAN_PASS"
+   }
+  },
+  {
+   "id": "W06",
+   "status": "QUALIFIED",
+   "class": "net.minecraft.world.chunk.Chunk",
+   "method": "func_76603_b",
+   "descriptor": "()V",
+   "hook_type": "WRITE_BEGIN",
+   "purpose": "chunk skylight generation",
+   "affected_domains": [
+    "sky light"
+   ],
+   "thread_context": "CANONICAL_OWNER",
+   "insertion_location": "method entry, before any read or write of protected state; balanced catch-all-finally end hook before every return and Throwable (WRITE_END)",
+   "fingerprint": {
+    "kind": "DECLARATION"
+   },
+   "bracket_end_hook_type": "WRITE_END",
+   "qualification_evidence": {
+    "classification": "REWRITTEN_METHOD",
+    "canonical_pre_hook_sha256": "bbc9f8164716f1acb92694cd7e9de4606175ce258ba690f419558fc12d34152c",
+    "raw_observed_sha256": "bb283fe1b9ba656bf6300e44d08eb10e5ef88706a4e8aa9a119afda219685ed3",
+    "anchor_validation": "IN_ORDER_FRAGMENT_SCAN_PASS"
+   }
+  },
+  {
+   "id": "W07",
+   "status": "QUALIFIED",
+   "class": "net.minecraft.world.chunk.Chunk",
+   "method": "func_76595_e",
+   "descriptor": "(II)V",
+   "hook_type": "WRITE_BEGIN",
+   "purpose": "chunk light relight enqueue (audit light family)",
+   "affected_domains": [
+    "block light",
+    "sky light"
+   ],
+   "thread_context": "CANONICAL_OWNER",
+   "insertion_location": "method entry, before any read or write of protected state; balanced catch-all-finally end hook before every return and Throwable (WRITE_END)",
+   "fingerprint": {
+    "kind": "DECLARATION"
+   },
+   "bracket_end_hook_type": "WRITE_END",
+   "qualification_evidence": {
+    "classification": "UNCHANGED_SEMANTIC",
+    "canonical_pre_hook_sha256": "bbc9f8164716f1acb92694cd7e9de4606175ce258ba690f419558fc12d34152c",
+    "raw_observed_sha256": "bb283fe1b9ba656bf6300e44d08eb10e5ef88706a4e8aa9a119afda219685ed3",
+    "anchor_validation": "IN_ORDER_FRAGMENT_SCAN_PASS"
+   }
+  },
+  {
+   "id": "W08",
+   "status": "QUALIFIED",
+   "class": "net.minecraft.world.chunk.Chunk",
+   "method": "func_150803_c",
+   "descriptor": "(Z)V",
+   "hook_type": "WRITE_BEGIN",
+   "purpose": "chunk light family setter (audit light family)",
+   "affected_domains": [
+    "block light",
+    "sky light"
+   ],
+   "thread_context": "CANONICAL_OWNER",
+   "insertion_location": "method entry, before any read or write of protected state; balanced catch-all-finally end hook before every return and Throwable (WRITE_END)",
+   "fingerprint": {
+    "kind": "DECLARATION"
+   },
+   "bracket_end_hook_type": "WRITE_END",
+   "qualification_evidence": {
+    "classification": "REWRITTEN_METHOD",
+    "canonical_pre_hook_sha256": "bbc9f8164716f1acb92694cd7e9de4606175ce258ba690f419558fc12d34152c",
+    "raw_observed_sha256": "bb283fe1b9ba656bf6300e44d08eb10e5ef88706a4e8aa9a119afda219685ed3",
+    "anchor_validation": "IN_ORDER_FRAGMENT_SCAN_PASS"
+   }
+  },
+  {
+   "id": "W09",
+   "status": "QUALIFIED",
+   "class": "net.minecraft.world.chunk.Chunk",
+   "method": "func_76599_g",
+   "descriptor": "(III)V",
+   "hook_type": "WRITE_BEGIN",
+   "purpose": "chunk light family writer (audit light family)",
+   "affected_domains": [
+    "block light",
+    "sky light"
+   ],
+   "thread_context": "CANONICAL_OWNER",
+   "insertion_location": "method entry, before any read or write of protected state; balanced catch-all-finally end hook before every return and Throwable (WRITE_END)",
+   "fingerprint": {
+    "kind": "DECLARATION"
+   },
+   "bracket_end_hook_type": "WRITE_END",
+   "qualification_evidence": {
+    "classification": "UNCHANGED_SEMANTIC",
+    "canonical_pre_hook_sha256": "bbc9f8164716f1acb92694cd7e9de4606175ce258ba690f419558fc12d34152c",
+    "raw_observed_sha256": "bb283fe1b9ba656bf6300e44d08eb10e5ef88706a4e8aa9a119afda219685ed3",
+    "anchor_validation": "IN_ORDER_FRAGMENT_SCAN_PASS"
+   }
+  },
+  {
+   "id": "W10",
+   "status": "QUALIFIED",
+   "class": "net.minecraft.world.chunk.Chunk",
+   "method": "func_76609_d",
+   "descriptor": "(IIII)V",
+   "hook_type": "WRITE_BEGIN",
+   "purpose": "chunk light family writer (audit light family)",
+   "affected_domains": [
+    "block light",
+    "sky light"
+   ],
+   "thread_context": "CANONICAL_OWNER",
+   "insertion_location": "method entry, before any read or write of protected state; balanced catch-all-finally end hook before every return and Throwable (WRITE_END)",
+   "fingerprint": {
+    "kind": "DECLARATION"
+   },
+   "bracket_end_hook_type": "WRITE_END",
+   "qualification_evidence": {
+    "classification": "UNCHANGED_SEMANTIC",
+    "canonical_pre_hook_sha256": "bbc9f8164716f1acb92694cd7e9de4606175ce258ba690f419558fc12d34152c",
+    "raw_observed_sha256": "bb283fe1b9ba656bf6300e44d08eb10e5ef88706a4e8aa9a119afda219685ed3",
+    "anchor_validation": "IN_ORDER_FRAGMENT_SCAN_PASS"
+   }
+  },
+  {
+   "id": "W11",
+   "status": "QUALIFIED",
+   "class": "net.minecraft.world.chunk.Chunk",
+   "method": "func_76615_h",
+   "descriptor": "(III)V",
+   "hook_type": "WRITE_BEGIN",
+   "purpose": "chunk skylight relight writer",
+   "affected_domains": [
+    "sky light"
+   ],
+   "thread_context": "CANONICAL_OWNER",
+   "insertion_location": "method entry, before any read or write of protected state; balanced catch-all-finally end hook before every return and Throwable (WRITE_END)",
+   "fingerprint": {
+    "kind": "DECLARATION"
+   },
+   "bracket_end_hook_type": "WRITE_END",
+   "qualification_evidence": {
+    "classification": "REWRITTEN_METHOD",
+    "canonical_pre_hook_sha256": "bbc9f8164716f1acb92694cd7e9de4606175ce258ba690f419558fc12d34152c",
+    "raw_observed_sha256": "bb283fe1b9ba656bf6300e44d08eb10e5ef88706a4e8aa9a119afda219685ed3",
+    "anchor_validation": "IN_ORDER_FRAGMENT_SCAN_PASS"
+   }
+  },
+  {
+   "id": "W12",
+   "status": "QUALIFIED",
+   "class": "net.minecraft.world.chunk.Chunk",
+   "method": "func_177436_a",
+   "descriptor": "(Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/state/IBlockState;)Lnet/minecraft/block/state/IBlockState;",
+   "hook_type": "WRITE_BEGIN",
+   "purpose": "chunk block state set incl. section allocation (audit BCI 124-203)",
+   "affected_domains": [
+    "block states",
+    "section existence"
+   ],
+   "thread_context": "CANONICAL_OWNER",
+   "insertion_location": "method entry, before any read or write of protected state; balanced catch-all-finally end hook before every return and Throwable (WRITE_END)",
+   "fingerprint": {
+    "kind": "BCI_ASSERTIONS",
+    "assertions": [
+     {
+      "bci": 203,
+      "expect": "invokevirtual net/minecraft/world/chunk/storage/ExtendedBlockStorage.func_177484_a"
+     }
+    ]
+   },
+   "bracket_end_hook_type": "WRITE_END",
+   "qualification_evidence": {
+    "classification": "REWRITTEN_METHOD",
+    "canonical_pre_hook_sha256": "bbc9f8164716f1acb92694cd7e9de4606175ce258ba690f419558fc12d34152c",
+    "raw_observed_sha256": "bb283fe1b9ba656bf6300e44d08eb10e5ef88706a4e8aa9a119afda219685ed3",
+    "anchor_validation": "IN_ORDER_FRAGMENT_SCAN_PASS"
+   }
+  },
+  {
+   "id": "W13",
+   "status": "QUALIFIED",
+   "class": "net.minecraft.world.chunk.Chunk",
+   "method": "func_177431_a",
+   "descriptor": "(Lnet/minecraft/world/EnumSkyBlock;Lnet/minecraft/util/math/BlockPos;I)V",
+   "hook_type": "WRITE_BEGIN",
+   "purpose": "chunk light value set",
+   "affected_domains": [
+    "block light",
+    "sky light"
+   ],
+   "thread_context": "CANONICAL_OWNER",
+   "insertion_location": "method entry, before any read or write of protected state; balanced catch-all-finally end hook before every return and Throwable (WRITE_END)",
+   "fingerprint": {
+    "kind": "DECLARATION"
+   },
+   "bracket_end_hook_type": "WRITE_END",
+   "qualification_evidence": {
+    "classification": "REWRITTEN_METHOD",
+    "canonical_pre_hook_sha256": "bbc9f8164716f1acb92694cd7e9de4606175ce258ba690f419558fc12d34152c",
+    "raw_observed_sha256": "bb283fe1b9ba656bf6300e44d08eb10e5ef88706a4e8aa9a119afda219685ed3",
+    "anchor_validation": "IN_ORDER_FRAGMENT_SCAN_PASS"
+   }
+  },
+  {
+   "id": "W14",
+   "status": "QUALIFIED",
+   "class": "net.minecraft.world.chunk.Chunk",
+   "method": "func_177424_a",
+   "descriptor": "(Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/world/chunk/Chunk$EnumCreateEntityType;)Lnet/minecraft/tileentity/TileEntity;",
+   "hook_type": "WRITE_BEGIN",
+   "purpose": "chunk tile entity creation/lookup (EnumCreateEntityType)",
+   "affected_domains": [
+    "tileentity restrictions"
+   ],
+   "thread_context": "CANONICAL_OWNER",
+   "insertion_location": "method entry, before any read or write of protected state; balanced catch-all-finally end hook before every return and Throwable (WRITE_END)",
+   "fingerprint": {
+    "kind": "DECLARATION"
+   },
+   "bracket_end_hook_type": "WRITE_END",
+   "qualification_evidence": {
+    "classification": "UNCHANGED_SEMANTIC",
+    "canonical_pre_hook_sha256": "bbc9f8164716f1acb92694cd7e9de4606175ce258ba690f419558fc12d34152c",
+    "raw_observed_sha256": "bb283fe1b9ba656bf6300e44d08eb10e5ef88706a4e8aa9a119afda219685ed3",
+    "anchor_validation": "IN_ORDER_FRAGMENT_SCAN_PASS"
+   }
+  },
+  {
+   "id": "W15",
+   "status": "QUALIFIED",
+   "class": "net.minecraft.world.chunk.Chunk",
+   "method": "func_150813_a",
+   "descriptor": "(Lnet/minecraft/tileentity/TileEntity;)V",
+   "hook_type": "WRITE_BEGIN",
+   "purpose": "chunk tile entity add",
+   "affected_domains": [
+    "tileentity restrictions"
+   ],
+   "thread_context": "CANONICAL_OWNER",
+   "insertion_location": "method entry, before any read or write of protected state; balanced catch-all-finally end hook before every return and Throwable (WRITE_END)",
+   "fingerprint": {
+    "kind": "DECLARATION"
+   },
+   "bracket_end_hook_type": "WRITE_END",
+   "qualification_evidence": {
+    "classification": "UNCHANGED_SEMANTIC",
+    "canonical_pre_hook_sha256": "bbc9f8164716f1acb92694cd7e9de4606175ce258ba690f419558fc12d34152c",
+    "raw_observed_sha256": "bb283fe1b9ba656bf6300e44d08eb10e5ef88706a4e8aa9a119afda219685ed3",
+    "anchor_validation": "IN_ORDER_FRAGMENT_SCAN_PASS"
+   }
+  },
+  {
+   "id": "W16",
+   "status": "QUALIFIED",
+   "class": "net.minecraft.world.chunk.Chunk",
+   "method": "func_177426_a",
+   "descriptor": "(Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/tileentity/TileEntity;)V",
+   "hook_type": "WRITE_BEGIN",
+   "purpose": "chunk tile entity put",
+   "affected_domains": [
+    "tileentity restrictions"
+   ],
+   "thread_context": "CANONICAL_OWNER",
+   "insertion_location": "method entry, before any read or write of protected state; balanced catch-all-finally end hook before every return and Throwable (WRITE_END)",
+   "fingerprint": {
+    "kind": "DECLARATION"
+   },
+   "bracket_end_hook_type": "WRITE_END",
+   "qualification_evidence": {
+    "classification": "UNCHANGED_SEMANTIC",
+    "canonical_pre_hook_sha256": "bbc9f8164716f1acb92694cd7e9de4606175ce258ba690f419558fc12d34152c",
+    "raw_observed_sha256": "bb283fe1b9ba656bf6300e44d08eb10e5ef88706a4e8aa9a119afda219685ed3",
+    "anchor_validation": "IN_ORDER_FRAGMENT_SCAN_PASS"
+   }
+  },
+  {
+   "id": "W17",
+   "status": "QUALIFIED",
+   "class": "net.minecraft.world.chunk.Chunk",
+   "method": "func_177425_e",
+   "descriptor": "(Lnet/minecraft/util/math/BlockPos;)V",
+   "hook_type": "WRITE_BEGIN",
+   "purpose": "chunk tile entity remove",
+   "affected_domains": [
+    "tileentity restrictions"
+   ],
+   "thread_context": "CANONICAL_OWNER",
+   "insertion_location": "method entry, before any read or write of protected state; balanced catch-all-finally end hook before every return and Throwable (WRITE_END)",
+   "fingerprint": {
+    "kind": "DECLARATION"
+   },
+   "bracket_end_hook_type": "WRITE_END",
+   "qualification_evidence": {
+    "classification": "UNCHANGED_SEMANTIC",
+    "canonical_pre_hook_sha256": "bbc9f8164716f1acb92694cd7e9de4606175ce258ba690f419558fc12d34152c",
+    "raw_observed_sha256": "bb283fe1b9ba656bf6300e44d08eb10e5ef88706a4e8aa9a119afda219685ed3",
+    "anchor_validation": "IN_ORDER_FRAGMENT_SCAN_PASS"
+   }
+  },
+  {
+   "id": "W18",
+   "status": "QUALIFIED",
+   "class": "net.minecraft.world.chunk.Chunk",
+   "method": "func_76631_c",
+   "descriptor": "()V",
+   "hook_type": "WRITE_BEGIN",
+   "purpose": "chunk onLoad callback (audit: onLoad146 in syncCallback)",
+   "affected_domains": [
+    "unload/reload"
+   ],
+   "thread_context": "CANONICAL_OWNER",
+   "insertion_location": "method entry, before any read or write of protected state; balanced catch-all-finally end hook before every return and Throwable (WRITE_END)",
+   "fingerprint": {
+    "kind": "DECLARATION"
+   },
+   "bracket_end_hook_type": "WRITE_END",
+   "qualification_evidence": {
+    "classification": "REWRITTEN_METHOD",
+    "canonical_pre_hook_sha256": "bbc9f8164716f1acb92694cd7e9de4606175ce258ba690f419558fc12d34152c",
+    "raw_observed_sha256": "bb283fe1b9ba656bf6300e44d08eb10e5ef88706a4e8aa9a119afda219685ed3",
+    "anchor_validation": "IN_ORDER_FRAGMENT_SCAN_PASS"
+   }
+  },
+  {
+   "id": "W19",
+   "status": "QUALIFIED",
+   "class": "net.minecraft.world.chunk.Chunk",
+   "method": "func_76623_d",
+   "descriptor": "()V",
+   "hook_type": "WRITE_BEGIN",
+   "purpose": "chunk onUnload callback (audit: onUnload149 in func_73156_b)",
+   "affected_domains": [
+    "unload/reload"
+   ],
+   "thread_context": "CANONICAL_OWNER",
+   "insertion_location": "method entry, before any read or write of protected state; balanced catch-all-finally end hook before every return and Throwable (WRITE_END)",
+   "fingerprint": {
+    "kind": "DECLARATION"
+   },
+   "bracket_end_hook_type": "WRITE_END",
+   "qualification_evidence": {
+    "classification": "REWRITTEN_METHOD",
+    "canonical_pre_hook_sha256": "bbc9f8164716f1acb92694cd7e9de4606175ce258ba690f419558fc12d34152c",
+    "raw_observed_sha256": "bb283fe1b9ba656bf6300e44d08eb10e5ef88706a4e8aa9a119afda219685ed3",
+    "anchor_validation": "IN_ORDER_FRAGMENT_SCAN_PASS"
+   }
+  },
+  {
+   "id": "W20",
+   "status": "QUALIFIED",
+   "class": "net.minecraft.world.chunk.Chunk",
+   "method": "func_186030_a",
+   "descriptor": "(Lnet/minecraft/world/chunk/IChunkProvider;Lnet/minecraft/world/gen/IChunkGenerator;)V",
+   "hook_type": "WRITE_BEGIN",
+   "purpose": "chunk populate (provider+generator)",
+   "affected_domains": [
+    "owner publication"
+   ],
+   "thread_context": "CANONICAL_OWNER",
+   "insertion_location": "method entry, before any read or write of protected state; balanced catch-all-finally end hook before every return and Throwable (WRITE_END)",
+   "fingerprint": {
+    "kind": "DECLARATION"
+   },
+   "bracket_end_hook_type": "WRITE_END",
+   "qualification_evidence": {
+    "classification": "UNCHANGED_SEMANTIC",
+    "canonical_pre_hook_sha256": "bbc9f8164716f1acb92694cd7e9de4606175ce258ba690f419558fc12d34152c",
+    "raw_observed_sha256": "bb283fe1b9ba656bf6300e44d08eb10e5ef88706a4e8aa9a119afda219685ed3",
+    "anchor_validation": "IN_ORDER_FRAGMENT_SCAN_PASS"
+   }
+  },
+  {
+   "id": "W21",
+   "status": "QUALIFIED",
+   "class": "net.minecraft.world.chunk.Chunk",
+   "method": "func_186034_a",
+   "descriptor": "(Lnet/minecraft/world/gen/IChunkGenerator;)V",
+   "hook_type": "WRITE_BEGIN",
+   "purpose": "chunk populate (generator) incl. terrain/light flag generation",
+   "affected_domains": [
+    "owner publication"
+   ],
+   "thread_context": "CANONICAL_OWNER",
+   "insertion_location": "method entry, before any read or write of protected state; balanced catch-all-finally end hook before every return and Throwable (WRITE_END)",
+   "fingerprint": {
+    "kind": "DECLARATION"
+   },
+   "bracket_end_hook_type": "WRITE_END",
+   "qualification_evidence": {
+    "classification": "UNCHANGED_SEMANTIC",
+    "canonical_pre_hook_sha256": "bbc9f8164716f1acb92694cd7e9de4606175ce258ba690f419558fc12d34152c",
+    "raw_observed_sha256": "bb283fe1b9ba656bf6300e44d08eb10e5ef88706a4e8aa9a119afda219685ed3",
+    "anchor_validation": "IN_ORDER_FRAGMENT_SCAN_PASS"
+   }
+  },
+  {
+   "id": "W22",
+   "status": "QUALIFIED",
+   "class": "net.minecraft.world.chunk.Chunk",
+   "method": "func_150804_b",
+   "descriptor": "(Z)V",
+   "hook_type": "WRITE_BEGIN",
+   "purpose": "chunk tick/incremental update (audit: func_150804_b177)",
+   "affected_domains": [
+    "block light",
+    "sky light"
+   ],
+   "thread_context": "CANONICAL_OWNER",
+   "insertion_location": "method entry, before any read or write of protected state; balanced catch-all-finally end hook before every return and Throwable (WRITE_END)",
+   "fingerprint": {
+    "kind": "DECLARATION"
+   },
+   "bracket_end_hook_type": "WRITE_END",
+   "qualification_evidence": {
+    "classification": "UNCHANGED_SEMANTIC",
+    "canonical_pre_hook_sha256": "bbc9f8164716f1acb92694cd7e9de4606175ce258ba690f419558fc12d34152c",
+    "raw_observed_sha256": "bb283fe1b9ba656bf6300e44d08eb10e5ef88706a4e8aa9a119afda219685ed3",
+    "anchor_validation": "IN_ORDER_FRAGMENT_SCAN_PASS"
+   }
+  },
+  {
+   "id": "W23",
+   "status": "QUALIFIED",
+   "class": "net.minecraft.world.chunk.Chunk",
+   "method": "func_76602_a",
+   "descriptor": "([Lnet/minecraft/world/chunk/storage/ExtendedBlockStorage;)V",
+   "hook_type": "WRITE_BEGIN",
+   "purpose": "chunk extended block storage replacement (audit arraycopy49)",
+   "affected_domains": [
+    "storage/backing replacement",
+    "section existence"
+   ],
+   "thread_context": "CANONICAL_OWNER",
+   "insertion_location": "method entry, before any read or write of protected state; balanced catch-all-finally end hook before every return and Throwable (WRITE_END)",
+   "fingerprint": {
+    "kind": "BCI_ASSERTIONS",
+    "assertions": [
+     {
+      "bci": 49,
+      "expect": "invokestatic java/lang/System.arraycopy"
+     }
+    ]
+   },
+   "bracket_end_hook_type": "WRITE_END",
+   "qualification_evidence": {
+    "classification": "REWRITTEN_METHOD",
+    "canonical_pre_hook_sha256": "bbc9f8164716f1acb92694cd7e9de4606175ce258ba690f419558fc12d34152c",
+    "raw_observed_sha256": "bb283fe1b9ba656bf6300e44d08eb10e5ef88706a4e8aa9a119afda219685ed3",
+    "anchor_validation": "IN_ORDER_FRAGMENT_SCAN_PASS"
+   }
+  },
+  {
+   "id": "W24",
+   "status": "QUALIFIED",
+   "class": "net.minecraft.world.chunk.Chunk",
+   "method": "func_177411_a",
+   "descriptor": "(Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/world/biome/BiomeProvider;)Lnet/minecraft/world/biome/Biome;",
+   "hook_type": "WRITE_BEGIN",
+   "purpose": "chunk lazy biome lookup fill (audit bastore92)",
+   "affected_domains": [
+    "biomes"
+   ],
+   "thread_context": "CANONICAL_OWNER",
+   "insertion_location": "method entry, before any read or write of protected state; balanced catch-all-finally end hook before every return and Throwable (WRITE_END)",
+   "fingerprint": {
+    "kind": "BCI_ASSERTIONS",
+    "assertions": [
+     {
+      "bci": 92,
+      "expect": "bastore"
+     }
+    ]
+   },
+   "bracket_end_hook_type": "WRITE_END",
+   "qualification_evidence": {
+    "classification": "REWRITTEN_METHOD",
+    "canonical_pre_hook_sha256": "bbc9f8164716f1acb92694cd7e9de4606175ce258ba690f419558fc12d34152c",
+    "raw_observed_sha256": "bb283fe1b9ba656bf6300e44d08eb10e5ef88706a4e8aa9a119afda219685ed3",
+    "anchor_validation": "IN_ORDER_FRAGMENT_SCAN_PASS"
+   }
+  },
+  {
+   "id": "W25",
+   "status": "QUALIFIED",
+   "class": "net.minecraft.world.chunk.Chunk",
+   "method": "func_76616_a",
+   "descriptor": "([B)V",
+   "hook_type": "WRITE_BEGIN",
+   "purpose": "chunk biome array set (audit arraycopy49)",
+   "affected_domains": [
+    "biomes"
+   ],
+   "thread_context": "CANONICAL_OWNER",
+   "insertion_location": "method entry, before any read or write of protected state; balanced catch-all-finally end hook before every return and Throwable (WRITE_END)",
+   "fingerprint": {
+    "kind": "BCI_ASSERTIONS",
+    "assertions": [
+     {
+      "bci": 49,
+      "expect": "invokestatic java/lang/System.arraycopy"
+     }
+    ]
+   },
+   "bracket_end_hook_type": "WRITE_END",
+   "qualification_evidence": {
+    "classification": "REWRITTEN_METHOD",
+    "canonical_pre_hook_sha256": "bbc9f8164716f1acb92694cd7e9de4606175ce258ba690f419558fc12d34152c",
+    "raw_observed_sha256": "bb283fe1b9ba656bf6300e44d08eb10e5ef88706a4e8aa9a119afda219685ed3",
+    "anchor_validation": "IN_ORDER_FRAGMENT_SCAN_PASS"
+   }
+  },
+  {
+   "id": "W26",
+   "status": "QUALIFIED",
+   "class": "net.minecraft.world.chunk.Chunk",
+   "method": "func_76594_o",
+   "descriptor": "()V",
+   "hook_type": "WRITE_BEGIN",
+   "purpose": "chunk incremental light update (audit func_76594_o161)",
+   "affected_domains": [
+    "block light",
+    "sky light"
+   ],
+   "thread_context": "CANONICAL_OWNER",
+   "insertion_location": "method entry, before any read or write of protected state; balanced catch-all-finally end hook before every return and Throwable (WRITE_END)",
+   "fingerprint": {
+    "kind": "DECLARATION"
+   },
+   "bracket_end_hook_type": "WRITE_END",
+   "qualification_evidence": {
+    "classification": "REWRITTEN_METHOD",
+    "canonical_pre_hook_sha256": "bbc9f8164716f1acb92694cd7e9de4606175ce258ba690f419558fc12d34152c",
+    "raw_observed_sha256": "bb283fe1b9ba656bf6300e44d08eb10e5ef88706a4e8aa9a119afda219685ed3",
+    "anchor_validation": "IN_ORDER_FRAGMENT_SCAN_PASS"
+   }
+  },
+  {
+   "id": "W27",
+   "status": "QUALIFIED",
+   "class": "net.minecraft.world.chunk.Chunk",
+   "method": "func_150809_p",
+   "descriptor": "()V",
+   "hook_type": "WRITE_BEGIN",
+   "purpose": "chunk terrain/light flags and propagation",
+   "affected_domains": [
+    "sky light"
+   ],
+   "thread_context": "CANONICAL_OWNER",
+   "insertion_location": "method entry, before any read or write of protected state; balanced catch-all-finally end hook before every return and Throwable (WRITE_END)",
+   "fingerprint": {
+    "kind": "DECLARATION"
+   },
+   "bracket_end_hook_type": "WRITE_END",
+   "qualification_evidence": {
+    "classification": "REWRITTEN_METHOD",
+    "canonical_pre_hook_sha256": "bbc9f8164716f1acb92694cd7e9de4606175ce258ba690f419558fc12d34152c",
+    "raw_observed_sha256": "bb283fe1b9ba656bf6300e44d08eb10e5ef88706a4e8aa9a119afda219685ed3",
+    "anchor_validation": "IN_ORDER_FRAGMENT_SCAN_PASS"
+   }
+  },
+  {
+   "id": "W28",
+   "status": "QUALIFIED",
+   "class": "net.minecraft.world.chunk.Chunk",
+   "method": "func_177441_y",
+   "descriptor": "()V",
+   "hook_type": "WRITE_BEGIN",
+   "purpose": "chunk light family writer (audit light family)",
+   "affected_domains": [
+    "block light",
+    "sky light"
+   ],
+   "thread_context": "CANONICAL_OWNER",
+   "insertion_location": "method entry, before any read or write of protected state; balanced catch-all-finally end hook before every return and Throwable (WRITE_END)",
+   "fingerprint": {
+    "kind": "DECLARATION"
+   },
+   "bracket_end_hook_type": "WRITE_END",
+   "qualification_evidence": {
+    "classification": "UNCHANGED_SEMANTIC",
+    "canonical_pre_hook_sha256": "bbc9f8164716f1acb92694cd7e9de4606175ce258ba690f419558fc12d34152c",
+    "raw_observed_sha256": "bb283fe1b9ba656bf6300e44d08eb10e5ef88706a4e8aa9a119afda219685ed3",
+    "anchor_validation": "IN_ORDER_FRAGMENT_SCAN_PASS"
+   }
+  },
+  {
+   "id": "W29",
+   "status": "QUALIFIED",
+   "class": "net.minecraft.world.chunk.Chunk",
+   "method": "func_180700_a",
+   "descriptor": "(Lnet/minecraft/util/EnumFacing;)V",
+   "hook_type": "WRITE_BEGIN",
+   "purpose": "chunk neighbor light access (audit light family)",
+   "affected_domains": [
+    "block light",
+    "sky light"
+   ],
+   "thread_context": "CANONICAL_OWNER",
+   "insertion_location": "method entry, before any read or write of protected state; balanced catch-all-finally end hook before every return and Throwable (WRITE_END)",
+   "fingerprint": {
+    "kind": "DECLARATION"
+   },
+   "bracket_end_hook_type": "WRITE_END",
+   "qualification_evidence": {
+    "classification": "UNCHANGED_SEMANTIC",
+    "canonical_pre_hook_sha256": "bbc9f8164716f1acb92694cd7e9de4606175ce258ba690f419558fc12d34152c",
+    "raw_observed_sha256": "bb283fe1b9ba656bf6300e44d08eb10e5ef88706a4e8aa9a119afda219685ed3",
+    "anchor_validation": "IN_ORDER_FRAGMENT_SCAN_PASS"
+   }
+  },
+  {
+   "id": "W30",
+   "status": "QUALIFIED",
+   "class": "net.minecraft.world.chunk.Chunk",
+   "method": "func_150811_f",
+   "descriptor": "(II)Z",
+   "hook_type": "WRITE_BEGIN",
+   "purpose": "chunk sky visibility/light check (audit light family)",
+   "affected_domains": [
+    "sky light"
+   ],
+   "thread_context": "CANONICAL_OWNER",
+   "insertion_location": "method entry, before any read or write of protected state; balanced catch-all-finally end hook before every return and Throwable (WRITE_END)",
+   "fingerprint": {
+    "kind": "DECLARATION"
+   },
+   "bracket_end_hook_type": "WRITE_END",
+   "qualification_evidence": {
+    "classification": "UNCHANGED_SEMANTIC",
+    "canonical_pre_hook_sha256": "bbc9f8164716f1acb92694cd7e9de4606175ce258ba690f419558fc12d34152c",
+    "raw_observed_sha256": "bb283fe1b9ba656bf6300e44d08eb10e5ef88706a4e8aa9a119afda219685ed3",
+    "anchor_validation": "IN_ORDER_FRAGMENT_SCAN_PASS"
+   }
+  },
+  {
+   "id": "W31",
+   "status": "QUALIFIED",
+   "class": "net.minecraft.world.chunk.Chunk",
+   "method": "func_177446_d",
+   "descriptor": "(Z)V",
+   "hook_type": "WRITE_BEGIN",
+   "purpose": "chunk readiness flag (terrain populated)",
+   "affected_domains": [
+    "owner publication"
+   ],
+   "thread_context": "CANONICAL_OWNER",
+   "insertion_location": "method entry, before any read or write of protected state; balanced catch-all-finally end hook before every return and Throwable (WRITE_END)",
+   "fingerprint": {
+    "kind": "DECLARATION"
+   },
+   "bracket_end_hook_type": "WRITE_END",
+   "qualification_evidence": {
+    "classification": "UNCHANGED_SEMANTIC",
+    "canonical_pre_hook_sha256": "bbc9f8164716f1acb92694cd7e9de4606175ce258ba690f419558fc12d34152c",
+    "raw_observed_sha256": "bb283fe1b9ba656bf6300e44d08eb10e5ef88706a4e8aa9a119afda219685ed3",
+    "anchor_validation": "IN_ORDER_FRAGMENT_SCAN_PASS"
+   }
+  },
+  {
+   "id": "W32",
+   "status": "QUALIFIED",
+   "class": "net.minecraft.world.chunk.Chunk",
+   "method": "func_177421_e",
+   "descriptor": "(Z)V",
+   "hook_type": "WRITE_BEGIN",
+   "purpose": "chunk readiness flag (light populated)",
+   "affected_domains": [
+    "owner publication"
+   ],
+   "thread_context": "CANONICAL_OWNER",
+   "insertion_location": "method entry, before any read or write of protected state; balanced catch-all-finally end hook before every return and Throwable (WRITE_END)",
+   "fingerprint": {
+    "kind": "DECLARATION"
+   },
+   "bracket_end_hook_type": "WRITE_END",
+   "qualification_evidence": {
+    "classification": "UNCHANGED_SEMANTIC",
+    "canonical_pre_hook_sha256": "bbc9f8164716f1acb92694cd7e9de4606175ce258ba690f419558fc12d34152c",
+    "raw_observed_sha256": "bb283fe1b9ba656bf6300e44d08eb10e5ef88706a4e8aa9a119afda219685ed3",
+    "anchor_validation": "IN_ORDER_FRAGMENT_SCAN_PASS"
+   }
+  },
+  {
+   "id": "W33",
+   "status": "QUALIFIED",
+   "class": "net.minecraft.world.chunk.Chunk",
+   "method": "removeInvalidTileEntity",
+   "descriptor": "(Lnet/minecraft/util/math/BlockPos;)V",
+   "hook_type": "WRITE_BEGIN",
+   "purpose": "chunk invalid tile entity removal",
+   "affected_domains": [
+    "tileentity restrictions"
+   ],
+   "thread_context": "CANONICAL_OWNER",
+   "insertion_location": "method entry, before any read or write of protected state; balanced catch-all-finally end hook before every return and Throwable (WRITE_END)",
+   "fingerprint": {
+    "kind": "DECLARATION"
+   },
+   "bracket_end_hook_type": "WRITE_END",
+   "qualification_evidence": {
+    "classification": "UNCHANGED_SEMANTIC",
+    "canonical_pre_hook_sha256": "bbc9f8164716f1acb92694cd7e9de4606175ce258ba690f419558fc12d34152c",
+    "raw_observed_sha256": "bb283fe1b9ba656bf6300e44d08eb10e5ef88706a4e8aa9a119afda219685ed3",
+    "anchor_validation": "IN_ORDER_FRAGMENT_SCAN_PASS"
+   }
+  },
+  {
+   "id": "W34",
+   "status": "QUALIFIED",
+   "class": "net.minecraft.world.chunk.Chunk",
+   "method": "<init>",
+   "descriptor": "(Lnet/minecraft/world/World;II)V",
+   "hook_type": "PRIVATE_BUILD_BEGIN",
+   "purpose": "chunk identity registration after super, before escape (serves worker-private build and owner-pending contexts)",
+   "affected_domains": [
+    "private I/O construction",
+    "section existence"
+   ],
+   "thread_context": "CANONICAL_OWNER_OR_IO_WORKER",
+   "insertion_location": "after the successful super constructor invocation, before the instance can escape; registers the fresh identity with PrivateBuildTickets.registerNew",
+   "fingerprint": {
+    "kind": "DECLARATION"
+   },
+   "bracket_end_hook_type": null,
+   "qualification_evidence": {
+    "classification": "REWRITTEN_METHOD",
+    "canonical_pre_hook_sha256": "bbc9f8164716f1acb92694cd7e9de4606175ce258ba690f419558fc12d34152c",
+    "raw_observed_sha256": "bb283fe1b9ba656bf6300e44d08eb10e5ef88706a4e8aa9a119afda219685ed3",
+    "anchor_validation": "IN_ORDER_FRAGMENT_SCAN_PASS"
+   }
+  },
+  {
+   "id": "W35",
+   "status": "QUALIFIED",
+   "class": "net.minecraft.world.chunk.Chunk",
+   "method": "<init>",
+   "descriptor": "(Lnet/minecraft/world/World;Lnet/minecraft/world/chunk/ChunkPrimer;II)V",
+   "hook_type": "PRIVATE_BUILD_BEGIN",
+   "purpose": "chunk identity registration after super, before escape (serves worker-private build and owner-pending contexts)",
+   "affected_domains": [
+    "private I/O construction",
+    "section existence"
+   ],
+   "thread_context": "CANONICAL_OWNER_OR_IO_WORKER",
+   "insertion_location": "after the successful super constructor invocation, before the instance can escape; registers the fresh identity with PrivateBuildTickets.registerNew",
+   "fingerprint": {
+    "kind": "DECLARATION"
+   },
+   "bracket_end_hook_type": null,
+   "qualification_evidence": {
+    "classification": "REWRITTEN_METHOD",
+    "canonical_pre_hook_sha256": "bbc9f8164716f1acb92694cd7e9de4606175ce258ba690f419558fc12d34152c",
+    "raw_observed_sha256": "bb283fe1b9ba656bf6300e44d08eb10e5ef88706a4e8aa9a119afda219685ed3",
+    "anchor_validation": "IN_ORDER_FRAGMENT_SCAN_PASS"
+   }
+  },
+  {
+   "id": "W36",
+   "status": "QUALIFIED",
+   "class": "net.minecraft.world.chunk.storage.ExtendedBlockStorage",
+   "method": "<init>",
+   "descriptor": "(IZ)V",
+   "hook_type": "PRIVATE_BUILD_BEGIN",
+   "purpose": "extended block storage identity registration",
+   "affected_domains": [
+    "section existence"
+   ],
+   "thread_context": "CANONICAL_OWNER_OR_IO_WORKER",
+   "insertion_location": "after the successful super constructor invocation, before the instance can escape; registers the fresh identity with PrivateBuildTickets.registerNew",
+   "fingerprint": {
+    "kind": "DECLARATION"
+   },
+   "bracket_end_hook_type": null,
+   "qualification_evidence": {
+    "classification": "REWRITTEN_METHOD",
+    "canonical_pre_hook_sha256": "6897b9847780809df7fe9a2782eb87bd89b6583595fc2c2e8afd0ff311716b7a",
+    "raw_observed_sha256": "53af813d4eabc47b6efd2a18a4c03a17cd5255f1565baba3b045d49d3d7549bd",
+    "anchor_validation": "IN_ORDER_FRAGMENT_SCAN_PASS"
+   }
+  },
+  {
+   "id": "W37",
+   "status": "QUALIFIED",
+   "class": "net.minecraft.world.chunk.storage.ExtendedBlockStorage",
+   "method": "func_177484_a",
+   "descriptor": "(IIILnet/minecraft/block/state/IBlockState;)V",
+   "hook_type": "WRITE_BEGIN",
+   "purpose": "EBS block state set + refcount updates (audit count writes 62/80/98/116, cell set 192-203)",
+   "affected_domains": [
+    "block states",
+    "blockRefCount/isEmpty"
+   ],
+   "thread_context": "CANONICAL_OWNER_OR_IO_WORKER",
+   "insertion_location": "method entry, before any read or write of protected state; balanced catch-all-finally end hook before every return and Throwable (WRITE_END)",
+   "fingerprint": {
+    "kind": "BCI_ASSERTIONS",
+    "assertions": [
+     {
+      "bci": 62,
+      "expect": "putfield field_76682_b:I"
+     },
+     {
+      "bci": 116,
+      "expect": "putfield field_76683_c:I"
+     }
+    ]
+   },
+   "bracket_end_hook_type": "WRITE_END",
+   "qualification_evidence": {
+    "classification": "UNCHANGED_SEMANTIC",
+    "canonical_pre_hook_sha256": "6897b9847780809df7fe9a2782eb87bd89b6583595fc2c2e8afd0ff311716b7a",
+    "raw_observed_sha256": "53af813d4eabc47b6efd2a18a4c03a17cd5255f1565baba3b045d49d3d7549bd",
+    "anchor_validation": "IN_ORDER_FRAGMENT_SCAN_PASS"
+   }
+  },
+  {
+   "id": "W38",
+   "status": "QUALIFIED",
+   "class": "net.minecraft.world.chunk.storage.ExtendedBlockStorage",
+   "method": "func_76657_c",
+   "descriptor": "(IIII)V",
+   "hook_type": "WRITE_BEGIN",
+   "purpose": "EBS sky light nibble write",
+   "affected_domains": [
+    "sky light"
+   ],
+   "thread_context": "CANONICAL_OWNER_OR_IO_WORKER",
+   "insertion_location": "method entry, before any read or write of protected state; balanced catch-all-finally end hook before every return and Throwable (WRITE_END)",
+   "fingerprint": {
+    "kind": "DECLARATION"
+   },
+   "bracket_end_hook_type": "WRITE_END",
+   "qualification_evidence": {
+    "classification": "REWRITTEN_METHOD",
+    "canonical_pre_hook_sha256": "6897b9847780809df7fe9a2782eb87bd89b6583595fc2c2e8afd0ff311716b7a",
+    "raw_observed_sha256": "53af813d4eabc47b6efd2a18a4c03a17cd5255f1565baba3b045d49d3d7549bd",
+    "anchor_validation": "IN_ORDER_FRAGMENT_SCAN_PASS"
+   }
+  },
+  {
+   "id": "W39",
+   "status": "QUALIFIED",
+   "class": "net.minecraft.world.chunk.storage.ExtendedBlockStorage",
+   "method": "func_76677_d",
+   "descriptor": "(IIII)V",
+   "hook_type": "WRITE_BEGIN",
+   "purpose": "EBS block light nibble write",
+   "affected_domains": [
+    "block light"
+   ],
+   "thread_context": "CANONICAL_OWNER_OR_IO_WORKER",
+   "insertion_location": "method entry, before any read or write of protected state; balanced catch-all-finally end hook before every return and Throwable (WRITE_END)",
+   "fingerprint": {
+    "kind": "DECLARATION"
+   },
+   "bracket_end_hook_type": "WRITE_END",
+   "qualification_evidence": {
+    "classification": "REWRITTEN_METHOD",
+    "canonical_pre_hook_sha256": "6897b9847780809df7fe9a2782eb87bd89b6583595fc2c2e8afd0ff311716b7a",
+    "raw_observed_sha256": "53af813d4eabc47b6efd2a18a4c03a17cd5255f1565baba3b045d49d3d7549bd",
+    "anchor_validation": "IN_ORDER_FRAGMENT_SCAN_PASS"
+   }
+  },
+  {
+   "id": "W40",
+   "status": "QUALIFIED",
+   "class": "net.minecraft.world.chunk.storage.ExtendedBlockStorage",
+   "method": "func_76672_e",
+   "descriptor": "()V",
+   "hook_type": "WRITE_BEGIN",
+   "purpose": "EBS refcount rescan (isEmpty basis)",
+   "affected_domains": [
+    "blockRefCount/isEmpty"
+   ],
+   "thread_context": "CANONICAL_OWNER_OR_IO_WORKER",
+   "insertion_location": "method entry, before any read or write of protected state; balanced catch-all-finally end hook before every return and Throwable (WRITE_END)",
+   "fingerprint": {
+    "kind": "DECLARATION"
+   },
+   "bracket_end_hook_type": "WRITE_END",
+   "qualification_evidence": {
+    "classification": "UNCHANGED_SEMANTIC",
+    "canonical_pre_hook_sha256": "6897b9847780809df7fe9a2782eb87bd89b6583595fc2c2e8afd0ff311716b7a",
+    "raw_observed_sha256": "53af813d4eabc47b6efd2a18a4c03a17cd5255f1565baba3b045d49d3d7549bd",
+    "anchor_validation": "IN_ORDER_FRAGMENT_SCAN_PASS"
+   }
+  },
+  {
+   "id": "W41",
+   "status": "QUALIFIED",
+   "class": "net.minecraft.world.chunk.storage.ExtendedBlockStorage",
+   "method": "func_76659_c",
+   "descriptor": "(Lnet/minecraft/world/chunk/NibbleArray;)V",
+   "hook_type": "WRITE_BEGIN",
+   "purpose": "EBS block light plane replacement",
+   "affected_domains": [
+    "storage/backing replacement",
+    "block light"
+   ],
+   "thread_context": "CANONICAL_OWNER_OR_IO_WORKER",
+   "insertion_location": "method entry, before any read or write of protected state; balanced catch-all-finally end hook before every return and Throwable (WRITE_END)",
+   "fingerprint": {
+    "kind": "DECLARATION"
+   },
+   "bracket_end_hook_type": "WRITE_END",
+   "qualification_evidence": {
+    "classification": "REWRITTEN_METHOD",
+    "canonical_pre_hook_sha256": "6897b9847780809df7fe9a2782eb87bd89b6583595fc2c2e8afd0ff311716b7a",
+    "raw_observed_sha256": "53af813d4eabc47b6efd2a18a4c03a17cd5255f1565baba3b045d49d3d7549bd",
+    "anchor_validation": "IN_ORDER_FRAGMENT_SCAN_PASS"
+   }
+  },
+  {
+   "id": "W42",
+   "status": "QUALIFIED",
+   "class": "net.minecraft.world.chunk.storage.ExtendedBlockStorage",
+   "method": "func_76666_d",
+   "descriptor": "(Lnet/minecraft/world/chunk/NibbleArray;)V",
+   "hook_type": "WRITE_BEGIN",
+   "purpose": "EBS sky light plane replacement",
+   "affected_domains": [
+    "storage/backing replacement",
+    "sky light"
+   ],
+   "thread_context": "CANONICAL_OWNER_OR_IO_WORKER",
+   "insertion_location": "method entry, before any read or write of protected state; balanced catch-all-finally end hook before every return and Throwable (WRITE_END)",
+   "fingerprint": {
+    "kind": "DECLARATION"
+   },
+   "bracket_end_hook_type": "WRITE_END",
+   "qualification_evidence": {
+    "classification": "REWRITTEN_METHOD",
+    "canonical_pre_hook_sha256": "6897b9847780809df7fe9a2782eb87bd89b6583595fc2c2e8afd0ff311716b7a",
+    "raw_observed_sha256": "53af813d4eabc47b6efd2a18a4c03a17cd5255f1565baba3b045d49d3d7549bd",
+    "anchor_validation": "IN_ORDER_FRAGMENT_SCAN_PASS"
+   }
+  },
+  {
+   "id": "W43",
+   "status": "QUALIFIED",
+   "class": "net.minecraft.world.chunk.BlockStateContainer",
+   "method": "<init>",
+   "descriptor": "()V",
+   "hook_type": "PRIVATE_BUILD_BEGIN",
+   "purpose": "block state container identity registration",
+   "affected_domains": [
+    "section existence"
+   ],
+   "thread_context": "CANONICAL_OWNER_OR_IO_WORKER",
+   "insertion_location": "after the successful super constructor invocation, before the instance can escape; registers the fresh identity with PrivateBuildTickets.registerNew",
+   "fingerprint": {
+    "kind": "DECLARATION"
+   },
+   "bracket_end_hook_type": null,
+   "qualification_evidence": {
+    "classification": "UNCHANGED_SEMANTIC",
+    "canonical_pre_hook_sha256": "80a1a26ca886401a83ac6f010a686f5b5e2aa48927b1b53f755b99506500ab91",
+    "raw_observed_sha256": "14750cd64e968a2fb452e3ec021314fa183870960e475d9f19e9e0251e2e7a95",
+    "anchor_validation": "IN_ORDER_FRAGMENT_SCAN_PASS"
+   }
+  },
+  {
+   "id": "W44",
+   "status": "QUALIFIED",
+   "class": "net.minecraft.world.chunk.BlockStateContainer",
+   "method": "func_186012_b",
+   "descriptor": "(I)V",
+   "hook_type": "WRITE_BEGIN",
+   "purpose": "container palette size setter",
+   "affected_domains": [
+    "block states"
+   ],
+   "thread_context": "CANONICAL_OWNER_OR_IO_WORKER",
+   "insertion_location": "method entry, before any read or write of protected state; balanced catch-all-finally end hook before every return and Throwable (WRITE_END)",
+   "fingerprint": {
+    "kind": "DECLARATION"
+   },
+   "bracket_end_hook_type": "WRITE_END",
+   "qualification_evidence": {
+    "classification": "UNCHANGED_SEMANTIC",
+    "canonical_pre_hook_sha256": "80a1a26ca886401a83ac6f010a686f5b5e2aa48927b1b53f755b99506500ab91",
+    "raw_observed_sha256": "14750cd64e968a2fb452e3ec021314fa183870960e475d9f19e9e0251e2e7a95",
+    "anchor_validation": "IN_ORDER_FRAGMENT_SCAN_PASS"
+   }
+  },
+  {
+   "id": "W45",
+   "status": "QUALIFIED",
+   "class": "net.minecraft.world.chunk.BlockStateContainer",
+   "method": "setBits",
+   "descriptor": "(IZ)V",
+   "hook_type": "WRITE_BEGIN",
+   "purpose": "container setBits: palette+BitArray replacement (audit BCI 73-99)",
+   "affected_domains": [
+    "block states",
+    "storage/backing replacement"
+   ],
+   "thread_context": "CANONICAL_OWNER_OR_IO_WORKER",
+   "insertion_location": "method entry, before any read or write of protected state; balanced catch-all-finally end hook before every return and Throwable (WRITE_END)",
+   "fingerprint": {
+    "kind": "BCI_ASSERTIONS",
+    "assertions": [
+     {
+      "bci": 99,
+      "expect": "putfield field_186024_e:I"
+     }
+    ]
+   },
+   "bracket_end_hook_type": "WRITE_END",
+   "qualification_evidence": {
+    "classification": "UNCHANGED_SEMANTIC",
+    "canonical_pre_hook_sha256": "80a1a26ca886401a83ac6f010a686f5b5e2aa48927b1b53f755b99506500ab91",
+    "raw_observed_sha256": "14750cd64e968a2fb452e3ec021314fa183870960e475d9f19e9e0251e2e7a95",
+    "anchor_validation": "IN_ORDER_FRAGMENT_SCAN_PASS"
+   }
+  },
+  {
+   "id": "W46",
+   "status": "QUALIFIED",
+   "class": "net.minecraft.world.chunk.BlockStateContainer",
+   "method": "func_186008_a",
+   "descriptor": "(ILnet/minecraft/block/state/IBlockState;)I",
+   "hook_type": "WRITE_BEGIN",
+   "purpose": "container palette resize",
+   "affected_domains": [
+    "block states"
+   ],
+   "thread_context": "CANONICAL_OWNER_OR_IO_WORKER",
+   "insertion_location": "method entry, before any read or write of protected state; balanced catch-all-finally end hook before every return and Throwable (WRITE_END)",
+   "fingerprint": {
+    "kind": "DECLARATION"
+   },
+   "bracket_end_hook_type": "WRITE_END",
+   "qualification_evidence": {
+    "classification": "UNCHANGED_SEMANTIC",
+    "canonical_pre_hook_sha256": "80a1a26ca886401a83ac6f010a686f5b5e2aa48927b1b53f755b99506500ab91",
+    "raw_observed_sha256": "14750cd64e968a2fb452e3ec021314fa183870960e475d9f19e9e0251e2e7a95",
+    "anchor_validation": "IN_ORDER_FRAGMENT_SCAN_PASS"
+   }
+  },
+  {
+   "id": "W47",
+   "status": "QUALIFIED",
+   "class": "net.minecraft.world.chunk.BlockStateContainer",
+   "method": "func_186013_a",
+   "descriptor": "(IIILnet/minecraft/block/state/IBlockState;)V",
+   "hook_type": "WRITE_BEGIN",
+   "purpose": "container state set (resize path)",
+   "affected_domains": [
+    "block states"
+   ],
+   "thread_context": "CANONICAL_OWNER_OR_IO_WORKER",
+   "insertion_location": "method entry, before any read or write of protected state; balanced catch-all-finally end hook before every return and Throwable (WRITE_END)",
+   "fingerprint": {
+    "kind": "DECLARATION"
+   },
+   "bracket_end_hook_type": "WRITE_END",
+   "qualification_evidence": {
+    "classification": "UNCHANGED_SEMANTIC",
+    "canonical_pre_hook_sha256": "80a1a26ca886401a83ac6f010a686f5b5e2aa48927b1b53f755b99506500ab91",
+    "raw_observed_sha256": "14750cd64e968a2fb452e3ec021314fa183870960e475d9f19e9e0251e2e7a95",
+    "anchor_validation": "IN_ORDER_FRAGMENT_SCAN_PASS"
+   }
+  },
+  {
+   "id": "W48",
+   "status": "QUALIFIED",
+   "class": "net.minecraft.world.chunk.BlockStateContainer",
+   "method": "func_186014_b",
+   "descriptor": "(ILnet/minecraft/block/state/IBlockState;)V",
+   "hook_type": "WRITE_BEGIN",
+   "purpose": "container index set",
+   "affected_domains": [
+    "block states"
+   ],
+   "thread_context": "CANONICAL_OWNER_OR_IO_WORKER",
+   "insertion_location": "method entry, before any read or write of protected state; balanced catch-all-finally end hook before every return and Throwable (WRITE_END)",
+   "fingerprint": {
+    "kind": "DECLARATION"
+   },
+   "bracket_end_hook_type": "WRITE_END",
+   "qualification_evidence": {
+    "classification": "UNCHANGED_SEMANTIC",
+    "canonical_pre_hook_sha256": "80a1a26ca886401a83ac6f010a686f5b5e2aa48927b1b53f755b99506500ab91",
+    "raw_observed_sha256": "14750cd64e968a2fb452e3ec021314fa183870960e475d9f19e9e0251e2e7a95",
+    "anchor_validation": "IN_ORDER_FRAGMENT_SCAN_PASS"
+   }
+  },
+  {
+   "id": "W49",
+   "status": "QUALIFIED",
+   "class": "net.minecraft.world.chunk.BlockStateContainer",
+   "method": "func_186019_a",
+   "descriptor": "([BLnet/minecraft/world/chunk/NibbleArray;Lnet/minecraft/world/chunk/NibbleArray;)V",
+   "hook_type": "WRITE_BEGIN",
+   "purpose": "container NBT ingestion (storage replacement)",
+   "affected_domains": [
+    "storage/backing replacement",
+    "block states"
+   ],
+   "thread_context": "CANONICAL_OWNER_OR_IO_WORKER",
+   "insertion_location": "method entry, before any read or write of protected state; balanced catch-all-finally end hook before every return and Throwable (WRITE_END)",
+   "fingerprint": {
+    "kind": "DECLARATION"
+   },
+   "bracket_end_hook_type": "WRITE_END",
+   "qualification_evidence": {
+    "classification": "UNCHANGED_SEMANTIC",
+    "canonical_pre_hook_sha256": "80a1a26ca886401a83ac6f010a686f5b5e2aa48927b1b53f755b99506500ab91",
+    "raw_observed_sha256": "14750cd64e968a2fb452e3ec021314fa183870960e475d9f19e9e0251e2e7a95",
+    "anchor_validation": "IN_ORDER_FRAGMENT_SCAN_PASS"
+   }
+  },
+  {
+   "id": "W50",
+   "status": "QUALIFIED",
+   "class": "net.minecraft.world.chunk.NibbleArray",
+   "method": "<init>",
+   "descriptor": "()V",
+   "hook_type": "PRIVATE_BUILD_BEGIN",
+   "purpose": "nibble array identity registration (fresh backing)",
+   "affected_domains": [
+    "section existence"
+   ],
+   "thread_context": "CANONICAL_OWNER_OR_IO_WORKER",
+   "insertion_location": "after the successful super constructor invocation, before the instance can escape; registers the fresh identity with PrivateBuildTickets.registerNew",
+   "fingerprint": {
+    "kind": "DECLARATION"
+   },
+   "bracket_end_hook_type": null,
+   "qualification_evidence": {
+    "classification": "UNCHANGED_EXACT",
+    "canonical_pre_hook_sha256": "437f0001a3c649ed44bf77cebccb5060109dbfb6243d05366f1bfa199c1ba0d8",
+    "raw_observed_sha256": "b5556356777ea7c17ecfd1ceec588da0aa8e183ee5305a16438215eaf297285f",
+    "anchor_validation": "IN_ORDER_FRAGMENT_SCAN_PASS"
+   }
+  },
+  {
+   "id": "W51",
+   "status": "QUALIFIED",
+   "class": "net.minecraft.world.chunk.NibbleArray",
+   "method": "<init>",
+   "descriptor": "([B)V",
+   "hook_type": "PRIVATE_BUILD_BEGIN",
+   "purpose": "nibble array identity registration (ALIASES its byte[] argument; prior provenance retained)",
+   "affected_domains": [
+    "storage/backing replacement"
+   ],
+   "thread_context": "CANONICAL_OWNER_OR_IO_WORKER",
+   "insertion_location": "after the successful super constructor invocation, before the instance can escape; registers the fresh identity with PrivateBuildTickets.registerNew",
+   "fingerprint": {
+    "kind": "DECLARATION"
+   },
+   "bracket_end_hook_type": null,
+   "qualification_evidence": {
+    "classification": "UNCHANGED_EXACT",
+    "canonical_pre_hook_sha256": "437f0001a3c649ed44bf77cebccb5060109dbfb6243d05366f1bfa199c1ba0d8",
+    "raw_observed_sha256": "b5556356777ea7c17ecfd1ceec588da0aa8e183ee5305a16438215eaf297285f",
+    "anchor_validation": "IN_ORDER_FRAGMENT_SCAN_PASS"
+   }
+  },
+  {
+   "id": "W52",
+   "status": "QUALIFIED",
+   "class": "net.minecraft.world.chunk.NibbleArray",
+   "method": "func_76581_a",
+   "descriptor": "(IIII)V",
+   "hook_type": "WRITE_BEGIN",
+   "purpose": "nibble array coordinated write",
+   "affected_domains": [
+    "block light",
+    "sky light"
+   ],
+   "thread_context": "CANONICAL_OWNER_OR_IO_WORKER",
+   "insertion_location": "method entry, before any read or write of protected state; balanced catch-all-finally end hook before every return and Throwable (WRITE_END)",
+   "fingerprint": {
+    "kind": "DECLARATION"
+   },
+   "bracket_end_hook_type": "WRITE_END",
+   "qualification_evidence": {
+    "classification": "UNCHANGED_EXACT",
+    "canonical_pre_hook_sha256": "437f0001a3c649ed44bf77cebccb5060109dbfb6243d05366f1bfa199c1ba0d8",
+    "raw_observed_sha256": "b5556356777ea7c17ecfd1ceec588da0aa8e183ee5305a16438215eaf297285f",
+    "anchor_validation": "IN_ORDER_FRAGMENT_SCAN_PASS"
+   }
+  },
+  {
+   "id": "W53",
+   "status": "QUALIFIED",
+   "class": "net.minecraft.world.chunk.NibbleArray",
+   "method": "func_177482_a",
+   "descriptor": "(II)V",
+   "hook_type": "WRITE_BEGIN",
+   "purpose": "nibble array direct backing set",
+   "affected_domains": [
+    "block light",
+    "sky light"
+   ],
+   "thread_context": "CANONICAL_OWNER_OR_IO_WORKER",
+   "insertion_location": "method entry, before any read or write of protected state; balanced catch-all-finally end hook before every return and Throwable (WRITE_END)",
+   "fingerprint": {
+    "kind": "DECLARATION"
+   },
+   "bracket_end_hook_type": "WRITE_END",
+   "qualification_evidence": {
+    "classification": "UNCHANGED_EXACT",
+    "canonical_pre_hook_sha256": "437f0001a3c649ed44bf77cebccb5060109dbfb6243d05366f1bfa199c1ba0d8",
+    "raw_observed_sha256": "b5556356777ea7c17ecfd1ceec588da0aa8e183ee5305a16438215eaf297285f",
+    "anchor_validation": "IN_ORDER_FRAGMENT_SCAN_PASS"
+   }
+  },
+  {
+   "id": "W54",
+   "status": "QUALIFIED",
+   "class": "net.minecraft.util.BitArray",
+   "method": "func_188141_a",
+   "descriptor": "(II)V",
+   "hook_type": "WRITE_BEGIN",
+   "purpose": "bit array packed cell write",
+   "affected_domains": [
+    "block states"
+   ],
+   "thread_context": "CANONICAL_OWNER_OR_IO_WORKER",
+   "insertion_location": "method entry, before any read or write of protected state; balanced catch-all-finally end hook before every return and Throwable (WRITE_END)",
+   "fingerprint": {
+    "kind": "DECLARATION"
+   },
+   "bracket_end_hook_type": "WRITE_END",
+   "qualification_evidence": {
+    "classification": "UNCHANGED_EXACT",
+    "canonical_pre_hook_sha256": "14e7638d675d3024f20f20ac53caced56cea409d97a12460b30a9f78df01611c",
+    "raw_observed_sha256": "d967a3fc91e099fd8d1ad4b3655cf90950ebb43f181344e1b4d5a5a3fb69be35",
+    "anchor_validation": "IN_ORDER_FRAGMENT_SCAN_PASS"
+   }
+  },
+  {
+   "id": "W55",
+   "status": "QUALIFIED",
+   "class": "net.minecraft.util.BitArray",
+   "method": "<init>",
+   "descriptor": "(II)V",
+   "hook_type": "PRIVATE_BUILD_BEGIN",
+   "purpose": "bit array identity registration",
+   "affected_domains": [
+    "section existence"
+   ],
+   "thread_context": "CANONICAL_OWNER_OR_IO_WORKER",
+   "insertion_location": "after the successful super constructor invocation, before the instance can escape; registers the fresh identity with PrivateBuildTickets.registerNew",
+   "fingerprint": {
+    "kind": "DECLARATION"
+   },
+   "bracket_end_hook_type": null,
+   "qualification_evidence": {
+    "classification": "UNCHANGED_EXACT",
+    "canonical_pre_hook_sha256": "14e7638d675d3024f20f20ac53caced56cea409d97a12460b30a9f78df01611c",
+    "raw_observed_sha256": "d967a3fc91e099fd8d1ad4b3655cf90950ebb43f181344e1b4d5a5a3fb69be35",
+    "anchor_validation": "IN_ORDER_FRAGMENT_SCAN_PASS"
+   }
+  },
+  {
+   "id": "W56",
+   "status": "QUALIFIED",
+   "class": "net.minecraft.world.gen.ChunkProviderServer",
+   "method": "loadChunk",
+   "descriptor": "(IILjava/lang/Runnable;)Lnet/minecraft/world/chunk/Chunk;",
+   "hook_type": "WRITE_BEGIN",
+   "purpose": "provider load/insert by coordinate: whole-operation owner publication transaction; exact map put recorded (audit put131); ordinary existing-READY lookups allocate no incarnation",
+   "affected_domains": [
+    "owner publication",
+    "same-coordinate replacement",
+    "unload/reload"
+   ],
+   "thread_context": "CANONICAL_OWNER",
+   "insertion_location": "method entry, before any read or write of protected state; balanced catch-all-finally end hook before every return and Throwable (WRITE_END)",
+   "fingerprint": {
+    "kind": "BCI_ASSERTIONS",
+    "assertions": [
+     {
+      "bci": 131,
+      "expect": "invokeinterface it/unimi/dsi/fastutil/longs/Long2ObjectMap.put"
+     }
+    ]
+   },
+   "bracket_end_hook_type": "WRITE_END",
+   "qualification_evidence": {
+    "classification": "UNCHANGED_SEMANTIC",
+    "canonical_pre_hook_sha256": "4e702c57553791135d03bee7090bb65c5869bdfbeea6666cb03f442e5da5ef36",
+    "raw_observed_sha256": "1e8d500defa3c604e2808f24c157400b98813b6bef2886ba14756f30e3d3f758",
+    "anchor_validation": "IN_ORDER_FRAGMENT_SCAN_PASS"
+   }
+  },
+  {
+   "id": "W57",
+   "status": "QUALIFIED",
+   "class": "net.minecraft.world.gen.ChunkProviderServer",
+   "method": "func_186025_d",
+   "descriptor": "(II)Lnet/minecraft/world/chunk/Chunk;",
+   "hook_type": "WRITE_BEGIN",
+   "purpose": "provider generator chunk insert: whole-operation owner publication transaction (audit put125)",
+   "affected_domains": [
+    "owner publication",
+    "same-coordinate replacement"
+   ],
+   "thread_context": "CANONICAL_OWNER",
+   "insertion_location": "method entry, before any read or write of protected state; balanced catch-all-finally end hook before every return and Throwable (WRITE_END)",
+   "fingerprint": {
+    "kind": "BCI_ASSERTIONS",
+    "assertions": [
+     {
+      "bci": 125,
+      "expect": "invokeinterface it/unimi/dsi/fastutil/longs/Long2ObjectMap.put"
+     }
+    ]
+   },
+   "bracket_end_hook_type": "WRITE_END",
+   "qualification_evidence": {
+    "classification": "UNCHANGED_SEMANTIC",
+    "canonical_pre_hook_sha256": "4e702c57553791135d03bee7090bb65c5869bdfbeea6666cb03f442e5da5ef36",
+    "raw_observed_sha256": "1e8d500defa3c604e2808f24c157400b98813b6bef2886ba14756f30e3d3f758",
+    "anchor_validation": "IN_ORDER_FRAGMENT_SCAN_PASS"
+   }
+  },
+  {
+   "id": "W58",
+   "status": "QUALIFIED",
+   "class": "net.minecraft.world.gen.ChunkProviderServer",
+   "method": "func_73156_b",
+   "descriptor": "()Z",
+   "hook_type": "LIFECYCLE_RETIRE",
+   "purpose": "provider unload: retire BEFORE onUnload149/dormant insertion167/save173/179/map remove187",
+   "affected_domains": [
+    "unload/reload"
+   ],
+   "thread_context": "CANONICAL_OWNER",
+   "insertion_location": "method entry, before any read or write of protected state; balanced catch-all-finally end hook before every return and Throwable (WRITE_END)",
+   "fingerprint": {
+    "kind": "BCI_ASSERTIONS",
+    "assertions": [
+     {
+      "bci": 149,
+      "expect": "invokevirtual net/minecraft/world/chunk/Chunk.func_76623_d"
+     },
+     {
+      "bci": 167,
+      "expect": "invokestatic net/minecraftforge/common/ForgeChunkManager.putDormantChunk"
+     },
+     {
+      "bci": 173,
+      "expect": "invokespecial func_73242_b"
+     },
+     {
+      "bci": 179,
+      "expect": "invokespecial func_73243_a"
+     },
+     {
+      "bci": 187,
+      "expect": "invokeinterface it/unimi/dsi/fastutil/longs/Long2ObjectMap.remove"
+     }
+    ]
+   },
+   "bracket_end_hook_type": "WRITE_END",
+   "qualification_evidence": {
+    "classification": "REWRITTEN_METHOD",
+    "canonical_pre_hook_sha256": "4e702c57553791135d03bee7090bb65c5869bdfbeea6666cb03f442e5da5ef36",
+    "raw_observed_sha256": "1e8d500defa3c604e2808f24c157400b98813b6bef2886ba14756f30e3d3f758",
+    "anchor_validation": "IN_ORDER_FRAGMENT_SCAN_PASS"
+   }
+  },
+  {
+   "id": "W59",
+   "status": "QUALIFIED",
+   "class": "net.minecraftforge.common.chunkio.ChunkIOProvider",
+   "method": "run",
+   "descriptor": "()V",
+   "hook_type": "PRIVATE_BUILD_END",
+   "purpose": "worker private build completion: success/failure release ticket published BEFORE the ran putfields (74 success, 88 failure)",
+   "affected_domains": [
+    "private I/O construction"
+   ],
+   "thread_context": "IO_WORKER",
+   "insertion_location": "success ticket after graph/NBT assignments (putfield nbt 59, putfield chunk 69) and BEFORE ran putfield 74; failure ticket before exceptional ran putfield 88; monitor exit/notify/finally preserved",
+   "fingerprint": {
+    "kind": "BCI_ASSERTIONS",
+    "assertions": [
+     {
+      "bci": 59,
+      "expect": "putfield nbt:Lnet/minecraft/nbt/NBTTagCompound;"
+     },
+     {
+      "bci": 69,
+      "expect": "putfield chunk:Lnet/minecraft/world/chunk/Chunk;"
+     },
+     {
+      "bci": 74,
+      "expect": "putfield ran:Z"
+     },
+     {
+      "bci": 88,
+      "expect": "putfield ran:Z"
+     }
+    ]
+   },
+   "bracket_end_hook_type": null,
+   "qualification_evidence": {
+    "classification": "UNCHANGED_EXACT",
+    "canonical_pre_hook_sha256": "0b0886facacc5ea6949022000ef85e2ee6417e4e3128b8fac492723c216c1aa1",
+    "raw_observed_sha256": "e2c76022ef993b0079f62b6a0671a17fd4bf232fa5bf83e01cb66196e6af50d1",
+    "anchor_validation": "IN_ORDER_FRAGMENT_SCAN_PASS"
+   }
+  },
+  {
+   "id": "W60",
+   "status": "QUALIFIED",
+   "class": "net.minecraftforge.common.chunkio.ChunkIOProvider",
+   "method": "syncCallback",
+   "descriptor": "()V",
+   "hook_type": "PUBLICATION_BEGIN",
+   "purpose": "owner acquire/validate ticket before first chunk read (getfield chunk 1), then owner publication transaction: recreate/put136, onLoad146, populate164, callbacks168; READY only after normal completion171",
+   "affected_domains": [
+    "owner publication",
+    "private I/O construction"
+   ],
+   "thread_context": "CANONICAL_OWNER",
+   "insertion_location": "acquire ticket at entry before BCI 1 first chunk read; publication scope spans loadEntities/events/put/onLoad/populate/callbacks",
+   "fingerprint": {
+    "kind": "BCI_ASSERTIONS",
+    "assertions": [
+     {
+      "bci": 1,
+      "expect": "getfield chunk:Lnet/minecraft/world/chunk/Chunk;"
+     },
+     {
+      "bci": 136,
+      "expect": "invokeinterface it/unimi/dsi/fastutil/longs/Long2ObjectMap.put"
+     },
+     {
+      "bci": 146,
+      "expect": "invokevirtual net/minecraft/world/chunk/Chunk.func_76631_c"
+     },
+     {
+      "bci": 164,
+      "expect": "invokevirtual net/minecraft/world/chunk/Chunk.func_186030_a"
+     },
+     {
+      "bci": 168,
+      "expect": "invokevirtual runCallbacks"
+     },
+     {
+      "bci": 171,
+      "expect": "return"
+     }
+    ]
+   },
+   "bracket_end_hook_type": "PUBLICATION_END",
+   "qualification_evidence": {
+    "classification": "UNCHANGED_EXACT",
+    "canonical_pre_hook_sha256": "0b0886facacc5ea6949022000ef85e2ee6417e4e3128b8fac492723c216c1aa1",
+    "raw_observed_sha256": "e2c76022ef993b0079f62b6a0671a17fd4bf232fa5bf83e01cb66196e6af50d1",
+    "anchor_validation": "IN_ORDER_FRAGMENT_SCAN_PASS"
+   }
+  },
+  {
+   "id": "S01",
+   "status": "QUALIFIED",
+   "class": "net.minecraft.server.MinecraftServer",
+   "method": "run",
+   "descriptor": "()V",
+   "hook_type": "DIAGNOSTIC_ONLY",
+   "purpose": "diagnostic session bootstrap/shutdown on the exact canonical owner thread (func_71256_s field_175590_aa; getter func_175583_aK); first owner tick admits the qualified profile; shutdown revokes bindings",
+   "affected_domains": [
+    "owner session"
+   ],
+   "thread_context": "CANONICAL_OWNER",
+   "insertion_location": "session establishment inside run()V using the exact Thread field/getter; shutdown hook at session end",
+   "fingerprint": {
+    "kind": "CLASS_STRUCTURE",
+    "markers": [
+     "declares field_175590_aa (Thread)",
+     "declares func_175583_aK",
+     "run calls func_71217_p"
+    ]
+   },
+   "bracket_end_hook_type": null,
+   "qualification_evidence": {
+    "classification": "UNCHANGED_SEMANTIC",
+    "canonical_pre_hook_sha256": "48142a959ec484e24a5ff2bca9e19a72e15063c833810acc0a38aeb11cd95d51",
+    "raw_observed_sha256": "f418709dcdc95e9f41852bd0790562fb6e3607eeac7a00360d67651f807869c2",
+    "anchor_validation": "IN_ORDER_FRAGMENT_SCAN_PASS"
+   }
+  },
+  {
+   "id": "S02",
+   "status": "QUALIFIED",
+   "class": "net.minecraft.network.play.server.SPacketChunkData",
+   "method": "<init>",
+   "descriptor": "(Lnet/minecraft/world/chunk/Chunk;I)V",
+   "hook_type": "PACKET_CAPTURE",
+   "purpose": "packet capture event: admission at constructor entry after Object init (BCI 1) before first source read (BCI 4); acceptance linearizes at normal return 200 after body/mask/TE processing; catch-all covers all instructions after super",
+   "affected_domains": [
+    "packet capture",
+    "tileentity restrictions"
+   ],
+   "thread_context": "CANONICAL_OWNER",
+   "insertion_location": "entry hook after Object.<init> (BCI 1) before coordinate/world/section reads at 4; normal-return hook pairs the actual Java result after TE loop and before RETURN 200; catch-all rethrows the original Throwable",
+   "fingerprint": {
+    "kind": "BCI_ASSERTIONS",
+    "assertions": [
+     {
+      "bci": 1,
+      "expect": "invokespecial java/lang/Object.\"<init>\""
+     },
+     {
+      "bci": 4,
+      "expect": "aload_0"
+     },
+     {
+      "bci": 75,
+      "expect": "invokevirtual func_189555_a"
+     },
+     {
+      "bci": 78,
+      "expect": "putfield field_186948_c:I"
+     },
+     {
+      "bci": 180,
+      "expect": "invokevirtual net/minecraft/tileentity/TileEntity.func_189517_E_"
+     },
+     {
+      "bci": 200,
+      "expect": "return"
+     }
+    ]
+   },
+   "bracket_end_hook_type": null,
+   "qualification_evidence": {
+    "classification": "UNCHANGED_SEMANTIC",
+    "canonical_pre_hook_sha256": "f375c6fb4e47f98ef59ea1aaf0c135557743f6ce22fe4f910faf899ee82b3132",
+    "raw_observed_sha256": "cd47b61bd752cdf736db3169dbb7591e301217d11a906c5da04448c5465c67d9",
+    "anchor_validation": "IN_ORDER_FRAGMENT_SCAN_PASS"
+   }
+  },
+  {
+   "id": "S03",
+   "status": "QUALIFIED",
+   "class": "net.minecraft.world.chunk.storage.AnvilChunkLoader",
+   "method": "loadChunk__Async",
+   "descriptor": "(Lnet/minecraft/world/World;II)[Ljava/lang/Object;",
+   "hook_type": "PRIVATE_BUILD_BEGIN",
+   "purpose": "worker private-build provenance: pending-map get 17 / nonnull branch 29 is SHARED_PENDING_NBT (never private); fresh disk branch reads compressed root 59, fixer 62, close 69; provenance before read 78",
+   "affected_domains": [
+    "private I/O construction"
+   ],
+   "thread_context": "IO_WORKER",
+   "insertion_location": "create task identity/private build context before loading work; provenance recorded before first data read at 78",
+   "fingerprint": {
+    "kind": "BCI_ASSERTIONS",
+    "assertions": [
+     {
+      "bci": 17,
+      "expect": "invokeinterface java/util/Map.get"
+     },
+     {
+      "bci": 29,
+      "expect": "ifnonnull"
+     },
+     {
+      "bci": 59,
+      "expect": "invokestatic net/minecraft/nbt/CompressedStreamTools.func_74794_a"
+     },
+     {
+      "bci": 62,
+      "expect": "invokevirtual net/minecraft/util/datafix/DataFixer.func_188257_a"
+     },
+     {
+      "bci": 69,
+      "expect": "invokevirtual java/io/DataInputStream.close"
+     },
+     {
+      "bci": 78,
+      "expect": "invokevirtual checkedReadChunkFromNBT__Async"
+     }
+    ]
+   },
+   "bracket_end_hook_type": null,
+   "qualification_evidence": {
+    "classification": "UNCHANGED_SEMANTIC",
+    "canonical_pre_hook_sha256": "a6a29a0cf6f81132f2c82294483c66a9d82a8caef03a1192eb54d947d7e37f8b",
+    "raw_observed_sha256": "b6d9d28d49043fe69b1d7551aaaca7b25f58a16fe93f9d668e6a849b7a021756",
+    "anchor_validation": "IN_ORDER_FRAGMENT_SCAN_PASS"
+   }
+  },
+  {
+   "id": "S04",
+   "status": "QUALIFIED",
+   "class": "net.minecraft.world.chunk.storage.AnvilChunkLoader",
+   "method": "checkedReadChunkFromNBT__Async",
+   "descriptor": "(Lnet/minecraft/world/World;IILnet/minecraft/nbt/NBTTagCompound;)[Ljava/lang/Object;",
+   "hook_type": "PRIVATE_BUILD_BEGIN",
+   "purpose": "exact root/source identity through original and relocated graph construction; neither branch may replace origin proof",
+   "affected_domains": [
+    "private I/O construction"
+   ],
+   "thread_context": "IO_WORKER",
+   "insertion_location": "source-identity binding at entry; no branch may replace the origin proof",
+   "fingerprint": {
+    "kind": "DECLARATION"
+   },
+   "bracket_end_hook_type": null,
+   "qualification_evidence": {
+    "classification": "UNCHANGED_SEMANTIC",
+    "canonical_pre_hook_sha256": "a6a29a0cf6f81132f2c82294483c66a9d82a8caef03a1192eb54d947d7e37f8b",
+    "raw_observed_sha256": "b6d9d28d49043fe69b1d7551aaaca7b25f58a16fe93f9d668e6a849b7a021756",
+    "anchor_validation": "IN_ORDER_FRAGMENT_SCAN_PASS"
+   }
+  },
+  {
+   "id": "S05",
+   "status": "QUALIFIED",
+   "class": "net.minecraft.world.chunk.storage.AnvilChunkLoader",
+   "method": "func_75823_a",
+   "descriptor": "(Lnet/minecraft/world/World;Lnet/minecraft/nbt/NBTTagCompound;)Lnet/minecraft/world/chunk/Chunk;",
+   "hook_type": "PRIVATE_BUILD_BEGIN",
+   "purpose": "private graph construction/reference assignment sites; current ticket and source proof required",
+   "affected_domains": [
+    "private I/O construction"
+   ],
+   "thread_context": "IO_WORKER",
+   "insertion_location": "component/reference registration at construction sites under the active BUILDING ticket",
+   "fingerprint": {
+    "kind": "DECLARATION"
+   },
+   "bracket_end_hook_type": null,
+   "qualification_evidence": {
+    "classification": "REWRITTEN_METHOD",
+    "canonical_pre_hook_sha256": "a6a29a0cf6f81132f2c82294483c66a9d82a8caef03a1192eb54d947d7e37f8b",
+    "raw_observed_sha256": "b6d9d28d49043fe69b1d7551aaaca7b25f58a16fe93f9d668e6a849b7a021756",
+    "anchor_validation": "IN_ORDER_FRAGMENT_SCAN_PASS"
+   }
+  },
+  {
+   "id": "S06",
+   "status": "QUALIFIED",
+   "class": "net.minecraft.world.gen.ChunkGeneratorFlat",
+   "method": "func_185932_a",
+   "descriptor": "(II)Lnet/minecraft/world/chunk/Chunk;",
+   "hook_type": "DIAGNOSTIC_ONLY",
+   "purpose": "verify raw biome store 213 is inside the qualified outer owner generation transaction; no setter-only proof (getter 184, raw store 213, skylight generation 222)",
+   "affected_domains": [
+    "biomes"
+   ],
+   "thread_context": "CANONICAL_OWNER",
+   "insertion_location": "verification-only: the whole generator operation must run inside one outer owner write transaction",
+   "fingerprint": {
+    "kind": "BCI_ASSERTIONS",
+    "assertions": [
+     {
+      "bci": 184,
+      "expect": "invokevirtual net/minecraft/world/chunk/Chunk.func_76605_m"
+     },
+     {
+      "bci": 213,
+      "expect": "bastore"
+     },
+     {
+      "bci": 222,
+      "expect": "invokevirtual net/minecraft/world/chunk/Chunk.func_76603_b"
+     }
+    ]
+   },
+   "bracket_end_hook_type": null,
+   "qualification_evidence": {
+    "classification": "UNCHANGED_EXACT",
+    "canonical_pre_hook_sha256": "e9ec6eb3dd488f0e6913067ee35f2eadc2c385022f73b751cec1249ea2c01f39",
+    "raw_observed_sha256": "d8bcb37048eb58380e2b162981ca7c35bfcbccf334e3241e4902166fcb010db9",
+    "anchor_validation": "IN_ORDER_FRAGMENT_SCAN_PASS"
+   }
+  }
+ ],
+ "nonqualified": [],
+ "lifecycle_phase": "DEFERRED_TO_DEDICATED_SERVER_QUALIFICATION",
+ "production_authority": false,
+ "note": "Derived from the accepted offline transformation qualification; statuses justified by the hook matrix plus in-order anchor revalidation against the pinned pre-hook bytes."
+}

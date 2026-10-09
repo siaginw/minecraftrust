@@ -1,0 +1,56 @@
+# M4.2B §1 — Reconciliation of M4.2A work-log numbers (evidence-preserved).
+schema_version: 1
+date: "2026-09-21"
+inputs:
+  run3_raw_preserved: machine/raw/M42-coherency-metrics.txt
+  note: "M4.2A live check consisted of three bounded runs (fresh world each). Runs 1 and 2
+    wrote the same raw filename and were overwritten by later runs — provenance gap,
+    acknowledged; their numbers survive as quoted values in the M4.2A work log and are
+    marked as such below. M4.2B runs use unique run IDs + recorded PIDs."
+
+the_3009_of_3019_claim:
+  verdict: "CROSS-RUN CONFLATION IN THE WORK-LOG PROSE — not a shortfall within one run."
+  detail: >
+    3,009 = run 3's terrain comparison total (m3wg_terrain_chunks=3009, matches=3009,
+    mismatches=0). 3,019 = run 2's total for a DIFFERENT fresh world (quoted from the
+    overwritten harvest: 3019/3019). The work-log line '3,009/3,019' merged two runs.
+    The two totals differ because each run deletes the world and the bot generates a
+    slightly different chunk count before the scheduled stop — there is no subset
+    relationship and no missing-chunk population inside either run.
+
+accounting_for_the_ten_chunks:
+  within_run3: >
+    classified_vanilla=3010 vs terrain_chunks=3009: exactly ONE chunk classified but not
+    compared — the shadowTerrain NullPointerException (native_errors bucket). Classified
+    as: SKIPPED (comparison incomplete, exception-terminated before the compare counter).
+    It is NOT counted as a match, NOT a mismatch, and is NOT relabeled: it remains an
+    unsited exception (stack not captured; caught and counted by the existing handler).
+    Follow-up for the next bounded run: capture the stack for any shadowTerrain error.
+  across_runs: >
+    The remaining nine of the 'ten' (3019 - 3010) are the run-2 vs run-3 population
+    difference (different worlds, bot timing). Classification: REPORTING/PROVENANCE
+    (cross-run conflation in prose; run-2 raw overwritten). No evidence of any
+    comparison failure is contained in them.
+
+refresh_vs_validation_20177_vs_20158:
+  difference: 19 sections (0.09%)
+  classification: COMPARISON ERROR (validator defect) — not a data mismatch and not a
+    silently counted success. Root cause by code inspection: those sections were
+    refreshed to all-air; the full-chunk packet legitimately omits empty sections
+    (isFullChunk && storage.isEmpty() -> skip, bytecode-proven in SPacketChunkData
+    func_189555_a), so the decoder's section locator failed to find them and kept
+    parsing into the 256-byte biome tail -> ArrayIndexOutOfBoundsException -> caught
+    and counted as a coherency error (m3wg_native_errors=20 = 19 + 1 shadowTerrain NPE).
+  original_evidence: >
+    machine/raw/M42-coherency-metrics.txt preserves the run-3 counters (20177/20158/20).
+    The 19 individual dumps were not captured (exception message only); per-case
+    confirmation is deliberately deferred per the stop discipline.
+  correction_build: >
+    Validator corrected in the M4.2A final commit range (coremod 675979db48eb3ae2 /
+    commits cbf34f4..4972ff6): absence is accepted ONLY when the Java-side cells are
+    all-air AND the actual Java packet semantics permit omission (full-chunk empty
+    section) — never for a missing section whose Java state is non-air, and light
+    non-zero forces a mismatch verdict. The M4.2B offline harness grounds this rule
+    against the REAL packet: case 'section-becomes-empty' clears a full section via
+    real Chunk.setBlockState and confirms the real SPacketChunkData drops it from the
+    mask identically to the native refresh (see M42B-packet-parity results).

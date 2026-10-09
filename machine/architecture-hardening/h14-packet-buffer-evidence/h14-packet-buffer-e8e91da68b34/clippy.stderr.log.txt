@@ -1,0 +1,29 @@
+    Checking typenum v1.20.1
+    Checking zlib-rs v0.6.8
+    Checking windows-link v0.2.1
+    Checking core-types v0.1.0 (D:\minecraftrust-astra-hardening\crates\core-types)
+    Checking cpubits v0.1.1
+    Checking cpufeatures v0.3.1
+    Checking bytes v1.12.1
+    Checking windows-sys v0.61.2
+    Checking buffers v0.1.0 (D:\minecraftrust-astra-hardening\crates\buffers)
+    Checking hybrid-array v0.4.15
+    Checking flate2 v1.1.10
+    Checking compression v0.1.0 (D:\minecraftrust-astra-hardening\crates\compression)
+    Checking socket2 v0.6.4
+warning: unused variable: `have`
+   --> D:\minecraftrust-astra-hardening\crates\compression\src\frame.rs:205:68
+    |
+205 |                     crate::CompressError::OutputTooSmall { needed, have } =>
+    |                                                                    ^^^^ help: try ignoring the field: `have: _`
+    |
+    = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: `compression` (lib) generated 1 warning (run `cargo clippy --fix --lib -p compression -- --no-deps -D warnings` to apply 1 suggestion)
+    Checking inout v0.2.2
+    Checking crypto-common v0.2.2
+    Checking cipher v0.5.2
+    Checking cfb8 v0.9.1
+    Checking aes v0.9.3
+    Checking packet-buffer-pipeline-experiment v0.1.0 (D:\minecraftrust-astra-hardening\tools\packet-buffer-pipeline-experiment)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 2.26s

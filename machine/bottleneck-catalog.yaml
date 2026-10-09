@@ -1,0 +1,494 @@
+# SYNTHETIC (M1.4-R invalidation): numeric tables in this file were AUTHORED,
+# not measured (see tools/run-p08-benchmarks.py / tools/p08_closure_audit.py
+# Values are illustrative of SHAPE only. Must NOT feed active empirical
+# decisions. Do not cite as evidence.
+primary_pack_breakdown_large_base:
+- category: TileEntities
+  subsystem: net.minecraft.world.World.updateEntities() [TileEntity loop]
+  time_ms: 19.84
+  pct_compute: 51.0
+  owner: MOD_SPECIFIC + FORGE_RUNTIME
+- category: Entities
+  subsystem: net.minecraft.world.World.updateEntities() [Entity loop + AI/Navigation]
+  time_ms: 6.61
+  pct_compute: 17.0
+  owner: ENGINE_OPTIMIZABLE + MOD_SPECIFIC
+- category: Chunk Operations
+  subsystem: Chunk loading, lighting updates, dirty chunk checks
+  time_ms: 3.89
+  pct_compute: 10.0
+  owner: ENGINE_OPTIMIZABLE
+- category: Forge Events & Hooks
+  subsystem: LivingUpdateEvent, TickEvent, Capability queries
+  time_ms: 3.11
+  pct_compute: 8.0
+  owner: FORGE_RUNTIME_OPTIMIZABLE
+- category: Block & Scheduled Ticks
+  subsystem: WorldServer.tickUpdates() [Block updates, liquids, redstone]
+  time_ms: 2.33
+  pct_compute: 6.0
+  owner: ENGINE_OPTIMIZABLE
+- category: Network & Packet Construction
+  subsystem: NetworkSystem, SPacketChunkData, entity metadata sync
+  time_ms: 1.95
+  pct_compute: 5.0
+  owner: ENGINE_OPTIMIZABLE
+- category: Vanilla Overhead & Misc
+  subsystem: PlayerList, command processing, scoreboard, time sync
+  time_ms: 1.17
+  pct_compute: 3.0
+  owner: UNAVOIDABLE_COMPATIBILITY_COST
+mod_attribution_table:
+- mod: Ender IO
+  classes: TileConduitBundle, ConduitNetwork
+  te_count: 480
+  time_ms: 6.82
+  pct_te_time: 34.4
+  alloc_mb_s: 142.0
+  top_issue: Neighbor capability querying & conduit route solving every tick
+- mod: Applied Energistics 2
+  classes: MENetwork, GridNode, TileDrive, TileInterface
+  te_count: 160
+  time_ms: 4.15
+  pct_te_time: 20.9
+  alloc_mb_s: 98.0
+  top_issue: Multi-slot inventory scanning & item storage cell NBT indexing
+- mod: Thermal Expansion/Dynamics
+  classes: TileDuct, TileMachineBase, EnergyStorageCache
+  te_count: 320
+  time_ms: 3.48
+  pct_te_time: 17.5
+  alloc_mb_s: 84.0
+  top_issue: Fluid/RF transfer recalculations and neighbor updates
+- mod: Mekanism
+  classes: TileEntityUniversalCable, TileEntityAdvancedElectricMachine
+  te_count: 140
+  time_ms: 2.25
+  pct_te_time: 11.3
+  alloc_mb_s: 62.0
+  top_issue: Strict transmitter network updates and heat/gas diffusion
+- mod: Vanilla (Chests/Hoppers/Furnaces)
+  classes: TileEntityChest, TileEntityHopper, TileEntityFurnace
+  te_count: 280
+  time_ms: 1.92
+  pct_te_time: 9.7
+  alloc_mb_s: 38.0
+  top_issue: Hopper inventory searches and item entity pickup scans
+- mod: Other Modded TEs
+  classes: IronChests, Forestry, Botania, ImmersiveEngineering
+  te_count: 120
+  time_ms: 1.22
+  pct_te_time: 6.2
+  alloc_mb_s: 32.0
+  top_issue: Miscellaneous rendering data updates and ticking state machines
+attribution_audit:
+  eventbus:
+    total_event_time_ms: 3.11
+    events_per_tick: 1840
+    avg_listeners_per_event: 4.12
+    total_listener_invocations_per_tick: 7580
+    framework_dispatch_cost_per_listener_ns: 17.5
+    framework_dispatch_total_ms: 0.133
+    framework_pct: 4.28
+    mod_subscriber_logic_ms: 2.977
+    mod_subscriber_pct: 95.72
+    top_subscribers:
+    - subscriber: crazypants.enderio.conduits.handler.ConduitTickHandler.onServerTick()
+      time_ms: 1.15
+    - subscriber: cofh.core.util.helpers.TickHandler.tick()
+      time_ms: 0.58
+    - subscriber: appeng.me.cache.CraftingGridCache.update()
+      time_ms: 0.42
+    - subscriber: net.minecraftforge.common.ForgeChunkManager.onWorldTick()
+      time_ms: 0.28
+    - subscriber: other_mod_subscribers
+      time_ms: 0.547
+    verdict: CLASSIFIED AS MOD / EVENT-HANDLER WORK. Forge EventBus framework overhead
+      is negligible (0.13 ms).
+  capability:
+    total_capability_time_ms: 1.8
+    queries_per_tick: 42500
+    dispatcher_array_loop_cost_ns: 7.8
+    dispatcher_only_time_ms: 0.331
+    dispatcher_pct: 18.39
+    provider_method_logic_ms: 1.469
+    provider_pct: 81.61
+    hit_miss_distribution:
+      first_hit_facing_pct: 68.4
+      secondary_hit_pct: 19.2
+      total_miss_pct: 12.4
+    top_providers:
+    - provider: crazypants.enderio.conduits.item.ItemConduitProvider
+      time_ms: 0.62
+    - provider: cofh.thermalexpansion.duct.item.TileDuctItemProvider
+      time_ms: 0.38
+    - provider: appeng.tile.misc.TileInterfaceProvider
+      time_ms: 0.29
+    - provider: other_providers
+      time_ms: 0.179
+    verdict: Provider logic accounts for 81.6% of time. SEAM-CAPABILITY-FASTPATH can
+      save at most ~0.33 ms.
+  recipe:
+    workload: SevTech 10,480 Recipes Auto-Crafting (2.80 ms)
+    lookups_per_tick: 45
+    recipes_scanned_per_lookup: 10480
+    registry_iteration_loop_ms: 0.48
+    ingredient_nbt_ore_matching_ms: 1.12
+    crafttweaker_custom_scripts_ms: 0.95
+    vanilla_matrix_overhead_ms: 0.25
+    verdict: Only ~0.48 ms is pure registry iteration; custom script and ingredient
+      matching consumes 2.07 ms. Native indexing must be scoped to standard shaped/shapeless
+      subsets.
+  network:
+    server_thread_packet_time_ms: 1.95
+    server_thread_breakdown:
+      spacket_chunk_data_instantiation_ms: 0.72
+      tile_entity_update_tag_nbt_ms: 0.64
+      entity_metadata_sync_ms: 0.38
+      send_packet_queue_handoff_ms: 0.21
+    netty_thread_work_ms:
+      packet_bytebuf_serialization_ms: 1.85
+      deflate_compression_ms: 3.4
+      aes_encryption_ms: 0.85
+      socket_epoll_write_ms: 0.45
+    verdict: Packet compression (3.4 ms) runs 100% on Netty IO threads! Only 1.95
+      ms runs on the Server thread.
+chunk_save_phase_decomposition:
+  total_autosave_spike_ms: 94.5
+  phases:
+  - phase: SAVE-A
+    name: Vanilla section / biome / heightmap snapshot construction
+    server_thread_ms: 14.2
+    bg_time_ms: 0.0
+    classification: REMOVABLE (Direct off-heap snapshot)
+  - phase: SAVE-B
+    name: Entity Java NBT serialization
+    server_thread_ms: 8.4
+    bg_time_ms: 0.0
+    classification: JAVA CALLBACK REQUIRED (Entity.writeToNBT)
+  - phase: SAVE-C
+    name: TileEntity Java/mod NBT serialization
+    server_thread_ms: 26.2
+    bg_time_ms: 0.0
+    classification: JAVA CALLBACK REQUIRED (TileEntity.writeToNBT)
+  - phase: SAVE-D
+    name: Forge capability serialization
+    server_thread_ms: 6.8
+    bg_time_ms: 0.0
+    classification: JAVA CALLBACK REQUIRED (ICapabilitySerializable.serializeNBT)
+  - phase: SAVE-E
+    name: ChunkDataEvent.Save / mod mutation
+    server_thread_ms: 4.1
+    bg_time_ms: 0.0
+    classification: JAVA CALLBACK REQUIRED (Mod event listeners)
+  - phase: SAVE-F
+    name: Binary NBT compound encoding (writeToStream)
+    server_thread_ms: 21.6
+    bg_time_ms: 0.0
+    classification: REMOVABLE (Native binary NBT writer off-thread)
+  - phase: SAVE-G
+    name: Deflate compression (ZLIB/Region)
+    server_thread_ms: 6.0
+    bg_time_ms: 8.5
+    classification: BACKGROUND ONLY (libdeflate worker)
+  - phase: SAVE-H
+    name: RegionFile disk write
+    server_thread_ms: 7.2
+    bg_time_ms: 18.2
+    classification: BACKGROUND ONLY (FileIOThread / direct async write)
+top_30_allocations:
+- rank: 1
+  class: net.minecraft.util.math.BlockPos$MutableBlockPos
+  allocs_sec: 4820000
+  mb_sec: 115.68
+  owner: VANILLA
+  stack: World.getBlockState() / Chunk.getBlockState()
+- rank: 2
+  class: net.minecraft.util.math.BlockPos
+  allocs_sec: 4120000
+  mb_sec: 98.88
+  owner: VANILLA/MODS
+  stack: TileConduitBundle.update() neighbor scanning
+- rank: 3
+  class: net.minecraft.item.ItemStack
+  allocs_sec: 3650000
+  mb_sec: 116.8
+  owner: VANILLA/MODS
+  stack: ItemHandlerHelper.copyStackWithSize()
+- rank: 4
+  class: net.minecraft.util.EnumFacing
+  allocs_sec: 2840000
+  mb_sec: 45.44
+  owner: VANILLA
+  stack: EnumFacing.values() iterator cloning
+- rank: 5
+  class: java.lang.Integer
+  allocs_sec: 2450000
+  mb_sec: 39.2
+  owner: JVM_BOXING
+  stack: OreDictionary / EnergyStorageCache primitive boxing
+- rank: 6
+  class: net.minecraft.nbt.NBTTagCompound
+  allocs_sec: 1820000
+  mb_sec: 87.36
+  owner: VANILLA/FORGE
+  stack: TileEntity.getUpdateTag() / Capability serialization
+- rank: 7
+  class: net.minecraft.util.math.AxisAlignedBB
+  allocs_sec: 1420000
+  mb_sec: 45.44
+  owner: VANILLA
+  stack: World.getCollisionBoxes()
+- rank: 8
+  class: java.util.ArrayList
+  allocs_sec: 1150000
+  mb_sec: 27.6
+  owner: JVM_COLLECTIONS
+  stack: InventoryHelper / Recipe matching ingredient lists
+- rank: 9
+  class: net.minecraft.util.NonNullList
+  allocs_sec: 890000
+  mb_sec: 21.36
+  owner: VANILLA
+  stack: ItemStackHandler / Inventory slots container
+- rank: 10
+  class: crazypants.enderio.conduits.item.ItemConduitNetwork$NetworkedInventory
+  allocs_sec: 620000
+  mb_sec: 19.84
+  owner: ENDER_IO
+  stack: ItemConduitNetwork.doTransfer()
+- rank: 11
+  class: net.minecraft.nbt.NBTTagList
+  allocs_sec: 580000
+  mb_sec: 13.92
+  owner: VANILLA
+  stack: ItemStack.writeToNBT() enchantments/lore
+- rank: 12
+  class: net.minecraft.nbt.NBTTagString
+  allocs_sec: 540000
+  mb_sec: 12.96
+  owner: VANILLA
+  stack: NBT compound string attributes
+- rank: 13
+  class: java.util.HashMap$Node
+  allocs_sec: 510000
+  mb_sec: 16.32
+  owner: JVM_COLLECTIONS
+  stack: AE2 GridNode internal route maps
+- rank: 14
+  class: appeng.util.item.AEItemStack
+  allocs_sec: 480000
+  mb_sec: 19.2
+  owner: APPLIED_ENERGISTICS_2
+  stack: StorageChannelItem.createStack()
+- rank: 15
+  class: cofh.thermalexpansion.duct.item.ItemGrid$RouteQueueItem
+  allocs_sec: 420000
+  mb_sec: 10.08
+  owner: THERMAL_EXPANSION
+  stack: Duct flow path priority queue
+- rank: 16
+  class: java.lang.Long
+  allocs_sec: 380000
+  mb_sec: 9.12
+  owner: JVM_BOXING
+  stack: ChunkPos / BlockPos packed coordinate hashing
+- rank: 17
+  class: net.minecraft.util.math.Vec3d
+  allocs_sec: 350000
+  mb_sec: 11.2
+  owner: VANILLA
+  stack: Entity pathfinding vector calculations
+- rank: 18
+  class: net.minecraft.util.math.RayTraceResult
+  allocs_sec: 310000
+  mb_sec: 9.92
+  owner: VANILLA
+  stack: Entity line of sight / targeting
+- rank: 19
+  class: net.minecraftforge.common.capabilities.CapabilityDispatcher$ProviderEntry
+  allocs_sec: 290000
+  mb_sec: 6.96
+  owner: FORGE
+  stack: Capability querying wrapper (transient iterator)
+- rank: 20
+  class: net.minecraft.world.chunk.storage.ExtendedBlockStorage
+  allocs_sec: 1200
+  mb_sec: 4.91
+  owner: VANILLA
+  stack: Chunk section allocation during loading
+- rank: 21
+  class: byte[]
+  allocs_sec: 145000
+  mb_sec: 23.2
+  owner: NETTY/IO
+  stack: PacketBuffer direct byte allocations
+- rank: 22
+  class: char[]
+  allocs_sec: 180000
+  mb_sec: 8.64
+  owner: JVM_STRINGS
+  stack: ResourceLocation / OreDictionary string lookups
+- rank: 23
+  class: net.minecraft.util.ResourceLocation
+  allocs_sec: 165000
+  mb_sec: 5.28
+  owner: VANILLA
+  stack: Registry lookups and block identifier parsing
+- rank: 24
+  class: java.util.LinkedHashMap$Entry
+  allocs_sec: 140000
+  mb_sec: 4.48
+  owner: JVM_COLLECTIONS
+  stack: ForgeRegistry active override multimap
+- rank: 25
+  class: mekanism.common.transmitters.TransmitterNetworkRegistry$NetworkUpdate
+  allocs_sec: 125000
+  mb_sec: 4.0
+  owner: MEKANISM
+  stack: Cable network graph synchronization
+- rank: 26
+  class: net.minecraftforge.event.entity.living.LivingEvent$LivingUpdateEvent
+  allocs_sec: 85000
+  mb_sec: 2.72
+  owner: FORGE
+  stack: Entity update event firing
+- rank: 27
+  class: net.minecraft.network.play.server.SPacketEntityMetadata
+  allocs_sec: 65000
+  mb_sec: 2.08
+  owner: VANILLA
+  stack: Entity tracking update packet construction
+- rank: 28
+  class: java.lang.Double
+  allocs_sec: 60000
+  mb_sec: 1.44
+  owner: JVM_BOXING
+  stack: Mekanism energy unit floating conversions
+- rank: 29
+  class: net.minecraft.util.math.ChunkPos
+  allocs_sec: 55000
+  mb_sec: 1.32
+  owner: VANILLA
+  stack: ChunkSource map coordinate queries
+- rank: 30
+  class: net.minecraft.block.state.BlockStateContainer$StateImplementation
+  allocs_sec: 450
+  mb_sec: 0.04
+  owner: VANILLA
+  stack: Startup registry static states
+distributed_normalization:
+  test_a_realistic_operational:
+    description: 10 players at normal view-distance 10; realistic operational deployment
+    clustered:
+      players: 10
+      regions: 1
+      loaded_chunks: 289
+      mean_mspt: 33.5
+      cache_miss_pct: 4.8
+    distributed:
+      players: 10
+      regions: 10
+      loaded_chunks: 2890
+      mean_mspt: 48.9
+      cache_miss_pct: 18.2
+    delta_compute_pct: 45.97
+    interpretation: Measures total operational cost under unrestricted player dispersion
+      (includes 10x chunk volume).
+  test_b_normalized_work:
+    description: 'Equalized active work: exactly 500 loaded chunks and 1,000 TEs in
+      1 region vs across 5 regions'
+    clustered_single_region:
+      regions: 1
+      loaded_chunks: 500
+      active_tes: 1000
+      mean_mspt: 24.2
+      cache_miss_pct: 5.2
+    distributed_five_regions:
+      regions: 5
+      loaded_chunks: 500
+      active_tes: 1000
+      mean_mspt: 26.8
+      cache_miss_pct: 8.4
+    delta_compute_pct: 10.74
+    interpretation: True spatial distribution penalty with identical work is only
+      +10.7%, driven by L3 cache scattering.
+parallel_time_classification:
+  total_server_thread_time_ms: 38.9
+  categories:
+  - class: INDEPENDENT_REGION_CANDIDATE
+    description: TileEntities & Entities in disjoint spatial regions with no cross-boundary
+      links
+    time_ms: 14.8
+    pct: 38.05
+  - class: MOD_GLOBAL
+    description: Cross-region Ender IO conduit graphs, AE2 ME networks, Mekanism universal
+      cables
+    time_ms: 11.2
+    pct: 28.79
+  - class: WORLD_GLOBAL
+    description: Scheduled block ticks, chunk unloading, lighting propagation, world
+      weather
+    time_ms: 5.4
+    pct: 13.88
+  - class: SERVER_GLOBAL
+    description: PlayerList, network packet dispatch, server task queue, autosave
+      coordination
+    time_ms: 4.8
+    pct: 12.34
+  - class: UNKNOWN / UNCLASSIFIED
+    description: Miscellaneous Forge hooks, JVM runtime checks, timer jitter
+    time_ms: 2.7
+    pct: 6.94
+  verdict: Only 38.05% of Server-thread time is purely independent across spatial
+    regions. 28.79% is tied into cross-region mod networks (EnderIO/AE2), precluding
+    naive multi-threading.
+exclusive_tick_budget:
+- category: MOD_TILEENTITY_LOGIC
+  exclusive_ms: 15.2
+  pct: 39.07
+  desc: Exclusive internal execution of mod machine/pipe bytecode
+- category: MOD_EVENT_HANDLERS
+  exclusive_ms: 2.98
+  pct: 7.66
+  desc: Subscribers reacting to LivingUpdate, WorldTick, ServerTick
+- category: ENTITY_AI_AND_PATHFINDING
+  exclusive_ms: 3.19
+  pct: 8.2
+  desc: EntityAITasks, PathNavigateGround, goal evaluations
+- category: ENTITY_COLLISION_AND_MOVE
+  exclusive_ms: 2.1
+  pct: 5.4
+  desc: getCollisionBoxes, entity push, movement bounding checks
+- category: VANILLA_TILEENTITY_LOGIC
+  exclusive_ms: 1.92
+  pct: 4.94
+  desc: Hopper inventory checks, furnace progress
+- category: CHUNK_SOURCE_AND_LIGHTING
+  exclusive_ms: 3.89
+  pct: 10.0
+  desc: Chunk lifecycle, unload checks, checkLightFor
+- category: WORLD_BLOCK_TICKS
+  exclusive_ms: 2.33
+  pct: 5.99
+  desc: Scheduled block updates, fluid flow, redstone
+- category: NETWORK_SERVER_THREAD
+  exclusive_ms: 1.95
+  pct: 5.01
+  desc: SPacketChunkData creation, metadata update assembly
+- category: CAPABILITY_DISPATCHER_LOOP
+  exclusive_ms: 0.33
+  pct: 0.85
+  desc: Pure CapabilityDispatcher provider array iteration
+- category: FORGE_FRAMEWORK_OVERHEAD
+  exclusive_ms: 0.13
+  pct: 0.33
+  desc: Pure EventBus ListenerList array iteration
+- category: VANILLA_SERVER_OVERHEAD
+  exclusive_ms: 1.17
+  pct: 3.01
+  desc: PlayerList, command processing, time sync, heartbeat
+- category: OTHER_JVM_RUNTIME
+  exclusive_ms: 3.71
+  pct: 9.54
+  desc: Unaccounted JIT compilation deopt, thread context switch, sampling jitter

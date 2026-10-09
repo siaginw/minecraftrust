@@ -1,0 +1,83 @@
+# M-CK4.2 — EQUIVALENT-PIPELINE THREE-ARM FRAME BENCHMARK
+schema_version: 1
+date: "2026-09-22"
+binary:
+  dll_sha256: c10ddca1ce3c82255e78154fde657408e82fa354707bc5174deb5b0a6cb62d2c
+  dll_abs_path: D:\minecraftrust\target\release\rustcraft_ffi.dll
+  java: Temurin jdk-8.0.504.1-hotspot
+  netty: "4.1.9.Final bundled in minecraft_server.1.12.2.srg.jar (classpath-identical to prior checkpoints)"
+architecture: >
+  ALL arms are handler-shaped behind equivalent warmed EmbeddedChannel pipelines
+  (the M-CK4.1 asymmetry — B as a direct helper call while A/C paid channel
+  overhead — is closed). A: installed NettyCompressionEncoder + installed
+  NettyVarint21FrameEncoder (vanilla 2-handler pipeline). B:
+  MCK42RustCompressJavaFrameHandler (CK2 native compressor, inner framing; below
+  threshold = pure-Java passthrough, no JNI, no native-context creation) +
+  INSTALLED prepender — the M-CK2 production shape. C: RustFrameHandler (1
+  handler: threshold + compression + both framings in Rust). Encode runs inline
+  on the calling thread for every arm (the permissive embedded loop; in
+  production the same encode runs on the channel's single event-loop thread).
+  DISABLED phase uses the ACTUAL vanilla contract (NetworkManager.func_179289_a
+  disassembly: negative threshold REMOVES the compression handlers): A' =
+  installed prepender only; C' = RustFrameHandler(-1); B'≡A' by construction
+  (no Rust code runs when compression is off; B's handler must not be installed)
+  — reported, not timed separately.
+equivalence_rules: >
+  Same immutable heap byte[] inputs and fixture schedule for all arms; warmed
+  reusable channel per arm; timed span = writeOutbound -> readOutbound -> copy
+  to caller byte[] (draining + consumption included); decode/validate EVERY
+  iteration OUTSIDE the timed span (first iteration included); cleanup outside
+  steady-state timing; cold creation + first operation measured separately and
+  symmetrically BEFORE any warmup (30 reps/arm, same first payload). Result sink
+  corrected per directive: no single fixed reference across varying inputs —
+  each output validated against ITS scheduled input; within-arm determinism
+  against that (arm,payload)'s first output; uncompressed framings (passthrough
+  payloads + all disabled frames) must match ACROSS arms byte-exactly; compressed
+  bytes NOT compared across Java/Rust (JDK deflate vs zlib-rs differ: e.g.
+  real-31k frame 127 B vs 130 B, both decode to the original).
+method: >
+  3 fresh JVMs, rotations ABC/BCA/CAB (args[0]); per-iteration intra-JVM arm
+  order also rotates; 9-payload deterministic labeled schedule x 15 warm + 40
+  timed passes; allocation pass via com.sun.management.ThreadMXBean
+  getThreadAllocatedBytes delta (untimed, 1 schedule pass/arm). Raw outputs:
+  machine/raw/MCK42-bench-{ABC,BCA,CAB}.txt. Schedule labels payloads REAL vs
+  SYNTHETIC and does NOT model live traffic distribution.
+schedule: "real-31k(31,023 B, installed serializer+enum id) | syn-64, syn-200 (below threshold) | syn-255, syn-257r (threshold-adjacent) | syn-rep-64k/1m, syn-rnd-64k/1m (PRNG 42/43)"
+headline_ratios_mean_over_3_jvms:
+  enabled_overall: "B/A=0.711x C/A=0.717x C/B=1.008x  (JVM range: B/A 0.709-0.713, C/A 0.705-0.732, C/B 0.991-1.032)"
+  disabled_overall: "C/A=4.27x SLOWER (JVM range 3.50-4.81x) — honest measured cost of disabled framing through JNI+heap staging vs the pure-ByteBuf prepender"
+per_payload_c_a_ranges:
+  real-31k: "0.428-0.464x (A ~98us -> B/C ~45us; REAL packet)"
+  syn-64_200_255_257r: "0.67-1.00x (parity at small sizes; absolute differences are single-digit us)"
+  syn-rep-64k: "0.310-0.315x; syn-rep-1m: 0.230-0.238x (zlib-rs vs JDK deflate on repetitive data)"
+  syn-rnd-64k: "0.749-0.756x; syn-rnd-1m: 0.790-0.827x (incompressible)"
+  b_vs_c: "B and C are equivalent (0.69-1.05x depending on payload; aggregate ~1.0) — full-Rust framing adds ~nothing over the hybrid; BOTH arms' win comes from the native compressor"
+absolute_representative_jvm_abc:
+  enabled_aggregate: "A mean 2589.5us p50 96.0 p95 18421 | B mean 1843.0us p50 46.1 p95 14675 | C mean 1825.8us p50 40.2 p95 14604 (aggregate dominated by the two 1 MiB payloads)"
+  enabled_examples: "real-31k: A 98.0us/B 45.7us/C 45.5us p50; syn-rep-1m: A 3278/B 775/C 779; syn-rnd-1m: A 18631/B 14775/C 14723; syn-64: A 4.6/B 5.0/C 3.8us"
+  disabled_aggregate: "A' mean 56.0us p50 7.5 | C' mean 196.0us p50 25.4 (disabled syn-rep-1m: A' 189us vs C' 814us — JNI staging+copy for data that needs no compression)"
+cold_symmetric_30reps:
+  enabled_construct_mean: "A 0.85-0.96 ms (Deflater init + reflection) | B 47-53 us | C 55-61 us (native frameCreate in addLast)"
+  enabled_first_op_mean: "A 452-576 us | B 94-101 us | C 78-91 us"
+  disabled_construct_mean: "A' 23-24 us | C' 27-32 us"
+  disabled_first_op_mean: "A' 40-45 us | C' 73-103 us"
+allocations_heap_bytes_per_iter_approx:
+  enabled: "A ~375.7 KB | B ~501.1 KB | C ~501.3 KB (B/C pay heap staging + fresh result byte[]; A leans on Netty buffers — honest)"
+  disabled: "A' ~251.3 KB | C' ~753.6 KB"
+retained_scratch:
+  B_CompressionCtx: "~2,097,818 B (direct, sized by max 1 MiB payloads)"
+  C_OutboundFrameCtx: "~2,097,834 B (direct input mirror + output)"
+  A: "NOT_MEASURED (JDK Deflater internals + Netty buffers not introspectable in this harness)"
+timing_boundary: "nanoTime immediately before writeOutbound to immediately after the output byte[] copy; decode/compare and all validation outside; cold spans separate (construct / first-op)"
+validation: "Every iteration of every arm decoded to its scheduled input; within-arm determinism enforced; cross-arm byte equality enforced for all deterministic framings; 0 validation errors across all 3 JVMs"
+remaining_costs_recorded:
+  - "Disabled-mode JNI staging/copy: C' 3.5-4.8x slower than the pure-Java prepender — in any production ON shape, the Rust frame handler must be installed ONLY when compression is enabled (vanilla already removes the handler when disabled)"
+  - "Heap allocation: Rust arms allocate ~33% more per iteration (staging copies + fresh result arrays); direct-buffer scratch ~2 MiB per context retained"
+  - "Per-encode ownership membership check included in arm C (executor.inEventLoop()); threshold reads are volatile; ordering cost is the single-thread FIFO executor serialization"
+  - "JDK-vs-zlib-rs compressed bytes differ (valid streams, decode-equal, NOT byte-equal): any future SHADOW comparator must compare post-inflate payloads, never raw compressed bytes"
+scope_limits: >
+  Offline immutable-input component measurement only. No live traffic
+  distribution, no live capture/refresh economics, no TPS claims, and NO claim
+  that these results resolve issue #1 (cross-thread capture coherence) or are a
+  prerequisite for a future SHADOW observer.
+classification: EQUIVALENT_PIPELINE_BASELINE_ESTABLISHED

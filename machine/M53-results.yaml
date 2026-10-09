@@ -1,0 +1,22 @@
+# M5.3 — TARGET-A FINAL READY REPORT
+schema_version: 1
+date: "2026-09-22"
+run: M5-20260922-072952 (confirmation; repo defaults OFF)
+builds: {dll: db2a0ad1b13d3843, coremod: 27fbc41f46dbb361}
+A_dead_path: "auth-sample builder disabled at BOTH ends (capture + processing); counters cannot increment; canary test asserts silence; historical evidence intact"
+B_offline: "27/27 authoritative x3 consecutive runs (race-stable), 7/7, 19/19, 8/8, 16/16, 29/29, 121/121, 10/10 Rust — retired_builder_attempts=0, exceptions=0"
+C_native_authored: 355
+D_gate_b: "1,572 completed independent comparisons, ALL PASSED, 0 mismatches, 0 comparator exceptions"
+E_freshness: "biome re-pushes 3 live; light checks live (0 refreshes needed this run, 0 light skips); stale rejects via version/pending guards (336 pending-work fallbacks = correct strictness)"
+F_exceptions: >
+  ONE caught maintenance error: pushBiomes BufferOverflow — the static biome
+  push buffer is shared across the 2 sync workers (thread-safety bug). NOT a
+  validator exception, NOT correctness-affecting: the packet-time biome
+  freshness domain is the authoritative guard (3 re-pushes prove it live);
+  the background push is optimization only. Queued fix: ThreadLocal buffer.
+  Zero validator/comparator exceptions.
+G_m2c: "1,599 native-compressed, 0 fallbacks/errors, ctx 1/1 balanced"
+H_client: "bot 30 teleports, 0 decode/decompression errors, clean session"
+I_cleanup: "257 chunks removed in-JVM -> 0 bytes, pre-exit"
+J_classification: NATIVE_NETWORK_READY_TARGETA
+K_next: "Revelation combined SHADOW ladder (operator-gated): pack SHADOW first, then bounded combined ON; pushBiomes ThreadLocal fix + combined-path profiling (OPTIMIZATION_NOT_EXHAUSTED) alongside"

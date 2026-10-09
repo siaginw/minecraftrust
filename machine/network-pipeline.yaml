@@ -1,0 +1,119 @@
+# Minecraft 1.12.2 / Forge 14.23.5.2860 network ChannelPipeline specification.
+# Derived from NetworkSystem.addEndpoint, NetworkManager.enableEncryption,
+# NetworkManager.setCompressionThreshold, NetworkDispatcher.insertIntoChannel.
+
+spec_version: "1.0.0"
+source_of_truth:
+  - third_party_reference/minecraft/src/net/minecraft/network/NetworkSystem.java (L80-L109)
+  - third_party_reference/minecraft/src/net/minecraft/network/NetworkManager.java (L231-L279)
+  - third_party_reference/forge/src/src/main/java/net/minecraftforge/fml/common/network/handshake/NetworkDispatcher.java (L170-L185)
+
+bootstrap:
+  server_bootstrap: "io.netty.bootstrap.ServerBootstrap"
+  event_loop_group:
+    windows_default: "NioEventLoopGroup"
+    linux_epoll_available: "EpollEventLoopGroup"
+    thread_naming: "Netty Server IO #%d (daemon)"
+    thread_count: 0
+  channel:
+    windows_default: "NioServerSocketChannel"
+    linux_epoll: "EpollServerSocketChannel"
+  socket_options:
+    child_tcp_nodelay: true
+  bind: "syncUninterruptibly"
+  allocator: "netty default (pooled byte buf allocator)"
+
+pipeline_initial_connection:
+  - name: "timeout"
+    handler: "ReadTimeoutHandler"
+    args: {seconds: 30}
+    removes_channel_on: "no read for 30s (ReadTimeoutException -> closeChannel disconnect.timeout)"
+  - name: "legacy_query"
+    handler: "LegacyPingHandler"
+    purpose: "pre-1.6 server-list ping (0xFE); passes non-ping bytes through"
+  - name: "splitter"
+    handler: "NettyVarint21FrameDecoder"
+    purpose: "VarInt21 length-prefix frame reassembly"
+  - name: "decoder"
+    handler: "NettyPacketDecoder(SERVERBOUND)"
+    depends: "channel attr 'protocol' (PROTOCOL_ATTRIBUTE_KEY) selects packet id map"
+  - name: "prepender"
+    handler: "NettyVarint21FrameEncoder"
+  - name: "encoder"
+    handler: "NettyPacketEncoder(CLIENTBOUND)"
+  - name: "packet_handler"
+    handler: "NetworkManager (SimpleChannelInboundHandler<Packet<?>>)"
+    state: "also the INetHandler holder (NetHandlerHandshakeTCP initially)"
+
+dynamic_insertions:
+  encryption_on_login:
+    when: "NetworkManager.enableEncryption(secretKey) after CPacketEncryptionResponse validated"
+    inbound:  {name: "decrypt", handler: "NettyEncryptingDecoder", addBefore: "splitter"}
+    outbound: {name: "encrypt", handler: "NettyEncryptingEncoder", addBefore: "prepender"}
+  compression_on_set_compression:
+    when: "NetHandlerLoginServer.tryAcceptPlayer -> SPacketEnableCompression listener -> setCompressionThreshold"
+    inbound:  {name: "decompress", handler: "NettyCompressionDecoder(threshold)", addBefore: "decoder"}
+    outbound: {name: "compress",   handler: "NettyCompressionEncoder(threshold)", addBefore: "encoder"}
+    negative_threshold: "handlers removed entirely (compression disabled)"
+  fml_dispatcher:
+    when: "NetworkDispatcher.allocAndSet at PlayerList.initializeConnectionToPlayer (Forge patch)"
+    both: {name: "fml:packet_handler", handler: "NetworkDispatcher", addBefore: "packet_handler"}
+    note: "NetworkDispatcher also implements ChannelOutboundHandler; intercepts FMLProxyPacket outbound"
+
+pipeline_play_full:
+  inbound:
+    - "timeout"
+    - "legacy_query"
+    - "decrypt"
+    - "splitter"
+    - "decompress"
+    - "decoder"
+    - "fml:packet_handler"
+    - "packet_handler"
+  outbound:
+    - "packet_handler"
+    - "fml:packet_handler"
+    - "encoder"
+    - "compress"
+    - "prepender"
+    - "encrypt"
+    - "legacy_query"
+    - "timeout"
+
+status_pipeline: "initial minus dynamic insertions; closed after SPacketPong (closeChannel EXIT_MESSAGE)"
+login_before_encryption: "initial pipeline (state=LOGIN)"
+login_after_encryption: "initial + decrypt/encrypt"
+login_after_compression: "initial + decrypt/encrypt + decompress/compress"
+
+# ---- RUNTIME VERIFICATION (P0-5 section 3) ----
+# Captured live from Forge 14.23.5.2860 server via reflection probe mod
+# (tools/pipeline-probe, dumps pipeline().toMap() + PROTOCOL attr per 100 ms).
+# Transcripts: benchmarks/protocol/p0-5/live_trace_*.jsonl + server pipeline-trace.txt
+runtime_verification:
+  method: "reflection probe mod poll + synthetic Python client (status/vanilla/forge)"
+  observed_combos: 3
+
+  observed_state_handshaking_or_status:
+    note: "identical pipeline; state attr = HANDSHAKING observed right after connect"
+    order: [timeout, legacy_query*, splitter, decoder, prepender, encoder, packet_handler]
+    legacy_query_note: "self-removes on first modern (non 0xFE) byte; absent in later snapshots"
+
+  observed_state_login:
+    order: [timeout, splitter, decoder, prepender, encoder, packet_handler]
+    note: "fml:packet_handler inserted by NetworkDispatcher.insertIntoChannel (addBefore packet_handler) when dispatcher attaches at login; probe snapshots caught both with/without"
+
+  observed_state_play_with_compression:
+    order_inbound: [timeout, splitter, decompress, decoder, fml:packet_handler, packet_handler]
+    note: "legacy_query removed post-first-frame; decrypt/encrypt absent (offline mode test server)"
+    insertion_points_confirmed:
+      decompress: "addBefore decoder"
+      compress: "addBefore encoder"
+      fml:packet_handler: "addBefore packet_handler (NetworkDispatcher.java L174)"
+
+  deviations_from_static_trace: "none in ordering; only legacy_query lifetime and fml insertion timing required runtime confirmation"
+
+  compression_frame_observed:
+    set_compression_packet: "LOGIN 0x03, threshold=256 (wire bytes 80 02)"
+    frame_layout: "[len][uncompressedSize VarInt][zlib data]; usz=0 means stored"
+    observed_threshold: 256
+

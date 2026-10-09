@@ -1,0 +1,53 @@
+# M2J H2 offline feasibility check: state->ID map (operator authorization).
+# Offline only: existing JFR dumps + javap on installed jars. No server runs,
+# no implementation. class: DERIVED_FROM_MEASURED. Provenance: M2J-H2-FEASIBILITY.
+schema_version: 1
+date: "2026-09-20"
+
+exact_implementation:
+  hot_method: "ObjectIntIdentityMap.func_148747_b(T) = getId(IBlockState), overridden by net.minecraftforge.registries.GameData$BlockCallbacks$1 (javap-verified; bytecode disassembled)"
+  fast_path: "java.util.IdentityHashMap.get(state) -> Integer (single identity probe)"
+  slow_path: "on miss: state -> block.getMetaFromState -> block.getStateFromMeta -> canonical state -> map (only for unmapped states)"
+  backing: "GameData$ClearableObjectIntIdentityMap (adds clear()/remove(I)); invalidation points EXIST and are Forge registry events (BlockCallbacks implements AddCallback/ClearCallback/CreateCallback: onAdd/onClear/onCreate)"
+  second_map: "IntIdentityHashBiMap.func_186808_c(K) = palette-LOCAL state<->id map inside BlockStateContainer sections (distinct from the registry map)"
+  identity_semantics: "identity-based; IBlockState instances are interned singletons (StateImplementation) -> per-instance caching would be semantically coherent GIVEN the existing clear()/onAdd invalidation chain"
+
+largest_callers_phase_separated: # ServerThread unless noted; presence counts, never merged across phases
+  streaming_n2673: {map_containing: "162 (6.1%)", top_chain: "AnvilChunkLoader.write (func_75820_a) <- NEID Hooks.blockStateContainer_getDataForNBT <- registry getId : 96/162", second: "NEID chunkPrimer_setBlockState <- getId : 23", palette_local_map: 37}
+  unload_save_n991: {map_containing: "186 (18.8%)", top_chain: "same NEID getDataForNBT chain : 148/186", palette_local_map: 21}
+  late_recovery_n276: {map_containing: "35 (12.7%)", top_chain: "same NEID chain : 29/35"}
+  chunk_io_executor_n297: {top: "palette-local IntIdentityHashBiMap inside section rebuild (func_186014_b) : 77+74 (load side, async thread)"}
+  denominators_and_limits: >
+    Counts are 10ms-sampled presence counts against the stated per-phase
+    ServerThread denominators; phases are never merged into one percentage.
+    Streaming save activity exists because corridor-border worldgen marks
+    chunks dirty and unload-saving writes them.
+
+interpretation:
+  the_map_is_not_the_problem: >
+    Vanilla/Forge use of the registry map is palette-sized (a few dozen
+    lookups per section). The observed volume comes from NEID's
+    blockStateContainer_getDataForNBT hook, which the caller census shows
+    sits between AnvilChunkLoader.write and the registry map on EVERY
+    phase's dominant chain - i.e. NEID's extended-id serialization
+    performs per-cell-scale registry translation during chunk saves. The
+    same hook family (setDataFromNBT) drives the load-side palette-local
+    map heat on the async Chunk I/O thread. Optimizing the map would be
+    optimizing the wrong layer: the driver is a mod's usage pattern.
+  candidate_changes_considered:
+    - "replace/augment BlockCallbacks$1 IdentityHashMap (Forge core patch or coremod): coherent invalidation exists, BUT the beneficiary is NEID's hot loop; magnitude on this workload is 6-19% presence in specific windows; risk touches a Forge registry invariant used by every mod"
+    - "per-state cached id field on StateImplementation (vanilla coremod patch): same beneficiary problem + vanilla class patch"
+    - "fix NEID's serialization loop (fork/patch the mod): correct layer, but mod-owned code - out of project scope by the operator's compatibility rules"
+  verdict: PARK_H2
+  reason: >
+    Existing evidence does not justify a bounded prototype: the removable
+    cost is driven by a mod's (NEID) serialization pattern, not by an
+    inefficient engine/Forge structure; the only in-scope changes would
+    optimize the wrong layer for a workload-window-bounded benefit, and
+    the honest size estimate carries sampling uncertainty (tens-to-low-
+    hundreds of samples). No optimization is manufactured to keep moving.
+
+missing_evidence_if_ever_revisited:
+  - "dirty-world steady-state save rate (factory-style workload; this capture's saves were disconnect/unload-driven)"
+  - "instrumented call counts per section save/load (samples cannot give volume)"
+  - "a pack without NEID, to isolate how much of the save-path map cost disappears"

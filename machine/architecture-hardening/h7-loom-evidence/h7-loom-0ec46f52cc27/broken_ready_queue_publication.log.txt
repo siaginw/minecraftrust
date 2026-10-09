@@ -1,0 +1,17 @@
+
+running 1 test
+test broken_ready_queue_publication ... 
+thread 'broken_ready_queue_publication' (26424) panicked at tests\lifecycle.rs:440:13:
+assertion `left == right` failed: READY_WITHOUT_PAYLOAD
+  left: 0
+ right: 17
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+FAILED
+
+failures:
+
+failures:
+    broken_ready_queue_publication
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 26 filtered out; finished in 0.00s
+

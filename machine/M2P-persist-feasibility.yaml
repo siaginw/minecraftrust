@@ -1,0 +1,139 @@
+# M2-PERSIST feasibility evaluation (operator directive 2026-09-20).
+# NO implementation. Save pipeline verified against the actual installed
+# jars (javap disassembly of vanilla AnvilChunkLoader, committed at
+# machine/raw/diag/anvil-loader-disasm.txt) + M2J JFR save-path samples.
+# class: DERIVED_FROM_MEASURED + SOURCE_VERIFIED.
+schema_version: 1
+date: "2026-09-20"
+
+verified_save_pipeline:
+  ServerThread_inline: # javap-verified bytecode of AnvilChunkLoader
+    entry: "saveChunks (func_75816_a): World.checkSessionLock -> new NBTTagCompound root{Level:{}, DataVersion} -> writeChunkToNBT (func_75820_a) -> queueWrite (func_75824_a)"
+    writeChunkToNBT_body: # all verified in disassembly
+      - "vanilla fields: xPos zPos LastUpdate HeightMap TerrainPopulated LightPopulated InhabitedTime"
+      - "Sections list: per-EBS Y byte + 4096B block array + NibbleArrays via BlockStateContainer.getDataForNBT (id translation state->id map: the BlockCallbacks cluster from M2J)"
+      - "Entities list: ClassInheritanceMultiMap iteration + Entity.writeToNBT(func_70019_b...) per entity (ONLY entities with chunk-local coords; unloaded-entity handling in loader)"
+      - "TileEntities list: chunk TE map values -> TileEntity.writeToNBT(func_189515_b) which includes Forge CAPABILITY serialization (ForgeCaps subtag) inside"
+      - "TileTicks list: NextTickListEntry -> {i: blockId-string, x,y,z,t,priority}"
+      - "Biomes (full chunks)"
+    forge_event: "ChunkDataEvent.Save fires AFTER writeChunkToNBT in Forge-patched AnvilSaveHandler/loader (Forge patch: onChunkDataSave(chunk, world, levelTag, rootTag)) - mods MUTATE the final tree here; event.getData() exposes the same tag written to disk"
+    output: "final Java NBTTagCompound (root{Level{...}}) handed to the queue"
+  Background_File_IO_Thread: # IThreadedFileIO + ThreadedFileIOBase.func_75735_a verified
+    - "writeChunkData: binary NBT encode (CompressedStreamTools.write) - NO ServerThread cost"
+    - "zlib deflate (Deflater level -1 via RegionFile) - NO ServerThread cost (disasm shows zip frames absent on ServerThread; M2J confirmed 0 zip frames in unload burst)"
+    - "RegionFile 4096-sector allocation + location table write (func_75824_a queues; IO thread executes)"
+  thread_model_note: "autosave triggers periodic saveAllChunks; PLAYER-DISCONNECT chunk unloads trigger the same saveChunk path synchronously queued (M2J: 190-sample unload burst ON ServerThread = NBT BUILD, not IO)"
+
+PERSIST_A: # Java builds COMPLETE final NBTTagCompound incl. all mod callbacks; Rust encodes+compresses+writes region
+  ServerThread_work_removed: >
+    NONE of the NBT BUILD (the measured hot part) - only the binary encode,
+    deflate, and region write move, which ALREADY run on the File IO
+    Thread off ServerThread (verified). Net ServerThread saving: ~ZERO.
+  copying: "NBTTagCompound -> native encode input requires either (a) a full tree walk to serialize into a direct buffer (re-does Java work off-thread) or (b) CompressedStreamTools output copy handoff"
+  jni_boundary: "coarse per-chunk; one direct buffer in/out"
+  mod_compatibility: PERFECT (final tree is the exact Java-authored artifact)
+  crash_safety: "identical semantics to vanilla IO; Rust writer failure = fall back to Java encode/write"
+  disk_corruption: "region-writer bugs are the risk; mitigated by shadow-write validation (below)"
+  rollback: "single property; revert to Java IO thread path"
+  parity_testability: "trivial: byte-compare Rust-written .mca vs Java-written .mca for identical NBT inputs"
+  verdict: SAFE_BUT_NEAR_ZERO_SERVER_THREAD_VALUE - it moves work that is already off-thread
+
+PERSIST_B: # Java builds coarse snapshot + mod-owned NBT fragments; Rust builds vanilla chunk NBT + merges
+  ServerThread_work_removed: >
+    The NBT BUILD itself (the measured unload-burst: state->id translation,
+    palette serialization, section arrays) COULD move off ServerThread.
+    BUT: sections/palette/heightmap must be read from live Chunk objects
+    (mutable during build - vanilla builds under ServerThread exclusivity);
+    a snapshot must be taken ON the ServerThread anyway.
+  copying: "snapshot extraction ~= a chunk read lock + section array copy (bytes) + TE/entity NBT fragments (Java, still built on ServerThread)"
+  jni_boundary: "coarse per-chunk (snapshot in, full NBT bytes out) - same shape as M1 staging"
+  mod_compatibility: DANGEROUS_UNPROVEN: >
+    ChunkDataEvent.Save mods receive (chunk, world, levelTag) and may read
+    ANY vanilla field from levelTag (e.g. overwrite Sections, inject
+    ForgeCaps at Level root, mutate TileEntities). If Rust pre-built the
+    vanilla part, the event must still fire with a REAL NBTTagCompound
+    containing the vanilla fields - requiring either (a) rebuilding Java
+    NBT from the Rust-built bytes before the event (negates the saving) or
+    (b) a lazy/tag-proxy NBT view over Rust data (correctness risk: mods
+    that compare tags, serialize them elsewhere, or hold references).
+    NEID also injects INTO BlockStateContainer.getDataForNBT (verified in
+    M2J stacks) - a Rust section serializer must reproduce NEID's extended
+    id encoding exactly, or worlds corrupt on reload.
+  crash_safety: "snapshot torn reads if not taken under the same exclusion vanilla uses"
+  disk_corruption: "HIGH: a Rust-side vanilla-NBT builder bug writes bad chunks that reload wrong and may be re-saved - persistent corruption (operator directive #10 explicitly flags this)"
+  rollback: "property-gated fallback to full Java path per chunk"
+  parity_testability: "shadow-write full .mca byte/semantic comparison per chunk; reload validation in a scratch world"
+  verdict: UNSAFE_AS_SPECIFIED - the Java NBTTagCompound contract with mods (event + NEID + capability tags) cannot be met without rebuilding the tree in Java
+
+serverthread_cpu_question: # directive 9
+  answer: >
+    PERSIST-A: ~0 ms removable (encode/deflate/write already off-thread -
+    verified by disasm + M2J JFR: 0 zip frames, 0 CompressedStreamTools
+    frames on ServerThread in the save burst; the File IO Thread samples
+    separately). PERSIST-B: the unload-burst NBT build measured ~190
+    samples/58s window (M2J, ~13-19% presence in that window) is the
+    theoretical ceiling, but it recurs per player-disconnect/unload, NOT
+    per tick; autosave periodic cost measured ~8 samples (~negligible in
+    our capture because unload had flushed dirty chunks). ANY claim of
+    'massive autosave spike removal' is UNSUPPORTED by current evidence:
+    our one Revelation capture never showed a dominant periodic-autosave
+    spike. Gemini-style claim: REJECTED on evidence.
+  unknowns: [dirty-world steady-state save rate (factory workload), autosave on a long-running server, SevTech save-path share]
+
+safety_strategy_mandatory: # directive 10 - applies to ANY future persist work
+  shadow_write: "dual-write: Rust writer emits to a test directory alongside Java IO output; no production region file touched until byte/semantic parity sustained"
+  comparison: "per-chunk byte compare of Java-authored vs Rust-authored .mca output on identical NBT inputs; plus semantic NBT compare (order-insensitive) via our two independent NBT codecs (crates/nbt + simdnbt - now both parity-proven)"
+  reload_validation: "server boot on the shadow-written region dir; full load + resave cycle; chunk-by-chunk NBT equality after reload"
+  fallback: "per-chunk property-gated Java path; any encode/bound error falls back before write"
+  old_save_compat: "region files written by Rust must byte-follow the vanilla 4096-sector format (fastanvil eval proves the format is implementable and testable against real files)"
+
+best_architecture: >
+  NEITHER as-specified. Evidence points to a PERSIST-A' variant if pursued:
+  Java builds the complete final tree (as A), Rust handles binary encode +
+  compression + region write WITH PERSIST-A's own acknowledgment that this
+  is off-thread already - the honest ServerThread benefit is ZERO.
+  The only measured ServerThread save cost (unload-burst NBT build) is
+  inseparable from the Java mod contract (event + NEID + capabilities),
+  so B cannot be made safe without a lazy-NBT research project.
+
+recommendation: >
+  M2-PERSIST does NOT deserve implementation now on performance grounds
+  (removable ServerThread work ~0 for the only safe variant). The measured
+  streaming-phase costs favor OTHER directions (already-parked H1/H2 and
+  the M2.0 compression prototype which IS measured faster). If the
+  operator's goal is architectural ownership of the save pipeline, a
+  PERSIST-A (encode+compress+region-write in Rust, Java tree contract
+  untouched) is SAFE and testable, with performance framed honestly as
+  off-thread CPU/allocation reduction, not ServerThread relief.
+
+next_bounded_milestone_proposal: >
+  If persistence remains a goal: PERSIST-A shadow-writer prototype
+  (Rust: NBT binary encode from a Java-serialized intermediate +
+  zlib + region append; NO vanilla-side changes; validation = the
+  safety_strategy above against our committed region fixtures).
+  Otherwise: proceed to M2.0-C compression live integration ladder
+  (SHADOW first), which has measured complete-path wins.
+
+velocity_native_lessons: # GPL-3: pattern reference only
+  - "long-lived native context handles (deflate/inflate ctx) allocated once, disposed explicitly (Disposable + ensureNotDisposed)"
+  - "direct ByteBuf addresses via memoryAddress()+readerIndex() offsets - no GetPrimitiveArrayCritical anywhere"
+  - "known-uncompressed-size inflate API (protocol provides it) avoids growth loops"
+  - "deflate loop with destination capacity check + explicit max-bytes parameter; retry with larger buffer on insufficient capacity"
+  - "Natives loader: extract bundled .so/.dll to temp file by OS/arch, attempt-load, fall back to pure-Java impl transparently (factory pattern VelocityCompressorFactory)"
+  - "BufferPreference abstraction: implementations declare heap/direct preference so the pipeline allocates correctly"
+  - "compared to M1/M2-C: we match address-passing and context reuse; we lack Velocity's explicit Disposable lifecycle and factory fallback seam - both adoptable in the future handler design"
+starlight_concepts:
+  - "StarLightEngine: queue-based propagation (increase/decrease queues as long-packed positions) replacing vanilla recursive light updates - relevant IF lighting ever becomes a target"
+  - "SWMRNibbleArray: single-writer-multiple-reader nibble storage with dirty tracking - pattern applicable to any Rust-side section cache"
+  - "section-local light state with per-section propagation restart - avoids full-chunk relight"
+  - "StarLightLightingProvider: async executor batching light updates off-thread - the batching pattern (not the code) transfers"
+lithium_concepts:
+  - "entity/movement: optimized collision shape queries (block_aabb caching, shape lazy-eval) - Java-side, reference for future collision profiling"
+  - "inventory_change_tracking / comparator_tracking: TE dirty-flag caching to skip redundant recomputation - DIRECTLY analogous to our chunk-dirty bookkeeping"
+  - "entity item/projectile: narrowed AABB and predicate-specialized queries replacing generic getEntitiesWithinAABB scans"
+  - "block entity sleeping_sculk: skip-tick via sleep states - pattern for TE tick reduction IF TE tick is ever measured hot"
+cleanroom_concepts:
+  - "1.12.2 on Java 25+: class-file version shim + ASM rewrite at load; Mixin bootstrapped in FMLLaunchHandler (MixinBootstrap.init at launch) - confirms our mixin-safe deferred-init approach"
+  - "LaunchWrapper retained but modernized (CleanroomLoader continues FML); transformer pipeline compatible - evidence that our coremod approach survives modern JDKs unchanged"
+  - "borrowable WITHOUT runtime switch: none required - our toolchain is JDK8-pinned by the target servers themselves; modernization would be a deployment option, not an architecture input"
+  - "migration NOT proposed: our mandate is Rust acceleration on the existing runtime; Cleanroom is an alternative runtime, not a seam for it"

@@ -1,0 +1,127 @@
+schema_version: "1.0.0"
+subsystem: "nbt_codec"
+minecraft_version: "1.12.2"
+forge_build: "14.23.5.2860"
+data_version: 1343
+
+endianness: "big-endian"
+max_depth: 512
+max_string_bytes: 65535
+string_encoding: "Java Modified UTF-8 (MUTF-8)"
+
+tag_types:
+  - id: 0
+    name: "TAG_End"
+    java_class: "net.minecraft.nbt.NBTTagEnd"
+    wire_size_bytes: 0
+    fixed_payload: true
+    description: "Closes compound tags; empty list element marker"
+
+  - id: 1
+    name: "TAG_Byte"
+    java_class: "net.minecraft.nbt.NBTTagByte"
+    wire_size_bytes: 1
+    fixed_payload: true
+    signed: true
+    description: "Signed 8-bit integer and boolean flags"
+
+  - id: 2
+    name: "TAG_Short"
+    java_class: "net.minecraft.nbt.NBTTagShort"
+    wire_size_bytes: 2
+    fixed_payload: true
+    signed: true
+    description: "Signed 16-bit big-endian integer"
+
+  - id: 3
+    name: "TAG_Int"
+    java_class: "net.minecraft.nbt.NBTTagInt"
+    wire_size_bytes: 4
+    fixed_payload: true
+    signed: true
+    description: "Signed 32-bit big-endian integer"
+
+  - id: 4
+    name: "TAG_Long"
+    java_class: "net.minecraft.nbt.NBTTagLong"
+    wire_size_bytes: 8
+    fixed_payload: true
+    signed: true
+    description: "Signed 64-bit big-endian integer"
+
+  - id: 5
+    name: "TAG_Float"
+    java_class: "net.minecraft.nbt.NBTTagFloat"
+    wire_size_bytes: 4
+    fixed_payload: true
+    format: "IEEE-754 single-precision"
+    description: "32-bit floating point"
+
+  - id: 6
+    name: "TAG_Double"
+    java_class: "net.minecraft.nbt.NBTTagDouble"
+    wire_size_bytes: 8
+    fixed_payload: true
+    format: "IEEE-754 double-precision"
+    description: "64-bit floating point"
+
+  - id: 7
+    name: "TAG_Byte_Array"
+    java_class: "net.minecraft.nbt.NBTTagByteArray"
+    wire_size_bytes: "4 + length"
+    fixed_payload: false
+    description: "Length-prefixed raw byte array"
+
+  - id: 8
+    name: "TAG_String"
+    java_class: "net.minecraft.nbt.NBTTagString"
+    wire_size_bytes: "2 + length"
+    fixed_payload: false
+    description: "Length-prefixed Modified UTF-8 string"
+
+  - id: 9
+    name: "TAG_List"
+    java_class: "net.minecraft.nbt.NBTTagList"
+    wire_size_bytes: "5 + sum(payloads)"
+    fixed_payload: false
+    homogeneous: true
+    description: "Homogeneous sequence of tags"
+
+  - id: 10
+    name: "TAG_Compound"
+    java_class: "net.minecraft.nbt.NBTTagCompound"
+    wire_size_bytes: "variable (terminated by TAG_End)"
+    fixed_payload: false
+    ordered: false
+    description: "Unordered key-value map of named tags"
+
+  - id: 11
+    name: "TAG_Int_Array"
+    java_class: "net.minecraft.nbt.NBTTagIntArray"
+    wire_size_bytes: "4 + 4 * length"
+    fixed_payload: false
+    description: "Length-prefixed array of 32-bit big-endian integers"
+
+  - id: 12
+    name: "TAG_Long_Array"
+    java_class: "net.minecraft.nbt.NBTTagLongArray"
+    wire_size_bytes: "4 + 8 * length"
+    fixed_payload: false
+    description: "Length-prefixed array of 64-bit big-endian integers (introduced in MC 1.12)"
+
+pseudo_types:
+  - id: 99
+    name: "Any Numeric Tag"
+    predicate_matches: [1, 2, 3, 4, 5, 6]
+    wire_presence: false
+    description: "In-memory query selector matching any numeric tag"
+
+size_tracker:
+  accounting_unit: "bits"
+  tag_compound_overhead_bits: 384
+  tag_compound_key_overhead_bits: "224 + 16 * key.length()"
+  tag_compound_replaced_key_bits: 288
+  tag_string_overhead_bits: 288
+  tag_string_char_bits: "16 * string.length()"
+  tag_list_overhead_bits: 288
+  forge_patch_utf_object_overhead_bits: 32

@@ -1,0 +1,319 @@
+warning: value assigned to `l0` is never read
+   --> crates\worldgen-noise\src\lib.rs:236:14
+    |
+236 |         let (mut l0, mut l1, mut l2, mut l3): (i32, i32, i32, i32) = (0, 0, 0, 0);
+    |              ^^^^^^ this value is reassigned later and never used
+...
+261 |                         l0 = self.perm[b0b as usize] + cz;
+    |                         --------------------------------- `l0` is overwritten here before the previous value is read
+    |
+    = note: `#[warn(unused_assignments)]` (part of `#[warn(unused)]`) on by default
+
+warning: value assigned to `l1` is never read
+   --> crates\worldgen-noise\src\lib.rs:236:22
+    |
+236 |         let (mut l0, mut l1, mut l2, mut l3): (i32, i32, i32, i32) = (0, 0, 0, 0);
+    |                      ^^^^^^ this value is reassigned later and never used
+...
+262 |                         l1 = self.perm[(b0b + 1) as usize] + cz;
+    |                         --------------------------------------- `l1` is overwritten here before the previous value is read
+
+warning: value assigned to `l2` is never read
+   --> crates\worldgen-noise\src\lib.rs:236:30
+    |
+236 |         let (mut l0, mut l1, mut l2, mut l3): (i32, i32, i32, i32) = (0, 0, 0, 0);
+    |                              ^^^^^^ this value is reassigned later and never used
+...
+264 |                         l2 = self.perm[b1b as usize] + cz;
+    |                         --------------------------------- `l2` is overwritten here before the previous value is read
+
+warning: value assigned to `l3` is never read
+   --> crates\worldgen-noise\src\lib.rs:236:38
+    |
+236 |         let (mut l0, mut l1, mut l2, mut l3): (i32, i32, i32, i32) = (0, 0, 0, 0);
+    |                                      ^^^^^^ this value is reassigned later and never used
+...
+265 |                         l3 = self.perm[(b1b + 1) as usize] + cz;
+    |                         --------------------------------------- `l3` is overwritten here before the previous value is read
+
+warning: unused variable: `len`
+   --> crates\worldgen-noise\src\field.rs:177:13
+    |
+177 |         let len = (x_size * y_size * z_size) as usize;
+    |             ^^^ help: if this is intentional, prefix it with an underscore: `_len`
+    |
+    = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: value assigned to `l0` is never read
+   --> crates\worldgen-noise\src\field_complete.rs:113:10
+    |
+113 |     let (mut l0, mut l1, mut l2, mut l3) = (0i32, 0i32, 0i32, 0i32);
+    |          ^^^^^^ this value is reassigned later and never used
+...
+135 |                     l0 = perm[b0 as usize] as i32 + cz;
+    |                     ---------------------------------- `l0` is overwritten here before the previous value is read
+
+warning: value assigned to `l1` is never read
+   --> crates\worldgen-noise\src\field_complete.rs:113:18
+    |
+113 |     let (mut l0, mut l1, mut l2, mut l3) = (0i32, 0i32, 0i32, 0i32);
+    |                  ^^^^^^ this value is reassigned later and never used
+...
+136 |                     l1 = perm[(b0 + 1) as usize] as i32 + cz;
+    |                     ---------------------------------------- `l1` is overwritten here before the previous value is read
+
+warning: value assigned to `l2` is never read
+   --> crates\worldgen-noise\src\field_complete.rs:113:26
+    |
+113 |     let (mut l0, mut l1, mut l2, mut l3) = (0i32, 0i32, 0i32, 0i32);
+    |                          ^^^^^^ this value is reassigned later and never used
+...
+138 |                     l2 = perm[b1 as usize] as i32 + cz;
+    |                     ---------------------------------- `l2` is overwritten here before the previous value is read
+
+warning: value assigned to `l3` is never read
+   --> crates\worldgen-noise\src\field_complete.rs:113:34
+    |
+113 |     let (mut l0, mut l1, mut l2, mut l3) = (0i32, 0i32, 0i32, 0i32);
+    |                                  ^^^^^^ this value is reassigned later and never used
+...
+139 |                     l3 = perm[(b1 + 1) as usize] as i32 + cz;
+    |                     ---------------------------------------- `l3` is overwritten here before the previous value is read
+
+warning: variable does not need to be mutable
+   --> crates\worldgen-noise\src\field_complete.rs:472:13
+    |
+472 |         let mut take = |n_oct: usize, perms: &[u8], offsets: &[f64],
+    |             ----^^^^
+    |             |
+    |             help: remove this `mut`
+    |
+    = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: `worldgen-noise` (lib) generated 10 warnings (run `cargo fix --lib -p worldgen-noise` to apply 2 suggestions)
+warning: constant `REGION_SIZE` is never used
+  --> crates\spawn-index\src\lib.rs:33:7
+   |
+33 | const REGION_SIZE: i32 = 1 << REGION_SHIFT;
+   |       ^^^^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `chunk_i`
+   --> crates\worldgen-noise\src\terrain.rs:384:13
+    |
+384 |         for chunk_i in 0..50 {
+    |             ^^^^^^^ help: if this is intentional, prefix it with an underscore: `_chunk_i`
+
+warning: `spawn-index` (lib) generated 1 warning
+warning: `spawn-index` (lib test) generated 1 warning (1 duplicate)
+warning: `worldgen-noise` (lib test) generated 11 warnings (10 duplicates) (run `cargo fix --lib -p worldgen-noise --tests` to apply 1 suggestion)
+warning: unused variable: `have`
+   --> crates\compression\src\frame.rs:205:68
+    |
+205 |                     crate::CompressError::OutputTooSmall { needed, have } =>
+    |                                                                    ^^^^ help: try ignoring the field: `have: _`
+    |
+    = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `inner`
+   --> crates\compression\src\frame.rs:291:14
+    |
+291 |         let (inner, u1) = varint_parse(&out);
+    |              ^^^^^ help: if this is intentional, prefix it with an underscore: `_inner`
+
+warning: `compression` (lib) generated 1 warning (run `cargo fix --lib -p compression` to apply 1 suggestion)
+warning: `compression` (lib test) generated 2 warnings (1 duplicate) (run `cargo fix --lib -p compression --tests` to apply 1 suggestion)
+   Compiling ffi v0.1.0 (D:\minecraftrust-astra-hardening\crates\ffi)
+warning: function `AssertUnwindSafeClosure` should have a snake case name
+   --> crates\ffi\src\lib.rs:308:4
+    |
+308 | fn AssertUnwindSafeClosure<F: FnOnce() -> i32>(f: F) -> impl FnOnce() -> i32 {
+    |    ^^^^^^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `assert_unwind_safe_closure`
+    |
+    = note: `#[warn(non_snake_case)]` (part of `#[warn(nonstandard_style)]`) on by default
+
+warning: `ffi` (lib test) generated 1 warning
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.73s
+     Running unittests src\lib.rs (target\debug\deps\buffers-e0d68116c430a43b.exe)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src\lib.rs (target\debug\deps\chunk_packet-0414daa6383169b5.exe)
+
+running 11 tests
+test tests::test_abi_version_rejection ... ok
+test tests::test_empty_chunk_biomes_only ... ok
+test tests::test_malformed_duplicate_section_index ... ok
+test tests::test_malformed_section_mask_mismatch ... ok
+test tests::test_global_palette_wire_omission ... ok
+test tests::test_malformed_truncated_staging ... ok
+test tests::test_capacity_boundary_conditions ... ok
+test tests::test_predict_output_len_matches_encode ... ok
+test tests::test_palette_overflow ... ok
+test tests::test_single_section_with_skylight ... ok
+test tests::test_unsupported_palette_width ... ok
+
+test result: ok. 11 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src\lib.rs (target\debug\deps\compression-d4adc7de1db19492.exe)
+
+running 14 tests
+test frame::tests::below_threshold_passthrough ... ok
+test tests::backend_pin_is_recorded ... ok
+test frame::tests::disabled_frame_layout ... ok
+test frame::tests::at_threshold_compresses ... ok
+test tests::level_bounds ... ok
+test frame::tests::capacity_error_is_clean_and_retryable ... ok
+test frame::tests::threshold_zero_compresses_everything ... ok
+test frame::tests::consecutive_frames_independent_streams ... ok
+test tests::insufficient_capacity_is_checked_before_writes ... ok
+test frame::tests::varint_boundaries ... ok
+test tests::threshold_adjacent_sizes ... ok
+test tests::incompressible_expansion_stays_within_bound ... ok
+test frame::tests::empty_body_invalid_and_body_too_large ... ok
+test tests::roundtrip_cases ... ok
+
+test result: ok. 14 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.15s
+
+     Running unittests src\lib.rs (target\debug\deps\contracts-f640806977e56e21.exe)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src\lib.rs (target\debug\deps\core_types-605f811419870326.exe)
+
+running 3 tests
+test tests::test_block_to_chunk_and_local ... ok
+test tests::test_blockpos_packing_roundtrip ... ok
+test tests::test_against_golden_coordinates_corpus ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src\lib.rs (target\debug\deps\rustcraft_ffi-00ec4f6de8820462.exe)
+
+running 11 tests
+test owned_snapshot::tests::owned_empty_v2_success_and_malformed_retry ... ok
+test owned_snapshot::tests::owned_pointer_overlap_and_numeric_errors_fail_before_dereference ... ok
+test packet_encode_v2::tests::success_layout_is_positive_and_lossless_at_boundaries ... ok
+test packet_encode_v2::tests::boundary_invokes_operation_once_on_success_error_and_panic ... ok
+test packet_encode_v2::tests::poisoned_native_state_is_rejected_without_success_metadata ... ok
+test packet_encode_v2::tests::current_and_unknown_encoder_errors_remain_failures ... ok
+test packet_encode_v2::tests::unrepresentable_success_becomes_only_an_error ... ok
+test packet_encode_v2::tests::every_failure_is_canonical_and_has_no_success_tag_interpretation ... ok
+test owned_snapshot::tests::owned_lifecycle_failure_carries_no_success_fields ... ok
+test packet_encode_v2::properties::v2_roundtrip_and_corrupted_reserved_bits ... ok
+test packet_encode_v2::properties::errors_have_no_success_fields_and_retry_is_independent ... ok
+
+test result: ok. 11 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src\lib.rs (target\debug\deps\metrics-97799a02af332d30.exe)
+
+running 8 tests
+test tests::fixed_operation_ids_are_unique_and_in_range ... ok
+test tests::sum_overflow_is_explicit_not_a_smaller_transfer ... ok
+test tests::partial_accounting_never_becomes_a_complete_total ... ok
+test tests::explicit_zero_and_unobserved_are_distinct ... ok
+test tests::unwind_records_an_unknown_failed_observation ... ok
+test tests::contained_panic_invalidates_normal_path_copy_and_allocation_proofs ... ok
+test tests::operation_ids_never_contribute_to_bytes_and_unknown_is_not_zero ... ok
+test tests::concurrent_known_and_unknown_observations_keep_separate_counts ... ok
+
+test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src\lib.rs (target\debug\deps\native_chunk-26d3e8c223c4665b.exe)
+
+running 10 tests
+test tests::test_section_index_mapping ... ok
+test tests::test_section_blocks_and_wire ... ok
+test tests::test_registry_lifecycle_and_invalidation ... ok
+test tests::test_versioned_snapshot_model ... ok
+test tests::test_light_only_refresh ... ok
+test tests::test_dimension_scoped_keys_no_aliasing ... ok
+test tests::test_zero_copy_consumers ... ok
+test tests::test_section_refresh_model ... ok
+test tests::test_refresh_then_mutation_then_refresh_cycle ... ok
+test tests::test_chunk_primer_bidirectional_roundtrip ... ok
+
+test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src\lib.rs (target\debug\deps\nbt-c4d31d5d788e019b.exe)
+
+running 6 tests
+test tests::test_arrays_roundtrip ... ok
+test tests::test_tape_cursor_lookup ... ok
+test tests::test_primitive_roundtrip ... ok
+test tests::test_mutf8_null_and_surrogates ... ok
+test tests::test_unknown_mod_tag_preservation ... ok
+test tests::test_depth_limit_enforced ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src\lib.rs (target\debug\deps\protocol-4df342ed516ef003.exe)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src\lib.rs (target\debug\deps\region_io-fd0d405b92218028.exe)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src\lib.rs (target\debug\deps\spatial_index-c571f226cca3a35d.exe)
+
+running 4 tests
+test tests::insert_remove_and_buckets_free ... ok
+test tests::negative_and_huge_coordinates_round_trip ... ok
+test tests::deterministic_point_queries ... ok
+test tests::fan_out_and_memory_bounds ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src\lib.rs (target\debug\deps\spawn_index-15a6db3e60a7bec2.exe)
+
+running 7 tests
+test tests::empty_map_query_misses ... ok
+test tests::invalid_start_never_matches ... ok
+test tests::tombstone_removes_visibility ... ok
+test tests::update_box_moves_membership ... ok
+test tests::negative_and_huge_coordinates ... ok
+test tests::exact_hit_component_and_first_match ... ok
+test tests::parity_against_linear_reference ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.04s
+
+     Running unittests src\lib.rs (target\debug\deps\test_support-e8b8a542164afbc9.exe)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src\lib.rs (target\debug\deps\transport-468ffa0cdc1a9108.exe)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src\lib.rs (target\debug\deps\worldgen_noise-963864263dae9bf1.exe)
+
+running 12 tests
+test field::tests::assembly_runs_and_biome_weights_match_reference ... ok
+test tests::deterministic_and_seed_sensitive ... ok
+test tests::java_random_lcg_reference_vector ... ok
+test tests::outputs_finite_and_bounded ... ok
+test terrain::tests::test_pure_stone_terrain ... ok
+test terrain::tests::test_pure_air_terrain ... ok
+test terrain::tests::test_parity_matches_column_major_on_real_density ... ok
+test terrain::tests::test_chunk_primer_index_bijection ... ok
+test field::tests::xlane_single_matches_scalar_bit_exact ... ok
+test field_complete::tests::complete_matches_scalar_pipeline_bit_exact ... ok
+test terrain::tests::test_parity_matches_column_major_multi_chunk ... ok
+test simd::tests::batched_simd_matches_scalar_bit_exact ... ok
+
+test result: ok. 12 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.59s
+

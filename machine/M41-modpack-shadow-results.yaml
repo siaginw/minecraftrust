@@ -1,0 +1,136 @@
+# M4.1 — Generalized NativeSection + modpack SHADOW validation.
+# class: MEASURED. Provenance: M41-GENERATIVE-PALETTE.
+# All native paths default OFF / SHADOW-only; no live authoritative output.
+schema_version: 1
+date: "2026-09-21"
+milestone: M4.1
+builds:
+  dll: {sha256_prefix: 6efe026329380865, note: "generalized sections + snapshot model + refresh exports (calls 309-313) + fixed cross-word spanning + dynamic global bits"}
+  coremod: {sha256_prefix: 5e97c320e119d740, note: "NativeChunkBridge refresh/dirty-mask declarations + registry-size global-bits init"}
+  prior_dll_rev_sev_first_pass: {sha256_prefix: unknown_pre_fix, note: "Revelation/SevTech first pass ran pre-spanning-fix; terrain/registration unaffected; Revelation re-run below is the definitive number"}
+scope:
+  engine_representation: "canonical u16[4096] global state ids per section; wire palettes derived on demand and cached"
+  state_id_semantics: "global state id = (blockId << 4) | meta; vanilla srg registry size 5,365 -> global palette 13 bits (verified empirically)"
+wire_parity_vs_real_vanilla:
+  method: "offline harness builds live net.minecraft.world.chunk.BlockStateContainer via Bootstrap, serializes with func_186009_b(PacketBuffer) (the exact SPacketChunkData path), byte-compares native Protocol 340 section output; vanilla inserted in section-index order to align palette first-appearance order"
+  cases: 26
+  pass: 26
+  fail: 0
+  coverage_bits: [4, 5, 6, 7, 8, 13]
+  coverage_modes: [linear, hashmap, global]
+  bugs_found_and_fixed:
+    - "cross-word spanning (5/6/7/13-bit) had swapped word halves — invisible to self-consistent roundtrip tests, caught only by real-vanilla byte comparison"
+    - "global palette bits hardcoded; vanilla computes ceil(log2(BLOCK_STATE_IDS.size())) at runtime (13 for vanilla 5,365; bigger under mods). Now dynamic, set by bridge from live registry at first load"
+    - "global palette wire form: palette length varint(0), no entries (decompiled BlockStatePaletteRegistry.func_186037_b) — confirmed matched"
+  artifact: tools/bridge/src/com/rustcraft/bridge/M4WireParityHarness.java
+live_shadow_runs:
+  targetA_clean_forge:
+    date: 2026-09-21
+    dll: fixed build
+    terrain_chunks_compared: 2931
+    terrain_matches: 2931
+    terrain_mismatches: 0
+    m4_registered: 2931
+    m4_packet_consumer_ok: 2931
+    m4_occupancy_consumer_ok: 2931
+    m4_persistence_consumer_ok: 2931
+    verdict: CLEAN
+  revelation_targetC:
+    date: 2026-09-21
+    definitive_rerun_fixed_build:
+      terrain_chunks_compared: 35660
+      terrain_matches: 35660
+      terrain_mismatches: 0
+      m4_registered: 35660
+      m4_packet_consumer_ok: 35660
+      m4_occupancy_consumer_ok: 35660
+      m4_persistence_consumer_ok: 35660
+      m4_rust_bytes_encoded: 1053862749
+      native_errors: 0
+      ctx_balance: "1 created / 1 freed"
+    note_first_pass: "38,179/38,179 terrain-exact on pre-spanning-fix dll (base-terrain sections are <=16-state 4-bit so wire bytes unaffected); re-run above is the authoritative number"
+    verdict: CLEAN
+  sevtech_targetD:
+    date: 2026-09-21
+    dll: pre-fix (terrain comparison does not involve the section encoder)
+    field_comparisons: 56949
+    field_matches: 56949
+    field_doubles_compared: 46982925
+    field_mismatches: 0
+    terrain_chunks_compared: 56949
+    terrain_matches: 0
+    terrain_mismatches: 56949
+    terrain_first_mismatch: "cx=13 cz=15 idx=0 java=air rust=stone (y=0 corner cell)"
+    m4_registered: 0
+    m4_leaked_state: 0
+    native_errors: 0
+    ctx_balance: "2 created / 2 freed"
+    server_exceptions: "pack baseline only (ferdinandsflowers recipe JSON, 11 NPEs — same class as prior M3WG SevTech campaigns)"
+    diagnosis: >
+      Density-field kernel remains bit-exact under SevTech (46.9M doubles, 0 mismatches),
+      but the base-terrain PRIMER fill diverges from the vanilla-fill model at every chunk
+      from the first cell (y=0 air vs stone). SevTech ships sevpatches-1.9-10.jar and
+      JustEnoughIDs-1.0.3-55.jar Mixin tweakers that patch chunk/primer code. The terrain
+      kernel's vanilla-fill assumption (stone at density>0, hardcoded stone=16/water=144,
+      sea level from settings) does not hold for this pack's patched fill.
+    diagnosis_correction_m42a: >
+      SUPERSEDED 2026-09-21 (M4.2A evidence, keep original diagnosis above for history):
+      decompiling the installed JustEnoughIDs-1.0.3-55 MixinChunkPrimer shows the primer's
+      block getBlockState/setBlockState are redirected at HEAD to a private int[65536]
+      intData holding runtime registry state ids, and the original methods are CANCELLED —
+      char[] field_177860_a is never read or written under JEID and stays all-air. The M4.1
+      comparator read that dead array as its oracle, so j=0(air)/r=16(stone) at every cell
+      was a COMPARATOR ARTIFACT, not a fill divergence. sevpatches only patches spawn-chunk
+      logic (irrelevant). The terrain kernel itself was never contradicted by this data.
+      See machine/M42A-representation-results.yaml for the logical-oracle probe.
+    safety_behavior: >
+      The M4 retention gate worked exactly as designed: registration requires terrain
+      bit-identity, so 0 NativeChunks were retained, 0 packet/persistence bytes produced,
+      comparison stayed read-only. No leak, no crash, server ran to clean stop.
+    verdict: DIVERGENT_PACK_TERRAIN_FILL — M4 retention correctly self-disabled; field-level kernel remains valid
+refresh_model:
+  design: section-granular dirty mask (markSectionMutation) + lazy pull on consumer path (refreshSection 12KB) + same-generation identity
+  measured:
+    mark_section_mutation_hook: {mean_us: 0.17, p50_us: 0.10}
+    refresh_section_12kb: {mean_us: 2.67, p50_us: 2.70, effective_bandwidth_gbps: 4.60}
+    refresh_section_8kb: {mean_us: 2.21, p50_us: 2.20}
+    five_section_chunk_refresh: {mean_us: 11.14, p50_us: 11.10}
+    register_primer_full_chunk_128kb: {mean_us: 44.58, p50_us: 39.90}
+    encode_packet_cached_palette: {mean_us: 1.22, p50_us: 1.30}
+    refresh_plus_encode_60state: {mean_us: 80.58, note: "dominated by palette rebuild ~70us (linear dedup scan), not the 2.7us transfer"}
+    refresh_plus_encode_4state: {mean_us: 13.65, p50_us: 13.20}
+  finding: "palette rebuild is the refresh cost headroom (O(4096 x unique)); vanilla pays the same class per packet; v2 options: incremental palette, hashmap dedup, single-block write-through"
+m1_direct_encode_revalidation:
+  mean_us: 1.17
+  p50_us: 0.90
+  p99_us: 1.00
+  bytes_per_packet: 31008
+  throughput_chunks_per_sec: 854307
+  note: "release build; 5-section overworld chunk; cached palettes; wire bytes proven exact by the real-vanilla harness"
+memory_model:
+  per_section_engine: "12,352 B (u16 states 8,192 + light 2x2,048 + counters) + Box overhead"
+  per_section_with_cached_palette: "14.5 KB (4-bit) .. 19.0 KB (13-bit global)"
+  per_chunk_5_sections: "61.3 KB base / 71.9 KB cached"
+  radius_20_loaded: "100.6 MB base / 118.0 MB cached (1,681 chunks)"
+  vs_java: "vanilla packed 4-bit section ~6.3 KB computed; native canonical is ~2x per section — trades memory for O(1) access and zero unpack; sparse Option<Box> keeps inactive sections at 8 B"
+  u16_limit: "65,535 state ids = inherent 1.12.2 ChunkPrimer char[] limit; vanilla srg registry 5,365; modpacks observed well below"
+snapshot_model:
+  counters: mutation_generation / snapshot_generation / dirty_sections per chunk
+  ffi: markMutation (309), markSectionMutation (310), refreshSection (311), getDirtySections (312), setGlobalPaletteBits (313)
+  tests: "7/7 native-chunk unit tests incl. test_versioned_snapshot_model, test_section_refresh_model"
+stop_conditions:
+  wire_parity: "26/26 — CLEAR"
+  target_a_terrain: "2,931/2,931 — CLEAR"
+  revelation_terrain: "35,660/35,660 fixed build (38,179 first pass) — CLEAR"
+  sevtech_terrain: "0/56,949 — EXPECTED DIVERGENCE, safely handled (0 registrations, read-only)"
+  leaks: "ctx balanced (A: 2/2, Rev: 1/1, Sev: 2/2); registry unload verified in tests; no native errors — CLEAR"
+  crashes: "0 native crashes across all runs — CLEAR"
+m42_next:
+  - "wire SevTech terrain-fill divergence root cause (sevpatches/JEID mixin RE) or per-pack fill-model plugins"
+  - "install Chunk.setBlockState/setStorageArrays/onUnload/light invalidation hooks (audit section Required Coremod Hooks)"
+  - "M1 ON_EXPERIMENTAL fed from native registry (byte-parity now proven offline)"
+  - "palette rebuild optimization (incremental palette / hashmap dedup / single-block write-through)"
+  - "live M1 SHADOW re-validation against Java SPacketChunkData with generalized encoder"
+classification:
+  performance_value: HIGH (packet encode 1.17us vs ~200us Java path; refresh path measured)
+  rust_migration_value: HIGH (multi-consumer native chunk state foundation proven; per-pack terrain eligibility is the boundary condition)

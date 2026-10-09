@@ -1,0 +1,66 @@
+# M-CK5-LS — FRAME SHADOW OBSERVER LIVE VALIDATION, SEVTECH AGES (Target D)
+schema_version: 1
+date: "2026-09-23"
+classification_target: FRAME_SHADOW_OBSERVER_LIVE_VALIDATED_SEVTECH
+binary:
+  dll_sha256: c10ddca1ce3c82255e78154fde657408e82fa354707bc5174deb5b0a6cb62d2c
+  coremod_jar_sha256: 220e5af309ca87095129856783ae75374ade1510c7fb80ae9da0b8c0343a6de9
+  java: Temurin jdk-8.0.504.1-hotspot
+  netty: 4.1.9.Final (bundled); SevTech's Forge 1.12.2-14.23.5.2860; SevTech Ages 3.2.3 (262 mods, FoamFix)
+implementation_changes: >
+  NONE to the observer — the exact Revelation-final build (pairing-hardening v2:
+  retire any incomplete pending at EVERY capture event, selected or sampled-out;
+  regressions preserved and green 23/23). New campaign wiring only
+  (tools/mck5ls-run.sh): in-place pack run with a UNIQUE campaign-marker
+  property for PID management (the SevTech jar NAME collides with Target A),
+  readiness-gated logins, corridor walk + mutation batch + reconnect sessions.
+pipeline_verification: >
+  Verified live per channel by handler NAME before any mutation (liveInstall;
+  fail closed on mismatch). Verified layout (head->tail): [timeout, splitter,
+  decompress, decoder, mck5-frame-observe, prepender, compress, mck5-capture,
+  encoder, packet_handler, TailContext#0] — identical semantic order to Target A
+  and Revelation; no encrypt (offline mode); no mod-added handlers between the
+  observer boundaries. installOk=5 installSkipped=0 lastSkipReason=null;
+  frameShadowHook.transformCount=1 HOOK_INSTALLED x1.
+campaign:
+  script: tools/mck5ls-run.sh
+  design: "ONE bounded ~15-min run: in-place pack server (install/world/config untouched), readiness-gated logins, Phase A corridor walk (perfbotb, 40 teleport hops) for chunk + movement + modded payload/TE traffic, console block-mutation batch, Phase B 3 reconnect sessions (mck5lsbot); deterministic 1:2 sampling; per-channel maxComparisons=6000; everything else OFF; Java transmits every packet; rust output discarded"
+  run_id: "MCK5LS-20260923-011541 (definitive, first-try clean; artifacts machine/raw/MCK5LS-20260923-011541-{meta,metrics,server.log,client.jsonl,campaign.log})"
+definitive_counters: >
+  mck5live.mode=LIVE hookCalls=5 installOk=5 installSkipped=0 lastSkipReason=null;
+  channels=5 channelsCleanClosed=5; observed=362334 selected=24458
+  completed=24458 matched=24458 mismatched=0; completedCompressed=996
+  completedUncompressed=23462; unpairedFrame=337876 (exactly the sampling-skipped
+  frames) unpairedCapture=0 (SevTech's Forge .2860 exhibited NO FML|MP header
+  drop in this run — the Revelation hardening was active regardless);
+  observerErrors=0 disabledObservers=0 disableReasons=none; skips:
+  limit=156708 (per-channel bounded cap, Java unaffected), ALL others 0;
+  ctxCreated=5 ctxFreed=5 retainedObservations=0 retainedBytes=0
+  sampledBytes=30996044; mismatchDiagnostics=none; lastError=null.
+compressed_results: "996 completed compressed comparisons — valid outer frame, correct data-length semantics, independent inflate of BOTH the java frame and the rust frame recovering the captured body exactly; compressed bytes never compared cross-implementation"
+uncompressed_results: "23462 completed uncompressed/passthrough comparisons — valid structure, both decoded bodies equal to the captured original, cross-implementation byte-exact framing"
+non_interference: >
+  Offline differential proof (23/23 gates incl. both pairing-hardening
+  regressions). Live: client decoded ALL traffic, 4/4 sessions errors=0 —
+  the walk alone decoded 323,628 frames incl. 12,003 chunk packets (321.2 MB)
+  with 8,147 block changes; clean session-end disconnects; Java transmitted
+  every packet (m1_java_packets_transmitted=13783); observer never disabled
+  nor errored; read-only at both boundaries.
+server_client_errors: >
+  Server log: 744 Exception/ERROR lines, ALL SevTech baseline (gson recipe
+  parse errors for FerdinandsFlowers/other mods, KleeSlabs slab warnings,
+  Hunting Dimension catches, worldgen NPEs, CyclicMagic first-join data
+  warnings for the fresh session-bot name, expected session-end disconnects).
+  Zero observer-attributable lines: the only mck5 matches are the metrics dump
+  and the mck5lsbot player name (login logs). Client: 4/4 sessions errors=0.
+lifecycle_memory: "contexts_created(5) == contexts_freed(5); observer_owned_retained_bytes == 0; channelsCleanClosed=5 (handlerRemoved-verified); reconnect/disconnect lifecycle exercised 4x; pack install/world/config untouched"
+failures_preserved:
+  - "None this campaign (first-try clean). Prior relevant preserved evidence stands: the Revelation failure loop (MCK5LR-224058/-224533/-000217) whose pairing-hardening v2 + regressions this run inherited unchanged."
+provenance_correction: >
+  The MCK5LR-LIVE-REVELATION provenance entry's binaries field recorded the
+  pre-v2 coremod hash (8ba83003) captured before the final v2 rebuild; BOTH
+  definitive runs' own meta files record the ACTUAL jar used — 220e5af3...,
+  the v2 pairing build (Sep 23 00:20). Corrected in the registry with this
+  note; raw evidence was always accurate.
+regressions: "MCK5ObserverGates 23/23 (pairing-hardening v1+v2 preserved green); MCK5OptimizationTests 13/13; MCK42OwnershipGates 15/15; MCK42FrameBoundaryGates 11/11; MCK4Validation 20/20; M53FrameOracle 25/25; M52CompressionTests 26/26; M4AuthoritativeTest 59/59; compression 14/14; native-chunk 10/10 (all on the final, run-identical build)"
+safety: "Java authoritative for every transmitted byte; Rust observer output discarded (never enters the outbound pipeline); defaults OFF (property-gated transformer inert when OFF); SevTech only; no authoritative networking; no transmission of rust frames; CAPTURE_UNSAFE gate untouched; issue #1 OPEN"

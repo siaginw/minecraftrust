@@ -1,0 +1,298 @@
+D:\minecraftrust-astra-hardening\tools\bridge\src\com\rustcraft\coremod\CanonicalClassIdentityV2.java:80: error: incompatible types: Object cannot be converted to FieldNode
+            for (FieldNode f : cn.fields) declarationOrder.add(a("field", f.name, f.desc));
+                                 ^
+D:\minecraftrust-astra-hardening\tools\bridge\src\com\rustcraft\coremod\CanonicalClassIdentityV2.java:81: error: incompatible types: Object cannot be converted to MethodNode
+            for (MethodNode m : cn.methods) declarationOrder.add(a("method", m.name, m.desc));
+                                  ^
+D:\minecraftrust-astra-hardening\tools\bridge\src\com\rustcraft\coremod\CanonicalClassIdentityV2.java:83: warning: [unchecked] unchecked method invocation: constructor <init> in class ArrayList is applied to given types
+            List<FieldNode> fields = new ArrayList<FieldNode>(cn.fields);
+                                     ^
+  required: Collection<? extends E>
+  found: List
+  where E is a type-variable:
+    E extends Object declared in class ArrayList
+D:\minecraftrust-astra-hardening\tools\bridge\src\com\rustcraft\coremod\CanonicalClassIdentityV2.java:83: warning: [unchecked] unchecked conversion
+            List<FieldNode> fields = new ArrayList<FieldNode>(cn.fields);
+                                                                ^
+  required: Collection<? extends E>
+  found:    List
+  where E is a type-variable:
+    E extends Object declared in class ArrayList
+D:\minecraftrust-astra-hardening\tools\bridge\src\com\rustcraft\coremod\CanonicalClassIdentityV2.java:96: warning: [unchecked] unchecked method invocation: method annotations in class CanonicalClassIdentityV2 is applied to given types
+                        annotations(f.visibleAnnotations, f.invisibleAnnotations),
+                                   ^
+  required: List<AnnotationNode>,List<AnnotationNode>
+  found: List,List
+D:\minecraftrust-astra-hardening\tools\bridge\src\com\rustcraft\coremod\CanonicalClassIdentityV2.java:96: warning: [unchecked] unchecked conversion
+                        annotations(f.visibleAnnotations, f.invisibleAnnotations),
+                                     ^
+  required: List<AnnotationNode>
+  found:    List
+D:\minecraftrust-astra-hardening\tools\bridge\src\com\rustcraft\coremod\CanonicalClassIdentityV2.java:96: warning: [unchecked] unchecked conversion
+                        annotations(f.visibleAnnotations, f.invisibleAnnotations),
+                                                           ^
+  required: List<AnnotationNode>
+  found:    List
+D:\minecraftrust-astra-hardening\tools\bridge\src\com\rustcraft\coremod\CanonicalClassIdentityV2.java:97: warning: [unchecked] unchecked method invocation: method typeAnnotations in class CanonicalClassIdentityV2 is applied to given types
+                        typeAnnotations(f.visibleTypeAnnotations, f.invisibleTypeAnnotations)));
+                                       ^
+  required: List<TypeAnnotationNode>,List<TypeAnnotationNode>
+  found: List,List
+D:\minecraftrust-astra-hardening\tools\bridge\src\com\rustcraft\coremod\CanonicalClassIdentityV2.java:97: warning: [unchecked] unchecked conversion
+                        typeAnnotations(f.visibleTypeAnnotations, f.invisibleTypeAnnotations)));
+                                         ^
+  required: List<TypeAnnotationNode>
+  found:    List
+D:\minecraftrust-astra-hardening\tools\bridge\src\com\rustcraft\coremod\CanonicalClassIdentityV2.java:97: warning: [unchecked] unchecked conversion
+                        typeAnnotations(f.visibleTypeAnnotations, f.invisibleTypeAnnotations)));
+                                                                   ^
+  required: List<TypeAnnotationNode>
+  found:    List
+D:\minecraftrust-astra-hardening\tools\bridge\src\com\rustcraft\coremod\CanonicalClassIdentityV2.java:99: warning: [unchecked] unchecked method invocation: constructor <init> in class ArrayList is applied to given types
+            List<MethodNode> methods = new ArrayList<MethodNode>(cn.methods);
+                                       ^
+  required: Collection<? extends E>
+  found: List
+  where E is a type-variable:
+    E extends Object declared in class ArrayList
+D:\minecraftrust-astra-hardening\tools\bridge\src\com\rustcraft\coremod\CanonicalClassIdentityV2.java:99: warning: [unchecked] unchecked conversion
+            List<MethodNode> methods = new ArrayList<MethodNode>(cn.methods);
+                                                                   ^
+  required: Collection<? extends E>
+  found:    List
+  where E is a type-variable:
+    E extends Object declared in class ArrayList
+D:\minecraftrust-astra-hardening\tools\bridge\src\com\rustcraft\coremod\CanonicalClassIdentityV2.java:113: error: incompatible types: Object cannot be converted to InnerClassNode
+            for (InnerClassNode i : cn.innerClasses) inner.add(a(i.name, i.outerName, i.innerName, i.access));
+                                      ^
+D:\minecraftrust-astra-hardening\tools\bridge\src\com\rustcraft\coremod\CanonicalClassIdentityV2.java:117: warning: [unchecked] unchecked method invocation: method annotations in class CanonicalClassIdentityV2 is applied to given types
+                    annotations(cn.visibleAnnotations, cn.invisibleAnnotations),
+                               ^
+  required: List<AnnotationNode>,List<AnnotationNode>
+  found: List,List
+D:\minecraftrust-astra-hardening\tools\bridge\src\com\rustcraft\coremod\CanonicalClassIdentityV2.java:117: warning: [unchecked] unchecked conversion
+                    annotations(cn.visibleAnnotations, cn.invisibleAnnotations),
+                                  ^
+  required: List<AnnotationNode>
+  found:    List
+D:\minecraftrust-astra-hardening\tools\bridge\src\com\rustcraft\coremod\CanonicalClassIdentityV2.java:117: warning: [unchecked] unchecked conversion
+                    annotations(cn.visibleAnnotations, cn.invisibleAnnotations),
+                                                         ^
+  required: List<AnnotationNode>
+  found:    List
+D:\minecraftrust-astra-hardening\tools\bridge\src\com\rustcraft\coremod\CanonicalClassIdentityV2.java:118: warning: [unchecked] unchecked method invocation: method typeAnnotations in class CanonicalClassIdentityV2 is applied to given types
+                    typeAnnotations(cn.visibleTypeAnnotations, cn.invisibleTypeAnnotations),
+                                   ^
+  required: List<TypeAnnotationNode>,List<TypeAnnotationNode>
+  found: List,List
+D:\minecraftrust-astra-hardening\tools\bridge\src\com\rustcraft\coremod\CanonicalClassIdentityV2.java:118: warning: [unchecked] unchecked conversion
+                    typeAnnotations(cn.visibleTypeAnnotations, cn.invisibleTypeAnnotations),
+                                      ^
+  required: List<TypeAnnotationNode>
+  found:    List
+D:\minecraftrust-astra-hardening\tools\bridge\src\com\rustcraft\coremod\CanonicalClassIdentityV2.java:118: warning: [unchecked] unchecked conversion
+                    typeAnnotations(cn.visibleTypeAnnotations, cn.invisibleTypeAnnotations),
+                                                                 ^
+  required: List<TypeAnnotationNode>
+  found:    List
+D:\minecraftrust-astra-hardening\tools\bridge\src\com\rustcraft\coremod\CanonicalClassIdentityV2.java:146: warning: [unchecked] unchecked method invocation: method frameValues in class CanonicalClassIdentityV2 is applied to given types
+                frames.add(a(ordinal, f.type, frameValues(f.local, labels), frameValues(f.stack, labels)));
+                                                         ^
+  required: List<Object>,IdentityHashMap<LabelNode,Integer>
+  found: List,IdentityHashMap<LabelNode,Integer>
+D:\minecraftrust-astra-hardening\tools\bridge\src\com\rustcraft\coremod\CanonicalClassIdentityV2.java:146: warning: [unchecked] unchecked conversion
+                frames.add(a(ordinal, f.type, frameValues(f.local, labels), frameValues(f.stack, labels)));
+                                                           ^
+  required: List<Object>
+  found:    List
+D:\minecraftrust-astra-hardening\tools\bridge\src\com\rustcraft\coremod\CanonicalClassIdentityV2.java:146: warning: [unchecked] unchecked method invocation: method frameValues in class CanonicalClassIdentityV2 is applied to given types
+                frames.add(a(ordinal, f.type, frameValues(f.local, labels), frameValues(f.stack, labels)));
+                                                                                       ^
+  required: List<Object>,IdentityHashMap<LabelNode,Integer>
+  found: List,IdentityHashMap<LabelNode,Integer>
+D:\minecraftrust-astra-hardening\tools\bridge\src\com\rustcraft\coremod\CanonicalClassIdentityV2.java:146: warning: [unchecked] unchecked conversion
+                frames.add(a(ordinal, f.type, frameValues(f.local, labels), frameValues(f.stack, labels)));
+                                                                                         ^
+  required: List<Object>
+  found:    List
+D:\minecraftrust-astra-hardening\tools\bridge\src\com\rustcraft\coremod\CanonicalClassIdentityV2.java:178: warning: [unchecked] unchecked method invocation: method labelList in class CanonicalClassIdentityV2 is applied to given types
+                operands.addAll(a(s.min, s.max, label(s.dflt, labels), labelList(s.labels, labels)));
+                                                                                ^
+  required: List<LabelNode>,IdentityHashMap<LabelNode,Integer>
+  found: List,IdentityHashMap<LabelNode,Integer>
+D:\minecraftrust-astra-hardening\tools\bridge\src\com\rustcraft\coremod\CanonicalClassIdentityV2.java:178: warning: [unchecked] unchecked conversion
+                operands.addAll(a(s.min, s.max, label(s.dflt, labels), labelList(s.labels, labels)));
+                                                                                  ^
+  required: List<LabelNode>
+  found:    List
+D:\minecraftrust-astra-hardening\tools\bridge\src\com\rustcraft\coremod\CanonicalClassIdentityV2.java:181: warning: [unchecked] unchecked method invocation: method labelList in class CanonicalClassIdentityV2 is applied to given types
+                operands.addAll(a(s.keys, label(s.dflt, labels), labelList(s.labels, labels)));
+                                                                          ^
+  required: List<LabelNode>,IdentityHashMap<LabelNode,Integer>
+  found: List,IdentityHashMap<LabelNode,Integer>
+D:\minecraftrust-astra-hardening\tools\bridge\src\com\rustcraft\coremod\CanonicalClassIdentityV2.java:181: warning: [unchecked] unchecked conversion
+                operands.addAll(a(s.keys, label(s.dflt, labels), labelList(s.labels, labels)));
+                                                                            ^
+  required: List<LabelNode>
+  found:    List
+D:\minecraftrust-astra-hardening\tools\bridge\src\com\rustcraft\coremod\CanonicalClassIdentityV2.java:187: warning: [unchecked] unchecked method invocation: method typeAnnotations in class CanonicalClassIdentityV2 is applied to given types
+                    typeAnnotations(n.visibleTypeAnnotations, n.invisibleTypeAnnotations)));
+                                   ^
+  required: List<TypeAnnotationNode>,List<TypeAnnotationNode>
+  found: List,List
+D:\minecraftrust-astra-hardening\tools\bridge\src\com\rustcraft\coremod\CanonicalClassIdentityV2.java:187: warning: [unchecked] unchecked conversion
+                    typeAnnotations(n.visibleTypeAnnotations, n.invisibleTypeAnnotations)));
+                                     ^
+  required: List<TypeAnnotationNode>
+  found:    List
+D:\minecraftrust-astra-hardening\tools\bridge\src\com\rustcraft\coremod\CanonicalClassIdentityV2.java:187: warning: [unchecked] unchecked conversion
+                    typeAnnotations(n.visibleTypeAnnotations, n.invisibleTypeAnnotations)));
+                                                               ^
+  required: List<TypeAnnotationNode>
+  found:    List
+D:\minecraftrust-astra-hardening\tools\bridge\src\com\rustcraft\coremod\CanonicalClassIdentityV2.java:191: error: incompatible types: Object cannot be converted to TryCatchBlockNode
+        for (TryCatchBlockNode t : m.tryCatchBlocks) {
+                                    ^
+D:\minecraftrust-astra-hardening\tools\bridge\src\com\rustcraft\coremod\CanonicalClassIdentityV2.java:193: warning: [unchecked] unchecked method invocation: method typeAnnotations in class CanonicalClassIdentityV2 is applied to given types
+                    typeAnnotations(t.visibleTypeAnnotations, t.invisibleTypeAnnotations)));
+                                   ^
+  required: List<TypeAnnotationNode>,List<TypeAnnotationNode>
+  found: List,List
+D:\minecraftrust-astra-hardening\tools\bridge\src\com\rustcraft\coremod\CanonicalClassIdentityV2.java:193: warning: [unchecked] unchecked conversion
+                    typeAnnotations(t.visibleTypeAnnotations, t.invisibleTypeAnnotations)));
+                                     ^
+  required: List<TypeAnnotationNode>
+  found:    List
+D:\minecraftrust-astra-hardening\tools\bridge\src\com\rustcraft\coremod\CanonicalClassIdentityV2.java:193: warning: [unchecked] unchecked conversion
+                    typeAnnotations(t.visibleTypeAnnotations, t.invisibleTypeAnnotations)));
+                                                               ^
+  required: List<TypeAnnotationNode>
+  found:    List
+D:\minecraftrust-astra-hardening\tools\bridge\src\com\rustcraft\coremod\CanonicalClassIdentityV2.java:196: error: incompatible types: Object cannot be converted to LocalVariableNode
+        if (m.localVariables != null) for (LocalVariableNode l : m.localVariables)
+                                                                  ^
+D:\minecraftrust-astra-hardening\tools\bridge\src\com\rustcraft\coremod\CanonicalClassIdentityV2.java:201: error: incompatible types: Object cannot be converted to ParameterNode
+            for (ParameterNode p : m.parameters) parameters.add(a(p.name, p.access));
+                                    ^
+D:\minecraftrust-astra-hardening\tools\bridge\src\com\rustcraft\coremod\CanonicalClassIdentityV2.java:204: warning: [unchecked] unchecked method invocation: method annotations in class CanonicalClassIdentityV2 is applied to given types
+                annotations(m.visibleAnnotations, m.invisibleAnnotations),
+                           ^
+  required: List<AnnotationNode>,List<AnnotationNode>
+  found: List,List
+D:\minecraftrust-astra-hardening\tools\bridge\src\com\rustcraft\coremod\CanonicalClassIdentityV2.java:204: warning: [unchecked] unchecked conversion
+                annotations(m.visibleAnnotations, m.invisibleAnnotations),
+                             ^
+  required: List<AnnotationNode>
+  found:    List
+D:\minecraftrust-astra-hardening\tools\bridge\src\com\rustcraft\coremod\CanonicalClassIdentityV2.java:204: warning: [unchecked] unchecked conversion
+                annotations(m.visibleAnnotations, m.invisibleAnnotations),
+                                                   ^
+  required: List<AnnotationNode>
+  found:    List
+D:\minecraftrust-astra-hardening\tools\bridge\src\com\rustcraft\coremod\CanonicalClassIdentityV2.java:205: warning: [unchecked] unchecked method invocation: method typeAnnotations in class CanonicalClassIdentityV2 is applied to given types
+                typeAnnotations(m.visibleTypeAnnotations, m.invisibleTypeAnnotations),
+                               ^
+  required: List<TypeAnnotationNode>,List<TypeAnnotationNode>
+  found: List,List
+D:\minecraftrust-astra-hardening\tools\bridge\src\com\rustcraft\coremod\CanonicalClassIdentityV2.java:205: warning: [unchecked] unchecked conversion
+                typeAnnotations(m.visibleTypeAnnotations, m.invisibleTypeAnnotations),
+                                 ^
+  required: List<TypeAnnotationNode>
+  found:    List
+D:\minecraftrust-astra-hardening\tools\bridge\src\com\rustcraft\coremod\CanonicalClassIdentityV2.java:205: warning: [unchecked] unchecked conversion
+                typeAnnotations(m.visibleTypeAnnotations, m.invisibleTypeAnnotations),
+                                                           ^
+  required: List<TypeAnnotationNode>
+  found:    List
+D:\minecraftrust-astra-hardening\tools\bridge\src\com\rustcraft\coremod\CanonicalClassIdentityV2.java:206: warning: [unchecked] unchecked method invocation: method parameterAnnotations in class CanonicalClassIdentityV2 is applied to given types
+                parameterAnnotations(m.visibleParameterAnnotations, m.invisibleParameterAnnotations),
+                                    ^
+  required: List<AnnotationNode>[],List<AnnotationNode>[]
+  found: List[],List[]
+D:\minecraftrust-astra-hardening\tools\bridge\src\com\rustcraft\coremod\CanonicalClassIdentityV2.java:206: warning: [unchecked] unchecked conversion
+                parameterAnnotations(m.visibleParameterAnnotations, m.invisibleParameterAnnotations),
+                                      ^
+  required: List<AnnotationNode>[]
+  found:    List[]
+D:\minecraftrust-astra-hardening\tools\bridge\src\com\rustcraft\coremod\CanonicalClassIdentityV2.java:206: warning: [unchecked] unchecked conversion
+                parameterAnnotations(m.visibleParameterAnnotations, m.invisibleParameterAnnotations),
+                                                                     ^
+  required: List<AnnotationNode>[]
+  found:    List[]
+D:\minecraftrust-astra-hardening\tools\bridge\src\com\rustcraft\coremod\CanonicalClassIdentityV2.java:209: warning: [unchecked] unchecked method invocation: method localAnnotations in class CanonicalClassIdentityV2 is applied to given types
+                localAnnotations(m.visibleLocalVariableAnnotations, m.invisibleLocalVariableAnnotations, labels),
+                                ^
+  required: List<LocalVariableAnnotationNode>,List<LocalVariableAnnotationNode>,IdentityHashMap<LabelNode,Integer>
+  found: List,List,IdentityHashMap<LabelNode,Integer>
+D:\minecraftrust-astra-hardening\tools\bridge\src\com\rustcraft\coremod\CanonicalClassIdentityV2.java:209: warning: [unchecked] unchecked conversion
+                localAnnotations(m.visibleLocalVariableAnnotations, m.invisibleLocalVariableAnnotations, labels),
+                                  ^
+  required: List<LocalVariableAnnotationNode>
+  found:    List
+D:\minecraftrust-astra-hardening\tools\bridge\src\com\rustcraft\coremod\CanonicalClassIdentityV2.java:209: warning: [unchecked] unchecked conversion
+                localAnnotations(m.visibleLocalVariableAnnotations, m.invisibleLocalVariableAnnotations, labels),
+                                                                     ^
+  required: List<LocalVariableAnnotationNode>
+  found:    List
+D:\minecraftrust-astra-hardening\tools\bridge\src\com\rustcraft\coremod\CanonicalClassIdentityV2.java:255: warning: [unchecked] unchecked method invocation: method annotationPairs in class CanonicalClassIdentityV2 is applied to given types
+            return a("annotation", n.desc, annotationPairs(n.values));
+                                                          ^
+  required: List<Object>
+  found: List
+D:\minecraftrust-astra-hardening\tools\bridge\src\com\rustcraft\coremod\CanonicalClassIdentityV2.java:255: warning: [unchecked] unchecked conversion
+            return a("annotation", n.desc, annotationPairs(n.values));
+                                                            ^
+  required: List<Object>
+  found:    List
+D:\minecraftrust-astra-hardening\tools\bridge\src\com\rustcraft\coremod\CanonicalClassIdentityV2.java:293: warning: [unchecked] unchecked method invocation: method annotationPairs in class CanonicalClassIdentityV2 is applied to given types
+            out.add(a(visible, n.desc, annotationPairs(n.values)));
+                                                      ^
+  required: List<Object>
+  found: List
+D:\minecraftrust-astra-hardening\tools\bridge\src\com\rustcraft\coremod\CanonicalClassIdentityV2.java:293: warning: [unchecked] unchecked conversion
+            out.add(a(visible, n.desc, annotationPairs(n.values)));
+                                                        ^
+  required: List<Object>
+  found:    List
+D:\minecraftrust-astra-hardening\tools\bridge\src\com\rustcraft\coremod\CanonicalClassIdentityV2.java:306: warning: [unchecked] unchecked method invocation: method annotationPairs in class CanonicalClassIdentityV2 is applied to given types
+                    n.desc, annotationPairs(n.values)));
+                                           ^
+  required: List<Object>
+  found: List
+D:\minecraftrust-astra-hardening\tools\bridge\src\com\rustcraft\coremod\CanonicalClassIdentityV2.java:306: warning: [unchecked] unchecked conversion
+                    n.desc, annotationPairs(n.values)));
+                                             ^
+  required: List<Object>
+  found:    List
+D:\minecraftrust-astra-hardening\tools\bridge\src\com\rustcraft\coremod\CanonicalClassIdentityV2.java:336: warning: [unchecked] unchecked method invocation: method annotationPairs in class CanonicalClassIdentityV2 is applied to given types
+                    n.desc, annotationPairs(n.values), labelList(n.start, labels),
+                                           ^
+  required: List<Object>
+  found: List
+D:\minecraftrust-astra-hardening\tools\bridge\src\com\rustcraft\coremod\CanonicalClassIdentityV2.java:336: warning: [unchecked] unchecked conversion
+                    n.desc, annotationPairs(n.values), labelList(n.start, labels),
+                                             ^
+  required: List<Object>
+  found:    List
+D:\minecraftrust-astra-hardening\tools\bridge\src\com\rustcraft\coremod\CanonicalClassIdentityV2.java:336: warning: [unchecked] unchecked method invocation: method labelList in class CanonicalClassIdentityV2 is applied to given types
+                    n.desc, annotationPairs(n.values), labelList(n.start, labels),
+                                                                ^
+  required: List<LabelNode>,IdentityHashMap<LabelNode,Integer>
+  found: List,IdentityHashMap<LabelNode,Integer>
+D:\minecraftrust-astra-hardening\tools\bridge\src\com\rustcraft\coremod\CanonicalClassIdentityV2.java:336: warning: [unchecked] unchecked conversion
+                    n.desc, annotationPairs(n.values), labelList(n.start, labels),
+                                                                  ^
+  required: List<LabelNode>
+  found:    List
+D:\minecraftrust-astra-hardening\tools\bridge\src\com\rustcraft\coremod\CanonicalClassIdentityV2.java:337: warning: [unchecked] unchecked method invocation: method labelList in class CanonicalClassIdentityV2 is applied to given types
+                    labelList(n.end, labels), n.index));
+                             ^
+  required: List<LabelNode>,IdentityHashMap<LabelNode,Integer>
+  found: List,IdentityHashMap<LabelNode,Integer>
+D:\minecraftrust-astra-hardening\tools\bridge\src\com\rustcraft\coremod\CanonicalClassIdentityV2.java:337: warning: [unchecked] unchecked conversion
+                    labelList(n.end, labels), n.index));
+                               ^
+  required: List<LabelNode>
+  found:    List
+6 errors
+54 warnings

@@ -1,0 +1,3946 @@
+{
+  "schema": "FRESH_FORGE_OBSERVER_RUN_V1",
+  "status": "PASS",
+  "production_authority": false,
+  "manifest_sha256": "bf8109cba947f2ddede036ea1783a264a07d02e426197e477cfa86ccc4c42a90",
+  "commands": [
+    {
+      "label": "compile",
+      "argv": [
+        "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\bin\\javac.exe",
+        "-J-Xmx384M",
+        "-proc:none",
+        "-encoding",
+        "UTF-8",
+        "-source",
+        "8",
+        "-target",
+        "8",
+        "-Xlint:all,-path",
+        "-Werror",
+        "-cp",
+        "D:\\minecraftrust-astra-hardening\\target\\fresh-forge-observer\\revelation-second\\game\\libraries\\com\\typesafe\\akka\\akka-actor_2.11\\2.3.3\\akka-actor_2.11-2.3.3.jar;D:\\minecraftrust-astra-hardening\\target\\fresh-forge-observer\\revelation-second\\game\\libraries\\com\\typesafe\\config\\1.2.1\\config-1.2.1.jar;D:\\minecraftrust-astra-hardening\\target\\fresh-forge-observer\\revelation-second\\game\\libraries\\java3d\\vecmath\\1.5.2\\vecmath-1.5.2.jar;D:\\minecraftrust-astra-hardening\\target\\fresh-forge-observer\\revelation-second\\game\\libraries\\lzma\\lzma\\0.0.1\\lzma-0.0.1.jar;D:\\minecraftrust-astra-hardening\\target\\fresh-forge-observer\\revelation-second\\game\\libraries\\net\\java\\dev\\jna\\jna\\4.4.0\\jna-4.4.0.jar;D:\\minecraftrust-astra-hardening\\target\\fresh-forge-observer\\revelation-second\\game\\libraries\\net\\minecraft\\launchwrapper\\1.12\\launchwrapper-1.12.jar;D:\\minecraftrust-astra-hardening\\target\\fresh-forge-observer\\revelation-second\\game\\libraries\\net\\sf\\jopt-simple\\jopt-simple\\5.0.3\\jopt-simple-5.0.3.jar;D:\\minecraftrust-astra-hardening\\target\\fresh-forge-observer\\revelation-second\\game\\libraries\\net\\sf\\trove4j\\trove4j\\3.0.3\\trove4j-3.0.3.jar;D:\\minecraftrust-astra-hardening\\target\\fresh-forge-observer\\revelation-second\\game\\libraries\\org\\apache\\maven\\maven-artifact\\3.5.3\\maven-artifact-3.5.3.jar;D:\\minecraftrust-astra-hardening\\target\\fresh-forge-observer\\revelation-second\\game\\libraries\\org\\jline\\jline\\3.5.1\\jline-3.5.1.jar;D:\\minecraftrust-astra-hardening\\target\\fresh-forge-observer\\revelation-second\\game\\libraries\\org\\ow2\\asm\\asm-all\\5.2\\asm-all-5.2.jar;D:\\minecraftrust-astra-hardening\\target\\fresh-forge-observer\\revelation-second\\game\\libraries\\org\\scala-lang\\plugins\\scala-continuations-library_2.11\\1.0.2\\scala-continuations-library_2.11-1.0.2.jar;D:\\minecraftrust-astra-hardening\\target\\fresh-forge-observer\\revelation-second\\game\\libraries\\org\\scala-lang\\plugins\\scala-continuations-plugin_2.11.1\\1.0.2\\scala-continuations-plugin_2.11.1-1.0.2.jar;D:\\minecraftrust-astra-hardening\\target\\fresh-forge-observer\\revelation-second\\game\\libraries\\org\\scala-lang\\scala-actors-migration_2.11\\1.1.0\\scala-actors-migration_2.11-1.1.0.jar;D:\\minecraftrust-astra-hardening\\target\\fresh-forge-observer\\revelation-second\\game\\libraries\\org\\scala-lang\\scala-compiler\\2.11.1\\scala-compiler-2.11.1.jar;D:\\minecraftrust-astra-hardening\\target\\fresh-forge-observer\\revelation-second\\game\\libraries\\org\\scala-lang\\scala-library\\2.11.1\\scala-library-2.11.1.jar;D:\\minecraftrust-astra-hardening\\target\\fresh-forge-observer\\revelation-second\\game\\libraries\\org\\scala-lang\\scala-parser-combinators_2.11\\1.0.1\\scala-parser-combinators_2.11-1.0.1.jar;D:\\minecraftrust-astra-hardening\\target\\fresh-forge-observer\\revelation-second\\game\\libraries\\org\\scala-lang\\scala-reflect\\2.11.1\\scala-reflect-2.11.1.jar;D:\\minecraftrust-astra-hardening\\target\\fresh-forge-observer\\revelation-second\\game\\libraries\\org\\scala-lang\\scala-swing_2.11\\1.0.1\\scala-swing_2.11-1.0.1.jar;D:\\minecraftrust-astra-hardening\\target\\fresh-forge-observer\\revelation-second\\game\\libraries\\org\\scala-lang\\scala-xml_2.11\\1.0.2\\scala-xml_2.11-1.0.2.jar;D:\\minecraftrust-astra-hardening\\target\\fresh-forge-observer\\revelation-second\\game\\forge-1.12.2-14.23.5.2846-universal.jar;D:\\minecraftrust-astra-hardening\\target\\fresh-forge-observer\\revelation-second\\game\\minecraft_server.1.12.2.jar",
+        "-d",
+        "D:\\minecraftrust-astra-hardening\\target\\fresh-forge-observer\\revelation-second\\classes",
+        "D:\\minecraftrust-astra-hardening\\tools\\fresh-forge-observer\\java\\com\\rustcraft\\fresh\\agent\\DefinitionObserver.java",
+        "D:\\minecraftrust-astra-hardening\\tools\\fresh-forge-observer\\java\\com\\rustcraft\\fresh\\bootstrap\\FreshTweaker.java",
+        "D:\\minecraftrust-astra-hardening\\tools\\fresh-forge-observer\\java\\com\\rustcraft\\fresh\\oracle\\FreshOracle.java"
+      ],
+      "cwd": "D:\\minecraftrust-astra-hardening\\target\\fresh-forge-observer\\revelation-second",
+      "memory_mib": 768,
+      "timeout_seconds": 120,
+      "exit_code": 0,
+      "timed_out": false,
+      "peak_process_committed_bytes": 157147136,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "compile-identity",
+      "argv": [
+        "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\bin\\javac.exe",
+        "-J-Xmx256M",
+        "-proc:none",
+        "-encoding",
+        "UTF-8",
+        "-source",
+        "8",
+        "-target",
+        "8",
+        "-Xlint:all",
+        "-Werror",
+        "-cp",
+        "D:\\rustcraft-runtime-targets\\clean-forge-2860\\server\\libraries\\org\\ow2\\asm\\asm-debug-all\\5.2\\asm-debug-all-5.2.jar",
+        "-d",
+        "D:\\minecraftrust-astra-hardening\\target\\fresh-forge-observer\\revelation-second\\identity-classes",
+        "D:\\minecraftrust-astra-hardening\\tools\\bridge\\src\\com\\rustcraft\\coremod\\CanonicalClassIdentityV2.java"
+      ],
+      "cwd": "D:\\minecraftrust-astra-hardening\\target\\fresh-forge-observer\\revelation-second",
+      "memory_mib": 768,
+      "timeout_seconds": 60,
+      "exit_code": 0,
+      "timed_out": false,
+      "peak_process_committed_bytes": 165597184,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "compile-observer-controls",
+      "argv": [
+        "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\bin\\javac.exe",
+        "-J-Xmx256M",
+        "-proc:none",
+        "-source",
+        "8",
+        "-target",
+        "8",
+        "-Xlint:all",
+        "-Werror",
+        "-cp",
+        "D:\\minecraftrust-astra-hardening\\target\\fresh-forge-observer\\revelation-second\\classes",
+        "-d",
+        "D:\\minecraftrust-astra-hardening\\target\\fresh-forge-observer\\revelation-second\\controls\\classes",
+        "D:\\minecraftrust-astra-hardening\\tools\\fresh-forge-observer\\tests\\example\\Fixture.java",
+        "D:\\minecraftrust-astra-hardening\\tools\\fresh-forge-observer\\tests\\ObserverControl.java"
+      ],
+      "cwd": "D:\\minecraftrust-astra-hardening\\target\\fresh-forge-observer\\revelation-second",
+      "memory_mib": 768,
+      "timeout_seconds": 60,
+      "exit_code": 0,
+      "timed_out": false,
+      "peak_process_committed_bytes": 133808128,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "observer-control-valid",
+      "argv": [
+        "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\bin\\java.exe",
+        "-Xmx128M",
+        "-Xverify:all",
+        "-javaagent:D:\\minecraftrust-astra-hardening\\target\\fresh-forge-observer\\revelation-second\\observer.jar",
+        "-Drustcraft.fresh.required=D:\\minecraftrust-astra-hardening\\target\\fresh-forge-observer\\revelation-second\\controls\\required.txt",
+        "-Drustcraft.fresh.dump=D:\\minecraftrust-astra-hardening\\target\\fresh-forge-observer\\revelation-second\\controls\\valid",
+        "-cp",
+        "D:\\minecraftrust-astra-hardening\\target\\fresh-forge-observer\\revelation-second\\controls\\classes;D:\\minecraftrust-astra-hardening\\target\\fresh-forge-observer\\revelation-second\\classes",
+        "ObserverControl",
+        "D:\\minecraftrust-astra-hardening\\target\\fresh-forge-observer\\revelation-second\\controls\\classes\\example\\Fixture.class",
+        "valid"
+      ],
+      "cwd": "D:\\minecraftrust-astra-hardening\\target\\fresh-forge-observer\\revelation-second",
+      "memory_mib": 384,
+      "timeout_seconds": 30,
+      "exit_code": 0,
+      "timed_out": false,
+      "peak_process_committed_bytes": 202346496,
+      "stdout_sha256": "cf0a587a123816a37886670e08e1691a75952a3f87e00cca3e21eb3882e6cf11",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "observer-control-duplicate",
+      "argv": [
+        "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\bin\\java.exe",
+        "-Xmx128M",
+        "-Xverify:all",
+        "-javaagent:D:\\minecraftrust-astra-hardening\\target\\fresh-forge-observer\\revelation-second\\observer.jar",
+        "-Drustcraft.fresh.required=D:\\minecraftrust-astra-hardening\\target\\fresh-forge-observer\\revelation-second\\controls\\required.txt",
+        "-Drustcraft.fresh.dump=D:\\minecraftrust-astra-hardening\\target\\fresh-forge-observer\\revelation-second\\controls\\duplicate",
+        "-cp",
+        "D:\\minecraftrust-astra-hardening\\target\\fresh-forge-observer\\revelation-second\\controls\\classes;D:\\minecraftrust-astra-hardening\\target\\fresh-forge-observer\\revelation-second\\classes",
+        "ObserverControl",
+        "D:\\minecraftrust-astra-hardening\\target\\fresh-forge-observer\\revelation-second\\controls\\classes\\example\\Fixture.class",
+        "duplicate"
+      ],
+      "cwd": "D:\\minecraftrust-astra-hardening\\target\\fresh-forge-observer\\revelation-second",
+      "memory_mib": 384,
+      "timeout_seconds": 30,
+      "exit_code": 0,
+      "timed_out": false,
+      "peak_process_committed_bytes": 202412032,
+      "stdout_sha256": "63a6d6140242d5b22fd69df39725492dc8d80d9a269964f443f9eafa9d2df0ec",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "observer-control-redefined",
+      "argv": [
+        "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\bin\\java.exe",
+        "-Xmx128M",
+        "-Xverify:all",
+        "-javaagent:D:\\minecraftrust-astra-hardening\\target\\fresh-forge-observer\\revelation-second\\observer.jar",
+        "-Drustcraft.fresh.required=D:\\minecraftrust-astra-hardening\\target\\fresh-forge-observer\\revelation-second\\controls\\required.txt",
+        "-Drustcraft.fresh.dump=D:\\minecraftrust-astra-hardening\\target\\fresh-forge-observer\\revelation-second\\controls\\redefined",
+        "-cp",
+        "D:\\minecraftrust-astra-hardening\\target\\fresh-forge-observer\\revelation-second\\controls\\classes;D:\\minecraftrust-astra-hardening\\target\\fresh-forge-observer\\revelation-second\\classes",
+        "ObserverControl",
+        "D:\\minecraftrust-astra-hardening\\target\\fresh-forge-observer\\revelation-second\\controls\\classes\\example\\Fixture.class",
+        "redefined"
+      ],
+      "cwd": "D:\\minecraftrust-astra-hardening\\target\\fresh-forge-observer\\revelation-second",
+      "memory_mib": 384,
+      "timeout_seconds": 30,
+      "exit_code": 0,
+      "timed_out": false,
+      "peak_process_committed_bytes": 202735616,
+      "stdout_sha256": "250748147954440f2b089eaaf45ab52df44743c8ffe9b64325df595749ad1e2b",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "python-controls",
+      "argv": [
+        "C:\\Python314\\python.exe",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "D:\\minecraftrust-astra-hardening\\tools\\fresh-forge-observer",
+        "-p",
+        "test_observe.py"
+      ],
+      "cwd": "D:\\minecraftrust-astra-hardening",
+      "memory_mib": 256,
+      "timeout_seconds": 30,
+      "exit_code": 0,
+      "timed_out": false,
+      "peak_process_committed_bytes": 18460672,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "6e9792fb2bb9c647f8f6da93541119387a90e689e7c07ce7b2b92b5942dbbc2a"
+    },
+    {
+      "label": "observe",
+      "argv": [
+        "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\bin\\java.exe",
+        "-Xmx1536M",
+        "-XX:+DisableAttachMechanism",
+        "-javaagent:D:\\minecraftrust-astra-hardening\\target\\fresh-forge-observer\\revelation-second\\observer.jar",
+        "-Drustcraft.fresh.required=D:\\minecraftrust-astra-hardening\\target\\fresh-forge-observer\\revelation-second\\required.txt",
+        "-Drustcraft.fresh.dump=D:\\minecraftrust-astra-hardening\\target\\fresh-forge-observer\\revelation-second\\definitions",
+        "-Drustcraft.fresh.result=D:\\minecraftrust-astra-hardening\\target\\fresh-forge-observer\\revelation-second\\observation.json",
+        "-Drustcraft.fresh.session=42be613fbd9142eea0107788be26ba51",
+        "-Drustcraft.fresh.challenge=760cab87c2cfc0e2d89b2b109ef530208206e222cdc11821893eb262c81f3975",
+        "-Drustcraft.fresh.requestSha256=941163b084c14eb799a0fd557d8cd569b04847f6176a242b905fd106a8afde54",
+        "-cp",
+        "D:\\minecraftrust-astra-hardening\\target\\fresh-forge-observer\\revelation-second\\classes;D:\\minecraftrust-astra-hardening\\target\\fresh-forge-observer\\revelation-second\\game\\libraries\\com\\typesafe\\akka\\akka-actor_2.11\\2.3.3\\akka-actor_2.11-2.3.3.jar;D:\\minecraftrust-astra-hardening\\target\\fresh-forge-observer\\revelation-second\\game\\libraries\\com\\typesafe\\config\\1.2.1\\config-1.2.1.jar;D:\\minecraftrust-astra-hardening\\target\\fresh-forge-observer\\revelation-second\\game\\libraries\\java3d\\vecmath\\1.5.2\\vecmath-1.5.2.jar;D:\\minecraftrust-astra-hardening\\target\\fresh-forge-observer\\revelation-second\\game\\libraries\\lzma\\lzma\\0.0.1\\lzma-0.0.1.jar;D:\\minecraftrust-astra-hardening\\target\\fresh-forge-observer\\revelation-second\\game\\libraries\\net\\java\\dev\\jna\\jna\\4.4.0\\jna-4.4.0.jar;D:\\minecraftrust-astra-hardening\\target\\fresh-forge-observer\\revelation-second\\game\\libraries\\net\\minecraft\\launchwrapper\\1.12\\launchwrapper-1.12.jar;D:\\minecraftrust-astra-hardening\\target\\fresh-forge-observer\\revelation-second\\game\\libraries\\net\\sf\\jopt-simple\\jopt-simple\\5.0.3\\jopt-simple-5.0.3.jar;D:\\minecraftrust-astra-hardening\\target\\fresh-forge-observer\\revelation-second\\game\\libraries\\net\\sf\\trove4j\\trove4j\\3.0.3\\trove4j-3.0.3.jar;D:\\minecraftrust-astra-hardening\\target\\fresh-forge-observer\\revelation-second\\game\\libraries\\org\\apache\\maven\\maven-artifact\\3.5.3\\maven-artifact-3.5.3.jar;D:\\minecraftrust-astra-hardening\\target\\fresh-forge-observer\\revelation-second\\game\\libraries\\org\\jline\\jline\\3.5.1\\jline-3.5.1.jar;D:\\minecraftrust-astra-hardening\\target\\fresh-forge-observer\\revelation-second\\game\\libraries\\org\\ow2\\asm\\asm-all\\5.2\\asm-all-5.2.jar;D:\\minecraftrust-astra-hardening\\target\\fresh-forge-observer\\revelation-second\\game\\libraries\\org\\scala-lang\\plugins\\scala-continuations-library_2.11\\1.0.2\\scala-continuations-library_2.11-1.0.2.jar;D:\\minecraftrust-astra-hardening\\target\\fresh-forge-observer\\revelation-second\\game\\libraries\\org\\scala-lang\\plugins\\scala-continuations-plugin_2.11.1\\1.0.2\\scala-continuations-plugin_2.11.1-1.0.2.jar;D:\\minecraftrust-astra-hardening\\target\\fresh-forge-observer\\revelation-second\\game\\libraries\\org\\scala-lang\\scala-actors-migration_2.11\\1.1.0\\scala-actors-migration_2.11-1.1.0.jar;D:\\minecraftrust-astra-hardening\\target\\fresh-forge-observer\\revelation-second\\game\\libraries\\org\\scala-lang\\scala-compiler\\2.11.1\\scala-compiler-2.11.1.jar;D:\\minecraftrust-astra-hardening\\target\\fresh-forge-observer\\revelation-second\\game\\libraries\\org\\scala-lang\\scala-library\\2.11.1\\scala-library-2.11.1.jar;D:\\minecraftrust-astra-hardening\\target\\fresh-forge-observer\\revelation-second\\game\\libraries\\org\\scala-lang\\scala-parser-combinators_2.11\\1.0.1\\scala-parser-combinators_2.11-1.0.1.jar;D:\\minecraftrust-astra-hardening\\target\\fresh-forge-observer\\revelation-second\\game\\libraries\\org\\scala-lang\\scala-reflect\\2.11.1\\scala-reflect-2.11.1.jar;D:\\minecraftrust-astra-hardening\\target\\fresh-forge-observer\\revelation-second\\game\\libraries\\org\\scala-lang\\scala-swing_2.11\\1.0.1\\scala-swing_2.11-1.0.1.jar;D:\\minecraftrust-astra-hardening\\target\\fresh-forge-observer\\revelation-second\\game\\libraries\\org\\scala-lang\\scala-xml_2.11\\1.0.2\\scala-xml_2.11-1.0.2.jar;D:\\minecraftrust-astra-hardening\\target\\fresh-forge-observer\\revelation-second\\game\\forge-1.12.2-14.23.5.2846-universal.jar;D:\\minecraftrust-astra-hardening\\target\\fresh-forge-observer\\revelation-second\\game\\minecraft_server.1.12.2.jar",
+        "net.minecraft.launchwrapper.Launch",
+        "--tweakClass",
+        "com.rustcraft.fresh.bootstrap.FreshTweaker",
+        "--gameDir",
+        "D:\\minecraftrust-astra-hardening\\target\\fresh-forge-observer\\revelation-second\\game"
+      ],
+      "cwd": "D:\\minecraftrust-astra-hardening\\target\\fresh-forge-observer\\revelation-second\\game",
+      "memory_mib": 3072,
+      "timeout_seconds": 180,
+      "exit_code": 0,
+      "timed_out": false,
+      "peak_process_committed_bytes": 989904896,
+      "stdout_sha256": "4730cbec01cf380902977a8763cf1cc25a01b136815cb5de5633a671f515a460",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "identity-0",
+      "argv": [
+        "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\bin\\java.exe",
+        "-Xmx384M",
+        "-cp",
+        "D:\\minecraftrust-astra-hardening\\target\\fresh-forge-observer\\revelation-second\\identity-classes;D:\\rustcraft-runtime-targets\\clean-forge-2860\\server\\libraries\\org\\ow2\\asm\\asm-debug-all\\5.2\\asm-debug-all-5.2.jar",
+        "com.rustcraft.coremod.CanonicalClassIdentityV2",
+        "D:\\minecraftrust-astra-hardening\\target\\fresh-forge-observer\\revelation-second\\definitions\\loader-3\\net\\minecraft\\network\\play\\server\\SPacketChunkData.class",
+        "D:\\minecraftrust-astra-hardening\\target\\fresh-forge-observer\\revelation-second\\definitions\\loader-3\\net\\minecraft\\server\\MinecraftServer.class",
+        "D:\\minecraftrust-astra-hardening\\target\\fresh-forge-observer\\revelation-second\\definitions\\loader-3\\net\\minecraft\\util\\BitArray.class",
+        "D:\\minecraftrust-astra-hardening\\target\\fresh-forge-observer\\revelation-second\\definitions\\loader-3\\net\\minecraft\\world\\World.class",
+        "D:\\minecraftrust-astra-hardening\\target\\fresh-forge-observer\\revelation-second\\definitions\\loader-3\\net\\minecraft\\world\\chunk\\BlockStateContainer.class",
+        "D:\\minecraftrust-astra-hardening\\target\\fresh-forge-observer\\revelation-second\\definitions\\loader-3\\net\\minecraft\\world\\chunk\\Chunk.class",
+        "D:\\minecraftrust-astra-hardening\\target\\fresh-forge-observer\\revelation-second\\definitions\\loader-3\\net\\minecraft\\world\\chunk\\NibbleArray.class",
+        "D:\\minecraftrust-astra-hardening\\target\\fresh-forge-observer\\revelation-second\\definitions\\loader-3\\net\\minecraft\\world\\chunk\\storage\\AnvilChunkLoader.class",
+        "D:\\minecraftrust-astra-hardening\\target\\fresh-forge-observer\\revelation-second\\definitions\\loader-3\\net\\minecraft\\world\\chunk\\storage\\ExtendedBlockStorage.class",
+        "D:\\minecraftrust-astra-hardening\\target\\fresh-forge-observer\\revelation-second\\definitions\\loader-3\\net\\minecraft\\world\\gen\\ChunkGeneratorFlat.class",
+        "D:\\minecraftrust-astra-hardening\\target\\fresh-forge-observer\\revelation-second\\definitions\\loader-3\\net\\minecraft\\world\\gen\\ChunkProviderServer.class",
+        "D:\\minecraftrust-astra-hardening\\target\\fresh-forge-observer\\revelation-second\\definitions\\loader-3\\net\\minecraftforge\\common\\chunkio\\ChunkIOProvider.class"
+      ],
+      "cwd": "D:\\minecraftrust-astra-hardening\\target\\fresh-forge-observer\\revelation-second",
+      "memory_mib": 768,
+      "timeout_seconds": 45,
+      "exit_code": 0,
+      "timed_out": false,
+      "peak_process_committed_bytes": 513802240,
+      "stdout_sha256": "bfd011f7d2dd7d77a7aa423cc0829aa2b5c4f07dfcbc9c2a21d3ed06e0fd1c29",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "scope": "OFFLINE_FINAL_DEFINITIONS_ONLY_NO_PROFILE_QUALIFICATION",
+  "sources_before": {
+    "D:\\minecraftrust-astra-hardening\\tools\\fresh-forge-observer\\observe.py": "19b486534cb2481a402acf31c372f10893c5015627836b739c9dd023a2ce182c",
+    "D:\\minecraftrust-astra-hardening\\tools\\fresh-forge-observer\\test_observe.py": "e873bd5e702db4355664ab60332399c507e58e7714f80a54024a7ac8166b5d65",
+    "D:\\minecraftrust-astra-hardening\\tools\\fresh-forge-observer\\tests\\ObserverControl.java": "2f80a16f555c80c24aeadf33dc4b63e5482eaf6ef3a65f9e301ecd97646d3b0f",
+    "D:\\minecraftrust-astra-hardening\\tools\\fresh-forge-observer\\tests\\example\\Fixture.java": "dfaa987369f4ed33b7b8016e9a5dd74197c6e7ac54f7b564b33c52add66d6509",
+    "D:\\minecraftrust-astra-hardening\\tools\\fresh-forge-observer\\java\\com\\rustcraft\\fresh\\agent\\DefinitionObserver.java": "eb511221706a5a78a24610fa5aec793609b19538faf6e9ddcbd06ff01e140b52",
+    "D:\\minecraftrust-astra-hardening\\tools\\fresh-forge-observer\\java\\com\\rustcraft\\fresh\\bootstrap\\FreshTweaker.java": "6a4c19294d095ba92bf39b1b708e765d5576f8b82016d008c1fc359d526b45b7",
+    "D:\\minecraftrust-astra-hardening\\tools\\fresh-forge-observer\\java\\com\\rustcraft\\fresh\\oracle\\FreshOracle.java": "b645148cd3508bc254fb3d420b465c412f1dc5d70355713bf93534f9ef9ece39",
+    "D:\\minecraftrust-astra-hardening\\tools\\testing\\qualification_engine.py": "ce66d4716637858063164b8a7e6d9eb9b88433246f3be1f9746ad75b07184b49",
+    "D:\\minecraftrust-astra-hardening\\tools\\testing\\qualification_certificate.py": "3eca99c72af064990dd284f78398f68e79b00a4b6ec59eca215e57f56034b914",
+    "D:\\minecraftrust-astra-hardening\\tools\\testing\\hardening_guard.py": "a2062b3ffbec7edba79bf5f5954fbcb1e9d97492ab9c4bb541833ebb820bdb6d",
+    "D:\\minecraftrust-astra-hardening\\tools\\nbt-region-experiment\\job.py": "41f77a4c87ba2f531872853f2bcc701c5cac3a384c1bb2cf49901b8fcff9c65b",
+    "D:\\minecraftrust-astra-hardening\\tools\\bridge\\src\\com\\rustcraft\\coremod\\CanonicalClassIdentityV2.java": "61749a998cb03e43f093b54c6ba5a069a236d868388fe6452ec1e0133ec4f4f8"
+  },
+  "removed_environment_names": [],
+  "guard_before": {
+    "schema_version": 1,
+    "kind": "HARDENING_ISOLATION_GATE_CHECK",
+    "status": "PASS",
+    "failures": [],
+    "original_observed": {
+      "head": "c4b868db2c9e4b03f745bf93c6ebf4fd8a8519e7",
+      "branch": "issue1-jni-v2",
+      "status": [
+        " M tools/live-capture/live_client_session.py",
+        "?? tools/live-capture/__pycache__/",
+        "?? tools/live-capture/run_rev_shadow.py"
+      ],
+      "files": [
+        {
+          "path": "D:\\minecraftrust\\tools\\live-capture\\live_client_session.py",
+          "sha256": "151c356161695aba3db3c1a8cbd589b5eda2b5a1770dff59ab21b728d36cabfa"
+        },
+        {
+          "path": "D:\\minecraftrust\\tools\\live-capture\\run_rev_shadow.py",
+          "sha256": "2b9b2aca49e57dd0d2a74bec46efcdc0ac7f95762a733276e27ff9dbcb472d93"
+        }
+      ]
+    },
+    "isolated_worktree": "D:\\minecraftrust-astra-hardening",
+    "isolated_head": "ac654a5cc09c6784c66962b4adf844d05d79ff2e",
+    "isolated_branch": "astra/architecture-hardening",
+    "production_gate_checks": {
+      "tryEncode_fail_closed": true,
+      "productionAuthorityEligible_false": true
+    },
+    "scope": "read-only original HEAD/status/two paused source hashes plus conservative source guards; runtime authority tests remain required"
+  },
+  "compiled_classes": {
+    "com/rustcraft/fresh/agent/DefinitionObserver.class": "b47232029a76e69936315ed639670b797ace7b08881d19ba06fab8899559bb39",
+    "com/rustcraft/fresh/bootstrap/FreshTweaker.class": "9474dda3c84e8c05b467b00debdf48ac91383710528c68cc551a4a41cf426b19",
+    "com/rustcraft/fresh/oracle/FreshOracle.class": "de30b629dff6564333400ef806648eeb4f61adb97d9dacff5c5fc096e8252374"
+  },
+  "compiled_identity": {
+    "com/rustcraft/coremod/CanonicalClassIdentityV2$1.class": "4408e4d1ad00f2b661ed54a0559e8ba784fa3019c72e9728fa8730a59d5921cb",
+    "com/rustcraft/coremod/CanonicalClassIdentityV2$2.class": "7def25f8e3a0fb29691820a49d243a8a13c4fdf45e44e3d7076fafb97f89f6f1",
+    "com/rustcraft/coremod/CanonicalClassIdentityV2$IdentityFailure.class": "194d9365f1963a2d865690152fad5561d0865abbda82add527a40a1ad20af84e",
+    "com/rustcraft/coremod/CanonicalClassIdentityV2$RawClass.class": "4e5a6c9f858672200e27c02605c316513050f45e91a8efd20f931a6b8218016e",
+    "com/rustcraft/coremod/CanonicalClassIdentityV2$Result.class": "3429834ff808c13ce977345a0bfcfccbeceff0fc984b1f08427d76c188254ced",
+    "com/rustcraft/coremod/CanonicalClassIdentityV2.class": "ecae040c4ec01af636d6ec5b174d874c9cc3a370ee105fe894d89a149001d093"
+  },
+  "observer_sha256": "5cbf97a80c98655f6ba10b6eb9e61a457126d9b86d17bc583b64c5140b394fab",
+  "compiled_controls": {
+    "ObserverControl$Owner.class": "3615b06abb6cbf4900ce75a5cdcf31214b20e30e437f277df44e79e6cc151746",
+    "ObserverControl.class": "14e5a8909f42ea438f5b5be03b947310c1948aa05345b7814ac2a7bb76ac5de3",
+    "example/Fixture.class": "ed85c5d2621c98e552f88be579b0ac4547f40009bc61ab6260da8de4d72b3c44"
+  },
+  "java_observer_controls": 3,
+  "python_tests": 6,
+  "malformed_observation_variants": 21,
+  "definition_count": 12,
+  "identities_sha256": "74302a0878460a0881f9c27badd846dcc17333d7cf8e7f4795f51814d28ab0a2",
+  "observation_sha256": "9a418fd70a33dcb533f9ed8a4b6cddacad3a99ae5379f5791294964d4dd40c79",
+  "private_inventory_after": {
+    "config/acronym/base/General.cfg": {
+      "sha256": "b34122b979ad7855d9c16fe3058f38c5eb9c040146c3cb662993bba33adcee19",
+      "bytes": 909
+    },
+    "config/actuallyadditions.cfg": {
+      "sha256": "d95d102e31969eb6807dee2c9955fcb12a4159dc35cc665c3a126856be8a7c51",
+      "bytes": 24545
+    },
+    "config/advanced_solar_panels.cfg": {
+      "sha256": "ad5df0054ae89dfafa8d46e818634a72e7ab009f81355e574f772b99c30847eb",
+      "bytes": 1296
+    },
+    "config/advanced_solar_panels_MTRecipes.cfg": {
+      "sha256": "d6a88ba873cf59fd4342d0d3d10929b4df962b757012147aaa20163c740e7581",
+      "bytes": 2190
+    },
+    "config/AE2WirelessTerminals.cfg": {
+      "sha256": "851a1ddf38f09513dd820f7802b41b9c68d6d89fe296bb13a037f27085d7c77d",
+      "bytes": 1942
+    },
+    "config/akashictome.cfg": {
+      "sha256": "1876b1b8846dcf79461e7230697d0158e6201e8b7d41a5184ad45aa32f243b61",
+      "bytes": 691
+    },
+    "config/appleskin.cfg": {
+      "sha256": "27fdd990f5cc4d5f8da3a8cd189a26dc50158edfd32ac633a9b82729c33ad317",
+      "bytes": 1333
+    },
+    "config/AppliedEnergistics2/aerecipes/generated/aliases.recipe": {
+      "sha256": "4df8d9a1ad27a6af5c97de2a5562f677abf740fd850a4f84b95ffd9932ebbe58",
+      "bytes": 54
+    },
+    "config/AppliedEnergistics2/aerecipes/generated/decorative/certus.recipe": {
+      "sha256": "6884810f0e5128350aeb34ffa3b830b37236520a6b9d3e4cc0f65a7b96ddb0a0",
+      "bytes": 160
+    },
+    "config/AppliedEnergistics2/aerecipes/generated/decorative/crystals.recipe": {
+      "sha256": "26014397869067c6831ac7c0019132cb8a9f18a02e36be058c7479193d6569ae",
+      "bytes": 1443
+    },
+    "config/AppliedEnergistics2/aerecipes/generated/decorative/fixtures.recipe": {
+      "sha256": "32d956dd70d28f4188a64c5e3603cb5f70837c010cdfda2002d9aac7efff3dca",
+      "bytes": 161
+    },
+    "config/AppliedEnergistics2/aerecipes/generated/decorative/index.recipe": {
+      "sha256": "7c86b8f6fc7cf82a2557112f6131a474db796050258dbb8121648b21bc2320c1",
+      "bytes": 234
+    },
+    "config/AppliedEnergistics2/aerecipes/generated/decorative/quartzglass.recipe": {
+      "sha256": "290ef6bb9cc3aaed58680ae7627e900ffdc4700ee7072b87f226a87b99db8ecf",
+      "bytes": 225
+    },
+    "config/AppliedEnergistics2/aerecipes/generated/decorative/skystone.recipe": {
+      "sha256": "d1813986c000e4f5b5192d002ccf8e2af51701e2c43d7fc726e5da872b38cef4",
+      "bytes": 268
+    },
+    "config/AppliedEnergistics2/aerecipes/generated/decorative/slabs.recipe": {
+      "sha256": "a540386351f5db86326ca32841a1a53c27e78238d499eeb2cbf411f41b1055ea",
+      "bytes": 865
+    },
+    "config/AppliedEnergistics2/aerecipes/generated/decorative/stairs.recipe": {
+      "sha256": "fc7c92f16f3b05bbdf43b5419bf480c48ea4c90a590f4c6bc248fc91dc0addbc",
+      "bytes": 1519
+    },
+    "config/AppliedEnergistics2/aerecipes/generated/groups.recipe": {
+      "sha256": "cce907c65f5e471587bd58577d4774854af9c7510c27b062108592a18d36af21",
+      "bytes": 1362
+    },
+    "config/AppliedEnergistics2/aerecipes/generated/index.recipe": {
+      "sha256": "5f88a45814668a5917743106ad0bbe1320e21e5a44ff3313b0ce57ed2509ca81",
+      "bytes": 1048
+    },
+    "config/AppliedEnergistics2/aerecipes/generated/materials/cards.recipe": {
+      "sha256": "ce0c411746d6ff6e74fb1e00d03c7634a46c7813673217d5773bb77e4af0051e",
+      "bytes": 993
+    },
+    "config/AppliedEnergistics2/aerecipes/generated/materials/circuits.recipe": {
+      "sha256": "65e251dad2bb322570a387faea801db994a34e844ff59f1761f122f2aaba1fe5",
+      "bytes": 494
+    },
+    "config/AppliedEnergistics2/aerecipes/generated/materials/cores.recipe": {
+      "sha256": "4b207d9f89494b7bc2cb548388dc117b1848ca656c4b84fcb4461be1920c192f",
+      "bytes": 232
+    },
+    "config/AppliedEnergistics2/aerecipes/generated/materials/index.recipe": {
+      "sha256": "1d47d0fcbfcaa2522f19a2fc0751dc736f9a1484b597617668df24c272c2e59e",
+      "bytes": 160
+    },
+    "config/AppliedEnergistics2/aerecipes/generated/materials/presses.recipe": {
+      "sha256": "5801ef13dbc5e55b16f68847b0be2edd67549722456f957af5c785c73bc9673f",
+      "bytes": 471
+    },
+    "config/AppliedEnergistics2/aerecipes/generated/materials/processors.recipe": {
+      "sha256": "07b4f794f1587b83ee0ce3aa74271fb87c615fcf7e6023bc0f356f0a955d5941",
+      "bytes": 434
+    },
+    "config/AppliedEnergistics2/aerecipes/generated/misc/chests.recipe": {
+      "sha256": "703fad4a423072807cfc1791d9979ddf8f7c442cb2bb8ad5fc9b013a09ddabf8",
+      "bytes": 486
+    },
+    "config/AppliedEnergistics2/aerecipes/generated/misc/deconstruction.recipe": {
+      "sha256": "5dcb148edb76d810f9835101fd281545be073cd6a31a10815a700b817ffa6970",
+      "bytes": 301
+    },
+    "config/AppliedEnergistics2/aerecipes/generated/misc/fluixpearl.recipe": {
+      "sha256": "f41c806245063dc7a7364e1bbc70cf08019eec4f47ba0c531e87f510ef5797b9",
+      "bytes": 216
+    },
+    "config/AppliedEnergistics2/aerecipes/generated/misc/grindstone.recipe": {
+      "sha256": "ea1c86a61b6b0aca3283b1d5760b35b39ade06a83e60cbcdf4e9ec0ee3e3d2ea",
+      "bytes": 553
+    },
+    "config/AppliedEnergistics2/aerecipes/generated/misc/index.recipe": {
+      "sha256": "59ca32599425cd1f7a603ab20b1d16240da451e58af74fd1bdc64656e6055afc",
+      "bytes": 226
+    },
+    "config/AppliedEnergistics2/aerecipes/generated/misc/meteors.recipe": {
+      "sha256": "f79db189ee80652dff1720cd663ea2c169e6442ab3ad16e16b42e38b242a77ce",
+      "bytes": 189
+    },
+    "config/AppliedEnergistics2/aerecipes/generated/misc/seeds.recipe": {
+      "sha256": "80354333c9a922aa8b72ddc4a60440cfc11792383eeaf468853d68fe9c94afa7",
+      "bytes": 262
+    },
+    "config/AppliedEnergistics2/aerecipes/generated/misc/tinytnt.recipe": {
+      "sha256": "e76b759b22c26411eefb80e5359e6d34b17422ff41c958ae1ee36e4a562f4c6a",
+      "bytes": 85
+    },
+    "config/AppliedEnergistics2/aerecipes/generated/misc/vanilla.recipe": {
+      "sha256": "20f761af3d035e9de7733d41db285d8c5714059868943223862de9e52bb5a2e3",
+      "bytes": 355
+    },
+    "config/AppliedEnergistics2/aerecipes/generated/network/blocks/cellworkbench.recipe": {
+      "sha256": "378b2cd9ddc8955bbdb21e69d24db23d41130ce81dc67f28b21ec39e99a35602",
+      "bytes": 229
+    },
+    "config/AppliedEnergistics2/aerecipes/generated/network/blocks/controller.recipe": {
+      "sha256": "b37163b2858a2bf6afc9a443dd9756f6411a4217f3d4755ad065863bc2570d72",
+      "bytes": 314
+    },
+    "config/AppliedEnergistics2/aerecipes/generated/network/blocks/crystal_processing.recipe": {
+      "sha256": "48be479b3c31cee595ddec696d797ed7c00a95d4644365a79851e689d34446a0",
+      "bytes": 409
+    },
+    "config/AppliedEnergistics2/aerecipes/generated/network/blocks/energy.recipe": {
+      "sha256": "b9e9c03c3ba209504d3e68690caaaa123dd5ffb422703542f27ffb7eee7ceb2d",
+      "bytes": 903
+    },
+    "config/AppliedEnergistics2/aerecipes/generated/network/blocks/index.recipe": {
+      "sha256": "b616fe1cf42a867ef9772b70f6ff96ebfa40c64f2316587d98968287f58909a8",
+      "bytes": 439
+    },
+    "config/AppliedEnergistics2/aerecipes/generated/network/blocks/inscribers.recipe": {
+      "sha256": "fb0c5b1cb75345edbf5b18abb5d484c1ad1768ba5a8697bfa06f19a70119a198",
+      "bytes": 212
+    },
+    "config/AppliedEnergistics2/aerecipes/generated/network/blocks/interfaces.recipe": {
+      "sha256": "e16717e59742303e9a41ecf2ff3e27b79fd9a1984d1ee954be31de63e051a6b0",
+      "bytes": 322
+    },
+    "config/AppliedEnergistics2/aerecipes/generated/network/blocks/io.recipe": {
+      "sha256": "a9d460e1757e1258ab0050cef9da11911c8fcc63db993023f48514d9dc9d9a6c",
+      "bytes": 349
+    },
+    "config/AppliedEnergistics2/aerecipes/generated/network/blocks/quantum.recipe": {
+      "sha256": "c5b6defd03eb9d5adecea7c47a1b9bda37c98e8d5cfff26ad8b7910f17ad8372",
+      "bytes": 504
+    },
+    "config/AppliedEnergistics2/aerecipes/generated/network/blocks/security_station.recipe": {
+      "sha256": "67acc43a4945a24a60e69753c5059a1aa99b4fd9a7e3290ac1e28e5da8a3144e",
+      "bytes": 219
+    },
+    "config/AppliedEnergistics2/aerecipes/generated/network/blocks/spatial_io.recipe": {
+      "sha256": "65710be6142d40ce3fd9e24740c610c8a0dae3903f8efcfaff645fae541c697b",
+      "bytes": 354
+    },
+    "config/AppliedEnergistics2/aerecipes/generated/network/blocks/storage.recipe": {
+      "sha256": "77ca4a6c4e7bb47ef88646bfdeab16f588d4e509a1a3f9319763fdb56d6bc2b8",
+      "bytes": 347
+    },
+    "config/AppliedEnergistics2/aerecipes/generated/network/cables/covered.recipe": {
+      "sha256": "45fc5f59f8d0106436cd695fa04676e99d681b6b69d74a40dbf6aa3a099312a9",
+      "bytes": 3734
+    },
+    "config/AppliedEnergistics2/aerecipes/generated/network/cables/dense.recipe": {
+      "sha256": "09c993189665ec87e0d5499d006d3740f21a35f6882f233fddf46420f12a09a3",
+      "bytes": 3546
+    },
+    "config/AppliedEnergistics2/aerecipes/generated/network/cables/glass.recipe": {
+      "sha256": "f2fa75d1a004c4110e4f2fb5596add6a710b26737cef174cc86f5dadbde28cf9",
+      "bytes": 3464
+    },
+    "config/AppliedEnergistics2/aerecipes/generated/network/cables/index.recipe": {
+      "sha256": "1b1c324447f3e1f9df218ce0953a22aec3d9854442cc5ed7d45d62836d481e10",
+      "bytes": 142
+    },
+    "config/AppliedEnergistics2/aerecipes/generated/network/cables/smart.recipe": {
+      "sha256": "14ebad536dfd576c2b3806e40a0a6f234b7cb8994340a2a89d8bf33978920d7b",
+      "bytes": 3492
+    },
+    "config/AppliedEnergistics2/aerecipes/generated/network/cells/empty.recipe": {
+      "sha256": "dc0e4340b24cd5765faa0472adcc4a2e6fd14705faa502fb24ae8601ff8c4e21",
+      "bytes": 248
+    },
+    "config/AppliedEnergistics2/aerecipes/generated/network/cells/index.recipe": {
+      "sha256": "121a99267660b0eb0b00d1f3d5ff496a8dd112af20b5e8266ab7a8c4b1ce6e42",
+      "bytes": 233
+    },
+    "config/AppliedEnergistics2/aerecipes/generated/network/cells/spatial.recipe": {
+      "sha256": "4043e7f6be4ac12bcd3da0855656faf4e9003094e0c8ba2596a6ec371eb0cb39",
+      "bytes": 1187
+    },
+    "config/AppliedEnergistics2/aerecipes/generated/network/cells/spatial_components.recipe": {
+      "sha256": "a281efef3483cc10f3b0d7bd06f4e1f0b6d0af9d50d67fe6284da1932a609532",
+      "bytes": 936
+    },
+    "config/AppliedEnergistics2/aerecipes/generated/network/cells/storage.recipe": {
+      "sha256": "8085b70e16aa5ac6bd445c5f12a31867d5c16aa4329b95e128002d123af7ef3b",
+      "bytes": 1427
+    },
+    "config/AppliedEnergistics2/aerecipes/generated/network/cells/storage_components.recipe": {
+      "sha256": "0e6c670e1492fdc529314911ff8bf4958fd5509c95853435f56337a7cb89b3c1",
+      "bytes": 1090
+    },
+    "config/AppliedEnergistics2/aerecipes/generated/network/cells/view.recipe": {
+      "sha256": "75a0f74f9dbd81763ad3b20eaa2107c21111e016e4d2f29ae3266febf60cadbc",
+      "bytes": 321
+    },
+    "config/AppliedEnergistics2/aerecipes/generated/network/crafting/assembler.recipe": {
+      "sha256": "e76e972cce791935b5a5076c49d5775bbd3887aadcf7222e5cd0ca20a7c95025",
+      "bytes": 272
+    },
+    "config/AppliedEnergistics2/aerecipes/generated/network/crafting/cpu.recipe": {
+      "sha256": "d264a6baf5290d5b899db89ad0eca425b07a83286662b358220ab2a202718777",
+      "bytes": 838
+    },
+    "config/AppliedEnergistics2/aerecipes/generated/network/crafting/index.recipe": {
+      "sha256": "1b77d68ad77d66a2f22644bd0c140cb70bd46ae7e3395cdce1916364c6efecf3",
+      "bytes": 116
+    },
+    "config/AppliedEnergistics2/aerecipes/generated/network/crafting/patterns.recipe": {
+      "sha256": "51e5626a149705a0d772edf19673ebe787736644742f86e2e1de74dcdcad3768",
+      "bytes": 259
+    },
+    "config/AppliedEnergistics2/aerecipes/generated/network/index.recipe": {
+      "sha256": "07d6f61b2be1650acb78d436d6c6095fdda7f235a484cb9d290059d71c378746",
+      "bytes": 206
+    },
+    "config/AppliedEnergistics2/aerecipes/generated/network/parts/cable_anchor.recipe": {
+      "sha256": "aeb1aaf6c410f1d5fcbeaf93689c67c29d958db22e88957337d7932fc0242eab",
+      "bytes": 63
+    },
+    "config/AppliedEnergistics2/aerecipes/generated/network/parts/emitters.recipe": {
+      "sha256": "45f35d2e14194c3736adfb0aa13013ce2dac1cf3b498dea7e259b4b03562ee16",
+      "bytes": 89
+    },
+    "config/AppliedEnergistics2/aerecipes/generated/network/parts/index.recipe": {
+      "sha256": "b1e61a8397e3a687f867039adbe54c7b0448681737ed69d0c8741768acef6162",
+      "bytes": 378
+    },
+    "config/AppliedEnergistics2/aerecipes/generated/network/parts/io_buses.recipe": {
+      "sha256": "350ea00f731ce1d4a33f4a2e13dd9aff8970745ea4cd8567f264d103181678f2",
+      "bytes": 359
+    },
+    "config/AppliedEnergistics2/aerecipes/generated/network/parts/monitors.recipe": {
+      "sha256": "c40b0bbb903101c126d575db458c1cbee3d17969046a5e0df432e2bfae895f78",
+      "bytes": 207
+    },
+    "config/AppliedEnergistics2/aerecipes/generated/network/parts/panels.recipe": {
+      "sha256": "5f0d15c0cd8b75a1684b9abe711f53706413cec75c16fb968a18ca6ea267d260",
+      "bytes": 413
+    },
+    "config/AppliedEnergistics2/aerecipes/generated/network/parts/planes.recipe": {
+      "sha256": "5d9e7d0c03917d65b26111296fba29e361143eb9b153130c027a2c15f2c86b8c",
+      "bytes": 782
+    },
+    "config/AppliedEnergistics2/aerecipes/generated/network/parts/quartz_fiber.recipe": {
+      "sha256": "cc68014701b570b55e8b655ebd2734b9fd9e8f23524972c0186e352c2fe47bfc",
+      "bytes": 121
+    },
+    "config/AppliedEnergistics2/aerecipes/generated/network/parts/terminals.recipe": {
+      "sha256": "f08770628a94ef174a061146f443a5aa69755e136a2bac336438d805fb4ecd7f",
+      "bytes": 453
+    },
+    "config/AppliedEnergistics2/aerecipes/generated/network/parts/toggle_buses.recipe": {
+      "sha256": "1fdef8e6958238425956b256f0911f49b5da85441571b5ec422ef9409e21276e",
+      "bytes": 269
+    },
+    "config/AppliedEnergistics2/aerecipes/generated/network/parts/tunnels.recipe": {
+      "sha256": "95dafd8750225bdf254210a155db8745edc6b329dba8e58a4f7a30b9dede7683",
+      "bytes": 191
+    },
+    "config/AppliedEnergistics2/aerecipes/generated/network/wireless.recipe": {
+      "sha256": "02b3f74fdc53adecc98362c8e7a176820d67f82a50c29e6e6445bf570a859d4d",
+      "bytes": 578
+    },
+    "config/AppliedEnergistics2/aerecipes/generated/oredict.recipe": {
+      "sha256": "9a2c12b5d771c4922bb9cfe1122e683e034c8fbe08343780dc45e18e98e7b584",
+      "bytes": 1600
+    },
+    "config/AppliedEnergistics2/aerecipes/generated/processing/factorization.recipe": {
+      "sha256": "2028892a4fcd62409d22eec089f0e4aa4a7f6e0099078eccfb275cf0e4e2c144",
+      "bytes": 579
+    },
+    "config/AppliedEnergistics2/aerecipes/generated/processing/grind.recipe": {
+      "sha256": "fb9ca1401b4cdabee176ee31b2379424e39366892e4a1fcf6c60779587b98b53",
+      "bytes": 174
+    },
+    "config/AppliedEnergistics2/aerecipes/generated/processing/hydraulicraft.recipe": {
+      "sha256": "b7a544e4830ed431d1fb65d5a0eca5773930ec669f0988bcf48ce0edf644111b",
+      "bytes": 593
+    },
+    "config/AppliedEnergistics2/aerecipes/generated/processing/ic2.recipe": {
+      "sha256": "bd4919c7dcfd1675b4e3de8e210b0d2fecdaf60c094471315006700f65735c5e",
+      "bytes": 595
+    },
+    "config/AppliedEnergistics2/aerecipes/generated/processing/index.recipe": {
+      "sha256": "6c2958aa52268b899f7e22e2a38898287a1b1681d415cfd7b612487112a1048e",
+      "bytes": 270
+    },
+    "config/AppliedEnergistics2/aerecipes/generated/processing/mekanism.recipe": {
+      "sha256": "3635f39906dff1a67cbf6c19c17a1c2a5a4174f4f28addb689c3c9d4f5fe6612",
+      "bytes": 621
+    },
+    "config/AppliedEnergistics2/aerecipes/generated/processing/rotarycraft.recipe": {
+      "sha256": "8d08201153eb7fbcf59810a73e41a991b0f678fe490896ae6c1b334ca9424e8e",
+      "bytes": 575
+    },
+    "config/AppliedEnergistics2/aerecipes/generated/processing/te.recipe": {
+      "sha256": "a7245744c55f4be446aae499da42da04424bb64ad9bf1a48d7be2319144f974f",
+      "bytes": 602
+    },
+    "config/AppliedEnergistics2/aerecipes/generated/processing/vanilla.recipe": {
+      "sha256": "ed914c2a98c835d65343846e66534d910b6ffe58143b0163012283fb08c61cba",
+      "bytes": 286
+    },
+    "config/AppliedEnergistics2/aerecipes/generated/smelting/smelting.recipe": {
+      "sha256": "40f8dd22755b13345bf2042677ac1fed886491a1ce78a0fd51e6e40f60c90a61",
+      "bytes": 60
+    },
+    "config/AppliedEnergistics2/aerecipes/generated/tools/certus_quartz.recipe": {
+      "sha256": "30438b57209549495ebe74a284e3430eda225c2e251628f232a9176dd73ac94e",
+      "bytes": 1314
+    },
+    "config/AppliedEnergistics2/aerecipes/generated/tools/index.recipe": {
+      "sha256": "19774902ab78bc7b51f9d0de57ba082266ffff229e30135465e72b0d9d49f947",
+      "bytes": 191
+    },
+    "config/AppliedEnergistics2/aerecipes/generated/tools/matter_cannon.recipe": {
+      "sha256": "13c8ced949f89e91edbb12b2450cc9432c16b45a9d9faec008e316bb13af77be",
+      "bytes": 192
+    },
+    "config/AppliedEnergistics2/aerecipes/generated/tools/misctools.recipe": {
+      "sha256": "5b58387b7506c60850f3260a02e340485fdea7acfdc7f61b6efff365d2696a1c",
+      "bytes": 312
+    },
+    "config/AppliedEnergistics2/aerecipes/generated/tools/nether_quartz.recipe": {
+      "sha256": "40f87d35171e8edcd78dd0bbeaa303b096f1680b2244060c5be2bba32c0bf321",
+      "bytes": 1314
+    },
+    "config/AppliedEnergistics2/aerecipes/generated/tools/network.recipe": {
+      "sha256": "2fcdb74bbac6bb5b1bcb655d4aff5e603ea4fbef638706a5b64b827d1cec10f5",
+      "bytes": 763
+    },
+    "config/AppliedEnergistics2/aerecipes/generated/tools/paintballs.recipe": {
+      "sha256": "8bc1ee0898b26826ee67765e69c73cb965f4584b46e002412281898bd3b76018",
+      "bytes": 8453
+    },
+    "config/AppliedEnergistics2/aerecipes/items.csv": {
+      "sha256": "755f5733a36d663dc9e1fa66d7d3d728579e99eaa7bfb7a5ebe9f4eb9f4bdd6c",
+      "bytes": 2211637
+    },
+    "config/AppliedEnergistics2/aerecipes/README.html": {
+      "sha256": "a48ab2d550bd771c56536ca2cbc148d81e1b8beff257d6a15fac03226b63f4be",
+      "bytes": 14676
+    },
+    "config/AppliedEnergistics2/AppliedEnergistics2.cfg": {
+      "sha256": "a7f5a21afd76d4e949bf9a51ea2299747f392eb64c21ffa096a18a7f820d15de",
+      "bytes": 12831
+    },
+    "config/AppliedEnergistics2/CustomRecipes.cfg": {
+      "sha256": "c6278df9c1e25ee957f4d294a9000b610206b2509142eee49a74e56b19b744ea",
+      "bytes": 855
+    },
+    "config/AppliedEnergistics2/extracells.cfg": {
+      "sha256": "ab81158753262cafb54e958c26a1eeff46f1c5cc348534be84f69a8641906410",
+      "bytes": 1156
+    },
+    "config/AppliedEnergistics2/Facades.cfg": {
+      "sha256": "661cd844fe44c188c95368174e115681b69d63f5b6f62a676bb9331860599ebb",
+      "bytes": 1733
+    },
+    "config/AppliedEnergistics2/items.csv": {
+      "sha256": "d17a5d70e73e4d87dc3b8ca93e4f731028f8391bda532474482e5ccf54821790",
+      "bytes": 2339446
+    },
+    "config/AppliedEnergistics2/VersionChecker.cfg": {
+      "sha256": "6844c1419ce367c8d3ecbb41dba2c6629d2f38efec7e440926a049198e69a4cd",
+      "bytes": 756
+    },
+    "config/architecturecraft.cfg": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "config/aroma1997/aroma1997core.cfg": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "config/aroma1997/aroma1997sdimension.cfg": {
+      "sha256": "b0c2c9eca46495a42d0ee9344fd60f6b511d1d0ecef31740231f79a94d8ee99a",
+      "bytes": 2505
+    },
+    "config/aroma1997/aroma1997sdimension_gen.json": {
+      "sha256": "1eb3196da5198ae31ef581ef7454d69f0e07780a464e2185069a709ea93e6f90",
+      "bytes": 2096
+    },
+    "config/astralsorcery/aevitas_ore_perk.cfg": {
+      "sha256": "6b07d912612fa348a3765283d9373a1a5b3459f2ac4721f56bdd0a0c0e8a4c94",
+      "bytes": 1494
+    },
+    "config/astralsorcery/amulet_enchantments.cfg": {
+      "sha256": "96cf3979b990231946bd59b688b999dabf95e73507950649e3461f7885d03c15",
+      "bytes": 4260
+    },
+    "config/astralsorcery/fluid_rarities.cfg": {
+      "sha256": "65d8852170d1e1770a725e944b6abcf97e9ab486911dbaa07deba8bc781be612",
+      "bytes": 2150
+    },
+    "config/astralsorcery/herdable_animals_blacklist.cfg": {
+      "sha256": "89afdc1c6ea1f898a960f84d920f34e20d1ec145a9b76a42d19c1b06334f7414",
+      "bytes": 586
+    },
+    "config/astralsorcery/mineralis_ritual.cfg": {
+      "sha256": "6b07d912612fa348a3765283d9373a1a5b3459f2ac4721f56bdd0a0c0e8a4c94",
+      "bytes": 1494
+    },
+    "config/astralsorcery/perk_void_trash_replacement.cfg": {
+      "sha256": "6b07d912612fa348a3765283d9373a1a5b3459f2ac4721f56bdd0a0c0e8a4c94",
+      "bytes": 1494
+    },
+    "config/astralsorcery/treasure_shrine.cfg": {
+      "sha256": "6b07d912612fa348a3765283d9373a1a5b3459f2ac4721f56bdd0a0c0e8a4c94",
+      "bytes": 1494
+    },
+    "config/astralsorcery.cfg": {
+      "sha256": "1af425370b5ab4712593f2d71a22a9e5b40d02e68888b9e548ebc72f83461997",
+      "bytes": 55066
+    },
+    "config/badwithernocookie.cfg": {
+      "sha256": "31fb544f1bcb3cd6a8381ca8822c865aa5632d2a2f7a5ebf2daeea5d2a8d1bb6",
+      "bytes": 1529
+    },
+    "config/badwithernocookiereloaded.cfg": {
+      "sha256": "71af24ce80a59892569f1c3d840a09542dbdb49029f78fefd875b5e88127e1e6",
+      "bytes": 1487
+    },
+    "config/baubles.cfg": {
+      "sha256": "e508483e8a803419d2600e3135cd0ccb6ea71307e3b20ccefc7943cbde4e1b18",
+      "bytes": 162
+    },
+    "config/betteradvancements/betteradvancements.cfg": {
+      "sha256": "6b26c60fe7e9eecf218f6136ee9188a1538e560e2aced0a62b61b22404c24052",
+      "bytes": 990
+    },
+    "config/betterbuilderswands.cfg": {
+      "sha256": "aaa6c4a182b4dfb4de6434ec56c6990c5c4962fd393b3c72bbb12af220b6f180",
+      "bytes": 1991
+    },
+    "config/bibliocraft.cfg": {
+      "sha256": "09fdef7c88ceb6da96cea8b070d50a7e35fd0f21c49215d78d0051c519b5ad73",
+      "bytes": 4909
+    },
+    "config/biomesoplenty/biome_ids.json": {
+      "sha256": "661c59b8dc2bf2c4699c8afb1c923cae15c95e71149ca63747914ba682bddfc6",
+      "bytes": 1549
+    },
+    "config/biomesoplenty/biomes/bamboo_forest.json": {
+      "sha256": "7c283dfb75cae3628a9ceaf5b9de732e5ada8dc4e894b03d32078ce41055bd59",
+      "bytes": 77
+    },
+    "config/biomesoplenty/biomes/bayou.json": {
+      "sha256": "d2486e1fb163c683c74c62a6c5383fc50105a04d9c37c46f3cd7a71bb6933de1",
+      "bytes": 81
+    },
+    "config/biomesoplenty/biomes/bog.json": {
+      "sha256": "d2486e1fb163c683c74c62a6c5383fc50105a04d9c37c46f3cd7a71bb6933de1",
+      "bytes": 81
+    },
+    "config/biomesoplenty/biomes/boreal_forest.json": {
+      "sha256": "35ba7e493ea30025a31a9d68f53bf8e84729b2091d6719d3d02dd49cff3d28e8",
+      "bytes": 77
+    },
+    "config/biomesoplenty/biomes/brushland.json": {
+      "sha256": "f63ce40cc8b342b75e4f52173438da155c52e0a9a6bf0a74593ae1418cfdb45c",
+      "bytes": 76
+    },
+    "config/biomesoplenty/biomes/chaparral.json": {
+      "sha256": "6fb37384d405aea44d13003c369e5789c3a148d84ce21b2e5ec0ded6111f5ff4",
+      "bytes": 79
+    },
+    "config/biomesoplenty/biomes/cherry_blossom_grove.json": {
+      "sha256": "7c283dfb75cae3628a9ceaf5b9de732e5ada8dc4e894b03d32078ce41055bd59",
+      "bytes": 77
+    },
+    "config/biomesoplenty/biomes/cold_desert.json": {
+      "sha256": "0eb6eee5296ba5be2fd068b5e27be8ad47dd9963d51b6cb890c668f8e0617473",
+      "bytes": 81
+    },
+    "config/biomesoplenty/biomes/coniferous_forest.json": {
+      "sha256": "35ba7e493ea30025a31a9d68f53bf8e84729b2091d6719d3d02dd49cff3d28e8",
+      "bytes": 77
+    },
+    "config/biomesoplenty/biomes/coral_reef.json": {
+      "sha256": "35ba7e493ea30025a31a9d68f53bf8e84729b2091d6719d3d02dd49cff3d28e8",
+      "bytes": 77
+    },
+    "config/biomesoplenty/biomes/dead_forest.json": {
+      "sha256": "0eb6eee5296ba5be2fd068b5e27be8ad47dd9963d51b6cb890c668f8e0617473",
+      "bytes": 81
+    },
+    "config/biomesoplenty/biomes/dead_swamp.json": {
+      "sha256": "d2486e1fb163c683c74c62a6c5383fc50105a04d9c37c46f3cd7a71bb6933de1",
+      "bytes": 81
+    },
+    "config/biomesoplenty/biomes/defaults/biomesoplenty/alps.json": {
+      "sha256": "790145e6eeb051e5af6ea21d2fc74b3123c5e4e09e151e5b97f43eb6222d3b91",
+      "bytes": 1556
+    },
+    "config/biomesoplenty/biomes/defaults/biomesoplenty/alps_foothills.json": {
+      "sha256": "89d53519c4ce40e56918f7b16e8763a03e968b84bd84c77510d7851d7d9fe554",
+      "bytes": 2062
+    },
+    "config/biomesoplenty/biomes/defaults/biomesoplenty/bamboo_forest.json": {
+      "sha256": "1913a609f2306f0f64c412ea70ea6a4f7d4fa2610815224566bd9444fb4e6e91",
+      "bytes": 3433
+    },
+    "config/biomesoplenty/biomes/defaults/biomesoplenty/bayou.json": {
+      "sha256": "108d3f5201d7c57e2f30c139738d4d70ae3b9e9d6f734ebed65459c5199af1b3",
+      "bytes": 5968
+    },
+    "config/biomesoplenty/biomes/defaults/biomesoplenty/bog.json": {
+      "sha256": "f55f10da8774230e30a95d55e893fdb7c6f4e19e490063055cc7643355ab4968",
+      "bytes": 6489
+    },
+    "config/biomesoplenty/biomes/defaults/biomesoplenty/boreal_forest.json": {
+      "sha256": "2f68fc8e5e4727bbc5a51320418ee2f217bb462c75d7104fa51c737b93e8d5b6",
+      "bytes": 3285
+    },
+    "config/biomesoplenty/biomes/defaults/biomesoplenty/brushland.json": {
+      "sha256": "e43d89c67e66eca5906816ae5ea7cf11cfed2d434ee90b775bc86c8e0acd1147",
+      "bytes": 2844
+    },
+    "config/biomesoplenty/biomes/defaults/biomesoplenty/chaparral.json": {
+      "sha256": "33939786f5b531d44a9934a3a976b02e17438dfed17beaa8d58dc01b48cd0310",
+      "bytes": 3832
+    },
+    "config/biomesoplenty/biomes/defaults/biomesoplenty/cherry_blossom_grove.json": {
+      "sha256": "639e8e997b28f25340c9443440472172094c354d2e079ff2107cf5bab92d5ba6",
+      "bytes": 4484
+    },
+    "config/biomesoplenty/biomes/defaults/biomesoplenty/cold_desert.json": {
+      "sha256": "b5e806ff3afe1f1bddf9f17c0415e5f1148248b842eb9b1b1abf6ab0c537293d",
+      "bytes": 2485
+    },
+    "config/biomesoplenty/biomes/defaults/biomesoplenty/coniferous_forest.json": {
+      "sha256": "954d88abd9297b0ab1bd4f2c39b01f922cd70c673cd43ffc772e33ed68b616c5",
+      "bytes": 4915
+    },
+    "config/biomesoplenty/biomes/defaults/biomesoplenty/coral_reef.json": {
+      "sha256": "88560b34fa10488db4b1e93f793f89d5f76c3812afae18f9356c6f9cfd6f2431",
+      "bytes": 3150
+    },
+    "config/biomesoplenty/biomes/defaults/biomesoplenty/corrupted_sands.json": {
+      "sha256": "068c091f763d59abf7691682544a440513b8d4bc5f708cd4cabae82567d9ff30",
+      "bytes": 1661
+    },
+    "config/biomesoplenty/biomes/defaults/biomesoplenty/crag.json": {
+      "sha256": "8d7751cdc73e68bcf82c424207e3093805875898541b721075382e5b8d0978f5",
+      "bytes": 2402
+    },
+    "config/biomesoplenty/biomes/defaults/biomesoplenty/dead_forest.json": {
+      "sha256": "f18266ad97e212e26ddf25e0cbd63e6a54fc36f09e781dfb441f43beb8639f71",
+      "bytes": 2986
+    },
+    "config/biomesoplenty/biomes/defaults/biomesoplenty/dead_swamp.json": {
+      "sha256": "49ee00016033b33ca6ec70f2285cb69659004eb21279fb1ea49edcba72ad5134",
+      "bytes": 3496
+    },
+    "config/biomesoplenty/biomes/defaults/biomesoplenty/eucalyptus_forest.json": {
+      "sha256": "7f4d696a1f75bc6c663ceb057d8ea7bc3df4d52b04649da9448f9950b33e9e80",
+      "bytes": 3959
+    },
+    "config/biomesoplenty/biomes/defaults/biomesoplenty/fen.json": {
+      "sha256": "e97829cf11ef8d0af6ff0fb73d2ab84e09781e1d57bcf4b28c990bf96c8c219f",
+      "bytes": 5138
+    },
+    "config/biomesoplenty/biomes/defaults/biomesoplenty/flower_field.json": {
+      "sha256": "7a39d1853899c2da4aaf18a4c983deae1ee03fd36442312b03d5d745dc2d667e",
+      "bytes": 2135
+    },
+    "config/biomesoplenty/biomes/defaults/biomesoplenty/flower_island.json": {
+      "sha256": "81b168940faf5e175a44120178d4753cf8dbe13f0b07c450614a3e9a2c79d508",
+      "bytes": 2859
+    },
+    "config/biomesoplenty/biomes/defaults/biomesoplenty/fungi_forest.json": {
+      "sha256": "c18cb529f441f504cf40c8ade1e1dc3e76bf6e4031fb5a0070edcab67ca70c70",
+      "bytes": 2154
+    },
+    "config/biomesoplenty/biomes/defaults/biomesoplenty/glacier.json": {
+      "sha256": "8a31238d772b3bd43265f844a682d80b67b5d6c0955ae76450e9b3a6bbf182a5",
+      "bytes": 1751
+    },
+    "config/biomesoplenty/biomes/defaults/biomesoplenty/grassland.json": {
+      "sha256": "fd6a23d212d98f3697c5e0e6f885028e448f3c5dc8ae18d49c68d4cd69c64f49",
+      "bytes": 4318
+    },
+    "config/biomesoplenty/biomes/defaults/biomesoplenty/gravel_beach.json": {
+      "sha256": "0e2baa55d50561c3fa4544a4bf4d89cc94e12e2c05821052e3b1c41123691920",
+      "bytes": 1352
+    },
+    "config/biomesoplenty/biomes/defaults/biomesoplenty/grove.json": {
+      "sha256": "8fe455fc42627c9fcf32b69d92a70e42eca41e326a979d9fad9a95a44202c6da",
+      "bytes": 3337
+    },
+    "config/biomesoplenty/biomes/defaults/biomesoplenty/highland.json": {
+      "sha256": "d78d48ef927660daae834fcc245679f7417121dd41d0a09bcc16aa09a38fbaf3",
+      "bytes": 1723
+    },
+    "config/biomesoplenty/biomes/defaults/biomesoplenty/kelp_forest.json": {
+      "sha256": "029fbe0e5b2d3422cc705635c00200b6d0e17bfd2ca4f2755de3b708ec631420",
+      "bytes": 2827
+    },
+    "config/biomesoplenty/biomes/defaults/biomesoplenty/land_of_lakes.json": {
+      "sha256": "33d3fe09439628e5a12674f025266d6a52e73bc7190ebefeec6c185abdd288bc",
+      "bytes": 5057
+    },
+    "config/biomesoplenty/biomes/defaults/biomesoplenty/lavender_fields.json": {
+      "sha256": "3f82d8652ebfe78eeb9d99f16a297228d94dc113ecbffc4cc5be5112ede59ac8",
+      "bytes": 2315
+    },
+    "config/biomesoplenty/biomes/defaults/biomesoplenty/lush_desert.json": {
+      "sha256": "6af9d43e9ea5fc916fe005968cb216c00db6e86c750517752190f96f588fd14f",
+      "bytes": 5382
+    },
+    "config/biomesoplenty/biomes/defaults/biomesoplenty/lush_swamp.json": {
+      "sha256": "3b333320e29cce859bed7f1af38d94d5af22a9f02f6a82f3c55db1614b4ea3f9",
+      "bytes": 7215
+    },
+    "config/biomesoplenty/biomes/defaults/biomesoplenty/mangrove.json": {
+      "sha256": "51d56fe8cbd65c6b9df87643abf300d84db61f31189ef54e44446e238d446034",
+      "bytes": 2201
+    },
+    "config/biomesoplenty/biomes/defaults/biomesoplenty/maple_woods.json": {
+      "sha256": "c972f9271ee9dca71168d8d69ec21c168dbc7e9b693638c389063ea32bfcbdd6",
+      "bytes": 3030
+    },
+    "config/biomesoplenty/biomes/defaults/biomesoplenty/marsh.json": {
+      "sha256": "83ab02611e2d0147a005e9fbc7baff6f6925887eed802c934929826bea72e240",
+      "bytes": 3094
+    },
+    "config/biomesoplenty/biomes/defaults/biomesoplenty/meadow.json": {
+      "sha256": "674585e53806d4b8cfc37c653cac853d444f6f16914312dcd488778ec696da96",
+      "bytes": 5181
+    },
+    "config/biomesoplenty/biomes/defaults/biomesoplenty/moor.json": {
+      "sha256": "08cf4fbde2ccb2db4ced229a063580b950ec0079f1b73f81c384e3a730642a30",
+      "bytes": 4026
+    },
+    "config/biomesoplenty/biomes/defaults/biomesoplenty/mountain.json": {
+      "sha256": "908d8d246638e8687fdb74f5372fc24c5397a64de4d1f70c11a57dd0bb4b4c32",
+      "bytes": 2911
+    },
+    "config/biomesoplenty/biomes/defaults/biomesoplenty/mountain_foothills.json": {
+      "sha256": "b0fa34a88944e090e11e52feb30cc2874a0d7bd0c5313b13192e9f77de6dda2c",
+      "bytes": 3798
+    },
+    "config/biomesoplenty/biomes/defaults/biomesoplenty/mystic_grove.json": {
+      "sha256": "9342b2eb6fa7ecc1fef3a6621ead6b7dc40bf23765769d77204ffad3223d1c65",
+      "bytes": 5756
+    },
+    "config/biomesoplenty/biomes/defaults/biomesoplenty/oasis.json": {
+      "sha256": "fd93ef37fc1fd78e9e26f3ba79357dfa8fdf75ca46af87af6fa7ca4fccc88e16",
+      "bytes": 3409
+    },
+    "config/biomesoplenty/biomes/defaults/biomesoplenty/ominous_woods.json": {
+      "sha256": "e1a7873bbd872ce7b314f01a30cf7b819ca35ef387e693a5348f1c69cecef742",
+      "bytes": 4062
+    },
+    "config/biomesoplenty/biomes/defaults/biomesoplenty/orchard.json": {
+      "sha256": "7c5e11af4b93f4841d444abadc85e3311c30f7821227090cc6bf300c5ab9ae02",
+      "bytes": 3286
+    },
+    "config/biomesoplenty/biomes/defaults/biomesoplenty/origin_beach.json": {
+      "sha256": "a845963c9abec1415d0ce0eec0ba0d9de1d038a53857b87c404d767e61a16f20",
+      "bytes": 1412
+    },
+    "config/biomesoplenty/biomes/defaults/biomesoplenty/origin_island.json": {
+      "sha256": "8845e1de63122e0ac671192da42d4cc249a3f2d81cd30b2d1d486d9d09f711fb",
+      "bytes": 2101
+    },
+    "config/biomesoplenty/biomes/defaults/biomesoplenty/outback.json": {
+      "sha256": "0bbe7190409a594847db3899acc3ace5be409b3a7304db2b068c62bc21bc9b7d",
+      "bytes": 3269
+    },
+    "config/biomesoplenty/biomes/defaults/biomesoplenty/overgrown_cliffs.json": {
+      "sha256": "784200b02ce81acf23a2bbcedbd338499c77d522644b7719ce650bc7a85dbec7",
+      "bytes": 2168
+    },
+    "config/biomesoplenty/biomes/defaults/biomesoplenty/pasture.json": {
+      "sha256": "6f4c4581bb3cb002da6f211c93cd5e7ffbbd560ef45e2d0934fa0f5a002a7bc8",
+      "bytes": 2289
+    },
+    "config/biomesoplenty/biomes/defaults/biomesoplenty/phantasmagoric_inferno.json": {
+      "sha256": "c9712c0038b6ff0d07ad214b587d13d3b6d73b2112be8d7fffe492d20da38343",
+      "bytes": 1632
+    },
+    "config/biomesoplenty/biomes/defaults/biomesoplenty/prairie.json": {
+      "sha256": "3a9c78bf4376644bdc196927ccee936c2a7999a2beab41e9890f3c4e024b237f",
+      "bytes": 3794
+    },
+    "config/biomesoplenty/biomes/defaults/biomesoplenty/quagmire.json": {
+      "sha256": "f84f8bbdbf2c39be91e9568394dd9ba56e69aa3d56049f72e8b8e68f6724d4d6",
+      "bytes": 3986
+    },
+    "config/biomesoplenty/biomes/defaults/biomesoplenty/rainforest.json": {
+      "sha256": "6b6ab14b412f513ac23a9fdbcc7f5b2773ca456d30899c6383db1313e1857242",
+      "bytes": 4394
+    },
+    "config/biomesoplenty/biomes/defaults/biomesoplenty/redwood_forest.json": {
+      "sha256": "8cf0772d3a3bd6338b8c97c0b4d6ca4b1426babec312db7b4b71aea399ea90ed",
+      "bytes": 3703
+    },
+    "config/biomesoplenty/biomes/defaults/biomesoplenty/redwood_forest_edge.json": {
+      "sha256": "62910d6b413db3bee1683f4d90f040f4d89cfb2aab4e6e4f239e2844fe9735de",
+      "bytes": 3043
+    },
+    "config/biomesoplenty/biomes/defaults/biomesoplenty/sacred_springs.json": {
+      "sha256": "28f431391bbe0665fb0f9ed3e3a1406447de66a26e8c282bf7075a55a9e13a3b",
+      "bytes": 5537
+    },
+    "config/biomesoplenty/biomes/defaults/biomesoplenty/seasonal_forest.json": {
+      "sha256": "255a0699c94f6356ec284a9bde8ad7f11f7674a8346545811e9b1eac22f9758d",
+      "bytes": 4920
+    },
+    "config/biomesoplenty/biomes/defaults/biomesoplenty/shield.json": {
+      "sha256": "a97d7a5b960e15b2f155317e9b19b5b60f9d90bb0346d0cd66c71c08a1d3952e",
+      "bytes": 4213
+    },
+    "config/biomesoplenty/biomes/defaults/biomesoplenty/shrubland.json": {
+      "sha256": "bf00e882a8aeb43fd8da24d4cd0957fcc889e6a5af970e0c2f75207615657a2d",
+      "bytes": 4160
+    },
+    "config/biomesoplenty/biomes/defaults/biomesoplenty/snowy_coniferous_forest.json": {
+      "sha256": "ec4db5dd62a6fad27bcf85377aa31cb78209a797ca04d10992e1a8b29da1a06a",
+      "bytes": 3258
+    },
+    "config/biomesoplenty/biomes/defaults/biomesoplenty/snowy_forest.json": {
+      "sha256": "88ef57f20adfe11c11855bafd15583bc2fda96dcc89349e41a8c0d9ef4a43792",
+      "bytes": 2661
+    },
+    "config/biomesoplenty/biomes/defaults/biomesoplenty/snowy_tundra.json": {
+      "sha256": "c98590276f170007cbfdfe9491d8e94c1949cf6ca171dd98a4697bab1d5dd9d3",
+      "bytes": 3502
+    },
+    "config/biomesoplenty/biomes/defaults/biomesoplenty/steppe.json": {
+      "sha256": "fd4baa54ce11864876c5080af83aa535cf565f9a121a7ad6a904b3acf70995d1",
+      "bytes": 2638
+    },
+    "config/biomesoplenty/biomes/defaults/biomesoplenty/temperate_rainforest.json": {
+      "sha256": "6b0fe06c9c7c6c62aab64776988251d2183e1e8b97e272f38e20c395384c9de0",
+      "bytes": 7466
+    },
+    "config/biomesoplenty/biomes/defaults/biomesoplenty/tropical_island.json": {
+      "sha256": "958752f85b81d6a3665098045281c9cb477c19ae7ed8129aabf0c3d17426669c",
+      "bytes": 3296
+    },
+    "config/biomesoplenty/biomes/defaults/biomesoplenty/tropical_rainforest.json": {
+      "sha256": "2ac00a47f4bef050a6db2eecac8dd61d7e65180844d787e17b9340e517c3a9bd",
+      "bytes": 6167
+    },
+    "config/biomesoplenty/biomes/defaults/biomesoplenty/tundra.json": {
+      "sha256": "f7e2157cc29c5a0834918b0acc7a92dffd28bad9dd482075526bccd4bf7f46e6",
+      "bytes": 3659
+    },
+    "config/biomesoplenty/biomes/defaults/biomesoplenty/undergarden.json": {
+      "sha256": "92e47a500c7fac58aacdd4574ff8427ed4c72e0c712b26aaff5f8317ce07ab19",
+      "bytes": 2601
+    },
+    "config/biomesoplenty/biomes/defaults/biomesoplenty/visceral_heap.json": {
+      "sha256": "d3a18eaa762abee27a0156446de59856acfd5bc0c576c98dcfcc8504c5c2206b",
+      "bytes": 1814
+    },
+    "config/biomesoplenty/biomes/defaults/biomesoplenty/volcanic_island.json": {
+      "sha256": "8b7f20d7a592d329bf6b975eb497e2e22f3bf9e910c864011851e1d0507f9a55",
+      "bytes": 2257
+    },
+    "config/biomesoplenty/biomes/defaults/biomesoplenty/wasteland.json": {
+      "sha256": "b8f8e35392c66df47f2774ae1cc0692127414451d44f2531bd1af4baf0153237",
+      "bytes": 3105
+    },
+    "config/biomesoplenty/biomes/defaults/biomesoplenty/wetland.json": {
+      "sha256": "a37d6950a0c6299e6b649c329d4cfbb41339cb05d310f3571911701efe763a59",
+      "bytes": 7163
+    },
+    "config/biomesoplenty/biomes/defaults/biomesoplenty/white_beach.json": {
+      "sha256": "69a9e54dcf8da7d5b8da5bf1ba8a23c8c5cced9da1dbfdfdc2beba728df8d6eb",
+      "bytes": 1378
+    },
+    "config/biomesoplenty/biomes/defaults/biomesoplenty/woodland.json": {
+      "sha256": "eda9bc306a709385679c2c5d00720f8f7407be4d8e37bf428b402805b68e2071",
+      "bytes": 4680
+    },
+    "config/biomesoplenty/biomes/defaults/biomesoplenty/xeric_shrubland.json": {
+      "sha256": "dedc586fbe0257c5a5e66dca083619529712674b4f492f0a1ceeeeff1ca8ab3d",
+      "bytes": 3182
+    },
+    "config/biomesoplenty/biomes/defaults/vanilla/beaches.json": {
+      "sha256": "11ce93e57c84aeaec79945e82d2ee7e1a708159017d3e7877657c89c265f348a",
+      "bytes": 1242
+    },
+    "config/biomesoplenty/biomes/defaults/vanilla/birch_forest.json": {
+      "sha256": "db02c3a484b5e0f0c83d20dae1d37bffc5b38c07b713515392a9e4e271df7bf2",
+      "bytes": 2912
+    },
+    "config/biomesoplenty/biomes/defaults/vanilla/birch_forest_hills.json": {
+      "sha256": "db02c3a484b5e0f0c83d20dae1d37bffc5b38c07b713515392a9e4e271df7bf2",
+      "bytes": 2912
+    },
+    "config/biomesoplenty/biomes/defaults/vanilla/desert.json": {
+      "sha256": "d43ff912e1430e195d9d174a6cc00238fcf4e4238fbb695d54d6e5dc0e280d41",
+      "bytes": 1625
+    },
+    "config/biomesoplenty/biomes/defaults/vanilla/desert_hills.json": {
+      "sha256": "310b12a3476ce9cbf3e9aa9832a7627617953a0b6fcc1391470dcb65ec5516d3",
+      "bytes": 1293
+    },
+    "config/biomesoplenty/biomes/defaults/vanilla/extreme_hills.json": {
+      "sha256": "c3c147a263ac9d839dc4b1e9cdbcff00af6aa2461b2f01d974bfcccdad53a599",
+      "bytes": 1489
+    },
+    "config/biomesoplenty/biomes/defaults/vanilla/extreme_hills_with_trees.json": {
+      "sha256": "c3c147a263ac9d839dc4b1e9cdbcff00af6aa2461b2f01d974bfcccdad53a599",
+      "bytes": 1489
+    },
+    "config/biomesoplenty/biomes/defaults/vanilla/forest.json": {
+      "sha256": "85bcf5e240eca02369bafcb70dc284feff12bea91845a0b081f93c28587d54fd",
+      "bytes": 3395
+    },
+    "config/biomesoplenty/biomes/defaults/vanilla/forest_hills.json": {
+      "sha256": "cd3b4a2f7203b7f09163f7f9c1d2535cae45cfe15b791fc835be511009568e82",
+      "bytes": 3396
+    },
+    "config/biomesoplenty/biomes/defaults/vanilla/hell.json": {
+      "sha256": "1c4a4cbe3eb11a647e8357a20225b21448af1f99452b29174b5a9dc17f061a29",
+      "bytes": 991
+    },
+    "config/biomesoplenty/biomes/defaults/vanilla/ice_flats.json": {
+      "sha256": "d51f3a018c095c6899c3bfbc0274f0812679e56007e1913acd2845dc47eeec51",
+      "bytes": 1252
+    },
+    "config/biomesoplenty/biomes/defaults/vanilla/ice_mountains.json": {
+      "sha256": "d51f3a018c095c6899c3bfbc0274f0812679e56007e1913acd2845dc47eeec51",
+      "bytes": 1252
+    },
+    "config/biomesoplenty/biomes/defaults/vanilla/jungle.json": {
+      "sha256": "9b751f8e910966ffe852ec5dc71448c547688675da591dd25ccddc4bb9c5e814",
+      "bytes": 1965
+    },
+    "config/biomesoplenty/biomes/defaults/vanilla/jungle_hills.json": {
+      "sha256": "9b751f8e910966ffe852ec5dc71448c547688675da591dd25ccddc4bb9c5e814",
+      "bytes": 1965
+    },
+    "config/biomesoplenty/biomes/defaults/vanilla/mesa.json": {
+      "sha256": "93ca5fde991a6bad6251b38cc774ffb5d0310a80659f7fb7406b190e9ec379cb",
+      "bytes": 1537
+    },
+    "config/biomesoplenty/biomes/defaults/vanilla/mesa_clear_rock.json": {
+      "sha256": "93ca5fde991a6bad6251b38cc774ffb5d0310a80659f7fb7406b190e9ec379cb",
+      "bytes": 1537
+    },
+    "config/biomesoplenty/biomes/defaults/vanilla/mushroom_island.json": {
+      "sha256": "6249e197ec40a61740b12f140c884b760dd1884f3c9f0caf6b584aba7af6fead",
+      "bytes": 2303
+    },
+    "config/biomesoplenty/biomes/defaults/vanilla/mutated_forest.json": {
+      "sha256": "fecaff8714828d5fc1fb21336ff73bb080b9456943df05e4dd54f9e910cff675",
+      "bytes": 2990
+    },
+    "config/biomesoplenty/biomes/defaults/vanilla/ocean.json": {
+      "sha256": "0cf38fbbc51492eb47ef42ca0f6c63989417f067975284aab1be2ba60d539e80",
+      "bytes": 1056
+    },
+    "config/biomesoplenty/biomes/defaults/vanilla/plains.json": {
+      "sha256": "a979aab699b229319d6c81009c9dcce44dc140baf78544c89f07442afbf0e1d0",
+      "bytes": 1248
+    },
+    "config/biomesoplenty/biomes/defaults/vanilla/redwood_taiga.json": {
+      "sha256": "150e78e10c71600ef372682f62763bd6ed24c105b4bd56e3294a0fe949b5bec7",
+      "bytes": 1261
+    },
+    "config/biomesoplenty/biomes/defaults/vanilla/redwood_taiga_hills.json": {
+      "sha256": "150e78e10c71600ef372682f62763bd6ed24c105b4bd56e3294a0fe949b5bec7",
+      "bytes": 1261
+    },
+    "config/biomesoplenty/biomes/defaults/vanilla/roofed_forest.json": {
+      "sha256": "cb744089b71700a28aca94295c7feb08faeb727231442407dc7496e05d720ec7",
+      "bytes": 1390
+    },
+    "config/biomesoplenty/biomes/defaults/vanilla/savanna.json": {
+      "sha256": "f03e8d3c81a46d494fa91230c7ee7015abbc0527a2197d583c7bf616e84968eb",
+      "bytes": 1574
+    },
+    "config/biomesoplenty/biomes/defaults/vanilla/savanna_rock.json": {
+      "sha256": "647729adee5599868bbabb8f69d5cb6c22bc84e2c14f48a0919e9f35c46a5ca4",
+      "bytes": 1242
+    },
+    "config/biomesoplenty/biomes/defaults/vanilla/sky.json": {
+      "sha256": "9c38be193b590150873d14183d428f5a335f4178c3c06668a2e11c055071c2e2",
+      "bytes": 1524
+    },
+    "config/biomesoplenty/biomes/defaults/vanilla/swampland.json": {
+      "sha256": "7963aeaa4668e58c3f154ba216d419ed41862f7a4aa046a1fd8b42af292a0918",
+      "bytes": 4195
+    },
+    "config/biomesoplenty/biomes/defaults/vanilla/taiga.json": {
+      "sha256": "150e78e10c71600ef372682f62763bd6ed24c105b4bd56e3294a0fe949b5bec7",
+      "bytes": 1261
+    },
+    "config/biomesoplenty/biomes/defaults/vanilla/taiga_cold.json": {
+      "sha256": "cc881c2692afc963ab6440a8b661c98607cad5218b8f017e16187282e93f8f44",
+      "bytes": 1252
+    },
+    "config/biomesoplenty/biomes/defaults/vanilla/taiga_cold_hills.json": {
+      "sha256": "cc881c2692afc963ab6440a8b661c98607cad5218b8f017e16187282e93f8f44",
+      "bytes": 1252
+    },
+    "config/biomesoplenty/biomes/defaults/vanilla/taiga_hills.json": {
+      "sha256": "150e78e10c71600ef372682f62763bd6ed24c105b4bd56e3294a0fe949b5bec7",
+      "bytes": 1261
+    },
+    "config/biomesoplenty/biomes/eucalyptus_forest.json": {
+      "sha256": "7c283dfb75cae3628a9ceaf5b9de732e5ada8dc4e894b03d32078ce41055bd59",
+      "bytes": 77
+    },
+    "config/biomesoplenty/biomes/fen.json": {
+      "sha256": "d2486e1fb163c683c74c62a6c5383fc50105a04d9c37c46f3cd7a71bb6933de1",
+      "bytes": 81
+    },
+    "config/biomesoplenty/biomes/flower_field.json": {
+      "sha256": "6fb37384d405aea44d13003c369e5789c3a148d84ce21b2e5ec0ded6111f5ff4",
+      "bytes": 79
+    },
+    "config/biomesoplenty/biomes/flower_island.json": {
+      "sha256": "7c283dfb75cae3628a9ceaf5b9de732e5ada8dc4e894b03d32078ce41055bd59",
+      "bytes": 77
+    },
+    "config/biomesoplenty/biomes/glacier.json": {
+      "sha256": "0eb6eee5296ba5be2fd068b5e27be8ad47dd9963d51b6cb890c668f8e0617473",
+      "bytes": 81
+    },
+    "config/biomesoplenty/biomes/grassland.json": {
+      "sha256": "6fb37384d405aea44d13003c369e5789c3a148d84ce21b2e5ec0ded6111f5ff4",
+      "bytes": 79
+    },
+    "config/biomesoplenty/biomes/grove.json": {
+      "sha256": "35ba7e493ea30025a31a9d68f53bf8e84729b2091d6719d3d02dd49cff3d28e8",
+      "bytes": 77
+    },
+    "config/biomesoplenty/biomes/heathland.json": {
+      "sha256": "6fb37384d405aea44d13003c369e5789c3a148d84ce21b2e5ec0ded6111f5ff4",
+      "bytes": 79
+    },
+    "config/biomesoplenty/biomes/kelp_forest.json": {
+      "sha256": "35ba7e493ea30025a31a9d68f53bf8e84729b2091d6719d3d02dd49cff3d28e8",
+      "bytes": 77
+    },
+    "config/biomesoplenty/biomes/land_of_lakes.json": {
+      "sha256": "d2486e1fb163c683c74c62a6c5383fc50105a04d9c37c46f3cd7a71bb6933de1",
+      "bytes": 81
+    },
+    "config/biomesoplenty/biomes/lavender_fields.json": {
+      "sha256": "6fb37384d405aea44d13003c369e5789c3a148d84ce21b2e5ec0ded6111f5ff4",
+      "bytes": 79
+    },
+    "config/biomesoplenty/biomes/lush_desert.json": {
+      "sha256": "f63ce40cc8b342b75e4f52173438da155c52e0a9a6bf0a74593ae1418cfdb45c",
+      "bytes": 76
+    },
+    "config/biomesoplenty/biomes/lush_swamp.json": {
+      "sha256": "d2486e1fb163c683c74c62a6c5383fc50105a04d9c37c46f3cd7a71bb6933de1",
+      "bytes": 81
+    },
+    "config/biomesoplenty/biomes/mangrove.json": {
+      "sha256": "35ba7e493ea30025a31a9d68f53bf8e84729b2091d6719d3d02dd49cff3d28e8",
+      "bytes": 77
+    },
+    "config/biomesoplenty/biomes/maple_woods.json": {
+      "sha256": "0eb6eee5296ba5be2fd068b5e27be8ad47dd9963d51b6cb890c668f8e0617473",
+      "bytes": 81
+    },
+    "config/biomesoplenty/biomes/marsh.json": {
+      "sha256": "d2486e1fb163c683c74c62a6c5383fc50105a04d9c37c46f3cd7a71bb6933de1",
+      "bytes": 81
+    },
+    "config/biomesoplenty/biomes/meadow.json": {
+      "sha256": "6fb37384d405aea44d13003c369e5789c3a148d84ce21b2e5ec0ded6111f5ff4",
+      "bytes": 79
+    },
+    "config/biomesoplenty/biomes/moor.json": {
+      "sha256": "d2486e1fb163c683c74c62a6c5383fc50105a04d9c37c46f3cd7a71bb6933de1",
+      "bytes": 81
+    },
+    "config/biomesoplenty/biomes/mountain_peaks.json": {
+      "sha256": "7c283dfb75cae3628a9ceaf5b9de732e5ada8dc4e894b03d32078ce41055bd59",
+      "bytes": 77
+    },
+    "config/biomesoplenty/biomes/mystic_grove.json": {
+      "sha256": "7c283dfb75cae3628a9ceaf5b9de732e5ada8dc4e894b03d32078ce41055bd59",
+      "bytes": 77
+    },
+    "config/biomesoplenty/biomes/oasis.json": {
+      "sha256": "f63ce40cc8b342b75e4f52173438da155c52e0a9a6bf0a74593ae1418cfdb45c",
+      "bytes": 76
+    },
+    "config/biomesoplenty/biomes/ominous_woods.json": {
+      "sha256": "d2486e1fb163c683c74c62a6c5383fc50105a04d9c37c46f3cd7a71bb6933de1",
+      "bytes": 81
+    },
+    "config/biomesoplenty/biomes/orchard.json": {
+      "sha256": "6fb37384d405aea44d13003c369e5789c3a148d84ce21b2e5ec0ded6111f5ff4",
+      "bytes": 79
+    },
+    "config/biomesoplenty/biomes/outback.json": {
+      "sha256": "f63ce40cc8b342b75e4f52173438da155c52e0a9a6bf0a74593ae1418cfdb45c",
+      "bytes": 76
+    },
+    "config/biomesoplenty/biomes/prairie.json": {
+      "sha256": "6fb37384d405aea44d13003c369e5789c3a148d84ce21b2e5ec0ded6111f5ff4",
+      "bytes": 79
+    },
+    "config/biomesoplenty/biomes/Put biome config files here": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "config/biomesoplenty/biomes/quagmire.json": {
+      "sha256": "d2486e1fb163c683c74c62a6c5383fc50105a04d9c37c46f3cd7a71bb6933de1",
+      "bytes": 81
+    },
+    "config/biomesoplenty/biomes/rainforest.json": {
+      "sha256": "7c283dfb75cae3628a9ceaf5b9de732e5ada8dc4e894b03d32078ce41055bd59",
+      "bytes": 77
+    },
+    "config/biomesoplenty/biomes/redwood_forest.json": {
+      "sha256": "35ba7e493ea30025a31a9d68f53bf8e84729b2091d6719d3d02dd49cff3d28e8",
+      "bytes": 77
+    },
+    "config/biomesoplenty/biomes/sacred_springs.json": {
+      "sha256": "7c283dfb75cae3628a9ceaf5b9de732e5ada8dc4e894b03d32078ce41055bd59",
+      "bytes": 77
+    },
+    "config/biomesoplenty/biomes/seasonal_forest.json": {
+      "sha256": "35ba7e493ea30025a31a9d68f53bf8e84729b2091d6719d3d02dd49cff3d28e8",
+      "bytes": 77
+    },
+    "config/biomesoplenty/biomes/shield.json": {
+      "sha256": "35ba7e493ea30025a31a9d68f53bf8e84729b2091d6719d3d02dd49cff3d28e8",
+      "bytes": 77
+    },
+    "config/biomesoplenty/biomes/shrubland.json": {
+      "sha256": "6fb37384d405aea44d13003c369e5789c3a148d84ce21b2e5ec0ded6111f5ff4",
+      "bytes": 79
+    },
+    "config/biomesoplenty/biomes/snowy_coniferous_forest.json": {
+      "sha256": "0eb6eee5296ba5be2fd068b5e27be8ad47dd9963d51b6cb890c668f8e0617473",
+      "bytes": 81
+    },
+    "config/biomesoplenty/biomes/snowy_forest.json": {
+      "sha256": "0eb6eee5296ba5be2fd068b5e27be8ad47dd9963d51b6cb890c668f8e0617473",
+      "bytes": 81
+    },
+    "config/biomesoplenty/biomes/steppe.json": {
+      "sha256": "f63ce40cc8b342b75e4f52173438da155c52e0a9a6bf0a74593ae1418cfdb45c",
+      "bytes": 76
+    },
+    "config/biomesoplenty/biomes/temperate_rainforest.json": {
+      "sha256": "35ba7e493ea30025a31a9d68f53bf8e84729b2091d6719d3d02dd49cff3d28e8",
+      "bytes": 77
+    },
+    "config/biomesoplenty/biomes/tropical_island.json": {
+      "sha256": "7c283dfb75cae3628a9ceaf5b9de732e5ada8dc4e894b03d32078ce41055bd59",
+      "bytes": 77
+    },
+    "config/biomesoplenty/biomes/tropical_rainforest.json": {
+      "sha256": "7c283dfb75cae3628a9ceaf5b9de732e5ada8dc4e894b03d32078ce41055bd59",
+      "bytes": 77
+    },
+    "config/biomesoplenty/biomes/tundra.json": {
+      "sha256": "0eb6eee5296ba5be2fd068b5e27be8ad47dd9963d51b6cb890c668f8e0617473",
+      "bytes": 81
+    },
+    "config/biomesoplenty/biomes/volcanic_island.json": {
+      "sha256": "f63ce40cc8b342b75e4f52173438da155c52e0a9a6bf0a74593ae1418cfdb45c",
+      "bytes": 76
+    },
+    "config/biomesoplenty/biomes/wasteland.json": {
+      "sha256": "f63ce40cc8b342b75e4f52173438da155c52e0a9a6bf0a74593ae1418cfdb45c",
+      "bytes": 76
+    },
+    "config/biomesoplenty/biomes/wetland.json": {
+      "sha256": "d2486e1fb163c683c74c62a6c5383fc50105a04d9c37c46f3cd7a71bb6933de1",
+      "bytes": 81
+    },
+    "config/biomesoplenty/biomes/woodland.json": {
+      "sha256": "35ba7e493ea30025a31a9d68f53bf8e84729b2091d6719d3d02dd49cff3d28e8",
+      "bytes": 77
+    },
+    "config/biomesoplenty/biomes/xeric_shrubland.json": {
+      "sha256": "f63ce40cc8b342b75e4f52173438da155c52e0a9a6bf0a74593ae1418cfdb45c",
+      "bytes": 76
+    },
+    "config/biomesoplenty/gameplay.cfg": {
+      "sha256": "be256098e21e145bae3047a6b9d0e297965dcefd7ff999b15db4ff52e05f0b7f",
+      "bytes": 172
+    },
+    "config/biomesoplenty/misc.cfg": {
+      "sha256": "a7c2d0cf0c62bcf03e1c97ed4443f18f80667e5dc260b3ccefe0841d2f3ac2db",
+      "bytes": 459
+    },
+    "config/blockcraftery.cfg": {
+      "sha256": "9ef23aa5bc31dd9697380f334afa1c613ab9ac028c958752bf6ce42efeb6e21c",
+      "bytes": 320
+    },
+    "config/bloodmagic/bloodmagic.cfg": {
+      "sha256": "102a5b99af39920c6ced4aee96bfeedade8429db1ba02e42a422b94f6a2c0e37",
+      "bytes": 6379
+    },
+    "config/bloodmagic/meteors/diamond.json": {
+      "sha256": "d07e896eda0661f1787604609dd8d6f598afdfb2de21892591445848ab3d8ca2",
+      "bytes": 690
+    },
+    "config/bloodmagic/meteors/gold.json": {
+      "sha256": "c8cd3cc4fc3335e1aefbc1a0f212bdc2d51558c0f927fe29d327eb769748ad29",
+      "bytes": 740
+    },
+    "config/bloodmagic/meteors/iron.json": {
+      "sha256": "5569dc8dd8fa255bc2aa947fcc5baf926e4591133b3f7604469463d072f1651f",
+      "bytes": 741
+    },
+    "config/bloodmagic/rituals.cfg": {
+      "sha256": "084b000ee8880540c209353eb6d8818e6d0f0c51f545cd5612f04d0d4f47a3a0",
+      "bytes": 4070
+    },
+    "config/bookshelf.cfg": {
+      "sha256": "ba2729658d054813c30596d27f8a0fb17498508cad0e958ebc378f325c92da5a",
+      "bytes": 1590
+    },
+    "config/botania.cfg": {
+      "sha256": "3c020b7e38ad02f642848e2c3e77a57c77461013c19b5c4a5f511e7df6e8e2b6",
+      "bytes": 8769
+    },
+    "config/brandon3055/BrandonsCore.cfg": {
+      "sha256": "1c166af3c1adf4e9e3f29de526c5468a5c5dd54be0b5fd074dcd39605c1a52a5",
+      "bytes": 1137
+    },
+    "config/brandon3055/Custom Fusion Recipe Info.txt": {
+      "sha256": "4646fe565ddb5e591c30b01488f0fbd2a066573701abbdacd83fca2f44e475b5",
+      "bytes": 4749
+    },
+    "config/brandon3055/DraconicEvolution.cfg": {
+      "sha256": "3d16326d43552b45342589e8f38135da420bb04ae622ab2d9c55e622ee899b0b",
+      "bytes": 18771
+    },
+    "config/brandon3055/ProjectIntelligence/manifest.json": {
+      "sha256": "9c7a5e458ce75f08278aac7c353c3946d9dc3c74e24bf644f739bb158a4f9e94",
+      "bytes": 239
+    },
+    "config/brandon3055/ProjectIntelligence/ModDocs/Draconic Evolution/draconicevolution-en_US.xml": {
+      "sha256": "e63266e39f45f965526208a3bbb00b5113686b0706347c7151c2d1a2a24726dd",
+      "bytes": 117428
+    },
+    "config/brandon3055/ProjectIntelligence/options.json": {
+      "sha256": "bc8659948a2d386656992219bd99ac2349eeef9d89156200dfe78cd7c38706c1",
+      "bytes": 199
+    },
+    "config/brandon3055/ProjectIntelligence/projectintelligence.xml": {
+      "sha256": "d44b0ab387ed2281c599566ab22206d8351f441a09ba19792baeb8c53eba516b",
+      "bytes": 1236
+    },
+    "config/buildcraft/detailed.properties": {
+      "sha256": "c3668a79430f743eb91399ece56cd1a40e71ed3b643e42f08ca0e125081474e2",
+      "bytes": 439
+    },
+    "config/buildcraft/main.cfg": {
+      "sha256": "1c0c85188a6499d759d4e9e10b76b12908ed1f576b7ca166be905ffd5dadda9d",
+      "bytes": 6418
+    },
+    "config/buildcraft/objects.cfg": {
+      "sha256": "5380c4e78eefad8c8bcd50177b7fd643e026daa4b0240839e24a9c282a7bbfe6",
+      "bytes": 1572
+    },
+    "config/chesttransporter.cfg": {
+      "sha256": "2bb150459330f1d9810ab919dc566e962ecff11abe273617de52fab6f32336b9",
+      "bytes": 1574
+    },
+    "config/chisel.cfg": {
+      "sha256": "b21b4d7f3c34a32638ac8ab9e56b85f15b9de523e8f3282ca3d5d4fc3a6a5cec",
+      "bytes": 5389
+    },
+    "config/chiselsandbits.cfg": {
+      "sha256": "87cf8e0a5e15840b12682a1eb8b500fbdfe3688760cc92d5bd84cff6efd1feaa",
+      "bytes": 26117
+    },
+    "config/chiselsandbits_clipboard.cfg": {
+      "sha256": "d1e667ef482ca7c7cd62bbf9f497ad2060a65651de4dfab15f156544955d62ab",
+      "bytes": 97088
+    },
+    "config/codechicken/supporters.json": {
+      "sha256": "a051785c4b430db9a78722a5dd7c93a2d152f234d2ff5c6c8fecd57206e1dbce",
+      "bytes": 601
+    },
+    "config/codechicken/supporters.marker": {
+      "sha256": "3a3b119d4575b5d31e890d1776b7ab37295f1c30cbf8c30911406afee6184d68",
+      "bytes": 13
+    },
+    "config/codechickenlib.cfg": {
+      "sha256": "1aa05b9dac4c5718764e3e0a4e23addce945ca283dd21959088520160b34a66e",
+      "bytes": 1495
+    },
+    "config/cofh/core/client.cfg": {
+      "sha256": "60a64b291d088f0435b86bcd2463b7a9d75b4c02b0c78df41b8974c0f55e2d7b",
+      "bytes": 1709
+    },
+    "config/cofh/core/common.cfg": {
+      "sha256": "e8ed351064c5d8bc764111eeb5ae53a906204d34c81844a598227cf963c121ca",
+      "bytes": 4122
+    },
+    "config/cofh/core/friends.cfg": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "config/cofh/redstonearsenal/client.cfg": {
+      "sha256": "cbc8a643d890a22d9bf0f7a2c3cac653202ad7fe5f7e70993bd6f82035026341",
+      "bytes": 233
+    },
+    "config/cofh/redstonearsenal/common.cfg": {
+      "sha256": "41721d588bcc2160961502c24dd1faa165b995c157bc94460bae84965121b67f",
+      "bytes": 1733
+    },
+    "config/cofh/thermalcultivation/client.cfg": {
+      "sha256": "a5c73e99aaa0bdc2d4443cebea55bd49d232398c82a74a3e21aa155c2153a406",
+      "bytes": 66
+    },
+    "config/cofh/thermalcultivation/common.cfg": {
+      "sha256": "02548a70e58efc904766972f9130ccbcf58b77e48052cc75aef2ce92380527fe",
+      "bytes": 644
+    },
+    "config/cofh/thermaldynamics/client.cfg": {
+      "sha256": "e6c698d6bc3ee8ead085268e020ce1dbb7b80aa56273943b631bd552a58c28a2",
+      "bytes": 725
+    },
+    "config/cofh/thermaldynamics/common.cfg": {
+      "sha256": "4e82a362cce45f75a42e4920f9a6ea395e7958fac8776190b220af467889881d",
+      "bytes": 959
+    },
+    "config/cofh/thermaldynamics/cover_blacklist.json": {
+      "sha256": "4bea0304342029262d27286d6089165d091f147809c93edd7a8ba986e2584fdf",
+      "bytes": 2503
+    },
+    "config/cofh/thermalexpansion/client.cfg": {
+      "sha256": "7d2fe10236dd751386f121cde040b2acc08d67c5cb4e49a101f2e677d97e7ba7",
+      "bytes": 3389
+    },
+    "config/cofh/thermalexpansion/common.cfg": {
+      "sha256": "c866ce5708ac2f84c08361f6f1ef834e535866594bf9d768e55970fa0d20524a",
+      "bytes": 28635
+    },
+    "config/cofh/thermalexpansion/florbs.cfg": {
+      "sha256": "3cb7590b744a9b600652626d69333158abb378332abb4e5d59e86118160a3254",
+      "bytes": 369
+    },
+    "config/cofh/thermalexpansion/morbs.cfg": {
+      "sha256": "9c6d848521ccfc1de2793e69f258a62e84046e365cdd853194717230d6027d84",
+      "bytes": 447
+    },
+    "config/cofh/thermalfoundation/client.cfg": {
+      "sha256": "91fa1647883d31fee34c2e6a94f7a3ef31d84b3e37c6ea4e2a2e4930fa83e6a8",
+      "bytes": 1566
+    },
+    "config/cofh/thermalfoundation/common.cfg": {
+      "sha256": "0ee906c7214eaac10acedf63ebfc4b7656387ef3595815506df8cd82dd9f92d5",
+      "bytes": 16988
+    },
+    "config/cofh/thermalfoundation/lexicon-whitelist.cfg": {
+      "sha256": "b25ba27e98718f9f1db0fd9490c8f0cc799be7a52618bd456ef2f8844f1edaed",
+      "bytes": 7041
+    },
+    "config/cofh/thermalinnovation/client.cfg": {
+      "sha256": "a5c73e99aaa0bdc2d4443cebea55bd49d232398c82a74a3e21aa155c2153a406",
+      "bytes": 66
+    },
+    "config/cofh/thermalinnovation/common.cfg": {
+      "sha256": "5743ec37416b664d156bc7317a6cc108c4a8f2354dea65a36a8d7aee5d9c5a57",
+      "bytes": 2255
+    },
+    "config/cofh/world/00_minecraft.json": {
+      "sha256": "3e2e25c80a743f0d99d20b25da73876038ca7fca49b0785787581ff587194118",
+      "bytes": 6615
+    },
+    "config/cofh/world/01_thermalfoundation_ores.json": {
+      "sha256": "4ef641d7f391101fcb76a9d85550226663915ccf529a285b3f0095f2a9ddcd5f",
+      "bytes": 3175
+    },
+    "config/cofh/world/02_thermalfoundation_oil.json": {
+      "sha256": "2a36182117f1deb5a0c2fbd35a6ba4679bffe1cffc1f4af73c4a989357a138f1",
+      "bytes": 3088
+    },
+    "config/cofh/world/03_thermalfoundation_clathrates.json": {
+      "sha256": "c07ec5c13c8a5f464ec69021b11948bbb81a05b1ac42457e682944d00197b0ef",
+      "bytes": 1753
+    },
+    "config/cofh/world/04_overworld_ores.json": {
+      "sha256": "831e089bdc024c7f820b46a4f729b12610ab2babaeb362a431c87c009851d1b3",
+      "bytes": 3469
+    },
+    "config/cofh/world/config.cfg": {
+      "sha256": "d47407e2f56f5d1d62f989e6f60f9f19b81d480552be94aa6fec7979f33cb446",
+      "bytes": 1474
+    },
+    "config/commoncapabilities.cfg": {
+      "sha256": "a68f49ccb2f0e71738fc445b49e105c3f8215e1466b38b2ee4a39a73a767d4d6",
+      "bytes": 1191
+    },
+    "config/compacter/client.config": {
+      "sha256": "d8831abb33ebebc89445cb5dac289d8800120ff3d182c12e3ccc40ca672972bb",
+      "bytes": 138
+    },
+    "config/compacter/readme.txt": {
+      "sha256": "f86901d1cbf94aa31daff7fd7898391008892b2a4c0d4c6983d491427184d412",
+      "bytes": 202
+    },
+    "config/compactmachines3/settings.cfg": {
+      "sha256": "3f777f77879f61c9fb6d473cda608ab38ba907dc90fe59e3fac16dff35eb0437",
+      "bytes": 2337
+    },
+    "config/compactsolars.cfg": {
+      "sha256": "9f00f807a1d11d9dc701de55f17fcabf7361026c65ed17a822c8452ff2832236",
+      "bytes": 272
+    },
+    "config/computercraft.cfg": {
+      "sha256": "9be5795a0b12adb1b534232246b673945f8c191dcccf512912282f6292b59511",
+      "bytes": 6697
+    },
+    "config/conarm.cfg": {
+      "sha256": "2218acbdc7dc2e85b36a92ebe0c6ac38815d25d0be58b663be7bd55f549f24a6",
+      "bytes": 959
+    },
+    "config/cookingforblockheads.cfg": {
+      "sha256": "63cd9d7e60b3bf3fe25ae9bcf03a6ae1733c7c2f7f02019dde7dabcf722319e7",
+      "bytes": 1689
+    },
+    "config/ctm.cfg": {
+      "sha256": "7ddf0e7cd4bb1dc03e6201ab78a7f73f0e7ac2cbbdb615c44fa72df5db63ca89",
+      "bytes": 240
+    },
+    "config/CustomMainMenu/mainmenu.json": {
+      "sha256": "b8bbc46acd2dc392dd8b2a94899591dbb1a4838871c54a115926d77142a1616e",
+      "bytes": 6651
+    },
+    "config/cyclopscore.cfg": {
+      "sha256": "ee56822bfa210b0eb1fd0f9ba8195bbafae70caffad25ac1f0705837ebc18608",
+      "bytes": 973
+    },
+    "config/DankNull.cfg": {
+      "sha256": "d05dacf5fe0e0b88cc4bdc8a1827b7fa209fc6b5393a70b3695a34ebee169fbc",
+      "bytes": 2268
+    },
+    "config/darkutils.cfg": {
+      "sha256": "a3710c9a97c554207b50f0695c4a270d8b1b25ee598284ceb3729f17e0069804",
+      "bytes": 4401
+    },
+    "config/deepresonance/machines.cfg": {
+      "sha256": "196c426ee3e4190ca20c8af452a218097240ab6408affcd7bae920f2c76f8a29",
+      "bytes": 4955
+    },
+    "config/deepresonance/main.cfg": {
+      "sha256": "620812f8435ca232ced8a1a6b5474461310590d768a77dfd4bc2dcc9fcb36a32",
+      "bytes": 19822
+    },
+    "config/deepresonance/version.cfg": {
+      "sha256": "cba1b28a10cc725e6ceb592c60fe91d778a42255f699d70a0cd0212055e1598f",
+      "bytes": 59
+    },
+    "config/defaultoptions/keybindings.txt": {
+      "sha256": "294a0bbc1cf35385e3a9cb83c0f203a25bd5284cc7f3643d80342c51b60c43ef",
+      "bytes": 4356
+    },
+    "config/defaultoptions/options.txt": {
+      "sha256": "1b975e8578dedf32411f3a43ca418fbb0dd96d84835a712045df3210a5d7a8c4",
+      "bytes": 1436
+    },
+    "config/defaultoptions.cfg": {
+      "sha256": "1cd9e176b04dfd80d71da2b001c71b8d95a427b532316f02dbe5665c1dd1866a",
+      "bytes": 473
+    },
+    "config/dirt2path.cfg": {
+      "sha256": "10a97773318247a2f728fefced946e561b950fb44c2765872ccb6750eec046ae",
+      "bytes": 704
+    },
+    "config/eleccore.cfg": {
+      "sha256": "afdc56975ac0569fdb42a5ac5669c14728542fddd3923aac9076bee6c126a241",
+      "bytes": 468
+    },
+    "config/endercore/cropconfig.json": {
+      "sha256": "f7c71c3da20edeb996b16f4d72709b55ba3f650eb91b0793a4dcefe495c200f3",
+      "bytes": 1297
+    },
+    "config/endercore/endercore.cfg": {
+      "sha256": "f7b96834e34312ca5ef60205f044e09031fe40cfbaf1917c58dfa918e593bd7c",
+      "bytes": 3181
+    },
+    "config/enderio/EnderIO.cfg": {
+      "sha256": "bf14db00163030a02a6472cee5c8555c788016271caf2295c0238c26426a6f08",
+      "bytes": 73503
+    },
+    "config/enderio/enderioconduits.cfg": {
+      "sha256": "f0d0ea67c19e2b71a7324798209d3dfcde4606af6fe3fe20ac2b1665ee9b1ce8",
+      "bytes": 5176
+    },
+    "config/enderio/enderiointegrationforestry.cfg": {
+      "sha256": "b2b939bdf9e2e31dcb49b51fb43e22c61ecdf2b86beb8f42b17c53830a189672",
+      "bytes": 478
+    },
+    "config/enderio/enderiomachines.cfg": {
+      "sha256": "9e6ddaba5c981de6b9ca3f70f88f89aa587d63173f5cde78da722ea4ff32f00f",
+      "bytes": 31560
+    },
+    "config/enderio/enderiopowertools.cfg": {
+      "sha256": "f2c7276341982631fadfc7dfece77697c2da5c751580e81c9229396eb9545599",
+      "bytes": 2122
+    },
+    "config/enderio/painter_paint_sources_core.xml": {
+      "sha256": "e25dbcf90745a8318f6a47af83ffed9b3669de71039885c43ac568f9bf1274c0",
+      "bytes": 1290
+    },
+    "config/enderio/painter_paint_sources_user.xml": {
+      "sha256": "c80691313787a06617249cfa769d71ac660e663ed62ec305188905cd9a2f53a7",
+      "bytes": 170
+    },
+    "config/enderio/recipes/aliases.xml": {
+      "sha256": "5a3383a990aae528ea111d3b1810ab2595d0db647a73b47d77bb0fc3f65205fc",
+      "bytes": 11112
+    },
+    "config/enderio/recipes/balls.xml": {
+      "sha256": "23a6dae6eb1688e2c8e5fb04d50ef05b3f29a14bb4971a4426978878f90b584f",
+      "bytes": 21537
+    },
+    "config/enderio/recipes/base.xml": {
+      "sha256": "0ee90ab214691c982655a566aa30aa49a7e81b72486cdd129c167bdd03f3a527",
+      "bytes": 26324
+    },
+    "config/enderio/recipes/capacitor.xml": {
+      "sha256": "b0c8eb9f31741e54537a111f38bd338aebf9f185cb5471390570f949c18b3884",
+      "bytes": 8819
+    },
+    "config/enderio/recipes/capacitor_machines.xml": {
+      "sha256": "8f2f97fdfecb0ae82bfa8798f2d1056caba128c1eb265d4ba019f42995144b3e",
+      "bytes": 14313
+    },
+    "config/enderio/recipes/conduits-applied-energistics.xml": {
+      "sha256": "2b746b4299f79d692e1267306b4d0ebe307de6a6b003a9831ab3cd2777637ca6",
+      "bytes": 4000
+    },
+    "config/enderio/recipes/conduits-opencomputers.xml": {
+      "sha256": "e0cbbb79872c51cd65c5fb45f3c108f8f9a12d8848df944ab40a4f1cf07cdf93",
+      "bytes": 1832
+    },
+    "config/enderio/recipes/conduits-refined-storage.xml": {
+      "sha256": "f4b25cb051e85c6eae376ddcd08ccad49f0d24a5bc7e6f308e50535683750183",
+      "bytes": 3678
+    },
+    "config/enderio/recipes/conduits.xml": {
+      "sha256": "825e86b0612a9e611c3d951c66bcb51787b9d4d91326079c36912582ed6b9ce0",
+      "bytes": 8421
+    },
+    "config/enderio/recipes/darksteel_upgrades.xml": {
+      "sha256": "f1323b2334b60284c8e861d5dde71cb9d24c4349ef496c6d27064db483e7e6e7",
+      "bytes": 35279
+    },
+    "config/enderio/recipes/darksteel_upgrades_forestry.xml": {
+      "sha256": "86c7c63a1366ac68a3916f43e3184834ec5e180b7165c0d405a2195446da4159",
+      "bytes": 6418
+    },
+    "config/enderio/recipes/darksteel_upgrades_machines.xml": {
+      "sha256": "b2d7b15d54fc49385262417170e569a57047336f2913181a57aa1e337ae55b4f",
+      "bytes": 4625
+    },
+    "config/enderio/recipes/enchanter.xml": {
+      "sha256": "bbc148bcf084bcb2f45f967bbd3ac5951a24762bafeea389a2115b38e98c4b4e",
+      "bytes": 14279
+    },
+    "config/enderio/recipes/examples/broken_spawner.xml": {
+      "sha256": "e53dbff5701db1036be40d261a10bdf77d1ae5520488b35292ef19817bf21dd6",
+      "bytes": 958
+    },
+    "config/enderio/recipes/examples/cheap_machines.xml": {
+      "sha256": "218c73ba14d3797ad6da2131ceb659f9243ea6f1787b735155bae9444096aaad",
+      "bytes": 11970
+    },
+    "config/enderio/recipes/examples/cheap_materials.xml": {
+      "sha256": "c1d79389081b1288b08e50140247dc4ad29137f0260d3fb7385b4c397fad73f9",
+      "bytes": 3909
+    },
+    "config/enderio/recipes/examples/cheaty_spawner.xml": {
+      "sha256": "745fbac9238539ea0dede964ef80b6178ca7a1710d1d3b59c5d493119c8da2ec",
+      "bytes": 5905
+    },
+    "config/enderio/recipes/examples/conduits_easy_recipes.xml": {
+      "sha256": "d12d5f788a900afcd414348a1019e59dcbdf4d355b598fa1ae142041e8d0d220",
+      "bytes": 6525
+    },
+    "config/enderio/recipes/examples/conduits_hard_recipes.xml": {
+      "sha256": "74da96a3f7eb6d5e0cc0ab33a87ba23f693f0096095e20550b60de3ea3f38dd1",
+      "bytes": 6513
+    },
+    "config/enderio/recipes/examples/easy_recipes.xml": {
+      "sha256": "ffcc8b9827a636dae7d4e6d76cd0a133dc8d9707b2e93bf7c92ed3bcbea4986b",
+      "bytes": 1891
+    },
+    "config/enderio/recipes/examples/hard_recipes.xml": {
+      "sha256": "1b03c5b8029604bae36d6291cc27587859a1bfdc3092330d07982ab254bbb851",
+      "bytes": 1803
+    },
+    "config/enderio/recipes/examples/infinity.xml": {
+      "sha256": "b49ba73af02b77bbac402c466f39673caffff5732d49df32ba1d8c5891f79044",
+      "bytes": 803
+    },
+    "config/enderio/recipes/examples/legacy_recipes.xml": {
+      "sha256": "52fd30cf874e85f9c5d11669a2fbf9cde7f8baf21a455d05c4ac83dbd6721efe",
+      "bytes": 17639
+    },
+    "config/enderio/recipes/examples/machines_easy_recipes.xml": {
+      "sha256": "e2b7f0882391c4e4dcb928e1bc68fea21d25b6746fb9a5985946a5b82ea1687e",
+      "bytes": 2913
+    },
+    "config/enderio/recipes/examples/optional_tweaks.xml": {
+      "sha256": "3fd6acf93a71b72e8e62fab1d8a6abc76f57bbb1267fa29587c2ac08f6e54d13",
+      "bytes": 925
+    },
+    "config/enderio/recipes/examples/peaceful.xml": {
+      "sha256": "03b97bb6e53910e7d94dc9f9965b7ecfbe83812bc86557740e1522c064777791",
+      "bytes": 1231
+    },
+    "config/enderio/recipes/examples/powertools_easy_recipes.xml": {
+      "sha256": "249a3177db6d7e055493cd22a7a3c567e445695a71d2d90b8b671b6a9f3e0d26",
+      "bytes": 762
+    },
+    "config/enderio/recipes/examples/recipes.xsd": {
+      "sha256": "bea9658dfa6e400672c5ea3e94e6974bb8bda8f7395e7d6fea5c22864ca18665",
+      "bytes": 74382
+    },
+    "config/enderio/recipes/examples/sagmill_dupe_recipe_patches.xml": {
+      "sha256": "28bc650b739945efbc46abae72e4f7104460aec317ad5d348cade22801cca3e9",
+      "bytes": 3396
+    },
+    "config/enderio/recipes/examples/strict_iron.xml": {
+      "sha256": "975a81e1202b7f5d70be7d1a134206eaf91ae3de4898e49f1b82c72654aa247f",
+      "bytes": 930
+    },
+    "config/enderio/recipes/examples/unhide_base.xml": {
+      "sha256": "2058cbec94cb5defa55596bff89b0583423933e13d874b1dfd4a31010782e8be",
+      "bytes": 5834
+    },
+    "config/enderio/recipes/fuels.xml": {
+      "sha256": "1e6dd13009361279c2f4924f85bb19b41694a51adebdccb3255e277bfe15e942",
+      "bytes": 5314
+    },
+    "config/enderio/recipes/hiding_base.xml": {
+      "sha256": "6a719987384f610bb2907ee38f506db4ac1a9fff3a02e5275e9a3bb3b437235a",
+      "bytes": 19065
+    },
+    "config/enderio/recipes/hiding_conduits.xml": {
+      "sha256": "96b5b1f5ded8b34528386c654866da521e47311c51afeff87a13c5b2747904c1",
+      "bytes": 3332
+    },
+    "config/enderio/recipes/hiding_machines.xml": {
+      "sha256": "067aa4603bb14d84059b1af6f201d2f6263cfdf13384d999d54f5127742e148c",
+      "bytes": 14409
+    },
+    "config/enderio/recipes/integration-forestry.xml": {
+      "sha256": "12ee8182d8859d9f7d3472d6fca16f5d4561992a4f39b7106dbc0187b12e8510",
+      "bytes": 1669
+    },
+    "config/enderio/recipes/integration_railcraft_recipes.xml": {
+      "sha256": "e8b23e3b21be843ca01c4e3e182cc785639b176291749ef5d488a60711f396f4",
+      "bytes": 6120
+    },
+    "config/enderio/recipes/items.xml": {
+      "sha256": "9cc30f8306f7115a8545a404c013c532cecef18004ca5160d3bc06989bedf362",
+      "bytes": 29120
+    },
+    "config/enderio/recipes/machines.xml": {
+      "sha256": "6f04acfc0c6db942e59f1ac3af5c7e9a2319edd044474e9a8625139f0920b1d7",
+      "bytes": 36486
+    },
+    "config/enderio/recipes/materials.xml": {
+      "sha256": "e87fb1ddefb0ac6aafa2314680e9ea84a1c84b48fe68110a18c5b772f7eb05f6",
+      "bytes": 44649
+    },
+    "config/enderio/recipes/misc.xml": {
+      "sha256": "7b817771ad8491669f9a380b8a7bb4684385d4a4f4f8aa3d1aee782e93cde8e6",
+      "bytes": 2380
+    },
+    "config/enderio/recipes/powertools.xml": {
+      "sha256": "6000b8cf47a174bc8e03514ca1cb95c3e7fa7405c8bfa4d38597de402b01ee76",
+      "bytes": 5782
+    },
+    "config/enderio/recipes/recipes.xsd": {
+      "sha256": "bea9658dfa6e400672c5ea3e94e6974bb8bda8f7395e7d6fea5c22864ca18665",
+      "bytes": 74382
+    },
+    "config/enderio/recipes/sagmill.xml": {
+      "sha256": "88fcceb7a9be1d5a4d63749f43567b94af4a5670c04b1a6fb3f67f60c6461922",
+      "bytes": 7060
+    },
+    "config/enderio/recipes/sagmill_metals.xml": {
+      "sha256": "7b953027adf8be665115c99b633a8bb927344ee68ea2ad696c39c98166b4df4e",
+      "bytes": 19668
+    },
+    "config/enderio/recipes/sagmill_modded.xml": {
+      "sha256": "984e532aeff7f346a79bb6a9635824e130d19d91981d2c4a0a8f890f118a562b",
+      "bytes": 10556
+    },
+    "config/enderio/recipes/sagmill_ores.xml": {
+      "sha256": "bf7f6131e5c18816fcbad71f43f9ada6277c3155d9de03520279e9696e0fe25f",
+      "bytes": 91550
+    },
+    "config/enderio/recipes/sagmill_silentgems.xml": {
+      "sha256": "8a3ed1e941304bfe8e6ec02feb41fc1a702640e1fa17935c5c63e04af68b23ac",
+      "bytes": 13789
+    },
+    "config/enderio/recipes/sagmill_vanilla.xml": {
+      "sha256": "79abb02e67dfba2f0cb8799c79a458c60f26b2d069dda0af4f110c90642fa05d",
+      "bytes": 16027
+    },
+    "config/enderio/recipes/sagmill_vanilla2modded.xml": {
+      "sha256": "0cbf0aeabb67c927f4df17c20c9be25885cfe90160d0a41ad1a57119c35aa1ea",
+      "bytes": 3555
+    },
+    "config/enderio/recipes/soulbinder.xml": {
+      "sha256": "b27b26b43c5c920d5eb9bef6b753423c5a2899a8c79e78369ea1d34d8662183e",
+      "bytes": 4186
+    },
+    "config/enderio/recipes/spawner.xml": {
+      "sha256": "e4c454d1e9c03cd4b467b1658428134576fb153c08742bbcede6c2dba55ac89d",
+      "bytes": 14167
+    },
+    "config/enderio/recipes/tank.xml": {
+      "sha256": "169b2acb9714012184a4b11138c899da7433dbfca5a929c681a03129366edbb8",
+      "bytes": 8277
+    },
+    "config/enderio/recipes/user/recipes.xsd": {
+      "sha256": "bea9658dfa6e400672c5ea3e94e6974bb8bda8f7395e7d6fea5c22864ca18665",
+      "bytes": 74382
+    },
+    "config/enderio/recipes/user/user_recipes.xml": {
+      "sha256": "5e8ca1c4fbda4fe8ade0c4f180fa2f98feeb45a09729f8ba43f15e62bd331a85",
+      "bytes": 235
+    },
+    "config/enderio/recipes/vat.xml": {
+      "sha256": "1a94285b740ec7ef97650c971e2dfd70839c82bb054ac221790c9871d41148ef",
+      "bytes": 7028
+    },
+    "config/enderstorage.cfg": {
+      "sha256": "0e768f6d9d9275564e12c41e0364cc3f0b98b6d2a1715af31509c1d577860853",
+      "bytes": 691
+    },
+    "config/engineersdoors.cfg": {
+      "sha256": "b546aad1898fb56e79a6bffb69de8eccbf79aaad07c1e69800046ac1d0e1ffd8",
+      "bytes": 160
+    },
+    "config/engineersworkshop.cfg": {
+      "sha256": "9d0f20298c7b7b226a1c438786f43d164014bc0ba5f3d51339e320006720d408",
+      "bytes": 1092
+    },
+    "config/environmentaltech/etlunar/main.cfg": {
+      "sha256": "6603ceaebc061623a8a7d9a5f3eccbc692b0cd9bf2f7d6e487510f75f7bd2fb1",
+      "bytes": 569
+    },
+    "config/environmentaltech/main.cfg": {
+      "sha256": "d4ea5cb9e5cec38f9aa2db8a1889aad04a5b2cf51073afe066906427d273bacf",
+      "bytes": 14211
+    },
+    "config/environmentaltech/multiblocks/void_miner/botanic/tier_1.json": {
+      "sha256": "d86f3aac6a366f54222421c2ff32b34ecafd3c3c41781f7affbe8616d4fc2b21",
+      "bytes": 4352
+    },
+    "config/environmentaltech/multiblocks/void_miner/botanic/tier_2.json": {
+      "sha256": "d86f3aac6a366f54222421c2ff32b34ecafd3c3c41781f7affbe8616d4fc2b21",
+      "bytes": 4352
+    },
+    "config/environmentaltech/multiblocks/void_miner/botanic/tier_3.json": {
+      "sha256": "d86f3aac6a366f54222421c2ff32b34ecafd3c3c41781f7affbe8616d4fc2b21",
+      "bytes": 4352
+    },
+    "config/environmentaltech/multiblocks/void_miner/botanic/tier_4.json": {
+      "sha256": "d86f3aac6a366f54222421c2ff32b34ecafd3c3c41781f7affbe8616d4fc2b21",
+      "bytes": 4352
+    },
+    "config/environmentaltech/multiblocks/void_miner/botanic/tier_5.json": {
+      "sha256": "d86f3aac6a366f54222421c2ff32b34ecafd3c3c41781f7affbe8616d4fc2b21",
+      "bytes": 4352
+    },
+    "config/environmentaltech/multiblocks/void_miner/botanic/tier_6.json": {
+      "sha256": "d86f3aac6a366f54222421c2ff32b34ecafd3c3c41781f7affbe8616d4fc2b21",
+      "bytes": 4352
+    },
+    "config/environmentaltech/multiblocks/void_miner/ore/tier_1.json": {
+      "sha256": "0efec6e5bdc2abd18b2fa50fb81c4441b0497643149db83b358dfa09cb63350c",
+      "bytes": 8187
+    },
+    "config/environmentaltech/multiblocks/void_miner/ore/tier_2.json": {
+      "sha256": "ea3434d733c6996702a165a4a1fd59e4a4380b519baaf6fe8bd8ebe4ad731f12",
+      "bytes": 8297
+    },
+    "config/environmentaltech/multiblocks/void_miner/ore/tier_3.json": {
+      "sha256": "153c47c0667524f2316e1ac74c4e6a6d1188b8b4e7405b237483bb0cb4dc8299",
+      "bytes": 8406
+    },
+    "config/environmentaltech/multiblocks/void_miner/ore/tier_4.json": {
+      "sha256": "412c4dafc9c2d49bc5c09dfb39f1f83032f78ae8f975075054932f8e788ff6a9",
+      "bytes": 8513
+    },
+    "config/environmentaltech/multiblocks/void_miner/ore/tier_5.json": {
+      "sha256": "12e59d146457c6e442ad73aa775e6a2fb0411cae0613b0fff9324dcbe5a5e3d2",
+      "bytes": 8621
+    },
+    "config/environmentaltech/multiblocks/void_miner/ore/tier_6.json": {
+      "sha256": "78b038d4b14de9080f9feaee2c1c364955f7ca455ddb698ada6efbddfeee6728",
+      "bytes": 8621
+    },
+    "config/environmentaltech/multiblocks/void_miner/resource/tier_1.json": {
+      "sha256": "7b0d8f8fa878019cf9578e57d1a1ebd4b0f3718150389a0e8816ce8de0cad0da",
+      "bytes": 6180
+    },
+    "config/environmentaltech/multiblocks/void_miner/resource/tier_2.json": {
+      "sha256": "8dc8c0d09ce1933ae9bab4ad3749b711a1daf2b72a0cbf37d1013139b82325c3",
+      "bytes": 6180
+    },
+    "config/environmentaltech/multiblocks/void_miner/resource/tier_3.json": {
+      "sha256": "a57263ab867731298c8085ebdfd9f74b9cc5520ea0fdb73e744b4afcb851da7c",
+      "bytes": 6180
+    },
+    "config/environmentaltech/multiblocks/void_miner/resource/tier_4.json": {
+      "sha256": "6f92ec57734ee10cffbfcf896179bcd06236ee88dcbb6a9f5f2d729736d5c9c2",
+      "bytes": 6180
+    },
+    "config/environmentaltech/multiblocks/void_miner/resource/tier_5.json": {
+      "sha256": "1f2d86e4fe04609557f82113c1c06fde6239a3f94bf0ed60ab1dfccce08c2d66",
+      "bytes": 6180
+    },
+    "config/environmentaltech/multiblocks/void_miner/resource/tier_6.json": {
+      "sha256": "6b165955c35f076e2e7ce877538bc88d04b3422cc635d7bf88f0dc0cc22ed7cd",
+      "bytes": 6180
+    },
+    "config/exchangers.cfg": {
+      "sha256": "bc084134691a0df9aef666b2b2a35209d3959d2bbb8d84c0bf91ffd8c91f3318",
+      "bytes": 20397
+    },
+    "config/extrautils2.cfg": {
+      "sha256": "1d84394a6812613aaa4509de13dcf9975611e8c57dff4b09da43066a280fb855",
+      "bytes": 4123
+    },
+    "config/Extreme Reactors/Extreme Reactors.cfg": {
+      "sha256": "c2bcccdd0a67f92856ff4932e61131a75820b699339bbff8bf217b5e86fe9d03",
+      "bytes": 9445
+    },
+    "config/fastbench.cfg": {
+      "sha256": "ebdd2073e78495f0f44850537ae9a5f26a8b8648b824626676f6619ac7dc42ed",
+      "bytes": 324
+    },
+    "config/flatcoloredblocks.cfg": {
+      "sha256": "26ae9f345961469e7d8cde61a2a46235f4a99f14d83ec886d9d9201db4154e6e",
+      "bytes": 2154
+    },
+    "config/flux_networks.cfg": {
+      "sha256": "730098f8abed8b7265de3d0d9da7d5feb3bc5e55a8bb89192b182b67dc44d01b",
+      "bytes": 5971
+    },
+    "config/flyringbaublemod.cfg": {
+      "sha256": "80292f3751e1b19b5682b842818a2829fc2efc822860547509905a2190ffe20f",
+      "bytes": 152
+    },
+    "config/foamfix.cfg": {
+      "sha256": "2f46c36a03f5da4f1870161a5528e85d08bf35f393ab9b2960784ad97de32773",
+      "bytes": 6346
+    },
+    "config/forestry/apiculture.cfg": {
+      "sha256": "bb43ccf992ac953a2e3a0cdbe946e798e30998608e7fda52620a1e4cb38f8ff8",
+      "bytes": 1404
+    },
+    "config/forestry/arboriculture.cfg": {
+      "sha256": "2dacf9432896e8533b953cf268c5b23b7101f1ee2aff8d5f4112f389c3768950",
+      "bytes": 49500
+    },
+    "config/forestry/backpacks.cfg": {
+      "sha256": "55169558b4e80af403e1fe3b9205f04a1b114d08ef7395a8f4d0a478fbaae1f7",
+      "bytes": 6922
+    },
+    "config/forestry/binnie-mods.conf": {
+      "sha256": "cd0ac625b8b3e05a998bd063ebae77262c0ca0cf34cd8a1470f89d3b714bc338",
+      "bytes": 364
+    },
+    "config/forestry/binniecore/main.conf": {
+      "sha256": "f8ae21e18ead5b881c2c71f9229ccf493e3fc863b10442bb7537738b467eca64",
+      "bytes": 24
+    },
+    "config/forestry/botany/modules.cfg": {
+      "sha256": "0ed5eb28617337385549751871415ba51ccd42e5b437a419b9f253a265285832",
+      "bytes": 1317
+    },
+    "config/forestry/common.cfg": {
+      "sha256": "91970658602c1cb4434caf64f2a8a39c38871c5f7a56eb2161db43283ea912ff",
+      "bytes": 9539
+    },
+    "config/forestry/crates.cfg": {
+      "sha256": "5862619092e98de013fa18eb2a4a92439f9d098ab85e5951918985a90f41a63a",
+      "bytes": 791
+    },
+    "config/forestry/extrabees/main.conf": {
+      "sha256": "4d77a0ddfc0a1d7ad90057ec014fcb21d48077414be82a8064536c74b48391a3",
+      "bytes": 979
+    },
+    "config/forestry/extrabees/modules.cfg": {
+      "sha256": "dab3ba61b7908312964b594755b25570d48b7daec11f2de5a6f3bc8f1ce31520",
+      "bytes": 827
+    },
+    "config/forestry/extratrees/main.cfg": {
+      "sha256": "84cd11efca93c97734a7aefd90267b4680d5e0d81448bb57b11819a9c01f311e",
+      "bytes": 270
+    },
+    "config/forestry/extratrees/modules.cfg": {
+      "sha256": "7389d4deae70ed22899282b42895fb69368497ee736d27bf9eecb2086f2a9bfe",
+      "bytes": 1550
+    },
+    "config/forestry/farm.cfg": {
+      "sha256": "1f3433cf5046f56dbb3709282bd2043f0b8700943b737d0d30941f7bc2079c20",
+      "bytes": 425
+    },
+    "config/forestry/fluids.cfg": {
+      "sha256": "b3e0ebbf52ef644847953b80508c47356cdb3bce26f4602d4558149dad54eb71",
+      "bytes": 1476
+    },
+    "config/forestry/gamemodes/EASY.cfg": {
+      "sha256": "276bf1a2631a51b39ea5e0bb45309aad8527106f5854e89e8cd66deea4f81ca2",
+      "bytes": 4856
+    },
+    "config/forestry/gamemodes/HARD.cfg": {
+      "sha256": "29392ba39553f4a94dfa4dccd16237bceeef4514afaddfc1ed756b2274f543a3",
+      "bytes": 4822
+    },
+    "config/forestry/gamemodes/NORMAL.cfg": {
+      "sha256": "bea2b7556e5cf24b5596e46ca68ff49f26418e4149e07caf3b97be4a84c4db10",
+      "bytes": 4838
+    },
+    "config/forestry/gamemodes/OP.cfg": {
+      "sha256": "5d76036dbc9cd6a2441ed8dd44b6946b671a4ad4b30fb63e7aa3d0a8e2c5ebe5",
+      "bytes": 4854
+    },
+    "config/forestry/genetics/main.conf": {
+      "sha256": "5503dbd4ef4b38d12791df6b7db08eb180713f2314406c9f81d26e8bef163aa8",
+      "bytes": 2121
+    },
+    "config/forestry/genetics/modules.cfg": {
+      "sha256": "95ac8f44d6c8c5d9a6c3a0c95f9f3499b221e0d2f087823db82b69e14dead953",
+      "bytes": 705
+    },
+    "config/forestry/lepidopterology.cfg": {
+      "sha256": "594741fbd08f92f92fd3388fd673a3b6a8f5490a7de303b9911366451f9dc0ae",
+      "bytes": 4616
+    },
+    "config/forestry/modules.cfg": {
+      "sha256": "5a05c13998938fd0b058952e9614f9c1909adfdb7387ec7cbe14090913085eec",
+      "bytes": 3745
+    },
+    "config/forge.cfg": {
+      "sha256": "0faa0fe45f52ce72ca55655dc7c476e823fc5ad50cb48373e086f3d513a9d592",
+      "bytes": 3954
+    },
+    "config/forgeChunkLoading.cfg": {
+      "sha256": "252fc93482995074d98526a38f541201d828b92c65ab683e25a4f7149c4b97b7",
+      "bytes": 2475
+    },
+    "config/ftbbackups.cfg": {
+      "sha256": "53e4abb5d072a936c66cae3c07de3e7ed1aeaa8105fef7bdc6d1de0a6c1399f1",
+      "bytes": 1754
+    },
+    "config/ftbguides/config.cfg": {
+      "sha256": "fd81f52ea0a03da06ed55a78503a827329bebeb5da64b28930c29573d7677a3b",
+      "bytes": 371
+    },
+    "config/ftblib.cfg": {
+      "sha256": "4299412202253b8ef7b0531c2abd914a9b6b0060a3185a91efef204ec1a820b3",
+      "bytes": 2039
+    },
+    "config/ftbutilities.cfg": {
+      "sha256": "d4d7841298abc19b7c3393842f440d648e5d307db228255029d397dfd3dbd5b8",
+      "bytes": 6376
+    },
+    "config/gendustry/client.config": {
+      "sha256": "5739a3e3cb213c4e0d8e7063f90dfd22a9150bea66ecde3c17ac5f67b3b2f768",
+      "bytes": 599
+    },
+    "config/gendustry/readme.txt": {
+      "sha256": "f86901d1cbf94aa31daff7fd7898391008892b2a4c0d4c6983d491427184d412",
+      "bytes": 202
+    },
+    "config/gravisuite.cfg": {
+      "sha256": "55acb19a750b997ff20a5ed58804370b19fddbf8b83341dbbfd519b4647e1782",
+      "bytes": 660
+    },
+    "config/Guide-API/Guide-API.cfg": {
+      "sha256": "21e082148c8c961a55e93b282825c0cc6bf5af097d8cef409573c6f0777f14e3",
+      "bytes": 1681
+    },
+    "config/harvest_config.json": {
+      "sha256": "92e433c7e928f561beb3a313b62cf67f91018ea73f871c73e9200c39e8a6fcfd",
+      "bytes": 638
+    },
+    "config/harvestcraft.cfg": {
+      "sha256": "98850f84bd2b84b96fa0c69582e4b086a822ce846dd45d47f6c71138dfebb0db",
+      "bytes": 15689
+    },
+    "config/harvestcraft_fruittree.cfg": {
+      "sha256": "23931cbb59b0299625685567b325176a3f43ee7ed1bac3614cb75bc6a9aa7885",
+      "bytes": 65786
+    },
+    "config/ic2/blast_furnace.ini": {
+      "sha256": "7dedf9f8efb0b7fab4930da12961037ad25389c74879def07c00299189b59bc0",
+      "bytes": 1783
+    },
+    "config/ic2/block_cutter.ini": {
+      "sha256": "fe8dcc46b6d141c973c708252699ff1455e37e0bdac06d369eb47c4127bcb6da",
+      "bytes": 2578
+    },
+    "config/ic2/compressor.ini": {
+      "sha256": "89928b8f2fb40ea66aa95aaa303955226608b81d584ebec77bc470b44bc614ab",
+      "bytes": 4379
+    },
+    "config/ic2/extractor.ini": {
+      "sha256": "7c93bf46d3819413fa9a368ed5a3e13cbffd3c184945fe4c9e7022a9841e603f",
+      "bytes": 1954
+    },
+    "config/ic2/general.ini": {
+      "sha256": "3135829e89bcd32061bf39b117f4de05681012ee33017b8b45e2f138aaffabe9",
+      "bytes": 8077
+    },
+    "config/ic2/macerator.ini": {
+      "sha256": "d73dc8e8a1c7ab4a02a5f87c0d9fd35d378a4bf62ed128e8151af5c0e3d80a70",
+      "bytes": 5684
+    },
+    "config/ic2/metal_former_cutting.ini": {
+      "sha256": "66470ad84ef31f232e64bd93a1aeb44644d195ba71c04119e317ba2eb40cb8f6",
+      "bytes": 1473
+    },
+    "config/ic2/metal_former_extruding.ini": {
+      "sha256": "6c17c5194f9e73edd6478646486a1f8a0f8e0c17e744d8e7043b6fdb29978ad5",
+      "bytes": 1786
+    },
+    "config/ic2/metal_former_rolling.ini": {
+      "sha256": "5084c2aed25bc363c3b7e829d6d790c0869a966104409b115436b6a14a184cc6",
+      "bytes": 2873
+    },
+    "config/ic2/ore_washer.ini": {
+      "sha256": "1e93975c8ea3e89d5ec412f5c842106ab9bf18ad18c8735ecf00f0d52a05f228",
+      "bytes": 2153
+    },
+    "config/ic2/shaped_recipes.ini": {
+      "sha256": "fc9d2a94a4dfe1048816b1d13a02aaed63f887fa883adb8a6d1b11b773cbc1d3",
+      "bytes": 39736
+    },
+    "config/ic2/shapeless_recipes.ini": {
+      "sha256": "a70d65f2db228564121cdbf2d748cbbf653fb622a3fbc31870fd0994876db9e8",
+      "bytes": 7656
+    },
+    "config/ic2/thermal_centrifuge.ini": {
+      "sha256": "2a898bbca704da33de0d1b20bf275bb7795ce379f63b11b9307be52e36867094",
+      "bytes": 4020
+    },
+    "config/ic2/uu_recipes.ini": {
+      "sha256": "a6d23a9e8af9a563f0089691842b48dcabb8a0ca60ab7ce0c844048ef97ecb8b",
+      "bytes": 2648
+    },
+    "config/ic2/uu_scan_values.ini": {
+      "sha256": "156f8824017d5c66e94abd63c8850967fe5d53b09edb98a9fe3571ca2be9a597",
+      "bytes": 5344
+    },
+    "config/IC2.ini": {
+      "sha256": "de7e965dc13c12d8080155f9128fdc9abacfd31f337b4427b625c4ab491f8e63",
+      "bytes": 11986
+    },
+    "config/igwmod.cfg": {
+      "sha256": "514cc7b53fe2ac89597ed8082db7c5ca8d6779fc9be4a1bae8ee8681057de1e5",
+      "bytes": 189
+    },
+    "config/immersivecables.cfg": {
+      "sha256": "aa2b9221c7f8bda653c59759bb29e5767eef82d00752cc01fd69bfdb4b3eb77c",
+      "bytes": 1625
+    },
+    "config/immersiveengineering.cfg": {
+      "sha256": "76b59ca758c575357026015991f3ab416e5347ab4895798ada76d07e80a7871d",
+      "bytes": 26228
+    },
+    "config/immersivepetroleum.cfg": {
+      "sha256": "ce0869c39645a87df66e2d88c569fe7c1eaaca1c2e53f51e281b4379696df2ce",
+      "bytes": 2527
+    },
+    "config/industrialforegoing.cfg": {
+      "sha256": "60abeda45204c92a39cfb647750821ff067aabc321da2c1e205d6d0f22aac2ff",
+      "bytes": 33525
+    },
+    "config/industrialwires.cfg": {
+      "sha256": "d5063098df60eae521473841ff5d5a5ae5f54f209a0e08308649ccb46b7d3f8b",
+      "bytes": 3672
+    },
+    "config/integrationforegoing.cfg": {
+      "sha256": "80d2f7328b3000d9091e4a27d8f55423107fd7894b28d151e433e66c4c62d770",
+      "bytes": 2875
+    },
+    "config/InvTweaks.cfg": {
+      "sha256": "fa9c2dfd9c3ff848d4e3f06283e5a4d73da5f464b05d8bd5f9912e9236474e4f",
+      "bytes": 746
+    },
+    "config/InvTweaksRules.txt": {
+      "sha256": "b63870bb7b08cb7edb1189dd929ae802a8e7a6857ede3d92055038a5c617bb22",
+      "bytes": 1237
+    },
+    "config/InvTweaksTree.txt": {
+      "sha256": "5dbafa1e67c70c79660a4da7a663fabfda69724ec352f79d5d4ab5e0323368e8",
+      "bytes": 62968
+    },
+    "config/ironbackpacks/blacklist.json": {
+      "sha256": "e20936e9319f9c0ad6654a73913b2a46b907f74357c3ee73d47a52a314f1115f",
+      "bytes": 47
+    },
+    "config/ironbackpacks/ironbackpacks.cfg": {
+      "sha256": "516811e854937cf0344a8de40e0a779f611cca4215843b4926fd5fede207e43f",
+      "bytes": 1495
+    },
+    "config/ironchest.cfg": {
+      "sha256": "6069282a9cf2a7047073120d602c7f54e6b642b52be4329787e95af97246d2be",
+      "bytes": 163
+    },
+    "config/jei/itemBlacklist.cfg": {
+      "sha256": "fadc4fc23d30139843bb86a6a94d73d19bd189396630862ca6cc305342802455",
+      "bytes": 678795
+    },
+    "config/jei/jei.cfg": {
+      "sha256": "73dd90e46983af7f5ad70f70cf945ea13fe6609b5b1660adf8a0fb87b5f43ad0",
+      "bytes": 2931
+    },
+    "config/jei/searchColors.cfg": {
+      "sha256": "4778e8b2d6b384ac6d52c7ceea96735c62c15bfe80a60e17db76f9f49b4eb8e5",
+      "bytes": 1994
+    },
+    "config/jei/worldSettings.cfg": {
+      "sha256": "409a2fa5bec77e708cde905872f470cc0a5861e1a27a101d78f8a7d189b79fcf",
+      "bytes": 52
+    },
+    "config/jeibees.cfg": {
+      "sha256": "876a3b81b1c8076cf7c69147aa00c3386522c225184359014445466a4af2a97b",
+      "bytes": 923
+    },
+    "config/jeiintegration.cfg": {
+      "sha256": "9f3bdaa99cff2aae77daae8a74e18545b679d31308bb76f18a194ef0d306a66f",
+      "bytes": 2442
+    },
+    "config/jeresources/jeresources.cfg": {
+      "sha256": "03395e10cc38f4b9453d6203fac39139c1753a5931976225370c73382f71a909",
+      "bytes": 869
+    },
+    "config/jeresources/world-gen.json": {
+      "sha256": "3483016cab0d471fc356390d4ab16dba7d99362ca1abfa618c89a52d55d9e019",
+      "bytes": 239974
+    },
+    "config/journeymap_ModInfo.cfg": {
+      "sha256": "624c984fd4adab360f392f1b01e5daadc0ea93f2c27bbacfbbb92c4ae2e2bd54",
+      "bytes": 373
+    },
+    "config/journeymap_server.cfg": {
+      "sha256": "bfd7c39f740bf5008fb0dc55e1b140d7436f47c57775f5a0fee9721db56229bc",
+      "bytes": 633
+    },
+    "config/laser_drill_ores/actuallyadditions_ores.json": {
+      "sha256": "30cec8700c40ec23ec2a811bc7447d69aada98bdf0ec5dd51ade49e31b9a05ee",
+      "bytes": 265
+    },
+    "config/laser_drill_ores/appliedenergistics2_ores.json": {
+      "sha256": "a4ae8cc196af660617b7957cc891c9c65ad1145401f6ebae19afdbb5bd02cfa3",
+      "bytes": 537
+    },
+    "config/laser_drill_ores/astralsorcery_ores.json": {
+      "sha256": "bcd2caccbd46377df20b6b0f1404a61a3a0edfa56f9aa1a904a197b1f14da7b2",
+      "bytes": 791
+    },
+    "config/laser_drill_ores/biomesoplenty_ores.json": {
+      "sha256": "d364fbba0e93e59604fe7d9c1c0ea78cd225180ba274c4b1ba113bbaa2cc563c",
+      "bytes": 2175
+    },
+    "config/laser_drill_ores/default_ores.json": {
+      "sha256": "29030f50114fa9b7f5c2c134c41d4c186f592898827bfbd9dcdfe8323815c5ab",
+      "bytes": 10696
+    },
+    "config/laser_drill_ores/forestry_ores.json": {
+      "sha256": "b70cf8708ccccec69c5449d5a1cda49c474275a420475482ce4b88f8ffecc3bc",
+      "bytes": 254
+    },
+    "config/laser_drill_ores/rftools_ores.json": {
+      "sha256": "888ee7c8d4e63b21c047e55706113be73087c861bd8f5716b915229463550633",
+      "bytes": 758
+    },
+    "config/laser_drill_ores/thermalfoundation_ores.json": {
+      "sha256": "5f6277b289867d18fc1bc100ba4a52c1926a93c3e7418fff6b4430e0651858b8",
+      "bytes": 1791
+    },
+    "config/libvulpes.cfg": {
+      "sha256": "da93e5477e9c9c0a5c34c141f7ff1b57cb29c606b7d6443d9ea9f039b217e11e",
+      "bytes": 171
+    },
+    "config/lostcities/general.cfg": {
+      "sha256": "6a48cdc4d2155434d55860a9a34d4fe85c58ef80615fd93fe78c05a1b251d6c9",
+      "bytes": 4221
+    },
+    "config/lostcities/profile_ancient.cfg": {
+      "sha256": "fd045e80744352ce78e953458f2ea5672e4cd0a5a1c012a434c0e43b6b564672",
+      "bytes": 21792
+    },
+    "config/lostcities/profile_atlantis.cfg": {
+      "sha256": "80ec24d2e3bc7201b42f97958d14508bf56d133dbcdb4a79713323181ab92c24",
+      "bytes": 21318
+    },
+    "config/lostcities/profile_bio_wasteland.cfg": {
+      "sha256": "e3e0d2bf23dce502eb1e8f947ece72bad76a6752495b102bd315b7faa4f34987",
+      "bytes": 21618
+    },
+    "config/lostcities/profile_biosphere.cfg": {
+      "sha256": "a761338b3a68eac49074186fb54276723ffb53df5a7514baba87c59692b6fd2c",
+      "bytes": 21637
+    },
+    "config/lostcities/profile_cavern.cfg": {
+      "sha256": "63c4e4e2f329c20db14e7c4b958eb4065d30f4fce3c37c0162bcc2b10e0fea3e",
+      "bytes": 21473
+    },
+    "config/lostcities/profile_chisel.cfg": {
+      "sha256": "e1b579348e3e8fa93357f39f569f115656688fafea80e01f56184230b5165735",
+      "bytes": 21302
+    },
+    "config/lostcities/profile_default.cfg": {
+      "sha256": "7921fea2b20a847a83a0879fcb05cea9865bcbbdbfbd0cf6d3cd2298173f2b79",
+      "bytes": 21321
+    },
+    "config/lostcities/profile_floating.cfg": {
+      "sha256": "87fcc8c5e242bbb44beafa49bf27a2e8183708c19c723ea58c632f4ddd162bfc",
+      "bytes": 21379
+    },
+    "config/lostcities/profile_nodamage.cfg": {
+      "sha256": "7c1e55cf1c4abe392b2f8feab6ca25ca62a1d1b872a35cdff29d5a927c12908b",
+      "bytes": 21447
+    },
+    "config/lostcities/profile_onlycities.cfg": {
+      "sha256": "4692ba7e7a0ab5b613efcecb0b124a2d1961c87258a47c9cbce600e6948d1cd6",
+      "bytes": 21348
+    },
+    "config/lostcities/profile_rarecities.cfg": {
+      "sha256": "516b1cea5d28070f9fde4a0dfecb8fb8fdcfc43acfe25278623fbcb48ce4a0a5",
+      "bytes": 21328
+    },
+    "config/lostcities/profile_realistic.cfg": {
+      "sha256": "cad15310209d30ecc994e9f6b2a3c6d1433df8ca54d5920055dee7627b43f0a6",
+      "bytes": 25911
+    },
+    "config/lostcities/profile_safe.cfg": {
+      "sha256": "eff71661d728687a1d426c17fd1c82c11b0481714273fab2aeacbf41dbe3149b",
+      "bytes": 21257
+    },
+    "config/lostcities/profile_space.cfg": {
+      "sha256": "cfa8cf132caaca0725b408d0d3b8075eb0256d6a6d5379b0ad7ee8d7c114d040",
+      "bytes": 21328
+    },
+    "config/lostcities/profile_tallbuildings.cfg": {
+      "sha256": "8ea58d1c5c336815a835f81402283ce217b3528c723b4d97d0b96c6e2470febd",
+      "bytes": 21443
+    },
+    "config/lostcities/profile_wasteland.cfg": {
+      "sha256": "16a1ad51a05ad1aa8203a3e69dbe44bf31c07a6bc25f74f26af75ec9c080d97e",
+      "bytes": 21923
+    },
+    "config/lostcities/profile_water_empty.cfg": {
+      "sha256": "3a02f4ae10c2ff7458d9c5a36c51535b315919a0e16bd6abee1e9aa5eaa16b61",
+      "bytes": 21303
+    },
+    "config/lostcities/profile_waterbubbles.cfg": {
+      "sha256": "accedf09a79e1139db331151727f47922c6b5ffc7bafc01a0ce8d41be106f99c",
+      "bytes": 21472
+    },
+    "config/magicbees.cfg": {
+      "sha256": "2052117c08914afdcfc099bd647dd1094254d4b8bcfbf4c3e04b27a732065205",
+      "bytes": 2061
+    },
+    "config/mcjtylib.cfg": {
+      "sha256": "5da016d72f154b7f42274db7a0f6b95a0b9b70a78bf97e9ebf4ea81867add8cc",
+      "bytes": 7626
+    },
+    "config/microblocks.cfg": {
+      "sha256": "c37d2987b0316ae1e4b0bff9af8bca096e1d67cc5032c1287154b83cee37928e",
+      "bytes": 468
+    },
+    "config/minetogether/gdpr.txt": {
+      "sha256": "ef669729b1aee61f38fe74e95bed24a47b07088838c1ddd683d66d545bcffa6f",
+      "bytes": 187
+    },
+    "config/minetogether.cfg": {
+      "sha256": "7744331685cc5712992623b2140a4a16557c6886a51e68a26e2725c5084a01c6",
+      "bytes": 462
+    },
+    "config/modnametooltip.cfg": {
+      "sha256": "c3b897ecd08bf4cf0a29747d40f5a5326df8cff30e797c15e37a3161a0b8de68",
+      "bytes": 398
+    },
+    "config/MoreOverlays.cfg": {
+      "sha256": "7f60f9f39e2373cb10de5423802bb12fd5b9747bf540bd4f234618c1b9d7da7c",
+      "bytes": 2494
+    },
+    "config/morpheus.cfg": {
+      "sha256": "de45bb566356433ad34a3c11ce644d248fc24348d9a034a5a882f342b245f393",
+      "bytes": 398
+    },
+    "config/morphtool.cfg": {
+      "sha256": "ca49d3b2bc0908843c008effd1b200f2e6ade6c844bdc078d862772281528690",
+      "bytes": 652
+    },
+    "config/MouseTweaks.cfg": {
+      "sha256": "523d95fb27803c0ebbf953bc31ec13c670a1d2ff45862c3f9b4a337f32c938de",
+      "bytes": 190
+    },
+    "config/MrTJPCore.cfg": {
+      "sha256": "d5e4e40fb65ffa43c31f98982993fc9a204acab9826d6413462b99668241866f",
+      "bytes": 1379
+    },
+    "config/multipart.cfg": {
+      "sha256": "09e84839cd81ded44c4a89136ad4c53ad9b276a3e3540e1b4040539ec040e0d7",
+      "bytes": 341
+    },
+    "config/natura.cfg": {
+      "sha256": "6e8c8b0ff5bc25d1c02c6baaf0fa5db2a17de5bf7b6defd85c13002f7ea7dc8e",
+      "bytes": 4355
+    },
+    "config/NaturaModules.cfg": {
+      "sha256": "3826d831f19b7d637fdf1ee3153a8e20af50d28c05b292ad37ef3f749f9cb81c",
+      "bytes": 608
+    },
+    "config/naturescompass.cfg": {
+      "sha256": "d64962b9a930d745f973bbb3a23a3e3fb23757693d9564820167ffce1e8c3f63",
+      "bytes": 1252
+    },
+    "config/nice.cfg": {
+      "sha256": "9ff147b626cb4ab398efbd51a951d26e8c3be613d8eff54d2d97f806a0e0e1e5",
+      "bytes": 472
+    },
+    "config/NoMobSpawningOnTrees.cfg": {
+      "sha256": "c2649e8c4297d5e530b52d0883a78d11979404ad4273f4dd9fa99176e15b7dd7",
+      "bytes": 821
+    },
+    "config/notenoughwands.cfg": {
+      "sha256": "7905235cd67c46e10e660d06737d31370ae43bf5b359cb53248d4363f3675b3e",
+      "bytes": 15045
+    },
+    "config/openblocks.cfg": {
+      "sha256": "17cab80f220b6b041ddd47ca7155b45ef33112b613eca78919148bb2331fe7b8",
+      "bytes": 13748
+    },
+    "config/openmods.cfg": {
+      "sha256": "a352eb26d4fb50a775455eeedf62cb2fce9170900efdaaaf115bb7e255e4f061",
+      "bytes": 684
+    },
+    "config/OpenModsLibCore.json": {
+      "sha256": "1e88fc13abaf0c4c84542dda7fac06e8dd7ea78904e2a98561c145db04cb4f0f",
+      "bytes": 1639
+    },
+    "config/p455w0rdsLib.cfg": {
+      "sha256": "e72fe6c98e169beb3f3c4b889bee946e1adda8dc9e2b2aa14b939becee831789",
+      "bytes": 1518
+    },
+    "config/patchouli.cfg": {
+      "sha256": "3eb8684d43d8211946a5d4c771bc45a3dc1faf5c64eaa66bbfae98f8625406f1",
+      "bytes": 552
+    },
+    "config/phosphor.json": {
+      "sha256": "4b27c6215105458d0910d8b3a994bec33c0c2bb1ab34e5fd5a48489f2b84dfda",
+      "bytes": 111
+    },
+    "config/placebo.cfg": {
+      "sha256": "0deaeb7c38d55ced49f2e11945b7854bfede8cf3124d2a050f9d92ece0a7c743",
+      "bytes": 326
+    },
+    "config/platforms.cfg": {
+      "sha256": "7e9c8dfa42b107a6d0539d78394d0b435187ce88ec86f71edcb10026f02c9f71",
+      "bytes": 2197
+    },
+    "config/ProjectRed.cfg": {
+      "sha256": "6d648d7a6c574ac0d520bfeaf61838fbade5a8525ef833794961929d7d8bfc2f",
+      "bytes": 4115
+    },
+    "config/ProjectRedRelocation.cfg": {
+      "sha256": "224f2d5e520ec1d05c2d7327154858d03dbc135c038b2c4b55953c0914b4fbb3",
+      "bytes": 3757
+    },
+    "config/quark.cfg": {
+      "sha256": "594f481b5c8ccb71260a01af6878f0fb3f4dee1b00cef5935837951e71b0c0f5",
+      "bytes": 105629
+    },
+    "config/quickleafdecay.cfg": {
+      "sha256": "fa597216a70fa324e73e2ad14edf05cd0e4cc8eff0143ea6d834fae890179796",
+      "bytes": 297
+    },
+    "config/railcraft/blocks.cfg": {
+      "sha256": "29d9d10c158e0a1bb17cdaf5ce4173592e36bcd04c003128c8945dddcc68d652",
+      "bytes": 13503
+    },
+    "config/railcraft/client.cfg": {
+      "sha256": "e697d596912cf33c5ff148f8e45aa7e26e71e63739efc974a35a70fd45d41424",
+      "bytes": 493
+    },
+    "config/railcraft/entities.cfg": {
+      "sha256": "05a510e914fd5295eab9d75a2f35e74866aaa19f7594a542b2e2c4f353edeabf",
+      "bytes": 1194
+    },
+    "config/railcraft/items.cfg": {
+      "sha256": "cf7361428e92fb1ae867058fd3fe79756f6308a66902ba395cdef1071d836efd",
+      "bytes": 2595
+    },
+    "config/railcraft/modules.cfg": {
+      "sha256": "70e019795c1f1c130f0666134d2802da7ea8b59356fc684599d4b448531b8ca9",
+      "bytes": 3114
+    },
+    "config/railcraft/ores/mine_copper.cfg": {
+      "sha256": "bb5cf7e7a150fae8e934844ed6874ac7cd15889cc3a01b96853821639aa01e46",
+      "bytes": 9228
+    },
+    "config/railcraft/ores/mine_gold.cfg": {
+      "sha256": "664c9156577d35d8a7408129a6564d67c84e662b84167f36c67fc5abdbe3ba95",
+      "bytes": 9226
+    },
+    "config/railcraft/ores/mine_iron.cfg": {
+      "sha256": "7f0ca0ee686c020d7bb97fd2db4fc899efbb817c32b5e5e8732cab8d11745cf9",
+      "bytes": 9228
+    },
+    "config/railcraft/ores/mine_lead.cfg": {
+      "sha256": "b2920a97a6e4ae3170af5c7a8fc35fbe917acded32c050be92ab3e4f2709c964",
+      "bytes": 9228
+    },
+    "config/railcraft/ores/mine_nickel.cfg": {
+      "sha256": "3b0f5563bb39de5405192910adaad0d5e7e26bf056a767359df1cac9ca3e1ba9",
+      "bytes": 9228
+    },
+    "config/railcraft/ores/mine_silver.cfg": {
+      "sha256": "94080e4f29b99404f142dbd68178ce2568e3abc9a52d9146b301bbb85b4e7973",
+      "bytes": 9228
+    },
+    "config/railcraft/ores/mine_tin.cfg": {
+      "sha256": "0644a8339c1b0970d81b51fd5b9d3ec1c9975778418675efc12818dd279f0f9b",
+      "bytes": 9228
+    },
+    "config/railcraft/ores/mine_zinc.cfg": {
+      "sha256": "f77cefad8c39c097278e7cc8af50a8bd650bd35240ed3009bd506376927bc71c",
+      "bytes": 9228
+    },
+    "config/railcraft/railcraft.cfg": {
+      "sha256": "0a5e0dc5c6a97399c97ab8f542b7ac170b06b4b88db6b6c0b1c48b25efe447eb",
+      "bytes": 22278
+    },
+    "config/randompatches.cfg": {
+      "sha256": "35280504d62e05b97b461956db53cccf6841f10e87492c3e360d3c7bbe7cc16c",
+      "bytes": 8676
+    },
+    "config/rangedpumps.cfg": {
+      "sha256": "1325ab50e5883cb91cd0c32b640975d23b01dffdba7e77c327b16597b10aedc4",
+      "bytes": 915
+    },
+    "config/reborncore.cfg": {
+      "sha256": "2b587ca12f0b39037da88d1b37686ac8d5f2d0e77dc125abd088a882f0cc1733",
+      "bytes": 1426
+    },
+    "config/refinedstorage.cfg": {
+      "sha256": "bbeef5169aa1b0a46b7514adcd2002d2d62d4ed6e0d52e18d0f234787eb7f8cc",
+      "bytes": 8403
+    },
+    "config/refinedstorageaddons.cfg": {
+      "sha256": "92e71caf488caab1d07d507c39c707ed6a785f7ee8a04cbec45bc38e54bfac9e",
+      "bytes": 1383
+    },
+    "config/rftools/control.cfg": {
+      "sha256": "42dd689da5ba3defc24efa8c3bda5f54d9820d7ecdd1563500fb8b8831e72501",
+      "bytes": 2253
+    },
+    "config/rftools/dimensions.cfg": {
+      "sha256": "254944d298758930a01335e65fd9601bbe66b6b3dac07c2fd3f9bef4ee63d8b6",
+      "bytes": 25790
+    },
+    "config/rftools/dimlets.json": {
+      "sha256": "ce43780c78161dff9205f6b8f2d067e5bee8f4b5ce799194d08d2ccb0009a939",
+      "bytes": 20133
+    },
+    "config/rftools/rftools.cfg": {
+      "sha256": "f69e86b06d93c93dcf27586645486faa359a6edb8d2ab5e1b5f707c589cff998",
+      "bytes": 58692
+    },
+    "config/rftools/rftoolspower.cfg": {
+      "sha256": "d7b0c0fb3208cae273eee5c8cc4b7cba7902e3d5b277e748f7d15cb3b9c6d2c6",
+      "bytes": 1426
+    },
+    "config/rustic.cfg": {
+      "sha256": "47e56b492286b4df9b5718aa16ce4d0dadbf79adf95e12838d31ef3fd799ade1",
+      "bytes": 8320
+    },
+    "config/shadowfacts/ExtraRails.cfg": {
+      "sha256": "45ba8df559c3a7a57967fbbf300bfff6b32be953e0941e2e7c82a71e78068b9d",
+      "bytes": 360
+    },
+    "config/shadowfacts/ShadowMC.cfg": {
+      "sha256": "a134af8daa6a57ff915e7ddca5b132e54d16e1332b96aa57226622aabf298b81",
+      "bytes": 276
+    },
+    "config/shetiphiancore.cfg": {
+      "sha256": "8d938b9c4ab481f311028da72ac3b929217d79dd1d2776e6f9d4655321bd4b03",
+      "bytes": 396
+    },
+    "config/signals.cfg": {
+      "sha256": "a41a46aa477dff000da6be1aa03618dde9f1bafb94c7bd73bedfe6d11114838d",
+      "bytes": 3809
+    },
+    "config/simplevoidworld.cfg": {
+      "sha256": "8c70e6e0e4691d2ff204d3c9b0e2c10e732275775e91313a81c1a39cb5405702",
+      "bytes": 563
+    },
+    "config/simplyjetpacks-client.cfg": {
+      "sha256": "a1afe0c75747eb33e790eddd3378126602b8a8bebecadf8717f557e39dcecfd3",
+      "bytes": 2690
+    },
+    "config/simplyjetpacks.cfg": {
+      "sha256": "3c141519aef92c8569f3a8e602270aea0891111f6b876769f23c0ff370da04a2",
+      "bytes": 26480
+    },
+    "config/snad.cfg": {
+      "sha256": "e30f8f43574957910bb41e19569f652518545fa09dbe54568ca006fa75fa6b32",
+      "bytes": 89
+    },
+    "config/soulshardsrespawn/multiblock.json": {
+      "sha256": "43a09683414a535d8560a9f9fc81bd8a6fa74e97857ddf18f937fa3dd1a68c5d",
+      "bytes": 408
+    },
+    "config/soulshardsrespawn/soulshardsrespawn.cfg": {
+      "sha256": "53bb9d2d38057b96be431eada6e67797f0f38eb498b8f9922ab13db2ba1ef71d",
+      "bytes": 23300
+    },
+    "config/soulshardsrespawn/tiers.json": {
+      "sha256": "78a235af4b73abe82f8b31f009be6bc83d6dc434385676e9dd78f5e335ee728e",
+      "bytes": 938
+    },
+    "config/splash.properties": {
+      "sha256": "d74f619df6d6b1ce3b70a0d3b3895250c0814f08eaae82e914e0c32b67abe1ad",
+      "bytes": 487
+    },
+    "config/splashanimation.cfg": {
+      "sha256": "08d21ee06ae9acfb4582505badfb3f6de6e2c046ac68595638c1bc3c81ac3137",
+      "bytes": 1000
+    },
+    "config/stevescarts.cfg": {
+      "sha256": "3ec5650892a0f3b02cd5e07f1a3394cc42e4feaadb7821154b19ce2711b8ab6c",
+      "bytes": 5234
+    },
+    "config/storagedrawers.cfg": {
+      "sha256": "48933618dfa813490c77dc11ea195d68716cb54741d2126198440aeff4aa5acb",
+      "bytes": 2628
+    },
+    "config/storagedrawersextra.cfg": {
+      "sha256": "657094bfa799749e5d01ce39c433c54e71c5210cf10f0e5aa92fcc9ebdd56c42",
+      "bytes": 156
+    },
+    "config/tconstruct.cfg": {
+      "sha256": "eb3a99ffa2b48c817cb3317a66f79c838aef739aa8d0fae84edca02c8b1e06ed",
+      "bytes": 5171
+    },
+    "config/teamreborn/configData.nbt": {
+      "sha256": "d7e848b921ce4c3f75cdf654fb581df4e8f159048467b11e0b5d6363803380b7",
+      "bytes": 2908
+    },
+    "config/teamreborn/energy_priority.json": {
+      "sha256": "a4b15e9e487251b9e4277da92c104361240e8eef17a28de40a36a6b595782363",
+      "bytes": 65
+    },
+    "config/teamreborn/reborncore/client.cfg": {
+      "sha256": "b4b9c2f59a545f021ad89115eead21f7e51a44e8468f6e041b9210760053f5a6",
+      "bytes": 388
+    },
+    "config/teamreborn/reborncore/misc.cfg": {
+      "sha256": "6a4d2c1a100dbd353f790586db5ed5282635d693ad7656e2c8932413d22ccd47",
+      "bytes": 638
+    },
+    "config/teamreborn/reborncore/power.cfg": {
+      "sha256": "265dbd50415252c24f522fa0c6cb440c564a9c0298911959283cae6aa56d4b8e",
+      "bytes": 390
+    },
+    "config/teamreborn/reborncore/selected_energy.json": {
+      "sha256": "9a1954243a3851247769c8525d22faf6addfb36cd3fb347449b14c1e18a98214",
+      "bytes": 2
+    },
+    "config/teamreborn/reborncore/upgrades.cfg": {
+      "sha256": "d3921a133b47bcf3a8bcbfc6974f717b8d3767a8bccc8de5af8d575f646019a0",
+      "bytes": 479
+    },
+    "config/teamreborn/rebornstorage/config.cfg": {
+      "sha256": "a77a2ec4eb9c62b93705e9eabc40d7564636440e3f1a3a50c06fd11f4b9f7707",
+      "bytes": 513
+    },
+    "config/teslacorelib.cfg": {
+      "sha256": "fcd06ed605a5d951523f59dc5a3e776a484a0a73a7cae61f25d91e872136088e",
+      "bytes": 2148
+    },
+    "config/thaumcraft_graphics.cfg": {
+      "sha256": "5177a7cd72d2c5537209d419500f1be0a58501c0e4c4c841b72e27b46a1da939",
+      "bytes": 1095
+    },
+    "config/thaumcraft_misc.cfg": {
+      "sha256": "12c478270eef3bfe018d4071987a6325619562a2e167aff31809c336156ab4f2",
+      "bytes": 964
+    },
+    "config/thaumcraft_world.cfg": {
+      "sha256": "591ff28cb6428894ea6fc961eabe5d1a7085f4b26999d3394f8fab703202b493",
+      "bytes": 2099
+    },
+    "config/thaumicjei.cfg": {
+      "sha256": "ebad328b693b32ca53b23ead8106183257380c522ecd040c84846d0705f601fb",
+      "bytes": 868
+    },
+    "config/thaumicjei_itemstack_aspects.json": {
+      "sha256": "44068361fbc0d8546a53aabe7f5f1fa586870a15c2908d05db3f86eae3ec4013",
+      "bytes": 6380592
+    },
+    "config/theoneprobe.cfg": {
+      "sha256": "74fe566fd615eea1d2bc40cd7f0e706262e4dad2427be036b96f8ff749dfc295",
+      "bytes": 13397
+    },
+    "config/thutcore.cfg": {
+      "sha256": "ae5d9b8d8636480eb7a7232106d5966d7d0b8185c6b45c84c7e77a2892a17bfc",
+      "bytes": 525
+    },
+    "config/thuttech.cfg": {
+      "sha256": "1d3df24cc226404ca14e53daf2a47d94366db11495c5780327e99ddcd4bcb9e1",
+      "bytes": 1326
+    },
+    "config/TinkerModules.cfg": {
+      "sha256": "0369794f540e0c43a4a3c791fbe6d369ae37f8e6434cd61e58d3ded94c006ff9",
+      "bytes": 567
+    },
+    "config/TinkerToolLeveling.cfg": {
+      "sha256": "c05fe73049b000b04c580916ec48ee8b3514c8d43ad898858a1d375c0bf13b2f",
+      "bytes": 1185
+    },
+    "config/toastcontrol.cfg": {
+      "sha256": "cf25a9ebeacc1940af30284180a9969fbc59e5bdfed78ed31ed65d3757ca9e45",
+      "bytes": 905
+    },
+    "config/topaddons.cfg": {
+      "sha256": "a238189d8d6db5e2149802d00d2d9724ef9d2877f552d57e09200998496c8877",
+      "bytes": 946
+    },
+    "config/topaddons_client.cfg": {
+      "sha256": "ed5d76d3752b944c0ece98ebfe3192d9623757db779902155b443fcb9215fe47",
+      "bytes": 842
+    },
+    "config/torchmaster.cfg": {
+      "sha256": "397f3a0c56d8476d803d205382cd3e76e25ab8ee2507f4bd9f94ff03558822d6",
+      "bytes": 4849
+    },
+    "config/translocators.cfg": {
+      "sha256": "7da7581e87df4f0f619d85bf78431aabe35b32d83fea33881556ab5f4083e708",
+      "bytes": 287
+    },
+    "config/traverse/traverse.cfg": {
+      "sha256": "fef802d08de0a81ff75ee1acd7223db9b491378defe081948eea13f802725f7b",
+      "bytes": 2997
+    },
+    "config/twilightforest.cfg": {
+      "sha256": "5f325a8e58a91c35770f1a35ae5ebf2ae9a8c6027fcbaa44dacfc84c64a890f4",
+      "bytes": 12087
+    },
+    "config/unidict/IntegrationModule.cfg": {
+      "sha256": "a4f51ee13dcff9addef116e42f4729760b7e28d58f2e32ab608c2cdbb92d6cd4",
+      "bytes": 712
+    },
+    "config/unidict/UniDict.cfg": {
+      "sha256": "4eb38a5951b817882c9fc09349cedf72635f2eeb2c761aba7b2a535be6a2b16a",
+      "bytes": 8497
+    },
+    "config/valkyrielib/main.cfg": {
+      "sha256": "9ec759eee45c7b29a32f55ec12f1bf9fbaf4f75cdb32d698add419a79f8611ad",
+      "bytes": 480
+    },
+    "config/Waystones.cfg": {
+      "sha256": "c668f0f324aa901177527cb3c7fc5deb31acf4bf5443f45525d692a4eb1ebd6b",
+      "bytes": 4536
+    },
+    "config/WirelessCraftingTerminal.cfg": {
+      "sha256": "0bd9084ff065aed3f19111faf8de27e44812aea05a3a8f15023bfd6bd353b391",
+      "bytes": 1835
+    },
+    "config/woot/custom_drops.json": {
+      "sha256": "1ac70c82eaa178ad24695d2db0af021305b67afa9c4508fdc5a808ed50d17e16",
+      "bytes": 2946
+    },
+    "config/woot/factory_config.json": {
+      "sha256": "2c693572fb46c84004f9a2f730ea97b2972e311dea7aaa428c797ccc952f3e79",
+      "bytes": 4264
+    },
+    "config/woot/factory_ingredients.json": {
+      "sha256": "4993660d3e16c67cf6ffa3130d8b6c3bc8a7b971ae8af84f9e2ed52640b5772f",
+      "bytes": 747
+    },
+    "config/woot/woot.cfg": {
+      "sha256": "a38b5c3aa7efc1a71efca878f003e57a4333c8d6491799b337eb207f24bda3da",
+      "bytes": 8944
+    },
+    "config/xnet/xnet.cfg": {
+      "sha256": "85c1790795afe1aa593336bba6adaa4649fb23fcabcfc649f9a484bcaf609626",
+      "bytes": 4328
+    },
+    "config/xreliquary.cfg": {
+      "sha256": "680b308d0879ef887ef30bea34da3954be7d25eac2d57189ba97d5b979c77afe",
+      "bytes": 53916
+    },
+    "config/xtones.cfg": {
+      "sha256": "d6d741ccf4ae64639917b23068a105480c0d9ef67729a9c1dac198965897cc46",
+      "bytes": 930
+    },
+    "config/yabba.cfg": {
+      "sha256": "1bfa0ce0980e2023b0458ac006e534b9c73bc638b94b26b7e7a52b5e35a4b705",
+      "bytes": 1983
+    },
+    "forge-1.12.2-14.23.5.2846-universal.jar": {
+      "sha256": "2484e7e36db090d61e567e75714ce7c16549983516842fe1bd34e809e92efa10",
+      "bytes": 4897687
+    },
+    "libraries/com/typesafe/akka/akka-actor_2.11/2.3.3/akka-actor_2.11-2.3.3.jar": {
+      "sha256": "4ccbc821a417f0174c9734fc721f078177cacef94ded09c3775ebf40c6a7bdfd",
+      "bytes": 2514991
+    },
+    "libraries/com/typesafe/config/1.2.1/config-1.2.1.jar": {
+      "sha256": "c160fbd78f51a0c2375a794e435ce2112524a6871f64d0331895e9e26ee8b9ee",
+      "bytes": 219554
+    },
+    "libraries/java3d/vecmath/1.5.2/vecmath-1.5.2.jar": {
+      "sha256": "09adf7955baa6bddf57a4bdbf9a91cf690261314969b59a18085ece1e05eccf9",
+      "bytes": 318956
+    },
+    "libraries/lzma/lzma/0.0.1/lzma-0.0.1.jar": {
+      "sha256": "0c3085cb93c3ef95d731c274b6f2dd195aa0405fe9328d69cab7f5e899d5e124",
+      "bytes": 5762
+    },
+    "libraries/net/java/dev/jna/jna/4.4.0/jna-4.4.0.jar": {
+      "sha256": "c4dadeeecaa90c8847902082aee5eb107fcf59c5d0e63a17fcaf273c0e2d2bd1",
+      "bytes": 1091208
+    },
+    "libraries/net/minecraft/launchwrapper/1.12/launchwrapper-1.12.jar": {
+      "sha256": "57f402b626d16cc2705bf2a37add7adbb074f0ca3b3102fa6e23aa303dae682f",
+      "bytes": 32999
+    },
+    "libraries/net/sf/jopt-simple/jopt-simple/5.0.3/jopt-simple-5.0.3.jar": {
+      "sha256": "6f45c00908265947c39221035250024f2caec9a15c1c8cf553ebeecee289f342",
+      "bytes": 78175
+    },
+    "libraries/net/sf/trove4j/trove4j/3.0.3/trove4j-3.0.3.jar": {
+      "sha256": "3c8616203d61a12a7e3487e8b34f3c198c2b5ba9e90da0c7ea32d99cd4958012",
+      "bytes": 2523218
+    },
+    "libraries/org/apache/maven/maven-artifact/3.5.3/maven-artifact-3.5.3.jar": {
+      "sha256": "30d066e27379a51c8d9c67b1ab0b7e55d930c9721161b07ef1666ab9fc24c629",
+      "bytes": 54961
+    },
+    "libraries/org/jline/jline/3.5.1/jline-3.5.1.jar": {
+      "sha256": "7285f4a93d4205674e328a3e28e4d7cec10429f3ab5a0d7024b85746e958aeda",
+      "bytes": 614590
+    },
+    "libraries/org/ow2/asm/asm-all/5.2/asm-all-5.2.jar": {
+      "sha256": "7fbffbc1db3422e2101689fd88df8384b15817b52b9b2b267b9f6d2511dc198d",
+      "bytes": 247787
+    },
+    "libraries/org/scala-lang/plugins/scala-continuations-library_2.11/1.0.2/scala-continuations-library_2.11-1.0.2.jar": {
+      "sha256": "8dd0a4941f4564117cc991734ca36aa53dff6bb0be329f39eab46d8819f60d1a",
+      "bytes": 25365
+    },
+    "libraries/org/scala-lang/plugins/scala-continuations-plugin_2.11.1/1.0.2/scala-continuations-plugin_2.11.1-1.0.2.jar": {
+      "sha256": "79329971a31ede7b6823f21a6ab765506b4093d9276debdc9dbe17b996884f2b",
+      "bytes": 206575
+    },
+    "libraries/org/scala-lang/scala-actors-migration_2.11/1.1.0/scala-actors-migration_2.11-1.1.0.jar": {
+      "sha256": "b89d0beb76df20c7b2c2bee59ba53b802cc48566bc3e89ac96ce6361c5c2ee38",
+      "bytes": 58018
+    },
+    "libraries/org/scala-lang/scala-compiler/2.11.1/scala-compiler-2.11.1.jar": {
+      "sha256": "3aa616f5c56d2052fc5e3231f3e8cf1736f876caff0142a66096fc5b4dc87ae5",
+      "bytes": 13449765
+    },
+    "libraries/org/scala-lang/scala-library/2.11.1/scala-library-2.11.1.jar": {
+      "sha256": "088bcb80f71b6e6a2a31d2fe7288c1fd64f19663ce281b924cdfab3fb105f4f3",
+      "bytes": 5538130
+    },
+    "libraries/org/scala-lang/scala-parser-combinators_2.11/1.0.1/scala-parser-combinators_2.11-1.0.1.jar": {
+      "sha256": "19495ce701fd9ba3c499c137e3ad5364acee8f87a01ef99e912f995a23fd4cb1",
+      "bytes": 419701
+    },
+    "libraries/org/scala-lang/scala-reflect/2.11.1/scala-reflect-2.11.1.jar": {
+      "sha256": "41938d1e89670979dd783102777a8b879999f4fb00a5b811b51c105b02a9d4f8",
+      "bytes": 4372892
+    },
+    "libraries/org/scala-lang/scala-swing_2.11/1.0.1/scala-swing_2.11-1.0.1.jar": {
+      "sha256": "4a7c757d4d87dd37382bd777ad611b5875748aef148277cf25bb39eebb496d07",
+      "bytes": 726500
+    },
+    "libraries/org/scala-lang/scala-xml_2.11/1.0.2/scala-xml_2.11-1.0.2.jar": {
+      "sha256": "6c3338a4062c13dc2ce61630d9854d361a81656a4050e5080302f500dd4a8832",
+      "bytes": 648679
+    },
+    "minecraft_server.1.12.2.jar": {
+      "sha256": "fe1f9274e6dad9191bf6e6e8e36ee6ebc737f373603df0946aafcded0d53167e",
+      "bytes": 30222121
+    },
+    "mods/1.12.2/ChickenASM-1.12-1.0.2.7.jar": {
+      "sha256": "54c063e72abb6af999d80b94a2f1c9593c6ef0bb7769f3410d2a49f47c1ba3b0",
+      "bytes": 55622
+    },
+    "mods/ActuallyAdditions-1.12.2-r150.jar": {
+      "sha256": "c5780a82a8f332d210ec4d011d9e1cb712177da50fb4cb1236635db94531d740",
+      "bytes": 2938976
+    },
+    "mods/ActuallyBaubles-1.12-1.1.jar": {
+      "sha256": "69817c09c8f0252098142383036062ca2e91d05bd1e422e3ae6682e8423e4bc1",
+      "bytes": 11604
+    },
+    "mods/Advanced Machines-61.0.1.jar": {
+      "sha256": "6092ffec5a1eff36c0a03225a46d45eb74fd7986023789391626c60437e4d9c4",
+      "bytes": 190539
+    },
+    "mods/Advanced Solar Panels-4.3.0.jar": {
+      "sha256": "6530286f2cd6545f4d7b510d64199a1ec5a4f77915fea2f7274c9a0fbdbc011a",
+      "bytes": 316833
+    },
+    "mods/AE2WTLib-1.12.2-1.0.34.jar": {
+      "sha256": "6d0ec545bf94e6142b4140f910aae4114b1f92298e820c12fa91af35a3c90d60",
+      "bytes": 243622
+    },
+    "mods/AkashicTome-1.2-12.jar": {
+      "sha256": "4edda1cb9a1eb9240b7c9087dfc0347b0f75c29f7239299991b27324524b167f",
+      "bytes": 44663
+    },
+    "mods/AppleSkin-mc1.12-1.0.9.jar": {
+      "sha256": "9bff732c18adf82c4410a827b35d43b68b979f9ede6c2108b6b97550cf386188",
+      "bytes": 32317
+    },
+    "mods/appliedenergistics2-rv6-stable-7.jar": {
+      "sha256": "e7f7fbf6caaf6206dbd958fb8f9185f874a405289e62ae3e97209b455a89fb1a",
+      "bytes": 4062630
+    },
+    "mods/architecturecraft-1.12-3.98.jar": {
+      "sha256": "36c179868eb79b1a10f09f0e1aa1c646468d87f65a9e71aa5ccdd7611d350da1",
+      "bytes": 921733
+    },
+    "mods/Aroma1997Core-1.12.2-2.0.0.2.jar": {
+      "sha256": "75cc65a0b352d8d44e30fd20c6a7811c9bc42ca2ddca75f79a955675960b58a8",
+      "bytes": 398634
+    },
+    "mods/Aroma1997s-Dimensional-World-1.12.2-2.0.0.2.b89.jar": {
+      "sha256": "4f7f5ed50b9c775dbf4d08f4b597ab0069143191b48861781a6aaf55766ecde1",
+      "bytes": 80721
+    },
+    "mods/astralsorcery-1.12.2-1.10.20.jar": {
+      "sha256": "70a93272ebb50e2ad153aa314864232fef639efa153cf65ed8dc6a0477fbdfb8",
+      "bytes": 24973981
+    },
+    "mods/AutoRegLib-1.3-32.jar": {
+      "sha256": "d8610a94da8f30815db4612b3291ecdcfd8204eaf1a4db8c5d0663c7b1191d91",
+      "bytes": 108306
+    },
+    "mods/badwithernocookiereloaded-1.12.2-3.3.16.jar": {
+      "sha256": "b096fe9213b2c25f8abe3a9154d114cfb5933397a1f48a89854e219651d9dea8",
+      "bytes": 11034
+    },
+    "mods/base-1.12.2-3.13.0.jar": {
+      "sha256": "8505982eb3204997dc965d1a6e22a6d0bc5df04de45d8ea6eb2b154426a9f591",
+      "bytes": 685028
+    },
+    "mods/Baubles-1.12-1.5.2.jar": {
+      "sha256": "b32010b2f2778aa1188585e7ead91ad46d4cb2c715f9c778a61848ba7fe51f8d",
+      "bytes": 108450
+    },
+    "mods/bdlib-1.14.3.12-mc1.12.2.jar": {
+      "sha256": "af43cc43c4f7775fbbaa50d63cf1f933911b768ca5e10378a106fdfc0dfe76ef",
+      "bytes": 1962731
+    },
+    "mods/bedpatch-2.2-1.12.2.jar": {
+      "sha256": "e57dbe0b427e49d35a9184b5d541d0e6ea504128673c8645b8fe7e4a99ebedba",
+      "bytes": 21613
+    },
+    "mods/BetterAdvancements-1.12.2-0.1.0.77.jar": {
+      "sha256": "c70cda15d9c76cc79423399c1002977d6dfcc229128b33b87f25d5b4238bea34",
+      "bytes": 62668
+    },
+    "mods/BetterBuildersWands-1.12-0.11.1.245+69d0d70.jar": {
+      "sha256": "f10e9db9cee878032dd674068bc12e6b871d88b83360e7d6ff207023dea7beed",
+      "bytes": 75709
+    },
+    "mods/BiblioCraft[v2.4.5][MC1.12.2].jar": {
+      "sha256": "b3aab967cf9a2fcaf1330b5a5997f8d31e7a73884eac7451f1f31b2fa1394add",
+      "bytes": 5122856
+    },
+    "mods/binnie-mods-1.12.2-2.5.1.188.jar": {
+      "sha256": "0f9723b3563dd8b57fc948a17304b2199439045caca4430f4ad96c66dd57d03f",
+      "bytes": 5861054
+    },
+    "mods/BiomesOPlenty-1.12.2-7.0.1.2441-universal.jar": {
+      "sha256": "ec01079c622c3bba532515d03a97118c2546876bd6ba98eedfe171ce69b5ab22",
+      "bytes": 4696621
+    },
+    "mods/blockcraftery-1.12.2-1.3.1.jar": {
+      "sha256": "2b64a900a30d12c55c48f295097327eab5547fa3e7dccdce0f929ecdee25d038",
+      "bytes": 105052
+    },
+    "mods/BloodMagic-1.12.2-2.4.1-103.jar": {
+      "sha256": "6ebc99e3f1448ce415d8afc4ba19caadded61528e30572cb44954e6485f7b4b9",
+      "bytes": 7202892
+    },
+    "mods/Bookshelf-1.12.2-2.3.585.jar": {
+      "sha256": "1418ab830dc3adc1463e4d01e5eed39ced3a22527988b7dce1b47e7cb010576f",
+      "bytes": 266512
+    },
+    "mods/Botania r1.10-361.jar": {
+      "sha256": "42725a364da12a72f7f3139ec0fb758dcd8f43026397ca03fb6dd81f52bd9b63",
+      "bytes": 13820816
+    },
+    "mods/BrandonsCore-1.12.2-2.4.17.208-universal.jar": {
+      "sha256": "5082fea40612b554515ae34d8ab19076f60150f7bc60c317e167e139d9d3cf1d",
+      "bytes": 825212
+    },
+    "mods/buildcraft-all-7.99.24.2.jar": {
+      "sha256": "f7528d029b5ce768aff1ec229ec5bdd85d5f644e58cb5816a8dc148b5d1ff200",
+      "bytes": 4768815
+    },
+    "mods/careerbees-0.4.0.jar": {
+      "sha256": "3380589ccd30d76ff2f42b9d87d8544945fadc2a311f69b539d359fec9092db4",
+      "bytes": 676344
+    },
+    "mods/cc-tweaked-1.12.2-1.84.0.jar": {
+      "sha256": "1d910ca1ca98a676f3f637732e490b67a939766620645e38743aa750eba06c2a",
+      "bytes": 1720739
+    },
+    "mods/Chameleon-1.12-4.1.3.jar": {
+      "sha256": "238416f801acda67b90fba9e0e572dbd6e7631b7e64c3eb3d6226f45ae536c87",
+      "bytes": 96859
+    },
+    "mods/ChestTransporter-1.12.2-2.8.8.jar": {
+      "sha256": "ea8ba7acdfaf7102cad7e3638bffa247bd5cfb634de4c355d47d33a8d2c724a1",
+      "bytes": 314060
+    },
+    "mods/Chisel-MC1.12.2-0.2.1.35.jar": {
+      "sha256": "fb99eff1e1389d88054b1d28245e802becb815388c5bb1946fbbdb60a34c297d",
+      "bytes": 4310011
+    },
+    "mods/chiselsandbits-14.33.jar": {
+      "sha256": "0b086aced1beca90ed5bb25fe6951a4d191d9b49f221af1074d1f9ff4f364b74",
+      "bytes": 737407
+    },
+    "mods/Clumps-3.1.2.jar": {
+      "sha256": "f3ce670e0087f4c6b770fd05ae5c3dfd8462f74c62397932ea72954d1c6c8df4",
+      "bytes": 13792
+    },
+    "mods/CodeChickenLib-1.12.2-3.2.3.357-universal.jar": {
+      "sha256": "0a6aeb0362c2f896ca95f448076a63b37e978a65e555ca9492456012bce21960",
+      "bytes": 704089
+    },
+    "mods/CoFHCore-1.12.2-4.6.3.27-universal.jar": {
+      "sha256": "d71bf404bd9031774f6ad49f4844a6aac008a9d830f8510fa67ea81404e990ed",
+      "bytes": 847938
+    },
+    "mods/CoFHWorld-1.12.2-1.3.1.7-universal.jar": {
+      "sha256": "5acc3d088317e0db9a50a7ee3f8a0018dd83ef398c5a8682121497b0a9cb177a",
+      "bytes": 532040
+    },
+    "mods/CompactSolars-1.12.2-5.0.18.341-universal.jar": {
+      "sha256": "7c04dd28880aa36f8c13276ff8e7bc4c26855bf154e5878c2130869e554c97ac",
+      "bytes": 73134
+    },
+    "mods/Computronics-1.12.2-1.6.6.jar": {
+      "sha256": "9bfc4c8763c008e7dd4e50fd5f82492962197f2bdc5f29668e9154e2c0c83ddf",
+      "bytes": 1291533
+    },
+    "mods/conarm-1.12.2-1.2.4.jar": {
+      "sha256": "76f362a0f697e9b76234575ee6ac16e37439cfd3a4ac8cd561058acb4adbd925",
+      "bytes": 891955
+    },
+    "mods/Controlling-3.0.7.jar": {
+      "sha256": "91d4dd56f8ca6833cc338c8766be962e2dc017f313e5485f4b1a7a1508966044",
+      "bytes": 27162
+    },
+    "mods/CookingForBlockheads_1.12.2-6.4.71.jar": {
+      "sha256": "e0b0590363f2b822f6e6d1b80f60cbbcde1268a4baab1f95158a66a023c5b99c",
+      "bytes": 591592
+    },
+    "mods/CraftTweaker2-1.12-4.1.19.jar": {
+      "sha256": "cb191abc798fcd7918d79728034d250589fe76c09a8637e58843e94dfbf89d7c",
+      "bytes": 1368377
+    },
+    "mods/CTM-MC1.12.2-0.3.3.22.jar": {
+      "sha256": "9b2882c33509c746bb0770d608944078cb94a75ede8e68c87a9e8e673a5db2e4",
+      "bytes": 194281
+    },
+    "mods/CustomMainMenu-MC1.12.2-2.0.9.jar": {
+      "sha256": "d01bb35116c624fb5f8399231f48c9ca56f343cf5cc15c390005d7c819380fef",
+      "bytes": 177791
+    },
+    "mods/DankNull-1.12.2-1.7.101.jar": {
+      "sha256": "2f27a2163d2e15e70ea37394381afb953864a61b653edb7453bcc14b971120e2",
+      "bytes": 327386
+    },
+    "mods/DarkUtils-1.12.2-1.8.226.jar": {
+      "sha256": "ea2ec24a4e18522b538a197460fe2f81e87994746310b6eae77bad4e66d63476",
+      "bytes": 419723
+    },
+    "mods/deepresonance-1.12-1.8.0.jar": {
+      "sha256": "1b36aa5e06ceeb7589f901997c44d6f613c73e12973fc1f25cd853029072a176",
+      "bytes": 915587
+    },
+    "mods/DefaultOptions_1.12.2-9.2.8.jar": {
+      "sha256": "1a4007ec8c503fe75faf7429b66c0ffe1555fa7a7d43147386049913ce6ebf4a",
+      "bytes": 15056
+    },
+    "mods/diethopper-1.1.jar": {
+      "sha256": "0b22434a8f5255f25fd1008e4c1faf90db3fc6999d14fb561382d11a47e998c9",
+      "bytes": 5222
+    },
+    "mods/dirt2path-1.8.0.jar": {
+      "sha256": "16c2d2e26a15a0ee2090f5c7ce9aca538c768aa4d78169b5a0a25024e85b5dc9",
+      "bytes": 6069
+    },
+    "mods/Draconic-Evolution-1.12.2-2.3.24.349-universal.jar": {
+      "sha256": "6a9a7d8f45c871af0f125ae7020e25e6a6e29e65da718736482241e700fd11ce",
+      "bytes": 5699511
+    },
+    "mods/ElecCore-1.12.2-1.9.452.jar": {
+      "sha256": "0b05ecffaff3245fa8b2d43485b5d78ac752300c313079fa88ae5ca608018358",
+      "bytes": 543926
+    },
+    "mods/EnderCore-1.12.2-0.5.68.jar": {
+      "sha256": "8de6e95a4dbf6e1fb11d95276b0caa6a87adb4547de47dfaa7dc6ad564fe900d",
+      "bytes": 640421
+    },
+    "mods/EnderIO-1.12.2-5.1.51.jar": {
+      "sha256": "757cccd53b3ff90ce976795b4902ff643f0bd6aa2eafb3963d9fbe4c90b862c3",
+      "bytes": 7990974
+    },
+    "mods/EnderStorage-1.12.2-2.4.6.137-universal.jar": {
+      "sha256": "06e2357019f4e0836bfb9202af013adc125252f610b198a7a547d4596d2934c0",
+      "bytes": 223250
+    },
+    "mods/engineers_doors-1.12.2-0.8.0.jar": {
+      "sha256": "d8737d4aef05fd0dcdc9534eb4ec62753ddf5640bc986fe13823d28377a88572",
+      "bytes": 121107
+    },
+    "mods/EngineersWorkshopReborn-1.12.2-1.0.9.40.jar": {
+      "sha256": "587f31c9f1cdac7e8712ee2682391efc4b6947aee42f9b040380e60ab4940b84",
+      "bytes": 281190
+    },
+    "mods/environmentaltech-1.12.2-2.0.20.1.jar": {
+      "sha256": "3331ac0d0f9093433b65ca7b18a8f2bca57bc45fef2d444267e7d7fc6b7bb3a1",
+      "bytes": 1001848
+    },
+    "mods/etlunar-1.12.2-2.0.20.1.jar": {
+      "sha256": "46010e9f54c47f6f8634e060f02dfbe740eb07b75d1f9e7753110f9ce71c540b",
+      "bytes": 63844
+    },
+    "mods/Exchangers-1.12.2-2.8.jar": {
+      "sha256": "30360018e10ad547448358a4ef8b2f324f62d0638ff78daeb28af6251582e36a",
+      "bytes": 281052
+    },
+    "mods/extrautils2-1.12-1.9.9.jar": {
+      "sha256": "6c1809eb2222604ebf3c051e1c7834b84049013b537633c2e5a1b0077ef9a940",
+      "bytes": 3226408
+    },
+    "mods/ExtremeReactors-1.12.2-0.4.5.67.jar": {
+      "sha256": "946861f89e75a68e45e3117e9488498eb14db1143872c226f442706be523a890",
+      "bytes": 1110113
+    },
+    "mods/FastWorkbench-1.12.2-1.7.2.jar": {
+      "sha256": "cabe4519ddb40409306c665177c036520c910945347ff6fc5fa6777dda4ede7d",
+      "bytes": 26322
+    },
+    "mods/fencejumper-1.12-1.0.5.jar": {
+      "sha256": "eb2fbfda86d2c696ea50037bb5b8bc5377775877d27026187fee8f4919000107",
+      "bytes": 6913
+    },
+    "mods/flatcoloredblocks-mc1.12-6.8.jar": {
+      "sha256": "61f0c49d65e9040bf15dd3aa2d83f61ef63fd7561ca172ad4ce9fe3e528756e3",
+      "bytes": 139609
+    },
+    "mods/fluxnetworks-1.12.2-3.0.19-21.jar": {
+      "sha256": "31a474a81bda495871265e82505a5e867ca3593ed14c6c98576e6d7893724bc3",
+      "bytes": 609733
+    },
+    "mods/foamfix-0.10.5-1.12.2.jar": {
+      "sha256": "0eeddd3d24738ac2a70b5f309571e246fde4ee18cb38354341b83dcff0feb500",
+      "bytes": 211210
+    },
+    "mods/forestry_1.12.2-5.8.2.394.jar": {
+      "sha256": "e7eb30816569b582d1c94bddd9068e3501826bdd8c53f49148f04d3adef7c957",
+      "bytes": 5232961
+    },
+    "mods/Forgelin-1.8.3.jar": {
+      "sha256": "582e906349f4084bf5931c9646406f92212f1900e2ca307cd3ed2a26568bb186",
+      "bytes": 5772310
+    },
+    "mods/ForgeMultipart-1.12.2-2.6.2.83-universal.jar": {
+      "sha256": "25718bd80799a608c45299d13d86e5d67248f07a3c00657c690948b1821835ce",
+      "bytes": 1304958
+    },
+    "mods/FTBBackups-1.1.0.1.jar": {
+      "sha256": "6b6bcbbf6ac4528657345e1696339528a44643ecb06e6137908eafb8432bd962",
+      "bytes": 43764
+    },
+    "mods/FTBGuides-1.0.2.33.jar": {
+      "sha256": "bb8ee150d53dc53904543a9e861c61af82ee4bdf087a24936529f4d5da87a834",
+      "bytes": 288780
+    },
+    "mods/FTBLib-5.4.7.2.jar": {
+      "sha256": "623fc574f0227fec6cc9e26c3879a605f9b4499c0078ff085291901a5495a6ac",
+      "bytes": 934370
+    },
+    "mods/FTBUtilities-5.4.1.130.jar": {
+      "sha256": "04f340c86df1165e9b5b0356760580aaeaedb7d64fea35c8c12baa2460090844",
+      "bytes": 425249
+    },
+    "mods/gendustry-1.6.5.8-mc1.12.2.jar": {
+      "sha256": "21952b5b2f4a89a3b80029042ec7b07d99835e56683d2c17e130a1144922b38d",
+      "bytes": 1856305
+    },
+    "mods/Gravitation Suite-3.1.1.jar": {
+      "sha256": "ebe327325374661a988798f4179041c26ccb74a8ac11170eeadb72af4ee3500d",
+      "bytes": 345616
+    },
+    "mods/Guide-API-1.12-2.1.8-63.jar": {
+      "sha256": "e201712ef8fadc6c4b6380939751e92fe32cad2ba2dcb717e1acb3b07e0c2125",
+      "bytes": 169528
+    },
+    "mods/Harvest-1.12-1.2.7-20.jar": {
+      "sha256": "67292e8aac947478b983ffc0e6b03ef390a68d4f84362089da25cfba44eefa1b",
+      "bytes": 17988
+    },
+    "mods/ImmersiveCables-1.12.2-1.3.2.jar": {
+      "sha256": "3bf93b78cdbe98c3a57cbbf1769e547b4e000030c8736b28b7f369478baa69c2",
+      "bytes": 205922
+    },
+    "mods/ImmersiveEngineering-0.12-91.jar": {
+      "sha256": "0ae7c417c74bb374462ba29085b601cae861dc3eb5899205a0af267f18309eb5",
+      "bytes": 6780914
+    },
+    "mods/immersivepetroleum-1.12.2-1.1.9.jar": {
+      "sha256": "6e6b7bcd22966ef6362eec013ef915521c22232f847c3153b57189b5a4011823",
+      "bytes": 906018
+    },
+    "mods/industrialcraft-2-2.8.187-ex112.jar": {
+      "sha256": "eb6d0408ef91312cbb811b444401d068e7ee7645810b62d5b9557f61d72ded44",
+      "bytes": 8465858
+    },
+    "mods/industrialforegoing-1.12.2-1.12.13-237.jar": {
+      "sha256": "8b6e1aa820d7d02571aeae818b4ab9aa2d78e0d3b277d7be6df53e3153ae9ea7",
+      "bytes": 1603134
+    },
+    "mods/IndustrialWires-1.7-36.jar": {
+      "sha256": "9e8bb959342343b30eee1a8c004e6811007ee0083e66ce4d7367e069bf071f8c",
+      "bytes": 1241169
+    },
+    "mods/InitialInventory-3.0.0.jar": {
+      "sha256": "9f1ba4dd157bbeedf82ca0fca6333e6f244e83d5c92ca7354951ced38678a3e6",
+      "bytes": 7863
+    },
+    "mods/IntegrationForegoing-1.12.2-1.9.jar": {
+      "sha256": "3aad65ad19c389c3baaae17950ecab808a11c1169f9506122b9a7149e85f7401",
+      "bytes": 172247
+    },
+    "mods/InventoryTweaks-1.63.jar": {
+      "sha256": "ef2fdcb59f9a766ee5c3c4c514c78f0a9e35b3d6bf02c17051b7dd4e94efdf7a",
+      "bytes": 263258
+    },
+    "mods/IronBackpacks-1.12.2-3.0.8-12.jar": {
+      "sha256": "5c9e680279ca009ab3ea114c22cd869cadb41cc0bae834b7857fee709c79075e",
+      "bytes": 465363
+    },
+    "mods/ironchest-1.12.2-7.0.72.847.jar": {
+      "sha256": "29d3a4115d67b83eb542b618eb64db40db23a7f009a0f4dc9a396101d6f8491f",
+      "bytes": 956692
+    },
+    "mods/jehc-1.12.2-1.6.4.jar": {
+      "sha256": "ac684b2bd978fce22d334ea53f3e2d341cc9241f74fc6e8935655e22b2b32979",
+      "bytes": 35964
+    },
+    "mods/jei_1.12.2-4.15.0.268.jar": {
+      "sha256": "9408dea76b43db553f94481a14e930286e0f66a6f17326585d851e4052a9e15c",
+      "bytes": 647239
+    },
+    "mods/jeibees-0.9.0.5-mc1.12.2.jar": {
+      "sha256": "07c6c95eddf0f6f3d15339f373da51a638716c3cbe69f93da5586f7957e3c22a",
+      "bytes": 117480
+    },
+    "mods/jeiintegration_1.12.2-1.5.1.36.jar": {
+      "sha256": "6d5b71ec4a89f86c0265f0057dccb95167a86badd74e68a784e80c99d16b6463",
+      "bytes": 54046
+    },
+    "mods/journeymap-1.12.2-5.5.5.jar": {
+      "sha256": "95b7a7897a99dc5d1a011e008cf5d59f3b0ceaa51f581c47d2c6a5321fc5fd9c",
+      "bytes": 1920463
+    },
+    "mods/JustEnoughResources-1.12.2-0.9.2.60.jar": {
+      "sha256": "9ea4d7df19c0a53880aae5e745ef1e886854bea5c533878688587a5e3fdaebdd",
+      "bytes": 222270
+    },
+    "mods/letsencryptcraft-1.10.2-1.2.0.jar": {
+      "sha256": "f214af0ce75145279e7d935d294cff7bc61b265b17cddeb4ceae38d043690a2c",
+      "bytes": 7091
+    },
+    "mods/longfallboots-1.2.1b.jar": {
+      "sha256": "0946d14acf7e552190754812aab7fc0c8e5e92ea7067a1a84abe5f6526ce1776",
+      "bytes": 6891
+    },
+    "mods/lostcities-1.12-2.0.21.jar": {
+      "sha256": "43a95e99001139119753dda98e994acf41c7f3a7fe7db5acf4d85bfae6bb86fc",
+      "bytes": 789648
+    },
+    "mods/MagicBees-1.12.2-3.1.10.jar": {
+      "sha256": "9d98de4f52b41a874cff48ea300152a834515fcf38c0fb7ba1de2e81de1f3f9b",
+      "bytes": 1035863
+    },
+    "mods/Mantle-1.12-1.3.3.55.jar": {
+      "sha256": "0975ad3ef3b8b35fe43461feabe44d406b5521b0a2f3d1965c8d2f6a59ad2e65",
+      "bytes": 843486
+    },
+    "mods/mcjtylib-1.12-3.5.4.jar": {
+      "sha256": "af7d2b3c421329e7b97202302a072867e7c9bd73c5b8fab9bdb3a76fbfe474e3",
+      "bytes": 544856
+    },
+    "mods/MCMultiPart-2.5.3.jar": {
+      "sha256": "ce28db33cfdca80c98dfbb2e5928a5f090477897fa6d28a37300d5564617fde2",
+      "bytes": 173426
+    },
+    "mods/memory_repo/blusunrize/ImmersiveEngineering-core/0.12-91/ImmersiveEngineering-core-0.12-91.jar": {
+      "sha256": "cd995e3a1b41532fd9df0b1fdf41ffa831877196d593277201de135b6f5cfc3e",
+      "bytes": 7632
+    },
+    "mods/memory_repo/blusunrize/ImmersiveEngineering-core/0.12-91/ImmersiveEngineering-core-0.12-91.jar.meta": {
+      "sha256": "2522ef9685b09b99430a936cadfb022b404d850cdeb5cf5169e72e548e995b06",
+      "bytes": 747
+    },
+    "mods/memory_repo/com/enderio/core/EnderCore/1.12.2-0.5.68/EnderCore-1.12.2-0.5.68-core.jar": {
+      "sha256": "65f73ddc1432341ef50810cada365216f62576afdb830ad650e348859157e5c4",
+      "bytes": 37606
+    },
+    "mods/memory_repo/com/enderio/core/EnderCore/1.12.2-0.5.68/EnderCore-1.12.2-0.5.68-core.jar.meta": {
+      "sha256": "fd6fbf11f5709d0e8d1a89733c4d79fa073e2efce977facf1f6e526e1445788a",
+      "bytes": 2787
+    },
+    "mods/memory_repo/info/loenwind/autoconfig/AutoConfig/1.12.2-1.0.2/AutoConfig-1.12.2-1.0.2.jar": {
+      "sha256": "07e017e50b918f9a1ddbc01777b24e74204155730e75628c68e923c4b2e559df",
+      "bytes": 74722
+    },
+    "mods/memory_repo/info/loenwind/autoconfig/AutoConfig/1.12.2-1.0.2/AutoConfig-1.12.2-1.0.2.jar.meta": {
+      "sha256": "4d1c31aec7881e577f9f91319a193145d84fd1cce8f1916752c617bbbe4862fd",
+      "bytes": 6735
+    },
+    "mods/memory_repo/info/loenwind/autosave/AutoSave/1.12.2-1.0.11/AutoSave-1.12.2-1.0.11.jar": {
+      "sha256": "8b40573a923098b7505dc3a7333ea7994f99fdca5d1507f200959779f768e14b",
+      "bytes": 90467
+    },
+    "mods/memory_repo/info/loenwind/autosave/AutoSave/1.12.2-1.0.11/AutoSave-1.12.2-1.0.11.jar.meta": {
+      "sha256": "ebfdf24363d41a75ed5ef4247b988e48c91f859aa050cf887a08c122a9a566b8",
+      "bytes": 8002
+    },
+    "mods/memory_repo/shetiphian/asm/ShetiPhian-ASM/1.12.0/ShetiPhian-ASM-1.12.0.jar": {
+      "sha256": "a99fedbe9036a00ce694cb44b220f7426301f40f2c35f11d96a96a888bda6eaf",
+      "bytes": 7086
+    },
+    "mods/memory_repo/shetiphian/asm/ShetiPhian-ASM/1.12.0/ShetiPhian-ASM-1.12.0.jar.meta": {
+      "sha256": "266e1ea9e16c0839fad6dbee39375f19bc284fab20574a01c8d41fcae57876d2",
+      "bytes": 122
+    },
+    "mods/MineTogether-1.12.2-2.4.1.jar": {
+      "sha256": "dc92877cb817512f786af8fa80facacf4f386b02e2a9d0433c7bdac20776af2a",
+      "bytes": 4046815
+    },
+    "mods/modnametooltip_1.12.2-1.10.1.jar": {
+      "sha256": "c779c2b7f6105ded36163801c7458baf677075f862bcabe7b1b29121799a31f6",
+      "bytes": 12732
+    },
+    "mods/modtweaker-4.0.17.jar": {
+      "sha256": "d13d8dd6318eedffc046f0633371f72b93c4f4e5a92f9147b706ada7e27f2f6d",
+      "bytes": 447874
+    },
+    "mods/moreoverlays-1.15.1-mc1.12.2.jar": {
+      "sha256": "428542f8e4e9a683826058fd113d6e74121a3d47c7e796d7cb96ceed801102ad",
+      "bytes": 51284
+    },
+    "mods/Morph-o-Tool-1.2-21.jar": {
+      "sha256": "c36065b106f735cc541188ac2db8301032d32de32ce8d57a58d11a306e04b29b",
+      "bytes": 30619
+    },
+    "mods/Morpheus-1.12.2-3.5.106.jar": {
+      "sha256": "1904c32a8e0077e005bfefe005c26834c2df09881bc075a7deadce8da97fb457",
+      "bytes": 21508
+    },
+    "mods/MouseTweaks-2.10-mc1.12.2.jar": {
+      "sha256": "77969c0e7f76c078ebb7004642e86746d57f47b7a46237fcb1c06d4a55679448",
+      "bytes": 75170
+    },
+    "mods/MrTJPCore-1.12.2-2.1.4.43-universal.jar": {
+      "sha256": "82652f00e513c61c99a791abf2cbc10fdfb0e3a79e4eb02b305cccbc2d2f0087",
+      "bytes": 803400
+    },
+    "mods/MTLib-3.0.6.jar": {
+      "sha256": "298fc0109614f567db4759a9709436924aa2ed20c55a8370a139f0af1ad9f109",
+      "bytes": 30002
+    },
+    "mods/mysticallib-1.12.2-1.3.6.jar": {
+      "sha256": "877f6b2dfcd2087e69908ad119827882bda14888f40b14d0d125cb66aeb65092",
+      "bytes": 339685
+    },
+    "mods/natura-1.12.2-4.3.2.69.jar": {
+      "sha256": "7663b57daf6ca0b36fbc8dd8ed06dc64447648237579b0c08910e15434ce36b2",
+      "bytes": 1142687
+    },
+    "mods/NaturesCompass-1.12.2-1.5.1.jar": {
+      "sha256": "55b8c0f0a440bfe3570f44bbc8a2d269ec8167d186e6f9577ee978bda071577d",
+      "bytes": 180209
+    },
+    "mods/nice-1.12-0.4.0.jar": {
+      "sha256": "67704877e1148316422d5d13cab4f9b6982d8d1f024477c3466477541041e28f",
+      "bytes": 83536
+    },
+    "mods/NotEnoughIDs-1.5.4.4.jar": {
+      "sha256": "f042f90c5623a1f2bbcc1d0bd93cfca40109b9c0659399e1f48aa8ce37b75622",
+      "bytes": 31782
+    },
+    "mods/notenoughwands-1.12-1.8.1.jar": {
+      "sha256": "bdf3dfaaa77407282445970df7b3c542a1916255fe1afe2ebaf3a62e17862cda",
+      "bytes": 165034
+    },
+    "mods/OpenBlocks-1.12.2-1.8.1.jar": {
+      "sha256": "fbf81a96f87c609feb0d03933398fdf4bd8b24bc18119f4642e42b30580950fc",
+      "bytes": 3217616
+    },
+    "mods/OpenModsLib-1.12.2-0.12.2.jar": {
+      "sha256": "47a2428297213cb3f6b3b75fe1604b002e1f5e4412a2ce77c362bf598e15a877",
+      "bytes": 2639587
+    },
+    "mods/p455w0rdslib-1.12.2-2.3.161.jar": {
+      "sha256": "e5844c044d9f2ce2f23eef84d95eea8cc1f2c5581874bd01410e7d103b90a424",
+      "bytes": 328793
+    },
+    "mods/Pam's HarvestCraft 1.12.2zf.jar": {
+      "sha256": "708229d38768c2b7f4b94c3e687a85b00cba8091911f64613d95106d891badc7",
+      "bytes": 4907780
+    },
+    "mods/Patchouli-1.0-20.jar": {
+      "sha256": "1f2664d0e81444e88398f24eafa54c07d64ee491a24c04f89752cb069cd234ae",
+      "bytes": 466243
+    },
+    "mods/phosphor-forge-mc1.12.2-0.2.7-universal.jar": {
+      "sha256": "4ddfdeca30c2809047f8dec84c7fb49b820e930fbe1657d90404e64c78184228",
+      "bytes": 920264
+    },
+    "mods/Placebo-1.12.2-1.6.0.jar": {
+      "sha256": "c2110db8b8abec23d9e2e9c4a89be010f6fe1150d52595397179c8804d942ee3",
+      "bytes": 76902
+    },
+    "mods/platforms-1.12.0-1.4.6.jar": {
+      "sha256": "d450927b4bb42d5a79c00d42391b7ac5cf3b591fdeea121a551bf63df40754ec",
+      "bytes": 398642
+    },
+    "mods/ProjectRed-1.12.2-4.9.4.120-Base.jar": {
+      "sha256": "8345e86d84cc38e8017fef9b20b1160b4a988637e14b8bcb5b817747d8e63570",
+      "bytes": 2036136
+    },
+    "mods/ProjectRed-1.12.2-4.9.4.120-compat.jar": {
+      "sha256": "02c2f75cc0c6630195072bd2cd5878fb60cc0b6780d4fd6a3b0f7b1f3f8ea394",
+      "bytes": 67384
+    },
+    "mods/ProjectRed-1.12.2-4.9.4.120-fabrication.jar": {
+      "sha256": "6f74f0cc3223636bae0c2a6f61dabdf377df2e4bd73db62f12e9c2356492ae9c",
+      "bytes": 1894139
+    },
+    "mods/ProjectRed-1.12.2-4.9.4.120-integration.jar": {
+      "sha256": "659623f496dd457dd689c69dbd7a593453f65f78662a4af8dc624bfff33ee2eb",
+      "bytes": 3923751
+    },
+    "mods/ProjectRed-1.12.2-4.9.4.120-lighting.jar": {
+      "sha256": "65d3a196ff8ca2a1caf119e28ebfb37d0157730d97c9acc0c7e2601f5edbe244",
+      "bytes": 724477
+    },
+    "mods/ProjectRed-1.12.2-4.9.4.120-mechanical.jar": {
+      "sha256": "3e2f19faf3f9f19d5835a7e368d2bf855ca3d1ee82575a48182b3746d214cad8",
+      "bytes": 2596509
+    },
+    "mods/ProjectRed-1.12.2-4.9.4.120-world.jar": {
+      "sha256": "6b763b939c4a8517ac7fbb2a3cc7267d67e25823b60cf4231443eca3bb681c2e",
+      "bytes": 501169
+    },
+    "mods/Quark-r1.6-177.jar": {
+      "sha256": "59a2ee73a168d8494dae20d9dcef8f5d9592f695bf93ab16d1d28ec984fb7429",
+      "bytes": 3875942
+    },
+    "mods/QuickLeafDecay-MC1.12.1-1.2.4.jar": {
+      "sha256": "5aaa4fb7e0056d9fc7624b5bc9f39b9d00ad0eef39ab7f2617540e9184e9f690",
+      "bytes": 7074
+    },
+    "mods/railcraft-12.0.0.jar": {
+      "sha256": "5db83f6a177ac2b143dcb50d0a35c2c0873b7cac6e1d8b58ee577494d5937ed2",
+      "bytes": 5541089
+    },
+    "mods/randompatches-1.12.2-1.18.1.1.jar": {
+      "sha256": "e814dd8370ad185f5a7fb29481b1746654570177d724f407dff0e49bb4f146fe",
+      "bytes": 264800
+    },
+    "mods/rangedpumps-0.5.jar": {
+      "sha256": "9329ee1bcb377849db089c7029d7f393897e0ca8efb9c4510268692bf332c530",
+      "bytes": 21519
+    },
+    "mods/reauth-3.6.0.jar": {
+      "sha256": "2264ebdb4d29fe4105d8940f1fd14720ada023d059879c41374b44cbb3b7ac7b",
+      "bytes": 30446
+    },
+    "mods/RebornCore-1.12.2-3.16.0.469-universal.jar": {
+      "sha256": "fbe8b48dc99e13ea599a67c77f01de0cf59996b5f639b0e0476ff6baf1b155e4",
+      "bytes": 1936717
+    },
+    "mods/RebornStorage-1.12.2-3.3.4.85.jar": {
+      "sha256": "99a10ade75837afdb17aaad5808b730ce224db41f79c37e8cbcb992297ac187b",
+      "bytes": 80180
+    },
+    "mods/RedstoneArsenal-1.12.2-2.6.3.18-universal.jar": {
+      "sha256": "506677ae0ec337d50badd7c887ead029a7376105af544b2a0b7144c0505d83ff",
+      "bytes": 262973
+    },
+    "mods/RedstoneFlux-1.12-2.1.0.6-universal.jar": {
+      "sha256": "7d8063471243e161f624abe4ba311d490bd7719aedbcfcf84e555358e19c3e89",
+      "bytes": 36278
+    },
+    "mods/refinedstorage-1.6.16.jar": {
+      "sha256": "ebdf868db673b2a22233e5e08e7c14ad937b10e2997c4c28a4511ffdd2544f8d",
+      "bytes": 1912377
+    },
+    "mods/refinedstorageaddons-0.4.5.jar": {
+      "sha256": "5af385ab60ffa2ab5fdfb8f20d4fc0c70bc6c000439edaa023e7c431fd1d76cf",
+      "bytes": 26804
+    },
+    "mods/Reliquary-1.12.2-1.3.4.796.jar": {
+      "sha256": "1f77457d3d03a06da533a0ad09af42df8e2f8df408678bee895eef6308ebad36",
+      "bytes": 1247278
+    },
+    "mods/ResourceLoader-MC1.12.1-1.5.3.jar": {
+      "sha256": "5c5ee114dccab5caca1772e3487eca04e161c494baca4d53c8fddf5cf8722e56",
+      "bytes": 16612
+    },
+    "mods/rftools-1.12-7.72.jar": {
+      "sha256": "ca87853aaf5b8440adc0f00be9e9e901215a0fd59f1e35208c00bcbe28e3aec4",
+      "bytes": 2895812
+    },
+    "mods/rftoolsctrl-1.12-2.0.2.jar": {
+      "sha256": "77a4c5f23f73cb4597ea6ee97e6ff5dd0a5eb94d1f25bfd031516b335dc92efe",
+      "bytes": 600728
+    },
+    "mods/rftoolspower-1.12-1.2.0.jar": {
+      "sha256": "bf678ca007953e8d5aee96f29aeefd88120485a988a05b7ec6d37663bb824891",
+      "bytes": 148083
+    },
+    "mods/rustic-1.1.1.jar": {
+      "sha256": "697575412c56c0cdbbae094c6e99d7528488cd6c78523e58dc5325c2baa0069e",
+      "bytes": 1339252
+    },
+    "mods/ShadowMC-1.12-3.8.0.jar": {
+      "sha256": "7bd5920c9bd6846de468ea10693a83a436813f83b2ab340f665c21904840cc93",
+      "bytes": 464802
+    },
+    "mods/shetiphiancore-1.12.0-3.5.9.jar": {
+      "sha256": "dc033f623cfc6d7afdaaecf5ef31dda865744f7da2fe85443ae69f204bf50d74",
+      "bytes": 406772
+    },
+    "mods/Simple-Void-World-1.12-1.2.0.9-universal.jar": {
+      "sha256": "d8eb380fc028e7f60ffbb9805e2a44f375dc8798d5f3c8745bf48bcc969b9a7b",
+      "bytes": 19865
+    },
+    "mods/SimplyJetpacks2-1.12.2-2.2.13.66.jar": {
+      "sha256": "fe69a52af042b9e5c5fa7c2a04de53c88ecf9f18ad73003df14b1305136d53dd",
+      "bytes": 664369
+    },
+    "mods/Snad-1.12.1-1.7.09.16a.jar": {
+      "sha256": "c38dbf3b805dfbd0412dd7ab7d75dac2a2772a7d26e9a975e39e33074de83506",
+      "bytes": 21346
+    },
+    "mods/sonarcore-1.12.2-5.0.19-20.jar": {
+      "sha256": "d3c5c5c1e3e09c6c7b49fc6505aad57c1ca0e76a8e5396acabf6123e8c96fa58",
+      "bytes": 1160618
+    },
+    "mods/SoulShardsRespawn-1.12.2-1.1.1-13.jar": {
+      "sha256": "0a4761a048cd219589ccf497fa64b0b28c91e0140aeae70622b054369d25934e",
+      "bytes": 201807
+    },
+    "mods/SplashAnimation-0.2.1.jar": {
+      "sha256": "e292f54e049635fe22fb8fd13b4a685ed41188474221d403c40bc40c4d6b154e",
+      "bytes": 46578
+    },
+    "mods/StevesCarts-1.12.2-2.4.31.135.jar": {
+      "sha256": "38a10f7c3b6ecdedf01a15565e3604fd093ddf8e1c3b45554e2d7d8adbe8e96b",
+      "bytes": 2475657
+    },
+    "mods/StorageDrawers-1.12.2-5.4.0.jar": {
+      "sha256": "d080a974ae03680242520091b81aa2e82ad9ff0facd139e07dfb9da5a1031768",
+      "bytes": 604797
+    },
+    "mods/StorageDrawersExtras-1.12-3.1.0.jar": {
+      "sha256": "ae7a151efb5db147d86a82ceb1b84f0cc1e31331e5c11f549c68d6d89b57abff",
+      "bytes": 402870
+    },
+    "mods/TConstruct-1.12.2-2.12.0.157.jar": {
+      "sha256": "c7830c8a26bb7d8d6c8b5b4a3e5692fbe4679c68a292bc3f02f089f70ae72804",
+      "bytes": 4004838
+    },
+    "mods/tesla-core-lib-1.12.2-1.0.15.jar": {
+      "sha256": "7e0dc8289acdf4451b2fa783bf33f52fb79495aded15fbad67c0b693087bae3a",
+      "bytes": 1140374
+    },
+    "mods/Thaumcraft-1.12.2-6.1.BETA26.jar": {
+      "sha256": "9425f8643581b27ff8845b087c8bc6fc10425a32942f1a3f0e265ce6b38f7b5f",
+      "bytes": 11360786
+    },
+    "mods/ThaumicInventoryScanning_1.12.2-2.0.10.jar": {
+      "sha256": "2fa7286fe1ce1e95eb1ccf958cf6e07fca8beddc3d7de7986d390523c75f247c",
+      "bytes": 17224
+    },
+    "mods/ThaumicJEI-1.12.2-1.6.0-27.jar": {
+      "sha256": "b9bef5de98638fe1497cc28de6414860ffc77962d93974d10ba44af3ad77fdce",
+      "bytes": 59213
+    },
+    "mods/theoneprobe-1.12-1.4.28.jar": {
+      "sha256": "f3e5048dbe58f37f98f8130886ede880ac5b3333ee73cae2381c337e500c4bd1",
+      "bytes": 301893
+    },
+    "mods/ThermalCultivation-1.12.2-0.3.3.12-universal.jar": {
+      "sha256": "b491ba8319da27844dbd957d68a9ac2f341e4d65790d7a5015a5a4086c9e2b65",
+      "bytes": 106843
+    },
+    "mods/ThermalDynamics-1.12.2-2.5.5.21-universal.jar": {
+      "sha256": "01c5dc41c1085944af9c7346a0e402e90075a9e069232b15dd6a2807dae00fe8",
+      "bytes": 762980
+    },
+    "mods/ThermalExpansion-1.12.2-5.5.4.43-universal.jar": {
+      "sha256": "08ac2de31e9cc0c174c2795f9371cb209d3251ea18210ec682d1816f1e39b08a",
+      "bytes": 2426151
+    },
+    "mods/ThermalFoundation-1.12.2-2.6.3.27-universal.jar": {
+      "sha256": "f7c424aa09860dbb151252dfe58920d8df62c0e9193d6b733ceb26fc7c4a0357",
+      "bytes": 2312713
+    },
+    "mods/ThermalInnovation-1.12.2-0.3.3.12-universal.jar": {
+      "sha256": "4ded9b7bcff8e88a381305893bf1fc4410e3e945beea4a49f7f9f29a9166f2bf",
+      "bytes": 197601
+    },
+    "mods/thutcore-1.12.2-5.21.0.jar": {
+      "sha256": "d4e879e4901f3f7ac19967a580657c55dff8b7eb12fa8e2bc594ac5ab5290093",
+      "bytes": 503447
+    },
+    "mods/thuttech-1.12.2-6.1.6.jar": {
+      "sha256": "ec168ccb03ca1a874c26fa089b3af4db3e7d12bbd04e0199f6c68b00b44a42bf",
+      "bytes": 92887
+    },
+    "mods/TinkerToolLeveling-1.12.2-1.1.0.jar": {
+      "sha256": "87e2702152d795efd8548b3a1ec9471469d7c705db1ec199a465807720ddcdcd",
+      "bytes": 95850
+    },
+    "mods/TipTheScales-1.12.2-1.0.4.jar": {
+      "sha256": "91eab825f0730d412a05a40136e9f0755b9a2b9483fc92255cba08e282a1e146",
+      "bytes": 11641
+    },
+    "mods/topaddons-1.12.2-1.11.0.jar": {
+      "sha256": "a36391644d6ff9e8a3e13b9b1fca89d804a32d4413f69d73b29f0bc47f69c1bb",
+      "bytes": 244342
+    },
+    "mods/torchmaster_1.12.2-1.8.0.79.jar": {
+      "sha256": "91344aa1ff4ec46b5f59b80efbeff940861276c801377c470aff423a5fbcbdd3",
+      "bytes": 167004
+    },
+    "mods/Translocators-1.12.2-2.5.2.81-universal.jar": {
+      "sha256": "f527ba59d8ab56d936b7edcd9ef0f42232dac436864603a016b83bfbb53c2384",
+      "bytes": 446678
+    },
+    "mods/twilightforest-1.12.2-3.9.984-universal.jar": {
+      "sha256": "09539d4f8e4bf69105ea3e596ee0b1fd0450d02eda80954aff61a9a0ed339cad",
+      "bytes": 28672637
+    },
+    "mods/UniDict-1.12.2-2.9.2.jar": {
+      "sha256": "3e797717ce27d7e4254b2ef45d89e27ff290d150fe9a3fbf9adef539171bff7f",
+      "bytes": 192476
+    },
+    "mods/valkyrielib-1.12.2-2.0.20.1.jar": {
+      "sha256": "24a72428d22c04040e8a60899a395283ca8512f39bfb0cec62ecf9109bf891e0",
+      "bytes": 733580
+    },
+    "mods/WanionLib-1.12.2-2.2.jar": {
+      "sha256": "3a96855db2e669d486409e67571a9b16f594de7b1032fafe859b7f983d0e55f0",
+      "bytes": 129188
+    },
+    "mods/Waystones_1.12.2-4.0.72.jar": {
+      "sha256": "f9f2447fe7433876a3626ba5afa66b4e482a0553bb8d7bd40eaccbd0b5e3446c",
+      "bytes": 175462
+    },
+    "mods/WirelessCraftingTerminal-1.12.2-3.12.97.jar": {
+      "sha256": "69e5b82f33925169e33456a5f6b3202917c06fc34f1f32f71cf553b0733f0114",
+      "bytes": 242030
+    },
+    "mods/woot-1.12.2-1.4.11.jar": {
+      "sha256": "f4f0b7a1861a4b2f11c6dc5f315090ec411dce8a62df3347fd00a96f191fb2e9",
+      "bytes": 879720
+    },
+    "mods/xnet-1.12-1.8.2.jar": {
+      "sha256": "37b39fb2e10bf3a991952317d68cf137c7470060197ce74a5826699fac0326fc",
+      "bytes": 496307
+    },
+    "mods/Xtones-1.12-1.0.8-11.jar": {
+      "sha256": "92041ff393ae061f9f16c8a59635241d1586491fc2557c47838225d097f58822",
+      "bytes": 449444
+    },
+    "mods/YABBA-1.1.2.53.jar": {
+      "sha256": "ec76c87ad76611593da2bc12e5371f65496886993a407860c58109500cb82519",
+      "bytes": 233275
+    },
+    "mods/zerocore-1.12.2-0.1.2.8.jar": {
+      "sha256": "99ca0107097641349055713e3505b434c4115e55a82d427975d6b2528500310b",
+      "bytes": 228623
+    },
+    "options.txt": {
+      "sha256": "f220dbe2ab8632e172c8f0c800312456dcc69511d9d9608368f1a1d249afceff",
+      "bytes": 15
+    },
+    "scripts/00_recipe_changes.zs": {
+      "sha256": "a0e8501734ae2cfa4c1ecdb9f2cd8e27c390809c9643cdf41e067a5989004414",
+      "bytes": 8784
+    },
+    "scripts/01_unification.zs": {
+      "sha256": "c3649ca252f3e57eff5b4a3dcce6bd73aeda27e99a9db782334eae539f805151",
+      "bytes": 7764
+    },
+    "scripts/02_akashic_tome.zs": {
+      "sha256": "a46e568d4122b751fc8b626a816b186a7443ea7ef18e3ecf481a9ab8a1ba79db",
+      "bytes": 3971
+    },
+    "scripts/03_tooltip.zs": {
+      "sha256": "59a479ec039687a10e80e36564c48bf8e806772165a34dc0a9248a2cd42d5672",
+      "bytes": 296
+    }
+  },
+  "sources_after": {
+    "D:\\minecraftrust-astra-hardening\\tools\\fresh-forge-observer\\observe.py": "19b486534cb2481a402acf31c372f10893c5015627836b739c9dd023a2ce182c",
+    "D:\\minecraftrust-astra-hardening\\tools\\fresh-forge-observer\\test_observe.py": "e873bd5e702db4355664ab60332399c507e58e7714f80a54024a7ac8166b5d65",
+    "D:\\minecraftrust-astra-hardening\\tools\\fresh-forge-observer\\tests\\ObserverControl.java": "2f80a16f555c80c24aeadf33dc4b63e5482eaf6ef3a65f9e301ecd97646d3b0f",
+    "D:\\minecraftrust-astra-hardening\\tools\\fresh-forge-observer\\tests\\example\\Fixture.java": "dfaa987369f4ed33b7b8016e9a5dd74197c6e7ac54f7b564b33c52add66d6509",
+    "D:\\minecraftrust-astra-hardening\\tools\\fresh-forge-observer\\java\\com\\rustcraft\\fresh\\agent\\DefinitionObserver.java": "eb511221706a5a78a24610fa5aec793609b19538faf6e9ddcbd06ff01e140b52",
+    "D:\\minecraftrust-astra-hardening\\tools\\fresh-forge-observer\\java\\com\\rustcraft\\fresh\\bootstrap\\FreshTweaker.java": "6a4c19294d095ba92bf39b1b708e765d5576f8b82016d008c1fc359d526b45b7",
+    "D:\\minecraftrust-astra-hardening\\tools\\fresh-forge-observer\\java\\com\\rustcraft\\fresh\\oracle\\FreshOracle.java": "b645148cd3508bc254fb3d420b465c412f1dc5d70355713bf93534f9ef9ece39",
+    "D:\\minecraftrust-astra-hardening\\tools\\testing\\qualification_engine.py": "ce66d4716637858063164b8a7e6d9eb9b88433246f3be1f9746ad75b07184b49",
+    "D:\\minecraftrust-astra-hardening\\tools\\testing\\qualification_certificate.py": "3eca99c72af064990dd284f78398f68e79b00a4b6ec59eca215e57f56034b914",
+    "D:\\minecraftrust-astra-hardening\\tools\\testing\\hardening_guard.py": "a2062b3ffbec7edba79bf5f5954fbcb1e9d97492ab9c4bb541833ebb820bdb6d",
+    "D:\\minecraftrust-astra-hardening\\tools\\nbt-region-experiment\\job.py": "41f77a4c87ba2f531872853f2bcc701c5cac3a384c1bb2cf49901b8fcff9c65b",
+    "D:\\minecraftrust-astra-hardening\\tools\\bridge\\src\\com\\rustcraft\\coremod\\CanonicalClassIdentityV2.java": "61749a998cb03e43f093b54c6ba5a069a236d868388fe6452ec1e0133ec4f4f8"
+  },
+  "guard_after": {
+    "schema_version": 1,
+    "kind": "HARDENING_ISOLATION_GATE_CHECK",
+    "status": "PASS",
+    "failures": [],
+    "original_observed": {
+      "head": "c4b868db2c9e4b03f745bf93c6ebf4fd8a8519e7",
+      "branch": "issue1-jni-v2",
+      "status": [
+        " M tools/live-capture/live_client_session.py",
+        "?? tools/live-capture/__pycache__/",
+        "?? tools/live-capture/run_rev_shadow.py"
+      ],
+      "files": [
+        {
+          "path": "D:\\minecraftrust\\tools\\live-capture\\live_client_session.py",
+          "sha256": "151c356161695aba3db3c1a8cbd589b5eda2b5a1770dff59ab21b728d36cabfa"
+        },
+        {
+          "path": "D:\\minecraftrust\\tools\\live-capture\\run_rev_shadow.py",
+          "sha256": "2b9b2aca49e57dd0d2a74bec46efcdc0ac7f95762a733276e27ff9dbcb472d93"
+        }
+      ]
+    },
+    "isolated_worktree": "D:\\minecraftrust-astra-hardening",
+    "isolated_head": "ac654a5cc09c6784c66962b4adf844d05d79ff2e",
+    "isolated_branch": "astra/architecture-hardening",
+    "production_gate_checks": {
+      "tryEncode_fail_closed": true,
+      "productionAuthorityEligible_false": true
+    },
+    "scope": "read-only original HEAD/status/two paused source hashes plus conservative source guards; runtime authority tests remain required"
+  },
+  "elapsed_seconds": 14.75316780002322
+}

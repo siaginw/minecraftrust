@@ -1,0 +1,32 @@
+   Compiling rustcraft-core v0.1.0 (D:\minecraftrust-astra-hardening\crates\rustcraft-core)
+   Compiling mc-1-12-x v0.1.0 (D:\minecraftrust-astra-hardening\versions\mc_1_12_x)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.07s
+     Running unittests src\lib.rs (target\architecture-hardening\h5-root-final\cargo\adapter\debug\deps\mc_1_12_x-8d150e507072beff.exe)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests\adapter_contracts.rs (target\architecture-hardening\h5-root-final\cargo\adapter\debug\deps\adapter_contracts-9fa29cb8fa547c96.exe)
+
+running 11 tests
+test keepalive_versions_are_not_interchangeable ... ok
+test malformed_keepalives_fail_and_valid_retry_succeeds ... ok
+test incomplete_duplicate_extra_and_out_of_range_maps_cannot_bind ... ok
+test mapping_separates_runtime_wire_semantic_and_disk_identities ... ok
+test independently_pinned_keepalive_vectors_match_both_specializations ... ok
+test only_legacy_bounds_can_be_represented_by_legacy_mask ... ok
+test palette_context_is_independent_per_world_and_accepts_wire_ids_above_u16 ... ok
+test legacy_biomes_require_an_explicit_complete_mapping_and_column_shape ... ok
+test position_vectors_do_not_depend_on_core_coordinate_packing ... ok
+test stale_or_invalid_job_cannot_publish_and_capacity_failure_leaves_buffer_intact ... ok
+test release_metadata_is_not_nearest_version_fallback ... ok
+
+test result: ok. 11 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests mc_1_12_x
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+

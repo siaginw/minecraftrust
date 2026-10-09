@@ -1,0 +1,558 @@
+{
+  "schema": "DIFFERENTIAL_REPLAY_CAMPAIGN_V1",
+  "status": "PASS",
+  "scope": "REPLAY_TOY_V1_ONLY",
+  "production_authority": false,
+  "decision": "LIMITED_USE",
+  "resource_control_artifacts": {
+    "resource-controls/test_boundary_timeout_kills_silent_adapter/adapter-resource-receipt.json": "7e52e182f8e9ceee993bcb3baf857dded224f90ec5c4a63fdcf7e7f1cdf14b66",
+    "resource-controls/test_boundary_timeout_kills_silent_adapter/flood.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "resource-controls/test_boundary_timeout_kills_silent_adapter/flood.stdout.jsonl": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "resource-controls/test_extra_output_cannot_pass/9f5bebfb949442d68f5a57796054e07d/candidate.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "resource-controls/test_extra_output_cannot_pass/9f5bebfb949442d68f5a57796054e07d/candidate.stdout.jsonl": "97bcfea7885c2331c3e1d7a2ea75bb1ded01f72c67d527c5532fb3888be78e34",
+    "resource-controls/test_extra_output_cannot_pass/9f5bebfb949442d68f5a57796054e07d/first-divergence.json": "2e9f7094a2c2c9b4fac2cca4588cebe4b8d814761c3880f3d89650e08cc125b8",
+    "resource-controls/test_extra_output_cannot_pass/9f5bebfb949442d68f5a57796054e07d/receipt.json": "efb4fc5248a9bad19ddf9841c365878fdfc10332df2658509cdea3689f1a0d56",
+    "resource-controls/test_extra_output_cannot_pass/9f5bebfb949442d68f5a57796054e07d/reference.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "resource-controls/test_extra_output_cannot_pass/9f5bebfb949442d68f5a57796054e07d/reference.stdout.jsonl": "241367f520875d7718b706f0b5a128a136979bb87c5bdf4e7213f0265fbd84f1",
+    "resource-controls/test_extra_output_cannot_pass/9f5bebfb949442d68f5a57796054e07d/request.json": "347110b571e41539b3cbab5ab29a3cc16232bbfe961e2d767aba8ffd1f7d3c14",
+    "resource-controls/test_extra_output_cannot_pass/9f5bebfb949442d68f5a57796054e07d/trace.json": "2af6d17893a5e9c1df8fc66341a331d99458bc92182b11645790c4470d816962",
+    "resource-controls/test_input_is_copied_before_any_adapter_runs/08fd0d38b6e04fa598ae669be911f3e2/candidate.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "resource-controls/test_input_is_copied_before_any_adapter_runs/08fd0d38b6e04fa598ae669be911f3e2/candidate.stdout.jsonl": "216e9c8d58331df81f8294465c38f76c2223ad58648ca0d7e9a36bccc36c8e16",
+    "resource-controls/test_input_is_copied_before_any_adapter_runs/08fd0d38b6e04fa598ae669be911f3e2/receipt.json": "6f027c78b966fc05b5ca0c79f5672b8c7e9e783bdcb9d83571b54c77f735e6f6",
+    "resource-controls/test_input_is_copied_before_any_adapter_runs/08fd0d38b6e04fa598ae669be911f3e2/reference.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "resource-controls/test_input_is_copied_before_any_adapter_runs/08fd0d38b6e04fa598ae669be911f3e2/reference.stdout.jsonl": "216e9c8d58331df81f8294465c38f76c2223ad58648ca0d7e9a36bccc36c8e16",
+    "resource-controls/test_input_is_copied_before_any_adapter_runs/08fd0d38b6e04fa598ae669be911f3e2/request.json": "7f5a05b596b376f4fcf859669b67c1ccd7381c263b0ac0cccc78958b7d00c4fc",
+    "resource-controls/test_input_is_copied_before_any_adapter_runs/08fd0d38b6e04fa598ae669be911f3e2/trace.json": "2af6d17893a5e9c1df8fc66341a331d99458bc92182b11645790c4470d816962",
+    "resource-controls/test_lifetime_kills_silent_adapter/adapter-resource-receipt.json": "cd444381773506db0b914de4794f3b9ae95aca22120bc01ea32cd86fa026b78a",
+    "resource-controls/test_lifetime_kills_silent_adapter/flood.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "resource-controls/test_lifetime_kills_silent_adapter/flood.stdout.jsonl": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "resource-controls/test_queue_flood_never_blocks_reader/adapter-resource-receipt.json": "d1cedc4bfe553792e7c5e9c05cf8e62992fbdda0299c0172377690e1044154ff",
+    "resource-controls/test_queue_flood_never_blocks_reader/queue.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "resource-controls/test_queue_flood_never_blocks_reader/queue.stdout.jsonl": "20b6edf8e5d7fdfa91af0f931312ddb24c8808b9ebc3b5422ea8403f781f0aaf",
+    "resource-controls/test_stderr_flood_has_total_byte_cap/adapter-resource-receipt.json": "55f4020b89de0d9353380772b495976744220715517b6a9610bded9360afc0ac",
+    "resource-controls/test_stderr_flood_has_total_byte_cap/flood.stderr.txt": "a2e659dacb4691e887ac0139f8893d04764ee197d70fb73d3190d56113d18e3e",
+    "resource-controls/test_stderr_flood_has_total_byte_cap/flood.stdout.jsonl": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "resource-controls/test_whole_run_boundary_budget/c3abb7e2fd4040878d837a01c0ec482c/candidate.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "resource-controls/test_whole_run_boundary_budget/c3abb7e2fd4040878d837a01c0ec482c/candidate.stdout.jsonl": "6ee622f4822c1010cfb0797a38095abe16d9cd7cc5cd299ba84e4621001a215a",
+    "resource-controls/test_whole_run_boundary_budget/c3abb7e2fd4040878d837a01c0ec482c/first-divergence.json": "52c9d695883baae2b23a7cc2a2e98f70b321ea34ba5cd79fd9da863a863c4e00",
+    "resource-controls/test_whole_run_boundary_budget/c3abb7e2fd4040878d837a01c0ec482c/receipt.json": "9ea48e825b36884ea435fd13468006c41730f0308f1fc8c8b5bfcbf85690cfe4",
+    "resource-controls/test_whole_run_boundary_budget/c3abb7e2fd4040878d837a01c0ec482c/reference.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "resource-controls/test_whole_run_boundary_budget/c3abb7e2fd4040878d837a01c0ec482c/reference.stdout.jsonl": "6ee622f4822c1010cfb0797a38095abe16d9cd7cc5cd299ba84e4621001a215a",
+    "resource-controls/test_whole_run_boundary_budget/c3abb7e2fd4040878d837a01c0ec482c/request.json": "23e885d19f920e45530470e5ab0972851adfeeaf26ce2d0a45d268e9402cb5f4",
+    "resource-controls/test_whole_run_boundary_budget/c3abb7e2fd4040878d837a01c0ec482c/trace.json": "06b43e2d2f61ce2f1e684372718e4d47c8dcbf989e1fd95826f69bde418b8cba",
+    "resource-controls/test_zero_newline_stdout_has_line_cap/adapter-resource-receipt.json": "0fe969015e1fb6a742f86ce216033ae0220373bc9a54982565fe1cb08d88b417",
+    "resource-controls/test_zero_newline_stdout_has_line_cap/flood.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "resource-controls/test_zero_newline_stdout_has_line_cap/flood.stdout.jsonl": "a2e659dacb4691e887ac0139f8893d04764ee197d70fb73d3190d56113d18e3e",
+    "resource-controls/test_zero_newline_stdout_has_total_byte_cap/adapter-resource-receipt.json": "b09c7e432871d713b1434e2c1a2c56d53dac36f9cd81df881ce1f22669e375dc",
+    "resource-controls/test_zero_newline_stdout_has_total_byte_cap/flood.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "resource-controls/test_zero_newline_stdout_has_total_byte_cap/flood.stdout.jsonl": "a2e659dacb4691e887ac0139f8893d04764ee197d70fb73d3190d56113d18e3e"
+  },
+  "sources": {
+    "D:\\minecraftrust-astra-hardening\\tools\\differential-replay\\Cargo.toml": "850820702c6653713b45ee22c1ccec7ff0cc955444e6a63d95d03b868aebf90f",
+    "D:\\minecraftrust-astra-hardening\\tools\\differential-replay\\Cargo.lock": "c56e82babf7b0357c063b0a328fb6a1a7b240bf5de9b4d95e2e7ced02dabd69f",
+    "D:\\minecraftrust-astra-hardening\\tools\\differential-replay\\replay.py": "ff2e749f4c409ad79f5e75fff1147a51cd2ba1d48ec1c247dffdd43914d42972",
+    "D:\\minecraftrust-astra-hardening\\tools\\differential-replay\\run.py": "73f56ec9c8cb689bc5aedf0795265104c6ca578af75b44e918c558c218bd95ec",
+    "D:\\minecraftrust-astra-hardening\\tools\\differential-replay\\test_replay.py": "6d7bda538f20bcc53bfbd523644db6d9b4a7df1873b126b130982e0a851e2799",
+    "D:\\minecraftrust-astra-hardening\\tools\\differential-replay\\src\\main.rs": "140a2a122508dbd27a11e3e4fc3a9dd556aa0712f0a1228acf6873fa91dae33e",
+    "D:\\minecraftrust-astra-hardening\\tools\\differential-replay\\java\\ReferenceReplay.java": "4a98129dc0047e3822d576b9cfc51efed070281a0f43a5085643656a6ab2b881"
+  },
+  "tools": {
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\bin\\java.exe": "65ebee06ec47df0c41c4483ac5aa408e55adb47a1613bad56be30bccc4317e85",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\bin\\javac.exe": "9f1dae15ffb49c7363c72351cf61f4889ac6896e3df87c1c5553b81745ae8a07",
+    "C:\\Users\\Admin\\.cargo\\bin\\cargo.exe": "6f4bef66261261fcb43131be8720bab817d403a09edec7455c371974b90bdb7e",
+    "C:\\Python314\\python.exe": "4942b86a6597e5aee0128daa00050ed79bc21f6e709a78eb19cbfeb0c2f39ac9"
+  },
+  "artifacts": {
+    "D:\\minecraftrust-astra-hardening\\target\\differential-replay\\7416393607984c89a810fe20abac8a61\\cargo-target\\release\\differential-replay-candidate.exe": "d90ed37819eb46c4d4da8d04a28481d21d90cee30fde495b62d67c6ca8fa05d8",
+    "D:\\minecraftrust-astra-hardening\\target\\differential-replay\\7416393607984c89a810fe20abac8a61\\classes\\ReferenceReplay$1.class": "4823389ffa224aff4b83c0cb8ff528606193f544a8f0086f2cfea8347eac1418",
+    "D:\\minecraftrust-astra-hardening\\target\\differential-replay\\7416393607984c89a810fe20abac8a61\\classes\\ReferenceReplay.class": "ab9a4adf7063d6bbc8a2cacb8a71680ed0a57f690cdf74eb665078b9376af33f"
+  },
+  "commands": [
+    {
+      "name": "rust-fmt",
+      "argv": [
+        "C:\\Users\\Admin\\.cargo\\bin\\cargo.exe",
+        "fmt",
+        "--",
+        "--check"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 0.1638937999960035,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "rust-tests",
+      "argv": [
+        "C:\\Users\\Admin\\.cargo\\bin\\cargo.exe",
+        "test",
+        "--locked",
+        "--offline",
+        "--target-dir",
+        "D:\\minecraftrust-astra-hardening\\target\\differential-replay\\7416393607984c89a810fe20abac8a61\\cargo-target"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 0.5541718999738805,
+      "stdout_sha256": "da11bbb1e7125e1f76e1e8e6631e8bf4e262c4a38eab5c5885b4407e95d35172",
+      "stderr_sha256": "8c7968d69f0ea2fd268a1d5d0c67a8f08bcf9291bd952469afc150267fb4cdd1"
+    },
+    {
+      "name": "rust-clippy",
+      "argv": [
+        "C:\\Users\\Admin\\.cargo\\bin\\cargo.exe",
+        "clippy",
+        "--locked",
+        "--offline",
+        "--target-dir",
+        "D:\\minecraftrust-astra-hardening\\target\\differential-replay\\7416393607984c89a810fe20abac8a61\\cargo-target",
+        "--",
+        "-D",
+        "warnings"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 0.29747480002697557,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "2dd3b562d92c2a47438455f789b04294ccd18f39ec2d36153613bc04b353854e"
+    },
+    {
+      "name": "rust-release",
+      "argv": [
+        "C:\\Users\\Admin\\.cargo\\bin\\cargo.exe",
+        "build",
+        "--release",
+        "--locked",
+        "--offline",
+        "--target-dir",
+        "D:\\minecraftrust-astra-hardening\\target\\differential-replay\\7416393607984c89a810fe20abac8a61\\cargo-target"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 0.7249315999797545,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "7fcb2e9b48bdb96de0f9a40323eb842f202049c69f5ebe61e1fc3e03b3d1d8da"
+    },
+    {
+      "name": "java-build",
+      "argv": [
+        "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\bin\\javac.exe",
+        "-encoding",
+        "UTF-8",
+        "-d",
+        "D:\\minecraftrust-astra-hardening\\target\\differential-replay\\7416393607984c89a810fe20abac8a61\\classes",
+        "D:\\minecraftrust-astra-hardening\\tools\\differential-replay\\java\\ReferenceReplay.java"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 0.36447319999570027,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "protocol-tests",
+      "argv": [
+        "C:\\Python314\\python.exe",
+        "-B",
+        "-m",
+        "unittest",
+        "test_replay",
+        "-v"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 1.8109910000348464,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "c1ce9dbb9bee76e8e61c8de8df0270d5d79e7d20c206d5e92fac28b7e6535f9b"
+    }
+  ],
+  "cases": [
+    {
+      "name": "integer-rng-golden",
+      "passed": true,
+      "expected": "PASS",
+      "observed": "PASS",
+      "receipt": "D:\\minecraftrust-astra-hardening\\target\\differential-replay\\7416393607984c89a810fe20abac8a61\\runs\\68e90e1d9c294bd8969621dc7ce0a948/receipt.json",
+      "receipt_sha256": "20deb0a2b32333955b09284e8bb1c767e66d8df18bb08c665f6293c8504c8722"
+    },
+    {
+      "name": "controlled-error-and-retry",
+      "passed": true,
+      "expected": "PASS",
+      "observed": "PASS",
+      "receipt": "D:\\minecraftrust-astra-hardening\\target\\differential-replay\\7416393607984c89a810fe20abac8a61\\runs\\eb7ff646d9cf4c0bae6c104c7e19be48/receipt.json",
+      "receipt_sha256": "9b6560e0721c9133b16fc2f2c73becfc5b113da79ebbe7c9d2e45b692d5f45dc"
+    },
+    {
+      "name": "same-time-schedule-order",
+      "passed": true,
+      "expected": "PASS",
+      "observed": "PASS",
+      "receipt": "D:\\minecraftrust-astra-hardening\\target\\differential-replay\\7416393607984c89a810fe20abac8a61\\runs\\e34a88813499466b8f6a341d54239f28/receipt.json",
+      "receipt_sha256": "388720672e8a34ca95307f583e2cd0d9491ea69a51660b502b81e3e61da8d06d"
+    },
+    {
+      "name": "signed-wrap-golden",
+      "passed": true,
+      "expected": "PASS",
+      "observed": "PASS",
+      "receipt": "D:\\minecraftrust-astra-hardening\\target\\differential-replay\\7416393607984c89a810fe20abac8a61\\runs\\5497e73cec22440089a4594fb7bcd1d0/receipt.json",
+      "receipt_sha256": "3f4fb17837af94c6b3f22f038111ef4c9b033645f987480d385baf9d2c601fa1"
+    },
+    {
+      "name": "callback-order-AB",
+      "passed": true,
+      "expected": "PASS",
+      "observed": "PASS",
+      "receipt": "D:\\minecraftrust-astra-hardening\\target\\differential-replay\\7416393607984c89a810fe20abac8a61\\runs\\90715ec3950844a3bf874b15a74ae20d/receipt.json",
+      "receipt_sha256": "a15fe3835cd650b1694586fbda70eab921ffc3bbb9d12e17652056950858a11a"
+    },
+    {
+      "name": "callback-order-BA",
+      "passed": true,
+      "expected": "PASS",
+      "observed": "PASS",
+      "receipt": "D:\\minecraftrust-astra-hardening\\target\\differential-replay\\7416393607984c89a810fe20abac8a61\\runs\\7fed62a96fed4bf9b8f2ca27e2a72277/receipt.json",
+      "receipt_sha256": "67d1c4b2c34da4f31c294548872587098f5355ce0bbf419c736e0892a8f159b4"
+    },
+    {
+      "name": "seeded-mixed-0",
+      "passed": true,
+      "expected": "PASS",
+      "observed": "PASS",
+      "receipt": "D:\\minecraftrust-astra-hardening\\target\\differential-replay\\7416393607984c89a810fe20abac8a61\\runs\\1c117e62a64c46ca991d4b3a3255f52d/receipt.json",
+      "receipt_sha256": "299aa45aa744bff1743af11c77a198a4ea65174ac5c9ec5c70d32fa7ca5e529e"
+    },
+    {
+      "name": "seeded-mixed-1",
+      "passed": true,
+      "expected": "PASS",
+      "observed": "PASS",
+      "receipt": "D:\\minecraftrust-astra-hardening\\target\\differential-replay\\7416393607984c89a810fe20abac8a61\\runs\\41c5f92774d746dd86cd58f607439b00/receipt.json",
+      "receipt_sha256": "eff3adba21f6a5a60a526a960e56fcbb4e6996ab1684f005538dd7f781d5058e"
+    },
+    {
+      "name": "seeded-mixed-2",
+      "passed": true,
+      "expected": "PASS",
+      "observed": "PASS",
+      "receipt": "D:\\minecraftrust-astra-hardening\\target\\differential-replay\\7416393607984c89a810fe20abac8a61\\runs\\9dde07a5a70342369d6ae25410d28bb4/receipt.json",
+      "receipt_sha256": "6d454ab052ff488f86b28222fca1a2186c78070f59a1c575212cfcf0ced4da86"
+    },
+    {
+      "name": "seeded-mixed-3",
+      "passed": true,
+      "expected": "PASS",
+      "observed": "PASS",
+      "receipt": "D:\\minecraftrust-astra-hardening\\target\\differential-replay\\7416393607984c89a810fe20abac8a61\\runs\\a4b7f8a026924cd688c9931f107cce27/receipt.json",
+      "receipt_sha256": "e3573f5b8a87015718d53a5d63e6abfb060d4a4d6837a66ff55bebb79f450221"
+    },
+    {
+      "name": "seeded-mixed-4",
+      "passed": true,
+      "expected": "PASS",
+      "observed": "PASS",
+      "receipt": "D:\\minecraftrust-astra-hardening\\target\\differential-replay\\7416393607984c89a810fe20abac8a61\\runs\\09908c6f82cd4638b268286fc9b77c7c/receipt.json",
+      "receipt_sha256": "5341cf403aab63bc0d967f371f95da7f1d5e4c05c8155388b991f95be33e9bf6"
+    },
+    {
+      "name": "seeded-mixed-5",
+      "passed": true,
+      "expected": "PASS",
+      "observed": "PASS",
+      "receipt": "D:\\minecraftrust-astra-hardening\\target\\differential-replay\\7416393607984c89a810fe20abac8a61\\runs\\6017ad0cb61c4b2abd3ef79458ce1dda/receipt.json",
+      "receipt_sha256": "655b3eca02c3dc6995192d08cd1b35ec4ece01e99d762c3cc1e3bb6a463b1b80"
+    },
+    {
+      "name": "seeded-mixed-6",
+      "passed": true,
+      "expected": "PASS",
+      "observed": "PASS",
+      "receipt": "D:\\minecraftrust-astra-hardening\\target\\differential-replay\\7416393607984c89a810fe20abac8a61\\runs\\39a31395be444f49b92a4bad8f3356ad/receipt.json",
+      "receipt_sha256": "2597ff365ddf5ff3c47e4a0e03365eb12a5041d90879e1a0af2248f4f4907e72"
+    },
+    {
+      "name": "seeded-mixed-7",
+      "passed": true,
+      "expected": "PASS",
+      "observed": "PASS",
+      "receipt": "D:\\minecraftrust-astra-hardening\\target\\differential-replay\\7416393607984c89a810fe20abac8a61\\runs\\39ad4698a5c2478fb9b40da49717a6fa/receipt.json",
+      "receipt_sha256": "f81cf93f4be65b77007154ec534c917bec646b0fb767a8df026fd75ef4c27524"
+    },
+    {
+      "name": "seeded-mixed-8",
+      "passed": true,
+      "expected": "PASS",
+      "observed": "PASS",
+      "receipt": "D:\\minecraftrust-astra-hardening\\target\\differential-replay\\7416393607984c89a810fe20abac8a61\\runs\\8138e4db9296425a87942ef16de7ba4b/receipt.json",
+      "receipt_sha256": "08e7caf4095573bf937916a763f84a7e8035b4d5bdf98e670e56d2757010641f"
+    },
+    {
+      "name": "seeded-mixed-9",
+      "passed": true,
+      "expected": "PASS",
+      "observed": "PASS",
+      "receipt": "D:\\minecraftrust-astra-hardening\\target\\differential-replay\\7416393607984c89a810fe20abac8a61\\runs\\175f7b4d7d2c4ab2a58ce3d2f2d055b3/receipt.json",
+      "receipt_sha256": "fa413e8c0d93bffc8aa5a7e811b0866dbe6b74bdbf63ed7495a1cb8a9c8f1d38"
+    },
+    {
+      "name": "seeded-mixed-10",
+      "passed": true,
+      "expected": "PASS",
+      "observed": "PASS",
+      "receipt": "D:\\minecraftrust-astra-hardening\\target\\differential-replay\\7416393607984c89a810fe20abac8a61\\runs\\27560b68cbf24ad5bf8a1b8c1b0d2a08/receipt.json",
+      "receipt_sha256": "23e183151328cc1038d2a2ec87141162d16b0cbbb255f1869e8d6c5a1f783483"
+    },
+    {
+      "name": "seeded-mixed-11",
+      "passed": true,
+      "expected": "PASS",
+      "observed": "PASS",
+      "receipt": "D:\\minecraftrust-astra-hardening\\target\\differential-replay\\7416393607984c89a810fe20abac8a61\\runs\\af2a38337af74da1b51bb904298ddfe0/receipt.json",
+      "receipt_sha256": "e7f86c3edc4f77bb99a149687cb9b92d0de19bea4c869728fca7c3cc9c0e76ee"
+    },
+    {
+      "name": "seeded-mixed-12",
+      "passed": true,
+      "expected": "PASS",
+      "observed": "PASS",
+      "receipt": "D:\\minecraftrust-astra-hardening\\target\\differential-replay\\7416393607984c89a810fe20abac8a61\\runs\\67c6a58b7dfd4eed8862c75defef2332/receipt.json",
+      "receipt_sha256": "562a169ba8033c01f3dd6c43a213fe3987df09f459d69ad8766d4c18aa56e6e4"
+    },
+    {
+      "name": "seeded-mixed-13",
+      "passed": true,
+      "expected": "PASS",
+      "observed": "PASS",
+      "receipt": "D:\\minecraftrust-astra-hardening\\target\\differential-replay\\7416393607984c89a810fe20abac8a61\\runs\\2a4df5c35acd48dc8e402889fa5b2e78/receipt.json",
+      "receipt_sha256": "cb7300a874f9157e0966a93b4b8c0e518f73f46577a3f569af6d930aedc8d8d4"
+    },
+    {
+      "name": "seeded-mixed-14",
+      "passed": true,
+      "expected": "PASS",
+      "observed": "PASS",
+      "receipt": "D:\\minecraftrust-astra-hardening\\target\\differential-replay\\7416393607984c89a810fe20abac8a61\\runs\\c6e0b889e9484982a95711a79d3782a6/receipt.json",
+      "receipt_sha256": "caf91bf7af51afd9f595ba8a449fcb0e8fefc542626b8f01efe127db0a2a8c15"
+    },
+    {
+      "name": "seeded-mixed-15",
+      "passed": true,
+      "expected": "PASS",
+      "observed": "PASS",
+      "receipt": "D:\\minecraftrust-astra-hardening\\target\\differential-replay\\7416393607984c89a810fe20abac8a61\\runs\\cb15a9848c1f420cbe0713701f4d3395/receipt.json",
+      "receipt_sha256": "0867e27079a34688a8889e6de5dfff3450419e6926c521cc839fd106d0384b56"
+    },
+    {
+      "name": "seeded-mixed-16",
+      "passed": true,
+      "expected": "PASS",
+      "observed": "PASS",
+      "receipt": "D:\\minecraftrust-astra-hardening\\target\\differential-replay\\7416393607984c89a810fe20abac8a61\\runs\\20c1bc83ff13405aafc14d659efc9198/receipt.json",
+      "receipt_sha256": "6fa27f8b07eea390a9d9a3f37dbd0ca4355c3aec8e81a52069114cecb9b3fad4"
+    },
+    {
+      "name": "seeded-mixed-17",
+      "passed": true,
+      "expected": "PASS",
+      "observed": "PASS",
+      "receipt": "D:\\minecraftrust-astra-hardening\\target\\differential-replay\\7416393607984c89a810fe20abac8a61\\runs\\5227353923f641b39459e1281018c17e/receipt.json",
+      "receipt_sha256": "253e29b4fbf6ca816c4cde4ee3cab78995813acfb7482308816567c296fea9ba"
+    },
+    {
+      "name": "seeded-mixed-18",
+      "passed": true,
+      "expected": "PASS",
+      "observed": "PASS",
+      "receipt": "D:\\minecraftrust-astra-hardening\\target\\differential-replay\\7416393607984c89a810fe20abac8a61\\runs\\a836c9c6b2e34ae09c285a85050cf066/receipt.json",
+      "receipt_sha256": "80613702cb3c023ef0e79e64948249989476d8a7b6816be1720362bb839155c6"
+    },
+    {
+      "name": "seeded-mixed-19",
+      "passed": true,
+      "expected": "PASS",
+      "observed": "PASS",
+      "receipt": "D:\\minecraftrust-astra-hardening\\target\\differential-replay\\7416393607984c89a810fe20abac8a61\\runs\\1691808fa3644cd1bda000561320ad77/receipt.json",
+      "receipt_sha256": "33ffc95a32e963f62b8a71563677ac177ee94f307c6d21b225e176748a051b10"
+    },
+    {
+      "name": "seeded-mixed-20",
+      "passed": true,
+      "expected": "PASS",
+      "observed": "PASS",
+      "receipt": "D:\\minecraftrust-astra-hardening\\target\\differential-replay\\7416393607984c89a810fe20abac8a61\\runs\\84f1e236a6f849f694e3cbc0751345cb/receipt.json",
+      "receipt_sha256": "38eb1c8711bad278ecfce3cc75716fcb7be9f270698a830980b5c7dcc561bcb0"
+    },
+    {
+      "name": "seeded-mixed-21",
+      "passed": true,
+      "expected": "PASS",
+      "observed": "PASS",
+      "receipt": "D:\\minecraftrust-astra-hardening\\target\\differential-replay\\7416393607984c89a810fe20abac8a61\\runs\\4eb480fc129f4e95a794ceae30c36517/receipt.json",
+      "receipt_sha256": "f611900312c5859410c98571aaaab6b486da632bc1ecd907bac65f0dcd8eda90"
+    },
+    {
+      "name": "seeded-mixed-22",
+      "passed": true,
+      "expected": "PASS",
+      "observed": "PASS",
+      "receipt": "D:\\minecraftrust-astra-hardening\\target\\differential-replay\\7416393607984c89a810fe20abac8a61\\runs\\4c4627b17d694edd973373a50fcdc7e7/receipt.json",
+      "receipt_sha256": "4c5dca384db06fee9b60816f69fbb39e97d5cd3fc5a3e199e3787f31fe61482f"
+    },
+    {
+      "name": "seeded-mixed-23",
+      "passed": true,
+      "expected": "PASS",
+      "observed": "PASS",
+      "receipt": "D:\\minecraftrust-astra-hardening\\target\\differential-replay\\7416393607984c89a810fe20abac8a61\\runs\\7c92b81ee2d2491fa78dde9ed47554bb/receipt.json",
+      "receipt_sha256": "897483e0f9bbc8f9652ba6861718fb1a78cc61588cb46f17d795bad26227250d"
+    },
+    {
+      "name": "reconverge",
+      "passed": true,
+      "expected": "DIVERGED",
+      "observed": "DIVERGED",
+      "receipt": "D:\\minecraftrust-astra-hardening\\target\\differential-replay\\7416393607984c89a810fe20abac8a61\\runs\\402adf8b07db481d967ca0cc3a9876c0/receipt.json",
+      "receipt_sha256": "f8906977f268f8007ca6dafbcb0fc1d120ca1a9b26bc80ec0c52b5cea7d2d198"
+    },
+    {
+      "name": "callback-reorder",
+      "passed": true,
+      "expected": "DIVERGED",
+      "observed": "DIVERGED",
+      "receipt": "D:\\minecraftrust-astra-hardening\\target\\differential-replay\\7416393607984c89a810fe20abac8a61\\runs\\e911b45895aa403db429137f478fdf66/receipt.json",
+      "receipt_sha256": "b21cf3b77f119ecde12f9890ecc157a662b0ab253927ae838c2247d9a7629f75"
+    },
+    {
+      "name": "callback-missing",
+      "passed": true,
+      "expected": "DIVERGED",
+      "observed": "DIVERGED",
+      "receipt": "D:\\minecraftrust-astra-hardening\\target\\differential-replay\\7416393607984c89a810fe20abac8a61\\runs\\135a8a33a8dc417da76b2d70bfe0a71d/receipt.json",
+      "receipt_sha256": "a4591114c2643c4a8dc86e67ba0c708832b55364f9c7766da779f39bc9696a3f"
+    },
+    {
+      "name": "callback-extra",
+      "passed": true,
+      "expected": "DIVERGED",
+      "observed": "DIVERGED",
+      "receipt": "D:\\minecraftrust-astra-hardening\\target\\differential-replay\\7416393607984c89a810fe20abac8a61\\runs\\6e4b2207205d42b691c1e99fde73e570/receipt.json",
+      "receipt_sha256": "24c285e02ba8e8494cff74bf7150a489589af867b6b6945008aa5859455db37e"
+    },
+    {
+      "name": "mutation-missing",
+      "passed": true,
+      "expected": "DIVERGED",
+      "observed": "DIVERGED",
+      "receipt": "D:\\minecraftrust-astra-hardening\\target\\differential-replay\\7416393607984c89a810fe20abac8a61\\runs\\7c7c38d711404f388a4ded4fcc6ddac6/receipt.json",
+      "receipt_sha256": "16a75d4bd0fbc72c2618f4045e7a5141f81e87c54c57561d05d6adaf06f424e2"
+    },
+    {
+      "name": "scheduled-missing",
+      "passed": true,
+      "expected": "DIVERGED",
+      "observed": "DIVERGED",
+      "receipt": "D:\\minecraftrust-astra-hardening\\target\\differential-replay\\7416393607984c89a810fe20abac8a61\\runs\\539b8dd29750411eab31e2c8c3676a0e/receipt.json",
+      "receipt_sha256": "480a2e1a0a328a4a789d9c4b807967f1d4c323839adf7995dcd6eb039506a066"
+    },
+    {
+      "name": "rng",
+      "passed": true,
+      "expected": "DIVERGED",
+      "observed": "DIVERGED",
+      "receipt": "D:\\minecraftrust-astra-hardening\\target\\differential-replay\\7416393607984c89a810fe20abac8a61\\runs\\80d6583678694bbd987f93b3bf3cf3a8/receipt.json",
+      "receipt_sha256": "2287611e8894d9f88b936714e62068e45c113c8150cc08f173af35d6708cd925"
+    },
+    {
+      "name": "packet",
+      "passed": true,
+      "expected": "DIVERGED",
+      "observed": "DIVERGED",
+      "receipt": "D:\\minecraftrust-astra-hardening\\target\\differential-replay\\7416393607984c89a810fe20abac8a61\\runs\\58dd49e696c94ca4b243e3ba99f5162d/receipt.json",
+      "receipt_sha256": "3343965a3aa6072b561aa7da71ab581818daf710d58d6cab96b1fde773e0175a"
+    },
+    {
+      "name": "save",
+      "passed": true,
+      "expected": "DIVERGED",
+      "observed": "DIVERGED",
+      "receipt": "D:\\minecraftrust-astra-hardening\\target\\differential-replay\\7416393607984c89a810fe20abac8a61\\runs\\8bab9437b675491a97d0043fd270daee/receipt.json",
+      "receipt_sha256": "ff9289806bcda9014854baecf67ee4e76c7ca4c9ac84d45f9b1e459db70ed455"
+    },
+    {
+      "name": "controlled-error",
+      "passed": true,
+      "expected": "DIVERGED",
+      "observed": "DIVERGED",
+      "receipt": "D:\\minecraftrust-astra-hardening\\target\\differential-replay\\7416393607984c89a810fe20abac8a61\\runs\\baffc272aa1d4a32821860eaa256a847/receipt.json",
+      "receipt_sha256": "7a25906a913a07d9b1a3066d782afbf5b3c79e15e7c2e089bc580ca323842339"
+    },
+    {
+      "name": "protocol-schema",
+      "passed": true,
+      "expected": "DIVERGED",
+      "observed": "DIVERGED",
+      "receipt": "D:\\minecraftrust-astra-hardening\\target\\differential-replay\\7416393607984c89a810fe20abac8a61\\runs\\645c630a4a454e0997247297f38b863c/receipt.json",
+      "receipt_sha256": "a2fa98a34378c0f96fca5dd84fa0a42daa95e2ed2dc72be823e2cc81301d507f"
+    },
+    {
+      "name": "protocol-session",
+      "passed": true,
+      "expected": "DIVERGED",
+      "observed": "DIVERGED",
+      "receipt": "D:\\minecraftrust-astra-hardening\\target\\differential-replay\\7416393607984c89a810fe20abac8a61\\runs\\8bae8b7ba16c424dbba7c6d8d4a66f4e/receipt.json",
+      "receipt_sha256": "32532777d672d9d13bb0fd100fcb52309e6329f99e7bc367fcafcb14e83835e0"
+    },
+    {
+      "name": "protocol-sequence",
+      "passed": true,
+      "expected": "DIVERGED",
+      "observed": "DIVERGED",
+      "receipt": "D:\\minecraftrust-astra-hardening\\target\\differential-replay\\7416393607984c89a810fe20abac8a61\\runs\\97f46b9ff21740528cd5954da4961c6e/receipt.json",
+      "receipt_sha256": "1f639e8df31fd9bddbf7edda8ecb8a79d0a957d0ab52cd83af7e71081cb2827f"
+    },
+    {
+      "name": "protocol-nonzero",
+      "passed": true,
+      "expected": "DIVERGED",
+      "observed": "DIVERGED",
+      "receipt": "D:\\minecraftrust-astra-hardening\\target\\differential-replay\\7416393607984c89a810fe20abac8a61\\runs\\7812c2bc6be04d7bbcaa4582149b59f5/receipt.json",
+      "receipt_sha256": "a66532df062c2a230e76c29434f70d5a6d3de7af7677f3cf493096e2b8258b42"
+    },
+    {
+      "name": "protocol-empty",
+      "passed": true,
+      "expected": "DIVERGED",
+      "observed": "DIVERGED",
+      "receipt": "D:\\minecraftrust-astra-hardening\\target\\differential-replay\\7416393607984c89a810fe20abac8a61\\runs\\3ec31a5d2aed4316a7c1ba442488055c/receipt.json",
+      "receipt_sha256": "b670a3b5c078bdf6671a31ce928849174dbd82b4230d4f5531184c19e1cc07e8"
+    },
+    {
+      "name": "protocol-malformed",
+      "passed": true,
+      "expected": "DIVERGED",
+      "observed": "DIVERGED",
+      "receipt": "D:\\minecraftrust-astra-hardening\\target\\differential-replay\\7416393607984c89a810fe20abac8a61\\runs\\cab635bdcabf4f1b914c235b8ffa27e3/receipt.json",
+      "receipt_sha256": "3770c77f2dde5305e9c9630cc933fa0970123e0ed8c22676a2d25c76c78a18da"
+    },
+    {
+      "name": "initial-state-drift",
+      "passed": true,
+      "expected": "DIVERGED",
+      "observed": "DIVERGED",
+      "receipt": "D:\\minecraftrust-astra-hardening\\target\\differential-replay\\7416393607984c89a810fe20abac8a61\\runs\\af2dfc2028164a71822497ecb141f1df/receipt.json",
+      "receipt_sha256": "be41df83d3806f8b8764c8d031035f55029f2a8b19a2c7126ee16d4b62e7e33f"
+    }
+  ],
+  "case_count": 47,
+  "all_inputs_unchanged": true,
+  "independent_implementations": "Java PriorityQueue/event-driven tick advancement; Rust sorted Vec/per-tick advancement; separate NBT writers",
+  "reconvergent_diagnostic": {
+    "receipt": "D:\\minecraftrust-astra-hardening\\target\\differential-replay\\7416393607984c89a810fe20abac8a61\\diagnostic\\b459d99b73a442e6b68b928826a0b288/receipt.json",
+    "receipt_sha256": "dcc249395191e8d5580ba4577a0b4a55d03023ca16332782451f9ccb599f81bc",
+    "final_state_equal": true,
+    "first_divergence_control": "reconverge"
+  },
+  "elapsed_seconds": 21.78506829997059,
+  "limitations": [
+    "Not Minecraft/Forge semantics or live qualification",
+    "Single-threaded integer model; no floating point, IO or arbitrary callbacks",
+    "Callbacks are ordered inert observations, never foreign code execution",
+    "Elapsed times include process startup and are not production performance claims"
+  ]
+}

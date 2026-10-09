@@ -1,0 +1,336 @@
+{
+  "schema_version": 1,
+  "kind": "H8_SECTION_PACKET_CACHE_PROTOTYPE",
+  "status": "FAIL",
+  "started_utc": "2026-09-27T01:35:38.287692+00:00",
+  "production_authority": false,
+  "correctness_only": true,
+  "results": [
+    {
+      "name": "resolve-toolchain",
+      "argv": [
+        "C:\\Users\\Admin\\.cargo\\bin\\rustup.exe",
+        "which",
+        "rustc"
+      ],
+      "status": "PASS",
+      "exit_code": 0,
+      "timed_out": false,
+      "elapsed_seconds": 0.04091570002492517,
+      "job_memory_limit_applied": false,
+      "peak_process_commit_bytes": null,
+      "stdout": "target/architecture-hardening/h8-section-packet-cache-e02ee2f05516/resolve-toolchain.stdout.log",
+      "stdout_sha256": "54234bc009f7bc295608f8bb882e03677001147f42f05ce19606c17d2db6473b",
+      "stderr": "target/architecture-hardening/h8-section-packet-cache-e02ee2f05516/resolve-toolchain.stderr.log",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "dependency-metadata",
+      "argv": [
+        "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\cargo.exe",
+        "metadata",
+        "--locked",
+        "--offline",
+        "--manifest-path",
+        "D:\\minecraftrust-astra-hardening\\tools\\section-packet-cache-experiment\\Cargo.toml",
+        "--format-version",
+        "1"
+      ],
+      "status": "PASS",
+      "exit_code": 0,
+      "timed_out": false,
+      "elapsed_seconds": 0.08639959996799007,
+      "job_memory_limit_applied": false,
+      "peak_process_commit_bytes": null,
+      "stdout": "target/architecture-hardening/h8-section-packet-cache-e02ee2f05516/dependency-metadata.stdout.log",
+      "stdout_sha256": "1ab0e5f6ca8dc3089c26c57a2c7c9c135f5f231ec35453b1c2a3e5f85a7f619e",
+      "stderr": "target/architecture-hardening/h8-section-packet-cache-e02ee2f05516/dependency-metadata.stderr.log",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "rustc-version",
+      "argv": [
+        "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\rustc.exe",
+        "-Vv"
+      ],
+      "status": "PASS",
+      "exit_code": 0,
+      "timed_out": false,
+      "elapsed_seconds": 0.02331600000616163,
+      "job_memory_limit_applied": false,
+      "peak_process_commit_bytes": null,
+      "stdout": "target/architecture-hardening/h8-section-packet-cache-e02ee2f05516/rustc-version.stdout.log",
+      "stdout_sha256": "c45e612575abeef05e99e88eb1e7aea52cddab9ad70d4f65ad20eaa65e92a9cf",
+      "stderr": "target/architecture-hardening/h8-section-packet-cache-e02ee2f05516/rustc-version.stderr.log",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "java-version",
+      "argv": [
+        "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\bin\\java.exe",
+        "-version"
+      ],
+      "status": "FAIL",
+      "exit_code": 1,
+      "timed_out": false,
+      "elapsed_seconds": 0.032252200006041676,
+      "job_memory_limit_applied": true,
+      "peak_process_commit_bytes": 532385792,
+      "stdout": "target/architecture-hardening/h8-section-packet-cache-e02ee2f05516/java-version.stdout.log",
+      "stdout_sha256": "e0f85b8712970dcc8daa910b938d066ca015d1cf9bb6fc2cbab15201e6ef636a",
+      "stderr": "target/architecture-hardening/h8-section-packet-cache-e02ee2f05516/java-version.stderr.log",
+      "stderr_sha256": "5a47b9a443096844bbee02716461363984206c74b70b5052f255c8a74044712e"
+    }
+  ],
+  "limits": {
+    "runtime_process_memory_mib": 512,
+    "runtime_active_processes": 1,
+    "runtime_output_bytes_per_stream": 1048576,
+    "benchmark_deadline_seconds": 180,
+    "resident_payload_budget": 65536,
+    "unique_adopted_live_payload_budget": 98304
+  },
+  "limitations": [
+    "Synthetic serial protocol-340/no-block-entity bodies, before framing/compression/encryption.",
+    "Current identity and generation updates are trusted harness inputs, not integrated H6/JVM ownership.",
+    "Payload budgets exclude metadata, source worlds, temporary builders and allocator overhead.",
+    "Shared-host timings with five samples per case; no real-server or general speedup claim.",
+    "Hash inventory covers listed local source/runtime/tool files, not full OS, MSVC toolchain or SDK."
+  ],
+  "isolation_before": {
+    "schema_version": 1,
+    "kind": "HARDENING_ISOLATION_GATE_CHECK",
+    "status": "PASS",
+    "failures": [],
+    "original_observed": {
+      "head": "c4b868db2c9e4b03f745bf93c6ebf4fd8a8519e7",
+      "branch": "issue1-jni-v2",
+      "status": [
+        " M tools/live-capture/live_client_session.py",
+        "?? tools/live-capture/__pycache__/",
+        "?? tools/live-capture/run_rev_shadow.py"
+      ],
+      "files": [
+        {
+          "path": "D:\\minecraftrust\\tools\\live-capture\\live_client_session.py",
+          "sha256": "151c356161695aba3db3c1a8cbd589b5eda2b5a1770dff59ab21b728d36cabfa"
+        },
+        {
+          "path": "D:\\minecraftrust\\tools\\live-capture\\run_rev_shadow.py",
+          "sha256": "2b9b2aca49e57dd0d2a74bec46efcdc0ac7f95762a733276e27ff9dbcb472d93"
+        }
+      ]
+    },
+    "isolated_worktree": "D:\\minecraftrust-astra-hardening",
+    "isolated_head": "1ee883947b4173e45fa4c56d86c040cf4198ae60",
+    "isolated_branch": "astra/architecture-hardening",
+    "production_gate_checks": {
+      "tryEncode_fail_closed": true,
+      "productionAuthorityEligible_false": true
+    },
+    "scope": "read-only original HEAD/status/two paused source hashes plus conservative source guards; runtime authority tests remain required"
+  },
+  "tool_hashes_before": {
+    "C:\\Users\\Admin\\.cargo\\bin\\cargo.exe": "6f4bef66261261fcb43131be8720bab817d403a09edec7455c371974b90bdb7e",
+    "C:\\Users\\Admin\\.cargo\\bin\\rustup.exe": "6f4bef66261261fcb43131be8720bab817d403a09edec7455c371974b90bdb7e",
+    "C:\\Python314\\python.exe": "4942b86a6597e5aee0128daa00050ed79bc21f6e709a78eb19cbfeb0c2f39ac9",
+    "C:\\Program Files\\Git\\cmd\\git.exe": "37c5725818d602e951ba2563b870d62763322956b73373da4c33a0b566a80bc9",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\bin\\java.exe": "65ebee06ec47df0c41c4483ac5aa408e55adb47a1613bad56be30bccc4317e85",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\bin\\javac.exe": "9f1dae15ffb49c7363c72351cf61f4889ac6896e3df87c1c5553b81745ae8a07",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\bin\\server\\jvm.dll": "d3f1564b31a25f280d633d33234bdf88fd12dbe0ae34e15e2e89db3f0ca2d407",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\lib\\rt.jar": "1166665601d9b1587682e2540cff6a31b0c7028211d2e07adb9ad30e1699eca3",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\lib\\tools.jar": "7325904e8de35b7376bbed7080a1fce7d9b886d3dddb5bfdbc00cefe7b248987",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\cargo.exe": "c37545ec61d48d31bdefce53280ecab61c4ea54eaace372fac6a0316c6e165d9",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\rustc.exe": "ca9988af88b1463f6857fdfe909299fee50a63260b3e5f7dbcb5b4d3318b27bc",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\rustdoc.exe": "9daff87cf4052ba3f97decb39d2822e1a96b3ed444eda86ed8df74802679dd60",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\rustfmt.exe": "ac9d781249bffabbb1bedb691a5ea6f63a818c1dda73dd698d4dff687ad4c24e",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\cargo-fmt.exe": "fcd2d35d13dc1a487c755e234bf2aee06f75b522c8a691cac9ee5f0d6fc854a1",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\cargo-clippy.exe": "cb0f2b164b3f6e95bfed7ec4ae9fc48f8ce8d9fef3649b5ae87961f75e1ef484",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\clippy-driver.exe": "00fd4ef2fe60e603571573746e52f42f109bbfe4b879e7ca7313614fda0b367b"
+  },
+  "source_hashes_before": {
+    "Cargo.toml": "ceaf10e69829d9488f89719c1fbc7889832f66f77234bb222b20625b34443c41",
+    "crates/buffers/Cargo.toml": "b174f499d9c90e7ffd5846e200f1b61a2dbfc53b54b2a6d2f272ec6c19c2d512",
+    "crates/buffers/src/lib.rs": "371258844e412e16b93ec539ab7e7e13a3a344e7fc3a54a7feb350d5bde45ab1",
+    "crates/core-types/Cargo.toml": "00383c33bbd1fb38b76e11d3cded64ff8832ce65efdf7620e00583613c2d2f82",
+    "crates/core-types/src/lib.rs": "630c3b67eeed6fd4e8216e3418656e7851728199391f4155ac94da852fe11521",
+    "crates/native-capability/Cargo.toml": "352d8023b05ef342d2165363f533931258e0f5c8e4758bb83ff64df4183c8964",
+    "crates/native-capability/src/lib.rs": "0fc47fbd5872a404c6fc40d248245549cbd3872c63a4d656cab1f7a5d30872d7",
+    "crates/native-chunk/Cargo.toml": "00b673f4e5f13ae6224b0bd1ef683aeadd07073c426cf077270ea8ecf94ab425",
+    "crates/native-chunk/src/chunk.rs": "4a91edb9587343ed67648de39b771e51600602e4e1d4ec72bea4a3b05d7f0921",
+    "crates/native-chunk/src/lib.rs": "0ff2155a8f4061a7939d3d3e91bbb73ae665b45ef211e10c7892965b2cc0a20c",
+    "crates/native-chunk/src/packet_snapshot.rs": "7170c8b0b56c3675927efa8d418b933683e302ed37002a606033fbc189970c12",
+    "crates/native-chunk/src/registry.rs": "79b4e5366da7b31dda3bd6fd24d72584e07f7c8da0f6514574221a39e1a63deb",
+    "crates/native-chunk/src/section.rs": "262f244fc86dab5d7a8a9eb0d2ef25f092b2229f30198aa5d410839171cb6d1e",
+    "crates/native-state-vnext/Cargo.toml": "a196d468553eee7ee43aee6fcb599e7050d2b6e957b3742b332997d909c3e9d6",
+    "crates/native-state-vnext/src/lib.rs": "15d932ec10f3e885c4535f997725f6a80ab7d88c606cfaca1855c56e415836f1",
+    "crates/native-state-vnext/src/section.rs": "b4ffde7b70168df5160155bacb4b8660c54ae253c400c2f5859d9f479b4122ce",
+    "crates/native-state-vnext/src/store.rs": "445aa04958554ffd1bf31c8112d2e5a2faee34ac0a2668b243eb280b9b0b49f1",
+    "crates/protocol/Cargo.toml": "68a7c06ea5fc1954c962b99a817235f4e6bb65a7d04b9f0ec3288be5385732dd",
+    "crates/protocol/src/codec.rs": "66b943c4ac9fa2ec234f8804df47f98f55ee7dc980ece6b46a93ef8cab92a8a2",
+    "crates/protocol/src/error.rs": "ef9a1267d6062656658857ff0f71df91b0875081fa7058ff3434ca2c92a4a8cf",
+    "crates/protocol/src/lib.rs": "86391633f56434d55f16abcff0a1cd168503378365c1dba14c3c20b963280f7e",
+    "crates/rustcraft-core/Cargo.toml": "f0b085a397c545665bae25b878f254c090a5d640bdc52e9bc15cf514f22ef39e",
+    "crates/rustcraft-core/src/lib.rs": "3e6a2914001d68fd02d8e0a33f4e7489ea14202e7b011af51aa3797976b73878",
+    "machine/architecture-hardening/isolation.json": "8f9b34b55f6ecc1d549da1ec4c42900b4a831a3072a9e4aa6aa2ae39cae53d93",
+    "tools/bridge/src/com/rustcraft/bridge/capture/CaptureContract.java": "76d053eaf1b10d4d52de00f236365ff00216e6d8db3425f9de0054fcaa268586",
+    "tools/bridge/src/com/rustcraft/bridge/M4NativeStatePayload.java": "a47be5f83303a2d039fd56acbc24ba71ae9a98035bc9fb15545167535e2513ab",
+    "tools/nbt-region-experiment/job.py": "41f77a4c87ba2f531872853f2bcc701c5cac3a384c1bb2cf49901b8fcff9c65b",
+    "tools/nbt-region-experiment/test_job.py": "9136383642db857086e84591a580cdff6475b7fb28abfe3d26773829a678c07f",
+    "tools/section-packet-cache-experiment/Cargo.lock": "72d5fa93a7de6b181b676898a71686dc22361f0d42e9d06fd6fd5636278bc1ba",
+    "tools/section-packet-cache-experiment/Cargo.toml": "9a9393aced2b47b600ec85fa15c4a207691a9f042906b4ec0a97c3150c5a98b2",
+    "tools/section-packet-cache-experiment/PacketOracle.java": "3dcdebe0c3701dc77d4a12d0bd1200c15edd764fef9e48472103af783a727ba1",
+    "tools/section-packet-cache-experiment/provenance.json": "b6200551e34d8eb6bd690a0b5e5fa9ec3e610f4100d4baf858968de5c5313643",
+    "tools/section-packet-cache-experiment/run.py": "052371fd1b8af63501e0136ae6f1b8faf00d86c8599dfa380332be63b287ac9d",
+    "tools/section-packet-cache-experiment/src/lib.rs": "9426652eb2c866d83215761482c5947e820a97af97eed7fb3f10a19d4eb29d54",
+    "tools/section-packet-cache-experiment/src/main.rs": "d8ccf336257e5cc9a43d27e9622bf34c7391ee492a9c8816af92136dfc1df959",
+    "tools/section-packet-cache-experiment/tests/contracts.rs": "6d04f2d236fa3937dd3734df7484a414761325ef1c5292370240b1a4b03a0276",
+    "tools/section-packet-cache-experiment/third-party/Hyperion-LICENSE.txt": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+    "tools/section-packet-cache-experiment/third-party/Valence-LICENSE.txt": "01c39d867eb175cce2f8dcafd98f151d2e704b4adedc8c6a8e1c2721cd9663cd",
+    "tools/testing/hardening_guard.py": "a2062b3ffbec7edba79bf5f5954fbcb1e9d97492ab9c4bb541833ebb820bdb6d"
+  },
+  "local_packages": [
+    {
+      "name": "buffers",
+      "version": "0.1.0",
+      "manifest": "D:\\minecraftrust-astra-hardening\\crates\\buffers\\Cargo.toml",
+      "license": "MIT OR Apache-2.0"
+    },
+    {
+      "name": "core-types",
+      "version": "0.1.0",
+      "manifest": "D:\\minecraftrust-astra-hardening\\crates\\core-types\\Cargo.toml",
+      "license": "MIT OR Apache-2.0"
+    },
+    {
+      "name": "native-capability",
+      "version": "0.1.0",
+      "manifest": "D:\\minecraftrust-astra-hardening\\crates\\native-capability\\Cargo.toml",
+      "license": "MIT OR Apache-2.0"
+    },
+    {
+      "name": "native-chunk",
+      "version": "0.1.0",
+      "manifest": "D:\\minecraftrust-astra-hardening\\crates\\native-chunk\\Cargo.toml",
+      "license": "MIT OR Apache-2.0"
+    },
+    {
+      "name": "native-state-vnext",
+      "version": "0.1.0",
+      "manifest": "D:\\minecraftrust-astra-hardening\\crates\\native-state-vnext\\Cargo.toml",
+      "license": "MIT OR Apache-2.0"
+    },
+    {
+      "name": "protocol",
+      "version": "0.1.0",
+      "manifest": "D:\\minecraftrust-astra-hardening\\crates\\protocol\\Cargo.toml",
+      "license": "MIT OR Apache-2.0"
+    },
+    {
+      "name": "rustcraft-core",
+      "version": "0.1.0",
+      "manifest": "D:\\minecraftrust-astra-hardening\\crates\\rustcraft-core\\Cargo.toml",
+      "license": "MIT OR Apache-2.0"
+    },
+    {
+      "name": "section-packet-cache-experiment",
+      "version": "0.1.0",
+      "manifest": "D:\\minecraftrust-astra-hardening\\tools\\section-packet-cache-experiment\\Cargo.toml",
+      "license": "MIT OR Apache-2.0"
+    }
+  ],
+  "error": "RuntimeError: java-version failed; partial logs retained",
+  "source_hashes_after": {
+    "Cargo.toml": "ceaf10e69829d9488f89719c1fbc7889832f66f77234bb222b20625b34443c41",
+    "crates/buffers/Cargo.toml": "b174f499d9c90e7ffd5846e200f1b61a2dbfc53b54b2a6d2f272ec6c19c2d512",
+    "crates/buffers/src/lib.rs": "371258844e412e16b93ec539ab7e7e13a3a344e7fc3a54a7feb350d5bde45ab1",
+    "crates/core-types/Cargo.toml": "00383c33bbd1fb38b76e11d3cded64ff8832ce65efdf7620e00583613c2d2f82",
+    "crates/core-types/src/lib.rs": "630c3b67eeed6fd4e8216e3418656e7851728199391f4155ac94da852fe11521",
+    "crates/native-capability/Cargo.toml": "352d8023b05ef342d2165363f533931258e0f5c8e4758bb83ff64df4183c8964",
+    "crates/native-capability/src/lib.rs": "0fc47fbd5872a404c6fc40d248245549cbd3872c63a4d656cab1f7a5d30872d7",
+    "crates/native-chunk/Cargo.toml": "00b673f4e5f13ae6224b0bd1ef683aeadd07073c426cf077270ea8ecf94ab425",
+    "crates/native-chunk/src/chunk.rs": "4a91edb9587343ed67648de39b771e51600602e4e1d4ec72bea4a3b05d7f0921",
+    "crates/native-chunk/src/lib.rs": "0ff2155a8f4061a7939d3d3e91bbb73ae665b45ef211e10c7892965b2cc0a20c",
+    "crates/native-chunk/src/packet_snapshot.rs": "7170c8b0b56c3675927efa8d418b933683e302ed37002a606033fbc189970c12",
+    "crates/native-chunk/src/registry.rs": "79b4e5366da7b31dda3bd6fd24d72584e07f7c8da0f6514574221a39e1a63deb",
+    "crates/native-chunk/src/section.rs": "262f244fc86dab5d7a8a9eb0d2ef25f092b2229f30198aa5d410839171cb6d1e",
+    "crates/native-state-vnext/Cargo.toml": "a196d468553eee7ee43aee6fcb599e7050d2b6e957b3742b332997d909c3e9d6",
+    "crates/native-state-vnext/src/lib.rs": "15d932ec10f3e885c4535f997725f6a80ab7d88c606cfaca1855c56e415836f1",
+    "crates/native-state-vnext/src/section.rs": "b4ffde7b70168df5160155bacb4b8660c54ae253c400c2f5859d9f479b4122ce",
+    "crates/native-state-vnext/src/store.rs": "445aa04958554ffd1bf31c8112d2e5a2faee34ac0a2668b243eb280b9b0b49f1",
+    "crates/protocol/Cargo.toml": "68a7c06ea5fc1954c962b99a817235f4e6bb65a7d04b9f0ec3288be5385732dd",
+    "crates/protocol/src/codec.rs": "66b943c4ac9fa2ec234f8804df47f98f55ee7dc980ece6b46a93ef8cab92a8a2",
+    "crates/protocol/src/error.rs": "ef9a1267d6062656658857ff0f71df91b0875081fa7058ff3434ca2c92a4a8cf",
+    "crates/protocol/src/lib.rs": "86391633f56434d55f16abcff0a1cd168503378365c1dba14c3c20b963280f7e",
+    "crates/rustcraft-core/Cargo.toml": "f0b085a397c545665bae25b878f254c090a5d640bdc52e9bc15cf514f22ef39e",
+    "crates/rustcraft-core/src/lib.rs": "3e6a2914001d68fd02d8e0a33f4e7489ea14202e7b011af51aa3797976b73878",
+    "machine/architecture-hardening/isolation.json": "8f9b34b55f6ecc1d549da1ec4c42900b4a831a3072a9e4aa6aa2ae39cae53d93",
+    "tools/bridge/src/com/rustcraft/bridge/capture/CaptureContract.java": "76d053eaf1b10d4d52de00f236365ff00216e6d8db3425f9de0054fcaa268586",
+    "tools/bridge/src/com/rustcraft/bridge/M4NativeStatePayload.java": "a47be5f83303a2d039fd56acbc24ba71ae9a98035bc9fb15545167535e2513ab",
+    "tools/nbt-region-experiment/job.py": "41f77a4c87ba2f531872853f2bcc701c5cac3a384c1bb2cf49901b8fcff9c65b",
+    "tools/nbt-region-experiment/test_job.py": "9136383642db857086e84591a580cdff6475b7fb28abfe3d26773829a678c07f",
+    "tools/section-packet-cache-experiment/Cargo.lock": "72d5fa93a7de6b181b676898a71686dc22361f0d42e9d06fd6fd5636278bc1ba",
+    "tools/section-packet-cache-experiment/Cargo.toml": "9a9393aced2b47b600ec85fa15c4a207691a9f042906b4ec0a97c3150c5a98b2",
+    "tools/section-packet-cache-experiment/PacketOracle.java": "3dcdebe0c3701dc77d4a12d0bd1200c15edd764fef9e48472103af783a727ba1",
+    "tools/section-packet-cache-experiment/provenance.json": "b6200551e34d8eb6bd690a0b5e5fa9ec3e610f4100d4baf858968de5c5313643",
+    "tools/section-packet-cache-experiment/run.py": "052371fd1b8af63501e0136ae6f1b8faf00d86c8599dfa380332be63b287ac9d",
+    "tools/section-packet-cache-experiment/src/lib.rs": "9426652eb2c866d83215761482c5947e820a97af97eed7fb3f10a19d4eb29d54",
+    "tools/section-packet-cache-experiment/src/main.rs": "d8ccf336257e5cc9a43d27e9622bf34c7391ee492a9c8816af92136dfc1df959",
+    "tools/section-packet-cache-experiment/tests/contracts.rs": "6d04f2d236fa3937dd3734df7484a414761325ef1c5292370240b1a4b03a0276",
+    "tools/section-packet-cache-experiment/third-party/Hyperion-LICENSE.txt": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+    "tools/section-packet-cache-experiment/third-party/Valence-LICENSE.txt": "01c39d867eb175cce2f8dcafd98f151d2e704b4adedc8c6a8e1c2721cd9663cd",
+    "tools/testing/hardening_guard.py": "a2062b3ffbec7edba79bf5f5954fbcb1e9d97492ab9c4bb541833ebb820bdb6d"
+  },
+  "tool_hashes_after": {
+    "C:\\Users\\Admin\\.cargo\\bin\\cargo.exe": "6f4bef66261261fcb43131be8720bab817d403a09edec7455c371974b90bdb7e",
+    "C:\\Users\\Admin\\.cargo\\bin\\rustup.exe": "6f4bef66261261fcb43131be8720bab817d403a09edec7455c371974b90bdb7e",
+    "C:\\Python314\\python.exe": "4942b86a6597e5aee0128daa00050ed79bc21f6e709a78eb19cbfeb0c2f39ac9",
+    "C:\\Program Files\\Git\\cmd\\git.exe": "37c5725818d602e951ba2563b870d62763322956b73373da4c33a0b566a80bc9",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\bin\\java.exe": "65ebee06ec47df0c41c4483ac5aa408e55adb47a1613bad56be30bccc4317e85",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\bin\\javac.exe": "9f1dae15ffb49c7363c72351cf61f4889ac6896e3df87c1c5553b81745ae8a07",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\bin\\server\\jvm.dll": "d3f1564b31a25f280d633d33234bdf88fd12dbe0ae34e15e2e89db3f0ca2d407",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\lib\\rt.jar": "1166665601d9b1587682e2540cff6a31b0c7028211d2e07adb9ad30e1699eca3",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\lib\\tools.jar": "7325904e8de35b7376bbed7080a1fce7d9b886d3dddb5bfdbc00cefe7b248987",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\cargo.exe": "c37545ec61d48d31bdefce53280ecab61c4ea54eaace372fac6a0316c6e165d9",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\rustc.exe": "ca9988af88b1463f6857fdfe909299fee50a63260b3e5f7dbcb5b4d3318b27bc",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\rustdoc.exe": "9daff87cf4052ba3f97decb39d2822e1a96b3ed444eda86ed8df74802679dd60",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\rustfmt.exe": "ac9d781249bffabbb1bedb691a5ea6f63a818c1dda73dd698d4dff687ad4c24e",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\cargo-fmt.exe": "fcd2d35d13dc1a487c755e234bf2aee06f75b522c8a691cac9ee5f0d6fc854a1",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\cargo-clippy.exe": "cb0f2b164b3f6e95bfed7ec4ae9fc48f8ce8d9fef3649b5ae87961f75e1ef484",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\clippy-driver.exe": "00fd4ef2fe60e603571573746e52f42f109bbfe4b879e7ca7313614fda0b367b"
+  },
+  "isolation_after": {
+    "schema_version": 1,
+    "kind": "HARDENING_ISOLATION_GATE_CHECK",
+    "status": "PASS",
+    "failures": [],
+    "original_observed": {
+      "head": "c4b868db2c9e4b03f745bf93c6ebf4fd8a8519e7",
+      "branch": "issue1-jni-v2",
+      "status": [
+        " M tools/live-capture/live_client_session.py",
+        "?? tools/live-capture/__pycache__/",
+        "?? tools/live-capture/run_rev_shadow.py"
+      ],
+      "files": [
+        {
+          "path": "D:\\minecraftrust\\tools\\live-capture\\live_client_session.py",
+          "sha256": "151c356161695aba3db3c1a8cbd589b5eda2b5a1770dff59ab21b728d36cabfa"
+        },
+        {
+          "path": "D:\\minecraftrust\\tools\\live-capture\\run_rev_shadow.py",
+          "sha256": "2b9b2aca49e57dd0d2a74bec46efcdc0ac7f95762a733276e27ff9dbcb472d93"
+        }
+      ]
+    },
+    "isolated_worktree": "D:\\minecraftrust-astra-hardening",
+    "isolated_head": "1ee883947b4173e45fa4c56d86c040cf4198ae60",
+    "isolated_branch": "astra/architecture-hardening",
+    "production_gate_checks": {
+      "tryEncode_fail_closed": true,
+      "productionAuthorityEligible_false": true
+    },
+    "scope": "read-only original HEAD/status/two paused source hashes plus conservative source guards; runtime authority tests remain required"
+  },
+  "finished_utc": "2026-09-27T01:35:39.060361+00:00"
+}

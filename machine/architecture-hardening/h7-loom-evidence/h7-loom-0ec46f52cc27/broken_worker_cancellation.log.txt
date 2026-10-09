@@ -1,0 +1,15 @@
+
+running 1 test
+test broken_worker_cancellation ... 
+thread 'broken_worker_cancellation' (38828) panicked at tests\lifecycle.rs:191:9:
+STALE_RESULT_COMMITTED
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+FAILED
+
+failures:
+
+failures:
+    broken_worker_cancellation
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 26 filtered out; finished in 0.00s
+

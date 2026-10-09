@@ -1,0 +1,24 @@
+{
+  "argv": [
+    "C:\\Python314\\python.exe",
+    "-B",
+    "D:\\minecraftrust-astra-hardening\\tools\\writer-placement-v2\\validate.py",
+    "--plan",
+    "D:\\minecraftrust-astra-hardening\\tools\\live-capture\\required-live-writer-hooks.json",
+    "--java",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\bin\\java.exe",
+    "--classpath",
+    "D:\\minecraftrust-astra-hardening\\target\\writer-placement-v2\\35f7ee72f7874d56b36145ce95df1514\\identity-classes;D:\\rustcraft-runtime-targets\\clean-forge-2860\\server\\libraries\\org\\ow2\\asm\\asm-debug-all\\5.2\\asm-debug-all-5.2.jar",
+    "--rust-parser",
+    "D:\\minecraftrust-astra-hardening\\tools\\classfile-crosscheck\\target\\debug\\rustcraft-classfile-crosscheck.exe",
+    "--request",
+    "D:\\minecraftrust-astra-hardening\\target\\writer-placement-v2\\35f7ee72f7874d56b36145ce95df1514\\clean-incomplete-request.json",
+    "--out",
+    "D:\\minecraftrust-astra-hardening\\target\\writer-placement-v2\\35f7ee72f7874d56b36145ce95df1514\\clean-incomplete-witness.json"
+  ],
+  "exit": 0,
+  "errors": [],
+  "elapsed_seconds": 3.8232228999841027,
+  "stdout_sha256": "be0a273140d33e8bafa1d6925dac59b149d47480b9d1b9c3121ac451367e0e51",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+}

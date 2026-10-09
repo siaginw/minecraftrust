@@ -1,0 +1,16 @@
+
+thread '<unnamed>' (62136) panicked at src\main.rs:98:51:
+called `Result::unwrap()` on an `Err` value: Os { code: 10035, kind: WouldBlock, message: "A non-blocking socket operation could not be completed immediately." }
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+thread '<unnamed>' (68544) panicked at src\main.rs:98:51:
+called `Result::unwrap()` on an `Err` value: Os { code: 10035, kind: WouldBlock, message: "A non-blocking socket operation could not be completed immediately." }
+
+thread '<unnamed>' (63008) panicked at src\main.rs:98:51:
+called `Result::unwrap()` on an `Err` value: Os { code: 10035, kind: WouldBlock, message: "A non-blocking socket operation could not be completed immediately." }
+
+thread '<unnamed>' (62448) panicked at src\main.rs:98:51:
+called `Result::unwrap()` on an `Err` value: Os { code: 10035, kind: WouldBlock, message: "A non-blocking socket operation could not be completed immediately." }
+
+thread 'main' (68420) panicked at src\main.rs:166:50:
+called `Result::unwrap()` on an `Err` value: Any { .. }

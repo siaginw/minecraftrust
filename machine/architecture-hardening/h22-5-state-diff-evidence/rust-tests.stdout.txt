@@ -1,0 +1,35 @@
+
+running 20 tests
+test tests::corrupted_second_diff_does_not_publish_first ... ok
+test tests::forged_snapshot_contents_rejected ... ok
+test tests::empty_batch_rejected ... ok
+test tests::gradient_golden ... ok
+test tests::gradient_failure_returns_no_partial_diff ... ok
+test tests::ordered_nonconflicting_commit ... ok
+test tests::identical_other_world_rejected ... ok
+test tests::generation_exhaustion_is_atomic ... ok
+test tests::out_of_order_rejected ... ok
+test tests::oversized_batch_rejected ... ok
+test tests::ordinal_bounds ... ok
+test tests::planning_has_no_mutation ... ok
+test tests::oversized_effects_rejected ... ok
+test tests::revocation_and_readmission_invalidate_old_diff ... ok
+test tests::repeated_planning_is_deterministic ... ok
+test tests::snapshot_copy_cannot_mutate_source ... ok
+test tests::read_after_write_conflict_is_atomic ... ok
+test tests::stale_generation_rejected ... ok
+test tests::unadmitted_snapshot_rejected ... ok
+test tests::write_conflict_is_atomic ... ok
+
+test result: ok. 20 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+

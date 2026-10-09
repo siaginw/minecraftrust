@@ -1,0 +1,98 @@
+[
+  {
+    "id": "phosphor-depth-decrement",
+    "file": "tools/bridge/src/com/rustcraft/bridge/PhosphorLightHook.java",
+    "must_contain": [
+      "Math\\.max\\(0, depth - 1\\)"
+    ],
+    "must_not_contain": [],
+    "reason": "jobEnd must decrement the drain DEPTH on every frame (before the ordinal gate) so nested drains are never misread as outer frames",
+    "incident": "dev8-12: a scripted patch restored a jobEnd without the decrement; depth stuck >=2 -> jobs=0 for the whole session, five boots burned"
+  },
+  {
+    "id": "phosphor-masks-int-accessor",
+    "file": "tools/bridge/src/com/rustcraft/bridge/PhosphorLightHook.java",
+    "must_contain": [
+      "getInt\\(null\\)"
+    ],
+    "must_not_contain": [
+      "getLong\\(null\\)"
+    ],
+    "reason": "Phosphor's PooledLongQueue mask/shift constants are declared as int fields (javap) \u2014 read them with getInt; getLong throws per call and the swallowed catch decodes every position as (0,0,0)",
+    "incident": "dev17/18: getLong on int masks -> every job far-from-anchor, all compares skipped"
+  },
+  {
+    "id": "lightbatch-little-endian",
+    "file": "tools/bridge/src/com/rustcraft/bridge/LightBatchCtx.java",
+    "must_contain": [
+      "LITTLE_ENDIAN"
+    ],
+    "must_not_contain": [],
+    "reason": "every direct ByteBuffer handed to the Rust kernel must be explicitly LITTLE_ENDIAN; the kernel reads native-endian packed i32s",
+    "incident": "diag10/11: default big-endian putInt byte-swapped every coordinate -> 43,116 bogus mismatches"
+  },
+  {
+    "id": "worldlight-bridge-delegates",
+    "file": "tools/bridge/src/com/rustcraft/bridge/WorldLightBridge.java",
+    "must_contain": [],
+    "must_not_contain": [
+      "static native"
+    ],
+    "reason": "WorldLightBridge must declare NO natives of its own \u2014 JNI binds by Java class+method name, so bridge-declared natives can never bind the LightBatchCtx exports; delegate instead",
+    "incident": "dev4: natives declared under the wrong class name -> UnsatisfiedLinkError on create(), bridge null, every cell NPEd"
+  },
+  {
+    "id": "phosphor-bridge-delegates",
+    "file": "tools/bridge/src/com/rustcraft/bridge/PhosphorLightBridge.java",
+    "must_contain": [],
+    "must_not_contain": [
+      "static native"
+    ],
+    "reason": "PhosphorLightBridge must declare NO natives of its own \u2014 same JNI binding rule as WorldLightBridge; delegate to LightBatchCtx",
+    "incident": "dev4: PhosphorLightBridge private natives never resolved -> jobs=2402, compared=0"
+  },
+  {
+    "id": "worldlight-hook-name-keyed",
+    "file": "tools/bridge/src/com/rustcraft/bridge/WorldLightHook.java",
+    "must_contain": [
+      "\\.name\\(\\)"
+    ],
+    "must_not_contain": [
+      "ordinal\\(\\)\\s*==\\s*0",
+      "ordinal\\(\\)\\s*!=\\s*0",
+      "ordinal\\s*!=\\s*0"
+    ],
+    "reason": "BLOCK/SKY discrimination must key on the enum constant NAME; ordinal dispatch was written inverted twice (SKY=0, BLOCK=1)",
+    "incident": "diag-era: ordinal!=0 gate rejected BLOCK=1; name-keying is the corrected, javap-verified discipline"
+  },
+  {
+    "id": "checklight-authority-frames",
+    "file": "tools/bridge/src/com/rustcraft/coremod/CheckLightAuthorityTransformer.java",
+    "must_contain": [
+      "COMPUTE_FRAMES"
+    ],
+    "must_not_contain": [],
+    "reason": "the ON authority injection adds branch targets (owned-path return) - Java 8 classfiles need regenerated stack map frames; COMPUTE_MAXS-only writers VerifyError at class-load time",
+    "incident": "Gate A ON dev boot VerifyError (dev-ON-1): COMPUTE_MAXS does not regenerate frames; fixed with the proven ResolvingClassWriter(COMPUTE_FRAMES) pattern"
+  },
+  {
+    "id": "checklight-authority-hooked-marker",
+    "file": "tools/bridge/src/com/rustcraft/coremod/CheckLightAuthorityTransformer.java",
+    "must_contain": [
+      "CHECK_LIGHT_AUTHORITY_HOOKED"
+    ],
+    "must_not_contain": [],
+    "reason": "the ON gates key on the CHECK_LIGHT_AUTHORITY_HOOKED marker line - removing it silently disables the runner's success criterion",
+    "incident": "the WORLD_CHECK_LIGHT_HOOKED marker is what the runner's evidence gates grep; same contract for the ON seam"
+  },
+  {
+    "id": "runner-on-gates-read-metrics",
+    "file": "tools/authority-review/run_region_write_campaign.py",
+    "must_contain": [
+      "_read_light_metrics"
+    ],
+    "must_not_contain": [],
+    "reason": "gate evidence must come from the metrics file (survives the process-kill race), never from shutdown log lines",
+    "incident": "light-shadow-C-full1: gates read shutdown log lines lost to the kill race -> spurious FAIL (commit 585a425)"
+  }
+]

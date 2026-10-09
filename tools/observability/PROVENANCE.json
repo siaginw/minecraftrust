@@ -1,0 +1,80 @@
+{
+  "schema": "H15_OBSERVABILITY_PROVENANCE_V1",
+  "authority": false,
+  "status": "BOUNDED_FOUNDATION_WITH_OFFLINE_ADAPTERS",
+  "actual_java_oracle": {
+    "runtime_pins": "tools/forge-capture/runtime-pins.json",
+    "noise_definitions_sha256": {
+      "net.minecraft.world.gen.NoiseGeneratorOctaves": "33fc557a226a90a5dcd184afa1a4cc393b21e098e360db8061036414c48c209b"
+    },
+    "scope": "Actual pinned NoiseGeneratorOctaves callback; synthetic registered nested fixtures; not complete mod dispatch or server MSPT",
+    "redistribution": "No Minecraft/Forge binaries, transformed classes or SRG jar committed; target-only"
+  },
+  "hdrhistogram": {
+    "version": "7.5.4",
+    "crate_sha256": "765c9198f173dd59ce26ff9f95ef0aafd0a0fe01fb9d72841bc5066a4c06511d",
+    "commit": "a3818d6ce81556010c7f04f423e1fa28a9ff1b5c",
+    "repository": "https://github.com/HdrHistogram/HdrHistogram_rust",
+    "license": "MIT OR Apache-2.0",
+    "default_features": false,
+    "decision": "USE_PINNED_MINIMAL; fixed bounds, no resizing, no serialization/sync features or omission correction; locally reviewed exact published source"
+  },
+  "primary_research": [
+    {
+      "url": "https://docs.rs/metrics/0.24.6/metrics/",
+      "decision": "STUDY_DEFER_EXPORTER",
+      "reason": "Recorder facade useful later; fixed bounded identity registry precedes string-label exporter. Existing local metrics crate remains H3 contract."
+    },
+    {
+      "url": "https://docs.rs/tracing/0.1.44/tracing/struct.Span.html",
+      "decision": "STUDY_DEFER_DEPENDENCY",
+      "reason": "Optional spans require subscriber/filter lifecycle; use bounded coarse sampling buffer now, never per-block event stream."
+    },
+    {
+      "url": "https://github.com/HdrHistogram/HdrHistogram_rust/tree/a3818d6ce81556010c7f04f423e1fa28a9ff1b5c",
+      "decision": "USE_PINNED_MINIMAL",
+      "reason": "Published source/archives fully verified by runner; integer nearest-rank intervals and explicit out-of-range/unknown counts tested independently."
+    },
+    {
+      "url": "https://github.com/wolfpld/tracy",
+      "license": "BSD-3-Clause",
+      "decision": "STUDY_NO_INSTALL",
+      "reason": "Windows native diagnostic candidate; Java8/JNI full-stack boundary and symbols not qualified here."
+    },
+    {
+      "url": "https://github.com/wolfpld/tracy/blob/master/LICENSE",
+      "claim": "Upstream BSD 3-clause license"
+    },
+    {
+      "url": "https://github.com/mstange/samply",
+      "license": "MIT OR Apache-2.0",
+      "decision": "STUDY_NO_INSTALL",
+      "reason": "Windows ETW available; no broad systemwide capture and no claim of qualified Java8 JIT symbols."
+    },
+    {
+      "url": "https://github.com/async-profiler/async-profiler#supported-platforms",
+      "decision": "REJECT_CURRENT_WINDOWS_RUNTIME_INSTALL",
+      "reason": "Official maintained platform table is Linux and macOS; current host Windows not listed."
+    },
+    {
+      "url": "https://docs.oracle.com/javase/8/docs/api/java/lang/management/MemoryMXBean.html",
+      "claim": "Actual heap used/committed/max point values; unsupported negative remains unknown"
+    },
+    {
+      "url": "https://docs.oracle.com/javase/8/docs/api/java/lang/management/GarbageCollectorMXBean.html",
+      "claim": "Cumulative GC count/time milliseconds; -1 unavailable"
+    },
+    {
+      "url": "https://docs.oracle.com/javase/8/docs/jre/api/management/extension/com/sun/management/ThreadMXBean.html",
+      "claim": "Java thread allocated heap bytes approximate and optional; never native allocation coverage"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/windows/win32/api/psapi/ns-psapi-process_memory_counters_ex",
+      "claim": "WorkingSetSize is process working set; PrivateUsage is private commit, not allocator live bytes"
+    }
+  ],
+  "jfr": {
+    "decision": "PROBE_EXACT_LOCAL_JAVA8",
+    "reason": "Java major version alone insufficient; runner creates a fresh startup recording on pinned Temurin8 and retains result. No full workload recording claimed."
+  }
+}

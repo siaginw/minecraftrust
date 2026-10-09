@@ -1,0 +1,67 @@
+# M-CK3 — RUST OUTBOUND FRAME ENGINE (offline, immutable inputs)
+schema_version: 1
+date: "2026-09-22"
+builds: {dll: 2c08a7b2ddf21891b13d3843aa5392f578dc730e57c21fa06f5ac45925b81f2c}
+scope: "IMMUTABLE-INPUT COMPONENT MEASUREMENTS ONLY. No live pipeline change, no transmission. Issue #1 OPEN; production tryEncode fail-closed untouched."
+contract: >
+  Verified against the INSTALLED 1.12.2 handlers by javap + EmbeddedChannel
+  oracle: NettyCompressionEncoder (outbound tail->head wiring: prep added
+  before compress; strict bodyLen < threshold -> dataLen=0 passthrough,
+  else dataLen=bodyLen + zlib stream; JDK-default level; reused Deflater —
+  our context resets per packet, the M2C bit-exact-validated contract) and
+  NettyVarint21FrameEncoder (outer length prefix; "unable to fit" limit
+  confirmed; we enforce 3-byte VarInt 0x1FFFFF pre-encode on provable
+  violations + exact post-compression check). Input = ONE complete immutable
+  packet body incl. its packet-ID VarInt; contents opaque; Java supplies the
+  EFFECTIVE threshold per call.
+implementation: >
+  crates/compression/src/frame.rs: OutboundFrameContext — threshold decision
+  + optional compression + compression framing + outer length framing ALL IN
+  RUST; reusable comp scratch (checked growth, retained for lifetime);
+  frame_len() exact/bound sizing; FrameError codes (-1 capacity w/ safe
+  retry bound, -2 backend, -3 too-large, -4 invalid). FFI (native_chunk.rs):
+  frameCreate/frameFree/frameEncode — one synchronous native op per frame.
+  Java adapter OutboundFrameCtx: caller-owned direct in/out scratch +
+  reusable native handle; single-owner-per-context contract (one
+  connection/event loop, mirroring production encoder-per-channel); fresh
+  caller-owned heap result (one final copy; no zero-copy claim); capacity
+  retry with bound; use-after-close -> null; no GetPrimitiveArrayCritical;
+  addresses re-resolved from strong refs each call.
+parity: >
+  M53FrameOracle 25/25 vs the ACTUAL installed handlers (EmbeddedChannel):
+  disabled exact-byte equality; below/at/above threshold; threshold-adjacent
+  (255/256/257 @256); threshold 0; VarInt boundaries 127/128/16383/16384;
+  incompressible; REAL 31,009 B chunk-packet body (packet-ID 0x20 + real
+  SPacketChunkData payload) compressed and disabled; size+threshold sweep on
+  ONE reused ctx incl. mid-stream disable; consecutive frames (A unchanged
+  while B produced; both independently decoded); concurrent independent
+  contexts (300 ops each, clean); capacity growth 70KB; use-after-close null;
+  double-free CAS-safe; empty/null body rejected; corruption negative
+  controls (damaged outer length detected; damaged payload detected).
+  Rust frame tests 8/8 (layout, strict->=, threshold-0, consecutive decode,
+  capacity-retry, invalid/too-large, VarInt boundaries). Independent Java
+  frame-decoder/inflater used for BOTH arms (never the Rust reader).
+  Full regression: compression 14/14, native-chunk 10/10, M52 26/26,
+  59/59 authoritative (fail-closed gate green).
+benchmark: >
+  3 fresh JVMs, identical immutable 31,009 B chunk body @ threshold 256,
+  rotated arm order, results consumed (all arms: body-in -> complete owned
+  frame bytes out, including all copies/JNI/handoff):
+  JVM1: A 141.25 / B 30.73 / C 30.52 us mean (C/A=0.216x, C/B=0.993x)
+  JVM2: A 142.81 / B 31.66 / C 31.53 us (0.221x, 0.996x)
+  JVM3: A 143.31 / B 31.01 / C 30.83 us (0.215x, 0.994x)
+  p50s: A ~134-138 / B ~28 / C ~28 us; p99: A ~215-222 / B ~41-47 / C ~39-49.
+  Single-JVM scope spots: incompressible 31KB (C/A=0.617x, C/B=0.990x);
+  below-threshold 128B passthrough (C/A=0.077x; C/B=20.8x — B pays a JNI
+  threshold call + Java framing per tiny frame; C's single JNI + Rust
+  passthrough wins decisively at small sizes).
+  ctx metrics: 1 growth event warm-up, 0 retries, retained approx 62,075 B.
+  NOT MEASURED: live capture/refresh/cache economics (blocked); EmbeddedChannel
+  overhead is inside arm A (it IS the installed pipeline shape).
+research_ledger:
+  - {source: "Netty EmbeddedChannel/outbound ordering (4.1 docs)", url: "https://netty.io/4.1/api/io/netty/channel/embedded/EmbeddedChannel.html", license: "Apache-2.0 docs", technique: "actual-handler oracle + tail->head outbound ordering", applicability: "direct", risk: "none", decision: "ADOPTED (oracle); ordering bug caught + fixed (prep-before-compress)"}
+  - {source: "Netty Varint21 prepender behavior (installed class javap)", url: "local bytecode", license: "n/a", technique: "3-byte outer length limit", applicability: "direct", risk: "parity", decision: "ADOPTED as BodyTooLarge pre/post checks"}
+  - {source: "Velocity-native frame+compress composition (reference)", url: "https://github.com/PaperMC/velocity-native", license: "GPL-3.0 (reference only)", technique: "single native call composing compression+framing", applicability: "high", risk: "none (pattern only)", decision: "ADOPTED shape: one frameEncode JNI per packet"}
+optimizations: "Change count within budget: (1) single-JNI frame composition [adopted]; (2) reusable comp scratch reuse from CK2 carried into the frame ctx [adopted]; (3) exact/bound frame_len for capacity pre-sizing [adopted]. No backend/level/semantic changes."
+classification: RUST_FRAME_OFFLINE_VALIDATED
+next_gate: "OFFLINE Netty integration adapter (handler-shaped, disabled by default) -> separately authorized bounded live SHADOW -> never before issue #1's live-snapshot aspects are separately re-gated. Issue #1 remains OPEN."

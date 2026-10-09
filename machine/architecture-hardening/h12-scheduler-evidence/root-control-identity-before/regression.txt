@@ -1,0 +1,27 @@
+   Compiling semantic-scheduler-prototype v0.1.0 (D:\minecraftrust-astra-hardening\crates\semantic-scheduler-prototype)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.69s
+     Running unittests src\lib.rs (target/semantic-scheduler-prototype/root-control-identity-before/cargo-target\debug\deps\semantic_scheduler_prototype-8a3a2876d0d71a79.exe)
+
+running 3 tests
+
+thread 'tests::foreign_dispatch_is_rejected_before_local_lookup' (71332) panicked at src\tests.rs:22:5:
+assertion failed: matches!(local.dispatch(foreign), Err(Error::WrongScheduler))
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+thread 'tests::foreign_cancellation_is_rejected_before_local_lookup' (48728) panicked at src\tests.rs:9:5:
+assertion `left == right` failed
+  left: Ok(())
+ right: Err(WrongScheduler)
+test tests::foreign_completion_cannot_rebind_equal_sequence_numbers ... ok
+test tests::foreign_dispatch_is_rejected_before_local_lookup ... FAILED
+test tests::foreign_cancellation_is_rejected_before_local_lookup ... FAILED
+
+failures:
+
+failures:
+    tests::foreign_cancellation_is_rejected_before_local_lookup
+    tests::foreign_dispatch_is_rejected_before_local_lookup
+
+test result: FAILED. 1 passed; 2 failed; 0 ignored; 0 measured; 23 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `--lib`

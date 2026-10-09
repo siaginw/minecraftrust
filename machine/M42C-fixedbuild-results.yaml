@@ -1,0 +1,85 @@
+# M4.2C — Fixed-build live snapshot confirmation.
+# class: MEASURED + STOP-AND-PRESERVE. Provenance: M42C-FIXEDBUILD.
+# Defaults all OFF; Java authoritative; Java transmits every packet; no native
+# transmission; no modpack campaign; no TE merge; no JEID registration.
+schema_version: 1
+date: "2026-09-21"
+base_checkpoints: [2f9475c, 4779610]
+builds:
+  live_run:  {dll: 8b05c4ccd66653ad, coremod: 66505f3067a3cb68, note: "pre-fullSync build: setBiomes + all-air fix + stack capture + dump context + FFI 317"}
+  final_fix: {dll: 8b05c4ccd66653ad, coremod: 0cc9a09206f8b6e7, note: "adds first-touch full synchronization (skyLight finding) + decodeEquals parse bound fix; NOT live-run (no rerun per stop discipline)"}
+
+preflight:
+  fix_markers_verified: "javap: refreshChunkNow/pushBiomes/setBiomes(316)/recordCoherencyError(String,Throwable); DLL exports exercised by the harness itself"
+  offline_suite_final: >
+    8/8 Gate B (base, block-mutation, light-only, empty->nonempty, nonempty->empty,
+    churn, chest-TE, section-becomes-empty), 7/8 Gate A (churn = valid palette-history
+    divergence); biome negative control (detects biome[0]) + setBiomes positive;
+    NEW skyLight negative control (registration-default light detected at
+    section 0 skyLight[0] — the live finding shape); NEW no-dirty first-touch case
+    through the ACTUAL M4Coherency.refreshChunkNow entry: full sync 16 sections +
+    biomes, packet GATE_B equal. 10/10 Rust units.
+  unique_run_dir: "machine/targetA/M42C-20260921-184024-run (refuse-overwrite guard active)"
+
+live_run:
+  run_id: M42C-20260921-184024
+  pid_recorded: true
+  outcome: STOPPED BY DESIGN on first comparator mismatch — dump captured in full
+  stop_dump: >
+    "dim=0 cx=-9 cz=0 mask=15 -> section 3 skyLight[0] | run=M42C-mubw1yx6 filter=65535
+    javaMask=15 skylight=true genId=209 mutGen=7 snapGen=7 dirtyMask=0 refreshBefore=0
+    TE=false javaLen=26504" (run id, coords, snapshot generations, packet params,
+    first differing value — all per directive 4)
+  root_cause: >
+    Registration-time light is a DEFAULT (sky=0xFF). The Java light engine sets real
+    sky light in sections that never had a block mutation — such sections carry no
+    dirty bit, so dirty-only refresh never reached them: first compare showed stale
+    default light (Java skyLight[0]=0 under terrain vs native 0xFF). Same evidence-class
+    as the M4.2B biome hole: the offline harness refreshed all sections manually and
+    masked it.
+  fix: >
+    First-touch full synchronization: until a chunk has been fully synced once, any
+    consumer-driven refreshChunkNow pulls ALL 16 sections (states + light, with
+    validation) plus biomes; afterwards dirty-only. WeakHashMap keyed by chunk —
+    reloaded chunks re-sync. Offline regression: negative control reproduces
+    skyLight[0]; positive equal after the live entry.
+  terrain_and_hooks: "2,991/2,991 terrain-exact, 2,991 registered; 22,114,378 block-sets + 2,501,145 light-sets recorded into masks; biomes_pushed=1 (the comparator's single compare — the setBiomes path functioned)"
+  lifecycle: "2,736 unloads flushed == 2,736 native evictions; allocations 13,798 / releases 12,754 / retained 1,044 sections (12.9 MB, 255 chunks) at the final (shutdown-time) dump; 15,654-vs-arithmetic exact (13,798-12,754=1,044). Post-stop state is process teardown — retained-at-shutdown is NOT claimed as shutdown-release."
+
+exception_reconciliation:
+  m42b_delta: "18,375 refreshed / 18,368 validated = 7; 8 native errors, then-unsited AIOOBE"
+  m42c_delta: "16,896 refreshed / 16,842 validated = 54; 55 native errors, AIOOBE"
+  resolution: >
+    NOW SITED AND FIXED: the M4.2C build's stack capture + an offline reproduction
+    through fullSync's validation path give the full stack — AIOOBE at
+    M4Coherency.decodeEquals (parse loop): when validating a section that was
+    refreshed to all-air (legitimately absent from the full-chunk packet), the
+    section locator kept parsing into the 256-byte biome tail. Same code path and
+    counter signature as M4.2B's unsited errors — the M4.2B per-exception sites are
+    resolved by identity of mechanism (same method, same exception, same
+    refreshed-then-validated ordering). Fix: parse stops when the remainder is the
+    biome tail (<=256 bytes); absence then flows into the all-air verdict.
+    M4.2B's exact 7-section attribution remains mechanism-explained; with the fix,
+    the class cannot recur.
+  not_swallowed: "0 validation mismatches, 0 stale acceptances, 0 lifecycle faults in both runs; all exceptions counted with stacks in the final builds"
+
+coverage_report:
+  covered_live:
+    - "initial chunk registration + biome ingestion (2,991 registered; biomes pushed through the live entry on the comparator's compare)"
+    - "hook recording of block + light mutations (24.6M events, zero per-write JNI)"
+    - "flush refresh + independent decode-validation (16,842 sections validated, 0 mismatches)"
+    - "unload/eviction lifecycle (2,736 == 2,736)"
+    - "stop-and-preserve with full context dump"
+  not_covered_live:
+    - "block mutation followed by full-chunk packet comparison (comparator stopped at packet 1, before the mutation batches)"
+    - "light-only update comparison (same)"
+    - "controlled biome-only VALUE change (no supported vanilla mutation path; ingestion + push covered)"
+    - "empty/non-empty transition comparison (commands executed; no post-mutation compare)"
+    - "stale snapshot rejection event (0 occurrences; race-dependent — offline unit-tested)"
+  exclusions_unchanged: "partial-filter packets, TE-containing packets (payload-comparable only), JEID registration, NEID high-bit — all Java-only"
+
+remaining_before_on:
+  - "one green live comparator run on the final fix build (first-touch full sync + parse bound)"
+  - "the not-covered live cases above"
+  - "TE merge-or-fallback decision"
+  - "operator ON authorization"

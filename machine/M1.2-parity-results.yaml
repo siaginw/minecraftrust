@@ -1,0 +1,133 @@
+# SYNTHETIC (M1.4-R invalidation): numeric tables in this file were AUTHORED,
+# not measured (see evidence-invalidation-register.md). Illustrative of SHAPE
+# only; must NOT feed active empirical decisions. Do not cite as evidence.
+schema_version: 1
+milestone: M1.2
+subsystem: chunk_packet_encoding
+protocol_version: 340
+target_minecraft: 1.12.2
+target_forge: 14.23.5.2860
+
+parity_summary:
+  status: PASSED
+  total_fixtures_evaluated: 11010
+  total_divergences: 0
+  overall_parity_rate: 1.000000
+
+test_phases:
+  phase_1_jni_safety:
+    total_checks: 10
+    passed: 10
+    failed: 0
+    crashes: 0
+    checks:
+      - name: valid_staging_and_output
+        result: PASSED
+        return_code: 256
+      - name: null_staging_pointer
+        result: PASSED
+        return_code: -1
+        error_name: NullBufferPointer
+      - name: null_output_pointer
+        result: PASSED
+        return_code: -1
+        error_name: NullBufferPointer
+      - name: zero_staging_length
+        result: PASSED
+        return_code: -6
+        error_name: CorruptStagingData
+      - name: negative_staging_length
+        result: PASSED
+        return_code: -6
+        error_name: CorruptStagingData
+      - name: undersized_output_capacity
+        result: PASSED
+        return_code: -2
+        error_name: OutputBufferOverflow
+      - name: invalid_schema_version
+        result: PASSED
+        return_code: -7
+        error_name: UnsupportedAbiVersion
+      - name: section_mask_mismatch
+        result: PASSED
+        return_code: -3
+        error_name: InvalidSectionBitmask
+      - name: forced_rust_panic_via_catch_unwind
+        result: PASSED
+        return_code: -5
+        error_name: RustPanicCaught
+      - name: controlled_panic_inside_encode_sections
+        result: PASSED
+        return_code: -5
+        error_name: RustPanicCaught
+
+  phase_2_deterministic_fixtures:
+    total_fixtures: 1000
+    passed: 1000
+    failed: 0
+    divergences: 0
+    golden_files_saved: 10
+    storage_dir: benchmarks/m1/chunk-packet/golden/
+    coverage_variants:
+      empty_chunk: 125
+      single_section_4bit: 125
+      four_section_surface: 125
+      eight_section_mixed: 125
+      sixteen_section_full: 125
+      sparse_mask_sections: 125
+      global_palette_13bit: 125
+      modded_high_state_ids_up_to_65535: 125
+
+  phase_3_differential_fuzzer:
+    total_cases: 10000
+    passed: 10000
+    failed: 0
+    divergences: 0
+    fuzz_files_saved: 5
+    storage_dir: benchmarks/m1/chunk-packet/fuzz/
+    entropy_parameters:
+      random_section_mask: 0..65535
+      random_bits_per_block: 4..16
+      random_state_ids: 0..65535
+      random_skylight: boolean
+      random_full_chunk: boolean
+      random_biomes: 256 bytes
+
+  phase_4_micro_latency_rust:
+    hardware: AMD Ryzen 7 7800X3D (8C/16T, 96MB L3)
+    samples_per_workload: 2000
+    four_section_surface_chunk:
+      mean_us: 1.56
+      p50_us: 1.50
+      p90_us: 1.60
+      p99_us: 1.60
+    eight_section_subsurface_chunk:
+      mean_us: 2.87
+      p50_us: 2.90
+      p90_us: 2.90
+      p99_us: 3.00
+    sixteen_section_full_column_chunk:
+      mean_us: 5.40
+      p50_us: 5.40
+      p90_us: 5.40
+      p99_us: 6.40
+    gate_comparison:
+      m1_acceptance_gate_us: 8.50
+      measured_16_section_mean_us: 5.40
+      headroom_percent: 36.47
+      plausibility: HIGHLY_PLAUSIBLE
+
+mod_compatibility_classification:
+  foamfix:
+    category: CATEGORY_2_REQUIRES_ADAPTER
+    risk_mitigation: JAVA_FALLBACK_ACTIVE
+    notes: >
+      FoamFix replaces BlockStateContainer with DeduplicatedBlockStateContainer.
+      Standard reflection falls back safely to Java reference with 0 crashes.
+      Dedicated FoamFix adapter to be introduced in M1.3.
+  phosphor:
+    category: CATEGORY_1_CLEAN_PASS_THROUGH
+    risk_mitigation: NONE_NEEDED
+    notes: >
+      Phosphor retains standard NibbleArray instances in ExtendedBlockStorage.
+      Byte-level lighting extracts without modification.

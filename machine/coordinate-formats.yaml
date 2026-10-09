@@ -1,0 +1,83 @@
+# Minecraft 1.12.2 Coordinate Formats and Bitfield Packing Specification
+version: "1.12.2"
+target_protocol: 340
+
+blockpos:
+  class: "net.minecraft.util.math.BlockPos"
+  superclass: "net.minecraft.util.math.Vec3i"
+  storage: "64-bit signed integer (long / i64)"
+  bit_layout:
+    x:
+      bits: 26
+      shift: 38
+      mask: "0x3FFFFFF (26 bits)"
+      min: -33554432
+      max: 33554431
+      unpack_expression_java: "(int)(packed << 0 >> 38)"
+      unpack_expression_rust: "(packed >> 38) as i32"
+    y:
+      bits: 12
+      shift: 26
+      mask: "0xFFF (12 bits)"
+      min: -2048
+      max: 2047
+      unpack_expression_java: "(int)(packed << 26 >> 52)"
+      unpack_expression_rust: "((packed << 26) >> 52) as i32"
+    z:
+      bits: 26
+      shift: 0
+      mask: "0x3FFFFFF (26 bits)"
+      min: -33554432
+      max: 33554431
+      unpack_expression_java: "(int)(packed << 38 >> 38)"
+      unpack_expression_rust: "((packed << 38) >> 38) as i32"
+  packing_formula: "((x & 0x3FFFFFF) << 38) | ((y & 0xFFF) << 26) | (z & 0x3FFFFFF)"
+  special_constants:
+    world_min_y: 0
+    world_max_y: 255
+    world_border_max_x: 30000000
+    world_border_max_z: 30000000
+
+chunkpos:
+  class: "net.minecraft.util.math.ChunkPos"
+  storage: "64-bit signed integer key (long / i64)"
+  packing_formula: "(x & 0xFFFFFFFFL) | ((z & 0xFFFFFFFFL) << 32)"
+  bit_layout:
+    x:
+      bits: 32
+      shift: 0
+      mask: "0xFFFFFFFF"
+      unpack_expression_java: "(int)(packed & 0xFFFFFFFFL)"
+      unpack_expression_rust: "(packed as u32) as i32"
+    z:
+      bits: 32
+      shift: 32
+      mask: "0xFFFFFFFF"
+      unpack_expression_java: "(int)((packed >>> 32) & 0xFFFFFFFFL)"
+      unpack_expression_rust: "((packed as u64 >> 32) as u32) as i32"
+  reference_hash:
+    formula: "int i = 1664525 * x + 1013904223; int j = 1664525 * (z ^ -559038737) + 1013904223; return i ^ j;"
+    characteristics: "Linear congruential pseudo-hash; avoids cluster collisions in identity hash tables"
+
+conversions:
+  block_to_chunk:
+    chunk_x: "x >> 4 (arithmetic shift)"
+    chunk_z: "z >> 4 (arithmetic shift)"
+  chunk_to_block_bounds:
+    min_x: "chunk_x << 4"
+    max_x: "(chunk_x << 4) + 15"
+    min_z: "chunk_z << 4"
+    max_z: "(chunk_z << 4) + 15"
+  chunk_local_block:
+    local_x: "x & 15"
+    local_y: "y & 15"
+    local_z: "z & 15"
+  section:
+    index: "y >> 4"
+    valid_range: [0, 15]
+    invalid_behavior: "Returns Blocks.AIR, outside build height check"
+  region:
+    region_x: "chunk_x >> 5"
+    region_z: "chunk_z >> 5"
+    chunk_local_in_region_x: "chunk_x & 31"
+    chunk_local_in_region_z: "chunk_z & 31"

@@ -1,0 +1,22 @@
+{
+  "name": "probe-panic",
+  "argv": [
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\bin\\java.exe",
+    "-Xcheck:jni",
+    "-Xmx64m",
+    "-cp",
+    "D:\\minecraftrust-astra-hardening\\target\\jni-lifecycle-root-review\\308e15b9fbcd491db073cd1f1af606ef\\classes",
+    "LifecycleProbe",
+    "D:\\minecraftrust-astra-hardening\\target\\jni-lifecycle-root-review\\308e15b9fbcd491db073cd1f1af606ef\\cargo-target\\release\\jni_lifecycle_prototype.dll",
+    "D:\\minecraftrust-astra-hardening\\target\\jni-lifecycle-root-review\\308e15b9fbcd491db073cd1f1af606ef\\classes\\LoaderPayload.class",
+    "34f931f1ff9f4efd9978dce1667c0f44",
+    "f2239e8cb08767ee43b3beaf879651f665cbe52e1962639e6c3e0588a09832f5",
+    "panic"
+  ],
+  "exit": 0,
+  "elapsed_seconds": 0.060651500010862947,
+  "output_byte_limit_per_stream": 2097152,
+  "resource_error": null,
+  "stdout_sha256": "e314ac8169966eeffaa575009b9e794be4c41b4617332d92eff262e17b5e8f03",
+  "stderr_sha256": "a5afb1812abce60b9f1b0b3210fb9dcc4c107c4ff91a74f67a236e829a93fc86"
+}

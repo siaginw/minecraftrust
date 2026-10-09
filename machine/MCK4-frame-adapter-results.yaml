@@ -1,0 +1,74 @@
+# M-CK4 — OFFLINE NETTY FRAME ADAPTER + CORRECTED VALIDATION
+schema_version: 1
+date: "2026-09-22"
+builds: {dll: c10ddca1ce3c8225b...}
+scope: "IMMUTABLE-INPUT offline only. No live pipeline change, no transmission. Issue #1 OPEN; production tryEncode fail-closed untouched."
+corrections_of_prior_claims:
+  fixture: >
+    M-CK3's 'real 31,009 B chunk packet' was SYNTHETIC (packet-ID prefix +
+    internal section payload — NOT the full packet serialization). FIXED:
+    M53FixtureBuilder now serializes a real SPacketChunkData through the
+    INSTALLED encoder (func_148840_b) preceded by the packet-ID VarInt from
+    the INSTALLED EnumConnectionState lookup (func_179246_a, PLAY/CLIENTBOUND —
+    NettyPacketEncoder's exact path), and round-trip-verifies through the
+    installed reader (func_148837_a) before use. Real body = 31,023 B.
+    Old fixture retained under the label SYNTHETIC_SECTION_PAYLOAD_WITH_PREFIX
+    in the suites (evidence preserved, relabeled).
+  boundary: >
+    M-CK3 frame_len/encode rejected compressed-path inputs where
+    1+uncompressed-len exceeded the 3-byte outer limit — conflating
+    uncompressed input with framed output. FIXED: pre-encode rejection only
+    for bodies that provably cannot fit; the exact POST-COMPRESSION inner
+    check is authoritative. Verified against installed handlers: max-1/max
+    encode fine disabled; max+1 both Java and Rust REJECT ('unable to fit
+    2097152 into 3' in the installed prepender — the encoder-side limit,
+    distinct from the receiver-side 2 MiB+1 check); a highly-compressible
+    2.4 MB body (limit+300k) is ACCEPTED by vanilla (prepender sees the
+    COMPRESSED size) and now by Rust too, frame under the limit, decodes
+    equal. A stale-DLL artifact during the fix (old binary carried the old
+    rejection) was caught by re-probing with an exposed error code.
+  benchmark_asymmetry: >
+    M-CK3's Java arm constructed its EmbeddedChannel + handlers + a Deflater
+    inside every timed call. FIXED: warm arms create one
+    channel/handler/context OUTSIDE the loop; cold construction measured
+    separately (java pipeline ~52 us construct; rust ctx+first-frame ~48 us).
+    WITHDRAWN: the M-CK3 claim 'C=0.077x Java at 128-byte passthrough' —
+    an artifact of that asymmetry. Corrected below-threshold result: B (Java
+    passthrough, no JNI — counter-verified 1800/1800) = 0.042x A; C (Rust
+    adapter) = 0.881x A and ~21x SLOWER than B at 128 B (B's Java
+    passthrough path is the honest tiny-packet winner; C pays JNI+staging).
+    The M-CK3 chunk numbers also changed (A dropped 141->85 us once warm).
+    Historical M-CK3 results retained with this methodology warning.
+adapter:
+  architecture: >
+    RustFrameHandler extends Netty MessageToByteEncoder<ByteBuf> — the
+    handler-shaped form of the frame engine: one complete immutable packet
+    body in, one complete unencrypted frame out. Added tail-most in the
+    offline pipeline (outbound tail->head ordering — the M-CK3 lesson), so
+    it replaces compression+prepender with NO double framing by
+    construction. One reusable native OutboundFrameCtx per handler
+    (connection lifetime; handlerRemoved frees it). Effective threshold via
+    setThreshold() (volatile under the single-event-loop owner contract;
+    update counter preserves message-order observability). Buffer forms:
+    heap/direct/readerIndex-nonzero/slices accepted via one staging copy;
+    composites via the same path. No global scratch.
+  wiring_diagram: "[body ByteBuf] -> RustFrameHandler(stage copy -> native frameEncode JNI -> frame copy) -> [framed ByteBuf]"
+parity_and_gates: "MCK4Validation 16/16 + M53FrameOracle 25/25 (regression): real fixture compressed+disabled; synthetic relabeled; adapter==installed parity (exact bytes disabled; independent decode both arms); threshold transitions on a reused connection (incl. threshold 0 and disable); nonzero readerIndex + slice; frame A retained while B produced; handlerRemoved frees ctx; concurrent independent pipelines (200 ops x2); capacity retry; corruption negatives; inflater completion + full-consumption + end() checks; empty-body rejection"
+benchmark_corrected: >
+  3 fresh JVMs, REAL 31,023 B packet body @256, warm arms (one channel/ctx
+  each outside timing), rotated order, contents checked:
+  JVM1: A 85.04 / B 30.30 / C 32.30 us mean (B/A=0.356x, C/A=0.380x, C/B=1.066x)
+  JVM2: A 85.81 / B 30.26 / C 32.57 us (0.353x, 0.380x, 1.076x)
+  JVM3: A 85.14 / B 30.36 / C 32.56 us (0.357x, 0.382x, 1.072x)
+  p50s: A ~84 / B ~28 / C ~31.5 us. Scope spots (single JVM each):
+  incompressible 31KB: B/A=0.756x C/A=0.774x; below-threshold 128B:
+  B/A=0.042x (Java passthrough) C/A=0.881x.
+  Honest summary: at chunk sizes the complete Rust frame path is ~2.6x the
+  warm Java pipeline and ~7% slower than CK2+Java-framing (C/B~1.07); the
+  adapter's value here is OWNERSHIP (all framing semantics in Rust), not
+  incremental latency. Tiny packets favor the Java passthrough shape.
+regressions: "compression 14/14 (boundary test updated to new semantics), native-chunk 10/10, M53FrameOracle 25/25, MCK4Validation 16/16, M52 26/26, M4AuthoritativeTest 59/59 (fail-closed gate green)"
+classification: RUST_FRAME_ADAPTER_OFFLINE_VALIDATED
+perf_clarification: "CK2 compression benefit (~2.8x on this path) and the frame-engine ownership gain stand; the INCREMENTAL benefit of moving framing into Rust is ~-7% latency at 31KB (accepted cost of native ownership; Java fallback always available); tiny-packet claims corrected as above"
+next_gate: "bounded live SHADOW of the adapter (separately authorized; requires issue #1's live-snapshot aspects remain independently gated). Issue #1 OPEN."
+

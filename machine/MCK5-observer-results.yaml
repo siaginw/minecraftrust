@@ -1,0 +1,84 @@
+# M-CK5 — TRUE OFFLINE SHADOW OBSERVER (Checkpoints A+B)
+schema_version: 1
+date: "2026-09-22"
+binary:
+  dll_sha256: c10ddca1ce3c82255e78154fde657408e82fa354707bc5174deb5b0a6cb62d2c
+  dll_abs_path: D:\minecraftrust\target\release\rustcraft_ffi.dll
+  java: Temurin jdk-8.0.504.1-hotspot
+  netty: "4.1.9.Final bundled in minecraft_server.1.12.2.srg.jar"
+  rust: "unchanged this checkpoint (all observer work Java-side)"
+architecture: >
+  FrameShadowObserver = TWO outbound handlers around the INSTALLED Java framing
+  pipeline (nothing replaced). Observer positions derived from ACTUAL installed
+  execution order (disassembled): NetworkSystem$4 addLast sequence [timeout,
+  legacy_query, splitter, decoder, prepender, encoder, packet_handler];
+  NetworkManager adds compress addBefore("encoder") and encrypt
+  addBefore("prepender") => outbound flow packet_handler -> encoder(serialize)
+  -> compress -> prepender(outer frame) -> encrypt. CAPTURE sits tail-ward of
+  compress (sees the complete serialized body, packet-ID included, AFTER Java
+  serialization, BEFORE compression); FRAME-OBSERVE sits at the encrypt slot
+  head-ward of prepender (sees the ACTUAL Java frame AFTER outer framing,
+  BEFORE encryption). Per selected sample: owned byte[] snapshot (getBytes at
+  readerIndex — a genuinely OWNED copy, not a lifetime-protecting
+  slice/duplicate; bounded even-offset re-read = torn-write detector, no claim
+  of repairing a source race); the original message + promise forwarded exactly
+  once with indices untouched; frame observation completes BEFORE forwarding
+  (the capture promise listener fires nested inside the forwarded write);
+  independent structural decode of BOTH the Java frame and the Rust frame of
+  the observer's OWN copy; recovered bodies compared to the captured original
+  (packet ID included); compressed bytes never compared across implementations
+  (JDK vs zlib-rs differ; decode-equal is the contract); passthrough/disabled
+  framings additionally byte-exact across Java/Rust; native output discarded,
+  never sent or substituted.
+pairing: >
+  Per-observer sequence IDs + effective compression state read from the
+  INSTALLED compressor's own field at each capture boundary (verified
+  field_179301_c — field_179300_a is its byte[] scratch, a wrong-name trap that
+  sat silently in older bridge code). One-frame-per-message contract PROVEN per
+  observation: structural decode must consume exactly the observed buffer
+  (consumedExactly) or the observation is skipped as FRAME_ANOMALY — never a
+  MATCH. Encode failures surface via fireExceptionCaught (NOT the write promise)
+  so retirement hooks exceptionCaught and forwards it UNCHANGED; max ONE
+  outstanding observation (synchronous single-owner design, no worker pool).
+bounds: "deterministic sampling (sampleEvery), maxSampleBytes, maxComparisons, one-outstanding cap; OFF mode creates NO native context and NO sample buffers (FRAME_OPS delta 0, counters 0)"
+counters_separate: "observed/selected/completed/matched/mismatched/unpaired(frame+capture)/observer-errors/ctx-created-freed/retained/oversize/empty/limit/threshold-unreadable/frame-anomaly/stability — injected expected failures are never counted as clean successes"
+quiescence_correction: >
+  Narrow lifecycle correction replacing the M-CK4.2 optimistic inline-free after
+  rejected executor submission: free is legal ONLY when removed==true AND
+  inFlightNative==0; ops increment inFlightNative BEFORE re-checking removed, so
+  a dispatched-then-preempted op is visible to cleanup; rejection with an op in
+  flight DEFERS the free to the completing op's finally (runs on the owning
+  thread). Applied to BOTH RustFrameHandler and the observer. Tested with REAL
+  single-thread executors and hard shutdown() — NOTE: Netty graceful shutdown
+  keeps ACCEPTING tasks while draining (ST_SHUTTING_DOWN, isShutdown()==false);
+  deterministic rejection requires SingleThreadEventExecutor.shutdown()
+  (ST_SHUTDOWN rejects immediately while the worker may still be mid-task).
+gates_19_19: >
+  OFF zero-native-calls (FRAME_OPS delta 0); differential A/B pipelines across
+  compression states (REAL 31k packet + synthetic below/at/above threshold,
+  enabled+disabled) — identical bytes/promises/refcounts; ordered writes around
+  threshold update+disable with per-state framing verified; multi-channel
+  independence; heap/direct/nonzero-index-slice/composite inputs; concatenated-
+  frames anomaly detector (consumedExactly=false) + single-frame + disabled-
+  framing decodes; limits (maxComparisons/oversize counted, ALL Java frames
+  produced; sampling 1:2 with unpaired-frames counted); simulated ctx-creation
+  failure (Java preserved, observer disabled with reason, 0 completed);
+  rust-frame corruption (MISMATCH + disabled + Java bytes identical to
+  no-observer run); same-length captured-body corruption (comparison FAILS);
+  STALE-SAMPLE pairing corruption (real previous-sample association detected as
+  MISMATCH, never a MATCH; real sample retired unpaired); Java-encode failure
+  ('unable to fit 2163357 into 3' identical both pipelines; capture retired,
+  observer data released); retained-A-while-B; uninstall frees exactly once
+  (marshaled to real executor); executor REJECTION with native op IN FLIGHT ->
+  free deferred to completion, exactly-once, no crash (observer AND handler).
+not_run_documented: >
+  Mid-write observer removal window cannot be constructed on the synchronous
+  embedded pipeline (capture->frame-observe complete within one write call); the
+  retirement paths (promise listener + exceptionCaught + uninstall) are each
+  exercised via the Java-encode-failure and quiescence cases instead. No inbound
+  protocol implementation (deliberately out of scope).
+observer_overhead_separate_measurement: "see machine/MCK5-optimization-results.yaml §observer_overhead (OFF == ABSENT within noise)"
+regressions: "MCK5ObserverGates 19/19; MCK42OwnershipGates 15/15; MCK42FrameBoundaryGates 11/11; MCK4Validation 20/20; M53FrameOracle 25/25; M52CompressionTests 26/26; M4AuthoritativeTest 59/59; compression 14/14; native-chunk 10/10"
+entry_script: "bash tools/run-mck5.sh <RUN_ID> [--bench] (rebuild + native identity + gates + optional 3-JVM bench -> machine/raw/<RUN_ID>)"
+classification: FRAME_SHADOW_OBSERVER_OFFLINE_VALIDATED
+issue1: "OPEN — unchanged. This work uses serialized immutable bytes and does not resolve world-snapshot coherency or the historical mask event."

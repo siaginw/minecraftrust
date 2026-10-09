@@ -1,0 +1,60 @@
+version: 1
+subsystem: coremod_targets
+
+surveyed_coremods:
+  foamfix:
+    mod_id: "foamfix"
+    target_classes:
+      - "net.minecraft.world.chunk.BlockStateContainer"
+      - "net.minecraft.world.chunk.storage.ExtendedBlockStorage"
+      - "net.minecraft.nbt.NBTTagCompound"
+    technique: "Class replacement & method rewriting"
+    hazard_tier: CRITICAL
+    native_conflict: "Direct conflict with native chunk block state replacement"
+
+  enderio:
+    mod_id: "enderio"
+    target_classes:
+      - "net.minecraft.item.Item"
+      - "net.minecraft.item.ItemStack"
+      - "net.minecraft.entity.EntityLivingBase"
+    technique: "Method head injection"
+    hazard_tier: HIGH
+    native_conflict: "Requires Java methods to execute to preserve capability transfer"
+
+  phosphor:
+    mod_id: "phosphor"
+    target_classes:
+      - "net.minecraft.world.World"
+      - "net.minecraft.world.chunk.Chunk"
+      - "net.minecraft.world.chunk.storage.ExtendedBlockStorage"
+    technique: "Method replacement for lighting engine"
+    hazard_tier: CRITICAL
+    native_conflict: "Collides with native lighting migration unless explicitly toggled"
+
+  astralsorcery:
+    mod_id: "astralsorcery"
+    target_classes:
+      - "net.minecraft.world.World"
+      - "net.minecraft.entity.player.EntityPlayer"
+    technique: "Method head/return injection"
+    hazard_tier: MEDIUM
+    native_conflict: "Requires standard player and world method execution"
+
+  tconstruct:
+    mod_id: "tconstruct"
+    target_classes:
+      - "net.minecraft.item.Item"
+      - "net.minecraft.item.ItemStack"
+    technique: "Method return modification"
+    hazard_tier: LOW
+    native_conflict: "Standard method return hook"
+
+  spongeforge:
+    mod_id: "spongeforge"
+    target_classes:
+      - "net.minecraft.server.MinecraftServer"
+      - "net.minecraft.world.WorldServer"
+    technique: "Mixin class replacement & injection"
+    hazard_tier: FATAL
+    native_conflict: "Incompatible with standalone native server loops"

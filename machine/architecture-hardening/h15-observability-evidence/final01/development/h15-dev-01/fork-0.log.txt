@@ -1,0 +1,77 @@
+[INFO] LaunchWrapper: Loading tweak class name com.rustcraft.offline.bootstrap.OfflineTweaker
+[INFO] LaunchWrapper: Using primary tweak class name com.rustcraft.offline.bootstrap.OfflineTweaker
+[INFO] LaunchWrapper: Calling tweak class com.rustcraft.offline.bootstrap.OfflineTweaker
+[INFO] FML: Forge Mod Loader version 14.23.5.2860 for Minecraft 1.12.2 loading
+[INFO] FML: Java is OpenJDK 64-Bit Server VM, version 1.8.0_504, running on Windows 11:amd64:10.0, installed at D:\rustcraft-toolchains\temurin8\jdk8u504-b01\jre
+[INFO] FML: Searching D:\minecraftrust-astra-hardening\target\architecture-hardening\h15-dev-01\fork-0\game\mods for mods
+[INFO] LaunchWrapper: Loading tweak class name net.minecraftforge.fml.common.launcher.FMLInjectionAndSortingTweaker
+[INFO] LaunchWrapper: Loading tweak class name net.minecraftforge.fml.common.launcher.FMLDeobfTweaker
+[INFO] LaunchWrapper: Calling tweak class net.minecraftforge.fml.common.launcher.FMLInjectionAndSortingTweaker
+[INFO] LaunchWrapper: Calling tweak class net.minecraftforge.fml.common.launcher.FMLInjectionAndSortingTweaker
+[INFO] LaunchWrapper: Calling tweak class net.minecraftforge.fml.relauncher.CoreModManager$FMLPluginWrapper
+[INFO] FML: Found valid fingerprint for Minecraft Forge. Certificate fingerprint e3c3d50c7c986df74c645c0ac54639741c90a557
+[INFO] LaunchWrapper: Calling tweak class net.minecraftforge.fml.relauncher.CoreModManager$FMLPluginWrapper
+[INFO] LaunchWrapper: Calling tweak class net.minecraftforge.fml.common.launcher.FMLDeobfTweaker
+[INFO] LaunchWrapper: Loading tweak class name net.minecraftforge.fml.common.launcher.TerminalTweaker
+[INFO] LaunchWrapper: Calling tweak class net.minecraftforge.fml.common.launcher.TerminalTweaker
+[INFO] LaunchWrapper: Launching wrapped minecraft {com.rustcraft.offline.oracle.QualifyRuntime}
+[INFO] FML: MinecraftForge v14.23.5.2860 Initialized
+[INFO] FML: Starts to replace vanilla recipe ingredients with ore ingredients.
+[INFO] FML: Invalid recipe found with multiple oredict ingredients in the same ingredient...
+[INFO] FML: Replaced 1227 ore ingredients
+[INFO] FML: Searching D:\minecraftrust-astra-hardening\target\architecture-hardening\h15-dev-01\fork-0\game\mods for mods
+[INFO] FML: Forge Mod Loader has identified 4 mods to load
+[WARN] FML: Missing English translation for FML: assets/fml/lang/en_us.lang
+[INFO] FML: Attempting connection with missing mods [minecraft, mcp, FML, forge] at CLIENT
+[INFO] FML: Attempting connection with missing mods [minecraft, mcp, FML, forge] at SERVER
+[INFO] FML: Processing ObjectHolder annotations
+[INFO] FML: Found 1168 ObjectHolder annotations
+[INFO] FML: Identifying ItemStackHolder annotations
+[INFO] FML: Found 0 ItemStackHolder annotations
+[INFO] FML: Configured a dormant chunk cache size of 0
+[INFO] FML: Applying holder lookups
+[INFO] FML: Holder lookups applied
+[INFO] FML: Applying holder lookups
+[INFO] FML: Holder lookups applied
+[INFO] FML: Applying holder lookups
+[INFO] FML: Holder lookups applied
+[INFO] FML: Applying holder lookups
+[INFO] FML: Holder lookups applied
+[INFO] FML: Injecting itemstacks
+[INFO] FML: Itemstack injection complete
+[INFO] FML: Applying holder lookups
+[INFO] FML: Holder lookups applied
+[INFO] FML: Injecting itemstacks
+[INFO] FML: Itemstack injection complete
+[INFO] FML: Forge Mod Loader has successfully loaded 4 mods
+[ERROR] LaunchWrapper: Unable to launch
+java.lang.reflect.InvocationTargetException: null
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[?:1.8.0_504]
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[?:1.8.0_504]
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[?:1.8.0_504]
+	at java.lang.reflect.Method.invoke(Method.java:498) ~[?:1.8.0_504]
+	at net.minecraft.launchwrapper.Launch.launch(Launch.java:135) [launchwrapper-1.12.jar:?]
+	at net.minecraft.launchwrapper.Launch.main(Launch.java:28) [launchwrapper-1.12.jar:?]
+Caused by: java.lang.reflect.InvocationTargetException
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[?:1.8.0_504]
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[?:1.8.0_504]
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[?:1.8.0_504]
+	at java.lang.reflect.Method.invoke(Method.java:498) ~[?:1.8.0_504]
+	at com.rustcraft.offline.oracle.QualifyRuntime.main(QualifyRuntime.java:303) ~[QualifyRuntime.class:?]
+	... 6 more
+Caused by: java.lang.LinkageError: loader constraint violation: when resolving method "com.rustcraft.telemetry.RuntimeTelemetry.call(Lcom/rustcraft/telemetry/CallbackRegistry$Token;Ljava/lang/Object;Lcom/rustcraft/telemetry/RuntimeTelemetry$Body;)Ljava/lang/Object;" the class loader (instance of net/minecraft/launchwrapper/LaunchClassLoader) of the current class, com/rustcraft/observability/ObservabilityChecks, and the class loader (instance of sun/misc/Launcher$AppClassLoader) for the method's defining class, com/rustcraft/telemetry/RuntimeTelemetry, have different Class objects for the type com/rustcraft/telemetry/RuntimeTelemetry$Body used in the signature
+	at com.rustcraft.observability.ObservabilityChecks.run(ObservabilityChecks.java:22) ~[ObservabilityChecks.class:?]
+	at com.rustcraft.observability.OfflineForgeProbe.main(OfflineForgeProbe.java:39) ~[OfflineForgeProbe.class:?]
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[?:1.8.0_504]
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[?:1.8.0_504]
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[?:1.8.0_504]
+	at java.lang.reflect.Method.invoke(Method.java:498) ~[?:1.8.0_504]
+	at com.rustcraft.offline.oracle.QualifyRuntime.main(QualifyRuntime.java:303) ~[QualifyRuntime.class:?]
+	... 6 more
+Exception in thread "RustCraftOfflineOwner" [INFO] STDERR: [java.lang.ThreadGroup:uncaughtException:1052]: net.minecraftforge.fml.relauncher.FMLSecurityManager$ExitTrappedException
+[INFO] STDERR: [java.lang.ThreadGroup:uncaughtException:1052]: 	at net.minecraftforge.fml.relauncher.FMLSecurityManager.checkPermission(FMLSecurityManager.java:49)
+[INFO] STDERR: [java.lang.ThreadGroup:uncaughtException:1052]: 	at java.lang.SecurityManager.checkExit(SecurityManager.java:761)
+[INFO] STDERR: [java.lang.ThreadGroup:uncaughtException:1052]: 	at java.lang.Runtime.exit(Runtime.java:101)
+[INFO] STDERR: [java.lang.ThreadGroup:uncaughtException:1052]: 	at java.lang.System.exit(System.java:987)
+[INFO] STDERR: [java.lang.ThreadGroup:uncaughtException:1052]: 	at net.minecraft.launchwrapper.Launch.launch(Launch.java:138)
+[INFO] STDERR: [java.lang.ThreadGroup:uncaughtException:1052]: 	at net.minecraft.launchwrapper.Launch.main(Launch.java:28)

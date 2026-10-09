@@ -1,0 +1,32 @@
+{
+  "schema": "H22_5_GPU_PROVENANCE_V1",
+  "dependencies_installed": [],
+  "reuse": [
+    {
+      "project": "skeeto/hash-prospector",
+      "commit": "396dbe235c94dfc2e9b559fc965bcfda8b6a122c",
+      "source": "https://github.com/skeeto/hash-prospector/blob/396dbe235c94dfc2e9b559fc965bcfda8b6a122c/README.md",
+      "license": "Unlicense",
+      "license_url": "https://raw.githubusercontent.com/skeeto/hash-prospector/396dbe235c94dfc2e9b559fc965bcfda8b6a122c/UNLICENSE",
+      "license_file": "hash-prospector-UNLICENSE",
+      "license_sha256": "7e12e5df4bae12cb21581ba157ced20e1986a0508dd10d0e8a4ab9a4cf94e85c",
+      "decision": "BORROW_ALGORITHM",
+      "scope": "lowbias32 shifts/constants in C++ scalar, AVX2, HLSL and Python, with extra repeated rounds and seed additions for synthetic arithmetic intensity; no generator/JIT implementation reused",
+      "reason": "Fixed integer permutation gives a reproducible bounded parity workload without floating-point ambiguity",
+      "performance_value": "Unqualified synthetic proxy only; no Minecraft speed claim",
+      "migration_value": "Tests GPU/CPU output validation and complete upload/readback boundary; no engine migration",
+      "integration_risk": "Isolated test tool only; algorithm is not approved for security, gameplay RNG or persistence identities",
+      "notice_obligations": "Retain exact Unlicense text and provenance voluntarily; no upstream library dependency"
+    }
+  ],
+  "platform": {
+    "api": "Existing Windows Direct3D 11 and MSVC/Windows SDK",
+    "installed_by_experiment": false,
+    "redistributed_platform_binaries": false,
+    "primary_documentation": [
+      "https://learn.microsoft.com/en-us/windows/win32/api/d3d11/nf-d3d11-id3d11device-createcomputeshader",
+      "https://learn.microsoft.com/en-us/windows/win32/direct3d11/direct3d-11-advanced-stages-cs-access",
+      "https://microsoft.github.io/DirectX-Specs/d3d/archive/D3D11_3_FunctionalSpec.htm"
+    ]
+  }
+}

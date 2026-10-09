@@ -1,0 +1,1902 @@
+{
+  "schema_version": 1,
+  "kind": "H12_H22_5_F_SEMANTIC_SCHEDULER_FOUNDATION",
+  "status": "PASS_OFFLINE_FOUNDATION",
+  "production_authority": false,
+  "root_workspace_changed": false,
+  "implementation": "crates/semantic-scheduler-prototype",
+  "report": "docs/architecture/semantic-scheduler.md",
+  "runs": [
+    {
+      "name": "bb570f0a96284ce1913a28cc58159d69",
+      "receipt": "machine/architecture-hardening/h12-scheduler-evidence/bb570f0a96284ce1913a28cc58159d69/campaign.json",
+      "sha256": "c436cfc859527702b50b7ac7c821cc795d3e46c7dae2f5840232e9c98b556471",
+      "acceptance": "SUPERSEDED_OR_PRE_FIX_EVIDENCE"
+    },
+    {
+      "name": "root-control-identity-before",
+      "receipt": "machine/architecture-hardening/h12-scheduler-evidence/root-control-identity-before/regression.json",
+      "sha256": "15c437f3a0325c9d6f66fe29657ac97409124d6e97d28ec945d914ddc1520a2b",
+      "acceptance": "SUPERSEDED_OR_PRE_FIX_EVIDENCE"
+    },
+    {
+      "name": "3ad6629035de49d884d1769325b5f7fc",
+      "receipt": "machine/architecture-hardening/h12-scheduler-evidence/3ad6629035de49d884d1769325b5f7fc/campaign.json",
+      "sha256": "7f8e31e490824b8cda915017e4e0f817aba8132a69ebba4b2ce27e1cee82bead",
+      "acceptance": "SUPERSEDED_OR_PRE_FIX_EVIDENCE"
+    },
+    {
+      "name": "root-final",
+      "receipt": "machine/architecture-hardening/h12-scheduler-evidence/root-final/campaign.json",
+      "sha256": "57bd4d8f56588b50aab79bf9a027304909b4158f88a39df95c153ae08e909961",
+      "acceptance": "CURRENT"
+    }
+  ],
+  "retained_artifacts": [
+    {
+      "original_path": "target/semantic-scheduler-prototype/bb570f0a96284ce1913a28cc58159d69/bad-scenario.process.json",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/bb570f0a96284ce1913a28cc58159d69/bad-scenario.process.json",
+      "sha256": "a599aab5a743df2a1513059ee6a97976dd20925e50187f1f02bddc7d59827751"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/bb570f0a96284ce1913a28cc58159d69/bad-scenario.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/bb570f0a96284ce1913a28cc58159d69/bad-scenario.stderr.txt",
+      "sha256": "9bb0038c6058336024b28b9971fcc884b13b8c2d8404189208c99a23832e8adf"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/bb570f0a96284ce1913a28cc58159d69/bad-scenario.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/bb570f0a96284ce1913a28cc58159d69/bad-scenario.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/bb570f0a96284ce1913a28cc58159d69/bad-seed.process.json",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/bb570f0a96284ce1913a28cc58159d69/bad-seed.process.json",
+      "sha256": "d1960c2a7fd68f797566a344236f3723f44995a636cdc67f8f5be6d659a41f75"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/bb570f0a96284ce1913a28cc58159d69/bad-seed.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/bb570f0a96284ce1913a28cc58159d69/bad-seed.stderr.txt",
+      "sha256": "011c8fad0382b63dfec34d33c06b0764e4ae293b18efd9ad2341e03d6803d9de"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/bb570f0a96284ce1913a28cc58159d69/bad-seed.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/bb570f0a96284ce1913a28cc58159d69/bad-seed.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/bb570f0a96284ce1913a28cc58159d69/bad-session.process.json",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/bb570f0a96284ce1913a28cc58159d69/bad-session.process.json",
+      "sha256": "3e752bb8bcee065eda677da4bf1aeaee61db987aef9ff9cbc0b72c5e6555d8b6"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/bb570f0a96284ce1913a28cc58159d69/bad-session.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/bb570f0a96284ce1913a28cc58159d69/bad-session.stderr.txt",
+      "sha256": "1bed19019ea2bd9191ca0befbe5105d83f2a3b17badf8d93b728e942c39acafd"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/bb570f0a96284ce1913a28cc58159d69/bad-session.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/bb570f0a96284ce1913a28cc58159d69/bad-session.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/bb570f0a96284ce1913a28cc58159d69/campaign.json",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/bb570f0a96284ce1913a28cc58159d69/campaign.json",
+      "sha256": "c436cfc859527702b50b7ac7c821cc795d3e46c7dae2f5840232e9c98b556471"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/bb570f0a96284ce1913a28cc58159d69/cargo-version.process.json",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/bb570f0a96284ce1913a28cc58159d69/cargo-version.process.json",
+      "sha256": "e3effa5020b0a8721a412252050810896f90dee74c132a6544418eb4f60e3b71"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/bb570f0a96284ce1913a28cc58159d69/cargo-version.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/bb570f0a96284ce1913a28cc58159d69/cargo-version.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/bb570f0a96284ce1913a28cc58159d69/cargo-version.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/bb570f0a96284ce1913a28cc58159d69/cargo-version.stdout.txt",
+      "sha256": "86c2d07f9968fd3174d9cff8c60a4d4323fba3166d5dc6dd36f0987a50677d70"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/bb570f0a96284ce1913a28cc58159d69/clippy.process.json",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/bb570f0a96284ce1913a28cc58159d69/clippy.process.json",
+      "sha256": "63b9b4b77599f2434f6b3a63de8f39e0f44e372d28a29e8edff9b1ec193a1068"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/bb570f0a96284ce1913a28cc58159d69/clippy.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/bb570f0a96284ce1913a28cc58159d69/clippy.stderr.txt",
+      "sha256": "e3cfed7cacd2a605333707dacb84fd714b74385b1c8250d5038e988654f7618b"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/bb570f0a96284ce1913a28cc58159d69/clippy.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/bb570f0a96284ce1913a28cc58159d69/clippy.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/bb570f0a96284ce1913a28cc58159d69/fmt.process.json",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/bb570f0a96284ce1913a28cc58159d69/fmt.process.json",
+      "sha256": "aff66e7abac1f21f8a63a01208356ebd24aca005dcc45fd615125ade33b97854"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/bb570f0a96284ce1913a28cc58159d69/fmt.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/bb570f0a96284ce1913a28cc58159d69/fmt.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/bb570f0a96284ce1913a28cc58159d69/fmt.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/bb570f0a96284ce1913a28cc58159d69/fmt.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/bb570f0a96284ce1913a28cc58159d69/metadata.process.json",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/bb570f0a96284ce1913a28cc58159d69/metadata.process.json",
+      "sha256": "1dc56ad9bceb6227e881ad321aaae5bb3c5409d8eb79865a193c7b9a19ec5f7b"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/bb570f0a96284ce1913a28cc58159d69/metadata.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/bb570f0a96284ce1913a28cc58159d69/metadata.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/bb570f0a96284ce1913a28cc58159d69/metadata.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/bb570f0a96284ce1913a28cc58159d69/metadata.stdout.txt",
+      "sha256": "ba7fa0a4e3d66422ca9265a482ced78cd21b2a06fb48528ccedb9c0b9192e3e0"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/bb570f0a96284ce1913a28cc58159d69/reference-tests.process.json",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/bb570f0a96284ce1913a28cc58159d69/reference-tests.process.json",
+      "sha256": "5dc40d0169f53f23f140f4a2d78a0f022f4bf9d3b22dca579654252abccad598"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/bb570f0a96284ce1913a28cc58159d69/reference-tests.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/bb570f0a96284ce1913a28cc58159d69/reference-tests.stderr.txt",
+      "sha256": "73a8ab0803495057757a28006c3f4700fbf88fd7d0a23ff824336d57a78094a3"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/bb570f0a96284ce1913a28cc58159d69/reference-tests.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/bb570f0a96284ce1913a28cc58159d69/reference-tests.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/bb570f0a96284ce1913a28cc58159d69/release.process.json",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/bb570f0a96284ce1913a28cc58159d69/release.process.json",
+      "sha256": "8df48f5df64b3c900f842bca0b8c24dbc3a5c40c65af3af2eb031e6357ac1caa"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/bb570f0a96284ce1913a28cc58159d69/release.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/bb570f0a96284ce1913a28cc58159d69/release.stderr.txt",
+      "sha256": "c71d959e4bf91aa3f28ac2b40743f46ad837232022a24650bc39a85b021f1c5f"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/bb570f0a96284ce1913a28cc58159d69/release.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/bb570f0a96284ce1913a28cc58159d69/release.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/bb570f0a96284ce1913a28cc58159d69/reordered.first-divergence.json",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/bb570f0a96284ce1913a28cc58159d69/reordered.first-divergence.json",
+      "sha256": "62a7b16f6f9f3351d39c279e359617b9b7a38172c37cece4a6507e9a97da69b8"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/bb570f0a96284ce1913a28cc58159d69/rust-sysroot.process.json",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/bb570f0a96284ce1913a28cc58159d69/rust-sysroot.process.json",
+      "sha256": "03f12964537247128b41aa7b00f3ecf62d1b6493213f09d54d81cb40a445fc6f"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/bb570f0a96284ce1913a28cc58159d69/rust-sysroot.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/bb570f0a96284ce1913a28cc58159d69/rust-sysroot.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/bb570f0a96284ce1913a28cc58159d69/rust-sysroot.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/bb570f0a96284ce1913a28cc58159d69/rust-sysroot.stdout.txt",
+      "sha256": "e0d8249c2fb93ac2106d97fedd24f44420e0ee2316617df20f769f033eaf568d"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/bb570f0a96284ce1913a28cc58159d69/rust-tests.process.json",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/bb570f0a96284ce1913a28cc58159d69/rust-tests.process.json",
+      "sha256": "bd52f48a4f2031b8fb9eb5f834c57ad62e4bf93a1fefcf47a09834b8687f7697"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/bb570f0a96284ce1913a28cc58159d69/rust-tests.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/bb570f0a96284ce1913a28cc58159d69/rust-tests.stderr.txt",
+      "sha256": "5f94eecef63dae28a16f832d8a05963097208b8e3fb9f3411521d444e89a7024"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/bb570f0a96284ce1913a28cc58159d69/rust-tests.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/bb570f0a96284ce1913a28cc58159d69/rust-tests.stdout.txt",
+      "sha256": "ed4dda8421f97ab70d4b70734b3261e104a10bddc6c993503ce5aa8dc8ea29b6"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/bb570f0a96284ce1913a28cc58159d69/rust-version.process.json",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/bb570f0a96284ce1913a28cc58159d69/rust-version.process.json",
+      "sha256": "88fc237331dac4010848ef5c0994922f1dce569a0ed08a80655ede5c6878f39e"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/bb570f0a96284ce1913a28cc58159d69/rust-version.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/bb570f0a96284ce1913a28cc58159d69/rust-version.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/bb570f0a96284ce1913a28cc58159d69/rust-version.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/bb570f0a96284ce1913a28cc58159d69/rust-version.stdout.txt",
+      "sha256": "c45e612575abeef05e99e88eb1e7aea52cddab9ad70d4f65ad20eaa65e92a9cf"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/bb570f0a96284ce1913a28cc58159d69/trace-arithmetic-0.process.json",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/bb570f0a96284ce1913a28cc58159d69/trace-arithmetic-0.process.json",
+      "sha256": "ea80c832a3edf09e1c5512a4970657777fac86317529fdf59f7ddf4cfa4cd8eb"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/bb570f0a96284ce1913a28cc58159d69/trace-arithmetic-0.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/bb570f0a96284ce1913a28cc58159d69/trace-arithmetic-0.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/bb570f0a96284ce1913a28cc58159d69/trace-arithmetic-0.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/bb570f0a96284ce1913a28cc58159d69/trace-arithmetic-0.stdout.txt",
+      "sha256": "024eb0b7c7eb33960f95623021fe51a175110318c6519c135d22f00f5bb3d557"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/bb570f0a96284ce1913a28cc58159d69/trace-arithmetic-17.process.json",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/bb570f0a96284ce1913a28cc58159d69/trace-arithmetic-17.process.json",
+      "sha256": "7a259785cdac787ae45f3133a70314b34f1359e5504e1d10de64050a04dee74b"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/bb570f0a96284ce1913a28cc58159d69/trace-arithmetic-17.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/bb570f0a96284ce1913a28cc58159d69/trace-arithmetic-17.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/bb570f0a96284ce1913a28cc58159d69/trace-arithmetic-17.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/bb570f0a96284ce1913a28cc58159d69/trace-arithmetic-17.stdout.txt",
+      "sha256": "a382d85b29085ca5a47dd516f84686142426a92f2dc6acdaa35f66e5d4d78b4a"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/bb570f0a96284ce1913a28cc58159d69/trace-arithmetic-18446744073709551615.process.json",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/bb570f0a96284ce1913a28cc58159d69/trace-arithmetic-18446744073709551615.process.json",
+      "sha256": "5445eeaa7ee36d80be690833e5c7130b2806d13b0af08eab3ace63028d628718"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/bb570f0a96284ce1913a28cc58159d69/trace-arithmetic-18446744073709551615.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/bb570f0a96284ce1913a28cc58159d69/trace-arithmetic-18446744073709551615.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/bb570f0a96284ce1913a28cc58159d69/trace-arithmetic-18446744073709551615.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/bb570f0a96284ce1913a28cc58159d69/trace-arithmetic-18446744073709551615.stdout.txt",
+      "sha256": "6854d3bf68cc336021afe2d81707f97b2ad3a3a6d36539f83221f47decc81e54"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/bb570f0a96284ce1913a28cc58159d69/trace-budget-0.process.json",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/bb570f0a96284ce1913a28cc58159d69/trace-budget-0.process.json",
+      "sha256": "3e320d7c0dabf189d0e443f17e0b13976ade1c2be5c271282af8310d324278c3"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/bb570f0a96284ce1913a28cc58159d69/trace-budget-0.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/bb570f0a96284ce1913a28cc58159d69/trace-budget-0.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/bb570f0a96284ce1913a28cc58159d69/trace-budget-0.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/bb570f0a96284ce1913a28cc58159d69/trace-budget-0.stdout.txt",
+      "sha256": "af38174b59bf21226861b31af9ced8b62cfe4a62ef54400a2e3a3a717f9aabd8"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/bb570f0a96284ce1913a28cc58159d69/trace-budget-17.process.json",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/bb570f0a96284ce1913a28cc58159d69/trace-budget-17.process.json",
+      "sha256": "bb6190195617e055e2a7f1ce8d8c282aa61123f59ab8706d001399eb21b2bc31"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/bb570f0a96284ce1913a28cc58159d69/trace-budget-17.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/bb570f0a96284ce1913a28cc58159d69/trace-budget-17.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/bb570f0a96284ce1913a28cc58159d69/trace-budget-17.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/bb570f0a96284ce1913a28cc58159d69/trace-budget-17.stdout.txt",
+      "sha256": "1d36eb7cab3a913d6b4b88656305721386b38c46fedd02461e109e6aab358dd7"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/bb570f0a96284ce1913a28cc58159d69/trace-budget-18446744073709551615.process.json",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/bb570f0a96284ce1913a28cc58159d69/trace-budget-18446744073709551615.process.json",
+      "sha256": "3497d02a3373bd44a42475822264e89f4de3ad4c68eed8429195c33586c18ec2"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/bb570f0a96284ce1913a28cc58159d69/trace-budget-18446744073709551615.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/bb570f0a96284ce1913a28cc58159d69/trace-budget-18446744073709551615.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/bb570f0a96284ce1913a28cc58159d69/trace-budget-18446744073709551615.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/bb570f0a96284ce1913a28cc58159d69/trace-budget-18446744073709551615.stdout.txt",
+      "sha256": "fe4df0aec2402f2ddd5a53c6bcb33d9418354aaa782578d57c570436a72bc21e"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/bb570f0a96284ce1913a28cc58159d69/trace-cancel-0.process.json",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/bb570f0a96284ce1913a28cc58159d69/trace-cancel-0.process.json",
+      "sha256": "5781cb0b6e8e5bc16fec50e25199ab7dae1522684564b59f61ea4113732e6028"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/bb570f0a96284ce1913a28cc58159d69/trace-cancel-0.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/bb570f0a96284ce1913a28cc58159d69/trace-cancel-0.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/bb570f0a96284ce1913a28cc58159d69/trace-cancel-0.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/bb570f0a96284ce1913a28cc58159d69/trace-cancel-0.stdout.txt",
+      "sha256": "08e7842dd1f21fc70bd124a3362fff02556b9492b9eae1357a37dcc9e5268985"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/bb570f0a96284ce1913a28cc58159d69/trace-cancel-17.process.json",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/bb570f0a96284ce1913a28cc58159d69/trace-cancel-17.process.json",
+      "sha256": "3bf2c438c1ef8d73b5299355c45a93c06828e45ae392ebc3b1c659ec987c3706"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/bb570f0a96284ce1913a28cc58159d69/trace-cancel-17.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/bb570f0a96284ce1913a28cc58159d69/trace-cancel-17.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/bb570f0a96284ce1913a28cc58159d69/trace-cancel-17.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/bb570f0a96284ce1913a28cc58159d69/trace-cancel-17.stdout.txt",
+      "sha256": "6b318bf6c378149ee680abe44bb811f5f14b7a7d1881d87914f1ae1a368a4ce8"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/bb570f0a96284ce1913a28cc58159d69/trace-cancel-18446744073709551615.process.json",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/bb570f0a96284ce1913a28cc58159d69/trace-cancel-18446744073709551615.process.json",
+      "sha256": "ff9733bb8e499d7cd72a18a182583f43ae11134bdd2f13a929d1a30b6862239f"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/bb570f0a96284ce1913a28cc58159d69/trace-cancel-18446744073709551615.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/bb570f0a96284ce1913a28cc58159d69/trace-cancel-18446744073709551615.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/bb570f0a96284ce1913a28cc58159d69/trace-cancel-18446744073709551615.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/bb570f0a96284ce1913a28cc58159d69/trace-cancel-18446744073709551615.stdout.txt",
+      "sha256": "5dcaea9a90a16a087dd0ba26a78f5641836ef8297eae0454d25d17fa57818f6f"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/bb570f0a96284ce1913a28cc58159d69/trace-conflict-0.process.json",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/bb570f0a96284ce1913a28cc58159d69/trace-conflict-0.process.json",
+      "sha256": "2cbd1392ce9e8e8b1970dbf56428de219114a10e19aa0cd1f3513db75046b649"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/bb570f0a96284ce1913a28cc58159d69/trace-conflict-0.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/bb570f0a96284ce1913a28cc58159d69/trace-conflict-0.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/bb570f0a96284ce1913a28cc58159d69/trace-conflict-0.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/bb570f0a96284ce1913a28cc58159d69/trace-conflict-0.stdout.txt",
+      "sha256": "220b3e6e1d633cd005c0ab339973249b32b604c8bae106f66d30158db30b4700"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/bb570f0a96284ce1913a28cc58159d69/trace-conflict-17.process.json",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/bb570f0a96284ce1913a28cc58159d69/trace-conflict-17.process.json",
+      "sha256": "2c0e2319ed6cea5bc04bf3b029ca70bbe10940b5732a7356db219b08977489a1"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/bb570f0a96284ce1913a28cc58159d69/trace-conflict-17.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/bb570f0a96284ce1913a28cc58159d69/trace-conflict-17.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/bb570f0a96284ce1913a28cc58159d69/trace-conflict-17.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/bb570f0a96284ce1913a28cc58159d69/trace-conflict-17.stdout.txt",
+      "sha256": "3a22948eb230ccbb6e25ae27dcf9430615129a6d44c558d9336537202c923fbe"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/bb570f0a96284ce1913a28cc58159d69/trace-conflict-18446744073709551615.process.json",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/bb570f0a96284ce1913a28cc58159d69/trace-conflict-18446744073709551615.process.json",
+      "sha256": "57e9fb3e856aabcb67484a71e40e44663280e2a2700a21cc03000a60b9cf1733"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/bb570f0a96284ce1913a28cc58159d69/trace-conflict-18446744073709551615.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/bb570f0a96284ce1913a28cc58159d69/trace-conflict-18446744073709551615.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/bb570f0a96284ce1913a28cc58159d69/trace-conflict-18446744073709551615.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/bb570f0a96284ce1913a28cc58159d69/trace-conflict-18446744073709551615.stdout.txt",
+      "sha256": "5070e9a50f5e787338a90222298132a272a39175c5b677170dcc5d9683ed86ae"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/bb570f0a96284ce1913a28cc58159d69/trace-deadline-0.process.json",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/bb570f0a96284ce1913a28cc58159d69/trace-deadline-0.process.json",
+      "sha256": "9bf805b748a03e70c4b8105d53b7058b36a587056ca235932fc0745662e57076"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/bb570f0a96284ce1913a28cc58159d69/trace-deadline-0.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/bb570f0a96284ce1913a28cc58159d69/trace-deadline-0.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/bb570f0a96284ce1913a28cc58159d69/trace-deadline-0.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/bb570f0a96284ce1913a28cc58159d69/trace-deadline-0.stdout.txt",
+      "sha256": "d9f18190c8e9c3507237f0f399210b58cf6908f0a596fdadf82ef6318745f27d"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/bb570f0a96284ce1913a28cc58159d69/trace-deadline-17.process.json",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/bb570f0a96284ce1913a28cc58159d69/trace-deadline-17.process.json",
+      "sha256": "ac99ea885db65a54f485ff9f08f5acb9ee6c420597ba06af3b58dc5363936626"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/bb570f0a96284ce1913a28cc58159d69/trace-deadline-17.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/bb570f0a96284ce1913a28cc58159d69/trace-deadline-17.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/bb570f0a96284ce1913a28cc58159d69/trace-deadline-17.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/bb570f0a96284ce1913a28cc58159d69/trace-deadline-17.stdout.txt",
+      "sha256": "eda96f7195a5e387f681c3df3d13c8552248e972999aed8142a259520d3b591f"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/bb570f0a96284ce1913a28cc58159d69/trace-deadline-18446744073709551615.process.json",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/bb570f0a96284ce1913a28cc58159d69/trace-deadline-18446744073709551615.process.json",
+      "sha256": "7eb11c04f8c7220b4e4c8d333e209e6a1bd56110e67dacd6786771d01f210439"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/bb570f0a96284ce1913a28cc58159d69/trace-deadline-18446744073709551615.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/bb570f0a96284ce1913a28cc58159d69/trace-deadline-18446744073709551615.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/bb570f0a96284ce1913a28cc58159d69/trace-deadline-18446744073709551615.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/bb570f0a96284ce1913a28cc58159d69/trace-deadline-18446744073709551615.stdout.txt",
+      "sha256": "36627895e2b5d45054424074ff1f1f31faa961f14efc873806f3f0edf7e60a9e"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/bb570f0a96284ce1913a28cc58159d69/trace-external-0.process.json",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/bb570f0a96284ce1913a28cc58159d69/trace-external-0.process.json",
+      "sha256": "f70a39c3972958c6184e5f0684fd24f0094bfd06eeb789214de1b651be6bc904"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/bb570f0a96284ce1913a28cc58159d69/trace-external-0.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/bb570f0a96284ce1913a28cc58159d69/trace-external-0.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/bb570f0a96284ce1913a28cc58159d69/trace-external-0.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/bb570f0a96284ce1913a28cc58159d69/trace-external-0.stdout.txt",
+      "sha256": "79dce0d4ba2b38fd02cb047dcfe061be4b69dadd859140acdb1c5c34f38ceddd"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/bb570f0a96284ce1913a28cc58159d69/trace-external-17.process.json",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/bb570f0a96284ce1913a28cc58159d69/trace-external-17.process.json",
+      "sha256": "88ad45a45088da6430b35fac51243e522378008d498b7bbf0e7a5dbb988f2a07"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/bb570f0a96284ce1913a28cc58159d69/trace-external-17.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/bb570f0a96284ce1913a28cc58159d69/trace-external-17.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/bb570f0a96284ce1913a28cc58159d69/trace-external-17.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/bb570f0a96284ce1913a28cc58159d69/trace-external-17.stdout.txt",
+      "sha256": "3eb60e5767c7deb6d6551cae8ea2d705a0ee94118f3745753f9bf51cc0a3addb"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/bb570f0a96284ce1913a28cc58159d69/trace-external-18446744073709551615.process.json",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/bb570f0a96284ce1913a28cc58159d69/trace-external-18446744073709551615.process.json",
+      "sha256": "43575081c752f1a8bd83db99db78963f36037b2940b52476e047eea37265fddc"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/bb570f0a96284ce1913a28cc58159d69/trace-external-18446744073709551615.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/bb570f0a96284ce1913a28cc58159d69/trace-external-18446744073709551615.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/bb570f0a96284ce1913a28cc58159d69/trace-external-18446744073709551615.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/bb570f0a96284ce1913a28cc58159d69/trace-external-18446744073709551615.stdout.txt",
+      "sha256": "39bd7dee1bdfe5ef81184a8799e3cdc0b5123a1fb75afc3de1e294286d296137"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/bb570f0a96284ce1913a28cc58159d69/trace-ordered-0.process.json",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/bb570f0a96284ce1913a28cc58159d69/trace-ordered-0.process.json",
+      "sha256": "170d213898a238fab9960a9919c605b3e979789b88c761139c95f67e64431b72"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/bb570f0a96284ce1913a28cc58159d69/trace-ordered-0.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/bb570f0a96284ce1913a28cc58159d69/trace-ordered-0.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/bb570f0a96284ce1913a28cc58159d69/trace-ordered-0.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/bb570f0a96284ce1913a28cc58159d69/trace-ordered-0.stdout.txt",
+      "sha256": "906142d21e3aa15cbbdba48e050cab4d8dc21d119da31a9cca0eae6f0e5c9027"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/bb570f0a96284ce1913a28cc58159d69/trace-ordered-17.process.json",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/bb570f0a96284ce1913a28cc58159d69/trace-ordered-17.process.json",
+      "sha256": "b0772937c5fa34288ac74296616c3c254ad4c1a7421d235b445bd63f7081f95a"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/bb570f0a96284ce1913a28cc58159d69/trace-ordered-17.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/bb570f0a96284ce1913a28cc58159d69/trace-ordered-17.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/bb570f0a96284ce1913a28cc58159d69/trace-ordered-17.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/bb570f0a96284ce1913a28cc58159d69/trace-ordered-17.stdout.txt",
+      "sha256": "f90eca0e2560adb1811d1a13199e439aeb693b825a47915b866aa4458233d134"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/bb570f0a96284ce1913a28cc58159d69/trace-ordered-18446744073709551615.process.json",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/bb570f0a96284ce1913a28cc58159d69/trace-ordered-18446744073709551615.process.json",
+      "sha256": "cd6a77dab0b28410da18d5a3509412ce0b96943dbac7549f5baaf608c19c3a3c"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/bb570f0a96284ce1913a28cc58159d69/trace-ordered-18446744073709551615.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/bb570f0a96284ce1913a28cc58159d69/trace-ordered-18446744073709551615.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/bb570f0a96284ce1913a28cc58159d69/trace-ordered-18446744073709551615.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/bb570f0a96284ce1913a28cc58159d69/trace-ordered-18446744073709551615.stdout.txt",
+      "sha256": "ea3d68ba86cd6a75074da589d80eea77ca6706c0feadc7d9eabb3a681e864ec6"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/bb570f0a96284ce1913a28cc58159d69/trace-revoke-0.process.json",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/bb570f0a96284ce1913a28cc58159d69/trace-revoke-0.process.json",
+      "sha256": "3dfe7c4fe9d8213ab8ad78cfe433e35422438538095bb3142c7d913aa19d8013"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/bb570f0a96284ce1913a28cc58159d69/trace-revoke-0.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/bb570f0a96284ce1913a28cc58159d69/trace-revoke-0.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/bb570f0a96284ce1913a28cc58159d69/trace-revoke-0.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/bb570f0a96284ce1913a28cc58159d69/trace-revoke-0.stdout.txt",
+      "sha256": "ff3d3ecab3a65e532ff8b8b8dfd17d55b01ceb92f2ef1bd843b83025b5563d49"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/bb570f0a96284ce1913a28cc58159d69/trace-revoke-17.process.json",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/bb570f0a96284ce1913a28cc58159d69/trace-revoke-17.process.json",
+      "sha256": "f1ecd4212f5355febc09d9bf9a08bbddb45a05bbcf85e7073e886f1bd04cb133"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/bb570f0a96284ce1913a28cc58159d69/trace-revoke-17.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/bb570f0a96284ce1913a28cc58159d69/trace-revoke-17.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/bb570f0a96284ce1913a28cc58159d69/trace-revoke-17.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/bb570f0a96284ce1913a28cc58159d69/trace-revoke-17.stdout.txt",
+      "sha256": "12d36bb4ef3d463317afe71b6b8311868402f36145c98e2308b62b8a373490cf"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/bb570f0a96284ce1913a28cc58159d69/trace-revoke-18446744073709551615.process.json",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/bb570f0a96284ce1913a28cc58159d69/trace-revoke-18446744073709551615.process.json",
+      "sha256": "f740aaed67421fbc022550f084e4e349f833dbca7a394b3233ecb4f98f7437d0"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/bb570f0a96284ce1913a28cc58159d69/trace-revoke-18446744073709551615.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/bb570f0a96284ce1913a28cc58159d69/trace-revoke-18446744073709551615.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/bb570f0a96284ce1913a28cc58159d69/trace-revoke-18446744073709551615.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/bb570f0a96284ce1913a28cc58159d69/trace-revoke-18446744073709551615.stdout.txt",
+      "sha256": "39cb9faa4163ea23ab3f672c62c45d0fb34aceda3a79ee4e40eec4431e442914"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/bb570f0a96284ce1913a28cc58159d69/trace-unload-0.process.json",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/bb570f0a96284ce1913a28cc58159d69/trace-unload-0.process.json",
+      "sha256": "7fafd773458bd62f5fe9943ca9f545971348dd7f00c6d4041376bff164945f76"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/bb570f0a96284ce1913a28cc58159d69/trace-unload-0.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/bb570f0a96284ce1913a28cc58159d69/trace-unload-0.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/bb570f0a96284ce1913a28cc58159d69/trace-unload-0.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/bb570f0a96284ce1913a28cc58159d69/trace-unload-0.stdout.txt",
+      "sha256": "db005d53b8b4f066eb7028b538a4956da00172ee8c991ffe4135a6e9bf4b18ab"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/bb570f0a96284ce1913a28cc58159d69/trace-unload-17.process.json",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/bb570f0a96284ce1913a28cc58159d69/trace-unload-17.process.json",
+      "sha256": "f2385698a0bb44041b5b55022e9dfccc24a254f72039b82b736f698dd97644e3"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/bb570f0a96284ce1913a28cc58159d69/trace-unload-17.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/bb570f0a96284ce1913a28cc58159d69/trace-unload-17.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/bb570f0a96284ce1913a28cc58159d69/trace-unload-17.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/bb570f0a96284ce1913a28cc58159d69/trace-unload-17.stdout.txt",
+      "sha256": "50a307dbcfa143809b8b3d45c9ba1b8719a9f921b749e66c4143139c28498667"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/bb570f0a96284ce1913a28cc58159d69/trace-unload-18446744073709551615.process.json",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/bb570f0a96284ce1913a28cc58159d69/trace-unload-18446744073709551615.process.json",
+      "sha256": "97fbf79964bc96d723e83adbc7eabbf93e902756cff57ef35b91dfbe2d2a0bce"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/bb570f0a96284ce1913a28cc58159d69/trace-unload-18446744073709551615.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/bb570f0a96284ce1913a28cc58159d69/trace-unload-18446744073709551615.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/bb570f0a96284ce1913a28cc58159d69/trace-unload-18446744073709551615.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/bb570f0a96284ce1913a28cc58159d69/trace-unload-18446744073709551615.stdout.txt",
+      "sha256": "2c28a0509cb195241e8bca9e5b05eca61d61c5f897c56df2096be0d7a727dff2"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/bb570f0a96284ce1913a28cc58159d69/wrong-value.first-divergence.json",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/bb570f0a96284ce1913a28cc58159d69/wrong-value.first-divergence.json",
+      "sha256": "2b61f457ac1aa35febe0c859beefde1ab7308077bdeb12e6fda04f0aa1a21320"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/root-control-identity-before/exit.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/root-control-identity-before/exit.txt",
+      "sha256": "bdc830287616dae1818ced3e7c186e1387155900ad30d5983ec02da1519c4a95"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/root-control-identity-before/lib.rs",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/root-control-identity-before/lib.rs",
+      "sha256": "d851f5c422f96a172d667ea7754a3bd396edbe7c6bea1be74c7e2c3aa2924a84"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/root-control-identity-before/regression.json",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/root-control-identity-before/regression.json",
+      "sha256": "15c437f3a0325c9d6f66fe29657ac97409124d6e97d28ec945d914ddc1520a2b"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/root-control-identity-before/regression.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/root-control-identity-before/regression.txt",
+      "sha256": "d9497a47d3f304865aac75904a6553ed6ae5f66c69f39f0cd1c20bd58c8a4f99"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/root-control-identity-before/tests.rs",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/root-control-identity-before/tests.rs",
+      "sha256": "170a9021778aef4f26218cd4b380eca17971011f8afb55237ab5e3b6d48f6b7c"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/3ad6629035de49d884d1769325b5f7fc/bad-scenario.process.json",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/3ad6629035de49d884d1769325b5f7fc/bad-scenario.process.json",
+      "sha256": "cdafa6b99a2459a5b59f08f9b5a448140c894555bae14bc147bfd1b6f21ae333"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/3ad6629035de49d884d1769325b5f7fc/bad-scenario.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/3ad6629035de49d884d1769325b5f7fc/bad-scenario.stderr.txt",
+      "sha256": "9bb0038c6058336024b28b9971fcc884b13b8c2d8404189208c99a23832e8adf"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/3ad6629035de49d884d1769325b5f7fc/bad-scenario.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/3ad6629035de49d884d1769325b5f7fc/bad-scenario.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/3ad6629035de49d884d1769325b5f7fc/bad-seed.process.json",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/3ad6629035de49d884d1769325b5f7fc/bad-seed.process.json",
+      "sha256": "135f57b7427e86bbf65ef9b65c8a79f1373b60b88b52f2bb0866f7a60aaaecb8"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/3ad6629035de49d884d1769325b5f7fc/bad-seed.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/3ad6629035de49d884d1769325b5f7fc/bad-seed.stderr.txt",
+      "sha256": "011c8fad0382b63dfec34d33c06b0764e4ae293b18efd9ad2341e03d6803d9de"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/3ad6629035de49d884d1769325b5f7fc/bad-seed.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/3ad6629035de49d884d1769325b5f7fc/bad-seed.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/3ad6629035de49d884d1769325b5f7fc/bad-session.process.json",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/3ad6629035de49d884d1769325b5f7fc/bad-session.process.json",
+      "sha256": "347f4b8d1450fc494fcc596fe25037ffdb66019d3a3034a041c3cd37e1c3f590"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/3ad6629035de49d884d1769325b5f7fc/bad-session.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/3ad6629035de49d884d1769325b5f7fc/bad-session.stderr.txt",
+      "sha256": "1bed19019ea2bd9191ca0befbe5105d83f2a3b17badf8d93b728e942c39acafd"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/3ad6629035de49d884d1769325b5f7fc/bad-session.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/3ad6629035de49d884d1769325b5f7fc/bad-session.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/3ad6629035de49d884d1769325b5f7fc/campaign.json",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/3ad6629035de49d884d1769325b5f7fc/campaign.json",
+      "sha256": "7f8e31e490824b8cda915017e4e0f817aba8132a69ebba4b2ce27e1cee82bead"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/3ad6629035de49d884d1769325b5f7fc/cargo-version.process.json",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/3ad6629035de49d884d1769325b5f7fc/cargo-version.process.json",
+      "sha256": "279a7dd023127af6a44573a3ec03afdbc4cf1eb07df4df3961de7a0afd9e6cf1"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/3ad6629035de49d884d1769325b5f7fc/cargo-version.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/3ad6629035de49d884d1769325b5f7fc/cargo-version.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/3ad6629035de49d884d1769325b5f7fc/cargo-version.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/3ad6629035de49d884d1769325b5f7fc/cargo-version.stdout.txt",
+      "sha256": "86c2d07f9968fd3174d9cff8c60a4d4323fba3166d5dc6dd36f0987a50677d70"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/3ad6629035de49d884d1769325b5f7fc/clippy.process.json",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/3ad6629035de49d884d1769325b5f7fc/clippy.process.json",
+      "sha256": "f52c294db9ee2522f7ba23b179f2ad60cb12ce7cf25002047981e5cbaa49acad"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/3ad6629035de49d884d1769325b5f7fc/clippy.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/3ad6629035de49d884d1769325b5f7fc/clippy.stderr.txt",
+      "sha256": "6b6793bd7e26478b0cd0ec18a17e2067d5950c0117b0f7a4bbba7dadbb39581e"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/3ad6629035de49d884d1769325b5f7fc/clippy.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/3ad6629035de49d884d1769325b5f7fc/clippy.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/3ad6629035de49d884d1769325b5f7fc/fmt.process.json",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/3ad6629035de49d884d1769325b5f7fc/fmt.process.json",
+      "sha256": "754eefba5d6b45908996a83b90c10c4dc71c97b8bbb64e1bb67df47d453eff78"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/3ad6629035de49d884d1769325b5f7fc/fmt.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/3ad6629035de49d884d1769325b5f7fc/fmt.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/3ad6629035de49d884d1769325b5f7fc/fmt.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/3ad6629035de49d884d1769325b5f7fc/fmt.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/3ad6629035de49d884d1769325b5f7fc/metadata.process.json",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/3ad6629035de49d884d1769325b5f7fc/metadata.process.json",
+      "sha256": "671f60b155448cb86b498adc97acdad5bcedc9505e22b1a896270361cde9d342"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/3ad6629035de49d884d1769325b5f7fc/metadata.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/3ad6629035de49d884d1769325b5f7fc/metadata.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/3ad6629035de49d884d1769325b5f7fc/metadata.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/3ad6629035de49d884d1769325b5f7fc/metadata.stdout.txt",
+      "sha256": "ba7fa0a4e3d66422ca9265a482ced78cd21b2a06fb48528ccedb9c0b9192e3e0"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/3ad6629035de49d884d1769325b5f7fc/reference-tests.process.json",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/3ad6629035de49d884d1769325b5f7fc/reference-tests.process.json",
+      "sha256": "92466ed5ccbc79c659ef6cca27e2264c5ae4f65cdd96f70384b0c4f5f0345c6b"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/3ad6629035de49d884d1769325b5f7fc/reference-tests.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/3ad6629035de49d884d1769325b5f7fc/reference-tests.stderr.txt",
+      "sha256": "3a20f6043b40c04a3fceff832c3cdc170b734c1adc57b3bab4404127e6aeab7f"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/3ad6629035de49d884d1769325b5f7fc/reference-tests.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/3ad6629035de49d884d1769325b5f7fc/reference-tests.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/3ad6629035de49d884d1769325b5f7fc/release.process.json",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/3ad6629035de49d884d1769325b5f7fc/release.process.json",
+      "sha256": "dfc852d03aad27f2ca056d79aa380ad64a15e74b88f01d4ed3426d1dbbb93f1a"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/3ad6629035de49d884d1769325b5f7fc/release.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/3ad6629035de49d884d1769325b5f7fc/release.stderr.txt",
+      "sha256": "c71d959e4bf91aa3f28ac2b40743f46ad837232022a24650bc39a85b021f1c5f"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/3ad6629035de49d884d1769325b5f7fc/release.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/3ad6629035de49d884d1769325b5f7fc/release.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/3ad6629035de49d884d1769325b5f7fc/reordered.first-divergence.json",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/3ad6629035de49d884d1769325b5f7fc/reordered.first-divergence.json",
+      "sha256": "5ab31c425038ab3a2be2fc7fc237bebbeb47ef04164ef71f019d1f2bf412fad4"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/3ad6629035de49d884d1769325b5f7fc/rust-sysroot.process.json",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/3ad6629035de49d884d1769325b5f7fc/rust-sysroot.process.json",
+      "sha256": "e15c49011c08c7ad16a7a6a55d141add364e7773671ebd0b9253e27424c98e10"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/3ad6629035de49d884d1769325b5f7fc/rust-sysroot.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/3ad6629035de49d884d1769325b5f7fc/rust-sysroot.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/3ad6629035de49d884d1769325b5f7fc/rust-sysroot.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/3ad6629035de49d884d1769325b5f7fc/rust-sysroot.stdout.txt",
+      "sha256": "e0d8249c2fb93ac2106d97fedd24f44420e0ee2316617df20f769f033eaf568d"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/3ad6629035de49d884d1769325b5f7fc/rust-tests.process.json",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/3ad6629035de49d884d1769325b5f7fc/rust-tests.process.json",
+      "sha256": "94f46df78c9fe6abaf69b24e5da2fec623f36cf352aafa547e9ecb8ee4cdd3d1"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/3ad6629035de49d884d1769325b5f7fc/rust-tests.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/3ad6629035de49d884d1769325b5f7fc/rust-tests.stderr.txt",
+      "sha256": "c5e3a09bbbf0d78805f722aa12431ac6bd0bb511ad2d15012ce81807ef28f741"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/3ad6629035de49d884d1769325b5f7fc/rust-tests.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/3ad6629035de49d884d1769325b5f7fc/rust-tests.stdout.txt",
+      "sha256": "5b927f9617cd944472de341a947674a51418b5c5aadc1bf7e115e4b5a5b23bdf"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/3ad6629035de49d884d1769325b5f7fc/rust-version.process.json",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/3ad6629035de49d884d1769325b5f7fc/rust-version.process.json",
+      "sha256": "44b4df0927c5c52f316d7f399370f55d33da56890c894412d50bdc651a51a354"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/3ad6629035de49d884d1769325b5f7fc/rust-version.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/3ad6629035de49d884d1769325b5f7fc/rust-version.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/3ad6629035de49d884d1769325b5f7fc/rust-version.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/3ad6629035de49d884d1769325b5f7fc/rust-version.stdout.txt",
+      "sha256": "c45e612575abeef05e99e88eb1e7aea52cddab9ad70d4f65ad20eaa65e92a9cf"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/3ad6629035de49d884d1769325b5f7fc/trace-arithmetic-0.process.json",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/3ad6629035de49d884d1769325b5f7fc/trace-arithmetic-0.process.json",
+      "sha256": "ad5f53e674d508f3580341a05c5ba3576e0a3260627b115f60f4b060fc504d34"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/3ad6629035de49d884d1769325b5f7fc/trace-arithmetic-0.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/3ad6629035de49d884d1769325b5f7fc/trace-arithmetic-0.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/3ad6629035de49d884d1769325b5f7fc/trace-arithmetic-0.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/3ad6629035de49d884d1769325b5f7fc/trace-arithmetic-0.stdout.txt",
+      "sha256": "f2000f9c720c5775d1f8aecea97a880a9c5e1232e29c0c3912e5adf60f7a3ccd"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/3ad6629035de49d884d1769325b5f7fc/trace-arithmetic-17.process.json",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/3ad6629035de49d884d1769325b5f7fc/trace-arithmetic-17.process.json",
+      "sha256": "89fe4d624abb93247a794e3c819d7089a0fa3ba53ba4cf88895d607ef34b1315"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/3ad6629035de49d884d1769325b5f7fc/trace-arithmetic-17.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/3ad6629035de49d884d1769325b5f7fc/trace-arithmetic-17.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/3ad6629035de49d884d1769325b5f7fc/trace-arithmetic-17.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/3ad6629035de49d884d1769325b5f7fc/trace-arithmetic-17.stdout.txt",
+      "sha256": "5be136acaccc009e93b721d94fc3c3ad2707a00db5720cc19f249c5114c86862"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/3ad6629035de49d884d1769325b5f7fc/trace-arithmetic-18446744073709551615.process.json",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/3ad6629035de49d884d1769325b5f7fc/trace-arithmetic-18446744073709551615.process.json",
+      "sha256": "05e349c0fd2faa4be8372fc6ce7ed7db8cc0e2465b9af201f45cfed5d4f6a92b"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/3ad6629035de49d884d1769325b5f7fc/trace-arithmetic-18446744073709551615.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/3ad6629035de49d884d1769325b5f7fc/trace-arithmetic-18446744073709551615.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/3ad6629035de49d884d1769325b5f7fc/trace-arithmetic-18446744073709551615.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/3ad6629035de49d884d1769325b5f7fc/trace-arithmetic-18446744073709551615.stdout.txt",
+      "sha256": "568834bfe6a304d8b18ffda5ac8df44d4c3619512a98cfe2eb10be211456f1bb"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/3ad6629035de49d884d1769325b5f7fc/trace-budget-0.process.json",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/3ad6629035de49d884d1769325b5f7fc/trace-budget-0.process.json",
+      "sha256": "c7f506dba2b972f6e8d11347dfc8984ee946cc3e1b5075370ec6981a81ec4782"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/3ad6629035de49d884d1769325b5f7fc/trace-budget-0.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/3ad6629035de49d884d1769325b5f7fc/trace-budget-0.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/3ad6629035de49d884d1769325b5f7fc/trace-budget-0.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/3ad6629035de49d884d1769325b5f7fc/trace-budget-0.stdout.txt",
+      "sha256": "3492b937327b959dfddcf8e707f3f4edb186f62de6615ffae079a722201b8fa3"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/3ad6629035de49d884d1769325b5f7fc/trace-budget-17.process.json",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/3ad6629035de49d884d1769325b5f7fc/trace-budget-17.process.json",
+      "sha256": "95f1241f4043127bf48b79217cee2330a1f1317270623771c678331427c57e68"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/3ad6629035de49d884d1769325b5f7fc/trace-budget-17.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/3ad6629035de49d884d1769325b5f7fc/trace-budget-17.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/3ad6629035de49d884d1769325b5f7fc/trace-budget-17.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/3ad6629035de49d884d1769325b5f7fc/trace-budget-17.stdout.txt",
+      "sha256": "ff01632a36386e736effc179043d1a4703733b9304512bad5ce3b99c2a6fcc49"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/3ad6629035de49d884d1769325b5f7fc/trace-budget-18446744073709551615.process.json",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/3ad6629035de49d884d1769325b5f7fc/trace-budget-18446744073709551615.process.json",
+      "sha256": "243d49513f01c361088bba8d89bc2932d99010e98aea0db3cf0ab96015bbe503"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/3ad6629035de49d884d1769325b5f7fc/trace-budget-18446744073709551615.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/3ad6629035de49d884d1769325b5f7fc/trace-budget-18446744073709551615.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/3ad6629035de49d884d1769325b5f7fc/trace-budget-18446744073709551615.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/3ad6629035de49d884d1769325b5f7fc/trace-budget-18446744073709551615.stdout.txt",
+      "sha256": "034d5ba8d914a8752d1a9c84ddaa0ed8a5983c942435d14e873bcae4236fe849"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/3ad6629035de49d884d1769325b5f7fc/trace-cancel-0.process.json",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/3ad6629035de49d884d1769325b5f7fc/trace-cancel-0.process.json",
+      "sha256": "2037ad840cc0ffe129fc8b5cf5cdcb3277d0e22bc606f1b78bcf646d707d2620"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/3ad6629035de49d884d1769325b5f7fc/trace-cancel-0.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/3ad6629035de49d884d1769325b5f7fc/trace-cancel-0.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/3ad6629035de49d884d1769325b5f7fc/trace-cancel-0.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/3ad6629035de49d884d1769325b5f7fc/trace-cancel-0.stdout.txt",
+      "sha256": "8238dc9c19b7b839957618b5a643225f4bba60c2c881943788b2a4a904a8edd5"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/3ad6629035de49d884d1769325b5f7fc/trace-cancel-17.process.json",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/3ad6629035de49d884d1769325b5f7fc/trace-cancel-17.process.json",
+      "sha256": "f638c722574a426f57e0e208caf8ba8f7581796265dc6edfcffe176b02a75576"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/3ad6629035de49d884d1769325b5f7fc/trace-cancel-17.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/3ad6629035de49d884d1769325b5f7fc/trace-cancel-17.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/3ad6629035de49d884d1769325b5f7fc/trace-cancel-17.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/3ad6629035de49d884d1769325b5f7fc/trace-cancel-17.stdout.txt",
+      "sha256": "f5f090f4f45dd8cd725c6cbcaff351f1fb3159bfafcf0f6b8faab3ad3d57b942"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/3ad6629035de49d884d1769325b5f7fc/trace-cancel-18446744073709551615.process.json",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/3ad6629035de49d884d1769325b5f7fc/trace-cancel-18446744073709551615.process.json",
+      "sha256": "272e95e621052f90c5770cf98eed9a94d66f7a4321d814e12c59251f54353078"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/3ad6629035de49d884d1769325b5f7fc/trace-cancel-18446744073709551615.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/3ad6629035de49d884d1769325b5f7fc/trace-cancel-18446744073709551615.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/3ad6629035de49d884d1769325b5f7fc/trace-cancel-18446744073709551615.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/3ad6629035de49d884d1769325b5f7fc/trace-cancel-18446744073709551615.stdout.txt",
+      "sha256": "4b98721a7c67089ed7e903015beeccb1915cee66daaf8b1e8334aa04ee77511d"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/3ad6629035de49d884d1769325b5f7fc/trace-conflict-0.process.json",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/3ad6629035de49d884d1769325b5f7fc/trace-conflict-0.process.json",
+      "sha256": "4baef1789818af0bcff4a278bf539ee5e236f3cf11bad5c25ce9369175241705"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/3ad6629035de49d884d1769325b5f7fc/trace-conflict-0.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/3ad6629035de49d884d1769325b5f7fc/trace-conflict-0.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/3ad6629035de49d884d1769325b5f7fc/trace-conflict-0.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/3ad6629035de49d884d1769325b5f7fc/trace-conflict-0.stdout.txt",
+      "sha256": "5f46309f01f16b8289e0b6525a7e90f67a05412257b4bc9cebf0758814ab8b36"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/3ad6629035de49d884d1769325b5f7fc/trace-conflict-17.process.json",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/3ad6629035de49d884d1769325b5f7fc/trace-conflict-17.process.json",
+      "sha256": "b1ec10eb23b74bf5a769dde1e49c1eaf0023a35dea53923fcad50d05ef34092c"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/3ad6629035de49d884d1769325b5f7fc/trace-conflict-17.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/3ad6629035de49d884d1769325b5f7fc/trace-conflict-17.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/3ad6629035de49d884d1769325b5f7fc/trace-conflict-17.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/3ad6629035de49d884d1769325b5f7fc/trace-conflict-17.stdout.txt",
+      "sha256": "a04a92254d95d252291daf66d682bbe9617c796eb9eb8daf726f0e5016bcd787"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/3ad6629035de49d884d1769325b5f7fc/trace-conflict-18446744073709551615.process.json",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/3ad6629035de49d884d1769325b5f7fc/trace-conflict-18446744073709551615.process.json",
+      "sha256": "7b0454e18dd3b26245c9c704be9c2d27a33fb262199ab45d325f174d68ecbe40"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/3ad6629035de49d884d1769325b5f7fc/trace-conflict-18446744073709551615.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/3ad6629035de49d884d1769325b5f7fc/trace-conflict-18446744073709551615.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/3ad6629035de49d884d1769325b5f7fc/trace-conflict-18446744073709551615.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/3ad6629035de49d884d1769325b5f7fc/trace-conflict-18446744073709551615.stdout.txt",
+      "sha256": "b7ff5670264526ed51adb0d4fd37001c1492fb380621cf8bbbd4a553a28be81a"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/3ad6629035de49d884d1769325b5f7fc/trace-deadline-0.process.json",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/3ad6629035de49d884d1769325b5f7fc/trace-deadline-0.process.json",
+      "sha256": "3cf986633b10d8545359d82025df2420f34dd026ba0f068a81f8c6ee4df0380d"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/3ad6629035de49d884d1769325b5f7fc/trace-deadline-0.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/3ad6629035de49d884d1769325b5f7fc/trace-deadline-0.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/3ad6629035de49d884d1769325b5f7fc/trace-deadline-0.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/3ad6629035de49d884d1769325b5f7fc/trace-deadline-0.stdout.txt",
+      "sha256": "6cd6f99835ffd6174a249ecd6f84e0ede040332b900d0f7e23fc3b4c1ee2100a"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/3ad6629035de49d884d1769325b5f7fc/trace-deadline-17.process.json",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/3ad6629035de49d884d1769325b5f7fc/trace-deadline-17.process.json",
+      "sha256": "2889d73dfcb38a7020d222454adb7f7fc2cebe9a9d5f184dd9daa620ec918283"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/3ad6629035de49d884d1769325b5f7fc/trace-deadline-17.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/3ad6629035de49d884d1769325b5f7fc/trace-deadline-17.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/3ad6629035de49d884d1769325b5f7fc/trace-deadline-17.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/3ad6629035de49d884d1769325b5f7fc/trace-deadline-17.stdout.txt",
+      "sha256": "3b833f535a06e974613370f1796798f82d199ed6136787906534a8ff7f48f04a"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/3ad6629035de49d884d1769325b5f7fc/trace-deadline-18446744073709551615.process.json",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/3ad6629035de49d884d1769325b5f7fc/trace-deadline-18446744073709551615.process.json",
+      "sha256": "f896c8f0344229693a2e754768bf1329a467ee441588ccbd9bf7336df2e61896"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/3ad6629035de49d884d1769325b5f7fc/trace-deadline-18446744073709551615.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/3ad6629035de49d884d1769325b5f7fc/trace-deadline-18446744073709551615.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/3ad6629035de49d884d1769325b5f7fc/trace-deadline-18446744073709551615.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/3ad6629035de49d884d1769325b5f7fc/trace-deadline-18446744073709551615.stdout.txt",
+      "sha256": "661939a843d0b110f7d204bbf40985e22ac0bb6a34911fde04d121b7d5a71932"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/3ad6629035de49d884d1769325b5f7fc/trace-external-0.process.json",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/3ad6629035de49d884d1769325b5f7fc/trace-external-0.process.json",
+      "sha256": "6693149f5986c2b8595643395854bd9aae5d5a6ab35a223a7df01c57c11f6efb"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/3ad6629035de49d884d1769325b5f7fc/trace-external-0.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/3ad6629035de49d884d1769325b5f7fc/trace-external-0.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/3ad6629035de49d884d1769325b5f7fc/trace-external-0.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/3ad6629035de49d884d1769325b5f7fc/trace-external-0.stdout.txt",
+      "sha256": "08e413afada508374a79d41c8ffcd57086859cce624eee04dd44c30fd0493846"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/3ad6629035de49d884d1769325b5f7fc/trace-external-17.process.json",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/3ad6629035de49d884d1769325b5f7fc/trace-external-17.process.json",
+      "sha256": "efba7ab5594153a5eb42f710872eee3765f8691dbe5413a73e9f003ee662db87"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/3ad6629035de49d884d1769325b5f7fc/trace-external-17.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/3ad6629035de49d884d1769325b5f7fc/trace-external-17.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/3ad6629035de49d884d1769325b5f7fc/trace-external-17.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/3ad6629035de49d884d1769325b5f7fc/trace-external-17.stdout.txt",
+      "sha256": "8b95c38b9ed0da0816a8469bfc6fd5e89cb0a65e72b52db80ac7e86a63535e69"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/3ad6629035de49d884d1769325b5f7fc/trace-external-18446744073709551615.process.json",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/3ad6629035de49d884d1769325b5f7fc/trace-external-18446744073709551615.process.json",
+      "sha256": "b2dac96ea81fe6c956f0dac613c704e8fdcb4efac7343a8df92e0824205f76df"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/3ad6629035de49d884d1769325b5f7fc/trace-external-18446744073709551615.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/3ad6629035de49d884d1769325b5f7fc/trace-external-18446744073709551615.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/3ad6629035de49d884d1769325b5f7fc/trace-external-18446744073709551615.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/3ad6629035de49d884d1769325b5f7fc/trace-external-18446744073709551615.stdout.txt",
+      "sha256": "2f33a323ffbad2dd391e8b2a0b18ba450e005145b345d2d10ba882a57cb6c5e4"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/3ad6629035de49d884d1769325b5f7fc/trace-ordered-0.process.json",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/3ad6629035de49d884d1769325b5f7fc/trace-ordered-0.process.json",
+      "sha256": "27f0c6a9733b20a04f009c5db15df6d47c69aa35dc4729880cc99fa1edd78ae9"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/3ad6629035de49d884d1769325b5f7fc/trace-ordered-0.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/3ad6629035de49d884d1769325b5f7fc/trace-ordered-0.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/3ad6629035de49d884d1769325b5f7fc/trace-ordered-0.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/3ad6629035de49d884d1769325b5f7fc/trace-ordered-0.stdout.txt",
+      "sha256": "dfae0789533d2598e1125a3110f275f510619d9e0b6193599561563d162bccad"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/3ad6629035de49d884d1769325b5f7fc/trace-ordered-17.process.json",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/3ad6629035de49d884d1769325b5f7fc/trace-ordered-17.process.json",
+      "sha256": "37b0212aa2e41b7f28d02a72794fc3654b563f376a7e0e0f83c4ba21c304fadd"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/3ad6629035de49d884d1769325b5f7fc/trace-ordered-17.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/3ad6629035de49d884d1769325b5f7fc/trace-ordered-17.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/3ad6629035de49d884d1769325b5f7fc/trace-ordered-17.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/3ad6629035de49d884d1769325b5f7fc/trace-ordered-17.stdout.txt",
+      "sha256": "da385123dec3ef1a79635300454192e3aff134fb12fe57786275e88cd1da7891"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/3ad6629035de49d884d1769325b5f7fc/trace-ordered-18446744073709551615.process.json",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/3ad6629035de49d884d1769325b5f7fc/trace-ordered-18446744073709551615.process.json",
+      "sha256": "1c58464eb34c07642acf33116ccd4edf79601d74ae309607eae5e02ec8a1cecc"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/3ad6629035de49d884d1769325b5f7fc/trace-ordered-18446744073709551615.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/3ad6629035de49d884d1769325b5f7fc/trace-ordered-18446744073709551615.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/3ad6629035de49d884d1769325b5f7fc/trace-ordered-18446744073709551615.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/3ad6629035de49d884d1769325b5f7fc/trace-ordered-18446744073709551615.stdout.txt",
+      "sha256": "326d6b8afefbfe591519ce5c26f9d5ba0d01a215bcbef926326fbfeb557ee97b"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/3ad6629035de49d884d1769325b5f7fc/trace-revoke-0.process.json",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/3ad6629035de49d884d1769325b5f7fc/trace-revoke-0.process.json",
+      "sha256": "6c5f6dec309f94a8daa28d8f92db1b06f70e81f87d8ba3c7ea83930c48c45fbc"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/3ad6629035de49d884d1769325b5f7fc/trace-revoke-0.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/3ad6629035de49d884d1769325b5f7fc/trace-revoke-0.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/3ad6629035de49d884d1769325b5f7fc/trace-revoke-0.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/3ad6629035de49d884d1769325b5f7fc/trace-revoke-0.stdout.txt",
+      "sha256": "2abe3e13418f6fdde6e62dbc7eee1e2965ab70e062e1f9ba15982956eb1a11ff"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/3ad6629035de49d884d1769325b5f7fc/trace-revoke-17.process.json",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/3ad6629035de49d884d1769325b5f7fc/trace-revoke-17.process.json",
+      "sha256": "402cd601188e9666921ca34bbf1045bd0b79200cbfaf20bac5fe47f1ae291be7"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/3ad6629035de49d884d1769325b5f7fc/trace-revoke-17.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/3ad6629035de49d884d1769325b5f7fc/trace-revoke-17.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/3ad6629035de49d884d1769325b5f7fc/trace-revoke-17.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/3ad6629035de49d884d1769325b5f7fc/trace-revoke-17.stdout.txt",
+      "sha256": "db3175d1c4de25ad6b08d7228c5f149dc45a0b41527bd87406d4c55d96275b8a"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/3ad6629035de49d884d1769325b5f7fc/trace-revoke-18446744073709551615.process.json",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/3ad6629035de49d884d1769325b5f7fc/trace-revoke-18446744073709551615.process.json",
+      "sha256": "8d132fe4adeebed55be83b6621de091a1811ac87dcdd16a58ddba274940c04e5"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/3ad6629035de49d884d1769325b5f7fc/trace-revoke-18446744073709551615.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/3ad6629035de49d884d1769325b5f7fc/trace-revoke-18446744073709551615.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/3ad6629035de49d884d1769325b5f7fc/trace-revoke-18446744073709551615.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/3ad6629035de49d884d1769325b5f7fc/trace-revoke-18446744073709551615.stdout.txt",
+      "sha256": "b8b343847197ca54e7cf9866e06b1c2328c3def8c04f6184fcf595dc85627b11"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/3ad6629035de49d884d1769325b5f7fc/trace-unload-0.process.json",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/3ad6629035de49d884d1769325b5f7fc/trace-unload-0.process.json",
+      "sha256": "f632ac0f0b84cad24288c925a2a689a2de06455e478bb9bccb4aa192a91c6c76"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/3ad6629035de49d884d1769325b5f7fc/trace-unload-0.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/3ad6629035de49d884d1769325b5f7fc/trace-unload-0.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/3ad6629035de49d884d1769325b5f7fc/trace-unload-0.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/3ad6629035de49d884d1769325b5f7fc/trace-unload-0.stdout.txt",
+      "sha256": "bc25fbba361186af5cf3f71e127662c1e4df9ab54969e0ae4384a90a3d2772a0"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/3ad6629035de49d884d1769325b5f7fc/trace-unload-17.process.json",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/3ad6629035de49d884d1769325b5f7fc/trace-unload-17.process.json",
+      "sha256": "b3b2ae3884f5a1acf330efa866c758c751b68677533fccfc2dc92c469c4317d5"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/3ad6629035de49d884d1769325b5f7fc/trace-unload-17.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/3ad6629035de49d884d1769325b5f7fc/trace-unload-17.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/3ad6629035de49d884d1769325b5f7fc/trace-unload-17.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/3ad6629035de49d884d1769325b5f7fc/trace-unload-17.stdout.txt",
+      "sha256": "6948fa3d1acdf2ba07d0e3b046a33d5f12f06f0b7f277a0123ff1df14f57ab9c"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/3ad6629035de49d884d1769325b5f7fc/trace-unload-18446744073709551615.process.json",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/3ad6629035de49d884d1769325b5f7fc/trace-unload-18446744073709551615.process.json",
+      "sha256": "e23876a3706a55e642378a49fea4756f4127d43c22537dbb72e1ce454b0cc883"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/3ad6629035de49d884d1769325b5f7fc/trace-unload-18446744073709551615.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/3ad6629035de49d884d1769325b5f7fc/trace-unload-18446744073709551615.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/3ad6629035de49d884d1769325b5f7fc/trace-unload-18446744073709551615.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/3ad6629035de49d884d1769325b5f7fc/trace-unload-18446744073709551615.stdout.txt",
+      "sha256": "4a66fe8829a64a43f835c4cc9215c96edd05b2dd393814e0686bdfe5cecd3808"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/3ad6629035de49d884d1769325b5f7fc/wrong-value.first-divergence.json",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/3ad6629035de49d884d1769325b5f7fc/wrong-value.first-divergence.json",
+      "sha256": "802e96612baf63cc2c2adda49be284e98c6626a70ea339927fddd52197ce97ee"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/root-final/bad-scenario.process.json",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/root-final/bad-scenario.process.json",
+      "sha256": "e89b90dc4b7ef8b0549f09aca52a13cf73a60f05e43563d6d27dab2ba6b447d9"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/root-final/bad-scenario.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/root-final/bad-scenario.stderr.txt",
+      "sha256": "9bb0038c6058336024b28b9971fcc884b13b8c2d8404189208c99a23832e8adf"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/root-final/bad-scenario.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/root-final/bad-scenario.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/root-final/bad-seed.process.json",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/root-final/bad-seed.process.json",
+      "sha256": "3111bedee40acb4d20ee5bf7f3060859b31817ed14d1896758bc94d4386830a4"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/root-final/bad-seed.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/root-final/bad-seed.stderr.txt",
+      "sha256": "011c8fad0382b63dfec34d33c06b0764e4ae293b18efd9ad2341e03d6803d9de"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/root-final/bad-seed.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/root-final/bad-seed.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/root-final/bad-session.process.json",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/root-final/bad-session.process.json",
+      "sha256": "9ab77d8400e8612cb3de40abdb4a19c8c47014c296c202e0405d064e11108d44"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/root-final/bad-session.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/root-final/bad-session.stderr.txt",
+      "sha256": "1bed19019ea2bd9191ca0befbe5105d83f2a3b17badf8d93b728e942c39acafd"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/root-final/bad-session.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/root-final/bad-session.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/root-final/campaign.json",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/root-final/campaign.json",
+      "sha256": "57bd4d8f56588b50aab79bf9a027304909b4158f88a39df95c153ae08e909961"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/root-final/cargo-version.process.json",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/root-final/cargo-version.process.json",
+      "sha256": "748c670e3e9020fc3a8e2977498ab54dc731cf24e310c1c2a753a7acc8bddb49"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/root-final/cargo-version.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/root-final/cargo-version.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/root-final/cargo-version.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/root-final/cargo-version.stdout.txt",
+      "sha256": "86c2d07f9968fd3174d9cff8c60a4d4323fba3166d5dc6dd36f0987a50677d70"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/root-final/clippy.process.json",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/root-final/clippy.process.json",
+      "sha256": "cd15f7079205e544e56fe126861020f7c057d7b086e9ed883396003c3eaf7f04"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/root-final/clippy.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/root-final/clippy.stderr.txt",
+      "sha256": "e3cfed7cacd2a605333707dacb84fd714b74385b1c8250d5038e988654f7618b"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/root-final/clippy.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/root-final/clippy.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/root-final/fmt.process.json",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/root-final/fmt.process.json",
+      "sha256": "8748d2c67452982ac9e5a08fcbd1f057086760535b57b418be832810ab1a74d9"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/root-final/fmt.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/root-final/fmt.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/root-final/fmt.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/root-final/fmt.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/root-final/metadata.process.json",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/root-final/metadata.process.json",
+      "sha256": "948584d396dd48cf586d6fcdd7afddaf80ef765c35fd240bf84de6fedb971f04"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/root-final/metadata.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/root-final/metadata.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/root-final/metadata.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/root-final/metadata.stdout.txt",
+      "sha256": "ba7fa0a4e3d66422ca9265a482ced78cd21b2a06fb48528ccedb9c0b9192e3e0"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/root-final/reference-tests.process.json",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/root-final/reference-tests.process.json",
+      "sha256": "685d3c86218c040669f3106b41f3f6d666e58e4dfb7a0014ee354c62ac380483"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/root-final/reference-tests.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/root-final/reference-tests.stderr.txt",
+      "sha256": "a515f87e3328c2b6e5eb61e4cc6dee508bb989fb2582550eb6c7a8bed862fd99"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/root-final/reference-tests.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/root-final/reference-tests.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/root-final/release.process.json",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/root-final/release.process.json",
+      "sha256": "9713bd0d1deca5b0cd3533d0d5bb194d139b64ea42c357ef87799bb2415b362c"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/root-final/release.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/root-final/release.stderr.txt",
+      "sha256": "8985b6db1a6bf4f0284694a059479ead343f73eff261cf34d849690e9db1cdce"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/root-final/release.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/root-final/release.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/root-final/reordered.first-divergence.json",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/root-final/reordered.first-divergence.json",
+      "sha256": "23912c1be4f9e80e7b8ed89392627dfca2db53d0f9fd40807acdcccd5414f4cc"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/root-final/rust-sysroot.process.json",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/root-final/rust-sysroot.process.json",
+      "sha256": "db4e303eff66229fcd9f8908ac6bc88286be0b2da17d2fce61042cf3e1f941a7"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/root-final/rust-sysroot.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/root-final/rust-sysroot.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/root-final/rust-sysroot.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/root-final/rust-sysroot.stdout.txt",
+      "sha256": "e0d8249c2fb93ac2106d97fedd24f44420e0ee2316617df20f769f033eaf568d"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/root-final/rust-tests.process.json",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/root-final/rust-tests.process.json",
+      "sha256": "1ae0c571ccd2964eb1964614c7aaec0fb7884806d9356443e6b72471937cc4a7"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/root-final/rust-tests.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/root-final/rust-tests.stderr.txt",
+      "sha256": "ff941e941c64163b671f8d8ce45145504f20532af1f11e547bb0f7485fc85c6a"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/root-final/rust-tests.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/root-final/rust-tests.stdout.txt",
+      "sha256": "7ca3e2d19d3711b4cb3d12fcd4dd5f4e0abffcbb5572ef87dc46ce1bf0d753d4"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/root-final/rust-version.process.json",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/root-final/rust-version.process.json",
+      "sha256": "8d77302b70cb88c2caa6664206cf9ba32f40a997fa03b4964b2e3b1b9cbc5eb8"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/root-final/rust-version.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/root-final/rust-version.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/root-final/rust-version.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/root-final/rust-version.stdout.txt",
+      "sha256": "c45e612575abeef05e99e88eb1e7aea52cddab9ad70d4f65ad20eaa65e92a9cf"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/root-final/trace-arithmetic-0.process.json",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/root-final/trace-arithmetic-0.process.json",
+      "sha256": "68695013ff68cf40250e8102c589e981d59dd0bee1f081af869384ddefb09a5e"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/root-final/trace-arithmetic-0.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/root-final/trace-arithmetic-0.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/root-final/trace-arithmetic-0.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/root-final/trace-arithmetic-0.stdout.txt",
+      "sha256": "c666296b91df5798de443db0e79f0c63ec9546b297badbd2361a28c501d18748"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/root-final/trace-arithmetic-17.process.json",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/root-final/trace-arithmetic-17.process.json",
+      "sha256": "1c52955d8b23a2a4208d65b02dcf4812d0852aca54e4d576e354b8207c472727"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/root-final/trace-arithmetic-17.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/root-final/trace-arithmetic-17.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/root-final/trace-arithmetic-17.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/root-final/trace-arithmetic-17.stdout.txt",
+      "sha256": "190f1b25db26aface249cb83de3aae913c67e1df6df7936466232d6bde71ef72"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/root-final/trace-arithmetic-18446744073709551615.process.json",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/root-final/trace-arithmetic-18446744073709551615.process.json",
+      "sha256": "13086d55188605a6ed7e2044a86e23c820c28a25bb0cca273ca20d71356c03b3"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/root-final/trace-arithmetic-18446744073709551615.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/root-final/trace-arithmetic-18446744073709551615.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/root-final/trace-arithmetic-18446744073709551615.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/root-final/trace-arithmetic-18446744073709551615.stdout.txt",
+      "sha256": "c62627e008a470a5521242297cceafe0862dba3bce9ce10bfe97e58f65240980"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/root-final/trace-budget-0.process.json",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/root-final/trace-budget-0.process.json",
+      "sha256": "adb9f8ff3499c2dd3a8b29802d9368b75d639bd24a47aabb63d239ab17aef322"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/root-final/trace-budget-0.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/root-final/trace-budget-0.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/root-final/trace-budget-0.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/root-final/trace-budget-0.stdout.txt",
+      "sha256": "aa2e43532ab0c039c198e9311bf5313f279ec2ca240c0c3b7489751fa448c286"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/root-final/trace-budget-17.process.json",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/root-final/trace-budget-17.process.json",
+      "sha256": "44190575ae4f755c2fd77828ffb3636f7f6b6bce50c48c18f481c5a5bc4e7f24"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/root-final/trace-budget-17.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/root-final/trace-budget-17.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/root-final/trace-budget-17.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/root-final/trace-budget-17.stdout.txt",
+      "sha256": "ee886aa6ee2bb6c9ea6001f1592a259c9c6969853c96f69703264bbf3b1b5aef"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/root-final/trace-budget-18446744073709551615.process.json",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/root-final/trace-budget-18446744073709551615.process.json",
+      "sha256": "fdc59945f6ab892b909a5999781f0bde692c34909cc64bc1c27ce7eb46037183"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/root-final/trace-budget-18446744073709551615.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/root-final/trace-budget-18446744073709551615.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/root-final/trace-budget-18446744073709551615.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/root-final/trace-budget-18446744073709551615.stdout.txt",
+      "sha256": "3eb110f75e429bcc1fc189d600b784d12b2b2db72a2b7de0287a4749a46736eb"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/root-final/trace-cancel-0.process.json",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/root-final/trace-cancel-0.process.json",
+      "sha256": "6c29482e5aaf821a7a781f64b0ba1a08f25c0630b943d6cb28a1e7b8d5c12913"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/root-final/trace-cancel-0.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/root-final/trace-cancel-0.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/root-final/trace-cancel-0.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/root-final/trace-cancel-0.stdout.txt",
+      "sha256": "33616aa964cd201e09c42a9ea007be9142610f4899a120ef03d7dd4f887e1c0a"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/root-final/trace-cancel-17.process.json",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/root-final/trace-cancel-17.process.json",
+      "sha256": "862f388b7574d01818f5ecdeea954bef3103b36aea31262615157b66361e4653"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/root-final/trace-cancel-17.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/root-final/trace-cancel-17.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/root-final/trace-cancel-17.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/root-final/trace-cancel-17.stdout.txt",
+      "sha256": "a8a0751a70d4ac0c1dbed554047d98eb4af3813bb6e0e230a237732ab25da5c5"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/root-final/trace-cancel-18446744073709551615.process.json",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/root-final/trace-cancel-18446744073709551615.process.json",
+      "sha256": "83f6e10a675e89c936fd4e66fba8bc5fc8d48d9050b4c10a80013a1ac0bcf55a"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/root-final/trace-cancel-18446744073709551615.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/root-final/trace-cancel-18446744073709551615.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/root-final/trace-cancel-18446744073709551615.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/root-final/trace-cancel-18446744073709551615.stdout.txt",
+      "sha256": "d47f200027d358c2648334f017a5f1345938a657d53383750c4863ab4144829f"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/root-final/trace-conflict-0.process.json",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/root-final/trace-conflict-0.process.json",
+      "sha256": "8caef3dbaa90258e39c8ca3bad647eca36c0411803786d94d9caf5a512f41516"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/root-final/trace-conflict-0.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/root-final/trace-conflict-0.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/root-final/trace-conflict-0.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/root-final/trace-conflict-0.stdout.txt",
+      "sha256": "bc23a81b746a564d51c16556baf814651a0b70f71d0ebd2cc07183539b3277a8"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/root-final/trace-conflict-17.process.json",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/root-final/trace-conflict-17.process.json",
+      "sha256": "f032757dca0c7f5a43b1e0f974ac577a3a56082b85e03811414191b6deb7295c"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/root-final/trace-conflict-17.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/root-final/trace-conflict-17.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/root-final/trace-conflict-17.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/root-final/trace-conflict-17.stdout.txt",
+      "sha256": "620df6439c24c9378f1f00587783d4e6921e6b34a5a7b5a073cbc95c442f1cbe"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/root-final/trace-conflict-18446744073709551615.process.json",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/root-final/trace-conflict-18446744073709551615.process.json",
+      "sha256": "69f1766f3a05341f29bad3d2910085bc8985897fe7966aca001a0e97242cb0b2"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/root-final/trace-conflict-18446744073709551615.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/root-final/trace-conflict-18446744073709551615.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/root-final/trace-conflict-18446744073709551615.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/root-final/trace-conflict-18446744073709551615.stdout.txt",
+      "sha256": "177b4e84533d322ddc933313f0eacdb8d43068ed9387e7a442e0c2737b27e935"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/root-final/trace-deadline-0.process.json",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/root-final/trace-deadline-0.process.json",
+      "sha256": "0276157cf2afa2c3109b0be20801f4c44d4ee139dbc4fafcd3f07119dedac936"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/root-final/trace-deadline-0.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/root-final/trace-deadline-0.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/root-final/trace-deadline-0.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/root-final/trace-deadline-0.stdout.txt",
+      "sha256": "dcd58b2738bd1673940f31243cd45c8d77b8eae3ce6136a9d5265b4ec78ea80f"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/root-final/trace-deadline-17.process.json",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/root-final/trace-deadline-17.process.json",
+      "sha256": "c146de499c0d366785288907b01dd45b40d3981ce18d6794412e51725530be72"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/root-final/trace-deadline-17.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/root-final/trace-deadline-17.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/root-final/trace-deadline-17.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/root-final/trace-deadline-17.stdout.txt",
+      "sha256": "eba6cb0c77e3c8c00fc97bc13438670786e121ae21247f83326298794aea68be"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/root-final/trace-deadline-18446744073709551615.process.json",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/root-final/trace-deadline-18446744073709551615.process.json",
+      "sha256": "412ceaf85738b714504258ba740708820b1ca6a6647300d0a830244ea12a2d93"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/root-final/trace-deadline-18446744073709551615.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/root-final/trace-deadline-18446744073709551615.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/root-final/trace-deadline-18446744073709551615.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/root-final/trace-deadline-18446744073709551615.stdout.txt",
+      "sha256": "01695b4ca6751aa625d2d050517806aaf5db33a54f4121992bdbd5d66b5e0b66"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/root-final/trace-external-0.process.json",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/root-final/trace-external-0.process.json",
+      "sha256": "a03ef29b94c177034068465fcd4d967751d3203177c8ab498affc2b32ccb7848"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/root-final/trace-external-0.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/root-final/trace-external-0.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/root-final/trace-external-0.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/root-final/trace-external-0.stdout.txt",
+      "sha256": "a5b655567ecc29c289b37b37a441ae146721ca56d5f9aa604778ef65c8b61536"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/root-final/trace-external-17.process.json",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/root-final/trace-external-17.process.json",
+      "sha256": "7ab6f81150224bff1afad27ab61dbd3f1322390bfe9bca8e36d48c3b5f5a0f2c"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/root-final/trace-external-17.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/root-final/trace-external-17.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/root-final/trace-external-17.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/root-final/trace-external-17.stdout.txt",
+      "sha256": "f05809b451fae1b9e3d54bf797b82ddb561d8040fdb44d42c57a97f322f33608"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/root-final/trace-external-18446744073709551615.process.json",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/root-final/trace-external-18446744073709551615.process.json",
+      "sha256": "2a5f43ffe8f8545f58e589c42e8c61ff0ac2758617ad4d48334b26aa17bd2564"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/root-final/trace-external-18446744073709551615.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/root-final/trace-external-18446744073709551615.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/root-final/trace-external-18446744073709551615.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/root-final/trace-external-18446744073709551615.stdout.txt",
+      "sha256": "9811fa2c7d5e77179a19651965ea43cdef902740ab85d1fa4a56d3d228aa9c16"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/root-final/trace-ordered-0.process.json",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/root-final/trace-ordered-0.process.json",
+      "sha256": "7afa87b621565dc7f0523ce21068f27885e9f1635a4a0e67692685d8bd801391"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/root-final/trace-ordered-0.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/root-final/trace-ordered-0.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/root-final/trace-ordered-0.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/root-final/trace-ordered-0.stdout.txt",
+      "sha256": "9b25d2d01ce43dc9917a52c6d74207faa83d04143c0aeba9b794f2aa201c6996"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/root-final/trace-ordered-17.process.json",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/root-final/trace-ordered-17.process.json",
+      "sha256": "1fbb750adf6e214faf89f5a2f399f01baca74bade57bcf659b8f3d21deac0bcd"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/root-final/trace-ordered-17.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/root-final/trace-ordered-17.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/root-final/trace-ordered-17.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/root-final/trace-ordered-17.stdout.txt",
+      "sha256": "040e5fdd7773b40e69209e5ea4f599a8db4e3f8e081c72a041c791864811f0b3"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/root-final/trace-ordered-18446744073709551615.process.json",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/root-final/trace-ordered-18446744073709551615.process.json",
+      "sha256": "3674b8056e85e184c107b6ab335332ee0d9b5070992575e3fb43702ece6d73c9"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/root-final/trace-ordered-18446744073709551615.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/root-final/trace-ordered-18446744073709551615.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/root-final/trace-ordered-18446744073709551615.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/root-final/trace-ordered-18446744073709551615.stdout.txt",
+      "sha256": "14074288c73f8850f37b2803a0846caaf65221c7bd72020111d51fef93cc6edb"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/root-final/trace-revoke-0.process.json",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/root-final/trace-revoke-0.process.json",
+      "sha256": "7c6183d4545c38b6c645ba00d388d28e3394fb73c1c09e04b44914ac2d32bf41"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/root-final/trace-revoke-0.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/root-final/trace-revoke-0.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/root-final/trace-revoke-0.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/root-final/trace-revoke-0.stdout.txt",
+      "sha256": "71695fbb57d9b6405448d28ad8fafe2ac91d1583202a679a3075cd344ea24360"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/root-final/trace-revoke-17.process.json",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/root-final/trace-revoke-17.process.json",
+      "sha256": "786e6b7dbd3e2428f5793f1fd0fe49cd399b1fae38ceea1e1cc596bbc6457a2e"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/root-final/trace-revoke-17.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/root-final/trace-revoke-17.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/root-final/trace-revoke-17.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/root-final/trace-revoke-17.stdout.txt",
+      "sha256": "51039b01da45212de790828cb3b3538788a49c2825a3958a7bf1d2cd2d31580a"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/root-final/trace-revoke-18446744073709551615.process.json",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/root-final/trace-revoke-18446744073709551615.process.json",
+      "sha256": "db5116a5bc0337e11ff8a450025182bb6f0bc7f6291d30ffade2e8f885be7b61"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/root-final/trace-revoke-18446744073709551615.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/root-final/trace-revoke-18446744073709551615.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/root-final/trace-revoke-18446744073709551615.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/root-final/trace-revoke-18446744073709551615.stdout.txt",
+      "sha256": "24ae03d93f1777784c0a3363293d90a16b8155159cb580ef68a974f59e019034"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/root-final/trace-unload-0.process.json",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/root-final/trace-unload-0.process.json",
+      "sha256": "ac45dcf9e7eedd93bf08ea0b1f270e66d44efb19f6d522a36d66f71a035f4e44"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/root-final/trace-unload-0.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/root-final/trace-unload-0.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/root-final/trace-unload-0.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/root-final/trace-unload-0.stdout.txt",
+      "sha256": "9c9a34c09098c147cd46a64ca1f06065a8d964e293713c50a090b00c782560f0"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/root-final/trace-unload-17.process.json",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/root-final/trace-unload-17.process.json",
+      "sha256": "3f8c2946f691f4a99414af8331ea588859720881784cd26cf198d6a6b30d1b5a"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/root-final/trace-unload-17.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/root-final/trace-unload-17.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/root-final/trace-unload-17.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/root-final/trace-unload-17.stdout.txt",
+      "sha256": "183ed781af8edca172515d4f1ad42e1c06e8d440ce814351bb66e41a8618e327"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/root-final/trace-unload-18446744073709551615.process.json",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/root-final/trace-unload-18446744073709551615.process.json",
+      "sha256": "8e129ee2a722eaa11576454395714f050d819f3b2299be85a81460830d327bb0"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/root-final/trace-unload-18446744073709551615.stderr.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/root-final/trace-unload-18446744073709551615.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/root-final/trace-unload-18446744073709551615.stdout.txt",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/root-final/trace-unload-18446744073709551615.stdout.txt",
+      "sha256": "91fe0946c2f7c3eb925ae064ad093242b6ddaa1fb17642c07dd50d9bfa2fb640"
+    },
+    {
+      "original_path": "target/semantic-scheduler-prototype/root-final/wrong-value.first-divergence.json",
+      "retained_path": "machine/architecture-hardening/h12-scheduler-evidence/root-final/wrong-value.first-divergence.json",
+      "sha256": "b257e3d7e1d9878a800a1b33ae7de491b83d5cb09bf99e9863fc80cad392fbb4"
+    }
+  ],
+  "final_receipt": "machine/architecture-hardening/h12-scheduler-evidence/root-final/campaign.json",
+  "final_receipt_sha256": "57bd4d8f56588b50aab79bf9a027304909b4158f88a39df95c153ae08e909961",
+  "current_source_bindings": {
+    "D:\\minecraftrust-astra-hardening\\crates\\semantic-scheduler-prototype\\Cargo.toml": "319182a5def7d457e4669491606893eb5265af85e0441e7b5de703fa26c11172",
+    "D:\\minecraftrust-astra-hardening\\crates\\semantic-scheduler-prototype\\Cargo.lock": "22d09909d0dc7100fa43806e1b377b4cd308735759549c7b0098b685dae54451",
+    "D:\\minecraftrust-astra-hardening\\crates\\semantic-scheduler-prototype\\mechanisms-research.json": "54f39752a1a9b3c346fcf88b71aa6188f0d8c64f90e33c9be5858570c2178796",
+    "D:\\minecraftrust-astra-hardening\\crates\\semantic-scheduler-prototype\\reference.py": "8b96cd848ea389001cb3c2e671861a589ffce7517130df9b5592cf0085a3832a",
+    "D:\\minecraftrust-astra-hardening\\crates\\semantic-scheduler-prototype\\run.py": "d0013bb084d25e0ea66f4b25784864617f9e621a14c47143d4e4a963dab140d0",
+    "D:\\minecraftrust-astra-hardening\\crates\\semantic-scheduler-prototype\\test_reference.py": "18ee4c5a04deaacc0a8af8bdee1151eea62a9184aed2900660d88829144b80aa",
+    "D:\\minecraftrust-astra-hardening\\crates\\semantic-scheduler-prototype\\src\\lib.rs": "e7a1d771e803718c488add0b507a8b8f33beb29153261f31d72d0827abfb23de",
+    "D:\\minecraftrust-astra-hardening\\crates\\semantic-scheduler-prototype\\src\\tests.rs": "bdcead156a2aef896ebd5aaa2927b00d6f5b255ab8a8bf2b3a0484b431d73d01",
+    "D:\\minecraftrust-astra-hardening\\crates\\semantic-scheduler-prototype\\examples\\boundaries.rs": "61fc93f3af7b02309ed79e1c7059f59d4c5dde0efd7a5448d26b0f02019838c1",
+    "D:\\minecraftrust-astra-hardening\\tools\\testing\\hardening_guard.py": "a2062b3ffbec7edba79bf5f5954fbcb1e9d97492ab9c4bb541833ebb820bdb6d",
+    "D:\\minecraftrust-astra-hardening\\machine\\architecture-hardening\\isolation.json": "8f9b34b55f6ecc1d549da1ec4c42900b4a831a3072a9e4aa6aa2ae39cae53d93",
+    "D:\\minecraftrust-astra-hardening\\docs\\architecture\\semantic-scheduler.md": "ebaf2c9ccf121acf5283977a7fa3b3efd24e65cc140dd9fa4381fa5a783263f5"
+  },
+  "test_counts": {
+    "rust_unit_tests": 28,
+    "rust_compile_fail_tests": 4,
+    "python_tests": 6,
+    "independent_boundary_comparisons": 891,
+    "ordered_decisions": 864
+  },
+  "process_checks": 39,
+  "external_dependencies": 0,
+  "review_fix": {
+    "defect": "Bare numeric sequence accepted by dispatch/cancel could control a different scheduler task with the same number.",
+    "evidence": "Both new foreign-control regressions fail against saved old lib.rs; prior foreign-completion test passes.",
+    "fix": "Opaque TaskId with private retained Arc origin and sequence; reject origin before lookup, reaping or mutation. Numeric trace sequence is inspection-only.",
+    "verification": "Origin, clone, stale, drop/recreation and compile-fail controls; independent root full campaign PASS."
+  },
+  "limits": [
+    "Closed bounded affine integer jobs only, not Minecraft/Forge semantics or tick parity",
+    "Offline privately issued model token is not actual H4/H6 runtime qualification",
+    "No real compression, packet, worldgen, disk or callback adapters",
+    "Cooperative deadlines and unwind handling, not hard preemption/abort recovery",
+    "Logical reservation excludes allocator overhead, OS stacks/RSS and caller-owned histories",
+    "Demonstration executor joins and is not a responsive live-controller event loop",
+    "No performance claim; six external mechanisms remain STUDY with no dependency added"
+  ]
+}

@@ -1,0 +1,183 @@
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 11 tests
+test tests::test_abi_version_rejection ... ok
+test tests::test_capacity_boundary_conditions ... ok
+test tests::test_empty_chunk_biomes_only ... ok
+test tests::test_malformed_duplicate_section_index ... ok
+test tests::test_malformed_truncated_staging ... ok
+test tests::test_palette_overflow ... ok
+test tests::test_malformed_section_mask_mismatch ... ok
+test tests::test_unsupported_palette_width ... ok
+test tests::test_predict_output_len_matches_encode ... ok
+test tests::test_global_palette_wire_omission ... ok
+test tests::test_single_section_with_skylight ... ok
+
+test result: ok. 11 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 14 tests
+test tests::backend_pin_is_recorded ... ok
+test frame::tests::disabled_frame_layout ... ok
+test frame::tests::below_threshold_passthrough ... ok
+test frame::tests::threshold_zero_compresses_everything ... ok
+test tests::level_bounds ... ok
+test frame::tests::at_threshold_compresses ... ok
+test frame::tests::capacity_error_is_clean_and_retryable ... ok
+test frame::tests::consecutive_frames_independent_streams ... ok
+test tests::insufficient_capacity_is_checked_before_writes ... ok
+test frame::tests::varint_boundaries ... ok
+test tests::threshold_adjacent_sizes ... ok
+test tests::incompressible_expansion_stays_within_bound ... ok
+test frame::tests::empty_body_invalid_and_body_too_large ... ok
+test tests::roundtrip_cases ... ok
+
+test result: ok. 14 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.14s
+
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 3 tests
+test tests::test_blockpos_packing_roundtrip ... ok
+test tests::test_block_to_chunk_and_local ... ok
+test tests::test_against_golden_coordinates_corpus ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 11 tests
+test owned_snapshot::tests::owned_lifecycle_failure_carries_no_success_fields ... ok
+test owned_snapshot::tests::owned_pointer_overlap_and_numeric_errors_fail_before_dereference ... ok
+test owned_snapshot::tests::owned_empty_v2_success_and_malformed_retry ... ok
+test packet_encode_v2::tests::current_and_unknown_encoder_errors_remain_failures ... ok
+test packet_encode_v2::tests::every_failure_is_canonical_and_has_no_success_tag_interpretation ... ok
+test packet_encode_v2::tests::success_layout_is_positive_and_lossless_at_boundaries ... ok
+test packet_encode_v2::tests::unrepresentable_success_becomes_only_an_error ... ok
+test packet_encode_v2::tests::poisoned_native_state_is_rejected_without_success_metadata ... ok
+test packet_encode_v2::tests::boundary_invokes_operation_once_on_success_error_and_panic ... ok
+test packet_encode_v2::properties::v2_roundtrip_and_corrupted_reserved_bits ... ok
+test packet_encode_v2::properties::errors_have_no_success_fields_and_retry_is_independent ... ok
+
+test result: ok. 11 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 8 tests
+test tests::fixed_operation_ids_are_unique_and_in_range ... ok
+test tests::sum_overflow_is_explicit_not_a_smaller_transfer ... ok
+test tests::partial_accounting_never_becomes_a_complete_total ... ok
+test tests::concurrent_known_and_unknown_observations_keep_separate_counts ... ok
+test tests::contained_panic_invalidates_normal_path_copy_and_allocation_proofs ... ok
+test tests::operation_ids_never_contribute_to_bytes_and_unknown_is_not_zero ... ok
+test tests::explicit_zero_and_unobserved_are_distinct ... ok
+test tests::unwind_records_an_unknown_failed_observation ... ok
+
+test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 2 tests
+test counter_tests::exhausted_resource_counter_never_publishes_a_partial_resource ... ok
+test counter_tests::exhausted_owner_counter_does_not_release_java_or_wrap ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 10 tests
+test tests::test_section_index_mapping ... ok
+test tests::test_section_blocks_and_wire ... ok
+test tests::test_registry_lifecycle_and_invalidation ... ok
+test tests::test_light_only_refresh ... ok
+test tests::test_zero_copy_consumers ... ok
+test tests::test_versioned_snapshot_model ... ok
+test tests::test_section_refresh_model ... ok
+test tests::test_dimension_scoped_keys_no_aliasing ... ok
+test tests::test_chunk_primer_bidirectional_roundtrip ... ok
+test tests::test_refresh_then_mutation_then_refresh_cycle ... ok
+
+test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 6 tests
+test tests::test_tape_cursor_lookup ... ok
+test tests::test_unknown_mod_tag_preservation ... ok
+test tests::test_arrays_roundtrip ... ok
+test tests::test_mutf8_null_and_surrogates ... ok
+test tests::test_primitive_roundtrip ... ok
+test tests::test_depth_limit_enforced ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 4 tests
+test tests::insert_remove_and_buckets_free ... ok
+test tests::negative_and_huge_coordinates_round_trip ... ok
+test tests::deterministic_point_queries ... ok
+test tests::fan_out_and_memory_bounds ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 7 tests
+test tests::empty_map_query_misses ... ok
+test tests::invalid_start_never_matches ... ok
+test tests::exact_hit_component_and_first_match ... ok
+test tests::negative_and_huge_coordinates ... ok
+test tests::tombstone_removes_visibility ... ok
+test tests::update_box_moves_membership ... ok
+test tests::parity_against_linear_reference ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.04s
+
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 12 tests
+test field::tests::assembly_runs_and_biome_weights_match_reference ... ok
+test tests::java_random_lcg_reference_vector ... ok
+test tests::deterministic_and_seed_sensitive ... ok
+test tests::outputs_finite_and_bounded ... ok
+test terrain::tests::test_pure_air_terrain ... ok
+test terrain::tests::test_pure_stone_terrain ... ok
+test terrain::tests::test_parity_matches_column_major_on_real_density ... ok
+test terrain::tests::test_chunk_primer_index_bijection ... ok
+test field::tests::xlane_single_matches_scalar_bit_exact ... ok
+test field_complete::tests::complete_matches_scalar_pipeline_bit_exact ... ok
+test terrain::tests::test_parity_matches_column_major_multi_chunk ... ok
+test simd::tests::batched_simd_matches_scalar_bit_exact ... ok
+
+test result: ok. 12 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.62s
+

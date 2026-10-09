@@ -1,0 +1,149 @@
+{
+  "mc_version": "1.12.2",
+  "_comment": [
+    "Symbol-index source configuration. Paths are candidate lists: the first",
+    "existing entry wins. Every build records the resolved paths and their",
+    "SHA-256s into the database meta table, so an index is always",
+    "reproducible/auditable regardless of which candidate was used.",
+    "Override with: python tools/symbols/rustcraft_symbols.py build --sources FILE"
+  ],
+  "mappings": [
+    {
+      "name": "MCP joined.srg (notch -> SRG)",
+      "version": "mcp-1.12.2 (ForgeGradle classic cache)",
+      "format": "joined_srg",
+      "required": true,
+      "paths": [
+        "C:/Users/Siagi/.gradle/caches/minecraft/de/oceanlabs/mcp/mcp/1.12.2/joined.srg"
+      ]
+    },
+    {
+      "name": "MCP snapshot 20171003 methods.csv (SRG -> MCP)",
+      "version": "snapshot_20171003",
+      "format": "mcp_methods_csv",
+      "required": true,
+      "paths": [
+        "C:/Users/Siagi/.gradle/caches/minecraft/de/oceanlabs/mcp/mcp_snapshot/20171003/methods.csv"
+      ]
+    },
+    {
+      "name": "MCP snapshot 20171003 fields.csv (SRG -> MCP)",
+      "version": "snapshot_20171003",
+      "format": "mcp_fields_csv",
+      "required": true,
+      "paths": [
+        "C:/Users/Siagi/.gradle/caches/minecraft/de/oceanlabs/mcp/mcp_snapshot/20171003/fields.csv"
+      ]
+    }
+  ],
+  "artifacts": [
+    {
+      "layer": "VANILLA_NOTCH",
+      "name": "Minecraft 1.12.2 dedicated server (notch)",
+      "member_namespace": "notch",
+      "entry_filter": "mc",
+      "anchor": true,
+      "required": true,
+      "note": "Server jar as distributed; bundled libraries are excluded by the mc entry filter (mapping universe).",
+      "paths": [
+        "C:/Users/Siagi/.gradle/caches/forge_gradle/mcp_repo/de/oceanlabs/mcp/mcp_config/1.12.2/joined/downloadServer/server.jar",
+        "C:/rustcraft/target/authority-smoke/runtimeA/minecraft_server.1.12.2.jar"
+      ]
+    },
+    {
+      "layer": "VANILLA_CLIENT_NOTCH",
+      "name": "Minecraft 1.12.2 client (notch)",
+      "member_namespace": "notch",
+      "entry_filter": "all",
+      "required": false,
+      "note": "Client-only classes absent from the server jar; also makes FORGE_PATCHED (merged jar) fully comparable.",
+      "paths": [
+        "C:/Users/Siagi/curseforge/minecraft/Install/versions/1.12.2/1.12.2.jar"
+      ]
+    },
+    {
+      "layer": "FORGE_PATCHED",
+      "name": "Forge 14.23.5.2847 binpatched merged jar (notch)",
+      "member_namespace": "notch",
+      "entry_filter": "all",
+      "forge_version": "14.23.5.2847",
+      "required": false,
+      "note": "Vanilla bytes + Forge binary patches. Per-method code hashes compare against VANILLA_NOTCH to expose what Forge changed.",
+      "paths": [
+        "C:/Users/Siagi/.gradle/caches/minecraft/net/minecraftforge/forge/1.12.2-14.23.5.2847/snapshot/20171003/forge-1.12.2-14.23.5.2847-binpatched.jar"
+      ]
+    },
+    {
+      "layer": "FORGE_PATCHED_MCP",
+      "name": "Forge 14.23.5.2864 recompiled, MCP snapshot 20171003 naming",
+      "member_namespace": "mcp",
+      "entry_filter": "all",
+      "forge_version": "14.23.5.2864",
+      "required": false,
+      "note": "Human-readable MCP names. Recompiled from patched sources: code hashes are NOT comparable to runtime jars; use FORGE_PATCHED for byte-level diffing.",
+      "paths": [
+        "C:/Users/Siagi/.gradle/caches/forge_gradle/minecraft_user_repo/net/minecraftforge/forge/1.12.2-14.23.5.2864_mapped_snapshot_20171003-1.12/forge-1.12.2-14.23.5.2864_mapped_snapshot_20171003-1.12.jar"
+      ]
+    },
+    {
+      "layer": "FORGE_MOD",
+      "name": "Forge universal 14.23.5.2846",
+      "member_namespace": "srg",
+      "entry_filter": "all",
+      "forge_version": "14.23.5.2846",
+      "required": false,
+      "note": "The Forge mod itself (net.minecraftforge, net.minecraftforge.fml).",
+      "paths": [
+        "C:/rustcraft/target/authority-smoke/runtimeC/forge-1.12.2-14.23.5.2846-universal.jar"
+      ]
+    },
+    {
+      "layer": "LIVE_TRANSFORMED",
+      "name": "Runtime-transformed class dump (sc-bisect-obs campaign)",
+      "member_namespace": "srg",
+      "entry_filter": "all",
+      "kind": "dir",
+      "forge_version": "14.23.5.2860",
+      "campaign_id": "sc-bisect-obs",
+      "required": false,
+      "note": "Classes as the live LaunchClassLoader actually defined them (SRG names, post-transform bytecode). Runtime was Forge 14.23.5.2860 with the Target C mod set, so live bytes = vanilla + Forge-2860 runtime-applied binary patches + mod coremods. Partial coverage: only classes dumped by that campaign. Machine-local, under target/.",
+      "paths": [
+        "C:/rustcraft/target/authority-smoke/sc-bisect-obs/server/transformed"
+      ]
+    },
+    {
+      "layer": "MOD_JAR",
+      "name": "phosphor-forge-mc1.12.2-0.2.7-universal.jar",
+      "member_namespace": "srg",
+      "entry_filter": "all",
+      "required": false,
+      "note": "The mod currently targeted by the light-authority work (Target C pack copy).",
+      "paths": [
+        "C:/rustcraft/target/authority-review/collision-profile-C/server/mods/phosphor-forge-mc1.12.2-0.2.7-universal.jar"
+      ]
+    },
+    {
+      "layer": "MOD_JAR",
+      "name": "journeymap-1.12.2-5.5.5.jar",
+      "member_namespace": "srg",
+      "entry_filter": "all",
+      "required": false,
+      "note": "Second Target C mod as a worked example.",
+      "paths": [
+        "C:/rustcraft/target/authority-review/collision-profile-C/server/mods/journeymap-1.12.2-5.5.5.jar"
+      ]
+    },
+    {
+      "layer": "MOD_JAR",
+      "name": "rustcraft campaign coremod classes",
+      "member_namespace": "srg",
+      "entry_filter": "all",
+      "kind": "dir",
+      "required": false,
+      "note": "RustCraft's own transformer/hook/bridge classes (target/campaign-coremod-build).",
+      "paths": [
+        "C:/rustcraft/target/campaign-coremod-build"
+      ]
+    }
+  ]
+}

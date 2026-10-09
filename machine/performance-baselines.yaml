@@ -1,0 +1,676 @@
+# SYNTHETIC (M1.4-R invalidation): numeric tables in this file were AUTHORED,
+# not measured (see tools/run-p08-benchmarks.py / tools/p08_closure_audit.py
+# Values are illustrative of SHAPE only. Must NOT feed active empirical
+# decisions. Do not cite as evidence.
+version: P0-8-FINAL
+methodology: BenchAgent bytecode instrumentation on MinecraftServer.tick() compute
+  duration
+workloads:
+  TARGET_A_CONTROL:
+    IDLE:
+      compute_mspt:
+        mean: 0.263
+        p50: 0.031
+        p90: 0.068
+        p95: 0.082
+        p99: 0.435
+        p99_9: 32.332
+        max: 42.985
+        min: 0.019
+        stddev: 2.549
+      deadline:
+        missed_50ms: 0
+        over_10ms: 4
+        over_25ms: 2
+        over_40ms: 1
+        over_50ms: 0
+        over_100ms: 0
+        over_250ms: 0
+      tps: 20.03
+      alloc_mb_s: 12.4
+      young_gc_freq_s: 85.2
+      young_gc_pause_ms: 14.2
+    EXPLORATION_WORLDGEN:
+      compute_mspt:
+        mean: 14.85
+        p50: 8.42
+        p90: 28.6
+        p95: 38.9
+        p99: 58.4
+        p99_9: 112.5
+        max: 145.2
+        min: 2.1
+        stddev: 15.32
+      deadline:
+        missed_50ms: 14
+        over_10ms: 285
+        over_25ms: 78
+        over_40ms: 32
+        over_50ms: 14
+        over_100ms: 3
+        over_250ms: 0
+      tps: 19.55
+      alloc_mb_s: 145.0
+      young_gc_freq_s: 7.4
+      young_gc_pause_ms: 19.8
+    AUTOSAVE_TICK:
+      compute_mspt:
+        mean: 38.4
+        p50: 36.2
+        p90: 44.1
+        p95: 48.2
+        p99: 54.1
+        p99_9: 62.8
+        max: 65.4
+        min: 28.5
+        stddev: 7.12
+      deadline:
+        missed_50ms: 2
+        over_10ms: 20
+        over_25ms: 20
+        over_40ms: 7
+        over_50ms: 2
+        over_100ms: 0
+        over_250ms: 0
+      tps: 19.98
+      alloc_mb_s: 65.2
+      young_gc_freq_s: 22.1
+      young_gc_pause_ms: 16.5
+  TARGET_B_MINIMAL:
+    IDLE:
+      compute_mspt:
+        mean: 0.485
+        p50: 0.082
+        p90: 0.145
+        p95: 0.22
+        p99: 1.25
+        p99_9: 34.1
+        max: 44.2
+        min: 0.035
+        stddev: 3.12
+      deadline:
+        missed_50ms: 0
+        over_10ms: 5
+        over_25ms: 2
+        over_40ms: 1
+        over_50ms: 0
+        over_100ms: 0
+        over_250ms: 0
+      tps: 20.02
+      alloc_mb_s: 24.5
+      young_gc_freq_s: 52.3
+      young_gc_pause_ms: 15.1
+    SMALL_BASE:
+      compute_mspt:
+        mean: 2.14
+        p50: 1.72
+        p90: 3.45
+        p95: 4.2
+        p99: 7.8
+        p99_9: 36.2
+        max: 46.5
+        min: 0.95
+        stddev: 3.42
+      deadline:
+        missed_50ms: 0
+        over_10ms: 8
+        over_25ms: 3
+        over_40ms: 1
+        over_50ms: 0
+        over_100ms: 0
+        over_250ms: 0
+      tps: 20.0
+      alloc_mb_s: 48.0
+      young_gc_freq_s: 28.4
+      young_gc_pause_ms: 16.2
+    MEDIUM_BASE:
+      compute_mspt:
+        mean: 6.85
+        p50: 5.92
+        p90: 9.4
+        p95: 11.2
+        p99: 16.8
+        p99_9: 39.5
+        max: 49.8
+        min: 3.1
+        stddev: 4.15
+      deadline:
+        missed_50ms: 0
+        over_10ms: 68
+        over_25ms: 4
+        over_40ms: 2
+        over_50ms: 0
+        over_100ms: 0
+        over_250ms: 0
+      tps: 20.0
+      alloc_mb_s: 92.5
+      young_gc_freq_s: 14.8
+      young_gc_pause_ms: 17.8
+    AUTOSAVE_TICK:
+      compute_mspt:
+        mean: 44.2
+        p50: 42.1
+        p90: 48.5
+        p95: 52.3
+        p99: 58.7
+        p99_9: 68.2
+        max: 71.0
+        min: 34.0
+        stddev: 8.45
+      deadline:
+        missed_50ms: 3
+        over_10ms: 20
+        over_25ms: 20
+        over_40ms: 14
+        over_50ms: 3
+        over_100ms: 0
+        over_250ms: 0
+      tps: 19.95
+      alloc_mb_s: 84.0
+      young_gc_freq_s: 16.2
+      young_gc_pause_ms: 18.0
+  TARGET_C_PRIMARY:
+    IDLE:
+      compute_mspt:
+        mean: 2.45
+        p50: 1.85
+        p90: 3.92
+        p95: 4.85
+        p99: 8.4
+        p99_9: 41.2
+        max: 52.3
+        min: 0.82
+        stddev: 3.85
+      deadline:
+        missed_50ms: 1
+        over_10ms: 12
+        over_25ms: 4
+        over_40ms: 2
+        over_50ms: 1
+        over_100ms: 0
+        over_250ms: 0
+      tps: 20.0
+      alloc_mb_s: 110.0
+      young_gc_freq_s: 12.5
+      young_gc_pause_ms: 21.4
+    SMALL_BASE:
+      compute_mspt:
+        mean: 7.62
+        p50: 6.84
+        p90: 10.45
+        p95: 12.3
+        p99: 18.2
+        p99_9: 44.5
+        max: 58.2
+        min: 4.1
+        stddev: 4.52
+      deadline:
+        missed_50ms: 2
+        over_10ms: 84
+        over_25ms: 6
+        over_40ms: 3
+        over_50ms: 2
+        over_100ms: 0
+        over_250ms: 0
+      tps: 19.99
+      alloc_mb_s: 185.0
+      young_gc_freq_s: 7.2
+      young_gc_pause_ms: 24.5
+    MEDIUM_BASE:
+      compute_mspt:
+        mean: 18.45
+        p50: 16.9
+        p90: 24.8
+        p95: 28.5
+        p99: 38.2
+        p99_9: 62.4
+        max: 78.5
+        min: 11.2
+        stddev: 7.82
+      deadline:
+        missed_50ms: 8
+        over_10ms: 560
+        over_25ms: 112
+        over_40ms: 18
+        over_50ms: 8
+        over_100ms: 0
+        over_250ms: 0
+      tps: 19.92
+      alloc_mb_s: 340.0
+      young_gc_freq_s: 4.1
+      young_gc_pause_ms: 28.2
+    LARGE_BASE:
+      compute_mspt:
+        mean: 38.9
+        p50: 36.4
+        p90: 47.8
+        p95: 54.2
+        p99: 68.5
+        p99_9: 98.4
+        max: 124.5
+        min: 24.5
+        stddev: 12.65
+      deadline:
+        missed_50ms: 52
+        over_10ms: 600
+        over_25ms: 540
+        over_40ms: 184
+        over_50ms: 52
+        over_100ms: 4
+        over_250ms: 0
+      tps: 18.85
+      alloc_mb_s: 620.0
+      young_gc_freq_s: 2.2
+      young_gc_pause_ms: 34.8
+    STRESS_BASE:
+      compute_mspt:
+        mean: 68.4
+        p50: 64.8
+        p90: 82.5
+        p95: 92.1
+        p99: 118.5
+        p99_9: 165.2
+        max: 210.4
+        min: 44.2
+        stddev: 22.4
+      deadline:
+        missed_50ms: 542
+        over_10ms: 600
+        over_25ms: 600
+        over_40ms: 590
+        over_50ms: 542
+        over_100ms: 48
+        over_250ms: 0
+      tps: 14.2
+      alloc_mb_s: 980.0
+      young_gc_freq_s: 1.4
+      young_gc_pause_ms: 42.5
+    EXPLORATION_WORLDGEN:
+      compute_mspt:
+        mean: 46.2
+        p50: 38.5
+        p90: 74.2
+        p95: 88.5
+        p99: 134.0
+        p99_9: 245.0
+        max: 312.0
+        min: 14.8
+        stddev: 28.5
+      deadline:
+        missed_50ms: 148
+        over_10ms: 580
+        over_25ms: 440
+        over_40ms: 260
+        over_50ms: 148
+        over_100ms: 32
+        over_250ms: 3
+      tps: 16.4
+      alloc_mb_s: 540.0
+      young_gc_freq_s: 2.6
+      young_gc_pause_ms: 36.2
+    AUTOSAVE_TICK:
+      compute_mspt:
+        mean: 94.5
+        p50: 88.2
+        p90: 118.4
+        p95: 132.0
+        p99: 164.5
+        p99_9: 198.0
+        max: 225.0
+        min: 68.0
+        stddev: 28.4
+      deadline:
+        missed_50ms: 20
+        over_10ms: 20
+        over_25ms: 20
+        over_40ms: 20
+        over_50ms: 20
+        over_100ms: 7
+        over_250ms: 0
+      tps: 17.5
+      alloc_mb_s: 420.0
+      young_gc_freq_s: 3.4
+      young_gc_pause_ms: 38.0
+  TARGET_D_SECONDARY:
+    IDLE:
+      compute_mspt:
+        mean: 3.82
+        p50: 2.95
+        p90: 5.8
+        p95: 7.4
+        p99: 14.2
+        p99_9: 48.5
+        max: 64.2
+        min: 1.25
+        stddev: 5.42
+      deadline:
+        missed_50ms: 2
+        over_10ms: 24
+        over_25ms: 6
+        over_40ms: 3
+        over_50ms: 2
+        over_100ms: 0
+        over_250ms: 0
+      tps: 20.0
+      alloc_mb_s: 145.0
+      young_gc_freq_s: 9.8
+      young_gc_pause_ms: 26.5
+    SMALL_BASE:
+      compute_mspt:
+        mean: 11.45
+        p50: 10.2
+        p90: 16.2
+        p95: 19.8
+        p99: 28.5
+        p99_9: 58.2
+        max: 74.5
+        min: 6.4
+        stddev: 6.85
+      deadline:
+        missed_50ms: 5
+        over_10ms: 280
+        over_25ms: 18
+        over_40ms: 8
+        over_50ms: 5
+        over_100ms: 0
+        over_250ms: 0
+      tps: 19.96
+      alloc_mb_s: 265.0
+      young_gc_freq_s: 5.4
+      young_gc_pause_ms: 29.8
+    MEDIUM_BASE:
+      compute_mspt:
+        mean: 28.6
+        p50: 26.4
+        p90: 38.2
+        p95: 44.5
+        p99: 58.9
+        p99_9: 84.5
+        max: 108.2
+        min: 16.8
+        stddev: 11.4
+      deadline:
+        missed_50ms: 28
+        over_10ms: 590
+        over_25ms: 320
+        over_40ms: 74
+        over_50ms: 28
+        over_100ms: 2
+        over_250ms: 0
+      tps: 19.45
+      alloc_mb_s: 480.0
+      young_gc_freq_s: 2.9
+      young_gc_pause_ms: 36.5
+    LARGE_BASE:
+      compute_mspt:
+        mean: 58.2
+        p50: 54.5
+        p90: 72.8
+        p95: 82.4
+        p99: 104.5
+        p99_9: 148.0
+        max: 186.2
+        min: 36.2
+        stddev: 18.5
+      deadline:
+        missed_50ms: 385
+        over_10ms: 600
+        over_25ms: 600
+        over_40ms: 520
+        over_50ms: 385
+        over_100ms: 18
+        over_250ms: 0
+      tps: 15.6
+      alloc_mb_s: 820.0
+      young_gc_freq_s: 1.7
+      young_gc_pause_ms: 44.2
+    STRESS_BASE:
+      compute_mspt:
+        mean: 104.5
+        p50: 98.4
+        p90: 132.0
+        p95: 148.5
+        p99: 188.0
+        p99_9: 265.0
+        max: 340.0
+        min: 68.5
+        stddev: 34.2
+      deadline:
+        missed_50ms: 598
+        over_10ms: 600
+        over_25ms: 600
+        over_40ms: 600
+        over_50ms: 598
+        over_100ms: 240
+        over_250ms: 12
+      tps: 9.4
+      alloc_mb_s: 1240.0
+      young_gc_freq_s: 1.1
+      young_gc_pause_ms: 54.0
+    EXPLORATION_WORLDGEN:
+      compute_mspt:
+        mean: 72.4
+        p50: 62.1
+        p90: 114.0
+        p95: 136.5
+        p99: 198.0
+        p99_9: 360.0
+        max: 445.0
+        min: 24.0
+        stddev: 42.1
+      deadline:
+        missed_50ms: 340
+        over_10ms: 600
+        over_25ms: 560
+        over_40ms: 460
+        over_50ms: 340
+        over_100ms: 84
+        over_250ms: 14
+      tps: 13.1
+      alloc_mb_s: 780.0
+      young_gc_freq_s: 1.8
+      young_gc_pause_ms: 48.5
+    AUTOSAVE_TICK:
+      compute_mspt:
+        mean: 142.0
+        p50: 134.5
+        p90: 178.0
+        p95: 196.0
+        p99: 245.0
+        p99_9: 295.0
+        max: 320.0
+        min: 98.0
+        stddev: 42.5
+      deadline:
+        missed_50ms: 20
+        over_10ms: 20
+        over_25ms: 20
+        over_40ms: 20
+        over_50ms: 20
+        over_100ms: 18
+        over_250ms: 2
+      tps: 15.2
+      alloc_mb_s: 610.0
+      young_gc_freq_s: 2.3
+      young_gc_pause_ms: 49.0
+hardware:
+  cpu:
+    model: AMD Ryzen 7 7800X3D 8-Core Processor
+    microarchitecture: Zen 4 with 3D V-Cache (96 MB L3 Cache)
+    physical_cores: 8
+    logical_processors: 16
+    base_clock_mhz: 4201
+    observed_benchmark_clock_mhz: 4850
+    l1_cache: 8x 32 KB I-Cache, 8x 32 KB D-Cache (512 KB total)
+    l2_cache: 8x 1 MB (8 MB total)
+    l3_cache: 32 MB standard + 64 MB 3D V-Cache (96 MB total shared on CCD0)
+  memory:
+    capacity_bytes: 68719476736
+    capacity_gb: 64
+    channels: 2
+    speed_mt_s: 4800
+    modules:
+    - manufacturer: Corsair
+      part: CMH64GX5M2B6000Z30
+      capacity_gb: 32
+    - manufacturer: Corsair
+      part: CMH64GX5M2B6000Z30
+      capacity_gb: 32
+  storage:
+  - model: SHPP41-1000GM (SK hynix Platinum P41 / Solidigm P44 Pro 1TB)
+    type: NVMe PCIe 4.0 x4
+    size_bytes: 1000202273280
+  - model: WD_BLACK SN770 1TB
+    type: NVMe PCIe 4.0 x4
+    size_bytes: 1000202273280
+  os:
+    caption: Microsoft Windows 11 IoT Enterprise
+    version: 10.0.26200
+    build: 26200
+    architecture: 64-bit
+    power_plan: 'Ultimate Performance (GUID: 6c0322ae-fd76-4c74-ad30-6bcb1ac24b28)'
+  jvm:
+    java_version: 1.8.0_504
+    java_vendor: Eclipse Adoptium (Temurin)
+    vm_name: OpenJDK 64-Bit Server VM (build 25.504-b01, mixed mode)
+    process_affinity: Unpinned (OS scheduled across all 16 logical processors)
+    background_process_policy: Dedicated execution, zero conflicting workloads
+reproducible_fixtures:
+  MEDIUM_BASE:
+    world_seed: 403938725
+    dimension: 0
+    bounding_box:
+      min_x: -180
+      max_x: -130
+      min_y: 60
+      max_y: 80
+      min_z: 210
+      max_z: 260
+    view_distance: 10
+    loaded_chunks: 441
+    forced_chunks: 9
+    players: 2
+    tile_entity_census:
+      total_count: 350
+      classes:
+        cofh.thermalexpansion.duct.item.TileDuctItem: 110
+        cofh.thermalexpansion.duct.energy.TileDuctEnergy: 70
+        cofh.thermalexpansion.block.dynamo.TileDynamoMagmatic: 24
+        cofh.thermalexpansion.block.machine.TilePulverizer: 16
+        appeng.tile.networking.TileController: 1
+        appeng.tile.storage.TileDrive: 4
+        appeng.tile.grid.TilePatternTerminal: 2
+        appeng.tile.misc.TileInterface: 18
+        net.minecraft.tileentity.TileEntityChest: 45
+        net.minecraft.tileentity.TileEntityHopper: 28
+        net.minecraft.tileentity.TileEntityFurnace: 12
+        other_mod_tes: 20
+    entity_census:
+      total_count: 60
+      mobs: 45
+      items_and_misc: 15
+    power_state: Saturated (Dynamos actively feeding 12,000 RF/t across ducts)
+    storage_networks: AE2 ME Network with 8,000 items indexed across 4x 4k ME Drives
+  LARGE_BASE:
+    world_seed: 403938725
+    dimension: 0
+    bounding_box:
+      min_x: -300
+      max_x: -100
+      min_y: 50
+      max_y: 95
+      min_z: 150
+      max_z: 350
+    view_distance: 10
+    loaded_chunks: 529
+    forced_chunks: 25
+    players: 5
+    tile_entity_census:
+      total_count: 1500
+      classes:
+        crazypants.enderio.conduits.TileConduitBundle: 480
+        cofh.thermalexpansion.duct.TileDuct: 320
+        net.minecraft.tileentity.TileEntityChest: 180
+        appeng.me.GridNode / TileDrive / TileInterface: 160
+        mekanism.common.tile.TileEntityUniversalCable: 140
+        net.minecraft.tileentity.TileEntityHopper: 100
+        tconstruct.smeltery.tileentity.TileSmeltery: 12
+        other_mod_ticking_tes: 108
+    entity_census:
+      total_count: 120
+      mobs: 95
+      items_and_misc: 25
+    power_state: Fully active conduit grid carrying 250,000 RF/t
+    storage_networks: 'AE2 Network: 100,000 items, 32 crafting CPUs, 14 ME interfaces'
+  STRESS_BASE:
+    world_seed: 403938725
+    dimension: 0
+    bounding_box:
+      min_x: -450
+      max_x: 50
+      min_y: 40
+      max_y: 120
+      min_z: 50
+      max_z: 550
+    view_distance: 10
+    loaded_chunks: 784
+    forced_chunks: 64
+    players: 10
+    tile_entity_census:
+      total_count: 4000
+      classes:
+        crazypants.enderio.conduits.TileConduitBundle: 1450
+        cofh.thermalexpansion.duct.TileDuct: 820
+        net.minecraft.tileentity.TileEntityChest: 520
+        mekanism.common.tile.TileEntityUniversalCable: 410
+        appeng.me.GridNode / TileDrive / TileInterface: 380
+        net.minecraft.tileentity.TileEntityHopper: 240
+        other_mod_tes: 180
+    entity_census:
+      total_count: 200
+      mobs: 160
+      items_and_misc: 40
+    power_state: High-throughput looping conduit grid
+    storage_networks: Dual interconnected ME networks + automated autocrafting loops
+  EXPLORATION_WORLDGEN:
+    world_seed: 403938725
+    dimension: 0
+    flight_path: Linear vector along X-axis from X=1000 to X=15000 at Z=0, Y=120
+    velocity: 32 blocks/sec (~2 chunks/sec per axis, triggering ~32 new chunk gens/sec)
+    view_distance: 10
+autosave_projections:
+  baseline_save_tick_ms: 94.5
+  non_removable_java_callbacks_ms: 45.5
+  best_case_theoretical:
+    description: All section snapshots, binary NBT encoding, compression, and region
+      file I/O moved completely off ServerThread. Zero copy overhead.
+    removable_ms: 49.0
+    resulting_save_tick_ms: 45.5
+  realistic_first_generation:
+    description: SAVE-A snapshot takes 2.5 ms memory copy on ServerThread; SAVE-F/G/H
+      moved to background Rust workers. Java mod callbacks retained.
+    removable_ms: 42.5
+    resulting_save_tick_ms: 52.0
+  compatibility_preserving:
+    description: Preserves full ChunkDataEvent.Save, TileEntity and Entity Java NBT
+      compound creation; offloads binary encoding, compression, and async RegionFile
+      writing.
+    removable_ms: 34.8
+    resulting_save_tick_ms: 59.7
+per_tick_simulation:
+  reference_large_base:
+    mean: 38.9
+    p50: 36.4
+    p95: 54.2
+    p99: 68.5
+    max: 124.5
+    misses_over_50ms: 52
+  projected_realistic_engine_acceleration:
+    removable_ms: 6.8
+    mean: 32.1
+    p50: 29.6
+    p95: 47.4
+    p99: 61.7
+    max: 117.7
+    projected_misses_over_50ms: 31
+    miss_reduction_pct: 40.4

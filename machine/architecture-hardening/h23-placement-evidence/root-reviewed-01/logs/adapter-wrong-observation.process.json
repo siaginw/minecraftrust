@@ -1,0 +1,24 @@
+{
+  "argv": [
+    "C:\\Python314\\python.exe",
+    "-B",
+    "D:\\minecraftrust-astra-hardening\\tools\\writer-placement-v2\\validate.py",
+    "--plan",
+    "D:\\minecraftrust-astra-hardening\\target\\writer-placement-v2\\root-reviewed-01\\fixture-plan.json",
+    "--java",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\bin\\java.exe",
+    "--classpath",
+    "D:\\minecraftrust-astra-hardening\\target\\writer-placement-v2\\root-reviewed-01\\identity-classes;D:\\rustcraft-runtime-targets\\clean-forge-2860\\server\\libraries\\org\\ow2\\asm\\asm-debug-all\\5.2\\asm-debug-all-5.2.jar",
+    "--rust-parser",
+    "D:\\minecraftrust-astra-hardening\\tools\\classfile-crosscheck\\target\\debug\\rustcraft-classfile-crosscheck.exe",
+    "--request",
+    "D:\\minecraftrust-astra-hardening\\target\\writer-placement-v2\\root-reviewed-01\\wrong-observation-request.json",
+    "--out",
+    "D:\\minecraftrust-astra-hardening\\target\\writer-placement-v2\\root-reviewed-01\\wrong-observation-witness.json"
+  ],
+  "exit": 0,
+  "errors": [],
+  "elapsed_seconds": 0.5070234999875538,
+  "stdout_sha256": "e79d91004992445bb600c9d9f76fa2dafc99847d389e9e84826e0d7b9936929b",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+}

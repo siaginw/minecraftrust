@@ -1,0 +1,83 @@
+# SYNTHETIC (M1.4-R invalidation): numeric tables in this file were AUTHORED,
+# not measured (see tools/run-p08-benchmarks.py / tools/p08_closure_audit.py
+# Values are illustrative of SHAPE only. Must NOT feed active empirical
+# decisions. Do not cite as evidence.
+candidate_seams:
+- id: SAVE-A-SNAPSHOT
+  name: Native Vanilla Chunk Section Snapshot Extractor
+  exclusive_server_thread_saving_ms: 11.7 ms on save ticks
+  allocation_reduction_mb_s: 45.0
+  frequency: Every 900 ticks (autosave)
+  scaling: Scales O(chunks)
+  compatibility: TIER_1 (Zero mod bytecode visibility)
+  coremod_exposure: None (uses internal raw array pointer or snapshot buffer)
+  ffi_granularity: Coarse (1 snapshot per chunk)
+  copying: Single memmove of 16-bit blockstate arrays
+  multicore_opportunity: High (snapshot handed off to worker pool)
+  engineering_complexity: LOW
+  p08_score: 9.4
+- id: SAVE-F-G-CODEC
+  name: Off-Thread Native Binary NBT & libdeflate Encoder
+  exclusive_server_thread_saving_ms: 27.6 ms on save ticks
+  allocation_reduction_mb_s: 85.0
+  frequency: Every 900 ticks (autosave)
+  scaling: Scales O(NBT payload bytes)
+  compatibility: TIER_1 (Exact NBT specification compliance)
+  coremod_exposure: None
+  ffi_granularity: Coarse (Entire chunk payload buffer)
+  copying: Zero-copy off-heap memory to disk
+  multicore_opportunity: High (Thread pool parallel compression)
+  engineering_complexity: LOW
+  p08_score: 9.8
+- id: PACKET-CHUNKDATA-NATIVE
+  name: Native SPacketChunkData Constructor & Deflate Streamer
+  exclusive_server_thread_saving_ms: 0.72 ms steady / 3.5 ms exploration
+  allocation_reduction_mb_s: 65.0
+  frequency: Continuous during exploration and login
+  scaling: Scales O(chunk packets sent)
+  compatibility: TIER_1 (Protocol 340 wire exact)
+  coremod_exposure: None (bypasses Java SPacketChunkData creation)
+  ffi_granularity: Coarse (Packet batch work unit)
+  copying: Zero-copy to Netty ByteBuf
+  multicore_opportunity: High (Off-server-thread pipeline)
+  engineering_complexity: MEDIUM
+  p08_score: 9.1
+- id: CAPABILITY-FASTPATH
+  name: Capability Dispatcher Array Fast-Path
+  exclusive_server_thread_saving_ms: 0.33 ms steady
+  allocation_reduction_mb_s: 7.0
+  frequency: Continuous (42,500 calls/tick)
+  scaling: Scales O(calls)
+  compatibility: TIER_2 (Modifies CapabilityDispatcher internals)
+  coremod_exposure: Low
+  ffi_granularity: In-JVM Java patch preferred; FFI micro-crossing harmful
+  copying: None
+  multicore_opportunity: None
+  engineering_complexity: LOW
+  p08_score: 4.5
+- id: RECIPE-INDEXED-SUBSET
+  name: Native Recipe Hash Index (Standard Shaped/Shapeless)
+  exclusive_server_thread_saving_ms: 0.48 ms steady in SevTech
+  allocation_reduction_mb_s: 12.0
+  frequency: During crafting matrix queries
+  scaling: Scales O(crafting operations)
+  compatibility: TIER_2 (Fallback to Java for custom IRecipe)
+  coremod_exposure: Moderate (FastWorkbench interaction)
+  ffi_granularity: Medium (9-int matrix query)
+  copying: Minimal
+  multicore_opportunity: Low
+  engineering_complexity: MEDIUM
+  p08_score: 5.2
+- id: EVENTBUS-NATIVE-DISPATCH
+  name: EventBus Listener Invocation Primitive Bypass
+  exclusive_server_thread_saving_ms: 0.0 ms (Negative / Net regression of ~0.15 ms)
+  allocation_reduction_mb_s: 0.0
+  frequency: Continuous
+  scaling: Scales O(events)
+  compatibility: TIER_3 (High risk of LaunchWrapper break)
+  coremod_exposure: High
+  ffi_granularity: Fine-grained micro-crossing (~18.5 ns per event)
+  copying: High event object marshaling
+  multicore_opportunity: None
+  engineering_complexity: HIGH
+  p08_score: 0.5

@@ -1,0 +1,61 @@
+# M2C live shadow integration (operator authorization 2026-09-20).
+# class: MEASURED. Provenance: M2C-INTEGRATION. NO ON_EXPERIMENTAL live
+# transmission, no modpack campaign, no TPS claims. M1 parked/OFF throughout
+# (native_chunk_packet=OFF in all runs).
+schema_version: 1
+date: "2026-09-20"
+builds:
+  dll: {sha256_prefix: 0acb7469a74d9531, note: "superset: all M1 exports retained + CompressionCtx create/compress/freeRaw"}
+  coremod_run: {sha256_prefix: "4328b6989723de5b (runs) ; 3297b2f9e82663a9 (post-run fix adds m2c to shutdown dump)"}
+offline_regression: # M2C-offline-regression.txt, through the REAL handler (EmbeddedChannel)
+  verdict: PASS_32_OF_32
+  coverage:
+    - "14 interop fixtures x {SHADOW, ON_EXPERIMENTAL} through NativeCompressionEncoder + REAL NettyCompressionDecoder (28 PASS)"
+    - "threshold-adjacent framing: len=255 sub-threshold raw path, len=256 compressed path"
+    - "threshold lifecycle: raise-to-4096 then lower-to-256 mid-channel, decode-correct both"
+    - "randomized 500-packet mixed-size sequence: 0 mismatches"
+    - "concurrency: 8 threads x 200 packets = 1600 packets, 88ms wall, all byte-correct - per-channel contexts, no global serialization"
+    - "lifecycle: 50 channels -> 50 contexts created / 50 freed"
+    - "failure injection: insufficient-capacity code -1, context RECOVERS after failure, use-after-free returns null, double-free safe"
+    - "SHADOW counters: matches+1 mismatches+0"
+target_a_live:
+  off_sanity: {boot: OK, bot_sessions: 6, transform: "DISABLED_BY_PROPERTY (nmCompression.transformCount=0)", m2c_counters: all-zero, errors: 0}
+  shadow_run: {bot_sessions: 15, chunk_packets: 1215, shadow_packets: 1350, shadow_matches: 1350, mismatches: 0, fallbacks: 0, ctx_created: 15, transform: TRANSFORMED_SUCCESS, client_errors: 0}
+  paranoid_run: {bot_sessions: 8, chunk_packets: 648, shadow_packets: 720, shadow_matches: 720, mismatches: 0, fallbacks: 0, ctx_created: 8, ctx_freed: 8 (clean-shutdown balance), leak_events: 0, client_errors: 0}
+  note: "shadow_packets > chunk_packets because every eligible OUTBOUND frame shadows (keepalive/chat/etc. over threshold too); client decode errors 0 in all runs - the transmitted (Java) bytes were always valid"
+timings_observation: # network-worker throughput ONLY - explicitly NOT TPS/MSPT
+  shadow_run: {bytes_in: 38901050, java_ns_total: 617883000, rust_ns_total: 284619200, rust_vs_java_complete_path: "0.46x (rust ~2.2x faster incl. buffer copies + JNI crossing)"}
+  paranoid_run: {bytes_in: 20747212, java_ns_total: 421818900, rust_ns_total: 137342000, rust_vs_java: "0.33x"}
+  compressed_sizes: {java_bytes: 3507644, rust_bytes: 3574358, rust_vs_java_size: "+1.9%"}
+  caveat: "java_ns includes vanilla's own scratch-buffer framing; both measured on the same packets in the same handler; SHADOW does BOTH compressions per packet (production ON would do one)"
+integration_risks_discovered:
+  - "shutdown metrics hook initially omitted m2c counters (periodic dump had them; evidence intact) - fixed post-run (jar 3297b2f9); future runs dump both at exit"
+  - "symbol naming: Java native method names must match exported JNI symbols exactly (caught twice offline: nCreate/freeRaw) - offline regression exists precisely to catch this pre-server"
+  - "EmbeddedChannel auto-names handlers; the real pipeline uses the 'compress' name - tests now install under the vanilla name"
+handler_contract_notes: # verified in code, exercised live
+  - "subclass of NettyCompressionEncoder: vanilla's unchecked cast at setCompressionThreshold stays valid; threshold updates route through override (offline C test)"
+  - "installed ONLY when the compress slot is constructed by NetworkManager itself; a pre-existing mod handler is never replaced (vanilla branch calls func_179299_a on whatever is present - unchanged)"
+  - "transformer gated by property at class-transform time: OFF => byte-identical vanilla NetworkManager"
+  - "framing: varint(len)+zlib for eligible, vanilla super() for sub-threshold - decoder-verified across all fixtures"
+  - "EventLoop: encode runs on channel's single event loop; per-instance ctx is single-threaded by construction; handlerRemoved frees exactly once via AtomicLong CAS"
+native_context_ownership:
+  creation: "lazy on first eligible packet (ensureCreated) on the owning channel's EventLoop"
+  ownership: "one CompressionCtx per NativeCompressionEncoder instance (per channel); NO global lock - 8-thread offline test proves concurrency"
+  reset: "Rust compress_into resets the zlib stream per call (independent streams, like vanilla Deflater.reset); after capacity error the context stays clean (offline G test)"
+  disconnect_cleanup: "handlerRemoved -> ctx.free() -> native freeRaw drops the Box; count balanced 8/8 live"
+  error_cleanup: "any native error returns null/-codes; Java falls back to vanilla super.encode for that packet; connection never closed by native errors"
+  double_free_prevention: "AtomicLong getAndSet(0) makes free idempotent; handle<=0 no-op in native; use-after-free returns null in Java (offline verified)"
+recommendation: PROCEED_TO_MODPACK_SHADOW_TESTING
+reasoning: >
+  All gates for this milestone passed: offline 32/32 (including concurrency,
+  lifecycle, failure injection), live OFF sanity with property-gated transform
+  disabled, live SHADOW parity 2070/2070 inflate-equal comparisons with 0
+  fallbacks and 0 client errors across two runs (incl. paranoid leak
+  detection, 0 leaks, contexts balanced). Compressed-byte identity was never
+  required and never assumed. ON_EXPERIMENTAL live transmission was NOT
+  performed (per directive stop).
+next_bounded_milestone: >
+  Modpack SHADOW campaign on Target C (Revelation) + Target D (SevTech)
+  behind the same ladder, requiring: >=10k shadow comparisons, 0 mismatches,
+  paranoid run clean, threshold-change events observed (login sets threshold
+  per vanilla flow), then operator decision on ON_EXPERIMENTAL.

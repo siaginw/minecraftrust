@@ -1,0 +1,46 @@
+D:\minecraftrust-astra-hardening\tools\telemetry-tests\src\com\rustcraft\bridge\TelemetryJniTest.java:6: warning: Unsafe is internal proprietary API and may be removed in a future release
+import sun.misc.Unsafe;
+               ^
+D:\minecraftrust-astra-hardening\tools\native-chunk-jni-tests\src\com\rustcraft\bridge\NativeChunkJniV2Test.java:8: warning: Unsafe is internal proprietary API and may be removed in a future release
+import sun.misc.Unsafe;
+               ^
+D:\minecraftrust-astra-hardening\tools\native-chunk-jni-tests\src\com\rustcraft\bridge\capture\OwnedSnapshotJniTest.java:7: warning: Unsafe is internal proprietary API and may be removed in a future release
+import sun.misc.Unsafe;
+               ^
+D:\minecraftrust-astra-hardening\tools\telemetry-tests\src\com\rustcraft\bridge\TelemetryJniTest.java:10: warning: Unsafe is internal proprietary API and may be removed in a future release
+    private static final Unsafe MEMORY = unsafe();
+                         ^
+D:\minecraftrust-astra-hardening\tools\telemetry-tests\src\com\rustcraft\bridge\TelemetryJniTest.java:14: warning: Unsafe is internal proprietary API and may be removed in a future release
+    private static Unsafe unsafe() {
+                   ^
+D:\minecraftrust-astra-hardening\tools\telemetry-tests\src\com\rustcraft\bridge\TelemetryJniTest.java:16: warning: Unsafe is internal proprietary API and may be removed in a future release
+            Field field = Unsafe.class.getDeclaredField("theUnsafe");
+                          ^
+D:\minecraftrust-astra-hardening\tools\telemetry-tests\src\com\rustcraft\bridge\TelemetryJniTest.java:18: warning: Unsafe is internal proprietary API and may be removed in a future release
+            return (Unsafe) field.get(null);
+                    ^
+D:\minecraftrust-astra-hardening\tools\native-chunk-jni-tests\src\com\rustcraft\bridge\NativeChunkJniV2Test.java:17: warning: Unsafe is internal proprietary API and may be removed in a future release
+    private static final Unsafe MEMORY = unsafe();
+                         ^
+D:\minecraftrust-astra-hardening\tools\native-chunk-jni-tests\src\com\rustcraft\bridge\NativeChunkJniV2Test.java:274: warning: Unsafe is internal proprietary API and may be removed in a future release
+    private static Unsafe unsafe() {
+                   ^
+D:\minecraftrust-astra-hardening\tools\native-chunk-jni-tests\src\com\rustcraft\bridge\NativeChunkJniV2Test.java:276: warning: Unsafe is internal proprietary API and may be removed in a future release
+            Field field = Unsafe.class.getDeclaredField("theUnsafe");
+                          ^
+D:\minecraftrust-astra-hardening\tools\native-chunk-jni-tests\src\com\rustcraft\bridge\NativeChunkJniV2Test.java:278: warning: Unsafe is internal proprietary API and may be removed in a future release
+            return (Unsafe) field.get(null);
+                    ^
+D:\minecraftrust-astra-hardening\tools\native-chunk-jni-tests\src\com\rustcraft\bridge\capture\OwnedSnapshotJniTest.java:11: warning: Unsafe is internal proprietary API and may be removed in a future release
+    private static final Unsafe MEMORY = unsafe();
+                         ^
+D:\minecraftrust-astra-hardening\tools\native-chunk-jni-tests\src\com\rustcraft\bridge\capture\OwnedSnapshotJniTest.java:140: warning: Unsafe is internal proprietary API and may be removed in a future release
+    private static Unsafe unsafe() {
+                   ^
+D:\minecraftrust-astra-hardening\tools\native-chunk-jni-tests\src\com\rustcraft\bridge\capture\OwnedSnapshotJniTest.java:142: warning: Unsafe is internal proprietary API and may be removed in a future release
+            Field field = Unsafe.class.getDeclaredField("theUnsafe");
+                          ^
+D:\minecraftrust-astra-hardening\tools\native-chunk-jni-tests\src\com\rustcraft\bridge\capture\OwnedSnapshotJniTest.java:144: warning: Unsafe is internal proprietary API and may be removed in a future release
+            return (Unsafe) field.get(null);
+                    ^
+15 warnings

@@ -1,0 +1,122 @@
+{
+  "schema": "H22_5_GPU_OFFLINE_V1",
+  "status": "FAIL",
+  "scope": "BOUNDED_SYNTHETIC_INTEGER_MIXING_ONLY",
+  "production_authority": false,
+  "server_started": false,
+  "processes": [
+    {
+      "name": "build",
+      "argv": [
+        "C:\\WINDOWS\\System32\\cmd.exe",
+        "/d",
+        "/c",
+        "D:\\minecraftrust-astra-hardening\\target\\gpu-offline-experiment\\41b3e600dd0141e9a8a0316357a7f62b\\build.cmd"
+      ],
+      "exit": 2,
+      "seconds": 1.9804121000343002,
+      "stdout_sha256": "301367f737597920677edb170ed78fdba8ada2897b93e5d588b6fcb51f3f50ad",
+      "stderr_sha256": "95f71f26414b8a8645e42e6c160f3bf41fa9e96ca50ca9fd7461299cd25b078a"
+    }
+  ],
+  "platform": "Windows-11-10.0.26200-SP0",
+  "logical_processors": 16,
+  "original_before": {
+    "schema_version": 1,
+    "kind": "HARDENING_ISOLATION_GATE_CHECK",
+    "status": "PASS",
+    "failures": [],
+    "original_observed": {
+      "head": "c4b868db2c9e4b03f745bf93c6ebf4fd8a8519e7",
+      "branch": "issue1-jni-v2",
+      "status": [
+        " M tools/live-capture/live_client_session.py",
+        "?? tools/live-capture/__pycache__/",
+        "?? tools/live-capture/run_rev_shadow.py"
+      ],
+      "files": [
+        {
+          "path": "D:\\minecraftrust\\tools\\live-capture\\live_client_session.py",
+          "sha256": "151c356161695aba3db3c1a8cbd589b5eda2b5a1770dff59ab21b728d36cabfa"
+        },
+        {
+          "path": "D:\\minecraftrust\\tools\\live-capture\\run_rev_shadow.py",
+          "sha256": "2b9b2aca49e57dd0d2a74bec46efcdc0ac7f95762a733276e27ff9dbcb472d93"
+        }
+      ]
+    },
+    "isolated_worktree": "D:\\minecraftrust-astra-hardening",
+    "isolated_head": "44f61a46f7cda93c0ac8aaffe13087678501cc6f",
+    "isolated_branch": "astra/architecture-hardening",
+    "production_gate_checks": {
+      "tryEncode_fail_closed": true,
+      "productionAuthorityEligible_false": true
+    },
+    "scope": "read-only original HEAD/status/two paused source hashes plus conservative source guards; runtime authority tests remain required"
+  },
+  "sources_before": {
+    "D:\\minecraftrust-astra-hardening\\tools\\gpu-offline-experiment\\main.cpp": "cb3a356372748c28e7026a2403b79ae5956b055fece414d1d87d1ba792ecb02e",
+    "D:\\minecraftrust-astra-hardening\\tools\\gpu-offline-experiment\\kernel.hlsl": "ccaf8b12844cefc0c5332a6136821941a4a5c194300d327cdfb4d003219676c3",
+    "D:\\minecraftrust-astra-hardening\\tools\\gpu-offline-experiment\\run.py": "3b9790d64e09477b8936f6d142ec91623c01726a5ca48d05fb790732a4b7f247"
+  },
+  "tools_before": {
+    "C:\\Program Files\\Microsoft Visual Studio\\18\\Community\\VC\\Tools\\MSVC\\14.51.36231\\bin\\Hostx64\\x64\\cl.exe": "dc8426b8760d92cf757df3d10b9f0244a95b454ff43194a58161568a0ec70d53",
+    "C:\\Program Files\\Microsoft Visual Studio\\18\\Community\\VC\\Tools\\MSVC\\14.51.36231\\bin\\Hostx64\\x64\\c1xx.dll": "363135c271bcb76ce1eeb179b22a9e410d72f8501b99171fb7cd71ea0e7a9166",
+    "C:\\Program Files\\Microsoft Visual Studio\\18\\Community\\VC\\Tools\\MSVC\\14.51.36231\\bin\\Hostx64\\x64\\c2.dll": "a557ac7b90fb5a68d393da2dce7ada52c91efad2a6956cc62ea23da392e9be89",
+    "C:\\Program Files\\Microsoft Visual Studio\\18\\Community\\VC\\Tools\\MSVC\\14.51.36231\\bin\\Hostx64\\x64\\link.exe": "e8c524347b8bc87fba790d254c8a3b902bf1a4b63807093b816d992940af3791",
+    "C:\\WINDOWS\\System32\\d3dcompiler_47.dll": "2e3526354dbcd9cf013f7b741c549df2170fe6af607628442216a21e7d584883",
+    "C:\\WINDOWS\\System32\\d3d11.dll": "ae2777002f5a0ff543b5b9bec5124746559fd01d6c7c0c216d3194632f084502",
+    "C:\\WINDOWS\\System32\\dxgi.dll": "b12aebf0f077d6c1394b50e2eecdd5e16072c9a0c871f30887b5d170cbf2eaae",
+    "C:\\Python314\\python.exe": "4942b86a6597e5aee0128daa00050ed79bc21f6e709a78eb19cbfeb0c2f39ac9"
+  },
+  "cpu_avx2_flag": true,
+  "error": "RuntimeError: build failed; raw outputs retained",
+  "sources_after": {
+    "D:\\minecraftrust-astra-hardening\\tools\\gpu-offline-experiment\\main.cpp": "cb3a356372748c28e7026a2403b79ae5956b055fece414d1d87d1ba792ecb02e",
+    "D:\\minecraftrust-astra-hardening\\tools\\gpu-offline-experiment\\kernel.hlsl": "ccaf8b12844cefc0c5332a6136821941a4a5c194300d327cdfb4d003219676c3",
+    "D:\\minecraftrust-astra-hardening\\tools\\gpu-offline-experiment\\run.py": "3b9790d64e09477b8936f6d142ec91623c01726a5ca48d05fb790732a4b7f247"
+  },
+  "tools_after": {
+    "C:\\Program Files\\Microsoft Visual Studio\\18\\Community\\VC\\Tools\\MSVC\\14.51.36231\\bin\\Hostx64\\x64\\cl.exe": "dc8426b8760d92cf757df3d10b9f0244a95b454ff43194a58161568a0ec70d53",
+    "C:\\Program Files\\Microsoft Visual Studio\\18\\Community\\VC\\Tools\\MSVC\\14.51.36231\\bin\\Hostx64\\x64\\c1xx.dll": "363135c271bcb76ce1eeb179b22a9e410d72f8501b99171fb7cd71ea0e7a9166",
+    "C:\\Program Files\\Microsoft Visual Studio\\18\\Community\\VC\\Tools\\MSVC\\14.51.36231\\bin\\Hostx64\\x64\\c2.dll": "a557ac7b90fb5a68d393da2dce7ada52c91efad2a6956cc62ea23da392e9be89",
+    "C:\\Program Files\\Microsoft Visual Studio\\18\\Community\\VC\\Tools\\MSVC\\14.51.36231\\bin\\Hostx64\\x64\\link.exe": "e8c524347b8bc87fba790d254c8a3b902bf1a4b63807093b816d992940af3791",
+    "C:\\WINDOWS\\System32\\d3dcompiler_47.dll": "2e3526354dbcd9cf013f7b741c549df2170fe6af607628442216a21e7d584883",
+    "C:\\WINDOWS\\System32\\d3d11.dll": "ae2777002f5a0ff543b5b9bec5124746559fd01d6c7c0c216d3194632f084502",
+    "C:\\WINDOWS\\System32\\dxgi.dll": "b12aebf0f077d6c1394b50e2eecdd5e16072c9a0c871f30887b5d170cbf2eaae",
+    "C:\\Python314\\python.exe": "4942b86a6597e5aee0128daa00050ed79bc21f6e709a78eb19cbfeb0c2f39ac9"
+  },
+  "original_after": {
+    "schema_version": 1,
+    "kind": "HARDENING_ISOLATION_GATE_CHECK",
+    "status": "PASS",
+    "failures": [],
+    "original_observed": {
+      "head": "c4b868db2c9e4b03f745bf93c6ebf4fd8a8519e7",
+      "branch": "issue1-jni-v2",
+      "status": [
+        " M tools/live-capture/live_client_session.py",
+        "?? tools/live-capture/__pycache__/",
+        "?? tools/live-capture/run_rev_shadow.py"
+      ],
+      "files": [
+        {
+          "path": "D:\\minecraftrust\\tools\\live-capture\\live_client_session.py",
+          "sha256": "151c356161695aba3db3c1a8cbd589b5eda2b5a1770dff59ab21b728d36cabfa"
+        },
+        {
+          "path": "D:\\minecraftrust\\tools\\live-capture\\run_rev_shadow.py",
+          "sha256": "2b9b2aca49e57dd0d2a74bec46efcdc0ac7f95762a733276e27ff9dbcb472d93"
+        }
+      ]
+    },
+    "isolated_worktree": "D:\\minecraftrust-astra-hardening",
+    "isolated_head": "44f61a46f7cda93c0ac8aaffe13087678501cc6f",
+    "isolated_branch": "astra/architecture-hardening",
+    "production_gate_checks": {
+      "tryEncode_fail_closed": true,
+      "productionAuthorityEligible_false": true
+    },
+    "scope": "read-only original HEAD/status/two paused source hashes plus conservative source guards; runtime authority tests remain required"
+  }
+}

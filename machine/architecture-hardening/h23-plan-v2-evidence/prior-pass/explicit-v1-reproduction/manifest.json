@@ -1,0 +1,1478 @@
+{
+  "schema_version": 1,
+  "kind": "REQUIRED_LIVE_WRITER_HOOKS_V1",
+  "target": "minecraft-1.12.2-forge-14.23.5.2860-clean-server",
+  "forge_build": "14.23.5.2860",
+  "status_vocabulary": [
+    "QUALIFIED",
+    "MISSING_CLASS",
+    "MISSING_METHOD",
+    "DESCRIPTOR_MISMATCH",
+    "HASH_MISMATCH",
+    "FINGERPRINT_MISMATCH",
+    "AMBIGUOUS_MATCH",
+    "TRANSFORM_ORDER_MISMATCH",
+    "UNSUPPORTED_RUNTIME"
+  ],
+  "hook_types": [
+    "WRITE_BEGIN",
+    "WRITE_END",
+    "PRIVATE_BUILD_BEGIN",
+    "PRIVATE_BUILD_END",
+    "PUBLICATION_BEGIN",
+    "PUBLICATION_END",
+    "LIFECYCLE_RETIRE",
+    "PACKET_CAPTURE",
+    "DIAGNOSTIC_ONLY"
+  ],
+  "domains": [
+    "section existence",
+    "block states",
+    "blockRefCount/isEmpty",
+    "block light",
+    "sky light",
+    "biomes",
+    "storage/backing replacement",
+    "private I/O construction",
+    "owner publication",
+    "unload/reload",
+    "same-coordinate replacement",
+    "tileentity restrictions",
+    "owner session",
+    "packet capture"
+  ],
+  "identity_requirements": {
+    "minecraft_server_jar_sha256": "fe1f9274e6dad9191bf6e6e8e36ee6ebc737f373603df0946aafcded0d53167e",
+    "forge_jar_sha256": "cd3fbf85d7ca744507fd6a37a41b90122d43e616a4f8962332b1b658655e8a64",
+    "java_runtime_version": "1.8.0_504-b01",
+    "qualification_profile": "FORGE_2860_SERVER_TRANSFORMED_FML_INITIALIZED_OFFLINE_V1",
+    "runtime_pins_sha256": "66b7c5e19fa1c7a84e53bdfee5b9e3dc1e34a60f5edbbd0d3b4590fb3b90cce1",
+    "foundation_implementation": {
+      "tools/bridge/src/com/rustcraft/bridge/capture/LiveWriterGate.java": "27b8eb203da1a70951f299da68abc420a42ab11c1d466cce7be0dcc6afc205f7",
+      "tools/bridge/src/com/rustcraft/bridge/capture/PrivateBuildTickets.java": "b31e287fba07ddfa1d1f5ca017345b84655a9f90e1cece28fb01c209bff1989f",
+      "tools/bridge/src/com/rustcraft/bridge/capture/LiveChunkBindings.java": "c23ce447621b36c9e8eb1949f540ca07d5d768bd6d538cc410b2ee35b471b74b"
+    },
+    "descriptor_source": "issue1-ultra-final-20260924/writers/required-hook-descriptors.json",
+    "descriptor_source_sha256": "47c8010a61b00bc1192471123c95098575b0f787d02f78e709d48abf6acdf4ed"
+  },
+  "required_hook_count": 66,
+  "required_hooks": [
+    {
+      "id": "W01",
+      "purpose": "world block set (whole operation incl. chunk/TE/light effects)",
+      "class": "net.minecraft.world.World",
+      "method": "func_180501_a",
+      "descriptor": "(Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/state/IBlockState;I)Z",
+      "handoff_hook_mode": "ENTRY_BEFORE_READ_WRITE_AND_ALL_RETURNS_CATCH_ALL_FINALLY",
+      "hook_type": "WRITE_BEGIN",
+      "affected_domains": [
+        "block states"
+      ],
+      "thread_context": "CANONICAL_OWNER",
+      "insertion_location": "method entry, before any read or write of protected state; balanced catch-all-finally end hook before every return and Throwable (WRITE_END)",
+      "fingerprint": {
+        "kind": "DECLARATION"
+      },
+      "bracket_end_hook_type": "WRITE_END"
+    },
+    {
+      "id": "W02",
+      "purpose": "world light value set",
+      "class": "net.minecraft.world.World",
+      "method": "func_175653_a",
+      "descriptor": "(Lnet/minecraft/world/EnumSkyBlock;Lnet/minecraft/util/math/BlockPos;I)V",
+      "handoff_hook_mode": "ENTRY_BEFORE_READ_WRITE_AND_ALL_RETURNS_CATCH_ALL_FINALLY",
+      "hook_type": "WRITE_BEGIN",
+      "affected_domains": [
+        "block light",
+        "sky light"
+      ],
+      "thread_context": "CANONICAL_OWNER",
+      "insertion_location": "method entry, before any read or write of protected state; balanced catch-all-finally end hook before every return and Throwable (WRITE_END)",
+      "fingerprint": {
+        "kind": "DECLARATION"
+      },
+      "bracket_end_hook_type": "WRITE_END"
+    },
+    {
+      "id": "W03",
+      "purpose": "world tile entity set",
+      "class": "net.minecraft.world.World",
+      "method": "func_175690_a",
+      "descriptor": "(Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/tileentity/TileEntity;)V",
+      "handoff_hook_mode": "ENTRY_BEFORE_READ_WRITE_AND_ALL_RETURNS_CATCH_ALL_FINALLY",
+      "hook_type": "WRITE_BEGIN",
+      "affected_domains": [
+        "tileentity restrictions"
+      ],
+      "thread_context": "CANONICAL_OWNER",
+      "insertion_location": "method entry, before any read or write of protected state; balanced catch-all-finally end hook before every return and Throwable (WRITE_END)",
+      "fingerprint": {
+        "kind": "DECLARATION"
+      },
+      "bracket_end_hook_type": "WRITE_END"
+    },
+    {
+      "id": "W04",
+      "purpose": "world tile entity removal",
+      "class": "net.minecraft.world.World",
+      "method": "func_175713_t",
+      "descriptor": "(Lnet/minecraft/util/math/BlockPos;)V",
+      "handoff_hook_mode": "ENTRY_BEFORE_READ_WRITE_AND_ALL_RETURNS_CATCH_ALL_FINALLY",
+      "hook_type": "WRITE_BEGIN",
+      "affected_domains": [
+        "tileentity restrictions"
+      ],
+      "thread_context": "CANONICAL_OWNER",
+      "insertion_location": "method entry, before any read or write of protected state; balanced catch-all-finally end hook before every return and Throwable (WRITE_END)",
+      "fingerprint": {
+        "kind": "DECLARATION"
+      },
+      "bracket_end_hook_type": "WRITE_END"
+    },
+    {
+      "id": "W05",
+      "purpose": "world light propagation check/update",
+      "class": "net.minecraft.world.World",
+      "method": "func_180500_c",
+      "descriptor": "(Lnet/minecraft/world/EnumSkyBlock;Lnet/minecraft/util/math/BlockPos;)Z",
+      "handoff_hook_mode": "ENTRY_BEFORE_READ_WRITE_AND_ALL_RETURNS_CATCH_ALL_FINALLY",
+      "hook_type": "WRITE_BEGIN",
+      "affected_domains": [
+        "block light",
+        "sky light"
+      ],
+      "thread_context": "CANONICAL_OWNER",
+      "insertion_location": "method entry, before any read or write of protected state; balanced catch-all-finally end hook before every return and Throwable (WRITE_END)",
+      "fingerprint": {
+        "kind": "DECLARATION"
+      },
+      "bracket_end_hook_type": "WRITE_END"
+    },
+    {
+      "id": "W06",
+      "purpose": "chunk skylight generation",
+      "class": "net.minecraft.world.chunk.Chunk",
+      "method": "func_76603_b",
+      "descriptor": "()V",
+      "handoff_hook_mode": "ENTRY_BEFORE_READ_WRITE_AND_ALL_RETURNS_CATCH_ALL_FINALLY",
+      "hook_type": "WRITE_BEGIN",
+      "affected_domains": [
+        "sky light"
+      ],
+      "thread_context": "CANONICAL_OWNER",
+      "insertion_location": "method entry, before any read or write of protected state; balanced catch-all-finally end hook before every return and Throwable (WRITE_END)",
+      "fingerprint": {
+        "kind": "DECLARATION"
+      },
+      "bracket_end_hook_type": "WRITE_END"
+    },
+    {
+      "id": "W07",
+      "purpose": "chunk light relight enqueue (audit light family)",
+      "class": "net.minecraft.world.chunk.Chunk",
+      "method": "func_76595_e",
+      "descriptor": "(II)V",
+      "handoff_hook_mode": "ENTRY_BEFORE_READ_WRITE_AND_ALL_RETURNS_CATCH_ALL_FINALLY",
+      "hook_type": "WRITE_BEGIN",
+      "affected_domains": [
+        "block light",
+        "sky light"
+      ],
+      "thread_context": "CANONICAL_OWNER",
+      "insertion_location": "method entry, before any read or write of protected state; balanced catch-all-finally end hook before every return and Throwable (WRITE_END)",
+      "fingerprint": {
+        "kind": "DECLARATION"
+      },
+      "bracket_end_hook_type": "WRITE_END"
+    },
+    {
+      "id": "W08",
+      "purpose": "chunk light family setter (audit light family)",
+      "class": "net.minecraft.world.chunk.Chunk",
+      "method": "func_150803_c",
+      "descriptor": "(Z)V",
+      "handoff_hook_mode": "ENTRY_BEFORE_READ_WRITE_AND_ALL_RETURNS_CATCH_ALL_FINALLY",
+      "hook_type": "WRITE_BEGIN",
+      "affected_domains": [
+        "block light",
+        "sky light"
+      ],
+      "thread_context": "CANONICAL_OWNER",
+      "insertion_location": "method entry, before any read or write of protected state; balanced catch-all-finally end hook before every return and Throwable (WRITE_END)",
+      "fingerprint": {
+        "kind": "DECLARATION"
+      },
+      "bracket_end_hook_type": "WRITE_END"
+    },
+    {
+      "id": "W09",
+      "purpose": "chunk light family writer (audit light family)",
+      "class": "net.minecraft.world.chunk.Chunk",
+      "method": "func_76599_g",
+      "descriptor": "(III)V",
+      "handoff_hook_mode": "ENTRY_BEFORE_READ_WRITE_AND_ALL_RETURNS_CATCH_ALL_FINALLY",
+      "hook_type": "WRITE_BEGIN",
+      "affected_domains": [
+        "block light",
+        "sky light"
+      ],
+      "thread_context": "CANONICAL_OWNER",
+      "insertion_location": "method entry, before any read or write of protected state; balanced catch-all-finally end hook before every return and Throwable (WRITE_END)",
+      "fingerprint": {
+        "kind": "DECLARATION"
+      },
+      "bracket_end_hook_type": "WRITE_END"
+    },
+    {
+      "id": "W10",
+      "purpose": "chunk light family writer (audit light family)",
+      "class": "net.minecraft.world.chunk.Chunk",
+      "method": "func_76609_d",
+      "descriptor": "(IIII)V",
+      "handoff_hook_mode": "ENTRY_BEFORE_READ_WRITE_AND_ALL_RETURNS_CATCH_ALL_FINALLY",
+      "hook_type": "WRITE_BEGIN",
+      "affected_domains": [
+        "block light",
+        "sky light"
+      ],
+      "thread_context": "CANONICAL_OWNER",
+      "insertion_location": "method entry, before any read or write of protected state; balanced catch-all-finally end hook before every return and Throwable (WRITE_END)",
+      "fingerprint": {
+        "kind": "DECLARATION"
+      },
+      "bracket_end_hook_type": "WRITE_END"
+    },
+    {
+      "id": "W11",
+      "purpose": "chunk skylight relight writer",
+      "class": "net.minecraft.world.chunk.Chunk",
+      "method": "func_76615_h",
+      "descriptor": "(III)V",
+      "handoff_hook_mode": "ENTRY_BEFORE_READ_WRITE_AND_ALL_RETURNS_CATCH_ALL_FINALLY",
+      "hook_type": "WRITE_BEGIN",
+      "affected_domains": [
+        "sky light"
+      ],
+      "thread_context": "CANONICAL_OWNER",
+      "insertion_location": "method entry, before any read or write of protected state; balanced catch-all-finally end hook before every return and Throwable (WRITE_END)",
+      "fingerprint": {
+        "kind": "DECLARATION"
+      },
+      "bracket_end_hook_type": "WRITE_END"
+    },
+    {
+      "id": "W12",
+      "purpose": "chunk block state set incl. section allocation (audit BCI 124-203)",
+      "class": "net.minecraft.world.chunk.Chunk",
+      "method": "func_177436_a",
+      "descriptor": "(Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/state/IBlockState;)Lnet/minecraft/block/state/IBlockState;",
+      "handoff_hook_mode": "ENTRY_BEFORE_READ_WRITE_AND_ALL_RETURNS_CATCH_ALL_FINALLY",
+      "hook_type": "WRITE_BEGIN",
+      "affected_domains": [
+        "block states",
+        "section existence"
+      ],
+      "thread_context": "CANONICAL_OWNER",
+      "insertion_location": "method entry, before any read or write of protected state; balanced catch-all-finally end hook before every return and Throwable (WRITE_END)",
+      "fingerprint": {
+        "kind": "BCI_ASSERTIONS",
+        "assertions": [
+          {
+            "bci": 203,
+            "expect": "invokevirtual net/minecraft/world/chunk/storage/ExtendedBlockStorage.func_177484_a"
+          }
+        ]
+      },
+      "bracket_end_hook_type": "WRITE_END"
+    },
+    {
+      "id": "W13",
+      "purpose": "chunk light value set",
+      "class": "net.minecraft.world.chunk.Chunk",
+      "method": "func_177431_a",
+      "descriptor": "(Lnet/minecraft/world/EnumSkyBlock;Lnet/minecraft/util/math/BlockPos;I)V",
+      "handoff_hook_mode": "ENTRY_BEFORE_READ_WRITE_AND_ALL_RETURNS_CATCH_ALL_FINALLY",
+      "hook_type": "WRITE_BEGIN",
+      "affected_domains": [
+        "block light",
+        "sky light"
+      ],
+      "thread_context": "CANONICAL_OWNER",
+      "insertion_location": "method entry, before any read or write of protected state; balanced catch-all-finally end hook before every return and Throwable (WRITE_END)",
+      "fingerprint": {
+        "kind": "DECLARATION"
+      },
+      "bracket_end_hook_type": "WRITE_END"
+    },
+    {
+      "id": "W14",
+      "purpose": "chunk tile entity creation/lookup (EnumCreateEntityType)",
+      "class": "net.minecraft.world.chunk.Chunk",
+      "method": "func_177424_a",
+      "descriptor": "(Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/world/chunk/Chunk$EnumCreateEntityType;)Lnet/minecraft/tileentity/TileEntity;",
+      "handoff_hook_mode": "ENTRY_BEFORE_READ_WRITE_AND_ALL_RETURNS_CATCH_ALL_FINALLY",
+      "hook_type": "WRITE_BEGIN",
+      "affected_domains": [
+        "tileentity restrictions"
+      ],
+      "thread_context": "CANONICAL_OWNER",
+      "insertion_location": "method entry, before any read or write of protected state; balanced catch-all-finally end hook before every return and Throwable (WRITE_END)",
+      "fingerprint": {
+        "kind": "DECLARATION"
+      },
+      "bracket_end_hook_type": "WRITE_END"
+    },
+    {
+      "id": "W15",
+      "purpose": "chunk tile entity add",
+      "class": "net.minecraft.world.chunk.Chunk",
+      "method": "func_150813_a",
+      "descriptor": "(Lnet/minecraft/tileentity/TileEntity;)V",
+      "handoff_hook_mode": "ENTRY_BEFORE_READ_WRITE_AND_ALL_RETURNS_CATCH_ALL_FINALLY",
+      "hook_type": "WRITE_BEGIN",
+      "affected_domains": [
+        "tileentity restrictions"
+      ],
+      "thread_context": "CANONICAL_OWNER",
+      "insertion_location": "method entry, before any read or write of protected state; balanced catch-all-finally end hook before every return and Throwable (WRITE_END)",
+      "fingerprint": {
+        "kind": "DECLARATION"
+      },
+      "bracket_end_hook_type": "WRITE_END"
+    },
+    {
+      "id": "W16",
+      "purpose": "chunk tile entity put",
+      "class": "net.minecraft.world.chunk.Chunk",
+      "method": "func_177426_a",
+      "descriptor": "(Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/tileentity/TileEntity;)V",
+      "handoff_hook_mode": "ENTRY_BEFORE_READ_WRITE_AND_ALL_RETURNS_CATCH_ALL_FINALLY",
+      "hook_type": "WRITE_BEGIN",
+      "affected_domains": [
+        "tileentity restrictions"
+      ],
+      "thread_context": "CANONICAL_OWNER",
+      "insertion_location": "method entry, before any read or write of protected state; balanced catch-all-finally end hook before every return and Throwable (WRITE_END)",
+      "fingerprint": {
+        "kind": "DECLARATION"
+      },
+      "bracket_end_hook_type": "WRITE_END"
+    },
+    {
+      "id": "W17",
+      "purpose": "chunk tile entity remove",
+      "class": "net.minecraft.world.chunk.Chunk",
+      "method": "func_177425_e",
+      "descriptor": "(Lnet/minecraft/util/math/BlockPos;)V",
+      "handoff_hook_mode": "ENTRY_BEFORE_READ_WRITE_AND_ALL_RETURNS_CATCH_ALL_FINALLY",
+      "hook_type": "WRITE_BEGIN",
+      "affected_domains": [
+        "tileentity restrictions"
+      ],
+      "thread_context": "CANONICAL_OWNER",
+      "insertion_location": "method entry, before any read or write of protected state; balanced catch-all-finally end hook before every return and Throwable (WRITE_END)",
+      "fingerprint": {
+        "kind": "DECLARATION"
+      },
+      "bracket_end_hook_type": "WRITE_END"
+    },
+    {
+      "id": "W18",
+      "purpose": "chunk onLoad callback (audit: onLoad146 in syncCallback)",
+      "class": "net.minecraft.world.chunk.Chunk",
+      "method": "func_76631_c",
+      "descriptor": "()V",
+      "handoff_hook_mode": "ENTRY_BEFORE_READ_WRITE_AND_ALL_RETURNS_CATCH_ALL_FINALLY",
+      "hook_type": "WRITE_BEGIN",
+      "affected_domains": [
+        "unload/reload"
+      ],
+      "thread_context": "CANONICAL_OWNER",
+      "insertion_location": "method entry, before any read or write of protected state; balanced catch-all-finally end hook before every return and Throwable (WRITE_END)",
+      "fingerprint": {
+        "kind": "DECLARATION"
+      },
+      "bracket_end_hook_type": "WRITE_END"
+    },
+    {
+      "id": "W19",
+      "purpose": "chunk onUnload callback (audit: onUnload149 in func_73156_b)",
+      "class": "net.minecraft.world.chunk.Chunk",
+      "method": "func_76623_d",
+      "descriptor": "()V",
+      "handoff_hook_mode": "ENTRY_BEFORE_READ_WRITE_AND_ALL_RETURNS_CATCH_ALL_FINALLY",
+      "hook_type": "WRITE_BEGIN",
+      "affected_domains": [
+        "unload/reload"
+      ],
+      "thread_context": "CANONICAL_OWNER",
+      "insertion_location": "method entry, before any read or write of protected state; balanced catch-all-finally end hook before every return and Throwable (WRITE_END)",
+      "fingerprint": {
+        "kind": "DECLARATION"
+      },
+      "bracket_end_hook_type": "WRITE_END"
+    },
+    {
+      "id": "W20",
+      "purpose": "chunk populate (provider+generator)",
+      "class": "net.minecraft.world.chunk.Chunk",
+      "method": "func_186030_a",
+      "descriptor": "(Lnet/minecraft/world/chunk/IChunkProvider;Lnet/minecraft/world/gen/IChunkGenerator;)V",
+      "handoff_hook_mode": "ENTRY_BEFORE_READ_WRITE_AND_ALL_RETURNS_CATCH_ALL_FINALLY",
+      "hook_type": "WRITE_BEGIN",
+      "affected_domains": [
+        "owner publication"
+      ],
+      "thread_context": "CANONICAL_OWNER",
+      "insertion_location": "method entry, before any read or write of protected state; balanced catch-all-finally end hook before every return and Throwable (WRITE_END)",
+      "fingerprint": {
+        "kind": "DECLARATION"
+      },
+      "bracket_end_hook_type": "WRITE_END"
+    },
+    {
+      "id": "W21",
+      "purpose": "chunk populate (generator) incl. terrain/light flag generation",
+      "class": "net.minecraft.world.chunk.Chunk",
+      "method": "func_186034_a",
+      "descriptor": "(Lnet/minecraft/world/gen/IChunkGenerator;)V",
+      "handoff_hook_mode": "ENTRY_BEFORE_READ_WRITE_AND_ALL_RETURNS_CATCH_ALL_FINALLY",
+      "hook_type": "WRITE_BEGIN",
+      "affected_domains": [
+        "owner publication"
+      ],
+      "thread_context": "CANONICAL_OWNER",
+      "insertion_location": "method entry, before any read or write of protected state; balanced catch-all-finally end hook before every return and Throwable (WRITE_END)",
+      "fingerprint": {
+        "kind": "DECLARATION"
+      },
+      "bracket_end_hook_type": "WRITE_END"
+    },
+    {
+      "id": "W22",
+      "purpose": "chunk tick/incremental update (audit: func_150804_b177)",
+      "class": "net.minecraft.world.chunk.Chunk",
+      "method": "func_150804_b",
+      "descriptor": "(Z)V",
+      "handoff_hook_mode": "ENTRY_BEFORE_READ_WRITE_AND_ALL_RETURNS_CATCH_ALL_FINALLY",
+      "hook_type": "WRITE_BEGIN",
+      "affected_domains": [
+        "block light",
+        "sky light"
+      ],
+      "thread_context": "CANONICAL_OWNER",
+      "insertion_location": "method entry, before any read or write of protected state; balanced catch-all-finally end hook before every return and Throwable (WRITE_END)",
+      "fingerprint": {
+        "kind": "DECLARATION"
+      },
+      "bracket_end_hook_type": "WRITE_END"
+    },
+    {
+      "id": "W23",
+      "purpose": "chunk extended block storage replacement (audit arraycopy49)",
+      "class": "net.minecraft.world.chunk.Chunk",
+      "method": "func_76602_a",
+      "descriptor": "([Lnet/minecraft/world/chunk/storage/ExtendedBlockStorage;)V",
+      "handoff_hook_mode": "ENTRY_BEFORE_READ_WRITE_AND_ALL_RETURNS_CATCH_ALL_FINALLY",
+      "hook_type": "WRITE_BEGIN",
+      "affected_domains": [
+        "storage/backing replacement",
+        "section existence"
+      ],
+      "thread_context": "CANONICAL_OWNER",
+      "insertion_location": "method entry, before any read or write of protected state; balanced catch-all-finally end hook before every return and Throwable (WRITE_END)",
+      "fingerprint": {
+        "kind": "BCI_ASSERTIONS",
+        "assertions": [
+          {
+            "bci": 49,
+            "expect": "invokestatic java/lang/System.arraycopy"
+          }
+        ]
+      },
+      "bracket_end_hook_type": "WRITE_END"
+    },
+    {
+      "id": "W24",
+      "purpose": "chunk lazy biome lookup fill (audit bastore92)",
+      "class": "net.minecraft.world.chunk.Chunk",
+      "method": "func_177411_a",
+      "descriptor": "(Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/world/biome/BiomeProvider;)Lnet/minecraft/world/biome/Biome;",
+      "handoff_hook_mode": "ENTRY_BEFORE_READ_WRITE_AND_ALL_RETURNS_CATCH_ALL_FINALLY",
+      "hook_type": "WRITE_BEGIN",
+      "affected_domains": [
+        "biomes"
+      ],
+      "thread_context": "CANONICAL_OWNER",
+      "insertion_location": "method entry, before any read or write of protected state; balanced catch-all-finally end hook before every return and Throwable (WRITE_END)",
+      "fingerprint": {
+        "kind": "BCI_ASSERTIONS",
+        "assertions": [
+          {
+            "bci": 92,
+            "expect": "bastore"
+          }
+        ]
+      },
+      "bracket_end_hook_type": "WRITE_END"
+    },
+    {
+      "id": "W25",
+      "purpose": "chunk biome array set (audit arraycopy49)",
+      "class": "net.minecraft.world.chunk.Chunk",
+      "method": "func_76616_a",
+      "descriptor": "([B)V",
+      "handoff_hook_mode": "ENTRY_BEFORE_READ_WRITE_AND_ALL_RETURNS_CATCH_ALL_FINALLY",
+      "hook_type": "WRITE_BEGIN",
+      "affected_domains": [
+        "biomes"
+      ],
+      "thread_context": "CANONICAL_OWNER",
+      "insertion_location": "method entry, before any read or write of protected state; balanced catch-all-finally end hook before every return and Throwable (WRITE_END)",
+      "fingerprint": {
+        "kind": "BCI_ASSERTIONS",
+        "assertions": [
+          {
+            "bci": 49,
+            "expect": "invokestatic java/lang/System.arraycopy"
+          }
+        ]
+      },
+      "bracket_end_hook_type": "WRITE_END"
+    },
+    {
+      "id": "W26",
+      "purpose": "chunk incremental light update (audit func_76594_o161)",
+      "class": "net.minecraft.world.chunk.Chunk",
+      "method": "func_76594_o",
+      "descriptor": "()V",
+      "handoff_hook_mode": "ENTRY_BEFORE_READ_WRITE_AND_ALL_RETURNS_CATCH_ALL_FINALLY",
+      "hook_type": "WRITE_BEGIN",
+      "affected_domains": [
+        "block light",
+        "sky light"
+      ],
+      "thread_context": "CANONICAL_OWNER",
+      "insertion_location": "method entry, before any read or write of protected state; balanced catch-all-finally end hook before every return and Throwable (WRITE_END)",
+      "fingerprint": {
+        "kind": "DECLARATION"
+      },
+      "bracket_end_hook_type": "WRITE_END"
+    },
+    {
+      "id": "W27",
+      "purpose": "chunk terrain/light flags and propagation",
+      "class": "net.minecraft.world.chunk.Chunk",
+      "method": "func_150809_p",
+      "descriptor": "()V",
+      "handoff_hook_mode": "ENTRY_BEFORE_READ_WRITE_AND_ALL_RETURNS_CATCH_ALL_FINALLY",
+      "hook_type": "WRITE_BEGIN",
+      "affected_domains": [
+        "sky light"
+      ],
+      "thread_context": "CANONICAL_OWNER",
+      "insertion_location": "method entry, before any read or write of protected state; balanced catch-all-finally end hook before every return and Throwable (WRITE_END)",
+      "fingerprint": {
+        "kind": "DECLARATION"
+      },
+      "bracket_end_hook_type": "WRITE_END"
+    },
+    {
+      "id": "W28",
+      "purpose": "chunk light family writer (audit light family)",
+      "class": "net.minecraft.world.chunk.Chunk",
+      "method": "func_177441_y",
+      "descriptor": "()V",
+      "handoff_hook_mode": "ENTRY_BEFORE_READ_WRITE_AND_ALL_RETURNS_CATCH_ALL_FINALLY",
+      "hook_type": "WRITE_BEGIN",
+      "affected_domains": [
+        "block light",
+        "sky light"
+      ],
+      "thread_context": "CANONICAL_OWNER",
+      "insertion_location": "method entry, before any read or write of protected state; balanced catch-all-finally end hook before every return and Throwable (WRITE_END)",
+      "fingerprint": {
+        "kind": "DECLARATION"
+      },
+      "bracket_end_hook_type": "WRITE_END"
+    },
+    {
+      "id": "W29",
+      "purpose": "chunk neighbor light access (audit light family)",
+      "class": "net.minecraft.world.chunk.Chunk",
+      "method": "func_180700_a",
+      "descriptor": "(Lnet/minecraft/util/EnumFacing;)V",
+      "handoff_hook_mode": "ENTRY_BEFORE_READ_WRITE_AND_ALL_RETURNS_CATCH_ALL_FINALLY",
+      "hook_type": "WRITE_BEGIN",
+      "affected_domains": [
+        "block light",
+        "sky light"
+      ],
+      "thread_context": "CANONICAL_OWNER",
+      "insertion_location": "method entry, before any read or write of protected state; balanced catch-all-finally end hook before every return and Throwable (WRITE_END)",
+      "fingerprint": {
+        "kind": "DECLARATION"
+      },
+      "bracket_end_hook_type": "WRITE_END"
+    },
+    {
+      "id": "W30",
+      "purpose": "chunk sky visibility/light check (audit light family)",
+      "class": "net.minecraft.world.chunk.Chunk",
+      "method": "func_150811_f",
+      "descriptor": "(II)Z",
+      "handoff_hook_mode": "ENTRY_BEFORE_READ_WRITE_AND_ALL_RETURNS_CATCH_ALL_FINALLY",
+      "hook_type": "WRITE_BEGIN",
+      "affected_domains": [
+        "sky light"
+      ],
+      "thread_context": "CANONICAL_OWNER",
+      "insertion_location": "method entry, before any read or write of protected state; balanced catch-all-finally end hook before every return and Throwable (WRITE_END)",
+      "fingerprint": {
+        "kind": "DECLARATION"
+      },
+      "bracket_end_hook_type": "WRITE_END"
+    },
+    {
+      "id": "W31",
+      "purpose": "chunk readiness flag (terrain populated)",
+      "class": "net.minecraft.world.chunk.Chunk",
+      "method": "func_177446_d",
+      "descriptor": "(Z)V",
+      "handoff_hook_mode": "ENTRY_BEFORE_READ_WRITE_AND_ALL_RETURNS_CATCH_ALL_FINALLY",
+      "hook_type": "WRITE_BEGIN",
+      "affected_domains": [
+        "owner publication"
+      ],
+      "thread_context": "CANONICAL_OWNER",
+      "insertion_location": "method entry, before any read or write of protected state; balanced catch-all-finally end hook before every return and Throwable (WRITE_END)",
+      "fingerprint": {
+        "kind": "DECLARATION"
+      },
+      "bracket_end_hook_type": "WRITE_END"
+    },
+    {
+      "id": "W32",
+      "purpose": "chunk readiness flag (light populated)",
+      "class": "net.minecraft.world.chunk.Chunk",
+      "method": "func_177421_e",
+      "descriptor": "(Z)V",
+      "handoff_hook_mode": "ENTRY_BEFORE_READ_WRITE_AND_ALL_RETURNS_CATCH_ALL_FINALLY",
+      "hook_type": "WRITE_BEGIN",
+      "affected_domains": [
+        "owner publication"
+      ],
+      "thread_context": "CANONICAL_OWNER",
+      "insertion_location": "method entry, before any read or write of protected state; balanced catch-all-finally end hook before every return and Throwable (WRITE_END)",
+      "fingerprint": {
+        "kind": "DECLARATION"
+      },
+      "bracket_end_hook_type": "WRITE_END"
+    },
+    {
+      "id": "W33",
+      "purpose": "chunk invalid tile entity removal",
+      "class": "net.minecraft.world.chunk.Chunk",
+      "method": "removeInvalidTileEntity",
+      "descriptor": "(Lnet/minecraft/util/math/BlockPos;)V",
+      "handoff_hook_mode": "ENTRY_BEFORE_READ_WRITE_AND_ALL_RETURNS_CATCH_ALL_FINALLY",
+      "hook_type": "WRITE_BEGIN",
+      "affected_domains": [
+        "tileentity restrictions"
+      ],
+      "thread_context": "CANONICAL_OWNER",
+      "insertion_location": "method entry, before any read or write of protected state; balanced catch-all-finally end hook before every return and Throwable (WRITE_END)",
+      "fingerprint": {
+        "kind": "DECLARATION"
+      },
+      "bracket_end_hook_type": "WRITE_END"
+    },
+    {
+      "id": "W34",
+      "purpose": "chunk identity registration after super, before escape (serves worker-private build and owner-pending contexts)",
+      "class": "net.minecraft.world.chunk.Chunk",
+      "method": "<init>",
+      "descriptor": "(Lnet/minecraft/world/World;II)V",
+      "handoff_hook_mode": "REGISTER_NEW_IDENTITY_AFTER_SUPER_BEFORE_ESCAPE",
+      "hook_type": "PRIVATE_BUILD_BEGIN",
+      "affected_domains": [
+        "private I/O construction",
+        "section existence"
+      ],
+      "thread_context": "CANONICAL_OWNER_OR_IO_WORKER",
+      "insertion_location": "after the successful super constructor invocation, before the instance can escape; registers the fresh identity with PrivateBuildTickets.registerNew",
+      "fingerprint": {
+        "kind": "DECLARATION"
+      }
+    },
+    {
+      "id": "W35",
+      "purpose": "chunk identity registration after super, before escape (serves worker-private build and owner-pending contexts)",
+      "class": "net.minecraft.world.chunk.Chunk",
+      "method": "<init>",
+      "descriptor": "(Lnet/minecraft/world/World;Lnet/minecraft/world/chunk/ChunkPrimer;II)V",
+      "handoff_hook_mode": "REGISTER_NEW_IDENTITY_AFTER_SUPER_BEFORE_ESCAPE",
+      "hook_type": "PRIVATE_BUILD_BEGIN",
+      "affected_domains": [
+        "private I/O construction",
+        "section existence"
+      ],
+      "thread_context": "CANONICAL_OWNER_OR_IO_WORKER",
+      "insertion_location": "after the successful super constructor invocation, before the instance can escape; registers the fresh identity with PrivateBuildTickets.registerNew",
+      "fingerprint": {
+        "kind": "DECLARATION"
+      }
+    },
+    {
+      "id": "W36",
+      "purpose": "extended block storage identity registration",
+      "class": "net.minecraft.world.chunk.storage.ExtendedBlockStorage",
+      "method": "<init>",
+      "descriptor": "(IZ)V",
+      "handoff_hook_mode": "REGISTER_NEW_IDENTITY_AFTER_SUPER_BEFORE_ESCAPE",
+      "hook_type": "PRIVATE_BUILD_BEGIN",
+      "affected_domains": [
+        "section existence"
+      ],
+      "thread_context": "CANONICAL_OWNER_OR_IO_WORKER",
+      "insertion_location": "after the successful super constructor invocation, before the instance can escape; registers the fresh identity with PrivateBuildTickets.registerNew",
+      "fingerprint": {
+        "kind": "DECLARATION"
+      }
+    },
+    {
+      "id": "W37",
+      "purpose": "EBS block state set + refcount updates (audit count writes 62/80/98/116, cell set 192-203)",
+      "class": "net.minecraft.world.chunk.storage.ExtendedBlockStorage",
+      "method": "func_177484_a",
+      "descriptor": "(IIILnet/minecraft/block/state/IBlockState;)V",
+      "handoff_hook_mode": "ENTRY_BEFORE_READ_WRITE_AND_ALL_RETURNS_CATCH_ALL_FINALLY",
+      "hook_type": "WRITE_BEGIN",
+      "affected_domains": [
+        "block states",
+        "blockRefCount/isEmpty"
+      ],
+      "thread_context": "CANONICAL_OWNER_OR_IO_WORKER",
+      "insertion_location": "method entry, before any read or write of protected state; balanced catch-all-finally end hook before every return and Throwable (WRITE_END)",
+      "fingerprint": {
+        "kind": "BCI_ASSERTIONS",
+        "assertions": [
+          {
+            "bci": 62,
+            "expect": "putfield field_76682_b:I"
+          },
+          {
+            "bci": 116,
+            "expect": "putfield field_76683_c:I"
+          }
+        ]
+      },
+      "bracket_end_hook_type": "WRITE_END"
+    },
+    {
+      "id": "W38",
+      "purpose": "EBS sky light nibble write",
+      "class": "net.minecraft.world.chunk.storage.ExtendedBlockStorage",
+      "method": "func_76657_c",
+      "descriptor": "(IIII)V",
+      "handoff_hook_mode": "ENTRY_BEFORE_READ_WRITE_AND_ALL_RETURNS_CATCH_ALL_FINALLY",
+      "hook_type": "WRITE_BEGIN",
+      "affected_domains": [
+        "sky light"
+      ],
+      "thread_context": "CANONICAL_OWNER_OR_IO_WORKER",
+      "insertion_location": "method entry, before any read or write of protected state; balanced catch-all-finally end hook before every return and Throwable (WRITE_END)",
+      "fingerprint": {
+        "kind": "DECLARATION"
+      },
+      "bracket_end_hook_type": "WRITE_END"
+    },
+    {
+      "id": "W39",
+      "purpose": "EBS block light nibble write",
+      "class": "net.minecraft.world.chunk.storage.ExtendedBlockStorage",
+      "method": "func_76677_d",
+      "descriptor": "(IIII)V",
+      "handoff_hook_mode": "ENTRY_BEFORE_READ_WRITE_AND_ALL_RETURNS_CATCH_ALL_FINALLY",
+      "hook_type": "WRITE_BEGIN",
+      "affected_domains": [
+        "block light"
+      ],
+      "thread_context": "CANONICAL_OWNER_OR_IO_WORKER",
+      "insertion_location": "method entry, before any read or write of protected state; balanced catch-all-finally end hook before every return and Throwable (WRITE_END)",
+      "fingerprint": {
+        "kind": "DECLARATION"
+      },
+      "bracket_end_hook_type": "WRITE_END"
+    },
+    {
+      "id": "W40",
+      "purpose": "EBS refcount rescan (isEmpty basis)",
+      "class": "net.minecraft.world.chunk.storage.ExtendedBlockStorage",
+      "method": "func_76672_e",
+      "descriptor": "()V",
+      "handoff_hook_mode": "ENTRY_BEFORE_READ_WRITE_AND_ALL_RETURNS_CATCH_ALL_FINALLY",
+      "hook_type": "WRITE_BEGIN",
+      "affected_domains": [
+        "blockRefCount/isEmpty"
+      ],
+      "thread_context": "CANONICAL_OWNER_OR_IO_WORKER",
+      "insertion_location": "method entry, before any read or write of protected state; balanced catch-all-finally end hook before every return and Throwable (WRITE_END)",
+      "fingerprint": {
+        "kind": "DECLARATION"
+      },
+      "bracket_end_hook_type": "WRITE_END"
+    },
+    {
+      "id": "W41",
+      "purpose": "EBS block light plane replacement",
+      "class": "net.minecraft.world.chunk.storage.ExtendedBlockStorage",
+      "method": "func_76659_c",
+      "descriptor": "(Lnet/minecraft/world/chunk/NibbleArray;)V",
+      "handoff_hook_mode": "ENTRY_BEFORE_READ_WRITE_AND_ALL_RETURNS_CATCH_ALL_FINALLY",
+      "hook_type": "WRITE_BEGIN",
+      "affected_domains": [
+        "storage/backing replacement",
+        "block light"
+      ],
+      "thread_context": "CANONICAL_OWNER_OR_IO_WORKER",
+      "insertion_location": "method entry, before any read or write of protected state; balanced catch-all-finally end hook before every return and Throwable (WRITE_END)",
+      "fingerprint": {
+        "kind": "DECLARATION"
+      },
+      "bracket_end_hook_type": "WRITE_END"
+    },
+    {
+      "id": "W42",
+      "purpose": "EBS sky light plane replacement",
+      "class": "net.minecraft.world.chunk.storage.ExtendedBlockStorage",
+      "method": "func_76666_d",
+      "descriptor": "(Lnet/minecraft/world/chunk/NibbleArray;)V",
+      "handoff_hook_mode": "ENTRY_BEFORE_READ_WRITE_AND_ALL_RETURNS_CATCH_ALL_FINALLY",
+      "hook_type": "WRITE_BEGIN",
+      "affected_domains": [
+        "storage/backing replacement",
+        "sky light"
+      ],
+      "thread_context": "CANONICAL_OWNER_OR_IO_WORKER",
+      "insertion_location": "method entry, before any read or write of protected state; balanced catch-all-finally end hook before every return and Throwable (WRITE_END)",
+      "fingerprint": {
+        "kind": "DECLARATION"
+      },
+      "bracket_end_hook_type": "WRITE_END"
+    },
+    {
+      "id": "W43",
+      "purpose": "block state container identity registration",
+      "class": "net.minecraft.world.chunk.BlockStateContainer",
+      "method": "<init>",
+      "descriptor": "()V",
+      "handoff_hook_mode": "REGISTER_NEW_IDENTITY_AFTER_SUPER_BEFORE_ESCAPE",
+      "hook_type": "PRIVATE_BUILD_BEGIN",
+      "affected_domains": [
+        "section existence"
+      ],
+      "thread_context": "CANONICAL_OWNER_OR_IO_WORKER",
+      "insertion_location": "after the successful super constructor invocation, before the instance can escape; registers the fresh identity with PrivateBuildTickets.registerNew",
+      "fingerprint": {
+        "kind": "DECLARATION"
+      }
+    },
+    {
+      "id": "W44",
+      "purpose": "container palette size setter",
+      "class": "net.minecraft.world.chunk.BlockStateContainer",
+      "method": "func_186012_b",
+      "descriptor": "(I)V",
+      "handoff_hook_mode": "ENTRY_BEFORE_READ_WRITE_AND_ALL_RETURNS_CATCH_ALL_FINALLY",
+      "hook_type": "WRITE_BEGIN",
+      "affected_domains": [
+        "block states"
+      ],
+      "thread_context": "CANONICAL_OWNER_OR_IO_WORKER",
+      "insertion_location": "method entry, before any read or write of protected state; balanced catch-all-finally end hook before every return and Throwable (WRITE_END)",
+      "fingerprint": {
+        "kind": "DECLARATION"
+      },
+      "bracket_end_hook_type": "WRITE_END"
+    },
+    {
+      "id": "W45",
+      "purpose": "container setBits: palette+BitArray replacement (audit BCI 73-99)",
+      "class": "net.minecraft.world.chunk.BlockStateContainer",
+      "method": "setBits",
+      "descriptor": "(IZ)V",
+      "handoff_hook_mode": "ENTRY_BEFORE_READ_WRITE_AND_ALL_RETURNS_CATCH_ALL_FINALLY",
+      "hook_type": "WRITE_BEGIN",
+      "affected_domains": [
+        "block states",
+        "storage/backing replacement"
+      ],
+      "thread_context": "CANONICAL_OWNER_OR_IO_WORKER",
+      "insertion_location": "method entry, before any read or write of protected state; balanced catch-all-finally end hook before every return and Throwable (WRITE_END)",
+      "fingerprint": {
+        "kind": "BCI_ASSERTIONS",
+        "assertions": [
+          {
+            "bci": 99,
+            "expect": "putfield field_186024_e:I"
+          }
+        ]
+      },
+      "bracket_end_hook_type": "WRITE_END"
+    },
+    {
+      "id": "W46",
+      "purpose": "container palette resize",
+      "class": "net.minecraft.world.chunk.BlockStateContainer",
+      "method": "func_186008_a",
+      "descriptor": "(ILnet/minecraft/block/state/IBlockState;)I",
+      "handoff_hook_mode": "ENTRY_BEFORE_READ_WRITE_AND_ALL_RETURNS_CATCH_ALL_FINALLY",
+      "hook_type": "WRITE_BEGIN",
+      "affected_domains": [
+        "block states"
+      ],
+      "thread_context": "CANONICAL_OWNER_OR_IO_WORKER",
+      "insertion_location": "method entry, before any read or write of protected state; balanced catch-all-finally end hook before every return and Throwable (WRITE_END)",
+      "fingerprint": {
+        "kind": "DECLARATION"
+      },
+      "bracket_end_hook_type": "WRITE_END"
+    },
+    {
+      "id": "W47",
+      "purpose": "container state set (resize path)",
+      "class": "net.minecraft.world.chunk.BlockStateContainer",
+      "method": "func_186013_a",
+      "descriptor": "(IIILnet/minecraft/block/state/IBlockState;)V",
+      "handoff_hook_mode": "ENTRY_BEFORE_READ_WRITE_AND_ALL_RETURNS_CATCH_ALL_FINALLY",
+      "hook_type": "WRITE_BEGIN",
+      "affected_domains": [
+        "block states"
+      ],
+      "thread_context": "CANONICAL_OWNER_OR_IO_WORKER",
+      "insertion_location": "method entry, before any read or write of protected state; balanced catch-all-finally end hook before every return and Throwable (WRITE_END)",
+      "fingerprint": {
+        "kind": "DECLARATION"
+      },
+      "bracket_end_hook_type": "WRITE_END"
+    },
+    {
+      "id": "W48",
+      "purpose": "container index set",
+      "class": "net.minecraft.world.chunk.BlockStateContainer",
+      "method": "func_186014_b",
+      "descriptor": "(ILnet/minecraft/block/state/IBlockState;)V",
+      "handoff_hook_mode": "ENTRY_BEFORE_READ_WRITE_AND_ALL_RETURNS_CATCH_ALL_FINALLY",
+      "hook_type": "WRITE_BEGIN",
+      "affected_domains": [
+        "block states"
+      ],
+      "thread_context": "CANONICAL_OWNER_OR_IO_WORKER",
+      "insertion_location": "method entry, before any read or write of protected state; balanced catch-all-finally end hook before every return and Throwable (WRITE_END)",
+      "fingerprint": {
+        "kind": "DECLARATION"
+      },
+      "bracket_end_hook_type": "WRITE_END"
+    },
+    {
+      "id": "W49",
+      "purpose": "container NBT ingestion (storage replacement)",
+      "class": "net.minecraft.world.chunk.BlockStateContainer",
+      "method": "func_186019_a",
+      "descriptor": "([BLnet/minecraft/world/chunk/NibbleArray;Lnet/minecraft/world/chunk/NibbleArray;)V",
+      "handoff_hook_mode": "ENTRY_BEFORE_READ_WRITE_AND_ALL_RETURNS_CATCH_ALL_FINALLY",
+      "hook_type": "WRITE_BEGIN",
+      "affected_domains": [
+        "storage/backing replacement",
+        "block states"
+      ],
+      "thread_context": "CANONICAL_OWNER_OR_IO_WORKER",
+      "insertion_location": "method entry, before any read or write of protected state; balanced catch-all-finally end hook before every return and Throwable (WRITE_END)",
+      "fingerprint": {
+        "kind": "DECLARATION"
+      },
+      "bracket_end_hook_type": "WRITE_END"
+    },
+    {
+      "id": "W50",
+      "purpose": "nibble array identity registration (fresh backing)",
+      "class": "net.minecraft.world.chunk.NibbleArray",
+      "method": "<init>",
+      "descriptor": "()V",
+      "handoff_hook_mode": "REGISTER_NEW_IDENTITY_AFTER_SUPER_BEFORE_ESCAPE",
+      "hook_type": "PRIVATE_BUILD_BEGIN",
+      "affected_domains": [
+        "section existence"
+      ],
+      "thread_context": "CANONICAL_OWNER_OR_IO_WORKER",
+      "insertion_location": "after the successful super constructor invocation, before the instance can escape; registers the fresh identity with PrivateBuildTickets.registerNew",
+      "fingerprint": {
+        "kind": "DECLARATION"
+      }
+    },
+    {
+      "id": "W51",
+      "purpose": "nibble array identity registration (ALIASES its byte[] argument; prior provenance retained)",
+      "class": "net.minecraft.world.chunk.NibbleArray",
+      "method": "<init>",
+      "descriptor": "([B)V",
+      "handoff_hook_mode": "REGISTER_NEW_IDENTITY_AFTER_SUPER_BEFORE_ESCAPE",
+      "hook_type": "PRIVATE_BUILD_BEGIN",
+      "affected_domains": [
+        "storage/backing replacement"
+      ],
+      "thread_context": "CANONICAL_OWNER_OR_IO_WORKER",
+      "insertion_location": "after the successful super constructor invocation, before the instance can escape; registers the fresh identity with PrivateBuildTickets.registerNew",
+      "fingerprint": {
+        "kind": "DECLARATION"
+      }
+    },
+    {
+      "id": "W52",
+      "purpose": "nibble array coordinated write",
+      "class": "net.minecraft.world.chunk.NibbleArray",
+      "method": "func_76581_a",
+      "descriptor": "(IIII)V",
+      "handoff_hook_mode": "ENTRY_BEFORE_READ_WRITE_AND_ALL_RETURNS_CATCH_ALL_FINALLY",
+      "hook_type": "WRITE_BEGIN",
+      "affected_domains": [
+        "block light",
+        "sky light"
+      ],
+      "thread_context": "CANONICAL_OWNER_OR_IO_WORKER",
+      "insertion_location": "method entry, before any read or write of protected state; balanced catch-all-finally end hook before every return and Throwable (WRITE_END)",
+      "fingerprint": {
+        "kind": "DECLARATION"
+      },
+      "bracket_end_hook_type": "WRITE_END"
+    },
+    {
+      "id": "W53",
+      "purpose": "nibble array direct backing set",
+      "class": "net.minecraft.world.chunk.NibbleArray",
+      "method": "func_177482_a",
+      "descriptor": "(II)V",
+      "handoff_hook_mode": "ENTRY_BEFORE_READ_WRITE_AND_ALL_RETURNS_CATCH_ALL_FINALLY",
+      "hook_type": "WRITE_BEGIN",
+      "affected_domains": [
+        "block light",
+        "sky light"
+      ],
+      "thread_context": "CANONICAL_OWNER_OR_IO_WORKER",
+      "insertion_location": "method entry, before any read or write of protected state; balanced catch-all-finally end hook before every return and Throwable (WRITE_END)",
+      "fingerprint": {
+        "kind": "DECLARATION"
+      },
+      "bracket_end_hook_type": "WRITE_END"
+    },
+    {
+      "id": "W54",
+      "purpose": "bit array packed cell write",
+      "class": "net.minecraft.util.BitArray",
+      "method": "func_188141_a",
+      "descriptor": "(II)V",
+      "handoff_hook_mode": "ENTRY_BEFORE_READ_WRITE_AND_ALL_RETURNS_CATCH_ALL_FINALLY",
+      "hook_type": "WRITE_BEGIN",
+      "affected_domains": [
+        "block states"
+      ],
+      "thread_context": "CANONICAL_OWNER_OR_IO_WORKER",
+      "insertion_location": "method entry, before any read or write of protected state; balanced catch-all-finally end hook before every return and Throwable (WRITE_END)",
+      "fingerprint": {
+        "kind": "DECLARATION"
+      },
+      "bracket_end_hook_type": "WRITE_END"
+    },
+    {
+      "id": "W55",
+      "purpose": "bit array identity registration",
+      "class": "net.minecraft.util.BitArray",
+      "method": "<init>",
+      "descriptor": "(II)V",
+      "handoff_hook_mode": "REGISTER_NEW_IDENTITY_AFTER_SUPER_BEFORE_ESCAPE",
+      "hook_type": "PRIVATE_BUILD_BEGIN",
+      "affected_domains": [
+        "section existence"
+      ],
+      "thread_context": "CANONICAL_OWNER_OR_IO_WORKER",
+      "insertion_location": "after the successful super constructor invocation, before the instance can escape; registers the fresh identity with PrivateBuildTickets.registerNew",
+      "fingerprint": {
+        "kind": "DECLARATION"
+      }
+    },
+    {
+      "id": "W56",
+      "purpose": "provider load/insert by coordinate: whole-operation owner publication transaction; exact map put recorded (audit put131); ordinary existing-READY lookups allocate no incarnation",
+      "class": "net.minecraft.world.gen.ChunkProviderServer",
+      "method": "loadChunk",
+      "descriptor": "(IILjava/lang/Runnable;)Lnet/minecraft/world/chunk/Chunk;",
+      "handoff_hook_mode": "ENTRY_BEFORE_READ_WRITE_AND_ALL_RETURNS_CATCH_ALL_FINALLY",
+      "hook_type": "WRITE_BEGIN",
+      "affected_domains": [
+        "owner publication",
+        "same-coordinate replacement",
+        "unload/reload"
+      ],
+      "thread_context": "CANONICAL_OWNER",
+      "insertion_location": "method entry, before any read or write of protected state; balanced catch-all-finally end hook before every return and Throwable (WRITE_END)",
+      "fingerprint": {
+        "kind": "BCI_ASSERTIONS",
+        "assertions": [
+          {
+            "bci": 131,
+            "expect": "invokeinterface it/unimi/dsi/fastutil/longs/Long2ObjectMap.put"
+          }
+        ]
+      },
+      "bracket_end_hook_type": "WRITE_END"
+    },
+    {
+      "id": "W57",
+      "purpose": "provider generator chunk insert: whole-operation owner publication transaction (audit put125)",
+      "class": "net.minecraft.world.gen.ChunkProviderServer",
+      "method": "func_186025_d",
+      "descriptor": "(II)Lnet/minecraft/world/chunk/Chunk;",
+      "handoff_hook_mode": "ENTRY_BEFORE_READ_WRITE_AND_ALL_RETURNS_CATCH_ALL_FINALLY",
+      "hook_type": "WRITE_BEGIN",
+      "affected_domains": [
+        "owner publication",
+        "same-coordinate replacement"
+      ],
+      "thread_context": "CANONICAL_OWNER",
+      "insertion_location": "method entry, before any read or write of protected state; balanced catch-all-finally end hook before every return and Throwable (WRITE_END)",
+      "fingerprint": {
+        "kind": "BCI_ASSERTIONS",
+        "assertions": [
+          {
+            "bci": 125,
+            "expect": "invokeinterface it/unimi/dsi/fastutil/longs/Long2ObjectMap.put"
+          }
+        ]
+      },
+      "bracket_end_hook_type": "WRITE_END"
+    },
+    {
+      "id": "W58",
+      "purpose": "provider unload: retire BEFORE onUnload149/dormant insertion167/save173/179/map remove187",
+      "class": "net.minecraft.world.gen.ChunkProviderServer",
+      "method": "func_73156_b",
+      "descriptor": "()Z",
+      "handoff_hook_mode": "ENTRY_BEFORE_READ_WRITE_AND_ALL_RETURNS_CATCH_ALL_FINALLY",
+      "hook_type": "LIFECYCLE_RETIRE",
+      "affected_domains": [
+        "unload/reload"
+      ],
+      "thread_context": "CANONICAL_OWNER",
+      "insertion_location": "method entry, before any read or write of protected state; balanced catch-all-finally end hook before every return and Throwable (WRITE_END)",
+      "fingerprint": {
+        "kind": "BCI_ASSERTIONS",
+        "assertions": [
+          {
+            "bci": 149,
+            "expect": "invokevirtual net/minecraft/world/chunk/Chunk.func_76623_d"
+          },
+          {
+            "bci": 167,
+            "expect": "invokestatic net/minecraftforge/common/ForgeChunkManager.putDormantChunk"
+          },
+          {
+            "bci": 173,
+            "expect": "invokespecial func_73242_b"
+          },
+          {
+            "bci": 179,
+            "expect": "invokespecial func_73243_a"
+          },
+          {
+            "bci": 187,
+            "expect": "invokeinterface it/unimi/dsi/fastutil/longs/Long2ObjectMap.remove"
+          }
+        ]
+      },
+      "bracket_end_hook_type": "WRITE_END"
+    },
+    {
+      "id": "W59",
+      "purpose": "worker private build completion: success/failure release ticket published BEFORE the ran putfields (74 success, 88 failure)",
+      "class": "net.minecraftforge.common.chunkio.ChunkIOProvider",
+      "method": "run",
+      "descriptor": "()V",
+      "handoff_hook_mode": "RELEASE_SUCCESS_BEFORE_RAN_74_FAILURE_BEFORE_RAN_88",
+      "hook_type": "PRIVATE_BUILD_END",
+      "affected_domains": [
+        "private I/O construction"
+      ],
+      "thread_context": "IO_WORKER",
+      "insertion_location": "success ticket after graph/NBT assignments (putfield nbt 59, putfield chunk 69) and BEFORE ran putfield 74; failure ticket before exceptional ran putfield 88; monitor exit/notify/finally preserved",
+      "fingerprint": {
+        "kind": "BCI_ASSERTIONS",
+        "assertions": [
+          {
+            "bci": 59,
+            "expect": "putfield nbt:Lnet/minecraft/nbt/NBTTagCompound;"
+          },
+          {
+            "bci": 69,
+            "expect": "putfield chunk:Lnet/minecraft/world/chunk/Chunk;"
+          },
+          {
+            "bci": 74,
+            "expect": "putfield ran:Z"
+          },
+          {
+            "bci": 88,
+            "expect": "putfield ran:Z"
+          }
+        ]
+      }
+    },
+    {
+      "id": "W60",
+      "purpose": "owner acquire/validate ticket before first chunk read (getfield chunk 1), then owner publication transaction: recreate/put136, onLoad146, populate164, callbacks168; READY only after normal completion171",
+      "class": "net.minecraftforge.common.chunkio.ChunkIOProvider",
+      "method": "syncCallback",
+      "descriptor": "()V",
+      "handoff_hook_mode": "ACQUIRE_TICKET_BEFORE_FIRST_CHUNK_READ_THEN_OWNER_PUBLICATION_SCOPE",
+      "hook_type": "PUBLICATION_BEGIN",
+      "affected_domains": [
+        "owner publication",
+        "private I/O construction"
+      ],
+      "thread_context": "CANONICAL_OWNER",
+      "insertion_location": "acquire ticket at entry before BCI 1 first chunk read; publication scope spans loadEntities/events/put/onLoad/populate/callbacks",
+      "fingerprint": {
+        "kind": "BCI_ASSERTIONS",
+        "assertions": [
+          {
+            "bci": 1,
+            "expect": "getfield chunk:Lnet/minecraft/world/chunk/Chunk;"
+          },
+          {
+            "bci": 136,
+            "expect": "invokeinterface it/unimi/dsi/fastutil/longs/Long2ObjectMap.put"
+          },
+          {
+            "bci": 146,
+            "expect": "invokevirtual net/minecraft/world/chunk/Chunk.func_76631_c"
+          },
+          {
+            "bci": 164,
+            "expect": "invokevirtual net/minecraft/world/chunk/Chunk.func_186030_a"
+          },
+          {
+            "bci": 168,
+            "expect": "invokevirtual runCallbacks"
+          },
+          {
+            "bci": 171,
+            "expect": "return"
+          }
+        ]
+      },
+      "bracket_end_hook_type": "PUBLICATION_END"
+    },
+    {
+      "id": "S01",
+      "purpose": "diagnostic session bootstrap/shutdown on the exact canonical owner thread (func_71256_s field_175590_aa; getter func_175583_aK); first owner tick admits the qualified profile; shutdown revokes bindings",
+      "class": "net.minecraft.server.MinecraftServer",
+      "method": "run",
+      "descriptor": "()V",
+      "handoff_hook_mode": "METHOD_ENTRY",
+      "hook_type": "DIAGNOSTIC_ONLY",
+      "affected_domains": [
+        "owner session"
+      ],
+      "thread_context": "CANONICAL_OWNER",
+      "insertion_location": "session establishment inside run()V using the exact Thread field/getter; shutdown hook at session end",
+      "fingerprint": {
+        "kind": "CLASS_STRUCTURE",
+        "markers": [
+          "declares field_175590_aa (Thread)",
+          "declares func_175583_aK",
+          "run calls func_71217_p"
+        ]
+      }
+    },
+    {
+      "id": "S02",
+      "purpose": "packet capture event: admission at constructor entry after Object init (BCI 1) before first source read (BCI 4); acceptance linearizes at normal return 200 after body/mask/TE processing; catch-all covers all instructions after super",
+      "class": "net.minecraft.network.play.server.SPacketChunkData",
+      "method": "<init>",
+      "descriptor": "(Lnet/minecraft/world/chunk/Chunk;I)V",
+      "handoff_hook_mode": "CONSTRUCTOR_ENTRY",
+      "hook_type": "PACKET_CAPTURE",
+      "affected_domains": [
+        "packet capture",
+        "tileentity restrictions"
+      ],
+      "thread_context": "CANONICAL_OWNER",
+      "insertion_location": "entry hook after Object.<init> (BCI 1) before coordinate/world/section reads at 4; normal-return hook pairs the actual Java result after TE loop and before RETURN 200; catch-all rethrows the original Throwable",
+      "fingerprint": {
+        "kind": "BCI_ASSERTIONS",
+        "assertions": [
+          {
+            "bci": 1,
+            "expect": "invokespecial java/lang/Object.\"<init>\""
+          },
+          {
+            "bci": 4,
+            "expect": "aload_0"
+          },
+          {
+            "bci": 75,
+            "expect": "invokevirtual func_189555_a"
+          },
+          {
+            "bci": 78,
+            "expect": "putfield field_186948_c:I"
+          },
+          {
+            "bci": 180,
+            "expect": "invokevirtual net/minecraft/tileentity/TileEntity.func_189517_E_"
+          },
+          {
+            "bci": 200,
+            "expect": "return"
+          }
+        ]
+      }
+    },
+    {
+      "id": "S03",
+      "purpose": "worker private-build provenance: pending-map get 17 / nonnull branch 29 is SHARED_PENDING_NBT (never private); fresh disk branch reads compressed root 59, fixer 62, close 69; provenance before read 78",
+      "class": "net.minecraft.world.chunk.storage.AnvilChunkLoader",
+      "method": "loadChunk__Async",
+      "descriptor": "(Lnet/minecraft/world/World;II)[Ljava/lang/Object;",
+      "handoff_hook_mode": "METHOD_ENTRY",
+      "hook_type": "PRIVATE_BUILD_BEGIN",
+      "affected_domains": [
+        "private I/O construction"
+      ],
+      "thread_context": "IO_WORKER",
+      "insertion_location": "create task identity/private build context before loading work; provenance recorded before first data read at 78",
+      "fingerprint": {
+        "kind": "BCI_ASSERTIONS",
+        "assertions": [
+          {
+            "bci": 17,
+            "expect": "invokeinterface java/util/Map.get"
+          },
+          {
+            "bci": 29,
+            "expect": "ifnonnull"
+          },
+          {
+            "bci": 59,
+            "expect": "invokestatic net/minecraft/nbt/CompressedStreamTools.func_74794_a"
+          },
+          {
+            "bci": 62,
+            "expect": "invokevirtual net/minecraft/util/datafix/DataFixer.func_188257_a"
+          },
+          {
+            "bci": 69,
+            "expect": "invokevirtual java/io/DataInputStream.close"
+          },
+          {
+            "bci": 78,
+            "expect": "invokevirtual checkedReadChunkFromNBT__Async"
+          }
+        ]
+      }
+    },
+    {
+      "id": "S04",
+      "purpose": "exact root/source identity through original and relocated graph construction; neither branch may replace origin proof",
+      "class": "net.minecraft.world.chunk.storage.AnvilChunkLoader",
+      "method": "checkedReadChunkFromNBT__Async",
+      "descriptor": "(Lnet/minecraft/world/World;IILnet/minecraft/nbt/NBTTagCompound;)[Ljava/lang/Object;",
+      "handoff_hook_mode": "METHOD_ENTRY",
+      "hook_type": "PRIVATE_BUILD_BEGIN",
+      "affected_domains": [
+        "private I/O construction"
+      ],
+      "thread_context": "IO_WORKER",
+      "insertion_location": "source-identity binding at entry; no branch may replace the origin proof",
+      "fingerprint": {
+        "kind": "DECLARATION"
+      }
+    },
+    {
+      "id": "S05",
+      "purpose": "private graph construction/reference assignment sites; current ticket and source proof required",
+      "class": "net.minecraft.world.chunk.storage.AnvilChunkLoader",
+      "method": "func_75823_a",
+      "descriptor": "(Lnet/minecraft/world/World;Lnet/minecraft/nbt/NBTTagCompound;)Lnet/minecraft/world/chunk/Chunk;",
+      "handoff_hook_mode": "METHOD_ENTRY",
+      "hook_type": "PRIVATE_BUILD_BEGIN",
+      "affected_domains": [
+        "private I/O construction"
+      ],
+      "thread_context": "IO_WORKER",
+      "insertion_location": "component/reference registration at construction sites under the active BUILDING ticket",
+      "fingerprint": {
+        "kind": "DECLARATION"
+      }
+    },
+    {
+      "id": "S06",
+      "purpose": "verify raw biome store 213 is inside the qualified outer owner generation transaction; no setter-only proof (getter 184, raw store 213, skylight generation 222)",
+      "class": "net.minecraft.world.gen.ChunkGeneratorFlat",
+      "method": "func_185932_a",
+      "descriptor": "(II)Lnet/minecraft/world/chunk/Chunk;",
+      "handoff_hook_mode": "METHOD_ENTRY",
+      "hook_type": "DIAGNOSTIC_ONLY",
+      "affected_domains": [
+        "biomes"
+      ],
+      "thread_context": "CANONICAL_OWNER",
+      "insertion_location": "verification-only: the whole generator operation must run inside one outer owner write transaction",
+      "fingerprint": {
+        "kind": "BCI_ASSERTIONS",
+        "assertions": [
+          {
+            "bci": 184,
+            "expect": "invokevirtual net/minecraft/world/chunk/Chunk.func_76605_m"
+          },
+          {
+            "bci": 213,
+            "expect": "bastore"
+          },
+          {
+            "bci": 222,
+            "expect": "invokevirtual net/minecraft/world/chunk/Chunk.func_76603_b"
+          }
+        ]
+      }
+    }
+  ],
+  "context_definitions": [
+    {
+      "purpose": "PlayerChunkMap update tick drives initial/clumped chunk packet construction (func_72693_b)",
+      "class": "net.minecraft.server.management.PlayerChunkMap",
+      "method": "func_72693_b",
+      "descriptor": "()V"
+    },
+    {
+      "purpose": "PlayerChunkMapEntry initial full-chunk send path (func_187272_b; runtime returns boolean)",
+      "class": "net.minecraft.server.management.PlayerChunkMapEntry",
+      "method": "func_187272_b",
+      "descriptor": "()Z"
+    },
+    {
+      "purpose": "PlayerChunkMapEntry per-watcher send path (func_187278_c)",
+      "class": "net.minecraft.server.management.PlayerChunkMapEntry",
+      "method": "func_187278_c",
+      "descriptor": "(Lnet/minecraft/entity/player/EntityPlayerMP;)V"
+    },
+    {
+      "purpose": "PlayerChunkMapEntry clumped section-update path (func_187280_d)",
+      "class": "net.minecraft.server.management.PlayerChunkMapEntry",
+      "method": "func_187280_d",
+      "descriptor": "()V"
+    }
+  ],
+  "arming_rule": "A future live writer protocol may arm only when ALL required hooks are QUALIFIED. No wildcard matches; no partial best-effort profile."
+}

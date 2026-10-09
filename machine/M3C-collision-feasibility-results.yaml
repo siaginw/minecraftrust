@@ -1,0 +1,73 @@
+# M3 collision feasibility gate (operator authorization 2026-09-20).
+# ONE bounded instrumentation pass + analysis; NO production implementation,
+# no mode changes, no long campaign. class: MEASURED. Provenance:
+# M3C-COLLISION-FEASIBILITY.
+schema_version: 1
+date: "2026-09-20"
+builds:
+  coremod: {sha256_prefix: ee5896cb60d9779a, note: "measurement superset: adds property-gated WorldCollisionProbeTransformer (default OFF; replaces World.func_191504_a body with CollisionProbe.scan, an EXACT bytecode-verified replica + aggregate counters). M1/M2C paths unchanged (nmCompression DISABLED_BY_PROPERTY in-run)."}
+  instrument_overhead: "counters only (LongAdders + fixed histograms + per-section map); replica scan time 7,180 ms across 4.97M queries = ~1.4 us/query counted; no per-block logging"
+directive_1_exact_semantics: # verified from committed disassembly machine/raw/diag/world-collision-full.txt
+  scan_bounds: "AABB expanded by 1 block on all sides (floor(min)-1 .. ceil(max)+1)"
+  vanilla_micro_skips: "corner columns (xEdge&&zEdge) skipped entirely: 19.87M columns; top-y of edge columns skipped: 21.70M positions — vanilla already prunes ~29% of the raw expanded volume"
+  chunk_traversal: "per-column loaded check at (x,64,z) via isBlockLoaded; unloaded columns skipped (0 in-run: loaded world)"
+  world_border: "AIR-substitution branch (!returnOnFirst && !border.contains(pos) && entityInsideBorder) — never fires in-workload (default 60M border); probe uses flagInside=false (documented exact-for-workload deviation, class note in source)"
+  unloaded_blocks: "skipped columns, not air"
+  callbacks: "state.addCollisionBoxToList invoked for EVERY considered position INCLUDING AIR (the callback IS the air filter) — virtual dispatch through live NEID/FoamFix/mod transforms"
+  ordering: "column-major scan order; pooled-mutable-pos lifecycle incl. exception path replicated"
+  entity_vs_block: "func_184144_a = block scan + separate entity AABB scan (func_72839_b) — probe covers the BLOCK half (the M3J hot leaf)"
+  runtime_transform_compatibility: "replica routes every read/callback through the LIVE transformed classes; FoamFix splice logs observed in-run; no mod patches func_191504_a itself (BOP/NEID checks from M3-discovery + this run)"
+workload: "perfbotb AFK 700s through a natural-spawning night at its saved position (M3J entity pattern); Revelation; fresh JVM; 5 failed rig attempts preserved (*-failed1..5: LVT-duplicate ClassFormatError, 2x NPE from unfilled AtomicLong[] elements, dump NPE, clinit-reflection re-entry — each diagnosed and fixed; attempt 6 clean)"
+measurement: # 4,967,965 queries, 77,141,304 positions considered
+  queries: 4967965
+  scan_ms_total: 7180
+  positions_per_query: {p50: 11, p95: 34, p99: 52, avg: 15.5}
+  sections_per_query: {p50: 1, p95: 2, note: "95.6% of queries touch <=2 sections"}
+  expanded_volume_hist: "modes at 27/36 blocks (small mobs); max 125"
+  states_read: 77141304
+  air_states: {count: 9776025, share: "12.7%"}
+
+  callbacks_invoked: 77141304   # == positions: every position dispatches the virtual callback
+  boxes_emitted: 2600420        # 3.37% of callbacks
+  queries_with_boxes: "32.9%"   # 67% of queries find NO collision box (airborne/aquatic movement)
+  block_classes_emitting: "50 distinct; top emitters ALL vanilla terrain (Grass 1.32M, Stone 0.90M, Dirt 0.17M, Sand 0.06M); modded emitters minor (Railcraft BlockGeneric 59k, CoFH ore 15k) — modded+dynamic share of EMITTING callbacks ~3-4%"
+directive_3_skippable_share: # the go/no-go metric
+  SAFE_SKIP:
+    positions_in_never_boxed_sections: {count: 35674428, share: "46.2% of all scanned positions", note: "sections that never emitted a box across the whole run — the exact-semantics Lithium-counter skip ceiling"}
+    air_positions: {share: "12.7%", note: "SUBSUMED by the callback contract: vanilla dispatches addCollisionBoxToList on air too, so air cannot be skipped without replacing the callback — NOT independently skippable in the block-scan design"}
+  JAVA_REQUIRED:
+    positions_in_boxing_sections: "53.8% — every one dispatches the virtual block callback (mod-visible semantics; NEID/FoamFix transforms apply)"
+  UNKNOWN: "none — the replica observed every position's outcome directly"
+directive_4_state_models:
+  A_JAVA_COUNTER: "Lithium-style per-section counters (maintained O(1) per setBlockState in Java) skip never-boxed sections -> captures the ENTIRE 46.2% exact-semantics ceiling with zero JNI, zero mirroring, zero cache transfer. COST: one counter update per block write + per-section flags. This is the known-good ecosystem solution (Lithium)."
+  B_RUST_MIRROR: "REJECTED: requires per-write JNI on every setBlockState (worldgen bursts = thousands/sec) + chunk/section lifecycle transfers, to reach the SAME 46.2% ceiling; mirror maintenance cost is comparable to the saved scan (0.9% of wall in this run; ~5.4% presence with heavy mobs per M3J) — MIRROR_TOO_EXPENSIVE"
+  C_LAZY_SNAPSHOT: "per-section dirty markers + packed occupancy cache: same 46.2% ceiling; per-dirty-section Java re-classification (4096 state reads) + 512-byte transfers; amortizes in settled worlds but adds cache coherence + transfer machinery for NO additional skip share beyond the Java counter"
+directive_5_rust_first_check: >
+  Per-query work is ~11 positions (p50) over 1-2 sections. After a Java-side
+  section counter skips empty sections, the remaining scan is ~6 positions of
+  live-callback work. A Rust broadphase would receive near-empty candidate
+  sets: Java has already done the classification. No packed-layout/SIMD/
+  scanning advantage exists at 4096-position granularity against a 46% skip
+  ceiling the Java counter reaches for free.
+directive_6_modded_shapes: "emitting callbacks are 96%+ vanilla simple-cube terrain blocks; stairs/fence/chest (vanilla dynamic) and a few modded blocks are a small tail. Rust must never approximate any of them — with candidates-not-shapes design the callbacks stay Java, and the shape question never becomes a Rust concern (also why Rust gains so little here)."
+directive_7_spatial_index_reuse: >
+  LongKeyBuckets/packing remain generically useful, but collision needs
+  per-write/lazy invalidation (counters or dirty markers) — a different
+  primitive (per-section packed bitsets + counters) than what the structure
+  index used. Reuse would be superficial; a separate section-bitset type
+  would be needed if any future consumer appears. Nothing implemented.
+classification: NOT_WORTH_IT
+classification_reasoning: >
+  The measurement answers the gate question decisively: the exact-semantics
+  skip ceiling is 46.2% of scanned positions (never-boxed sections), the
+  per-query domain is tiny (p50 11 positions, 1-2 sections), and the Java
+  section-counter model captures the entire ceiling with O(1) per-write
+  updates and no cross-boundary state. Rust mirror/snapshot models add
+  per-write JNI or cache-transfer machinery to reach the SAME ceiling —
+  the mirror's maintenance cost rivals the scan it saves. The Rust-first
+  test fails: after Java counters, Rust would receive ~6-candidate queries.
+  This is ALGORITHM_ONLY territory, and the algorithm is already known-good
+  in Java (Lithium). Per the project charter (no Java performance patches),
+  nothing is implemented. Collision is PARKED.
+recommendation: "PARK collision. M3 remains UNSELECTED. The 5 preserved rig-failure artifacts document the measurement-build lessons (ASM LVT clearing; AtomicLong[] element initialization; clinit re-entrancy). No live integration, no SHADOW, no defaults changed."
+stop: "Research/measurement only. STOP before implementation."

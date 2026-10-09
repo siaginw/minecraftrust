@@ -1,0 +1,265 @@
+{
+  "schema_version": 1,
+  "decision": "ADOPT_TEST_ONLY",
+  "name": "loom",
+  "version": "0.7.2",
+  "release_git_commit": "a7033ee06a97c52eb2f8131c095fbea6c6eecba3",
+  "repository": "https://github.com/tokio-rs/loom",
+  "license": "MIT",
+  "license_evidence_url": "https://github.com/tokio-rs/loom/blob/v0.7.2/LICENSE",
+  "license_sha256": "8ce0830173fdac609dfb4ea603fdc002c2f4af0dc9b1a005653f5da9cf534b18",
+  "api_evidence_urls": [
+    "https://docs.rs/loom/0.7.2/loom/",
+    "https://docs.rs/loom/0.7.2/loom/model/struct.Builder.html"
+  ],
+  "subsystem": "Isolated lifecycle concurrency invariant models only",
+  "performance_value": "No runtime speedup claim; testing detects selected interleavings without live-server stress loops.",
+  "migration_value": "Documents linearization obligations before a concurrent ownership implementation exists.",
+  "integration_risk": "Model/source drift and bounded exploration can miss real-runtime races. Loom sees only replacement synchronization primitives and does not fully model all Rust/C++ weak-memory behavior.",
+  "dependency_vs_borrowed_code": "Registry test dependency; original RustCraft models, no upstream example implementation copied.",
+  "root_workspace_dependency_changed": false,
+  "vendored_implementation": false,
+  "notices": "Loom copyright/license preserved in third-party/LOOM-LICENSE.txt; transitive versions/licenses/checksums below describe this isolated dependency closure. No vendored dependency source or packaged executable.",
+  "dependencies": [
+    {
+      "name": "aho-corasick",
+      "version": "1.1.5",
+      "license": "Unlicense OR MIT",
+      "repository": "https://github.com/BurntSushi/aho-corasick",
+      "registry_source": "registry+https://github.com/rust-lang/crates.io-index",
+      "crate_checksum": "c982642fa9e8606056828ee9a8505737230110bb1099153c79efe865c59d12ba"
+    },
+    {
+      "name": "cc",
+      "version": "1.5.1",
+      "license": "MIT OR Apache-2.0",
+      "repository": "https://github.com/rust-lang/cc-rs",
+      "registry_source": "registry+https://github.com/rust-lang/crates.io-index",
+      "crate_checksum": "f360145194ee8e21db5ee7f3fcd4fe52210864c75c985dae33218202c8bbe040"
+    },
+    {
+      "name": "cfg-if",
+      "version": "1.0.5",
+      "license": "MIT OR Apache-2.0",
+      "repository": "https://github.com/rust-lang/cfg-if",
+      "registry_source": "registry+https://github.com/rust-lang/crates.io-index",
+      "crate_checksum": "4e7648175b45a9a48536d676f68d918270699102aa8dab5496df06904c914600"
+    },
+    {
+      "name": "find-msvc-tools",
+      "version": "0.1.14",
+      "license": "MIT OR Apache-2.0",
+      "repository": "https://github.com/rust-lang/cc-rs",
+      "registry_source": "registry+https://github.com/rust-lang/crates.io-index",
+      "crate_checksum": "aedcfb3409746eddb02b9e19ebda1c3394f759a152e48ee875a0844d1b955484"
+    },
+    {
+      "name": "generator",
+      "version": "0.8.10",
+      "license": "MIT/Apache-2.0",
+      "repository": "https://github.com/Xudong-Huang/generator-rs.git",
+      "registry_source": "registry+https://github.com/rust-lang/crates.io-index",
+      "crate_checksum": "54ade96dc9003043bce7c035c85a9df5a858bfb2039c5a2e6fdf00f324f6c551"
+    },
+    {
+      "name": "lazy_static",
+      "version": "1.5.0",
+      "license": "MIT OR Apache-2.0",
+      "repository": "https://github.com/rust-lang-nursery/lazy-static.rs",
+      "registry_source": "registry+https://github.com/rust-lang/crates.io-index",
+      "crate_checksum": "bbd2bcb4c963f2ddae06a2efc7e9f3591312473c50c6685e1f298068316e66fe"
+    },
+    {
+      "name": "libc",
+      "version": "0.2.189",
+      "license": "MIT OR Apache-2.0",
+      "repository": "https://github.com/rust-lang/libc",
+      "registry_source": "registry+https://github.com/rust-lang/crates.io-index",
+      "crate_checksum": "3eaf3ede3fee6db1a4c2ee091bf8a8b4dccdc6d17f656fb07896ee72867612f2"
+    },
+    {
+      "name": "log",
+      "version": "0.4.34",
+      "license": "MIT OR Apache-2.0",
+      "repository": "https://github.com/rust-lang/log",
+      "registry_source": "registry+https://github.com/rust-lang/crates.io-index",
+      "crate_checksum": "f9f8bd3e56ce4dfc153cf470fffbfa98c7620958b312ca5c3a4b8d5181fd13c6"
+    },
+    {
+      "name": "loom",
+      "version": "0.7.2",
+      "license": "MIT",
+      "repository": "https://github.com/tokio-rs/loom",
+      "registry_source": "registry+https://github.com/rust-lang/crates.io-index",
+      "crate_checksum": "419e0dc8046cb947daa77eb95ae174acfbddb7673b4151f56d1eed8e93fbfaca"
+    },
+    {
+      "name": "matchers",
+      "version": "0.2.0",
+      "license": "MIT",
+      "repository": "https://github.com/hawkw/matchers",
+      "registry_source": "registry+https://github.com/rust-lang/crates.io-index",
+      "crate_checksum": "d1525a2a28c7f4fa0fc98bb91ae755d1e2d1505079e05539e35bc876b5d65ae9"
+    },
+    {
+      "name": "memchr",
+      "version": "2.8.3",
+      "license": "Unlicense OR MIT",
+      "repository": "https://github.com/BurntSushi/memchr",
+      "registry_source": "registry+https://github.com/rust-lang/crates.io-index",
+      "crate_checksum": "cf8baf1c55e62ffcace7a9f06f4bd9cd3f0c4beb022d3b367256b91b87513d98"
+    },
+    {
+      "name": "nu-ansi-term",
+      "version": "0.50.3",
+      "license": "MIT",
+      "repository": "https://github.com/nushell/nu-ansi-term",
+      "registry_source": "registry+https://github.com/rust-lang/crates.io-index",
+      "crate_checksum": "7957b9740744892f114936ab4a57b3f487491bbeafaf8083688b16841a4240e5"
+    },
+    {
+      "name": "once_cell",
+      "version": "1.21.4",
+      "license": "MIT OR Apache-2.0",
+      "repository": "https://github.com/matklad/once_cell",
+      "registry_source": "registry+https://github.com/rust-lang/crates.io-index",
+      "crate_checksum": "9f7c3e4beb33f85d45ae3e3a1792185706c8e16d043238c593331cc7cd313b50"
+    },
+    {
+      "name": "pin-project-lite",
+      "version": "0.2.17",
+      "license": "Apache-2.0 OR MIT",
+      "repository": "https://github.com/taiki-e/pin-project-lite",
+      "registry_source": "registry+https://github.com/rust-lang/crates.io-index",
+      "crate_checksum": "a89322df9ebe1c1578d689c92318e070967d1042b512afbe49518723f4e6d5cd"
+    },
+    {
+      "name": "regex-automata",
+      "version": "0.4.18",
+      "license": "MIT OR Apache-2.0",
+      "repository": "https://github.com/rust-lang/regex",
+      "registry_source": "registry+https://github.com/rust-lang/crates.io-index",
+      "crate_checksum": "ad8553b9b26413251cbf30e620595c7a41b3887f03da04579c0e6b0d6a06b4b2"
+    },
+    {
+      "name": "regex-syntax",
+      "version": "0.8.11",
+      "license": "MIT OR Apache-2.0",
+      "repository": "https://github.com/rust-lang/regex",
+      "registry_source": "registry+https://github.com/rust-lang/crates.io-index",
+      "crate_checksum": "d6f6ff9a378485b298a5286656da665ba74413d36db0979633275d2e708145d4"
+    },
+    {
+      "name": "rustversion",
+      "version": "1.0.23",
+      "license": "MIT OR Apache-2.0",
+      "repository": "https://github.com/dtolnay/rustversion",
+      "registry_source": "registry+https://github.com/rust-lang/crates.io-index",
+      "crate_checksum": "cf54715a573b99ac80df0bc206da022bcd442c974952c7b9720069370852e21f"
+    },
+    {
+      "name": "scoped-tls",
+      "version": "1.0.1",
+      "license": "MIT/Apache-2.0",
+      "repository": "https://github.com/alexcrichton/scoped-tls",
+      "registry_source": "registry+https://github.com/rust-lang/crates.io-index",
+      "crate_checksum": "e1cf6437eb19a8f4a6cc0f7dca544973b0b78843adbfeb3683d1a94a0024a294"
+    },
+    {
+      "name": "sharded-slab",
+      "version": "0.1.7",
+      "license": "MIT",
+      "repository": "https://github.com/hawkw/sharded-slab",
+      "registry_source": "registry+https://github.com/rust-lang/crates.io-index",
+      "crate_checksum": "f40ca3c46823713e0d4209592e8d6e826aa57e928f09752619fc696c499637f6"
+    },
+    {
+      "name": "shlex",
+      "version": "2.0.1",
+      "license": "MIT OR Apache-2.0",
+      "repository": "https://github.com/comex/rust-shlex",
+      "registry_source": "registry+https://github.com/rust-lang/crates.io-index",
+      "crate_checksum": "f8fadd59c855ef2080decdef8ff161eb6661b86933c9d82e5ba29dc602a55aba"
+    },
+    {
+      "name": "smallvec",
+      "version": "1.16.2",
+      "license": "MIT OR Apache-2.0",
+      "repository": "https://github.com/servo/rust-smallvec",
+      "registry_source": "registry+https://github.com/rust-lang/crates.io-index",
+      "crate_checksum": "f9395f0f0eee849a9b707b2f06bb92a6a422090e2123bb2ef8e87a0e61892a8e"
+    },
+    {
+      "name": "thread_local",
+      "version": "1.1.10",
+      "license": "MIT OR Apache-2.0",
+      "repository": "https://github.com/Amanieu/thread_local-rs",
+      "registry_source": "registry+https://github.com/rust-lang/crates.io-index",
+      "crate_checksum": "1ad99c4c6d32803332c548b1af0540b357b3f5fc0be8f6c6bfe8b2e6ae784070"
+    },
+    {
+      "name": "tracing",
+      "version": "0.1.44",
+      "license": "MIT",
+      "repository": "https://github.com/tokio-rs/tracing",
+      "registry_source": "registry+https://github.com/rust-lang/crates.io-index",
+      "crate_checksum": "63e71662fa4b2a2c3a26f570f037eb95bb1f85397f3cd8076caed2f026a6d100"
+    },
+    {
+      "name": "tracing-core",
+      "version": "0.1.36",
+      "license": "MIT",
+      "repository": "https://github.com/tokio-rs/tracing",
+      "registry_source": "registry+https://github.com/rust-lang/crates.io-index",
+      "crate_checksum": "db97caf9d906fbde555dd62fa95ddba9eecfd14cb388e4f491a66d74cd5fb79a"
+    },
+    {
+      "name": "tracing-log",
+      "version": "0.2.0",
+      "license": "MIT",
+      "repository": "https://github.com/tokio-rs/tracing",
+      "registry_source": "registry+https://github.com/rust-lang/crates.io-index",
+      "crate_checksum": "ee855f1f400bd0e5c02d150ae5de3840039a3f54b025156404e34c23c03f47c3"
+    },
+    {
+      "name": "tracing-subscriber",
+      "version": "0.3.23",
+      "license": "MIT",
+      "repository": "https://github.com/tokio-rs/tracing",
+      "registry_source": "registry+https://github.com/rust-lang/crates.io-index",
+      "crate_checksum": "cb7f578e5945fb242538965c2d0b04418d38ec25c79d160cd279bf0731c8d319"
+    },
+    {
+      "name": "valuable",
+      "version": "0.1.1",
+      "license": "MIT",
+      "repository": "https://github.com/tokio-rs/valuable",
+      "registry_source": "registry+https://github.com/rust-lang/crates.io-index",
+      "crate_checksum": "ba73ea9cf16a25df0c8caa16c51acb937d5712a8429db78a3ee29d5dcacd3a65"
+    },
+    {
+      "name": "windows-link",
+      "version": "0.2.1",
+      "license": "MIT OR Apache-2.0",
+      "repository": "https://github.com/microsoft/windows-rs",
+      "registry_source": "registry+https://github.com/rust-lang/crates.io-index",
+      "crate_checksum": "f0805222e57f7521d6a62e36fa9163bc891acd422f971defe97d64e70d0a4fe5"
+    },
+    {
+      "name": "windows-result",
+      "version": "0.4.1",
+      "license": "MIT OR Apache-2.0",
+      "repository": "https://github.com/microsoft/windows-rs",
+      "registry_source": "registry+https://github.com/rust-lang/crates.io-index",
+      "crate_checksum": "7781fa89eaf60850ac3d2da7af8e5242a5ea78d1a11c49bf2910bb5a73853eb5"
+    },
+    {
+      "name": "windows-sys",
+      "version": "0.61.2",
+      "license": "MIT OR Apache-2.0",
+      "repository": "https://github.com/microsoft/windows-rs",
+      "registry_source": "registry+https://github.com/rust-lang/crates.io-index",
+      "crate_checksum": "ae137229bcbd6cdf0f7b80a31df61766145077ddf49416a728b02cb3921ff3fc"
+    }
+  ]
+}

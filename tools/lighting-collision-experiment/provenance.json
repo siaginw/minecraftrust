@@ -1,0 +1,493 @@
+{
+  "schema_version": 1,
+  "production_authority": false,
+  "runtime_definitions": {
+    "net.minecraft.util.math.AxisAlignedBB": "45e5169e18127920f0ecf356e2faeed442fb1b661e1491cec508ee6716416d8c",
+    "net.minecraft.world.World": "5deb85ca3424a85c32b132c763e774a419e32676c8d520ef2677fa7bc695858a",
+    "net.minecraft.block.Block": "050d4f765b4a8939fce4685cb087b34a3cad6960804a9845c367d982fdb0400c",
+    "net.minecraft.block.BlockAir": "c3562c68ed8bf738655630379f06809df13cc5eb10e72362a9b0eb21a2f85534",
+    "net.minecraft.block.BlockStone": "49cbe2295456fa5e14263668a7ae5aa7b66226ebf848847e3e8c0caa89a83537",
+    "net.minecraft.block.BlockGlowstone": "124840aa8bddf7ea57c0cc0b72203bfd90772c9ea673b79e9e40b0528e614940",
+    "net.minecraft.block.BlockTorch": "2a2c296bede5649e64d4e223a23acc5549363cdb4a46a438077b08d513e486a7",
+    "net.minecraft.block.BlockGlass": "1f2c944937d4618e20b66a46a5750af5e8d512714a4bdbd07b56f7fac61ebcda",
+    "net.minecraft.block.BlockLiquid": "43105fb700831ab96cd244741b787f71f8e5d1a2172b64e2a40a72e8f0c51b5b",
+    "net.minecraft.block.BlockDynamicLiquid": "3d07be076764ed745e215a76224b8736c94d8538e37d6574109a39017f3b1764",
+    "net.minecraft.block.BlockStaticLiquid": "faf143e914449c0b1a0be3bbd56c9c96bae8e469a8d152e129d91e7f18e93fb8",
+    "net.minecraft.block.state.BlockStateContainer$StateImplementation": "2e3ea47a3f673ad82ed9e527649e2a1c2428b6779d9ffad81891ee9cc357f925",
+    "net.minecraft.util.EnumFacing": "116271202aa4464387f17c1c74cebd5e788f308786b6cc14198f40d9447b0c87",
+    "net.minecraft.util.math.BlockPos": "ac5ee68ae2683993c02b6842e4e293e8a0a36d15b373c3517ef2c979c2f908ea",
+    "net.minecraft.world.EnumSkyBlock": "f13bde5331946013a48628666f965a717c661326e93a13ccf2c71f8413acac08"
+  },
+  "runtime": "Actual pinned initialized Forge 14.23.5.2860 Java8 definitions, private detached finite grid; no server/provider/tick",
+  "redistribution": "Minecraft jars, final class dumps, compile-only SRG support and runtime-derived fixtures stay target-only; no relicensing claim",
+  "jni": {
+    "version": "0.22.4",
+    "license": "MIT OR Apache-2.0",
+    "source": "https://github.com/jni-rs/jni-rs/tree/5ae9458a4ec44c5318f37ddc7569c1d4ae8a69e7"
+  },
+  "research": [
+    {
+      "name": "Starlight",
+      "decision": "BORROW_ALGORITHM",
+      "commit": "cca03d62da48e876ac79196bad16864e8a96bbeb",
+      "license": "LGPL-3.0-only",
+      "source": "https://github.com/PaperMC/Starlight/blob/cca03d62da48e876ac79196bad16864e8a96bbeb/TECHNICAL_DETAILS.md",
+      "license_source": "https://github.com/PaperMC/Starlight/blob/cca03d62da48e876ac79196bad16864e8a96bbeb/LICENSE",
+      "scope": "Study packed position queues, dirty work and reduced reads; no code copy, no modern semantics transplant"
+    },
+    {
+      "name": "Folia",
+      "decision": "STUDY",
+      "commit": "612d9bd8569fe1a6008a05325af3fad66ef1cef7",
+      "license": "GPL-3.0-only",
+      "source": "https://github.com/PaperMC/Folia/tree/612d9bd8569fe1a6008a05325af3fad66ef1cef7",
+      "scope": "Ownership boundaries only; no scheduler or code reuse",
+      "license_scope": "Folia API/server patches, PATCHES-LICENSE; inherited Paper/Minecraft components are not relicensed; no code dependency.",
+      "license_source": "https://github.com/PaperMC/Folia/blob/612d9bd8569fe1a6008a05325af3fad66ef1cef7/PATCHES-LICENSE"
+    },
+    {
+      "name": "Parry f64",
+      "decision": "STUDY",
+      "commit": "3383f51cbbe9af70565427e7a66c605e1557c1fc",
+      "license": "Apache-2.0",
+      "source": "https://github.com/dimforge/parry/tree/3383f51cbbe9af70565427e7a66c605e1557c1fc",
+      "scope": "Spatial acceleration candidate; general collision APIs do not define Minecraft strict-contact and ordered clipping semantics",
+      "license_source": "https://github.com/dimforge/parry/blob/3383f51cbbe9af70565427e7a66c605e1557c1fc/LICENSE"
+    },
+    {
+      "name": "glam DVec3",
+      "decision": "STUDY",
+      "commit": "0090cbeca303d076d87a8034a75ede85177247bc",
+      "license": "MIT OR Apache-2.0",
+      "source": "https://github.com/bitshifter/glam-rs/tree/0090cbeca303d076d87a8034a75ede85177247bc",
+      "license_sources": [
+        "https://github.com/bitshifter/glam-rs/blob/0090cbeca303d076d87a8034a75ede85177247bc/LICENSE-MIT",
+        "https://github.com/bitshifter/glam-rs/blob/0090cbeca303d076d87a8034a75ede85177247bc/LICENSE-APACHE"
+      ],
+      "scope": "Double vector layout candidate only; retain explicit scalar operation order for current exact primitive qualification; no dependency installed."
+    }
+  ],
+  "dependencies": [
+    {
+      "name": "bytes",
+      "version": "1.12.1",
+      "license": "MIT",
+      "source": "https://docs.rs/crate/bytes/1.12.1/source/",
+      "notices": [
+        {
+          "path": "third-party/bytes-1.12.1/LICENSE",
+          "sha256": "45f522cacecb1023856e46df79ca625dfc550c94910078bd8aec6e02880b3d42"
+        }
+      ]
+    },
+    {
+      "name": "cfg-if",
+      "version": "1.0.5",
+      "license": "MIT OR Apache-2.0",
+      "source": "https://docs.rs/crate/cfg-if/1.0.5/source/",
+      "notices": [
+        {
+          "path": "third-party/cfg-if-1.0.5/LICENSE-APACHE",
+          "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2"
+        },
+        {
+          "path": "third-party/cfg-if-1.0.5/LICENSE-MIT",
+          "sha256": "378f5840b258e2779c39418f3f2d7b2ba96f1c7917dd6be0713f88305dbda397"
+        }
+      ]
+    },
+    {
+      "name": "combine",
+      "version": "4.6.8",
+      "license": "MIT",
+      "source": "https://docs.rs/crate/combine/4.6.8/source/",
+      "notices": [
+        {
+          "path": "third-party/combine-4.6.8/LICENSE",
+          "sha256": "9bbc1b3dc4674a9ebb12c2a62f54fe3c08672539717f8d05828f684b6cc419a3"
+        }
+      ]
+    },
+    {
+      "name": "jni",
+      "version": "0.22.4",
+      "license": "MIT OR Apache-2.0",
+      "source": "https://docs.rs/crate/jni/0.22.4/source/",
+      "notices": [
+        {
+          "path": "third-party/jni-0.22.4/LICENSE-MIT",
+          "sha256": "fea1d5bf3dd71605ce5d7d2ff695c1837e914c77195e523a86b5391716477960",
+          "source": "https://raw.githubusercontent.com/jni-rs/jni-rs/5ae9458a4ec44c5318f37ddc7569c1d4ae8a69e7/LICENSE-MIT"
+        },
+        {
+          "path": "third-party/jni-0.22.4/LICENSE-APACHE",
+          "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2",
+          "source": "https://raw.githubusercontent.com/jni-rs/jni-rs/5ae9458a4ec44c5318f37ddc7569c1d4ae8a69e7/LICENSE-APACHE"
+        }
+      ],
+      "notice_source_commit": "5ae9458a4ec44c5318f37ddc7569c1d4ae8a69e7",
+      "notice_scope": "Published crate excludes root license texts; retained from the exact .cargo_vcs_info.json repository commit."
+    },
+    {
+      "name": "jni-macros",
+      "version": "0.22.4",
+      "license": "MIT OR Apache-2.0",
+      "source": "https://docs.rs/crate/jni-macros/0.22.4/source/",
+      "notices": [
+        {
+          "path": "third-party/jni-macros-0.22.4/LICENSE-MIT",
+          "sha256": "fea1d5bf3dd71605ce5d7d2ff695c1837e914c77195e523a86b5391716477960",
+          "source": "https://raw.githubusercontent.com/jni-rs/jni-rs/33045a124105c939d1e2cbdcb5a39e5d868ffa03/LICENSE-MIT"
+        },
+        {
+          "path": "third-party/jni-macros-0.22.4/LICENSE-APACHE",
+          "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2",
+          "source": "https://raw.githubusercontent.com/jni-rs/jni-rs/33045a124105c939d1e2cbdcb5a39e5d868ffa03/LICENSE-APACHE"
+        }
+      ],
+      "notice_source_commit": "33045a124105c939d1e2cbdcb5a39e5d868ffa03",
+      "notice_scope": "Published crate excludes root license texts; retained from the exact .cargo_vcs_info.json repository commit."
+    },
+    {
+      "name": "jni-sys",
+      "version": "0.4.1",
+      "license": "MIT OR Apache-2.0",
+      "source": "https://docs.rs/crate/jni-sys/0.4.1/source/",
+      "notices": [
+        {
+          "path": "third-party/jni-sys-0.4.1/LICENSE-APACHE",
+          "sha256": "c6596eb7be8581c18be736c846fb9173b69eccf6ef94c5135893ec56bd92ba08"
+        },
+        {
+          "path": "third-party/jni-sys-0.4.1/LICENSE-MIT",
+          "sha256": "1d85bd754b04ceec93e98e890edd1fa3c6a22e81bcb32135806beeccefa51cd1"
+        }
+      ]
+    },
+    {
+      "name": "jni-sys-macros",
+      "version": "0.4.1",
+      "license": "MIT OR Apache-2.0",
+      "source": "https://docs.rs/crate/jni-sys-macros/0.4.1/source/",
+      "notices": [
+        {
+          "path": "third-party/jni-sys-macros-0.4.1/LICENSE-MIT",
+          "sha256": "1d85bd754b04ceec93e98e890edd1fa3c6a22e81bcb32135806beeccefa51cd1",
+          "source": "https://raw.githubusercontent.com/jni-rs/jni-sys/64d77b7a5f119d7b55b4e2c169a4668067ff59e6/LICENSE-MIT"
+        },
+        {
+          "path": "third-party/jni-sys-macros-0.4.1/LICENSE-APACHE",
+          "sha256": "c6596eb7be8581c18be736c846fb9173b69eccf6ef94c5135893ec56bd92ba08",
+          "source": "https://raw.githubusercontent.com/jni-rs/jni-sys/64d77b7a5f119d7b55b4e2c169a4668067ff59e6/LICENSE-APACHE"
+        }
+      ],
+      "notice_source_commit": "64d77b7a5f119d7b55b4e2c169a4668067ff59e6",
+      "notice_scope": "Published crate excludes root license texts; retained from the exact .cargo_vcs_info.json repository commit."
+    },
+    {
+      "name": "log",
+      "version": "0.4.34",
+      "license": "MIT OR Apache-2.0",
+      "source": "https://docs.rs/crate/log/0.4.34/source/",
+      "notices": [
+        {
+          "path": "third-party/log-0.4.34/LICENSE-APACHE",
+          "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2"
+        },
+        {
+          "path": "third-party/log-0.4.34/LICENSE-MIT",
+          "sha256": "6485b8ed310d3f0340bf1ad1f47645069ce4069dcc6bb46c7d5c6faf41de1fdb"
+        }
+      ]
+    },
+    {
+      "name": "memchr",
+      "version": "2.8.3",
+      "license": "Unlicense OR MIT",
+      "source": "https://docs.rs/crate/memchr/2.8.3/source/",
+      "notices": [
+        {
+          "path": "third-party/memchr-2.8.3/COPYING",
+          "sha256": "01c266bced4a434da0051174d6bee16a4c82cf634e2679b6155d40d75012390f"
+        },
+        {
+          "path": "third-party/memchr-2.8.3/LICENSE-MIT",
+          "sha256": "0f96a83840e146e43c0ec96a22ec1f392e0680e6c1226e6f3ba87e0740af850f"
+        }
+      ]
+    },
+    {
+      "name": "proc-macro2",
+      "version": "1.0.107",
+      "license": "MIT OR Apache-2.0",
+      "source": "https://docs.rs/crate/proc-macro2/1.0.107/source/",
+      "notices": [
+        {
+          "path": "third-party/proc-macro2-1.0.107/LICENSE-APACHE",
+          "sha256": "62c7a1e35f56406896d7aa7ca52d0cc0d272ac022b5d2796e7d6905db8a3636a"
+        },
+        {
+          "path": "third-party/proc-macro2-1.0.107/LICENSE-MIT",
+          "sha256": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3"
+        }
+      ]
+    },
+    {
+      "name": "quote",
+      "version": "1.0.47",
+      "license": "MIT OR Apache-2.0",
+      "source": "https://docs.rs/crate/quote/1.0.47/source/",
+      "notices": [
+        {
+          "path": "third-party/quote-1.0.47/LICENSE-APACHE",
+          "sha256": "62c7a1e35f56406896d7aa7ca52d0cc0d272ac022b5d2796e7d6905db8a3636a"
+        },
+        {
+          "path": "third-party/quote-1.0.47/LICENSE-MIT",
+          "sha256": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3"
+        }
+      ]
+    },
+    {
+      "name": "rustc_version",
+      "version": "0.4.1",
+      "license": "MIT OR Apache-2.0",
+      "source": "https://docs.rs/crate/rustc_version/0.4.1/source/",
+      "notices": [
+        {
+          "path": "third-party/rustc_version-0.4.1/LICENSE-APACHE",
+          "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2"
+        },
+        {
+          "path": "third-party/rustc_version-0.4.1/LICENSE-MIT",
+          "sha256": "c9a75f18b9ab2927829a208fc6aa2cf4e63b8420887ba29cdb265d6619ae82d5"
+        }
+      ]
+    },
+    {
+      "name": "same-file",
+      "version": "1.0.6",
+      "license": "Unlicense/MIT",
+      "source": "https://docs.rs/crate/same-file/1.0.6/source/",
+      "notices": [
+        {
+          "path": "third-party/same-file-1.0.6/COPYING",
+          "sha256": "01c266bced4a434da0051174d6bee16a4c82cf634e2679b6155d40d75012390f"
+        },
+        {
+          "path": "third-party/same-file-1.0.6/LICENSE-MIT",
+          "sha256": "cb3c929a05e6cbc9de9ab06a4c57eeb60ca8c724bef6c138c87d3a577e27aa14"
+        }
+      ]
+    },
+    {
+      "name": "semver",
+      "version": "1.0.28",
+      "license": "MIT OR Apache-2.0",
+      "source": "https://docs.rs/crate/semver/1.0.28/source/",
+      "notices": [
+        {
+          "path": "third-party/semver-1.0.28/LICENSE-APACHE",
+          "sha256": "62c7a1e35f56406896d7aa7ca52d0cc0d272ac022b5d2796e7d6905db8a3636a"
+        },
+        {
+          "path": "third-party/semver-1.0.28/LICENSE-MIT",
+          "sha256": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3"
+        }
+      ]
+    },
+    {
+      "name": "simd_cesu8",
+      "version": "1.2.0",
+      "license": "Apache-2.0 OR MIT",
+      "source": "https://docs.rs/crate/simd_cesu8/1.2.0/source/",
+      "notices": [
+        {
+          "path": "third-party/simd_cesu8-1.2.0/LICENSE-APACHE",
+          "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2"
+        },
+        {
+          "path": "third-party/simd_cesu8-1.2.0/LICENSE-MIT",
+          "sha256": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3"
+        }
+      ]
+    },
+    {
+      "name": "simdutf8",
+      "version": "0.1.5",
+      "license": "MIT OR Apache-2.0",
+      "source": "https://docs.rs/crate/simdutf8/0.1.5/source/",
+      "notices": [
+        {
+          "path": "third-party/simdutf8-0.1.5/LICENSE-Apache",
+          "sha256": "0cec06e0e55fbc3dc5cee4fca9b607f66cb8f4e4dbcf3b3c013594dd156732e9"
+        },
+        {
+          "path": "third-party/simdutf8-0.1.5/LICENSE-MIT",
+          "sha256": "1847e0e0698142ed4347c1441a9fa81c8fbddd44b1d8bbcd5e3647f991759d7f"
+        }
+      ]
+    },
+    {
+      "name": "syn",
+      "version": "2.0.119",
+      "license": "MIT OR Apache-2.0",
+      "source": "https://docs.rs/crate/syn/2.0.119/source/",
+      "notices": [
+        {
+          "path": "third-party/syn-2.0.119/LICENSE-APACHE",
+          "sha256": "62c7a1e35f56406896d7aa7ca52d0cc0d272ac022b5d2796e7d6905db8a3636a"
+        },
+        {
+          "path": "third-party/syn-2.0.119/LICENSE-MIT",
+          "sha256": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3"
+        }
+      ]
+    },
+    {
+      "name": "syn",
+      "version": "3.0.6",
+      "license": "MIT OR Apache-2.0",
+      "source": "https://docs.rs/crate/syn/3.0.6/source/",
+      "notices": [
+        {
+          "path": "third-party/syn-3.0.6/LICENSE-APACHE",
+          "sha256": "62c7a1e35f56406896d7aa7ca52d0cc0d272ac022b5d2796e7d6905db8a3636a"
+        },
+        {
+          "path": "third-party/syn-3.0.6/LICENSE-MIT",
+          "sha256": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3"
+        }
+      ]
+    },
+    {
+      "name": "thiserror",
+      "version": "2.0.21",
+      "license": "MIT OR Apache-2.0",
+      "source": "https://docs.rs/crate/thiserror/2.0.21/source/",
+      "notices": [
+        {
+          "path": "third-party/thiserror-2.0.21/LICENSE-APACHE",
+          "sha256": "62c7a1e35f56406896d7aa7ca52d0cc0d272ac022b5d2796e7d6905db8a3636a"
+        },
+        {
+          "path": "third-party/thiserror-2.0.21/LICENSE-MIT",
+          "sha256": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3"
+        }
+      ]
+    },
+    {
+      "name": "thiserror-impl",
+      "version": "2.0.21",
+      "license": "MIT OR Apache-2.0",
+      "source": "https://docs.rs/crate/thiserror-impl/2.0.21/source/",
+      "notices": [
+        {
+          "path": "third-party/thiserror-impl-2.0.21/LICENSE-APACHE",
+          "sha256": "62c7a1e35f56406896d7aa7ca52d0cc0d272ac022b5d2796e7d6905db8a3636a"
+        },
+        {
+          "path": "third-party/thiserror-impl-2.0.21/LICENSE-MIT",
+          "sha256": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3"
+        }
+      ]
+    },
+    {
+      "name": "unicode-ident",
+      "version": "1.0.26",
+      "license": "(MIT OR Apache-2.0) AND Unicode-3.0",
+      "source": "https://docs.rs/crate/unicode-ident/1.0.26/source/",
+      "notices": [
+        {
+          "path": "third-party/unicode-ident-1.0.26/LICENSE-APACHE",
+          "sha256": "62c7a1e35f56406896d7aa7ca52d0cc0d272ac022b5d2796e7d6905db8a3636a"
+        },
+        {
+          "path": "third-party/unicode-ident-1.0.26/LICENSE-MIT",
+          "sha256": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3"
+        },
+        {
+          "path": "third-party/unicode-ident-1.0.26/LICENSE-UNICODE",
+          "sha256": "f7db81051789b729fea528a63ec4c938fdcb93d9d61d97dc8cc2e9df6d47f2a1"
+        }
+      ]
+    },
+    {
+      "name": "walkdir",
+      "version": "2.5.0",
+      "license": "Unlicense/MIT",
+      "source": "https://docs.rs/crate/walkdir/2.5.0/source/",
+      "notices": [
+        {
+          "path": "third-party/walkdir-2.5.0/COPYING",
+          "sha256": "01c266bced4a434da0051174d6bee16a4c82cf634e2679b6155d40d75012390f"
+        },
+        {
+          "path": "third-party/walkdir-2.5.0/LICENSE-MIT",
+          "sha256": "0f96a83840e146e43c0ec96a22ec1f392e0680e6c1226e6f3ba87e0740af850f"
+        }
+      ]
+    },
+    {
+      "name": "winapi-util",
+      "version": "0.1.11",
+      "license": "Unlicense OR MIT",
+      "source": "https://docs.rs/crate/winapi-util/0.1.11/source/",
+      "notices": [
+        {
+          "path": "third-party/winapi-util-0.1.11/COPYING",
+          "sha256": "01c266bced4a434da0051174d6bee16a4c82cf634e2679b6155d40d75012390f"
+        },
+        {
+          "path": "third-party/winapi-util-0.1.11/LICENSE-MIT",
+          "sha256": "cb3c929a05e6cbc9de9ab06a4c57eeb60ca8c724bef6c138c87d3a577e27aa14"
+        }
+      ]
+    },
+    {
+      "name": "windows-link",
+      "version": "0.2.1",
+      "license": "MIT OR Apache-2.0",
+      "source": "https://docs.rs/crate/windows-link/0.2.1/source/",
+      "notices": [
+        {
+          "path": "third-party/windows-link-0.2.1/license-apache-2.0",
+          "sha256": "c16f8dcf1a368b83be78d826ea23de4079fe1b4469a0ab9ee20563f37ff3d44b"
+        },
+        {
+          "path": "third-party/windows-link-0.2.1/license-mit",
+          "sha256": "c2cfccb812fe482101a8f04597dfc5a9991a6b2748266c47ac91b6a5aae15383"
+        }
+      ]
+    },
+    {
+      "name": "windows-sys",
+      "version": "0.61.2",
+      "license": "MIT OR Apache-2.0",
+      "source": "https://docs.rs/crate/windows-sys/0.61.2/source/",
+      "notices": [
+        {
+          "path": "third-party/windows-sys-0.61.2/license-apache-2.0",
+          "sha256": "c16f8dcf1a368b83be78d826ea23de4079fe1b4469a0ab9ee20563f37ff3d44b"
+        },
+        {
+          "path": "third-party/windows-sys-0.61.2/license-mit",
+          "sha256": "c2cfccb812fe482101a8f04597dfc5a9991a6b2748266c47ac91b6a5aae15383"
+        }
+      ]
+    }
+  ],
+  "runtime_pin_source": "target/architecture-hardening/h13-light-collision-32f6f10b8a11/fork-0/qualification.json",
+  "method_bindings": {
+    "net.minecraft.util.math.AxisAlignedBB": [
+      "func_72326_a(Lnet/minecraft/util/math/AxisAlignedBB;)Z",
+      "func_72316_a(Lnet/minecraft/util/math/AxisAlignedBB;D)D",
+      "func_72323_b(Lnet/minecraft/util/math/AxisAlignedBB;D)D",
+      "func_72322_c(Lnet/minecraft/util/math/AxisAlignedBB;D)D"
+    ],
+    "net.minecraft.world.World": [
+      "func_175638_a(Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/world/EnumSkyBlock;)I",
+      "func_180500_c(Lnet/minecraft/world/EnumSkyBlock;Lnet/minecraft/util/math/BlockPos;)Z"
+    ]
+  }
+}

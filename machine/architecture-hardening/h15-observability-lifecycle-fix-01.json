@@ -1,0 +1,235 @@
+{
+  "schema": "H15_OBSERVER_LIFECYCLE_CORRECTION_V1",
+  "status": "PASS",
+  "classification": "FOUNDATION_WITH_OFFLINE_ADAPTERS",
+  "live_runtime_coverage": "INCOMPLETE",
+  "production_authority": false,
+  "receipt_sha256": "ad9d95f9197a28c447036ccc1cf06fb8a855ea947b6a81738f17b4b5a7392989",
+  "pre_correction_history": [
+    "target/architecture-hardening/h15-final-01/receipt.json",
+    "target/architecture-hardening/h15-root-reviewed-01/receipt.json"
+  ],
+  "native_tests": 13,
+  "java_assertions_per_jvm": 65,
+  "java_jvms": 2,
+  "rejected_definition_attempts_per_jvm": 4,
+  "actual_java_values_compared": 6800,
+  "subprocesses": 33,
+  "successful_subprocesses": 23,
+  "expected_negative_subprocesses": 10,
+  "measured_samples": 0,
+  "source_inputs": 56,
+  "limitation": "Attempts invalidate and cannot requalify. No definition-completion or live callback integration claim. Final independent timed rerun belongs to root.",
+  "archive": [
+    {
+      "path": "machine/architecture-hardening/h15-observability-evidence/lifecycle-fix01/bootstrap-javac.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "machine/architecture-hardening/h15-observability-evidence/lifecycle-fix01/cargo-metadata.log.txt",
+      "sha256": "66d4ad469d952e5501044f6eb887f2cfc4d72f59e4bda2484b60a58f5ecc08b4",
+      "bytes": 19369
+    },
+    {
+      "path": "machine/architecture-hardening/h15-observability-evidence/lifecycle-fix01/deterministic-java.log.txt",
+      "sha256": "a9ea1f9d26a5dd84894fd2ea2dd804d48b067c9c9bc54b5c7b98a9d21fb1e0eb",
+      "bytes": 36
+    },
+    {
+      "path": "machine/architecture-hardening/h15-observability-evidence/lifecycle-fix01/deterministic.json",
+      "sha256": "f86d3c0f48e7c8cea113f18db6c1c968542748b9b3880a628f85f81916689544",
+      "bytes": 9674
+    },
+    {
+      "path": "machine/architecture-hardening/h15-observability-evidence/lifecycle-fix01/fork-0/oracle/actual-callback-stages.tsv",
+      "sha256": "fc1d39c2ca49a2b7026bac74f6a6e443ca04669066e795c392368e06720ba70a",
+      "bytes": 216
+    },
+    {
+      "path": "machine/architecture-hardening/h15-observability-evidence/lifecycle-fix01/fork-0/oracle/result.json",
+      "sha256": "03dd3d5ebcd2ce501d74e523b38d8340778048685ee3f622464be4af44533354",
+      "bytes": 13593
+    },
+    {
+      "path": "machine/architecture-hardening/h15-observability-evidence/lifecycle-fix01/fork-0/oracle/synthetic-known-ticks.tsv",
+      "sha256": "d863d3b4ddce4c281b093c2400303f9f657d208dde1c35fea49246a47d222276",
+      "bytes": 1317
+    },
+    {
+      "path": "machine/architecture-hardening/h15-observability-evidence/lifecycle-fix01/fork-0/oracle/synthetic-loss-stages.tsv",
+      "sha256": "b653b066502e45ba4be3827c2233ac21102f1b0dd27ab2b4ab06c0c05fd6c05c",
+      "bytes": 83
+    },
+    {
+      "path": "machine/architecture-hardening/h15-observability-evidence/lifecycle-fix01/fork-0/qualification.json",
+      "sha256": "083d9d169dea3d7d82574bd982df08ebc3c4662c7718838c19c03c5f4ca73b3c",
+      "bytes": 375224
+    },
+    {
+      "path": "machine/architecture-hardening/h15-observability-evidence/lifecycle-fix01/fork-0/registry-logical-states.tsv",
+      "sha256": "3fdbf16998cd758fd3384401cd5550a9761b9d62eaff451ece1ec90c304b022e",
+      "bytes": 389618
+    },
+    {
+      "path": "machine/architecture-hardening/h15-observability-evidence/lifecycle-fix01/fork-0/registry-state-ids.tsv",
+      "sha256": "449059d5a2b512040e982fb4763849d62e4ae586c73da38b191af0c25585cc00",
+      "bytes": 91316
+    },
+    {
+      "path": "machine/architecture-hardening/h15-observability-evidence/lifecycle-fix01/fork-0.log.txt",
+      "sha256": "5823e0cdf5621f86639d87d32b6bdef483981be9bb939402d3112ff52f4efc4d",
+      "bytes": 3689
+    },
+    {
+      "path": "machine/architecture-hardening/h15-observability-evidence/lifecycle-fix01/import-0-actual-callback-stages.log.txt",
+      "sha256": "b5f6edb8b136962c8c998d31e13436e019b9be212284e600c7e248fcce5e163a",
+      "bytes": 1698
+    },
+    {
+      "path": "machine/architecture-hardening/h15-observability-evidence/lifecycle-fix01/import-0-synthetic-known-ticks.log.txt",
+      "sha256": "af438d1b5784f1590052f34e1efca23e134ddd25ef6ed50e9d4f4cdca44fc0b6",
+      "bytes": 1711
+    },
+    {
+      "path": "machine/architecture-hardening/h15-observability-evidence/lifecycle-fix01/import-0-synthetic-loss-stages.log.txt",
+      "sha256": "fa07188d58636d20409fff35af26e63f25180647ae9796679d237031b93bbc34",
+      "bytes": 1664
+    },
+    {
+      "path": "machine/architecture-hardening/h15-observability-evidence/lifecycle-fix01/invalid-capacity.log.txt",
+      "sha256": "05260f68112049cf4f747dcbdbdeab265f16d86efe909e871afd68879af02d8e",
+      "bytes": 24
+    },
+    {
+      "path": "machine/architecture-hardening/h15-observability-evidence/lifecycle-fix01/invalid-duplicate-loss.log.txt",
+      "sha256": "8493787f091aa54319b86fa1caf5604db79195407cc68050beb1d1b54c0abbd3",
+      "bytes": 32
+    },
+    {
+      "path": "machine/architecture-hardening/h15-observability-evidence/lifecycle-fix01/invalid-event-capacity.log.txt",
+      "sha256": "e3922891e1cb85f3dc5d099999619a66d91a0c37e409afb17c76a5de7562f9df",
+      "bytes": 31
+    },
+    {
+      "path": "machine/architecture-hardening/h15-observability-evidence/lifecycle-fix01/invalid-fields.log.txt",
+      "sha256": "86311330a3ce03d2449185baa3f61b4bef475ab56dca8760eb894183015bf82e",
+      "bytes": 16
+    },
+    {
+      "path": "machine/architecture-hardening/h15-observability-evidence/lifecycle-fix01/invalid-negative.log.txt",
+      "sha256": "52f40b6db69995bae815f5648afa36f8997a3eaa28ef22200ab1364cca6af6e6",
+      "bytes": 27
+    },
+    {
+      "path": "machine/architecture-hardening/h15-observability-evidence/lifecycle-fix01/invalid-overflow.log.txt",
+      "sha256": "ebe398d7384ee8368f526141495c8529138333e71e6a3126e2a96aa0b78f232f",
+      "bytes": 43
+    },
+    {
+      "path": "machine/architecture-hardening/h15-observability-evidence/lifecycle-fix01/invalid-sample-after-loss.log.txt",
+      "sha256": "e3922891e1cb85f3dc5d099999619a66d91a0c37e409afb17c76a5de7562f9df",
+      "bytes": 31
+    },
+    {
+      "path": "machine/architecture-hardening/h15-observability-evidence/lifecycle-fix01/invalid-sample-capacity.log.txt",
+      "sha256": "e3922891e1cb85f3dc5d099999619a66d91a0c37e409afb17c76a5de7562f9df",
+      "bytes": 31
+    },
+    {
+      "path": "machine/architecture-hardening/h15-observability-evidence/lifecycle-fix01/invalid-schema.log.txt",
+      "sha256": "b5ebe3975df8fb6bf3766a059e1bf095c3d27ff66f7ab7fb0bfa45ee956ba458",
+      "bytes": 16
+    },
+    {
+      "path": "machine/architecture-hardening/h15-observability-evidence/lifecycle-fix01/invalid-stage.log.txt",
+      "sha256": "95bf4800968e115d02f15302314a41200cf7b8680bc95c0a607fbbd49b3372ed",
+      "bytes": 15
+    },
+    {
+      "path": "machine/architecture-hardening/h15-observability-evidence/lifecycle-fix01/java-version.log.txt",
+      "sha256": "9d65a43706f49fcfdbcece91e737f759110493e82fd1c4886cf49104c2017b0e",
+      "bytes": 155
+    },
+    {
+      "path": "machine/architecture-hardening/h15-observability-evidence/lifecycle-fix01/java8-jfr.log.txt",
+      "sha256": "319546cb92c71e24780b6174d8dcd10f7c41bb173b5d2000fc2b90d3ae72ee0a",
+      "bytes": 311
+    },
+    {
+      "path": "machine/architecture-hardening/h15-observability-evidence/lifecycle-fix01/native-probe.log.txt",
+      "sha256": "e8eb6f65caa67a55e1fcc250ddf811720e9428359239f8f02bdd52ce59d87d59",
+      "bytes": 241
+    },
+    {
+      "path": "machine/architecture-hardening/h15-observability-evidence/lifecycle-fix01/native-release.log.txt",
+      "sha256": "d9e2b790b1b4ec3e73e528d9efeeb068ceb144d553261cc973f8bc4f9ca4b815",
+      "bytes": 367
+    },
+    {
+      "path": "machine/architecture-hardening/h15-observability-evidence/lifecycle-fix01/probe-javac.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "machine/architecture-hardening/h15-observability-evidence/lifecycle-fix01/receipt.json",
+      "sha256": "ad9d95f9197a28c447036ccc1cf06fb8a855ea947b6a81738f17b4b5a7392989",
+      "bytes": 168716
+    },
+    {
+      "path": "machine/architecture-hardening/h15-observability-evidence/lifecycle-fix01/resolve-cargo-clippy.log.txt",
+      "sha256": "26f09df4e33bf098ad9fb2f35d1fce728c2b509fef8c47af1c745973b28b296d",
+      "bytes": 85
+    },
+    {
+      "path": "machine/architecture-hardening/h15-observability-evidence/lifecycle-fix01/resolve-cargo.log.txt",
+      "sha256": "d70a6681283a709db0b4154a538f41c781608f69fb5bfbfa66dac449b697a95c",
+      "bytes": 78
+    },
+    {
+      "path": "machine/architecture-hardening/h15-observability-evidence/lifecycle-fix01/resolve-clippy-driver.log.txt",
+      "sha256": "934b599a01bd8f7d5338d12d97fc793d1af3427b7f706b93d8eb18819ce01b01",
+      "bytes": 86
+    },
+    {
+      "path": "machine/architecture-hardening/h15-observability-evidence/lifecycle-fix01/resolve-rustc.log.txt",
+      "sha256": "54234bc009f7bc295608f8bb882e03677001147f42f05ce19606c17d2db6473b",
+      "bytes": 78
+    },
+    {
+      "path": "machine/architecture-hardening/h15-observability-evidence/lifecycle-fix01/resolve-rustfmt.log.txt",
+      "sha256": "0e07fc57cf9821aa13e5d361fdaa13fcb14ecb9c7db0284d9b66cb63d44a5beb",
+      "bytes": 80
+    },
+    {
+      "path": "machine/architecture-hardening/h15-observability-evidence/lifecycle-fix01/rust-tests.log.txt",
+      "sha256": "9da3d0fd29205726deef622f4f29dfd7beaad02286a50aa17dfb747129b9f759",
+      "bytes": 1808
+    },
+    {
+      "path": "machine/architecture-hardening/h15-observability-evidence/lifecycle-fix01/rust-toolchain.log.txt",
+      "sha256": "86c2d07f9968fd3174d9cff8c60a4d4323fba3166d5dc6dd36f0987a50677d70",
+      "bytes": 321
+    },
+    {
+      "path": "machine/architecture-hardening/h15-observability-evidence/lifecycle-fix01/rustc-version.log.txt",
+      "sha256": "c45e612575abeef05e99e88eb1e7aea52cddab9ad70d4f65ad20eaa65e92a9cf",
+      "bytes": 194
+    },
+    {
+      "path": "machine/architecture-hardening/h15-observability-evidence/lifecycle-fix01/scoped-clippy.log.txt",
+      "sha256": "a23ecc76d2244a9170a1599b499557151c1da3d9a048cc1a4d72f362fb7b7dbf",
+      "bytes": 349
+    },
+    {
+      "path": "machine/architecture-hardening/h15-observability-evidence/lifecycle-fix01/scoped-fmt.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "machine/architecture-hardening/h15-observability-evidence/lifecycle-fix01/srg-compile-support.log.txt",
+      "sha256": "17d6345dfdf117e75ca242ff486fcd09e36e00e961049483f6b57f150d7609c4",
+      "bytes": 162
+    }
+  ]
+}

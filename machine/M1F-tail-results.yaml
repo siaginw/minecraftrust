@@ -1,0 +1,70 @@
+# M1-final tail-latency study results (operator directive 3, 2026-09-19).
+# class: DERIVED_FROM_MEASURED — computed from machine/raw/M1F-tail-j{1..4}.csv
+# (4 fresh JVM processes, balanced pass order java-first/native-first alternating,
+# 500-iter warmup, 2000 samples per fixture per scope, 34 fixtures = 24 original
+# corpus + 10 held-out boundary fixtures; raw samples committed).
+# Provenance: M1F-TAIL-LATENCY. Provenance of the original single-JVM result
+# being investigated: M14R2-HANDOFF-A-FULLCORPUS.
+schema_version: 1
+milestone: M1-final
+date_derived: "2026-09-19"
+question: "Is the M14R2 single-JVM pooled p99 result (native 5.3% WORSE) reproducible, unresolved, or absent?"
+verdict:
+  pooled_p99_regression: ABSENT_IN_REPLICATION
+  detail: >
+    All 4 fresh JVMs show native pooled eligible p99 BETTER than Java
+    (+7.0%, +14.4%, +8.9%, +37.6%). The single-JVM M14R2 -5.3% pooled p99 did
+    not replicate under balanced order across processes. Cross-JVM variance of
+    Java's OWN p99 (13.4-20.8 us across JVMs in pilot) dwarfs the effect;
+    single-JVM p99 comparisons are fragile and must not be treated as
+    regression evidence in either direction.
+  fixture_level_anomaly: REPRODUCIBLE_UNRESOLVED
+  anomaly_detail: >
+    det5 (16419 B, mask 0xf0, 4 sections) is WORSE at p99 in ALL 4 JVMs
+    (-67% to -137%); det1 (38312 B) worse in 3/4 JVMs. 20 of 29 eligible
+    fixtures are native-better at p99 in all 4 JVMs; the remainder flip sign
+    across JVMs (noise). The det5/det1 tail behavior is a real, unexplained
+    fixture-specific effect - recorded as UNRESOLVED, not dismissed.
+per_jvm_pooled_eligible: # p50 / p99 reduction, native vs Java (positive = native better)
+  j1: {order: java-first,  p50_reduction_pct: 28.6, p99_reduction_pct: 8.9}
+  j2: {order: native-first, p50_reduction_pct: 28.8, p99_reduction_pct: 37.6}
+  j3: {order: java-first,  p50_reduction_pct: 36.1, p99_reduction_pct: 7.0}
+  j4: {order: native-first, p50_reduction_pct: 31.0, p99_reduction_pct: 14.4}
+median_p50_reduction_pct: 29.9   # median of the four JVM medians; matches M14R2 single-JVM figure
+held_out_boundary_fixtures: # never used to derive the 8192-byte gate
+  below_threshold:
+    - {fixture: bnd_k1a, bytes: 4645, select_decision: java_fallback, forced_native_vs_java_p50: "0 +/-8% (breakeven)"}
+    - {fixture: bnd_k1b, bytes: 5157, select_decision: java_fallback, forced_native_vs_java_p50: "+7.1% native in all 4 JVMs"}
+  above_threshold_p50_reduction_range:
+    bnd_k2b: "8248 B: +5.0% to +20.0% (thinnest margin; p99 mixed in 2/4 JVMs)"
+    bnd_k2a_thru_bnd_k5a: "9277-23666 B: +5% to +37% native-better in ALL 4 JVMs"
+  gate_assessment: >
+    No held-out fixture contradicts the 8192-byte rule; just above the boundary
+    the native win is real but thin (~8.2 KB: +5-20%), growing with size. The
+    gate is mildly CONSERVATIVE in a thin ~4.6-5.2 KB band (bnd_k1b would have
+    been ~7% faster native). Threshold UNCHANGED per operator directive; the
+    conservative band is recorded as an observation only.
+selection_path_cost: # SCOPE-SELECT = production decision path with REAL 8192 gate
+  ineligible_p50_overhead_us: "+0.4 to +1.3 (typical +0.5-0.8) vs pure-Java path"
+  ineligible_fixtures: [det0 319B, det2 4133B, det3 4640B, bnd_k1a 4645B, bnd_k1b 5157B]
+  scope_note: >
+    SELECT scope = ctor(0) shell + populatePacket (staging + predictOutputLen +
+    gate) + [ctor(mask) when routed to Java] + serialize. The overhead figure
+    therefore UPPER-BOUNDS the pure decision cost (includes one cheap packet
+    allocation). Relative to these fixtures' pure-Java p50 of ~0.9-1.7 us, the
+    decision machinery roughly doubles the small-packet path cost today.
+  eligible_gate_cost: ~0 (SELECT ~= forced-NATIVE within noise when routed native)
+  future_work_note: >
+    A cheap pre-staging gate (e.g. on requested section bit-count) could avoid
+    staging cost for obviously-small packets. NOT implemented; encoder and
+    threshold unchanged per directive.
+claim_scope_qualifications:
+  - "Offline packet-path microbenchmarks only. NOTHING here implies whole-server MSPT, TPS, or GC benefits."
+  - "GATE-PERF-SERVER, GATE-PERF-ALLOC, GATE-PERF-REGRESS remain OPEN (unmeasured)."
+  - "Single machine (7800X3D), Java 8 Temurin 8u504, same session; cross-machine behavior untested."
+  - "The 8192-byte threshold generalization beyond this corpus remains unproven; held-out fixtures support but do not prove it."
+gate_status:
+  GATE-PERF-MICRO: "PASS at p50 on eligible fixtures in all 4 JVMs; p99 pooled better in all 4 JVMs this study, with det5/det1 fixture tails UNRESOLVED. Gate text unchanged."
+  GATE-PERF-SERVER: "OPEN - no whole-server MSPT/TPS measurement"
+  GATE-PERF-ALLOC: "OPEN - allocation churn unmeasured"
+  GATE-PERF-REGRESS: "OPEN - no cross-target regression campaign"

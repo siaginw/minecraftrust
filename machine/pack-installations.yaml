@@ -1,0 +1,37 @@
+# Real modpack server installations (M1-final, 2026-09-19).
+# Every "real pack" empirical claim must point at an entry here.
+version: 1
+last_updated: "2026-09-19"
+installations:
+  - id: TARGET-A-CONTROL
+    pack: "Minecraft 1.12.2 + Forge 14.23.5.2860 (clean)"
+    status: installed
+    forge: 14.23.5.2860
+    location: machine/targetA/server (local)
+    metadata: machine/targetA/server-metadata.txt
+  - id: TARGET-B-MINIMAL
+    pack: "Minimal corpus (Thermal Expansion/Foundation, AE2, Iron Chests, JourneyMap + deps)"
+    status: installed_and_tested
+    forge: 14.23.5.2860
+    mods: 12
+    location: machine/targetB/server (local)
+    metadata: machine/targetB/mod-ids.json, machine/targetB/fixture-manifest.txt
+    note: "Previously recorded as blocked on missing Thermal 1.12.2 assets; resolved."
+  - id: TARGET-C-REVELATION
+    pack: "FTB Revelation 3.4.0"
+    status: installed_and_tested
+    forge: 14.23.5.2846   # pack-official; deviation from modpack-targets.yaml (.2860)
+    mods: 193
+    location: machine/targetC/server (local)
+    metadata: machine/targetC/pack-metadata.json (installer sha256 + 64-bit mod hashes), fixture-manifest.txt
+    foamfix: "0.10.5 active"
+    phosphor: "0.2.7 active"
+  - id: TARGET-D-SEVTECH
+    pack: "SevTech Ages 3.2.3"
+    status: installed_and_tested
+    forge: 14.23.5.2860
+    mods: 262
+    location: machine/targetD/server (local)
+    metadata: machine/targetD/manifest.json (CurseForge manifest), mod-ids.json, fixture-manifest.txt
+    foamfix: "0.10.10 active"
+    phosphor: "NOT INSTALLED (see docs/migrations/M1-final-target-coverage.md §2.2)"

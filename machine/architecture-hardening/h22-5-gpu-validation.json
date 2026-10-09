@@ -1,0 +1,572 @@
+{
+  "schema": "H22_5_GPU_OFFLINE_DECISION_V1",
+  "status": "BOUNDED_EXPERIMENT_COMPLETE",
+  "decision": "PARK_GPU_AFTER_BOUNDED_PROXY",
+  "production_authority": false,
+  "server_started": false,
+  "runs": [
+    {
+      "role": "INITIAL_COMPILE_FAILURE_MISSING_STRING_HEADER",
+      "status": "FAIL",
+      "receipt": "machine/architecture-hardening/h22-5-gpu-evidence/41b3e600dd0141e9a8a0316357a7f62b/receipt.json",
+      "sha256": "b0b206173f086e87f7e9495f2d18782fabea8e6b79e7ce2bfbba08af81727068"
+    },
+    {
+      "role": "SUPERSEDED_SCALAR_POOL_BASELINE",
+      "status": "PASS_EXPLORATORY_ONLY",
+      "receipt": "machine/architecture-hardening/h22-5-gpu-evidence/43ac3f24c9794bb3a5dad218bfc9d4b5/receipt.json",
+      "sha256": "aaa2562c83dc2426ed0404850f85731ed651d7596cc53d0e7c2e6c7cbfa0536f"
+    },
+    {
+      "role": "SIMD_BASELINE_BEFORE_REVIEW_CORRECTIONS",
+      "status": "PASS_EXPLORATORY_ONLY",
+      "receipt": "machine/architecture-hardening/h22-5-gpu-evidence/696f16548d844f4d862d701aa115060e/receipt.json",
+      "sha256": "6345cbd1c5a0736cc25867ad556ba2793e36bd06fe0eb266630d18005c4691d1"
+    },
+    {
+      "role": "FINAL_VALIDATION",
+      "status": "PASS_EXPLORATORY_ONLY",
+      "receipt": "machine/architecture-hardening/h22-5-gpu-evidence/4393190159b3402ba0a86b3389d1fc50/receipt.json",
+      "sha256": "b33385b75a0e1f6c43ba061b80d9485c7640a1e9b840c2085c1289dcdb17161a"
+    },
+    {
+      "role": "FROZEN_TARGETED_RERUN",
+      "status": "PASS_EXPLORATORY_ONLY",
+      "receipt": "machine/architecture-hardening/h22-5-gpu-evidence/84e4f6fafdf44506a8340c60a67d7dd8/receipt.json",
+      "sha256": "1d762d3f74e3837c7275d9bf77a9651f1033e607856ce90319fcb8342c70e4ce"
+    }
+  ],
+  "final_cases": 9,
+  "final_samples": 90,
+  "measured_samples_per_case": 9,
+  "warmup_per_case": 1,
+  "full_array_parity": true,
+  "independent_python_points_per_sample": 4,
+  "injected_fault": "FIRST_DIVERGENCE_AT_INDEX_ZERO_IN_BOTH_FINAL_RUNS",
+  "summary": [
+    {
+      "count": 4096,
+      "rounds": 0,
+      "samples": 9,
+      "median_ms": {
+        "scalar_ms": 0.0025,
+        "simd_ms": 0.0003,
+        "pool_ms": 0.0393,
+        "gpu_whole_ms": 0.0503,
+        "gpu_kernel_ms": 0.003296,
+        "gpu_wrapper_ms": 0.0514
+      },
+      "max_ms": {
+        "scalar_ms": 0.0047,
+        "simd_ms": 0.0005,
+        "pool_ms": 0.0559,
+        "gpu_whole_ms": 0.3078,
+        "gpu_kernel_ms": 0.003968,
+        "gpu_wrapper_ms": 0.3091
+      },
+      "best_cpu_over_gpu_ratio": 0.005964214711729622,
+      "non_kernel_fraction": 0.9344731610337972,
+      "decision": "PARK_GPU_FOR_THIS_WORKLOAD"
+    },
+    {
+      "count": 4096,
+      "rounds": 1,
+      "samples": 9,
+      "median_ms": {
+        "scalar_ms": 0.0054,
+        "simd_ms": 0.0006,
+        "pool_ms": 0.0296,
+        "gpu_whole_ms": 0.0376,
+        "gpu_kernel_ms": 0.00336,
+        "gpu_wrapper_ms": 0.0382
+      },
+      "max_ms": {
+        "scalar_ms": 0.0259,
+        "simd_ms": 0.0008,
+        "pool_ms": 0.0361,
+        "gpu_whole_ms": 0.212,
+        "gpu_kernel_ms": 0.004,
+        "gpu_wrapper_ms": 0.2133
+      },
+      "best_cpu_over_gpu_ratio": 0.015957446808510637,
+      "non_kernel_fraction": 0.9106382978723404,
+      "decision": "PARK_GPU_FOR_THIS_WORKLOAD"
+    },
+    {
+      "count": 4096,
+      "rounds": 64,
+      "samples": 9,
+      "median_ms": {
+        "scalar_ms": 0.7179,
+        "simd_ms": 0.0811,
+        "pool_ms": 0.0526,
+        "gpu_whole_ms": 0.0383,
+        "gpu_kernel_ms": 0.004512,
+        "gpu_wrapper_ms": 0.0388
+      },
+      "max_ms": {
+        "scalar_ms": 0.9184,
+        "simd_ms": 0.1008,
+        "pool_ms": 0.0758,
+        "gpu_whole_ms": 0.0655,
+        "gpu_kernel_ms": 0.004896,
+        "gpu_wrapper_ms": 0.0666
+      },
+      "best_cpu_over_gpu_ratio": 1.3733681462140992,
+      "non_kernel_fraction": 0.8821932114882507,
+      "decision": "SYNTHETIC_MEDIAN_ADVANTAGE_UNQUALIFIED"
+    },
+    {
+      "count": 65536,
+      "rounds": 0,
+      "samples": 9,
+      "median_ms": {
+        "scalar_ms": 0.0393,
+        "simd_ms": 0.0044,
+        "pool_ms": 0.0351,
+        "gpu_whole_ms": 0.0925,
+        "gpu_kernel_ms": 0.004736,
+        "gpu_wrapper_ms": 0.0932
+      },
+      "max_ms": {
+        "scalar_ms": 0.0421,
+        "simd_ms": 0.0068,
+        "pool_ms": 0.0474,
+        "gpu_whole_ms": 0.3204,
+        "gpu_kernel_ms": 0.0056,
+        "gpu_wrapper_ms": 0.3216
+      },
+      "best_cpu_over_gpu_ratio": 0.047567567567567574,
+      "non_kernel_fraction": 0.9488,
+      "decision": "PARK_GPU_FOR_THIS_WORKLOAD"
+    },
+    {
+      "count": 65536,
+      "rounds": 1,
+      "samples": 9,
+      "median_ms": {
+        "scalar_ms": 0.0792,
+        "simd_ms": 0.0084,
+        "pool_ms": 0.0384,
+        "gpu_whole_ms": 0.9015,
+        "gpu_kernel_ms": 0.005024,
+        "gpu_wrapper_ms": 0.9032
+      },
+      "max_ms": {
+        "scalar_ms": 0.1174,
+        "simd_ms": 0.009,
+        "pool_ms": 0.0657,
+        "gpu_whole_ms": 2.0999,
+        "gpu_kernel_ms": 0.006336,
+        "gpu_wrapper_ms": 2.1015
+      },
+      "best_cpu_over_gpu_ratio": 0.009317803660565723,
+      "non_kernel_fraction": 0.9944270660011093,
+      "decision": "PARK_GPU_FOR_THIS_WORKLOAD"
+    },
+    {
+      "count": 65536,
+      "rounds": 64,
+      "samples": 9,
+      "median_ms": {
+        "scalar_ms": 12.099,
+        "simd_ms": 1.2998,
+        "pool_ms": 0.3625,
+        "gpu_whole_ms": 0.1796,
+        "gpu_kernel_ms": 0.00992,
+        "gpu_wrapper_ms": 0.181
+      },
+      "max_ms": {
+        "scalar_ms": 12.9661,
+        "simd_ms": 1.7589,
+        "pool_ms": 0.4479,
+        "gpu_whole_ms": 1.9848,
+        "gpu_kernel_ms": 0.010112,
+        "gpu_wrapper_ms": 1.9862
+      },
+      "best_cpu_over_gpu_ratio": 2.01837416481069,
+      "non_kernel_fraction": 0.9447661469933185,
+      "decision": "SYNTHETIC_MEDIAN_ADVANTAGE_UNQUALIFIED"
+    },
+    {
+      "count": 1048576,
+      "rounds": 0,
+      "samples": 9,
+      "median_ms": {
+        "scalar_ms": 0.6307,
+        "simd_ms": 0.0811,
+        "pool_ms": 0.0655,
+        "gpu_whole_ms": 0.7222,
+        "gpu_kernel_ms": 0.01872,
+        "gpu_wrapper_ms": 0.7235
+      },
+      "max_ms": {
+        "scalar_ms": 1.1856,
+        "simd_ms": 0.0968,
+        "pool_ms": 0.0782,
+        "gpu_whole_ms": 1.7304,
+        "gpu_kernel_ms": 0.0208,
+        "gpu_wrapper_ms": 1.7317
+      },
+      "best_cpu_over_gpu_ratio": 0.09069509831071726,
+      "non_kernel_fraction": 0.9740792024369981,
+      "decision": "PARK_GPU_FOR_THIS_WORKLOAD"
+    },
+    {
+      "count": 1048576,
+      "rounds": 1,
+      "samples": 9,
+      "median_ms": {
+        "scalar_ms": 1.3377,
+        "simd_ms": 0.1369,
+        "pool_ms": 0.0906,
+        "gpu_whole_ms": 0.6925,
+        "gpu_kernel_ms": 0.01232,
+        "gpu_wrapper_ms": 0.694
+      },
+      "max_ms": {
+        "scalar_ms": 1.4629,
+        "simd_ms": 0.2053,
+        "pool_ms": 0.1036,
+        "gpu_whole_ms": 2.3823,
+        "gpu_kernel_ms": 0.021376,
+        "gpu_wrapper_ms": 2.3838
+      },
+      "best_cpu_over_gpu_ratio": 0.1308303249097473,
+      "non_kernel_fraction": 0.9822093862815885,
+      "decision": "PARK_GPU_FOR_THIS_WORKLOAD"
+    },
+    {
+      "count": 1048576,
+      "rounds": 64,
+      "samples": 9,
+      "median_ms": {
+        "scalar_ms": 199.4567,
+        "simd_ms": 22.895,
+        "pool_ms": 3.5277,
+        "gpu_whole_ms": 0.872,
+        "gpu_kernel_ms": 0.082016,
+        "gpu_wrapper_ms": 0.8739
+      },
+      "max_ms": {
+        "scalar_ms": 202.9488,
+        "simd_ms": 26.2057,
+        "pool_ms": 3.7278,
+        "gpu_whole_ms": 4.0518,
+        "gpu_kernel_ms": 0.110176,
+        "gpu_wrapper_ms": 4.0532
+      },
+      "best_cpu_over_gpu_ratio": 4.04552752293578,
+      "non_kernel_fraction": 0.9059449541284403,
+      "decision": "SYNTHETIC_MEDIAN_ADVANTAGE_UNQUALIFIED"
+    }
+  ],
+  "device": {
+    "kind": "device",
+    "name": "NVIDIA GeForce RTX 5060 Ti",
+    "vendor": 4318,
+    "device": 11524,
+    "dedicated_bytes": 16829644800,
+    "device_and_shader_ms": 197.871
+  },
+  "limitations": [
+    "Synthetic mixing intensity is not Minecraft generation, lighting, or a complete map index",
+    "Host/GPU load and CPU affinity are uncontrolled; timings are exploratory, not performance qualification",
+    "Non-kernel fraction includes driver/submission/synchronization and CPU memcpy, not just PCIe transfer",
+    "GPU whole time includes upload, dispatch, completion wait, readback and copy; device/shader/buffer initialization is separately reported",
+    "GPU wrapper time additionally includes timestamp-query collection; array byte counts exclude parameter upload and unknown driver traffic",
+    "Scalar, explicit AVX2 when available, and persistent SIMD CPU pool baselines are checked; no live-server work is enabled",
+    "Best CPU is best tested median: fixed scalar/SIMD/pool ordering, warm caches and eight-worker cap are not optimized-machine qualification",
+    "Tool hashes do not close over SDK headers/import libraries, transitive VsDevCmd scripts, firmware or full graphics driver binaries",
+    "Driver/system API calls are bounded externally by a 45-second child deadline; no software GPU fallback"
+  ],
+  "candidate_decisions": {
+    "large_pregeneration": "PARK_PENDING_QUALIFIED_COMPLETE_CPU_BASELINE_AND_INTEGER_KERNEL",
+    "selected_worldgen": "PARK_PENDING_QUALIFIED_COMPLETE_CPU_BASELINE_AND_INTEGER_KERNEL",
+    "bulk_lighting": "PARK_PENDING_QUALIFIED_COMPLETE_CPU_BASELINE_AND_INTEGER_KERNEL",
+    "offline_map_index": "PARK_PENDING_QUALIFIED_COMPLETE_CPU_BASELINE_AND_INTEGER_KERNEL"
+  },
+  "reuse_provenance": "tools/gpu-offline-experiment/PROVENANCE.json",
+  "retained_artifacts": [
+    {
+      "original_path": "target\\gpu-offline-experiment\\41b3e600dd0141e9a8a0316357a7f62b\\build.cmd",
+      "retained_path": "machine/architecture-hardening/h22-5-gpu-evidence/41b3e600dd0141e9a8a0316357a7f62b/build.cmd.txt",
+      "sha256": "9ec860c8bbe39ae615e8971edf4039974f130edd1ea28e740aa3d0b21e60b73d"
+    },
+    {
+      "original_path": "target\\gpu-offline-experiment\\41b3e600dd0141e9a8a0316357a7f62b\\build.stderr",
+      "retained_path": "machine/architecture-hardening/h22-5-gpu-evidence/41b3e600dd0141e9a8a0316357a7f62b/build.stderr.txt",
+      "sha256": "95f71f26414b8a8645e42e6c160f3bf41fa9e96ca50ca9fd7461299cd25b078a"
+    },
+    {
+      "original_path": "target\\gpu-offline-experiment\\41b3e600dd0141e9a8a0316357a7f62b\\build.stdout",
+      "retained_path": "machine/architecture-hardening/h22-5-gpu-evidence/41b3e600dd0141e9a8a0316357a7f62b/build.stdout.txt",
+      "sha256": "301367f737597920677edb170ed78fdba8ada2897b93e5d588b6fcb51f3f50ad"
+    },
+    {
+      "original_path": "target\\gpu-offline-experiment\\41b3e600dd0141e9a8a0316357a7f62b\\receipt.json",
+      "retained_path": "machine/architecture-hardening/h22-5-gpu-evidence/41b3e600dd0141e9a8a0316357a7f62b/receipt.json",
+      "sha256": "b0b206173f086e87f7e9495f2d18782fabea8e6b79e7ce2bfbba08af81727068"
+    },
+    {
+      "original_path": "target\\gpu-offline-experiment\\43ac3f24c9794bb3a5dad218bfc9d4b5\\build.cmd",
+      "retained_path": "machine/architecture-hardening/h22-5-gpu-evidence/43ac3f24c9794bb3a5dad218bfc9d4b5/build.cmd.txt",
+      "sha256": "24f7ddd2090399bb0f7f521c5c35152c2f7f518b56be4dd972836cf706f283d9"
+    },
+    {
+      "original_path": "target\\gpu-offline-experiment\\43ac3f24c9794bb3a5dad218bfc9d4b5\\build.stderr",
+      "retained_path": "machine/architecture-hardening/h22-5-gpu-evidence/43ac3f24c9794bb3a5dad218bfc9d4b5/build.stderr.txt",
+      "sha256": "95f71f26414b8a8645e42e6c160f3bf41fa9e96ca50ca9fd7461299cd25b078a"
+    },
+    {
+      "original_path": "target\\gpu-offline-experiment\\43ac3f24c9794bb3a5dad218bfc9d4b5\\build.stdout",
+      "retained_path": "machine/architecture-hardening/h22-5-gpu-evidence/43ac3f24c9794bb3a5dad218bfc9d4b5/build.stdout.txt",
+      "sha256": "22282cc2dc9f53c7110f12e59a0b204aa19d33835e2e806e071fe78b50d5741b"
+    },
+    {
+      "original_path": "target\\gpu-offline-experiment\\43ac3f24c9794bb3a5dad218bfc9d4b5\\experiment.stderr",
+      "retained_path": "machine/architecture-hardening/h22-5-gpu-evidence/43ac3f24c9794bb3a5dad218bfc9d4b5/experiment.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target\\gpu-offline-experiment\\43ac3f24c9794bb3a5dad218bfc9d4b5\\experiment.stdout",
+      "retained_path": "machine/architecture-hardening/h22-5-gpu-evidence/43ac3f24c9794bb3a5dad218bfc9d4b5/experiment.stdout.txt",
+      "sha256": "d3e6584fa968bf001ff0b0ad8d0e635338c7a1f2debd8168bcc7f5288ac85fe8"
+    },
+    {
+      "original_path": "target\\gpu-offline-experiment\\43ac3f24c9794bb3a5dad218bfc9d4b5\\fault-control.stderr",
+      "retained_path": "machine/architecture-hardening/h22-5-gpu-evidence/43ac3f24c9794bb3a5dad218bfc9d4b5/fault-control.stderr.txt",
+      "sha256": "7f6a68ddff893e7cea18a664f8b9a4db945391a5881f11b3f767c84244d89e7f"
+    },
+    {
+      "original_path": "target\\gpu-offline-experiment\\43ac3f24c9794bb3a5dad218bfc9d4b5\\fault-control.stdout",
+      "retained_path": "machine/architecture-hardening/h22-5-gpu-evidence/43ac3f24c9794bb3a5dad218bfc9d4b5/fault-control.stdout.txt",
+      "sha256": "16cc250d45e0c361e4382097489af4a1cb7fe17265c43bb38cf0139aa6677ab3"
+    },
+    {
+      "original_path": "target\\gpu-offline-experiment\\43ac3f24c9794bb3a5dad218bfc9d4b5\\fault-output.hlsl",
+      "retained_path": "machine/architecture-hardening/h22-5-gpu-evidence/43ac3f24c9794bb3a5dad218bfc9d4b5/fault-output.hlsl",
+      "sha256": "4777975d3e8a7c9da5c59362baa4f83316a672f45ed10dbea289bf0dfc218453"
+    },
+    {
+      "original_path": "target\\gpu-offline-experiment\\43ac3f24c9794bb3a5dad218bfc9d4b5\\gpu-load-after.stderr",
+      "retained_path": "machine/architecture-hardening/h22-5-gpu-evidence/43ac3f24c9794bb3a5dad218bfc9d4b5/gpu-load-after.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target\\gpu-offline-experiment\\43ac3f24c9794bb3a5dad218bfc9d4b5\\gpu-load-after.stdout",
+      "retained_path": "machine/architecture-hardening/h22-5-gpu-evidence/43ac3f24c9794bb3a5dad218bfc9d4b5/gpu-load-after.stdout.txt",
+      "sha256": "f4e90c0e13b5bc1ab6a94db27bef352797571d21a8c68f8d8cc11edbc588eeca"
+    },
+    {
+      "original_path": "target\\gpu-offline-experiment\\43ac3f24c9794bb3a5dad218bfc9d4b5\\gpu-load-before.stderr",
+      "retained_path": "machine/architecture-hardening/h22-5-gpu-evidence/43ac3f24c9794bb3a5dad218bfc9d4b5/gpu-load-before.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target\\gpu-offline-experiment\\43ac3f24c9794bb3a5dad218bfc9d4b5\\gpu-load-before.stdout",
+      "retained_path": "machine/architecture-hardening/h22-5-gpu-evidence/43ac3f24c9794bb3a5dad218bfc9d4b5/gpu-load-before.stdout.txt",
+      "sha256": "3be6d629dbfe488725900448132997fbccf0fc556993d39ee99d684d1e8cb68b"
+    },
+    {
+      "original_path": "target\\gpu-offline-experiment\\43ac3f24c9794bb3a5dad218bfc9d4b5\\receipt.json",
+      "retained_path": "machine/architecture-hardening/h22-5-gpu-evidence/43ac3f24c9794bb3a5dad218bfc9d4b5/receipt.json",
+      "sha256": "aaa2562c83dc2426ed0404850f85731ed651d7596cc53d0e7c2e6c7cbfa0536f"
+    },
+    {
+      "original_path": "target\\gpu-offline-experiment\\696f16548d844f4d862d701aa115060e\\build.cmd",
+      "retained_path": "machine/architecture-hardening/h22-5-gpu-evidence/696f16548d844f4d862d701aa115060e/build.cmd.txt",
+      "sha256": "e0409af439f96bdb0bb597a481fb94357d16f3f2bea51788d1a8f5b50ab0f1d8"
+    },
+    {
+      "original_path": "target\\gpu-offline-experiment\\696f16548d844f4d862d701aa115060e\\build.stderr",
+      "retained_path": "machine/architecture-hardening/h22-5-gpu-evidence/696f16548d844f4d862d701aa115060e/build.stderr.txt",
+      "sha256": "95f71f26414b8a8645e42e6c160f3bf41fa9e96ca50ca9fd7461299cd25b078a"
+    },
+    {
+      "original_path": "target\\gpu-offline-experiment\\696f16548d844f4d862d701aa115060e\\build.stdout",
+      "retained_path": "machine/architecture-hardening/h22-5-gpu-evidence/696f16548d844f4d862d701aa115060e/build.stdout.txt",
+      "sha256": "22282cc2dc9f53c7110f12e59a0b204aa19d33835e2e806e071fe78b50d5741b"
+    },
+    {
+      "original_path": "target\\gpu-offline-experiment\\696f16548d844f4d862d701aa115060e\\experiment.stderr",
+      "retained_path": "machine/architecture-hardening/h22-5-gpu-evidence/696f16548d844f4d862d701aa115060e/experiment.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target\\gpu-offline-experiment\\696f16548d844f4d862d701aa115060e\\experiment.stdout",
+      "retained_path": "machine/architecture-hardening/h22-5-gpu-evidence/696f16548d844f4d862d701aa115060e/experiment.stdout.txt",
+      "sha256": "f32f85d6e82725aeda19018b10eb4d7976c899bb0c48aa65176fb0721415a6e8"
+    },
+    {
+      "original_path": "target\\gpu-offline-experiment\\696f16548d844f4d862d701aa115060e\\fault-control.stderr",
+      "retained_path": "machine/architecture-hardening/h22-5-gpu-evidence/696f16548d844f4d862d701aa115060e/fault-control.stderr.txt",
+      "sha256": "f8fd38b6a63ed262a731a3b3ec1185ddaf6247c76e7d504d5783b9c60e429ada"
+    },
+    {
+      "original_path": "target\\gpu-offline-experiment\\696f16548d844f4d862d701aa115060e\\fault-control.stdout",
+      "retained_path": "machine/architecture-hardening/h22-5-gpu-evidence/696f16548d844f4d862d701aa115060e/fault-control.stdout.txt",
+      "sha256": "670ee51a7ff41a511c6cef2fb8e1d60f27777deafbc70d83d5557ab784c9176c"
+    },
+    {
+      "original_path": "target\\gpu-offline-experiment\\696f16548d844f4d862d701aa115060e\\fault-output.hlsl",
+      "retained_path": "machine/architecture-hardening/h22-5-gpu-evidence/696f16548d844f4d862d701aa115060e/fault-output.hlsl",
+      "sha256": "4777975d3e8a7c9da5c59362baa4f83316a672f45ed10dbea289bf0dfc218453"
+    },
+    {
+      "original_path": "target\\gpu-offline-experiment\\696f16548d844f4d862d701aa115060e\\gpu-load-after.stderr",
+      "retained_path": "machine/architecture-hardening/h22-5-gpu-evidence/696f16548d844f4d862d701aa115060e/gpu-load-after.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target\\gpu-offline-experiment\\696f16548d844f4d862d701aa115060e\\gpu-load-after.stdout",
+      "retained_path": "machine/architecture-hardening/h22-5-gpu-evidence/696f16548d844f4d862d701aa115060e/gpu-load-after.stdout.txt",
+      "sha256": "3be6d629dbfe488725900448132997fbccf0fc556993d39ee99d684d1e8cb68b"
+    },
+    {
+      "original_path": "target\\gpu-offline-experiment\\696f16548d844f4d862d701aa115060e\\gpu-load-before.stderr",
+      "retained_path": "machine/architecture-hardening/h22-5-gpu-evidence/696f16548d844f4d862d701aa115060e/gpu-load-before.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target\\gpu-offline-experiment\\696f16548d844f4d862d701aa115060e\\gpu-load-before.stdout",
+      "retained_path": "machine/architecture-hardening/h22-5-gpu-evidence/696f16548d844f4d862d701aa115060e/gpu-load-before.stdout.txt",
+      "sha256": "cf4141d67844dbee08e8224174043508124a2a490c3bc5d2f1263687f87a943a"
+    },
+    {
+      "original_path": "target\\gpu-offline-experiment\\696f16548d844f4d862d701aa115060e\\receipt.json",
+      "retained_path": "machine/architecture-hardening/h22-5-gpu-evidence/696f16548d844f4d862d701aa115060e/receipt.json",
+      "sha256": "6345cbd1c5a0736cc25867ad556ba2793e36bd06fe0eb266630d18005c4691d1"
+    },
+    {
+      "original_path": "target\\gpu-offline-experiment\\4393190159b3402ba0a86b3389d1fc50\\build.cmd",
+      "retained_path": "machine/architecture-hardening/h22-5-gpu-evidence/4393190159b3402ba0a86b3389d1fc50/build.cmd.txt",
+      "sha256": "30d9dbc1e1923f668fa041a0b4a2f8cdfbbe5011a29bbf86c2215fa3e22b5a76"
+    },
+    {
+      "original_path": "target\\gpu-offline-experiment\\4393190159b3402ba0a86b3389d1fc50\\build.stderr",
+      "retained_path": "machine/architecture-hardening/h22-5-gpu-evidence/4393190159b3402ba0a86b3389d1fc50/build.stderr.txt",
+      "sha256": "95f71f26414b8a8645e42e6c160f3bf41fa9e96ca50ca9fd7461299cd25b078a"
+    },
+    {
+      "original_path": "target\\gpu-offline-experiment\\4393190159b3402ba0a86b3389d1fc50\\build.stdout",
+      "retained_path": "machine/architecture-hardening/h22-5-gpu-evidence/4393190159b3402ba0a86b3389d1fc50/build.stdout.txt",
+      "sha256": "22282cc2dc9f53c7110f12e59a0b204aa19d33835e2e806e071fe78b50d5741b"
+    },
+    {
+      "original_path": "target\\gpu-offline-experiment\\4393190159b3402ba0a86b3389d1fc50\\experiment.stderr",
+      "retained_path": "machine/architecture-hardening/h22-5-gpu-evidence/4393190159b3402ba0a86b3389d1fc50/experiment.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target\\gpu-offline-experiment\\4393190159b3402ba0a86b3389d1fc50\\experiment.stdout",
+      "retained_path": "machine/architecture-hardening/h22-5-gpu-evidence/4393190159b3402ba0a86b3389d1fc50/experiment.stdout.txt",
+      "sha256": "c91a7e2258f2e00800d01a3d7d9f9c0b53fc4b22bf9c8844df731f5705094e48"
+    },
+    {
+      "original_path": "target\\gpu-offline-experiment\\4393190159b3402ba0a86b3389d1fc50\\fault-control.stderr",
+      "retained_path": "machine/architecture-hardening/h22-5-gpu-evidence/4393190159b3402ba0a86b3389d1fc50/fault-control.stderr.txt",
+      "sha256": "f8fd38b6a63ed262a731a3b3ec1185ddaf6247c76e7d504d5783b9c60e429ada"
+    },
+    {
+      "original_path": "target\\gpu-offline-experiment\\4393190159b3402ba0a86b3389d1fc50\\fault-control.stdout",
+      "retained_path": "machine/architecture-hardening/h22-5-gpu-evidence/4393190159b3402ba0a86b3389d1fc50/fault-control.stdout.txt",
+      "sha256": "2052bff53dc5438ced2ba9745707faa626feeed7c84839a2eee6433d74953e42"
+    },
+    {
+      "original_path": "target\\gpu-offline-experiment\\4393190159b3402ba0a86b3389d1fc50\\fault-output.hlsl",
+      "retained_path": "machine/architecture-hardening/h22-5-gpu-evidence/4393190159b3402ba0a86b3389d1fc50/fault-output.hlsl",
+      "sha256": "4777975d3e8a7c9da5c59362baa4f83316a672f45ed10dbea289bf0dfc218453"
+    },
+    {
+      "original_path": "target\\gpu-offline-experiment\\4393190159b3402ba0a86b3389d1fc50\\gpu-load-after.stderr",
+      "retained_path": "machine/architecture-hardening/h22-5-gpu-evidence/4393190159b3402ba0a86b3389d1fc50/gpu-load-after.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target\\gpu-offline-experiment\\4393190159b3402ba0a86b3389d1fc50\\gpu-load-after.stdout",
+      "retained_path": "machine/architecture-hardening/h22-5-gpu-evidence/4393190159b3402ba0a86b3389d1fc50/gpu-load-after.stdout.txt",
+      "sha256": "b875bb3db3ea99ba50b1573a9c903fdaf10ff1c83f1975a6e684953a2c557342"
+    },
+    {
+      "original_path": "target\\gpu-offline-experiment\\4393190159b3402ba0a86b3389d1fc50\\gpu-load-before.stderr",
+      "retained_path": "machine/architecture-hardening/h22-5-gpu-evidence/4393190159b3402ba0a86b3389d1fc50/gpu-load-before.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target\\gpu-offline-experiment\\4393190159b3402ba0a86b3389d1fc50\\gpu-load-before.stdout",
+      "retained_path": "machine/architecture-hardening/h22-5-gpu-evidence/4393190159b3402ba0a86b3389d1fc50/gpu-load-before.stdout.txt",
+      "sha256": "4b29ba284b7ea3a0af3e77bc261dce66a4ae600267e2d7b874cc64ddaaff7ebf"
+    },
+    {
+      "original_path": "target\\gpu-offline-experiment\\4393190159b3402ba0a86b3389d1fc50\\receipt.json",
+      "retained_path": "machine/architecture-hardening/h22-5-gpu-evidence/4393190159b3402ba0a86b3389d1fc50/receipt.json",
+      "sha256": "b33385b75a0e1f6c43ba061b80d9485c7640a1e9b840c2085c1289dcdb17161a"
+    },
+    {
+      "original_path": "target\\gpu-offline-experiment\\84e4f6fafdf44506a8340c60a67d7dd8\\build.cmd",
+      "retained_path": "machine/architecture-hardening/h22-5-gpu-evidence/84e4f6fafdf44506a8340c60a67d7dd8/build.cmd.txt",
+      "sha256": "f563a61ebd7a5626970edda5c8cf81d35d9c68004de6caa30456cf5d1082c6da"
+    },
+    {
+      "original_path": "target\\gpu-offline-experiment\\84e4f6fafdf44506a8340c60a67d7dd8\\build.stderr",
+      "retained_path": "machine/architecture-hardening/h22-5-gpu-evidence/84e4f6fafdf44506a8340c60a67d7dd8/build.stderr.txt",
+      "sha256": "95f71f26414b8a8645e42e6c160f3bf41fa9e96ca50ca9fd7461299cd25b078a"
+    },
+    {
+      "original_path": "target\\gpu-offline-experiment\\84e4f6fafdf44506a8340c60a67d7dd8\\build.stdout",
+      "retained_path": "machine/architecture-hardening/h22-5-gpu-evidence/84e4f6fafdf44506a8340c60a67d7dd8/build.stdout.txt",
+      "sha256": "22282cc2dc9f53c7110f12e59a0b204aa19d33835e2e806e071fe78b50d5741b"
+    },
+    {
+      "original_path": "target\\gpu-offline-experiment\\84e4f6fafdf44506a8340c60a67d7dd8\\experiment.stderr",
+      "retained_path": "machine/architecture-hardening/h22-5-gpu-evidence/84e4f6fafdf44506a8340c60a67d7dd8/experiment.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target\\gpu-offline-experiment\\84e4f6fafdf44506a8340c60a67d7dd8\\experiment.stdout",
+      "retained_path": "machine/architecture-hardening/h22-5-gpu-evidence/84e4f6fafdf44506a8340c60a67d7dd8/experiment.stdout.txt",
+      "sha256": "839dab26ea2d16be46c7a24d0f7db1cdecedc662add027e56707f0b58f5c42ea"
+    },
+    {
+      "original_path": "target\\gpu-offline-experiment\\84e4f6fafdf44506a8340c60a67d7dd8\\fault-control.stderr",
+      "retained_path": "machine/architecture-hardening/h22-5-gpu-evidence/84e4f6fafdf44506a8340c60a67d7dd8/fault-control.stderr.txt",
+      "sha256": "f8fd38b6a63ed262a731a3b3ec1185ddaf6247c76e7d504d5783b9c60e429ada"
+    },
+    {
+      "original_path": "target\\gpu-offline-experiment\\84e4f6fafdf44506a8340c60a67d7dd8\\fault-control.stdout",
+      "retained_path": "machine/architecture-hardening/h22-5-gpu-evidence/84e4f6fafdf44506a8340c60a67d7dd8/fault-control.stdout.txt",
+      "sha256": "24aedc37e80daa1b3d772f12507215281171674689667d64fa594b6e8b595495"
+    },
+    {
+      "original_path": "target\\gpu-offline-experiment\\84e4f6fafdf44506a8340c60a67d7dd8\\fault-output.hlsl",
+      "retained_path": "machine/architecture-hardening/h22-5-gpu-evidence/84e4f6fafdf44506a8340c60a67d7dd8/fault-output.hlsl",
+      "sha256": "4777975d3e8a7c9da5c59362baa4f83316a672f45ed10dbea289bf0dfc218453"
+    },
+    {
+      "original_path": "target\\gpu-offline-experiment\\84e4f6fafdf44506a8340c60a67d7dd8\\gpu-load-after.stderr",
+      "retained_path": "machine/architecture-hardening/h22-5-gpu-evidence/84e4f6fafdf44506a8340c60a67d7dd8/gpu-load-after.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target\\gpu-offline-experiment\\84e4f6fafdf44506a8340c60a67d7dd8\\gpu-load-after.stdout",
+      "retained_path": "machine/architecture-hardening/h22-5-gpu-evidence/84e4f6fafdf44506a8340c60a67d7dd8/gpu-load-after.stdout.txt",
+      "sha256": "5b563bf616b276ecdfd1c3041dac23c6f95d8668529cfdb1b683ba384232ddf6"
+    },
+    {
+      "original_path": "target\\gpu-offline-experiment\\84e4f6fafdf44506a8340c60a67d7dd8\\gpu-load-before.stderr",
+      "retained_path": "machine/architecture-hardening/h22-5-gpu-evidence/84e4f6fafdf44506a8340c60a67d7dd8/gpu-load-before.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target\\gpu-offline-experiment\\84e4f6fafdf44506a8340c60a67d7dd8\\gpu-load-before.stdout",
+      "retained_path": "machine/architecture-hardening/h22-5-gpu-evidence/84e4f6fafdf44506a8340c60a67d7dd8/gpu-load-before.stdout.txt",
+      "sha256": "b47387066bd3abd9584433f92bf6e8b6267c22e9befa01f9048c8802941b0452"
+    },
+    {
+      "original_path": "target\\gpu-offline-experiment\\84e4f6fafdf44506a8340c60a67d7dd8\\receipt.json",
+      "retained_path": "machine/architecture-hardening/h22-5-gpu-evidence/84e4f6fafdf44506a8340c60a67d7dd8/receipt.json",
+      "sha256": "1d762d3f74e3837c7275d9bf77a9651f1033e607856ce90319fcb8342c70e4ce"
+    }
+  ]
+}

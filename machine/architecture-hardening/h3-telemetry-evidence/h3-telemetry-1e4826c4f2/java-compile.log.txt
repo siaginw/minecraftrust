@@ -1,0 +1,210 @@
+D:\minecraftrust-astra-hardening\tools\telemetry-tests\src\com\rustcraft\bridge\TelemetryJniTest.java:6: warning: Unsafe is internal proprietary API and may be removed in a future release
+import sun.misc.Unsafe;
+               ^
+D:\minecraftrust-astra-hardening\tools\bridge\src\com\rustcraft\bridge\capture\CaptureDraft.java:16: error: package LivePacketCapture does not exist
+    private final LivePacketCapture.LiveCaptureSource source;
+                                   ^
+D:\minecraftrust-astra-hardening\tools\bridge\src\com\rustcraft\bridge\capture\CaptureDraft.java:17: error: package LiveWriterGate does not exist
+    private final LiveWriterGate.CaptureAttempt attempt;
+                                ^
+D:\minecraftrust-astra-hardening\tools\bridge\src\com\rustcraft\bridge\capture\CaptureDraft.java:18: error: package LiveChunkBindings does not exist
+    private final LiveChunkBindings.Binding binding;
+                                   ^
+D:\minecraftrust-astra-hardening\tools\bridge\src\com\rustcraft\bridge\capture\CaptureDraft.java:29: error: package LivePacketCapture does not exist
+    private CaptureDraft(LivePacketCapture.LiveCaptureSource source,
+                                          ^
+D:\minecraftrust-astra-hardening\tools\bridge\src\com\rustcraft\bridge\capture\CaptureDraft.java:30: error: package LiveWriterGate does not exist
+                         LiveWriterGate.CaptureAttempt attempt,
+                                       ^
+D:\minecraftrust-astra-hardening\tools\bridge\src\com\rustcraft\bridge\capture\CaptureDraft.java:31: error: package LiveChunkBindings does not exist
+                         LiveChunkBindings.Binding binding, int filter,
+                                          ^
+D:\minecraftrust-astra-hardening\tools\bridge\src\com\rustcraft\bridge\capture\CaptureDraft.java:47: error: package LivePacketCapture does not exist
+    static CaptureDraft extract(LivePacketCapture.LiveCaptureSource source,
+                                                 ^
+D:\minecraftrust-astra-hardening\tools\bridge\src\com\rustcraft\bridge\capture\CaptureDraft.java:48: error: package LiveWriterGate does not exist
+                                LiveWriterGate.CaptureAttempt attempt,
+                                              ^
+D:\minecraftrust-astra-hardening\tools\bridge\src\com\rustcraft\bridge\capture\CaptureDraft.java:49: error: package LiveChunkBindings does not exist
+                                LiveChunkBindings.Binding binding, int filter) {
+                                                 ^
+D:\minecraftrust-astra-hardening\tools\bridge\src\com\rustcraft\bridge\capture\CaptureDraft.java:105: error: cannot find symbol
+    SealedLiveCapture seal(Object packet, long gateEventId) {
+    ^
+  symbol:   class SealedLiveCapture
+  location: class CaptureDraft
+D:\minecraftrust-astra-hardening\tools\bridge\src\com\rustcraft\bridge\capture\CaptureDraft.java:148: error: package LiveChunkBindings does not exist
+    private static void validateBegin(CaptureSource.View begin, LiveChunkBindings.Binding binding, int filter) {
+                                                                                 ^
+D:\minecraftrust-astra-hardening\tools\native-chunk-jni-tests\src\com\rustcraft\bridge\NativeChunkJniV2Test.java:8: warning: Unsafe is internal proprietary API and may be removed in a future release
+import sun.misc.Unsafe;
+               ^
+D:\minecraftrust-astra-hardening\tools\native-chunk-jni-tests\src\com\rustcraft\bridge\capture\OwnedSnapshotJniTest.java:7: warning: Unsafe is internal proprietary API and may be removed in a future release
+import sun.misc.Unsafe;
+               ^
+D:\minecraftrust-astra-hardening\tools\telemetry-tests\src\com\rustcraft\bridge\TelemetryJniTest.java:10: warning: Unsafe is internal proprietary API and may be removed in a future release
+    private static final Unsafe MEMORY = unsafe();
+                         ^
+D:\minecraftrust-astra-hardening\tools\telemetry-tests\src\com\rustcraft\bridge\TelemetryJniTest.java:14: warning: Unsafe is internal proprietary API and may be removed in a future release
+    private static Unsafe unsafe() {
+                   ^
+D:\minecraftrust-astra-hardening\tools\telemetry-tests\src\com\rustcraft\bridge\TelemetryJniTest.java:16: warning: Unsafe is internal proprietary API and may be removed in a future release
+            Field field = Unsafe.class.getDeclaredField("theUnsafe");
+                          ^
+D:\minecraftrust-astra-hardening\tools\telemetry-tests\src\com\rustcraft\bridge\TelemetryJniTest.java:18: warning: Unsafe is internal proprietary API and may be removed in a future release
+            return (Unsafe) field.get(null);
+                    ^
+D:\minecraftrust-astra-hardening\tools\bridge\src\com\rustcraft\bridge\capture\CaptureDraft.java:63: error: package LivePacketCapture does not exist
+                    throw LivePacketCapture.reject(LivePacketCapture.RejectionReason.EXTENDED_ID,
+                                                                    ^
+D:\minecraftrust-astra-hardening\tools\bridge\src\com\rustcraft\bridge\capture\CaptureDraft.java:63: error: cannot find symbol
+                    throw LivePacketCapture.reject(LivePacketCapture.RejectionReason.EXTENDED_ID,
+                          ^
+  symbol:   variable LivePacketCapture
+  location: class CaptureDraft
+D:\minecraftrust-astra-hardening\tools\bridge\src\com\rustcraft\bridge\capture\CaptureDraft.java:69: error: package LivePacketCapture does not exist
+                throw LivePacketCapture.reject(LivePacketCapture.RejectionReason.INVALID_INPUT,
+                                                                ^
+D:\minecraftrust-astra-hardening\tools\bridge\src\com\rustcraft\bridge\capture\CaptureDraft.java:69: error: cannot find symbol
+                throw LivePacketCapture.reject(LivePacketCapture.RejectionReason.INVALID_INPUT,
+                      ^
+  symbol:   variable LivePacketCapture
+  location: class CaptureDraft
+D:\minecraftrust-astra-hardening\tools\bridge\src\com\rustcraft\bridge\capture\CaptureDraft.java:73: error: package LivePacketCapture does not exist
+                throw LivePacketCapture.reject(LivePacketCapture.RejectionReason.INVALID_INPUT,
+                                                                ^
+D:\minecraftrust-astra-hardening\tools\bridge\src\com\rustcraft\bridge\capture\CaptureDraft.java:73: error: cannot find symbol
+                throw LivePacketCapture.reject(LivePacketCapture.RejectionReason.INVALID_INPUT,
+                      ^
+  symbol:   variable LivePacketCapture
+  location: class CaptureDraft
+D:\minecraftrust-astra-hardening\tools\bridge\src\com\rustcraft\bridge\capture\CaptureDraft.java:78: error: package LivePacketCapture does not exist
+                    throw LivePacketCapture.reject(LivePacketCapture.RejectionReason.EXTENDED_ID,
+                                                                    ^
+D:\minecraftrust-astra-hardening\tools\bridge\src\com\rustcraft\bridge\capture\CaptureDraft.java:78: error: cannot find symbol
+                    throw LivePacketCapture.reject(LivePacketCapture.RejectionReason.EXTENDED_ID,
+                          ^
+  symbol:   variable LivePacketCapture
+  location: class CaptureDraft
+D:\minecraftrust-astra-hardening\tools\bridge\src\com\rustcraft\bridge\capture\CaptureDraft.java:100: error: package LivePacketCapture does not exist
+            throw LivePacketCapture.reject(LivePacketCapture.RejectionReason.TE_PRESENT,
+                                                            ^
+D:\minecraftrust-astra-hardening\tools\bridge\src\com\rustcraft\bridge\capture\CaptureDraft.java:100: error: cannot find symbol
+            throw LivePacketCapture.reject(LivePacketCapture.RejectionReason.TE_PRESENT,
+                  ^
+  symbol:   variable LivePacketCapture
+  location: class CaptureDraft
+D:\minecraftrust-astra-hardening\tools\bridge\src\com\rustcraft\bridge\capture\CaptureDraft.java:106: error: package LivePacketCapture does not exist
+        LivePacketCapture.JavaPacketView java = source.javaPacket(packet);
+                         ^
+D:\minecraftrust-astra-hardening\tools\bridge\src\com\rustcraft\bridge\capture\CaptureDraft.java:108: error: package LivePacketCapture does not exist
+            throw LivePacketCapture.reject(LivePacketCapture.RejectionReason.PACKET_MISMATCH,
+                                                            ^
+D:\minecraftrust-astra-hardening\tools\bridge\src\com\rustcraft\bridge\capture\CaptureDraft.java:108: error: cannot find symbol
+            throw LivePacketCapture.reject(LivePacketCapture.RejectionReason.PACKET_MISMATCH,
+                  ^
+  symbol:   variable LivePacketCapture
+  location: class CaptureDraft
+D:\minecraftrust-astra-hardening\tools\bridge\src\com\rustcraft\bridge\capture\CaptureDraft.java:112: error: package LivePacketCapture does not exist
+            throw LivePacketCapture.reject(LivePacketCapture.RejectionReason.MASK_MISMATCH,
+                                                            ^
+D:\minecraftrust-astra-hardening\tools\bridge\src\com\rustcraft\bridge\capture\CaptureDraft.java:112: error: cannot find symbol
+            throw LivePacketCapture.reject(LivePacketCapture.RejectionReason.MASK_MISMATCH,
+                  ^
+  symbol:   variable LivePacketCapture
+  location: class CaptureDraft
+D:\minecraftrust-astra-hardening\tools\bridge\src\com\rustcraft\bridge\capture\CaptureDraft.java:117: error: package LivePacketCapture does not exist
+            throw LivePacketCapture.reject(LivePacketCapture.RejectionReason.PACKET_MISMATCH,
+                                                            ^
+D:\minecraftrust-astra-hardening\tools\bridge\src\com\rustcraft\bridge\capture\CaptureDraft.java:117: error: cannot find symbol
+            throw LivePacketCapture.reject(LivePacketCapture.RejectionReason.PACKET_MISMATCH,
+                  ^
+  symbol:   variable LivePacketCapture
+  location: class CaptureDraft
+D:\minecraftrust-astra-hardening\tools\bridge\src\com\rustcraft\bridge\capture\CaptureDraft.java:132: error: cannot find symbol
+        return new SealedLiveCapture(gateEventId, binding.identityRecord(), snapshot,
+                   ^
+  symbol:   class SealedLiveCapture
+  location: class CaptureDraft
+D:\minecraftrust-astra-hardening\tools\bridge\src\com\rustcraft\bridge\capture\CaptureDraft.java:154: error: package LivePacketCapture does not exist
+            throw LivePacketCapture.reject(LivePacketCapture.RejectionReason.INVALID_INPUT,
+                                                            ^
+D:\minecraftrust-astra-hardening\tools\bridge\src\com\rustcraft\bridge\capture\CaptureDraft.java:154: error: cannot find symbol
+            throw LivePacketCapture.reject(LivePacketCapture.RejectionReason.INVALID_INPUT,
+                  ^
+  symbol:   variable LivePacketCapture
+  location: class CaptureDraft
+D:\minecraftrust-astra-hardening\tools\bridge\src\com\rustcraft\bridge\capture\CaptureDraft.java:159: error: package LivePacketCapture does not exist
+            throw LivePacketCapture.reject(LivePacketCapture.RejectionReason.PROVIDER_IDENTITY_CHANGED,
+                                                            ^
+D:\minecraftrust-astra-hardening\tools\bridge\src\com\rustcraft\bridge\capture\CaptureDraft.java:159: error: cannot find symbol
+            throw LivePacketCapture.reject(LivePacketCapture.RejectionReason.PROVIDER_IDENTITY_CHANGED,
+                  ^
+  symbol:   variable LivePacketCapture
+  location: class CaptureDraft
+D:\minecraftrust-astra-hardening\tools\bridge\src\com\rustcraft\bridge\capture\CaptureDraft.java:166: error: package LivePacketCapture does not exist
+            throw LivePacketCapture.reject(LivePacketCapture.RejectionReason.INVALID_INPUT,
+                                                            ^
+D:\minecraftrust-astra-hardening\tools\bridge\src\com\rustcraft\bridge\capture\CaptureDraft.java:166: error: cannot find symbol
+            throw LivePacketCapture.reject(LivePacketCapture.RejectionReason.INVALID_INPUT,
+                  ^
+  symbol:   variable LivePacketCapture
+  location: class CaptureDraft
+D:\minecraftrust-astra-hardening\tools\bridge\src\com\rustcraft\bridge\capture\CaptureDraft.java:176: error: package LivePacketCapture does not exist
+            throw LivePacketCapture.reject(LivePacketCapture.RejectionReason.EPOCH_CHANGED,
+                                                            ^
+D:\minecraftrust-astra-hardening\tools\bridge\src\com\rustcraft\bridge\capture\CaptureDraft.java:176: error: cannot find symbol
+            throw LivePacketCapture.reject(LivePacketCapture.RejectionReason.EPOCH_CHANGED,
+                  ^
+  symbol:   variable LivePacketCapture
+  location: class CaptureDraft
+D:\minecraftrust-astra-hardening\tools\bridge\src\com\rustcraft\bridge\capture\CaptureDraft.java:180: error: package LivePacketCapture does not exist
+            throw LivePacketCapture.reject(LivePacketCapture.RejectionReason.EPOCH_CHANGED,
+                                                            ^
+D:\minecraftrust-astra-hardening\tools\bridge\src\com\rustcraft\bridge\capture\CaptureDraft.java:180: error: cannot find symbol
+            throw LivePacketCapture.reject(LivePacketCapture.RejectionReason.EPOCH_CHANGED,
+                  ^
+  symbol:   variable LivePacketCapture
+  location: class CaptureDraft
+D:\minecraftrust-astra-hardening\tools\bridge\src\com\rustcraft\bridge\capture\CaptureDraft.java:187: error: package LivePacketCapture does not exist
+                throw LivePacketCapture.reject(LivePacketCapture.RejectionReason.EPOCH_CHANGED,
+                                                                ^
+D:\minecraftrust-astra-hardening\tools\bridge\src\com\rustcraft\bridge\capture\CaptureDraft.java:187: error: cannot find symbol
+                throw LivePacketCapture.reject(LivePacketCapture.RejectionReason.EPOCH_CHANGED,
+                      ^
+  symbol:   variable LivePacketCapture
+  location: class CaptureDraft
+D:\minecraftrust-astra-hardening\tools\bridge\src\com\rustcraft\bridge\capture\CaptureDraft.java:195: error: package LivePacketCapture does not exist
+                throw LivePacketCapture.reject(LivePacketCapture.RejectionReason.EPOCH_CHANGED,
+                                                                ^
+D:\minecraftrust-astra-hardening\tools\bridge\src\com\rustcraft\bridge\capture\CaptureDraft.java:195: error: cannot find symbol
+                throw LivePacketCapture.reject(LivePacketCapture.RejectionReason.EPOCH_CHANGED,
+                      ^
+  symbol:   variable LivePacketCapture
+  location: class CaptureDraft
+D:\minecraftrust-astra-hardening\tools\native-chunk-jni-tests\src\com\rustcraft\bridge\NativeChunkJniV2Test.java:17: warning: Unsafe is internal proprietary API and may be removed in a future release
+    private static final Unsafe MEMORY = unsafe();
+                         ^
+D:\minecraftrust-astra-hardening\tools\native-chunk-jni-tests\src\com\rustcraft\bridge\NativeChunkJniV2Test.java:274: warning: Unsafe is internal proprietary API and may be removed in a future release
+    private static Unsafe unsafe() {
+                   ^
+D:\minecraftrust-astra-hardening\tools\native-chunk-jni-tests\src\com\rustcraft\bridge\NativeChunkJniV2Test.java:276: warning: Unsafe is internal proprietary API and may be removed in a future release
+            Field field = Unsafe.class.getDeclaredField("theUnsafe");
+                          ^
+D:\minecraftrust-astra-hardening\tools\native-chunk-jni-tests\src\com\rustcraft\bridge\NativeChunkJniV2Test.java:278: warning: Unsafe is internal proprietary API and may be removed in a future release
+            return (Unsafe) field.get(null);
+                    ^
+D:\minecraftrust-astra-hardening\tools\native-chunk-jni-tests\src\com\rustcraft\bridge\capture\OwnedSnapshotJniTest.java:11: warning: Unsafe is internal proprietary API and may be removed in a future release
+    private static final Unsafe MEMORY = unsafe();
+                         ^
+D:\minecraftrust-astra-hardening\tools\native-chunk-jni-tests\src\com\rustcraft\bridge\capture\OwnedSnapshotJniTest.java:140: warning: Unsafe is internal proprietary API and may be removed in a future release
+    private static Unsafe unsafe() {
+                   ^
+D:\minecraftrust-astra-hardening\tools\native-chunk-jni-tests\src\com\rustcraft\bridge\capture\OwnedSnapshotJniTest.java:142: warning: Unsafe is internal proprietary API and may be removed in a future release
+            Field field = Unsafe.class.getDeclaredField("theUnsafe");
+                          ^
+D:\minecraftrust-astra-hardening\tools\native-chunk-jni-tests\src\com\rustcraft\bridge\capture\OwnedSnapshotJniTest.java:144: warning: Unsafe is internal proprietary API and may be removed in a future release
+            return (Unsafe) field.get(null);
+                    ^
+43 errors
+15 warnings

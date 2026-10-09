@@ -1,0 +1,22 @@
+{
+  "name": "probe-badsig",
+  "argv": [
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\bin\\java.exe",
+    "-Xcheck:jni",
+    "-Xmx64m",
+    "-cp",
+    "D:\\minecraftrust-astra-hardening\\target\\jni-lifecycle-root-review\\308e15b9fbcd491db073cd1f1af606ef\\classes",
+    "LifecycleProbe",
+    "D:\\minecraftrust-astra-hardening\\target\\jni-lifecycle-root-review\\308e15b9fbcd491db073cd1f1af606ef\\cargo-target\\release\\jni_lifecycle_prototype.dll",
+    "D:\\minecraftrust-astra-hardening\\target\\jni-lifecycle-root-review\\308e15b9fbcd491db073cd1f1af606ef\\classes\\LoaderPayload.class",
+    "d8bf28ccddf64a4b8c9fc09e12ed5167",
+    "fb1261c6e2c1eceb08d9704811ea10c6b527698109bf3bcd3a99f1e94b70bdd6",
+    "badsig"
+  ],
+  "exit": 0,
+  "elapsed_seconds": 0.06038320000516251,
+  "output_byte_limit_per_stream": 2097152,
+  "resource_error": null,
+  "stdout_sha256": "ed8023cde8d792fc916c7c1a8d2c48f2758f7a72f4d79a5aaa3c899f70b584a7",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+}

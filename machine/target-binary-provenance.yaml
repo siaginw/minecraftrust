@@ -1,0 +1,60 @@
+# M1 tested-binary provenance — links every campaign's binaries to source.
+# Generated during M1-final evidence preservation (2026-09-19).
+# Rule: a tested binary that cannot be linked to source marks its evidence
+# incomplete. Both artifacts below ARE linked (see verification).
+version: 1
+date: "2026-09-19"
+artifacts:
+  coremod_jar:
+    path_local: machine/target{A,B,C,D}/server/mods/rustcraft-m1-coremod.jar
+    sha256: c912085833a1d8937c76cd2ddfbebad4cab4ba8c1a61fb279d3b8f504250b5e9
+    identical_across_targets: true   # A, B, C, D
+    source_files:
+      - tools/bridge/src/com/rustcraft/bridge/NativeChunkPacket.java
+      - tools/bridge/src/com/rustcraft/coremod/RustCraftCoreMod.java
+      - tools/bridge/src/com/rustcraft/coremod/SPacketChunkDataTransformer.java
+    source_revision: a1acdcf   # commit that preserves the exact tested source
+    build_recipe: bash tools/build-coremod.sh
+    verification:
+      method: "Rebuilt with tools/build-coremod.sh from the working tree preserved in a1acdcf; per-.class sha256 compared against the tested jar."
+      result: CLASS_IDENTICAL
+      detail: >
+        Jar-level sha256 differs from the tested jar only by zip entry
+        timestamps; all three .class files hash-identical.
+  native_dll:
+    path_local: machine/target{B,C,D}/server/rustcraft_ffi.dll (+ target/release build output)
+    sha256: 02c722dedefdf14a6e38c711d6078b7f5d51cc820d6f0b5731a6b91476ffdc6e
+    size_bytes: 117760
+    identical_across_targets: true   # B, C, D (Target A loads from target/release)
+    source: crates/ffi + crates/chunk-packet (+ workspace deps) at a1acdcf
+    build_recipe: cargo build --release
+    verification:
+      method: "cargo build --release from the source preserved in a1acdcf; artifact sha256 compared against all tested copies."
+      result: BIT_IDENTICAL
+m1g_validation_build:
+  coremod_jar_sha256: 9343412ea366952e2c6981929185a07e351984e70065595df8b9344195232ab0
+  note: >
+    M1G validation build (adds the M1G pre-staging size bound; see
+    machine/M1G-results.yaml). Deployed to machine/targetA/server/mods for the
+    M1G SHADOW/ON revalidation runs only. DLL unchanged (02c722de). Campaign
+    jars in targetB/C/D remain c9120858 - campaign evidence is NOT tied to
+    this build.
+
+m1i_measurement_build:
+  coremod_jar_sha256: b497c4c3fcaac6796af9b437266e603d8a0cb7e63262da4babc74dbc55afb9eb
+  note: >
+    M1I whole-server perf measurement build = M1G build (9343412e) plus the
+    MSPT histogram sampler inside the metrics dumper thread; packet path
+    unchanged. Deployed to targetC/targetD for the M1I campaign only. DLL
+    unchanged (02c722de). Campaign evidence remains tied to the builds
+    recorded above.
+
+campaigns_using_these_binaries:
+  - {campaign: TARGET-A shadow-10k / onexp-canary, commit_of_evidence: ee1b646, binaries: same jar + target/release DLL}
+  - {campaign: TARGET-A r2 revalidation + paranoid, commit_of_evidence: c7e8b91, binaries: same jar + target/release DLL}
+  - {campaign: TARGET-B shadow/onexp/paranoid, commit_of_evidence: a1acdcf, binaries: jar c9120858 + dll 02c722de}
+  - {campaign: TARGET-C shadow-10k/onexp/paranoid, commit_of_evidence: a1acdcf, binaries: jar c9120858 + dll 02c722de}
+  - {campaign: TARGET-D shadow-10k/onexp/paranoid, commit_of_evidence: a1acdcf, binaries: jar c9120858 + dll 02c722de}
+notes:
+  - "Target A server dir has no DLL copy; java.library.path resolves to the repo target/release build (see tools/targeta-run.sh)."
+  - "Local fixture manifests (world hashes, forge jar hashes, reproduction): machine/target{B,C,D}/fixture-manifest.txt."

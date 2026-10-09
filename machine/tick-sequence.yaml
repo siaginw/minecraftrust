@@ -1,0 +1,450 @@
+# Minecraft 1.12.2 / Forge 14.23.5.2860 Authoritative Tick Sequence
+schema_version: "1.0.0"
+runtime_target:
+  game_version: "1.12.2"
+  forge_version: "14.23.5.2860"
+  forge_commit: "d3f01843f7e7a4f613b5e8113d381fd8747b4343"
+
+loop_timing:
+  target_tick_ms: 50
+  target_tps: 20.0
+  time_source: "System.currentTimeMillis()"
+  max_lag_clamp_ms: 2000
+  max_burst_ticks: 40
+  min_yield_sleep_ms: 1
+  sleeping_fast_path:
+    condition: "this.worlds[0].areAllPlayersAsleep()"
+    action: "tick(); accumulator = 0L;"
+
+server_tick:
+  id: "SERVER_TICK_ROOT"
+  method: "net.minecraft.server.MinecraftServer.tick()"
+  thread: "Server thread"
+  owner: "MinecraftServer"
+  order: 1
+  evidence: "MinecraftServer.java:499-570; MinecraftServer.java.patch:160-230"
+  phases:
+    - id: "SERVER_TICK_START_EVENT"
+      method: "net.minecraftforge.fml.common.FMLCommonHandler.onPreServerTick()"
+      thread: "Server thread"
+      owner: "FMLCommonHandler"
+      order: 1
+      reads: ["MinecraftServer.tickCounter"]
+      writes: []
+      forge_hooks: ["net.minecraftforge.fml.common.gameevent.TickEvent$ServerTickEvent(Phase.START)"]
+      mod_observable: true
+      parallelism_constraints: "Must execute on Server thread; synchronous mod event subscribers"
+      evidence: "MinecraftServer.java.patch:163"
+      profiling_key: null
+
+    - id: "TICK_COUNTER_INCREMENT"
+      method: "this.tickCounter++"
+      thread: "Server thread"
+      owner: "MinecraftServer"
+      order: 2
+      reads: ["this.tickCounter"]
+      writes: ["this.tickCounter"]
+      forge_hooks: []
+      mod_observable: true
+      parallelism_constraints: "Monotonic integer advance on Server thread"
+      evidence: "MinecraftServer.java:500"
+      profiling_key: null
+
+    - id: "CHUNK_IO_DRAIN"
+      method: "net.minecraftforge.common.chunkio.ChunkIOExecutor.tick()"
+      thread: "Server thread"
+      owner: "ChunkIOExecutor"
+      order: 3
+      reads: ["ChunkIOExecutor.queue"]
+      writes: ["ChunkProviderServer.loadedChunks"]
+      forge_hooks: []
+      mod_observable: false
+      parallelism_constraints: "Polls async chunk tasks loaded from disk; binds chunk pointers into world on Server thread"
+      evidence: "MinecraftServer.java.patch:168"
+      profiling_key: "levels"
+
+    - id: "SCHEDULED_TASKS_DRAIN"
+      method: "synchronized (this.futureTaskQueue) { Util.runTask(...) }"
+      thread: "Server thread"
+      owner: "MinecraftServer"
+      order: 4
+      reads: ["this.futureTaskQueue"]
+      writes: ["this.futureTaskQueue", "arbitrary world state via tasks"]
+      forge_hooks: []
+      mod_observable: true
+      parallelism_constraints: "Drains MPSC queue; task handlers mutate world state; must finish before world simulation begins"
+      evidence: "MinecraftServer.java:549-554; Util.java:11-22"
+      profiling_key: "jobs"
+
+    - id: "DIMENSION_ITERATION_LOOP"
+      method: "for (int id : DimensionManager.getIDs(tickCounter % 200 == 0))"
+      thread: "Server thread"
+      owner: "DimensionManager / MinecraftServer"
+      order: 5
+      reads: ["DimensionManager.worlds", "DimensionManager.dimensions"]
+      writes: []
+      forge_hooks: []
+      mod_observable: true
+      parallelism_constraints: "Vanilla ticks sequentially; cross-dimension interactions (portals, capabilities) require synchronization if parallelized"
+      evidence: "MinecraftServer.java.patch:195-225"
+      profiling_key: "levels"
+      per_world_sequence:
+        - id: "TIME_DIFFICULTY_BROADCAST"
+          condition: "this.tickCounter % 20 == 0"
+          method: "PlayerList.sendPacketToAllPlayersInDimension(SPacketTimeUpdate, id)"
+          thread: "Server thread"
+          owner: "PlayerList"
+          order: 1
+          reads: ["worldserver.getWorldTotalTime()", "worldserver.getWorldTime()", "worldserver.getGameRules()"]
+          writes: ["Netty outbound buffer"]
+          forge_hooks: []
+          mod_observable: true
+          parallelism_constraints: "Packet serialization read-only from world state"
+          evidence: "MinecraftServer.java:528-535"
+          profiling_key: "timeSync"
+
+        - id: "WORLD_TICK_START_EVENT"
+          method: "FMLCommonHandler.onPreWorldTick(worldserver)"
+          thread: "Server thread"
+          owner: "FMLCommonHandler"
+          order: 2
+          reads: ["worldserver"]
+          writes: []
+          forge_hooks: ["net.minecraftforge.fml.common.gameevent.TickEvent$WorldTickEvent(Side.SERVER, Phase.START, worldserver)"]
+          mod_observable: true
+          parallelism_constraints: "Synchronous mod dispatch"
+          evidence: "MinecraftServer.java.patch:214"
+          profiling_key: null
+
+        - id: "WORLD_SERVER_TICK"
+          method: "worldserver.tick()"
+          thread: "Server thread"
+          owner: "WorldServer"
+          order: 3
+          evidence: "WorldServer.java:150-250"
+          subphases:
+            - id: "WEATHER_UPDATE"
+              method: "World.updateWeather()"
+              order: 1
+              reads: ["worldInfo.cleanWeatherTime", "worldInfo.rainTime", "worldInfo.thunderTime"]
+              writes: ["worldInfo.cleanWeatherTime", "worldInfo.rainTime", "worldInfo.thunderTime", "prevRainingStrength", "rainingStrength"]
+              forge_hooks: []
+              mod_observable: true
+              parallelism_constraints: "World-local"
+              evidence: "World.java:1615-1650"
+              profiling_key: null
+
+            - id: "HARDCORE_CHECK"
+              condition: "worldInfo.isHardcoreModeEnabled()"
+              method: "setDifficulty(EnumDifficulty.HARD)"
+              order: 2
+              reads: ["worldInfo.hardcore"]
+              writes: ["difficulty"]
+              forge_hooks: []
+              mod_observable: true
+              parallelism_constraints: "World-local"
+              evidence: "WorldServer.java:170"
+              profiling_key: null
+
+            - id: "BIOME_CACHE_CLEANUP"
+              method: "provider.getBiomeProvider().cleanupCache()"
+              order: 3
+              reads: []
+              writes: ["BiomeProvider.cache"]
+              forge_hooks: []
+              mod_observable: false
+              parallelism_constraints: "World-local"
+              evidence: "WorldServer.java:175"
+              profiling_key: null
+
+            - id: "SLEEPING_CHECK"
+              condition: "this.areAllPlayersAsleep()"
+              method: "wakeAllPlayers(); if (doDaylightCycle) advanceToMorning();"
+              order: 4
+              reads: ["playerEntities", "gameRules.doDaylightCycle"]
+              writes: ["worldInfo.worldTime", "player bed timers"]
+              forge_hooks: []
+              mod_observable: true
+              parallelism_constraints: "World-local; Dimension 0 controls server-wide sleep skip"
+              evidence: "WorldServer.java:180-195"
+              profiling_key: null
+
+            - id: "MOB_SPAWNER"
+              condition: "gameRules.getBoolean('doMobSpawning')"
+              method: "WorldEntitySpawner.findChunksForSpawning(worldserver, mobSpawn, animalSpawn, false)"
+              order: 5
+              reads: ["playerChunkMap", "loadedEntityList", "blockStates", "biome"]
+              writes: ["loadedEntityList", "chunk.entityLists"]
+              forge_hooks: ["ForgeEventFactory.canEntitySpawn()"]
+              mod_observable: true
+              parallelism_constraints: "Reads 17x17 chunk grid around players; mutates entity list"
+              evidence: "WorldServer.java:200-205; WorldEntitySpawner.java:45-120"
+              profiling_key: "mobSpawner"
+
+            - id: "CHUNK_SOURCE_TICK"
+              method: "ChunkProviderServer.tick()"
+              order: 6
+              reads: ["droppedChunksSet"]
+              writes: ["loadedChunks", "id2ChunkMap", "AnvilChunkLoader save queue"]
+              forge_hooks: ["net.minecraftforge.event.world.ChunkEvent$Unload"]
+              mod_observable: true
+              parallelism_constraints: "Drains chunk unload candidates; pushes NBT to File IO thread"
+              evidence: "ChunkProviderServer.java:140-165"
+              profiling_key: "chunkSource"
+
+            - id: "SKYLIGHT_SUBTRACTED"
+              method: "calculateSkylightSubtracted(1.0F)"
+              order: 7
+              reads: ["skylightSubtracted", "celestialAngle", "rainingStrength"]
+              writes: ["skylightSubtracted"]
+              forge_hooks: []
+              mod_observable: false
+              parallelism_constraints: "World-local scalar"
+              evidence: "World.java:1660"
+              profiling_key: null
+
+            - id: "WORLD_TIME_INCREMENT"
+              method: "worldInfo.setWorldTotalTime(+1L); if (doDaylightCycle) worldInfo.setWorldTime(+1L);"
+              order: 8
+              reads: ["worldInfo.worldTotalTime", "worldInfo.worldTime"]
+              writes: ["worldInfo.worldTotalTime", "worldInfo.worldTime"]
+              forge_hooks: []
+              mod_observable: true
+              parallelism_constraints: "World-local atomic increment"
+              evidence: "WorldServer.java:210-213"
+              profiling_key: null
+
+            - id: "SCHEDULED_BLOCK_TICKS"
+              method: "WorldServer.tickUpdates(false)"
+              order: 9
+              reads: ["pendingTickListEntriesTreeSet", "pendingTickListEntriesHashSet"]
+              writes: ["pendingTickListEntriesTreeSet", "pendingTickListEntriesHashSet", "world block states"]
+              forge_hooks: []
+              mod_observable: true
+              parallelism_constraints: "Max 65,536 ticks; 3-tier sort; updates block state in-place"
+              evidence: "WorldServer.java:214; WorldServer.java:530-580"
+              profiling_key: "tickPending"
+
+            - id: "RANDOM_BLOCK_TICKS"
+              method: "WorldServer.updateBlocks()"
+              order: 10
+              reads: ["playerChunkMap.getChunkIterator()", "ForgeChunkManager persistent chunks", "blockStates"]
+              writes: ["blockStates", "weather effects", "light arrays"]
+              forge_hooks: []
+              mod_observable: true
+              parallelism_constraints: "Chunk-local; stochastic LCG coordinate rolls"
+              evidence: "WorldServer.java:218; WorldServer.java:286-375"
+              profiling_key: "tickBlocks"
+
+            - id: "PLAYER_CHUNK_MAP_SYNC"
+              method: "playerChunkMap.tick()"
+              order: 11
+              reads: ["dirty player chunk entries"]
+              writes: ["Netty outbound packets (SPacketBlockChange, SPacketMultiBlockChange)"]
+              forge_hooks: []
+              mod_observable: true
+              parallelism_constraints: "Transmits block diffs to tracking players"
+              evidence: "WorldServer.java:220; PlayerChunkMap.java:180-210"
+              profiling_key: "chunkMap"
+
+            - id: "VILLAGE_TICK"
+              method: "villageCollection.tick(); villageSiege.tick();"
+              order: 12
+              reads: ["villages", "doors", "ironGolems", "time"]
+              writes: ["villages", "zombie siege spawns"]
+              forge_hooks: []
+              mod_observable: true
+              parallelism_constraints: "World-local"
+              evidence: "WorldServer.java:222-226"
+              profiling_key: "village"
+
+            - id: "PORTAL_FORCER_CLEANUP"
+              method: "worldTeleporter.removeStalePortalLocations(worldTotalTime)"
+              order: 13
+              reads: ["destinationCoordinateCache"]
+              writes: ["destinationCoordinateCache"]
+              forge_hooks: []
+              mod_observable: false
+              parallelism_constraints: "World-local cache purge"
+              evidence: "WorldServer.java:230"
+              profiling_key: "portalForcer"
+
+            - id: "BLOCK_EVENT_QUEUE_SEND"
+              method: "sendQueuedBlockEvents()"
+              order: 14
+              reads: ["blockEventQueue"]
+              writes: ["blockEventQueue", "SPacketBlockAction"]
+              forge_hooks: []
+              mod_observable: true
+              parallelism_constraints: "Flushes piston/chest/note block animation events"
+              evidence: "WorldServer.java:235; WorldServer.java:480-510"
+              profiling_key: null
+
+        - id: "WORLD_UPDATE_ENTITIES"
+          method: "worldserver.updateEntities()"
+          thread: "Server thread"
+          owner: "WorldServer / World"
+          order: 4
+          evidence: "World.java:1036-1150; WorldServer.java:480-510"
+          subphases:
+            - id: "WEATHER_EFFECTS"
+              method: "iterate this.weatherEffects"
+              order: 1
+              reads: ["weatherEffects"]
+              writes: ["weatherEffects", "entity damage"]
+              forge_hooks: []
+              mod_observable: true
+              parallelism_constraints: "World-local"
+              evidence: "World.java:1038-1042"
+              profiling_key: null
+
+            - id: "PLAYER_ENTITIES"
+              method: "this.updateEntity(player)"
+              order: 2
+              reads: ["playerEntities"]
+              writes: ["player position", "inventory", "health", "potion effects"]
+              forge_hooks: [
+                "net.minecraftforge.fml.common.gameevent.TickEvent$PlayerTickEvent(Phase.START, player)",
+                "net.minecraftforge.fml.common.gameevent.TickEvent$PlayerTickEvent(Phase.END, player)"
+              ]
+              mod_observable: true
+              parallelism_constraints: "Player-local except interaction with world/containers"
+              evidence: "World.java:1044-1065; EntityPlayer.java.patch:28,45"
+              profiling_key: "players"
+
+            - id: "REGULAR_ENTITIES"
+              method: "for (int i = 0; i < loadedEntityList.size(); ++i) updateEntityWithOptionalForce(entity, true)"
+              order: 3
+              reads: ["loadedEntityList"]
+              writes: ["loadedEntityList", "entity motion/AI/health", "chunk.entityLists"]
+              forge_hooks: []
+              mod_observable: true
+              parallelism_constraints: "Entity AI & movement read neighboring block/entity state"
+              evidence: "World.java:1066-1070"
+              profiling_key: "entities.regular"
+
+            - id: "TILE_ENTITIES"
+              method: "for (TileEntity tile : tickableTileEntities) tile.update()"
+              order: 4
+              reads: ["tickableTileEntities"]
+              writes: ["tile entity state", "capabilities", "addedTileEntityList", "tileEntitiesToBeRemoved"]
+              forge_hooks: []
+              mod_observable: true
+              parallelism_constraints: "processingLoadedTiles = true guard; staged mutations"
+              evidence: "World.java:1072-1115; World.java.patch:600-750"
+              profiling_key: "entities.blockEntities"
+
+            - id: "TILE_ENTITY_QUEUES_DRAIN"
+              method: "drain tileEntitiesToBeRemoved; drain addedTileEntityList"
+              order: 5
+              reads: ["tileEntitiesToBeRemoved", "addedTileEntityList"]
+              writes: ["loadedTileEntityList", "tickableTileEntities", "chunk.tileEntities"]
+              forge_hooks: []
+              mod_observable: false
+              parallelism_constraints: "Synchronous commit to world collections on Server thread"
+              evidence: "World.java:1120-1145"
+              profiling_key: null
+
+        - id: "WORLD_TICK_END_EVENT"
+          method: "FMLCommonHandler.onPostWorldTick(worldserver)"
+          thread: "Server thread"
+          owner: "FMLCommonHandler"
+          order: 5
+          reads: ["worldserver"]
+          writes: []
+          forge_hooks: ["net.minecraftforge.fml.common.gameevent.TickEvent$WorldTickEvent(Side.SERVER, Phase.END, worldserver)"]
+          mod_observable: true
+          parallelism_constraints: "Synchronous mod dispatch"
+          evidence: "MinecraftServer.java.patch:222"
+          profiling_key: null
+
+        - id: "ENTITY_TRACKER_TICK"
+          method: "worldserver.getEntityTracker().tick()"
+          thread: "Server thread"
+          owner: "EntityTracker"
+          order: 6
+          reads: ["trackedEntities", "entity coordinates", "player coordinates"]
+          writes: ["Netty outbound packets (SPacketEntityRelMove, SPacketEntityTeleport, SPacketEntityMetadata)"]
+          forge_hooks: []
+          mod_observable: true
+          parallelism_constraints: "Computes delta motion; broadcasts packets to players"
+          evidence: "MinecraftServer.java:565; EntityTracker.java:70-110"
+          profiling_key: "tracker"
+
+    - id: "DIMENSION_UNLOAD_CHECK"
+      method: "DimensionManager.unloadWorlds(this.worldTickTimes)"
+      thread: "Server thread"
+      owner: "DimensionManager"
+      order: 6
+      reads: ["unloadQueue", "worldTickTimes"]
+      writes: ["DimensionManager.worlds", "DimensionManager.dimensions"]
+      forge_hooks: ["net.minecraftforge.event.world.WorldEvent$Unload"]
+      mod_observable: true
+      parallelism_constraints: "Closes dimension chunk providers and flushes world files on Server thread"
+      evidence: "MinecraftServer.java.patch:228; DimensionManager.java:350-390"
+      profiling_key: "dim_unloading"
+
+    - id: "NETWORK_SYSTEM_TICK"
+      method: "this.networkSystem.networkTick()"
+      thread: "Server thread"
+      owner: "NetworkSystem"
+      order: 7
+      reads: ["networkManagers"]
+      writes: ["inbound packet handlers", "outbound socket flush"]
+      forge_hooks: []
+      mod_observable: true
+      parallelism_constraints: "Iterates active NetworkManager channels; polls direct packet queues"
+      evidence: "MinecraftServer.java:558; NetworkSystem.java:125-155"
+      profiling_key: "connection"
+
+    - id: "PLAYER_LIST_TICK"
+      method: "this.playerList.onTick()"
+      thread: "Server thread"
+      owner: "PlayerList"
+      order: 8
+      reads: ["playerEntities", "ping timestamps"]
+      writes: ["KeepAlive packets every 40 ticks", "player disconnect timeouts"]
+      forge_hooks: []
+      mod_observable: true
+      parallelism_constraints: "Updates player ping metrics"
+      evidence: "MinecraftServer.java:560; PlayerList.java:880-910"
+      profiling_key: "players"
+
+    - id: "COMMAND_FUNCTIONS_UPDATE"
+      method: "this.getFunctionManager().update()"
+      thread: "Server thread"
+      owner: "FunctionManager"
+      order: 9
+      reads: ["ticking mcfunctions"]
+      writes: ["command sender output", "game state via commands"]
+      forge_hooks: []
+      mod_observable: true
+      parallelism_constraints: "Vanilla command macro execution"
+      evidence: "MinecraftServer.java:562; FunctionManager.java:90-115"
+      profiling_key: "commandFunctions"
+
+    - id: "TICKABLES_UPDATE"
+      method: "for (ITickable t : this.tickables) t.update()"
+      thread: "Server thread"
+      owner: "MinecraftServer"
+      order: 10
+      reads: ["this.tickables"]
+      writes: ["custom tickable state"]
+      forge_hooks: []
+      mod_observable: true
+      parallelism_constraints: "Custom server-level tickable objects"
+      evidence: "MinecraftServer.java:564"
+      profiling_key: "tickables"
+
+    - id: "SERVER_TICK_END_EVENT"
+      method: "FMLCommonHandler.onPostServerTick()"
+      thread: "Server thread"
+      owner: "FMLCommonHandler"
+      order: 11
+      reads: ["this.tickTimeArray"]
+      writes: ["this.tickTimeArray"]
+      forge_hooks: ["net.minecraftforge.fml.common.gameevent.TickEvent$ServerTickEvent(Phase.END)"]
+      mod_observable: true
+      parallelism_constraints: "Synchronous mod dispatch at end of tick"
+      evidence: "MinecraftServer.java.patch:179"
+      profiling_key: null

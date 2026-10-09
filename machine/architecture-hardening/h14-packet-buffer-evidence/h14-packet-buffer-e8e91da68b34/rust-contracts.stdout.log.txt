@@ -1,0 +1,35 @@
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 14 tests
+test abandoned_completion_handle_cannot_grow_controller_tracking_without_bound ... ok
+test actual_loopback_reset_after_prefix_closes_connection_and_releases_pending_buffers ... ok
+test actual_slow_loopback_receiver_exercises_would_block_without_unbounded_queue ... SOCKET_PRESSURE would_block=1 short_writes=0 bytes=2097248 peak_reserved=984180
+ok
+test bounded_body_budget_does_not_ignore_reader_retention ... ok
+test canceled_order_hole_retains_credit_until_preceding_work_quiesces ... ok
+test cancellation_holds_reservation_until_real_worker_quiescence_and_skips_order_hole ... ok
+test completed_slow_output_still_holds_admission_budget_until_send ... ok
+test compression_failure_is_terminal_and_capacity_rejection_does_not_consume_sequence ... ok
+test equivalent_recipients_share_exact_body_other_rules_and_generations_do_not ... ok
+test foreign_connection_ticket_and_completion_cannot_consume_local_work ... ok
+test partial_vectored_writes_resume_without_reencrypting_or_duplicating ... ok
+test real_workers_complete_out_of_order_but_cipher_order_is_continuous ... ok
+test scripted_partial_writer_error_is_terminal_and_pending_work_is_not_reused ... ok
+test unload_reconnect_discards_old_generation_without_advancing_new_cipher ... ok
+
+test result: ok. 14 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 4.63s
+
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+

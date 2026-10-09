@@ -1,0 +1,74 @@
+# M3 TARGET-A AUTHORITATIVE HARDENING — results (2026-09-21)
+# Twin-world pre-population terrain oracle + live authoritative-path profile.
+# Worlds: World J (worldgen OFF_MEASURE, pure Java reference) / World R (ON_EXPERIMENTAL, Rust authoritative)
+# Same seed 123456789, same generator settings, same exact ordered TP corpus (110 hops / 20k span), same Forge/JVM/config.
+mode_java: OFF_MEASURE
+mode_rust: ON_EXPERIMENTAL
+seed: 123456789
+dll_hash: 6db38f407a197cf25945fb9b7bdb8a5cbb9788b7abff3f4732a72feecf15f6b4
+offline_ledger_dll: 6db38f40
+offline_ledger_file: machine/raw/hardening/ledger-6db38f40.txt
+
+prepop_oracle:
+  boundary: func_185977_a (setBlocksInChunk) RETURN - after density consumed into base terrain, before MapGen/population
+  java_lines: 9491
+  rust_lines: 9491
+  java_unique_coords: 9491
+  rust_unique_coords: 9491
+  in_both: 9491
+  only_java: 0
+  only_rust: 0
+  identical: 9491
+  mismatched: 0
+  identical_pct: 100.0
+  verdict: "JAVA_PRE_POP == RUST_PRE_POP for every target chunk (9491/9491), zero unexplained diffs"
+
+postpop_secondary:
+  java_chunks: 9491
+  rust_chunks: 9491
+  compared: 9491
+  identical: 5908
+  mismatched: 3583
+  blocks_compared: 190001152
+  blocks_mismatched: 80831
+  first_mismatch: "Chunk (-17,2) Y=4 rel=(2,65,1) J_block=2 R_block=3"
+  attribution: "decoration/population nondeterminism, NOT base terrain (pre-pop base terrain is 100% identical)"
+
+live_profile_rust:
+  calls: 9491
+  eligible: 9491
+  native_auth: 9491
+  native_errors: 0
+  fallbacks: 0
+  ctx_created: 1
+  ctx_freed: 1
+  generator: net.minecraft.world.gen.ChunkGeneratorOverworld
+  dimension: "0"
+  stages_ns:   # p50 / p95 / p99
+    elig:     [6800,   17700,  28800]
+    biome:    [500,    2000,   10100]
+    jni_kernel: [286500, 436400, 496700]
+    commit:   [400,    1600,   4500]
+  mean_us:
+    elig: 8.265
+    biome: 0.842
+    jni_kernel: 308.364
+    commit: 0.670
+    full_hook_auth: 318.6
+java_reference_live:
+  calls: 9491
+  mean_us: 339.723
+  p50_ns: 309200
+  p95_ns: 465200
+  p99_ns: 527300
+
+offline_kernel_identity:
+  # LedgerBench n=1 on CURRENT live DLL (6db38f40) — isolates kernel from integration
+  l0_java_reference_median_us: 294.3
+  l2_onecall_redesigned_median_us: 278.3
+  one_call_parity: "BIT-EXACT (240 chunks, 0 mismatches)"
+  integrated_regression: "PASS"
+  conclusion: "No kernel regression vs M3W4 (offline 275.9/292.3). Live Rust-slower claim was a noisier aggregate; staged live profile shows Rust full hook 318.6us < Java ref 339.7us."
+
+classification: "PASS — pre-pop oracle exact parity, authoritative safety clean (0 errors/0 fallbacks/balanced lifecycle 1:1), live performance characterized with p50/p95/p99, Rust net-faster live."
+recommendation: "M3 Target-A authoritative hardening gate CLEARED. Next: modpack authoritative generation (SHADOW validation), then ON_EXPERIMENTAL live operator gate."

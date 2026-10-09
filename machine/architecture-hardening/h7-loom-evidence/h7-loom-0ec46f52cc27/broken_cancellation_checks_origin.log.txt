@@ -1,0 +1,15 @@
+
+running 1 test
+test broken_cancellation_checks_origin ... 
+thread 'broken_cancellation_checks_origin' (24644) panicked at tests\lifecycle.rs:319:5:
+FOREIGN_WORK_CANCELLED_LOCAL_JOB
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+FAILED
+
+failures:
+
+failures:
+    broken_cancellation_checks_origin
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 26 filtered out; finished in 0.00s
+

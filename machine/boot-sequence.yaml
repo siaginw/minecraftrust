@@ -1,0 +1,262 @@
+version: 1
+target_environment: "Minecraft 1.12.2 / Forge 14.23.5.2860"
+
+phases:
+  - id: 0
+    name: "Process Entry & LaunchWrapper Invocation"
+    entry: "net.minecraftforge.fml.relauncher.ServerLaunchWrapper.main([Ljava/lang/String;)V"
+    thread: "main"
+    classloader: "sun.misc.Launcher$AppClassLoader"
+    owner: "JAVA_OWNED"
+    prerequisites:
+      - "JVM 8 runtime initialized"
+      - "Classpath containing Forge, Minecraft, and libraries/"
+    calls:
+      - "net.minecraft.launchwrapper.Launch.main([Ljava/lang/String;)V"
+    mutates:
+      - "System properties: log4j.configurationFile"
+    forge_hooks: []
+    mod_callbacks: []
+    transformer_state: "NONE"
+    next: 1
+    future_migration_notes: "Native launcher can bypass ServerLaunchWrapper if driving LaunchWrapper or native runtime directly."
+
+  - id: 1
+    name: "LaunchWrapper Initialization & Tweaker Processing"
+    entry: "net.minecraft.launchwrapper.Launch.main([Ljava/lang/String;)V"
+    thread: "main"
+    classloader: "sun.misc.Launcher$AppClassLoader -> net.minecraft.launchwrapper.LaunchClassLoader"
+    owner: "JAVA_OWNED"
+    prerequisites:
+      - "Phase 0 complete"
+    calls:
+      - "net.minecraftforge.fml.common.launcher.FMLServerTweaker.acceptOptions(Ljava/util/List;Ljava/io/File;Ljava/io/File;Ljava/lang/String;)V"
+      - "net.minecraftforge.fml.common.launcher.FMLServerTweaker.injectIntoClassLoader(Lnet/minecraft/launchwrapper/LaunchClassLoader;)V"
+    mutates:
+      - "Launch.blackboard properties"
+      - "LaunchClassLoader exclusions added"
+      - "Thread context classloader set to LaunchClassLoader"
+    forge_hooks:
+      - "FMLLaunchHandler.configureForServerLaunch"
+    mod_callbacks: []
+    transformer_state: "INITIALIZING"
+    next: 2
+    future_migration_notes: "LaunchClassLoader transforms vanilla bytecode before it reaches JVM execution."
+
+  - id: 2
+    name: "CoreMod Discovery & Transformer Registration"
+    entry: "net.minecraftforge.fml.relauncher.CoreModManager.handleLaunch(Ljava/io/File;Lnet/minecraft/launchwrapper/LaunchClassLoader;Lnet/minecraftforge/fml/common/launcher/FMLTweaker;)V"
+    thread: "main"
+    classloader: "net.minecraft.launchwrapper.LaunchClassLoader"
+    owner: "JAVA_OWNED"
+    prerequisites:
+      - "Phase 1 complete"
+    calls:
+      - "net.minecraftforge.fml.relauncher.CoreModManager.discoverCoreMods(Ljava/io/File;Lnet/minecraft/launchwrapper/LaunchClassLoader;)V"
+      - "net.minecraftforge.fml.relauncher.CoreModManager.injectTransformers(Lnet/minecraft/launchwrapper/LaunchClassLoader;)V"
+    mutates:
+      - "Registered transformers in LaunchClassLoader: PatchingTransformer, SideTransformer, EventSubscriptionTransformer, AccessTransformer, DeobfuscationTransformer"
+    forge_hooks:
+      - "IFMLLoadingPlugin callbacks"
+      - "IFMLCallHook.injectData and call"
+    mod_callbacks:
+      - "CoreMod plugins (@IFMLLoadingPlugin)"
+    transformer_state: "FULLY_REGISTERED"
+    next: 3
+    future_migration_notes: "Coremods mutate bytecode dynamically. Rust reimplementations must account for transformed semantics."
+
+  - id: 3
+    name: "Minecraft Server Entry & Thread Transition"
+    entry: "net.minecraft.launchwrapper.Launch.launch([Ljava/lang/String;)V -> net.minecraft.server.MinecraftServer.main([Ljava/lang/String;)V"
+    thread: "main -> Server thread"
+    classloader: "net.minecraft.launchwrapper.LaunchClassLoader"
+    owner: "JAVA_OWNED"
+    prerequisites:
+      - "Phase 2 complete"
+      - "All transformers registered"
+    calls:
+      - "net.minecraft.init.Bootstrap.register()V"
+      - "new net.minecraft.server.dedicated.DedicatedServer(...)"
+      - "net.minecraft.server.MinecraftServer.startServerThread()V"
+    mutates:
+      - "Vanilla registry singletons populated (Blocks, Items, Potions, Biomes)"
+      - "DedicatedServer instance created"
+      - "Server thread spawned and started"
+    forge_hooks:
+      - "Bootstrap.register patch hooks"
+    mod_callbacks: []
+    transformer_state: "TRANSFORMING_BYTECODE"
+    next: 4
+    future_migration_notes: "Main thread terminates; all subsequent server work runs on Server thread."
+
+  - id: 4
+    name: "DedicatedServer Init & FML Mod Discovery"
+    entry: "net.minecraft.server.dedicated.DedicatedServer.init()Z"
+    thread: "Server thread"
+    classloader: "net.minecraft.launchwrapper.LaunchClassLoader"
+    owner: "JAVA_OWNED"
+    prerequisites:
+      - "Phase 3 complete"
+      - "Server thread running"
+    calls:
+      - "net.minecraftforge.fml.common.FMLCommonHandler.onServerStart(Lnet/minecraft/server/MinecraftServer;)V"
+      - "net.minecraftforge.fml.server.FMLServerHandler.beginServerLoading(Lnet/minecraft/server/MinecraftServer;)V"
+      - "net.minecraftforge.fml.common.Loader.loadMods(Ljava/util/List;)V"
+    mutates:
+      - "Mod discovery in mods/ directory"
+      - "Mod dependency graph resolved and topologically sorted"
+      - "ModContainer instances instantiated"
+      - "LoaderState.CONSTRUCTING entered"
+    forge_hooks:
+      - "FMLCommonHandler.onServerStart"
+      - "Loader.loadMods"
+    mod_callbacks:
+      - "Mod constructors / FMLConstructionEvent"
+    transformer_state: "ACTIVE"
+    next: 5
+    future_migration_notes: "ModContainer graph defines mod IDs, versions, and load ordering."
+
+  - id: 5
+    name: "FML Pre-Initialization & Registry Events"
+    entry: "net.minecraftforge.fml.common.Loader.preinitializeMods()V"
+    thread: "Server thread"
+    classloader: "net.minecraft.launchwrapper.LaunchClassLoader"
+    owner: "JAVA_OWNED"
+    prerequisites:
+      - "Phase 4 complete"
+      - "All mod containers constructed"
+    calls:
+      - "net.minecraftforge.registries.GameData.fireCreateRegistryEvents()V"
+      - "net.minecraftforge.fml.common.LoadController.distributeStateMessage(FMLPreInitializationEvent)"
+      - "net.minecraftforge.registries.GameData.fireRegistryEvents(...)V"
+    mutates:
+      - "RegistryEvent.NewRegistry emitted"
+      - "Capabilities registered (@CapabilityInject)"
+      - "Blocks, Items, Potions, Biomes registered via RegistryEvent.Register<T>"
+      - "ObjectHolder fields injected"
+      - "LoaderState.PREINITIALIZATION -> INITIALIZATION"
+    forge_hooks:
+      - "RegistryEvent.NewRegistry"
+      - "FMLPreInitializationEvent"
+      - "RegistryEvent.Register<Block>"
+      - "RegistryEvent.Register<Item>"
+    mod_callbacks:
+      - "Mod @EventHandler methods for FMLPreInitializationEvent"
+      - "Mod @SubscribeEvent methods for RegistryEvent"
+    transformer_state: "ACTIVE"
+    next: 6
+    future_migration_notes: "Blocks and items are authoritative in Forge registries by end of this phase."
+
+  - id: 6
+    name: "Server Properties, RSA Keypair & Socket Bind"
+    entry: "net.minecraft.server.dedicated.DedicatedServer.init()Z (continued)"
+    thread: "Server thread"
+    classloader: "net.minecraft.launchwrapper.LaunchClassLoader"
+    owner: "JAVA_OWNED"
+    prerequisites:
+      - "Phase 5 complete"
+    calls:
+      - "new net.minecraft.server.dedicated.PropertyManager(Ljava/io/File;)"
+      - "net.minecraft.util.CryptManager.generateKeyPair()Ljava/security/KeyPair;"
+      - "net.minecraft.network.NetworkSystem.addEndpoint(Ljava/net/InetAddress;I)V"
+    mutates:
+      - "server.properties loaded and cached"
+      - "RSA 1024-bit keypair generated"
+      - "Netty ServerBootstrap bound to TCP listening port"
+    forge_hooks: []
+    mod_callbacks: []
+    transformer_state: "ACTIVE"
+    next: 7
+    future_migration_notes: "TCP socket is open; Netty channel pipeline active. CANDIDATE — UNVALIDATED: requires dedicated networking research into Netty pipeline, NetworkManager, FML handshake, SimpleNetworkWrapper, and mod channel injection."
+
+  - id: 7
+    name: "FML Initialization, Post-Initialization & Registry Freeze"
+    entry: "net.minecraftforge.fml.common.FMLCommonHandler.onServerStarted()V -> Loader.initializeMods()V"
+    thread: "Server thread"
+    classloader: "net.minecraft.launchwrapper.LaunchClassLoader"
+    owner: "JAVA_OWNED"
+    prerequisites:
+      - "Phase 6 complete"
+      - "Network socket bound"
+    calls:
+      - "net.minecraftforge.common.crafting.CraftingHelper.loadRecipes(Z)V"
+      - "net.minecraftforge.fml.common.LoadController.distributeStateMessage(FMLInitializationEvent)"
+      - "net.minecraftforge.fml.common.LoadController.distributeStateMessage(IMCEvent)"
+      - "net.minecraftforge.fml.common.LoadController.distributeStateMessage(FMLPostInitializationEvent)"
+      - "net.minecraftforge.fml.common.LoadController.distributeStateMessage(FMLLoadCompleteEvent)"
+      - "net.minecraftforge.registries.GameData.freezeData()V"
+    mutates:
+      - "Crafting recipes registered"
+      - "LoaderState.AVAILABLE reached"
+      - "All Forge registries frozen into immutable tables"
+      - "DedicatedPlayerList constructed"
+    forge_hooks:
+      - "RegistryEvent.Register<IRecipe>"
+      - "FMLInitializationEvent"
+      - "IMCEvent"
+      - "FMLPostInitializationEvent"
+      - "FMLLoadCompleteEvent"
+      - "GameData.freezeData"
+    mod_callbacks:
+      - "Mod @EventHandler callbacks for Init, IMC, PostInit, LoadComplete"
+    transformer_state: "ACTIVE"
+    next: 8
+    future_migration_notes: "Registries become completely immutable after GameData.freezeData(). Safe snapshot boundary for Rust."
+
+  - id: 8
+    name: "Server About To Start & World Loading"
+    entry: "net.minecraftforge.fml.common.FMLCommonHandler.handleServerAboutToStart(Lnet/minecraft/server/MinecraftServer;)Z"
+    thread: "Server thread"
+    classloader: "net.minecraft.launchwrapper.LaunchClassLoader"
+    owner: "JAVA_OWNED"
+    prerequisites:
+      - "Phase 7 complete"
+      - "Registries frozen"
+    calls:
+      - "net.minecraftforge.fml.common.LoadController.distributeStateMessage(FMLServerAboutToStartEvent)"
+      - "net.minecraft.server.MinecraftServer.loadAllWorlds(Ljava/lang/String;Ljava/lang/String;JLnet/minecraft/world/WorldType;Ljava/lang/String;)V"
+      - "net.minecraft.server.MinecraftServer.initialWorldChunkLoad()V"
+    mutates:
+      - "AnvilSaveHandler created"
+      - "WorldServer instances allocated for Dim 0 (Overworld), Dim -1 (Nether), Dim 1 (End)"
+      - "DimensionManager populated"
+      - "Spawn chunks loaded (25x25 chunk grid, 625 chunks)"
+    forge_hooks:
+      - "FMLServerAboutToStartEvent"
+      - "WorldEvent.Load"
+      - "ChunkEvent.Load"
+    mod_callbacks:
+      - "Mod @EventHandler callbacks for FMLServerAboutToStartEvent"
+      - "WorldEvent.Load event subscribers"
+    transformer_state: "ACTIVE"
+    next: 9
+    future_migration_notes: "Worlds and chunk caches exist. Primary candidate for Rust world-storage and region-io."
+
+  - id: 9
+    name: "Server Starting, Ready State & Tick Loop Entry"
+    entry: "net.minecraftforge.fml.common.FMLCommonHandler.handleServerStarting(Lnet/minecraft/server/MinecraftServer;)Z"
+    thread: "Server thread"
+    classloader: "net.minecraft.launchwrapper.LaunchClassLoader"
+    owner: "JAVA_OWNED"
+    prerequisites:
+      - "Phase 8 complete"
+      - "Spawn chunks loaded"
+    calls:
+      - "net.minecraftforge.fml.common.LoadController.distributeStateMessage(FMLServerStartingEvent)"
+      - "net.minecraftforge.fml.common.FMLCommonHandler.handleServerStarted()V"
+      - "DedicatedServer.allowPlayerLogins = true"
+      - "net.minecraft.server.MinecraftServer.run()V (while serverRunning loop)"
+    mutates:
+      - "Server commands registered (/forge, mod commands)"
+      - "DedicatedServer.allowPlayerLogins set to true"
+      - "Server status ping response updated (motd, version 340, player slots)"
+      - "Main tick loop begins execution"
+    forge_hooks:
+      - "FMLServerStartingEvent"
+      - "FMLServerStartedEvent"
+      - "DedicatedServer.allowPlayerLogins"
+    mod_callbacks:
+      - "Mod @EventHandler callbacks for FMLServerStartingEvent and FMLServerStartedEvent"
+    transformer_state: "IDLE"
+    next: null
+    future_migration_notes: "Boundary of P0-1 (Boot). Next phase is P0-2 (Tick Pipeline)."

@@ -1,0 +1,13 @@
+[package]
+name = "nbt-eval"
+version = "0.1.0"
+edition = "2021"
+
+[workspace]
+
+[dependencies]
+nbt = { path = "D:/minecraftrust/crates/nbt" }
+simdnbt = { path = "D:/minecraftrust/third_party_reference/eval/simdnbt/simdnbt" }
+
+[profile.release]
+debug = false

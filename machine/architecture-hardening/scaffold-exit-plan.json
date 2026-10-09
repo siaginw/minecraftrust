@@ -1,0 +1,159 @@
+{
+  "schema_version": 1,
+  "kind": "H28_SCAFFOLD_EXIT_REGISTER",
+  "status": "PLAN_VALIDATED_NOT_REMOVAL",
+  "document": "docs/architecture/scaffold-exit-plan.md",
+  "document_sha256": "ddf0a5a1453cc6c4a9aac05ab844dafce233923d61d36fe0f7df5fbc0bbe67e9",
+  "production_authority": false,
+  "runtime_changes": false,
+  "entries": [
+    {
+      "mechanism": "diagnostic_live_capture",
+      "classification": "TEMPORARY_AND_EXPECTED",
+      "status": "RETAIN_PENDING_REPLACEMENT_PROOF",
+      "exit_condition": "Fresh V2 writer/lifecycle qualification and live shadow, then bounded opt-in diagnostics and retained first divergence replace continuous capture.",
+      "dependent_milestones": [
+        "H23",
+        "H24"
+      ],
+      "source_bindings": {
+        "tools/bridge/src/com/rustcraft/bridge/capture/LivePacketCapture.java": "1416ab5abd365e8d3623794cc5f9e8dd83bd7e5abc2affd519a2507f84694eea",
+        "tools/bridge/src/com/rustcraft/bridge/capture/SealedLiveCapture.java": "4a87b6375c538ae922975575f6d0b367f6f1c96641f6b0d3713575d4d0f1b306"
+      }
+    },
+    {
+      "mechanism": "java_native_packet_comparison",
+      "classification": "REMOVE_WHEN_X",
+      "status": "RETAIN_PENDING_REPLACEMENT_PROOF",
+      "exit_condition": "Operation-specific parity, lifecycle closure, complete performance evidence and explicit authority approval; retain offline replay and safe fallback.",
+      "dependent_milestones": [
+        "H8.1",
+        "H23",
+        "H24",
+        "H25"
+      ],
+      "source_bindings": {
+        "tools/bridge/src/com/rustcraft/bridge/capture/LiveComparisonQueue.java": "c4b1017d0b9a8e63e4e26a2fc00136116ddcffb1c0c50f9c60580e80dfd1957e",
+        "tools/bridge/src/com/rustcraft/bridge/capture/LiveShadowCampaignConsumer.java": "626de7b15d2e9b8844e16bb462c1251fd9ad436d7511694b44b17112ebe69311"
+      }
+    },
+    {
+      "mechanism": "profile_specific_probes",
+      "classification": "GENERALIZE",
+      "status": "RETAIN_PENDING_REPLACEMENT_PROOF",
+      "exit_condition": "Both target runtimes use generic fresh V2 qualification with substantive placement/writer/lifecycle witnesses and cross-profile negative controls.",
+      "dependent_milestones": [
+        "H2",
+        "H23"
+      ],
+      "source_bindings": {
+        "tools/live-capture/run_rev_probe.py": "616734d4029d16321a9aee77586eecf43564812e7786e0906eabbb37089c37f3",
+        "tools/live-capture/derive_rev_profile.py": "4e69368866a47d4fd2940f10bb4f685764f5fa1447c2ebba822280419a6965da",
+        "tools/testing/live_profile.py": "595f70c9df3ebbca40b5a946c7542ffde05e2548818b8508310190caaa69458d",
+        "tools/testing/qualification_engine.py": "ce66d4716637858063164b8a7e6d9eb9b88433246f3be1f9746ad75b07184b49"
+      }
+    },
+    {
+      "mechanism": "duplicate_java_native_state",
+      "classification": "DANGEROUS_IF_PERMANENT",
+      "status": "RETAIN_PENDING_REPLACEMENT_PROOF",
+      "exit_condition": "Prove qualified single ownership, quiescence, atomic handoff, registry/object identity, rollback and unloading plus complete-operation value before deleting duplicate mutable state.",
+      "dependent_milestones": [
+        "H6",
+        "H20",
+        "H23"
+      ],
+      "source_bindings": {
+        "tools/bridge/src/com/rustcraft/bridge/NativeChunkBridge.java": "f8ab45c2d4ca952660d175be89f4762853ddb285fd19d430d7b1602dd16d787b",
+        "crates/native-chunk/src/chunk.rs": "4a91edb9587343ed67648de39b771e51600602e4e1d4ec72bea4a3b05d7f0921",
+        "crates/native-state-vnext/src/store.rs": "445aa04958554ffd1bf31c8112d2e5a2faee34ac0a2668b243eb280b9b0b49f1"
+      }
+    },
+    {
+      "mechanism": "jni_state_getters",
+      "classification": "REMOVE_WHEN_X",
+      "status": "RETAIN_PENDING_REPLACEMENT_PROOF",
+      "exit_condition": "Same-operation encode metadata and qualified retained immutable views replace getter reconstruction; caller inventory and ABI compatibility checks before removal.",
+      "dependent_milestones": [
+        "H3",
+        "H6",
+        "H14"
+      ],
+      "source_bindings": {
+        "tools/bridge/src/com/rustcraft/bridge/NativeChunkBridge.java": "f8ab45c2d4ca952660d175be89f4762853ddb285fd19d430d7b1602dd16d787b",
+        "tools/bridge/src/com/rustcraft/bridge/NativeChunkPacket.java": "ab0adb9510ea80ab4e61d6df105c99d46c0eb3760d84da7afa99f05e3066a454"
+      }
+    },
+    {
+      "mechanism": "global_writer_gate",
+      "classification": "GENERALIZE",
+      "status": "RETAIN_PENDING_REPLACEMENT_PROOF",
+      "exit_condition": "Prove full writer/alias closure, domain lock ordering, reentrancy and JVM memory ordering plus live negative controls before finer ownership domains.",
+      "dependent_milestones": [
+        "H4",
+        "H6",
+        "H7",
+        "H20",
+        "H23"
+      ],
+      "source_bindings": {
+        "tools/bridge/src/com/rustcraft/bridge/capture/LiveWriterGate.java": "27b8eb203da1a70951f299da68abc420a42ab11c1d466cce7be0dcc6afc205f7"
+      }
+    },
+    {
+      "mechanism": "persistent_identity_history",
+      "classification": "DANGEROUS_IF_PERMANENT",
+      "status": "RETAIN_PENDING_REPLACEMENT_PROOF",
+      "exit_condition": "Bound retention without forgetting live aliases/provenance; prove safe retirement, anti-ABA, revocation and churn/session reset; preserve fail-closed saturation.",
+      "dependent_milestones": [
+        "H6",
+        "H22",
+        "H23"
+      ],
+      "source_bindings": {
+        "tools/bridge/src/com/rustcraft/bridge/capture/PrivateBuildTickets.java": "b31e287fba07ddfa1d1f5ca017345b84655a9f90e1cece28fb01c209bff1989f",
+        "tools/bridge/src/com/rustcraft/bridge/capture/LiveChunkBindings.java": "c23ce447621b36c9e8eb1949f540ca07d5d768bd6d538cc410b2ee35b471b74b",
+        "crates/native-state-vnext/src/store.rs": "445aa04958554ffd1bf31c8112d2e5a2faee34ac0a2668b243eb280b9b0b49f1"
+      }
+    },
+    {
+      "mechanism": "closed_handler_retention",
+      "classification": "DANGEROUS_IF_PERMANENT",
+      "status": "RETAIN_PENDING_REPLACEMENT_PROOF",
+      "exit_condition": "After drainage, move final counters into bounded aggregates and prove exactly-once close/free accounting and churn behavior without changing frame authority/MCK6 semantics.",
+      "dependent_milestones": [
+        "H22"
+      ],
+      "source_bindings": {
+        "tools/bridge/src/com/rustcraft/bridge/FrameAuthorityHandler.java": "902b81597a63cfe3e9194bf1705dfa819c17b1bb72aa012dbfe76a20eb3109ad",
+        "tools/bridge/src/com/rustcraft/bridge/FrameShadowLiveHook.java": "c2845547d588e536a9adfbfafecce0bbc87b119dbb7ae31b0fcf48b18febd984"
+      }
+    },
+    {
+      "mechanism": "java_engine_oracle_paths",
+      "classification": "GENERALIZE",
+      "status": "RETAIN_PENDING_REPLACEMENT_PROOF",
+      "exit_condition": "Qualified parity/performance/authority approval permits removing duplicate hot-path execution; retain pinned independent Java oracle and first-divergence release tests.",
+      "dependent_milestones": [
+        "H22.5",
+        "H23",
+        "H24",
+        "H25"
+      ],
+      "source_bindings": {
+        "tools/bridge/src/com/rustcraft/bridge/M5PipelineOracle.java": "f79b12f09dd7b7b65cda5fc83c148ff562282c25dc949edaf1dc2ebddbe63659",
+        "tools/differential-replay/java/ReferenceReplay.java": "4a98129dc0047e3822d576b9cfc51efed070281a0f43a5085643656a6ab2b881"
+      }
+    }
+  ],
+  "validation": [
+    "Nine required mechanisms present exactly once",
+    "Classification from explicit four-value request vocabulary",
+    "Every source anchor exists and is SHA256-bound",
+    "Each row has concrete exit condition and dependent milestones"
+  ],
+  "limits": [
+    "Source observations and proposed replacement gates only",
+    "No retention cleanup, runtime replacement, authority approval or historical evidence deletion performed"
+  ]
+}

@@ -1,0 +1,1773 @@
+{
+  "schema": "OFFLINE_STORAGE_CAMPAIGN_V1",
+  "status": "PASS",
+  "production_authority": false,
+  "output": "D:\\minecraftrust-astra-hardening\\target\\offline-storage-experiment\\74ee0d64de0c4d3ea51fa0fa5e92d75a",
+  "host": "Windows-11-10.0.26200-SP0",
+  "cpu": "AMD64 Family 25 Model 97 Stepping 2, AuthenticAMD",
+  "samples_per_method_and_size": 5,
+  "measurement_concurrency": "serial subprocesses; other team benchmark windows coordinated outside harness",
+  "guard_before": {
+    "schema_version": 1,
+    "kind": "HARDENING_ISOLATION_GATE_CHECK",
+    "status": "PASS",
+    "failures": [],
+    "original_observed": {
+      "head": "c4b868db2c9e4b03f745bf93c6ebf4fd8a8519e7",
+      "branch": "issue1-jni-v2",
+      "status": [
+        " M tools/live-capture/live_client_session.py",
+        "?? tools/live-capture/__pycache__/",
+        "?? tools/live-capture/run_rev_shadow.py"
+      ],
+      "files": [
+        {
+          "path": "D:\\minecraftrust\\tools\\live-capture\\live_client_session.py",
+          "sha256": "151c356161695aba3db3c1a8cbd589b5eda2b5a1770dff59ab21b728d36cabfa"
+        },
+        {
+          "path": "D:\\minecraftrust\\tools\\live-capture\\run_rev_shadow.py",
+          "sha256": "2b9b2aca49e57dd0d2a74bec46efcdc0ac7f95762a733276e27ff9dbcb472d93"
+        }
+      ]
+    },
+    "isolated_worktree": "D:\\minecraftrust-astra-hardening",
+    "isolated_head": "cb6886371bbd05c722b206d85c4d7672fdc5a98d",
+    "isolated_branch": "astra/architecture-hardening",
+    "production_gate_checks": {
+      "tryEncode_fail_closed": true,
+      "productionAuthorityEligible_false": true
+    },
+    "scope": "read-only original HEAD/status/two paused source hashes plus conservative source guards; runtime authority tests remain required"
+  },
+  "environment_policy": {
+    "removed_names": [
+      "RUST_LOG"
+    ],
+    "explicit": {
+      "RUST_BACKTRACE": "0",
+      "RUSTC": "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\rustc.exe",
+      "CARGO_HOME": "C:\\Users\\Admin\\.cargo",
+      "PATH_PREPEND": "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin",
+      "OFFLINE_STORAGE_TEST_DIR": "D:\\minecraftrust-astra-hardening\\target\\offline-storage-experiment\\74ee0d64de0c4d3ea51fa0fa5e92d75a\\unit-files"
+    },
+    "remaining": "OS compiler/linker environment inherited; not fully hermetic"
+  },
+  "processes": [
+    {
+      "name": "sysroot",
+      "argv": [
+        "C:\\Users\\Admin\\.cargo\\bin\\rustc.exe",
+        "--print",
+        "sysroot"
+      ],
+      "exit": 0,
+      "expected_exit": 0,
+      "resource_error": null,
+      "timed_out": false,
+      "elapsed_seconds": 0.0860050999908708,
+      "windows_job_peak_process_committed_bytes": null,
+      "job_memory_limit_mib": null,
+      "stdout_sha256": "e0d8249c2fb93ac2106d97fedd24f44420e0ee2316617df20f769f033eaf568d",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "rust-version",
+      "argv": [
+        "C:\\Users\\Admin\\.cargo\\bin\\rustc.exe",
+        "-vV"
+      ],
+      "exit": 0,
+      "expected_exit": 0,
+      "resource_error": null,
+      "timed_out": false,
+      "elapsed_seconds": 0.07191419997252524,
+      "windows_job_peak_process_committed_bytes": null,
+      "job_memory_limit_mib": null,
+      "stdout_sha256": "c45e612575abeef05e99e88eb1e7aea52cddab9ad70d4f65ad20eaa65e92a9cf",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "metadata",
+      "argv": [
+        "C:\\Users\\Admin\\.cargo\\bin\\cargo.exe",
+        "metadata",
+        "--locked",
+        "--offline",
+        "--format-version",
+        "1"
+      ],
+      "exit": 0,
+      "expected_exit": 0,
+      "resource_error": null,
+      "timed_out": false,
+      "elapsed_seconds": 0.14146110002184287,
+      "windows_job_peak_process_committed_bytes": null,
+      "job_memory_limit_mib": null,
+      "stdout_sha256": "745cc703140c36bd65e5a1d0a35b17d72d74c97df3b6d28cdfa1252dede7fa8c",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "fmt",
+      "argv": [
+        "C:\\Users\\Admin\\.cargo\\bin\\cargo.exe",
+        "fmt",
+        "--",
+        "--check"
+      ],
+      "exit": 0,
+      "expected_exit": 0,
+      "resource_error": null,
+      "timed_out": false,
+      "elapsed_seconds": 0.18181079998612404,
+      "windows_job_peak_process_committed_bytes": null,
+      "job_memory_limit_mib": null,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "rust-tests",
+      "argv": [
+        "C:\\Users\\Admin\\.cargo\\bin\\cargo.exe",
+        "test",
+        "--locked",
+        "--offline",
+        "--target-dir",
+        "D:\\minecraftrust-astra-hardening\\target\\offline-storage-experiment\\74ee0d64de0c4d3ea51fa0fa5e92d75a\\cargo-target"
+      ],
+      "exit": 0,
+      "expected_exit": 0,
+      "resource_error": null,
+      "timed_out": false,
+      "elapsed_seconds": 4.882066799968015,
+      "windows_job_peak_process_committed_bytes": null,
+      "job_memory_limit_mib": null,
+      "stdout_sha256": "9b250283def33b870edee468188629e21a43ba16f60d63a2edcea9a96c76dc61",
+      "stderr_sha256": "2976170b3fa4183c3112040cdb34c15ab34d8b14ea5b8fa32efa2b6f0748b186"
+    },
+    {
+      "name": "clippy",
+      "argv": [
+        "C:\\Users\\Admin\\.cargo\\bin\\cargo.exe",
+        "clippy",
+        "--locked",
+        "--offline",
+        "--all-targets",
+        "--target-dir",
+        "D:\\minecraftrust-astra-hardening\\target\\offline-storage-experiment\\74ee0d64de0c4d3ea51fa0fa5e92d75a\\cargo-target",
+        "--",
+        "-D",
+        "warnings"
+      ],
+      "exit": 0,
+      "expected_exit": 0,
+      "resource_error": null,
+      "timed_out": false,
+      "elapsed_seconds": 1.905728799989447,
+      "windows_job_peak_process_committed_bytes": null,
+      "job_memory_limit_mib": null,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "5c727fcfa38d544f01b9e5d522ca2d0eeb58abf16afb898fb5ea988e2564d10b"
+    },
+    {
+      "name": "release",
+      "argv": [
+        "C:\\Users\\Admin\\.cargo\\bin\\cargo.exe",
+        "build",
+        "--locked",
+        "--offline",
+        "--release",
+        "--target-dir",
+        "D:\\minecraftrust-astra-hardening\\target\\offline-storage-experiment\\74ee0d64de0c4d3ea51fa0fa5e92d75a\\cargo-target"
+      ],
+      "exit": 0,
+      "expected_exit": 0,
+      "resource_error": null,
+      "timed_out": false,
+      "elapsed_seconds": 7.099761399964336,
+      "windows_job_peak_process_committed_bytes": null,
+      "job_memory_limit_mib": null,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "d1bef4adb69d63fd9dfba0c8a4705f4d28b356d7a36f2416edc2a5e4d684d85d"
+    },
+    {
+      "name": "reference-tests",
+      "argv": [
+        "C:\\Python314\\python.exe",
+        "-B",
+        "-m",
+        "unittest",
+        "test_reference",
+        "-v"
+      ],
+      "exit": 0,
+      "expected_exit": 0,
+      "resource_error": null,
+      "timed_out": false,
+      "elapsed_seconds": 0.08451159996911883,
+      "windows_job_peak_process_committed_bytes": null,
+      "job_memory_limit_mib": null,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "7b743ccdd703f894cf2af7e5a8063f2e48972cf1438dbbd2e939191e6ff06bc1"
+    },
+    {
+      "name": "sample-8192-0-buffered",
+      "argv": [
+        "D:\\minecraftrust-astra-hardening\\target\\offline-storage-experiment\\74ee0d64de0c4d3ea51fa0fa5e92d75a\\cargo-target\\release\\offline-storage-experiment.exe",
+        "buffered",
+        "D:\\minecraftrust-astra-hardening\\target\\offline-storage-experiment\\74ee0d64de0c4d3ea51fa0fa5e92d75a\\source-8192.bin",
+        "D:\\minecraftrust-astra-hardening\\target\\offline-storage-experiment\\74ee0d64de0c4d3ea51fa0fa5e92d75a\\sample-8192-0-buffered",
+        "109362e2de8c405ba0d8240bf416a58d",
+        "f2c8b4eb5851ad6c74189c2d89bb4465769f4fd30c6e490f1f63120057d19c53",
+        "7"
+      ],
+      "exit": 0,
+      "expected_exit": 0,
+      "resource_error": null,
+      "timed_out": false,
+      "elapsed_seconds": 0.08036350004840642,
+      "windows_job_peak_process_committed_bytes": 1912832,
+      "job_memory_limit_mib": 512,
+      "stdout_sha256": "9d74b79076df08c9c89b41b7d34346262cfe12df537e6f24b1d2849ace3d83d1",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "sample-8192-0-mmap",
+      "argv": [
+        "D:\\minecraftrust-astra-hardening\\target\\offline-storage-experiment\\74ee0d64de0c4d3ea51fa0fa5e92d75a\\cargo-target\\release\\offline-storage-experiment.exe",
+        "mmap",
+        "D:\\minecraftrust-astra-hardening\\target\\offline-storage-experiment\\74ee0d64de0c4d3ea51fa0fa5e92d75a\\source-8192.bin",
+        "D:\\minecraftrust-astra-hardening\\target\\offline-storage-experiment\\74ee0d64de0c4d3ea51fa0fa5e92d75a\\sample-8192-0-mmap",
+        "7ea12864dfe94738b30ac281e4e34a46",
+        "3c6de1c0ba64cecc9fe415af79181d91e480212263bb3e61f21bdce4301400a3",
+        "7"
+      ],
+      "exit": 0,
+      "expected_exit": 0,
+      "resource_error": null,
+      "timed_out": false,
+      "elapsed_seconds": 0.03665360005106777,
+      "windows_job_peak_process_committed_bytes": 1908736,
+      "job_memory_limit_mib": 512,
+      "stdout_sha256": "a24ded9516e54971201e8efd7552ebeb29580f411e2e2967911bb591271a7bea",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "sample-8192-1-mmap",
+      "argv": [
+        "D:\\minecraftrust-astra-hardening\\target\\offline-storage-experiment\\74ee0d64de0c4d3ea51fa0fa5e92d75a\\cargo-target\\release\\offline-storage-experiment.exe",
+        "mmap",
+        "D:\\minecraftrust-astra-hardening\\target\\offline-storage-experiment\\74ee0d64de0c4d3ea51fa0fa5e92d75a\\source-8192.bin",
+        "D:\\minecraftrust-astra-hardening\\target\\offline-storage-experiment\\74ee0d64de0c4d3ea51fa0fa5e92d75a\\sample-8192-1-mmap",
+        "784e4f04b4b64725ad6ddb6a2cd1e397",
+        "f9644cba4a1b98b371566394337661ef074ce90fa0a61bf5de120fb8fca206f0",
+        "7"
+      ],
+      "exit": 0,
+      "expected_exit": 0,
+      "resource_error": null,
+      "timed_out": false,
+      "elapsed_seconds": 0.03331229998730123,
+      "windows_job_peak_process_committed_bytes": 1900544,
+      "job_memory_limit_mib": 512,
+      "stdout_sha256": "f800d08ddc9c758f8a34a803451832ea2e3d45799b7d766d066f8c25bfc95066",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "sample-8192-1-buffered",
+      "argv": [
+        "D:\\minecraftrust-astra-hardening\\target\\offline-storage-experiment\\74ee0d64de0c4d3ea51fa0fa5e92d75a\\cargo-target\\release\\offline-storage-experiment.exe",
+        "buffered",
+        "D:\\minecraftrust-astra-hardening\\target\\offline-storage-experiment\\74ee0d64de0c4d3ea51fa0fa5e92d75a\\source-8192.bin",
+        "D:\\minecraftrust-astra-hardening\\target\\offline-storage-experiment\\74ee0d64de0c4d3ea51fa0fa5e92d75a\\sample-8192-1-buffered",
+        "1e9d3f0d61494a4a8a55843d1b26af91",
+        "ffadfc91de79862531abb1c2fc06eec93a6a233ed6746750302916fa593d2874",
+        "7"
+      ],
+      "exit": 0,
+      "expected_exit": 0,
+      "resource_error": null,
+      "timed_out": false,
+      "elapsed_seconds": 0.03139509999891743,
+      "windows_job_peak_process_committed_bytes": 1912832,
+      "job_memory_limit_mib": 512,
+      "stdout_sha256": "cb72a017b3a212f260b14181a978446ce271e25882e6e29466ff0ea940d70552",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "sample-8192-2-buffered",
+      "argv": [
+        "D:\\minecraftrust-astra-hardening\\target\\offline-storage-experiment\\74ee0d64de0c4d3ea51fa0fa5e92d75a\\cargo-target\\release\\offline-storage-experiment.exe",
+        "buffered",
+        "D:\\minecraftrust-astra-hardening\\target\\offline-storage-experiment\\74ee0d64de0c4d3ea51fa0fa5e92d75a\\source-8192.bin",
+        "D:\\minecraftrust-astra-hardening\\target\\offline-storage-experiment\\74ee0d64de0c4d3ea51fa0fa5e92d75a\\sample-8192-2-buffered",
+        "2f8de1fbcc8f40acac8a65040bdfce8b",
+        "1bfa133a1a8d546604442173c1d585dad2ec76ef25584d0b962df4a68ba1532c",
+        "7"
+      ],
+      "exit": 0,
+      "expected_exit": 0,
+      "resource_error": null,
+      "timed_out": false,
+      "elapsed_seconds": 0.032039000012446195,
+      "windows_job_peak_process_committed_bytes": 1904640,
+      "job_memory_limit_mib": 512,
+      "stdout_sha256": "0727b8ecbac51d2e860a1ad25763f8f7e34279b395c9c6e91483ecb937c5de18",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "sample-8192-2-mmap",
+      "argv": [
+        "D:\\minecraftrust-astra-hardening\\target\\offline-storage-experiment\\74ee0d64de0c4d3ea51fa0fa5e92d75a\\cargo-target\\release\\offline-storage-experiment.exe",
+        "mmap",
+        "D:\\minecraftrust-astra-hardening\\target\\offline-storage-experiment\\74ee0d64de0c4d3ea51fa0fa5e92d75a\\source-8192.bin",
+        "D:\\minecraftrust-astra-hardening\\target\\offline-storage-experiment\\74ee0d64de0c4d3ea51fa0fa5e92d75a\\sample-8192-2-mmap",
+        "8b0c869026434fe28bfff89bd9b298e6",
+        "91c95d1ce5579abdaf0c668978b0b84b26366a1e39d946f7ee3153c7be472aa5",
+        "7"
+      ],
+      "exit": 0,
+      "expected_exit": 0,
+      "resource_error": null,
+      "timed_out": false,
+      "elapsed_seconds": 0.033763699990231544,
+      "windows_job_peak_process_committed_bytes": 1908736,
+      "job_memory_limit_mib": 512,
+      "stdout_sha256": "c0bc57fb23e8913780ad8e4666079a8382fd7e3ede048ac78f928743f2897af9",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "sample-8192-3-mmap",
+      "argv": [
+        "D:\\minecraftrust-astra-hardening\\target\\offline-storage-experiment\\74ee0d64de0c4d3ea51fa0fa5e92d75a\\cargo-target\\release\\offline-storage-experiment.exe",
+        "mmap",
+        "D:\\minecraftrust-astra-hardening\\target\\offline-storage-experiment\\74ee0d64de0c4d3ea51fa0fa5e92d75a\\source-8192.bin",
+        "D:\\minecraftrust-astra-hardening\\target\\offline-storage-experiment\\74ee0d64de0c4d3ea51fa0fa5e92d75a\\sample-8192-3-mmap",
+        "1d62adf5bc2448409f52aca3519b019f",
+        "1051d569fb074c083b1778fab2dca540310bbc501072129808493df09df84e7b",
+        "7"
+      ],
+      "exit": 0,
+      "expected_exit": 0,
+      "resource_error": null,
+      "timed_out": false,
+      "elapsed_seconds": 0.03260520001640543,
+      "windows_job_peak_process_committed_bytes": 2002944,
+      "job_memory_limit_mib": 512,
+      "stdout_sha256": "e8cbb82d6ddde2bae34aeb9ee1f7f0b83563eb405af9ee3bdf584300bfc9363e",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "sample-8192-3-buffered",
+      "argv": [
+        "D:\\minecraftrust-astra-hardening\\target\\offline-storage-experiment\\74ee0d64de0c4d3ea51fa0fa5e92d75a\\cargo-target\\release\\offline-storage-experiment.exe",
+        "buffered",
+        "D:\\minecraftrust-astra-hardening\\target\\offline-storage-experiment\\74ee0d64de0c4d3ea51fa0fa5e92d75a\\source-8192.bin",
+        "D:\\minecraftrust-astra-hardening\\target\\offline-storage-experiment\\74ee0d64de0c4d3ea51fa0fa5e92d75a\\sample-8192-3-buffered",
+        "4b061656dfa04b36abd62fbe3ed92441",
+        "27704b83334e2d188fa98ee7dc1e64a0ab86dd4deded8dd51252c09ba1ea9770",
+        "7"
+      ],
+      "exit": 0,
+      "expected_exit": 0,
+      "resource_error": null,
+      "timed_out": false,
+      "elapsed_seconds": 0.03512319998117164,
+      "windows_job_peak_process_committed_bytes": 1912832,
+      "job_memory_limit_mib": 512,
+      "stdout_sha256": "640d57d6aa41abb566b4405213d8dc0674555a179c42628450961725c9f8b74a",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "sample-8192-4-buffered",
+      "argv": [
+        "D:\\minecraftrust-astra-hardening\\target\\offline-storage-experiment\\74ee0d64de0c4d3ea51fa0fa5e92d75a\\cargo-target\\release\\offline-storage-experiment.exe",
+        "buffered",
+        "D:\\minecraftrust-astra-hardening\\target\\offline-storage-experiment\\74ee0d64de0c4d3ea51fa0fa5e92d75a\\source-8192.bin",
+        "D:\\minecraftrust-astra-hardening\\target\\offline-storage-experiment\\74ee0d64de0c4d3ea51fa0fa5e92d75a\\sample-8192-4-buffered",
+        "7063fd8272824a92bf5bea76c43d0a94",
+        "abbfbb255a55a946e6d34e6a92af259daecfcd49c5c9cfcde454a620ee6ce6ec",
+        "7"
+      ],
+      "exit": 0,
+      "expected_exit": 0,
+      "resource_error": null,
+      "timed_out": false,
+      "elapsed_seconds": 0.03549350000685081,
+      "windows_job_peak_process_committed_bytes": 1916928,
+      "job_memory_limit_mib": 512,
+      "stdout_sha256": "5afbddd6fe6e6ab7a1f4964a03b36d62acc31cce3785d86644147efb86206b67",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "sample-8192-4-mmap",
+      "argv": [
+        "D:\\minecraftrust-astra-hardening\\target\\offline-storage-experiment\\74ee0d64de0c4d3ea51fa0fa5e92d75a\\cargo-target\\release\\offline-storage-experiment.exe",
+        "mmap",
+        "D:\\minecraftrust-astra-hardening\\target\\offline-storage-experiment\\74ee0d64de0c4d3ea51fa0fa5e92d75a\\source-8192.bin",
+        "D:\\minecraftrust-astra-hardening\\target\\offline-storage-experiment\\74ee0d64de0c4d3ea51fa0fa5e92d75a\\sample-8192-4-mmap",
+        "353e0e0ff3924e69bd213332d620422e",
+        "e4a21b7a6fe80d6143a16d7fe273ea3668da9d45894603366dd8d33792ce704a",
+        "7"
+      ],
+      "exit": 0,
+      "expected_exit": 0,
+      "resource_error": null,
+      "timed_out": false,
+      "elapsed_seconds": 0.033516000024974346,
+      "windows_job_peak_process_committed_bytes": 1908736,
+      "job_memory_limit_mib": 512,
+      "stdout_sha256": "32da310a51fd06c5ab5255f66c5f8564e0948b1cc5551d6c783453595efd08b4",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "sample-65536-0-buffered",
+      "argv": [
+        "D:\\minecraftrust-astra-hardening\\target\\offline-storage-experiment\\74ee0d64de0c4d3ea51fa0fa5e92d75a\\cargo-target\\release\\offline-storage-experiment.exe",
+        "buffered",
+        "D:\\minecraftrust-astra-hardening\\target\\offline-storage-experiment\\74ee0d64de0c4d3ea51fa0fa5e92d75a\\source-65536.bin",
+        "D:\\minecraftrust-astra-hardening\\target\\offline-storage-experiment\\74ee0d64de0c4d3ea51fa0fa5e92d75a\\sample-65536-0-buffered",
+        "d42efdba300b42c8ae3b018f19fdf824",
+        "c05c21ae713cc425716b2cce29630c38734498b59e7eb740187c285f81f57ff1",
+        "7"
+      ],
+      "exit": 0,
+      "expected_exit": 0,
+      "resource_error": null,
+      "timed_out": false,
+      "elapsed_seconds": 0.08111379999900237,
+      "windows_job_peak_process_committed_bytes": 7852032,
+      "job_memory_limit_mib": 512,
+      "stdout_sha256": "933f19d11b2f30276c355e953f455efc2dd4eb87a9aefc8a4f4434f8df241992",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "sample-65536-0-mmap",
+      "argv": [
+        "D:\\minecraftrust-astra-hardening\\target\\offline-storage-experiment\\74ee0d64de0c4d3ea51fa0fa5e92d75a\\cargo-target\\release\\offline-storage-experiment.exe",
+        "mmap",
+        "D:\\minecraftrust-astra-hardening\\target\\offline-storage-experiment\\74ee0d64de0c4d3ea51fa0fa5e92d75a\\source-65536.bin",
+        "D:\\minecraftrust-astra-hardening\\target\\offline-storage-experiment\\74ee0d64de0c4d3ea51fa0fa5e92d75a\\sample-65536-0-mmap",
+        "c98b2b47ba354762847b60262a74b7a6",
+        "861ae53a16a84a05c453a58576d52bc1ffecb9bec4a2b6f89be4bd4bd9387107",
+        "7"
+      ],
+      "exit": 0,
+      "expected_exit": 0,
+      "resource_error": null,
+      "timed_out": false,
+      "elapsed_seconds": 0.08066619996679947,
+      "windows_job_peak_process_committed_bytes": 7376896,
+      "job_memory_limit_mib": 512,
+      "stdout_sha256": "cbff1fde292501079ec78b3c2a8edcd62e40aba68b526c1ac83b3bb0a62a830b",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "sample-65536-1-mmap",
+      "argv": [
+        "D:\\minecraftrust-astra-hardening\\target\\offline-storage-experiment\\74ee0d64de0c4d3ea51fa0fa5e92d75a\\cargo-target\\release\\offline-storage-experiment.exe",
+        "mmap",
+        "D:\\minecraftrust-astra-hardening\\target\\offline-storage-experiment\\74ee0d64de0c4d3ea51fa0fa5e92d75a\\source-65536.bin",
+        "D:\\minecraftrust-astra-hardening\\target\\offline-storage-experiment\\74ee0d64de0c4d3ea51fa0fa5e92d75a\\sample-65536-1-mmap",
+        "71dec4e6844d47448f03eb91077e5e3f",
+        "a73aa64c2982a11413d8b6479b9bfde0cce66c9635c20179a9f229a96cd4c477",
+        "7"
+      ],
+      "exit": 0,
+      "expected_exit": 0,
+      "resource_error": null,
+      "timed_out": false,
+      "elapsed_seconds": 0.08261539996601641,
+      "windows_job_peak_process_committed_bytes": 7380992,
+      "job_memory_limit_mib": 512,
+      "stdout_sha256": "ad327da95b8a5a88aae65af62bc66522d70839413a05f82b3a8d0b0a49b06cbb",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "sample-65536-1-buffered",
+      "argv": [
+        "D:\\minecraftrust-astra-hardening\\target\\offline-storage-experiment\\74ee0d64de0c4d3ea51fa0fa5e92d75a\\cargo-target\\release\\offline-storage-experiment.exe",
+        "buffered",
+        "D:\\minecraftrust-astra-hardening\\target\\offline-storage-experiment\\74ee0d64de0c4d3ea51fa0fa5e92d75a\\source-65536.bin",
+        "D:\\minecraftrust-astra-hardening\\target\\offline-storage-experiment\\74ee0d64de0c4d3ea51fa0fa5e92d75a\\sample-65536-1-buffered",
+        "447219c96b614918a853b327978edd99",
+        "196cc88dfe87526244cb5bee67737363e4283895e51472791f326b9537b63ed9",
+        "7"
+      ],
+      "exit": 0,
+      "expected_exit": 0,
+      "resource_error": null,
+      "timed_out": false,
+      "elapsed_seconds": 0.07682859996566549,
+      "windows_job_peak_process_committed_bytes": 7856128,
+      "job_memory_limit_mib": 512,
+      "stdout_sha256": "db260075209efb4e888b4dc2307c461cc1d25f0eed0c7feeedfa59fa0dfcd9dd",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "sample-65536-2-buffered",
+      "argv": [
+        "D:\\minecraftrust-astra-hardening\\target\\offline-storage-experiment\\74ee0d64de0c4d3ea51fa0fa5e92d75a\\cargo-target\\release\\offline-storage-experiment.exe",
+        "buffered",
+        "D:\\minecraftrust-astra-hardening\\target\\offline-storage-experiment\\74ee0d64de0c4d3ea51fa0fa5e92d75a\\source-65536.bin",
+        "D:\\minecraftrust-astra-hardening\\target\\offline-storage-experiment\\74ee0d64de0c4d3ea51fa0fa5e92d75a\\sample-65536-2-buffered",
+        "1715fff4d9064fff89ad46dd464e624d",
+        "c7e7b6776f24244002af9bf9fd72ca4a49bb3c8e1342946b8406401b5543698b",
+        "7"
+      ],
+      "exit": 0,
+      "expected_exit": 0,
+      "resource_error": null,
+      "timed_out": false,
+      "elapsed_seconds": 0.0764433000003919,
+      "windows_job_peak_process_committed_bytes": 7860224,
+      "job_memory_limit_mib": 512,
+      "stdout_sha256": "dbf45bb1aff835a10e03642b8e01b9c8d0ddcd8b070241be285d80061e751e58",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "sample-65536-2-mmap",
+      "argv": [
+        "D:\\minecraftrust-astra-hardening\\target\\offline-storage-experiment\\74ee0d64de0c4d3ea51fa0fa5e92d75a\\cargo-target\\release\\offline-storage-experiment.exe",
+        "mmap",
+        "D:\\minecraftrust-astra-hardening\\target\\offline-storage-experiment\\74ee0d64de0c4d3ea51fa0fa5e92d75a\\source-65536.bin",
+        "D:\\minecraftrust-astra-hardening\\target\\offline-storage-experiment\\74ee0d64de0c4d3ea51fa0fa5e92d75a\\sample-65536-2-mmap",
+        "a89cb9bf0234494ba0ee75ebd51dcec2",
+        "e6535eef3a13b53b4bc641550bf496469a059f1ce31790c4e4f82ec1c29230a3",
+        "7"
+      ],
+      "exit": 0,
+      "expected_exit": 0,
+      "resource_error": null,
+      "timed_out": false,
+      "elapsed_seconds": 0.0789128000033088,
+      "windows_job_peak_process_committed_bytes": 7380992,
+      "job_memory_limit_mib": 512,
+      "stdout_sha256": "d8b79f4d060594ce8ff61a022c5766d2db467b4932c6bde70e80b71551bcf3b0",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "sample-65536-3-mmap",
+      "argv": [
+        "D:\\minecraftrust-astra-hardening\\target\\offline-storage-experiment\\74ee0d64de0c4d3ea51fa0fa5e92d75a\\cargo-target\\release\\offline-storage-experiment.exe",
+        "mmap",
+        "D:\\minecraftrust-astra-hardening\\target\\offline-storage-experiment\\74ee0d64de0c4d3ea51fa0fa5e92d75a\\source-65536.bin",
+        "D:\\minecraftrust-astra-hardening\\target\\offline-storage-experiment\\74ee0d64de0c4d3ea51fa0fa5e92d75a\\sample-65536-3-mmap",
+        "d23e97d9b06f4384a6d4a1c895d948d1",
+        "75c15c709d51784717e3b27ce85c56a884df4b72f46345075699fb1ebdd776af",
+        "7"
+      ],
+      "exit": 0,
+      "expected_exit": 0,
+      "resource_error": null,
+      "timed_out": false,
+      "elapsed_seconds": 0.08190559997456148,
+      "windows_job_peak_process_committed_bytes": 7659520,
+      "job_memory_limit_mib": 512,
+      "stdout_sha256": "5489154769694b7b8172555ed179c3d404d485591c089d357eeefacfefce063e",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "sample-65536-3-buffered",
+      "argv": [
+        "D:\\minecraftrust-astra-hardening\\target\\offline-storage-experiment\\74ee0d64de0c4d3ea51fa0fa5e92d75a\\cargo-target\\release\\offline-storage-experiment.exe",
+        "buffered",
+        "D:\\minecraftrust-astra-hardening\\target\\offline-storage-experiment\\74ee0d64de0c4d3ea51fa0fa5e92d75a\\source-65536.bin",
+        "D:\\minecraftrust-astra-hardening\\target\\offline-storage-experiment\\74ee0d64de0c4d3ea51fa0fa5e92d75a\\sample-65536-3-buffered",
+        "966d25cd7d034ebc9cc5fe7106fe3a1b",
+        "f60654eb3b7e9298514e2c4edee743fa86e49fc496dba81864fd9a3718977cc7",
+        "7"
+      ],
+      "exit": 0,
+      "expected_exit": 0,
+      "resource_error": null,
+      "timed_out": false,
+      "elapsed_seconds": 0.08287780004320666,
+      "windows_job_peak_process_committed_bytes": 7847936,
+      "job_memory_limit_mib": 512,
+      "stdout_sha256": "ed79f9290438c0bee9cc83d3c104006ff474d64561bc966e5695cdf113376d49",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "sample-65536-4-buffered",
+      "argv": [
+        "D:\\minecraftrust-astra-hardening\\target\\offline-storage-experiment\\74ee0d64de0c4d3ea51fa0fa5e92d75a\\cargo-target\\release\\offline-storage-experiment.exe",
+        "buffered",
+        "D:\\minecraftrust-astra-hardening\\target\\offline-storage-experiment\\74ee0d64de0c4d3ea51fa0fa5e92d75a\\source-65536.bin",
+        "D:\\minecraftrust-astra-hardening\\target\\offline-storage-experiment\\74ee0d64de0c4d3ea51fa0fa5e92d75a\\sample-65536-4-buffered",
+        "7453795e6418401bb8e3a4dbc23a8e8b",
+        "9a00421e283a9323d6d59d62f1a4e89fa04dbbf1a2d6325608204e9945156b31",
+        "7"
+      ],
+      "exit": 0,
+      "expected_exit": 0,
+      "resource_error": null,
+      "timed_out": false,
+      "elapsed_seconds": 0.08062459999928251,
+      "windows_job_peak_process_committed_bytes": 7860224,
+      "job_memory_limit_mib": 512,
+      "stdout_sha256": "02bfa191298de707eaac3578d19cb6e084921806d3a331b675537758d545d47c",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "sample-65536-4-mmap",
+      "argv": [
+        "D:\\minecraftrust-astra-hardening\\target\\offline-storage-experiment\\74ee0d64de0c4d3ea51fa0fa5e92d75a\\cargo-target\\release\\offline-storage-experiment.exe",
+        "mmap",
+        "D:\\minecraftrust-astra-hardening\\target\\offline-storage-experiment\\74ee0d64de0c4d3ea51fa0fa5e92d75a\\source-65536.bin",
+        "D:\\minecraftrust-astra-hardening\\target\\offline-storage-experiment\\74ee0d64de0c4d3ea51fa0fa5e92d75a\\sample-65536-4-mmap",
+        "5cbb7b9f445f4e3d8329258636a00de4",
+        "b3c2356e083617d54f9e5bf0c89562a39b3f78d846251234a0c50516f3b7270e",
+        "7"
+      ],
+      "exit": 0,
+      "expected_exit": 0,
+      "resource_error": null,
+      "timed_out": false,
+      "elapsed_seconds": 0.08525409997673705,
+      "windows_job_peak_process_committed_bytes": 7380992,
+      "job_memory_limit_mib": 512,
+      "stdout_sha256": "716fe0fef4d7b15753c264b7db92207a01897113ff6ccdcc9b78450ffb90c866",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "crash-uncommitted",
+      "argv": [
+        "D:\\minecraftrust-astra-hardening\\target\\offline-storage-experiment\\74ee0d64de0c4d3ea51fa0fa5e92d75a\\cargo-target\\release\\offline-storage-experiment.exe",
+        "crash-uncommitted",
+        "D:\\minecraftrust-astra-hardening\\target\\offline-storage-experiment\\74ee0d64de0c4d3ea51fa0fa5e92d75a\\control-source.bin",
+        "D:\\minecraftrust-astra-hardening\\target\\offline-storage-experiment\\74ee0d64de0c4d3ea51fa0fa5e92d75a\\crash-control",
+        "124a59da37554c428345e26297d9093f",
+        "c2768ba44c270cc2781bd349613d137cc1d6679fab888d1f1592f114d002eb77",
+        "7"
+      ],
+      "exit": 71,
+      "expected_exit": 71,
+      "resource_error": null,
+      "timed_out": false,
+      "elapsed_seconds": 0.02772499999264255,
+      "windows_job_peak_process_committed_bytes": 901120,
+      "job_memory_limit_mib": 512,
+      "stdout_sha256": "c30d6346cd1547d12985a22b1bf69f0799b741361c1bedfc3c83a30ae847df31",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "recover",
+      "argv": [
+        "D:\\minecraftrust-astra-hardening\\target\\offline-storage-experiment\\74ee0d64de0c4d3ea51fa0fa5e92d75a\\cargo-target\\release\\offline-storage-experiment.exe",
+        "recover",
+        "D:\\minecraftrust-astra-hardening\\target\\offline-storage-experiment\\74ee0d64de0c4d3ea51fa0fa5e92d75a\\control-source.bin",
+        "D:\\minecraftrust-astra-hardening\\target\\offline-storage-experiment\\74ee0d64de0c4d3ea51fa0fa5e92d75a\\crash-control",
+        "00a6dd5395254d13b35df8000daee663",
+        "4505e7f37fb24d82036daf30088ab674f7c02ce544f0f759114f6d0ee2354d55",
+        "7"
+      ],
+      "exit": 0,
+      "expected_exit": 0,
+      "resource_error": null,
+      "timed_out": false,
+      "elapsed_seconds": 0.024063200049567968,
+      "windows_job_peak_process_committed_bytes": 974848,
+      "job_memory_limit_mib": 512,
+      "stdout_sha256": "67acbaa9c56850659377862c8444eab49887ec9f0b0473e1280880a2bcd8ce7e",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "bad-magic",
+      "argv": [
+        "D:\\minecraftrust-astra-hardening\\target\\offline-storage-experiment\\74ee0d64de0c4d3ea51fa0fa5e92d75a\\cargo-target\\release\\offline-storage-experiment.exe",
+        "mmap",
+        "D:\\minecraftrust-astra-hardening\\target\\offline-storage-experiment\\74ee0d64de0c4d3ea51fa0fa5e92d75a\\bad-magic.bin",
+        "D:\\minecraftrust-astra-hardening\\target\\offline-storage-experiment\\74ee0d64de0c4d3ea51fa0fa5e92d75a\\bad-magic-output",
+        "5d8a6fba0dbc4118ad66bafe92d978a2",
+        "447015fbd39348d78de323f6e8fdbb0e188ce333e583ccd0260d2479021cd90c",
+        "7"
+      ],
+      "exit": 2,
+      "expected_exit": 2,
+      "resource_error": null,
+      "timed_out": false,
+      "elapsed_seconds": 0.015962500008754432,
+      "windows_job_peak_process_committed_bytes": 868352,
+      "job_memory_limit_mib": 512,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "b1325b6839dffaacf2250a27f282142e6ec8650abec2174026469910a0151866"
+    },
+    {
+      "name": "truncated",
+      "argv": [
+        "D:\\minecraftrust-astra-hardening\\target\\offline-storage-experiment\\74ee0d64de0c4d3ea51fa0fa5e92d75a\\cargo-target\\release\\offline-storage-experiment.exe",
+        "mmap",
+        "D:\\minecraftrust-astra-hardening\\target\\offline-storage-experiment\\74ee0d64de0c4d3ea51fa0fa5e92d75a\\truncated.bin",
+        "D:\\minecraftrust-astra-hardening\\target\\offline-storage-experiment\\74ee0d64de0c4d3ea51fa0fa5e92d75a\\truncated-output",
+        "2de7cdbda2574fe5aedc8bb01150b864",
+        "2d3257796a397ebedcd3bef75d007d7de36b498d185830a25e70396bb21a9219",
+        "7"
+      ],
+      "exit": 2,
+      "expected_exit": 2,
+      "resource_error": null,
+      "timed_out": false,
+      "elapsed_seconds": 0.015906999993603677,
+      "windows_job_peak_process_committed_bytes": 876544,
+      "job_memory_limit_mib": 512,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "f2431b0b24eaf4e3074159e63a4e90a41e38fb66aaac130fab149d5e13482c4a"
+    },
+    {
+      "name": "trailing",
+      "argv": [
+        "D:\\minecraftrust-astra-hardening\\target\\offline-storage-experiment\\74ee0d64de0c4d3ea51fa0fa5e92d75a\\cargo-target\\release\\offline-storage-experiment.exe",
+        "mmap",
+        "D:\\minecraftrust-astra-hardening\\target\\offline-storage-experiment\\74ee0d64de0c4d3ea51fa0fa5e92d75a\\trailing.bin",
+        "D:\\minecraftrust-astra-hardening\\target\\offline-storage-experiment\\74ee0d64de0c4d3ea51fa0fa5e92d75a\\trailing-output",
+        "e2386994e0f14e6fba42e031ae10a0a5",
+        "70df3fe2e6cc352b23116c4b9be45b85651b5fb161b61049c100c2da466732eb",
+        "7"
+      ],
+      "exit": 2,
+      "expected_exit": 2,
+      "resource_error": null,
+      "timed_out": false,
+      "elapsed_seconds": 0.01549469999736175,
+      "windows_job_peak_process_committed_bytes": 876544,
+      "job_memory_limit_mib": 512,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "f2431b0b24eaf4e3074159e63a4e90a41e38fb66aaac130fab149d5e13482c4a"
+    },
+    {
+      "name": "duplicate-key",
+      "argv": [
+        "D:\\minecraftrust-astra-hardening\\target\\offline-storage-experiment\\74ee0d64de0c4d3ea51fa0fa5e92d75a\\cargo-target\\release\\offline-storage-experiment.exe",
+        "mmap",
+        "D:\\minecraftrust-astra-hardening\\target\\offline-storage-experiment\\74ee0d64de0c4d3ea51fa0fa5e92d75a\\duplicate-key.bin",
+        "D:\\minecraftrust-astra-hardening\\target\\offline-storage-experiment\\74ee0d64de0c4d3ea51fa0fa5e92d75a\\duplicate-key-output",
+        "30c66870c1ce446db1589547746f0c99",
+        "d96a99a3f6f4b8f58f2c5701369369dfd6a4024fc7028a7a6e268fa47f60419b",
+        "7"
+      ],
+      "exit": 2,
+      "expected_exit": 2,
+      "resource_error": null,
+      "timed_out": false,
+      "elapsed_seconds": 0.013987499987706542,
+      "windows_job_peak_process_committed_bytes": 868352,
+      "job_memory_limit_mib": 512,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "a827411c1cdab697712f021b7ea777536ea8f35a176e94d0c51425024c5aa2be"
+    },
+    {
+      "name": "wrong-source-epoch",
+      "argv": [
+        "D:\\minecraftrust-astra-hardening\\target\\offline-storage-experiment\\74ee0d64de0c4d3ea51fa0fa5e92d75a\\cargo-target\\release\\offline-storage-experiment.exe",
+        "mmap",
+        "D:\\minecraftrust-astra-hardening\\target\\offline-storage-experiment\\74ee0d64de0c4d3ea51fa0fa5e92d75a\\wrong-source-epoch.bin",
+        "D:\\minecraftrust-astra-hardening\\target\\offline-storage-experiment\\74ee0d64de0c4d3ea51fa0fa5e92d75a\\wrong-source-epoch-output",
+        "ccd63df8aa0d41aab61a6ba5da3bf54b",
+        "a84a8b10eb044f42f13cdd575a4f5208041009cf66a96f9589e9f94470ae65e9",
+        "8"
+      ],
+      "exit": 2,
+      "expected_exit": 2,
+      "resource_error": null,
+      "timed_out": false,
+      "elapsed_seconds": 0.013755299965851009,
+      "windows_job_peak_process_committed_bytes": 880640,
+      "job_memory_limit_mib": 512,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "f84bd7f23ecbe9a0c29b59923a36f0870d49d7fe7f7718ef459c2438b419283b"
+    }
+  ],
+  "source_hashes": {
+    "D:\\minecraftrust-astra-hardening\\tools\\offline-storage-experiment\\Cargo.lock": "c196bb44d3e2765db1e86ce5de8fcd4e4b24f5339fec6354c9bb9c6c44b23373",
+    "D:\\minecraftrust-astra-hardening\\tools\\offline-storage-experiment\\Cargo.toml": "08a3fa1fc26fc4ef2d113a4bbce9808121ce60843f2ffbf4ce31e40491e9ebfc",
+    "D:\\minecraftrust-astra-hardening\\tools\\offline-storage-experiment\\collect_licenses.py": "6b89f21638114696830c3e9c8fffac2c6b95a7666ec93fd7ad0947e0b81b22cb",
+    "D:\\minecraftrust-astra-hardening\\tools\\offline-storage-experiment\\reference.py": "3373990c77d3ad6aed598cfa99e21ea61b67cfae8bb45391511ee4d186c94d13",
+    "D:\\minecraftrust-astra-hardening\\tools\\offline-storage-experiment\\research-provenance.json": "bae020916f8e0ae34ab438e02c9b6a85990e30a9104966403f902688b70dc76a",
+    "D:\\minecraftrust-astra-hardening\\tools\\offline-storage-experiment\\run.py": "792e92dd30cbb57f0d018e7ab2a835a26a60027226057bef563abc3c32b5f9f5",
+    "D:\\minecraftrust-astra-hardening\\tools\\offline-storage-experiment\\test_reference.py": "7a0f988b26bbe52fc9c2f4178449101935eeb1c6efe84919e269eaa34ac7c253",
+    "D:\\minecraftrust-astra-hardening\\tools\\offline-storage-experiment\\src\\lib.rs": "57fa83a9f8c7d82f9ee0b82820d930b06e1eff8357978ba3f9c2bf70e714272f",
+    "D:\\minecraftrust-astra-hardening\\tools\\offline-storage-experiment\\src\\main.rs": "21c093d589120f7caf805ab392eeecbe193e86658fd3a65afbcdb06d4902c2c6",
+    "D:\\minecraftrust-astra-hardening\\tools\\offline-storage-experiment\\src\\sidecar.rs": "495521611e9797284411705ca3c5e507cc266c23ce00cc10551d73539df6fb04",
+    "D:\\minecraftrust-astra-hardening\\tools\\offline-storage-experiment\\src\\snapshot.rs": "145bcadc61acd25aae191361c7e67d6ec03bfc76c9a74a03ca6ad46bbd521c7e",
+    "D:\\minecraftrust-astra-hardening\\tools\\offline-storage-experiment\\src\\tests.rs": "8554f53d79324a847f9f5bdd13771be8d1805b8646a6cee834e712a606e7f522",
+    "D:\\minecraftrust-astra-hardening\\tools\\offline-storage-experiment\\third-party\\inventory.json": "e30f823d12edc6ad0aae498d4df5ae49ff11a9137747c272a5275698dd575819",
+    "D:\\minecraftrust-astra-hardening\\tools\\offline-storage-experiment\\third-party\\block-buffer-0.10.4\\LICENSE-APACHE": "a9040321c3712d8fd0b09cf52b17445de04a23a10165049ae187cd39e5c86be5",
+    "D:\\minecraftrust-astra-hardening\\tools\\offline-storage-experiment\\third-party\\block-buffer-0.10.4\\LICENSE-MIT": "d5c22aa3118d240e877ad41c5d9fa232f9c77d757d4aac0c2f943afc0a95e0ef",
+    "D:\\minecraftrust-astra-hardening\\tools\\offline-storage-experiment\\third-party\\cfg-if-1.0.5\\LICENSE-APACHE": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2",
+    "D:\\minecraftrust-astra-hardening\\tools\\offline-storage-experiment\\third-party\\cfg-if-1.0.5\\LICENSE-MIT": "378f5840b258e2779c39418f3f2d7b2ba96f1c7917dd6be0713f88305dbda397",
+    "D:\\minecraftrust-astra-hardening\\tools\\offline-storage-experiment\\third-party\\cpufeatures-0.2.17\\LICENSE-APACHE": "a9040321c3712d8fd0b09cf52b17445de04a23a10165049ae187cd39e5c86be5",
+    "D:\\minecraftrust-astra-hardening\\tools\\offline-storage-experiment\\third-party\\cpufeatures-0.2.17\\LICENSE-MIT": "ae9baa7beea910273c2f384c2a6b721fb7bd02bda3436074a1072e4ee689f985",
+    "D:\\minecraftrust-astra-hardening\\tools\\offline-storage-experiment\\third-party\\crypto-common-0.1.7\\LICENSE-APACHE": "a9040321c3712d8fd0b09cf52b17445de04a23a10165049ae187cd39e5c86be5",
+    "D:\\minecraftrust-astra-hardening\\tools\\offline-storage-experiment\\third-party\\crypto-common-0.1.7\\LICENSE-MIT": "3521672491a3479422d5fe1aca6645dd2984090f85da6e5205abfb18fb7a6897",
+    "D:\\minecraftrust-astra-hardening\\tools\\offline-storage-experiment\\third-party\\digest-0.10.7\\LICENSE-APACHE": "a9040321c3712d8fd0b09cf52b17445de04a23a10165049ae187cd39e5c86be5",
+    "D:\\minecraftrust-astra-hardening\\tools\\offline-storage-experiment\\third-party\\digest-0.10.7\\LICENSE-MIT": "9e0dfd2dd4173a530e238cb6adb37aa78c34c6bc7444e0e10c1ab5d8881f63ba",
+    "D:\\minecraftrust-astra-hardening\\tools\\offline-storage-experiment\\third-party\\generic-array-0.14.7\\LICENSE": "c09aae9d3c77b531f56351a9947bc7446511d6b025b3255312d3e3442a9a7583",
+    "D:\\minecraftrust-astra-hardening\\tools\\offline-storage-experiment\\third-party\\libc-0.2.189\\LICENSE-APACHE": "62c7a1e35f56406896d7aa7ca52d0cc0d272ac022b5d2796e7d6905db8a3636a",
+    "D:\\minecraftrust-astra-hardening\\tools\\offline-storage-experiment\\third-party\\libc-0.2.189\\LICENSE-MIT": "123a331b5dbf04c30097fa43b8f858bc85df671fe776de498d01f3d6b7c1f69e",
+    "D:\\minecraftrust-astra-hardening\\tools\\offline-storage-experiment\\third-party\\memmap2-0.9.11\\LICENSE-APACHE": "04ea4849dba9dcae07113850c6f1b1a69052c625210639914eee352023f750ad",
+    "D:\\minecraftrust-astra-hardening\\tools\\offline-storage-experiment\\third-party\\memmap2-0.9.11\\LICENSE-MIT": "0d25d03b5ab49576178ad0cae7a2648d12c17ad0452fe49c07e55e4b59aa5257",
+    "D:\\minecraftrust-astra-hardening\\tools\\offline-storage-experiment\\third-party\\redb-4.3.0\\LICENSE-APACHE": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+    "D:\\minecraftrust-astra-hardening\\tools\\offline-storage-experiment\\third-party\\redb-4.3.0\\LICENSE-MIT": "9dc47584f810f4a0f88197b590bf428b154dc5a7f87237c06a39720241e0461f",
+    "D:\\minecraftrust-astra-hardening\\tools\\offline-storage-experiment\\third-party\\sha2-0.10.9\\LICENSE-APACHE": "a9040321c3712d8fd0b09cf52b17445de04a23a10165049ae187cd39e5c86be5",
+    "D:\\minecraftrust-astra-hardening\\tools\\offline-storage-experiment\\third-party\\sha2-0.10.9\\LICENSE-MIT": "b4eb00df6e2a4d22518fcaa6a2b4646f249b3a3c9814509b22bd2091f1392ff1",
+    "D:\\minecraftrust-astra-hardening\\tools\\offline-storage-experiment\\third-party\\typenum-1.20.1\\LICENSE": "db11fec9946737df39ca3898d9cd8c10ec6f6c3a884a6802b0ad0b81b4e8f23a",
+    "D:\\minecraftrust-astra-hardening\\tools\\offline-storage-experiment\\third-party\\typenum-1.20.1\\LICENSE-APACHE": "516b24e051bf5630880ebbd55c40a25ce9552ebaf8970a53e8976eb70e522406",
+    "D:\\minecraftrust-astra-hardening\\tools\\offline-storage-experiment\\third-party\\typenum-1.20.1\\LICENSE-MIT": "a825bd853ab71619a4923d7b4311221427848070ff44d990da39b0b274c1683f",
+    "D:\\minecraftrust-astra-hardening\\tools\\offline-storage-experiment\\third-party\\version_check-0.9.5\\LICENSE-APACHE": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2",
+    "D:\\minecraftrust-astra-hardening\\tools\\offline-storage-experiment\\third-party\\version_check-0.9.5\\LICENSE-MIT": "b7e650f3fce5c53249d1cdc608b54df156a97edd636cf9d23498d0cfe7aec63e",
+    "D:\\minecraftrust-astra-hardening\\tools\\testing\\hardening_guard.py": "a2062b3ffbec7edba79bf5f5954fbcb1e9d97492ab9c4bb541833ebb820bdb6d",
+    "D:\\minecraftrust-astra-hardening\\tools\\nbt-region-experiment\\job.py": "41f77a4c87ba2f531872853f2bcc701c5cac3a384c1bb2cf49901b8fcff9c65b",
+    "D:\\minecraftrust-astra-hardening\\machine\\architecture-hardening\\isolation.json": "8f9b34b55f6ecc1d549da1ec4c42900b4a831a3072a9e4aa6aa2ae39cae53d93",
+    "D:\\minecraftrust-astra-hardening\\docs\\research\\offline-storage-experiment.md": "c7ea72bbfcde7f13aa3e1e42dbf225e8a0a6548d45804fff944138db0065d6ef"
+  },
+  "dependency_inventory_sha256": "e30f823d12edc6ad0aae498d4df5ae49ff11a9137747c272a5275698dd575819",
+  "tools": {
+    "C:\\Users\\Admin\\.cargo\\bin\\cargo.exe": "6f4bef66261261fcb43131be8720bab817d403a09edec7455c371974b90bdb7e",
+    "C:\\Users\\Admin\\.cargo\\bin\\rustc.exe": "6f4bef66261261fcb43131be8720bab817d403a09edec7455c371974b90bdb7e",
+    "C:\\Python314\\python.exe": "4942b86a6597e5aee0128daa00050ed79bc21f6e709a78eb19cbfeb0c2f39ac9",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\cargo-clippy.exe": "cb0f2b164b3f6e95bfed7ec4ae9fc48f8ce8d9fef3649b5ae87961f75e1ef484",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\cargo-clippy.pdb": "3a680d9ca59c8a9f57ad545aaf3a5c322299ecf996a2c89fd730f6797f65e9d7",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\cargo-fmt.exe": "fcd2d35d13dc1a487c755e234bf2aee06f75b522c8a691cac9ee5f0d6fc854a1",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\cargo-fmt.pdb": "b9e1bd5ecb93d51c5bbdfc6dc976ce2d064194eb01082c9f7d0807fc7f28e371",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\cargo.exe": "c37545ec61d48d31bdefce53280ecab61c4ea54eaace372fac6a0316c6e165d9",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\cargo.pdb": "8cce17351523369a7d8b048a0748cfac676e75658ee4f2562f30e52268eaf0cf",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\clippy-driver.exe": "00fd4ef2fe60e603571573746e52f42f109bbfe4b879e7ca7313614fda0b367b",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\clippy-driver.pdb": "c2d975735a9107baa24abcce1a9e8f23f06b59445a4590365534b9065a5759cc",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\rust-gdb": "557985ec5a31f5617d25d26bd6fe23c4b8d6f85b1498e1aae82831ca0d7f17fe",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\rust-gdbgui": "bc60613775a098e59b49fa4584cea73631697fe1456c44284c337d6700340315",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\rust-lldb": "a82c91ccb285aa4a1dbcf08cda68ba4e8c36082af0adfefdee514673113815da",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\rust-windbg.cmd": "42607991c8f3040a5e7bbf222272007e741ea96e97499a16bc6ab2fc77ab10f5",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\rustc.exe": "ca9988af88b1463f6857fdfe909299fee50a63260b3e5f7dbcb5b4d3318b27bc",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\rustc.pdb": "c6120a2b877403003c2f6eab11116e2c1cd307c50864fbad62de62cf0859ac23",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\rustc_driver-573e106f78c6e3e0.dll": "50b9168c1d7bf98a7c4417eed0c8098daab7033b13ebb0bca752945708ea9ec7",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\rustc_driver-573e106f78c6e3e0.pdb": "624dd7a5857a11a20ff9b9ed24864670fced8f457265d49b14efa6846ea5705b",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\rustc_main-27d7dda480758917.pdb": "c6120a2b877403003c2f6eab11116e2c1cd307c50864fbad62de62cf0859ac23",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\rustdoc.exe": "9daff87cf4052ba3f97decb39d2822e1a96b3ed444eda86ed8df74802679dd60",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\rustdoc.pdb": "b94c0bae3a9ef3d2577453bf67a8d25e0a1713466a3036734b32faa8d448d9a5",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\rustfmt.exe": "ac9d781249bffabbb1bedb691a5ea6f63a818c1dda73dd698d4dff687ad4c24e",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\rustfmt.pdb": "182ba38d314712a0cc7cd014d332ef04c1d9cfb47653565ef52ef9451f77abd3",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\std-44a584f44bc3dd65.dll": "8dd8ea258a3561a499c438b322b218af3cb2f4db1029205adc94d58fd5b0615c",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\std-44a584f44bc3dd65.pdb": "fe5047c7cf230c724b38f9edfb7e1a98b2baba109cea4ebb2118cd4f8f027f6d",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\lib\\rustlib\\x86_64-pc-windows-msvc\\lib\\liballoc-e70c1e2d2d692bb9.rlib": "295df0e47c56fa3315f86911ffc6b374958f0243c62b8d05d2ed9851cf837a32",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\lib\\rustlib\\x86_64-pc-windows-msvc\\lib\\liballoc-e70c1e2d2d692bb9.rmeta": "bd4a8f1181be773e0664f52925a9f8820cbbdb2dba599653b898e09b386ec12f",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\lib\\rustlib\\x86_64-pc-windows-msvc\\lib\\libcfg_if-f6cc825be93b6db6.rlib": "adf5b9d342434214101fb0107255a3ca1e4351bc615c0a603baf28fe64e6909d",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\lib\\rustlib\\x86_64-pc-windows-msvc\\lib\\libcfg_if-f6cc825be93b6db6.rmeta": "fc1346ee3604dbc77d7a477943dde32a54921b9e110c6b59f91964ad593cac3d",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\lib\\rustlib\\x86_64-pc-windows-msvc\\lib\\libcompiler_builtins-d2ba6b5d33df79c1.rlib": "31f484ed29d0af592c71a5402dad113c5153a848c54d8ffb64ab7f4bf1af51bf",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\lib\\rustlib\\x86_64-pc-windows-msvc\\lib\\libcompiler_builtins-d2ba6b5d33df79c1.rmeta": "b778b1ee74368da018e744e654840ab873c00374efe29df2cef3a694267be6f2",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\lib\\rustlib\\x86_64-pc-windows-msvc\\lib\\libcore-5b8de9dae852fb90.rlib": "020e870c2676b36a49d19170265bb2fc53fa74e070edfa9bb9db99372db56522",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\lib\\rustlib\\x86_64-pc-windows-msvc\\lib\\libcore-5b8de9dae852fb90.rmeta": "76f466e2a0a8d6fc79689487c72a12fc5afefc9df6c92257ae1755a58ef7e7be",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\lib\\rustlib\\x86_64-pc-windows-msvc\\lib\\libgetopts-d2d45541664c6692.rlib": "ac1093aea514791f079d09f23b115e20f425d5f41473298f3bf1ce497c97428c",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\lib\\rustlib\\x86_64-pc-windows-msvc\\lib\\libgetopts-d2d45541664c6692.rmeta": "5c860f41a00dd119452532b131c232ed9d448c15dede8ca9863119cf465913d9",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\lib\\rustlib\\x86_64-pc-windows-msvc\\lib\\libhashbrown-d0cff6b08e590a6f.rlib": "96197b46c6a1337eafb3ad94bc91f7a922e7574ebbc1801a7cbdcf65b89816cc",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\lib\\rustlib\\x86_64-pc-windows-msvc\\lib\\libhashbrown-d0cff6b08e590a6f.rmeta": "068086c340c4bb59e40f3227b290fb8f5b9814a9ad4de22180dec59d56fbe226",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\lib\\rustlib\\x86_64-pc-windows-msvc\\lib\\libpanic_abort-91330a6e358edcc5.rlib": "5394014585283b4bdbf1351a289822819e65070dc4878956e7adf1fcade9b32d",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\lib\\rustlib\\x86_64-pc-windows-msvc\\lib\\libpanic_abort-91330a6e358edcc5.rmeta": "2459bcad6a0ae052b6919e4a9ccd53d633bf5ef1ddc0569bd1818ea9a06ec8bb",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\lib\\rustlib\\x86_64-pc-windows-msvc\\lib\\libpanic_unwind-d45f266e54626acb.rlib": "2ba01fc563e45f847a5d489bb19f54e86a2dc7f6c1ec55778401411484dd68de",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\lib\\rustlib\\x86_64-pc-windows-msvc\\lib\\libpanic_unwind-d45f266e54626acb.rmeta": "e5e2656be5ca28ac1a9b16e800e4773a2144e6e0198a4b0d2b43d953e0cd35c4",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\lib\\rustlib\\x86_64-pc-windows-msvc\\lib\\libproc_macro-7186298fd695a1a5.rlib": "fc5e02cb9683a955a6fbff7184725db0c78fc415e4dcc3f96ba48ee20e74875a",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\lib\\rustlib\\x86_64-pc-windows-msvc\\lib\\libproc_macro-7186298fd695a1a5.rmeta": "b97f36899688f05bf2790f8795715f3d22f845e9beeba77ef53b79acd9b3a49c",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\lib\\rustlib\\x86_64-pc-windows-msvc\\lib\\libprofiler_builtins-56fcd661f7d6fe38.rlib": "5bf3aa6724a208115b12b0a5b8f494873288664649af36c09fb2b8d2644c481a",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\lib\\rustlib\\x86_64-pc-windows-msvc\\lib\\libprofiler_builtins-56fcd661f7d6fe38.rmeta": "78367523b449a5834ec46e9b1d83729ce5b59e5c85a3387ff72f4025439e3596",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\lib\\rustlib\\x86_64-pc-windows-msvc\\lib\\librustc_demangle-0d6817d2202cd839.rlib": "80771d243a2faeb8e0baaf52c577746b815ae8354edb5e1dd76318c0f1b3862d",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\lib\\rustlib\\x86_64-pc-windows-msvc\\lib\\librustc_demangle-0d6817d2202cd839.rmeta": "44161335936e300d1127cfdfc53a35b369f03b1fef0d95801ba7607f8bcf7db1",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\lib\\rustlib\\x86_64-pc-windows-msvc\\lib\\librustc_literal_escaper-dd4ecc55777ebb42.rlib": "fd1366ed9f80bfdfc8f2dfc5a1aeb366a2f57a9968d1c1559ca6f0f25dd97524",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\lib\\rustlib\\x86_64-pc-windows-msvc\\lib\\librustc_literal_escaper-dd4ecc55777ebb42.rmeta": "2c845d8cc3fefab1d1d9d22f2b6f3cb51b22bf4b9280eec66345f71252ae3b92",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\lib\\rustlib\\x86_64-pc-windows-msvc\\lib\\librustc_std_workspace_alloc-6b150602d1d36152.rlib": "3bd4038f38bdbd8ac96b6b83c229adfe04d3845d5ee5c1e895dca173be542ac2",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\lib\\rustlib\\x86_64-pc-windows-msvc\\lib\\librustc_std_workspace_alloc-6b150602d1d36152.rmeta": "d96a522f2714117600d4fd8424d355c2b6dda3983e9002aef679aa4269d861b0",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\lib\\rustlib\\x86_64-pc-windows-msvc\\lib\\librustc_std_workspace_core-0958d4df46313f70.rlib": "d16f4f466be193ccf216fa63a5cd319dd6ec04a0e9c12f2a7bc5827f38f6030b",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\lib\\rustlib\\x86_64-pc-windows-msvc\\lib\\librustc_std_workspace_core-0958d4df46313f70.rmeta": "d9b95531740e2ca750a81cd399e5a104018e41299e0c63ad9badb4b263fbfa3e",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\lib\\rustlib\\x86_64-pc-windows-msvc\\lib\\librustc_std_workspace_std-7880561ff197d76f.rlib": "58d24589cb00d7f8f9f76e46788733308c5e8f524c9799e4d46fa760b71c178d",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\lib\\rustlib\\x86_64-pc-windows-msvc\\lib\\librustc_std_workspace_std-7880561ff197d76f.rmeta": "066c2065c7141b174cf0db01f597c1cfd32639f15e0f9e431b2af92cb4df18a2",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\lib\\rustlib\\x86_64-pc-windows-msvc\\lib\\libstd-44a584f44bc3dd65.rlib": "b2269a9ae50f6ed8c16da326fe043d6b1a046399b58511605264154ca9b3c553",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\lib\\rustlib\\x86_64-pc-windows-msvc\\lib\\libstd-44a584f44bc3dd65.rmeta": "418ef6da6caeaedfb8c7a73c7d340373a65367522bd4b5b7f8ed31e557ee46cd",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\lib\\rustlib\\x86_64-pc-windows-msvc\\lib\\libstd_detect-cb31305a36296f2c.rlib": "cfc3f8d8c9e5101931c42d498b8e3a4b64be40176847517722a033e0d107611f",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\lib\\rustlib\\x86_64-pc-windows-msvc\\lib\\libstd_detect-cb31305a36296f2c.rmeta": "3bb6c32b24fe137940b9c370455b2769ec185aae3ea210263c4f5586a4d5b295",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\lib\\rustlib\\x86_64-pc-windows-msvc\\lib\\libsysroot-523460ab676420ca.rlib": "7e7ec698c30c494e26424ddc358abc1446e4f9b99dc1dbea32118e97a5e199d5",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\lib\\rustlib\\x86_64-pc-windows-msvc\\lib\\libsysroot-523460ab676420ca.rmeta": "ed3012862fd7c78389d48f1a84d8215e81b080226929cb3506d60206ff3e45db",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\lib\\rustlib\\x86_64-pc-windows-msvc\\lib\\libtest-b612a6b84a3b28c3.rlib": "b5a6434ae71e76fcd193674af171171d4435e8b1c9057d5920a05df23ae5c9a8",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\lib\\rustlib\\x86_64-pc-windows-msvc\\lib\\libtest-b612a6b84a3b28c3.rmeta": "a4c958b532bc8c010899ef3da3ae628700fbf540302c26b78c9df833482e3050",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\lib\\rustlib\\x86_64-pc-windows-msvc\\lib\\libunwind-e1499329ec2a6c49.rlib": "3d5a88c7ce6d8cf3e41e178753d3dd3c95c338fb9213703a17915e6c56f5c1d1",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\lib\\rustlib\\x86_64-pc-windows-msvc\\lib\\libunwind-e1499329ec2a6c49.rmeta": "9bd037e1e2d6fefb87561085cecdc968f9b1ad68502cedd8e4c0783cc91e9a95",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\lib\\rustlib\\x86_64-pc-windows-msvc\\lib\\libwindows_link-d56ce6793d295ac1.rlib": "25987f1530b6ba3df71b11b82dd38ec22a85279165278905a6880dcf4cadc4fe",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\lib\\rustlib\\x86_64-pc-windows-msvc\\lib\\libwindows_link-d56ce6793d295ac1.rmeta": "6d651273bff357e8425e2a8dcc80e26b7df08a974c947d70bb502c814ccdaf07",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\lib\\rustlib\\x86_64-pc-windows-msvc\\lib\\std-44a584f44bc3dd65.dll": "8dd8ea258a3561a499c438b322b218af3cb2f4db1029205adc94d58fd5b0615c",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\lib\\rustlib\\x86_64-pc-windows-msvc\\lib\\std-44a584f44bc3dd65.dll.lib": "52ea6a190d3c9910292d414e3990b544b5a3e51ad6bf18ebc3aa1025f3c7a9b3",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\lib\\rustlib\\x86_64-pc-windows-msvc\\lib\\std-44a584f44bc3dd65.pdb": "fe5047c7cf230c724b38f9edfb7e1a98b2baba109cea4ebb2118cd4f8f027f6d"
+  },
+  "inherited_configs": {
+    "C:\\Users\\Admin\\.cargo\\config.toml": null,
+    "C:\\Users\\Admin\\.cargo\\config": null,
+    "D:\\minecraftrust-astra-hardening\\rust-toolchain.toml": "2c6c06daae576901d5ae1824046862ed1aa59615827de79d9c5e72f5a282183e",
+    "D:\\minecraftrust-astra-hardening\\tools\\offline-storage-experiment\\rust-toolchain.toml": null,
+    "D:\\minecraftrust-astra-hardening\\tools\\rust-toolchain": null,
+    "D:\\minecraftrust-astra-hardening\\rust-toolchain": null,
+    "D:\\.cargo\\config": null,
+    "D:\\minecraftrust-astra-hardening\\tools\\.cargo\\config.toml": null,
+    "D:\\minecraftrust-astra-hardening\\tools\\offline-storage-experiment\\.cargo\\config": null,
+    "D:\\minecraftrust-astra-hardening\\.cargo\\config": null,
+    "D:\\minecraftrust-astra-hardening\\tools\\offline-storage-experiment\\.cargo\\config.toml": null,
+    "D:\\rust-toolchain.toml": null,
+    "D:\\.cargo\\config.toml": null,
+    "D:\\minecraftrust-astra-hardening\\tools\\rust-toolchain.toml": null,
+    "D:\\minecraftrust-astra-hardening\\tools\\.cargo\\config": null,
+    "D:\\rust-toolchain": null,
+    "D:\\minecraftrust-astra-hardening\\.cargo\\config.toml": null,
+    "D:\\minecraftrust-astra-hardening\\tools\\offline-storage-experiment\\rust-toolchain": null
+  },
+  "artifact": {
+    "path": "D:\\minecraftrust-astra-hardening\\target\\offline-storage-experiment\\74ee0d64de0c4d3ea51fa0fa5e92d75a\\cargo-target\\release\\offline-storage-experiment.exe",
+    "sha256": "a26c2f52a3209434ab8a9a42cf6847ef3e864b36c138e46aef3bbe72e3be879b"
+  },
+  "samples": [
+    {
+      "schema": "OFFLINE_STORAGE_SAMPLE_V1",
+      "session": "109362e2de8c405ba0d8240bf416a58d",
+      "challenge": "f2c8b4eb5851ad6c74189c2d89bb4465769f4fd30c6e490f1f63120057d19c53",
+      "mode": "buffered",
+      "epoch": 7,
+      "records": 8192,
+      "source_bytes": 262208,
+      "source_sha256": "a5b72c0c53b141de62651133131df3a17087798854dbc767e2ea3dfb543402df",
+      "index_sha256": "d31041cf3e588029c44f930adbaa0bb75c2dc25d1417b713e629bb0aaaca85ef",
+      "query_sha256": "71e3a1deffdd2ebd30fd0241047e8ff41a56e761fe8ec24fa688e38ed6fbbc88",
+      "sidecar_bytes": 1056768,
+      "production_authority": false,
+      "timings_ns": {
+        "snapshot_copy_sync": 864000,
+        "source_hash": 146600,
+        "map_create": 0,
+        "scan": 84100,
+        "index_sort_hash": 360100,
+        "sidecar_open_commit": 6986600,
+        "sidecar_verify": 577800,
+        "sidecar_queries": 40100,
+        "sidecar_reopen_verify": 6725500,
+        "complete": 16966900
+      },
+      "repetition": 0,
+      "process_name": "sample-8192-0-buffered"
+    },
+    {
+      "schema": "OFFLINE_STORAGE_SAMPLE_V1",
+      "session": "7ea12864dfe94738b30ac281e4e34a46",
+      "challenge": "3c6de1c0ba64cecc9fe415af79181d91e480212263bb3e61f21bdce4301400a3",
+      "mode": "mmap",
+      "epoch": 7,
+      "records": 8192,
+      "source_bytes": 262208,
+      "source_sha256": "a5b72c0c53b141de62651133131df3a17087798854dbc767e2ea3dfb543402df",
+      "index_sha256": "d31041cf3e588029c44f930adbaa0bb75c2dc25d1417b713e629bb0aaaca85ef",
+      "query_sha256": "71e3a1deffdd2ebd30fd0241047e8ff41a56e761fe8ec24fa688e38ed6fbbc88",
+      "sidecar_bytes": 1056768,
+      "production_authority": false,
+      "timings_ns": {
+        "snapshot_copy_sync": 791200,
+        "source_hash": 145500,
+        "map_create": 22300,
+        "scan": 169600,
+        "index_sort_hash": 359600,
+        "sidecar_open_commit": 9415100,
+        "sidecar_verify": 540700,
+        "sidecar_queries": 37200,
+        "sidecar_reopen_verify": 6675100,
+        "complete": 19490800
+      },
+      "repetition": 0,
+      "process_name": "sample-8192-0-mmap"
+    },
+    {
+      "schema": "OFFLINE_STORAGE_SAMPLE_V1",
+      "session": "784e4f04b4b64725ad6ddb6a2cd1e397",
+      "challenge": "f9644cba4a1b98b371566394337661ef074ce90fa0a61bf5de120fb8fca206f0",
+      "mode": "mmap",
+      "epoch": 7,
+      "records": 8192,
+      "source_bytes": 262208,
+      "source_sha256": "a5b72c0c53b141de62651133131df3a17087798854dbc767e2ea3dfb543402df",
+      "index_sha256": "d31041cf3e588029c44f930adbaa0bb75c2dc25d1417b713e629bb0aaaca85ef",
+      "query_sha256": "71e3a1deffdd2ebd30fd0241047e8ff41a56e761fe8ec24fa688e38ed6fbbc88",
+      "sidecar_bytes": 1056768,
+      "production_authority": false,
+      "timings_ns": {
+        "snapshot_copy_sync": 714800,
+        "source_hash": 137800,
+        "map_create": 21700,
+        "scan": 169800,
+        "index_sort_hash": 355300,
+        "sidecar_open_commit": 5809600,
+        "sidecar_verify": 834500,
+        "sidecar_queries": 40600,
+        "sidecar_reopen_verify": 7063700,
+        "complete": 16471900
+      },
+      "repetition": 1,
+      "process_name": "sample-8192-1-mmap"
+    },
+    {
+      "schema": "OFFLINE_STORAGE_SAMPLE_V1",
+      "session": "1e9d3f0d61494a4a8a55843d1b26af91",
+      "challenge": "ffadfc91de79862531abb1c2fc06eec93a6a233ed6746750302916fa593d2874",
+      "mode": "buffered",
+      "epoch": 7,
+      "records": 8192,
+      "source_bytes": 262208,
+      "source_sha256": "a5b72c0c53b141de62651133131df3a17087798854dbc767e2ea3dfb543402df",
+      "index_sha256": "d31041cf3e588029c44f930adbaa0bb75c2dc25d1417b713e629bb0aaaca85ef",
+      "query_sha256": "71e3a1deffdd2ebd30fd0241047e8ff41a56e761fe8ec24fa688e38ed6fbbc88",
+      "sidecar_bytes": 1056768,
+      "production_authority": false,
+      "timings_ns": {
+        "snapshot_copy_sync": 693200,
+        "source_hash": 136700,
+        "map_create": 0,
+        "scan": 79000,
+        "index_sort_hash": 364800,
+        "sidecar_open_commit": 5848000,
+        "sidecar_verify": 548600,
+        "sidecar_queries": 38800,
+        "sidecar_reopen_verify": 6109600,
+        "complete": 15221700
+      },
+      "repetition": 1,
+      "process_name": "sample-8192-1-buffered"
+    },
+    {
+      "schema": "OFFLINE_STORAGE_SAMPLE_V1",
+      "session": "2f8de1fbcc8f40acac8a65040bdfce8b",
+      "challenge": "1bfa133a1a8d546604442173c1d585dad2ec76ef25584d0b962df4a68ba1532c",
+      "mode": "buffered",
+      "epoch": 7,
+      "records": 8192,
+      "source_bytes": 262208,
+      "source_sha256": "a5b72c0c53b141de62651133131df3a17087798854dbc767e2ea3dfb543402df",
+      "index_sha256": "d31041cf3e588029c44f930adbaa0bb75c2dc25d1417b713e629bb0aaaca85ef",
+      "query_sha256": "71e3a1deffdd2ebd30fd0241047e8ff41a56e761fe8ec24fa688e38ed6fbbc88",
+      "sidecar_bytes": 1056768,
+      "production_authority": false,
+      "timings_ns": {
+        "snapshot_copy_sync": 845700,
+        "source_hash": 144000,
+        "map_create": 0,
+        "scan": 82700,
+        "index_sort_hash": 379800,
+        "sidecar_open_commit": 6056400,
+        "sidecar_verify": 546100,
+        "sidecar_queries": 37600,
+        "sidecar_reopen_verify": 6772700,
+        "complete": 16103500
+      },
+      "repetition": 2,
+      "process_name": "sample-8192-2-buffered"
+    },
+    {
+      "schema": "OFFLINE_STORAGE_SAMPLE_V1",
+      "session": "8b0c869026434fe28bfff89bd9b298e6",
+      "challenge": "91c95d1ce5579abdaf0c668978b0b84b26366a1e39d946f7ee3153c7be472aa5",
+      "mode": "mmap",
+      "epoch": 7,
+      "records": 8192,
+      "source_bytes": 262208,
+      "source_sha256": "a5b72c0c53b141de62651133131df3a17087798854dbc767e2ea3dfb543402df",
+      "index_sha256": "d31041cf3e588029c44f930adbaa0bb75c2dc25d1417b713e629bb0aaaca85ef",
+      "query_sha256": "71e3a1deffdd2ebd30fd0241047e8ff41a56e761fe8ec24fa688e38ed6fbbc88",
+      "sidecar_bytes": 1056768,
+      "production_authority": false,
+      "timings_ns": {
+        "snapshot_copy_sync": 931700,
+        "source_hash": 150800,
+        "map_create": 28500,
+        "scan": 191000,
+        "index_sort_hash": 452000,
+        "sidecar_open_commit": 7139000,
+        "sidecar_verify": 662600,
+        "sidecar_queries": 47000,
+        "sidecar_reopen_verify": 6582100,
+        "complete": 17496200
+      },
+      "repetition": 2,
+      "process_name": "sample-8192-2-mmap"
+    },
+    {
+      "schema": "OFFLINE_STORAGE_SAMPLE_V1",
+      "session": "1d62adf5bc2448409f52aca3519b019f",
+      "challenge": "1051d569fb074c083b1778fab2dca540310bbc501072129808493df09df84e7b",
+      "mode": "mmap",
+      "epoch": 7,
+      "records": 8192,
+      "source_bytes": 262208,
+      "source_sha256": "a5b72c0c53b141de62651133131df3a17087798854dbc767e2ea3dfb543402df",
+      "index_sha256": "d31041cf3e588029c44f930adbaa0bb75c2dc25d1417b713e629bb0aaaca85ef",
+      "query_sha256": "71e3a1deffdd2ebd30fd0241047e8ff41a56e761fe8ec24fa688e38ed6fbbc88",
+      "sidecar_bytes": 1056768,
+      "production_authority": false,
+      "timings_ns": {
+        "snapshot_copy_sync": 758800,
+        "source_hash": 172300,
+        "map_create": 26700,
+        "scan": 195200,
+        "index_sort_hash": 444800,
+        "sidecar_open_commit": 6411400,
+        "sidecar_verify": 551700,
+        "sidecar_queries": 39500,
+        "sidecar_reopen_verify": 6156900,
+        "complete": 15874400
+      },
+      "repetition": 3,
+      "process_name": "sample-8192-3-mmap"
+    },
+    {
+      "schema": "OFFLINE_STORAGE_SAMPLE_V1",
+      "session": "4b061656dfa04b36abd62fbe3ed92441",
+      "challenge": "27704b83334e2d188fa98ee7dc1e64a0ab86dd4deded8dd51252c09ba1ea9770",
+      "mode": "buffered",
+      "epoch": 7,
+      "records": 8192,
+      "source_bytes": 262208,
+      "source_sha256": "a5b72c0c53b141de62651133131df3a17087798854dbc767e2ea3dfb543402df",
+      "index_sha256": "d31041cf3e588029c44f930adbaa0bb75c2dc25d1417b713e629bb0aaaca85ef",
+      "query_sha256": "71e3a1deffdd2ebd30fd0241047e8ff41a56e761fe8ec24fa688e38ed6fbbc88",
+      "sidecar_bytes": 1056768,
+      "production_authority": false,
+      "timings_ns": {
+        "snapshot_copy_sync": 790700,
+        "source_hash": 172500,
+        "map_create": 0,
+        "scan": 97000,
+        "index_sort_hash": 445000,
+        "sidecar_open_commit": 6278000,
+        "sidecar_verify": 554300,
+        "sidecar_queries": 37400,
+        "sidecar_reopen_verify": 6747900,
+        "complete": 16203100
+      },
+      "repetition": 3,
+      "process_name": "sample-8192-3-buffered"
+    },
+    {
+      "schema": "OFFLINE_STORAGE_SAMPLE_V1",
+      "session": "7063fd8272824a92bf5bea76c43d0a94",
+      "challenge": "abbfbb255a55a946e6d34e6a92af259daecfcd49c5c9cfcde454a620ee6ce6ec",
+      "mode": "buffered",
+      "epoch": 7,
+      "records": 8192,
+      "source_bytes": 262208,
+      "source_sha256": "a5b72c0c53b141de62651133131df3a17087798854dbc767e2ea3dfb543402df",
+      "index_sha256": "d31041cf3e588029c44f930adbaa0bb75c2dc25d1417b713e629bb0aaaca85ef",
+      "query_sha256": "71e3a1deffdd2ebd30fd0241047e8ff41a56e761fe8ec24fa688e38ed6fbbc88",
+      "sidecar_bytes": 1056768,
+      "production_authority": false,
+      "timings_ns": {
+        "snapshot_copy_sync": 767100,
+        "source_hash": 140900,
+        "map_create": 0,
+        "scan": 91600,
+        "index_sort_hash": 359500,
+        "sidecar_open_commit": 6174900,
+        "sidecar_verify": 549800,
+        "sidecar_queries": 37500,
+        "sidecar_reopen_verify": 6365900,
+        "complete": 15875400
+      },
+      "repetition": 4,
+      "process_name": "sample-8192-4-buffered"
+    },
+    {
+      "schema": "OFFLINE_STORAGE_SAMPLE_V1",
+      "session": "353e0e0ff3924e69bd213332d620422e",
+      "challenge": "e4a21b7a6fe80d6143a16d7fe273ea3668da9d45894603366dd8d33792ce704a",
+      "mode": "mmap",
+      "epoch": 7,
+      "records": 8192,
+      "source_bytes": 262208,
+      "source_sha256": "a5b72c0c53b141de62651133131df3a17087798854dbc767e2ea3dfb543402df",
+      "index_sha256": "d31041cf3e588029c44f930adbaa0bb75c2dc25d1417b713e629bb0aaaca85ef",
+      "query_sha256": "71e3a1deffdd2ebd30fd0241047e8ff41a56e761fe8ec24fa688e38ed6fbbc88",
+      "sidecar_bytes": 1056768,
+      "production_authority": false,
+      "timings_ns": {
+        "snapshot_copy_sync": 813100,
+        "source_hash": 141900,
+        "map_create": 21200,
+        "scan": 171700,
+        "index_sort_hash": 356300,
+        "sidecar_open_commit": 6786000,
+        "sidecar_verify": 565900,
+        "sidecar_queries": 39000,
+        "sidecar_reopen_verify": 6451100,
+        "complete": 16576600
+      },
+      "repetition": 4,
+      "process_name": "sample-8192-4-mmap"
+    },
+    {
+      "schema": "OFFLINE_STORAGE_SAMPLE_V1",
+      "session": "d42efdba300b42c8ae3b018f19fdf824",
+      "challenge": "c05c21ae713cc425716b2cce29630c38734498b59e7eb740187c285f81f57ff1",
+      "mode": "buffered",
+      "epoch": 7,
+      "records": 65536,
+      "source_bytes": 2097216,
+      "source_sha256": "3fb769f5912d47341471a6812eff26c732d914fae6b299115c4f7a7442f9fe78",
+      "index_sha256": "6f08b565fdc01291dc92dee3f6a88cb1cccbf85576f3f9713fc6c3dd550e287e",
+      "query_sha256": "30013bc4b44e06b2a6d81eb3fcbfa4f785af8d320d316c9ffe042befea1dd2d8",
+      "sidecar_bytes": 4214784,
+      "production_authority": false,
+      "timings_ns": {
+        "snapshot_copy_sync": 2180400,
+        "source_hash": 1083100,
+        "map_create": 0,
+        "scan": 544800,
+        "index_sort_hash": 3788600,
+        "sidecar_open_commit": 37215900,
+        "sidecar_verify": 4384100,
+        "sidecar_queries": 58900,
+        "sidecar_reopen_verify": 13821700,
+        "complete": 64355400
+      },
+      "repetition": 0,
+      "process_name": "sample-65536-0-buffered"
+    },
+    {
+      "schema": "OFFLINE_STORAGE_SAMPLE_V1",
+      "session": "c98b2b47ba354762847b60262a74b7a6",
+      "challenge": "861ae53a16a84a05c453a58576d52bc1ffecb9bec4a2b6f89be4bd4bd9387107",
+      "mode": "mmap",
+      "epoch": 7,
+      "records": 65536,
+      "source_bytes": 2097216,
+      "source_sha256": "3fb769f5912d47341471a6812eff26c732d914fae6b299115c4f7a7442f9fe78",
+      "index_sha256": "6f08b565fdc01291dc92dee3f6a88cb1cccbf85576f3f9713fc6c3dd550e287e",
+      "query_sha256": "30013bc4b44e06b2a6d81eb3fcbfa4f785af8d320d316c9ffe042befea1dd2d8",
+      "sidecar_bytes": 4214784,
+      "production_authority": false,
+      "timings_ns": {
+        "snapshot_copy_sync": 1631500,
+        "source_hash": 1052300,
+        "map_create": 26900,
+        "scan": 1027300,
+        "index_sort_hash": 3130100,
+        "sidecar_open_commit": 35339800,
+        "sidecar_verify": 4810400,
+        "sidecar_queries": 74600,
+        "sidecar_reopen_verify": 13639300,
+        "complete": 62176900
+      },
+      "repetition": 0,
+      "process_name": "sample-65536-0-mmap"
+    },
+    {
+      "schema": "OFFLINE_STORAGE_SAMPLE_V1",
+      "session": "71dec4e6844d47448f03eb91077e5e3f",
+      "challenge": "a73aa64c2982a11413d8b6479b9bfde0cce66c9635c20179a9f229a96cd4c477",
+      "mode": "mmap",
+      "epoch": 7,
+      "records": 65536,
+      "source_bytes": 2097216,
+      "source_sha256": "3fb769f5912d47341471a6812eff26c732d914fae6b299115c4f7a7442f9fe78",
+      "index_sha256": "6f08b565fdc01291dc92dee3f6a88cb1cccbf85576f3f9713fc6c3dd550e287e",
+      "query_sha256": "30013bc4b44e06b2a6d81eb3fcbfa4f785af8d320d316c9ffe042befea1dd2d8",
+      "sidecar_bytes": 4214784,
+      "production_authority": false,
+      "timings_ns": {
+        "snapshot_copy_sync": 1931600,
+        "source_hash": 1036700,
+        "map_create": 27300,
+        "scan": 1104500,
+        "index_sort_hash": 3398900,
+        "sidecar_open_commit": 36266600,
+        "sidecar_verify": 4778200,
+        "sidecar_queries": 65100,
+        "sidecar_reopen_verify": 14389100,
+        "complete": 64382000
+      },
+      "repetition": 1,
+      "process_name": "sample-65536-1-mmap"
+    },
+    {
+      "schema": "OFFLINE_STORAGE_SAMPLE_V1",
+      "session": "447219c96b614918a853b327978edd99",
+      "challenge": "196cc88dfe87526244cb5bee67737363e4283895e51472791f326b9537b63ed9",
+      "mode": "buffered",
+      "epoch": 7,
+      "records": 65536,
+      "source_bytes": 2097216,
+      "source_sha256": "3fb769f5912d47341471a6812eff26c732d914fae6b299115c4f7a7442f9fe78",
+      "index_sha256": "6f08b565fdc01291dc92dee3f6a88cb1cccbf85576f3f9713fc6c3dd550e287e",
+      "query_sha256": "30013bc4b44e06b2a6d81eb3fcbfa4f785af8d320d316c9ffe042befea1dd2d8",
+      "sidecar_bytes": 4214784,
+      "production_authority": false,
+      "timings_ns": {
+        "snapshot_copy_sync": 1828200,
+        "source_hash": 1024900,
+        "map_create": 0,
+        "scan": 557300,
+        "index_sort_hash": 3116800,
+        "sidecar_open_commit": 34394900,
+        "sidecar_verify": 4386800,
+        "sidecar_queries": 69400,
+        "sidecar_reopen_verify": 12617100,
+        "complete": 59553000
+      },
+      "repetition": 1,
+      "process_name": "sample-65536-1-buffered"
+    },
+    {
+      "schema": "OFFLINE_STORAGE_SAMPLE_V1",
+      "session": "1715fff4d9064fff89ad46dd464e624d",
+      "challenge": "c7e7b6776f24244002af9bf9fd72ca4a49bb3c8e1342946b8406401b5543698b",
+      "mode": "buffered",
+      "epoch": 7,
+      "records": 65536,
+      "source_bytes": 2097216,
+      "source_sha256": "3fb769f5912d47341471a6812eff26c732d914fae6b299115c4f7a7442f9fe78",
+      "index_sha256": "6f08b565fdc01291dc92dee3f6a88cb1cccbf85576f3f9713fc6c3dd550e287e",
+      "query_sha256": "30013bc4b44e06b2a6d81eb3fcbfa4f785af8d320d316c9ffe042befea1dd2d8",
+      "sidecar_bytes": 4214784,
+      "production_authority": false,
+      "timings_ns": {
+        "snapshot_copy_sync": 1814900,
+        "source_hash": 1214800,
+        "map_create": 0,
+        "scan": 683900,
+        "index_sort_hash": 3118500,
+        "sidecar_open_commit": 35482200,
+        "sidecar_verify": 4495800,
+        "sidecar_queries": 63200,
+        "sidecar_reopen_verify": 12728000,
+        "complete": 61012100
+      },
+      "repetition": 2,
+      "process_name": "sample-65536-2-buffered"
+    },
+    {
+      "schema": "OFFLINE_STORAGE_SAMPLE_V1",
+      "session": "a89cb9bf0234494ba0ee75ebd51dcec2",
+      "challenge": "e6535eef3a13b53b4bc641550bf496469a059f1ce31790c4e4f82ec1c29230a3",
+      "mode": "mmap",
+      "epoch": 7,
+      "records": 65536,
+      "source_bytes": 2097216,
+      "source_sha256": "3fb769f5912d47341471a6812eff26c732d914fae6b299115c4f7a7442f9fe78",
+      "index_sha256": "6f08b565fdc01291dc92dee3f6a88cb1cccbf85576f3f9713fc6c3dd550e287e",
+      "query_sha256": "30013bc4b44e06b2a6d81eb3fcbfa4f785af8d320d316c9ffe042befea1dd2d8",
+      "sidecar_bytes": 4214784,
+      "production_authority": false,
+      "timings_ns": {
+        "snapshot_copy_sync": 1896600,
+        "source_hash": 1076900,
+        "map_create": 27800,
+        "scan": 1096800,
+        "index_sort_hash": 3274500,
+        "sidecar_open_commit": 35108500,
+        "sidecar_verify": 4913900,
+        "sidecar_queries": 68800,
+        "sidecar_reopen_verify": 13413600,
+        "complete": 62382400
+      },
+      "repetition": 2,
+      "process_name": "sample-65536-2-mmap"
+    },
+    {
+      "schema": "OFFLINE_STORAGE_SAMPLE_V1",
+      "session": "d23e97d9b06f4384a6d4a1c895d948d1",
+      "challenge": "75c15c709d51784717e3b27ce85c56a884df4b72f46345075699fb1ebdd776af",
+      "mode": "mmap",
+      "epoch": 7,
+      "records": 65536,
+      "source_bytes": 2097216,
+      "source_sha256": "3fb769f5912d47341471a6812eff26c732d914fae6b299115c4f7a7442f9fe78",
+      "index_sha256": "6f08b565fdc01291dc92dee3f6a88cb1cccbf85576f3f9713fc6c3dd550e287e",
+      "query_sha256": "30013bc4b44e06b2a6d81eb3fcbfa4f785af8d320d316c9ffe042befea1dd2d8",
+      "sidecar_bytes": 4214784,
+      "production_authority": false,
+      "timings_ns": {
+        "snapshot_copy_sync": 1778400,
+        "source_hash": 1023800,
+        "map_create": 27300,
+        "scan": 1299200,
+        "index_sort_hash": 3544000,
+        "sidecar_open_commit": 36633900,
+        "sidecar_verify": 4433000,
+        "sidecar_queries": 81200,
+        "sidecar_reopen_verify": 14207400,
+        "complete": 64639300
+      },
+      "repetition": 3,
+      "process_name": "sample-65536-3-mmap"
+    },
+    {
+      "schema": "OFFLINE_STORAGE_SAMPLE_V1",
+      "session": "966d25cd7d034ebc9cc5fe7106fe3a1b",
+      "challenge": "f60654eb3b7e9298514e2c4edee743fa86e49fc496dba81864fd9a3718977cc7",
+      "mode": "buffered",
+      "epoch": 7,
+      "records": 65536,
+      "source_bytes": 2097216,
+      "source_sha256": "3fb769f5912d47341471a6812eff26c732d914fae6b299115c4f7a7442f9fe78",
+      "index_sha256": "6f08b565fdc01291dc92dee3f6a88cb1cccbf85576f3f9713fc6c3dd550e287e",
+      "query_sha256": "30013bc4b44e06b2a6d81eb3fcbfa4f785af8d320d316c9ffe042befea1dd2d8",
+      "sidecar_bytes": 4214784,
+      "production_authority": false,
+      "timings_ns": {
+        "snapshot_copy_sync": 1950700,
+        "source_hash": 1122700,
+        "map_create": 0,
+        "scan": 549700,
+        "index_sort_hash": 3109600,
+        "sidecar_open_commit": 38366900,
+        "sidecar_verify": 4374300,
+        "sidecar_queries": 60300,
+        "sidecar_reopen_verify": 14184700,
+        "complete": 65490700
+      },
+      "repetition": 3,
+      "process_name": "sample-65536-3-buffered"
+    },
+    {
+      "schema": "OFFLINE_STORAGE_SAMPLE_V1",
+      "session": "7453795e6418401bb8e3a4dbc23a8e8b",
+      "challenge": "9a00421e283a9323d6d59d62f1a4e89fa04dbbf1a2d6325608204e9945156b31",
+      "mode": "buffered",
+      "epoch": 7,
+      "records": 65536,
+      "source_bytes": 2097216,
+      "source_sha256": "3fb769f5912d47341471a6812eff26c732d914fae6b299115c4f7a7442f9fe78",
+      "index_sha256": "6f08b565fdc01291dc92dee3f6a88cb1cccbf85576f3f9713fc6c3dd550e287e",
+      "query_sha256": "30013bc4b44e06b2a6d81eb3fcbfa4f785af8d320d316c9ffe042befea1dd2d8",
+      "sidecar_bytes": 4214784,
+      "production_authority": false,
+      "timings_ns": {
+        "snapshot_copy_sync": 1755800,
+        "source_hash": 1240200,
+        "map_create": 0,
+        "scan": 566700,
+        "index_sort_hash": 3440000,
+        "sidecar_open_commit": 36933600,
+        "sidecar_verify": 4509800,
+        "sidecar_queries": 65800,
+        "sidecar_reopen_verify": 12817300,
+        "complete": 62678200
+      },
+      "repetition": 4,
+      "process_name": "sample-65536-4-buffered"
+    },
+    {
+      "schema": "OFFLINE_STORAGE_SAMPLE_V1",
+      "session": "5cbb7b9f445f4e3d8329258636a00de4",
+      "challenge": "b3c2356e083617d54f9e5bf0c89562a39b3f78d846251234a0c50516f3b7270e",
+      "mode": "mmap",
+      "epoch": 7,
+      "records": 65536,
+      "source_bytes": 2097216,
+      "source_sha256": "3fb769f5912d47341471a6812eff26c732d914fae6b299115c4f7a7442f9fe78",
+      "index_sha256": "6f08b565fdc01291dc92dee3f6a88cb1cccbf85576f3f9713fc6c3dd550e287e",
+      "query_sha256": "30013bc4b44e06b2a6d81eb3fcbfa4f785af8d320d316c9ffe042befea1dd2d8",
+      "sidecar_bytes": 4214784,
+      "production_authority": false,
+      "timings_ns": {
+        "snapshot_copy_sync": 1697400,
+        "source_hash": 1038500,
+        "map_create": 27000,
+        "scan": 1177100,
+        "index_sort_hash": 4003000,
+        "sidecar_open_commit": 39376100,
+        "sidecar_verify": 4775100,
+        "sidecar_queries": 64000,
+        "sidecar_reopen_verify": 13559300,
+        "complete": 67341800
+      },
+      "repetition": 4,
+      "process_name": "sample-65536-4-mmap"
+    }
+  ],
+  "controls": [
+    {
+      "name": "process-exit-with-uncommitted-transaction",
+      "status": "PASS",
+      "scope": "explicit exit(71) with no Rust destructors, then fresh process reopen; not power failure or random crash point"
+    },
+    {
+      "name": "bad-magic",
+      "status": "EXPECTED_REJECTION"
+    },
+    {
+      "name": "truncated",
+      "status": "EXPECTED_REJECTION"
+    },
+    {
+      "name": "trailing",
+      "status": "EXPECTED_REJECTION"
+    },
+    {
+      "name": "duplicate-key",
+      "status": "EXPECTED_REJECTION"
+    },
+    {
+      "name": "wrong-source-epoch",
+      "status": "EXPECTED_REJECTION"
+    }
+  ],
+  "inputs": {
+    "D:\\minecraftrust-astra-hardening\\target\\offline-storage-experiment\\74ee0d64de0c4d3ea51fa0fa5e92d75a\\source-8192.bin": "a5b72c0c53b141de62651133131df3a17087798854dbc767e2ea3dfb543402df",
+    "D:\\minecraftrust-astra-hardening\\target\\offline-storage-experiment\\74ee0d64de0c4d3ea51fa0fa5e92d75a\\source-65536.bin": "3fb769f5912d47341471a6812eff26c732d914fae6b299115c4f7a7442f9fe78",
+    "D:\\minecraftrust-astra-hardening\\target\\offline-storage-experiment\\74ee0d64de0c4d3ea51fa0fa5e92d75a\\control-source.bin": "16e4f021c464a6f3aa6c5567f816722a375bd0ff0e7b7b47480ce0dc2f5d35c2",
+    "D:\\minecraftrust-astra-hardening\\target\\offline-storage-experiment\\74ee0d64de0c4d3ea51fa0fa5e92d75a\\bad-magic.bin": "1485d62808ad656e2d7f170209c1615351967ebd040893cc0cf6b09dbcab6b2e",
+    "D:\\minecraftrust-astra-hardening\\target\\offline-storage-experiment\\74ee0d64de0c4d3ea51fa0fa5e92d75a\\truncated.bin": "3cd7c1c8e0037307c2542fca52cc3459e6d2279e0e55dedcf281a108f0a91d9c",
+    "D:\\minecraftrust-astra-hardening\\target\\offline-storage-experiment\\74ee0d64de0c4d3ea51fa0fa5e92d75a\\trailing.bin": "f19e8ad7a5a885f6299071dbe09fec0c316ceef94dfbcaa83d636cb07838603e",
+    "D:\\minecraftrust-astra-hardening\\target\\offline-storage-experiment\\74ee0d64de0c4d3ea51fa0fa5e92d75a\\duplicate-key.bin": "6f0b00904527438baea44fa17d8ce23245da440e3f3944bf9d58df0931ded141",
+    "D:\\minecraftrust-astra-hardening\\target\\offline-storage-experiment\\74ee0d64de0c4d3ea51fa0fa5e92d75a\\wrong-source-epoch.bin": "16e4f021c464a6f3aa6c5567f816722a375bd0ff0e7b7b47480ce0dc2f5d35c2"
+  },
+  "summary_ns": {
+    "8192-buffered": {
+      "snapshot_copy_sync": {
+        "median": 790700,
+        "minimum": 693200,
+        "maximum": 864000
+      },
+      "source_hash": {
+        "median": 144000,
+        "minimum": 136700,
+        "maximum": 172500
+      },
+      "map_create": {
+        "median": 0,
+        "minimum": 0,
+        "maximum": 0
+      },
+      "scan": {
+        "median": 84100,
+        "minimum": 79000,
+        "maximum": 97000
+      },
+      "index_sort_hash": {
+        "median": 364800,
+        "minimum": 359500,
+        "maximum": 445000
+      },
+      "sidecar_open_commit": {
+        "median": 6174900,
+        "minimum": 5848000,
+        "maximum": 6986600
+      },
+      "sidecar_verify": {
+        "median": 549800,
+        "minimum": 546100,
+        "maximum": 577800
+      },
+      "sidecar_queries": {
+        "median": 37600,
+        "minimum": 37400,
+        "maximum": 40100
+      },
+      "sidecar_reopen_verify": {
+        "median": 6725500,
+        "minimum": 6109600,
+        "maximum": 6772700
+      },
+      "complete": {
+        "median": 16103500,
+        "minimum": 15221700,
+        "maximum": 16966900
+      }
+    },
+    "8192-mmap": {
+      "snapshot_copy_sync": {
+        "median": 791200,
+        "minimum": 714800,
+        "maximum": 931700
+      },
+      "source_hash": {
+        "median": 145500,
+        "minimum": 137800,
+        "maximum": 172300
+      },
+      "map_create": {
+        "median": 22300,
+        "minimum": 21200,
+        "maximum": 28500
+      },
+      "scan": {
+        "median": 171700,
+        "minimum": 169600,
+        "maximum": 195200
+      },
+      "index_sort_hash": {
+        "median": 359600,
+        "minimum": 355300,
+        "maximum": 452000
+      },
+      "sidecar_open_commit": {
+        "median": 6786000,
+        "minimum": 5809600,
+        "maximum": 9415100
+      },
+      "sidecar_verify": {
+        "median": 565900,
+        "minimum": 540700,
+        "maximum": 834500
+      },
+      "sidecar_queries": {
+        "median": 39500,
+        "minimum": 37200,
+        "maximum": 47000
+      },
+      "sidecar_reopen_verify": {
+        "median": 6582100,
+        "minimum": 6156900,
+        "maximum": 7063700
+      },
+      "complete": {
+        "median": 16576600,
+        "minimum": 15874400,
+        "maximum": 19490800
+      }
+    },
+    "65536-buffered": {
+      "snapshot_copy_sync": {
+        "median": 1828200,
+        "minimum": 1755800,
+        "maximum": 2180400
+      },
+      "source_hash": {
+        "median": 1122700,
+        "minimum": 1024900,
+        "maximum": 1240200
+      },
+      "map_create": {
+        "median": 0,
+        "minimum": 0,
+        "maximum": 0
+      },
+      "scan": {
+        "median": 557300,
+        "minimum": 544800,
+        "maximum": 683900
+      },
+      "index_sort_hash": {
+        "median": 3118500,
+        "minimum": 3109600,
+        "maximum": 3788600
+      },
+      "sidecar_open_commit": {
+        "median": 36933600,
+        "minimum": 34394900,
+        "maximum": 38366900
+      },
+      "sidecar_verify": {
+        "median": 4386800,
+        "minimum": 4374300,
+        "maximum": 4509800
+      },
+      "sidecar_queries": {
+        "median": 63200,
+        "minimum": 58900,
+        "maximum": 69400
+      },
+      "sidecar_reopen_verify": {
+        "median": 12817300,
+        "minimum": 12617100,
+        "maximum": 14184700
+      },
+      "complete": {
+        "median": 62678200,
+        "minimum": 59553000,
+        "maximum": 65490700
+      }
+    },
+    "65536-mmap": {
+      "snapshot_copy_sync": {
+        "median": 1778400,
+        "minimum": 1631500,
+        "maximum": 1931600
+      },
+      "source_hash": {
+        "median": 1038500,
+        "minimum": 1023800,
+        "maximum": 1076900
+      },
+      "map_create": {
+        "median": 27300,
+        "minimum": 26900,
+        "maximum": 27800
+      },
+      "scan": {
+        "median": 1104500,
+        "minimum": 1027300,
+        "maximum": 1299200
+      },
+      "index_sort_hash": {
+        "median": 3398900,
+        "minimum": 3130100,
+        "maximum": 4003000
+      },
+      "sidecar_open_commit": {
+        "median": 36266600,
+        "minimum": 35108500,
+        "maximum": 39376100
+      },
+      "sidecar_verify": {
+        "median": 4778200,
+        "minimum": 4433000,
+        "maximum": 4913900
+      },
+      "sidecar_queries": {
+        "median": 68800,
+        "minimum": 64000,
+        "maximum": 81200
+      },
+      "sidecar_reopen_verify": {
+        "median": 13639300,
+        "minimum": 13413600,
+        "maximum": 14389100
+      },
+      "complete": {
+        "median": 64382000,
+        "minimum": 62176900,
+        "maximum": 67341800
+      }
+    }
+  },
+  "rust_tests": 12,
+  "compile_fail_tests": 2,
+  "python_tests": 5,
+  "semantic_samples": 20,
+  "snapshot_data_limit_bytes": 4194368,
+  "sidecar_file_limit_bytes": 67108864,
+  "retained_file_bytes": 284479113,
+  "measurement_scope": "generated fixtures; warm page cache after copy/hash; creation and verification included; no Minecraft or server performance claim",
+  "guard_after": {
+    "schema_version": 1,
+    "kind": "HARDENING_ISOLATION_GATE_CHECK",
+    "status": "PASS",
+    "failures": [],
+    "original_observed": {
+      "head": "c4b868db2c9e4b03f745bf93c6ebf4fd8a8519e7",
+      "branch": "issue1-jni-v2",
+      "status": [
+        " M tools/live-capture/live_client_session.py",
+        "?? tools/live-capture/__pycache__/",
+        "?? tools/live-capture/run_rev_shadow.py"
+      ],
+      "files": [
+        {
+          "path": "D:\\minecraftrust\\tools\\live-capture\\live_client_session.py",
+          "sha256": "151c356161695aba3db3c1a8cbd589b5eda2b5a1770dff59ab21b728d36cabfa"
+        },
+        {
+          "path": "D:\\minecraftrust\\tools\\live-capture\\run_rev_shadow.py",
+          "sha256": "2b9b2aca49e57dd0d2a74bec46efcdc0ac7f95762a733276e27ff9dbcb472d93"
+        }
+      ]
+    },
+    "isolated_worktree": "D:\\minecraftrust-astra-hardening",
+    "isolated_head": "cb6886371bbd05c722b206d85c4d7672fdc5a98d",
+    "isolated_branch": "astra/architecture-hardening",
+    "production_gate_checks": {
+      "tryEncode_fail_closed": true,
+      "productionAuthorityEligible_false": true
+    },
+    "scope": "read-only original HEAD/status/two paused source hashes plus conservative source guards; runtime authority tests remain required"
+  },
+  "elapsed_seconds": 17.864835900021717
+}

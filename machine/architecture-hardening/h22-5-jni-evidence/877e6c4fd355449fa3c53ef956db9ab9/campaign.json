@@ -1,0 +1,1981 @@
+{
+  "schema": "JNI_LIFECYCLE_CAMPAIGN_V1",
+  "status": "PASS_WITH_JVM_BASELINE_WARNINGS",
+  "decision": "PROTOTYPE",
+  "production_authority": false,
+  "sources": {
+    "D:\\minecraftrust-astra-hardening\\tools\\jni-lifecycle-prototype\\Cargo.toml": "ed4a7641e52ed9900d6f27b8386d3d5d681fa382483cbd2e5eb7ee1f3a0ef378",
+    "D:\\minecraftrust-astra-hardening\\tools\\jni-lifecycle-prototype\\Cargo.lock": "a81b7fc2b41d09a2fa1da1327e1e5dc5a2b4712bb643da5e74b84ebc3200bbea",
+    "D:\\minecraftrust-astra-hardening\\tools\\testing\\hardening_guard.py": "a2062b3ffbec7edba79bf5f5954fbcb1e9d97492ab9c4bb541833ebb820bdb6d",
+    "D:\\minecraftrust-astra-hardening\\machine\\architecture-hardening\\isolation.json": "8f9b34b55f6ecc1d549da1ec4c42900b4a831a3072a9e4aa6aa2ae39cae53d93",
+    "D:\\minecraftrust-astra-hardening\\tools\\jni-lifecycle-prototype\\collect_licenses.py": "1195f726b8e624e0d7e2d16fb5c20facd795a7c777ee1f81d04a38b829651343",
+    "D:\\minecraftrust-astra-hardening\\tools\\jni-lifecycle-prototype\\run.py": "c68d03c3728e8c1a4e624a3ef541534ecb527eacf8cc9920fb71ea7286eda095",
+    "D:\\minecraftrust-astra-hardening\\tools\\jni-lifecycle-prototype\\src\\lib.rs": "a96dc3cd9add99fda9d01940b6a45e1c097ae46abe2e77b29e914ce3b06ae2e1",
+    "D:\\minecraftrust-astra-hardening\\tools\\jni-lifecycle-prototype\\java\\BootstrapOnly.java": "1639c1511add9c5c3a32c9a9caf53fa057fb32fc4c927437f997be310b85727d",
+    "D:\\minecraftrust-astra-hardening\\tools\\jni-lifecycle-prototype\\java\\LifecycleProbe.java": "433d4b6a0963915a7ec5f93bbc881a237802c95d5836654ad6ea672850b9caf0",
+    "D:\\minecraftrust-astra-hardening\\tools\\jni-lifecycle-prototype\\java\\LoaderPayload.java": "b6fdb2d5bcd9f94aba6cec570f868dde5e0b78041f1d658df0d6bc7f28eff3e1",
+    "D:\\minecraftrust-astra-hardening\\tools\\jni-lifecycle-prototype\\java\\PathOnly.java": "d1241f7f1db0f918a4a0b10ea7028fa376482cfac16f70a613116d9f60e8f7bf",
+    "D:\\minecraftrust-astra-hardening\\tools\\jni-lifecycle-prototype\\compile-fail\\escape_local.rs": "cb6f60afbeca41596871e65f262115b61fece0ba286cd8ffc272981b9537815a",
+    "D:\\minecraftrust-astra-hardening\\tools\\jni-lifecycle-prototype\\compile-fail\\valid_local.rs": "b2f0f18de9bc5371920ad2f3acb8a9ca53d7edb28146933e3333b7cd4950f3e5",
+    "D:\\minecraftrust-astra-hardening\\tools\\jni-lifecycle-prototype\\third-party\\inventory.json": "65ee7ab25f2a43c6924df17d7e44474ca118e4a51eac698d0d3f4fe302732cf1",
+    "D:\\minecraftrust-astra-hardening\\tools\\jni-lifecycle-prototype\\third-party\\README.md": "e74e766583627270d49ad04115e040558c11ea16d2d73889bf66f5eb4add89ca",
+    "D:\\minecraftrust-astra-hardening\\tools\\jni-lifecycle-prototype\\third-party\\bytes-1.12.1\\LICENSE": "45f522cacecb1023856e46df79ca625dfc550c94910078bd8aec6e02880b3d42",
+    "D:\\minecraftrust-astra-hardening\\tools\\jni-lifecycle-prototype\\third-party\\cfg-if-1.0.5\\LICENSE-APACHE": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2",
+    "D:\\minecraftrust-astra-hardening\\tools\\jni-lifecycle-prototype\\third-party\\cfg-if-1.0.5\\LICENSE-MIT": "378f5840b258e2779c39418f3f2d7b2ba96f1c7917dd6be0713f88305dbda397",
+    "D:\\minecraftrust-astra-hardening\\tools\\jni-lifecycle-prototype\\third-party\\combine-4.6.8\\LICENSE": "9bbc1b3dc4674a9ebb12c2a62f54fe3c08672539717f8d05828f684b6cc419a3",
+    "D:\\minecraftrust-astra-hardening\\tools\\jni-lifecycle-prototype\\third-party\\jni-0.22.4\\LICENSE-APACHE": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2",
+    "D:\\minecraftrust-astra-hardening\\tools\\jni-lifecycle-prototype\\third-party\\jni-0.22.4\\LICENSE-MIT": "fea1d5bf3dd71605ce5d7d2ff695c1837e914c77195e523a86b5391716477960",
+    "D:\\minecraftrust-astra-hardening\\tools\\jni-lifecycle-prototype\\third-party\\jni-macros-0.22.4\\LICENSE-APACHE": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2",
+    "D:\\minecraftrust-astra-hardening\\tools\\jni-lifecycle-prototype\\third-party\\jni-macros-0.22.4\\LICENSE-MIT": "fea1d5bf3dd71605ce5d7d2ff695c1837e914c77195e523a86b5391716477960",
+    "D:\\minecraftrust-astra-hardening\\tools\\jni-lifecycle-prototype\\third-party\\jni-sys-0.4.1\\LICENSE-APACHE": "c6596eb7be8581c18be736c846fb9173b69eccf6ef94c5135893ec56bd92ba08",
+    "D:\\minecraftrust-astra-hardening\\tools\\jni-lifecycle-prototype\\third-party\\jni-sys-0.4.1\\LICENSE-MIT": "1d85bd754b04ceec93e98e890edd1fa3c6a22e81bcb32135806beeccefa51cd1",
+    "D:\\minecraftrust-astra-hardening\\tools\\jni-lifecycle-prototype\\third-party\\jni-sys-macros-0.4.1\\LICENSE-APACHE": "c6596eb7be8581c18be736c846fb9173b69eccf6ef94c5135893ec56bd92ba08",
+    "D:\\minecraftrust-astra-hardening\\tools\\jni-lifecycle-prototype\\third-party\\jni-sys-macros-0.4.1\\LICENSE-MIT": "1d85bd754b04ceec93e98e890edd1fa3c6a22e81bcb32135806beeccefa51cd1",
+    "D:\\minecraftrust-astra-hardening\\tools\\jni-lifecycle-prototype\\third-party\\log-0.4.34\\LICENSE-APACHE": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2",
+    "D:\\minecraftrust-astra-hardening\\tools\\jni-lifecycle-prototype\\third-party\\log-0.4.34\\LICENSE-MIT": "6485b8ed310d3f0340bf1ad1f47645069ce4069dcc6bb46c7d5c6faf41de1fdb",
+    "D:\\minecraftrust-astra-hardening\\tools\\jni-lifecycle-prototype\\third-party\\memchr-2.8.3\\COPYING": "01c266bced4a434da0051174d6bee16a4c82cf634e2679b6155d40d75012390f",
+    "D:\\minecraftrust-astra-hardening\\tools\\jni-lifecycle-prototype\\third-party\\memchr-2.8.3\\LICENSE-MIT": "0f96a83840e146e43c0ec96a22ec1f392e0680e6c1226e6f3ba87e0740af850f",
+    "D:\\minecraftrust-astra-hardening\\tools\\jni-lifecycle-prototype\\third-party\\memchr-2.8.3\\UNLICENSE": "7e12e5df4bae12cb21581ba157ced20e1986a0508dd10d0e8a4ab9a4cf94e85c",
+    "D:\\minecraftrust-astra-hardening\\tools\\jni-lifecycle-prototype\\third-party\\proc-macro2-1.0.107\\LICENSE-APACHE": "62c7a1e35f56406896d7aa7ca52d0cc0d272ac022b5d2796e7d6905db8a3636a",
+    "D:\\minecraftrust-astra-hardening\\tools\\jni-lifecycle-prototype\\third-party\\proc-macro2-1.0.107\\LICENSE-MIT": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3",
+    "D:\\minecraftrust-astra-hardening\\tools\\jni-lifecycle-prototype\\third-party\\quote-1.0.47\\LICENSE-APACHE": "62c7a1e35f56406896d7aa7ca52d0cc0d272ac022b5d2796e7d6905db8a3636a",
+    "D:\\minecraftrust-astra-hardening\\tools\\jni-lifecycle-prototype\\third-party\\quote-1.0.47\\LICENSE-MIT": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3",
+    "D:\\minecraftrust-astra-hardening\\tools\\jni-lifecycle-prototype\\third-party\\rustc_version-0.4.1\\LICENSE-APACHE": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2",
+    "D:\\minecraftrust-astra-hardening\\tools\\jni-lifecycle-prototype\\third-party\\rustc_version-0.4.1\\LICENSE-MIT": "c9a75f18b9ab2927829a208fc6aa2cf4e63b8420887ba29cdb265d6619ae82d5",
+    "D:\\minecraftrust-astra-hardening\\tools\\jni-lifecycle-prototype\\third-party\\same-file-1.0.6\\COPYING": "01c266bced4a434da0051174d6bee16a4c82cf634e2679b6155d40d75012390f",
+    "D:\\minecraftrust-astra-hardening\\tools\\jni-lifecycle-prototype\\third-party\\same-file-1.0.6\\LICENSE-MIT": "cb3c929a05e6cbc9de9ab06a4c57eeb60ca8c724bef6c138c87d3a577e27aa14",
+    "D:\\minecraftrust-astra-hardening\\tools\\jni-lifecycle-prototype\\third-party\\same-file-1.0.6\\UNLICENSE": "7e12e5df4bae12cb21581ba157ced20e1986a0508dd10d0e8a4ab9a4cf94e85c",
+    "D:\\minecraftrust-astra-hardening\\tools\\jni-lifecycle-prototype\\third-party\\semver-1.0.28\\LICENSE-APACHE": "62c7a1e35f56406896d7aa7ca52d0cc0d272ac022b5d2796e7d6905db8a3636a",
+    "D:\\minecraftrust-astra-hardening\\tools\\jni-lifecycle-prototype\\third-party\\semver-1.0.28\\LICENSE-MIT": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3",
+    "D:\\minecraftrust-astra-hardening\\tools\\jni-lifecycle-prototype\\third-party\\simdutf8-0.1.5\\LICENSE-Apache": "0cec06e0e55fbc3dc5cee4fca9b607f66cb8f4e4dbcf3b3c013594dd156732e9",
+    "D:\\minecraftrust-astra-hardening\\tools\\jni-lifecycle-prototype\\third-party\\simdutf8-0.1.5\\LICENSE-MIT": "1847e0e0698142ed4347c1441a9fa81c8fbddd44b1d8bbcd5e3647f991759d7f",
+    "D:\\minecraftrust-astra-hardening\\tools\\jni-lifecycle-prototype\\third-party\\simd_cesu8-1.2.0\\LICENSE-APACHE": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2",
+    "D:\\minecraftrust-astra-hardening\\tools\\jni-lifecycle-prototype\\third-party\\simd_cesu8-1.2.0\\LICENSE-MIT": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3",
+    "D:\\minecraftrust-astra-hardening\\tools\\jni-lifecycle-prototype\\third-party\\syn-2.0.119\\LICENSE-APACHE": "62c7a1e35f56406896d7aa7ca52d0cc0d272ac022b5d2796e7d6905db8a3636a",
+    "D:\\minecraftrust-astra-hardening\\tools\\jni-lifecycle-prototype\\third-party\\syn-2.0.119\\LICENSE-MIT": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3",
+    "D:\\minecraftrust-astra-hardening\\tools\\jni-lifecycle-prototype\\third-party\\syn-3.0.6\\LICENSE-APACHE": "62c7a1e35f56406896d7aa7ca52d0cc0d272ac022b5d2796e7d6905db8a3636a",
+    "D:\\minecraftrust-astra-hardening\\tools\\jni-lifecycle-prototype\\third-party\\syn-3.0.6\\LICENSE-MIT": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3",
+    "D:\\minecraftrust-astra-hardening\\tools\\jni-lifecycle-prototype\\third-party\\thiserror-2.0.21\\LICENSE-APACHE": "62c7a1e35f56406896d7aa7ca52d0cc0d272ac022b5d2796e7d6905db8a3636a",
+    "D:\\minecraftrust-astra-hardening\\tools\\jni-lifecycle-prototype\\third-party\\thiserror-2.0.21\\LICENSE-MIT": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3",
+    "D:\\minecraftrust-astra-hardening\\tools\\jni-lifecycle-prototype\\third-party\\thiserror-impl-2.0.21\\LICENSE-APACHE": "62c7a1e35f56406896d7aa7ca52d0cc0d272ac022b5d2796e7d6905db8a3636a",
+    "D:\\minecraftrust-astra-hardening\\tools\\jni-lifecycle-prototype\\third-party\\thiserror-impl-2.0.21\\LICENSE-MIT": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3",
+    "D:\\minecraftrust-astra-hardening\\tools\\jni-lifecycle-prototype\\third-party\\unicode-ident-1.0.26\\LICENSE-APACHE": "62c7a1e35f56406896d7aa7ca52d0cc0d272ac022b5d2796e7d6905db8a3636a",
+    "D:\\minecraftrust-astra-hardening\\tools\\jni-lifecycle-prototype\\third-party\\unicode-ident-1.0.26\\LICENSE-MIT": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3",
+    "D:\\minecraftrust-astra-hardening\\tools\\jni-lifecycle-prototype\\third-party\\unicode-ident-1.0.26\\LICENSE-UNICODE": "f7db81051789b729fea528a63ec4c938fdcb93d9d61d97dc8cc2e9df6d47f2a1",
+    "D:\\minecraftrust-astra-hardening\\tools\\jni-lifecycle-prototype\\third-party\\walkdir-2.5.0\\COPYING": "01c266bced4a434da0051174d6bee16a4c82cf634e2679b6155d40d75012390f",
+    "D:\\minecraftrust-astra-hardening\\tools\\jni-lifecycle-prototype\\third-party\\walkdir-2.5.0\\LICENSE-MIT": "0f96a83840e146e43c0ec96a22ec1f392e0680e6c1226e6f3ba87e0740af850f",
+    "D:\\minecraftrust-astra-hardening\\tools\\jni-lifecycle-prototype\\third-party\\walkdir-2.5.0\\UNLICENSE": "7e12e5df4bae12cb21581ba157ced20e1986a0508dd10d0e8a4ab9a4cf94e85c",
+    "D:\\minecraftrust-astra-hardening\\tools\\jni-lifecycle-prototype\\third-party\\winapi-util-0.1.11\\COPYING": "01c266bced4a434da0051174d6bee16a4c82cf634e2679b6155d40d75012390f",
+    "D:\\minecraftrust-astra-hardening\\tools\\jni-lifecycle-prototype\\third-party\\winapi-util-0.1.11\\LICENSE-MIT": "cb3c929a05e6cbc9de9ab06a4c57eeb60ca8c724bef6c138c87d3a577e27aa14",
+    "D:\\minecraftrust-astra-hardening\\tools\\jni-lifecycle-prototype\\third-party\\winapi-util-0.1.11\\UNLICENSE": "7e12e5df4bae12cb21581ba157ced20e1986a0508dd10d0e8a4ab9a4cf94e85c",
+    "D:\\minecraftrust-astra-hardening\\tools\\jni-lifecycle-prototype\\third-party\\windows-link-0.2.1\\license-apache-2.0": "c16f8dcf1a368b83be78d826ea23de4079fe1b4469a0ab9ee20563f37ff3d44b",
+    "D:\\minecraftrust-astra-hardening\\tools\\jni-lifecycle-prototype\\third-party\\windows-link-0.2.1\\license-mit": "c2cfccb812fe482101a8f04597dfc5a9991a6b2748266c47ac91b6a5aae15383",
+    "D:\\minecraftrust-astra-hardening\\tools\\jni-lifecycle-prototype\\third-party\\windows-sys-0.61.2\\license-apache-2.0": "c16f8dcf1a368b83be78d826ea23de4079fe1b4469a0ab9ee20563f37ff3d44b",
+    "D:\\minecraftrust-astra-hardening\\tools\\jni-lifecycle-prototype\\third-party\\windows-sys-0.61.2\\license-mit": "c2cfccb812fe482101a8f04597dfc5a9991a6b2748266c47ac91b6a5aae15383",
+    "D:\\minecraftrust-astra-hardening\\rust-toolchain.toml": "2c6c06daae576901d5ae1824046862ed1aa59615827de79d9c5e72f5a282183e"
+  },
+  "tools": {
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\bin\\java.exe": "65ebee06ec47df0c41c4483ac5aa408e55adb47a1613bad56be30bccc4317e85",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\bin\\javac.exe": "9f1dae15ffb49c7363c72351cf61f4889ac6896e3df87c1c5553b81745ae8a07",
+    "C:\\Users\\Admin\\.cargo\\bin\\cargo.exe": "6f4bef66261261fcb43131be8720bab817d403a09edec7455c371974b90bdb7e",
+    "C:\\Users\\Admin\\.cargo\\bin\\rustc.exe": "6f4bef66261261fcb43131be8720bab817d403a09edec7455c371974b90bdb7e",
+    "C:\\Python314\\python.exe": "4942b86a6597e5aee0128daa00050ed79bc21f6e709a78eb19cbfeb0c2f39ac9",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\cargo.exe": "c37545ec61d48d31bdefce53280ecab61c4ea54eaace372fac6a0316c6e165d9",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\cargo-clippy.exe": "cb0f2b164b3f6e95bfed7ec4ae9fc48f8ce8d9fef3649b5ae87961f75e1ef484",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\clippy-driver.exe": "00fd4ef2fe60e603571573746e52f42f109bbfe4b879e7ca7313614fda0b367b",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\rustc.exe": "ca9988af88b1463f6857fdfe909299fee50a63260b3e5f7dbcb5b4d3318b27bc",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\rustfmt.exe": "ac9d781249bffabbb1bedb691a5ea6f63a818c1dda73dd698d4dff687ad4c24e",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\rustdoc.exe": "9daff87cf4052ba3f97decb39d2822e1a96b3ed444eda86ed8df74802679dd60"
+  },
+  "jdk_runtime_files": {
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\bin\\api-ms-win-core-console-l1-1-0.dll": "88ace577a9c51061cb7d1a36babbbefa48212fadc838ffde98fdfff60de18386",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\bin\\api-ms-win-core-console-l1-2-0.dll": "c062477ad3bfdc57b0cc402179637a214dab5045c8d644592c7decca7d18aa50",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\bin\\api-ms-win-core-datetime-l1-1-0.dll": "1bd81dfd19204b44662510d9054852fb77c9f25c1088d647881c9b976cc16818",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\bin\\api-ms-win-core-debug-l1-1-0.dll": "591358eb4d1531e9563ee0813e4301c552ce364c912ce684d16576eabf195dc3",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\bin\\api-ms-win-core-errorhandling-l1-1-0.dll": "d56ce7b1cd76108ad6c137326ec694a14c99d48c3d7b0ace8c3ff4d9bcee3ce8",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\bin\\api-ms-win-core-fibers-l1-1-0.dll": "91d249d7bc0e38ef6bcb17158b1fdc6dd8888dc086615c9b8b750b87e52a5fb3",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\bin\\api-ms-win-core-fibers-l1-1-1.dll": "fc9d86cec621383eab636ebc87ddd3f5c19a3cb2a33d97be112c051d0b275429",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\bin\\api-ms-win-core-file-l1-1-0.dll": "1ca895aba4e7435563a6b43e85eba67a0f8c74aa6a6a94d0fc48fa35535e2585",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\bin\\api-ms-win-core-file-l1-2-0.dll": "4cadbc0c39da7c6722206fdcebd670abe5b8d261e7b041dd94f9397a89d1990d",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\bin\\api-ms-win-core-file-l2-1-0.dll": "93c624b366ba16c643fc8933070a26f03b073ad0cf7f80173266d67536c61989",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\bin\\api-ms-win-core-handle-l1-1-0.dll": "39095f59c41d76ec81bb2723d646fde4c148e7cc3402f4980d2ade95cb9c84f9",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\bin\\api-ms-win-core-heap-l1-1-0.dll": "8f105771b236dbcb859de271f0a6822ce1cb79c36988dd42c9e3f6f55c5f7eb9",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\bin\\api-ms-win-core-interlocked-l1-1-0.dll": "53b25e753ca785bf8b695d89dde5818a318890211dc992a89146f16658f0b606",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\bin\\api-ms-win-core-kernel32-legacy-l1-1-1.dll": "a9b13a1cd1b8c19b0c6b4afcd5bb0dd29c0e2288231ac9e6db8510094ce68ba6",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\bin\\api-ms-win-core-libraryloader-l1-1-0.dll": "7f39ba298b41e4963047341288cab36b6a241835ee11ba4ad70f44dacd40906c",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\bin\\api-ms-win-core-localization-l1-2-0.dll": "6ee44dd0d8510dc024c9f7c79b1b9fa88c987b26b6beb6653ddd11751c34e5dc",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\bin\\api-ms-win-core-memory-l1-1-0.dll": "0512a35316ec9180437f86696a84c5c06a7e4e82e050055a656e5bf9fca206f9",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\bin\\api-ms-win-core-namedpipe-l1-1-0.dll": "c05f1fffe3b5a2738ea54ce9485cca026fb9635f982626fba1e1dcc531897273",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\bin\\api-ms-win-core-processenvironment-l1-1-0.dll": "c4eca98c3c67b6395d5b005b00ac1eb0318b86b23aa71035a44c2b1602befba9",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\bin\\api-ms-win-core-processthreads-l1-1-0.dll": "5ccb89e93d67bc3288d4e84649c5346e66e15e3d7cd65d989daf3f4cb584be9a",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\bin\\api-ms-win-core-processthreads-l1-1-1.dll": "4ad565a8ba3ef0ea8ab87221ad11f83ee0bc844ce236607958406663b407333e",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\bin\\api-ms-win-core-profile-l1-1-0.dll": "7809160932f44e59b021699f5bc68799eb7293ee1fa926d6fcca3c3445302e61",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\bin\\api-ms-win-core-rtlsupport-l1-1-0.dll": "9dc1e91e71c7c054854bd1487cb4e6946d82c9f463430f1c4e8d1471005172b1",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\bin\\api-ms-win-core-string-l1-1-0.dll": "60fc31d2a0c634412f529dba76af3b9bf991352877c6dae528186d3935704cfd",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\bin\\api-ms-win-core-synch-l1-1-0.dll": "3a72b4f29f39a265d32ad12f0ce15dbf60129c840e10d84d427829ede45e78ad",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\bin\\api-ms-win-core-synch-l1-2-0.dll": "efc1e4460984a73cf47a3def033af1c8f3b1dbc1a56cd27781d3aacf3e3330cb",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\bin\\api-ms-win-core-sysinfo-l1-1-0.dll": "b203d862ddef1dd62bf623fc866c7f7a9c317c1c2ae30d1f52cb41f955b5698e",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\bin\\api-ms-win-core-sysinfo-l1-2-0.dll": "2703635d835396afd0f138d7c73751afe7e33a24f4225d08c1690b0a371932c0",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\bin\\api-ms-win-core-timezone-l1-1-0.dll": "33f4fddc181066fce06b2227bded813f95e94ed1f3d785e982c6b6b56c510c57",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\bin\\api-ms-win-core-util-l1-1-0.dll": "6eda016742a6171205a387a14b3c0b331841567740376f56768f8c151724207d",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\bin\\api-ms-win-crt-conio-l1-1-0.dll": "b762061b688aae679afe788904d2c9970f74a7dac98f3b42463d08f25e483d3f",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\bin\\api-ms-win-crt-convert-l1-1-0.dll": "ebb2ae5535a64f65daeab8235585114fc9dd2cf1a49f5852d446250b998b6ae4",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\bin\\api-ms-win-crt-environment-l1-1-0.dll": "17d63275d00bdd8670422b95bd264c532998e0a1b041079e54fce4b6b7a55819",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\bin\\api-ms-win-crt-filesystem-l1-1-0.dll": "9a9e2a65a281644e368d0f272b95ba5f6b445d1c35910d06056c5ebeb77402db",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\bin\\api-ms-win-crt-heap-l1-1-0.dll": "bab9ac3ec83e380ae51e4295ef3bf2c738627812d3a49d1e713661abbc8dc57a",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\bin\\api-ms-win-crt-locale-l1-1-0.dll": "bd14c67ea28e21d6257ad780a37122c9b5773f69e693f5db6bffaee4d839526e",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\bin\\api-ms-win-crt-math-l1-1-0.dll": "606d66d82db562ea7979179d06486a0f94d079941d26b80a1e2c49d29959df6f",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\bin\\api-ms-win-crt-multibyte-l1-1-0.dll": "95f49efbe8107786733fa7c474025cf3fee0ac632f240367b296c736d06572aa",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\bin\\api-ms-win-crt-private-l1-1-0.dll": "1bc82bed6143d2bf1b6b08a7809f4a5e29317d6fddd338a7da3c0223522e4bbf",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\bin\\api-ms-win-crt-process-l1-1-0.dll": "f6156b1020380ec4f0e48577ebedaaef5fb1ab1f337d8b4e72e6a33a7567a9cc",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\bin\\api-ms-win-crt-runtime-l1-1-0.dll": "c5902934d026d7e15fbe9917d474f3322846a41a25e66f4b2b1f758801879f4b",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\bin\\api-ms-win-crt-stdio-l1-1-0.dll": "a9c5a153d8c0286f9b41a2b1c65854ad9e6471b8755b7de87bae4470e60bcab6",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\bin\\api-ms-win-crt-string-l1-1-0.dll": "25b8f83a7767211b11132775a0e27a45aa4ec8ab4e6572599f9c172ae3606b40",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\bin\\api-ms-win-crt-time-l1-1-0.dll": "7c7f6393f06de11750adb09cc5698ae55cd9fb27b2e51e207286feb1b5b2b156",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\bin\\api-ms-win-crt-utility-l1-1-0.dll": "d8ba5f17b9ffcbf3aeaf3fa1da226832d2fa90f81acce0cd669464e76ce434ac",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\bin\\attach.dll": "20a15cb016bcb659898dacf9e527b1785779a582ddebae4ca12920c90c986bc2",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\bin\\awt.dll": "9afa770f2862a85b0b866568a7edce21c651582ba7e660ee3de6c2753aae053f",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\bin\\dt_shmem.dll": "1b077dfa88ac117f8cd930611e588b41b2c0e2f8f3af5e74d94a1e538e4645a2",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\bin\\dt_socket.dll": "070459dd44e9860e19805693bd9815172feff9c4345aa1f0ea4f21ad9af06748",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\bin\\fontmanager.dll": "fbb48832c1870665e92d4daeb65e7d86387efb4993d8ed0a4283a7990b6d64bb",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\bin\\freetype.dll": "1a6902d22ef998270087527c755ce745045aa0da6e59c89fd78c8a088d2034ae",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\bin\\hprof.dll": "a9b9f5fcce4c862de0e3c7c0822779246a1629c5b9e1dbefb4e7501ed114db4b",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\bin\\instrument.dll": "edc99b9f4231855e01aa07765b6d0ced7cd8c72cfa6c7ce44a2b2a1ab933da9d",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\bin\\j2gss.dll": "86caa67f9017cc181e7ddb61c462c2e71356fbf8b781a4299f5f9da4534e1f98",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\bin\\j2pcsc.dll": "3631e63bf20b3fb3a627caa0a72d64cebe445293fcfbe149ea619adb0b4b91a5",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\bin\\j2pkcs11.dll": "87311046f1dc93c03575b62e6b4d6941e95c23ea0248588f8dfc622d4d5a046a",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\bin\\jaas_nt.dll": "a3bdb9ca498e157966f6f5bb3ad46f7a0c18cc76ec803c8f73c9749ab02d38e3",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\bin\\jabswitch.exe": "e3c8cc7a8dbab3d8e4040d00c1dc117c9b0fb1356d3d2b0043db937715ce09d4",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\bin\\java-rmi.exe": "b166e656032bd82f879d62595117ae6cc4759a8a2cb07d5ba2e053aa44018107",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\bin\\java.dll": "3b3cd5eb0843b484bc38dc5ce3847ddddcbac293e98a8e29d17d72f0edeb3859",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\bin\\java.exe": "01a7bf20e2bdac1c0d75b9c9770276dbdee93e400b1908d9beb6a63102144d6d",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\bin\\JavaAccessBridge-64.dll": "d6e1de7a8246b889ab301c02e9c204bea7c16fcf4b3b6b2dcd158d9d3be274fe",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\bin\\javaw.exe": "09d314057950b1cd23b07d79a5b736dd8936295b44edce4f3ab39521191b033f",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\bin\\java_crw_demo.dll": "8c12e58ffd796744f718eb271f5f30302b7c0eb1a5a8facd82b92756c919cd6a",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\bin\\jawt.dll": "d6702d8e2646bdd3538b36fbf5ef43bbed91bf3341bc0d061ba476fe556a7072",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\bin\\JAWTAccessBridge-64.dll": "12ba69450ce64b02e6c000a1066c26b41f3ebb97054e778fcb138cefc7957123",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\bin\\jdwp.dll": "9a33b76f3ec5b5b5d51cab26f65ec92d0cf61647139a64286bfb8bf58c82a4bd",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\bin\\jjs.exe": "732cafa5c13e74630de8c8b054ea195ed3d99b37131a9fcfaa2c72de45bd77e7",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\bin\\jli.dll": "6fd1d3421e825f7b2a98a8b1a1ab3fd1445d6b295be25f21115f1a5fa3485e0a",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\bin\\jpeg.dll": "980a3aa71034d9358118ee46f024f5b5e28831bedabf3f3b63bf10e150410a8a",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\bin\\jsdt.dll": "4bc92a3e73207c3f185e6421cdaee314cc46718fa45cefa8491fa55075f0c5d3",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\bin\\jsound.dll": "6e1aa51aa5d709a031424d1be93de9d51fccd2ad92fdd7817561f319e8cb3dc2",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\bin\\jsoundds.dll": "9b12d7d0c998b641efc4f843fd568215dbb4c4c7c7d833c64a328d6c4f1c3c68",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\bin\\keytool.exe": "bdc3282d563b19bf17ad65e69394f344f86fad12cce1b3638d494baf829e696b",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\bin\\kinit.exe": "9d7e129d13a1a22cb233f165b09a0b4eb7a7656a7983bf1d3e3a1d301e313863",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\bin\\klist.exe": "19f1c95cd79dd7c2856dc3ae0ba7ea2ce756acca004b2b181ce02c2ab0e5497b",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\bin\\ktab.exe": "94340d4895e83bdfe2999d0e9c49de09b6b597b1b47920ff4c6c18509fe2e545",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\bin\\lcms.dll": "9a6cf970c0beaf1ae2d270662e5c56a6cf91ac2a74d456b1cf787ebf3632c030",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\bin\\management.dll": "138f8b89c9c3ebe03e99244e539a966681d133bda93514e44c1862b22cfa57e4",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\bin\\mlib_image.dll": "60a03765b9a8579052d29d1ba554d0f5899937c46e283213db283606d785012b",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\bin\\msvcp140.dll": "a4c2229bdc2a2a630acdc095b4d86008e5c3e3bc7773174354f3da4f5beb9cde",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\bin\\net.dll": "b0c9a87342564b99ab57ef1ff78dc452777aa7a13f1b92ac5d368fdc006a523a",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\bin\\nio.dll": "8b823f8273ad9db9a55e95341c09091ee62305659ad5a91bc8a6b948dd1a7ada",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\bin\\npt.dll": "35c64a1bb9fb649640f9d530d7f056a5295d35f746fe39da978172ecc8945d76",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\bin\\orbd.exe": "61e3d9443abba9aa6c0501a45f3565a9fe6bd69ed2d2e46c2d509c79b0318662",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\bin\\pack200.exe": "bb1423ed624b7054b65730e601329513c996ddceb14109db90ca36ef593f21b3",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\bin\\policytool.exe": "80abea89e1e7503080cb16afb18d3dabd229b9382b3994327c3c865cb1361909",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\bin\\rmid.exe": "57dba727dd986955ce831b48c19cccf619b490233ea0360e9b7eca1fc0566392",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\bin\\rmiregistry.exe": "11b813ea67355225bbf1422fff3bb299035118cfeb28c3fa323b02511f77d809",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\bin\\sawindbg.dll": "ba8d2c00e9108f9d3fa1ea4f422575e8e9843ac4294efe128d35c387c21d2e3f",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\bin\\servertool.exe": "188904ef3494eb3ba86536f93052a4245d62a0eca5de22f910711e5fe2121080",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\bin\\splashscreen.dll": "da08ab487d1d497de8ab1a5e0d153da90ffcde94a82c691a5d1172935088346f",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\bin\\sspi_bridge.dll": "fe28259e8862e5cee1fb0495b9111ba6169416f592ca5feae258e8b0abb3ba4c",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\bin\\sunec.dll": "e9a8b8c95c86d333396feed46701fcc716607fc8886fd3a5dc05e27911348198",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\bin\\sunmscapi.dll": "47e5d699ef7104982eaf543394c7fe432764b3a9840b9456188759daa9de2cf0",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\bin\\tnameserv.exe": "74039f8838103d90cead832bb48e9fba32bac2d5679d87dcff616b00a84c94d4",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\bin\\ucrtbase.dll": "2e5fb14b7bf8540278f3614a12f0226e56a7cc9e64b81cbd976c6fcf2f71cbfb",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\bin\\unpack.dll": "8bd1aa7c8ffae2f7db6a83f1b24c8f9fce9cb147b0393bb1bdfea6acf4ecbe71",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\bin\\unpack200.exe": "59b30c6e6340061e6c57b4bcf6172617ad08d918499fd792128aabb456e3124e",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\bin\\vcruntime140.dll": "02c6aa0e6e624411a9f19b0360a7865ab15908e26024510e5c38a9c08362c35a",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\bin\\vcruntime140_1.dll": "7dd9aa02e271c68ca6d5f18d651d23a15d7259715af43326578f7dde27f37637",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\bin\\verify.dll": "48ff6c31f0fc6e0aefd70173f6059eb9fe5dd73b313bbbcaeea41d21ee8514d7",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\bin\\w2k_lsa_auth.dll": "faa37e086d329a0ddfbdae8a9f887c50a7d923cf7b06ac65c808e29e922332db",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\bin\\WindowsAccessBridge-64.dll": "bce5ad07a8999a2110d295c9d15ee4253a9d8e572f2df851e20a5e9dc323107f",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\bin\\zip.dll": "72dc4d8a908e3a5ee215615498a9d748b8464c6167e3adc4c52890dc98aa1366",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\bin\\server\\jvm.dll": "d3f1564b31a25f280d633d33234bdf88fd12dbe0ae34e15e2e89db3f0ca2d407",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\bin\\server\\Xusage.txt": "37cf4e6cdc4357cebb0ec8108d5cb0ad42611f675b926c819ae03b74ce990a08",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\lib\\accessibility.properties": "68ef2f3c6d7636e39c6626ed1bd700e3a6b796c25a9e5feca4533abfacd61cdf",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\lib\\calendars.properties": "9b72cfad9723c8b33eed3e18bda69be3f50740f8c11456487d3098e288359bfa",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\lib\\charsets.jar": "531ad9d1e0e142c0f9885fd92a4684e4ca5fc5cf09a5a6bbccb06c74e6b1dd40",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\lib\\classlist": "01fe24232d0dbefe339f88c44a3fd3d99ff0e17ae03926ccf90b835332f5f89c",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\lib\\content-types.properties": "46f47b3883c7244a819ae1161113fe9d2375f881b75c9b3012d7a6b3497e030a",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\lib\\currency.data": "a840a4b4ef284287697cb2496a208c4d95e0c59cb4759e3ba49bf443a1012e38",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\lib\\flavormap.properties": "c2748e07b59398cc40cacccd47fc98a70c562f84067e9272383b45a8df72a692",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\lib\\fontconfig.bfc": "b2ab990df3c4c1c2ec4317aaf22c946df17f0796727dbda712402307c56558ac",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\lib\\fontconfig.properties.src": "f13df9360e93b24820b24652473f6cb0f4f70fc346aa3b408acb94ed59cac0ac",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\lib\\hijrah-config-umalqura.properties": "3456982de9eba535337852f02852e26e4ed197ebd9d8356977e6da4ed9075538",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\lib\\jce.jar": "bfb5bc4d5eb833a2263a28a39339508421f92e919e0e5afd9d8613f157af065a",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\lib\\jfr.jar": "8622b9ef632b691e83b7ee6f0b727fd1753a2f667ffdff32d5e4906d6243e833",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\lib\\jsse.jar": "ea12717509e59b62e96d29b465787ccf064e4e3ef569a93ce1896243e68c3cfc",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\lib\\jvm.hprof.txt": "b055bf25b07e5ac70e99b897fb8152f288769065b5b84387362bb9cc2e6c9d38",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\lib\\logging.properties": "ce1688fe641099954572ea856953035b5188e2ca228705001368250337b9b232",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\lib\\management-agent.jar": "c729e16a5c0e84ee16a44ce16391d639b62f358948f241e962ac20d7f89109d0",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\lib\\meta-index": "daa262732f1f698294822c762d8e33db636ad67f21b402eac70f78f315403fbf",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\lib\\net.properties": "f4567500fd182e9912c7ed58633eba1737619ebefc79c52a583df54a0226127a",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\lib\\psfont.properties.ja": "5a4bd51b969bf187ff86d94f4a71fdfbfa602762975fa3c73d264b4575f7c78f",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\lib\\psfontj2d.properties": "780c565d5af3ee6f68b887b75c041cdf46a0592f67012f12eeb691283e92630a",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\lib\\resources.jar": "5364f53840b4cf583f4ffc42b05e42b197bf277e7a66d5a61bcf53151129f7c7",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\lib\\rt.jar": "1166665601d9b1587682e2540cff6a31b0c7028211d2e07adb9ad30e1699eca3",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\lib\\sound.properties": "299c2360b6155eb28990ec49cd21753f97e43442fe8fab03e04f3e213df43a66",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\lib\\tzdb.dat": "8bf59121570827d89fd173cf6552300dcf2902b5aa61c818d63fb3f151fd031f",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\lib\\tzmappings": "83755efbcb24476f61b7b57bcf54707161678431347e5de2d7b894d022a0089a",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\lib\\amd64\\jvm.cfg": "23f728cc2bf14e62d454190ea0139f159031b5bd9c3f141ca9237c4c5c96ec1d",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\lib\\cmm\\CIEXYZ.pf": "98cf012f6122c833b1ff4fbbe37f43a808d769d9b10ba43f3411728e7bb58bea",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\lib\\cmm\\GRAY.pf": "d3fd8cb41b7ef8c5ea53bfecb1ad6d4762197c8eab04444545e083dff6f86fa9",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\lib\\cmm\\LINEAR_RGB.pf": "790da58ccc79d03658283652716ec9896ed31e0392d818e60f6832815ee79f4c",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\lib\\cmm\\PYCC.pf": "0031aa2b8b4d490369a2a601ae0d95505df0cb86c0504f080c02ed87e84b3ddc",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\lib\\cmm\\sRGB.pf": "87e382b9336e6a0417a4d860173109ab319a029cf2972e19833a3327c65bd7e4",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\lib\\ext\\access-bridge-64.jar": "bcbabaa47d327eed0ac1f732eefab416a0a12b1796bbe34386905bff9bff8c95",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\lib\\ext\\cldrdata.jar": "b491385213a3aeb5ee40920a2b2ba39d6941869a92284f3d2b6c89e471f4b197",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\lib\\ext\\dnsns.jar": "fe5928e512b5dfc80c41082603c0f8164494a63362c8f5e898505a613c344ab6",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\lib\\ext\\jaccess.jar": "0cc6077047474fc815fdff0ec4617268d7ba6874af0126cc6cc3980fa5f5e048",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\lib\\ext\\localedata.jar": "e772e318b252203c219b2a0bbb0572d1a8f9e2854974527c1e325ed42eb13d2c",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\lib\\ext\\meta-index": "87e75d66805d429cdf4cdd24672b5528cd30c7b0509a3f07c6b78b30ca2a52b1",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\lib\\ext\\nashorn.jar": "6cd59867860324c890ce0c3af4ed352be9987597068fdd87b9408c03a3c23d03",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\lib\\ext\\sunec.jar": "ff62a8eef35445c1750dd7ef3173fa1c2480833b3d44494238752bb447f4b09d",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\lib\\ext\\sunjce_provider.jar": "b60f8627031c5e930823737c00e7ab30194a7b728335de933f14d58c3e3b5e1c",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\lib\\ext\\sunmscapi.jar": "db56651950f5a9d80bc638255edaa3f3941a0bf23204642d9f0dd17b945194ef",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\lib\\ext\\sunpkcs11.jar": "071c75020e4812c95c7877b9c34185b456bdfd2c9662282c092e90615855ea8d",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\lib\\ext\\zipfs.jar": "65fd3a09b79d0c61d1e96bd3d350bcb113a3e3e041f51b05ac1310a635974dd2",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\lib\\jfr\\default.jfc": "07905e9fc1be1a17fb74df479bedcf40fdeb0427722b0e2d12af96a4705a5e6a",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\lib\\jfr\\profile.jfc": "0207c7ddbba287366723ecc65641b0e1f03195895d4a39f36d8e1d135df13e84",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\lib\\management\\jmxremote.access": "439158eb513525feda19e0e4153ccf36a08fe6a39c0c6ceeb9fcee86899dd33c",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\lib\\management\\jmxremote.password.template": "3d83e336c9a24d09a16063ea1355885e07f7a176a37543463596b5db8d82f8fa",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\lib\\management\\management.properties": "57b2702c8a4158ae72c3616300efdc81d690d617c1d1ce2a66b1c95e0dbe0d57",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\lib\\management\\snmp.acl.template": "f1dc97da5a5d220ed5d5b71110ce8200b16cac50622b33790bb03e329c751ced",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\lib\\security\\blacklisted.certs": "96572f243f31c2ef81a6e627542e596f6a9295cff3c7ae095c1b595cb1457ded",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\lib\\security\\cacerts": "70cb224b25c1476f6265bfb0d6c08fa0466b980e0e7fb5de05cc03019aad8630",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\lib\\security\\java.policy": "164dee2520126c729d9bbb80be71bc733720f9f6a6bfe1a40e9d45ea99edbb48",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\lib\\security\\java.security": "81c3efb8dec32a975af01fee72136e275316d2ea1fafe736fab09dacd81e03af",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\lib\\security\\policy\\limited\\local_policy.jar": "8ad74ba90a77bedd8751b35a7ab5253cf86d4a0f4eba292423e8dd5d03c66523",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\lib\\security\\policy\\limited\\US_export_policy.jar": "2cb938121a90c70247cc36f1f2e0c36331168c1177581a9fd773db4514236d51",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\lib\\security\\policy\\unlimited\\local_policy.jar": "4afab9ef3e1b6a0e67477b53081d2b8f72910bba1c36178fcb3952121e51fd05",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\lib\\security\\policy\\unlimited\\US_export_policy.jar": "2cb938121a90c70247cc36f1f2e0c36331168c1177581a9fd773db4514236d51",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\lib\\images\\cursors\\cursors.properties": "7b8b63f78e2f732bd58bf8f16144c4802c513a52970c18dc0bdb789dd04078e4",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\lib\\images\\cursors\\invalid32x32.gif": "1a1d3079d49583837662b84e11d8c0870698511d9110e710eb8e7eb20df7ae3b",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\lib\\images\\cursors\\win32_CopyDrop32x32.gif": "13c783acd580df27207dabccb10b3f0c14674560a23943ac7233df7f72d4e49d",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\lib\\images\\cursors\\win32_CopyNoDrop32x32.gif": "1a1d3079d49583837662b84e11d8c0870698511d9110e710eb8e7eb20df7ae3b",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\lib\\images\\cursors\\win32_LinkDrop32x32.gif": "485cbe5c5144cfcd13cc6d701cdab96e4a6f8660cbc70a0a58f1b7916be64198",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\lib\\images\\cursors\\win32_LinkNoDrop32x32.gif": "1a1d3079d49583837662b84e11d8c0870698511d9110e710eb8e7eb20df7ae3b",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\lib\\images\\cursors\\win32_MoveDrop32x32.gif": "12cfce05229dba939ce13375d65ca7d303ce87851ae15539c02f11d1dc824338",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\jre\\lib\\images\\cursors\\win32_MoveNoDrop32x32.gif": "1a1d3079d49583837662b84e11d8c0870698511d9110e710eb8e7eb20df7ae3b",
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\lib\\tools.jar": "7325904e8de35b7376bbed7080a1fce7d9b886d3dddb5bfdbc00cefe7b248987"
+  },
+  "artifacts": {
+    "D:\\minecraftrust-astra-hardening\\target\\jni-lifecycle-prototype\\877e6c4fd355449fa3c53ef956db9ab9\\cargo-target\\release\\jni_lifecycle_prototype.dll": "b7d1520846e455c4965bfc5574a3de1099b09f61c16edcf3c6b664007270a460",
+    "D:\\minecraftrust-astra-hardening\\target\\jni-lifecycle-prototype\\877e6c4fd355449fa3c53ef956db9ab9\\cargo-target\\release\\deps\\libjni-a9846df3e3edceb7.rlib": "7fa9619ee7b103377bb8035217683483ae0810f533930d60cfeced0f60115cea",
+    "D:\\minecraftrust-astra-hardening\\target\\jni-lifecycle-prototype\\877e6c4fd355449fa3c53ef956db9ab9\\classes\\BootstrapOnly.class": "1f22d3b75ab06655db22e11d45084e913fd258b7c6405ae3edc3fbf4d91202ba",
+    "D:\\minecraftrust-astra-hardening\\target\\jni-lifecycle-prototype\\877e6c4fd355449fa3c53ef956db9ab9\\classes\\LifecycleProbe$1.class": "bd91f17467b65415b08de1e828f684e84c588bf2aec460cfd34b4f2766a200b8",
+    "D:\\minecraftrust-astra-hardening\\target\\jni-lifecycle-prototype\\877e6c4fd355449fa3c53ef956db9ab9\\classes\\LifecycleProbe$10.class": "8ea364d6ffaeae44bd1e6c59f056a91d34ba0c05245d2580da0d358387d685a1",
+    "D:\\minecraftrust-astra-hardening\\target\\jni-lifecycle-prototype\\877e6c4fd355449fa3c53ef956db9ab9\\classes\\LifecycleProbe$2.class": "eba993ecb4fe7c33e6addf53003864edb98f91aed75f94827fb3dfbe846e1087",
+    "D:\\minecraftrust-astra-hardening\\target\\jni-lifecycle-prototype\\877e6c4fd355449fa3c53ef956db9ab9\\classes\\LifecycleProbe$3.class": "5726aa6aa96253c499dec2c216fae5eb101e5716b39ae8baee6ff0f75781c918",
+    "D:\\minecraftrust-astra-hardening\\target\\jni-lifecycle-prototype\\877e6c4fd355449fa3c53ef956db9ab9\\classes\\LifecycleProbe$4.class": "5bc2be9ab5b61a47070eaedf40967baf0bb8eb181218dfc7495023a4309ae1a3",
+    "D:\\minecraftrust-astra-hardening\\target\\jni-lifecycle-prototype\\877e6c4fd355449fa3c53ef956db9ab9\\classes\\LifecycleProbe$5.class": "f991275d36d094b2dab1123cc078fddf01256890485c2c495488f2127976e7f6",
+    "D:\\minecraftrust-astra-hardening\\target\\jni-lifecycle-prototype\\877e6c4fd355449fa3c53ef956db9ab9\\classes\\LifecycleProbe$6.class": "ff0e70328ee1550f3fe7767f5088d9ffb31f40a020dab6f2d0aa9246954d2e31",
+    "D:\\minecraftrust-astra-hardening\\target\\jni-lifecycle-prototype\\877e6c4fd355449fa3c53ef956db9ab9\\classes\\LifecycleProbe$7.class": "1d8c698e59d8662586b571ad50f71f14def2fa7dd86f6b0beee001762c636a60",
+    "D:\\minecraftrust-astra-hardening\\target\\jni-lifecycle-prototype\\877e6c4fd355449fa3c53ef956db9ab9\\classes\\LifecycleProbe$8.class": "006556ebdec56898f5f6a1f1c27fc90bb461e310db297759f0e282e3e73db410",
+    "D:\\minecraftrust-astra-hardening\\target\\jni-lifecycle-prototype\\877e6c4fd355449fa3c53ef956db9ab9\\classes\\LifecycleProbe$9.class": "ea3fd20e2e8aeaf5a7621e90ec8db7d4088e9ff0c6c275491d38b9f0af6fff25",
+    "D:\\minecraftrust-astra-hardening\\target\\jni-lifecycle-prototype\\877e6c4fd355449fa3c53ef956db9ab9\\classes\\LifecycleProbe$Action.class": "0699d31057a20d240706013ec48e440abfe8d9a2e78b54d877947dc7c293e057",
+    "D:\\minecraftrust-astra-hardening\\target\\jni-lifecycle-prototype\\877e6c4fd355449fa3c53ef956db9ab9\\classes\\LifecycleProbe$Callback.class": "248f390d8c73ac02eeeda125ff091f5efc41f4aba101ff5c43423872b2c84e49",
+    "D:\\minecraftrust-astra-hardening\\target\\jni-lifecycle-prototype\\877e6c4fd355449fa3c53ef956db9ab9\\classes\\LifecycleProbe$Isolated.class": "9445d823d798a8ff7afc7d05835b79e599636aea6be013c56d1995db8a8bd522",
+    "D:\\minecraftrust-astra-hardening\\target\\jni-lifecycle-prototype\\877e6c4fd355449fa3c53ef956db9ab9\\classes\\LifecycleProbe.class": "8255ed4057a0a278b74c7c150144028649ddb5f4d21d29a214f184138703ed05",
+    "D:\\minecraftrust-astra-hardening\\target\\jni-lifecycle-prototype\\877e6c4fd355449fa3c53ef956db9ab9\\classes\\LoaderPayload.class": "94924d3c5108401102f991978ded01833b04e3fdee504d7f4efcd31920b30110",
+    "D:\\minecraftrust-astra-hardening\\target\\jni-lifecycle-prototype\\877e6c4fd355449fa3c53ef956db9ab9\\classes\\PathOnly.class": "6db1f258370a5c7152ae418915c5753ed84e8d0dc8648a61adc08ac415d9a4a1",
+    "D:\\minecraftrust-astra-hardening\\target\\jni-lifecycle-prototype\\877e6c4fd355449fa3c53ef956db9ab9\\libvalid_local.rlib": "51e7b4253ed04372a3b44912532b0ba566f751161a223b3403d8cf13cdfb2f38"
+  },
+  "dependencies": [
+    {
+      "name": "bytes-1.12.1",
+      "archive_sha256": "fc652a48c352aef3ea3aed32080501cf3ef6ed5da78602a020c991775b0aff04",
+      "source_inventory_sha256": "1e8624f27d1a0f178db11062cc323bfd6a29d92c5d1d4e4e199f27da70c111e7",
+      "source_files": 40,
+      "license_expression": "MIT"
+    },
+    {
+      "name": "cfg-if-1.0.5",
+      "archive_sha256": "4e7648175b45a9a48536d676f68d918270699102aa8dab5496df06904c914600",
+      "source_inventory_sha256": "ca5d16fc5975021244447571ccd3d5557f14e03072d88278ede83f90a916f446",
+      "source_files": 14,
+      "license_expression": "MIT OR Apache-2.0"
+    },
+    {
+      "name": "combine-4.6.8",
+      "archive_sha256": "cfc320937d09e6de266b31b9afb480f197d7a861be86be7cb2ea7e5d1bfffc5e",
+      "source_inventory_sha256": "003ae788d4ed521d9dc2f2d595a8dcaa6c40b6f2d253bb11a2112fcec6ec805e",
+      "source_files": 31,
+      "license_expression": "MIT"
+    },
+    {
+      "name": "jni-0.22.4",
+      "archive_sha256": "5efd9a482cf3a427f00d6b35f14332adc7902ce91efb778580e180ff90fa3498",
+      "source_inventory_sha256": "a7cde8e0b2b7b8dcd93f2874291a85e423e8d7c40fd1264c95152e01dd38ff59",
+      "source_files": 76,
+      "license_expression": "MIT OR Apache-2.0"
+    },
+    {
+      "name": "jni-macros-0.22.4",
+      "archive_sha256": "a00109accc170f0bdb141fed3e393c565b6f5e072365c3bd58f5b062591560a3",
+      "source_inventory_sha256": "96900a491e254cf3efedf3167e7e86bf6ce55e88d23c4d9375323af1bc47e07b",
+      "source_files": 14,
+      "license_expression": "MIT OR Apache-2.0"
+    },
+    {
+      "name": "jni-sys-0.4.1",
+      "archive_sha256": "c6377a88cb3910bee9b0fa88d4f42e1d2da8e79915598f65fb0c7ee14c878af2",
+      "source_inventory_sha256": "f1a77843397ba0f6a0c32aa8589246726fd665dad015f11ed22877331110ad23",
+      "source_files": 10,
+      "license_expression": "MIT OR Apache-2.0"
+    },
+    {
+      "name": "jni-sys-macros-0.4.1",
+      "archive_sha256": "38c0b942f458fe50cdac086d2f946512305e5631e720728f2a61aabcd47a6264",
+      "source_inventory_sha256": "61c3e66166ddccb610e96a94e6665a9cd6489dea4ad073d3e1fee316be2eb20b",
+      "source_files": 6,
+      "license_expression": "MIT OR Apache-2.0"
+    },
+    {
+      "name": "log-0.4.34",
+      "archive_sha256": "f9f8bd3e56ce4dfc153cf470fffbfa98c7620958b312ca5c3a4b8d5181fd13c6",
+      "source_inventory_sha256": "ddb2240f5f79fa70f715b8c6c718acda69eebf44f8e4dd88dc25f8949aed2ec1",
+      "source_files": 23,
+      "license_expression": "MIT OR Apache-2.0"
+    },
+    {
+      "name": "memchr-2.8.3",
+      "archive_sha256": "cf8baf1c55e62ffcace7a9f06f4bd9cd3f0c4beb022d3b367256b91b87513d98",
+      "source_inventory_sha256": "4d8cc12ffde71c113b03b3ae3f2fb7cc43b1c41e71e18d373874dad9487e7890",
+      "source_files": 59,
+      "license_expression": "Unlicense OR MIT"
+    },
+    {
+      "name": "proc-macro2-1.0.107",
+      "archive_sha256": "985e7ec9bb745e6ce6535b544d84d6cd6f7ad8bd711c398938ae983b91a766d9",
+      "source_inventory_sha256": "ee793c83b55353af8accd7e6c65fbbc686eee2aefcb4717852e4223d31247c45",
+      "source_files": 33,
+      "license_expression": "MIT OR Apache-2.0"
+    },
+    {
+      "name": "quote-1.0.47",
+      "archive_sha256": "1fbf4db142a473a8d80c26bbf18454ed458bf8d26c8219c331daecfdbd079001",
+      "source_inventory_sha256": "608bf46e13612b2721911c92a9fe9b1b9234e436d498826e351a65e20d12f2d0",
+      "source_files": 35,
+      "license_expression": "MIT OR Apache-2.0"
+    },
+    {
+      "name": "rustc_version-0.4.1",
+      "archive_sha256": "cfcb3a22ef46e85b45de6ee7e79d063319ebb6594faafcf1c225ea92ab6e9b92",
+      "source_inventory_sha256": "d7088ddf2a9183908898629d9ba315d0501c8c4e40ea3578fe1270e0aba00756",
+      "source_files": 13,
+      "license_expression": "MIT OR Apache-2.0"
+    },
+    {
+      "name": "same-file-1.0.6",
+      "archive_sha256": "93fc1dc3aaa9bfed95e02e6eadabb4baf7e3078b0bd1b4d7b6b0b68378900502",
+      "source_inventory_sha256": "dbeae3e2b826f015ce250de944c0f479be6d07aba1ebd416d0c293f914bcf94d",
+      "source_files": 16,
+      "license_expression": "Unlicense/MIT"
+    },
+    {
+      "name": "semver-1.0.28",
+      "archive_sha256": "8a7852d02fc848982e0c167ef163aaff9cd91dc640ba85e263cb1ce46fae51cd",
+      "source_inventory_sha256": "f7f290f741ecd73b4bbc217481fe2108ac61547e6c76152566209353b3cc01c7",
+      "source_files": 25,
+      "license_expression": "MIT OR Apache-2.0"
+    },
+    {
+      "name": "simd_cesu8-1.2.0",
+      "archive_sha256": "11031e251abf8611c80f460e19dbdeb54a66db918e49c65a7065b46ac7aec520",
+      "source_inventory_sha256": "85bffaf86ccc3e2682e119ab7857e313170096ea4a6856f20d493c12b6e17b04",
+      "source_files": 30,
+      "license_expression": "Apache-2.0 OR MIT"
+    },
+    {
+      "name": "simdutf8-0.1.5",
+      "archive_sha256": "e3a9fe34e3e7a50316060351f37187a3f546bce95496156754b601a5fa71b76e",
+      "source_inventory_sha256": "11877e9c6d088b37aaef41486b131bcab01b4c657c37dd5cd554d3be2b983b54",
+      "source_files": 26,
+      "license_expression": "MIT OR Apache-2.0"
+    },
+    {
+      "name": "syn-2.0.119",
+      "archive_sha256": "872831b642d1a07999a962a351ed35b955ea2cfc8f3862091e2a240a84f17297",
+      "source_inventory_sha256": "c73afaca38c11781e988c2b9557e9785a42a503ecfc965a22baecd0727792ac7",
+      "source_files": 105,
+      "license_expression": "MIT OR Apache-2.0"
+    },
+    {
+      "name": "syn-3.0.6",
+      "archive_sha256": "8593e8e72159ed2257d083c7a454a85cbf854f37a0966d8d483aff8c8a3ebcee",
+      "source_inventory_sha256": "19b05ef4f5335e26e47e367b6979001b1eddc4d693e78d80954cd5f06ec8dd3a",
+      "source_files": 104,
+      "license_expression": "MIT OR Apache-2.0"
+    },
+    {
+      "name": "thiserror-2.0.21",
+      "archive_sha256": "09e52cb86a36cede5cb101bf8908837b3e4c6e5e59fe7fd85c23fb56200d189e",
+      "source_inventory_sha256": "edbc8e35e5d912571d852096237667fd06acb74cd02d1066380cc15c6d34efb0",
+      "source_files": 105,
+      "license_expression": "MIT OR Apache-2.0"
+    },
+    {
+      "name": "thiserror-impl-2.0.21",
+      "archive_sha256": "fe5197923287db20a58125f0bc85c062f7f2c892de97b18c356f9efb14b28524",
+      "source_inventory_sha256": "2c91fd9754200bc1db9ff39a4105de023ac01dc639e85adbcf5fef509414145d",
+      "source_files": 17,
+      "license_expression": "MIT OR Apache-2.0"
+    },
+    {
+      "name": "unicode-ident-1.0.26",
+      "archive_sha256": "d245f478577f809a851594d02313b640fb437e0bb33866753cff937863096954",
+      "source_inventory_sha256": "5a7c8d9ddcea41f9c76cea2d85271c2b2c478a17c363b13e314980ffb26bf5d3",
+      "source_files": 26,
+      "license_expression": "(MIT OR Apache-2.0) AND Unicode-3.0"
+    },
+    {
+      "name": "walkdir-2.5.0",
+      "archive_sha256": "29790946404f91d9c5d06f9874efddea1dc06c5efe94541a7d6863108e3a5e4b",
+      "source_inventory_sha256": "038e9da87fd0d9fcf0f563d29a2020bd144db038fb464c85738a097e573cea1c",
+      "source_files": 19,
+      "license_expression": "Unlicense/MIT"
+    },
+    {
+      "name": "winapi-util-0.1.11",
+      "archive_sha256": "c2a7b1c03c876122aa43f3020e6c3c3ee5c05081c9a00739faf7503aeba10d22",
+      "source_inventory_sha256": "37febb1d65ea66e31db2a3b4214ee08d2e947dc82f4ac9f95178aab79647891f",
+      "source_files": 17,
+      "license_expression": "Unlicense OR MIT"
+    },
+    {
+      "name": "windows-link-0.2.1",
+      "archive_sha256": "f0805222e57f7521d6a62e36fa9163bc891acd422f971defe97d64e70d0a4fe5",
+      "source_inventory_sha256": "5ad79acd692a96dab613343e5f9a34d8df4312e51e3a121d0df15853b8815678",
+      "source_files": 8,
+      "license_expression": "MIT OR Apache-2.0"
+    },
+    {
+      "name": "windows-sys-0.61.2",
+      "archive_sha256": "ae137229bcbd6cdf0f7b80a31df61766145077ddf49416a728b02cb3921ff3fc",
+      "source_inventory_sha256": "63935ebf69306ec383d3db3edae5d685659a0cec5e02b977c6f59f389e4e9f77",
+      "source_files": 257,
+      "license_expression": "MIT OR Apache-2.0"
+    }
+  ],
+  "environment_policy": {
+    "schema": "JNI_PROTOTYPE_ENVIRONMENT_V1",
+    "removed_variable_names": [
+      "RUST_LOG"
+    ],
+    "blocked_exact": [
+      "CFLAGS",
+      "CL",
+      "CLASSPATH",
+      "CLIPPY_ARGS",
+      "CLIPPY_CONF_DIR",
+      "CPPFLAGS",
+      "CXXFLAGS",
+      "JAVA_OPTS",
+      "JAVA_TOOL_OPTIONS",
+      "JDK_JAVAC_OPTIONS",
+      "JDK_JAVA_OPTIONS",
+      "LDFLAGS",
+      "LINK",
+      "_CL_",
+      "_JAVA_OPTIONS",
+      "_LINK_"
+    ],
+    "blocked_prefixes": [
+      "CARGO_ except pinned CARGO_HOME",
+      "RUST except RUSTUP_HOME"
+    ],
+    "explicit_values": {
+      "RUST_BACKTRACE": "0",
+      "RUSTC": "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\rustc.exe",
+      "CARGO_HOME": "C:\\Users\\Admin\\.cargo",
+      "PATH_PREPEND": "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin"
+    },
+    "remaining_environment": "Inherited OS/toolchain environment; no secret environment values retained"
+  },
+  "isolation_before": {
+    "schema_version": 1,
+    "kind": "HARDENING_ISOLATION_GATE_CHECK",
+    "status": "PASS",
+    "failures": [],
+    "original_observed": {
+      "head": "c4b868db2c9e4b03f745bf93c6ebf4fd8a8519e7",
+      "branch": "issue1-jni-v2",
+      "status": [
+        " M tools/live-capture/live_client_session.py",
+        "?? tools/live-capture/__pycache__/",
+        "?? tools/live-capture/run_rev_shadow.py"
+      ],
+      "files": [
+        {
+          "path": "D:\\minecraftrust\\tools\\live-capture\\live_client_session.py",
+          "sha256": "151c356161695aba3db3c1a8cbd589b5eda2b5a1770dff59ab21b728d36cabfa"
+        },
+        {
+          "path": "D:\\minecraftrust\\tools\\live-capture\\run_rev_shadow.py",
+          "sha256": "2b9b2aca49e57dd0d2a74bec46efcdc0ac7f95762a733276e27ff9dbcb472d93"
+        }
+      ]
+    },
+    "isolated_worktree": "D:\\minecraftrust-astra-hardening",
+    "isolated_head": "44f61a46f7cda93c0ac8aaffe13087678501cc6f",
+    "isolated_branch": "astra/architecture-hardening",
+    "production_gate_checks": {
+      "tryEncode_fail_closed": true,
+      "productionAuthorityEligible_false": true
+    },
+    "scope": "read-only original HEAD/status/two paused source hashes plus conservative source guards; runtime authority tests remain required"
+  },
+  "isolation_after": {
+    "schema_version": 1,
+    "kind": "HARDENING_ISOLATION_GATE_CHECK",
+    "status": "PASS",
+    "failures": [],
+    "original_observed": {
+      "head": "c4b868db2c9e4b03f745bf93c6ebf4fd8a8519e7",
+      "branch": "issue1-jni-v2",
+      "status": [
+        " M tools/live-capture/live_client_session.py",
+        "?? tools/live-capture/__pycache__/",
+        "?? tools/live-capture/run_rev_shadow.py"
+      ],
+      "files": [
+        {
+          "path": "D:\\minecraftrust\\tools\\live-capture\\live_client_session.py",
+          "sha256": "151c356161695aba3db3c1a8cbd589b5eda2b5a1770dff59ab21b728d36cabfa"
+        },
+        {
+          "path": "D:\\minecraftrust\\tools\\live-capture\\run_rev_shadow.py",
+          "sha256": "2b9b2aca49e57dd0d2a74bec46efcdc0ac7f95762a733276e27ff9dbcb472d93"
+        }
+      ]
+    },
+    "isolated_worktree": "D:\\minecraftrust-astra-hardening",
+    "isolated_head": "44f61a46f7cda93c0ac8aaffe13087678501cc6f",
+    "isolated_branch": "astra/architecture-hardening",
+    "production_gate_checks": {
+      "tryEncode_fail_closed": true,
+      "productionAuthorityEligible_false": true
+    },
+    "scope": "read-only original HEAD/status/two paused source hashes plus conservative source guards; runtime authority tests remain required"
+  },
+  "checks": [
+    {
+      "name": "rust-sysroot",
+      "argv": [
+        "C:\\Users\\Admin\\.cargo\\bin\\rustc.exe",
+        "--print",
+        "sysroot"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 0.07074920000741258,
+      "output_byte_limit_per_stream": 2097152,
+      "resource_error": null,
+      "stdout_sha256": "e0d8249c2fb93ac2106d97fedd24f44420e0ee2316617df20f769f033eaf568d",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "java-version",
+      "argv": [
+        "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\bin\\java.exe",
+        "-version"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 0.06120070000179112,
+      "output_byte_limit_per_stream": 2097152,
+      "resource_error": null,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "9d65a43706f49fcfdbcece91e737f759110493e82fd1c4886cf49104c2017b0e"
+    },
+    {
+      "name": "cargo-version",
+      "argv": [
+        "C:\\Users\\Admin\\.cargo\\bin\\cargo.exe",
+        "-vV"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 0.05512009997619316,
+      "output_byte_limit_per_stream": 2097152,
+      "resource_error": null,
+      "stdout_sha256": "86c2d07f9968fd3174d9cff8c60a4d4323fba3166d5dc6dd36f0987a50677d70",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "rustc-version",
+      "argv": [
+        "C:\\Users\\Admin\\.cargo\\bin\\rustc.exe",
+        "-vV"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 0.05995409999741241,
+      "output_byte_limit_per_stream": 2097152,
+      "resource_error": null,
+      "stdout_sha256": "c45e612575abeef05e99e88eb1e7aea52cddab9ad70d4f65ad20eaa65e92a9cf",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "cargo-metadata",
+      "argv": [
+        "C:\\Users\\Admin\\.cargo\\bin\\cargo.exe",
+        "metadata",
+        "--locked",
+        "--offline",
+        "--format-version",
+        "1"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 0.13579289999324828,
+      "output_byte_limit_per_stream": 2097152,
+      "resource_error": null,
+      "stdout_sha256": "155cd4dfe98ac66fe1f31c565033d91cce8ed081de2aedff68452de86f936f02",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "rust-fmt",
+      "argv": [
+        "C:\\Users\\Admin\\.cargo\\bin\\cargo.exe",
+        "fmt",
+        "--",
+        "--check"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 0.14658739999867976,
+      "output_byte_limit_per_stream": 2097152,
+      "resource_error": null,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "rust-tests",
+      "argv": [
+        "C:\\Users\\Admin\\.cargo\\bin\\cargo.exe",
+        "test",
+        "--locked",
+        "--offline",
+        "--target-dir",
+        "D:\\minecraftrust-astra-hardening\\target\\jni-lifecycle-prototype\\877e6c4fd355449fa3c53ef956db9ab9\\cargo-target"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 7.257701900030952,
+      "output_byte_limit_per_stream": 2097152,
+      "resource_error": null,
+      "stdout_sha256": "d38e6ea6d69ddb377e4a4380b22926f3864806998a850d5e28c8459dfc09f014",
+      "stderr_sha256": "e80ac9af4aa387786511344d7a14bfd417bb09a7308eb1a10e6fe449a48a1f7e"
+    },
+    {
+      "name": "rust-clippy",
+      "argv": [
+        "C:\\Users\\Admin\\.cargo\\bin\\cargo.exe",
+        "clippy",
+        "--locked",
+        "--offline",
+        "--target-dir",
+        "D:\\minecraftrust-astra-hardening\\target\\jni-lifecycle-prototype\\877e6c4fd355449fa3c53ef956db9ab9\\cargo-target",
+        "--",
+        "-D",
+        "warnings"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 4.6301329000270925,
+      "output_byte_limit_per_stream": 2097152,
+      "resource_error": null,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "b59841dd057e7ab25e108eaf5d286bd301ff26bef5cff35388b49a55cad5773f"
+    },
+    {
+      "name": "rust-release",
+      "argv": [
+        "C:\\Users\\Admin\\.cargo\\bin\\cargo.exe",
+        "build",
+        "--release",
+        "--locked",
+        "--offline",
+        "--target-dir",
+        "D:\\minecraftrust-astra-hardening\\target\\jni-lifecycle-prototype\\877e6c4fd355449fa3c53ef956db9ab9\\cargo-target"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 9.446385299961548,
+      "output_byte_limit_per_stream": 2097152,
+      "resource_error": null,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "1efe87059652767352891a6f107e248c249c476f6ae63af8135cf68876e7082c"
+    },
+    {
+      "name": "java-build",
+      "argv": [
+        "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\bin\\javac.exe",
+        "-encoding",
+        "UTF-8",
+        "-d",
+        "D:\\minecraftrust-astra-hardening\\target\\jni-lifecycle-prototype\\877e6c4fd355449fa3c53ef956db9ab9\\classes",
+        "D:\\minecraftrust-astra-hardening\\tools\\jni-lifecycle-prototype\\java\\BootstrapOnly.java",
+        "D:\\minecraftrust-astra-hardening\\tools\\jni-lifecycle-prototype\\java\\LifecycleProbe.java",
+        "D:\\minecraftrust-astra-hardening\\tools\\jni-lifecycle-prototype\\java\\LoaderPayload.java",
+        "D:\\minecraftrust-astra-hardening\\tools\\jni-lifecycle-prototype\\java\\PathOnly.java"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 0.35361900000134483,
+      "output_byte_limit_per_stream": 2097152,
+      "resource_error": null,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "valid-local-compile",
+      "argv": [
+        "C:\\Users\\Admin\\.cargo\\bin\\rustc.exe",
+        "--edition",
+        "2021",
+        "--crate-type",
+        "lib",
+        "--extern",
+        "jni=D:\\minecraftrust-astra-hardening\\target\\jni-lifecycle-prototype\\877e6c4fd355449fa3c53ef956db9ab9\\cargo-target\\release\\deps\\libjni-a9846df3e3edceb7.rlib",
+        "-L",
+        "dependency=D:\\minecraftrust-astra-hardening\\target\\jni-lifecycle-prototype\\877e6c4fd355449fa3c53ef956db9ab9\\cargo-target\\release\\deps",
+        "--out-dir",
+        "D:\\minecraftrust-astra-hardening\\target\\jni-lifecycle-prototype\\877e6c4fd355449fa3c53ef956db9ab9",
+        "--crate-name",
+        "valid_local",
+        "D:\\minecraftrust-astra-hardening\\tools\\jni-lifecycle-prototype\\compile-fail\\valid_local.rs"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 0.15299959998810664,
+      "output_byte_limit_per_stream": 2097152,
+      "resource_error": null,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "escape-local-compile",
+      "argv": [
+        "C:\\Users\\Admin\\.cargo\\bin\\rustc.exe",
+        "--edition",
+        "2021",
+        "--crate-type",
+        "lib",
+        "--extern",
+        "jni=D:\\minecraftrust-astra-hardening\\target\\jni-lifecycle-prototype\\877e6c4fd355449fa3c53ef956db9ab9\\cargo-target\\release\\deps\\libjni-a9846df3e3edceb7.rlib",
+        "-L",
+        "dependency=D:\\minecraftrust-astra-hardening\\target\\jni-lifecycle-prototype\\877e6c4fd355449fa3c53ef956db9ab9\\cargo-target\\release\\deps",
+        "--out-dir",
+        "D:\\minecraftrust-astra-hardening\\target\\jni-lifecycle-prototype\\877e6c4fd355449fa3c53ef956db9ab9",
+        "--crate-name",
+        "escape_local",
+        "D:\\minecraftrust-astra-hardening\\tools\\jni-lifecycle-prototype\\compile-fail\\escape_local.rs"
+      ],
+      "exit": 1,
+      "elapsed_seconds": 0.08908020000671968,
+      "output_byte_limit_per_stream": 2097152,
+      "resource_error": null,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "076882fe00e17a17d04b35e2fc29392b88a2203fe7e107e658dc9e34229c14ac"
+    },
+    {
+      "name": "bootstrap-0",
+      "argv": [
+        "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\bin\\java.exe",
+        "-Xcheck:jni",
+        "-Xmx64m",
+        "-cp",
+        "D:\\minecraftrust-astra-hardening\\target\\jni-lifecycle-prototype\\877e6c4fd355449fa3c53ef956db9ab9\\classes",
+        "BootstrapOnly"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 0.05928829999174923,
+      "output_byte_limit_per_stream": 2097152,
+      "resource_error": null,
+      "stdout_sha256": "e8546acb9792b427538f8be831ae72d90548c3f54aa55d2af098c50b5d363415",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "bootstrap-2",
+      "argv": [
+        "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\bin\\java.exe",
+        "-Xcheck:jni",
+        "-Xmx64m",
+        "-cp",
+        "D:\\minecraftrust-astra-hardening\\target\\jni-lifecycle-prototype\\877e6c4fd355449fa3c53ef956db9ab9\\classes",
+        "BootstrapOnly",
+        "baseline",
+        "baseline"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 0.05966610001632944,
+      "output_byte_limit_per_stream": 2097152,
+      "resource_error": null,
+      "stdout_sha256": "f25aa1969ccab467c95277abe4cacc66252bb45e591d9056825ac455360ace76",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "bootstrap-4",
+      "argv": [
+        "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\bin\\java.exe",
+        "-Xcheck:jni",
+        "-Xmx64m",
+        "-cp",
+        "D:\\minecraftrust-astra-hardening\\target\\jni-lifecycle-prototype\\877e6c4fd355449fa3c53ef956db9ab9\\classes",
+        "BootstrapOnly",
+        "baseline",
+        "baseline",
+        "baseline",
+        "baseline"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 0.05862389999674633,
+      "output_byte_limit_per_stream": 2097152,
+      "resource_error": null,
+      "stdout_sha256": "42e8e125fe0afbb0efd49a64945e3dd2e9cc82c53ba65adc5b140e173ca6cafc",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "bootstrap-5",
+      "argv": [
+        "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\bin\\java.exe",
+        "-Xcheck:jni",
+        "-Xmx64m",
+        "-cp",
+        "D:\\minecraftrust-astra-hardening\\target\\jni-lifecycle-prototype\\877e6c4fd355449fa3c53ef956db9ab9\\classes",
+        "BootstrapOnly",
+        "baseline",
+        "baseline",
+        "baseline",
+        "baseline",
+        "baseline"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 0.06123160000424832,
+      "output_byte_limit_per_stream": 2097152,
+      "resource_error": null,
+      "stdout_sha256": "0d2888c4bcb70f72ce990362733cdd7461e6f86615ffa6dfe822d23077d05b9d",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "nio-without-prototype",
+      "argv": [
+        "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\bin\\java.exe",
+        "-Xcheck:jni",
+        "-Xmx64m",
+        "-cp",
+        "D:\\minecraftrust-astra-hardening\\target\\jni-lifecycle-prototype\\877e6c4fd355449fa3c53ef956db9ab9\\classes",
+        "PathOnly",
+        "D:\\minecraftrust-astra-hardening\\target\\jni-lifecycle-prototype\\877e6c4fd355449fa3c53ef956db9ab9\\cargo-target\\release\\jni_lifecycle_prototype.dll",
+        "D:\\minecraftrust-astra-hardening\\target\\jni-lifecycle-prototype\\877e6c4fd355449fa3c53ef956db9ab9\\classes\\LoaderPayload.class"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 0.06614439998520538,
+      "output_byte_limit_per_stream": 2097152,
+      "resource_error": null,
+      "stdout_sha256": "c0bd7e9cf890e5d26fcfabb261f7924115f11aae053ff98427720cdd0c49176c",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "probe-load-only",
+      "argv": [
+        "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\bin\\java.exe",
+        "-Xcheck:jni",
+        "-Xmx64m",
+        "-cp",
+        "D:\\minecraftrust-astra-hardening\\target\\jni-lifecycle-prototype\\877e6c4fd355449fa3c53ef956db9ab9\\classes",
+        "LifecycleProbe",
+        "D:\\minecraftrust-astra-hardening\\target\\jni-lifecycle-prototype\\877e6c4fd355449fa3c53ef956db9ab9\\cargo-target\\release\\jni_lifecycle_prototype.dll",
+        "D:\\minecraftrust-astra-hardening\\target\\jni-lifecycle-prototype\\877e6c4fd355449fa3c53ef956db9ab9\\classes\\LoaderPayload.class",
+        "662756b0fe2842e0b9b08985abd3444d",
+        "e1e42a91c1b0be9d164a6bfc23c23fcba1184dae0fe79a186e05e6d2f041d9fa",
+        "load-only"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 0.060420599998906255,
+      "output_byte_limit_per_stream": 2097152,
+      "resource_error": null,
+      "stdout_sha256": "642afe1375705f265d77ed1f800ff51cd003c76611c4c2ff9d31ff33f48539f4",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "probe-ping",
+      "argv": [
+        "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\bin\\java.exe",
+        "-Xcheck:jni",
+        "-Xmx64m",
+        "-cp",
+        "D:\\minecraftrust-astra-hardening\\target\\jni-lifecycle-prototype\\877e6c4fd355449fa3c53ef956db9ab9\\classes",
+        "LifecycleProbe",
+        "D:\\minecraftrust-astra-hardening\\target\\jni-lifecycle-prototype\\877e6c4fd355449fa3c53ef956db9ab9\\cargo-target\\release\\jni_lifecycle_prototype.dll",
+        "D:\\minecraftrust-astra-hardening\\target\\jni-lifecycle-prototype\\877e6c4fd355449fa3c53ef956db9ab9\\classes\\LoaderPayload.class",
+        "9e3dd30dc29e407783f47a5c3c45bfae",
+        "7169c7a03c41b7b6d358c7887a09f00251713a9403ea32231daff458a88e21c1",
+        "ping"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 0.061535000044386834,
+      "output_byte_limit_per_stream": 2097152,
+      "resource_error": null,
+      "stdout_sha256": "e1f00061804210ef1c5c275b2d73d0d9af4a9544508fa5fe63ac0738ae9b89c1",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "probe-local",
+      "argv": [
+        "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\bin\\java.exe",
+        "-Xcheck:jni",
+        "-Xmx64m",
+        "-cp",
+        "D:\\minecraftrust-astra-hardening\\target\\jni-lifecycle-prototype\\877e6c4fd355449fa3c53ef956db9ab9\\classes",
+        "LifecycleProbe",
+        "D:\\minecraftrust-astra-hardening\\target\\jni-lifecycle-prototype\\877e6c4fd355449fa3c53ef956db9ab9\\cargo-target\\release\\jni_lifecycle_prototype.dll",
+        "D:\\minecraftrust-astra-hardening\\target\\jni-lifecycle-prototype\\877e6c4fd355449fa3c53ef956db9ab9\\classes\\LoaderPayload.class",
+        "fd2cef42efdc456ea1531bbee688cef4",
+        "9972793b038b7f2b914b36be4372cf355b19c4d9508ff0df09ad517c13f76cbb",
+        "local"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 0.07141640002373606,
+      "output_byte_limit_per_stream": 2097152,
+      "resource_error": null,
+      "stdout_sha256": "26fe17a851e3501102e2a424bfbb541a5a5785240606e3b38bb4c68dc30ab231",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "probe-callback",
+      "argv": [
+        "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\bin\\java.exe",
+        "-Xcheck:jni",
+        "-Xmx64m",
+        "-cp",
+        "D:\\minecraftrust-astra-hardening\\target\\jni-lifecycle-prototype\\877e6c4fd355449fa3c53ef956db9ab9\\classes",
+        "LifecycleProbe",
+        "D:\\minecraftrust-astra-hardening\\target\\jni-lifecycle-prototype\\877e6c4fd355449fa3c53ef956db9ab9\\cargo-target\\release\\jni_lifecycle_prototype.dll",
+        "D:\\minecraftrust-astra-hardening\\target\\jni-lifecycle-prototype\\877e6c4fd355449fa3c53ef956db9ab9\\classes\\LoaderPayload.class",
+        "6475be36bbb14a71937646122b06cc4a",
+        "4fc0f7d91f481b975889be09bb6187db7f8e8c36d98cf1d974108c8f51548367",
+        "callback"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 0.061355500016361475,
+      "output_byte_limit_per_stream": 2097152,
+      "resource_error": null,
+      "stdout_sha256": "a14a8115b52c41c9babd1e075cef176b2cb0bc4bf2596592f472b474de162b01",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "probe-direct",
+      "argv": [
+        "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\bin\\java.exe",
+        "-Xcheck:jni",
+        "-Xmx64m",
+        "-cp",
+        "D:\\minecraftrust-astra-hardening\\target\\jni-lifecycle-prototype\\877e6c4fd355449fa3c53ef956db9ab9\\classes",
+        "LifecycleProbe",
+        "D:\\minecraftrust-astra-hardening\\target\\jni-lifecycle-prototype\\877e6c4fd355449fa3c53ef956db9ab9\\cargo-target\\release\\jni_lifecycle_prototype.dll",
+        "D:\\minecraftrust-astra-hardening\\target\\jni-lifecycle-prototype\\877e6c4fd355449fa3c53ef956db9ab9\\classes\\LoaderPayload.class",
+        "2fbbfc76de99430a8f49a56f1a1f6815",
+        "c57dcfb41b6125c3de2fe3bfbb80290e6061a136a038711ecfcd7a73a27c0c8c",
+        "direct"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 0.06091199995717034,
+      "output_byte_limit_per_stream": 2097152,
+      "resource_error": null,
+      "stdout_sha256": "ce0b93886904c5afcdbc51db4b27706b6f99999d01656902a04f22afe5312799",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "probe-worker",
+      "argv": [
+        "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\bin\\java.exe",
+        "-Xcheck:jni",
+        "-Xmx64m",
+        "-cp",
+        "D:\\minecraftrust-astra-hardening\\target\\jni-lifecycle-prototype\\877e6c4fd355449fa3c53ef956db9ab9\\classes",
+        "LifecycleProbe",
+        "D:\\minecraftrust-astra-hardening\\target\\jni-lifecycle-prototype\\877e6c4fd355449fa3c53ef956db9ab9\\cargo-target\\release\\jni_lifecycle_prototype.dll",
+        "D:\\minecraftrust-astra-hardening\\target\\jni-lifecycle-prototype\\877e6c4fd355449fa3c53ef956db9ab9\\classes\\LoaderPayload.class",
+        "91aa24e10c1a471a8569170b76c19526",
+        "8c186e81276d04f4bb181ea2772bd5747f4c389a97943557aa5ab7c1b92be67e",
+        "worker"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 0.060502200038172305,
+      "output_byte_limit_per_stream": 2097152,
+      "resource_error": null,
+      "stdout_sha256": "7118cb266b68126d539d36ad56102635aab81fcb1f087ffe351530014624655e",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "probe-worker-fail",
+      "argv": [
+        "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\bin\\java.exe",
+        "-Xcheck:jni",
+        "-Xmx64m",
+        "-cp",
+        "D:\\minecraftrust-astra-hardening\\target\\jni-lifecycle-prototype\\877e6c4fd355449fa3c53ef956db9ab9\\classes",
+        "LifecycleProbe",
+        "D:\\minecraftrust-astra-hardening\\target\\jni-lifecycle-prototype\\877e6c4fd355449fa3c53ef956db9ab9\\cargo-target\\release\\jni_lifecycle_prototype.dll",
+        "D:\\minecraftrust-astra-hardening\\target\\jni-lifecycle-prototype\\877e6c4fd355449fa3c53ef956db9ab9\\classes\\LoaderPayload.class",
+        "06d6149061094e67ae253d0994d99bea",
+        "e6cd13acd6bc7ad804b30ab3e53cbed8258459095f7b0e2e7d5960bc9e502a86",
+        "worker-fail"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 0.06069709995063022,
+      "output_byte_limit_per_stream": 2097152,
+      "resource_error": null,
+      "stdout_sha256": "c2aa6c76d7cdcbe0c5ba4fff52cbf37f90ea31771fa74a876d385a3c746a36f8",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "probe-badsig",
+      "argv": [
+        "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\bin\\java.exe",
+        "-Xcheck:jni",
+        "-Xmx64m",
+        "-cp",
+        "D:\\minecraftrust-astra-hardening\\target\\jni-lifecycle-prototype\\877e6c4fd355449fa3c53ef956db9ab9\\classes",
+        "LifecycleProbe",
+        "D:\\minecraftrust-astra-hardening\\target\\jni-lifecycle-prototype\\877e6c4fd355449fa3c53ef956db9ab9\\cargo-target\\release\\jni_lifecycle_prototype.dll",
+        "D:\\minecraftrust-astra-hardening\\target\\jni-lifecycle-prototype\\877e6c4fd355449fa3c53ef956db9ab9\\classes\\LoaderPayload.class",
+        "6ee17827b3b347eabb0ba633018c4d83",
+        "ecee7a84c460b2589bb3c1e3534aaf31802e07ba4e088fbfaf50a8181af073b5",
+        "badsig"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 0.05990980000933632,
+      "output_byte_limit_per_stream": 2097152,
+      "resource_error": null,
+      "stdout_sha256": "5f093930e9bbe4e93231ee74f368624cd045f4ed2b18bb7de29d436ae30d1987",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "probe-null",
+      "argv": [
+        "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\bin\\java.exe",
+        "-Xcheck:jni",
+        "-Xmx64m",
+        "-cp",
+        "D:\\minecraftrust-astra-hardening\\target\\jni-lifecycle-prototype\\877e6c4fd355449fa3c53ef956db9ab9\\classes",
+        "LifecycleProbe",
+        "D:\\minecraftrust-astra-hardening\\target\\jni-lifecycle-prototype\\877e6c4fd355449fa3c53ef956db9ab9\\cargo-target\\release\\jni_lifecycle_prototype.dll",
+        "D:\\minecraftrust-astra-hardening\\target\\jni-lifecycle-prototype\\877e6c4fd355449fa3c53ef956db9ab9\\classes\\LoaderPayload.class",
+        "13e1836e052f4b0798e19d833561b05d",
+        "214a3cd4fee14490ab66d63480e469a7edc3cc553bee482264b5ea651f3535ea",
+        "null"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 0.06002400000579655,
+      "output_byte_limit_per_stream": 2097152,
+      "resource_error": null,
+      "stdout_sha256": "4b53e020455294dda23ff3cfbb43d4d10c5bd2fe3ba772ace3c44ec09671a74b",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "probe-panic",
+      "argv": [
+        "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\bin\\java.exe",
+        "-Xcheck:jni",
+        "-Xmx64m",
+        "-cp",
+        "D:\\minecraftrust-astra-hardening\\target\\jni-lifecycle-prototype\\877e6c4fd355449fa3c53ef956db9ab9\\classes",
+        "LifecycleProbe",
+        "D:\\minecraftrust-astra-hardening\\target\\jni-lifecycle-prototype\\877e6c4fd355449fa3c53ef956db9ab9\\cargo-target\\release\\jni_lifecycle_prototype.dll",
+        "D:\\minecraftrust-astra-hardening\\target\\jni-lifecycle-prototype\\877e6c4fd355449fa3c53ef956db9ab9\\classes\\LoaderPayload.class",
+        "60c6a4eae1494b1a8317f09ec36457f6",
+        "11c4742aec8cace75e8efd10693c68992a3db352b40a6e5e918982c33d327ed8",
+        "panic"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 0.06109010003274307,
+      "output_byte_limit_per_stream": 2097152,
+      "resource_error": null,
+      "stdout_sha256": "91df71f6184ef13c28c7d2af2445fe051f1bd1d25dedae3e6715734913ed6769",
+      "stderr_sha256": "30a2f4478235618ce4c88187a4377c1139907cd02ab59984de7b068a66d13009"
+    },
+    {
+      "name": "probe-class",
+      "argv": [
+        "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\bin\\java.exe",
+        "-Xcheck:jni",
+        "-Xmx64m",
+        "-cp",
+        "D:\\minecraftrust-astra-hardening\\target\\jni-lifecycle-prototype\\877e6c4fd355449fa3c53ef956db9ab9\\classes",
+        "LifecycleProbe",
+        "D:\\minecraftrust-astra-hardening\\target\\jni-lifecycle-prototype\\877e6c4fd355449fa3c53ef956db9ab9\\cargo-target\\release\\jni_lifecycle_prototype.dll",
+        "D:\\minecraftrust-astra-hardening\\target\\jni-lifecycle-prototype\\877e6c4fd355449fa3c53ef956db9ab9\\classes\\LoaderPayload.class",
+        "a90a9653242a475eb4b3d72a8444e387",
+        "ded8e9803cbc43bf1678b5de58c4b890293de9286875499f45dfd196a91996f8",
+        "class"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 0.059721300029195845,
+      "output_byte_limit_per_stream": 2097152,
+      "resource_error": null,
+      "stdout_sha256": "9594cded803803843ffbb911419d69c2513dee1ee8f49e9e21ee73c53e702ad5",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "probe-global",
+      "argv": [
+        "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\bin\\java.exe",
+        "-Xcheck:jni",
+        "-Xmx64m",
+        "-cp",
+        "D:\\minecraftrust-astra-hardening\\target\\jni-lifecycle-prototype\\877e6c4fd355449fa3c53ef956db9ab9\\classes",
+        "LifecycleProbe",
+        "D:\\minecraftrust-astra-hardening\\target\\jni-lifecycle-prototype\\877e6c4fd355449fa3c53ef956db9ab9\\cargo-target\\release\\jni_lifecycle_prototype.dll",
+        "D:\\minecraftrust-astra-hardening\\target\\jni-lifecycle-prototype\\877e6c4fd355449fa3c53ef956db9ab9\\classes\\LoaderPayload.class",
+        "b91d6e30f3f0420499d1806c7245a48c",
+        "d8fd7a6e251bb4cc48d63cf664b74d4d8688036169d11850afc09ec0e327d514",
+        "global"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 0.06024090002756566,
+      "output_byte_limit_per_stream": 2097152,
+      "resource_error": null,
+      "stdout_sha256": "d8c9beacc5a9d5c6d137f01bd81c46d4899adee26fe52baadea24c9cccc73783",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "probe-full",
+      "argv": [
+        "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\bin\\java.exe",
+        "-Xcheck:jni",
+        "-Xmx64m",
+        "-cp",
+        "D:\\minecraftrust-astra-hardening\\target\\jni-lifecycle-prototype\\877e6c4fd355449fa3c53ef956db9ab9\\classes",
+        "LifecycleProbe",
+        "D:\\minecraftrust-astra-hardening\\target\\jni-lifecycle-prototype\\877e6c4fd355449fa3c53ef956db9ab9\\cargo-target\\release\\jni_lifecycle_prototype.dll",
+        "D:\\minecraftrust-astra-hardening\\target\\jni-lifecycle-prototype\\877e6c4fd355449fa3c53ef956db9ab9\\classes\\LoaderPayload.class",
+        "e9d3bb2ef5b54468aef2ddfa35485abb",
+        "4185623f6deba8af655e0c3f455d3961d6d199f845b286289b03e386cc956dbc"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 0.15828590001910925,
+      "output_byte_limit_per_stream": 2097152,
+      "resource_error": null,
+      "stdout_sha256": "0c9ca2b038fc372bf6697debbce94d45b24144bb6fa5d9a794a44f1bc617a7d0",
+      "stderr_sha256": "9a1a6d68cc5f4e5637503c47e0165b365180e56fb6262a281e14e8ef3b080dbc"
+    }
+  ],
+  "bootstrap_baselines": {
+    "0": {
+      "diagnostics": [
+        {
+          "line": 1,
+          "text": "WARNING: JNI local refs: 40, exceeds capacity: 39"
+        },
+        {
+          "line": 2,
+          "text": "\tat java.lang.System.initProperties(Native Method)"
+        },
+        {
+          "line": 3,
+          "text": "\tat java.lang.System.initializeSystemClass(System.java:1180)"
+        }
+      ]
+    },
+    "2": {
+      "diagnostics": [
+        {
+          "line": 1,
+          "text": "WARNING: JNI local refs: 40, exceeds capacity: 39"
+        },
+        {
+          "line": 2,
+          "text": "\tat java.lang.System.initProperties(Native Method)"
+        },
+        {
+          "line": 3,
+          "text": "\tat java.lang.System.initializeSystemClass(System.java:1180)"
+        },
+        {
+          "line": 4,
+          "text": "WARNING in native method: JNI call made without checking exceptions when required to from CallStaticObjectMethod"
+        },
+        {
+          "line": 5,
+          "text": "WARNING in native method: JNI call made without checking exceptions when required to from CallStaticObjectMethod"
+        }
+      ]
+    },
+    "4": {
+      "diagnostics": [
+        {
+          "line": 1,
+          "text": "WARNING: JNI local refs: 40, exceeds capacity: 39"
+        },
+        {
+          "line": 2,
+          "text": "\tat java.lang.System.initProperties(Native Method)"
+        },
+        {
+          "line": 3,
+          "text": "\tat java.lang.System.initializeSystemClass(System.java:1180)"
+        },
+        {
+          "line": 4,
+          "text": "WARNING in native method: JNI call made without checking exceptions when required to from CallStaticObjectMethod"
+        },
+        {
+          "line": 5,
+          "text": "WARNING in native method: JNI call made without checking exceptions when required to from CallStaticObjectMethod"
+        },
+        {
+          "line": 6,
+          "text": "WARNING in native method: JNI call made without checking exceptions when required to from CallStaticObjectMethod"
+        },
+        {
+          "line": 7,
+          "text": "WARNING in native method: JNI call made without checking exceptions when required to from CallStaticObjectMethod"
+        }
+      ]
+    },
+    "5": {
+      "diagnostics": [
+        {
+          "line": 1,
+          "text": "WARNING: JNI local refs: 40, exceeds capacity: 39"
+        },
+        {
+          "line": 2,
+          "text": "\tat java.lang.System.initProperties(Native Method)"
+        },
+        {
+          "line": 3,
+          "text": "\tat java.lang.System.initializeSystemClass(System.java:1180)"
+        },
+        {
+          "line": 4,
+          "text": "WARNING in native method: JNI call made without checking exceptions when required to from CallStaticObjectMethod"
+        },
+        {
+          "line": 5,
+          "text": "WARNING in native method: JNI call made without checking exceptions when required to from CallStaticObjectMethod"
+        },
+        {
+          "line": 6,
+          "text": "WARNING in native method: JNI call made without checking exceptions when required to from CallStaticObjectMethod"
+        },
+        {
+          "line": 7,
+          "text": "WARNING in native method: JNI call made without checking exceptions when required to from CallStaticObjectMethod"
+        },
+        {
+          "line": 8,
+          "text": "WARNING in native method: JNI call made without checking exceptions when required to from CallStaticObjectMethod"
+        }
+      ]
+    }
+  },
+  "nio_control": {
+    "records": [
+      {
+        "event": "BEFORE_PATHS"
+      },
+      {
+        "schema": "JVM_NIO_CONTROL_V1",
+        "native_library_loaded": false,
+        "input_bytes": 255,
+        "absolute_path": true
+      }
+    ],
+    "diagnostics": [
+      {
+        "line": 1,
+        "text": "WARNING: JNI local refs: 40, exceeds capacity: 39"
+      },
+      {
+        "line": 2,
+        "text": "\tat java.lang.System.initProperties(Native Method)"
+      },
+      {
+        "line": 3,
+        "text": "\tat java.lang.System.initializeSystemClass(System.java:1180)"
+      },
+      {
+        "line": 4,
+        "text": "WARNING in native method: JNI call made without checking exceptions when required to from CallStaticObjectMethod"
+      },
+      {
+        "line": 5,
+        "text": "WARNING in native method: JNI call made without checking exceptions when required to from CallStaticObjectMethod"
+      }
+    ]
+  },
+  "java_probes": [
+    {
+      "mode": "load-only",
+      "result": {
+        "schema": "JNI_ISOLATED_PROBE_V1",
+        "session": "662756b0fe2842e0b9b08985abd3444d",
+        "challenge": "e1e42a91c1b0be9d164a6bfc23c23fcba1184dae0fe79a186e05e6d2f041d9fa",
+        "mode": "load-only",
+        "status": "PASS"
+      },
+      "jni_diagnostics": [
+        {
+          "line": 1,
+          "text": "WARNING: JNI local refs: 40, exceeds capacity: 39"
+        },
+        {
+          "line": 2,
+          "text": "\tat java.lang.System.initProperties(Native Method)"
+        },
+        {
+          "line": 3,
+          "text": "\tat java.lang.System.initializeSystemClass(System.java:1180)"
+        },
+        {
+          "line": 4,
+          "text": "WARNING in native method: JNI call made without checking exceptions when required to from CallStaticObjectMethod"
+        },
+        {
+          "line": 5,
+          "text": "WARNING in native method: JNI call made without checking exceptions when required to from CallStaticObjectMethod"
+        },
+        {
+          "line": 6,
+          "text": "WARNING in native method: JNI call made without checking exceptions when required to from CallStaticObjectMethod"
+        },
+        {
+          "line": 7,
+          "text": "WARNING in native method: JNI call made without checking exceptions when required to from CallStaticObjectMethod"
+        },
+        {
+          "line": 8,
+          "text": "WARNING in native method: JNI call made without checking exceptions when required to from CallStaticObjectMethod"
+        }
+      ],
+      "incremental_warnings": [],
+      "native_stderr_kind": "EMPTY"
+    },
+    {
+      "mode": "ping",
+      "result": {
+        "schema": "JNI_ISOLATED_PROBE_V1",
+        "session": "9e3dd30dc29e407783f47a5c3c45bfae",
+        "challenge": "7169c7a03c41b7b6d358c7887a09f00251713a9403ea32231daff458a88e21c1",
+        "mode": "ping",
+        "status": "PASS"
+      },
+      "jni_diagnostics": [
+        {
+          "line": 1,
+          "text": "WARNING: JNI local refs: 40, exceeds capacity: 39"
+        },
+        {
+          "line": 2,
+          "text": "\tat java.lang.System.initProperties(Native Method)"
+        },
+        {
+          "line": 3,
+          "text": "\tat java.lang.System.initializeSystemClass(System.java:1180)"
+        },
+        {
+          "line": 4,
+          "text": "WARNING in native method: JNI call made without checking exceptions when required to from CallStaticObjectMethod"
+        },
+        {
+          "line": 5,
+          "text": "WARNING in native method: JNI call made without checking exceptions when required to from CallStaticObjectMethod"
+        },
+        {
+          "line": 6,
+          "text": "WARNING in native method: JNI call made without checking exceptions when required to from CallStaticObjectMethod"
+        },
+        {
+          "line": 7,
+          "text": "WARNING in native method: JNI call made without checking exceptions when required to from CallStaticObjectMethod"
+        },
+        {
+          "line": 8,
+          "text": "WARNING in native method: JNI call made without checking exceptions when required to from CallStaticObjectMethod"
+        }
+      ],
+      "incremental_warnings": [],
+      "native_stderr_kind": "EMPTY"
+    },
+    {
+      "mode": "local",
+      "result": {
+        "schema": "JNI_ISOLATED_PROBE_V1",
+        "session": "fd2cef42efdc456ea1531bbee688cef4",
+        "challenge": "9972793b038b7f2b914b36be4372cf355b19c4d9508ff0df09ad517c13f76cbb",
+        "mode": "local",
+        "status": "PASS"
+      },
+      "jni_diagnostics": [
+        {
+          "line": 1,
+          "text": "WARNING: JNI local refs: 40, exceeds capacity: 39"
+        },
+        {
+          "line": 2,
+          "text": "\tat java.lang.System.initProperties(Native Method)"
+        },
+        {
+          "line": 3,
+          "text": "\tat java.lang.System.initializeSystemClass(System.java:1180)"
+        },
+        {
+          "line": 4,
+          "text": "WARNING in native method: JNI call made without checking exceptions when required to from CallStaticObjectMethod"
+        },
+        {
+          "line": 5,
+          "text": "WARNING in native method: JNI call made without checking exceptions when required to from CallStaticObjectMethod"
+        },
+        {
+          "line": 6,
+          "text": "WARNING in native method: JNI call made without checking exceptions when required to from CallStaticObjectMethod"
+        },
+        {
+          "line": 7,
+          "text": "WARNING in native method: JNI call made without checking exceptions when required to from CallStaticObjectMethod"
+        },
+        {
+          "line": 8,
+          "text": "WARNING in native method: JNI call made without checking exceptions when required to from CallStaticObjectMethod"
+        }
+      ],
+      "incremental_warnings": [],
+      "native_stderr_kind": "EMPTY"
+    },
+    {
+      "mode": "callback",
+      "result": {
+        "schema": "JNI_ISOLATED_PROBE_V1",
+        "session": "6475be36bbb14a71937646122b06cc4a",
+        "challenge": "4fc0f7d91f481b975889be09bb6187db7f8e8c36d98cf1d974108c8f51548367",
+        "mode": "callback",
+        "status": "PASS"
+      },
+      "jni_diagnostics": [
+        {
+          "line": 1,
+          "text": "WARNING: JNI local refs: 40, exceeds capacity: 39"
+        },
+        {
+          "line": 2,
+          "text": "\tat java.lang.System.initProperties(Native Method)"
+        },
+        {
+          "line": 3,
+          "text": "\tat java.lang.System.initializeSystemClass(System.java:1180)"
+        },
+        {
+          "line": 4,
+          "text": "WARNING in native method: JNI call made without checking exceptions when required to from CallStaticObjectMethod"
+        },
+        {
+          "line": 5,
+          "text": "WARNING in native method: JNI call made without checking exceptions when required to from CallStaticObjectMethod"
+        },
+        {
+          "line": 6,
+          "text": "WARNING in native method: JNI call made without checking exceptions when required to from CallStaticObjectMethod"
+        },
+        {
+          "line": 7,
+          "text": "WARNING in native method: JNI call made without checking exceptions when required to from CallStaticObjectMethod"
+        },
+        {
+          "line": 8,
+          "text": "WARNING in native method: JNI call made without checking exceptions when required to from CallStaticObjectMethod"
+        }
+      ],
+      "incremental_warnings": [],
+      "native_stderr_kind": "EMPTY"
+    },
+    {
+      "mode": "direct",
+      "result": {
+        "schema": "JNI_ISOLATED_PROBE_V1",
+        "session": "2fbbfc76de99430a8f49a56f1a1f6815",
+        "challenge": "c57dcfb41b6125c3de2fe3bfbb80290e6061a136a038711ecfcd7a73a27c0c8c",
+        "mode": "direct",
+        "status": "PASS"
+      },
+      "jni_diagnostics": [
+        {
+          "line": 1,
+          "text": "WARNING: JNI local refs: 40, exceeds capacity: 39"
+        },
+        {
+          "line": 2,
+          "text": "\tat java.lang.System.initProperties(Native Method)"
+        },
+        {
+          "line": 3,
+          "text": "\tat java.lang.System.initializeSystemClass(System.java:1180)"
+        },
+        {
+          "line": 4,
+          "text": "WARNING in native method: JNI call made without checking exceptions when required to from CallStaticObjectMethod"
+        },
+        {
+          "line": 5,
+          "text": "WARNING in native method: JNI call made without checking exceptions when required to from CallStaticObjectMethod"
+        },
+        {
+          "line": 6,
+          "text": "WARNING in native method: JNI call made without checking exceptions when required to from CallStaticObjectMethod"
+        },
+        {
+          "line": 7,
+          "text": "WARNING in native method: JNI call made without checking exceptions when required to from CallStaticObjectMethod"
+        },
+        {
+          "line": 8,
+          "text": "WARNING in native method: JNI call made without checking exceptions when required to from CallStaticObjectMethod"
+        }
+      ],
+      "incremental_warnings": [],
+      "native_stderr_kind": "EMPTY"
+    },
+    {
+      "mode": "worker",
+      "result": {
+        "schema": "JNI_ISOLATED_PROBE_V1",
+        "session": "91aa24e10c1a471a8569170b76c19526",
+        "challenge": "8c186e81276d04f4bb181ea2772bd5747f4c389a97943557aa5ab7c1b92be67e",
+        "mode": "worker",
+        "status": "PASS"
+      },
+      "jni_diagnostics": [
+        {
+          "line": 1,
+          "text": "WARNING: JNI local refs: 40, exceeds capacity: 39"
+        },
+        {
+          "line": 2,
+          "text": "\tat java.lang.System.initProperties(Native Method)"
+        },
+        {
+          "line": 3,
+          "text": "\tat java.lang.System.initializeSystemClass(System.java:1180)"
+        },
+        {
+          "line": 4,
+          "text": "WARNING in native method: JNI call made without checking exceptions when required to from CallStaticObjectMethod"
+        },
+        {
+          "line": 5,
+          "text": "WARNING in native method: JNI call made without checking exceptions when required to from CallStaticObjectMethod"
+        },
+        {
+          "line": 6,
+          "text": "WARNING in native method: JNI call made without checking exceptions when required to from CallStaticObjectMethod"
+        },
+        {
+          "line": 7,
+          "text": "WARNING in native method: JNI call made without checking exceptions when required to from CallStaticObjectMethod"
+        },
+        {
+          "line": 8,
+          "text": "WARNING in native method: JNI call made without checking exceptions when required to from CallStaticObjectMethod"
+        }
+      ],
+      "incremental_warnings": [],
+      "native_stderr_kind": "EMPTY"
+    },
+    {
+      "mode": "worker-fail",
+      "result": {
+        "schema": "JNI_ISOLATED_PROBE_V1",
+        "session": "06d6149061094e67ae253d0994d99bea",
+        "challenge": "e6cd13acd6bc7ad804b30ab3e53cbed8258459095f7b0e2e7d5960bc9e502a86",
+        "mode": "worker-fail",
+        "status": "PASS"
+      },
+      "jni_diagnostics": [
+        {
+          "line": 1,
+          "text": "WARNING: JNI local refs: 40, exceeds capacity: 39"
+        },
+        {
+          "line": 2,
+          "text": "\tat java.lang.System.initProperties(Native Method)"
+        },
+        {
+          "line": 3,
+          "text": "\tat java.lang.System.initializeSystemClass(System.java:1180)"
+        },
+        {
+          "line": 4,
+          "text": "WARNING in native method: JNI call made without checking exceptions when required to from CallStaticObjectMethod"
+        },
+        {
+          "line": 5,
+          "text": "WARNING in native method: JNI call made without checking exceptions when required to from CallStaticObjectMethod"
+        },
+        {
+          "line": 6,
+          "text": "WARNING in native method: JNI call made without checking exceptions when required to from CallStaticObjectMethod"
+        },
+        {
+          "line": 7,
+          "text": "WARNING in native method: JNI call made without checking exceptions when required to from CallStaticObjectMethod"
+        },
+        {
+          "line": 8,
+          "text": "WARNING in native method: JNI call made without checking exceptions when required to from CallStaticObjectMethod"
+        }
+      ],
+      "incremental_warnings": [],
+      "native_stderr_kind": "EMPTY"
+    },
+    {
+      "mode": "badsig",
+      "result": {
+        "schema": "JNI_ISOLATED_PROBE_V1",
+        "session": "6ee17827b3b347eabb0ba633018c4d83",
+        "challenge": "ecee7a84c460b2589bb3c1e3534aaf31802e07ba4e088fbfaf50a8181af073b5",
+        "mode": "badsig",
+        "status": "PASS"
+      },
+      "jni_diagnostics": [
+        {
+          "line": 1,
+          "text": "WARNING: JNI local refs: 40, exceeds capacity: 39"
+        },
+        {
+          "line": 2,
+          "text": "\tat java.lang.System.initProperties(Native Method)"
+        },
+        {
+          "line": 3,
+          "text": "\tat java.lang.System.initializeSystemClass(System.java:1180)"
+        },
+        {
+          "line": 4,
+          "text": "WARNING in native method: JNI call made without checking exceptions when required to from CallStaticObjectMethod"
+        },
+        {
+          "line": 5,
+          "text": "WARNING in native method: JNI call made without checking exceptions when required to from CallStaticObjectMethod"
+        },
+        {
+          "line": 6,
+          "text": "WARNING in native method: JNI call made without checking exceptions when required to from CallStaticObjectMethod"
+        },
+        {
+          "line": 7,
+          "text": "WARNING in native method: JNI call made without checking exceptions when required to from CallStaticObjectMethod"
+        },
+        {
+          "line": 8,
+          "text": "WARNING in native method: JNI call made without checking exceptions when required to from CallStaticObjectMethod"
+        }
+      ],
+      "incremental_warnings": [],
+      "native_stderr_kind": "EMPTY"
+    },
+    {
+      "mode": "null",
+      "result": {
+        "schema": "JNI_ISOLATED_PROBE_V1",
+        "session": "13e1836e052f4b0798e19d833561b05d",
+        "challenge": "214a3cd4fee14490ab66d63480e469a7edc3cc553bee482264b5ea651f3535ea",
+        "mode": "null",
+        "status": "PASS"
+      },
+      "jni_diagnostics": [
+        {
+          "line": 1,
+          "text": "WARNING: JNI local refs: 40, exceeds capacity: 39"
+        },
+        {
+          "line": 2,
+          "text": "\tat java.lang.System.initProperties(Native Method)"
+        },
+        {
+          "line": 3,
+          "text": "\tat java.lang.System.initializeSystemClass(System.java:1180)"
+        },
+        {
+          "line": 4,
+          "text": "WARNING in native method: JNI call made without checking exceptions when required to from CallStaticObjectMethod"
+        },
+        {
+          "line": 5,
+          "text": "WARNING in native method: JNI call made without checking exceptions when required to from CallStaticObjectMethod"
+        },
+        {
+          "line": 6,
+          "text": "WARNING in native method: JNI call made without checking exceptions when required to from CallStaticObjectMethod"
+        },
+        {
+          "line": 7,
+          "text": "WARNING in native method: JNI call made without checking exceptions when required to from CallStaticObjectMethod"
+        },
+        {
+          "line": 8,
+          "text": "WARNING in native method: JNI call made without checking exceptions when required to from CallStaticObjectMethod"
+        }
+      ],
+      "incremental_warnings": [],
+      "native_stderr_kind": "EMPTY"
+    },
+    {
+      "mode": "panic",
+      "result": {
+        "schema": "JNI_ISOLATED_PROBE_V1",
+        "session": "60c6a4eae1494b1a8317f09ec36457f6",
+        "challenge": "11c4742aec8cace75e8efd10693c68992a3db352b40a6e5e918982c33d327ed8",
+        "mode": "panic",
+        "status": "PASS"
+      },
+      "jni_diagnostics": [
+        {
+          "line": 1,
+          "text": "WARNING: JNI local refs: 40, exceeds capacity: 39"
+        },
+        {
+          "line": 2,
+          "text": "\tat java.lang.System.initProperties(Native Method)"
+        },
+        {
+          "line": 3,
+          "text": "\tat java.lang.System.initializeSystemClass(System.java:1180)"
+        },
+        {
+          "line": 4,
+          "text": "WARNING in native method: JNI call made without checking exceptions when required to from CallStaticObjectMethod"
+        },
+        {
+          "line": 5,
+          "text": "WARNING in native method: JNI call made without checking exceptions when required to from CallStaticObjectMethod"
+        },
+        {
+          "line": 6,
+          "text": "WARNING in native method: JNI call made without checking exceptions when required to from CallStaticObjectMethod"
+        },
+        {
+          "line": 7,
+          "text": "WARNING in native method: JNI call made without checking exceptions when required to from CallStaticObjectMethod"
+        },
+        {
+          "line": 8,
+          "text": "WARNING in native method: JNI call made without checking exceptions when required to from CallStaticObjectMethod"
+        }
+      ],
+      "incremental_warnings": [],
+      "native_stderr_kind": "EXPECTED_CAUGHT_PANIC"
+    },
+    {
+      "mode": "class",
+      "result": {
+        "schema": "JNI_ISOLATED_PROBE_V1",
+        "session": "a90a9653242a475eb4b3d72a8444e387",
+        "challenge": "ded8e9803cbc43bf1678b5de58c4b890293de9286875499f45dfd196a91996f8",
+        "mode": "class",
+        "status": "PASS"
+      },
+      "jni_diagnostics": [
+        {
+          "line": 1,
+          "text": "WARNING: JNI local refs: 40, exceeds capacity: 39"
+        },
+        {
+          "line": 2,
+          "text": "\tat java.lang.System.initProperties(Native Method)"
+        },
+        {
+          "line": 3,
+          "text": "\tat java.lang.System.initializeSystemClass(System.java:1180)"
+        },
+        {
+          "line": 4,
+          "text": "WARNING in native method: JNI call made without checking exceptions when required to from CallStaticObjectMethod"
+        },
+        {
+          "line": 5,
+          "text": "WARNING in native method: JNI call made without checking exceptions when required to from CallStaticObjectMethod"
+        },
+        {
+          "line": 6,
+          "text": "WARNING in native method: JNI call made without checking exceptions when required to from CallStaticObjectMethod"
+        },
+        {
+          "line": 7,
+          "text": "WARNING in native method: JNI call made without checking exceptions when required to from CallStaticObjectMethod"
+        },
+        {
+          "line": 8,
+          "text": "WARNING in native method: JNI call made without checking exceptions when required to from CallStaticObjectMethod"
+        }
+      ],
+      "incremental_warnings": [],
+      "native_stderr_kind": "EMPTY"
+    },
+    {
+      "mode": "global",
+      "result": {
+        "schema": "JNI_ISOLATED_PROBE_V1",
+        "session": "b91d6e30f3f0420499d1806c7245a48c",
+        "challenge": "d8fd7a6e251bb4cc48d63cf664b74d4d8688036169d11850afc09ec0e327d514",
+        "mode": "global",
+        "status": "PASS"
+      },
+      "jni_diagnostics": [
+        {
+          "line": 1,
+          "text": "WARNING: JNI local refs: 40, exceeds capacity: 39"
+        },
+        {
+          "line": 2,
+          "text": "\tat java.lang.System.initProperties(Native Method)"
+        },
+        {
+          "line": 3,
+          "text": "\tat java.lang.System.initializeSystemClass(System.java:1180)"
+        },
+        {
+          "line": 4,
+          "text": "WARNING in native method: JNI call made without checking exceptions when required to from CallStaticObjectMethod"
+        },
+        {
+          "line": 5,
+          "text": "WARNING in native method: JNI call made without checking exceptions when required to from CallStaticObjectMethod"
+        },
+        {
+          "line": 6,
+          "text": "WARNING in native method: JNI call made without checking exceptions when required to from CallStaticObjectMethod"
+        },
+        {
+          "line": 7,
+          "text": "WARNING in native method: JNI call made without checking exceptions when required to from CallStaticObjectMethod"
+        },
+        {
+          "line": 8,
+          "text": "WARNING in native method: JNI call made without checking exceptions when required to from CallStaticObjectMethod"
+        }
+      ],
+      "incremental_warnings": [],
+      "native_stderr_kind": "EMPTY"
+    },
+    {
+      "mode": "full",
+      "result": {
+        "schema": "JNI_LIFECYCLE_PROBE_V1",
+        "session": "e9d3bb2ef5b54468aef2ddfa35485abb",
+        "challenge": "4185623f6deba8af655e0c3f455d3961d6d199f845b286289b03e386cc956dbc",
+        "status": "PASS",
+        "production_authority": false,
+        "checks": [
+          "ping",
+          "local-frame-zero",
+          "local-frame-80000-refs-identity",
+          "local-frame-negative-bound",
+          "local-frame-upper-bound",
+          "callback-success",
+          "direct-exception-observed",
+          "direct-exact-throwable-identity",
+          "direct-exception-retry",
+          "worker-success-0",
+          "worker-success-1",
+          "worker-success-2",
+          "worker-success-3",
+          "worker-success-4",
+          "worker-success-5",
+          "worker-success-6",
+          "worker-success-7",
+          "worker-success-8",
+          "worker-success-9",
+          "worker-success-10",
+          "worker-success-11",
+          "worker-success-12",
+          "worker-success-13",
+          "worker-success-14",
+          "worker-success-15",
+          "worker-success-16",
+          "worker-success-17",
+          "worker-success-18",
+          "worker-success-19",
+          "worker-success-20",
+          "worker-success-21",
+          "worker-success-22",
+          "worker-success-23",
+          "worker-success-24",
+          "worker-success-25",
+          "worker-success-26",
+          "worker-success-27",
+          "worker-success-28",
+          "worker-success-29",
+          "worker-success-30",
+          "worker-success-31",
+          "worker-exception-observed",
+          "worker-exact-throwable-identity",
+          "worker-exception-retry",
+          "bad-signature-rejected",
+          "bad-signature-is-method-error",
+          "bad-signature-retry",
+          "null-callback-rejected",
+          "null-callback-not-control-sentinel",
+          "null-retry",
+          "panic-contained",
+          "panic-runtime-exception",
+          "panic-retry",
+          "class-exact",
+          "class-wrong-supertype",
+          "same-name-distinct-loader-setup",
+          "same-name-own-class",
+          "same-name-other-loader-rejected",
+          "release-empty",
+          "retain-first",
+          "global-reference-prevents-collection",
+          "global-reference-bounded-single-slot",
+          "release-held",
+          "release-idempotent",
+          "retain-release-retry",
+          "final-ping"
+        ],
+        "gc_after_release": "COLLECTED",
+        "gc_proves_leak_freedom": false
+      },
+      "jni_diagnostics": [
+        {
+          "line": 1,
+          "text": "WARNING: JNI local refs: 40, exceeds capacity: 39"
+        },
+        {
+          "line": 2,
+          "text": "\tat java.lang.System.initProperties(Native Method)"
+        },
+        {
+          "line": 3,
+          "text": "\tat java.lang.System.initializeSystemClass(System.java:1180)"
+        },
+        {
+          "line": 4,
+          "text": "WARNING in native method: JNI call made without checking exceptions when required to from CallStaticObjectMethod"
+        },
+        {
+          "line": 5,
+          "text": "WARNING in native method: JNI call made without checking exceptions when required to from CallStaticObjectMethod"
+        },
+        {
+          "line": 6,
+          "text": "WARNING in native method: JNI call made without checking exceptions when required to from CallStaticObjectMethod"
+        },
+        {
+          "line": 7,
+          "text": "WARNING in native method: JNI call made without checking exceptions when required to from CallStaticObjectMethod"
+        }
+      ],
+      "incremental_warnings": [],
+      "native_stderr_kind": "EXPECTED_CAUGHT_PANIC"
+    }
+  ],
+  "full_fixture_assertions": 66,
+  "compile_fail_lifetime_control": "EXPECTED_REJECTION_WITH_VALID_SCALAR_CONTROL",
+  "all_inputs_unchanged": true,
+  "elapsed_seconds": 25.102697600028478,
+  "limitations": [
+    "Not an absolute clean -Xcheck:jni run: selected JVM startup warnings retained",
+    "GC collection observation does not prove leak freedom",
+    "No JNI performance baseline or speed claim",
+    "No production bridge replacement or runtime qualification"
+  ]
+}

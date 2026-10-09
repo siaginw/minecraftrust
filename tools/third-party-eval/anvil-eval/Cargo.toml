@@ -1,0 +1,14 @@
+[package]
+name = "anvil-eval"
+version = "0.1.0"
+edition = "2021"
+
+[workspace]
+
+[dependencies]
+fastanvil = { path = "D:/minecraftrust/third_party_reference/eval/fastnbt/fastanvil" }
+fastnbt = { path = "D:/minecraftrust/third_party_reference/eval/fastnbt/fastnbt" }
+flate2 = "1.0"
+
+[profile.release]
+debug = false

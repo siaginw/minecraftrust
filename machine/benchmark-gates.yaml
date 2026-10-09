@@ -1,0 +1,9 @@
+version: 1
+defaults:
+  correctness:
+    parity_required: true
+  performance:
+    p95_mspt_regression_max_percent: 2.0
+    max_unexplained_ffi_growth_percent: 5.0
+notes:
+  - Bootstrap defaults only; subsystem gates must become evidence-based.

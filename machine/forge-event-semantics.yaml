@@ -1,0 +1,51 @@
+version: 1
+subsystem: forge_event_bus
+
+priority_tiers:
+  HIGHEST:
+    ordinal: 0
+    execution_order: 1
+    description: "First to execute; early interception and state modification"
+  HIGH:
+    ordinal: 1
+    execution_order: 2
+    description: "High priority mod logic"
+  NORMAL:
+    ordinal: 2
+    execution_order: 3
+    description: "Default priority for unannotated or standard subscribers"
+  LOW:
+    ordinal: 3
+    execution_order: 4
+    description: "Late stage overrides"
+  LOWEST:
+    ordinal: 4
+    execution_order: 5
+    description: "Final execution; telemetry, logging, veto reconciliation"
+
+tie_breaking_rule: "FIFO deterministic registration order within same priority tier"
+
+cancellation:
+  annotation: "net.minecraftforge.fml.common.eventhandler.Cancelable"
+  method_check: "isCancelable() == true"
+  default_action_on_canceled: "Listeners without receiveCanceled skipped; listeners with receiveCanceled=true continue"
+  override_flag: "receiveCanceled = true on @SubscribeEvent"
+  measured_bailout_overhead_ns: 965.09
+
+results:
+  annotation: "net.minecraftforge.fml.common.eventhandler.Event.HasResult"
+  allowed_values:
+    - DENY
+    - DEFAULT
+    - ALLOW
+  semantics: "Mutable state across listeners; subsequent listeners can overwrite result"
+
+hierarchy_wiring:
+  subclass_first: true
+  description: "When posting a subclass event, subclass listeners execute before superclass listeners"
+
+threading_contract:
+  dispatch_thread: "Must match event context (Main Server Thread for 95%+ of game events)"
+  multithread_safe_dispatch: true
+  multithread_safe_registration: false
+  lock_type: "Monitor lock on ListenerList during rebuild; lock-free volatile read on post"

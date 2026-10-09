@@ -1,0 +1,1084 @@
+{
+  "schema_version": 1,
+  "kind": "H7_BOUNDED_LOOM_LIFECYCLE_MODELS",
+  "status": "PASS_BOUNDED_MODELS_ONLY",
+  "production_authority": false,
+  "runtime_source_loom_instrumented": false,
+  "started_utc": "2026-09-27T01:15:37.776085+00:00",
+  "results": [
+    {
+      "name": "resolve-toolchain",
+      "argv": [
+        "C:\\Users\\Admin\\.cargo\\bin\\rustup.exe",
+        "which",
+        "rustc"
+      ],
+      "exit_code": 0,
+      "seconds": 0.03544459998374805,
+      "timed_out": false,
+      "log": "target/architecture-hardening/h7-loom-9e66277719c1/resolve-toolchain.log",
+      "log_sha256": "54234bc009f7bc295608f8bb882e03677001147f42f05ce19606c17d2db6473b",
+      "status": "PASS"
+    },
+    {
+      "name": "rustc-version",
+      "argv": [
+        "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\rustc.exe",
+        "-Vv"
+      ],
+      "exit_code": 0,
+      "seconds": 0.025947700021788478,
+      "timed_out": false,
+      "log": "target/architecture-hardening/h7-loom-9e66277719c1/rustc-version.log",
+      "log_sha256": "c45e612575abeef05e99e88eb1e7aea52cddab9ad70d4f65ad20eaa65e92a9cf",
+      "status": "PASS"
+    },
+    {
+      "name": "dependency-metadata",
+      "argv": [
+        "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\cargo.exe",
+        "metadata",
+        "--locked",
+        "--offline",
+        "--manifest-path",
+        "D:\\minecraftrust-astra-hardening\\tools\\loom-lifecycle-models\\Cargo.toml",
+        "--format-version",
+        "1"
+      ],
+      "exit_code": 0,
+      "seconds": 0.10024260001955554,
+      "timed_out": false,
+      "log": "target/architecture-hardening/h7-loom-9e66277719c1/dependency-metadata.log",
+      "log_sha256": "a84f24b044f8c82dfd726d819dddb3276d87aec77919e212d7b8030219663eb7",
+      "status": "PASS"
+    },
+    {
+      "name": "format",
+      "argv": [
+        "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\cargo.exe",
+        "fmt",
+        "--manifest-path",
+        "D:\\minecraftrust-astra-hardening\\tools\\loom-lifecycle-models\\Cargo.toml",
+        "--check"
+      ],
+      "exit_code": 0,
+      "seconds": 0.18463610002072528,
+      "timed_out": false,
+      "log": "target/architecture-hardening/h7-loom-9e66277719c1/format.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "status": "PASS"
+    },
+    {
+      "name": "clippy",
+      "argv": [
+        "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\cargo.exe",
+        "clippy",
+        "--locked",
+        "--offline",
+        "--manifest-path",
+        "D:\\minecraftrust-astra-hardening\\tools\\loom-lifecycle-models\\Cargo.toml",
+        "--target-dir",
+        "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h7-loom-9e66277719c1\\cargo",
+        "--all-targets",
+        "--",
+        "-D",
+        "warnings"
+      ],
+      "exit_code": 0,
+      "seconds": 3.6826770000043325,
+      "timed_out": false,
+      "log": "target/architecture-hardening/h7-loom-9e66277719c1/clippy.log",
+      "log_sha256": "21cdeffbd109fea20e2e50634835aa3b82158b6fb5b25cd8c28bedbf22778a6f",
+      "status": "PASS"
+    },
+    {
+      "name": "build-model-tests",
+      "argv": [
+        "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\cargo.exe",
+        "test",
+        "--locked",
+        "--offline",
+        "--manifest-path",
+        "D:\\minecraftrust-astra-hardening\\tools\\loom-lifecycle-models\\Cargo.toml",
+        "--target-dir",
+        "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h7-loom-9e66277719c1\\cargo",
+        "--release",
+        "--test",
+        "lifecycle",
+        "--no-run",
+        "--message-format=json"
+      ],
+      "exit_code": 0,
+      "seconds": 10.583064000005834,
+      "timed_out": false,
+      "log": "target/architecture-hardening/h7-loom-9e66277719c1/build-model-tests.log",
+      "log_sha256": "61d61c040c3467a24ba065dfd526dca46cce78a53977d3189f8333fb54f17a5f",
+      "status": "PASS"
+    },
+    {
+      "name": "test-inventory",
+      "argv": [
+        "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h7-loom-9e66277719c1\\cargo\\release\\deps\\lifecycle-97b880fb9c143f1c.exe",
+        "--list"
+      ],
+      "exit_code": 0,
+      "seconds": 0.07836819998919964,
+      "timed_out": false,
+      "log": "target/architecture-hardening/h7-loom-9e66277719c1/test-inventory.log",
+      "log_sha256": "aa36de22a719d626189da20fd75f3c1a7e7560fa97cbed844278651b9f127513",
+      "status": "PASS"
+    },
+    {
+      "name": "handoff_admission_drain",
+      "argv": [
+        "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h7-loom-9e66277719c1\\cargo\\release\\deps\\lifecycle-97b880fb9c143f1c.exe",
+        "handoff_admission_drain",
+        "--exact",
+        "--nocapture",
+        "--test-threads=1"
+      ],
+      "exit_code": 0,
+      "seconds": 0.017779899993911386,
+      "timed_out": false,
+      "log": "target/architecture-hardening/h7-loom-9e66277719c1/handoff_admission_drain.log",
+      "log_sha256": "666942c9f65ab7510c5648185b69f5cc92b1c6497eefea3c69235948219dd785",
+      "status": "PASS",
+      "completed_executions": 43
+    },
+    {
+      "name": "owner_and_candidate_publication",
+      "argv": [
+        "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h7-loom-9e66277719c1\\cargo\\release\\deps\\lifecycle-97b880fb9c143f1c.exe",
+        "owner_and_candidate_publication",
+        "--exact",
+        "--nocapture",
+        "--test-threads=1"
+      ],
+      "exit_code": 0,
+      "seconds": 0.020781499973963946,
+      "timed_out": false,
+      "log": "target/architecture-hardening/h7-loom-9e66277719c1/owner_and_candidate_publication.log",
+      "log_sha256": "f8df5c2a51c5a6c881672648693dc58e1c49c1b1fac01539009cab7d1b1d585f",
+      "status": "PASS",
+      "completed_executions": 34
+    },
+    {
+      "name": "worker_revocation",
+      "argv": [
+        "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h7-loom-9e66277719c1\\cargo\\release\\deps\\lifecycle-97b880fb9c143f1c.exe",
+        "worker_revocation",
+        "--exact",
+        "--nocapture",
+        "--test-threads=1"
+      ],
+      "exit_code": 0,
+      "seconds": 0.01825319998897612,
+      "timed_out": false,
+      "log": "target/architecture-hardening/h7-loom-9e66277719c1/worker_revocation.log",
+      "log_sha256": "a94d9f69b79d009f76f9602c6777f4c50ea4a1d6476ac840d27fd7e90bbf6ac5",
+      "status": "PASS",
+      "completed_executions": 34
+    },
+    {
+      "name": "worker_cancellation",
+      "argv": [
+        "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h7-loom-9e66277719c1\\cargo\\release\\deps\\lifecycle-97b880fb9c143f1c.exe",
+        "worker_cancellation",
+        "--exact",
+        "--nocapture",
+        "--test-threads=1"
+      ],
+      "exit_code": 0,
+      "seconds": 0.019696100032888353,
+      "timed_out": false,
+      "log": "target/architecture-hardening/h7-loom-9e66277719c1/worker_cancellation.log",
+      "log_sha256": "fab02f26456c2959e9876281540405b6e8aaa28f4b8f7d7405b17b0412dcca6b",
+      "status": "PASS",
+      "completed_executions": 34
+    },
+    {
+      "name": "worker_state_generation",
+      "argv": [
+        "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h7-loom-9e66277719c1\\cargo\\release\\deps\\lifecycle-97b880fb9c143f1c.exe",
+        "worker_state_generation",
+        "--exact",
+        "--nocapture",
+        "--test-threads=1"
+      ],
+      "exit_code": 0,
+      "seconds": 0.0194902999792248,
+      "timed_out": false,
+      "log": "target/architecture-hardening/h7-loom-9e66277719c1/worker_state_generation.log",
+      "log_sha256": "92f8c048362764493b3cfa6b55e66c3f09fe2ca0c2a3935819fd6d1b52fb79f9",
+      "status": "PASS",
+      "completed_executions": 34
+    },
+    {
+      "name": "worker_registry_epoch",
+      "argv": [
+        "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h7-loom-9e66277719c1\\cargo\\release\\deps\\lifecycle-97b880fb9c143f1c.exe",
+        "worker_registry_epoch",
+        "--exact",
+        "--nocapture",
+        "--test-threads=1"
+      ],
+      "exit_code": 0,
+      "seconds": 0.01899869996123016,
+      "timed_out": false,
+      "log": "target/architecture-hardening/h7-loom-9e66277719c1/worker_registry_epoch.log",
+      "log_sha256": "79c5873537c1a89a60f37f430b0c8c0eed38c4e065f82b9ff4879bdb7b9d9caa",
+      "status": "PASS",
+      "completed_executions": 34
+    },
+    {
+      "name": "worker_ownership_generation",
+      "argv": [
+        "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h7-loom-9e66277719c1\\cargo\\release\\deps\\lifecycle-97b880fb9c143f1c.exe",
+        "worker_ownership_generation",
+        "--exact",
+        "--nocapture",
+        "--test-threads=1"
+      ],
+      "exit_code": 0,
+      "seconds": 0.019209699996281415,
+      "timed_out": false,
+      "log": "target/architecture-hardening/h7-loom-9e66277719c1/worker_ownership_generation.log",
+      "log_sha256": "4bf228b7307815cee086e07d1e97ab61d9ec2e47d9a0bc31ea7f1f3ada175f7c",
+      "status": "PASS",
+      "completed_executions": 34
+    },
+    {
+      "name": "async_io_unload_adoption",
+      "argv": [
+        "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h7-loom-9e66277719c1\\cargo\\release\\deps\\lifecycle-97b880fb9c143f1c.exe",
+        "async_io_unload_adoption",
+        "--exact",
+        "--nocapture",
+        "--test-threads=1"
+      ],
+      "exit_code": 0,
+      "seconds": 0.018355900014284998,
+      "timed_out": false,
+      "log": "target/architecture-hardening/h7-loom-9e66277719c1/async_io_unload_adoption.log",
+      "log_sha256": "b71b1e26889c2a938aa82c39bd3215d0eea4045528a8c41dd9be45b9fbd7fff5",
+      "status": "PASS",
+      "completed_executions": 34
+    },
+    {
+      "name": "slot_reuse_generation",
+      "argv": [
+        "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h7-loom-9e66277719c1\\cargo\\release\\deps\\lifecycle-97b880fb9c143f1c.exe",
+        "slot_reuse_generation",
+        "--exact",
+        "--nocapture",
+        "--test-threads=1"
+      ],
+      "exit_code": 0,
+      "seconds": 0.0175246000289917,
+      "timed_out": false,
+      "log": "target/architecture-hardening/h7-loom-9e66277719c1/slot_reuse_generation.log",
+      "log_sha256": "8fc510c933ad4bb5dbf8678007560d88c479219007097842aebc9b0caf7ab6ce",
+      "status": "PASS",
+      "completed_executions": 34
+    },
+    {
+      "name": "exhausted_generation_retires",
+      "argv": [
+        "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h7-loom-9e66277719c1\\cargo\\release\\deps\\lifecycle-97b880fb9c143f1c.exe",
+        "exhausted_generation_retires",
+        "--exact",
+        "--nocapture",
+        "--test-threads=1"
+      ],
+      "exit_code": 0,
+      "seconds": 0.02186099998652935,
+      "timed_out": false,
+      "log": "target/architecture-hardening/h7-loom-9e66277719c1/exhausted_generation_retires.log",
+      "log_sha256": "2b0eca04f5cee9d92b4bc91034afcaf73fb7711e5689dbc454526533184919af",
+      "status": "PASS",
+      "completed_executions": 34
+    },
+    {
+      "name": "ready_queue_publication",
+      "argv": [
+        "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h7-loom-9e66277719c1\\cargo\\release\\deps\\lifecycle-97b880fb9c143f1c.exe",
+        "ready_queue_publication",
+        "--exact",
+        "--nocapture",
+        "--test-threads=1"
+      ],
+      "exit_code": 0,
+      "seconds": 0.021484200027771294,
+      "timed_out": false,
+      "log": "target/architecture-hardening/h7-loom-9e66277719c1/ready_queue_publication.log",
+      "log_sha256": "27246de505e49b8236e562a2099005d5c3caeb7cfc0fbefb75ee26c6104f14bd",
+      "status": "PASS",
+      "completed_executions": 90
+    },
+    {
+      "name": "immutable_snapshot_reclamation",
+      "argv": [
+        "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h7-loom-9e66277719c1\\cargo\\release\\deps\\lifecycle-97b880fb9c143f1c.exe",
+        "immutable_snapshot_reclamation",
+        "--exact",
+        "--nocapture",
+        "--test-threads=1"
+      ],
+      "exit_code": 0,
+      "seconds": 0.08922779996646568,
+      "timed_out": false,
+      "log": "target/architecture-hardening/h7-loom-9e66277719c1/immutable_snapshot_reclamation.log",
+      "log_sha256": "9a42d1bb6f1d97ed60798955c31e51261db9383489c2289fe51d2b3e40f6cab6",
+      "status": "PASS",
+      "completed_executions": 48
+    },
+    {
+      "name": "broken_handoff_admission_drain",
+      "argv": [
+        "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h7-loom-9e66277719c1\\cargo\\release\\deps\\lifecycle-97b880fb9c143f1c.exe",
+        "broken_handoff_admission_drain",
+        "--exact",
+        "--ignored",
+        "--nocapture",
+        "--test-threads=1"
+      ],
+      "exit_code": 101,
+      "seconds": 0.03925239999080077,
+      "timed_out": false,
+      "log": "target/architecture-hardening/h7-loom-9e66277719c1/broken_handoff_admission_drain.log",
+      "log_sha256": "3e4e589fb3bc3292c70e56468615e2cdf2035a9c7519650aaffbabfd425b3f68",
+      "expected_invariant_failure": "ADMISSION_AFTER_FREEZE",
+      "status": "PASS"
+    },
+    {
+      "name": "broken_owner_and_candidate_publication",
+      "argv": [
+        "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h7-loom-9e66277719c1\\cargo\\release\\deps\\lifecycle-97b880fb9c143f1c.exe",
+        "broken_owner_and_candidate_publication",
+        "--exact",
+        "--ignored",
+        "--nocapture",
+        "--test-threads=1"
+      ],
+      "exit_code": 101,
+      "seconds": 0.03201639995677397,
+      "timed_out": false,
+      "log": "target/architecture-hardening/h7-loom-9e66277719c1/broken_owner_and_candidate_publication.log",
+      "log_sha256": "6ff119a867cf1a913315244c11bee4c9811892b170a3f99aeb1f6c544aec4509",
+      "expected_invariant_failure": "PARTIAL_OWNER_PUBLICATION",
+      "status": "PASS"
+    },
+    {
+      "name": "broken_worker_revocation",
+      "argv": [
+        "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h7-loom-9e66277719c1\\cargo\\release\\deps\\lifecycle-97b880fb9c143f1c.exe",
+        "broken_worker_revocation",
+        "--exact",
+        "--ignored",
+        "--nocapture",
+        "--test-threads=1"
+      ],
+      "exit_code": 101,
+      "seconds": 0.030670000007376075,
+      "timed_out": false,
+      "log": "target/architecture-hardening/h7-loom-9e66277719c1/broken_worker_revocation.log",
+      "log_sha256": "bdcb185d6fe2721b8519382fe6355c69aa800ed0308b660b1371e81a00576524",
+      "expected_invariant_failure": "STALE_RESULT_COMMITTED",
+      "status": "PASS"
+    },
+    {
+      "name": "broken_worker_cancellation",
+      "argv": [
+        "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h7-loom-9e66277719c1\\cargo\\release\\deps\\lifecycle-97b880fb9c143f1c.exe",
+        "broken_worker_cancellation",
+        "--exact",
+        "--ignored",
+        "--nocapture",
+        "--test-threads=1"
+      ],
+      "exit_code": 101,
+      "seconds": 0.03199109999695793,
+      "timed_out": false,
+      "log": "target/architecture-hardening/h7-loom-9e66277719c1/broken_worker_cancellation.log",
+      "log_sha256": "b8f2264ab56277a6e307dce8c5389ea3e6d35324a3218deeb3586ec9e46fb1e6",
+      "expected_invariant_failure": "STALE_RESULT_COMMITTED",
+      "status": "PASS"
+    },
+    {
+      "name": "broken_worker_state_generation",
+      "argv": [
+        "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h7-loom-9e66277719c1\\cargo\\release\\deps\\lifecycle-97b880fb9c143f1c.exe",
+        "broken_worker_state_generation",
+        "--exact",
+        "--ignored",
+        "--nocapture",
+        "--test-threads=1"
+      ],
+      "exit_code": 101,
+      "seconds": 0.025372000003699213,
+      "timed_out": false,
+      "log": "target/architecture-hardening/h7-loom-9e66277719c1/broken_worker_state_generation.log",
+      "log_sha256": "b380414c13961a6d41472c3dfeab41710810d96ed6b30b6ec55c2f072dd629a2",
+      "expected_invariant_failure": "STALE_RESULT_COMMITTED",
+      "status": "PASS"
+    },
+    {
+      "name": "broken_worker_registry_epoch",
+      "argv": [
+        "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h7-loom-9e66277719c1\\cargo\\release\\deps\\lifecycle-97b880fb9c143f1c.exe",
+        "broken_worker_registry_epoch",
+        "--exact",
+        "--ignored",
+        "--nocapture",
+        "--test-threads=1"
+      ],
+      "exit_code": 101,
+      "seconds": 0.026663399999961257,
+      "timed_out": false,
+      "log": "target/architecture-hardening/h7-loom-9e66277719c1/broken_worker_registry_epoch.log",
+      "log_sha256": "89bb25b72f9ff4911312459dff5d54cb771914e6b73e67b4dbdf5fe9e85f805c",
+      "expected_invariant_failure": "STALE_RESULT_COMMITTED",
+      "status": "PASS"
+    },
+    {
+      "name": "broken_worker_ownership_generation",
+      "argv": [
+        "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h7-loom-9e66277719c1\\cargo\\release\\deps\\lifecycle-97b880fb9c143f1c.exe",
+        "broken_worker_ownership_generation",
+        "--exact",
+        "--ignored",
+        "--nocapture",
+        "--test-threads=1"
+      ],
+      "exit_code": 101,
+      "seconds": 0.03319069999270141,
+      "timed_out": false,
+      "log": "target/architecture-hardening/h7-loom-9e66277719c1/broken_worker_ownership_generation.log",
+      "log_sha256": "cbb1eb8e07da8d17e2f527e14a55277735d154f7845b6d3126c9909b9294105e",
+      "expected_invariant_failure": "STALE_RESULT_COMMITTED",
+      "status": "PASS"
+    },
+    {
+      "name": "broken_async_io_unload_adoption",
+      "argv": [
+        "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h7-loom-9e66277719c1\\cargo\\release\\deps\\lifecycle-97b880fb9c143f1c.exe",
+        "broken_async_io_unload_adoption",
+        "--exact",
+        "--ignored",
+        "--nocapture",
+        "--test-threads=1"
+      ],
+      "exit_code": 101,
+      "seconds": 0.02980829996522516,
+      "timed_out": false,
+      "log": "target/architecture-hardening/h7-loom-9e66277719c1/broken_async_io_unload_adoption.log",
+      "log_sha256": "2e61752f2425c3c52b6ed812e963791949e21ed3166874c077e4526f0f3ae00b",
+      "expected_invariant_failure": "STALE_RESULT_COMMITTED",
+      "status": "PASS"
+    },
+    {
+      "name": "broken_slot_reuse_generation",
+      "argv": [
+        "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h7-loom-9e66277719c1\\cargo\\release\\deps\\lifecycle-97b880fb9c143f1c.exe",
+        "broken_slot_reuse_generation",
+        "--exact",
+        "--ignored",
+        "--nocapture",
+        "--test-threads=1"
+      ],
+      "exit_code": 101,
+      "seconds": 0.027450099994894117,
+      "timed_out": false,
+      "log": "target/architecture-hardening/h7-loom-9e66277719c1/broken_slot_reuse_generation.log",
+      "log_sha256": "c797fb62c22c7b034f7ae18dfaefa2abdc996ec435038221a99edc4970eb9fb1",
+      "expected_invariant_failure": "STALE_HANDLE_ALIASED_NEW_SLOT",
+      "status": "PASS"
+    },
+    {
+      "name": "broken_exhausted_generation_retires",
+      "argv": [
+        "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h7-loom-9e66277719c1\\cargo\\release\\deps\\lifecycle-97b880fb9c143f1c.exe",
+        "broken_exhausted_generation_retires",
+        "--exact",
+        "--ignored",
+        "--nocapture",
+        "--test-threads=1"
+      ],
+      "exit_code": 101,
+      "seconds": 0.05204280000180006,
+      "timed_out": false,
+      "log": "target/architecture-hardening/h7-loom-9e66277719c1/broken_exhausted_generation_retires.log",
+      "log_sha256": "07c85ba9841fc0ce3992ef38cd88150ff577183ac58f2b2d024a78f04a8a6c6b",
+      "expected_invariant_failure": "GENERATION_WRAP_ABA",
+      "status": "PASS"
+    },
+    {
+      "name": "broken_ready_queue_publication",
+      "argv": [
+        "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h7-loom-9e66277719c1\\cargo\\release\\deps\\lifecycle-97b880fb9c143f1c.exe",
+        "broken_ready_queue_publication",
+        "--exact",
+        "--ignored",
+        "--nocapture",
+        "--test-threads=1"
+      ],
+      "exit_code": 101,
+      "seconds": 0.033673099998850375,
+      "timed_out": false,
+      "log": "target/architecture-hardening/h7-loom-9e66277719c1/broken_ready_queue_publication.log",
+      "log_sha256": "d5828993115e967b08ff9b03d340ae8d9d08c1df04b5dadfd797c655b93eda37",
+      "expected_invariant_failure": "READY_WITHOUT_PAYLOAD",
+      "status": "PASS"
+    },
+    {
+      "name": "broken_immutable_snapshot_reclamation",
+      "argv": [
+        "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h7-loom-9e66277719c1\\cargo\\release\\deps\\lifecycle-97b880fb9c143f1c.exe",
+        "broken_immutable_snapshot_reclamation",
+        "--exact",
+        "--ignored",
+        "--nocapture",
+        "--test-threads=1"
+      ],
+      "exit_code": 101,
+      "seconds": 0.03305309999268502,
+      "timed_out": false,
+      "log": "target/architecture-hardening/h7-loom-9e66277719c1/broken_immutable_snapshot_reclamation.log",
+      "log_sha256": "79e4a8226fe2b7d9328f3e980a476b859c8e4ab84e8924e847adc406e6f56237",
+      "expected_invariant_failure": "RECLAIMED_LIVE_SNAPSHOT",
+      "status": "PASS"
+    },
+    {
+      "name": "broken_handoff_skips_drain",
+      "argv": [
+        "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h7-loom-9e66277719c1\\cargo\\release\\deps\\lifecycle-97b880fb9c143f1c.exe",
+        "broken_handoff_skips_drain",
+        "--exact",
+        "--ignored",
+        "--nocapture",
+        "--test-threads=1"
+      ],
+      "exit_code": 101,
+      "seconds": 0.028551499999593943,
+      "timed_out": false,
+      "log": "target/architecture-hardening/h7-loom-9e66277719c1/broken_handoff_skips_drain.log",
+      "log_sha256": "0ed89a5dd54e00ffbe8fc3561cebcd27aff1642e94217e3043a8d2a1bece4f5f",
+      "expected_invariant_failure": "JAVA_NATIVE_WRITERS_OVERLAP",
+      "status": "PASS"
+    }
+  ],
+  "bounds": {
+    "threads_including_main": 3,
+    "preemptions": 3,
+    "branches_per_execution": 256,
+    "permutation_cap": null,
+    "loom_duration_cap": null,
+    "test_process_deadline_seconds": 30
+  },
+  "source_hashes_before": {
+    "crates/native-capability/src/lib.rs": "0fc47fbd5872a404c6fc40d248245549cbd3872c63a4d656cab1f7a5d30872d7",
+    "crates/native-state-vnext/src/lib.rs": "15d932ec10f3e885c4535f997725f6a80ab7d88c606cfaca1855c56e415836f1",
+    "crates/native-state-vnext/src/store.rs": "eef84fed3e53d0cba644cb088ce19ae333547a2aec0155a6745b2185fc9ce595",
+    "crates/rustcraft-core/src/lib.rs": "3e6a2914001d68fd02d8e0a33f4e7489ea14202e7b011af51aa3797976b73878",
+    "docs/architecture/loom-lifecycle-models.md": "358ec83a0ea9ea015cd35b1f64875accb809a25a5675078570d02f0bcecf21cc",
+    "docs/architecture/retained-native-state.md": "ec1efbc4f95a81ce8759dd4dcf747c133392a0b7655eff8be27e83ad8a40b395",
+    "machine/architecture-hardening/isolation.json": "8f9b34b55f6ecc1d549da1ec4c42900b4a831a3072a9e4aa6aa2ae39cae53d93",
+    "tools/bridge/src/com/rustcraft/bridge/capture/CaptureContract.java": "76d053eaf1b10d4d52de00f236365ff00216e6d8db3425f9de0054fcaa268586",
+    "tools/bridge/src/com/rustcraft/bridge/M4NativeStatePayload.java": "a47be5f83303a2d039fd56acbc24ba71ae9a98035bc9fb15545167535e2513ab",
+    "tools/loom-lifecycle-models/Cargo.lock": "ca8487d7297b3636214e24764fccf595ee764fd78bc7a904bf997194f1e1c93c",
+    "tools/loom-lifecycle-models/Cargo.toml": "de9394dab7dd818bdadfa1a3dd52fd75641f605fa4b163575ce4c80a51ffac25",
+    "tools/loom-lifecycle-models/provenance.json": "96b3c73dfa83489b17076156a302239db74f07bb976240cd85e794b8cd0b564c",
+    "tools/loom-lifecycle-models/run.py": "946be2da62ebd4e05326990c5042a39a03d29d0cffa36d0d0b722fd4f7a6d419",
+    "tools/loom-lifecycle-models/tests/lifecycle.rs": "161919b1f392881eba7e1a1f6ba60bec265c27e91756744b11234e12f4487d73",
+    "tools/loom-lifecycle-models/third-party/LOOM-LICENSE.txt": "8ce0830173fdac609dfb4ea603fdc002c2f4af0dc9b1a005653f5da9cf534b18",
+    "tools/testing/hardening_guard.py": "a2062b3ffbec7edba79bf5f5954fbcb1e9d97492ab9c4bb541833ebb820bdb6d"
+  },
+  "limitations": [
+    "Abstract state machines; no proof of H4/H6 implementation or JVM synchronization.",
+    "READY queue and async IO adoption are prospective obligations, not implemented engine features.",
+    "Only configured bounded schedules and Loom-supported memory behaviors are checked.",
+    "Tool hashes cover listed binaries, not every MSVC linker/SDK/system library or environment input."
+  ],
+  "isolation_before": {
+    "schema_version": 1,
+    "kind": "HARDENING_ISOLATION_GATE_CHECK",
+    "status": "PASS",
+    "failures": [],
+    "original_observed": {
+      "head": "c4b868db2c9e4b03f745bf93c6ebf4fd8a8519e7",
+      "branch": "issue1-jni-v2",
+      "status": [
+        " M tools/live-capture/live_client_session.py",
+        "?? tools/live-capture/__pycache__/",
+        "?? tools/live-capture/run_rev_shadow.py"
+      ],
+      "files": [
+        {
+          "path": "D:\\minecraftrust\\tools\\live-capture\\live_client_session.py",
+          "sha256": "151c356161695aba3db3c1a8cbd589b5eda2b5a1770dff59ab21b728d36cabfa"
+        },
+        {
+          "path": "D:\\minecraftrust\\tools\\live-capture\\run_rev_shadow.py",
+          "sha256": "2b9b2aca49e57dd0d2a74bec46efcdc0ac7f95762a733276e27ff9dbcb472d93"
+        }
+      ]
+    },
+    "isolated_worktree": "D:\\minecraftrust-astra-hardening",
+    "isolated_head": "c13dfb18e3c28028bbb9cc320f83d8d37aa1bd54",
+    "isolated_branch": "astra/architecture-hardening",
+    "production_gate_checks": {
+      "tryEncode_fail_closed": true,
+      "productionAuthorityEligible_false": true
+    },
+    "scope": "read-only original HEAD/status/two paused source hashes plus conservative source guards; runtime authority tests remain required"
+  },
+  "tool_hashes_before": {
+    "C:\\Users\\Admin\\.cargo\\bin\\cargo.exe": "6f4bef66261261fcb43131be8720bab817d403a09edec7455c371974b90bdb7e",
+    "C:\\Users\\Admin\\.cargo\\bin\\rustup.exe": "6f4bef66261261fcb43131be8720bab817d403a09edec7455c371974b90bdb7e",
+    "C:\\Python314\\python.exe": "4942b86a6597e5aee0128daa00050ed79bc21f6e709a78eb19cbfeb0c2f39ac9",
+    "C:\\Program Files\\Git\\cmd\\git.exe": "37c5725818d602e951ba2563b870d62763322956b73373da4c33a0b566a80bc9",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\cargo.exe": "c37545ec61d48d31bdefce53280ecab61c4ea54eaace372fac6a0316c6e165d9",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\rustc.exe": "ca9988af88b1463f6857fdfe909299fee50a63260b3e5f7dbcb5b4d3318b27bc",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\rustdoc.exe": "9daff87cf4052ba3f97decb39d2822e1a96b3ed444eda86ed8df74802679dd60",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\rustfmt.exe": "ac9d781249bffabbb1bedb691a5ea6f63a818c1dda73dd698d4dff687ad4c24e",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\cargo-fmt.exe": "fcd2d35d13dc1a487c755e234bf2aee06f75b522c8a691cac9ee5f0d6fc854a1",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\cargo-clippy.exe": "cb0f2b164b3f6e95bfed7ec4ae9fc48f8ce8d9fef3649b5ae87961f75e1ef484",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\clippy-driver.exe": "00fd4ef2fe60e603571573746e52f42f109bbfe4b879e7ca7313614fda0b367b"
+  },
+  "dependency_hashes_before": {
+    "aho-corasick@1.1.5": {
+      "crate_checksum": "c982642fa9e8606056828ee9a8505737230110bb1099153c79efe865c59d12ba",
+      "file_count": 48,
+      "files_manifest_sha256": "8c9a14ad9f52c6cc100a11f5d0a038d42a9561afe500eca3b6dfc280d691f422",
+      "license": "Unlicense OR MIT"
+    },
+    "cc@1.5.1": {
+      "crate_checksum": "f360145194ee8e21db5ee7f3fcd4fe52210864c75c985dae33218202c8bbe040",
+      "file_count": 31,
+      "files_manifest_sha256": "04ce25c1196289a1983062f3c6eda495dd98437a2a8b8ac82d2628be63a0ec37",
+      "license": "MIT OR Apache-2.0"
+    },
+    "cfg-if@1.0.5": {
+      "crate_checksum": "4e7648175b45a9a48536d676f68d918270699102aa8dab5496df06904c914600",
+      "file_count": 14,
+      "files_manifest_sha256": "47d8b1410c68992107fcd6f530df78102e88a5d7d8735388db6c2fc726a36eb9",
+      "license": "MIT OR Apache-2.0"
+    },
+    "find-msvc-tools@0.1.14": {
+      "crate_checksum": "aedcfb3409746eddb02b9e19ebda1c3394f759a152e48ee875a0844d1b955484",
+      "file_count": 19,
+      "files_manifest_sha256": "f18c0292c2f55737d69cc5a9ca8b1ba7d90bbf96c0ba54cdf10c69b0975d6193",
+      "license": "MIT OR Apache-2.0"
+    },
+    "generator@0.8.10": {
+      "crate_checksum": "54ade96dc9003043bce7c035c85a9df5a858bfb2039c5a2e6fdf00f324f6c551",
+      "file_count": 56,
+      "files_manifest_sha256": "7668194a546745f13903b8000a2f9c83f54c803f1189f83b4aa527670dab3e1e",
+      "license": "MIT/Apache-2.0"
+    },
+    "lazy_static@1.5.0": {
+      "crate_checksum": "bbd2bcb4c963f2ddae06a2efc7e9f3591312473c50c6685e1f298068316e66fe",
+      "file_count": 21,
+      "files_manifest_sha256": "85037e0cb99473a710c0956d9007ce736a3df0c6b613a92d824b6cf5935e1fa6",
+      "license": "MIT OR Apache-2.0"
+    },
+    "libc@0.2.189": {
+      "crate_checksum": "3eaf3ede3fee6db1a4c2ee091bf8a8b4dccdc6d17f656fb07896ee72867612f2",
+      "file_count": 404,
+      "files_manifest_sha256": "aff9577229a356dd521de8b2a4b8be1593a510c66dea5e4a22f791a635f7975f",
+      "license": "MIT OR Apache-2.0"
+    },
+    "log@0.4.34": {
+      "crate_checksum": "f9f8bd3e56ce4dfc153cf470fffbfa98c7620958b312ca5c3a4b8d5181fd13c6",
+      "file_count": 23,
+      "files_manifest_sha256": "31984e8d186ceb9e2edef283cc88ce8a8be6a236c82df9565640c2a45d85bf56",
+      "license": "MIT OR Apache-2.0"
+    },
+    "loom@0.7.2": {
+      "crate_checksum": "419e0dc8046cb947daa77eb95ae174acfbddb7673b4151f56d1eed8e93fbfaca",
+      "file_count": 76,
+      "files_manifest_sha256": "1a7d44ff40e4873b0c6ca756e3e554bd15fd6a38dd067e81ed9236a19b631106",
+      "license": "MIT"
+    },
+    "matchers@0.2.0": {
+      "crate_checksum": "d1525a2a28c7f4fa0fc98bb91ae755d1e2d1505079e05539e35bc876b5d65ae9",
+      "file_count": 10,
+      "files_manifest_sha256": "c30859775b09e21ed22eb8835ac40b095eecc8c908587e97729160e6e5814331",
+      "license": "MIT"
+    },
+    "memchr@2.8.3": {
+      "crate_checksum": "cf8baf1c55e62ffcace7a9f06f4bd9cd3f0c4beb022d3b367256b91b87513d98",
+      "file_count": 59,
+      "files_manifest_sha256": "63c74d6b01c49b56723d51eb724bb892fa4fe2275d890eaf4b7de27fcf958be6",
+      "license": "Unlicense OR MIT"
+    },
+    "nu-ansi-term@0.50.3": {
+      "crate_checksum": "7957b9740744892f114936ab4a57b3f487491bbeafaf8083688b16841a4240e5",
+      "file_count": 28,
+      "files_manifest_sha256": "9e1bd66f01a7e949fad5ce492fdb7d608c77c69cce3ac6c358b1c913ee6b1202",
+      "license": "MIT"
+    },
+    "once_cell@1.21.4": {
+      "crate_checksum": "9f7c3e4beb33f85d45ae3e3a1792185706c8e16d043238c593331cc7cd313b50",
+      "file_count": 29,
+      "files_manifest_sha256": "bee75a6623912447b6ab9519db5a5d19d1b92439baa5fa17e219adec54ff9389",
+      "license": "MIT OR Apache-2.0"
+    },
+    "pin-project-lite@0.2.17": {
+      "crate_checksum": "a89322df9ebe1c1578d689c92318e070967d1042b512afbe49518723f4e6d5cd",
+      "file_count": 81,
+      "files_manifest_sha256": "5d6f0faf53411f1a82cb0cbd8bc7f8980d6c51d1dd9c1b4ac1ef0852321acf7f",
+      "license": "Apache-2.0 OR MIT"
+    },
+    "regex-automata@0.4.18": {
+      "crate_checksum": "ad8553b9b26413251cbf30e620595c7a41b3887f03da04579c0e6b0d6a06b4b2",
+      "file_count": 107,
+      "files_manifest_sha256": "2b62bd2ce83624450e8b817a12afdb47e0aa098f7f8dfbe675cda073dc0418a9",
+      "license": "MIT OR Apache-2.0"
+    },
+    "regex-syntax@0.8.11": {
+      "crate_checksum": "d6f6ff9a378485b298a5286656da665ba74413d36db0979633275d2e708145d4",
+      "file_count": 42,
+      "files_manifest_sha256": "d35bdbe5ddf0b4ebe92d9ff51cb34e7d5068df3d7a1dee405f1fd907caf08536",
+      "license": "MIT OR Apache-2.0"
+    },
+    "rustversion@1.0.23": {
+      "crate_checksum": "cf54715a573b99ac80df0bc206da022bcd442c974952c7b9720069370852e21f",
+      "file_count": 39,
+      "files_manifest_sha256": "078288930b0ab28bec1782a74c1cc24d1a386b50fff36af119c125809b94b407",
+      "license": "MIT OR Apache-2.0"
+    },
+    "scoped-tls@1.0.1": {
+      "crate_checksum": "e1cf6437eb19a8f4a6cc0f7dca544973b0b78843adbfeb3683d1a94a0024a294",
+      "file_count": 9,
+      "files_manifest_sha256": "8cf2c9fe40b5e37ad4d68bd2e21f474fe2b99e1e9f87f9f4c61b96510bb7c52b",
+      "license": "MIT/Apache-2.0"
+    },
+    "sharded-slab@0.1.7": {
+      "crate_checksum": "f40ca3c46823713e0d4209592e8d6e826aa57e928f09752619fc696c499637f6",
+      "file_count": 37,
+      "files_manifest_sha256": "c632d1e69aadb6cd281c71300272a37d6ca44f6602c24102bb2dd662f89947fc",
+      "license": "MIT"
+    },
+    "shlex@2.0.1": {
+      "crate_checksum": "f8fadd59c855ef2080decdef8ff161eb6661b86933c9d82e5ba29dc602a55aba",
+      "file_count": 13,
+      "files_manifest_sha256": "262c20acdfd1d246a47168a069851d59123a14e299822fc4526fa9b93a23829b",
+      "license": "MIT OR Apache-2.0"
+    },
+    "smallvec@1.16.2": {
+      "crate_checksum": "f9395f0f0eee849a9b707b2f06bb92a6a422090e2123bb2ef8e87a0e61892a8e",
+      "file_count": 11,
+      "files_manifest_sha256": "d6913fc5aee1c09814164e9b144e5d72300a0afea4649b01c35d3eb82013dee6",
+      "license": "MIT OR Apache-2.0"
+    },
+    "thread_local@1.1.10": {
+      "crate_checksum": "1ad99c4c6d32803332c548b1af0540b357b3f5fc0be8f6c6bfe8b2e6ae784070",
+      "file_count": 14,
+      "files_manifest_sha256": "e6413f06c0d0d7a3054d711164b423e294dfb592486afea462a0caf221cddbc0",
+      "license": "MIT OR Apache-2.0"
+    },
+    "tracing@0.1.44": {
+      "crate_checksum": "63e71662fa4b2a2c3a26f570f037eb95bb1f85397f3cd8076caed2f026a6d100",
+      "file_count": 93,
+      "files_manifest_sha256": "0ba11f50888e22a305c055bccbd4a59a536460073e8a17ff7d81eb0ac64b1497",
+      "license": "MIT"
+    },
+    "tracing-core@0.1.36": {
+      "crate_checksum": "db97caf9d906fbde555dd62fa95ddba9eecfd14cb388e4f491a66d74cd5fb79a",
+      "file_count": 28,
+      "files_manifest_sha256": "a18f607b031751ac5ccffbbe7c8e3e40c483fec78cba3161365bdc3c30e71586",
+      "license": "MIT"
+    },
+    "tracing-log@0.2.0": {
+      "crate_checksum": "ee855f1f400bd0e5c02d150ae5de3840039a3f54b025156404e34c23c03f47c3",
+      "file_count": 12,
+      "files_manifest_sha256": "c46c4f2c92d973bbe695846c35a7d9983d9a5abed49cc85b5555d6548c58fce0",
+      "license": "MIT"
+    },
+    "tracing-subscriber@0.3.23": {
+      "crate_checksum": "cb7f578e5945fb242538965c2d0b04418d38ec25c79d160cd279bf0731c8d319",
+      "file_count": 87,
+      "files_manifest_sha256": "4a995dc9cab07c9a53898d4ef7c3167dba4419e2902fb4bdf0833730ee302413",
+      "license": "MIT"
+    },
+    "valuable@0.1.1": {
+      "crate_checksum": "ba73ea9cf16a25df0c8caa16c51acb937d5712a8429db78a3ee29d5dcacd3a65",
+      "file_count": 23,
+      "files_manifest_sha256": "7ce1012c716b22ad364e93df32c347018960735200ca2667b33ab38b8456855f",
+      "license": "MIT"
+    },
+    "windows-link@0.2.1": {
+      "crate_checksum": "f0805222e57f7521d6a62e36fa9163bc891acd422f971defe97d64e70d0a4fe5",
+      "file_count": 8,
+      "files_manifest_sha256": "6e7a757dc834ecb8dff27b0c3c35690dbb399d68a3209aff3a2b7e1ec1304e00",
+      "license": "MIT OR Apache-2.0"
+    },
+    "windows-result@0.4.1": {
+      "crate_checksum": "7781fa89eaf60850ac3d2da7af8e5242a5ea78d1a11c49bf2910bb5a73853eb5",
+      "file_count": 16,
+      "files_manifest_sha256": "8db8247e34319ee765a0fe892382a51f516680728d93e7075f9ab93d8bdbeab6",
+      "license": "MIT OR Apache-2.0"
+    },
+    "windows-sys@0.61.2": {
+      "crate_checksum": "ae137229bcbd6cdf0f7b80a31df61766145077ddf49416a728b02cb3921ff3fc",
+      "file_count": 257,
+      "files_manifest_sha256": "36844e94722e9ec78da43ee64d6d19365b2569db584b35d4aefe9273a6141b3e",
+      "license": "MIT OR Apache-2.0"
+    }
+  },
+  "test_binary": {
+    "path": "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h7-loom-9e66277719c1\\cargo\\release\\deps\\lifecycle-97b880fb9c143f1c.exe",
+    "sha256_before": "7de583dd1f24b69da453420a563933d3f63ceef05db23dedfd8c3043a90129e9",
+    "sha256_after": "7de583dd1f24b69da453420a563933d3f63ceef05db23dedfd8c3043a90129e9"
+  },
+  "positive_models": 12,
+  "negative_controls_detected": 13,
+  "source_hashes_after": {
+    "crates/native-capability/src/lib.rs": "0fc47fbd5872a404c6fc40d248245549cbd3872c63a4d656cab1f7a5d30872d7",
+    "crates/native-state-vnext/src/lib.rs": "15d932ec10f3e885c4535f997725f6a80ab7d88c606cfaca1855c56e415836f1",
+    "crates/native-state-vnext/src/store.rs": "eef84fed3e53d0cba644cb088ce19ae333547a2aec0155a6745b2185fc9ce595",
+    "crates/rustcraft-core/src/lib.rs": "3e6a2914001d68fd02d8e0a33f4e7489ea14202e7b011af51aa3797976b73878",
+    "docs/architecture/loom-lifecycle-models.md": "358ec83a0ea9ea015cd35b1f64875accb809a25a5675078570d02f0bcecf21cc",
+    "docs/architecture/retained-native-state.md": "ec1efbc4f95a81ce8759dd4dcf747c133392a0b7655eff8be27e83ad8a40b395",
+    "machine/architecture-hardening/isolation.json": "8f9b34b55f6ecc1d549da1ec4c42900b4a831a3072a9e4aa6aa2ae39cae53d93",
+    "tools/bridge/src/com/rustcraft/bridge/capture/CaptureContract.java": "76d053eaf1b10d4d52de00f236365ff00216e6d8db3425f9de0054fcaa268586",
+    "tools/bridge/src/com/rustcraft/bridge/M4NativeStatePayload.java": "a47be5f83303a2d039fd56acbc24ba71ae9a98035bc9fb15545167535e2513ab",
+    "tools/loom-lifecycle-models/Cargo.lock": "ca8487d7297b3636214e24764fccf595ee764fd78bc7a904bf997194f1e1c93c",
+    "tools/loom-lifecycle-models/Cargo.toml": "de9394dab7dd818bdadfa1a3dd52fd75641f605fa4b163575ce4c80a51ffac25",
+    "tools/loom-lifecycle-models/provenance.json": "96b3c73dfa83489b17076156a302239db74f07bb976240cd85e794b8cd0b564c",
+    "tools/loom-lifecycle-models/run.py": "946be2da62ebd4e05326990c5042a39a03d29d0cffa36d0d0b722fd4f7a6d419",
+    "tools/loom-lifecycle-models/tests/lifecycle.rs": "161919b1f392881eba7e1a1f6ba60bec265c27e91756744b11234e12f4487d73",
+    "tools/loom-lifecycle-models/third-party/LOOM-LICENSE.txt": "8ce0830173fdac609dfb4ea603fdc002c2f4af0dc9b1a005653f5da9cf534b18",
+    "tools/testing/hardening_guard.py": "a2062b3ffbec7edba79bf5f5954fbcb1e9d97492ab9c4bb541833ebb820bdb6d"
+  },
+  "tool_hashes_after": {
+    "C:\\Users\\Admin\\.cargo\\bin\\cargo.exe": "6f4bef66261261fcb43131be8720bab817d403a09edec7455c371974b90bdb7e",
+    "C:\\Users\\Admin\\.cargo\\bin\\rustup.exe": "6f4bef66261261fcb43131be8720bab817d403a09edec7455c371974b90bdb7e",
+    "C:\\Python314\\python.exe": "4942b86a6597e5aee0128daa00050ed79bc21f6e709a78eb19cbfeb0c2f39ac9",
+    "C:\\Program Files\\Git\\cmd\\git.exe": "37c5725818d602e951ba2563b870d62763322956b73373da4c33a0b566a80bc9",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\cargo.exe": "c37545ec61d48d31bdefce53280ecab61c4ea54eaace372fac6a0316c6e165d9",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\rustc.exe": "ca9988af88b1463f6857fdfe909299fee50a63260b3e5f7dbcb5b4d3318b27bc",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\rustdoc.exe": "9daff87cf4052ba3f97decb39d2822e1a96b3ed444eda86ed8df74802679dd60",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\rustfmt.exe": "ac9d781249bffabbb1bedb691a5ea6f63a818c1dda73dd698d4dff687ad4c24e",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\cargo-fmt.exe": "fcd2d35d13dc1a487c755e234bf2aee06f75b522c8a691cac9ee5f0d6fc854a1",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\cargo-clippy.exe": "cb0f2b164b3f6e95bfed7ec4ae9fc48f8ce8d9fef3649b5ae87961f75e1ef484",
+    "C:\\Users\\Admin\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\clippy-driver.exe": "00fd4ef2fe60e603571573746e52f42f109bbfe4b879e7ca7313614fda0b367b"
+  },
+  "dependency_hashes_after": {
+    "aho-corasick@1.1.5": {
+      "crate_checksum": "c982642fa9e8606056828ee9a8505737230110bb1099153c79efe865c59d12ba",
+      "file_count": 48,
+      "files_manifest_sha256": "8c9a14ad9f52c6cc100a11f5d0a038d42a9561afe500eca3b6dfc280d691f422",
+      "license": "Unlicense OR MIT"
+    },
+    "cc@1.5.1": {
+      "crate_checksum": "f360145194ee8e21db5ee7f3fcd4fe52210864c75c985dae33218202c8bbe040",
+      "file_count": 31,
+      "files_manifest_sha256": "04ce25c1196289a1983062f3c6eda495dd98437a2a8b8ac82d2628be63a0ec37",
+      "license": "MIT OR Apache-2.0"
+    },
+    "cfg-if@1.0.5": {
+      "crate_checksum": "4e7648175b45a9a48536d676f68d918270699102aa8dab5496df06904c914600",
+      "file_count": 14,
+      "files_manifest_sha256": "47d8b1410c68992107fcd6f530df78102e88a5d7d8735388db6c2fc726a36eb9",
+      "license": "MIT OR Apache-2.0"
+    },
+    "find-msvc-tools@0.1.14": {
+      "crate_checksum": "aedcfb3409746eddb02b9e19ebda1c3394f759a152e48ee875a0844d1b955484",
+      "file_count": 19,
+      "files_manifest_sha256": "f18c0292c2f55737d69cc5a9ca8b1ba7d90bbf96c0ba54cdf10c69b0975d6193",
+      "license": "MIT OR Apache-2.0"
+    },
+    "generator@0.8.10": {
+      "crate_checksum": "54ade96dc9003043bce7c035c85a9df5a858bfb2039c5a2e6fdf00f324f6c551",
+      "file_count": 56,
+      "files_manifest_sha256": "7668194a546745f13903b8000a2f9c83f54c803f1189f83b4aa527670dab3e1e",
+      "license": "MIT/Apache-2.0"
+    },
+    "lazy_static@1.5.0": {
+      "crate_checksum": "bbd2bcb4c963f2ddae06a2efc7e9f3591312473c50c6685e1f298068316e66fe",
+      "file_count": 21,
+      "files_manifest_sha256": "85037e0cb99473a710c0956d9007ce736a3df0c6b613a92d824b6cf5935e1fa6",
+      "license": "MIT OR Apache-2.0"
+    },
+    "libc@0.2.189": {
+      "crate_checksum": "3eaf3ede3fee6db1a4c2ee091bf8a8b4dccdc6d17f656fb07896ee72867612f2",
+      "file_count": 404,
+      "files_manifest_sha256": "aff9577229a356dd521de8b2a4b8be1593a510c66dea5e4a22f791a635f7975f",
+      "license": "MIT OR Apache-2.0"
+    },
+    "log@0.4.34": {
+      "crate_checksum": "f9f8bd3e56ce4dfc153cf470fffbfa98c7620958b312ca5c3a4b8d5181fd13c6",
+      "file_count": 23,
+      "files_manifest_sha256": "31984e8d186ceb9e2edef283cc88ce8a8be6a236c82df9565640c2a45d85bf56",
+      "license": "MIT OR Apache-2.0"
+    },
+    "loom@0.7.2": {
+      "crate_checksum": "419e0dc8046cb947daa77eb95ae174acfbddb7673b4151f56d1eed8e93fbfaca",
+      "file_count": 76,
+      "files_manifest_sha256": "1a7d44ff40e4873b0c6ca756e3e554bd15fd6a38dd067e81ed9236a19b631106",
+      "license": "MIT"
+    },
+    "matchers@0.2.0": {
+      "crate_checksum": "d1525a2a28c7f4fa0fc98bb91ae755d1e2d1505079e05539e35bc876b5d65ae9",
+      "file_count": 10,
+      "files_manifest_sha256": "c30859775b09e21ed22eb8835ac40b095eecc8c908587e97729160e6e5814331",
+      "license": "MIT"
+    },
+    "memchr@2.8.3": {
+      "crate_checksum": "cf8baf1c55e62ffcace7a9f06f4bd9cd3f0c4beb022d3b367256b91b87513d98",
+      "file_count": 59,
+      "files_manifest_sha256": "63c74d6b01c49b56723d51eb724bb892fa4fe2275d890eaf4b7de27fcf958be6",
+      "license": "Unlicense OR MIT"
+    },
+    "nu-ansi-term@0.50.3": {
+      "crate_checksum": "7957b9740744892f114936ab4a57b3f487491bbeafaf8083688b16841a4240e5",
+      "file_count": 28,
+      "files_manifest_sha256": "9e1bd66f01a7e949fad5ce492fdb7d608c77c69cce3ac6c358b1c913ee6b1202",
+      "license": "MIT"
+    },
+    "once_cell@1.21.4": {
+      "crate_checksum": "9f7c3e4beb33f85d45ae3e3a1792185706c8e16d043238c593331cc7cd313b50",
+      "file_count": 29,
+      "files_manifest_sha256": "bee75a6623912447b6ab9519db5a5d19d1b92439baa5fa17e219adec54ff9389",
+      "license": "MIT OR Apache-2.0"
+    },
+    "pin-project-lite@0.2.17": {
+      "crate_checksum": "a89322df9ebe1c1578d689c92318e070967d1042b512afbe49518723f4e6d5cd",
+      "file_count": 81,
+      "files_manifest_sha256": "5d6f0faf53411f1a82cb0cbd8bc7f8980d6c51d1dd9c1b4ac1ef0852321acf7f",
+      "license": "Apache-2.0 OR MIT"
+    },
+    "regex-automata@0.4.18": {
+      "crate_checksum": "ad8553b9b26413251cbf30e620595c7a41b3887f03da04579c0e6b0d6a06b4b2",
+      "file_count": 107,
+      "files_manifest_sha256": "2b62bd2ce83624450e8b817a12afdb47e0aa098f7f8dfbe675cda073dc0418a9",
+      "license": "MIT OR Apache-2.0"
+    },
+    "regex-syntax@0.8.11": {
+      "crate_checksum": "d6f6ff9a378485b298a5286656da665ba74413d36db0979633275d2e708145d4",
+      "file_count": 42,
+      "files_manifest_sha256": "d35bdbe5ddf0b4ebe92d9ff51cb34e7d5068df3d7a1dee405f1fd907caf08536",
+      "license": "MIT OR Apache-2.0"
+    },
+    "rustversion@1.0.23": {
+      "crate_checksum": "cf54715a573b99ac80df0bc206da022bcd442c974952c7b9720069370852e21f",
+      "file_count": 39,
+      "files_manifest_sha256": "078288930b0ab28bec1782a74c1cc24d1a386b50fff36af119c125809b94b407",
+      "license": "MIT OR Apache-2.0"
+    },
+    "scoped-tls@1.0.1": {
+      "crate_checksum": "e1cf6437eb19a8f4a6cc0f7dca544973b0b78843adbfeb3683d1a94a0024a294",
+      "file_count": 9,
+      "files_manifest_sha256": "8cf2c9fe40b5e37ad4d68bd2e21f474fe2b99e1e9f87f9f4c61b96510bb7c52b",
+      "license": "MIT/Apache-2.0"
+    },
+    "sharded-slab@0.1.7": {
+      "crate_checksum": "f40ca3c46823713e0d4209592e8d6e826aa57e928f09752619fc696c499637f6",
+      "file_count": 37,
+      "files_manifest_sha256": "c632d1e69aadb6cd281c71300272a37d6ca44f6602c24102bb2dd662f89947fc",
+      "license": "MIT"
+    },
+    "shlex@2.0.1": {
+      "crate_checksum": "f8fadd59c855ef2080decdef8ff161eb6661b86933c9d82e5ba29dc602a55aba",
+      "file_count": 13,
+      "files_manifest_sha256": "262c20acdfd1d246a47168a069851d59123a14e299822fc4526fa9b93a23829b",
+      "license": "MIT OR Apache-2.0"
+    },
+    "smallvec@1.16.2": {
+      "crate_checksum": "f9395f0f0eee849a9b707b2f06bb92a6a422090e2123bb2ef8e87a0e61892a8e",
+      "file_count": 11,
+      "files_manifest_sha256": "d6913fc5aee1c09814164e9b144e5d72300a0afea4649b01c35d3eb82013dee6",
+      "license": "MIT OR Apache-2.0"
+    },
+    "thread_local@1.1.10": {
+      "crate_checksum": "1ad99c4c6d32803332c548b1af0540b357b3f5fc0be8f6c6bfe8b2e6ae784070",
+      "file_count": 14,
+      "files_manifest_sha256": "e6413f06c0d0d7a3054d711164b423e294dfb592486afea462a0caf221cddbc0",
+      "license": "MIT OR Apache-2.0"
+    },
+    "tracing@0.1.44": {
+      "crate_checksum": "63e71662fa4b2a2c3a26f570f037eb95bb1f85397f3cd8076caed2f026a6d100",
+      "file_count": 93,
+      "files_manifest_sha256": "0ba11f50888e22a305c055bccbd4a59a536460073e8a17ff7d81eb0ac64b1497",
+      "license": "MIT"
+    },
+    "tracing-core@0.1.36": {
+      "crate_checksum": "db97caf9d906fbde555dd62fa95ddba9eecfd14cb388e4f491a66d74cd5fb79a",
+      "file_count": 28,
+      "files_manifest_sha256": "a18f607b031751ac5ccffbbe7c8e3e40c483fec78cba3161365bdc3c30e71586",
+      "license": "MIT"
+    },
+    "tracing-log@0.2.0": {
+      "crate_checksum": "ee855f1f400bd0e5c02d150ae5de3840039a3f54b025156404e34c23c03f47c3",
+      "file_count": 12,
+      "files_manifest_sha256": "c46c4f2c92d973bbe695846c35a7d9983d9a5abed49cc85b5555d6548c58fce0",
+      "license": "MIT"
+    },
+    "tracing-subscriber@0.3.23": {
+      "crate_checksum": "cb7f578e5945fb242538965c2d0b04418d38ec25c79d160cd279bf0731c8d319",
+      "file_count": 87,
+      "files_manifest_sha256": "4a995dc9cab07c9a53898d4ef7c3167dba4419e2902fb4bdf0833730ee302413",
+      "license": "MIT"
+    },
+    "valuable@0.1.1": {
+      "crate_checksum": "ba73ea9cf16a25df0c8caa16c51acb937d5712a8429db78a3ee29d5dcacd3a65",
+      "file_count": 23,
+      "files_manifest_sha256": "7ce1012c716b22ad364e93df32c347018960735200ca2667b33ab38b8456855f",
+      "license": "MIT"
+    },
+    "windows-link@0.2.1": {
+      "crate_checksum": "f0805222e57f7521d6a62e36fa9163bc891acd422f971defe97d64e70d0a4fe5",
+      "file_count": 8,
+      "files_manifest_sha256": "6e7a757dc834ecb8dff27b0c3c35690dbb399d68a3209aff3a2b7e1ec1304e00",
+      "license": "MIT OR Apache-2.0"
+    },
+    "windows-result@0.4.1": {
+      "crate_checksum": "7781fa89eaf60850ac3d2da7af8e5242a5ea78d1a11c49bf2910bb5a73853eb5",
+      "file_count": 16,
+      "files_manifest_sha256": "8db8247e34319ee765a0fe892382a51f516680728d93e7075f9ab93d8bdbeab6",
+      "license": "MIT OR Apache-2.0"
+    },
+    "windows-sys@0.61.2": {
+      "crate_checksum": "ae137229bcbd6cdf0f7b80a31df61766145077ddf49416a728b02cb3921ff3fc",
+      "file_count": 257,
+      "files_manifest_sha256": "36844e94722e9ec78da43ee64d6d19365b2569db584b35d4aefe9273a6141b3e",
+      "license": "MIT OR Apache-2.0"
+    }
+  },
+  "isolation_after": {
+    "schema_version": 1,
+    "kind": "HARDENING_ISOLATION_GATE_CHECK",
+    "status": "PASS",
+    "failures": [],
+    "original_observed": {
+      "head": "c4b868db2c9e4b03f745bf93c6ebf4fd8a8519e7",
+      "branch": "issue1-jni-v2",
+      "status": [
+        " M tools/live-capture/live_client_session.py",
+        "?? tools/live-capture/__pycache__/",
+        "?? tools/live-capture/run_rev_shadow.py"
+      ],
+      "files": [
+        {
+          "path": "D:\\minecraftrust\\tools\\live-capture\\live_client_session.py",
+          "sha256": "151c356161695aba3db3c1a8cbd589b5eda2b5a1770dff59ab21b728d36cabfa"
+        },
+        {
+          "path": "D:\\minecraftrust\\tools\\live-capture\\run_rev_shadow.py",
+          "sha256": "2b9b2aca49e57dd0d2a74bec46efcdc0ac7f95762a733276e27ff9dbcb472d93"
+        }
+      ]
+    },
+    "isolated_worktree": "D:\\minecraftrust-astra-hardening",
+    "isolated_head": "c13dfb18e3c28028bbb9cc320f83d8d37aa1bd54",
+    "isolated_branch": "astra/architecture-hardening",
+    "production_gate_checks": {
+      "tryEncode_fail_closed": true,
+      "productionAuthorityEligible_false": true
+    },
+    "scope": "read-only original HEAD/status/two paused source hashes plus conservative source guards; runtime authority tests remain required"
+  },
+  "finished_utc": "2026-09-27T01:15:55.056494+00:00"
+}

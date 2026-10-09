@@ -1,0 +1,25 @@
+{
+  "status": "PASS_FIXED_TARGETED_RERUN",
+  "command": [
+    "C:\\Users\\Admin\\.cargo\\bin\\cargo.exe",
+    "test",
+    "--locked",
+    "--offline",
+    "-p",
+    "native-state-vnext",
+    "--target-dir",
+    "target/architecture-hardening/h6-root-final/build",
+    "--test",
+    "lifecycle",
+    "foreign_cancellation_cannot_remove_same_nonce_work_in_another_store",
+    "--",
+    "--exact"
+  ],
+  "exit": 0,
+  "sources": {
+    "crates/native-state-vnext/src/store.rs": "445aa04958554ffd1bf31c8112d2e5a2faee34ac0a2668b243eb280b9b0b49f1",
+    "crates/native-state-vnext/tests/lifecycle.rs": "071f89731bba83318f11fb8a1be49eb588bd77f2dcbc2e2e16ea82f717ae0106"
+  },
+  "stdout_sha256": "724ed20e00c3241c8d4bf647f6fd5aa5820b1fdb4ffc5395a105961e6e884e5d",
+  "stderr_sha256": "a50557ff65305b63a1dac4bb02dd40584ab5e2b2a396d09e48150323ecac8e83"
+}

@@ -1,0 +1,58 @@
+lifecycle: untracked chunk gets a provisional PUBLISHING binding -> PASS (null)
+lifecycle: owner-generated source qualification -> PASS (OWNER_GENERATED)
+lifecycle: fresh owner allocation registered OWNER_PENDING -> PASS (null)
+lifecycle: transaction-pending value attached and bound to the binding -> PASS (null)
+lifecycle: exact map put accepted -> PASS (null)
+lifecycle: outermost normal completion finalizes READY -> PASS (READY)
+lifecycle: identity binds session/world/chunk/incarnation/generation -> PASS (com.rustcraft.bridge.capture.LiveChunkBindings$BindingIdentity@2fac74bf)
+lifecycle: READY unrevoked binding admits and commits capture -> PASS (SEALED_COMMITTED)
+failure: failed publication reports PUBLICATION_FAILED -> PASS (PUBLICATION_FAILED)
+failure: binding goes INELIGIBLE, never READY -> PASS (INELIGIBLE)
+failure: capture falls back NOT_READY for the failed incarnation -> PASS (NOT_READY)
+unfinished: binding stays PUBLISHING without completion -> PASS
+unfinished: the leaked transaction keeps the binding PUBLISHING -> PASS
+unfinished: capture falls back PUBLICATION_ACTIVE while a transaction leaks -> PASS (PUBLICATION_ACTIVE)
+nested: inner transaction opened inside the outer one -> PASS
+nested: both bindings PUBLISHING while nested -> PASS
+nested: inner finish accepted but NOT finalized READY inside the outer transaction -> PASS (PUBLISHING)
+nested: outermost normal completion finalizes both bindings READY -> PASS (READY/READY)
+duplicate: publishing a READY binding rejected DUPLICATE_PUBLICATION -> PASS (DUPLICATE_PUBLICATION)
+duplicate: binding still READY (no state damage) -> PASS
+put: object without binding rejected NO_BINDING -> PASS (NO_BINDING)
+put: wrong World object rejected WORLD_MISMATCH -> PASS (WORLD_MISMATCH)
+replacement: put over a live coordinate binding rejected COORDINATE_OCCUPIED -> PASS (COORDINATE_OCCUPIED)
+replacement: old binding still holds the coordinates (never silently replaced) -> PASS
+replacement: after retiring the old binding the put is accepted -> PASS (null)
+remove: retired predecessor's removal is a no-op that never touches the replacement -> PASS (null)
+remove: the replacement still holds the coordinates -> PASS
+remove: a live chunk removing coordinates it does not hold rejected REMOVAL_IDENTITY_MISMATCH -> PASS (REMOVAL_IDENTITY_MISMATCH)
+remove: the exact current binding removes its own coordinate entry -> PASS (null)
+unload: retire accepted -> PASS (RETIRED/revoked=true)
+unload: chunk object no longer bound -> PASS
+unload: capture falls back NO_BINDING after retirement -> PASS (NO_BINDING)
+unload: second retire rejected NO_BINDING (irreversible, no resurrection) -> PASS (NO_BINDING)
+unload: identity record unchanged and token stays revoked -> PASS
+reincarnate: first lifecycle READY -> PASS
+reincarnate: qualified dormant rebind re-adopts the same graph's component -> PASS (null)
+reincarnate: same object, new incarnation and generation -> PASS (inc 1->2)
+reincarnate: old binding stays RETIRED with its revoked token -> PASS
+reincarnate: registry maps the object to the NEW binding only -> PASS
+reincarnate: capture uses the new lifecycle and commits -> PASS (SEALED_COMMITTED)
+alias: setup published chunk A READY with its owned component -> PASS
+alias: foreign alias rejected FOREIGN_ALIAS -> PASS (FOREIGN_ALIAS)
+alias: both known bindings revoked and INELIGIBLE -> PASS (A=INELIGIBLE)
+unknown-value: unregistered value rejected UNKNOWN_VALUE -> PASS (UNKNOWN_VALUE)
+unknown-value: receiving binding revoked before the Java store -> PASS
+unknown-value: the revoked binding never reaches READY -> PASS (INELIGIBLE)
+sealed-direct: component is effectively SEALED_IO under the sealed ticket -> PASS
+sealed-direct: direct attach of a sealed-but-unadopted component rejected -> PASS (SEALED_NOT_ADOPTED)
+sealed-direct: receiving binding revoked -> PASS
+sealed-direct: the ticket itself remains unconsumed for the real adoption flow -> PASS
+sweep: re-registering a tombstoned orphan rejected REGISTRATION_REJECTED -> PASS (REGISTRATION_REJECTED)
+sweep: tombstoned orphan attach rejected SHARED_COMPONENT and revokes the receiver -> PASS (SHARED_COMPONENT)
+limit: exactly the retention bound was admitted -> PASS (admitted=4096)
+limit: the next binding refuses with RESOURCE_LIMIT -> PASS (RESOURCE_LIMIT)
+limit: resource exhaustion disqualifies the session -> PASS (RESOURCE_LIMIT)
+reasons: PRIVATE (not yet published) binding -> NOT_READY -> PASS (NOT_READY)
+reasons: different World object -> PROVIDER_IDENTITY_CHANGED (identity is never coordinates) -> PASS (PROVIDER_IDENTITY_CHANGED)
+RESULT: 57 pass, 0 fail

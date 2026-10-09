@@ -1,0 +1,703 @@
+{
+  "schema": "H23_FRESH_OBSERVATION_PREREQUISITE_V1",
+  "status": "OBSERVATION_ONLY",
+  "production_authority": false,
+  "profile_requalification": false,
+  "reference_document": "docs/engineering/fresh-forge-observer.md",
+  "runs": [
+    {
+      "name": "clean-final",
+      "receipt": "target\\fresh-forge-observer\\clean-final\\receipt.json",
+      "sha256": "7e4fb5fbe12d5e503fcbde7aafb818292337a4551abb22b8216cc3495a8108ea",
+      "manifest_sha256": "e7aa4f373033f66562d89398cff26b91a5f3551c5f15f563417858d81f4a8a41",
+      "selected_definitions": 12,
+      "definition_attempts": 13,
+      "transformers": 13,
+      "coremods": 2,
+      "runtime_files": 24,
+      "java_controls": 3,
+      "python_tests": 6,
+      "malformed_variants": 21,
+      "scope": "OFFLINE_FINAL_DEFINITIONS_ONLY_NO_PROFILE_QUALIFICATION"
+    },
+    {
+      "name": "revelation-final",
+      "receipt": "target\\fresh-forge-observer\\revelation-final\\receipt.json",
+      "sha256": "deba5f2110f173b705c94ba62b66f33ba09849f7a80bdee8a768c09a72b06b6e",
+      "manifest_sha256": "a86f581af56327badf1d75b685cfa8b2094c35b2d10dbb7d9e2c5525f8addce1",
+      "selected_definitions": 12,
+      "definition_attempts": 14,
+      "transformers": 34,
+      "coremods": 19,
+      "runtime_files": 893,
+      "java_controls": 3,
+      "python_tests": 6,
+      "malformed_variants": 21,
+      "scope": "OFFLINE_FINAL_DEFINITIONS_ONLY_NO_PROFILE_QUALIFICATION"
+    }
+  ],
+  "retained_evidence": [
+    {
+      "source": "target/fresh-forge-observer/clean-fifth/compile-observer-controls.stderr.txt",
+      "retained": "machine/architecture-hardening/h23-fresh-observation-evidence/clean-fifth/compile-observer-controls.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/fresh-forge-observer/clean-fifth/compile-observer-controls.stdout.txt",
+      "retained": "machine/architecture-hardening/h23-fresh-observation-evidence/clean-fifth/compile-observer-controls.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/fresh-forge-observer/clean-fifth/compile.stderr.txt",
+      "retained": "machine/architecture-hardening/h23-fresh-observation-evidence/clean-fifth/compile.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/fresh-forge-observer/clean-fifth/compile.stdout.txt",
+      "retained": "machine/architecture-hardening/h23-fresh-observation-evidence/clean-fifth/compile.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/fresh-forge-observer/clean-fifth/identity-0.stderr.txt",
+      "retained": "machine/architecture-hardening/h23-fresh-observation-evidence/clean-fifth/identity-0.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/fresh-forge-observer/clean-fifth/identity-0.stdout.txt",
+      "retained": "machine/architecture-hardening/h23-fresh-observation-evidence/clean-fifth/identity-0.stdout.txt",
+      "sha256": "fb9e4b23091c176ae9360ce805dda5e2d3e6c12f4a298fc3f73f18aecbdb2f8c"
+    },
+    {
+      "source": "target/fresh-forge-observer/clean-fifth/observation.json",
+      "retained": "machine/architecture-hardening/h23-fresh-observation-evidence/clean-fifth/observation.json",
+      "sha256": "d7b3187f0a10c09cd50f5625721cdd6003842549d3236c9e72e001ada2b095f5"
+    },
+    {
+      "source": "target/fresh-forge-observer/clean-fifth/observe.stderr.txt",
+      "retained": "machine/architecture-hardening/h23-fresh-observation-evidence/clean-fifth/observe.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/fresh-forge-observer/clean-fifth/observe.stdout.txt",
+      "retained": "machine/architecture-hardening/h23-fresh-observation-evidence/clean-fifth/observe.stdout.txt",
+      "sha256": "5dc7aff3bfdbe2ed0be1c589334bcd09e78daddbbe9c9108cd6c0aa3f295ab15"
+    },
+    {
+      "source": "target/fresh-forge-observer/clean-fifth/observer-control-duplicate.stderr.txt",
+      "retained": "machine/architecture-hardening/h23-fresh-observation-evidence/clean-fifth/observer-control-duplicate.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/fresh-forge-observer/clean-fifth/observer-control-duplicate.stdout.txt",
+      "retained": "machine/architecture-hardening/h23-fresh-observation-evidence/clean-fifth/observer-control-duplicate.stdout.txt",
+      "sha256": "63a6d6140242d5b22fd69df39725492dc8d80d9a269964f443f9eafa9d2df0ec"
+    },
+    {
+      "source": "target/fresh-forge-observer/clean-fifth/observer-control-redefined.stderr.txt",
+      "retained": "machine/architecture-hardening/h23-fresh-observation-evidence/clean-fifth/observer-control-redefined.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/fresh-forge-observer/clean-fifth/observer-control-redefined.stdout.txt",
+      "retained": "machine/architecture-hardening/h23-fresh-observation-evidence/clean-fifth/observer-control-redefined.stdout.txt",
+      "sha256": "250748147954440f2b089eaaf45ab52df44743c8ffe9b64325df595749ad1e2b"
+    },
+    {
+      "source": "target/fresh-forge-observer/clean-fifth/observer-control-valid.stderr.txt",
+      "retained": "machine/architecture-hardening/h23-fresh-observation-evidence/clean-fifth/observer-control-valid.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/fresh-forge-observer/clean-fifth/observer-control-valid.stdout.txt",
+      "retained": "machine/architecture-hardening/h23-fresh-observation-evidence/clean-fifth/observer-control-valid.stdout.txt",
+      "sha256": "cf0a587a123816a37886670e08e1691a75952a3f87e00cca3e21eb3882e6cf11"
+    },
+    {
+      "source": "target/fresh-forge-observer/clean-fifth/python-controls.stderr.txt",
+      "retained": "machine/architecture-hardening/h23-fresh-observation-evidence/clean-fifth/python-controls.stderr.txt",
+      "sha256": "8343114fbe4419b97ad307f4f5148f2cbdb31250581b1400123962320a08e965"
+    },
+    {
+      "source": "target/fresh-forge-observer/clean-fifth/python-controls.stdout.txt",
+      "retained": "machine/architecture-hardening/h23-fresh-observation-evidence/clean-fifth/python-controls.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/fresh-forge-observer/clean-fifth/receipt.json",
+      "retained": "machine/architecture-hardening/h23-fresh-observation-evidence/clean-fifth/receipt.json",
+      "sha256": "3245950359d031bc0431ea42af9dcb000a9730d19add1d0d93ab27a1d3d8cbf9"
+    },
+    {
+      "source": "target/fresh-forge-observer/clean-fifth/request.json",
+      "retained": "machine/architecture-hardening/h23-fresh-observation-evidence/clean-fifth/request.json",
+      "sha256": "b27b7a210d3efe7e9b235e3f96fc440cd24402d81317441a0af17d6f56e5f087"
+    },
+    {
+      "source": "target/fresh-forge-observer/clean-fifth/required.txt",
+      "retained": "machine/architecture-hardening/h23-fresh-observation-evidence/clean-fifth/required.txt",
+      "sha256": "ba6c01eb30033e7cc6a8f669c7debb57ea57e19b27261faa0702a141970010f0"
+    },
+    {
+      "source": "target/fresh-forge-observer/clean-fifth/v2-identities.json",
+      "retained": "machine/architecture-hardening/h23-fresh-observation-evidence/clean-fifth/v2-identities.json",
+      "sha256": "432ae22ba8852a47e869313c30d1010e3e30b6552e7a276bd6a63971259dc14f"
+    },
+    {
+      "source": "target/fresh-forge-observer/clean-final/compile-identity.stderr.txt",
+      "retained": "machine/architecture-hardening/h23-fresh-observation-evidence/clean-final/compile-identity.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/fresh-forge-observer/clean-final/compile-identity.stdout.txt",
+      "retained": "machine/architecture-hardening/h23-fresh-observation-evidence/clean-final/compile-identity.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/fresh-forge-observer/clean-final/compile-observer-controls.stderr.txt",
+      "retained": "machine/architecture-hardening/h23-fresh-observation-evidence/clean-final/compile-observer-controls.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/fresh-forge-observer/clean-final/compile-observer-controls.stdout.txt",
+      "retained": "machine/architecture-hardening/h23-fresh-observation-evidence/clean-final/compile-observer-controls.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/fresh-forge-observer/clean-final/compile.stderr.txt",
+      "retained": "machine/architecture-hardening/h23-fresh-observation-evidence/clean-final/compile.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/fresh-forge-observer/clean-final/compile.stdout.txt",
+      "retained": "machine/architecture-hardening/h23-fresh-observation-evidence/clean-final/compile.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/fresh-forge-observer/clean-final/identity-0.stderr.txt",
+      "retained": "machine/architecture-hardening/h23-fresh-observation-evidence/clean-final/identity-0.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/fresh-forge-observer/clean-final/identity-0.stdout.txt",
+      "retained": "machine/architecture-hardening/h23-fresh-observation-evidence/clean-final/identity-0.stdout.txt",
+      "sha256": "fb9e4b23091c176ae9360ce805dda5e2d3e6c12f4a298fc3f73f18aecbdb2f8c"
+    },
+    {
+      "source": "target/fresh-forge-observer/clean-final/observation.json",
+      "retained": "machine/architecture-hardening/h23-fresh-observation-evidence/clean-final/observation.json",
+      "sha256": "3a49f700abd7853152a63f59ffe3773230a6153481743512ac646629ee7ca941"
+    },
+    {
+      "source": "target/fresh-forge-observer/clean-final/observe.stderr.txt",
+      "retained": "machine/architecture-hardening/h23-fresh-observation-evidence/clean-final/observe.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/fresh-forge-observer/clean-final/observe.stdout.txt",
+      "retained": "machine/architecture-hardening/h23-fresh-observation-evidence/clean-final/observe.stdout.txt",
+      "sha256": "a0446f5e512fd6d3aad886a86b548032a4af68f627d1dfe6b8bb57146bad9cd5"
+    },
+    {
+      "source": "target/fresh-forge-observer/clean-final/observer-control-duplicate.stderr.txt",
+      "retained": "machine/architecture-hardening/h23-fresh-observation-evidence/clean-final/observer-control-duplicate.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/fresh-forge-observer/clean-final/observer-control-duplicate.stdout.txt",
+      "retained": "machine/architecture-hardening/h23-fresh-observation-evidence/clean-final/observer-control-duplicate.stdout.txt",
+      "sha256": "63a6d6140242d5b22fd69df39725492dc8d80d9a269964f443f9eafa9d2df0ec"
+    },
+    {
+      "source": "target/fresh-forge-observer/clean-final/observer-control-redefined.stderr.txt",
+      "retained": "machine/architecture-hardening/h23-fresh-observation-evidence/clean-final/observer-control-redefined.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/fresh-forge-observer/clean-final/observer-control-redefined.stdout.txt",
+      "retained": "machine/architecture-hardening/h23-fresh-observation-evidence/clean-final/observer-control-redefined.stdout.txt",
+      "sha256": "250748147954440f2b089eaaf45ab52df44743c8ffe9b64325df595749ad1e2b"
+    },
+    {
+      "source": "target/fresh-forge-observer/clean-final/observer-control-valid.stderr.txt",
+      "retained": "machine/architecture-hardening/h23-fresh-observation-evidence/clean-final/observer-control-valid.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/fresh-forge-observer/clean-final/observer-control-valid.stdout.txt",
+      "retained": "machine/architecture-hardening/h23-fresh-observation-evidence/clean-final/observer-control-valid.stdout.txt",
+      "sha256": "cf0a587a123816a37886670e08e1691a75952a3f87e00cca3e21eb3882e6cf11"
+    },
+    {
+      "source": "target/fresh-forge-observer/clean-final/python-controls.stderr.txt",
+      "retained": "machine/architecture-hardening/h23-fresh-observation-evidence/clean-final/python-controls.stderr.txt",
+      "sha256": "6e9792fb2bb9c647f8f6da93541119387a90e689e7c07ce7b2b92b5942dbbc2a"
+    },
+    {
+      "source": "target/fresh-forge-observer/clean-final/python-controls.stdout.txt",
+      "retained": "machine/architecture-hardening/h23-fresh-observation-evidence/clean-final/python-controls.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/fresh-forge-observer/clean-final/receipt.json",
+      "retained": "machine/architecture-hardening/h23-fresh-observation-evidence/clean-final/receipt.json",
+      "sha256": "7e4fb5fbe12d5e503fcbde7aafb818292337a4551abb22b8216cc3495a8108ea"
+    },
+    {
+      "source": "target/fresh-forge-observer/clean-final/request.json",
+      "retained": "machine/architecture-hardening/h23-fresh-observation-evidence/clean-final/request.json",
+      "sha256": "868ce20c94d779fdccb4b3ea21ea65dd3444e617968c0bc500396e96430330a6"
+    },
+    {
+      "source": "target/fresh-forge-observer/clean-final/required.txt",
+      "retained": "machine/architecture-hardening/h23-fresh-observation-evidence/clean-final/required.txt",
+      "sha256": "ba6c01eb30033e7cc6a8f669c7debb57ea57e19b27261faa0702a141970010f0"
+    },
+    {
+      "source": "target/fresh-forge-observer/clean-final/v2-identities.json",
+      "retained": "machine/architecture-hardening/h23-fresh-observation-evidence/clean-final/v2-identities.json",
+      "sha256": "432ae22ba8852a47e869313c30d1010e3e30b6552e7a276bd6a63971259dc14f"
+    },
+    {
+      "source": "target/fresh-forge-observer/clean-fourth/compile-observer-controls.stderr.txt",
+      "retained": "machine/architecture-hardening/h23-fresh-observation-evidence/clean-fourth/compile-observer-controls.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/fresh-forge-observer/clean-fourth/compile-observer-controls.stdout.txt",
+      "retained": "machine/architecture-hardening/h23-fresh-observation-evidence/clean-fourth/compile-observer-controls.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/fresh-forge-observer/clean-fourth/compile.stderr.txt",
+      "retained": "machine/architecture-hardening/h23-fresh-observation-evidence/clean-fourth/compile.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/fresh-forge-observer/clean-fourth/compile.stdout.txt",
+      "retained": "machine/architecture-hardening/h23-fresh-observation-evidence/clean-fourth/compile.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/fresh-forge-observer/clean-fourth/observer-control-valid.stderr.txt",
+      "retained": "machine/architecture-hardening/h23-fresh-observation-evidence/clean-fourth/observer-control-valid.stderr.txt",
+      "sha256": "9f98f433dd89dd95074649aaec43576738405b40bfcc0f98e12f0ae88f9fccd3"
+    },
+    {
+      "source": "target/fresh-forge-observer/clean-fourth/observer-control-valid.stdout.txt",
+      "retained": "machine/architecture-hardening/h23-fresh-observation-evidence/clean-fourth/observer-control-valid.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/fresh-forge-observer/clean-fourth/receipt.json",
+      "retained": "machine/architecture-hardening/h23-fresh-observation-evidence/clean-fourth/receipt.json",
+      "sha256": "4de4fd21834df54611ef2f16f6810b0c49cb94b48426d6d6a7ca9e764f012b23"
+    },
+    {
+      "source": "target/fresh-forge-observer/clean-fourth/request.json",
+      "retained": "machine/architecture-hardening/h23-fresh-observation-evidence/clean-fourth/request.json",
+      "sha256": "49732ed8bd868d74080f5339bd25cf3ff445c8f224a824238c1306f98390c0d2"
+    },
+    {
+      "source": "target/fresh-forge-observer/clean-fourth/required.txt",
+      "retained": "machine/architecture-hardening/h23-fresh-observation-evidence/clean-fourth/required.txt",
+      "sha256": "ba6c01eb30033e7cc6a8f669c7debb57ea57e19b27261faa0702a141970010f0"
+    },
+    {
+      "source": "target/fresh-forge-observer/clean-initial/compile.stderr.txt",
+      "retained": "machine/architecture-hardening/h23-fresh-observation-evidence/clean-initial/compile.stderr.txt",
+      "sha256": "50d19ec55208d435867d3b3e9848b2b970a43b18c63cf73bff2299c16cddb466"
+    },
+    {
+      "source": "target/fresh-forge-observer/clean-initial/compile.stdout.txt",
+      "retained": "machine/architecture-hardening/h23-fresh-observation-evidence/clean-initial/compile.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/fresh-forge-observer/clean-initial/receipt.json",
+      "retained": "machine/architecture-hardening/h23-fresh-observation-evidence/clean-initial/receipt.json",
+      "sha256": "e4e2bce3d29bec791b33ad6c341a1e141c6c73e9f0ed350d1a8376f9d48a754f"
+    },
+    {
+      "source": "target/fresh-forge-observer/clean-initial/request.json",
+      "retained": "machine/architecture-hardening/h23-fresh-observation-evidence/clean-initial/request.json",
+      "sha256": "04d4c5c19aa1940df087f3250364f68cc9a9d152d82ea5f021a612aa673c01d3"
+    },
+    {
+      "source": "target/fresh-forge-observer/clean-initial/required.txt",
+      "retained": "machine/architecture-hardening/h23-fresh-observation-evidence/clean-initial/required.txt",
+      "sha256": "ba6c01eb30033e7cc6a8f669c7debb57ea57e19b27261faa0702a141970010f0"
+    },
+    {
+      "source": "target/fresh-forge-observer/clean-manifest-final.json",
+      "retained": "machine/architecture-hardening/h23-fresh-observation-evidence/clean-manifest-final.json",
+      "sha256": "e7aa4f373033f66562d89398cff26b91a5f3551c5f15f563417858d81f4a8a41"
+    },
+    {
+      "source": "target/fresh-forge-observer/clean-manifest-initial.json",
+      "retained": "machine/architecture-hardening/h23-fresh-observation-evidence/clean-manifest-initial.json",
+      "sha256": "4582b5450e436a1ffbef087b7ed80b089251bb3fc15f5abaa9b22b75f6c85536"
+    },
+    {
+      "source": "target/fresh-forge-observer/clean-second/compile.stderr.txt",
+      "retained": "machine/architecture-hardening/h23-fresh-observation-evidence/clean-second/compile.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/fresh-forge-observer/clean-second/compile.stdout.txt",
+      "retained": "machine/architecture-hardening/h23-fresh-observation-evidence/clean-second/compile.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/fresh-forge-observer/clean-second/observe.stderr.txt",
+      "retained": "machine/architecture-hardening/h23-fresh-observation-evidence/clean-second/observe.stderr.txt",
+      "sha256": "64b70a4e06476769253585457734f6e77e01af4f5a9f434e35b61963f1de18fd"
+    },
+    {
+      "source": "target/fresh-forge-observer/clean-second/observe.stdout.txt",
+      "retained": "machine/architecture-hardening/h23-fresh-observation-evidence/clean-second/observe.stdout.txt",
+      "sha256": "664a84560c633e0fb0278b626757182adb2b9aa045ec2085572d0c955d164eff"
+    },
+    {
+      "source": "target/fresh-forge-observer/clean-second/receipt.json",
+      "retained": "machine/architecture-hardening/h23-fresh-observation-evidence/clean-second/receipt.json",
+      "sha256": "fe841e9b700d50937a73d36787a4535fb708a01f1c9f6ed14eb1bc299933cae1"
+    },
+    {
+      "source": "target/fresh-forge-observer/clean-second/request.json",
+      "retained": "machine/architecture-hardening/h23-fresh-observation-evidence/clean-second/request.json",
+      "sha256": "5519529056f0f0f53ee07ade82e4ddfc5e91164831987649435cd751e4b46ca8"
+    },
+    {
+      "source": "target/fresh-forge-observer/clean-second/required.txt",
+      "retained": "machine/architecture-hardening/h23-fresh-observation-evidence/clean-second/required.txt",
+      "sha256": "ba6c01eb30033e7cc6a8f669c7debb57ea57e19b27261faa0702a141970010f0"
+    },
+    {
+      "source": "target/fresh-forge-observer/clean-third/compile.stderr.txt",
+      "retained": "machine/architecture-hardening/h23-fresh-observation-evidence/clean-third/compile.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/fresh-forge-observer/clean-third/compile.stdout.txt",
+      "retained": "machine/architecture-hardening/h23-fresh-observation-evidence/clean-third/compile.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/fresh-forge-observer/clean-third/identity-0.stderr.txt",
+      "retained": "machine/architecture-hardening/h23-fresh-observation-evidence/clean-third/identity-0.stderr.txt",
+      "sha256": "5a47b9a443096844bbee02716461363984206c74b70b5052f255c8a74044712e"
+    },
+    {
+      "source": "target/fresh-forge-observer/clean-third/identity-0.stdout.txt",
+      "retained": "machine/architecture-hardening/h23-fresh-observation-evidence/clean-third/identity-0.stdout.txt",
+      "sha256": "cd0f9fcefaf5ac17676469c4003a1930f12391cadae596146f3794a3b4c43a93"
+    },
+    {
+      "source": "target/fresh-forge-observer/clean-third/observation.json",
+      "retained": "machine/architecture-hardening/h23-fresh-observation-evidence/clean-third/observation.json",
+      "sha256": "54335ecc3bbad2a5e59d363233138a5d55e5856aeb1e171a5da22959025657fa"
+    },
+    {
+      "source": "target/fresh-forge-observer/clean-third/observe.stderr.txt",
+      "retained": "machine/architecture-hardening/h23-fresh-observation-evidence/clean-third/observe.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/fresh-forge-observer/clean-third/observe.stdout.txt",
+      "retained": "machine/architecture-hardening/h23-fresh-observation-evidence/clean-third/observe.stdout.txt",
+      "sha256": "63dae38cc773486e052bb48c2fb568d56216ed882c8c286004403336dc802e37"
+    },
+    {
+      "source": "target/fresh-forge-observer/clean-third/receipt.json",
+      "retained": "machine/architecture-hardening/h23-fresh-observation-evidence/clean-third/receipt.json",
+      "sha256": "4f25ef8abb99d2135eaa6a735758e6b4bad89936d2b042347e277630dd5f2288"
+    },
+    {
+      "source": "target/fresh-forge-observer/clean-third/request.json",
+      "retained": "machine/architecture-hardening/h23-fresh-observation-evidence/clean-third/request.json",
+      "sha256": "7becfb844e0a774dba2814075c671f3600e1594d38ad62ded6d756694130fc67"
+    },
+    {
+      "source": "target/fresh-forge-observer/clean-third/required.txt",
+      "retained": "machine/architecture-hardening/h23-fresh-observation-evidence/clean-third/required.txt",
+      "sha256": "ba6c01eb30033e7cc6a8f669c7debb57ea57e19b27261faa0702a141970010f0"
+    },
+    {
+      "source": "target/fresh-forge-observer/revelation-final/compile-identity.stderr.txt",
+      "retained": "machine/architecture-hardening/h23-fresh-observation-evidence/revelation-final/compile-identity.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/fresh-forge-observer/revelation-final/compile-identity.stdout.txt",
+      "retained": "machine/architecture-hardening/h23-fresh-observation-evidence/revelation-final/compile-identity.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/fresh-forge-observer/revelation-final/compile-observer-controls.stderr.txt",
+      "retained": "machine/architecture-hardening/h23-fresh-observation-evidence/revelation-final/compile-observer-controls.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/fresh-forge-observer/revelation-final/compile-observer-controls.stdout.txt",
+      "retained": "machine/architecture-hardening/h23-fresh-observation-evidence/revelation-final/compile-observer-controls.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/fresh-forge-observer/revelation-final/compile.stderr.txt",
+      "retained": "machine/architecture-hardening/h23-fresh-observation-evidence/revelation-final/compile.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/fresh-forge-observer/revelation-final/compile.stdout.txt",
+      "retained": "machine/architecture-hardening/h23-fresh-observation-evidence/revelation-final/compile.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/fresh-forge-observer/revelation-final/identity-0.stderr.txt",
+      "retained": "machine/architecture-hardening/h23-fresh-observation-evidence/revelation-final/identity-0.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/fresh-forge-observer/revelation-final/identity-0.stdout.txt",
+      "retained": "machine/architecture-hardening/h23-fresh-observation-evidence/revelation-final/identity-0.stdout.txt",
+      "sha256": "e704f3784649b2e7ab4b46472d4dcdd338e721147ef8166985aa5dd90c181b30"
+    },
+    {
+      "source": "target/fresh-forge-observer/revelation-final/observation.json",
+      "retained": "machine/architecture-hardening/h23-fresh-observation-evidence/revelation-final/observation.json",
+      "sha256": "18875f7082f8ef35fd7e394966f466260471e9cacffc2a560dbddb94a1696b7b"
+    },
+    {
+      "source": "target/fresh-forge-observer/revelation-final/observe.stderr.txt",
+      "retained": "machine/architecture-hardening/h23-fresh-observation-evidence/revelation-final/observe.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/fresh-forge-observer/revelation-final/observe.stdout.txt",
+      "retained": "machine/architecture-hardening/h23-fresh-observation-evidence/revelation-final/observe.stdout.txt",
+      "sha256": "c42cfd2970021576f8486c69254b97c41135f36f8209b0673a94cb45b96e3081"
+    },
+    {
+      "source": "target/fresh-forge-observer/revelation-final/observer-control-duplicate.stderr.txt",
+      "retained": "machine/architecture-hardening/h23-fresh-observation-evidence/revelation-final/observer-control-duplicate.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/fresh-forge-observer/revelation-final/observer-control-duplicate.stdout.txt",
+      "retained": "machine/architecture-hardening/h23-fresh-observation-evidence/revelation-final/observer-control-duplicate.stdout.txt",
+      "sha256": "63a6d6140242d5b22fd69df39725492dc8d80d9a269964f443f9eafa9d2df0ec"
+    },
+    {
+      "source": "target/fresh-forge-observer/revelation-final/observer-control-redefined.stderr.txt",
+      "retained": "machine/architecture-hardening/h23-fresh-observation-evidence/revelation-final/observer-control-redefined.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/fresh-forge-observer/revelation-final/observer-control-redefined.stdout.txt",
+      "retained": "machine/architecture-hardening/h23-fresh-observation-evidence/revelation-final/observer-control-redefined.stdout.txt",
+      "sha256": "250748147954440f2b089eaaf45ab52df44743c8ffe9b64325df595749ad1e2b"
+    },
+    {
+      "source": "target/fresh-forge-observer/revelation-final/observer-control-valid.stderr.txt",
+      "retained": "machine/architecture-hardening/h23-fresh-observation-evidence/revelation-final/observer-control-valid.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/fresh-forge-observer/revelation-final/observer-control-valid.stdout.txt",
+      "retained": "machine/architecture-hardening/h23-fresh-observation-evidence/revelation-final/observer-control-valid.stdout.txt",
+      "sha256": "cf0a587a123816a37886670e08e1691a75952a3f87e00cca3e21eb3882e6cf11"
+    },
+    {
+      "source": "target/fresh-forge-observer/revelation-final/python-controls.stderr.txt",
+      "retained": "machine/architecture-hardening/h23-fresh-observation-evidence/revelation-final/python-controls.stderr.txt",
+      "sha256": "223d3ee053e4f29028f4bb3b431054ec0cb9d31ad3c7d7bc459d708ffe871e75"
+    },
+    {
+      "source": "target/fresh-forge-observer/revelation-final/python-controls.stdout.txt",
+      "retained": "machine/architecture-hardening/h23-fresh-observation-evidence/revelation-final/python-controls.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/fresh-forge-observer/revelation-final/receipt.json",
+      "retained": "machine/architecture-hardening/h23-fresh-observation-evidence/revelation-final/receipt.json",
+      "sha256": "deba5f2110f173b705c94ba62b66f33ba09849f7a80bdee8a768c09a72b06b6e"
+    },
+    {
+      "source": "target/fresh-forge-observer/revelation-final/request.json",
+      "retained": "machine/architecture-hardening/h23-fresh-observation-evidence/revelation-final/request.json",
+      "sha256": "20290fcab0193239d69beca1436494202208a33c91a6650446a2aebbe436f4a3"
+    },
+    {
+      "source": "target/fresh-forge-observer/revelation-final/required.txt",
+      "retained": "machine/architecture-hardening/h23-fresh-observation-evidence/revelation-final/required.txt",
+      "sha256": "ba6c01eb30033e7cc6a8f669c7debb57ea57e19b27261faa0702a141970010f0"
+    },
+    {
+      "source": "target/fresh-forge-observer/revelation-final/v2-identities.json",
+      "retained": "machine/architecture-hardening/h23-fresh-observation-evidence/revelation-final/v2-identities.json",
+      "sha256": "50dbf21f69a4214f3dc7993eda07201ece80805f0f169de090d2c6cead807a3a"
+    },
+    {
+      "source": "target/fresh-forge-observer/revelation-initial/compile.stderr.txt",
+      "retained": "machine/architecture-hardening/h23-fresh-observation-evidence/revelation-initial/compile.stderr.txt",
+      "sha256": "36a6e2634a4d3a95fd0185428a690321fd01a9a38aecad9a53cbe330afa00f09"
+    },
+    {
+      "source": "target/fresh-forge-observer/revelation-initial/compile.stdout.txt",
+      "retained": "machine/architecture-hardening/h23-fresh-observation-evidence/revelation-initial/compile.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/fresh-forge-observer/revelation-initial/receipt.json",
+      "retained": "machine/architecture-hardening/h23-fresh-observation-evidence/revelation-initial/receipt.json",
+      "sha256": "de583ff9b7b8da2301bd8042879f94822b73bfc9b2c9f3747317c92bb964b861"
+    },
+    {
+      "source": "target/fresh-forge-observer/revelation-initial/request.json",
+      "retained": "machine/architecture-hardening/h23-fresh-observation-evidence/revelation-initial/request.json",
+      "sha256": "ce662e7f93436375dac87e3d1798f224f9a268fe240d30c0545644610764a232"
+    },
+    {
+      "source": "target/fresh-forge-observer/revelation-initial/required.txt",
+      "retained": "machine/architecture-hardening/h23-fresh-observation-evidence/revelation-initial/required.txt",
+      "sha256": "ba6c01eb30033e7cc6a8f669c7debb57ea57e19b27261faa0702a141970010f0"
+    },
+    {
+      "source": "target/fresh-forge-observer/revelation-manifest-final.json",
+      "retained": "machine/architecture-hardening/h23-fresh-observation-evidence/revelation-manifest-final.json",
+      "sha256": "a86f581af56327badf1d75b685cfa8b2094c35b2d10dbb7d9e2c5525f8addce1"
+    },
+    {
+      "source": "target/fresh-forge-observer/revelation-manifest-initial.json",
+      "retained": "machine/architecture-hardening/h23-fresh-observation-evidence/revelation-manifest-initial.json",
+      "sha256": "f81a2b12ff96e4af3fb14500b8b24a5366327099469a7985ba87d815496e52b6"
+    },
+    {
+      "source": "target/fresh-forge-observer/revelation-manifest-reviewed.json",
+      "retained": "machine/architecture-hardening/h23-fresh-observation-evidence/revelation-manifest-reviewed.json",
+      "sha256": "bf8109cba947f2ddede036ea1783a264a07d02e426197e477cfa86ccc4c42a90"
+    },
+    {
+      "source": "target/fresh-forge-observer/revelation-second/compile-identity.stderr.txt",
+      "retained": "machine/architecture-hardening/h23-fresh-observation-evidence/revelation-second/compile-identity.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/fresh-forge-observer/revelation-second/compile-identity.stdout.txt",
+      "retained": "machine/architecture-hardening/h23-fresh-observation-evidence/revelation-second/compile-identity.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/fresh-forge-observer/revelation-second/compile-observer-controls.stderr.txt",
+      "retained": "machine/architecture-hardening/h23-fresh-observation-evidence/revelation-second/compile-observer-controls.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/fresh-forge-observer/revelation-second/compile-observer-controls.stdout.txt",
+      "retained": "machine/architecture-hardening/h23-fresh-observation-evidence/revelation-second/compile-observer-controls.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/fresh-forge-observer/revelation-second/compile.stderr.txt",
+      "retained": "machine/architecture-hardening/h23-fresh-observation-evidence/revelation-second/compile.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/fresh-forge-observer/revelation-second/compile.stdout.txt",
+      "retained": "machine/architecture-hardening/h23-fresh-observation-evidence/revelation-second/compile.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/fresh-forge-observer/revelation-second/identity-0.stderr.txt",
+      "retained": "machine/architecture-hardening/h23-fresh-observation-evidence/revelation-second/identity-0.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/fresh-forge-observer/revelation-second/identity-0.stdout.txt",
+      "retained": "machine/architecture-hardening/h23-fresh-observation-evidence/revelation-second/identity-0.stdout.txt",
+      "sha256": "bfd011f7d2dd7d77a7aa423cc0829aa2b5c4f07dfcbc9c2a21d3ed06e0fd1c29"
+    },
+    {
+      "source": "target/fresh-forge-observer/revelation-second/observation.json",
+      "retained": "machine/architecture-hardening/h23-fresh-observation-evidence/revelation-second/observation.json",
+      "sha256": "9a418fd70a33dcb533f9ed8a4b6cddacad3a99ae5379f5791294964d4dd40c79"
+    },
+    {
+      "source": "target/fresh-forge-observer/revelation-second/observe.stderr.txt",
+      "retained": "machine/architecture-hardening/h23-fresh-observation-evidence/revelation-second/observe.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/fresh-forge-observer/revelation-second/observe.stdout.txt",
+      "retained": "machine/architecture-hardening/h23-fresh-observation-evidence/revelation-second/observe.stdout.txt",
+      "sha256": "4730cbec01cf380902977a8763cf1cc25a01b136815cb5de5633a671f515a460"
+    },
+    {
+      "source": "target/fresh-forge-observer/revelation-second/observer-control-duplicate.stderr.txt",
+      "retained": "machine/architecture-hardening/h23-fresh-observation-evidence/revelation-second/observer-control-duplicate.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/fresh-forge-observer/revelation-second/observer-control-duplicate.stdout.txt",
+      "retained": "machine/architecture-hardening/h23-fresh-observation-evidence/revelation-second/observer-control-duplicate.stdout.txt",
+      "sha256": "63a6d6140242d5b22fd69df39725492dc8d80d9a269964f443f9eafa9d2df0ec"
+    },
+    {
+      "source": "target/fresh-forge-observer/revelation-second/observer-control-redefined.stderr.txt",
+      "retained": "machine/architecture-hardening/h23-fresh-observation-evidence/revelation-second/observer-control-redefined.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/fresh-forge-observer/revelation-second/observer-control-redefined.stdout.txt",
+      "retained": "machine/architecture-hardening/h23-fresh-observation-evidence/revelation-second/observer-control-redefined.stdout.txt",
+      "sha256": "250748147954440f2b089eaaf45ab52df44743c8ffe9b64325df595749ad1e2b"
+    },
+    {
+      "source": "target/fresh-forge-observer/revelation-second/observer-control-valid.stderr.txt",
+      "retained": "machine/architecture-hardening/h23-fresh-observation-evidence/revelation-second/observer-control-valid.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/fresh-forge-observer/revelation-second/observer-control-valid.stdout.txt",
+      "retained": "machine/architecture-hardening/h23-fresh-observation-evidence/revelation-second/observer-control-valid.stdout.txt",
+      "sha256": "cf0a587a123816a37886670e08e1691a75952a3f87e00cca3e21eb3882e6cf11"
+    },
+    {
+      "source": "target/fresh-forge-observer/revelation-second/python-controls.stderr.txt",
+      "retained": "machine/architecture-hardening/h23-fresh-observation-evidence/revelation-second/python-controls.stderr.txt",
+      "sha256": "6e9792fb2bb9c647f8f6da93541119387a90e689e7c07ce7b2b92b5942dbbc2a"
+    },
+    {
+      "source": "target/fresh-forge-observer/revelation-second/python-controls.stdout.txt",
+      "retained": "machine/architecture-hardening/h23-fresh-observation-evidence/revelation-second/python-controls.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/fresh-forge-observer/revelation-second/receipt.json",
+      "retained": "machine/architecture-hardening/h23-fresh-observation-evidence/revelation-second/receipt.json",
+      "sha256": "7d1c91e6bef018b096d90576a8aadcd35601bbebdd10eddf0f88ffaf435d9933"
+    },
+    {
+      "source": "target/fresh-forge-observer/revelation-second/request.json",
+      "retained": "machine/architecture-hardening/h23-fresh-observation-evidence/revelation-second/request.json",
+      "sha256": "941163b084c14eb799a0fd557d8cd569b04847f6176a242b905fd106a8afde54"
+    },
+    {
+      "source": "target/fresh-forge-observer/revelation-second/required.txt",
+      "retained": "machine/architecture-hardening/h23-fresh-observation-evidence/revelation-second/required.txt",
+      "sha256": "ba6c01eb30033e7cc6a8f669c7debb57ea57e19b27261faa0702a141970010f0"
+    },
+    {
+      "source": "target/fresh-forge-observer/revelation-second/v2-identities.json",
+      "retained": "machine/architecture-hardening/h23-fresh-observation-evidence/revelation-second/v2-identities.json",
+      "sha256": "74302a0878460a0881f9c27badd846dcc17333d7cf8e7f4795f51814d28ab0a2"
+    }
+  ],
+  "outstanding": [
+    "QualificationEngine acquisition adapter and evidence certificate binding",
+    "Fresh V2 writer recipes and actual post-hook definition capture",
+    "Independent permitted frame relation, loader/hierarchy and verification proof",
+    "Writer/lifecycle/extractor/registry/capability closure",
+    "Clean and Revelation V2 profile requalification before live shadow"
+  ]
+}

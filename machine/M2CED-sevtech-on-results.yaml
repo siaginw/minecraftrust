@@ -1,0 +1,98 @@
+# M2CED SevTech ON_EXPERIMENTAL bounded campaign (operator authorization
+# 2026-09-20). SevTech: Ages 3.2.3 / Target D — the FINAL modpack
+# ON_EXPERIMENTAL compatibility rung. Rust-compressed outbound bytes
+# AUTHORITATIVE. M1 parked/OFF throughout; M2-PERSIST parked; default mode
+# NOT changed (operator stop boundary honored).
+# class: MEASURED. Provenance: M2CED-SEVTECH-ON.
+# Correctness/compatibility validation: NO TPS/MSPT/whole-server claim
+# (directive 7); network-worker observations only.
+schema_version: 1
+date: "2026-09-20"
+target:
+  pack: "SevTech: Ages 3.2.3 (existing known-good install/world/config; pack contents NOT modified)"
+  forge: "14.23.5.2860"
+  java: "Temurin jdk-8.0.504.1-hotspot"
+  mods: 262 (FoamFix; NO Phosphor — compatibility-scope note preserved)
+  port: 25568
+  playerdata_at_start: 297 files (Prestige boot-inflation pruned in M2CC era; boot normal: ~80s server-start to Done)
+builds:
+  dll: {sha256_prefix: 0acb7469a74d9531, note: "unchanged since M2.0"}
+  coremod: {sha256_prefix: c975fc1c81aed912, note: "same jar as M2CE (A) and M2CER (C); supersedes 3297b2f9 on D"}
+rig_evolution: # two setup failures preserved (M2J precedent); neither is a server correctness fault
+  attempt_1: "PRESERVED as *-failed1: all 12 readiness probes rejected with 'Server Mod rejections' — the client default M1_MODLIST is targetC's (Revelation) list; SevTech requires its own mod-ids.json. 24 native handshake packets were transmitted to rejected bots and the channels closed cleanly (no fault). Fix: M1_MODLIST on every client invocation."
+  attempt_2: "PRESERVED as *-failed2: probe (with D modlist) accepted, but the WALK client still sent the default list — the sed-style patch missed the multi-line walk invocation and the grep count was masked by a now-removed comment variable (silent-patch lesson). Fix: explicit Edit of the walk line; 4/4 client invocations verified before attempt 3."
+  attempt_3: "clean: probe accepted first try on both runs (Done+~42s, matching the M2CER settle+probe pattern)."
+run_1_normal: # machine/targetD/server/run-mced-d-on1.log; launch 15:33:24, stop 15:44:04 (window 640s)
+  workload: "1 login-readiness probe + perfbotb corridor walk (63 hops x 40 blocks, 260s, ping-pong span 600 on the pre-generated corridor) + 15 sequential login/logout sessions (8s hold) — the reconnect batch M2CC's expired window never ran"
+  m2c_native_packets: 28191
+  m2c_native_bytes_tx_plaintext: 885580859
+  m2c_bytes_rust_compressed: 72956945
+  m2c_bytes_java: 0
+  compressed_size_ratio: "8.2% of plaintext (12.1:1)"
+  fallbacks: {total: 0, noctx: 0, native: 0}
+  contexts: {created: 17, freed: 17}
+  on_verify: {checks: 96, matches: 96, mismatches: 0}
+  threshold: {runtime: 256, changes: 0}
+  transform: "nmCompression.transformCount=1 TRANSFORMED_SUCCESS"
+  client: {walk: "20,367 chunks / 708,687 frames / 63 hops / 0 errors", sessions: "15/15 logins, 6,615 chunks, 77,846 frames, 0 errors"}
+  leak_events: 0
+  clean_shutdown: yes
+run_2_paranoid: # machine/targetD/server/run-mced-d-on2.log; launch 15:45:05, stop 15:51:25 (window 320s), -Dio.netty.leakDetection.level=paranoid
+  workload: "1 login-readiness probe + 8 sequential login/logout sessions (8s hold)"
+  m2c_native_packets: 4329
+  m2c_native_bytes_tx_plaintext: 140372158
+  m2c_bytes_rust_compressed: 13447013
+  compressed_size_ratio: "9.6% of plaintext"
+  fallbacks: {total: 0, noctx: 0, native: 0}
+  contexts: {created: 9, freed: 9}
+  on_verify: {checks: 9, matches: 9, mismatches: 0}
+  threshold: {runtime: 256, changes: 0}
+  transform: TRANSFORMED_SUCCESS
+  client: {sessions: "8/8 logins, 3,528 chunks, 37,155 frames, 0 errors"}
+  leak_events: 0
+  clean_shutdown: yes
+campaign_totals:
+  native_packets_transmitted: 32520
+  native_plaintext_bytes: 1025953017
+  native_compressed_bytes: 86403958
+  compressed_size_ratio_total: "8.4% of plaintext"
+  client_decode_errors: 0
+  frames_decoded: 823688
+  chunk_packets_decoded: 30510
+  malformed_frames: 0
+  native_crashes: 0
+  lifecycle_faults: 0
+  threshold_failures: 0
+  pipeline_conflicts: 0
+  fallbacks: 0
+  contexts: "26/26 balanced (17/17 + 9/9)"
+  sampled_verification: "105 checks / 105 matches / 0 mismatches"
+  stop_conditions: NONE_TRIGGERED
+  zombie_jvms_after_campaign: 0
+compatibility_notes:
+  - "No mod occupies the vanilla compress seam on SevTech (transform installs the encoder; M2CC already showed the seam unoccupied in SHADOW)"
+  - "No ElecCore on SevTech: 0 leak events in the paranoid run (matches M2CC's SevTech baseline of 0)"
+  - "SevTech compresses much harder than Revelation (8.4% vs 13.8% of plaintext) — pack content mix, not an M2C property"
+network_worker_observation_only: # NOT a perf claim
+  rust_complete_path: {run_1: "4.713 s for 885.6 MB plaintext (~188 MB/s)", run_2: "0.774 s for 140.4 MB (~181 MB/s)"}
+  note: "complete path incl. direct-buffer copies + JNI + zlib-rs level 6; no Java arm in ON mode by design; matched throughput comparison is future work"
+ladder_status_after_this_run:
+  rungs_completed: "M2.0 prototype -> M2C Target A SHADOW -> M2CC modpack SHADOW (C+D) -> M2CE Target A ON -> M2CER Revelation ON -> M2CED SevTech ON (this run)"
+  all_on_runs: {native_packets_total: 139530, plaintext_total_bytes: 2877015903, decode_errors: 0, fallbacks: 0, leaks_attributable_to_m2c: 0, contexts: "100/100 balanced (36/36 A + 38/38 C + 26/26 D)"}
+  sampled_verification_all_on_runs: "487 checks / 487 matches / 0 mismatches"
+recommendation: ELIGIBLE_FOR_OPTIONAL_DEFAULT_ENABLED_DISCUSSION
+recommendation_reasoning: >
+  The final compatibility rung passed cleanly: 32,520 Rust-compressed
+  packets authoritative on SevTech's 262-mod surface (1.03 GB plaintext,
+  8.4% compressed ratio), 0 fallbacks, 0 decode errors over 823,688
+  frames, contexts 26/26, 0 leaks under paranoid detection, sampled
+  verification 105/105, clean shutdowns. Across ALL three ON campaigns
+  (A + C + D): 139,530 native packets, 2.88 GB plaintext, 0 M2C-
+  attributable faults of any class. The remaining honest gaps for a
+  default-on decision are (1) real human-client gameplay (all evidence
+  is protocol-bot traffic), (2) matched fresh-JVM throughput microbench
+  (the ~180 MB/s observation has no Java arm), (3) long-duration soak
+  (all runs < 15 min), and (4) the operator's own risk posture for an
+  experimental-native wire path. Default mode remains OFF pending that
+  discussion; no mode change was made in this campaign.
+next_step: "Operator decision: open the optional/default-enabled discussion (or order broader testing: real clients, soak, microbench). STOP honored: default unchanged."

@@ -1,0 +1,43 @@
+default-off: begin returns null with no admission -> PASS
+[live-capture] token diagnostic unavailable: java.lang.NullPointerException
+matrix-1 setup: binding READY -> PASS
+matrix-1: admitted -> PASS
+matrix-1: sealed + enqueued -> PASS
+matrix-1: exactly one sealed capture drained once -> PASS
+matrix-1: transport is RCSNAP01 scope 3 -> PASS (scope=3)
+matrix-1: java payload owned and masked -> PASS
+matrix-12: commit twice ignored (12. seal called twice) -> PASS
+matrix-2: admitted -> PASS
+matrix-2: invalidated capture published nothing -> PASS
+matrix-3/4/5: retired binding rejects NO_BINDING -> PASS
+[live-capture] FIRST disqualification at writerBegin rogue: com.rustcraft.bridge.capture.LiveWriterGate$ProtocolViolationException: OFF_OWNER_PUBLISHED_WRITE: off-owner published write; receiver=com.rustcraft.bridge.capture.LiveCaptureAdmissionTest$FakeChunk op=rogue
+  at com.rustcraft.bridge.capture.LiveWriterGate.beginWrite(LiveWriterGate.java:378)
+  at com.rustcraft.bridge.capture.LiveWriterHooks.writerBegin(LiveWriterHooks.java:365)
+  at com.rustcraft.bridge.capture.LiveCaptureAdmissionTest.lambda$caseUnknownWriterDisqualifiesThenRejected$0(LiveCaptureAdmissionTest.java:254)
+  at java.lang.Thread.run(Thread.java:750)
+Exception in thread "Thread-0" com.rustcraft.bridge.capture.LiveWriterGate$ProtocolViolationException: OFF_OWNER_PUBLISHED_WRITE: off-owner published write; receiver=com.rustcraft.bridge.capture.LiveCaptureAdmissionTest$FakeChunk op=rogue
+	at com.rustcraft.bridge.capture.LiveWriterGate.beginWrite(LiveWriterGate.java:378)
+	at com.rustcraft.bridge.capture.LiveWriterHooks.writerBegin(LiveWriterHooks.java:365)
+	at com.rustcraft.bridge.capture.LiveCaptureAdmissionTest.lambda$caseUnknownWriterDisqualifiesThenRejected$0(LiveCaptureAdmissionTest.java:254)
+	at java.lang.Thread.run(Thread.java:750)
+matrix-6: rogue write disqualified the session -> PASS
+matrix-6: capture refused RUNTIME_DISQUALIFIED -> PASS
+matrix-7: immediate WRITER_ACTIVE fallback, never waits -> PASS
+matrix-8: TE-bearing chunk rejected -> PASS
+matrix-11: extraction failure released the gate (next attempt admits) -> PASS
+matrix-9: u16 overflow rejected EXTENDED_ID -> PASS
+matrix-13: capacity overflow dropped the diagnostic work only -> PASS
+matrix-14: java payload returned by clone -> PASS
+matrix-14: transport deterministic and fully owned -> PASS
+matrix-15: consumer works after capture completion -> PASS
+matrix-18 setup: admitted -> PASS
+matrix-18: abort released the gate for the next attempt -> PASS
+matrix-18: next attempt admits after abort -> PASS
+mask-mismatch setup: admitted -> PASS
+mask-mismatch: commit rejected, nothing published -> PASS
+io-provenance: qualified ticket derives the byte[] backing (no taint) -> PASS (null)
+io-provenance: the component and backing are registered under the same ticket -> PASS
+io-provenance: unqualified ticket keeps UNKNOWN_BACKING (fail-closed) -> PASS (UNKNOWN_BACKING_PROVENANCE)
+io-provenance: unqualified ticket is not source-qualified -> PASS
+io-provenance: cross-ticket registration still taints (existing identity) -> PASS (EXISTING_IDENTITY_RELABELED)
+RESULT: 31 pass, 0 fail

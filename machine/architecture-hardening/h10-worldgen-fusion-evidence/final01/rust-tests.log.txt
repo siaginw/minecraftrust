@@ -1,0 +1,145 @@
+   Compiling proc-macro2 v1.0.107
+   Compiling quote v1.0.47
+   Compiling unicode-ident v1.0.26
+   Compiling windows-link v0.2.1
+   Compiling semver v1.0.28
+   Compiling thiserror v2.0.21
+   Compiling simdutf8 v0.1.5
+   Compiling bytes v1.12.1
+   Compiling memchr v2.8.3
+   Compiling log v0.4.34
+   Compiling rustcraft-core v0.1.0 (D:\minecraftrust-astra-hardening\crates\rustcraft-core)
+   Compiling cfg-if v1.0.5
+   Compiling worldgen-noise v0.1.0 (D:\minecraftrust-astra-hardening\crates\worldgen-noise)
+   Compiling windows-sys v0.61.2
+   Compiling simd_cesu8 v1.2.0
+   Compiling rustc_version v0.4.1
+warning: value assigned to `l0` is never read
+   --> D:\minecraftrust-astra-hardening\crates\worldgen-noise\src\lib.rs:236:14
+    |
+236 |         let (mut l0, mut l1, mut l2, mut l3): (i32, i32, i32, i32) = (0, 0, 0, 0);
+    |              ^^^^^^ this value is reassigned later and never used
+...
+261 |                         l0 = self.perm[b0b as usize] + cz;
+    |                         --------------------------------- `l0` is overwritten here before the previous value is read
+    |
+    = note: `#[warn(unused_assignments)]` (part of `#[warn(unused)]`) on by default
+
+warning: value assigned to `l1` is never read
+   --> D:\minecraftrust-astra-hardening\crates\worldgen-noise\src\lib.rs:236:22
+    |
+236 |         let (mut l0, mut l1, mut l2, mut l3): (i32, i32, i32, i32) = (0, 0, 0, 0);
+    |                      ^^^^^^ this value is reassigned later and never used
+...
+262 |                         l1 = self.perm[(b0b + 1) as usize] + cz;
+    |                         --------------------------------------- `l1` is overwritten here before the previous value is read
+
+warning: value assigned to `l2` is never read
+   --> D:\minecraftrust-astra-hardening\crates\worldgen-noise\src\lib.rs:236:30
+    |
+236 |         let (mut l0, mut l1, mut l2, mut l3): (i32, i32, i32, i32) = (0, 0, 0, 0);
+    |                              ^^^^^^ this value is reassigned later and never used
+...
+264 |                         l2 = self.perm[b1b as usize] + cz;
+    |                         --------------------------------- `l2` is overwritten here before the previous value is read
+
+warning: value assigned to `l3` is never read
+   --> D:\minecraftrust-astra-hardening\crates\worldgen-noise\src\lib.rs:236:38
+    |
+236 |         let (mut l0, mut l1, mut l2, mut l3): (i32, i32, i32, i32) = (0, 0, 0, 0);
+    |                                      ^^^^^^ this value is reassigned later and never used
+...
+265 |                         l3 = self.perm[(b1b + 1) as usize] + cz;
+    |                         --------------------------------------- `l3` is overwritten here before the previous value is read
+
+warning: unused variable: `len`
+   --> D:\minecraftrust-astra-hardening\crates\worldgen-noise\src\field.rs:177:13
+    |
+177 |         let len = (x_size * y_size * z_size) as usize;
+    |             ^^^ help: if this is intentional, prefix it with an underscore: `_len`
+    |
+    = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+   Compiling mc-1-12-x v0.1.0 (D:\minecraftrust-astra-hardening\versions\mc_1_12_x)
+warning: value assigned to `l0` is never read
+   --> D:\minecraftrust-astra-hardening\crates\worldgen-noise\src\field_complete.rs:113:10
+    |
+113 |     let (mut l0, mut l1, mut l2, mut l3) = (0i32, 0i32, 0i32, 0i32);
+    |          ^^^^^^ this value is reassigned later and never used
+...
+135 |                     l0 = perm[b0 as usize] as i32 + cz;
+    |                     ---------------------------------- `l0` is overwritten here before the previous value is read
+
+warning: value assigned to `l1` is never read
+   --> D:\minecraftrust-astra-hardening\crates\worldgen-noise\src\field_complete.rs:113:18
+    |
+113 |     let (mut l0, mut l1, mut l2, mut l3) = (0i32, 0i32, 0i32, 0i32);
+    |                  ^^^^^^ this value is reassigned later and never used
+...
+136 |                     l1 = perm[(b0 + 1) as usize] as i32 + cz;
+    |                     ---------------------------------------- `l1` is overwritten here before the previous value is read
+
+warning: value assigned to `l2` is never read
+   --> D:\minecraftrust-astra-hardening\crates\worldgen-noise\src\field_complete.rs:113:26
+    |
+113 |     let (mut l0, mut l1, mut l2, mut l3) = (0i32, 0i32, 0i32, 0i32);
+    |                          ^^^^^^ this value is reassigned later and never used
+...
+138 |                     l2 = perm[b1 as usize] as i32 + cz;
+    |                     ---------------------------------- `l2` is overwritten here before the previous value is read
+
+warning: value assigned to `l3` is never read
+   --> D:\minecraftrust-astra-hardening\crates\worldgen-noise\src\field_complete.rs:113:34
+    |
+113 |     let (mut l0, mut l1, mut l2, mut l3) = (0i32, 0i32, 0i32, 0i32);
+    |                                  ^^^^^^ this value is reassigned later and never used
+...
+139 |                     l3 = perm[(b1 + 1) as usize] as i32 + cz;
+    |                     ---------------------------------------- `l3` is overwritten here before the previous value is read
+
+warning: variable does not need to be mutable
+   --> D:\minecraftrust-astra-hardening\crates\worldgen-noise\src\field_complete.rs:472:13
+    |
+472 |         let mut take = |n_oct: usize, perms: &[u8], offsets: &[f64],
+    |             ----^^^^
+    |             |
+    |             help: remove this `mut`
+    |
+    = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+   Compiling jni-macros v0.22.4
+   Compiling combine v4.6.8
+warning: `worldgen-noise` (lib) generated 10 warnings (run `cargo fix --lib -p worldgen-noise` to apply 2 suggestions)
+   Compiling winapi-util v0.1.11
+   Compiling syn v2.0.119
+   Compiling syn v3.0.6
+   Compiling same-file v1.0.6
+   Compiling walkdir v2.5.0
+   Compiling jni v0.22.4
+   Compiling thiserror-impl v2.0.21
+   Compiling jni-sys-macros v0.4.1
+   Compiling jni-sys v0.4.1
+   Compiling worldgen-fusion-experiment v0.1.0 (D:\minecraftrust-astra-hardening\tools\worldgen-fusion-experiment)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 7.76s
+     Running unittests src\lib.rs (target\architecture-hardening\h10-final-01\native-build\debug\deps\worldgen_fusion_experiment-853834866f3c1c55.exe)
+
+running 3 tests
+test tests::invalid_inputs_rejected ... ok
+test tests::exact_float_widening_and_u32 ... ok
+test tests::all_cells_follow_y_major_inner_order ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests\adapter_boundary.rs (target\architecture-hardening\h10-final-01\native-build\debug\deps\adapter_boundary-3515e3d7bf4091b1.exe)
+
+running 1 test
+test wide_dense_id_requires_explicit_epoch_bound_version_mapping ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.20s
+
+   Doc-tests worldgen_fusion_experiment
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+

@@ -1,0 +1,171 @@
+# SYNTHETIC (M1.4-R invalidation): numeric tables in this file were AUTHORED,
+# not measured (see evidence-invalidation-register.md). Illustrative of SHAPE
+# only; must NOT feed active empirical decisions. Do not cite as evidence.
+version: 1
+current_project_stage: M1-final (evidence preservation + acceptance review 2026-09-19)
+
+status_legend:
+  research_status: [NOT_STARTED, IN_PROGRESS, MAPPED, VERIFIED]
+  implementation_state: [JAVA_ONLY, SKELETON, SHADOW, HYBRID, RUST_PRIMARY]
+
+subsystems:
+  transport_buffers:
+    target_stage: P1
+    research_status: MAPPED
+    implementation_state: JAVA_ONLY
+    risk_tier: LOW
+    parity_tests_count: 27
+    benchmarks_count: 6
+    assigned_doc: "docs/learned/netty_server_bootstrap.md"
+    notes: "P0-5 research complete: VarInt framing, Netty pipeline, Netty ByteBuf de facto mod ABI mapped. Authoritative ownership remains JAVA_OWNED."
+
+  packet_compression:
+    target_stage: P2
+    research_status: MAPPED
+    implementation_state: JAVA_ONLY
+    risk_tier: LOW
+    parity_tests_count: 5
+    benchmarks_count: 4
+    assigned_doc: "docs/learned/packet_framing.md"
+    notes: "P0-5 research complete: zlib threshold 256, 2 MiB bomb guard, CPU vs wire savings mapped. Authoritative ownership remains JAVA_OWNED."
+
+  nbt_codec:
+    target_stage: P2
+    research_status: PARITY_PARTIAL
+    implementation_state: SKELETON
+    risk_tier: MEDIUM
+    parity_tests_count: 6
+    benchmarks_count: 3
+    assigned_doc: "docs/learned/nbt_specification.md"
+    notes: "Research prototype in crates/nbt; wire-format and benchmark target only. Authoritative ownership remains JAVA_OWNED."
+
+  region_io:
+    target_stage: P2
+    research_status: MAPPED
+    implementation_state: JAVA_ONLY
+    risk_tier: MEDIUM
+    parity_tests_count: 1
+    benchmarks_count: 1
+    assigned_doc: "docs/learned/anvil_region_format.md"
+
+  chunk_storage:
+    target_stage: P4
+    research_status: MAPPED
+    implementation_state: JAVA_ONLY
+    risk_tier: HIGH
+    parity_tests_count: 1
+    benchmarks_count: 1
+    assigned_doc: "docs/learned/chunk_lifecycle.md"
+
+  block_storage:
+    target_stage: P1
+    research_status: MAPPED
+    implementation_state: JAVA_ONLY
+    risk_tier: HIGH
+    parity_tests_count: 53
+    benchmarks_count: 9
+    assigned_doc: "docs/learned/block_state_container.md"
+    notes: "P0-6 research complete: BitArray boundary spanning, palette tiers, 16-bit state IDs, and FFI granularity penalty mapped. Authoritative ownership remains JAVA_OWNED."
+
+  spatial_index:
+    target_stage: P3
+    research_status: MAPPED
+    implementation_state: JAVA_ONLY
+    risk_tier: MEDIUM
+    parity_tests_count: 0
+    benchmarks_count: 0
+    assigned_doc: "docs/learned/tick_pipeline.md"
+
+  lighting_engine:
+    target_stage: P3
+    research_status: NOT_STARTED
+    implementation_state: JAVA_ONLY
+    risk_tier: MEDIUM
+    parity_tests_count: 0
+    benchmarks_count: 0
+    assigned_doc: "docs/learned/chunk_lifecycle.md"
+
+  pathfinding:
+    target_stage: P3
+    research_status: MAPPED
+    implementation_state: JAVA_ONLY
+    risk_tier: LOW
+    parity_tests_count: 0
+    benchmarks_count: 0
+    assigned_doc: "docs/learned/tick_pipeline.md"
+
+  entity_simulation:
+    target_stage: P6
+    research_status: MAPPED
+    implementation_state: JAVA_ONLY
+    risk_tier: HIGH
+    parity_tests_count: 0
+    benchmarks_count: 0
+    assigned_doc: "docs/learned/tick_pipeline.md"
+
+  tile_entity_simulation:
+    target_stage: P6
+    research_status: MAPPED
+    implementation_state: JAVA_ONLY
+    risk_tier: CRITICAL
+    parity_tests_count: 0
+    benchmarks_count: 0
+    assigned_doc: "docs/learned/tick_pipeline.md"
+
+  block_updates:
+    target_stage: P6
+    research_status: MAPPED
+    implementation_state: JAVA_ONLY
+    risk_tier: HIGH
+    parity_tests_count: 0
+    benchmarks_count: 0
+    assigned_doc: "docs/learned/tick_pipeline.md"
+
+  world_generator:
+    target_stage: P3
+    research_status: NOT_STARTED
+    implementation_state: JAVA_ONLY
+    risk_tier: HIGH
+    parity_tests_count: 0
+    benchmarks_count: 0
+    assigned_doc: "docs/learned/chunk_lifecycle.md"
+
+  forge_runtime_bridge:
+    target_stage: P7
+    research_status: MAPPED
+    implementation_state: JAVA_ONLY
+    risk_tier: CRITICAL
+    parity_tests_count: 16
+    benchmarks_count: 18
+    assigned_doc: "docs/architecture/reference-forge-runtime.md"
+    notes: "P0-7 research complete: EventBus ASM/ListenerList, ForgeRegistry lifecycle & freeze, CapabilityDispatcher scaling, OreDictionary, and recipe matching mapped. Authoritative ownership remains JAVA_OWNED."
+
+  coremod_asm_adapter:
+    target_stage: P7
+    research_status: MAPPED
+    implementation_state: JAVA_ONLY
+    risk_tier: CRITICAL
+    parity_tests_count: 5
+    benchmarks_count: 3
+    assigned_doc: "docs/learned/coremod_runtime.md"
+    notes: "P0-7 research complete: LaunchWrapper classloader topology, ASM method injection/return interception, AT survey, and native façade feasibility mapped. Authoritative ownership remains JAVA_OWNED."
+
+  modpack_integration_baseline:
+    target_stage: P8
+    research_status: VERIFIED
+    implementation_state: JAVA_ONLY
+    risk_tier: CRITICAL
+    parity_tests_count: 4
+    benchmarks_count: 28
+    assigned_doc: "docs/benchmarks/primary-pack-baseline.md"
+    notes: "P0-8 research complete: Clean, Minimal, FTB Revelation, and SevTech empirical baselines established. Server thread compute, mod attribution, tech systems, autosave, and candidate seams mapped. Authoritative ownership remains JAVA_OWNED."
+
+  chunk_packet_encoding:
+    target_stage: M1
+    research_status: VERIFIED
+    implementation_state: SHADOW
+    risk_tier: LOW
+    parity_tests_count: 111010
+    benchmarks_count: 12
+    assigned_doc: "docs/migrations/M1-final-target-coverage.md"
+    notes: "M1-final (2026-09-19): corrected parity 11k + 100k zero-divergence; live SHADOW parity and ON_EXPERIMENTAL native transmission validated on real servers Targets A/B/C/D (provenance TARGETA-*, M14R2-*, TARGET-B/C/D-*). HANDOFF-A equal-scope performance: see provenance M14R2-PERF-DERIVED for the qualified result (eligible-class pooled p50 reduction; p99 mixed; ineligible routed to Java). The numeric table below predates M1.4-R and remains SYNTHETIC per the file banner — do not cite it."

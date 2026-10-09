@@ -1,0 +1,60 @@
+# M1H final validation results (operator authorization 2026-09-19).
+# All runs on the FINAL build: coremod 9343412e (M1G pre-gate) + dll 02c722de.
+# Provenance ids M1H-SEVTECH-SHADOW / M1H-SEVTECH-ONEXP / M1H-SEVTECH-PARANOID /
+# M1H-ELECCORE-BASELINE-FINAL / M1H-TARGET-B-REVAL.
+schema_version: 1
+milestone: M1H
+date: "2026-09-19"
+sevtech_target_d:
+  shadow: {sessions: 25, chunk_packets: 11025, comparisons: 11025, matches: 11025, mismatches: 0, fallbacks: 0, bot_errors: 0}
+  on_experimental: {sessions: 10, chunk_packets: 4410, native_transmitted: 4410, java_path: 0, fallbacks: 0, bot_errors: 0}
+  paranoid: {sessions: 6, chunk_packets: 2646, native_transmitted: 2646, fallbacks: 0, leak_events: 0, bot_errors: 0}
+  requirements: ">=10,000 shadow comparisons (11025 OK), 0 divergence (OK), >=2,000 native (4410 OK), 0 decode errors / 0 fallback (OK), paranoid clean (OK)"
+  foamfix: "0.10.10 active (FoamFixTransformer splicing verified in run log)"
+  phosphor: "NOT INSTALLED in SevTech (per operator-approved coverage amendment; see machine/compatibility-scope.yaml)"
+  mixins: "SpongePowered MIXIN Subsystem 0.8 active (via JustEnoughIDs et al.; mixin target-resolution warnings present and benign)"
+  operational_notes: >
+    Two earlier launch attempts stalled: (1) bot playerdata accumulation (1151
+    files) inflated SevTech boot via Prestige per-player loading to ~7 min -
+    fixed by pruning zero-progression bot playerdata (fixture manifest
+    regenerated, documented); (2) a launch raced the previous JVM's shutdown
+    (log/world file collision, AE2 shutdown-hook NPE) - process hygiene fixed;
+    (3) Target D listens on server-port 25568 (not 25565), and the Netty port
+    binds before FML finishes loading, so readiness must be detected via the
+    run log 'Done (' line. Stalled-attempt logs were removed; the successful
+    runs' logs are the committed evidence.
+revelation_target_c_off_baseline:
+  mode: "native OFF + paranoid leak detection, FINAL coremod build"
+  sessions: 8
+  java_path_packets: 3528
+  native_transmitted: 0
+  eleccore_leak_events: 1
+  result: >
+    The identical ElecCore WindowManager SEVERE leak (elec332 ElecByteBuf
+    stacks) fires with M1 fully disabled on the final build ->
+    PACK_BASELINE_UNRELATED_TO_M1 reconfirmed. Extract committed:
+    machine/raw/M1H-eleccore-leak-native-OFF-finalbuild.txt.
+target_b:
+  decision: >
+    NO substitution required: the exact planned anchor set was already
+    acquired and tested (Thermal Expansion 5.5.7.1 + Thermal Foundation
+    2.6.7.1 + CoFH Core, AE2 rv6-stable-7, Tinkers Construct 2.12.0.135 +
+    Mantle, Iron Chests 7.0.67.844, JourneyMap 5.5.4; 12 mods total incl.
+    dependencies). The historical 'blocked on missing Thermal assets' state
+    is obsolete; GATE-COMPAT-B is satisfied as written.
+  revalidation: {sessions: 6, comparisons: 2646, matches: 2646, mismatches: 0, fallbacks: 0, bot_errors: 0}
+live_totals_all_campaigns: # M1F campaigns (old jar) + M1G A runs + M1H runs (final jar)
+  shadow_comparisons: 104130   # A 23004, B 48951, C 10143, D 22032
+  shadow_divergences: 0
+  native_packets_on_experimental: 315567   # A 5103, B 69678, C 117306, D 123480
+  live_fallbacks: 0
+  client_decode_errors: 0
+  eligibility_note: "100% of live ON-mode packets were native-eligible across every campaign (native_ineligible=0, pregate_skipped=0); small-packet routing is validated offline only"
+offline_parity_totals:
+  true_vanilla_reference: "11,000 fixtures / 0 divergence (a81fb39) + 9,277 spot / 0 divergence (M1G)"
+  corrected_shadow_campaign: "100,000 consecutive / 0 mismatch (5097759)"
+timing_and_gates:
+  eligible_packet_path: "pooled p50 Java 6.70us vs native 4.70us (M14R2 corpus); replicated 28.8-36.1% p50 reduction across 4 fresh JVMs (M1F/M1G)"
+  p99: "pooled native p99 better in 8/8 replication JVMs; det5 fixture-level tail open risk (allocation-phase; see M1G)"
+  whole_server_mspt_tps_gc: "OPEN - never measured (GATE-PERF-SERVER/ALLOC/REGRESS)"
+  production_status: "experimental only; default OFF; Java authoritative"

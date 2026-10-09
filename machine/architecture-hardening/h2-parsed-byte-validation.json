@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "kind": "H2_PARSED_BYTE_BINDING_CORRECTION",
+  "status": "PASS",
+  "defect": "Separate parse and later hash could bind different file bytes. The deterministic profile edit control returned PASS before the correction.",
+  "implementation": "Manifest/profile/observation/placement/control JSON is parsed and SHA256-hashed from the same byte buffer; end drift check retains original digest.",
+  "tests": 41,
+  "skips": 0,
+  "new_controls": [
+    "Profile changes after read but before hashing",
+    "Observation,negative-control andplacementwitness changes after read"
+  ],
+  "receipt": {
+    "path": "target/architecture-hardening/h2-definition-binding-final-abe89b4d/receipt.json",
+    "sha256": "f8c6cef3840b8b52e365252ba922836511ce2debfff266083882e26c0eaa8617"
+  },
+  "sources": {
+    "tools/testing/qualification_engine.py": "ce66d4716637858063164b8a7e6d9eb9b88433246f3be1f9746ad75b07184b49",
+    "tools/testing/test_qualification_engine.py": "10390d5028ee7fe50e0da8bfec4815014b6cae9a0a0b833086b5981044b839a4",
+    "tools/testing/profile_verify.py": "8fd87e31e519923e9ce6af510b4a4b8b631db8c82daaeecf05d65271e53a77ff",
+    "tools/testing/test_profile_verify.py": "850cb68ea9ec8513fa6769bdef5d67f31df80a69d8abf701ca2c382fce5e8fd5",
+    "tools/testing/qualification_certificate.py": "3eca99c72af064990dd284f78398f68e79b00a4b6ec59eca215e57f56034b914",
+    "tools/testing/test_qualification_certificate.py": "c4de114633ef757595818070244d119668cf602b3f01709f34b7caf618775185",
+    "docs/engineering/qualification-engine-v2.md": "537b7f2c43d6c89e22e1dba8ce162e152a8796d0e28270d4093fd99f429c6442"
+  },
+  "reproduced_failure": {
+    "path": "target/architecture-hardening/h2-definition-binding-before-2/stderr.log",
+    "sha256": "7dad1753db9a21480534aa955c6a9c83281e8e827dbf0a89efd7a57f176bc493"
+  },
+  "test_selection_error": "target/architecture-hardening/h2-definition-binding-before/stderr.log",
+  "scope": "Generic engine synthetic integration only; existing Java/runtime adapter sources unchanged. No fresh V2 live qualification.",
+  "production_authority": false
+}

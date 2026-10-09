@@ -1,0 +1,17 @@
+# M5.8-R — NEGATIVE-CONTROL REPAIR + CANARY (checkpoint)
+schema_version: 1
+date: "2026-09-22"
+exception_cause: "TEST BUG: packetCtor().newInstance(chunk2) omitted the 65535 filter argument — Constructor.newInstance IllegalArgumentException (arity), no product code involved. Fixed."
+negative_control: "corrupted-native => REAL_MISMATCH (mism=1, expected section/cell values recorded); java reference bytes byte-asserted UNCHANGED; repaired native => MATCH. 43/43 suite + battery green (7/7,19/19,8/8,16/16,10/10)."
+capture_contract: "entry capture = int[16][4096] copies on the packet-construction (server) thread — the same thread that owns block/light/biome writes in the supported runtime; the copy is immutable once made; workers consume only the copy; no Rust lock is claimed to freeze Java. Endpoint equality + entry snapshot; A->B->A during the single-threaded ctor window is excluded by ownership, not heuristics. Cross-thread writers (worldgen biome/light) are covered by the packet-time freshness domains, not by the capture."
+canary: >
+  One-shot max-3 with ack: accepted=3 executed=3 sent=0 — the SEND invocation
+  failed: WorldServer.func_184164_z() NoSuchMethod (wrong SRG name for the
+  player list). The construction/comparator chain DID fire (full_ctor=2,
+  compared=2) — proving repeated explicit construction works — but the driver
+  send path needs the correct accessor. ONE comparator mismatch preserved:
+  "cx=-23 cz=-7 mask=31 TE -> section 1 cell 149 gid 76916 vs 11380" —
+  NEW signature (large modded gids, TE=true; NOT the mask/fluid classes).
+  Stop honored; no retry.
+other: "M2-C 44,121/44,121 shadows clean; cleanup 623->0 bytes; 0 exceptions in comparator"
+next: "(1) fix the player-list accessor (func_184164_z is wrong for WorldServer — use playerEntities field_73010_j or PlayerList); (2) diagnose the TE/gid-76916 mismatch offline (modded-state corpus); (3) re-canary"

@@ -1,0 +1,65 @@
+# M-CK4.1 — FRAME ADAPTER HARDENING / NON-VACUOUS GATES
+schema_version: 1
+date: "2026-09-22"
+binary:
+  dll_sha256: c10ddca1ce3c82255e78154fde657408e82fa354707bc5174deb5b0a6cb62d2c
+  dll_abs_path: D:\minecraftrust\target\release\rustcraft_ffi.dll
+  source_commit: d01e40e tree (frame.rs unchanged this checkpoint — only Java-side repair)
+  build: cargo build -p ffi --release; validation launcher pins -Djava.library.path=<target/release> and runs from that directory, preventing search-path selection of a stale DLL
+retry_defect_and_fix: >
+  DEFECT: OutboundFrameCtx passed RETRY_BB_TL's direct address to native but read
+  needed from an UNRELATED int[] ThreadLocal (never written by native); the
+  direct ThreadLocal was initialized only on the class-initializing thread; the
+  retry counter existed without a limit. FIX: one per-context retry-result
+  direct ByteBuffer (4-byte, native order — correct under the single-owner
+  contract), cleared before EVERY native call; the needed value is read from
+  the buffer NATIVE WROTE; explicit one-retry ceiling (retriesThisCall);
+  guards reject needed<=0, needed<=failedCap (nonsensical bound), and
+  needed>policyLimit (resource policy 16 MiB default, instance field so
+  offline tests can lower it — wire-format 3-byte limit remains in Rust).
+  Injection seam: package-private testForceFirstCapacity forces a REAL
+  insufficient-capacity frameEncode through the normal wrapper + JNI (cannot be
+  activated by any runtime property).
+gates: >
+  ALL with negative controls proving the assertion detects failure:
+  1. Retry (positive): forced ERR_CAPACITY -> native writes bound (5015) ->
+     Java reads that exact value (LAST_RETRY_NEEDED) -> exactly one retry ->
+     frame independently decodes to the original body. The old disconnected
+     int[] path could NEVER have satisfied this (it read a never-written 0).
+     2. One-retry ceiling: fresh ctx with lowered policy -> forced error ->
+     needed(5015) > policy(64) -> null on first retry (no loop).
+  3. Retained output (REPAIRED — old gate compared a copy against a copy of
+     itself): save A's bytes via getBytes(readerIndex) WITHOUT changing
+     indices, produce B, RE-READ A's original retained ByteBuf at the same
+     index, compare to saved, independently decode BOTH. Negative control:
+     bit-flipped saved-A fails the same comparison AND the decode.
+  4. Boundary parity (REPAIRED — both outcomes now ASSERTED): disabled max+1:
+     Java rejects (prepender 'unable to fit 2097152 into 3') AND Rust rejects.
+     Compressible-over-limit: Java ACCEPTS AND Rust ACCEPTS, both frames
+     independently decode to the original body. Below-threshold replaced with
+     boundary-ADJACENT cases (threshold-1/threshold/threshold+1, dataLen=0
+     byte accounted, inner = 1 + bodyLen). NOT_RUN: a bounded case whose
+     actual compressed framed body exceeds the outer limit with incompressible
+     content — requires ~2 MiB incompressible fixture; marked NOT_RUN (the
+     post-compression exact check covers the logic; vanilla reference behavior
+     at that shape untested this pass).
+  5. Ownership/cleanup (NEW, 5/5): pre-attachment setup allowed; on-owner
+     threshold updates with SEQUENCE TOKENS proving ORDER (256->1024->64->-1)
+     interleaved with decodable frames; off-owner setThreshold REJECTED;
+     off-owner update MARSHALED through the documented order-preserving test
+     executor; handlerRemoved frees the native ctx on channel close; encode
+     after close returns null.
+real_fixture: "unchanged (installed serializer + enum id + round-trip reader verification); payload BYTES compared (Arrays.equals), not just lengths"
+copy_accounting: "corrected in RustFrameHandler: ByteBuf -> heap body -> direct native input; native output -> heap result -> Netty output (3 copies; NOT a direct single-copy input path)"
+shadow_boundary: "documented in the handler javadoc (read-stable copy AFTER Java serialization; Java authoritative everywhere; compare/discard; never publish or disturb input; bounded observation; offline replacement != shadow); NOT enabled"
+benchmark_qualification: >
+  Existing numbers stand with annotations: A and C are Netty-PIPELINE
+  measurements (channel write/read cycle included) while B is a DIRECT helper
+  call — not an equivalent boundary. The '7% cost of native framing'
+  attribution is WITHDRAWN (B's different harness shape explains part of it).
+  Content sink upgraded: every iteration now enforces byte-equality against
+  the first captured reference arm (was null/length-only). Corrected
+  comparison requires B behind an equivalent handler/pipeline boundary with a
+  varied scheduled corpus — a FUTURE benchmark, not invented here.
+regressions: "compression 14/14, native-chunk 10/10, M53FrameOracle 25/25, MCK4Validation 20/20, MCK41Gates 5/5, M52 26/26, M4Authoritative 59/59 (fail-closed green)"
+classification: FRAME_ADAPTER_HARDENED_OFFLINE

@@ -1,0 +1,960 @@
+{
+  "schema_version": 1,
+  "kind": "ARCHITECTURE_HARDENING_PROGRAM",
+  "baseline": "c4b868db2c9e4b03f745bf93c6ebf4fd8a8519e7",
+  "status": "ACTIVE",
+  "request_sha256": "c050fc42bd71c349b655032dd170ded8c498b8f349d45834344f92c4177ea2d3",
+  "authority": "PRODUCTION_NATIVE_CHUNK_DISABLED",
+  "milestones": [
+    {
+      "id": "H1",
+      "title": "COMPLETE CANONICAL BYTECODE IDENTITY V2",
+      "status": "COMMITTED",
+      "implementation": [
+        "tools/bridge/src/com/rustcraft/coremod/CanonicalClassIdentityV2.java",
+        "tools/classfile-crosscheck"
+      ],
+      "validation": [
+        "92 Java assertions",
+        "1815 independent class observations",
+        "fresh Clean legacy regression",
+        "historical Revelation V1 regression",
+        "Rust library/integration suites and release FFI"
+      ],
+      "evidence": [
+        "machine/architecture-hardening/h1-validation.json"
+      ],
+      "commit": "5dc125edbdd3716294c13becaeffae86cc06c392"
+    },
+    {
+      "id": "H2",
+      "title": "MAKE PROFILE QUALIFICATION TRULY GENERIC",
+      "status": "FOUNDATION_COMMITTED",
+      "implementation": [
+        "tools/testing/qualification_engine.py",
+        "tools/testing/qualification_certificate.py",
+        "tools/bridge/src/com/rustcraft/bridge/capture/LiveCaptureScope.java"
+      ],
+      "validation": [
+        "39 configured Python/real-Java tests;33 detached extractor controls;25 tooling tests;201 Java foundation assertions;fresh legacyCleanpacket comparison;historicalRevelation129classes/10controls",
+        "41 configured tests after same-buffer parse/hash race correction; all passed, no skips."
+      ],
+      "evidence": [
+        "machine/architecture-hardening/h2-validation.json",
+        "machine/architecture-hardening/h2-parsed-byte-validation.json"
+      ],
+      "commit": "06b57d672c8e1f0962cd1ba7bab0d0ba45903e57",
+      "outstanding": [
+        "Fresh Clean and Revelation V2 collector adapters and substantive placement validators",
+        "Live writer/lifecycle/registry closure validator backend",
+        "Issued-certificate to running loader/session/registry binding",
+        "Fresh V2 runtime requalification H23; H24 remains forbidden until both profiles qualify"
+      ]
+    },
+    {
+      "id": "H3",
+      "title": "FIX TELEMETRY",
+      "status": "COMMITTED",
+      "implementation": [
+        "crates/metrics/src/lib.rs",
+        "crates/ffi/src",
+        "tools/telemetry-tests",
+        "docs/engineering/ffi-telemetry-v2.md"
+      ],
+      "validation": [
+        "8 metrics tests;10 telemetry integration;47 native-chunk;86 workspace library;10 protocol;release FFI PASS",
+        "5 Java suites PASS;1809 telemetry assertions",
+        "Root fresh Clean legacy:25 tooling,201 foundation assertions,mask1/4358 identical bytes",
+        "Changed-file formatting and strict metrics clippy PASS;legacy global fmt and FFI strict lint failures retained"
+      ],
+      "evidence": [
+        "machine/architecture-hardening/h3-telemetry-v2.json"
+      ],
+      "commit": "7d2fdf5354adb13967951b88c5493dfde7e0246f",
+      "limitations": [
+        "27 scalar outcome reasons remain explicitly unknown",
+        "Uncovered frame/debug exports and unknown copy/allocation fields are inventoried",
+        "Native timing excludes JNI; instrumentation overhead awaits H15 measurement"
+      ]
+    },
+    {
+      "id": "H4",
+      "title": "FINE-GRAINED NATIVE CAPABILITY MODEL",
+      "status": "FOUNDATION_COMMITTED",
+      "implementation": [
+        "crates/native-capability",
+        "docs/architecture/native-capabilities.md"
+      ],
+      "validation": [
+        "28 deterministic tests;88 workspace-library tests;strict crate clippy/fmt;release FFI PASS"
+      ],
+      "evidence": [
+        "machine/architecture-hardening/h4-validation.json"
+      ],
+      "commit": "a36e4d7642ba7bce0d19b846a0b0f7cd5f670c2f",
+      "outstanding": [
+        "Opaque identities/evidence are model inputs, not verified running JVM objects or H2 certificate imports",
+        "Runtime event delivery, quiescence, registry epoch authority and H23 requalification remain pending",
+        "Serialized model is not Loom concurrency proof"
+      ]
+    },
+    {
+      "id": "H5",
+      "title": "VERSION-NEUTRAL CORE ARCHITECTURE",
+      "status": "FOUNDATION_COMMITTED",
+      "implementation": [
+        "crates/rustcraft-core",
+        "versions/mc_1_12_x",
+        "docs/architecture/version-adapters.md"
+      ],
+      "validation": [
+        "Core13 (11 integration +2 compile-fail); adapter11;Java18 fixture checks;strict scoped clippy/fmt; both4096-state dispatches;339 rejection;independent root rerun PASS",
+        "88 workspace library tests;28 capability regressions;release FFI;fresh Clean25 tooling/201 foundation/mask1 4358bytes identical;historical Revelation129classes/10controls PASS"
+      ],
+      "evidence": [
+        "machine/architecture-hardening/h5-version-adapters.json"
+      ],
+      "commit": "c13dfb1",
+      "outstanding": [
+        "Exact qualified runtime mapping extraction and H4/H6 issuer binding",
+        "Accepted legacy core-types/packet/FFI consumers remain unchanged until explicit migration",
+        "Complete codecs, loader/mod runtime and1.12.1 gameplay unimplemented"
+      ]
+    },
+    {
+      "id": "H6",
+      "title": "RETAINED NATIVE OWNERSHIP MODEL",
+      "status": "FOUNDATION_COMMITTED",
+      "implementation": [
+        "crates/native-state-vnext",
+        "docs/architecture/retained-native-state.md"
+      ],
+      "validation": [
+        "38 scoped tests; strict clippy/fmt;42 independently checked layout rows plus3 transition controls",
+        "Foreign cancellation bug reproduced then fixed; targeted rerun passes",
+        "92 workspace library tests;28 capability regressions;release FFI;fresh Clean25 tooling/201 assertions/4358byte parity;historical Revelation129classes/10controls"
+      ],
+      "evidence": [
+        "machine/architecture-hardening/h6-retained-state.json"
+      ],
+      "commit": "b4d1098",
+      "outstanding": [
+        "Actual JVM writer/alias closure, safepoints, barriers and atomic handoff",
+        "Certificate issuer and loaded-object/registry binding",
+        "Real packet/light/persistence algorithms and independent qualification",
+        "H8 full packing/cache workloads and memory budget",
+        "H22 registry/cache/abandoned-lease retention cleanup",
+        "Concurrent implementation validation; H7 models are separate reduced contracts"
+      ]
+    },
+    {
+      "id": "H7",
+      "title": "LOOM MODEL CHECKING",
+      "status": "BOUNDED_MODELS_COMMITTED",
+      "implementation": [
+        "tools/loom-lifecycle-models",
+        "docs/architecture/loom-lifecycle-models.md"
+      ],
+      "validation": [
+        "Independent root rerun:13 positive models,521 bounded executions,14 specific broken controls detected; strict clippy/fmt;30 dependency archives/1695 files and source/tool bindings"
+      ],
+      "evidence": [
+        "machine/architecture-hardening/h7-loom.json"
+      ],
+      "commit": "6a2d1cc",
+      "outstanding": [
+        "Models are reduced obligations; actual H4/H6 concurrent implementation and JVM synchronization not Loom-instrumented or proven",
+        "No liveness/fairness guarantee or live runtime qualification"
+      ]
+    },
+    {
+      "id": "H8",
+      "title": "SECTION LAYOUT PROTOTYPES",
+      "status": "PROTOTYPE_COMMITTED",
+      "implementation": [
+        "tools/section-packet-cache-experiment",
+        "docs/research/section-packet-cache-experiment.md"
+      ],
+      "validation": [
+        "Independent root rerun:10 Rust tests,18 Java fixtures305602bytes/encoder,4 Job controls,strict fmt/clippy;240 exploratory timing rows per campaign;bad-byte first divergence preserved"
+      ],
+      "evidence": [
+        "machine/architecture-hardening/h8-section-packet-cache.json"
+      ],
+      "commit": "734b7f4",
+      "outstanding": [
+        "Synthetic serial protocol-340/no-block-entity bodies, before framing/compression/encryption.",
+        "Current identity and generation updates are trusted harness inputs, not integrated H6/JVM ownership.",
+        "Payload budgets exclude metadata, source worlds, temporary builders and allocator overhead.",
+        "Shared-host timings with five samples per case; no real-server or general speedup claim.",
+        "Hash inventory covers listed local source/runtime/tool files, not full OS, MSVC toolchain or SDK.",
+        "Cache keys/current generations are trusted serial fixture inputs; H6 validated work publication is not integrated.",
+        "Private legacy palette allocations and H6 HashMap bucket bytes remain unknown; memory columns are partial.",
+        "All-player shared views and immediate oldest-reader release are synthetic; no real network backpressure latency.",
+        "Before/after hashes cover actual local dependency sources, not unrelated standalone projects or every compiler/linker/system input.",
+        "Bind immutable cache keys and source snapshots to H6 WorkTicket/view identity, publish through validated ownership/generation checks, and reserve bytes for concurrent builders before runtime JNI integration."
+      ]
+    },
+    {
+      "id": "H9",
+      "title": "NATIVE NBT / REGION PIPELINE",
+      "status": "PROTOTYPE_COMMITTED",
+      "implementation": [
+        "tools/nbt-region-experiment",
+        "docs/research/nbt-region-pipeline.md"
+      ],
+      "validation": [
+        "216 generated fixture cases;15 transaction/bounds controls;4 actual-process Job failure controls;strict clippy/fmt;independent root final campaign PASS",
+        "Custom raw span and simdnbt40 exact each;14 malformed inputs refused before each candidate;all existing/fastnbt representation losses preserved"
+      ],
+      "evidence": [
+        "machine/architecture-hardening/h9-nbt-region-pipeline.json"
+      ],
+      "commit": "1ee8839",
+      "outstanding": [
+        "Only generated fixtures and checked LastUpdate increment; not general schema editing or real mod save corpus",
+        "Malformed inputs qualify shared structural guard, not unsafe candidate parser fuzz safety",
+        "Warm-cache full-file append/replace with orphan old sectors; no production free-sector allocator or crash recovery",
+        "No external writer exclusion or directory power-loss durability",
+        "Dependencies archive/source-verified before build; not full after-run dependency/system-DLL environment closure",
+        "512MiB Job process commit cap and observed peaks are not allocator retention or RSS",
+        "Five timing samples and no server benchmark; compression is same isolated zlib-rs configuration with production unchanged",
+        "Real runtime ownership, version schema, unload/disk scheduling and save replay remain required"
+      ]
+    },
+    {
+      "id": "H10",
+      "title": "WORLDGEN PIPELINE FUSION",
+      "status": "PROTOTYPE_COMMITTED",
+      "implementation": [
+        "tools/worldgen-fusion-experiment",
+        "docs/research/worldgen-fusion.md"
+      ],
+      "validation": [
+        "Independent root five-JVM rerun:4 Rust tests,179 assertions/fork,4.8M raw doubles,90 timing rows;exact transfer counters;retained JVM warnings and license bindings;strict scoped fmt/clippy"
+      ],
+      "evidence": [
+        "machine/architecture-hardening/h10-worldgen-fusion.json"
+      ],
+      "commit": "cb6886371bbd05c722b206d85c4d7672fdc5a98d",
+      "outstanding": [
+        "Actual pinned runtime noise with synthetic density/classification/callbacks, not complete Forge chunk generation",
+        "Identical exact raw floating comparisons on this Java8/Windows host only",
+        "Explicit transfer bytes derived from executed JNI region lengths;hidden copies and allocations/RSS unmeasured",
+        "Observed callback fence/throw/RNG parity limited to specified synthetic callbacks;actual Forge callback closure absent",
+        "Five shared-host forks;no global performance benefit claimed;initial run fused remained slower than Java",
+        "Existing worldgen-noise historical port provenance not newly certified",
+        "Native monotonic process handles and global mutex are diagnostic only, not runtime capability/ownership integration",
+        "32 warnings per fork; supplied stacks point to JDK/bootstrap paths, none name FusionProbe. Stackless warnings remain unclassified; this is not a warning-free JNI campaign or proof of absence of added warnings."
+      ]
+    },
+    {
+      "id": "H11",
+      "title": "ENTITY STORAGE EXPERIMENT",
+      "status": "PROTOTYPE_COMMITTED",
+      "implementation": [
+        "tools/entity-storage-experiment",
+        "docs/research/entity-storage-comparison.md"
+      ],
+      "validation": [
+        "Root review fixed rejection precedence;10 Rust+7 Python tests;560 normal boundaries;8 fault/replay controls;40 exploratory samples;strict clippy/fmt"
+      ],
+      "evidence": [
+        "machine/architecture-hardening/h11-entity-storage.json"
+      ],
+      "commit": "79517cc",
+      "outstanding": [
+        "Synthetic integer entity data and prescribed logical order, not Minecraft/Forge behavior",
+        "Keys cover one registry lifetime, no session/incarnation-safe production identity",
+        "No actual Java refs, NBT parsing, capability authority or arbitrary dynamic component schemas",
+        "Checked per-component point lookup does not establish each library best possible API",
+        "Requested allocation bytes not RSS; instrumentation overhead included; five samples on shared host, no reliable overall winner or tail result",
+        "Root rerun timings exploratory with possible overlapping correctness/build work; published table is explicitly initial campaign",
+        "No production storage or scheduler integration; H4/H6/runtime qualification and Java traces still required"
+      ]
+    },
+    {
+      "id": "H12",
+      "title": "SEMANTIC SCHEDULER",
+      "status": "FOUNDATION_COMMITTED",
+      "implementation": [
+        "crates/semantic-scheduler-prototype",
+        "docs/architecture/semantic-scheduler.md"
+      ],
+      "validation": [
+        "28 Rust tests,4 compile-fail controls,6 Python tests;891 boundary comparisons including864 ordered decisions;39 subprocess checks;strict fmt/clippy;independent root rerun"
+      ],
+      "evidence": [
+        "machine/architecture-hardening/h12-semantic-scheduler.json"
+      ],
+      "commit": "73839e4",
+      "outstanding": [
+        "Closed bounded affine integer jobs only, not Minecraft/Forge semantics or tick parity",
+        "Offline privately issued model token is not actual H4/H6 runtime qualification",
+        "No real compression, packet, worldgen, disk or callback adapters",
+        "Cooperative deadlines and unwind handling, not hard preemption/abort recovery",
+        "Logical reservation excludes allocator overhead, OS stacks/RSS and caller-owned histories",
+        "Demonstration executor joins and is not a responsive live-controller event loop",
+        "No performance claim; six external mechanisms remain STUDY with no dependency added"
+      ]
+    },
+    {
+      "id": "H13",
+      "title": "LIGHTING / COLLISION PROTOTYPES",
+      "status": "PROTOTYPE_VALIDATED_BOUNDED_PRIMITIVES_ONLY",
+      "implementation": [
+        "tools/lighting-collision-experiment",
+        "docs/research/lighting-collision.md"
+      ],
+      "validation": [
+        "Independent root full rerun PASS:7 Rust tests,4 Job controls,strict scoped fmt/clippy/release,3 actual initialized offline Forge JVMs;25 collision scenes,30 light updates,45 assertions,55 exact fixtures per fork;378 complete-operation timing rows"
+      ],
+      "evidence": [
+        "machine/architecture-hardening/h13-light-collision.json"
+      ],
+      "commit": "0136df3363851ed88bd8fd4df13ed8c6613cb8bb",
+      "outstanding": [
+        "Primitive ordered AABB queries only; no full Entity.move, stepping, world border or entity interactions.",
+        "Finite block-light grid only; no skylight, full world/chunk boundaries or dynamic mod behavior.",
+        "Correct initial grid and complete dirty set are fixture preconditions, not generated runtime qualifications.",
+        "No H4/H6 production capture identity, invalidation or runtime publication integration.",
+        "Final light values only in callback-free domain; intermediate callback order not qualified.",
+        "Java retained objects versus native full capture on every operation; no general performance claim.",
+        "Source-defined copy payloads known; allocation counts, RSS and all internal copies remain unknown.",
+        "Minecraft binaries and derived binary fixtures target-only; retained records contain identities and digests.",
+        "Offline Clean Forge only; no Revelation,1.12.1,live shadow or production authority."
+      ]
+    },
+    {
+      "id": "H14",
+      "title": "PACKET / BUFFER PIPELINE",
+      "status": "PROTOTYPE_VALIDATED",
+      "implementation": [
+        "tools/packet-buffer-pipeline-experiment",
+        "docs/research/packet-buffer-pipeline.md"
+      ],
+      "validation": [
+        "Independent root full rerun:14 Rust tests,strict own fmt/clippy,release,4 Job controls,4 Java loopback configurations,2 tamper controls,24 pipeline rows,18 handle rows;exact payload copies,overlapping timing ranges"
+      ],
+      "evidence": [
+        "machine/architecture-hardening/h14-packet-buffer.json"
+      ],
+      "commit": "ac654a5cc09c6784c66962b4adf844d05d79ff2e",
+      "outstanding": [
+        "Synthetic packet0x7e payload and fixed public keys; no Minecraft gameplay/authentication/JNI integration.",
+        "Java-valid deflate streams need not be byte-identical; independent AES oracle uses validated native frames.",
+        "Explicit application payload copies and Rust allocator requests are measured; backend/crypto/OS/kernel internal copies remain unknown.",
+        "Payload reservations exclude metadata, retained source snapshots, backend contexts and kernel socket queues; child Job adds an overall commit limit.",
+        "Shared host and instrumented allocator; no zero-copy or general production-throughput claim.",
+        "Actual pipeline is standalone and synthetic; production H6/JVM capture/key and scheduler integration remains required.",
+        "Canceled completion abandonment remains fail-closed until teardown; no worker-panic recovery qualification.",
+        "Root timing median reverses initial small sharing advantage; no general end-to-end performance win.",
+        "Continuous stream can send a prefix before fatal error; failure closes connection, no transactional wire rollback."
+      ]
+    },
+    {
+      "id": "H15",
+      "title": "OBSERVABILITY PLATFORM",
+      "status": "FOUNDATION_VALIDATED_LIVE_ADAPTERS_PENDING",
+      "implementation": [
+        "crates/native-observability",
+        "tools/observability",
+        "docs/architecture/observability.md"
+      ],
+      "validation": [
+        "Root final3fork6sample rerun PASS:13Rust tests,scopedfmt/clippy,65Java assertions and4attempt-rejection controls\u00d74processes,20400actual callback values,9stage imports,10malformed imports,162Java/40native timing rows"
+      ],
+      "evidence": [
+        "machine/architecture-hardening/h15-observability.json"
+      ],
+      "commit": "40983829d86f5717881db8a73dc4599d08dc9103",
+      "outstanding": [
+        "No live tick/MSPT or complete mod-dispatch adapter",
+        "No production network/queue/lock/snapshot-retention/allocator adapters",
+        "No full Java/JNI transition pairing",
+        "No H4 issuer-certified capability lineage integration",
+        "Final agent-order and unload/redefinition closure remains live qualification work",
+        "Disabled/enabled callback overhead is a synthetic preallocated-body microbenchmark, not whole-server overhead",
+        "About35.8MB histogram counter storage for aggregate+8workers; bounded memory but nontrivial",
+        "Pre-fix final01/root-reviewed01 receipts preserved as historical PASS before discovered redefinition-attempt attribution defect; current root lifecycle-final supersedes them"
+      ]
+    },
+    {
+      "id": "H16",
+      "title": "REPRESENTATIVE BENCHMARK MATRIX",
+      "status": "PENDING",
+      "implementation": [],
+      "validation": [],
+      "evidence": [],
+      "commit": null
+    },
+    {
+      "id": "H17",
+      "title": "ALLOCATOR EXPERIMENTS",
+      "status": "BOUNDED_EXPERIMENT_VALIDATED_NO_PRODUCTION_SELECTION",
+      "implementation": [
+        "tools/allocator-experiment",
+        "docs/research/allocator-experiment.md"
+      ],
+      "validation": [
+        "Independent root rerun PASS:36Rust integration+6compilefail+6process controls,42native processes,216measured+108warmup rows,exact packet/NBT artifacts across3allocators;48startup bytes in cross-thread runs remain unknown"
+      ],
+      "evidence": [
+        "machine/architecture-hardening/h17-allocator.json"
+      ],
+      "commit": null,
+      "outstanding": [
+        "Authored fixture schedule executing actual kernels; not a captured server allocation trace",
+        "No JNI, network, region disk I/O, live server, lifecycle authority or allocator integration",
+        "Pure allocator fragmentation and usable allocation sizes remain unknown",
+        "Instrumented requested-layout high water is not simultaneous backend live memory",
+        "Small-sample p95 and p99 are both observed maxima, not population tails",
+        "No uninstrumented throughput or long-duration retention result",
+        "First-use 48-byte requested retention remains explicitly unattributed"
+      ]
+    },
+    {
+      "id": "H18",
+      "title": "EXTERNAL REPOSITORY / ALGORITHM EXPERIMENTS",
+      "status": "PENDING",
+      "implementation": [],
+      "validation": [],
+      "evidence": [],
+      "commit": null
+    },
+    {
+      "id": "H19",
+      "title": "JVM / JAVA MOD RUNTIME RESEARCH",
+      "status": "PENDING",
+      "implementation": [],
+      "validation": [],
+      "evidence": [],
+      "commit": null
+    },
+    {
+      "id": "H20",
+      "title": "COMPATIBILITY DOMAIN TRANSFER PROTOTYPE",
+      "status": "PENDING",
+      "implementation": [],
+      "validation": [],
+      "evidence": [],
+      "commit": null
+    },
+    {
+      "id": "H21",
+      "title": "EVENT / CAPABILITY FAST PATHS",
+      "status": "PENDING",
+      "implementation": [],
+      "validation": [],
+      "evidence": [],
+      "commit": null
+    },
+    {
+      "id": "H22",
+      "title": "RETENTION / LEAK AUDIT",
+      "status": "PENDING",
+      "implementation": [],
+      "validation": [],
+      "evidence": [],
+      "commit": null
+    },
+    {
+      "id": "H22.5",
+      "title": "Remaining Ultra audit experiments",
+      "status": "IN_PROGRESS",
+      "implementation": [
+        "machine/external-reuse/ultra-candidates.json",
+        "docs/research/external-candidate-decisions.md",
+        "tools/differential-replay",
+        "docs/research/differential-event-replay.md",
+        "tools/state-diff-experiment",
+        "docs/research/state-diff-execution.md",
+        "tools/gpu-offline-experiment",
+        "docs/research/gpu-offline-acceleration.md",
+        "tools/jni-lifecycle-prototype",
+        "docs/research/jni-classfile-tooling.md",
+        "machine/external-reuse/experiment-results.json",
+        "tools/entity-storage-experiment",
+        "docs/research/entity-storage-comparison.md",
+        "crates/semantic-scheduler-prototype",
+        "docs/architecture/semantic-scheduler.md",
+        "tools/offline-storage-experiment",
+        "docs/research/offline-storage-experiment.md"
+      ],
+      "validation": [
+        "Decision ledger: 70 candidates, all 48 required names, 13 validator tests passed. Remaining bounded experiments are pending.",
+        "Replay model independently rerun:47/47 cases,836 boundaries,5 Rust and14 Python tests; real Minecraft adapters remain pending.",
+        "State-diff model root rerun:20 Rust tests,24 Java/Rust cases,547 paired boundaries; live scheduler remains rejected.",
+        "GPU proxy: two frozen-source campaigns of 90 samples; exact full-array integer parity and first-element injected fault detected; no performance qualification or integration.",
+        "JNI prototype independently rerun:66 assertions,13 JVM probes,positive/negative lifetime compile controls; no incremental warnings over exact bare-JVM baselines;25 isolated dependencies inventoried.",
+        "Offline storage independently rerun:12 Rust+2 compile-fail+5 Python;20 exact samples;6 error/recovery controls;no useful mmap whole-path gain;12 locked dependencies inventoried."
+      ],
+      "evidence": [
+        "machine/architecture-hardening/h22-5-ledger-validation.json",
+        "machine/architecture-hardening/h22-5-replay-validation.json",
+        "machine/architecture-hardening/h22-5-state-diff-validation.json",
+        "machine/architecture-hardening/h22-5-gpu-validation.json",
+        "machine/architecture-hardening/h22-5-jni-validation.json",
+        "machine/architecture-hardening/h11-entity-storage.json",
+        "machine/architecture-hardening/h12-semantic-scheduler.json",
+        "machine/architecture-hardening/h22-5-offline-storage.json"
+      ],
+      "commit": null,
+      "requirements": [
+        "A: differential first-divergence replay",
+        "B: state-diff execution ADOPT/LIMITED_USE/REJECT",
+        "C: bounded GPU/offline experiment and stop gates",
+        "D: bevy_ecs and Shipyard comparators",
+        "E: JNI/classfile tooling evaluation",
+        "F: concurrency/buffer mechanisms",
+        "G: mmap and sidecar storage",
+        "H: profile-guided hot mod method research",
+        "I: complete external decision ledger"
+      ],
+      "subtasks": {
+        "I": {
+          "status": "COMMITTED",
+          "commit": "7fe87eb127ce242e14ba1bfe6e75ac5d013370d7"
+        },
+        "A": {
+          "status": "PROTOTYPE_COMMITTED",
+          "decision": "LIMITED_USE",
+          "evidence": "machine/architecture-hardening/h22-5-replay-validation.json",
+          "commit": "6d36b9ce8c4deb8043c6edf485c6748b61396864"
+        },
+        "B": {
+          "status": "PROTOTYPE_COMMITTED",
+          "evidence": "machine/architecture-hardening/h22-5-state-diff-validation.json",
+          "commit": "44f61a46f7cda93c0ac8aaffe13087678501cc6f"
+        },
+        "C": {
+          "status": "EXPERIMENT_COMMITTED",
+          "decision": "PARK_GPU_AFTER_BOUNDED_PROXY",
+          "evidence": "machine/architecture-hardening/h22-5-gpu-validation.json",
+          "commit": "4770cf7"
+        },
+        "D": {
+          "status": "PROTOTYPE_COMMITTED",
+          "evidence": "machine/architecture-hardening/h11-entity-storage.json",
+          "decision": "KEEP_SOA_AND_HECS_EXPERIMENTS_PARK_BEVY_SHIPYARD_ADOPTION",
+          "commit": "79517cc"
+        },
+        "E": {
+          "status": "PROTOTYPE_COMMITTED",
+          "decision": "PROTOTYPE_JNI_STUDY_GENERATOR_AND_ALTERNATE_PARSER",
+          "evidence": "machine/architecture-hardening/h22-5-jni-validation.json",
+          "commit": "72e68ca"
+        },
+        "F": {
+          "status": "MECHANISMS_RESEARCHED",
+          "decision": "STUDY_NO_EXTERNAL_MECHANISM_INSTALLED",
+          "evidence": "machine/architecture-hardening/h12-semantic-scheduler.json"
+        },
+        "G": {
+          "status": "EXPERIMENT_COMMITTED",
+          "decision": "KEEP_BUFFERED_BASELINE_RETAIN_NARROW_MMAP_REDB_PROTOTYPES",
+          "evidence": "machine/architecture-hardening/h22-5-offline-storage.json",
+          "outstanding": [
+            "Generated fixed-width records, not NBT/MCA or a real server workload.",
+            "Private copy/hash warms page cache; full pipeline includes copy/sync/hash/index/database/verification, not cold disk.",
+            "Windows private-file map lifetime only; no coherent capture of arbitrary live input files.",
+            "Process-exit recovery during one uncommitted transaction, not power failure or arbitrary crash-point proof.",
+            "Five samples per method/size on shared host; no useful mmap speed benefit established.",
+            "Peak committed process bytes are not RSS; cache and sidecar caps do not prove unbounded reader retention safe."
+          ],
+          "commit": "a1769f61f5fcb0c3099ededf0fa2b468f2b461d3"
+        },
+        "H": {
+          "status": "PENDING"
+        }
+      }
+    },
+    {
+      "id": "H23",
+      "title": "REQUALIFY CLEAN FORGE AND REVELATION UNDER V2",
+      "status": "FRESH_OBSERVATION_PREREQUISITES_VALIDATED_REQUALIFICATION_INCOMPLETE",
+      "implementation": [
+        "tools/live-capture/generate_live_writer_plan.py",
+        "tools/bridge/src/com/rustcraft/coremod/LiveWriterPlan.java",
+        "tools/bridge/src/com/rustcraft/coremod/LiveHookSupport.java",
+        "tools/writer-plan-v2-tests",
+        "docs/engineering/v2-writer-plan-admission.md",
+        "tools/fresh-forge-observer",
+        "docs/engineering/fresh-forge-observer.md",
+        "tools/writer-placement-v2",
+        "docs/engineering/v2-writer-placement.md"
+      ],
+      "validation": [
+        "26 Java admission assertions,23 negative generator controls,generated V2 compilation/admission,92 canonical assertions,historical Revelation129/10,fresh Clean25 tooling/201 foundation/4358-byte diagnostic comparison",
+        "Fresh same generic launcher:Clean2860 12selected/13attempts/13transformers/2coremods;Revelation2846 12selected/14attempts/34transformers/19coremods;6Python+21malformed variants+3Java controls each;no lifecycle or profile qualification",
+        "Root independent placement rerun PASS controls:18Python,27actual mutated classes,66missing hooks,29fixture+24Clean parser agreements,3adapter controls;Clean actual relation INCOMPLETE due preserved frame differences"
+      ],
+      "evidence": [
+        "machine/architecture-hardening/h23-writer-plan-v2.json",
+        "machine/architecture-hardening/h23-fresh-observation.json",
+        "machine/architecture-hardening/h23-placement.json"
+      ],
+      "commit": "7bb5326e7fc0d986f218f633c986895756552597",
+      "outstanding": [
+        "QualificationEngine acquisition adapter and evidence certificate binding",
+        "Fresh V2 writer recipes and actual post-hook definition capture",
+        "Independent permitted frame relation, loader/hierarchy and verification proof",
+        "Writer/lifecycle/extractor/registry/capability closure",
+        "Clean and Revelation V2 profile requalification before live shadow"
+      ],
+      "prerequisite_commits": [
+        "7bb5326e7fc0d986f218f633c986895756552597",
+        "ad274e7",
+        "0ab1f71bea44d5f57c9cd27d022f33326919d49b",
+        "b0d0a232991e1989f0abeaa6a04981c4a9172d25"
+      ],
+      "prerequisites": [
+        {
+          "name": "Pinned whole-class verification trigger and unresolved-frame-type counterexample",
+          "status": "BOUNDED_FIXTURE_VALIDATED",
+          "evidence": "machine/architecture-hardening/h23-hotspot-verification.json",
+          "outstanding": [
+            "Pinned vendor HotSpot fixture proof only; no actual Forge verification or native authority.",
+            "Local vendor release SOURCE has plus suffix; source lead is not reproducible source-to-binary proof.",
+            "Verifier success does not resolve all frame reference types; explicit complete hierarchy and Class/loader binding still required.",
+            "Three finite fixture relations are demonstrations, not general frame qualification.",
+            "Runtime/game bytecode observers and loader effects need separately accepted scope policies.",
+            "All consulted primary-source files remain hash-bound target-only; immutable upstream URLs and licenses are recorded in provenance."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "H24",
+      "title": "RESUME PAUSED REVELATION SHADOW",
+      "status": "PENDING",
+      "implementation": [],
+      "validation": [],
+      "evidence": [],
+      "commit": null
+    },
+    {
+      "id": "H1.1",
+      "title": "CLASS REPRESENTATION",
+      "status": "COMMITTED",
+      "implementation": [
+        "See H1 implementation inventory"
+      ],
+      "validation": [
+        "See H1 scoped validation"
+      ],
+      "evidence": [
+        "machine/architecture-hardening/h1-validation.json"
+      ],
+      "commit": "5dc125edbdd3716294c13becaeffae86cc06c392"
+    },
+    {
+      "id": "H1.2",
+      "title": "MUTATION NEGATIVE CONTROLS",
+      "status": "COMMITTED",
+      "implementation": [
+        "See H1 implementation inventory"
+      ],
+      "validation": [
+        "See H1 scoped validation"
+      ],
+      "evidence": [
+        "machine/architecture-hardening/h1-validation.json"
+      ],
+      "commit": "5dc125edbdd3716294c13becaeffae86cc06c392"
+    },
+    {
+      "id": "H1.3",
+      "title": "INDEPENDENT CLASSFILE CROSS-CHECK",
+      "status": "COMMITTED",
+      "implementation": [
+        "See H1 implementation inventory"
+      ],
+      "validation": [
+        "See H1 scoped validation"
+      ],
+      "evidence": [
+        "machine/architecture-hardening/h1-validation.json"
+      ],
+      "commit": "5dc125edbdd3716294c13becaeffae86cc06c392"
+    },
+    {
+      "id": "H2.1",
+      "title": "EVIDENCE DEPENDENCY GRAPH / CERTIFICATES",
+      "status": "COMMITTED",
+      "implementation": [
+        "tools/testing/qualification_engine.py",
+        "tools/testing/qualification_certificate.py",
+        "tools/bridge/src/com/rustcraft/bridge/capture/LiveCaptureScope.java"
+      ],
+      "validation": [
+        "39 configured Python/real-Java tests;33 detached extractor controls;25 tooling tests;201 Java foundation assertions;fresh legacyCleanpacket comparison;historicalRevelation129classes/10controls",
+        "41 configured tests after same-buffer parse/hash race correction; all passed, no skips."
+      ],
+      "evidence": [
+        "machine/architecture-hardening/h2-validation.json",
+        "machine/architecture-hardening/h2-parsed-byte-validation.json"
+      ],
+      "commit": "06b57d672c8e1f0962cd1ba7bab0d0ba45903e57",
+      "outstanding": []
+    },
+    {
+      "id": "H2.2",
+      "title": "EXTRACTOR SCOPE CORRECTION",
+      "status": "COMMITTED",
+      "implementation": [
+        "tools/testing/qualification_engine.py",
+        "tools/testing/qualification_certificate.py",
+        "tools/bridge/src/com/rustcraft/bridge/capture/LiveCaptureScope.java"
+      ],
+      "validation": [
+        "39 configured Python/real-Java tests;33 detached extractor controls;25 tooling tests;201 Java foundation assertions;fresh legacyCleanpacket comparison;historicalRevelation129classes/10controls"
+      ],
+      "evidence": [
+        "machine/architecture-hardening/h2-validation.json"
+      ],
+      "commit": "06b57d672c8e1f0962cd1ba7bab0d0ba45903e57",
+      "outstanding": []
+    },
+    {
+      "id": "H3.1",
+      "title": "PERFORMANCE CLAIM AUDIT",
+      "status": "COMMITTED",
+      "implementation": [
+        "docs/engineering/performance-claim-audit.md",
+        "machine/architecture-hardening/h3-claim-audit.json"
+      ],
+      "validation": [
+        "323 tracked documents/summaries scanned; 2101 candidate lines inventoried; 17 scoped claims reviewed including all six explicit categories; source bindings checked. No new performance campaign."
+      ],
+      "evidence": [
+        "machine/architecture-hardening/h3-claim-validation.json"
+      ],
+      "commit": "d89b93314620d8b76a38609a6709c4cf4d0ead81"
+    },
+    {
+      "id": "H5.1",
+      "title": "1.12.X FAMILY",
+      "status": "FOUNDATION_COMMITTED",
+      "implementation": [
+        "crates/rustcraft-core",
+        "versions/mc_1_12_x",
+        "docs/architecture/version-adapters.md"
+      ],
+      "validation": [
+        "Core13 (11 integration +2 compile-fail); adapter11;Java18 fixture checks;strict scoped clippy/fmt; both4096-state dispatches;339 rejection;independent root rerun PASS",
+        "88 workspace library tests;28 capability regressions;release FFI;fresh Clean25 tooling/201 foundation/mask1 4358bytes identical;historical Revelation129classes/10controls PASS"
+      ],
+      "evidence": [
+        "machine/architecture-hardening/h5-version-adapters.json"
+      ],
+      "commit": "c13dfb1",
+      "outstanding": [
+        "Exact qualified runtime mapping extraction and H4/H6 issuer binding",
+        "Accepted legacy core-types/packet/FFI consumers remain unchanged until explicit migration",
+        "Complete codecs, loader/mod runtime and1.12.1 gameplay unimplemented"
+      ]
+    },
+    {
+      "id": "H6.1",
+      "title": "GENERATIONAL HANDLES",
+      "status": "FOUNDATION_COMMITTED",
+      "implementation": [
+        "crates/native-state-vnext",
+        "docs/architecture/retained-native-state.md"
+      ],
+      "validation": [
+        "38 scoped tests; strict clippy/fmt;42 independently checked layout rows plus3 transition controls",
+        "Foreign cancellation bug reproduced then fixed; targeted rerun passes",
+        "92 workspace library tests;28 capability regressions;release FFI;fresh Clean25 tooling/201 assertions/4358byte parity;historical Revelation129classes/10controls"
+      ],
+      "evidence": [
+        "machine/architecture-hardening/h6-retained-state.json"
+      ],
+      "commit": "b4d1098",
+      "outstanding": [
+        "Actual JVM writer/alias closure, safepoints, barriers and atomic handoff",
+        "Certificate issuer and loaded-object/registry binding",
+        "Real packet/light/persistence algorithms and independent qualification",
+        "H8 full packing/cache workloads and memory budget",
+        "H22 registry/cache/abandoned-lease retention cleanup",
+        "Concurrent implementation validation; H7 models are separate reduced contracts"
+      ]
+    },
+    {
+      "id": "H6.2",
+      "title": "NATIVECHUNK VNEXT",
+      "status": "FOUNDATION_COMMITTED",
+      "implementation": [
+        "crates/native-state-vnext",
+        "docs/architecture/retained-native-state.md"
+      ],
+      "validation": [
+        "38 scoped tests; strict clippy/fmt;42 independently checked layout rows plus3 transition controls",
+        "Foreign cancellation bug reproduced then fixed; targeted rerun passes",
+        "92 workspace library tests;28 capability regressions;release FFI;fresh Clean25 tooling/201 assertions/4358byte parity;historical Revelation129classes/10controls"
+      ],
+      "evidence": [
+        "machine/architecture-hardening/h6-retained-state.json"
+      ],
+      "commit": "b4d1098",
+      "outstanding": [
+        "Actual JVM writer/alias closure, safepoints, barriers and atomic handoff",
+        "Certificate issuer and loaded-object/registry binding",
+        "Real packet/light/persistence algorithms and independent qualification",
+        "H8 full packing/cache workloads and memory budget",
+        "H22 registry/cache/abandoned-lease retention cleanup",
+        "Concurrent implementation validation; H7 models are separate reduced contracts"
+      ]
+    },
+    {
+      "id": "H6.3",
+      "title": "IMMUTABLE GENERATION-TAGGED VIEWS",
+      "status": "FOUNDATION_COMMITTED",
+      "implementation": [
+        "crates/native-state-vnext",
+        "docs/architecture/retained-native-state.md"
+      ],
+      "validation": [
+        "38 scoped tests; strict clippy/fmt;42 independently checked layout rows plus3 transition controls",
+        "Foreign cancellation bug reproduced then fixed; targeted rerun passes",
+        "92 workspace library tests;28 capability regressions;release FFI;fresh Clean25 tooling/201 assertions/4358byte parity;historical Revelation129classes/10controls"
+      ],
+      "evidence": [
+        "machine/architecture-hardening/h6-retained-state.json"
+      ],
+      "commit": "b4d1098",
+      "outstanding": [
+        "Actual JVM writer/alias closure, safepoints, barriers and atomic handoff",
+        "Certificate issuer and loaded-object/registry binding",
+        "Real packet/light/persistence algorithms and independent qualification",
+        "H8 full packing/cache workloads and memory budget",
+        "H22 registry/cache/abandoned-lease retention cleanup",
+        "Concurrent implementation validation; H7 models are separate reduced contracts"
+      ]
+    },
+    {
+      "id": "H8.1",
+      "title": "GENERATION-KEYED PACKET CACHE",
+      "status": "PROTOTYPE_COMMITTED",
+      "implementation": [
+        "tools/section-packet-cache-experiment",
+        "docs/research/section-packet-cache-experiment.md"
+      ],
+      "validation": [
+        "Independent root rerun:10 Rust tests,18 Java fixtures305602bytes/encoder,4 Job controls,strict fmt/clippy;240 exploratory timing rows per campaign;bad-byte first divergence preserved"
+      ],
+      "evidence": [
+        "machine/architecture-hardening/h8-section-packet-cache.json"
+      ],
+      "commit": "734b7f4",
+      "outstanding": [
+        "Synthetic serial protocol-340/no-block-entity bodies, before framing/compression/encryption.",
+        "Current identity and generation updates are trusted harness inputs, not integrated H6/JVM ownership.",
+        "Payload budgets exclude metadata, source worlds, temporary builders and allocator overhead.",
+        "Shared-host timings with five samples per case; no real-server or general speedup claim.",
+        "Hash inventory covers listed local source/runtime/tool files, not full OS, MSVC toolchain or SDK.",
+        "Cache keys/current generations are trusted serial fixture inputs; H6 validated work publication is not integrated.",
+        "Private legacy palette allocations and H6 HashMap bucket bytes remain unknown; memory columns are partial.",
+        "All-player shared views and immediate oldest-reader release are synthetic; no real network backpressure latency.",
+        "Before/after hashes cover actual local dependency sources, not unrelated standalone projects or every compiler/linker/system input.",
+        "Bind immutable cache keys and source snapshots to H6 WorkTicket/view identity, publish through validated ownership/generation checks, and reserve bytes for concurrent builders before runtime JNI integration."
+      ]
+    },
+    {
+      "id": "H19.1",
+      "title": "GUARDED MINECRAFT INTRINSIC",
+      "status": "PENDING",
+      "implementation": [],
+      "validation": [],
+      "evidence": [],
+      "commit": null
+    },
+    {
+      "id": "H19.2",
+      "title": "JAVA OBJECT IDENTITY / NATIVE HANDLE PROTOTYPE",
+      "status": "PENDING",
+      "implementation": [],
+      "validation": [],
+      "evidence": [],
+      "commit": null
+    },
+    {
+      "id": "H19.3",
+      "title": "CUSTOM JVM GO / NO-GO",
+      "status": "PENDING",
+      "implementation": [],
+      "validation": [],
+      "evidence": [],
+      "commit": null
+    },
+    {
+      "id": "H25",
+      "title": "DO NOT ENABLE PRODUCTION AUTHORITY",
+      "status": "PENDING",
+      "implementation": [],
+      "validation": [],
+      "evidence": [],
+      "commit": null
+    },
+    {
+      "id": "H26",
+      "title": "PERFORMANCE ACCEPTANCE RULE",
+      "status": "PENDING",
+      "implementation": [],
+      "validation": [],
+      "evidence": [],
+      "commit": null
+    },
+    {
+      "id": "H27",
+      "title": "LICENSING / PROVENANCE",
+      "status": "PENDING",
+      "implementation": [],
+      "validation": [],
+      "evidence": [],
+      "commit": null
+    },
+    {
+      "id": "H28",
+      "title": "TEMPORARY SCAFFOLD EXIT PLAN",
+      "status": "EXIT_PLAN_COMMITTED",
+      "implementation": [
+        "docs/architecture/scaffold-exit-plan.md",
+        "machine/architecture-hardening/scaffold-exit-plan.json"
+      ],
+      "validation": [
+        "Nine required mechanisms, explicit classifications/exit gates and21 hashed source anchors; documentation-only, no runtime removal"
+      ],
+      "evidence": [
+        "machine/architecture-hardening/scaffold-exit-plan.json"
+      ],
+      "commit": "9cba1b3",
+      "outstanding": [
+        "Replacement evidence and removal decisions remain owned by dependent milestones; preserve all scaffolding until its listed gates pass"
+      ]
+    },
+    {
+      "id": "H29",
+      "title": "COMMIT POLICY",
+      "status": "PENDING",
+      "implementation": [],
+      "validation": [],
+      "evidence": [],
+      "commit": null
+    },
+    {
+      "id": "H30",
+      "title": "CONTINUOUS REGRESSION SAFETY",
+      "status": "PENDING",
+      "implementation": [],
+      "validation": [],
+      "evidence": [],
+      "commit": null
+    }
+  ],
+  "completion_rule": "Every explicit requirement needs current scoped evidence; pending or unverified is not complete.",
+  "amendments": [
+    "docs/engineering/architecture-hardening-h22-5.md"
+  ]
+}

@@ -1,0 +1,35 @@
+{
+  "schema": "H9_CANDIDATE_PROVENANCE_V1",
+  "candidates": [
+    {
+      "name": "fastnbt",
+      "version": "2.6.3",
+      "license": "MIT",
+      "crate_checksum": "f9dcc36fee27b17c9c183294d6e739cf218b01ce0fc545c31d8be3913d961731",
+      "upstream_commit": "d71c04b2e73d1365c0d677e1f42cf573ccc2b281",
+      "source_url": "https://github.com/owengage/fastnbt/tree/d71c04b2e73d1365c0d677e1f42cf573ccc2b281",
+      "license_url": "https://raw.githubusercontent.com/owengage/fastnbt/d71c04b2e73d1365c0d677e1f42cf573ccc2b281/LICENSE",
+      "license_sha256": "09dbb44f72a02771daf763db1419ac897f24b433ef739bdd1620cbab2b7fe35c",
+      "license_archive_note": "Published crate omits workspace-root license; obtained exact commit license separately."
+    },
+    {
+      "name": "simdnbt",
+      "version": "0.10.0",
+      "license": "MIT",
+      "crate_checksum": "7893a73842e21e674dde2bb31be1b949c127294f13dd52ee530d2f75a90ffe44",
+      "upstream_commit": "4cc67bcd980c752b412beee0ea1192f502333bf0",
+      "source_url": "https://github.com/azalea-rs/simdnbt/tree/4cc67bcd980c752b412beee0ea1192f502333bf0",
+      "license_url": "https://raw.githubusercontent.com/azalea-rs/simdnbt/4cc67bcd980c752b412beee0ea1192f502333bf0/LICENSE",
+      "license_sha256": "c46eb0dccbfdbbe66b20d470edf7dee4d80b551f2319c05abf4adc02719e39ef",
+      "license_archive_note": "Published crate omits workspace-root license; obtained exact commit license separately."
+    }
+  ],
+  "toolchain": "nightly-2026-09-24",
+  "reason": "simdnbt 0.10.0 requires portable_simd and allocator_api; isolated RUSTUP_HOME, no bootstrap flags or default-toolchain change outside it.",
+  "compression": {
+    "flate2": "1.1.10",
+    "zlib_rs": "0.6.8",
+    "level": 6,
+    "scope": "Matches current production backend/version; isolated dependency feature union verified by flate2 pinned cfg logic."
+  }
+}

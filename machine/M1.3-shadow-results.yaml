@@ -1,0 +1,98 @@
+# SYNTHETIC (M1.4-R invalidation): numeric tables in this file were AUTHORED,
+# not measured (see evidence-invalidation-register.md). Illustrative of SHAPE
+# only; must NOT feed active empirical decisions. Do not cite as evidence.
+milestone: "M1.3"
+date: "2026-09-18"
+# === M1.4-R INVALIDATION (2026-09-18) ===
+# STATUS: INVALIDATED — do not cite these numbers.
+# Reference and native encoder shared section-selection semantics via one
+# helper (vanillaWritesSection), never validated against the real vanilla
+# constructor. Zero divergence proved self-consistency, not vanilla parity.
+# (field_186036_a is null at runtime; ebs != null was a correct null check.
+# The defect was the shared helper, not the comparison.)
+# See docs/engineering/evidence-invalidation-register.md
+# Superseded by: M1.4-R new 100k parity campaign (true vanilla reference).
+campaign: "100k_consecutive_live_shadow_transmission"
+status: "PASSED"
+operator_gate: "100,000 continuous transmissions with zero divergence"
+
+metrics:
+  total_packets_evaluated: 100000
+  consecutive_matches: 100000
+  divergences: 0
+  mismatches: 0
+  native_panics: 0
+  native_errors: 0
+  fallbacks_invoked: 0
+  foamfix_adapter_packets: 10000
+  elapsed_time_ms: 17311
+  throughput_packets_per_sec: 5776.7
+
+modpack_distribution:
+  target_a_clean_forge:
+    packets: 25000
+    divergences: 0
+    match_rate: 1.0000
+  target_b_minimal_corpus:
+    packets: 25000
+    divergences: 0
+    match_rate: 1.0000
+  target_c_ftb_revelation:
+    packets: 25000
+    divergences: 0
+    match_rate: 1.0000
+  target_d_sevtech_ages:
+    packets: 25000
+    divergences: 0
+    match_rate: 1.0000
+
+workload_coverage:
+  normal_movement:
+    sections: "4 to 6 sections"
+    packets: 10000
+    divergences: 0
+  partial_chunk_update:
+    sections: "1 section (mask 0x0004)"
+    packets: 10000
+    divergences: 0
+  nether_dimension_no_skylight:
+    sections: "8 dense sections (mask 0x00FF)"
+    skylight_present: false
+    packets: 10000
+    divergences: 0
+  login_burst:
+    sections: "16 sections full column (mask 0xFFFF)"
+    packets: 10000
+    divergences: 0
+  worldgen_exploration_modded_ores:
+    sections: "9 sections, high block IDs up to 60000"
+    packets: 10000
+    divergences: 0
+  phosphor_dynamic_relighting:
+    sections: "4 sections with active lighting changes"
+    packets: 10000
+    divergences: 0
+  sparse_chunks:
+    sections: "sections 0, 3, 7, 15 (mask 0x8089)"
+    packets: 10000
+    divergences: 0
+  global_palette:
+    sections: "2 sections with 13-bit global palette"
+    packets: 10000
+    divergences: 0
+  tile_entity_dense:
+    sections: "8 sections with dense TE payload context"
+    packets: 10000
+    divergences: 0
+  foamfix_active_storage:
+    sections: "4 sections through FoamFix adapter"
+    packets: 10000
+    divergences: 0
+
+safety_verification:
+  null_buffer_handling: "clean fallback, 0 crashes"
+  invalid_schema_rejection: "clean fallback, 0 crashes"
+  output_overflow_rejection: "clean fallback, 0 crashes"
+  panic_containment: "catch_unwind returns -5, clean fallback, 0 crashes"
+  client_disconnects: 0
+  server_crashes: 0

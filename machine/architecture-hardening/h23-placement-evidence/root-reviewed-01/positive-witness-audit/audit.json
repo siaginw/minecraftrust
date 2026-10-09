@@ -1,0 +1,92 @@
+{
+  "schema": "RUSTCRAFT_WRITER_PLACEMENT_AUDIT_V2",
+  "status": "PASS",
+  "production_authority": false,
+  "scope": "OFFLINE_EXACT_INSERTION_AND_V2_PRESERVATION; no live writer/lifecycle closure",
+  "records": [
+    {
+      "class_name": "fixture/Writer",
+      "status": "PASS",
+      "sites": [
+        {
+          "id": "W36",
+          "status": "PASS",
+          "blockers": [],
+          "original_instructions": 3,
+          "inserted_instructions": 3,
+          "original_handlers": 0,
+          "added_handlers": 0,
+          "normal_exits": 1,
+          "anchors": []
+        },
+        {
+          "id": "W01",
+          "status": "PASS",
+          "blockers": [],
+          "original_instructions": 7,
+          "inserted_instructions": 18,
+          "original_handlers": 0,
+          "added_handlers": 1,
+          "normal_exits": 2,
+          "anchors": []
+        }
+      ],
+      "unhooked_method_differences": [],
+      "pool_failures": {
+        "removed": [],
+        "unexpected_added": [],
+        "duplicate_added": []
+      },
+      "frame_related_pool_additions_unproven": [],
+      "pre_identity": [
+        "CANONICAL_ID_V2",
+        "fixture/Writer",
+        "f83d77dda89b3dc2a1b7213fdf916fb90d73bc0ef102ac698aac834218b72a71",
+        "06dbd2fb6983caefaf76a2691ad5b93a6c34ab4ca5c8b10ef69caac6d96d1921",
+        "d739f96abbf88b2b388eb3c4df03f765c8e3d6ed306f70f523cf02d9d282e37d"
+      ],
+      "post_identity": [
+        "CANONICAL_ID_V2",
+        "fixture/Writer",
+        "4b57cc0a3947c85b0ea9e6bfdec2051df0061831fdc504954d47a1a3b8018a4e",
+        "06dbd2fb6983caefaf76a2691ad5b93a6c34ab4ca5c8b10ef69caac6d96d1921",
+        "58b9872f83803baec946ac63337895ad05235b0ddff98f75b761f0fc0c40c099"
+      ],
+      "original_methods": 2,
+      "required_sites": 2
+    }
+  ],
+  "required_hook_count": 2,
+  "observed_class_count": 1,
+  "tool_hashes": {
+    "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\bin\\java.exe": "65ebee06ec47df0c41c4483ac5aa408e55adb47a1613bad56be30bccc4317e85",
+    "D:\\minecraftrust-astra-hardening\\tools\\classfile-crosscheck\\target\\debug\\rustcraft-classfile-crosscheck.exe": "d8774f1349a7c29d2647d9fb4f815b66c906a095f5142244b9c02ba606648554",
+    "D:\\minecraftrust-astra-hardening\\tools\\classfile-crosscheck\\crosscheck.py": "208d4924d76cb5ead96006fa7f31d2f1f09b5d9907a530b090d0503f50826f96",
+    "D:\\minecraftrust-astra-hardening\\target\\writer-placement-v2\\root-reviewed-01\\identity-classes\\com\\rustcraft\\coremod\\CanonicalClassIdentityV2$1.class": "4408e4d1ad00f2b661ed54a0559e8ba784fa3019c72e9728fa8730a59d5921cb",
+    "D:\\minecraftrust-astra-hardening\\target\\writer-placement-v2\\root-reviewed-01\\identity-classes\\com\\rustcraft\\coremod\\CanonicalClassIdentityV2$2.class": "7def25f8e3a0fb29691820a49d243a8a13c4fdf45e44e3d7076fafb97f89f6f1",
+    "D:\\minecraftrust-astra-hardening\\target\\writer-placement-v2\\root-reviewed-01\\identity-classes\\com\\rustcraft\\coremod\\CanonicalClassIdentityV2$IdentityFailure.class": "194d9365f1963a2d865690152fad5561d0865abbda82add527a40a1ad20af84e",
+    "D:\\minecraftrust-astra-hardening\\target\\writer-placement-v2\\root-reviewed-01\\identity-classes\\com\\rustcraft\\coremod\\CanonicalClassIdentityV2$RawClass.class": "4e5a6c9f858672200e27c02605c316513050f45e91a8efd20f931a6b8218016e",
+    "D:\\minecraftrust-astra-hardening\\target\\writer-placement-v2\\root-reviewed-01\\identity-classes\\com\\rustcraft\\coremod\\CanonicalClassIdentityV2$Result.class": "3429834ff808c13ce977345a0bfcfccbeceff0fc984b1f08427d76c188254ced",
+    "D:\\minecraftrust-astra-hardening\\target\\writer-placement-v2\\root-reviewed-01\\identity-classes\\com\\rustcraft\\coremod\\CanonicalClassIdentityV2.class": "ecae040c4ec01af636d6ec5b174d874c9cc3a370ee105fe894d89a149001d093",
+    "D:\\minecraftrust-astra-hardening\\target\\writer-placement-v2\\root-reviewed-01\\identity-classes\\PlacementFixtures.class": "9ce38f3ecae1138ec2e3d9851ae70739c65b6a5940d4f453f416b95bf53f208c",
+    "D:\\rustcraft-runtime-targets\\clean-forge-2860\\server\\libraries\\org\\ow2\\asm\\asm-debug-all\\5.2\\asm-debug-all-5.2.jar": "254b82bec9da4f8efbc8b1f93ab2b87f7465227a82b36cf3d05d9e77a0e8dd2e"
+  },
+  "validator_source_hashes": {
+    "D:\\minecraftrust-astra-hardening\\tools\\writer-placement-v2\\capture.py": "5a358bfb434f2eea64de94af3c4af8897ad4f4bc21dd064acbcf6b1940dfb9f5",
+    "D:\\minecraftrust-astra-hardening\\tools\\writer-placement-v2\\classfile.py": "de809aed3f18ad8cafa260768f3d46f1e7d2b549f5d06f0dcdd7cdb8e146a633",
+    "D:\\minecraftrust-astra-hardening\\tools\\writer-placement-v2\\io_utils.py": "b826ac61f3660439ecec15fe74cd3d859e515e81a6c973be14e3138194c6c7e9",
+    "D:\\minecraftrust-astra-hardening\\tools\\writer-placement-v2\\PlacementFixtures.java": "2b8537386da9ae7fa77c2293cb5bd4d6f93721bd59981b89d47fc43137ddc784",
+    "D:\\minecraftrust-astra-hardening\\tools\\writer-placement-v2\\run.py": "054a09ef886e1e2ee39cd8cfce1f845ba6d2c120f8ad3b6211f2f7e074377ff4",
+    "D:\\minecraftrust-astra-hardening\\tools\\writer-placement-v2\\test_validator.py": "b88e0c6d5200644bac6f54aa401c4fef25e1490899642f3a7eef398804fdaf0f",
+    "D:\\minecraftrust-astra-hardening\\tools\\writer-placement-v2\\validate.py": "ca84a407d99f541b6e4fdb6b6fb124d532aa39a833af720ee8e658fd93901b58",
+    "D:\\minecraftrust-astra-hardening\\tools\\writer-placement-v2\\validator.py": "e0f011472879d6d6cb1adb6eedb66fba3d31ff3ae914df7ec25437eaf16603c1"
+  },
+  "pre_input_hashes": {
+    "D:\\minecraftrust-astra-hardening\\target\\writer-placement-v2\\root-reviewed-01\\fixtures\\pre.class": "d739f96abbf88b2b388eb3c4df03f765c8e3d6ed306f70f523cf02d9d282e37d"
+  },
+  "post_input_hashes": {
+    "D:\\minecraftrust-astra-hardening\\target\\writer-placement-v2\\root-reviewed-01\\fixtures\\valid.class": "58b9872f83803baec946ac63337895ad05235b0ddff98f75b761f0fc0c40c099"
+  },
+  "independent_parser_agreements": 2,
+  "environment_policy": "JAVA_TOOL_OPTIONS/_JAVA_OPTIONS/JDK_JAVA_OPTIONS/CLASSPATH removed; explicit Java and classpath; no transformer or game execution"
+}

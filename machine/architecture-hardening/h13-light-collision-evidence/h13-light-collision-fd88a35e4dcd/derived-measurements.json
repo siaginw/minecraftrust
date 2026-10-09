@@ -1,0 +1,369 @@
+{
+  "schema_version": 1,
+  "kind": "H13_DERIVED_MEASUREMENTS",
+  "source_receipt": {
+    "path": "target/architecture-hardening/h13-light-collision-fd88a35e4dcd/receipt.json",
+    "sha256": "63843d6a1f9dece8bd3aa05412096c5d40b3133e99afed501ba087ec14624394"
+  },
+  "units": "microseconds per complete operation; native metric samples describe only last operation in a sample",
+  "samples_total": 378,
+  "groups": [
+    {
+      "kind": "collision",
+      "shapes": 256,
+      "clustered": false,
+      "lane": 0,
+      "n": 18,
+      "min_us": 78.35,
+      "median_us": 98.59375,
+      "max_us": 156.675,
+      "last_native_metric_medians": null
+    },
+    {
+      "kind": "collision",
+      "shapes": 256,
+      "clustered": false,
+      "lane": 1,
+      "n": 18,
+      "min_us": 29.475,
+      "median_us": 35.56875,
+      "max_us": 71.9375,
+      "last_native_metric_medians": [
+        12288.0,
+        0.0,
+        0.0,
+        15744.0,
+        2696.0,
+        25500.0,
+        26200.0,
+        15744.0
+      ]
+    },
+    {
+      "kind": "collision",
+      "shapes": 256,
+      "clustered": false,
+      "lane": 2,
+      "n": 18,
+      "min_us": 35.95,
+      "median_us": 58.05625,
+      "max_us": 93.9375,
+      "last_native_metric_medians": [
+        496.0,
+        105.0,
+        310.0,
+        15744.0,
+        2696.0,
+        32850.0,
+        33800.0,
+        15744.0
+      ]
+    },
+    {
+      "kind": "collision",
+      "shapes": 2048,
+      "clustered": false,
+      "lane": 0,
+      "n": 18,
+      "min_us": 597.475,
+      "median_us": 820.7,
+      "max_us": 1013.65,
+      "last_native_metric_medians": null
+    },
+    {
+      "kind": "collision",
+      "shapes": 2048,
+      "clustered": false,
+      "lane": 1,
+      "n": 18,
+      "min_us": 199.7375,
+      "median_us": 318.36875,
+      "max_us": 1072.45,
+      "last_native_metric_medians": [
+        98304.0,
+        0.0,
+        0.0,
+        101760.0,
+        2696.0,
+        210000.0,
+        215600.0,
+        101760.0
+      ]
+    },
+    {
+      "kind": "collision",
+      "shapes": 2048,
+      "clustered": false,
+      "lane": 2,
+      "n": 18,
+      "min_us": 225.4875,
+      "median_us": 294.28125,
+      "max_us": 614.8375,
+      "last_native_metric_medians": [
+        992.0,
+        105.0,
+        3108.0,
+        101760.0,
+        2696.0,
+        243300.0,
+        249200.0,
+        101760.0
+      ]
+    },
+    {
+      "kind": "collision",
+      "shapes": 256,
+      "clustered": true,
+      "lane": 0,
+      "n": 18,
+      "min_us": 109.425,
+      "median_us": 174.90625,
+      "max_us": 378.55,
+      "last_native_metric_medians": null
+    },
+    {
+      "kind": "collision",
+      "shapes": 256,
+      "clustered": true,
+      "lane": 1,
+      "n": 18,
+      "min_us": 70.125,
+      "median_us": 113.05625,
+      "max_us": 140.95,
+      "last_native_metric_medians": [
+        12288.0,
+        0.0,
+        0.0,
+        15744.0,
+        56840.0,
+        69450.0,
+        70400.0,
+        15744.0
+      ]
+    },
+    {
+      "kind": "collision",
+      "shapes": 256,
+      "clustered": true,
+      "lane": 2,
+      "n": 18,
+      "min_us": 308.7375,
+      "median_us": 510.5875,
+      "max_us": 659.9875,
+      "last_native_metric_medians": [
+        12288.0,
+        127.0,
+        256.0,
+        15744.0,
+        56840.0,
+        476250.0,
+        478850.0,
+        15744.0
+      ]
+    },
+    {
+      "kind": "collision",
+      "shapes": 2048,
+      "clustered": true,
+      "lane": 0,
+      "n": 18,
+      "min_us": 908.2125,
+      "median_us": 1165.3874999999998,
+      "max_us": 1625.85,
+      "last_native_metric_medians": null
+    },
+    {
+      "kind": "collision",
+      "shapes": 2048,
+      "clustered": true,
+      "lane": 1,
+      "n": 18,
+      "min_us": 481.175,
+      "median_us": 686.55,
+      "max_us": 848.075,
+      "last_native_metric_medians": [
+        98304.0,
+        0.0,
+        0.0,
+        101760.0,
+        443912.0,
+        576750.0,
+        583350.0,
+        101760.0
+      ]
+    },
+    {
+      "kind": "collision",
+      "shapes": 2048,
+      "clustered": true,
+      "lane": 2,
+      "n": 18,
+      "min_us": 3392.425,
+      "median_us": 4230.0125,
+      "max_us": 4832.225,
+      "last_native_metric_medians": [
+        98304.0,
+        127.0,
+        2048.0,
+        101760.0,
+        443912.0,
+        3767350.0,
+        3774850.0,
+        101760.0
+      ]
+    },
+    {
+      "kind": "light-add",
+      "shapes": null,
+      "clustered": null,
+      "lane": 0,
+      "n": 18,
+      "min_us": 947.9,
+      "median_us": 1301.4499999999998,
+      "max_us": 2097.2,
+      "last_native_metric_medians": null
+    },
+    {
+      "kind": "light-add",
+      "shapes": null,
+      "clustered": null,
+      "lane": 1,
+      "n": 18,
+      "min_us": 1030.6,
+      "median_us": 1561.75,
+      "max_us": 2325.9,
+      "last_native_metric_medians": [
+        528447.0,
+        3396.0,
+        0.0,
+        17500.0,
+        5832.0,
+        1485450.0,
+        1489000.0,
+        23332.0
+      ]
+    },
+    {
+      "kind": "light-add",
+      "shapes": null,
+      "clustered": null,
+      "lane": 2,
+      "n": 18,
+      "min_us": 143.8,
+      "median_us": 215.10000000000002,
+      "max_us": 314.3,
+      "last_native_metric_medians": [
+        39714.0,
+        3396.0,
+        981.0,
+        17500.0,
+        5832.0,
+        174000.0,
+        177600.0,
+        23332.0
+      ]
+    },
+    {
+      "kind": "light-remove",
+      "shapes": null,
+      "clustered": null,
+      "lane": 0,
+      "n": 18,
+      "min_us": 1175.9,
+      "median_us": 1473.35,
+      "max_us": 2859.1,
+      "last_native_metric_medians": null
+    },
+    {
+      "kind": "light-remove",
+      "shapes": null,
+      "clustered": null,
+      "lane": 1,
+      "n": 18,
+      "min_us": 91.0,
+      "median_us": 115.9,
+      "max_us": 239.6,
+      "last_native_metric_medians": [
+        33048.0,
+        0.0,
+        0.0,
+        17500.0,
+        5832.0,
+        83550.0,
+        86850.0,
+        23332.0
+      ]
+    },
+    {
+      "kind": "light-remove",
+      "shapes": null,
+      "clustered": null,
+      "lane": 2,
+      "n": 18,
+      "min_us": 229.4,
+      "median_us": 287.0,
+      "max_us": 510.9,
+      "last_native_metric_medians": [
+        63648.0,
+        8737.0,
+        2074.0,
+        17500.0,
+        5832.0,
+        254400.0,
+        257050.0,
+        23332.0
+      ]
+    },
+    {
+      "kind": "light-unchanged",
+      "shapes": null,
+      "clustered": null,
+      "lane": 0,
+      "n": 18,
+      "min_us": 5.0,
+      "median_us": 6.9,
+      "max_us": 10.5,
+      "last_native_metric_medians": null
+    },
+    {
+      "kind": "light-unchanged",
+      "shapes": null,
+      "clustered": null,
+      "lane": 1,
+      "n": 18,
+      "min_us": 1018.1,
+      "median_us": 1264.6,
+      "max_us": 2129.7,
+      "last_native_metric_medians": [
+        528447.0,
+        3396.0,
+        0.0,
+        17500.0,
+        5832.0,
+        1224250.0,
+        1227150.0,
+        23332.0
+      ]
+    },
+    {
+      "kind": "light-unchanged",
+      "shapes": null,
+      "clustered": null,
+      "lane": 2,
+      "n": 18,
+      "min_us": 29.4,
+      "median_us": 48.95,
+      "max_us": 62.9,
+      "last_native_metric_medians": [
+        15.0,
+        0.0,
+        4.0,
+        17500.0,
+        5832.0,
+        8300.0,
+        10800.0,
+        23332.0
+      ]
+    }
+  ]
+}

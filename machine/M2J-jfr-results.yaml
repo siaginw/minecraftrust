@@ -1,0 +1,89 @@
+# M2J: ONE bounded Revelation JFR discovery capture (operator approval 2026-09-20).
+# class: MEASURED (sampled profiler data; shares are SAMPLE shares, not exact
+# milliseconds or byte counts). Provenance: M2J-JFR-CAPTURE.
+schema_version: 1
+date: "2026-09-20"
+capture:
+  jvm: "Temurin 8u504, -XX:+FlightRecorder, StartFlightRecording settings=profile, duration=480s, dumponexit=true, FlightRecorderOptions=stackdepth=96"
+  run: "M1 OFF, existing Revelation world/config, boot->settle 12s->150s TP-hop streaming->recovery to self-stop at 420s; bot streamed 8764 chunks / 251.3 MB / 0 errors"
+  phases_jfr: "boot 364 ServerThread samples / idle 143 / streaming 2166 / recovery 1267 (of 3940 total ServerThread samples; 4921 events file-wide)"
+  early_validation: "T+170s in-run jcmd JFR.check + dump: recording running, 3013 execution + 6419 allocation samples present"
+  setup_attempts: >
+    4 failed setup attempts preceded the valid capture, all preserved:
+    attempts 1-2 = JVM refused -XX:FlightRecorderOptions=dumponexit (removed
+    in this build; moved into StartFlightRecording); attempt 3 = timeline
+    path bug aborted the driver leaving an orphan no-workload server (killed;
+    its 8-min boot/idle-only recording discarded as invalid, diagnostics
+    kept as M2J-jfr1-attempt4-noworkload.log); final attempt clean.
+analysis_commands: "jfr print --events jdk.ExecutionSample / jdk.ObjectAllocationInNewTLAB,jdk.ObjectAllocationOutsideTLAB machine/raw/M2J-jfr1.jfr; python aggregation (tools/m2j-analyze.py equivalent inline; dumps committed under machine/raw/diag/)"
+cpu_findings_server_thread:
+  streaming_self_top: >
+    Chunk.func_186032_a (setBlockState) 9.3%, Chunk.func_177435_g
+    (getBlockState) 4.3%, Forge GameData$BlockCallbacks 4.3%, HashMap ops
+    ~10% combined (getNode/putVal/resize/TreeNode), fastutil Long2Object
+    2.6%, BlockStateContainer$StateImplementation 2.5%, Tinkers MeltingRecipe
+    1.9%, StatList.reinit 1.8%, worldgen NoiseGenerator 1.8%.
+  blockstate_cluster: >
+    The single largest coherent cluster: block-state machinery
+    (setBlockState+getBlockState+BlockCallbacks+StateImplementation+palette
+    maps) ~20%+ of streaming ServerThread samples. NOTE: the dominant
+    setBlockState caller is Chunk.func_177435_g (getBlockState) itself -
+    i.e. a mod-ASM-transformed read/write chain (NEID 'ru.fewizz.neid.asm
+    Hooks' frames appear in chunk-load stacks); NEID is installed in this
+    pack. This cluster is ENGINE code executing under MOD transformation.
+  stack_presence_streaming: >
+    mantle/Tinkers recipe matching 12.6% presence (MeltingRecipe.matches <-
+    TinkerRegistry.getMelting; mod-owned, callers not resolvable deeper),
+    Chunk.setBlockState 9.3%, worldgen (noise/populate; corridor-border
+    chunks still generating) 9.0%, Forge EventBus.post 5.1%,
+    PlayerChunkMap/chunk-send 1.6%, SPacketChunkData ctor 0.1%,
+    entity tick 0.9%, TileEntity tick 0.2%, block random/light tick 0.0%.
+  engine_vs_mod: "48.5% of streaming samples carry a mod frame in top-8; 40.7% pure engine/jdk; 28.4% carry a Forge frame (overlap allowed)"
+  chunk_load_path: >
+    Streaming-phase AnvilChunkLoader.checkedReadChunkFromNBT__Async +
+    Forge ChunkIO sync callback + BlockStateContainer palette rebuild
+    frames confirm chunk LOAD (not just send) is a major streaming cost;
+    Chunk I/O Executor thread also sampled (297 samples).
+  recovery_autosave: >
+    AUTOSAVE OBSERVED: 347 save-pipeline samples in recovery (write roots:
+    AnvilChunkLoader.func_75820_a write chain, 179 as bottom-root cluster)
+    executing on the SERVER THREAD (NBT serialization inline), plus 122
+    worldgen samples (border-chunk generation) in the same window.
+allocation_findings: # sampled events; NO stacks in this configuration (limitation)
+  by_thread: "Server thread 4026, Netty Server IO 1848, File IO Thread 1427, FJPool 1000, Thread-30 945, AE Compass 600 (of 12474)"
+  serverthread_classes: "char[] 23.1%, byte[] 11.6%, BlockPos 5.6%, HashMap$Node[] 5.4%, HashMap 5.4%, Node 5.4%, Object[] 4.1%, Itr 3.4%, String 2.4%, int[] 2.0%"
+  limitation: "allocation events carry class+thread only in this JDK8 profile config (no stacks); shares are sampled-event shares, NOT bytes; char[]/byte[] dominance is consistent with NBT/String-heavy save+load work"
+m2_shortlist_from_this_recording:
+  - id: M2-H1-chunk-save-load-nbt
+    observed: "autosave on ServerThread: 347 samples in a ~4min window (write chain rooted at AnvilChunkLoader write; NBT+char[]/byte[] allocation consistent); chunk LOAD path also hot during streaming (AnvilChunkLoader.read + palette rebuild)"
+    removable: "NBT serialization/deserialization of chunk sections to an off-thread or native codec (P0-4 Rust NBT codec exists); disk IO is already async - the INLINE NBT build is the removable part"
+    java_callbacks: "save/load hooks at AnvilChunkLoader (vanilla seam, no mod API); TileEntity/ capability NBT must stay Java-authoritative"
+    data_transfer: "coarse per-chunk NBT trees (P0-4 measured transfer costs)"
+    compat_risk: "HIGH for saves: on-disk format must remain bit-identical (region consumers, backups); read path (load) is lower-risk than write"
+  - id: M2-H2-blockstate-access-cluster
+    observed: "~20% of streaming ServerThread samples in block-state machinery, executing under NEID's ASM transformation (setBlockState called FROM getBlockState frames); Forge registry callbacks inside"
+    removable: "UNCLEAR - the cluster is engine code under mod transformation; a native cache of section->blockstate views could bypass per-access map chains, but mod hooks (BlockCallbacks, event buses) fire inside the path and must be preserved"
+    java_callbacks: "BlockStateContainer/Chunk accessors (vanilla seam); NEID compatibility is the gating unknown"
+    data_transfer: "per-section bulk reads (like M1 staging)"
+    compat_risk: "MEDIUM-HIGH: any change in observable access behavior can break NEID/mod callbacks; requires its own shadow ladder like M1"
+  - id: M2-H3-mod-recipe-hotloop-tinkers
+    observed: "Tinkers/Mantle MeltingRecipe.getMelting matching ~12.6% stack presence on the SERVER THREAD during chunk streaming (likely chunk-population/lava-related melting lookups)"
+    removable: "possible (caching/lookup structure) but MOD-OWNED code - Rust rewrite of a mod's recipe matcher violates the project rule that mod logic stays Java"
+    java_callbacks: "would be a Java-side fix inside the mod or a cache hook, not a Rust migration"
+    data_transfer: "n/a"
+    compat_risk: "out of scope for native migration; listed for completeness as measured mod-side cost"
+limitations:
+  - single capture, single pack, single streaming workload; not a machine-heavy factory scenario (no running tech, no entities spawned by machines)
+  - sampled data: shares are sample proportions; 10ms method sampling under-represents very short frames
+  - allocation events lack stacks in this JDK8 config; class/thread attribution only
+  - recovery window conflates autosave with shutdown-save and border worldgen
+  - inclusive-style figures reported ONLY as stack-presence shares; nested inclusive percentages were not summed
+artifacts:
+  jfr_full: machine/raw/M2J-jfr1.jfr (16.6MB, sha256 in M2J-hashes.txt)
+  jfr_early: machine/raw/M2J-jfr1-early.jfr (12.5MB)
+  timeline: machine/raw/M2J-m2j-jfr1.timeline
+  gc_log: machine/targetC/server/gc-m2j-jfr1.log
+  run_log: machine/targetC/server/run-m2j-jfr1.log
+  sample_dumps: machine/raw/diag/m2j-exec-samples.txt, m2j-alloc-samples.txt
+  setup_failures: machine/raw/M2J-jfr1-attempt1-failed.log, attempt2, attempt4-noworkload
+sensitivity_note: "JFR recordings contain machine/JVM metadata (hostname, paths, flags); retained in-repo as this is a private research repo - flag before any public release"

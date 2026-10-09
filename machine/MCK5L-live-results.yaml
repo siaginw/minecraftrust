@@ -1,0 +1,71 @@
+# M-CK5-LIVE — FRAME SHADOW OBSERVER LIVE VALIDATION, CLEAN FORGE TARGET A
+schema_version: 1
+date: "2026-09-22"
+classification_target: FRAME_SHADOW_OBSERVER_LIVE_VALIDATED_TARGETA
+binary:
+  dll_sha256: c10ddca1ce3c82255e78154fde657408e82fa354707bc5174deb5b0a6cb62d2c
+  coremod_jar_sha256: 370740e5740eca2ecd80c7e5743e56c76041013ff90cd1bb8a6f6d55444a48db
+  java: Temurin jdk-8.0.504.1-hotspot
+  netty: 4.1.9.Final (bundled); forge 1.12.2-14.23.5.2860
+  rust: unchanged (Java/JNI-side checkpoint; DLL identical to offline M-CK5)
+live_wiring:
+  hook: "FrameShadowHookTransformer injects FrameShadowLiveHook.onCompressionThresholdSet(this,threshold) before the single RETURN of NetworkManager.func_179289_a(I)V (method identified by the unique 'compress' LDC — same fingerprint as the proven M2C transformer); verified offline against the installed jar bytecode (transformCount=1, owner+method+desc present in the product, unrelated classes untouched, property OFF -> NO transformation)"
+  gating: "-Dminecraftrust.frame_shadow=LIVE (default OFF -> transformer disabled entirely -> zero live code); sampling/bounds via minecraftrust.frame_shadow.every/maxbytes/maxcomparisons"
+  installation: "FrameShadowObserver.liveInstall at the hook (server thread): VERIFIES the real pipeline by handler NAME before any mutation — requires prepender/compress/encoder present with list order prep<compress<enc (disassembled ground truth [.., (encrypt), prepender, compress, encoder, packet_handler]); capture addBefore('encoder') = post-serialization pre-compression in traversal; frame-observe addBefore('prepender') = post-framing pre-encryption for ANY head-ward content; FAIL CLOSED on any mismatch (counted reason, Java untouched)"
+  offline_gates: "MCK5ObserverGates extended to 21/21: production-shaped live-install positions + double-install skip + close-based exactly-once cleanup; missing-prepender and wrong-order pipelines install NOTHING"
+campaign:
+  script: tools/mck5live-run.sh
+  design: "ONE bounded ~5.5-min run: fresh disposable world; 2 sequential login/play/disconnect sessions (reconnect lifecycle, 2 channels); teleport-exploration client (12 hops/session) for chunk traffic; 2 console block-mutation batches (block_change + light -> chunk resends); deterministic sampling 1:2; everything else OFF (native_chunk_packet/worldgen/native_compress OFF); Java transmits every packet; observer output discarded"
+  run_id: MCK5L-20260922-222121 (definitive; artifacts machine/raw/MCK5L-20260922-222121-{meta,metrics,server.log,client.jsonl,client-stdout}.txt)
+definitive_run_counters: >
+  mck5live.mode=LIVE hookCalls=2 installOk=2 installSkipped=0 lastSkipReason=null;
+  channels=2 channelsCleanClosed=2; observed=9965 selected=4982 (deterministic 1:2)
+  completed=4982 matched=4982 mismatched=0; unpairedFrame=4983 (exactly the
+  sampling-skipped frames) unpairedCapture=0; observerErrors=0 disabledObservers=0
+  disableReasons=none; ALL skip reasons 0 (over/empty/limit/threshold/frameAnomaly/
+  stability); ctxCreated=2 ctxFreed=2 retainedObservations=0 retainedBytes=0
+  sampledBytes=20948095; lastError=null; frameShadowHook.transformCount=1
+  HOOK_INSTALLED x1.
+compressed_vs_uncompressed: >
+  completedCompressed=707 (>0: inflate path exercised on real chunk packets —
+  declared uncompressed length verified, independent inflate of BOTH java and
+  rust frames recovered the captured body); completedUncompressed=4275
+  (passthrough packets — keepalive/time/chat/movement etc. — with structural
+  validity AND cross-implementation exact-byte framing). 707+4275=4982=completed.
+non_interference: >
+  Offline differential proof (21/21): identical Java bytes, promise outcomes,
+  buffer release across every state and fault injection. Live: client decoded
+  and decompressed ALL traffic — session s0 4774 frames / 715 chunk packets
+  (22.1 MB), session s1 5186 frames / 688 chunk packets (19.7 MB), errors=0
+  both, 552 block-change packets, 12 teleport hops each, clean session-end
+  disconnects (last_error=None). Server-side Java transmitted every packet
+  (m1_java_packets_transmitted=1403 chunk packets on the M1 counter alone);
+  no native transmission path exists in the observer (read-only copies;
+  output discarded in-code and counter-verified: m1/m2c native counters all
+  zero this run — native_compress OFF).
+lifecycle_memory: >
+  contexts_created(2) == contexts_freed(2); observer_owned_retained_bytes == 0
+  at final dump; channelsCleanClosed=2 (verified in handlerRemoved AFTER the
+  teardown free — the final lifecycle point); reconnect/disconnect lifecycle
+  exercised by the 2 sequential sessions; fresh disposable world per run.
+server_client_errors: >
+  Server log contains exactly 3 ERROR/Exception lines, all the expected
+  client-initiated session-end disconnects ('connection forcibly closed by the
+  remote host' at the hold deadline; logged by FML NetworkDispatcher +
+  NetHandlerPlayServer 'lost connection'). No observer-attributable exceptions,
+  no validator exceptions, no native errors.
+failures_and_preserved_runs:
+  - "MCK5L-20260922-220105: HARNESS DEFECT (missing cd in run script; server launched from repo root, no jar). Preserved; script fixed."
+  - "MCK5L-20260922-220400: SUCCESSFUL validation run (5315/5315 matched, 0 mismatch; ctx 2/2; retained 0) with two OBSERVABILITY defects found: (a) clean-close check ran on closeFuture BEFORE teardown freed the context (showed 0 despite 2/2 balance at shutdown), (b) mck5live section missing from the shutdown metrics FILE (stdout only) and the final write truncated the periodic dump. Both fixed (clean-close accounting moved into handlerRemoved after freeNative; dump added to the file write). Counters recovered complete from the server log stdout dump."
+  - "MCK5L-20260922-221021: clean-close accounting validated (2/2) but the closeFuture listener REMOVED observers from the aggregation list before the final dump -> zeroed aggregate. HARNESS DEFECT introduced by the previous fix; observers now stay listed. Preserved."
+  - "MCK5L-20260922-221537: fully green counters (4381/4381 matched, ctx 2/2, retained 0, cleanClose 2/2) but the compressed/uncompressed split of completed comparisons was not directly counted (only derivable from traffic mix) — split counters added for the definitive run rather than accepting a derived figure."
+server_client_errors: >
+  Server log contains exactly 3 ERROR/Exception lines, all the expected
+  client-initiated session-end disconnects ('connection forcibly closed by the
+  remote host' at the hold deadline; logged by FML NetworkDispatcher +
+  NetHandlerPlayServer 'lost connection'). No observer-attributable exceptions,
+  no validator exceptions, no native errors.
+safety: "Java authoritative for every transmitted byte; Rust observer output discarded (never written to any pipeline buffer); defaults OFF; no Revelation/SevTech; disposable fresh world per run; M1/M2/M5 authoritative networking stayed OFF; CAPTURE_UNSAFE gate untouched; issue #1 OPEN"
+regressions: "MCK5ObserverGates 21/21; MCK5OptimizationTests 13/13; MCK42OwnershipGates 15/15; MCK42FrameBoundaryGates 11/11; MCK4Validation 20/20; M53FrameOracle 25/25; M52CompressionTests 26/26; M4AuthoritativeTest 59/59; compression 14/14; native-chunk 10/10 (all after the final implementation state)"
+safety: "Java authoritative for every transmitted byte; Rust observer output discarded (never written to any pipeline buffer); defaults OFF; no Revelation/SevTech; disposable fresh world per run; M1/M2/M5 authoritative networking stayed OFF; CAPTURE_UNSAFE gate untouched; issue #1 OPEN"
+classification: FRAME_SHADOW_OBSERVER_LIVE_VALIDATED_TARGETA

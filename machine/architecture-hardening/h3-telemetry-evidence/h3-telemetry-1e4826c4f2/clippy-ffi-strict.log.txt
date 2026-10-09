@@ -1,0 +1,1036 @@
+    Checking core-types v0.1.0 (D:\minecraftrust-astra-hardening\crates\core-types)
+    Checking metrics v0.1.0 (D:\minecraftrust-astra-hardening\crates\metrics)
+    Checking spatial-index v0.1.0 (D:\minecraftrust-astra-hardening\crates\spatial-index)
+    Checking worldgen-noise v0.1.0 (D:\minecraftrust-astra-hardening\crates\worldgen-noise)
+    Checking buffers v0.1.0 (D:\minecraftrust-astra-hardening\crates\buffers)
+    Checking spawn-index v0.1.0 (D:\minecraftrust-astra-hardening\crates\spawn-index)
+warning: value assigned to `l0` is never read
+   --> crates\worldgen-noise\src\lib.rs:236:14
+    |
+236 |         let (mut l0, mut l1, mut l2, mut l3): (i32, i32, i32, i32) = (0, 0, 0, 0);
+    |              ^^^^^^ this value is reassigned later and never used
+...
+261 |                         l0 = self.perm[b0b as usize] + cz;
+    |                         --------------------------------- `l0` is overwritten here before the previous value is read
+    |
+    = note: `#[warn(unused_assignments)]` (part of `#[warn(unused)]`) on by default
+
+warning: value assigned to `l1` is never read
+   --> crates\worldgen-noise\src\lib.rs:236:22
+    |
+236 |         let (mut l0, mut l1, mut l2, mut l3): (i32, i32, i32, i32) = (0, 0, 0, 0);
+    |                      ^^^^^^ this value is reassigned later and never used
+...
+262 |                         l1 = self.perm[(b0b + 1) as usize] + cz;
+    |                         --------------------------------------- `l1` is overwritten here before the previous value is read
+
+warning: value assigned to `l2` is never read
+   --> crates\worldgen-noise\src\lib.rs:236:30
+    |
+236 |         let (mut l0, mut l1, mut l2, mut l3): (i32, i32, i32, i32) = (0, 0, 0, 0);
+    |                              ^^^^^^ this value is reassigned later and never used
+...
+264 |                         l2 = self.perm[b1b as usize] + cz;
+    |                         --------------------------------- `l2` is overwritten here before the previous value is read
+
+warning: value assigned to `l3` is never read
+   --> crates\worldgen-noise\src\lib.rs:236:38
+    |
+236 |         let (mut l0, mut l1, mut l2, mut l3): (i32, i32, i32, i32) = (0, 0, 0, 0);
+    |                                      ^^^^^^ this value is reassigned later and never used
+...
+265 |                         l3 = self.perm[(b1b + 1) as usize] + cz;
+    |                         --------------------------------------- `l3` is overwritten here before the previous value is read
+
+warning: unused variable: `len`
+   --> crates\worldgen-noise\src\field.rs:177:13
+    |
+177 |         let len = (x_size * y_size * z_size) as usize;
+    |             ^^^ help: if this is intentional, prefix it with an underscore: `_len`
+    |
+    = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: value assigned to `l0` is never read
+   --> crates\worldgen-noise\src\field_complete.rs:113:10
+    |
+113 |     let (mut l0, mut l1, mut l2, mut l3) = (0i32, 0i32, 0i32, 0i32);
+    |          ^^^^^^ this value is reassigned later and never used
+...
+135 |                     l0 = perm[b0 as usize] as i32 + cz;
+    |                     ---------------------------------- `l0` is overwritten here before the previous value is read
+
+warning: value assigned to `l1` is never read
+   --> crates\worldgen-noise\src\field_complete.rs:113:18
+    |
+113 |     let (mut l0, mut l1, mut l2, mut l3) = (0i32, 0i32, 0i32, 0i32);
+    |                  ^^^^^^ this value is reassigned later and never used
+...
+136 |                     l1 = perm[(b0 + 1) as usize] as i32 + cz;
+    |                     ---------------------------------------- `l1` is overwritten here before the previous value is read
+
+warning: value assigned to `l2` is never read
+   --> crates\worldgen-noise\src\field_complete.rs:113:26
+    |
+113 |     let (mut l0, mut l1, mut l2, mut l3) = (0i32, 0i32, 0i32, 0i32);
+    |                          ^^^^^^ this value is reassigned later and never used
+...
+138 |                     l2 = perm[b1 as usize] as i32 + cz;
+    |                     ---------------------------------- `l2` is overwritten here before the previous value is read
+
+warning: value assigned to `l3` is never read
+   --> crates\worldgen-noise\src\field_complete.rs:113:34
+    |
+113 |     let (mut l0, mut l1, mut l2, mut l3) = (0i32, 0i32, 0i32, 0i32);
+    |                                  ^^^^^^ this value is reassigned later and never used
+...
+139 |                     l3 = perm[(b1 + 1) as usize] as i32 + cz;
+    |                     ---------------------------------------- `l3` is overwritten here before the previous value is read
+
+warning: variable does not need to be mutable
+   --> crates\worldgen-noise\src\field_complete.rs:472:13
+    |
+472 |         let mut take = |n_oct: usize, perms: &[u8], offsets: &[f64],
+    |             ----^^^^
+    |             |
+    |             help: remove this `mut`
+    |
+    = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: constant `REGION_SIZE` is never used
+  --> crates\spawn-index\src\lib.rs:33:7
+   |
+33 | const REGION_SIZE: i32 = 1 << REGION_SHIFT;
+   |       ^^^^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+    Checking contracts v0.1.0 (D:\minecraftrust-astra-hardening\crates\contracts)
+    Checking protocol v0.1.0 (D:\minecraftrust-astra-hardening\crates\protocol)
+    Checking compression v0.1.0 (D:\minecraftrust-astra-hardening\crates\compression)
+warning: `worldgen-noise` (lib) generated 10 warnings (run `cargo clippy --fix --lib -p worldgen-noise -- --no-deps -D warnings` to apply 2 suggestions)
+warning: `spawn-index` (lib) generated 1 warning
+    Checking chunk-packet v0.1.0 (D:\minecraftrust-astra-hardening\crates\chunk-packet)
+warning: unused variable: `have`
+   --> crates\compression\src\frame.rs:205:68
+    |
+205 |                     crate::CompressError::OutputTooSmall { needed, have } =>
+    |                                                                    ^^^^ help: try ignoring the field: `have: _`
+    |
+    = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: `compression` (lib) generated 1 warning (run `cargo clippy --fix --lib -p compression -- --no-deps -D warnings` to apply 1 suggestion)
+    Checking native-chunk v0.1.0 (D:\minecraftrust-astra-hardening\crates\native-chunk)
+    Checking ffi v0.1.0 (D:\minecraftrust-astra-hardening\crates\ffi)
+error: unsafe function's docs are missing a `# Safety` section
+  --> crates\ffi\src\spawn.rs:18:1
+   |
+18 | / pub unsafe extern "system" fn Java_com_rustcraft_interop_SpawnIndexInterop_create(
+19 | |     _env: *mut c_void,
+20 | |     _cls: *mut c_void,
+21 | | ) -> *mut c_void {
+   | |________________^
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#missing_safety_doc
+   = note: `-D clippy::missing-safety-doc` implied by `-D warnings`
+   = help: to override `-D warnings` add `#[allow(clippy::missing_safety_doc)]`
+
+error: unsafe function's docs are missing a `# Safety` section
+  --> crates\ffi\src\spawn.rs:28:1
+   |
+28 | / pub unsafe extern "system" fn Java_com_rustcraft_interop_SpawnIndexInterop_freeRaw(
+29 | |     _env: *mut c_void,
+30 | |     _cls: *mut c_void,
+31 | |     h: *mut c_void,
+32 | | ) {
+   | |_^
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#missing_safety_doc
+
+error: unsafe function's docs are missing a `# Safety` section
+  --> crates\ffi\src\spawn.rs:42:1
+   |
+42 | / pub unsafe extern "system" fn Java_com_rustcraft_interop_SpawnIndexInterop_insert(
+43 | |     _env: *mut c_void,
+44 | |     _cls: *mut c_void,
+45 | |     h: *mut c_void,
+...  |
+55 | |     n_comp_ints: i32,
+56 | | ) {
+   | |_^
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#missing_safety_doc
+
+error: unsafe function's docs are missing a `# Safety` section
+   --> crates\ffi\src\spawn.rs:94:1
+    |
+ 94 | / pub unsafe extern "system" fn Java_com_rustcraft_interop_SpawnIndexInterop_updateBox(
+ 95 | |     _env: *mut c_void,
+ 96 | |     _cls: *mut c_void,
+ 97 | |     h: *mut c_void,
+...   |
+104 | |     max_z: i32,
+105 | | ) {
+    | |_^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#missing_safety_doc
+
+error: unsafe function's docs are missing a `# Safety` section
+   --> crates\ffi\src\spawn.rs:117:1
+    |
+117 | / pub unsafe extern "system" fn Java_com_rustcraft_interop_SpawnIndexInterop_remove(
+118 | |     _env: *mut c_void,
+119 | |     _cls: *mut c_void,
+120 | |     h: *mut c_void,
+121 | |     rank: i32,
+122 | | ) {
+    | |_^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#missing_safety_doc
+
+error: unsafe function's docs are missing a `# Safety` section
+   --> crates\ffi\src\spawn.rs:135:1
+    |
+135 | / pub unsafe extern "system" fn Java_com_rustcraft_interop_SpawnIndexInterop_query(
+136 | |     _env: *mut c_void,
+137 | |     _cls: *mut c_void,
+138 | |     h: *mut c_void,
+...   |
+141 | |     z: i32,
+142 | | ) -> i32 {
+    | |________^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#missing_safety_doc
+
+error: unsafe function's docs are missing a `# Safety` section
+   --> crates\ffi\src\spawn.rs:157:1
+    |
+157 | / pub unsafe extern "system" fn Java_com_rustcraft_interop_SpawnIndexInterop_stats(
+158 | |     _env: *mut c_void,
+159 | |     _cls: *mut c_void,
+160 | |     h: *mut c_void,
+161 | |     out: *mut i64,
+162 | |     _out_len: i32,
+163 | | ) {
+    | |_^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#missing_safety_doc
+
+error: unsafe function's docs are missing a `# Safety` section
+  --> crates\ffi\src\wnoise.rs:16:1
+   |
+16 | / pub unsafe extern "system" fn Java_com_rustcraft_interop_WNoiseInterop_create(
+17 | |     _env: *mut c_void,
+18 | |     _cls: *mut c_void,
+19 | |     seed: i64,
+20 | |     octaves: i32,
+21 | | ) -> *mut c_void {
+   | |________________^
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#missing_safety_doc
+
+error: unsafe function's docs are missing a `# Safety` section
+  --> crates\ffi\src\wnoise.rs:32:1
+   |
+32 | / pub unsafe extern "system" fn Java_com_rustcraft_interop_WNoiseInterop_freeRaw(
+33 | |     _env: *mut c_void,
+34 | |     _cls: *mut c_void,
+35 | |     h: *mut c_void,
+36 | | ) {
+   | |_^
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#missing_safety_doc
+
+error: unsafe function's docs are missing a `# Safety` section
+  --> crates\ffi\src\wnoise.rs:47:1
+   |
+47 | / pub unsafe extern "system" fn Java_com_rustcraft_interop_WNoiseInterop_gen3d(
+48 | |     _env: *mut c_void,
+49 | |     _cls: *mut c_void,
+50 | |     h: *mut c_void,
+...  |
+61 | |     out_len: i32,
+62 | | ) {
+   | |_^
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#missing_safety_doc
+
+error: unsafe function's docs are missing a `# Safety` section
+   --> crates\ffi\src\wnoise.rs:90:1
+    |
+ 90 | / pub unsafe extern "system" fn Java_com_rustcraft_interop_WNoiseInterop_gen2d(
+ 91 | |     _env: *mut c_void,
+ 92 | |     _cls: *mut c_void,
+ 93 | |     h: *mut c_void,
+...   |
+102 | |     out_len: i32,
+103 | | ) {
+    | |_^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#missing_safety_doc
+
+error: unsafe function's docs are missing a `# Safety` section
+   --> crates\ffi\src\wnoise.rs:139:1
+    |
+139 | / pub unsafe extern "system" fn Java_com_rustcraft_interop_WNoiseInterop_batchCreate(
+140 | |     _env: *mut c_void,
+141 | |     _cls: *mut c_void,
+142 | |     seed: i64,
+143 | |     octaves: i32,
+144 | | ) -> *mut c_void {
+    | |________________^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#missing_safety_doc
+
+error: unsafe function's docs are missing a `# Safety` section
+   --> crates\ffi\src\wnoise.rs:154:1
+    |
+154 | / pub unsafe extern "system" fn Java_com_rustcraft_interop_WNoiseInterop_batchFreeRaw(
+155 | |     _env: *mut c_void,
+156 | |     _cls: *mut c_void,
+157 | |     h: *mut c_void,
+158 | | ) {
+    | |_^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#missing_safety_doc
+
+error: unsafe function's docs are missing a `# Safety` section
+   --> crates\ffi\src\wnoise.rs:170:1
+    |
+170 | / pub unsafe extern "system" fn Java_com_rustcraft_interop_WNoiseInterop_batchGen3d(
+171 | |     _env: *mut c_void,
+172 | |     _cls: *mut c_void,
+173 | |     h: *mut c_void,
+...   |
+184 | |     out_addr: i64,
+185 | | ) {
+    | |_^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#missing_safety_doc
+
+error: unsafe function's docs are missing a `# Safety` section
+   --> crates\ffi\src\wnoise.rs:221:1
+    |
+221 | / pub unsafe extern "system" fn Java_com_rustcraft_interop_WNoiseInterop_fieldCreate(
+222 | |     _env: *mut c_void, _cls: *mut c_void,
+223 | |     a: f32, b: f32, e: f32, f: f32, g: f32, h: f32, i: f32, j: f32,
+224 | |     k: f32, l: f32, d: f32, c: f32, m: f32, n: f32, o: f32, p: f32,
+225 | |     amplified: u8,
+226 | | ) -> *mut c_void {
+    | |________________^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#missing_safety_doc
+
+error: unsafe function's docs are missing a `# Safety` section
+   --> crates\ffi\src\wnoise.rs:244:1
+    |
+244 | / pub unsafe extern "system" fn Java_com_rustcraft_interop_WNoiseInterop_fieldFreeRaw(
+245 | |     _env: *mut c_void, _cls: *mut c_void, h: *mut c_void,
+246 | | ) {
+    | |_^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#missing_safety_doc
+
+error: unsafe function's docs are missing a `# Safety` section
+   --> crates\ffi\src\wnoise.rs:255:1
+    |
+255 | / pub unsafe extern "system" fn Java_com_rustcraft_interop_WNoiseInterop_fieldAssemble(
+256 | |     _env: *mut c_void, _cls: *mut c_void, fh: *mut c_void,
+257 | |     h_addr: i64, e_addr: i64, f_addr: i64, g_addr: i64,
+258 | |     biome_addr: i64, q_addr: i64,
+259 | | ) {
+    | |_^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#missing_safety_doc
+
+error: unsafe function's docs are missing a `# Safety` section
+   --> crates\ffi\src\wnoise.rs:296:1
+    |
+296 | / pub unsafe extern "system" fn Java_com_rustcraft_interop_WNoiseInterop_singleCreate(
+297 | |     _env: *mut c_void, _cls: *mut c_void, seed: i64, octaves: i32,
+298 | | ) -> *mut c_void {
+    | |________________^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#missing_safety_doc
+
+error: unsafe function's docs are missing a `# Safety` section
+   --> crates\ffi\src\wnoise.rs:307:1
+    |
+307 | / pub unsafe extern "system" fn Java_com_rustcraft_interop_WNoiseInterop_singleFreeRaw(
+308 | |     _env: *mut c_void, _cls: *mut c_void, h: *mut c_void,
+309 | | ) {
+    | |_^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#missing_safety_doc
+
+error: unsafe function's docs are missing a `# Safety` section
+   --> crates\ffi\src\wnoise.rs:317:1
+    |
+317 | / pub unsafe extern "system" fn Java_com_rustcraft_interop_WNoiseInterop_singleGen3d(
+318 | |     _env: *mut c_void, _cls: *mut c_void, h: *mut c_void,
+319 | |     x_off: i32, y_off: i32, z_off: i32,
+320 | |     x_size: i32, y_size: i32, z_size: i32,
+321 | |     x_scale: f64, y_scale: f64, z_scale: f64, out_addr: i64,
+322 | | ) {
+    | |_^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#missing_safety_doc
+
+error: unsafe function's docs are missing a `# Safety` section
+   --> crates\ffi\src\wnoise.rs:353:1
+    |
+353 | / pub unsafe extern "system" fn Java_com_rustcraft_interop_WNoiseInterop_initCreate(
+354 | |     _env: *mut c_void, _cls: *mut c_void,
+355 | |     seed_depth: i64, seed_main: i64, seed_min: i64, seed_max: i64,
+356 | |     a: f32, b: f32, e: f32, f: f32, g: f32, h: f32, i: f32, j: f32,
+357 | |     k: f32, l: f32, d: f32, c: f32, m: f32, n: f32, o: f32, p: f32,
+358 | |     amplified: u8,
+359 | | ) -> *mut c_void {
+    | |________________^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#missing_safety_doc
+
+error: unsafe function's docs are missing a `# Safety` section
+   --> crates\ffi\src\wnoise.rs:378:1
+    |
+378 | / pub unsafe extern "system" fn Java_com_rustcraft_interop_WNoiseInterop_initFreeRaw(
+379 | |     _env: *mut c_void, _cls: *mut c_void, h: *mut c_void,
+380 | | ) {
+    | |_^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#missing_safety_doc
+
+error: unsafe function's docs are missing a `# Safety` section
+   --> crates\ffi\src\wnoise.rs:389:1
+    |
+389 | / pub unsafe extern "system" fn Java_com_rustcraft_interop_WNoiseInterop_initFieldComplete(
+390 | |     _env: *mut c_void, _cls: *mut c_void, h: *mut c_void,
+391 | |     x4: i32, z4: i32, biome_addr: i64, out_addr: i64,
+392 | | ) {
+    | |_^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#missing_safety_doc
+
+error: unsafe function's docs are missing a `# Safety` section
+   --> crates\ffi\src\wnoise.rs:416:1
+    |
+416 | / pub unsafe extern "system" fn Java_com_rustcraft_interop_WNoiseInterop_initCreateFromState(
+417 | |     _env: *mut c_void, _cls: *mut c_void,
+418 | |     oct_depth: i32, oct_main: i32, oct_min: i32, oct_max: i32,
+419 | |     perms_i32_addr: i64, offs_addr: i64,
+420 | |     a: f32, b: f32, e: f32, f: f32, g: f32, h: f32, i: f32, j: f32,
+421 | |     k: f32, l: f32, d: f32, c: f32, m: f32, n: f32, o: f32, p: f32,
+422 | | ) -> i64 {
+    | |________^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#missing_safety_doc
+
+error: unsafe function's docs are missing a `# Safety` section
+   --> crates\ffi\src\wnoise.rs:471:1
+    |
+471 | / pub unsafe extern "system" fn Java_com_rustcraft_bridge_WorldgenShadow_initCreateFromState(
+472 | |     _env: *mut c_void, _cls: *mut c_void,
+473 | |     oct_depth: i32, oct_main: i32, oct_min: i32, oct_max: i32,
+474 | |     perms_i32_addr: i64, offs_addr: i64,
+475 | |     a: f32, b: f32, e: f32, f: f32, g: f32, h: f32, i: f32, j: f32,
+476 | |     k: f32, l: f32, d: f32, c: f32, m: f32, n: f32, o: f32, p: f32,
+477 | | ) -> i64 {
+    | |________^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#missing_safety_doc
+
+error: unsafe function's docs are missing a `# Safety` section
+   --> crates\ffi\src\wnoise.rs:484:1
+    |
+484 | / pub unsafe extern "system" fn Java_com_rustcraft_bridge_WorldgenShadow_initFieldComplete(
+485 | |     _env: *mut c_void, _cls: *mut c_void, h: *mut c_void,
+486 | |     x4: i32, z4: i32, biome_addr: i64, out_addr: i64,
+487 | | ) {
+    | |_^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#missing_safety_doc
+
+error: unsafe function's docs are missing a `# Safety` section
+   --> crates\ffi\src\wnoise.rs:492:1
+    |
+492 | / pub unsafe extern "system" fn Java_com_rustcraft_bridge_WorldgenShadow_initFreeRaw(
+493 | |     _env: *mut c_void, _cls: *mut c_void, h: *mut c_void,
+494 | | ) {
+    | |_^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#missing_safety_doc
+
+error: unsafe function's docs are missing a `# Safety` section
+   --> crates\ffi\src\wnoise.rs:503:1
+    |
+503 | / pub unsafe extern "system" fn Java_com_rustcraft_interop_WNoiseInterop_terrainSetBlocks(
+504 | |     _env: *mut c_void, _cls: *mut c_void,
+505 | |     density_addr: i64, sea_level: i32, stone_id: i32, water_id: i32, primer_out_addr: i64,
+506 | | ) {
+    | |_^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#missing_safety_doc
+
+error: unsafe function's docs are missing a `# Safety` section
+   --> crates\ffi\src\wnoise.rs:531:1
+    |
+531 | / pub unsafe extern "system" fn Java_com_rustcraft_interop_WNoiseInterop_terrainSetBlocksOpt(
+532 | |     _env: *mut c_void, _cls: *mut c_void,
+533 | |     density_addr: i64, sea_level: i32, stone_id: i32, water_id: i32, primer_out_addr: i64,
+534 | | ) {
+    | |_^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#missing_safety_doc
+
+error: unsafe function's docs are missing a `# Safety` section
+   --> crates\ffi\src\wnoise.rs:559:1
+    |
+559 | / pub unsafe extern "system" fn Java_com_rustcraft_interop_WNoiseInterop_terrainComplete(
+560 | |     _env: *mut c_void, _cls: *mut c_void, h: *mut c_void,
+561 | |     x4: i32, z4: i32, biome_addr: i64, sea_level: i32, stone_id: i32, water_id: i32, primer_out_addr: i64,
+562 | | ) {
+    | |_^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#missing_safety_doc
+
+error: unsafe function's docs are missing a `# Safety` section
+   --> crates\ffi\src\wnoise.rs:589:1
+    |
+589 | / pub unsafe extern "system" fn Java_com_rustcraft_interop_WNoiseInterop_terrainSetBlocksCritical(
+590 | |     env: *mut c_void,
+591 | |     _cls: *mut c_void,
+592 | |     density_addr: i64,
+...   |
+596 | |     output_array: *mut c_void,
+597 | | ) {
+    | |_^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#missing_safety_doc
+
+error: unsafe function's docs are missing a `# Safety` section
+   --> crates\ffi\src\wnoise.rs:629:1
+    |
+629 | / pub unsafe extern "system" fn Java_com_rustcraft_bridge_WorldgenShadow_terrainSetBlocks(
+630 | |     _env: *mut c_void, _cls: *mut c_void,
+631 | |     density_addr: i64, sea_level: i32, stone_id: i32, water_id: i32, primer_out_addr: i64,
+632 | | ) {
+    | |_^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#missing_safety_doc
+
+error: unsafe function's docs are missing a `# Safety` section
+   --> crates\ffi\src\wnoise.rs:639:1
+    |
+639 | / pub unsafe extern "system" fn Java_com_rustcraft_bridge_WorldgenShadow_terrainSetBlocksOpt(
+640 | |     _env: *mut c_void, _cls: *mut c_void,
+641 | |     density_addr: i64, sea_level: i32, stone_id: i32, water_id: i32, primer_out_addr: i64,
+642 | | ) {
+    | |_^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#missing_safety_doc
+
+error: unsafe function's docs are missing a `# Safety` section
+   --> crates\ffi\src\wnoise.rs:649:1
+    |
+649 | / pub unsafe extern "system" fn Java_com_rustcraft_bridge_WorldgenShadow_terrainComplete(
+650 | |     _env: *mut c_void, _cls: *mut c_void, h: *mut c_void,
+651 | |     x4: i32, z4: i32, biome_addr: i64, sea_level: i32, stone_id: i32, water_id: i32, primer_out_addr: i64,
+652 | | ) {
+    | |_^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#missing_safety_doc
+
+error: unsafe function's docs are missing a `# Safety` section
+  --> crates\ffi\src\native_chunk.rs:22:1
+   |
+22 | / pub unsafe extern "system" fn Java_com_rustcraft_bridge_NativeChunkBridge_registerPrimer(
+23 | |     _env: *mut c_void,
+24 | |     _clazz: *mut c_void,
+25 | |     dim: i32,
+...  |
+29 | |     biome_addr: i64,
+30 | | ) -> i64 {
+   | |________^
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#missing_safety_doc
+
+error: unsafe function's docs are missing a `# Safety` section
+  --> crates\ffi\src\native_chunk.rs:65:1
+   |
+65 | / pub unsafe extern "system" fn Java_com_rustcraft_bridge_NativeChunkBridge_materializePrimer(
+66 | |     _env: *mut c_void,
+67 | |     _clazz: *mut c_void,
+68 | |     dim: i32,
+...  |
+72 | |     primer_out_addr: i64,
+73 | | ) -> i32 {
+   | |________^
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#missing_safety_doc
+
+error: unsafe function's docs are missing a `# Safety` section
+   --> crates\ffi\src\native_chunk.rs:108:1
+    |
+108 | / pub unsafe extern "system" fn Java_com_rustcraft_bridge_NativeChunkBridge_getPrimaryBitMask(
+109 | |     _env: *mut c_void,
+110 | |     _clazz: *mut c_void,
+111 | |     dim: i32,
+...   |
+114 | |     generation_id: i64,
+115 | | ) -> i32 {
+    | |________^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#missing_safety_doc
+
+error: unsafe function's docs are missing a `# Safety` section
+   --> crates\ffi\src\native_chunk.rs:144:1
+    |
+144 | / pub unsafe extern "system" fn Java_com_rustcraft_bridge_NativeChunkBridge_encodePacketPayload(
+145 | |     _env: *mut c_void,
+146 | |     _clazz: *mut c_void,
+147 | |     dim: i32,
+...   |
+154 | |     output_buf_capacity: i32,
+155 | | ) -> i32 {
+    | |________^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#missing_safety_doc
+
+error: unsafe function's docs are missing a `# Safety` section
+   --> crates\ffi\src\native_chunk.rs:194:1
+    |
+194 | / pub unsafe extern "system" fn Java_com_rustcraft_bridge_NativeChunkBridge_getOccupancySummary(
+195 | |     _env: *mut c_void,
+196 | |     _clazz: *mut c_void,
+197 | |     dim: i32,
+...   |
+201 | |     out_count_addr: i64,
+202 | | ) -> i32 {
+    | |________^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#missing_safety_doc
+
+error: unsafe function's docs are missing a `# Safety` section
+   --> crates\ffi\src\native_chunk.rs:238:1
+    |
+238 | / pub unsafe extern "system" fn Java_com_rustcraft_bridge_NativeChunkBridge_stagePersistence(
+239 | |     _env: *mut c_void,
+240 | |     _clazz: *mut c_void,
+241 | |     dim: i32,
+...   |
+246 | |     output_buf_capacity: i32,
+247 | | ) -> i32 {
+    | |________^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#missing_safety_doc
+
+error: unsafe function's docs are missing a `# Safety` section
+   --> crates\ffi\src\native_chunk.rs:284:1
+    |
+284 | / pub unsafe extern "system" fn Java_com_rustcraft_bridge_NativeChunkBridge_invalidateChunk(
+285 | |     _env: *mut c_void,
+286 | |     _clazz: *mut c_void,
+287 | |     dim: i32,
+288 | |     cx: i32,
+289 | |     cz: i32,
+290 | | ) -> i32 {
+    | |________^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#missing_safety_doc
+
+error: unsafe function's docs are missing a `# Safety` section
+   --> crates\ffi\src\native_chunk.rs:301:1
+    |
+301 | / pub unsafe extern "system" fn Java_com_rustcraft_bridge_NativeChunkBridge_unloadChunk(
+302 | |     _env: *mut c_void,
+303 | |     _clazz: *mut c_void,
+304 | |     dim: i32,
+305 | |     cx: i32,
+306 | |     cz: i32,
+307 | | ) -> i32 {
+    | |________^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#missing_safety_doc
+
+error: unsafe function's docs are missing a `# Safety` section
+   --> crates\ffi\src\native_chunk.rs:319:1
+    |
+319 | / pub unsafe extern "system" fn Java_com_rustcraft_bridge_NativeChunkBridge_markMutation(
+320 | |     _env: *mut c_void,
+321 | |     _clazz: *mut c_void,
+322 | |     dim: i32,
+323 | |     cx: i32,
+324 | |     cz: i32,
+325 | | ) -> i32 {
+    | |________^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#missing_safety_doc
+
+error: unsafe function's docs are missing a `# Safety` section
+   --> crates\ffi\src\native_chunk.rs:339:1
+    |
+339 | / pub unsafe extern "system" fn Java_com_rustcraft_bridge_NativeChunkBridge_markSectionMutation(
+340 | |     _env: *mut c_void,
+341 | |     _clazz: *mut c_void,
+342 | |     dim: i32,
+...   |
+345 | |     section_y: u8,
+346 | | ) -> i32 {
+    | |________^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#missing_safety_doc
+
+error: unsafe function's docs are missing a `# Safety` section
+   --> crates\ffi\src\native_chunk.rs:362:1
+    |
+362 | / pub unsafe extern "system" fn Java_com_rustcraft_bridge_NativeChunkBridge_refreshSection(
+363 | |     _env: *mut c_void,
+364 | |     _clazz: *mut c_void,
+365 | |     dim: i32,
+...   |
+371 | |     sky_light_addr: i64,
+372 | | ) -> i32 {
+    | |________^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#missing_safety_doc
+
+error: unsafe function's docs are missing a `# Safety` section
+   --> crates\ffi\src\native_chunk.rs:407:1
+    |
+407 | / pub unsafe extern "system" fn Java_com_rustcraft_bridge_NativeChunkBridge_setGlobalPaletteBits(
+408 | |     _env: *mut c_void,
+409 | |     _clazz: *mut c_void,
+410 | |     bits: u8,
+411 | | ) -> i32 {
+    | |________^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#missing_safety_doc
+
+error: unsafe function's docs are missing a `# Safety` section
+   --> crates\ffi\src\native_chunk.rs:424:1
+    |
+424 | / pub unsafe extern "system" fn Java_com_rustcraft_bridge_NativeChunkBridge_getDirtySections(
+425 | |     _env: *mut c_void,
+426 | |     _clazz: *mut c_void,
+427 | |     dim: i32,
+428 | |     cx: i32,
+429 | |     cz: i32,
+430 | | ) -> i32 {
+    | |________^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#missing_safety_doc
+
+error: unsafe function's docs are missing a `# Safety` section
+   --> crates\ffi\src\native_chunk.rs:444:1
+    |
+444 | / pub unsafe extern "system" fn Java_com_rustcraft_bridge_NativeChunkBridge_getRegisteredCount(
+445 | |     _env: *mut c_void,
+446 | |     _clazz: *mut c_void,
+447 | | ) -> i32 {
+    | |________^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#missing_safety_doc
+
+error: unsafe function's docs are missing a `# Safety` section
+   --> crates\ffi\src\native_chunk.rs:458:1
+    |
+458 | / pub unsafe extern "system" fn Java_com_rustcraft_bridge_NativeChunkBridge_findGeneration(
+459 | |     _env: *mut c_void,
+460 | |     _clazz: *mut c_void,
+461 | |     dim: i32,
+462 | |     cx: i32,
+463 | |     cz: i32,
+464 | | ) -> i64 {
+    | |________^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#missing_safety_doc
+
+error: unsafe function's docs are missing a `# Safety` section
+   --> crates\ffi\src\native_chunk.rs:478:1
+    |
+478 | / pub unsafe extern "system" fn Java_com_rustcraft_bridge_NativeChunkBridge_getRegistryStats(
+479 | |     _env: *mut c_void,
+480 | |     _clazz: *mut c_void,
+481 | |     out_addr: i64,
+482 | | ) -> i32 {
+    | |________^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#missing_safety_doc
+
+error: unsafe function's docs are missing a `# Safety` section
+   --> crates\ffi\src\native_chunk.rs:516:1
+    |
+516 | / pub unsafe extern "system" fn Java_com_rustcraft_bridge_NativeChunkBridge_setBiomes(
+517 | |     _env: *mut c_void,
+518 | |     _clazz: *mut c_void,
+519 | |     dim: i32,
+...   |
+522 | |     biome_addr: i64,
+523 | | ) -> i32 {
+    | |________^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#missing_safety_doc
+
+error: unsafe function's docs are missing a `# Safety` section
+   --> crates\ffi\src\native_chunk.rs:559:1
+    |
+559 | / pub unsafe extern "system" fn Java_com_rustcraft_bridge_NativeChunkBridge_getGenerationInfo(
+560 | |     _env: *mut c_void,
+561 | |     _clazz: *mut c_void,
+562 | |     dim: i32,
+...   |
+565 | |     out_addr: i64,
+566 | | ) -> i32 {
+    | |________^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#missing_safety_doc
+
+error: unsafe function's docs are missing a `# Safety` section
+   --> crates\ffi\src\native_chunk.rs:602:1
+    |
+602 | / pub unsafe extern "system" fn Java_com_rustcraft_bridge_NativeChunkBridge_registryClear(
+603 | |     _env: *mut c_void,
+604 | |     _clazz: *mut c_void,
+605 | | ) -> i32 {
+    | |________^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#missing_safety_doc
+
+error: unsafe function's docs are missing a `# Safety` section
+   --> crates\ffi\src\native_chunk.rs:619:1
+    |
+619 | / pub unsafe extern "system" fn Java_com_rustcraft_bridge_NativeChunkBridge_getBiomes(
+620 | |     _env: *mut c_void,
+621 | |     _clazz: *mut c_void,
+622 | |     dim: i32,
+...   |
+625 | |     out_addr: i64,
+626 | | ) -> i32 {
+    | |________^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#missing_safety_doc
+
+error: unsafe function's docs are missing a `# Safety` section
+   --> crates\ffi\src\native_chunk.rs:660:1
+    |
+660 | / pub unsafe extern "system" fn Java_com_rustcraft_bridge_NativeChunkBridge_getSectionLight(
+661 | |     _env: *mut c_void,
+662 | |     _clazz: *mut c_void,
+663 | |     dim: i32,
+...   |
+667 | |     out_addr: i64,
+668 | | ) -> i32 {
+    | |________^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#missing_safety_doc
+
+error: unsafe function's docs are missing a `# Safety` section
+   --> crates\ffi\src\native_chunk.rs:712:1
+    |
+712 | / pub unsafe extern "system" fn Java_com_rustcraft_bridge_OutboundFrameCtx_frameCreate(
+713 | |     _env: *mut c_void,
+714 | |     _clazz: *mut c_void,
+715 | | ) -> i64 {
+    | |________^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#missing_safety_doc
+
+error: unsafe function's docs are missing a `# Safety` section
+   --> crates\ffi\src\native_chunk.rs:726:1
+    |
+726 | / pub unsafe extern "system" fn Java_com_rustcraft_bridge_OutboundFrameCtx_frameFree(
+727 | |     _env: *mut c_void,
+728 | |     _clazz: *mut c_void,
+729 | |     handle: i64,
+730 | | ) -> i32 {
+    | |________^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#missing_safety_doc
+
+error: unsafe function's docs are missing a `# Safety` section
+   --> crates\ffi\src\native_chunk.rs:744:1
+    |
+744 | / pub unsafe extern "system" fn Java_com_rustcraft_bridge_OutboundFrameCtx_frameEncode(
+745 | |     _env: *mut c_void,
+746 | |     _clazz: *mut c_void,
+747 | |     handle: i64,
+...   |
+753 | |     retry_bound_addr: i64,
+754 | | ) -> i32 {
+    | |________^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#missing_safety_doc
+
+error: unsafe function's docs are missing a `# Safety` section
+   --> crates\ffi\src\lib.rs:111:1
+    |
+111 | / pub unsafe extern "system" fn Java_com_rustcraft_bridge_NativeChunkPacket_predictOutputLen(
+112 | |     _env: *mut c_void,
+113 | |     _clazz: *mut c_void,
+114 | |     staging_buf_address: i64,
+115 | |     staging_buf_len: i32,
+116 | | ) -> i32 {
+    | |________^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#missing_safety_doc
+
+error: unsafe function's docs are missing a `# Safety` section
+   --> crates\ffi\src\lib.rs:145:1
+    |
+145 | / pub unsafe extern "system" fn Java_com_rustcraft_bridge_NativeChunkPacket_jniNoop(
+146 | |     _env: *mut c_void,
+147 | |     _clazz: *mut c_void,
+148 | | ) -> i32 {
+    | |________^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#missing_safety_doc
+
+error: unsafe function's docs are missing a `# Safety` section
+   --> crates\ffi\src\lib.rs:154:1
+    |
+154 | / pub unsafe extern "system" fn Java_com_rustcraft_bridge_NativeChunkPacket_testForcedPanic(
+155 | |     _env: *mut c_void,
+156 | |     _clazz: *mut c_void,
+157 | | ) -> i32 {
+    | |________^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#missing_safety_doc
+
+error: unsafe function's docs are missing a `# Safety` section
+   --> crates\ffi\src\lib.rs:172:1
+    |
+172 | / pub unsafe extern "system" fn Java_com_rustcraft_bridge_NativeChunkPacket_fillPattern(
+173 | |     _env: *mut c_void,
+174 | |     _clazz: *mut c_void,
+175 | |     addr: u64,
+176 | |     len: u64,
+177 | |     pattern: u8,
+178 | | ) -> i32 {
+    | |________^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#missing_safety_doc
+
+error: unsafe function's docs are missing a `# Safety` section
+   --> crates\ffi\src\lib.rs:208:1
+    |
+208 | / pub unsafe extern "system" fn Java_com_rustcraft_bridge_NativeChunkPacket_encodeSectionsIntoArray(
+209 | |     env: *mut c_void,
+210 | |     _clazz: *mut c_void,
+211 | |     staging_buf_address: i64,
+212 | |     staging_buf_len: i32,
+213 | |     output_array: *mut c_void, // jbyteArray
+214 | | ) -> i32 {
+    | |________^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#missing_safety_doc
+
+error: casting raw pointers to the same type and constness is unnecessary (`*mut std::ffi::c_void` -> `*mut std::ffi::c_void`)
+   --> crates\ffi\src\lib.rs:261:21
+    |
+261 |             get_len(jenv as *mut c_void, output_array) as usize
+    |                     ^^^^^^^^^^^^^^^^^^^ help: try: `jenv`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#unnecessary_cast
+    = note: `-D clippy::unnecessary-cast` implied by `-D warnings`
+    = help: to override `-D warnings` add `#[allow(clippy::unnecessary_cast)]`
+
+error: casting raw pointers to the same type and constness is unnecessary (`*mut std::ffi::c_void` -> `*mut std::ffi::c_void`)
+   --> crates\ffi\src\lib.rs:271:13
+    |
+271 |             jenv as *mut c_void,
+    |             ^^^^^^^^^^^^^^^^^^^ help: try: `jenv`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#unnecessary_cast
+
+error: casting raw pointers to the same type and constness is unnecessary (`*mut std::ffi::c_void` -> `*mut std::ffi::c_void`)
+   --> crates\ffi\src\lib.rs:284:13
+    |
+284 |             jenv as *mut c_void,
+    |             ^^^^^^^^^^^^^^^^^^^ help: try: `jenv`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#unnecessary_cast
+
+error: unsafe function's docs are missing a `# Safety` section
+   --> crates\ffi\src\lib.rs:318:1
+    |
+318 | / pub unsafe extern "system" fn Java_com_rustcraft_bridge_NativeChunkPacket_jniProbeVersion(
+319 | |     env: *mut c_void,
+320 | |     _clazz: *mut c_void,
+321 | |     slot: i32,
+322 | | ) -> i32 {
+    | |________^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#missing_safety_doc
+
+error: unsafe function's docs are missing a `# Safety` section
+   --> crates\ffi\src\lib.rs:355:1
+    |
+355 | / pub unsafe extern "system" fn Java_com_rustcraft_bridge_CompressionCtx_create(
+356 | |     _env: *mut c_void, _clazz: *mut c_void,
+357 | | ) -> i64 {
+    | |________^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#missing_safety_doc
+
+error: unsafe function's docs are missing a `# Safety` section
+   --> crates\ffi\src\lib.rs:374:1
+    |
+374 | / pub unsafe extern "system" fn Java_com_rustcraft_bridge_CompressionCtx_compress(
+375 | |     _env: *mut c_void, _clazz: *mut c_void,
+376 | |     handle: i64, in_addr: i64, in_len: i32, out_addr: i64, out_cap: i32,
+377 | | ) -> i32 {
+    | |________^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#missing_safety_doc
+
+error: unsafe function's docs are missing a `# Safety` section
+   --> crates\ffi\src\lib.rs:418:1
+    |
+418 | / pub unsafe extern "system" fn Java_com_rustcraft_bridge_CompressionCtx_freeRaw(
+419 | |     _env: *mut c_void, _clazz: *mut c_void, handle: i64,
+420 | | ) -> i32 {
+    | |________^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#missing_safety_doc
+
+error: this pattern reimplements `Result::unwrap_or`
+   --> crates\ffi\src\lib.rs:428:5
+    |
+428 |     match result { Ok(c) => c, Err(_) => -1 }
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: replace with: `result.unwrap_or(-1)`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#manual_unwrap_or
+    = note: `-D clippy::manual-unwrap-or` implied by `-D warnings`
+    = help: to override `-D warnings` add `#[allow(clippy::manual_unwrap_or)]`
+
+error: function `AssertUnwindSafeClosure` should have a snake case name
+   --> crates\ffi\src\lib.rs:307:4
+    |
+307 | fn AssertUnwindSafeClosure<F: FnOnce() -> i32>(f: F) -> impl FnOnce() -> i32 {
+    |    ^^^^^^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `assert_unwind_safe_closure`
+    |
+    = note: `-D non-snake-case` implied by `-D warnings`
+    = help: to override `-D warnings` add `#[allow(non_snake_case)]`
+
+error: could not compile `ffi` (lib) due to 72 previous errors
+warning: build failed, waiting for other jobs to finish...
+error: items after a test module
+   --> crates\ffi\src\owned_snapshot.rs:17:1
+    |
+ 17 |   mod tests {
+    |   ^^^^^^^^^
+...
+113 | / pub unsafe extern "system" fn Java_com_rustcraft_bridge_capture_OwnedSnapshotBridge_encodeOwnedV1(
+114 | |     _env: *mut c_void,
+115 | |     _class: *mut c_void,
+116 | |     input_address: i64,
+...   |
+119 | |     output_capacity: i32,
+120 | | ) -> i64 {
+    | |________^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#items_after_test_module
+    = note: `-D clippy::items-after-test-module` implied by `-D warnings`
+    = help: to override `-D warnings` add `#[allow(clippy::items_after_test_module)]`
+    = help: move the items to before the test module was defined
+
+error: could not compile `ffi` (lib test) due to 73 previous errors

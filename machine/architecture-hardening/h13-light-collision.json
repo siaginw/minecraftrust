@@ -1,0 +1,988 @@
+{
+  "schema": "H13_ROOT_REVIEWED_PRIMITIVE_EXPERIMENT_V1",
+  "status": "PROTOTYPE_VALIDATED_BOUNDED_PRIMITIVES_ONLY",
+  "production_authority": false,
+  "root_receipt_sha256": "c8a6344be129410139fc19a9509fb81d90f4d4caed25bb4fd2aaf2791f4fb5e0",
+  "source_inputs": 99,
+  "registry_dependencies": 25,
+  "rust_tests": 7,
+  "job_controls": 4,
+  "fresh_java_forks": 3,
+  "collision_scenes_per_fork": 25,
+  "light_updates_per_fork": 30,
+  "assertions_per_fork": 45,
+  "fixtures_per_fork": 55,
+  "fixture_bytes_per_fork": 3868368,
+  "timing_rows": 378,
+  "root_timing_summary": [
+    {
+      "kind": "collision",
+      "shapes": 256,
+      "clustered": false,
+      "lane": 0,
+      "samples": 18,
+      "median_us": 88.35,
+      "min_us": 79.9125,
+      "max_us": 124.475
+    },
+    {
+      "kind": "collision",
+      "shapes": 256,
+      "clustered": false,
+      "lane": 1,
+      "samples": 18,
+      "median_us": 36.4875,
+      "min_us": 31.225,
+      "max_us": 493.05
+    },
+    {
+      "kind": "collision",
+      "shapes": 256,
+      "clustered": false,
+      "lane": 2,
+      "samples": 18,
+      "median_us": 68.99375,
+      "min_us": 36.3875,
+      "max_us": 134.825
+    },
+    {
+      "kind": "collision",
+      "shapes": 2048,
+      "clustered": false,
+      "lane": 0,
+      "samples": 18,
+      "median_us": 640.4125,
+      "min_us": 597.125,
+      "max_us": 1088.1
+    },
+    {
+      "kind": "collision",
+      "shapes": 2048,
+      "clustered": false,
+      "lane": 1,
+      "samples": 18,
+      "median_us": 245.96875,
+      "min_us": 195.3375,
+      "max_us": 1145.25
+    },
+    {
+      "kind": "collision",
+      "shapes": 2048,
+      "clustered": false,
+      "lane": 2,
+      "samples": 18,
+      "median_us": 244.3875,
+      "min_us": 209.625,
+      "max_us": 382.85
+    },
+    {
+      "kind": "collision",
+      "shapes": 256,
+      "clustered": true,
+      "lane": 0,
+      "samples": 18,
+      "median_us": 111.9375,
+      "min_us": 107.875,
+      "max_us": 178.4875
+    },
+    {
+      "kind": "collision",
+      "shapes": 256,
+      "clustered": true,
+      "lane": 1,
+      "samples": 18,
+      "median_us": 74.9625,
+      "min_us": 69.2875,
+      "max_us": 146.25
+    },
+    {
+      "kind": "collision",
+      "shapes": 256,
+      "clustered": true,
+      "lane": 2,
+      "samples": 18,
+      "median_us": 324.275,
+      "min_us": 304.0125,
+      "max_us": 678.9375
+    },
+    {
+      "kind": "collision",
+      "shapes": 2048,
+      "clustered": true,
+      "lane": 0,
+      "samples": 18,
+      "median_us": 1006.25625,
+      "min_us": 877.3125,
+      "max_us": 1481.9375
+    },
+    {
+      "kind": "collision",
+      "shapes": 2048,
+      "clustered": true,
+      "lane": 1,
+      "samples": 18,
+      "median_us": 562.3375,
+      "min_us": 488.7875,
+      "max_us": 1087.875
+    },
+    {
+      "kind": "collision",
+      "shapes": 2048,
+      "clustered": true,
+      "lane": 2,
+      "samples": 18,
+      "median_us": 3299.8,
+      "min_us": 2945.1125,
+      "max_us": 4409.5875
+    },
+    {
+      "kind": "light-add",
+      "shapes": null,
+      "clustered": null,
+      "lane": 0,
+      "samples": 18,
+      "median_us": 1093.6,
+      "min_us": 921.9,
+      "max_us": 2754.2
+    },
+    {
+      "kind": "light-add",
+      "shapes": null,
+      "clustered": null,
+      "lane": 1,
+      "samples": 18,
+      "median_us": 1308.3,
+      "min_us": 1038.5,
+      "max_us": 3351.5
+    },
+    {
+      "kind": "light-add",
+      "shapes": null,
+      "clustered": null,
+      "lane": 2,
+      "samples": 18,
+      "median_us": 196.25,
+      "min_us": 145.4,
+      "max_us": 354.4
+    },
+    {
+      "kind": "light-remove",
+      "shapes": null,
+      "clustered": null,
+      "lane": 0,
+      "samples": 18,
+      "median_us": 1684.6,
+      "min_us": 1312.0,
+      "max_us": 2445.5
+    },
+    {
+      "kind": "light-remove",
+      "shapes": null,
+      "clustered": null,
+      "lane": 1,
+      "samples": 18,
+      "median_us": 95.80000000000001,
+      "min_us": 90.2,
+      "max_us": 142.5
+    },
+    {
+      "kind": "light-remove",
+      "shapes": null,
+      "clustered": null,
+      "lane": 2,
+      "samples": 18,
+      "median_us": 229.9,
+      "min_us": 221.9,
+      "max_us": 545.6
+    },
+    {
+      "kind": "light-unchanged",
+      "shapes": null,
+      "clustered": null,
+      "lane": 0,
+      "samples": 18,
+      "median_us": 6.05,
+      "min_us": 4.8,
+      "max_us": 15.3
+    },
+    {
+      "kind": "light-unchanged",
+      "shapes": null,
+      "clustered": null,
+      "lane": 1,
+      "samples": 18,
+      "median_us": 1135.95,
+      "min_us": 1025.5,
+      "max_us": 1898.4
+    },
+    {
+      "kind": "light-unchanged",
+      "shapes": null,
+      "clustered": null,
+      "lane": 2,
+      "samples": 18,
+      "median_us": 33.2,
+      "min_us": 28.7,
+      "max_us": 71.9
+    }
+  ],
+  "decision": "KEEP_SCALAR_COLLISION_AND_CHANGED_LIGHT_FRONTIER_PROTOTYPES_PARK_REBUILT_INDEX_AND_PRODUCTION",
+  "retained_evidence": [
+    {
+      "source": "target/architecture-hardening/h13-light-collision-1fd0d2b78b49/bootstrap-javac.stderr.log",
+      "retained": "machine/architecture-hardening/h13-light-collision-evidence/h13-light-collision-1fd0d2b78b49/bootstrap-javac.stderr.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h13-light-collision-1fd0d2b78b49/bootstrap-javac.stdout.log",
+      "retained": "machine/architecture-hardening/h13-light-collision-evidence/h13-light-collision-1fd0d2b78b49/bootstrap-javac.stdout.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h13-light-collision-1fd0d2b78b49/clippy.stderr.log",
+      "retained": "machine/architecture-hardening/h13-light-collision-evidence/h13-light-collision-1fd0d2b78b49/clippy.stderr.log.txt",
+      "sha256": "a96ba11c630fde31f9827f469566312f289412b0a686c9f26d671bc6738583f6"
+    },
+    {
+      "source": "target/architecture-hardening/h13-light-collision-1fd0d2b78b49/clippy.stdout.log",
+      "retained": "machine/architecture-hardening/h13-light-collision-evidence/h13-light-collision-1fd0d2b78b49/clippy.stdout.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h13-light-collision-1fd0d2b78b49/compile-support.stderr.log",
+      "retained": "machine/architecture-hardening/h13-light-collision-evidence/h13-light-collision-1fd0d2b78b49/compile-support.stderr.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h13-light-collision-1fd0d2b78b49/compile-support.stdout.log",
+      "retained": "machine/architecture-hardening/h13-light-collision-evidence/h13-light-collision-1fd0d2b78b49/compile-support.stdout.log.txt",
+      "sha256": "8201c4b928e6b2788b27ed019ef8b64a75bae5ca1864dd1a21b575f7e88a2b8b"
+    },
+    {
+      "source": "target/architecture-hardening/h13-light-collision-1fd0d2b78b49/fork-0.stderr.log",
+      "retained": "machine/architecture-hardening/h13-light-collision-evidence/h13-light-collision-1fd0d2b78b49/fork-0.stderr.log.txt",
+      "sha256": "c0624c0614ed766fdd1609327a88ead815a056ce8f0a25bd8529b5ee6c386dbc"
+    },
+    {
+      "source": "target/architecture-hardening/h13-light-collision-1fd0d2b78b49/fork-0.stdout.log",
+      "retained": "machine/architecture-hardening/h13-light-collision-evidence/h13-light-collision-1fd0d2b78b49/fork-0.stdout.log.txt",
+      "sha256": "6fa1d7d70daa80b3e7e50c55fd0879c9c09b69997a72c4a05b2795af94127fbb"
+    },
+    {
+      "source": "target/architecture-hardening/h13-light-collision-1fd0d2b78b49/format.stderr.log",
+      "retained": "machine/architecture-hardening/h13-light-collision-evidence/h13-light-collision-1fd0d2b78b49/format.stderr.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h13-light-collision-1fd0d2b78b49/format.stdout.log",
+      "retained": "machine/architecture-hardening/h13-light-collision-evidence/h13-light-collision-1fd0d2b78b49/format.stdout.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h13-light-collision-1fd0d2b78b49/java-version.stderr.log",
+      "retained": "machine/architecture-hardening/h13-light-collision-evidence/h13-light-collision-1fd0d2b78b49/java-version.stderr.log.txt",
+      "sha256": "9d65a43706f49fcfdbcece91e737f759110493e82fd1c4886cf49104c2017b0e"
+    },
+    {
+      "source": "target/architecture-hardening/h13-light-collision-1fd0d2b78b49/java-version.stdout.log",
+      "retained": "machine/architecture-hardening/h13-light-collision-evidence/h13-light-collision-1fd0d2b78b49/java-version.stdout.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h13-light-collision-1fd0d2b78b49/job-controls.stderr.log",
+      "retained": "machine/architecture-hardening/h13-light-collision-evidence/h13-light-collision-1fd0d2b78b49/job-controls.stderr.log.txt",
+      "sha256": "f857e54d0c13591c12e1352c1c28d7df2c3c2a99cb8d4349ef7aa96bcd7a2b05"
+    },
+    {
+      "source": "target/architecture-hardening/h13-light-collision-1fd0d2b78b49/job-controls.stdout.log",
+      "retained": "machine/architecture-hardening/h13-light-collision-evidence/h13-light-collision-1fd0d2b78b49/job-controls.stdout.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h13-light-collision-1fd0d2b78b49/metadata.stderr.log",
+      "retained": "machine/architecture-hardening/h13-light-collision-evidence/h13-light-collision-1fd0d2b78b49/metadata.stderr.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h13-light-collision-1fd0d2b78b49/metadata.stdout.log",
+      "retained": "machine/architecture-hardening/h13-light-collision-evidence/h13-light-collision-1fd0d2b78b49/metadata.stdout.log.txt",
+      "sha256": "7fc5a2bee603bd849b4986b50371e5c6877808e4e9612ad7e112a182666bc626"
+    },
+    {
+      "source": "target/architecture-hardening/h13-light-collision-1fd0d2b78b49/probe-javac.stderr.log",
+      "retained": "machine/architecture-hardening/h13-light-collision-evidence/h13-light-collision-1fd0d2b78b49/probe-javac.stderr.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h13-light-collision-1fd0d2b78b49/probe-javac.stdout.log",
+      "retained": "machine/architecture-hardening/h13-light-collision-evidence/h13-light-collision-1fd0d2b78b49/probe-javac.stdout.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h13-light-collision-1fd0d2b78b49/receipt.json",
+      "retained": "machine/architecture-hardening/h13-light-collision-evidence/h13-light-collision-1fd0d2b78b49/receipt.json",
+      "sha256": "0c7db9e12e6b9501ab442ede5cd204cdcc42d649cbedec39a1b5f342042a069f"
+    },
+    {
+      "source": "target/architecture-hardening/h13-light-collision-1fd0d2b78b49/release-build.stderr.log",
+      "retained": "machine/architecture-hardening/h13-light-collision-evidence/h13-light-collision-1fd0d2b78b49/release-build.stderr.log.txt",
+      "sha256": "af9d314ebef170ed4e8a459dce956aaf15fc64e822a7fafdf6830e543275fa4b"
+    },
+    {
+      "source": "target/architecture-hardening/h13-light-collision-1fd0d2b78b49/release-build.stdout.log",
+      "retained": "machine/architecture-hardening/h13-light-collision-evidence/h13-light-collision-1fd0d2b78b49/release-build.stdout.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h13-light-collision-1fd0d2b78b49/resolve-rustc.stderr.log",
+      "retained": "machine/architecture-hardening/h13-light-collision-evidence/h13-light-collision-1fd0d2b78b49/resolve-rustc.stderr.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h13-light-collision-1fd0d2b78b49/resolve-rustc.stdout.log",
+      "retained": "machine/architecture-hardening/h13-light-collision-evidence/h13-light-collision-1fd0d2b78b49/resolve-rustc.stdout.log.txt",
+      "sha256": "54234bc009f7bc295608f8bb882e03677001147f42f05ce19606c17d2db6473b"
+    },
+    {
+      "source": "target/architecture-hardening/h13-light-collision-1fd0d2b78b49/rust-tests.stderr.log",
+      "retained": "machine/architecture-hardening/h13-light-collision-evidence/h13-light-collision-1fd0d2b78b49/rust-tests.stderr.log.txt",
+      "sha256": "76bbc8c326f980b15aed93d8d4668577176ead5ba2ac9a65b303dff1b8140a96"
+    },
+    {
+      "source": "target/architecture-hardening/h13-light-collision-1fd0d2b78b49/rust-tests.stdout.log",
+      "retained": "machine/architecture-hardening/h13-light-collision-evidence/h13-light-collision-1fd0d2b78b49/rust-tests.stdout.log.txt",
+      "sha256": "d64c64c0125071940980ed557cc8bee0261a5055dfd2fe65dacddb321b7261a1"
+    },
+    {
+      "source": "target/architecture-hardening/h13-light-collision-1fd0d2b78b49/rustc-version.stderr.log",
+      "retained": "machine/architecture-hardening/h13-light-collision-evidence/h13-light-collision-1fd0d2b78b49/rustc-version.stderr.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h13-light-collision-1fd0d2b78b49/rustc-version.stdout.log",
+      "retained": "machine/architecture-hardening/h13-light-collision-evidence/h13-light-collision-1fd0d2b78b49/rustc-version.stdout.log.txt",
+      "sha256": "c45e612575abeef05e99e88eb1e7aea52cddab9ad70d4f65ad20eaa65e92a9cf"
+    },
+    {
+      "source": "target/architecture-hardening/h13-light-collision-32f6f10b8a11/bootstrap-javac.stderr.log",
+      "retained": "machine/architecture-hardening/h13-light-collision-evidence/h13-light-collision-32f6f10b8a11/bootstrap-javac.stderr.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h13-light-collision-32f6f10b8a11/bootstrap-javac.stdout.log",
+      "retained": "machine/architecture-hardening/h13-light-collision-evidence/h13-light-collision-32f6f10b8a11/bootstrap-javac.stdout.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h13-light-collision-32f6f10b8a11/clippy.stderr.log",
+      "retained": "machine/architecture-hardening/h13-light-collision-evidence/h13-light-collision-32f6f10b8a11/clippy.stderr.log.txt",
+      "sha256": "4ef282c1fa421b1ffe55b03091054fd5d487d9185135bab524a7d083e658f515"
+    },
+    {
+      "source": "target/architecture-hardening/h13-light-collision-32f6f10b8a11/clippy.stdout.log",
+      "retained": "machine/architecture-hardening/h13-light-collision-evidence/h13-light-collision-32f6f10b8a11/clippy.stdout.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h13-light-collision-32f6f10b8a11/compile-support.stderr.log",
+      "retained": "machine/architecture-hardening/h13-light-collision-evidence/h13-light-collision-32f6f10b8a11/compile-support.stderr.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h13-light-collision-32f6f10b8a11/compile-support.stdout.log",
+      "retained": "machine/architecture-hardening/h13-light-collision-evidence/h13-light-collision-32f6f10b8a11/compile-support.stdout.log.txt",
+      "sha256": "ae0c917396f16253259740227f8906a40249d5c0c074ff55dd148f018c1e3d8a"
+    },
+    {
+      "source": "target/architecture-hardening/h13-light-collision-32f6f10b8a11/fork-0/oracle/results.json",
+      "retained": "machine/architecture-hardening/h13-light-collision-evidence/h13-light-collision-32f6f10b8a11/fork-0/oracle/results.json",
+      "sha256": "fbccf7a22cc0eb6d8d53f37315999a15cc914aa43cf3e41e2cf0db2ad85230ec"
+    },
+    {
+      "source": "target/architecture-hardening/h13-light-collision-32f6f10b8a11/fork-0/qualification.json",
+      "retained": "machine/architecture-hardening/h13-light-collision-evidence/h13-light-collision-32f6f10b8a11/fork-0/qualification.json",
+      "sha256": "02b84622203df3013f862a177288d9219cc25c261c2322585445bf37d213bc7e"
+    },
+    {
+      "source": "target/architecture-hardening/h13-light-collision-32f6f10b8a11/fork-0.stderr.log",
+      "retained": "machine/architecture-hardening/h13-light-collision-evidence/h13-light-collision-32f6f10b8a11/fork-0.stderr.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h13-light-collision-32f6f10b8a11/fork-0.stdout.log",
+      "retained": "machine/architecture-hardening/h13-light-collision-evidence/h13-light-collision-32f6f10b8a11/fork-0.stdout.log.txt",
+      "sha256": "895046484020603778e274b6930b61e71fca521a0ddd1f02e9c2550a3b691433"
+    },
+    {
+      "source": "target/architecture-hardening/h13-light-collision-32f6f10b8a11/format.stderr.log",
+      "retained": "machine/architecture-hardening/h13-light-collision-evidence/h13-light-collision-32f6f10b8a11/format.stderr.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h13-light-collision-32f6f10b8a11/format.stdout.log",
+      "retained": "machine/architecture-hardening/h13-light-collision-evidence/h13-light-collision-32f6f10b8a11/format.stdout.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h13-light-collision-32f6f10b8a11/java-version.stderr.log",
+      "retained": "machine/architecture-hardening/h13-light-collision-evidence/h13-light-collision-32f6f10b8a11/java-version.stderr.log.txt",
+      "sha256": "9d65a43706f49fcfdbcece91e737f759110493e82fd1c4886cf49104c2017b0e"
+    },
+    {
+      "source": "target/architecture-hardening/h13-light-collision-32f6f10b8a11/java-version.stdout.log",
+      "retained": "machine/architecture-hardening/h13-light-collision-evidence/h13-light-collision-32f6f10b8a11/java-version.stdout.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h13-light-collision-32f6f10b8a11/job-controls.stderr.log",
+      "retained": "machine/architecture-hardening/h13-light-collision-evidence/h13-light-collision-32f6f10b8a11/job-controls.stderr.log.txt",
+      "sha256": "4ab93056765f498e9f808af36c28da596f18c0adb4785ac3992b271a925114b2"
+    },
+    {
+      "source": "target/architecture-hardening/h13-light-collision-32f6f10b8a11/job-controls.stdout.log",
+      "retained": "machine/architecture-hardening/h13-light-collision-evidence/h13-light-collision-32f6f10b8a11/job-controls.stdout.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h13-light-collision-32f6f10b8a11/metadata.stderr.log",
+      "retained": "machine/architecture-hardening/h13-light-collision-evidence/h13-light-collision-32f6f10b8a11/metadata.stderr.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h13-light-collision-32f6f10b8a11/metadata.stdout.log",
+      "retained": "machine/architecture-hardening/h13-light-collision-evidence/h13-light-collision-32f6f10b8a11/metadata.stdout.log.txt",
+      "sha256": "7fc5a2bee603bd849b4986b50371e5c6877808e4e9612ad7e112a182666bc626"
+    },
+    {
+      "source": "target/architecture-hardening/h13-light-collision-32f6f10b8a11/probe-javac.stderr.log",
+      "retained": "machine/architecture-hardening/h13-light-collision-evidence/h13-light-collision-32f6f10b8a11/probe-javac.stderr.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h13-light-collision-32f6f10b8a11/probe-javac.stdout.log",
+      "retained": "machine/architecture-hardening/h13-light-collision-evidence/h13-light-collision-32f6f10b8a11/probe-javac.stdout.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h13-light-collision-32f6f10b8a11/receipt.json",
+      "retained": "machine/architecture-hardening/h13-light-collision-evidence/h13-light-collision-32f6f10b8a11/receipt.json",
+      "sha256": "65ac3099704c6c935875fb8e424fed446d51149996441dbdd55449c1bb2c2304"
+    },
+    {
+      "source": "target/architecture-hardening/h13-light-collision-32f6f10b8a11/release-build.stderr.log",
+      "retained": "machine/architecture-hardening/h13-light-collision-evidence/h13-light-collision-32f6f10b8a11/release-build.stderr.log.txt",
+      "sha256": "3ca569c6005ff9af1d1abaec5616979a4f0132c54adb5082eb01af11b68dc089"
+    },
+    {
+      "source": "target/architecture-hardening/h13-light-collision-32f6f10b8a11/release-build.stdout.log",
+      "retained": "machine/architecture-hardening/h13-light-collision-evidence/h13-light-collision-32f6f10b8a11/release-build.stdout.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h13-light-collision-32f6f10b8a11/resolve-rustc.stderr.log",
+      "retained": "machine/architecture-hardening/h13-light-collision-evidence/h13-light-collision-32f6f10b8a11/resolve-rustc.stderr.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h13-light-collision-32f6f10b8a11/resolve-rustc.stdout.log",
+      "retained": "machine/architecture-hardening/h13-light-collision-evidence/h13-light-collision-32f6f10b8a11/resolve-rustc.stdout.log.txt",
+      "sha256": "54234bc009f7bc295608f8bb882e03677001147f42f05ce19606c17d2db6473b"
+    },
+    {
+      "source": "target/architecture-hardening/h13-light-collision-32f6f10b8a11/rust-tests.stderr.log",
+      "retained": "machine/architecture-hardening/h13-light-collision-evidence/h13-light-collision-32f6f10b8a11/rust-tests.stderr.log.txt",
+      "sha256": "ae44ea6990e53751f6ff02d703db925eb8b10464f699d924351df12951feff5c"
+    },
+    {
+      "source": "target/architecture-hardening/h13-light-collision-32f6f10b8a11/rust-tests.stdout.log",
+      "retained": "machine/architecture-hardening/h13-light-collision-evidence/h13-light-collision-32f6f10b8a11/rust-tests.stdout.log.txt",
+      "sha256": "c3c757b276c958f150ec4315175f5c573f1ab946af97fd098d7263ae7e6e671f"
+    },
+    {
+      "source": "target/architecture-hardening/h13-light-collision-32f6f10b8a11/rustc-version.stderr.log",
+      "retained": "machine/architecture-hardening/h13-light-collision-evidence/h13-light-collision-32f6f10b8a11/rustc-version.stderr.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h13-light-collision-32f6f10b8a11/rustc-version.stdout.log",
+      "retained": "machine/architecture-hardening/h13-light-collision-evidence/h13-light-collision-32f6f10b8a11/rustc-version.stdout.log.txt",
+      "sha256": "c45e612575abeef05e99e88eb1e7aea52cddab9ad70d4f65ad20eaa65e92a9cf"
+    },
+    {
+      "source": "target/architecture-hardening/h13-light-collision-fd88a35e4dcd/bootstrap-javac.stderr.log",
+      "retained": "machine/architecture-hardening/h13-light-collision-evidence/h13-light-collision-fd88a35e4dcd/bootstrap-javac.stderr.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h13-light-collision-fd88a35e4dcd/bootstrap-javac.stdout.log",
+      "retained": "machine/architecture-hardening/h13-light-collision-evidence/h13-light-collision-fd88a35e4dcd/bootstrap-javac.stdout.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h13-light-collision-fd88a35e4dcd/canonical-0.stderr.log",
+      "retained": "machine/architecture-hardening/h13-light-collision-evidence/h13-light-collision-fd88a35e4dcd/canonical-0.stderr.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h13-light-collision-fd88a35e4dcd/canonical-0.stdout.log",
+      "retained": "machine/architecture-hardening/h13-light-collision-evidence/h13-light-collision-fd88a35e4dcd/canonical-0.stdout.log.txt",
+      "sha256": "233b952a1edded40a0a9c599efd058846f32f37d0f5c5bb59eb78201fb24e9c2"
+    },
+    {
+      "source": "target/architecture-hardening/h13-light-collision-fd88a35e4dcd/canonical-1.stderr.log",
+      "retained": "machine/architecture-hardening/h13-light-collision-evidence/h13-light-collision-fd88a35e4dcd/canonical-1.stderr.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h13-light-collision-fd88a35e4dcd/canonical-1.stdout.log",
+      "retained": "machine/architecture-hardening/h13-light-collision-evidence/h13-light-collision-fd88a35e4dcd/canonical-1.stdout.log.txt",
+      "sha256": "233b952a1edded40a0a9c599efd058846f32f37d0f5c5bb59eb78201fb24e9c2"
+    },
+    {
+      "source": "target/architecture-hardening/h13-light-collision-fd88a35e4dcd/canonical-2.stderr.log",
+      "retained": "machine/architecture-hardening/h13-light-collision-evidence/h13-light-collision-fd88a35e4dcd/canonical-2.stderr.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h13-light-collision-fd88a35e4dcd/canonical-2.stdout.log",
+      "retained": "machine/architecture-hardening/h13-light-collision-evidence/h13-light-collision-fd88a35e4dcd/canonical-2.stdout.log.txt",
+      "sha256": "233b952a1edded40a0a9c599efd058846f32f37d0f5c5bb59eb78201fb24e9c2"
+    },
+    {
+      "source": "target/architecture-hardening/h13-light-collision-fd88a35e4dcd/clippy.stderr.log",
+      "retained": "machine/architecture-hardening/h13-light-collision-evidence/h13-light-collision-fd88a35e4dcd/clippy.stderr.log.txt",
+      "sha256": "c97d30d308b46dcb6c8c26200cecd83b6f17e3c931c5b057d27bf1437b4ee826"
+    },
+    {
+      "source": "target/architecture-hardening/h13-light-collision-fd88a35e4dcd/clippy.stdout.log",
+      "retained": "machine/architecture-hardening/h13-light-collision-evidence/h13-light-collision-fd88a35e4dcd/clippy.stdout.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h13-light-collision-fd88a35e4dcd/compile-support.stderr.log",
+      "retained": "machine/architecture-hardening/h13-light-collision-evidence/h13-light-collision-fd88a35e4dcd/compile-support.stderr.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h13-light-collision-fd88a35e4dcd/compile-support.stdout.log",
+      "retained": "machine/architecture-hardening/h13-light-collision-evidence/h13-light-collision-fd88a35e4dcd/compile-support.stdout.log.txt",
+      "sha256": "df2fe1a076b1e6bc9be3c966397cccaaefa1b11201cc6e90031c88e384263862"
+    },
+    {
+      "source": "target/architecture-hardening/h13-light-collision-fd88a35e4dcd/derived-measurements.json",
+      "retained": "machine/architecture-hardening/h13-light-collision-evidence/h13-light-collision-fd88a35e4dcd/derived-measurements.json",
+      "sha256": "fde5f4f61715262a9623ed8b9218bcc8b9b8f67d28b746cc5c0165df4590195c"
+    },
+    {
+      "source": "target/architecture-hardening/h13-light-collision-fd88a35e4dcd/fork-0/oracle/negative-control/FIRST-DIVERGENCE.json",
+      "retained": "machine/architecture-hardening/h13-light-collision-evidence/h13-light-collision-fd88a35e4dcd/fork-0/oracle/negative-control/FIRST-DIVERGENCE.json",
+      "sha256": "74d658f36debd9da144cb9f9283a5c9029ed7c1399489e0024e95af4e1da1e62"
+    },
+    {
+      "source": "target/architecture-hardening/h13-light-collision-fd88a35e4dcd/fork-0/oracle/results.json",
+      "retained": "machine/architecture-hardening/h13-light-collision-evidence/h13-light-collision-fd88a35e4dcd/fork-0/oracle/results.json",
+      "sha256": "55eab470c63463085f6b4518402169d8b7d19c40f8c3e480a727d16d00a3463c"
+    },
+    {
+      "source": "target/architecture-hardening/h13-light-collision-fd88a35e4dcd/fork-0/qualification.json",
+      "retained": "machine/architecture-hardening/h13-light-collision-evidence/h13-light-collision-fd88a35e4dcd/fork-0/qualification.json",
+      "sha256": "ece67c6b26b351ece50e8ac640d15e70f2f76122825a51a30a2865e3fb64660c"
+    },
+    {
+      "source": "target/architecture-hardening/h13-light-collision-fd88a35e4dcd/fork-0.stderr.log",
+      "retained": "machine/architecture-hardening/h13-light-collision-evidence/h13-light-collision-fd88a35e4dcd/fork-0.stderr.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h13-light-collision-fd88a35e4dcd/fork-0.stdout.log",
+      "retained": "machine/architecture-hardening/h13-light-collision-evidence/h13-light-collision-fd88a35e4dcd/fork-0.stdout.log.txt",
+      "sha256": "ca8a2be0d3ab653152b075c6d22ffcdfe32011ff948c982002cc110a098d5444"
+    },
+    {
+      "source": "target/architecture-hardening/h13-light-collision-fd88a35e4dcd/fork-1/oracle/negative-control/FIRST-DIVERGENCE.json",
+      "retained": "machine/architecture-hardening/h13-light-collision-evidence/h13-light-collision-fd88a35e4dcd/fork-1/oracle/negative-control/FIRST-DIVERGENCE.json",
+      "sha256": "74d658f36debd9da144cb9f9283a5c9029ed7c1399489e0024e95af4e1da1e62"
+    },
+    {
+      "source": "target/architecture-hardening/h13-light-collision-fd88a35e4dcd/fork-1/oracle/results.json",
+      "retained": "machine/architecture-hardening/h13-light-collision-evidence/h13-light-collision-fd88a35e4dcd/fork-1/oracle/results.json",
+      "sha256": "3e2e58da2ccca9582b55f0e0ca24affdecf7357c7f4004aa63b5845404e16030"
+    },
+    {
+      "source": "target/architecture-hardening/h13-light-collision-fd88a35e4dcd/fork-1/qualification.json",
+      "retained": "machine/architecture-hardening/h13-light-collision-evidence/h13-light-collision-fd88a35e4dcd/fork-1/qualification.json",
+      "sha256": "b7c779790b8b76339adbbaba605deafee09a42c2f5e8be07ea3982b6b6c32aa9"
+    },
+    {
+      "source": "target/architecture-hardening/h13-light-collision-fd88a35e4dcd/fork-1.stderr.log",
+      "retained": "machine/architecture-hardening/h13-light-collision-evidence/h13-light-collision-fd88a35e4dcd/fork-1.stderr.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h13-light-collision-fd88a35e4dcd/fork-1.stdout.log",
+      "retained": "machine/architecture-hardening/h13-light-collision-evidence/h13-light-collision-fd88a35e4dcd/fork-1.stdout.log.txt",
+      "sha256": "560f0ffb9b31a9b1d2a583a76af86e2f292efd71f97349ab1f5199d52ae3e8fb"
+    },
+    {
+      "source": "target/architecture-hardening/h13-light-collision-fd88a35e4dcd/fork-2/oracle/negative-control/FIRST-DIVERGENCE.json",
+      "retained": "machine/architecture-hardening/h13-light-collision-evidence/h13-light-collision-fd88a35e4dcd/fork-2/oracle/negative-control/FIRST-DIVERGENCE.json",
+      "sha256": "74d658f36debd9da144cb9f9283a5c9029ed7c1399489e0024e95af4e1da1e62"
+    },
+    {
+      "source": "target/architecture-hardening/h13-light-collision-fd88a35e4dcd/fork-2/oracle/results.json",
+      "retained": "machine/architecture-hardening/h13-light-collision-evidence/h13-light-collision-fd88a35e4dcd/fork-2/oracle/results.json",
+      "sha256": "4a5e99f4e02373ffa17e80c565255cf07fd80b5e91368c04f95afb8833540133"
+    },
+    {
+      "source": "target/architecture-hardening/h13-light-collision-fd88a35e4dcd/fork-2/qualification.json",
+      "retained": "machine/architecture-hardening/h13-light-collision-evidence/h13-light-collision-fd88a35e4dcd/fork-2/qualification.json",
+      "sha256": "3e738c8e69e21900fcb1911017b6c4220959dccfbfa74005120f1b3552327809"
+    },
+    {
+      "source": "target/architecture-hardening/h13-light-collision-fd88a35e4dcd/fork-2.stderr.log",
+      "retained": "machine/architecture-hardening/h13-light-collision-evidence/h13-light-collision-fd88a35e4dcd/fork-2.stderr.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h13-light-collision-fd88a35e4dcd/fork-2.stdout.log",
+      "retained": "machine/architecture-hardening/h13-light-collision-evidence/h13-light-collision-fd88a35e4dcd/fork-2.stdout.log.txt",
+      "sha256": "2bd363277bbf6ac6b304ec953a6cc927255ae9733140c2bcaa293570eaf17749"
+    },
+    {
+      "source": "target/architecture-hardening/h13-light-collision-fd88a35e4dcd/format.stderr.log",
+      "retained": "machine/architecture-hardening/h13-light-collision-evidence/h13-light-collision-fd88a35e4dcd/format.stderr.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h13-light-collision-fd88a35e4dcd/format.stdout.log",
+      "retained": "machine/architecture-hardening/h13-light-collision-evidence/h13-light-collision-fd88a35e4dcd/format.stdout.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h13-light-collision-fd88a35e4dcd/java-version.stderr.log",
+      "retained": "machine/architecture-hardening/h13-light-collision-evidence/h13-light-collision-fd88a35e4dcd/java-version.stderr.log.txt",
+      "sha256": "9d65a43706f49fcfdbcece91e737f759110493e82fd1c4886cf49104c2017b0e"
+    },
+    {
+      "source": "target/architecture-hardening/h13-light-collision-fd88a35e4dcd/java-version.stdout.log",
+      "retained": "machine/architecture-hardening/h13-light-collision-evidence/h13-light-collision-fd88a35e4dcd/java-version.stdout.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h13-light-collision-fd88a35e4dcd/job-controls.stderr.log",
+      "retained": "machine/architecture-hardening/h13-light-collision-evidence/h13-light-collision-fd88a35e4dcd/job-controls.stderr.log.txt",
+      "sha256": "0ee55a73370e4b411a6e348ffeaaadc6700fb723604d3c8d0f7733bf5c368261"
+    },
+    {
+      "source": "target/architecture-hardening/h13-light-collision-fd88a35e4dcd/job-controls.stdout.log",
+      "retained": "machine/architecture-hardening/h13-light-collision-evidence/h13-light-collision-fd88a35e4dcd/job-controls.stdout.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h13-light-collision-fd88a35e4dcd/metadata.stderr.log",
+      "retained": "machine/architecture-hardening/h13-light-collision-evidence/h13-light-collision-fd88a35e4dcd/metadata.stderr.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h13-light-collision-fd88a35e4dcd/metadata.stdout.log",
+      "retained": "machine/architecture-hardening/h13-light-collision-evidence/h13-light-collision-fd88a35e4dcd/metadata.stdout.log.txt",
+      "sha256": "7fc5a2bee603bd849b4986b50371e5c6877808e4e9612ad7e112a182666bc626"
+    },
+    {
+      "source": "target/architecture-hardening/h13-light-collision-fd88a35e4dcd/probe-javac.stderr.log",
+      "retained": "machine/architecture-hardening/h13-light-collision-evidence/h13-light-collision-fd88a35e4dcd/probe-javac.stderr.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h13-light-collision-fd88a35e4dcd/probe-javac.stdout.log",
+      "retained": "machine/architecture-hardening/h13-light-collision-evidence/h13-light-collision-fd88a35e4dcd/probe-javac.stdout.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h13-light-collision-fd88a35e4dcd/receipt.json",
+      "retained": "machine/architecture-hardening/h13-light-collision-evidence/h13-light-collision-fd88a35e4dcd/receipt.json",
+      "sha256": "63843d6a1f9dece8bd3aa05412096c5d40b3133e99afed501ba087ec14624394"
+    },
+    {
+      "source": "target/architecture-hardening/h13-light-collision-fd88a35e4dcd/release-build.stderr.log",
+      "retained": "machine/architecture-hardening/h13-light-collision-evidence/h13-light-collision-fd88a35e4dcd/release-build.stderr.log.txt",
+      "sha256": "25199f88e684769bcc42c52be9f2664046b1fb77563563285f9593a47dc0a63a"
+    },
+    {
+      "source": "target/architecture-hardening/h13-light-collision-fd88a35e4dcd/release-build.stdout.log",
+      "retained": "machine/architecture-hardening/h13-light-collision-evidence/h13-light-collision-fd88a35e4dcd/release-build.stdout.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h13-light-collision-fd88a35e4dcd/resolve-rustc.stderr.log",
+      "retained": "machine/architecture-hardening/h13-light-collision-evidence/h13-light-collision-fd88a35e4dcd/resolve-rustc.stderr.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h13-light-collision-fd88a35e4dcd/resolve-rustc.stdout.log",
+      "retained": "machine/architecture-hardening/h13-light-collision-evidence/h13-light-collision-fd88a35e4dcd/resolve-rustc.stdout.log.txt",
+      "sha256": "54234bc009f7bc295608f8bb882e03677001147f42f05ce19606c17d2db6473b"
+    },
+    {
+      "source": "target/architecture-hardening/h13-light-collision-fd88a35e4dcd/rust-tests.stderr.log",
+      "retained": "machine/architecture-hardening/h13-light-collision-evidence/h13-light-collision-fd88a35e4dcd/rust-tests.stderr.log.txt",
+      "sha256": "179d1d2fd2826432a4c0405293126e6d2f3e958a99d63a609642d1a88f63f318"
+    },
+    {
+      "source": "target/architecture-hardening/h13-light-collision-fd88a35e4dcd/rust-tests.stdout.log",
+      "retained": "machine/architecture-hardening/h13-light-collision-evidence/h13-light-collision-fd88a35e4dcd/rust-tests.stdout.log.txt",
+      "sha256": "82bd3d8a001f86c143c6833b446aab7a89b2d286b5bdd96bab90c02327d47d30"
+    },
+    {
+      "source": "target/architecture-hardening/h13-light-collision-fd88a35e4dcd/rustc-version.stderr.log",
+      "retained": "machine/architecture-hardening/h13-light-collision-evidence/h13-light-collision-fd88a35e4dcd/rustc-version.stderr.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h13-light-collision-fd88a35e4dcd/rustc-version.stdout.log",
+      "retained": "machine/architecture-hardening/h13-light-collision-evidence/h13-light-collision-fd88a35e4dcd/rustc-version.stdout.log.txt",
+      "sha256": "c45e612575abeef05e99e88eb1e7aea52cddab9ad70d4f65ad20eaa65e92a9cf"
+    },
+    {
+      "source": "target/architecture-hardening/h13-light-collision-90e43dd5b31c/bootstrap-javac.stderr.log",
+      "retained": "machine/architecture-hardening/h13-light-collision-evidence/h13-light-collision-90e43dd5b31c/bootstrap-javac.stderr.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h13-light-collision-90e43dd5b31c/bootstrap-javac.stdout.log",
+      "retained": "machine/architecture-hardening/h13-light-collision-evidence/h13-light-collision-90e43dd5b31c/bootstrap-javac.stdout.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h13-light-collision-90e43dd5b31c/canonical-0.stderr.log",
+      "retained": "machine/architecture-hardening/h13-light-collision-evidence/h13-light-collision-90e43dd5b31c/canonical-0.stderr.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h13-light-collision-90e43dd5b31c/canonical-0.stdout.log",
+      "retained": "machine/architecture-hardening/h13-light-collision-evidence/h13-light-collision-90e43dd5b31c/canonical-0.stdout.log.txt",
+      "sha256": "233b952a1edded40a0a9c599efd058846f32f37d0f5c5bb59eb78201fb24e9c2"
+    },
+    {
+      "source": "target/architecture-hardening/h13-light-collision-90e43dd5b31c/canonical-1.stderr.log",
+      "retained": "machine/architecture-hardening/h13-light-collision-evidence/h13-light-collision-90e43dd5b31c/canonical-1.stderr.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h13-light-collision-90e43dd5b31c/canonical-1.stdout.log",
+      "retained": "machine/architecture-hardening/h13-light-collision-evidence/h13-light-collision-90e43dd5b31c/canonical-1.stdout.log.txt",
+      "sha256": "233b952a1edded40a0a9c599efd058846f32f37d0f5c5bb59eb78201fb24e9c2"
+    },
+    {
+      "source": "target/architecture-hardening/h13-light-collision-90e43dd5b31c/canonical-2.stderr.log",
+      "retained": "machine/architecture-hardening/h13-light-collision-evidence/h13-light-collision-90e43dd5b31c/canonical-2.stderr.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h13-light-collision-90e43dd5b31c/canonical-2.stdout.log",
+      "retained": "machine/architecture-hardening/h13-light-collision-evidence/h13-light-collision-90e43dd5b31c/canonical-2.stdout.log.txt",
+      "sha256": "233b952a1edded40a0a9c599efd058846f32f37d0f5c5bb59eb78201fb24e9c2"
+    },
+    {
+      "source": "target/architecture-hardening/h13-light-collision-90e43dd5b31c/clippy.stderr.log",
+      "retained": "machine/architecture-hardening/h13-light-collision-evidence/h13-light-collision-90e43dd5b31c/clippy.stderr.log.txt",
+      "sha256": "6238741e04f2c6904f09167d6c55b22bd4fa53e63da888a87592ee51f73bf6d2"
+    },
+    {
+      "source": "target/architecture-hardening/h13-light-collision-90e43dd5b31c/clippy.stdout.log",
+      "retained": "machine/architecture-hardening/h13-light-collision-evidence/h13-light-collision-90e43dd5b31c/clippy.stdout.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h13-light-collision-90e43dd5b31c/compile-support.stderr.log",
+      "retained": "machine/architecture-hardening/h13-light-collision-evidence/h13-light-collision-90e43dd5b31c/compile-support.stderr.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h13-light-collision-90e43dd5b31c/compile-support.stdout.log",
+      "retained": "machine/architecture-hardening/h13-light-collision-evidence/h13-light-collision-90e43dd5b31c/compile-support.stdout.log.txt",
+      "sha256": "7fcc890f6130e8beafd30d6968c805249df2fa75618fecd3e4048158b8374f8d"
+    },
+    {
+      "source": "target/architecture-hardening/h13-light-collision-90e43dd5b31c/fork-0/oracle/negative-control/FIRST-DIVERGENCE.json",
+      "retained": "machine/architecture-hardening/h13-light-collision-evidence/h13-light-collision-90e43dd5b31c/fork-0/oracle/negative-control/FIRST-DIVERGENCE.json",
+      "sha256": "74d658f36debd9da144cb9f9283a5c9029ed7c1399489e0024e95af4e1da1e62"
+    },
+    {
+      "source": "target/architecture-hardening/h13-light-collision-90e43dd5b31c/fork-0/oracle/results.json",
+      "retained": "machine/architecture-hardening/h13-light-collision-evidence/h13-light-collision-90e43dd5b31c/fork-0/oracle/results.json",
+      "sha256": "20519a4c4843db252abfb631c12a75eace404bdeb7dff2f6bb8aa140009edbf0"
+    },
+    {
+      "source": "target/architecture-hardening/h13-light-collision-90e43dd5b31c/fork-0/qualification.json",
+      "retained": "machine/architecture-hardening/h13-light-collision-evidence/h13-light-collision-90e43dd5b31c/fork-0/qualification.json",
+      "sha256": "f64dddca47fe8f19d51f3ba482d4dba500eb8320dca9dc47d8d87462acabfb84"
+    },
+    {
+      "source": "target/architecture-hardening/h13-light-collision-90e43dd5b31c/fork-0.stderr.log",
+      "retained": "machine/architecture-hardening/h13-light-collision-evidence/h13-light-collision-90e43dd5b31c/fork-0.stderr.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h13-light-collision-90e43dd5b31c/fork-0.stdout.log",
+      "retained": "machine/architecture-hardening/h13-light-collision-evidence/h13-light-collision-90e43dd5b31c/fork-0.stdout.log.txt",
+      "sha256": "68604463aef8d5e5cecc5cb442f956c84cc05c4dbde29404d8b26e992425dd5e"
+    },
+    {
+      "source": "target/architecture-hardening/h13-light-collision-90e43dd5b31c/fork-1/oracle/negative-control/FIRST-DIVERGENCE.json",
+      "retained": "machine/architecture-hardening/h13-light-collision-evidence/h13-light-collision-90e43dd5b31c/fork-1/oracle/negative-control/FIRST-DIVERGENCE.json",
+      "sha256": "74d658f36debd9da144cb9f9283a5c9029ed7c1399489e0024e95af4e1da1e62"
+    },
+    {
+      "source": "target/architecture-hardening/h13-light-collision-90e43dd5b31c/fork-1/oracle/results.json",
+      "retained": "machine/architecture-hardening/h13-light-collision-evidence/h13-light-collision-90e43dd5b31c/fork-1/oracle/results.json",
+      "sha256": "0452f889ee6d63411e3092c5e7fe4243c30ae64ec4cfdf36fdaa4fd3e3209bf8"
+    },
+    {
+      "source": "target/architecture-hardening/h13-light-collision-90e43dd5b31c/fork-1/qualification.json",
+      "retained": "machine/architecture-hardening/h13-light-collision-evidence/h13-light-collision-90e43dd5b31c/fork-1/qualification.json",
+      "sha256": "245ea618948f7ff7a2db9750d86a584afa7ce43b0d22508e16e4ba12be0e6014"
+    },
+    {
+      "source": "target/architecture-hardening/h13-light-collision-90e43dd5b31c/fork-1.stderr.log",
+      "retained": "machine/architecture-hardening/h13-light-collision-evidence/h13-light-collision-90e43dd5b31c/fork-1.stderr.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h13-light-collision-90e43dd5b31c/fork-1.stdout.log",
+      "retained": "machine/architecture-hardening/h13-light-collision-evidence/h13-light-collision-90e43dd5b31c/fork-1.stdout.log.txt",
+      "sha256": "5f20b39cb119a4e01d4e31a0621b4f09bc66922abf3722682f32e5a12e9516df"
+    },
+    {
+      "source": "target/architecture-hardening/h13-light-collision-90e43dd5b31c/fork-2/oracle/negative-control/FIRST-DIVERGENCE.json",
+      "retained": "machine/architecture-hardening/h13-light-collision-evidence/h13-light-collision-90e43dd5b31c/fork-2/oracle/negative-control/FIRST-DIVERGENCE.json",
+      "sha256": "74d658f36debd9da144cb9f9283a5c9029ed7c1399489e0024e95af4e1da1e62"
+    },
+    {
+      "source": "target/architecture-hardening/h13-light-collision-90e43dd5b31c/fork-2/oracle/results.json",
+      "retained": "machine/architecture-hardening/h13-light-collision-evidence/h13-light-collision-90e43dd5b31c/fork-2/oracle/results.json",
+      "sha256": "a372282a00947038e4ed4bcce329798e7daef4fd4cc5a5e4948b0eff73a64bae"
+    },
+    {
+      "source": "target/architecture-hardening/h13-light-collision-90e43dd5b31c/fork-2/qualification.json",
+      "retained": "machine/architecture-hardening/h13-light-collision-evidence/h13-light-collision-90e43dd5b31c/fork-2/qualification.json",
+      "sha256": "ecef325c35a33b1a19c6e9d34e27183a50bc0b1f89e2a1f39b7bc881fb48e4a7"
+    },
+    {
+      "source": "target/architecture-hardening/h13-light-collision-90e43dd5b31c/fork-2.stderr.log",
+      "retained": "machine/architecture-hardening/h13-light-collision-evidence/h13-light-collision-90e43dd5b31c/fork-2.stderr.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h13-light-collision-90e43dd5b31c/fork-2.stdout.log",
+      "retained": "machine/architecture-hardening/h13-light-collision-evidence/h13-light-collision-90e43dd5b31c/fork-2.stdout.log.txt",
+      "sha256": "c708bda88b44ffe90a40b5999c033d034032c4da58bf58ffc12c1e68b3a3bdb6"
+    },
+    {
+      "source": "target/architecture-hardening/h13-light-collision-90e43dd5b31c/format.stderr.log",
+      "retained": "machine/architecture-hardening/h13-light-collision-evidence/h13-light-collision-90e43dd5b31c/format.stderr.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h13-light-collision-90e43dd5b31c/format.stdout.log",
+      "retained": "machine/architecture-hardening/h13-light-collision-evidence/h13-light-collision-90e43dd5b31c/format.stdout.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h13-light-collision-90e43dd5b31c/java-version.stderr.log",
+      "retained": "machine/architecture-hardening/h13-light-collision-evidence/h13-light-collision-90e43dd5b31c/java-version.stderr.log.txt",
+      "sha256": "9d65a43706f49fcfdbcece91e737f759110493e82fd1c4886cf49104c2017b0e"
+    },
+    {
+      "source": "target/architecture-hardening/h13-light-collision-90e43dd5b31c/java-version.stdout.log",
+      "retained": "machine/architecture-hardening/h13-light-collision-evidence/h13-light-collision-90e43dd5b31c/java-version.stdout.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h13-light-collision-90e43dd5b31c/job-controls.stderr.log",
+      "retained": "machine/architecture-hardening/h13-light-collision-evidence/h13-light-collision-90e43dd5b31c/job-controls.stderr.log.txt",
+      "sha256": "f07b07df8fa9823e7a8cc65da4d83fc3d0f024fa8ef8b2498bf2f5feb5e4cb2b"
+    },
+    {
+      "source": "target/architecture-hardening/h13-light-collision-90e43dd5b31c/job-controls.stdout.log",
+      "retained": "machine/architecture-hardening/h13-light-collision-evidence/h13-light-collision-90e43dd5b31c/job-controls.stdout.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h13-light-collision-90e43dd5b31c/metadata.stderr.log",
+      "retained": "machine/architecture-hardening/h13-light-collision-evidence/h13-light-collision-90e43dd5b31c/metadata.stderr.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h13-light-collision-90e43dd5b31c/metadata.stdout.log",
+      "retained": "machine/architecture-hardening/h13-light-collision-evidence/h13-light-collision-90e43dd5b31c/metadata.stdout.log.txt",
+      "sha256": "7fc5a2bee603bd849b4986b50371e5c6877808e4e9612ad7e112a182666bc626"
+    },
+    {
+      "source": "target/architecture-hardening/h13-light-collision-90e43dd5b31c/probe-javac.stderr.log",
+      "retained": "machine/architecture-hardening/h13-light-collision-evidence/h13-light-collision-90e43dd5b31c/probe-javac.stderr.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h13-light-collision-90e43dd5b31c/probe-javac.stdout.log",
+      "retained": "machine/architecture-hardening/h13-light-collision-evidence/h13-light-collision-90e43dd5b31c/probe-javac.stdout.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h13-light-collision-90e43dd5b31c/receipt.json",
+      "retained": "machine/architecture-hardening/h13-light-collision-evidence/h13-light-collision-90e43dd5b31c/receipt.json",
+      "sha256": "c8a6344be129410139fc19a9509fb81d90f4d4caed25bb4fd2aaf2791f4fb5e0"
+    },
+    {
+      "source": "target/architecture-hardening/h13-light-collision-90e43dd5b31c/release-build.stderr.log",
+      "retained": "machine/architecture-hardening/h13-light-collision-evidence/h13-light-collision-90e43dd5b31c/release-build.stderr.log.txt",
+      "sha256": "b60c4367e36ae141a57eb4bb678d3049e2604db4c72705afc3ba06c4a261e10e"
+    },
+    {
+      "source": "target/architecture-hardening/h13-light-collision-90e43dd5b31c/release-build.stdout.log",
+      "retained": "machine/architecture-hardening/h13-light-collision-evidence/h13-light-collision-90e43dd5b31c/release-build.stdout.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h13-light-collision-90e43dd5b31c/resolve-rustc.stderr.log",
+      "retained": "machine/architecture-hardening/h13-light-collision-evidence/h13-light-collision-90e43dd5b31c/resolve-rustc.stderr.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h13-light-collision-90e43dd5b31c/resolve-rustc.stdout.log",
+      "retained": "machine/architecture-hardening/h13-light-collision-evidence/h13-light-collision-90e43dd5b31c/resolve-rustc.stdout.log.txt",
+      "sha256": "54234bc009f7bc295608f8bb882e03677001147f42f05ce19606c17d2db6473b"
+    },
+    {
+      "source": "target/architecture-hardening/h13-light-collision-90e43dd5b31c/rust-tests.stderr.log",
+      "retained": "machine/architecture-hardening/h13-light-collision-evidence/h13-light-collision-90e43dd5b31c/rust-tests.stderr.log.txt",
+      "sha256": "d1da1937cfc554393e01a96190e40f520ba4caf406c229c2323ccd94d99f026b"
+    },
+    {
+      "source": "target/architecture-hardening/h13-light-collision-90e43dd5b31c/rust-tests.stdout.log",
+      "retained": "machine/architecture-hardening/h13-light-collision-evidence/h13-light-collision-90e43dd5b31c/rust-tests.stdout.log.txt",
+      "sha256": "1a994dd80cefca0685cf4ee975e1169ebf64c63fa5f30c6ccda144bc19a31e90"
+    },
+    {
+      "source": "target/architecture-hardening/h13-light-collision-90e43dd5b31c/rustc-version.stderr.log",
+      "retained": "machine/architecture-hardening/h13-light-collision-evidence/h13-light-collision-90e43dd5b31c/rustc-version.stderr.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/architecture-hardening/h13-light-collision-90e43dd5b31c/rustc-version.stdout.log",
+      "retained": "machine/architecture-hardening/h13-light-collision-evidence/h13-light-collision-90e43dd5b31c/rustc-version.stdout.log.txt",
+      "sha256": "c45e612575abeef05e99e88eb1e7aea52cddab9ad70d4f65ad20eaa65e92a9cf"
+    }
+  ],
+  "limitations": [
+    "Primitive ordered AABB queries only; no full Entity.move, stepping, world border or entity interactions.",
+    "Finite block-light grid only; no skylight, full world/chunk boundaries or dynamic mod behavior.",
+    "Correct initial grid and complete dirty set are fixture preconditions, not generated runtime qualifications.",
+    "No H4/H6 production capture identity, invalidation or runtime publication integration.",
+    "Final light values only in callback-free domain; intermediate callback order not qualified.",
+    "Java retained objects versus native full capture on every operation; no general performance claim.",
+    "Source-defined copy payloads known; allocation counts, RSS and all internal copies remain unknown.",
+    "Minecraft binaries and derived binary fixtures target-only; retained records contain identities and digests.",
+    "Offline Clean Forge only; no Revelation,1.12.1,live shadow or production authority."
+  ]
+}

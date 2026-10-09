@@ -1,0 +1,56 @@
+# M3 Worldgen live shadow integration (operator authorization 2026-09-20).
+# class: MEASURED. Provenance: M3WG-LIVE-SHADOW.
+# NO authoritative Rust worldgen output, no live default changes.
+# M1 parked/OFF, M2-C READY_OPTIONAL/OFF.
+schema_version: 1
+date: "2026-09-20"
+builds:
+  dll: {sha256_prefix: 6db38f407a197cf2, note: "wnoise JNI exports with bridge name shims (Java_com_rustcraft_bridge_WorldgenShadow_*)"}
+  coremod: {sha256_prefix: dca82b008075490c, note: "WorldgenShadow adapter + WorldgenShadowTransformer (injected at return of func_185978_a)"}
+offline_regression: # machine/raw/M3WG-offline-integrated.txt
+  verdict: PASS
+  coverage:
+    - "240 chunks one-call bit-exact parity across near/far/extreme coords (to +/-29.5M)"
+    - "transplant context created: true (live generator octaves/perms/offsets state packing)"
+    - "transplant parity: 30 fields x 825 doubles bit-exact vs real oracle (0 mismatches)"
+    - "forced failure injection: truncated state buffer returns ctx=0 (safe null handle)"
+target_a_live: # machine/raw/M3WG-shadow-metrics-final.txt, machine/raw/M3WG-shadow-run1.log
+  target: "Clean Forge Target A (forge-1.12.2-14.23.5.2860)"
+  world: "disposable copied server (machine/targetA/shadow-run) with deleted world/ for 100% fresh generation"
+  mode: "SHADOW (-Dminecraftrust.worldgen_shadow=SHADOW)"
+  calls: 625
+  eligible: 625
+  ineligible_disabled: 0
+  ineligible_class: 0
+  ineligible_fields: 0 # counter bug in run 1 had provisional bump; logic now fixed
+  ineligible_noctx: 0
+  native_errors: 0
+  fields_compared: 625
+  doubles_compared: 515625
+  matches: 625
+  mismatches: 0
+  first_mismatch: "none"
+  last_error: "none"
+  ctx_created: 1
+  ctx_freed: 1
+  clean_shutdown_balanced: true
+performance_observation: # live SHADOW mode includes transplant + compute + 825 bitwise comparisons
+  rust_ns_total: 224229500
+  avg_ns_per_field: 358767
+  note: "informational only; production ON would execute compute only without bitwise parity checks"
+stop_conditions_check:
+  mismatch_threshold: "0 mismatches (observed: 0) — CLEAR"
+  native_crashes: "0 crashes (observed: 0) — CLEAR"
+  leak_threshold: "ctx_created == ctx_freed (1 == 1) — CLEAR"
+  server_generation_errors: "0 chunk generation errors — CLEAR"
+  generator_ineligibility: "625/625 eligible — CLEAR"
+  clean_shutdown: "server stopped cleanly, world saved, hook flushed — CLEAR"
+classification: RUST_VALID_ARCHITECTURAL
+recommendation: PROCEED_TO_MODPACK_SHADOW_OR_REMAIN_IN_SHADOW
+reasoning: >
+  Live SHADOW integration on clean Forge Target A succeeded with 100% bit-exact
+  parity across 625 freshly generated chunk density fields (515,625 doubles
+  compared, 0 mismatches, 0 errors, 0 leaks). Generator state was successfully
+  transplanted from live Forge NoiseGeneratorOctaves objects without seed-replay
+  assumptions. Authoritative Rust worldgen output must NOT be enabled yet;
+  modpack SHADOW validation or remaining profiling is recommended next.

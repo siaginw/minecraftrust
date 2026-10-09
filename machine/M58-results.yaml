@@ -1,0 +1,33 @@
+# M5.8 — RESEND DRIVER + SAME-STATE COMPARATOR (checkpoint; canary NOT yet run live)
+schema_version: 1
+date: "2026-09-22"
+historical_event: "SUSPECTED_CAPTURE_WINDOW_RACE (per directive; capture-time per-section refcounts remain UNKNOWN)"
+driver: >
+  M5ResendDriver: test-only explicit resend — server-owner verification via
+  FMLCommonHandler.getMinecraftServerInstance + addScheduledTask (func_152344_a);
+  ready chunk near an existing watching player; REAL SPacketChunkData ctor;
+  ordinary connection send (func_147297_a). Counters split: accepted /
+  executed / sent / rejected-no-context (+ ctor entry/return via comparator).
+  Offline chain (testConstructChain) constructs+compares REAL packets
+  repeatedly. LIVE wiring armed behind -Dminecraftrust.m58.canary (flusher
+  requests 3 resends every 10 cycles); the live canary is NOT yet run.
+capture_design: >
+  Immutable INPUT capture at ctor ENTRY (int[16][4096] logical fingerprints in
+  a WeakHashMap keyed by packet): the validated interval includes the original
+  Java construction; the comparator compares entry-capture vs post-encode
+  state (endpoint equality AND entry snapshot — not fingerprints alone).
+  Java writers are synchronized only through the server-owner context of the
+  construction + the entry capture; a Rust lock is not claimed to freeze Java.
+offline_tests: >
+  3 of 4 deterministic capture cases PASS: (1) stable capture constructs and
+  compares; (2) mutation between ctor-entry and comparator is REJECTED as a
+  stale skip (version-pin + fingerprint evidence, NOT a silent skip); (3) a
+  post-mutation FRESH packet compares clean (old packet discarded via
+  WeakHashMap — no cross-time comparison). Case (4) (stable input +
+  deliberately corrupted native must be a REAL mismatch) is NOT PASSING: the
+  test's java-packet construction throws IllegalArgumentException inside
+  SPacketChunkData after the corruption step — UNDIAGNOSED; recorded as an
+  open test defect, not a product pass. Battery otherwise green: 40/41 case
+  suite, 7/7, 19/19, 8/8, 16/16, 10/10.
+live_canary: NOT RUN (directive: driver first — case (4) must pass before boot)
+fixtures: "mask-contract shapes permanent in-suite; fluid/replay fixtures still pending (deferred recorded)"

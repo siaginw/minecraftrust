@@ -1,0 +1,144 @@
+{
+  "schema": "H17_ALLOCATOR_PROVENANCE_V1",
+  "consulted": "2026-09-26",
+  "production_allocator_changed": false,
+  "registry_candidates": [
+    {
+      "name": "mimalloc",
+      "version": "0.1.52",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "2d4139bb28d14ad1facf21d5eb8825051b326e172d216b39f6d31df53cc97862",
+      "dependencies": [
+        "libmimalloc-sys"
+      ],
+      "packaged_vcs": {
+        "git": {
+          "sha1": "abcd2be6171e89190f8087fcaccf001d8bd5bc96"
+        },
+        "path_in_vcs": ""
+      }
+    },
+    {
+      "name": "libmimalloc-sys",
+      "version": "0.1.49",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "6a45a52f43e1c16f667ccfe4dd8c85b7f7c204fd5e3bf46c5b0db9a5c3c0b8e9",
+      "dependencies": [
+        "cc"
+      ],
+      "packaged_vcs": {
+        "git": {
+          "sha1": "abcd2be6171e89190f8087fcaccf001d8bd5bc96"
+        },
+        "path_in_vcs": "libmimalloc-sys"
+      }
+    },
+    {
+      "name": "rpmalloc",
+      "version": "0.2.2",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "86179c13cdc0bcedbb60e63c1aebe3bac82162ddfa746320de6dcea31ebe2b06",
+      "dependencies": [
+        "rpmalloc-sys"
+      ],
+      "packaged_vcs": {
+        "git": {
+          "sha1": "532cf875266d08c245ce2ab558d53307d1ee47bc"
+        }
+      }
+    },
+    {
+      "name": "rpmalloc-sys",
+      "version": "0.2.3+b097fd0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "8d4b7d5e225a53887ee57fcec492eaf114b8e290f7072d035adc6ddd6810b67b",
+      "dependencies": [
+        "cc",
+        "libc",
+        "pkg-config"
+      ],
+      "packaged_vcs": {
+        "git": {
+          "sha1": "ffd0ef7ac62393d091380b97ca55eafe53a0633e"
+        },
+        "path_in_vcs": "rpmalloc-sys"
+      }
+    },
+    {
+      "name": "bumpalo",
+      "version": "3.20.3",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "72f5acc6cb2ba439de613abc23857ec3d78374d8ed5ac84e9d11336e87da8649",
+      "packaged_vcs": {
+        "git": {
+          "sha1": "84654ace6be4444da3ff102a0a0af3b38c4df4fb"
+        },
+        "path_in_vcs": ""
+      }
+    }
+  ],
+  "jemalloc": {
+    "decision": "STUDY_AVOID_CURRENT_MSVC_WRAPPER",
+    "source": "https://github.com/tikv/jemallocator",
+    "reason": "Upstream Rust wrapper configuration excludes target_env=msvc; support table Linux/macOS. No installed or measured jemalloc lane. No universal claim against C jemalloc Windows support."
+  },
+  "primary_sources": [
+    "https://github.com/purpleprotocol/mimalloc_rust",
+    "https://docs.rs/rpmalloc/0.2.2/rpmalloc/",
+    "https://github.com/EmbarkStudios/rpmalloc-rs",
+    "https://github.com/mjansson/rpmalloc",
+    "https://github.com/fitzgen/bumpalo",
+    "https://github.com/tikv/jemallocator"
+  ],
+  "integration_scope": "Standalone executable and its test executables only; all registry sources unmodified; current production paths are read-only dependencies.",
+  "retained_licenses": [
+    {
+      "package": "mimalloc-0.1.52",
+      "upstream_path": "LICENSE.txt",
+      "file": "licenses/mimalloc-0.1.52-LICENSE.txt.txt",
+      "sha256": "a08554fab028af3af047e8588d32d019662c1b1bf07959a195a2f75fe340726b"
+    },
+    {
+      "package": "libmimalloc-sys-0.1.49",
+      "upstream_path": "LICENSE.txt",
+      "file": "licenses/libmimalloc-sys-0.1.49-LICENSE.txt.txt",
+      "sha256": "a08554fab028af3af047e8588d32d019662c1b1bf07959a195a2f75fe340726b"
+    },
+    {
+      "package": "libmimalloc-sys-0.1.49",
+      "upstream_path": "c_src/mimalloc/v3/LICENSE",
+      "file": "licenses/libmimalloc-sys-0.1.49-bundled-C-LICENSE.txt",
+      "sha256": "82ade5d7d9b029044b5fbbc326207fc47c2d44ee4dd71e8a559c36d728217de9"
+    },
+    {
+      "package": "rpmalloc-0.2.2",
+      "upstream_path": "LICENSE-APACHE",
+      "file": "licenses/rpmalloc-0.2.2-LICENSE-APACHE.txt",
+      "sha256": "1ac50a5abd5cff5331d59928d83369b66b0099a88f0111dc2175526b3c666dec"
+    },
+    {
+      "package": "rpmalloc-0.2.2",
+      "upstream_path": "LICENSE-MIT",
+      "file": "licenses/rpmalloc-0.2.2-LICENSE-MIT.txt",
+      "sha256": "0825089df27eea5bba9fabee1b2dfab19937c89f80f92a59511fcf8bb1e0118f"
+    },
+    {
+      "package": "rpmalloc-sys-0.2.3+b097fd0",
+      "upstream_path": "rpmalloc/LICENSE",
+      "file": "licenses/rpmalloc-sys-0.2.3+b097fd0-bundled-C-LICENSE.txt",
+      "sha256": "de6559d6ead86312f7c815ee2506d937220343fb64ca5101159755952644b591"
+    },
+    {
+      "package": "bumpalo-3.20.3",
+      "upstream_path": "LICENSE-APACHE",
+      "file": "licenses/bumpalo-3.20.3-LICENSE-APACHE.txt",
+      "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2"
+    },
+    {
+      "package": "bumpalo-3.20.3",
+      "upstream_path": "LICENSE-MIT",
+      "file": "licenses/bumpalo-3.20.3-LICENSE-MIT.txt",
+      "sha256": "65f94e99ddaf4f5d1782a6dae23f35d4293a9a01444a13135a6887017d353cee"
+    }
+  ]
+}

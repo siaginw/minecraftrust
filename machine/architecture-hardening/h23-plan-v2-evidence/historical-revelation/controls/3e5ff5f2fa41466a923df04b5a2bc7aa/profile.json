@@ -1,0 +1,3257 @@
+{
+  "schema_version": 1,
+  "kind": "REVELATION_OFFLINE_TRANSFORMATION_PROFILE",
+  "target": "FTB Revelation 3.4.0 dedicated server",
+  "forge_build": "14.23.5.2846",
+  "minecraft_version": "1.12.2",
+  "runtime_pins": {
+    "schema_version": 1,
+    "profile": "FORGE_2846_FTB_REVELATION_3_4_0_SERVER_OFFLINE_V1",
+    "server_root": "D:\\rustcraft-runtime-targets\\revelation-3.4.0\\server",
+    "artifacts": {
+      "minecraft_server.1.12.2.jar": {
+        "role": "vanilla_base",
+        "transformation_input": true,
+        "expected_sha256_clean_forge_pin": "fe1f9274e6dad9191bf6e6e8e36ee6ebc737f373603df0946aafcded0d53167e",
+        "path": "D:\\rustcraft-runtime-targets\\revelation-3.4.0\\server\\minecraft_server.1.12.2.jar",
+        "bytes": 30222121,
+        "sha256": "fe1f9274e6dad9191bf6e6e8e36ee6ebc737f373603df0946aafcded0d53167e",
+        "matches_clean_forge_vanilla_pin": true
+      },
+      "forge-1.12.2-14.23.5.2846-universal.jar": {
+        "role": "forge_universal",
+        "transformation_input": true,
+        "path": "D:\\rustcraft-runtime-targets\\revelation-3.4.0\\server\\forge-1.12.2-14.23.5.2846-universal.jar",
+        "bytes": 4897687,
+        "sha256": "2484e7e36db090d61e567e75714ce7c16549983516842fe1bd34e809e92efa10"
+      }
+    },
+    "libraries": {
+      "libraries/com/typesafe/akka/akka-actor_2.11/2.3.3/akka-actor_2.11-2.3.3.jar": {
+        "bytes": 2514991,
+        "sha256": "4ccbc821a417f0174c9734fc721f078177cacef94ded09c3775ebf40c6a7bdfd"
+      },
+      "libraries/com/typesafe/config/1.2.1/config-1.2.1.jar": {
+        "bytes": 219554,
+        "sha256": "c160fbd78f51a0c2375a794e435ce2112524a6871f64d0331895e9e26ee8b9ee"
+      },
+      "libraries/java3d/vecmath/1.5.2/vecmath-1.5.2.jar": {
+        "bytes": 318956,
+        "sha256": "09adf7955baa6bddf57a4bdbf9a91cf690261314969b59a18085ece1e05eccf9"
+      },
+      "libraries/lzma/lzma/0.0.1/lzma-0.0.1.jar": {
+        "bytes": 5762,
+        "sha256": "0c3085cb93c3ef95d731c274b6f2dd195aa0405fe9328d69cab7f5e899d5e124"
+      },
+      "libraries/net/java/dev/jna/jna/4.4.0/jna-4.4.0.jar": {
+        "bytes": 1091208,
+        "sha256": "c4dadeeecaa90c8847902082aee5eb107fcf59c5d0e63a17fcaf273c0e2d2bd1"
+      },
+      "libraries/net/minecraft/launchwrapper/1.12/launchwrapper-1.12.jar": {
+        "bytes": 32999,
+        "sha256": "57f402b626d16cc2705bf2a37add7adbb074f0ca3b3102fa6e23aa303dae682f"
+      },
+      "libraries/net/sf/jopt-simple/jopt-simple/5.0.3/jopt-simple-5.0.3.jar": {
+        "bytes": 78175,
+        "sha256": "6f45c00908265947c39221035250024f2caec9a15c1c8cf553ebeecee289f342"
+      },
+      "libraries/net/sf/trove4j/trove4j/3.0.3/trove4j-3.0.3.jar": {
+        "bytes": 2523218,
+        "sha256": "3c8616203d61a12a7e3487e8b34f3c198c2b5ba9e90da0c7ea32d99cd4958012"
+      },
+      "libraries/org/apache/maven/maven-artifact/3.5.3/maven-artifact-3.5.3.jar": {
+        "bytes": 54961,
+        "sha256": "30d066e27379a51c8d9c67b1ab0b7e55d930c9721161b07ef1666ab9fc24c629"
+      },
+      "libraries/org/jline/jline/3.5.1/jline-3.5.1.jar": {
+        "bytes": 614590,
+        "sha256": "7285f4a93d4205674e328a3e28e4d7cec10429f3ab5a0d7024b85746e958aeda"
+      },
+      "libraries/org/ow2/asm/asm-all/5.2/asm-all-5.2.jar": {
+        "bytes": 247787,
+        "sha256": "7fbffbc1db3422e2101689fd88df8384b15817b52b9b2b267b9f6d2511dc198d"
+      },
+      "libraries/org/scala-lang/plugins/scala-continuations-library_2.11/1.0.2/scala-continuations-library_2.11-1.0.2.jar": {
+        "bytes": 25365,
+        "sha256": "8dd0a4941f4564117cc991734ca36aa53dff6bb0be329f39eab46d8819f60d1a"
+      },
+      "libraries/org/scala-lang/plugins/scala-continuations-plugin_2.11.1/1.0.2/scala-continuations-plugin_2.11.1-1.0.2.jar": {
+        "bytes": 206575,
+        "sha256": "79329971a31ede7b6823f21a6ab765506b4093d9276debdc9dbe17b996884f2b"
+      },
+      "libraries/org/scala-lang/scala-actors-migration_2.11/1.1.0/scala-actors-migration_2.11-1.1.0.jar": {
+        "bytes": 58018,
+        "sha256": "b89d0beb76df20c7b2c2bee59ba53b802cc48566bc3e89ac96ce6361c5c2ee38"
+      },
+      "libraries/org/scala-lang/scala-compiler/2.11.1/scala-compiler-2.11.1.jar": {
+        "bytes": 13449765,
+        "sha256": "3aa616f5c56d2052fc5e3231f3e8cf1736f876caff0142a66096fc5b4dc87ae5"
+      },
+      "libraries/org/scala-lang/scala-library/2.11.1/scala-library-2.11.1.jar": {
+        "bytes": 5538130,
+        "sha256": "088bcb80f71b6e6a2a31d2fe7288c1fd64f19663ce281b924cdfab3fb105f4f3"
+      },
+      "libraries/org/scala-lang/scala-parser-combinators_2.11/1.0.1/scala-parser-combinators_2.11-1.0.1.jar": {
+        "bytes": 419701,
+        "sha256": "19495ce701fd9ba3c499c137e3ad5364acee8f87a01ef99e912f995a23fd4cb1"
+      },
+      "libraries/org/scala-lang/scala-reflect/2.11.1/scala-reflect-2.11.1.jar": {
+        "bytes": 4372892,
+        "sha256": "41938d1e89670979dd783102777a8b879999f4fb00a5b811b51c105b02a9d4f8"
+      },
+      "libraries/org/scala-lang/scala-swing_2.11/1.0.1/scala-swing_2.11-1.0.1.jar": {
+        "bytes": 726500,
+        "sha256": "4a7c757d4d87dd37382bd777ad611b5875748aef148277cf25bb39eebb496d07"
+      },
+      "libraries/org/scala-lang/scala-xml_2.11/1.0.2/scala-xml_2.11-1.0.2.jar": {
+        "bytes": 648679,
+        "sha256": "6c3338a4062c13dc2ce61630d9854d361a81656a4050e5080302f500dd4a8832"
+      }
+    },
+    "mods": {
+      "mods/1.12.2/ChickenASM-1.12-1.0.2.7.jar": {
+        "bytes": 55622,
+        "sha256": "54c063e72abb6af999d80b94a2f1c9593c6ef0bb7769f3410d2a49f47c1ba3b0",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": "codechicken.asm.internal.Tweaker",
+        "access_transformers": [],
+        "signed": true
+      },
+      "mods/ActuallyAdditions-1.12.2-r150.jar": {
+        "bytes": 2938976,
+        "sha256": "c5780a82a8f332d210ec4d011d9e1cb712177da50fb4cb1236635db94531d740",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [],
+        "signed": false
+      },
+      "mods/ActuallyBaubles-1.12-1.1.jar": {
+        "bytes": 11604,
+        "sha256": "69817c09c8f0252098142383036062ca2e91d05bd1e422e3ae6682e8423e4bc1",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [],
+        "signed": false
+      },
+      "mods/Advanced Machines-61.0.1.jar": {
+        "bytes": 190539,
+        "sha256": "6092ffec5a1eff36c0a03225a46d45eb74fd7986023789391626c60437e4d9c4",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [],
+        "signed": false
+      },
+      "mods/Advanced Solar Panels-4.3.0.jar": {
+        "bytes": 316833,
+        "sha256": "6530286f2cd6545f4d7b510d64199a1ec5a4f77915fea2f7274c9a0fbdbc011a",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [],
+        "signed": false
+      },
+      "mods/AE2WTLib-1.12.2-1.0.34.jar": {
+        "bytes": 243622,
+        "sha256": "6d0ec545bf94e6142b4140f910aae4114b1f92298e820c12fa91af35a3c90d60",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [
+          "META-INF/ae2wtlib_at.cfg"
+        ],
+        "signed": true
+      },
+      "mods/AkashicTome-1.2-12.jar": {
+        "bytes": 44663,
+        "sha256": "4edda1cb9a1eb9240b7c9087dfc0347b0f75c29f7239299991b27324524b167f",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [],
+        "signed": false
+      },
+      "mods/AppleSkin-mc1.12-1.0.9.jar": {
+        "bytes": 32317,
+        "sha256": "9bff732c18adf82c4410a827b35d43b68b979f9ede6c2108b6b97550cf386188",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [],
+        "signed": false
+      },
+      "mods/appliedenergistics2-rv6-stable-7.jar": {
+        "bytes": 4062630,
+        "sha256": "e7f7fbf6caaf6206dbd958fb8f9185f874a405289e62ae3e97209b455a89fb1a",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [
+          "META-INF/appeng_at.cfg"
+        ],
+        "signed": true
+      },
+      "mods/architecturecraft-1.12-3.98.jar": {
+        "bytes": 921733,
+        "sha256": "36c179868eb79b1a10f09f0e1aa1c646468d87f65a9e71aa5ccdd7611d350da1",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [],
+        "signed": false
+      },
+      "mods/Aroma1997Core-1.12.2-2.0.0.2.jar": {
+        "bytes": 398634,
+        "sha256": "75cc65a0b352d8d44e30fd20c6a7811c9bc42ca2ddca75f79a955675960b58a8",
+        "coremod": "aroma1997.core.coremod.CoreMod",
+        "contains_fml_mod": "",
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [],
+        "signed": true
+      },
+      "mods/Aroma1997s-Dimensional-World-1.12.2-2.0.0.2.b89.jar": {
+        "bytes": 80721,
+        "sha256": "4f7f5ed50b9c775dbf4d08f4b597ab0069143191b48861781a6aaf55766ecde1",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [],
+        "signed": true
+      },
+      "mods/astralsorcery-1.12.2-1.10.20.jar": {
+        "bytes": 24973981,
+        "sha256": "70a93272ebb50e2ad153aa314864232fef639efa153cf65ed8dc6a0477fbdfb8",
+        "coremod": "hellfirepvp.astralsorcery.core.AstralCore",
+        "contains_fml_mod": "true",
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [
+          "META-INF/astralsorcery_at.cfg"
+        ],
+        "signed": true
+      },
+      "mods/AutoRegLib-1.3-32.jar": {
+        "bytes": 108306,
+        "sha256": "d8610a94da8f30815db4612b3291ecdcfd8204eaf1a4db8c5d0663c7b1191d91",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [],
+        "signed": false
+      },
+      "mods/badwithernocookiereloaded-1.12.2-3.3.16.jar": {
+        "bytes": 11034,
+        "sha256": "b096fe9213b2c25f8abe3a9154d114cfb5933397a1f48a89854e219651d9dea8",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [],
+        "signed": false
+      },
+      "mods/base-1.12.2-3.13.0.jar": {
+        "bytes": 685028,
+        "sha256": "8505982eb3204997dc965d1a6e22a6d0bc5df04de45d8ea6eb2b154426a9f591",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [],
+        "signed": false
+      },
+      "mods/Baubles-1.12-1.5.2.jar": {
+        "bytes": 108450,
+        "sha256": "b32010b2f2778aa1188585e7ead91ad46d4cb2c715f9c778a61848ba7fe51f8d",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [],
+        "signed": false
+      },
+      "mods/bdlib-1.14.3.12-mc1.12.2.jar": {
+        "bytes": 1962731,
+        "sha256": "af43cc43c4f7775fbbaa50d63cf1f933911b768ca5e10378a106fdfc0dfe76ef",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [],
+        "signed": false
+      },
+      "mods/bedpatch-2.2-1.12.2.jar": {
+        "bytes": 21613,
+        "sha256": "e57dbe0b427e49d35a9184b5d541d0e6ea504128673c8645b8fe7e4a99ebedba",
+        "coremod": "com.mordenkainen.bedpatch.BedPatch",
+        "contains_fml_mod": "true",
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [],
+        "signed": true
+      },
+      "mods/BetterAdvancements-1.12.2-0.1.0.77.jar": {
+        "bytes": 62668,
+        "sha256": "c70cda15d9c76cc79423399c1002977d6dfcc229128b33b87f25d5b4238bea34",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [
+          "META-INF/betteradvancements_at.cfg"
+        ],
+        "signed": false
+      },
+      "mods/BetterBuildersWands-1.12-0.11.1.245+69d0d70.jar": {
+        "bytes": 75709,
+        "sha256": "f10e9db9cee878032dd674068bc12e6b871d88b83360e7d6ff207023dea7beed",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [],
+        "signed": false
+      },
+      "mods/BiblioCraft[v2.4.5][MC1.12.2].jar": {
+        "bytes": 5122856,
+        "sha256": "b3aab967cf9a2fcaf1330b5a5997f8d31e7a73884eac7451f1f31b2fa1394add",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [],
+        "signed": false
+      },
+      "mods/binnie-mods-1.12.2-2.5.1.188.jar": {
+        "bytes": 5861054,
+        "sha256": "0f9723b3563dd8b57fc948a17304b2199439045caca4430f4ad96c66dd57d03f",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [],
+        "signed": false
+      },
+      "mods/BiomesOPlenty-1.12.2-7.0.1.2441-universal.jar": {
+        "bytes": 4696621,
+        "sha256": "ec01079c622c3bba532515d03a97118c2546876bd6ba98eedfe171ce69b5ab22",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [
+          "META-INF/biomesoplenty_at.cfg"
+        ],
+        "signed": false
+      },
+      "mods/blockcraftery-1.12.2-1.3.1.jar": {
+        "bytes": 105052,
+        "sha256": "2b64a900a30d12c55c48f295097327eab5547fa3e7dccdce0f929ecdee25d038",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [],
+        "signed": false
+      },
+      "mods/BloodMagic-1.12.2-2.4.1-103.jar": {
+        "bytes": 7202892,
+        "sha256": "6ebc99e3f1448ce415d8afc4ba19caadded61528e30572cb44954e6485f7b4b9",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [],
+        "signed": false
+      },
+      "mods/Bookshelf-1.12.2-2.3.585.jar": {
+        "bytes": 266512,
+        "sha256": "1418ab830dc3adc1463e4d01e5eed39ced3a22527988b7dce1b47e7cb010576f",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [
+          "META-INF/bookshelf_at.cfg"
+        ],
+        "signed": true
+      },
+      "mods/Botania r1.10-361.jar": {
+        "bytes": 13820816,
+        "sha256": "42725a364da12a72f7f3139ec0fb758dcd8f43026397ca03fb6dd81f52bd9b63",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [
+          "META-INF/botania_at.cfg"
+        ],
+        "signed": false
+      },
+      "mods/BrandonsCore-1.12.2-2.4.17.208-universal.jar": {
+        "bytes": 825212,
+        "sha256": "5082fea40612b554515ae34d8ab19076f60150f7bc60c317e167e139d9d3cf1d",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [
+          "META-INF/BrandonsCore_at.cfg"
+        ],
+        "signed": false
+      },
+      "mods/buildcraft-all-7.99.24.2.jar": {
+        "bytes": 4768815,
+        "sha256": "f7528d029b5ce768aff1ec229ec5bdd85d5f644e58cb5816a8dc148b5d1ff200",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [],
+        "signed": false
+      },
+      "mods/careerbees-0.4.0.jar": {
+        "bytes": 676344,
+        "sha256": "3380589ccd30d76ff2f42b9d87d8544945fadc2a311f69b539d359fec9092db4",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [],
+        "signed": false
+      },
+      "mods/cc-tweaked-1.12.2-1.84.0.jar": {
+        "bytes": 1720739,
+        "sha256": "1d910ca1ca98a676f3f637732e490b67a939766620645e38743aa750eba06c2a",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [
+          "META-INF/computercraft_at.cfg"
+        ],
+        "signed": false
+      },
+      "mods/Chameleon-1.12-4.1.3.jar": {
+        "bytes": 96859,
+        "sha256": "238416f801acda67b90fba9e0e572dbd6e7631b7e64c3eb3d6226f45ae536c87",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [],
+        "signed": false
+      },
+      "mods/ChestTransporter-1.12.2-2.8.8.jar": {
+        "bytes": 314060,
+        "sha256": "ea8ba7acdfaf7102cad7e3638bffa247bd5cfb634de4c355d47d33a8d2c724a1",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [],
+        "signed": false
+      },
+      "mods/Chisel-MC1.12.2-0.2.1.35.jar": {
+        "bytes": 4310011,
+        "sha256": "fb99eff1e1389d88054b1d28245e802becb815388c5bb1946fbbdb60a34c297d",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [
+          "META-INF/chisel_at.cfg"
+        ],
+        "signed": false
+      },
+      "mods/chiselsandbits-14.33.jar": {
+        "bytes": 737407,
+        "sha256": "0b086aced1beca90ed5bb25fe6951a4d191d9b49f221af1074d1f9ff4f364b74",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [
+          "META-INF/chiselsandbits_at.cfg"
+        ],
+        "signed": false
+      },
+      "mods/Clumps-3.1.2.jar": {
+        "bytes": 13792,
+        "sha256": "f3ce670e0087f4c6b770fd05ae5c3dfd8462f74c62397932ea72954d1c6c8df4",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [],
+        "signed": false
+      },
+      "mods/CodeChickenLib-1.12.2-3.2.3.357-universal.jar": {
+        "bytes": 704089,
+        "sha256": "0a6aeb0362c2f896ca95f448076a63b37e978a65e555ca9492456012bce21960",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [
+          "META-INF/ccl_at.cfg"
+        ],
+        "signed": true
+      },
+      "mods/CoFHCore-1.12.2-4.6.3.27-universal.jar": {
+        "bytes": 847938,
+        "sha256": "d71bf404bd9031774f6ad49f4844a6aac008a9d830f8510fa67ea81404e990ed",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [
+          "META-INF/cofh_at.cfg"
+        ],
+        "signed": false
+      },
+      "mods/CoFHWorld-1.12.2-1.3.1.7-universal.jar": {
+        "bytes": 532040,
+        "sha256": "5acc3d088317e0db9a50a7ee3f8a0018dd83ef398c5a8682121497b0a9cb177a",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [],
+        "signed": true
+      },
+      "mods/CompactSolars-1.12.2-5.0.18.341-universal.jar": {
+        "bytes": 73134,
+        "sha256": "7c04dd28880aa36f8c13276ff8e7bc4c26855bf154e5878c2130869e554c97ac",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [],
+        "signed": false
+      },
+      "mods/Computronics-1.12.2-1.6.6.jar": {
+        "bytes": 1291533,
+        "sha256": "9bfc4c8763c008e7dd4e50fd5f82492962197f2bdc5f29668e9154e2c0c83ddf",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [],
+        "signed": false
+      },
+      "mods/conarm-1.12.2-1.2.4.jar": {
+        "bytes": 891955,
+        "sha256": "76f362a0f697e9b76234575ee6ac16e37439cfd3a4ac8cd561058acb4adbd925",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [],
+        "signed": true
+      },
+      "mods/Controlling-3.0.7.jar": {
+        "bytes": 27162,
+        "sha256": "91d4dd56f8ca6833cc338c8766be962e2dc017f313e5485f4b1a7a1508966044",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [
+          "META-INF/controlling_at.cfg"
+        ],
+        "signed": false
+      },
+      "mods/CookingForBlockheads_1.12.2-6.4.71.jar": {
+        "bytes": 591592,
+        "sha256": "e0b0590363f2b822f6e6d1b80f60cbbcde1268a4baab1f95158a66a023c5b99c",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [
+          "META-INF/cookingforblockheads_at.cfg"
+        ],
+        "signed": false
+      },
+      "mods/CraftTweaker2-1.12-4.1.19.jar": {
+        "bytes": 1368377,
+        "sha256": "cb191abc798fcd7918d79728034d250589fe76c09a8637e58843e94dfbf89d7c",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [
+          "META-INF/crafttweaker_at.cfg",
+          "META-INF/crafttweaker_at.cfg"
+        ],
+        "signed": false
+      },
+      "mods/CTM-MC1.12.2-0.3.3.22.jar": {
+        "bytes": 194281,
+        "sha256": "9b2882c33509c746bb0770d608944078cb94a75ede8e68c87a9e8e673a5db2e4",
+        "coremod": "team.chisel.ctm.client.asm.CTMCorePlugin",
+        "contains_fml_mod": "true",
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [
+          "META-INF/ctm_at.cfg"
+        ],
+        "signed": false
+      },
+      "mods/CustomMainMenu-MC1.12.2-2.0.9.jar": {
+        "bytes": 177791,
+        "sha256": "d01bb35116c624fb5f8399231f48c9ca56f343cf5cc15c390005d7c819380fef",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [],
+        "signed": false
+      },
+      "mods/DankNull-1.12.2-1.7.101.jar": {
+        "bytes": 327386,
+        "sha256": "2f27a2163d2e15e70ea37394381afb953864a61b653edb7453bcc14b971120e2",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [
+          "META-INF/danknull_at.cfg"
+        ],
+        "signed": true
+      },
+      "mods/DarkUtils-1.12.2-1.8.226.jar": {
+        "bytes": 419723,
+        "sha256": "ea2ec24a4e18522b538a197460fe2f81e87994746310b6eae77bad4e66d63476",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [],
+        "signed": true
+      },
+      "mods/deepresonance-1.12-1.8.0.jar": {
+        "bytes": 915587,
+        "sha256": "1b36aa5e06ceeb7589f901997c44d6f613c73e12973fc1f25cd853029072a176",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [
+          "META-INF/eleccore_at.cfg",
+          "META-INF/deepresonance_at.cfg"
+        ],
+        "signed": false
+      },
+      "mods/DefaultOptions_1.12.2-9.2.8.jar": {
+        "bytes": 15056,
+        "sha256": "1a4007ec8c503fe75faf7429b66c0ffe1555fa7a7d43147386049913ce6ebf4a",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [
+          "META-INF/defaultoptions_at.cfg"
+        ],
+        "signed": false
+      },
+      "mods/diethopper-1.1.jar": {
+        "bytes": 5222,
+        "sha256": "0b22434a8f5255f25fd1008e4c1faf90db3fc6999d14fb561382d11a47e998c9",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [],
+        "signed": false
+      },
+      "mods/dirt2path-1.8.0.jar": {
+        "bytes": 6069,
+        "sha256": "16c2d2e26a15a0ee2090f5c7ce9aca538c768aa4d78169b5a0a25024e85b5dc9",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [],
+        "signed": false
+      },
+      "mods/Draconic-Evolution-1.12.2-2.3.24.349-universal.jar": {
+        "bytes": 5699511,
+        "sha256": "6a9a7d8f45c871af0f125ae7020e25e6a6e29e65da718736482241e700fd11ce",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [
+          "META-INF/DraconicEvolution_at.cfg"
+        ],
+        "signed": false
+      },
+      "mods/ElecCore-1.12.2-1.9.452.jar": {
+        "bytes": 543926,
+        "sha256": "0b05ecffaff3245fa8b2d43485b5d78ac752300c313079fa88ae5ca608018358",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [
+          "META-INF/eleccore_at.cfg"
+        ],
+        "signed": false
+      },
+      "mods/EnderCore-1.12.2-0.5.68.jar": {
+        "bytes": 640421,
+        "sha256": "8de6e95a4dbf6e1fb11d95276b0caa6a87adb4547de47dfaa7dc6ad564fe900d",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [],
+        "signed": true
+      },
+      "mods/EnderIO-1.12.2-5.1.51.jar": {
+        "bytes": 7990974,
+        "sha256": "757cccd53b3ff90ce976795b4902ff643f0bd6aa2eafb3963d9fbe4c90b862c3",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [],
+        "signed": true
+      },
+      "mods/EnderStorage-1.12.2-2.4.6.137-universal.jar": {
+        "bytes": 223250,
+        "sha256": "06e2357019f4e0836bfb9202af013adc125252f610b198a7a547d4596d2934c0",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [
+          "META-INF/es_at.cfg"
+        ],
+        "signed": true
+      },
+      "mods/engineers_doors-1.12.2-0.8.0.jar": {
+        "bytes": 121107,
+        "sha256": "d8737d4aef05fd0dcdc9534eb4ec62753ddf5640bc986fe13823d28377a88572",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [],
+        "signed": false
+      },
+      "mods/EngineersWorkshopReborn-1.12.2-1.0.9.40.jar": {
+        "bytes": 281190,
+        "sha256": "587f31c9f1cdac7e8712ee2682391efc4b6947aee42f9b040380e60ab4940b84",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [],
+        "signed": true
+      },
+      "mods/environmentaltech-1.12.2-2.0.20.1.jar": {
+        "bytes": 1001848,
+        "sha256": "3331ac0d0f9093433b65ca7b18a8f2bca57bc45fef2d444267e7d7fc6b7bb3a1",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [],
+        "signed": false
+      },
+      "mods/etlunar-1.12.2-2.0.20.1.jar": {
+        "bytes": 63844,
+        "sha256": "46010e9f54c47f6f8634e060f02dfbe740eb07b75d1f9e7753110f9ce71c540b",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [],
+        "signed": false
+      },
+      "mods/Exchangers-1.12.2-2.8.jar": {
+        "bytes": 281052,
+        "sha256": "30360018e10ad547448358a4ef8b2f324f62d0638ff78daeb28af6251582e36a",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [
+          "META-INF/exchangers_at.cfg"
+        ],
+        "signed": true
+      },
+      "mods/extrautils2-1.12-1.9.9.jar": {
+        "bytes": 3226408,
+        "sha256": "6c1809eb2222604ebf3c051e1c7834b84049013b537633c2e5a1b0077ef9a940",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [
+          "META-INF/extrautils2_at.cfg"
+        ],
+        "signed": false
+      },
+      "mods/ExtremeReactors-1.12.2-0.4.5.67.jar": {
+        "bytes": 1110113,
+        "sha256": "946861f89e75a68e45e3117e9488498eb14db1143872c226f442706be523a890",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [],
+        "signed": false
+      },
+      "mods/FastWorkbench-1.12.2-1.7.2.jar": {
+        "bytes": 26322,
+        "sha256": "cabe4519ddb40409306c665177c036520c910945347ff6fc5fa6777dda4ede7d",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [
+          "META-INF/fastbench_at.cfg"
+        ],
+        "signed": false
+      },
+      "mods/fencejumper-1.12-1.0.5.jar": {
+        "bytes": 6913,
+        "sha256": "eb2fbfda86d2c696ea50037bb5b8bc5377775877d27026187fee8f4919000107",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [],
+        "signed": false
+      },
+      "mods/flatcoloredblocks-mc1.12-6.8.jar": {
+        "bytes": 139609,
+        "sha256": "61f0c49d65e9040bf15dd3aa2d83f61ef63fd7561ca172ad4ce9fe3e528756e3",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [],
+        "signed": false
+      },
+      "mods/fluxnetworks-1.12.2-3.0.19-21.jar": {
+        "bytes": 609733,
+        "sha256": "31a474a81bda495871265e82505a5e867ca3593ed14c6c98576e6d7893724bc3",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [],
+        "signed": false
+      },
+      "mods/foamfix-0.10.5-1.12.2.jar": {
+        "bytes": 211210,
+        "sha256": "0eeddd3d24738ac2a70b5f309571e246fde4ee18cb38354341b83dcff0feb500",
+        "coremod": "pl.asie.foamfix.coremod.FoamFixCore",
+        "contains_fml_mod": "true",
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [],
+        "signed": true
+      },
+      "mods/forestry_1.12.2-5.8.2.394.jar": {
+        "bytes": 5232961,
+        "sha256": "e7eb30816569b582d1c94bddd9068e3501826bdd8c53f49148f04d3adef7c957",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [
+          "META-INF/forestry_at.cfg"
+        ],
+        "signed": false
+      },
+      "mods/Forgelin-1.8.3.jar": {
+        "bytes": 5772310,
+        "sha256": "582e906349f4084bf5931c9646406f92212f1900e2ca307cd3ed2a26568bb186",
+        "coremod": "net.shadowfacts.forgelin.preloader.ForgelinPlugin",
+        "contains_fml_mod": "true",
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [],
+        "signed": false
+      },
+      "mods/ForgeMultipart-1.12.2-2.6.2.83-universal.jar": {
+        "bytes": 1304958,
+        "sha256": "25718bd80799a608c45299d13d86e5d67248f07a3c00657c690948b1821835ce",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [
+          "META-INF/fmp_at.cfg"
+        ],
+        "signed": true
+      },
+      "mods/FTBBackups-1.1.0.1.jar": {
+        "bytes": 43764,
+        "sha256": "6b6bcbbf6ac4528657345e1696339528a44643ecb06e6137908eafb8432bd962",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [],
+        "signed": false
+      },
+      "mods/FTBGuides-1.0.2.33.jar": {
+        "bytes": 288780,
+        "sha256": "bb8ee150d53dc53904543a9e861c61af82ee4bdf087a24936529f4d5da87a834",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [],
+        "signed": false
+      },
+      "mods/FTBLib-5.4.7.2.jar": {
+        "bytes": 934370,
+        "sha256": "623fc574f0227fec6cc9e26c3879a605f9b4499c0078ff085291901a5495a6ac",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [
+          "META-INF/ftblib_at.cfg"
+        ],
+        "signed": false
+      },
+      "mods/FTBUtilities-5.4.1.130.jar": {
+        "bytes": 425249,
+        "sha256": "04f340c86df1165e9b5b0356760580aaeaedb7d64fea35c8c12baa2460090844",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [],
+        "signed": false
+      },
+      "mods/gendustry-1.6.5.8-mc1.12.2.jar": {
+        "bytes": 1856305,
+        "sha256": "21952b5b2f4a89a3b80029042ec7b07d99835e56683d2c17e130a1144922b38d",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [],
+        "signed": false
+      },
+      "mods/Gravitation Suite-3.1.1.jar": {
+        "bytes": 345616,
+        "sha256": "ebe327325374661a988798f4179041c26ccb74a8ac11170eeadb72af4ee3500d",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [],
+        "signed": false
+      },
+      "mods/Guide-API-1.12-2.1.8-63.jar": {
+        "bytes": 169528,
+        "sha256": "e201712ef8fadc6c4b6380939751e92fe32cad2ba2dcb717e1acb3b07e0c2125",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [],
+        "signed": false
+      },
+      "mods/Harvest-1.12-1.2.7-20.jar": {
+        "bytes": 17988,
+        "sha256": "67292e8aac947478b983ffc0e6b03ef390a68d4f84362089da25cfba44eefa1b",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [],
+        "signed": false
+      },
+      "mods/ImmersiveCables-1.12.2-1.3.2.jar": {
+        "bytes": 205922,
+        "sha256": "3bf93b78cdbe98c3a57cbbf1769e547b4e000030c8736b28b7f369478baa69c2",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [],
+        "signed": false
+      },
+      "mods/ImmersiveEngineering-0.12-91.jar": {
+        "bytes": 6780914,
+        "sha256": "0ae7c417c74bb374462ba29085b601cae861dc3eb5899205a0af267f18309eb5",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [
+          "META-INF/ImmersiveEngineering_at.cfg"
+        ],
+        "signed": true
+      },
+      "mods/immersivepetroleum-1.12.2-1.1.9.jar": {
+        "bytes": 906018,
+        "sha256": "6e6b7bcd22966ef6362eec013ef915521c22232f847c3153b57189b5a4011823",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [],
+        "signed": false
+      },
+      "mods/industrialcraft-2-2.8.187-ex112.jar": {
+        "bytes": 8465858,
+        "sha256": "eb6d0408ef91312cbb811b444401d068e7ee7645810b62d5b9557f61d72ded44",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [],
+        "signed": true
+      },
+      "mods/industrialforegoing-1.12.2-1.12.13-237.jar": {
+        "bytes": 1603134,
+        "sha256": "8b6e1aa820d7d02571aeae818b4ab9aa2d78e0d3b277d7be6df53e3153ae9ea7",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [],
+        "signed": false
+      },
+      "mods/IndustrialWires-1.7-36.jar": {
+        "bytes": 1241169,
+        "sha256": "9e8bb959342343b30eee1a8c004e6811007ee0083e66ce4d7367e069bf071f8c",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [
+          "META-INF/industrialwires_at.cfg"
+        ],
+        "signed": true
+      },
+      "mods/InitialInventory-3.0.0.jar": {
+        "bytes": 7863,
+        "sha256": "9f1ba4dd157bbeedf82ca0fca6333e6f244e83d5c92ca7354951ced38678a3e6",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [],
+        "signed": false
+      },
+      "mods/IntegrationForegoing-1.12.2-1.9.jar": {
+        "bytes": 172247,
+        "sha256": "3aad65ad19c389c3baaae17950ecab808a11c1169f9506122b9a7149e85f7401",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [],
+        "signed": true
+      },
+      "mods/InventoryTweaks-1.63.jar": {
+        "bytes": 263258,
+        "sha256": "ef2fdcb59f9a766ee5c3c4c514c78f0a9e35b3d6bf02c17051b7dd4e94efdf7a",
+        "coremod": "invtweaks.forge.asm.FMLPlugin",
+        "contains_fml_mod": "true",
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [],
+        "signed": true
+      },
+      "mods/IronBackpacks-1.12.2-3.0.8-12.jar": {
+        "bytes": 465363,
+        "sha256": "5c9e680279ca009ab3ea114c22cd869cadb41cc0bae834b7857fee709c79075e",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [],
+        "signed": false
+      },
+      "mods/ironchest-1.12.2-7.0.72.847.jar": {
+        "bytes": 956692,
+        "sha256": "29d3a4115d67b83eb542b618eb64db40db23a7f009a0f4dc9a396101d6f8491f",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [],
+        "signed": false
+      },
+      "mods/jehc-1.12.2-1.6.4.jar": {
+        "bytes": 35964,
+        "sha256": "ac684b2bd978fce22d334ea53f3e2d341cc9241f74fc6e8935655e22b2b32979",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [],
+        "signed": false
+      },
+      "mods/jei_1.12.2-4.15.0.268.jar": {
+        "bytes": 647239,
+        "sha256": "9408dea76b43db553f94481a14e930286e0f66a6f17326585d851e4052a9e15c",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [
+          "META-INF/jei_at.cfg"
+        ],
+        "signed": false
+      },
+      "mods/jeibees-0.9.0.5-mc1.12.2.jar": {
+        "bytes": 117480,
+        "sha256": "07c6c95eddf0f6f3d15339f373da51a638716c3cbe69f93da5586f7957e3c22a",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [],
+        "signed": false
+      },
+      "mods/jeiintegration_1.12.2-1.5.1.36.jar": {
+        "bytes": 54046,
+        "sha256": "6d5b71ec4a89f86c0265f0057dccb95167a86badd74e68a784e80c99d16b6463",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [],
+        "signed": false
+      },
+      "mods/journeymap-1.12.2-5.5.5.jar": {
+        "bytes": 1920463,
+        "sha256": "95b7a7897a99dc5d1a011e008cf5d59f3b0ceaa51f581c47d2c6a5321fc5fd9c",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [
+          "META-INF/journeymap_at.cfg"
+        ],
+        "signed": false
+      },
+      "mods/JustEnoughResources-1.12.2-0.9.2.60.jar": {
+        "bytes": 222270,
+        "sha256": "9ea4d7df19c0a53880aae5e745ef1e886854bea5c533878688587a5e3fdaebdd",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [
+          "META-INF/jeresources_at.cfg"
+        ],
+        "signed": false
+      },
+      "mods/letsencryptcraft-1.10.2-1.2.0.jar": {
+        "bytes": 7091,
+        "sha256": "f214af0ce75145279e7d935d294cff7bc61b265b17cddeb4ceae38d043690a2c",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [],
+        "signed": false
+      },
+      "mods/longfallboots-1.2.1b.jar": {
+        "bytes": 6891,
+        "sha256": "0946d14acf7e552190754812aab7fc0c8e5e92ea7067a1a84abe5f6526ce1776",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [],
+        "signed": false
+      },
+      "mods/lostcities-1.12-2.0.21.jar": {
+        "bytes": 789648,
+        "sha256": "43a95e99001139119753dda98e994acf41c7f3a7fe7db5acf4d85bfae6bb86fc",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [
+          "META-INF/lostcities_at.cfg"
+        ],
+        "signed": false
+      },
+      "mods/MagicBees-1.12.2-3.1.10.jar": {
+        "bytes": 1035863,
+        "sha256": "9d98de4f52b41a874cff48ea300152a834515fcf38c0fb7ba1de2e81de1f3f9b",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [
+          "META-INF/magicbees_at.cfg"
+        ],
+        "signed": false
+      },
+      "mods/Mantle-1.12-1.3.3.55.jar": {
+        "bytes": 843486,
+        "sha256": "0975ad3ef3b8b35fe43461feabe44d406b5521b0a2f3d1965c8d2f6a59ad2e65",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [
+          "META-INF/mantle_at.cfg",
+          "META-INF/mantle_deobf_at.cfg"
+        ],
+        "signed": false
+      },
+      "mods/mcjtylib-1.12-3.5.4.jar": {
+        "bytes": 544856,
+        "sha256": "af7d2b3c421329e7b97202302a072867e7c9bd73c5b8fab9bdb3a76fbfe474e3",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [
+          "META-INF/mcjtylib_ng_at.cfg"
+        ],
+        "signed": false
+      },
+      "mods/MCMultiPart-2.5.3.jar": {
+        "bytes": 173426,
+        "sha256": "ce28db33cfdca80c98dfbb2e5928a5f090477897fa6d28a37300d5564617fde2",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [],
+        "signed": false
+      },
+      "mods/memory_repo/blusunrize/ImmersiveEngineering-core/0.12-91/ImmersiveEngineering-core-0.12-91.jar": {
+        "bytes": 7632,
+        "sha256": "cd995e3a1b41532fd9df0b1fdf41ffa831877196d593277201de135b6f5cfc3e",
+        "coremod": "blusunrize.immersiveengineering.common.asm.IELoadingPlu",
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [],
+        "signed": true
+      },
+      "mods/memory_repo/com/enderio/core/EnderCore/1.12.2-0.5.68/EnderCore-1.12.2-0.5.68-core.jar": {
+        "bytes": 37606,
+        "sha256": "65f73ddc1432341ef50810cada365216f62576afdb830ad650e348859157e5c4",
+        "coremod": "com.enderio.core.common.transform.EnderCorePlugin",
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [],
+        "signed": true
+      },
+      "mods/memory_repo/info/loenwind/autoconfig/AutoConfig/1.12.2-1.0.2/AutoConfig-1.12.2-1.0.2.jar": {
+        "bytes": 74722,
+        "sha256": "07e017e50b918f9a1ddbc01777b24e74204155730e75628c68e923c4b2e559df",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [],
+        "signed": true
+      },
+      "mods/memory_repo/info/loenwind/autosave/AutoSave/1.12.2-1.0.11/AutoSave-1.12.2-1.0.11.jar": {
+        "bytes": 90467,
+        "sha256": "8b40573a923098b7505dc3a7333ea7994f99fdca5d1507f200959779f768e14b",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [],
+        "signed": true
+      },
+      "mods/memory_repo/shetiphian/asm/ShetiPhian-ASM/1.12.0/ShetiPhian-ASM-1.12.0.jar": {
+        "bytes": 7086,
+        "sha256": "a99fedbe9036a00ce694cb44b220f7426301f40f2c35f11d96a96a888bda6eaf",
+        "coremod": "shetiphian.asm.TweakPlugin",
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [],
+        "signed": false
+      },
+      "mods/MineTogether-1.12.2-2.4.1.jar": {
+        "bytes": 4046815,
+        "sha256": "dc92877cb817512f786af8fa80facacf4f386b02e2a9d0433c7bdac20776af2a",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [],
+        "signed": true
+      },
+      "mods/modnametooltip_1.12.2-1.10.1.jar": {
+        "bytes": 12732,
+        "sha256": "c779c2b7f6105ded36163801c7458baf677075f862bcabe7b1b29121799a31f6",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [],
+        "signed": false
+      },
+      "mods/modtweaker-4.0.17.jar": {
+        "bytes": 447874,
+        "sha256": "d13d8dd6318eedffc046f0633371f72b93c4f4e5a92f9147b706ada7e27f2f6d",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [],
+        "signed": false
+      },
+      "mods/moreoverlays-1.15.1-mc1.12.2.jar": {
+        "bytes": 51284,
+        "sha256": "428542f8e4e9a683826058fd113d6e74121a3d47c7e796d7cb96ceed801102ad",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [],
+        "signed": false
+      },
+      "mods/Morph-o-Tool-1.2-21.jar": {
+        "bytes": 30619,
+        "sha256": "c36065b106f735cc541188ac2db8301032d32de32ce8d57a58d11a306e04b29b",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [],
+        "signed": false
+      },
+      "mods/Morpheus-1.12.2-3.5.106.jar": {
+        "bytes": 21508,
+        "sha256": "1904c32a8e0077e005bfefe005c26834c2df09881bc075a7deadce8da97fb457",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [],
+        "signed": false
+      },
+      "mods/MouseTweaks-2.10-mc1.12.2.jar": {
+        "bytes": 75170,
+        "sha256": "77969c0e7f76c078ebb7004642e86746d57f47b7a46237fcb1c06d4a55679448",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [],
+        "signed": false
+      },
+      "mods/MrTJPCore-1.12.2-2.1.4.43-universal.jar": {
+        "bytes": 803400,
+        "sha256": "82652f00e513c61c99a791abf2cbc10fdfb0e3a79e4eb02b305cccbc2d2f0087",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [],
+        "signed": false
+      },
+      "mods/MTLib-3.0.6.jar": {
+        "bytes": 30002,
+        "sha256": "298fc0109614f567db4759a9709436924aa2ed20c55a8370a139f0af1ad9f109",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [],
+        "signed": false
+      },
+      "mods/mysticallib-1.12.2-1.3.6.jar": {
+        "bytes": 339685,
+        "sha256": "877f6b2dfcd2087e69908ad119827882bda14888f40b14d0d125cb66aeb65092",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [
+          "META-INF/mysticallib_at.cfg"
+        ],
+        "signed": false
+      },
+      "mods/natura-1.12.2-4.3.2.69.jar": {
+        "bytes": 1142687,
+        "sha256": "7663b57daf6ca0b36fbc8dd8ed06dc64447648237579b0c08910e15434ce36b2",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [],
+        "signed": false
+      },
+      "mods/NaturesCompass-1.12.2-1.5.1.jar": {
+        "bytes": 180209,
+        "sha256": "55b8c0f0a440bfe3570f44bbc8a2d269ec8167d186e6f9577ee978bda071577d",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [],
+        "signed": false
+      },
+      "mods/nice-1.12-0.4.0.jar": {
+        "bytes": 83536,
+        "sha256": "67704877e1148316422d5d13cab4f9b6982d8d1f024477c3466477541041e28f",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [],
+        "signed": false
+      },
+      "mods/NotEnoughIDs-1.5.4.4.jar": {
+        "bytes": 31782,
+        "sha256": "f042f90c5623a1f2bbcc1d0bd93cfca40109b9c0659399e1f48aa8ce37b75622",
+        "coremod": "ru.fewizz.neid.asm.Plugin",
+        "contains_fml_mod": "true",
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [
+          "META-INF/neid_at.cfg"
+        ],
+        "signed": false
+      },
+      "mods/notenoughwands-1.12-1.8.1.jar": {
+        "bytes": 165034,
+        "sha256": "bdf3dfaaa77407282445970df7b3c542a1916255fe1afe2ebaf3a62e17862cda",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [],
+        "signed": false
+      },
+      "mods/OpenBlocks-1.12.2-1.8.1.jar": {
+        "bytes": 3217616,
+        "sha256": "fbf81a96f87c609feb0d03933398fdf4bd8b24bc18119f4642e42b30580950fc",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [
+          "META-INF/openblocks_at.cfg"
+        ],
+        "signed": true
+      },
+      "mods/OpenModsLib-1.12.2-0.12.2.jar": {
+        "bytes": 2639587,
+        "sha256": "47a2428297213cb3f6b3b75fe1604b002e1f5e4412a2ce77c362bf598e15a877",
+        "coremod": "openmods.core.OpenModsCorePlugin",
+        "contains_fml_mod": "true",
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [],
+        "signed": true
+      },
+      "mods/p455w0rdslib-1.12.2-2.3.161.jar": {
+        "bytes": 328793,
+        "sha256": "e5844c044d9f2ce2f23eef84d95eea8cc1f2c5581874bd01410e7d103b90a424",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [
+          "META-INF/p455w0rdslib_at.cfg"
+        ],
+        "signed": true
+      },
+      "mods/Pam's HarvestCraft 1.12.2zf.jar": {
+        "bytes": 4907780,
+        "sha256": "708229d38768c2b7f4b94c3e687a85b00cba8091911f64613d95106d891badc7",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [],
+        "signed": false
+      },
+      "mods/Patchouli-1.0-20.jar": {
+        "bytes": 466243,
+        "sha256": "1f2664d0e81444e88398f24eafa54c07d64ee491a24c04f89752cb069cd234ae",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [],
+        "signed": false
+      },
+      "mods/phosphor-forge-mc1.12.2-0.2.7-universal.jar": {
+        "bytes": 920264,
+        "sha256": "4ddfdeca30c2809047f8dec84c7fb49b820e930fbe1657d90404e64c78184228",
+        "coremod": "me.jellysquid.mods.phosphor.core.PhosphorFMLLoadingPlug",
+        "contains_fml_mod": "true",
+        "mixin_configs": null,
+        "tweaker": "org.spongepowered.asm.launch.MixinTweaker",
+        "access_transformers": [
+          "META-INF/phosphor_at.cfg"
+        ],
+        "signed": false
+      },
+      "mods/Placebo-1.12.2-1.6.0.jar": {
+        "bytes": 76902,
+        "sha256": "c2110db8b8abec23d9e2e9c4a89be010f6fe1150d52595397179c8804d942ee3",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [
+          "META-INF/placebo_at.cfg"
+        ],
+        "signed": false
+      },
+      "mods/platforms-1.12.0-1.4.6.jar": {
+        "bytes": 398642,
+        "sha256": "d450927b4bb42d5a79c00d42391b7ac5cf3b591fdeea121a551bf63df40754ec",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [],
+        "signed": false
+      },
+      "mods/ProjectRed-1.12.2-4.9.4.120-Base.jar": {
+        "bytes": 2036136,
+        "sha256": "8345e86d84cc38e8017fef9b20b1160b4a988637e14b8bcb5b817747d8e63570",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [],
+        "signed": false
+      },
+      "mods/ProjectRed-1.12.2-4.9.4.120-compat.jar": {
+        "bytes": 67384,
+        "sha256": "02c2f75cc0c6630195072bd2cd5878fb60cc0b6780d4fd6a3b0f7b1f3f8ea394",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [],
+        "signed": false
+      },
+      "mods/ProjectRed-1.12.2-4.9.4.120-fabrication.jar": {
+        "bytes": 1894139,
+        "sha256": "6f74f0cc3223636bae0c2a6f61dabdf377df2e4bd73db62f12e9c2356492ae9c",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [],
+        "signed": false
+      },
+      "mods/ProjectRed-1.12.2-4.9.4.120-integration.jar": {
+        "bytes": 3923751,
+        "sha256": "659623f496dd457dd689c69dbd7a593453f65f78662a4af8dc624bfff33ee2eb",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [],
+        "signed": false
+      },
+      "mods/ProjectRed-1.12.2-4.9.4.120-lighting.jar": {
+        "bytes": 724477,
+        "sha256": "65d3a196ff8ca2a1caf119e28ebfb37d0157730d97c9acc0c7e2601f5edbe244",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [],
+        "signed": false
+      },
+      "mods/ProjectRed-1.12.2-4.9.4.120-mechanical.jar": {
+        "bytes": 2596509,
+        "sha256": "3e2f19faf3f9f19d5835a7e368d2bf855ca3d1ee82575a48182b3746d214cad8",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [
+          "META-INF/projectred-relocation_at.cfg"
+        ],
+        "signed": false
+      },
+      "mods/ProjectRed-1.12.2-4.9.4.120-world.jar": {
+        "bytes": 501169,
+        "sha256": "6b763b939c4a8517ac7fbb2a3cc7267d67e25823b60cf4231443eca3bb681c2e",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [],
+        "signed": false
+      },
+      "mods/Quark-r1.6-177.jar": {
+        "bytes": 3875942,
+        "sha256": "59a2ee73a168d8494dae20d9dcef8f5d9592f695bf93ab16d1d28ec984fb7429",
+        "coremod": "vazkii.quark.base.asm.LoadingPlugin",
+        "contains_fml_mod": "true",
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [],
+        "signed": false
+      },
+      "mods/QuickLeafDecay-MC1.12.1-1.2.4.jar": {
+        "bytes": 7074,
+        "sha256": "5aaa4fb7e0056d9fc7624b5bc9f39b9d00ad0eef39ab7f2617540e9184e9f690",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [],
+        "signed": false
+      },
+      "mods/railcraft-12.0.0.jar": {
+        "bytes": 5541089,
+        "sha256": "5db83f6a177ac2b143dcb50d0a35c2c0873b7cac6e1d8b58ee577494d5937ed2",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [
+          "META-INF/railcraft_at.cfg"
+        ],
+        "signed": true
+      },
+      "mods/randompatches-1.12.2-1.18.1.1.jar": {
+        "bytes": 264800,
+        "sha256": "e814dd8370ad185f5a7fb29481b1746654570177d724f407dff0e49bb4f146fe",
+        "coremod": "com.therandomlabs.randompatches.core.RPCore",
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [
+          "META-INF/randompatches_at.cfg"
+        ],
+        "signed": true
+      },
+      "mods/rangedpumps-0.5.jar": {
+        "bytes": 21519,
+        "sha256": "9329ee1bcb377849db089c7029d7f393897e0ca8efb9c4510268692bf332c530",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [],
+        "signed": false
+      },
+      "mods/reauth-3.6.0.jar": {
+        "bytes": 30446,
+        "sha256": "2264ebdb4d29fe4105d8940f1fd14720ada023d059879c41374b44cbb3b7ac7b",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [],
+        "signed": true
+      },
+      "mods/RebornCore-1.12.2-3.16.0.469-universal.jar": {
+        "bytes": 1936717,
+        "sha256": "fbe8b48dc99e13ea599a67c77f01de0cf59996b5f639b0e0476ff6baf1b155e4",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [
+          "META-INF/reborncore_at.cfg"
+        ],
+        "signed": true
+      },
+      "mods/RebornStorage-1.12.2-3.3.4.85.jar": {
+        "bytes": 80180,
+        "sha256": "99a10ade75837afdb17aaad5808b730ce224db41f79c37e8cbcb992297ac187b",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [],
+        "signed": false
+      },
+      "mods/RedstoneArsenal-1.12.2-2.6.3.18-universal.jar": {
+        "bytes": 262973,
+        "sha256": "506677ae0ec337d50badd7c887ead029a7376105af544b2a0b7144c0505d83ff",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [
+          "META-INF/cofh_at.cfg"
+        ],
+        "signed": true
+      },
+      "mods/RedstoneFlux-1.12-2.1.0.6-universal.jar": {
+        "bytes": 36278,
+        "sha256": "7d8063471243e161f624abe4ba311d490bd7719aedbcfcf84e555358e19c3e89",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [],
+        "signed": true
+      },
+      "mods/refinedstorage-1.6.16.jar": {
+        "bytes": 1912377,
+        "sha256": "ebdf868db673b2a22233e5e08e7c14ad937b10e2997c4c28a4511ffdd2544f8d",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [],
+        "signed": true
+      },
+      "mods/refinedstorageaddons-0.4.5.jar": {
+        "bytes": 26804,
+        "sha256": "5af385ab60ffa2ab5fdfb8f20d4fc0c70bc6c000439edaa023e7c431fd1d76cf",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [],
+        "signed": false
+      },
+      "mods/Reliquary-1.12.2-1.3.4.796.jar": {
+        "bytes": 1247278,
+        "sha256": "1f77457d3d03a06da533a0ad09af42df8e2f8df408678bee895eef6308ebad36",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [],
+        "signed": false
+      },
+      "mods/ResourceLoader-MC1.12.1-1.5.3.jar": {
+        "bytes": 16612,
+        "sha256": "5c5ee114dccab5caca1772e3487eca04e161c494baca4d53c8fddf5cf8722e56",
+        "coremod": "lumien.resourceloader.asm.LoadingPlugin",
+        "contains_fml_mod": "true",
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [],
+        "signed": true
+      },
+      "mods/rftools-1.12-7.72.jar": {
+        "bytes": 2895812,
+        "sha256": "ca87853aaf5b8440adc0f00be9e9e901215a0fd59f1e35208c00bcbe28e3aec4",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [
+          "META-INF/rftools_at.cfg"
+        ],
+        "signed": false
+      },
+      "mods/rftoolsctrl-1.12-2.0.2.jar": {
+        "bytes": 600728,
+        "sha256": "77a4c5f23f73cb4597ea6ee97e6ff5dd0a5eb94d1f25bfd031516b335dc92efe",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [],
+        "signed": false
+      },
+      "mods/rftoolspower-1.12-1.2.0.jar": {
+        "bytes": 148083,
+        "sha256": "bf678ca007953e8d5aee96f29aeefd88120485a988a05b7ec6d37663bb824891",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [],
+        "signed": false
+      },
+      "mods/rustic-1.1.1.jar": {
+        "bytes": 1339252,
+        "sha256": "697575412c56c0cdbbae094c6e99d7528488cd6c78523e58dc5325c2baa0069e",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [],
+        "signed": false
+      },
+      "mods/ShadowMC-1.12-3.8.0.jar": {
+        "bytes": 464802,
+        "sha256": "7bd5920c9bd6846de468ea10693a83a436813f83b2ab340f665c21904840cc93",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [],
+        "signed": false
+      },
+      "mods/shetiphiancore-1.12.0-3.5.9.jar": {
+        "bytes": 406772,
+        "sha256": "dc033f623cfc6d7afdaaecf5ef31dda865744f7da2fe85443ae69f204bf50d74",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [],
+        "signed": false
+      },
+      "mods/Simple-Void-World-1.12-1.2.0.9-universal.jar": {
+        "bytes": 19865,
+        "sha256": "d8eb380fc028e7f60ffbb9805e2a44f375dc8798d5f3c8745bf48bcc969b9a7b",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [],
+        "signed": false
+      },
+      "mods/SimplyJetpacks2-1.12.2-2.2.13.66.jar": {
+        "bytes": 664369,
+        "sha256": "fe69a52af042b9e5c5fa7c2a04de53c88ecf9f18ad73003df14b1305136d53dd",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [],
+        "signed": false
+      },
+      "mods/Snad-1.12.1-1.7.09.16a.jar": {
+        "bytes": 21346,
+        "sha256": "c38dbf3b805dfbd0412dd7ab7d75dac2a2772a7d26e9a975e39e33074de83506",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [],
+        "signed": false
+      },
+      "mods/sonarcore-1.12.2-5.0.19-20.jar": {
+        "bytes": 1160618,
+        "sha256": "d3c5c5c1e3e09c6c7b49fc6505aad57c1ca0e76a8e5396acabf6123e8c96fa58",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [],
+        "signed": false
+      },
+      "mods/SoulShardsRespawn-1.12.2-1.1.1-13.jar": {
+        "bytes": 201807,
+        "sha256": "0a4761a048cd219589ccf497fa64b0b28c91e0140aeae70622b054369d25934e",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [],
+        "signed": false
+      },
+      "mods/SplashAnimation-0.2.1.jar": {
+        "bytes": 46578,
+        "sha256": "e292f54e049635fe22fb8fd13b4a685ed41188474221d403c40bc40c4d6b154e",
+        "coremod": "pl.asie.splashanimation.core.SplashAnimationCoremod",
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [],
+        "signed": true
+      },
+      "mods/StevesCarts-1.12.2-2.4.31.135.jar": {
+        "bytes": 2475657,
+        "sha256": "38a10f7c3b6ecdedf01a15565e3604fd093ddf8e1c3b45554e2d7d8adbe8e96b",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [],
+        "signed": true
+      },
+      "mods/StorageDrawers-1.12.2-5.4.0.jar": {
+        "bytes": 604797,
+        "sha256": "d080a974ae03680242520091b81aa2e82ad9ff0facd139e07dfb9da5a1031768",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [],
+        "signed": false
+      },
+      "mods/StorageDrawersExtras-1.12-3.1.0.jar": {
+        "bytes": 402870,
+        "sha256": "ae7a151efb5db147d86a82ceb1b84f0cc1e31331e5c11f549c68d6d89b57abff",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [],
+        "signed": false
+      },
+      "mods/TConstruct-1.12.2-2.12.0.157.jar": {
+        "bytes": 4004838,
+        "sha256": "c7830c8a26bb7d8d6c8b5b4a3e5692fbe4679c68a292bc3f02f089f70ae72804",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [
+          "META-INF/tconstruct_at.cfg"
+        ],
+        "signed": false
+      },
+      "mods/tesla-core-lib-1.12.2-1.0.15.jar": {
+        "bytes": 1140374,
+        "sha256": "7e0dc8289acdf4451b2fa783bf33f52fb79495aded15fbad67c0b693087bae3a",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [],
+        "signed": true
+      },
+      "mods/Thaumcraft-1.12.2-6.1.BETA26.jar": {
+        "bytes": 11360786,
+        "sha256": "9425f8643581b27ff8845b087c8bc6fc10425a32942f1a3f0e265ce6b38f7b5f",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [
+          "META-INF/tc_at.cfg"
+        ],
+        "signed": false
+      },
+      "mods/ThaumicInventoryScanning_1.12.2-2.0.10.jar": {
+        "bytes": 17224,
+        "sha256": "2fa7286fe1ce1e95eb1ccf958cf6e07fca8beddc3d7de7986d390523c75f247c",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [
+          "META-INF/tcinventoryscan_at.cfg"
+        ],
+        "signed": false
+      },
+      "mods/ThaumicJEI-1.12.2-1.6.0-27.jar": {
+        "bytes": 59213,
+        "sha256": "b9bef5de98638fe1497cc28de6414860ffc77962d93974d10ba44af3ad77fdce",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [],
+        "signed": false
+      },
+      "mods/theoneprobe-1.12-1.4.28.jar": {
+        "bytes": 301893,
+        "sha256": "f3e5048dbe58f37f98f8130886ede880ac5b3333ee73cae2381c337e500c4bd1",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [
+          "META-INF/top_at.cfg"
+        ],
+        "signed": false
+      },
+      "mods/ThermalCultivation-1.12.2-0.3.3.12-universal.jar": {
+        "bytes": 106843,
+        "sha256": "b491ba8319da27844dbd957d68a9ac2f341e4d65790d7a5015a5a4086c9e2b65",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [
+          "META-INF/cofh_at.cfg"
+        ],
+        "signed": true
+      },
+      "mods/ThermalDynamics-1.12.2-2.5.5.21-universal.jar": {
+        "bytes": 762980,
+        "sha256": "01c5dc41c1085944af9c7346a0e402e90075a9e069232b15dd6a2807dae00fe8",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [
+          "META-INF/cofh_at.cfg"
+        ],
+        "signed": true
+      },
+      "mods/ThermalExpansion-1.12.2-5.5.4.43-universal.jar": {
+        "bytes": 2426151,
+        "sha256": "08ac2de31e9cc0c174c2795f9371cb209d3251ea18210ec682d1816f1e39b08a",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [
+          "META-INF/cofh_at.cfg"
+        ],
+        "signed": true
+      },
+      "mods/ThermalFoundation-1.12.2-2.6.3.27-universal.jar": {
+        "bytes": 2312713,
+        "sha256": "f7c424aa09860dbb151252dfe58920d8df62c0e9193d6b733ceb26fc7c4a0357",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [
+          "META-INF/cofh_at.cfg"
+        ],
+        "signed": true
+      },
+      "mods/ThermalInnovation-1.12.2-0.3.3.12-universal.jar": {
+        "bytes": 197601,
+        "sha256": "4ded9b7bcff8e88a381305893bf1fc4410e3e945beea4a49f7f9f29a9166f2bf",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [
+          "META-INF/cofh_at.cfg"
+        ],
+        "signed": true
+      },
+      "mods/thutcore-1.12.2-5.21.0.jar": {
+        "bytes": 503447,
+        "sha256": "d4e879e4901f3f7ac19967a580657c55dff8b7eb12fa8e2bc594ac5ab5290093",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [
+          "META-INF/thut_at.cfg"
+        ],
+        "signed": false
+      },
+      "mods/thuttech-1.12.2-6.1.6.jar": {
+        "bytes": 92887,
+        "sha256": "ec168ccb03ca1a874c26fa089b3af4db3e7d12bbd04e0199f6c68b00b44a42bf",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [
+          "META-INF/thut_at.cfg"
+        ],
+        "signed": false
+      },
+      "mods/TinkerToolLeveling-1.12.2-1.1.0.jar": {
+        "bytes": 95850,
+        "sha256": "87e2702152d795efd8548b3a1ec9471469d7c705db1ec199a465807720ddcdcd",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [],
+        "signed": false
+      },
+      "mods/TipTheScales-1.12.2-1.0.4.jar": {
+        "bytes": 11641,
+        "sha256": "91eab825f0730d412a05a40136e9f0755b9a2b9483fc92255cba08e282a1e146",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [
+          "META-INF/tipthescales_at.cfg"
+        ],
+        "signed": false
+      },
+      "mods/topaddons-1.12.2-1.11.0.jar": {
+        "bytes": 244342,
+        "sha256": "a36391644d6ff9e8a3e13b9b1fca89d804a32d4413f69d73b29f0bc47f69c1bb",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [],
+        "signed": false
+      },
+      "mods/torchmaster_1.12.2-1.8.0.79.jar": {
+        "bytes": 167004,
+        "sha256": "91344aa1ff4ec46b5f59b80efbeff940861276c801377c470aff423a5fbcbdd3",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [],
+        "signed": true
+      },
+      "mods/Translocators-1.12.2-2.5.2.81-universal.jar": {
+        "bytes": 446678,
+        "sha256": "f527ba59d8ab56d936b7edcd9ef0f42232dac436864603a016b83bfbb53c2384",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [],
+        "signed": true
+      },
+      "mods/twilightforest-1.12.2-3.9.984-universal.jar": {
+        "bytes": 28672637,
+        "sha256": "09539d4f8e4bf69105ea3e596ee0b1fd0450d02eda80954aff61a9a0ed339cad",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [
+          "META-INF/tf_at.cfg"
+        ],
+        "signed": false
+      },
+      "mods/UniDict-1.12.2-2.9.2.jar": {
+        "bytes": 192476,
+        "sha256": "3e797717ce27d7e4254b2ef45d89e27ff290d150fe9a3fbf9adef539171bff7f",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [],
+        "signed": false
+      },
+      "mods/valkyrielib-1.12.2-2.0.20.1.jar": {
+        "bytes": 733580,
+        "sha256": "24a72428d22c04040e8a60899a395283ca8512f39bfb0cec62ecf9109bf891e0",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [],
+        "signed": false
+      },
+      "mods/WanionLib-1.12.2-2.2.jar": {
+        "bytes": 129188,
+        "sha256": "3a96855db2e669d486409e67571a9b16f594de7b1032fafe859b7f983d0e55f0",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [],
+        "signed": false
+      },
+      "mods/Waystones_1.12.2-4.0.72.jar": {
+        "bytes": 175462,
+        "sha256": "f9f2447fe7433876a3626ba5afa66b4e482a0553bb8d7bd40eaccbd0b5e3446c",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [
+          "META-INF/waystones_at.cfg"
+        ],
+        "signed": false
+      },
+      "mods/WirelessCraftingTerminal-1.12.2-3.12.97.jar": {
+        "bytes": 242030,
+        "sha256": "69e5b82f33925169e33456a5f6b3202917c06fc34f1f32f71cf553b0733f0114",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [
+          "META-INF/wct_at.cfg"
+        ],
+        "signed": true
+      },
+      "mods/woot-1.12.2-1.4.11.jar": {
+        "bytes": 879720,
+        "sha256": "f4f0b7a1861a4b2f11c6dc5f315090ec411dce8a62df3347fd00a96f191fb2e9",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [
+          "META-INF/woot_at.cfg"
+        ],
+        "signed": false
+      },
+      "mods/xnet-1.12-1.8.2.jar": {
+        "bytes": 496307,
+        "sha256": "37b39fb2e10bf3a991952317d68cf137c7470060197ce74a5826699fac0326fc",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [],
+        "signed": false
+      },
+      "mods/Xtones-1.12-1.0.8-11.jar": {
+        "bytes": 449444,
+        "sha256": "92041ff393ae061f9f16c8a59635241d1586491fc2557c47838225d097f58822",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [],
+        "signed": false
+      },
+      "mods/YABBA-1.1.2.53.jar": {
+        "bytes": 233275,
+        "sha256": "ec76c87ad76611593da2bc12e5371f65496886993a407860c58109500cb82519",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [],
+        "signed": false
+      },
+      "mods/zerocore-1.12.2-0.1.2.8.jar": {
+        "bytes": 228623,
+        "sha256": "99ca0107097641349055713e3505b434c4115e55a82d427975d6b2528500310b",
+        "coremod": null,
+        "contains_fml_mod": null,
+        "mixin_configs": null,
+        "tweaker": null,
+        "access_transformers": [],
+        "signed": false
+      }
+    }
+  },
+  "expected_runtime": {
+    "forge_major": "14",
+    "forge_minor": "23",
+    "forge_rev": "5",
+    "forge_build": "2846",
+    "forge_mccversion": "1.12.2",
+    "forge_mcpversion": "9.42",
+    "java_runtime_version": "1.8.0_504-b01"
+  },
+  "expected_transformer_chain": [
+    "net.minecraftforge.fml.common.asm.transformers.PatchingTransformer",
+    "org.spongepowered.asm.mixin.transformer.Proxy",
+    "$wrapper.net.minecraftforge.fml.common.asm.transformers.SideTransformer",
+    "$wrapper.net.minecraftforge.fml.common.asm.transformers.EventSubscriptionTransformer",
+    "$wrapper.net.minecraftforge.fml.common.asm.transformers.EventSubscriberTransformer",
+    "$wrapper.net.minecraftforge.fml.common.asm.transformers.SoundEngineFixTransformer",
+    "codechicken.asm.internal.SnifferTransformer",
+    "$wrapper.openmods.core.OpenModsClassTransformer",
+    "net.minecraftforge.fml.common.asm.transformers.DeobfuscationTransformer",
+    "net.minecraftforge.fml.common.asm.transformers.AccessTransformer",
+    "hellfirepvp.astralsorcery.core.AstralTransformer",
+    "pl.asie.foamfix.coremod.FoamFixAT",
+    "invtweaks.forge.asm.ITAccessTransformer",
+    "net.minecraftforge.fml.common.asm.transformers.ModAccessTransformer",
+    "net.minecraftforge.fml.common.asm.transformers.ItemStackTransformer",
+    "net.minecraftforge.fml.common.asm.transformers.ItemBlockTransformer",
+    "net.minecraftforge.fml.common.asm.transformers.ItemBlockSpecialTransformer",
+    "net.minecraftforge.fml.common.asm.transformers.PotionEffectTransformer",
+    "org.spongepowered.asm.mixin.transformer.Proxy",
+    "$wrapper.com.mordenkainen.bedpatch.BedPatchASM",
+    "$wrapper.pl.asie.foamfix.coremod.FoamFixTransformer",
+    "$wrapper.invtweaks.forge.asm.ContainerTransformer",
+    "$wrapper.ru.fewizz.neid.asm.Transformer",
+    "$wrapper.vazkii.quark.base.asm.ClassTransformer",
+    "$wrapper.lumien.resourceloader.asm.ClassTransformer",
+    "$wrapper.pl.asie.splashanimation.core.SplashProgressTransformer",
+    "$wrapper.blusunrize.immersiveengineering.common.asm.IEClassTransformer",
+    "$wrapper.shetiphian.asm.ClassTransformer",
+    "$wrapper.com.therandomlabs.randompatches.core.RPTransformer",
+    "$wrapper.team.chisel.ctm.client.asm.CTMTransformer",
+    "$wrapper.com.enderio.core.common.transform.EnderCoreTransformer",
+    "$wrapper.com.enderio.core.common.transform.SimpleMixinPatcher",
+    "net.minecraftforge.fml.common.asm.transformers.TerminalTransformer",
+    "org.spongepowered.asm.mixin.transformer.Proxy"
+  ],
+  "expected_coremod_plugins": [
+    {
+      "class": "net.minecraftforge.fml.relauncher.FMLCorePlugin",
+      "location": "file:/D:/rustcraft-runtime-targets/revelation-3.4.0/server/forge-1.12.2-14.23.5.2846-universal.jar"
+    },
+    {
+      "class": "net.minecraftforge.classloading.FMLForgePlugin",
+      "location": "file:/D:/rustcraft-runtime-targets/revelation-3.4.0/server/forge-1.12.2-14.23.5.2846-universal.jar"
+    },
+    {
+      "class": "aroma1997.core.coremod.CoreMod",
+      "location": "file:/D:/rustcraft-runtime-targets/revelation-3.4.0/server/mods/Aroma1997Core-1.12.2-2.0.0.2.jar"
+    },
+    {
+      "class": "hellfirepvp.astralsorcery.core.AstralCore",
+      "location": "file:/D:/rustcraft-runtime-targets/revelation-3.4.0/server/mods/astralsorcery-1.12.2-1.10.20.jar"
+    },
+    {
+      "class": "com.mordenkainen.bedpatch.BedPatch",
+      "location": "file:/D:/rustcraft-runtime-targets/revelation-3.4.0/server/mods/bedpatch-2.2-1.12.2.jar"
+    },
+    {
+      "class": "team.chisel.ctm.client.asm.CTMCorePlugin",
+      "location": "file:/D:/rustcraft-runtime-targets/revelation-3.4.0/server/mods/CTM-MC1.12.2-0.3.3.22.jar"
+    },
+    {
+      "class": "pl.asie.foamfix.coremod.FoamFixCore",
+      "location": "file:/D:/rustcraft-runtime-targets/revelation-3.4.0/server/mods/foamfix-0.10.5-1.12.2.jar"
+    },
+    {
+      "class": "net.shadowfacts.forgelin.preloader.ForgelinPlugin",
+      "location": "file:/D:/rustcraft-runtime-targets/revelation-3.4.0/server/mods/Forgelin-1.8.3.jar"
+    },
+    {
+      "class": "invtweaks.forge.asm.FMLPlugin",
+      "location": "file:/D:/rustcraft-runtime-targets/revelation-3.4.0/server/mods/InventoryTweaks-1.63.jar"
+    },
+    {
+      "class": "ru.fewizz.neid.asm.Plugin",
+      "location": "file:/D:/rustcraft-runtime-targets/revelation-3.4.0/server/mods/NotEnoughIDs-1.5.4.4.jar"
+    },
+    {
+      "class": "openmods.core.OpenModsCorePlugin",
+      "location": "file:/D:/rustcraft-runtime-targets/revelation-3.4.0/server/mods/OpenModsLib-1.12.2-0.12.2.jar"
+    },
+    {
+      "class": "vazkii.quark.base.asm.LoadingPlugin",
+      "location": "file:/D:/rustcraft-runtime-targets/revelation-3.4.0/server/mods/Quark-r1.6-177.jar"
+    },
+    {
+      "class": "com.therandomlabs.randompatches.core.RPCore",
+      "location": "file:/D:/rustcraft-runtime-targets/revelation-3.4.0/server/mods/randompatches-1.12.2-1.18.1.1.jar"
+    },
+    {
+      "class": "lumien.resourceloader.asm.LoadingPlugin",
+      "location": "file:/D:/rustcraft-runtime-targets/revelation-3.4.0/server/mods/ResourceLoader-MC1.12.1-1.5.3.jar"
+    },
+    {
+      "class": "pl.asie.splashanimation.core.SplashAnimationCoremod",
+      "location": "file:/D:/rustcraft-runtime-targets/revelation-3.4.0/server/mods/SplashAnimation-0.2.1.jar"
+    },
+    {
+      "class": "com.enderio.core.common.transform.EnderCorePlugin",
+      "location": "file:/D:/rustcraft-runtime-targets/revelation-3.4.0/server/mods/memory_repo/com/enderio/core/EnderCore/1.12.2-0.5.68/EnderCore-1.12.2-0.5.68-core.jar"
+    },
+    {
+      "class": "blusunrize.immersiveengineering.common.asm.IELoadingPlugin",
+      "location": "file:/D:/rustcraft-runtime-targets/revelation-3.4.0/server/mods/memory_repo/blusunrize/ImmersiveEngineering-core/0.12-91/ImmersiveEngineering-core-0.12-91.jar"
+    },
+    {
+      "class": "shetiphian.asm.TweakPlugin",
+      "location": "file:/D:/rustcraft-runtime-targets/revelation-3.4.0/server/mods/memory_repo/shetiphian/asm/ShetiPhian-ASM/1.12.0/ShetiPhian-ASM-1.12.0.jar"
+    },
+    {
+      "class": "me.jellysquid.mods.phosphor.core.PhosphorFMLLoadingPlugin",
+      "location": "file:/D:/rustcraft-runtime-targets/revelation-3.4.0/server/mods/phosphor-forge-mc1.12.2-0.2.7-universal.jar"
+    }
+  ],
+  "expected_transformed_classes": {
+    "net.minecraftforge.common.capabilities.ICapabilityProvider": "71f63611564050394021cdbafed7293f400f20573bdbebee6e42fcd715b4c3ed",
+    "net.minecraftforge.common.capabilities.ICapabilitySerializable": "332ca615865cc507f905515cb1524ccd6c179e9100ffc6ce76a8ee70fabfcd79",
+    "net.minecraftforge.common.chunkio.ChunkIOExecutor": "10533af2e1a65e3275bd1ff14daa263e0c00b862e49191168cfe17bf0ce6f9ee",
+    "net.minecraftforge.common.chunkio.ChunkIOProvider": "0b0886facacc5ea6949022000ef85e2ee6417e4e3128b8fac492723c216c1aa1",
+    "net.minecraftforge.common.config.ConfigCategory": "4504250824f95fbe93d171cf34f357a52fd427cdf375c575e73fb8d8e56c5585",
+    "net.minecraftforge.common.config.Configuration$UnicodeInputStreamReader": "ac281ecfe7837c6abcd2430e3d159e91e6ba71dd398829b23e4c660caa7d877e",
+    "net.minecraftforge.common.config.Configuration": "254a48c8ddfb65655445d40787d5bddb97206a01f925d8e217118a30de70fa64",
+    "net.minecraftforge.common.config.Property$Type": "f17b98ac1e3bcde88fc362db186149ccf4280169646574da8b694490abb28a6c",
+    "net.minecraftforge.common.config.Property": "01a6006f067b5e1fb8fb3b0a821ab49436a0f87ccc48d8a5eee09a9d09f3b95b",
+    "net.minecraftforge.common.util.INBTSerializable": "4098a7809ed9f36f4be9c91176315016db5daf621d9b9b6525b15b24e4f9169e",
+    "net.minecraftforge.fml.client.IDisplayableError": "352fe50b3eabfeba5eb889fb9f6f3d94d6e5784239af747b314fa1e49502a21e",
+    "net.minecraftforge.fml.common.asm.ASMTransformerWrapper$TransformerException": "e8b796f3b5d150d185ed60a0367af1b22c77e27c036bbcc9da007a009b62cf5c",
+    "net.minecraftforge.fml.common.asm.ASMTransformerWrapper$TransformerWrapper": "640b9b9c31c0cb0bd4a869954c63d9bba40a8b1351566a2d5e89f4196fe61470",
+    "net.minecraftforge.fml.common.asm.FMLSanityChecker": "742d8d15f48d33631ecd52bc8a5a00d61e41511f3623269926eff63eb97f9836",
+    "net.minecraftforge.fml.common.asm.transformers.AccessTransformer$1": "6b66c3ded29c6d443ece8bc1032fe795c13f047435b3621d0be185bbfd9a67fb",
+    "net.minecraftforge.fml.common.asm.transformers.AccessTransformer$Modifier": "38eeeb4054af619c7de44c045689d78539d65f72be4f3efaaaa36a2642f79437",
+    "net.minecraftforge.fml.common.asm.transformers.AccessTransformer": "78ab5190c7f979424f8bbc9ed49aa1e1907b26fbd87967dba0d4f9e9341e1fcb",
+    "net.minecraftforge.fml.common.asm.transformers.DeobfuscationTransformer": "fbf00d4a2e3d0957bf633b43584445b3135b6dc554803845854248d488fabc0a",
+    "net.minecraftforge.fml.common.asm.transformers.deobf.FMLDeobfuscatingRemapper": "520eebb132e2ad2180e9e4520dfa1da88f0dd81f73c1a530eed1bcd8d7b8a8d4",
+    "net.minecraftforge.fml.common.asm.transformers.deobf.FMLRemappingAdapter$StaticFixingMethodVisitor": "73b127c5ba827db2ddd00e65735c2b1401c57a78d0bf740324a37445c0cc0e88",
+    "net.minecraftforge.fml.common.asm.transformers.deobf.FMLRemappingAdapter": "ef0fe47d742dc51c05ca11ab1e2a40109b8f5758efc42312629b2707187c01fb",
+    "net.minecraftforge.fml.common.asm.transformers.deobf.LZMAInputSupplier": "12ef9b62c6d5d61ff3e3adbdea06ddf64f306aff99d2e1c170a0cb453ab0aaf7",
+    "net.minecraftforge.fml.common.asm.transformers.EventSubscriberTransformer$SubscribeEventPredicate": "91e82a34ba54474729b12dc2d8612d82ee2e28324a93b55af8b63c39f6520c6b",
+    "net.minecraftforge.fml.common.asm.transformers.EventSubscriberTransformer": "ae8d9ea48eaea969e7269926f46e125d4c0960cc50688609bc0eb65a8db4ad98",
+    "net.minecraftforge.fml.common.asm.transformers.EventSubscriptionTransformer": "002a088e6f618b833f0da86a78ce0a64c028f6018f4835d74945b1e19876acfe",
+    "net.minecraftforge.fml.common.asm.transformers.FieldRedirectTransformer": "50c3e092d99e7de222fdfacbf6bcb3655ee3dcf83d9a264dd22fecdc0a508f00",
+    "net.minecraftforge.fml.common.asm.transformers.ItemBlockSpecialTransformer": "3ed274d83b81eba91a345351694decbf21ce9d54f2ca71456fa49eb082732a9c",
+    "net.minecraftforge.fml.common.asm.transformers.ItemBlockTransformer": "b0bf3917b35e8ba70b3fb306baf2ee1c6527d293d8a969fa3c5e890ba61c439f",
+    "net.minecraftforge.fml.common.asm.transformers.ItemStackTransformer": "78e634cf126f6cd96ba00522ffc04e248e371ff8f83ba89aa36279bb7b33fa2e",
+    "net.minecraftforge.fml.common.asm.transformers.ModAccessTransformer": "4830a42c74870f9c84da3dba45978748cbabb990565cb6605a20b4702dedd331",
+    "net.minecraftforge.fml.common.asm.transformers.PatchingTransformer": "754aa1b8295c0669d604d564c94386717b35249462a2694331bdfa52802098ef",
+    "net.minecraftforge.fml.common.asm.transformers.PotionEffectTransformer": "f73e16c0dcffc7907cc5071e3e41c3efa387934cac8e10539ed62daa9f829ce2",
+    "net.minecraftforge.fml.common.asm.transformers.SideTransformer$LambdaGatherer": "211d9b773b1c0707768ce96b7ea7fe8515597c0484285e54805f9ed35c35c262",
+    "net.minecraftforge.fml.common.asm.transformers.SideTransformer": "e8e56bc8f585b209efa5f00fd001bec3bc62a863373a7b72aabb42ec3fb95fff",
+    "net.minecraftforge.fml.common.asm.transformers.SoundEngineFixTransformer": "b29e70a8bf14ee3d01d69f6d88575075689a6aca08051d695adff335f20578f7",
+    "net.minecraftforge.fml.common.asm.transformers.TerminalTransformer$ExitVisitor$1": "e213734fd91a122db48fdac751a7c9fcabdad80d5148eb3029e38e69b4297022",
+    "net.minecraftforge.fml.common.asm.transformers.TerminalTransformer$ExitVisitor": "727770f15dfb6aba71404fd5d78bc25037f12bb33cad48473e8e0591568e7ccf",
+    "net.minecraftforge.fml.common.asm.transformers.TerminalTransformer": "107bf5d6732c7b12a6a0d28ca21cb30eb9174de276c01789240640dc17a0f699",
+    "net.minecraftforge.fml.common.DummyModContainer": "cfd433623dcf840a988664ae7e2d53c4a3a168d216f23ede22b2ab7f331fbac0",
+    "net.minecraftforge.fml.common.DuplicateModsFoundException": "de0f738bd06eb38cd34929982de3c4a38a03135bfa11770ec4cb2447dfee668b",
+    "net.minecraftforge.fml.common.EnhancedRuntimeException": "03e85f114b5e7851a7039e442ebc6fcd14e6ddbcb4d287d6ac61fc9c913ae5c5",
+    "net.minecraftforge.fml.common.eventhandler.Event": "3f3d6df38d5f20c7d6f164ebfaedd323d75d69d6fdba93c09e668f82ee2ab5e9",
+    "net.minecraftforge.fml.common.event.FMLEvent": "c0858291c65e3e25757787e7a75030e535f50a0e615cd8239ce83689f36aa64f",
+    "net.minecraftforge.fml.common.event.FMLModIdMappingEvent": "ec876c85406b094737c29414c525813312c94c18a3e83a070dc04827464a2c26",
+    "net.minecraftforge.fml.common.FMLLog": "4d99b3cd363866d465e0bccd790ba91929f31f1b96ce5a37872fe607a499cb5d",
+    "net.minecraftforge.fml.common.ICrashCallable": "5659e191a2ae1e4f6a229a54299278da6eb48bc7f3f0fd62d7d5067711080999",
+    "net.minecraftforge.fml.common.ILanguageAdapter": "e15d21f52617880add9f980a35db4a1b470d224468b89c09ce087cc8fd070ce5",
+    "net.minecraftforge.fml.common.Loader": "c82dff31bbf811fb19b0455958146d46b7408765424925c28f9a9d6a607e76f8",
+    "net.minecraftforge.fml.common.LoaderException": "369fdd7e659ae6a9a8fb6287745b24e9f81c7c206869eeec3703f0a5c5ea8cd8",
+    "net.minecraftforge.fml.common.LoaderState$ModState": "b8417f75bf88dec62547d0b0cd44f8c53832cf0edd0f757fc3aba269d9e2f2cd",
+    "net.minecraftforge.fml.common.LoaderState": "19321915a2fd64e773910ec89b79450c5de8bbd8d54e712360021833f72aaa6a",
+    "net.minecraftforge.fml.common.MCPDummyContainer": "535e721c3a476e60654e4ad39184781599adf076c2be52c818b4611b72596c73",
+    "net.minecraftforge.fml.common.MetadataCollection$ArtifactVersionAdapter": "4749668ebf0ec02d3425b468c24d7412e2517fcbb2650e5da471d3c5ba8e8ed2",
+    "net.minecraftforge.fml.common.MetadataCollection": "3c002388cbaa4e65124f30906a49b8d00a7172001afbb6b9308a223781603773",
+    "net.minecraftforge.fml.common.MinecraftDummyContainer": "e3235e54e07fa0e07d616f7b8f5316387a668b05c22678cc6813b5fccbf65f53",
+    "net.minecraftforge.fml.common.MissingModsException": "2c33781030f584f2e0b4b9b6427354fe28fcb661f238c6e4affd4b240ccbef23",
+    "net.minecraftforge.fml.common.Mod$CustomProperty": "226810a3f0ed165b1c7ee32e430223c329c6ff2eacb6883b2c1b1b745e63e5ed",
+    "net.minecraftforge.fml.common.Mod": "81de9840d6be72a0cac1a4b1a43d7d14e128b0dcc428915bb9e4795a0914a75e",
+    "net.minecraftforge.fml.common.ModClassLoader": "a9aefa98cccbb5558548eba8912adee28b4ec40986ab8551fbce4b8049222941",
+    "net.minecraftforge.fml.common.ModContainer": "31768c09716e02b72f0659086223293f3343c625badae818b66480096381935b",
+    "net.minecraftforge.fml.common.ModMetadata": "4f5bf24ca66c2869fa9be726c3a77e406f671e99fe715ef2394898ad1363f74b",
+    "net.minecraftforge.fml.common.MultipleModsErrored": "5a750a50ab4c0bafc06e2c4848872770f667dea9bdac0eed2375de724f79ee2c",
+    "net.minecraftforge.fml.common.patcher.ClassPatch": "0cb255b56080e23f9c3cc08873dcb5bc3e861bad3a3dac986c56c338decc8d64",
+    "net.minecraftforge.fml.common.patcher.ClassPatchManager": "71a042663074c214ec002d29154eb5ef939b9af4ba0331c9dde200e7a80f7423",
+    "net.minecraftforge.fml.common.toposort.ModSortingException": "10682304ab363227531119ed446e6c71a442697ae6b2c375a69c8353dd259ea5",
+    "net.minecraftforge.fml.common.versioning.ArtifactVersion": "181a0ef5ab3cf17b28f02f4b3a9a63ed582632795636fd4341534143a71ffa20",
+    "net.minecraftforge.fml.common.versioning.ComparableVersion$IntegerItem": "e6bcc7ca79e8b57d947d3b3bed96b022b88352193788ec0858d48dea14d6e620",
+    "net.minecraftforge.fml.common.versioning.ComparableVersion$Item": "2e42e6524554ab90ba0c853493a372783f29ac636e2b558f55b199d77577f46b",
+    "net.minecraftforge.fml.common.versioning.ComparableVersion$ListItem": "06c11784bc78a6deff22dbe6c3b64d873996768ff40597b3e8700bcab856bedc",
+    "net.minecraftforge.fml.common.versioning.ComparableVersion": "60e2a38a4b6b66d39de04b4bb26e9c1ba398b4f2e643a25771283d1a2f99b307",
+    "net.minecraftforge.fml.common.versioning.DefaultArtifactVersion": "4fca7ce71437a2704d978775e2ffe9514b476c67af047fcc7b32d9e068cfc1af",
+    "net.minecraftforge.fml.common.versioning.InvalidVersionSpecificationException": "a782fb39d6277173e6df8deaa9906950468078e2b1641c8ab67195083893926c",
+    "net.minecraftforge.fml.common.versioning.Restriction": "ba8780acd062106bec6eb702a6bf745ee144b181df5ec868a369e764fde2e4ed",
+    "net.minecraftforge.fml.common.versioning.VersionParser": "a11d544bfd763bfdaa1e800d42c676b2c8d6d2b88f2708ab33d2fabda8530a88",
+    "net.minecraftforge.fml.common.versioning.VersionRange": "6c5af4e9c54378e5fa745502784ab72c13746061ea9fc4f43b1bc1e0daec51ce",
+    "net.minecraftforge.fml.common.WrongMinecraftVersionException": "e01fd36734b7672ca5d86e9c485d60d9884138b4f49839719201b06f603b6907",
+    "net.minecraftforge.fml.repackage.com.nothome.delta.ByteBufferSeekableSource": "78ebebfa4149ab63e6d7c0a00fab32c83d77a4b03ff1f4058b790556cc2330dd",
+    "net.minecraftforge.fml.repackage.com.nothome.delta.GDiffPatcher": "ae2af3c1d23516a985e8c117676192662f189b6a3f6c679842b5389ba520560c",
+    "net.minecraftforge.fml.repackage.com.nothome.delta.PatchException": "20b8d40518b52e333100964bb43ece5b0dc890cf6f45956128c83a9cc57f0e71",
+    "net.minecraftforge.fml.repackage.com.nothome.delta.SeekableSource": "884b073755bcb4056214c9d6b975ac1e5e11fec1fd3051d1d1949d05d951be8b",
+    "net.minecraftforge.registries.IForgeRegistryEntry": "ae16b0ab39a8b149544fc59d28ba1ababcb2911974d5ce38060af16737dd5eac",
+    "net.minecraft.command.ICommand": "940bc5957f6881011f3ab99f9d6209c2fb023364502aee9ce4f2cc03662d5959",
+    "net.minecraft.command.ICommandSender": "e83d569f53126af1d8467fdad47f6be5d5fad028ecf2c68418c78c224f36011a",
+    "net.minecraft.crash.ICrashReportDetail": "b5e886932bc7e9bbaaceb3f106fa8614dd87b536e6cceabe3174c68be7dccad2",
+    "net.minecraft.nbt.CompressedStreamTools": "4d7005532337ceb2d0d24f6289cd94e1cdc3aefef76f695a538bdce8c3207de4",
+    "net.minecraft.nbt.NBTBase": "a44e0a5b992007360769f3d3ada74bb512bb844f908af9252c10f9e84bff37b4",
+    "net.minecraft.nbt.NBTPrimitive": "541b1b96a9249dcfe2ac3b02e3e9a0e27ae0c11be7efa4060807226d2a3953df",
+    "net.minecraft.nbt.NBTTagByteArray": "4b06f8d8e74f8a9c066c439eec86424dd459b25d597c22a0ae76875b5a5348e3",
+    "net.minecraft.nbt.NBTTagCompound": "c22d2ca1bc53affa5f4912ff452cc5eb8dfa00870d5af6693780e089f44145fa",
+    "net.minecraft.nbt.NBTTagDouble": "43c5bc0be68ce0a649bab951f9effb5cfc5df2bb1b2ec2732eb0deeffc4b229f",
+    "net.minecraft.nbt.NBTTagList": "20aa8d93071bf0c9321ddbbc785cc4b4582f725310fda3b3b598753747fa7873",
+    "net.minecraft.network.Packet": "d252c6f85281772bb6375dc870935e141184bc631765b3194a4494578122bf53",
+    "net.minecraft.network.PacketBuffer": "f582dc836283a10c4f4479a7722b981d0aadf1841b5dbc80b270fa16a8bd6720",
+    "net.minecraft.network.play.server.SPacketChunkData": "f375c6fb4e47f98ef59ea1aaf0c135557743f6ce22fe4f910faf899ee82b3132",
+    "net.minecraft.profiler.ISnooperInfo": "d7851dfcd12630d005bc627403f5900a0f9f8029ec5ca58e8f0b9d9ebe37e5ff",
+    "net.minecraft.server.management.PlayerChunkMap": "c90a30993c3b7743acf82304edae39d812759cd35da5f6f8cd04b78ac29fadd7",
+    "net.minecraft.server.management.PlayerChunkMapEntry": "d37b1cb841b55092ba65611a124034bcfb387a699897fd27dca783aa6f5d065b",
+    "net.minecraft.server.MinecraftServer": "48142a959ec484e24a5ff2bca9e19a72e15063c833810acc0a38aeb11cd95d51",
+    "net.minecraft.tileentity.TileEntity": "2b85a242a7bbcf1b6352b4864d36004c173e60cf5d7a7d7846b54383bb1dbbb3",
+    "net.minecraft.util.BitArray": "14e7638d675d3024f20f20ac53caced56cea409d97a12460b30a9f78df01611c",
+    "net.minecraft.util.datafix.DataFixer": "3706d60a308b429faabc97db8f4ca28f02c0d71f5473227ba1a8c0aa656f9ff4",
+    "net.minecraft.util.datafix.IDataFixer": "ab11d16c138d22c155aa1184710f7ee3aa3419fa4293511479bbc4a35a8673c5",
+    "net.minecraft.util.IObjectIntIterable": "68963516ee4d4351a13a41fcda2353f2fb37f2b0ece4f1db0f2daafb7590d5b3",
+    "net.minecraft.util.IThreadListener": "9526089d922440655249f6e4a1f4197e239d424fc007d75ba13f22f082aff843",
+    "net.minecraft.util.math.BlockPos": "228fcd88a303c9397c810293ed041b9e10c2ead35e5b530a3acef9f104154528",
+    "net.minecraft.util.math.Vec3i": "8973a30a720329d6cd4bfc0296757ba9be2a69f2080b4d0d39717e84a6135bc0",
+    "net.minecraft.util.ObjectIntIdentityMap": "6dfda71116403f3f34fa00a3ad7bf242bbe109b55b1923fcafc4f6de07123a7e",
+    "net.minecraft.util.ReportedException": "aa9d4948c8b68e65b5ecd5e707c05803c4bf74273bd2bf2c5fd4c04d1c2bd4b7",
+    "net.minecraft.world.chunk.BlockStateContainer": "80a1a26ca886401a83ac6f010a686f5b5e2aa48927b1b53f755b99506500ab91",
+    "net.minecraft.world.chunk.BlockStatePaletteHashMap": "4b82b3861ba3ecc94c554d7d75a795a991f285a760bcee6553bc56d5a66e8dfe",
+    "net.minecraft.world.chunk.BlockStatePaletteLinear": "007979e4ac64b43631da96757b9306b632ee805eb46b687f3195de41ef09d319",
+    "net.minecraft.world.chunk.BlockStatePaletteRegistry": "38d742c7ad9c3be6fd92299d611c50d55638abf25b6f5e33452451a53f4cf15c",
+    "net.minecraft.world.chunk.Chunk": "bbc9f8164716f1acb92694cd7e9de4606175ce258ba690f419558fc12d34152c",
+    "net.minecraft.world.chunk.IBlockStatePalette": "bb938374cddf1c3285aafd733c80fa33a012fd65a0bd2bd037777e2a7f8a5c22",
+    "net.minecraft.world.chunk.IBlockStatePaletteResizer": "374dc35749bbfe008cd6eba93c7c9d24a08766d13e69630f09f14be62ac1b755",
+    "net.minecraft.world.chunk.IChunkProvider": "577921aee8bb4e448e8619d6ccc8cfc5888d02051d8c46362239739ec79d2e52",
+    "net.minecraft.world.chunk.NibbleArray": "437f0001a3c649ed44bf77cebccb5060109dbfb6243d05366f1bfa199c1ba0d8",
+    "net.minecraft.world.chunk.storage.AnvilChunkLoader": "a6a29a0cf6f81132f2c82294483c66a9d82a8caef03a1192eb54d947d7e37f8b",
+    "net.minecraft.world.chunk.storage.ExtendedBlockStorage": "6897b9847780809df7fe9a2782eb87bd89b6583595fc2c2e8afd0ff311716b7a",
+    "net.minecraft.world.chunk.storage.IChunkLoader": "01b61e96105faf9d7c18589284398dfd227dbc16ee6d23dc67017b7f7932caee",
+    "net.minecraft.world.gen.ChunkGeneratorFlat": "e9ec6eb3dd488f0e6913067ee35f2eadc2c385022f73b751cec1249ea2c01f39",
+    "net.minecraft.world.gen.ChunkProviderServer": "4e702c57553791135d03bee7090bb65c5869bdfbeea6666cb03f442e5da5ef36",
+    "net.minecraft.world.gen.IChunkGenerator": "d8daf6cfdbc916fc3bd430a845232f7a59bd91978e262f8bd27c7b987d1c7a73",
+    "net.minecraft.world.IBlockAccess": "22afbe6e21f5578a009548630624071ae969e7272afdff2cb3336a65a95a1147",
+    "net.minecraft.world.storage.IThreadedFileIO": "44d318fb2982aeb2347843d698ecfdbda28182c0bce25d2e5c848ceb45198f58",
+    "net.minecraft.world.World": "541aa82353c953b72681655d7f73600cd979ea0abacee8758fa9bda675de5584",
+    "net.minecraft.world.WorldProvider": "e7e491c6542cb86008a3fd3e6c92ee48199a8c24a7e5542af7485fa3a0baa1a0",
+    "net.minecraft.world.WorldProviderSurface": "6f5d6a4a3db6f3476654fd4a95a9a660d93bf6924267fb4bcb535b88c932f200",
+    "net.minecraft.world.WorldServer": "bc38249a16bc5fde9003495b1628e05614d5732dff1abcd702da99966413c529"
+  },
+  "transformed_dump_dir": "D:\\minecraftrust\\target\\rev-probe\\transformed",
+  "expected_transformer_chain_sha256": "42d26a14c5b4542caa0df5fd3ce25d6d503db5b5d5f7f2f4e3e7c2cef30cbfb7",
+  "expected_coremod_plugins_sha256": "e11fc337eb542d03b0605a55a2c257573c68b3b731f61e44591cba40573f6909",
+  "probe_receipt": {
+    "transformers": [
+      "net.minecraftforge.fml.common.asm.transformers.PatchingTransformer",
+      "org.spongepowered.asm.mixin.transformer.Proxy",
+      "$wrapper.net.minecraftforge.fml.common.asm.transformers.SideTransformer",
+      "$wrapper.net.minecraftforge.fml.common.asm.transformers.EventSubscriptionTransformer",
+      "$wrapper.net.minecraftforge.fml.common.asm.transformers.EventSubscriberTransformer",
+      "$wrapper.net.minecraftforge.fml.common.asm.transformers.SoundEngineFixTransformer",
+      "codechicken.asm.internal.SnifferTransformer",
+      "$wrapper.openmods.core.OpenModsClassTransformer",
+      "net.minecraftforge.fml.common.asm.transformers.DeobfuscationTransformer",
+      "net.minecraftforge.fml.common.asm.transformers.AccessTransformer",
+      "hellfirepvp.astralsorcery.core.AstralTransformer",
+      "pl.asie.foamfix.coremod.FoamFixAT",
+      "invtweaks.forge.asm.ITAccessTransformer",
+      "net.minecraftforge.fml.common.asm.transformers.ModAccessTransformer",
+      "net.minecraftforge.fml.common.asm.transformers.ItemStackTransformer",
+      "net.minecraftforge.fml.common.asm.transformers.ItemBlockTransformer",
+      "net.minecraftforge.fml.common.asm.transformers.ItemBlockSpecialTransformer",
+      "net.minecraftforge.fml.common.asm.transformers.PotionEffectTransformer",
+      "org.spongepowered.asm.mixin.transformer.Proxy",
+      "$wrapper.com.mordenkainen.bedpatch.BedPatchASM",
+      "$wrapper.pl.asie.foamfix.coremod.FoamFixTransformer",
+      "$wrapper.invtweaks.forge.asm.ContainerTransformer",
+      "$wrapper.ru.fewizz.neid.asm.Transformer",
+      "$wrapper.vazkii.quark.base.asm.ClassTransformer",
+      "$wrapper.lumien.resourceloader.asm.ClassTransformer",
+      "$wrapper.pl.asie.splashanimation.core.SplashProgressTransformer",
+      "$wrapper.blusunrize.immersiveengineering.common.asm.IEClassTransformer",
+      "$wrapper.shetiphian.asm.ClassTransformer",
+      "$wrapper.com.therandomlabs.randompatches.core.RPTransformer",
+      "$wrapper.team.chisel.ctm.client.asm.CTMTransformer",
+      "$wrapper.com.enderio.core.common.transform.EnderCoreTransformer",
+      "$wrapper.com.enderio.core.common.transform.SimpleMixinPatcher",
+      "net.minecraftforge.fml.common.asm.transformers.TerminalTransformer",
+      "org.spongepowered.asm.mixin.transformer.Proxy"
+    ],
+    "registered_coremod_plugins": [
+      {
+        "class": "net.minecraftforge.fml.relauncher.FMLCorePlugin",
+        "location": "file:/D:/rustcraft-runtime-targets/revelation-3.4.0/server/forge-1.12.2-14.23.5.2846-universal.jar"
+      },
+      {
+        "class": "net.minecraftforge.classloading.FMLForgePlugin",
+        "location": "file:/D:/rustcraft-runtime-targets/revelation-3.4.0/server/forge-1.12.2-14.23.5.2846-universal.jar"
+      },
+      {
+        "class": "aroma1997.core.coremod.CoreMod",
+        "location": "file:/D:/rustcraft-runtime-targets/revelation-3.4.0/server/mods/Aroma1997Core-1.12.2-2.0.0.2.jar"
+      },
+      {
+        "class": "hellfirepvp.astralsorcery.core.AstralCore",
+        "location": "file:/D:/rustcraft-runtime-targets/revelation-3.4.0/server/mods/astralsorcery-1.12.2-1.10.20.jar"
+      },
+      {
+        "class": "com.mordenkainen.bedpatch.BedPatch",
+        "location": "file:/D:/rustcraft-runtime-targets/revelation-3.4.0/server/mods/bedpatch-2.2-1.12.2.jar"
+      },
+      {
+        "class": "team.chisel.ctm.client.asm.CTMCorePlugin",
+        "location": "file:/D:/rustcraft-runtime-targets/revelation-3.4.0/server/mods/CTM-MC1.12.2-0.3.3.22.jar"
+      },
+      {
+        "class": "pl.asie.foamfix.coremod.FoamFixCore",
+        "location": "file:/D:/rustcraft-runtime-targets/revelation-3.4.0/server/mods/foamfix-0.10.5-1.12.2.jar"
+      },
+      {
+        "class": "net.shadowfacts.forgelin.preloader.ForgelinPlugin",
+        "location": "file:/D:/rustcraft-runtime-targets/revelation-3.4.0/server/mods/Forgelin-1.8.3.jar"
+      },
+      {
+        "class": "invtweaks.forge.asm.FMLPlugin",
+        "location": "file:/D:/rustcraft-runtime-targets/revelation-3.4.0/server/mods/InventoryTweaks-1.63.jar"
+      },
+      {
+        "class": "ru.fewizz.neid.asm.Plugin",
+        "location": "file:/D:/rustcraft-runtime-targets/revelation-3.4.0/server/mods/NotEnoughIDs-1.5.4.4.jar"
+      },
+      {
+        "class": "openmods.core.OpenModsCorePlugin",
+        "location": "file:/D:/rustcraft-runtime-targets/revelation-3.4.0/server/mods/OpenModsLib-1.12.2-0.12.2.jar"
+      },
+      {
+        "class": "vazkii.quark.base.asm.LoadingPlugin",
+        "location": "file:/D:/rustcraft-runtime-targets/revelation-3.4.0/server/mods/Quark-r1.6-177.jar"
+      },
+      {
+        "class": "com.therandomlabs.randompatches.core.RPCore",
+        "location": "file:/D:/rustcraft-runtime-targets/revelation-3.4.0/server/mods/randompatches-1.12.2-1.18.1.1.jar"
+      },
+      {
+        "class": "lumien.resourceloader.asm.LoadingPlugin",
+        "location": "file:/D:/rustcraft-runtime-targets/revelation-3.4.0/server/mods/ResourceLoader-MC1.12.1-1.5.3.jar"
+      },
+      {
+        "class": "pl.asie.splashanimation.core.SplashAnimationCoremod",
+        "location": "file:/D:/rustcraft-runtime-targets/revelation-3.4.0/server/mods/SplashAnimation-0.2.1.jar"
+      },
+      {
+        "class": "com.enderio.core.common.transform.EnderCorePlugin",
+        "location": "file:/D:/rustcraft-runtime-targets/revelation-3.4.0/server/mods/memory_repo/com/enderio/core/EnderCore/1.12.2-0.5.68/EnderCore-1.12.2-0.5.68-core.jar"
+      },
+      {
+        "class": "blusunrize.immersiveengineering.common.asm.IELoadingPlugin",
+        "location": "file:/D:/rustcraft-runtime-targets/revelation-3.4.0/server/mods/memory_repo/blusunrize/ImmersiveEngineering-core/0.12-91/ImmersiveEngineering-core-0.12-91.jar"
+      },
+      {
+        "class": "shetiphian.asm.TweakPlugin",
+        "location": "file:/D:/rustcraft-runtime-targets/revelation-3.4.0/server/mods/memory_repo/shetiphian/asm/ShetiPhian-ASM/1.12.0/ShetiPhian-ASM-1.12.0.jar"
+      },
+      {
+        "class": "me.jellysquid.mods.phosphor.core.PhosphorFMLLoadingPlugin",
+        "location": "file:/D:/rustcraft-runtime-targets/revelation-3.4.0/server/mods/phosphor-forge-mc1.12.2-0.2.7-universal.jar"
+      }
+    ],
+    "transformed_classes": {},
+    "required_class_missing": []
+  },
+  "hook_matrix": {
+    "clean_forge_forge_build": "14.23.5.2860",
+    "hook_count": 66,
+    "counts": {
+      "UNCHANGED_SEMANTIC": 35,
+      "REWRITTEN_METHOD": 22,
+      "UNCHANGED_EXACT": 9
+    },
+    "sites": [
+      {
+        "id": "W01",
+        "class": "net.minecraft.world.World",
+        "method": "func_180501_a",
+        "descriptor": "(Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/state/IBlockState;I)Z",
+        "clean_sha256": "5deb85ca3424a85c32b132c763e774a419e32676c8d520ef2677fa7bc695858a",
+        "rev_sha256": "38af6739e9c046f8d645071b800ab75f1a820cc53bc683d198929c5820be0626",
+        "classification": "UNCHANGED_SEMANTIC"
+      },
+      {
+        "id": "W02",
+        "class": "net.minecraft.world.World",
+        "method": "func_175653_a",
+        "descriptor": "(Lnet/minecraft/world/EnumSkyBlock;Lnet/minecraft/util/math/BlockPos;I)V",
+        "clean_sha256": "5deb85ca3424a85c32b132c763e774a419e32676c8d520ef2677fa7bc695858a",
+        "rev_sha256": "38af6739e9c046f8d645071b800ab75f1a820cc53bc683d198929c5820be0626",
+        "classification": "UNCHANGED_SEMANTIC"
+      },
+      {
+        "id": "W03",
+        "class": "net.minecraft.world.World",
+        "method": "func_175690_a",
+        "descriptor": "(Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/tileentity/TileEntity;)V",
+        "clean_sha256": "5deb85ca3424a85c32b132c763e774a419e32676c8d520ef2677fa7bc695858a",
+        "rev_sha256": "38af6739e9c046f8d645071b800ab75f1a820cc53bc683d198929c5820be0626",
+        "classification": "UNCHANGED_SEMANTIC"
+      },
+      {
+        "id": "W04",
+        "class": "net.minecraft.world.World",
+        "method": "func_175713_t",
+        "descriptor": "(Lnet/minecraft/util/math/BlockPos;)V",
+        "clean_sha256": "5deb85ca3424a85c32b132c763e774a419e32676c8d520ef2677fa7bc695858a",
+        "rev_sha256": "38af6739e9c046f8d645071b800ab75f1a820cc53bc683d198929c5820be0626",
+        "classification": "UNCHANGED_SEMANTIC"
+      },
+      {
+        "id": "W05",
+        "class": "net.minecraft.world.World",
+        "method": "func_180500_c",
+        "descriptor": "(Lnet/minecraft/world/EnumSkyBlock;Lnet/minecraft/util/math/BlockPos;)Z",
+        "clean_sha256": "5deb85ca3424a85c32b132c763e774a419e32676c8d520ef2677fa7bc695858a",
+        "rev_sha256": "38af6739e9c046f8d645071b800ab75f1a820cc53bc683d198929c5820be0626",
+        "classification": "REWRITTEN_METHOD",
+        "clean_instructions": 582,
+        "rev_instructions": 599
+      },
+      {
+        "id": "W06",
+        "class": "net.minecraft.world.chunk.Chunk",
+        "method": "func_76603_b",
+        "descriptor": "()V",
+        "clean_sha256": "0bd20899a444608e1f49f93a2a0a0b594a5cedb81d7202adfc54fd4e3417e7e3",
+        "rev_sha256": "bb283fe1b9ba656bf6300e44d08eb10e5ef88706a4e8aa9a119afda219685ed3",
+        "classification": "REWRITTEN_METHOD",
+        "clean_instructions": 142,
+        "rev_instructions": 142
+      },
+      {
+        "id": "W07",
+        "class": "net.minecraft.world.chunk.Chunk",
+        "method": "func_76595_e",
+        "descriptor": "(II)V",
+        "clean_sha256": "0bd20899a444608e1f49f93a2a0a0b594a5cedb81d7202adfc54fd4e3417e7e3",
+        "rev_sha256": "bb283fe1b9ba656bf6300e44d08eb10e5ef88706a4e8aa9a119afda219685ed3",
+        "classification": "UNCHANGED_SEMANTIC"
+      },
+      {
+        "id": "W08",
+        "class": "net.minecraft.world.chunk.Chunk",
+        "method": "func_150803_c",
+        "descriptor": "(Z)V",
+        "clean_sha256": "0bd20899a444608e1f49f93a2a0a0b594a5cedb81d7202adfc54fd4e3417e7e3",
+        "rev_sha256": "bb283fe1b9ba656bf6300e44d08eb10e5ef88706a4e8aa9a119afda219685ed3",
+        "classification": "REWRITTEN_METHOD",
+        "clean_instructions": 146,
+        "rev_instructions": 71
+      },
+      {
+        "id": "W09",
+        "class": "net.minecraft.world.chunk.Chunk",
+        "method": "func_76599_g",
+        "descriptor": "(III)V",
+        "clean_sha256": "0bd20899a444608e1f49f93a2a0a0b594a5cedb81d7202adfc54fd4e3417e7e3",
+        "rev_sha256": "bb283fe1b9ba656bf6300e44d08eb10e5ef88706a4e8aa9a119afda219685ed3",
+        "classification": "UNCHANGED_SEMANTIC"
+      },
+      {
+        "id": "W10",
+        "class": "net.minecraft.world.chunk.Chunk",
+        "method": "func_76609_d",
+        "descriptor": "(IIII)V",
+        "clean_sha256": "0bd20899a444608e1f49f93a2a0a0b594a5cedb81d7202adfc54fd4e3417e7e3",
+        "rev_sha256": "bb283fe1b9ba656bf6300e44d08eb10e5ef88706a4e8aa9a119afda219685ed3",
+        "classification": "UNCHANGED_SEMANTIC"
+      },
+      {
+        "id": "W11",
+        "class": "net.minecraft.world.chunk.Chunk",
+        "method": "func_76615_h",
+        "descriptor": "(III)V",
+        "clean_sha256": "0bd20899a444608e1f49f93a2a0a0b594a5cedb81d7202adfc54fd4e3417e7e3",
+        "rev_sha256": "bb283fe1b9ba656bf6300e44d08eb10e5ef88706a4e8aa9a119afda219685ed3",
+        "classification": "REWRITTEN_METHOD",
+        "clean_instructions": 279,
+        "rev_instructions": 72
+      },
+      {
+        "id": "W12",
+        "class": "net.minecraft.world.chunk.Chunk",
+        "method": "func_177436_a",
+        "descriptor": "(Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/state/IBlockState;)Lnet/minecraft/block/state/IBlockState;",
+        "clean_sha256": "0bd20899a444608e1f49f93a2a0a0b594a5cedb81d7202adfc54fd4e3417e7e3",
+        "rev_sha256": "bb283fe1b9ba656bf6300e44d08eb10e5ef88706a4e8aa9a119afda219685ed3",
+        "classification": "REWRITTEN_METHOD",
+        "clean_instructions": 284,
+        "rev_instructions": 302
+      },
+      {
+        "id": "W13",
+        "class": "net.minecraft.world.chunk.Chunk",
+        "method": "func_177431_a",
+        "descriptor": "(Lnet/minecraft/world/EnumSkyBlock;Lnet/minecraft/util/math/BlockPos;I)V",
+        "clean_sha256": "0bd20899a444608e1f49f93a2a0a0b594a5cedb81d7202adfc54fd4e3417e7e3",
+        "rev_sha256": "bb283fe1b9ba656bf6300e44d08eb10e5ef88706a4e8aa9a119afda219685ed3",
+        "classification": "REWRITTEN_METHOD",
+        "clean_instructions": 77,
+        "rev_instructions": 83
+      },
+      {
+        "id": "W14",
+        "class": "net.minecraft.world.chunk.Chunk",
+        "method": "func_177424_a",
+        "descriptor": "(Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/world/chunk/Chunk$EnumCreateEntityType;)Lnet/minecraft/tileentity/TileEntity;",
+        "clean_sha256": "0bd20899a444608e1f49f93a2a0a0b594a5cedb81d7202adfc54fd4e3417e7e3",
+        "rev_sha256": "bb283fe1b9ba656bf6300e44d08eb10e5ef88706a4e8aa9a119afda219685ed3",
+        "classification": "UNCHANGED_SEMANTIC"
+      },
+      {
+        "id": "W15",
+        "class": "net.minecraft.world.chunk.Chunk",
+        "method": "func_150813_a",
+        "descriptor": "(Lnet/minecraft/tileentity/TileEntity;)V",
+        "clean_sha256": "0bd20899a444608e1f49f93a2a0a0b594a5cedb81d7202adfc54fd4e3417e7e3",
+        "rev_sha256": "bb283fe1b9ba656bf6300e44d08eb10e5ef88706a4e8aa9a119afda219685ed3",
+        "classification": "UNCHANGED_SEMANTIC"
+      },
+      {
+        "id": "W16",
+        "class": "net.minecraft.world.chunk.Chunk",
+        "method": "func_177426_a",
+        "descriptor": "(Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/tileentity/TileEntity;)V",
+        "clean_sha256": "0bd20899a444608e1f49f93a2a0a0b594a5cedb81d7202adfc54fd4e3417e7e3",
+        "rev_sha256": "bb283fe1b9ba656bf6300e44d08eb10e5ef88706a4e8aa9a119afda219685ed3",
+        "classification": "UNCHANGED_SEMANTIC"
+      },
+      {
+        "id": "W17",
+        "class": "net.minecraft.world.chunk.Chunk",
+        "method": "func_177425_e",
+        "descriptor": "(Lnet/minecraft/util/math/BlockPos;)V",
+        "clean_sha256": "0bd20899a444608e1f49f93a2a0a0b594a5cedb81d7202adfc54fd4e3417e7e3",
+        "rev_sha256": "bb283fe1b9ba656bf6300e44d08eb10e5ef88706a4e8aa9a119afda219685ed3",
+        "classification": "UNCHANGED_SEMANTIC"
+      },
+      {
+        "id": "W18",
+        "class": "net.minecraft.world.chunk.Chunk",
+        "method": "func_76631_c",
+        "descriptor": "()V",
+        "clean_sha256": "0bd20899a444608e1f49f93a2a0a0b594a5cedb81d7202adfc54fd4e3417e7e3",
+        "rev_sha256": "bb283fe1b9ba656bf6300e44d08eb10e5ef88706a4e8aa9a119afda219685ed3",
+        "classification": "REWRITTEN_METHOD",
+        "clean_instructions": 39,
+        "rev_instructions": 46
+      },
+      {
+        "id": "W19",
+        "class": "net.minecraft.world.chunk.Chunk",
+        "method": "func_76623_d",
+        "descriptor": "()V",
+        "clean_sha256": "0bd20899a444608e1f49f93a2a0a0b594a5cedb81d7202adfc54fd4e3417e7e3",
+        "rev_sha256": "bb283fe1b9ba656bf6300e44d08eb10e5ef88706a4e8aa9a119afda219685ed3",
+        "classification": "REWRITTEN_METHOD",
+        "clean_instructions": 55,
+        "rev_instructions": 60
+      },
+      {
+        "id": "W20",
+        "class": "net.minecraft.world.chunk.Chunk",
+        "method": "func_186030_a",
+        "descriptor": "(Lnet/minecraft/world/chunk/IChunkProvider;Lnet/minecraft/world/gen/IChunkGenerator;)V",
+        "clean_sha256": "0bd20899a444608e1f49f93a2a0a0b594a5cedb81d7202adfc54fd4e3417e7e3",
+        "rev_sha256": "bb283fe1b9ba656bf6300e44d08eb10e5ef88706a4e8aa9a119afda219685ed3",
+        "classification": "UNCHANGED_SEMANTIC"
+      },
+      {
+        "id": "W21",
+        "class": "net.minecraft.world.chunk.Chunk",
+        "method": "func_186034_a",
+        "descriptor": "(Lnet/minecraft/world/gen/IChunkGenerator;)V",
+        "clean_sha256": "0bd20899a444608e1f49f93a2a0a0b594a5cedb81d7202adfc54fd4e3417e7e3",
+        "rev_sha256": "bb283fe1b9ba656bf6300e44d08eb10e5ef88706a4e8aa9a119afda219685ed3",
+        "classification": "UNCHANGED_SEMANTIC"
+      },
+      {
+        "id": "W22",
+        "class": "net.minecraft.world.chunk.Chunk",
+        "method": "func_150804_b",
+        "descriptor": "(Z)V",
+        "clean_sha256": "0bd20899a444608e1f49f93a2a0a0b594a5cedb81d7202adfc54fd4e3417e7e3",
+        "rev_sha256": "bb283fe1b9ba656bf6300e44d08eb10e5ef88706a4e8aa9a119afda219685ed3",
+        "classification": "UNCHANGED_SEMANTIC"
+      },
+      {
+        "id": "W23",
+        "class": "net.minecraft.world.chunk.Chunk",
+        "method": "func_76602_a",
+        "descriptor": "([Lnet/minecraft/world/chunk/storage/ExtendedBlockStorage;)V",
+        "clean_sha256": "0bd20899a444608e1f49f93a2a0a0b594a5cedb81d7202adfc54fd4e3417e7e3",
+        "rev_sha256": "bb283fe1b9ba656bf6300e44d08eb10e5ef88706a4e8aa9a119afda219685ed3",
+        "classification": "REWRITTEN_METHOD",
+        "clean_instructions": 27,
+        "rev_instructions": 27
+      },
+      {
+        "id": "W24",
+        "class": "net.minecraft.world.chunk.Chunk",
+        "method": "func_177411_a",
+        "descriptor": "(Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/world/biome/BiomeProvider;)Lnet/minecraft/world/biome/Biome;",
+        "clean_sha256": "0bd20899a444608e1f49f93a2a0a0b594a5cedb81d7202adfc54fd4e3417e7e3",
+        "rev_sha256": "bb283fe1b9ba656bf6300e44d08eb10e5ef88706a4e8aa9a119afda219685ed3",
+        "classification": "REWRITTEN_METHOD",
+        "clean_instructions": 59,
+        "rev_instructions": 59
+      },
+      {
+        "id": "W25",
+        "class": "net.minecraft.world.chunk.Chunk",
+        "method": "func_76616_a",
+        "descriptor": "([B)V",
+        "clean_sha256": "0bd20899a444608e1f49f93a2a0a0b594a5cedb81d7202adfc54fd4e3417e7e3",
+        "rev_sha256": "bb283fe1b9ba656bf6300e44d08eb10e5ef88706a4e8aa9a119afda219685ed3",
+        "classification": "REWRITTEN_METHOD",
+        "clean_instructions": 27,
+        "rev_instructions": 27
+      },
+      {
+        "id": "W26",
+        "class": "net.minecraft.world.chunk.Chunk",
+        "method": "func_76594_o",
+        "descriptor": "()V",
+        "clean_sha256": "0bd20899a444608e1f49f93a2a0a0b594a5cedb81d7202adfc54fd4e3417e7e3",
+        "rev_sha256": "bb283fe1b9ba656bf6300e44d08eb10e5ef88706a4e8aa9a119afda219685ed3",
+        "classification": "REWRITTEN_METHOD",
+        "clean_instructions": 164,
+        "rev_instructions": 164
+      },
+      {
+        "id": "W27",
+        "class": "net.minecraft.world.chunk.Chunk",
+        "method": "func_150809_p",
+        "descriptor": "()V",
+        "clean_sha256": "0bd20899a444608e1f49f93a2a0a0b594a5cedb81d7202adfc54fd4e3417e7e3",
+        "rev_sha256": "bb283fe1b9ba656bf6300e44d08eb10e5ef88706a4e8aa9a119afda219685ed3",
+        "classification": "REWRITTEN_METHOD",
+        "clean_instructions": 102,
+        "rev_instructions": 8
+      },
+      {
+        "id": "W28",
+        "class": "net.minecraft.world.chunk.Chunk",
+        "method": "func_177441_y",
+        "descriptor": "()V",
+        "clean_sha256": "0bd20899a444608e1f49f93a2a0a0b594a5cedb81d7202adfc54fd4e3417e7e3",
+        "rev_sha256": "bb283fe1b9ba656bf6300e44d08eb10e5ef88706a4e8aa9a119afda219685ed3",
+        "classification": "UNCHANGED_SEMANTIC"
+      },
+      {
+        "id": "W29",
+        "class": "net.minecraft.world.chunk.Chunk",
+        "method": "func_180700_a",
+        "descriptor": "(Lnet/minecraft/util/EnumFacing;)V",
+        "clean_sha256": "0bd20899a444608e1f49f93a2a0a0b594a5cedb81d7202adfc54fd4e3417e7e3",
+        "rev_sha256": "bb283fe1b9ba656bf6300e44d08eb10e5ef88706a4e8aa9a119afda219685ed3",
+        "classification": "UNCHANGED_SEMANTIC"
+      },
+      {
+        "id": "W30",
+        "class": "net.minecraft.world.chunk.Chunk",
+        "method": "func_150811_f",
+        "descriptor": "(II)Z",
+        "clean_sha256": "0bd20899a444608e1f49f93a2a0a0b594a5cedb81d7202adfc54fd4e3417e7e3",
+        "rev_sha256": "bb283fe1b9ba656bf6300e44d08eb10e5ef88706a4e8aa9a119afda219685ed3",
+        "classification": "UNCHANGED_SEMANTIC"
+      },
+      {
+        "id": "W31",
+        "class": "net.minecraft.world.chunk.Chunk",
+        "method": "func_177446_d",
+        "descriptor": "(Z)V",
+        "clean_sha256": "0bd20899a444608e1f49f93a2a0a0b594a5cedb81d7202adfc54fd4e3417e7e3",
+        "rev_sha256": "bb283fe1b9ba656bf6300e44d08eb10e5ef88706a4e8aa9a119afda219685ed3",
+        "classification": "UNCHANGED_SEMANTIC"
+      },
+      {
+        "id": "W32",
+        "class": "net.minecraft.world.chunk.Chunk",
+        "method": "func_177421_e",
+        "descriptor": "(Z)V",
+        "clean_sha256": "0bd20899a444608e1f49f93a2a0a0b594a5cedb81d7202adfc54fd4e3417e7e3",
+        "rev_sha256": "bb283fe1b9ba656bf6300e44d08eb10e5ef88706a4e8aa9a119afda219685ed3",
+        "classification": "UNCHANGED_SEMANTIC"
+      },
+      {
+        "id": "W33",
+        "class": "net.minecraft.world.chunk.Chunk",
+        "method": "removeInvalidTileEntity",
+        "descriptor": "(Lnet/minecraft/util/math/BlockPos;)V",
+        "clean_sha256": "0bd20899a444608e1f49f93a2a0a0b594a5cedb81d7202adfc54fd4e3417e7e3",
+        "rev_sha256": "bb283fe1b9ba656bf6300e44d08eb10e5ef88706a4e8aa9a119afda219685ed3",
+        "classification": "UNCHANGED_SEMANTIC"
+      },
+      {
+        "id": "W34",
+        "class": "net.minecraft.world.chunk.Chunk",
+        "method": "<init>",
+        "descriptor": "(Lnet/minecraft/world/World;II)V",
+        "clean_sha256": "0bd20899a444608e1f49f93a2a0a0b594a5cedb81d7202adfc54fd4e3417e7e3",
+        "rev_sha256": "bb283fe1b9ba656bf6300e44d08eb10e5ef88706a4e8aa9a119afda219685ed3",
+        "classification": "REWRITTEN_METHOD",
+        "clean_instructions": 75,
+        "rev_instructions": 82
+      },
+      {
+        "id": "W35",
+        "class": "net.minecraft.world.chunk.Chunk",
+        "method": "<init>",
+        "descriptor": "(Lnet/minecraft/world/World;Lnet/minecraft/world/chunk/ChunkPrimer;II)V",
+        "clean_sha256": "0bd20899a444608e1f49f93a2a0a0b594a5cedb81d7202adfc54fd4e3417e7e3",
+        "rev_sha256": "bb283fe1b9ba656bf6300e44d08eb10e5ef88706a4e8aa9a119afda219685ed3",
+        "classification": "REWRITTEN_METHOD",
+        "clean_instructions": 75,
+        "rev_instructions": 82
+      },
+      {
+        "id": "W36",
+        "class": "net.minecraft.world.chunk.storage.ExtendedBlockStorage",
+        "method": "<init>",
+        "descriptor": "(IZ)V",
+        "clean_sha256": "b7445c7bd232e8debf2c6ed47438b890d6bd121e406455cdc3cb9e84b487cd23",
+        "rev_sha256": "53af813d4eabc47b6efd2a18a4c03a17cd5255f1565baba3b045d49d3d7549bd",
+        "classification": "REWRITTEN_METHOD",
+        "clean_instructions": 23,
+        "rev_instructions": 26
+      },
+      {
+        "id": "W37",
+        "class": "net.minecraft.world.chunk.storage.ExtendedBlockStorage",
+        "method": "func_177484_a",
+        "descriptor": "(IIILnet/minecraft/block/state/IBlockState;)V",
+        "clean_sha256": "b7445c7bd232e8debf2c6ed47438b890d6bd121e406455cdc3cb9e84b487cd23",
+        "rev_sha256": "53af813d4eabc47b6efd2a18a4c03a17cd5255f1565baba3b045d49d3d7549bd",
+        "classification": "UNCHANGED_SEMANTIC"
+      },
+      {
+        "id": "W38",
+        "class": "net.minecraft.world.chunk.storage.ExtendedBlockStorage",
+        "method": "func_76657_c",
+        "descriptor": "(IIII)V",
+        "clean_sha256": "b7445c7bd232e8debf2c6ed47438b890d6bd121e406455cdc3cb9e84b487cd23",
+        "rev_sha256": "53af813d4eabc47b6efd2a18a4c03a17cd5255f1565baba3b045d49d3d7549bd",
+        "classification": "REWRITTEN_METHOD",
+        "clean_instructions": 8,
+        "rev_instructions": 11
+      },
+      {
+        "id": "W39",
+        "class": "net.minecraft.world.chunk.storage.ExtendedBlockStorage",
+        "method": "func_76677_d",
+        "descriptor": "(IIII)V",
+        "clean_sha256": "b7445c7bd232e8debf2c6ed47438b890d6bd121e406455cdc3cb9e84b487cd23",
+        "rev_sha256": "53af813d4eabc47b6efd2a18a4c03a17cd5255f1565baba3b045d49d3d7549bd",
+        "classification": "REWRITTEN_METHOD",
+        "clean_instructions": 8,
+        "rev_instructions": 11
+      },
+      {
+        "id": "W40",
+        "class": "net.minecraft.world.chunk.storage.ExtendedBlockStorage",
+        "method": "func_76672_e",
+        "descriptor": "()V",
+        "clean_sha256": "b7445c7bd232e8debf2c6ed47438b890d6bd121e406455cdc3cb9e84b487cd23",
+        "rev_sha256": "53af813d4eabc47b6efd2a18a4c03a17cd5255f1565baba3b045d49d3d7549bd",
+        "classification": "UNCHANGED_SEMANTIC"
+      },
+      {
+        "id": "W41",
+        "class": "net.minecraft.world.chunk.storage.ExtendedBlockStorage",
+        "method": "func_76659_c",
+        "descriptor": "(Lnet/minecraft/world/chunk/NibbleArray;)V",
+        "clean_sha256": "b7445c7bd232e8debf2c6ed47438b890d6bd121e406455cdc3cb9e84b487cd23",
+        "rev_sha256": "53af813d4eabc47b6efd2a18a4c03a17cd5255f1565baba3b045d49d3d7549bd",
+        "classification": "REWRITTEN_METHOD",
+        "clean_instructions": 4,
+        "rev_instructions": 7
+      },
+      {
+        "id": "W42",
+        "class": "net.minecraft.world.chunk.storage.ExtendedBlockStorage",
+        "method": "func_76666_d",
+        "descriptor": "(Lnet/minecraft/world/chunk/NibbleArray;)V",
+        "clean_sha256": "b7445c7bd232e8debf2c6ed47438b890d6bd121e406455cdc3cb9e84b487cd23",
+        "rev_sha256": "53af813d4eabc47b6efd2a18a4c03a17cd5255f1565baba3b045d49d3d7549bd",
+        "classification": "REWRITTEN_METHOD",
+        "clean_instructions": 4,
+        "rev_instructions": 7
+      },
+      {
+        "id": "W43",
+        "class": "net.minecraft.world.chunk.BlockStateContainer",
+        "method": "<init>",
+        "descriptor": "()V",
+        "clean_sha256": "9720a0dede53bd654fc6704b4251499f1bf1d853b56cd52f75b465b7956716bc",
+        "rev_sha256": "14750cd64e968a2fb452e3ec021314fa183870960e475d9f19e9e0251e2e7a95",
+        "classification": "UNCHANGED_SEMANTIC"
+      },
+      {
+        "id": "W44",
+        "class": "net.minecraft.world.chunk.BlockStateContainer",
+        "method": "func_186012_b",
+        "descriptor": "(I)V",
+        "clean_sha256": "9720a0dede53bd654fc6704b4251499f1bf1d853b56cd52f75b465b7956716bc",
+        "rev_sha256": "14750cd64e968a2fb452e3ec021314fa183870960e475d9f19e9e0251e2e7a95",
+        "classification": "UNCHANGED_SEMANTIC"
+      },
+      {
+        "id": "W45",
+        "class": "net.minecraft.world.chunk.BlockStateContainer",
+        "method": "setBits",
+        "descriptor": "(IZ)V",
+        "clean_sha256": "9720a0dede53bd654fc6704b4251499f1bf1d853b56cd52f75b465b7956716bc",
+        "rev_sha256": "14750cd64e968a2fb452e3ec021314fa183870960e475d9f19e9e0251e2e7a95",
+        "classification": "UNCHANGED_SEMANTIC"
+      },
+      {
+        "id": "W46",
+        "class": "net.minecraft.world.chunk.BlockStateContainer",
+        "method": "func_186008_a",
+        "descriptor": "(ILnet/minecraft/block/state/IBlockState;)I",
+        "clean_sha256": "9720a0dede53bd654fc6704b4251499f1bf1d853b56cd52f75b465b7956716bc",
+        "rev_sha256": "14750cd64e968a2fb452e3ec021314fa183870960e475d9f19e9e0251e2e7a95",
+        "classification": "UNCHANGED_SEMANTIC"
+      },
+      {
+        "id": "W47",
+        "class": "net.minecraft.world.chunk.BlockStateContainer",
+        "method": "func_186013_a",
+        "descriptor": "(IIILnet/minecraft/block/state/IBlockState;)V",
+        "clean_sha256": "9720a0dede53bd654fc6704b4251499f1bf1d853b56cd52f75b465b7956716bc",
+        "rev_sha256": "14750cd64e968a2fb452e3ec021314fa183870960e475d9f19e9e0251e2e7a95",
+        "classification": "UNCHANGED_SEMANTIC"
+      },
+      {
+        "id": "W48",
+        "class": "net.minecraft.world.chunk.BlockStateContainer",
+        "method": "func_186014_b",
+        "descriptor": "(ILnet/minecraft/block/state/IBlockState;)V",
+        "clean_sha256": "9720a0dede53bd654fc6704b4251499f1bf1d853b56cd52f75b465b7956716bc",
+        "rev_sha256": "14750cd64e968a2fb452e3ec021314fa183870960e475d9f19e9e0251e2e7a95",
+        "classification": "UNCHANGED_SEMANTIC"
+      },
+      {
+        "id": "W49",
+        "class": "net.minecraft.world.chunk.BlockStateContainer",
+        "method": "func_186019_a",
+        "descriptor": "([BLnet/minecraft/world/chunk/NibbleArray;Lnet/minecraft/world/chunk/NibbleArray;)V",
+        "clean_sha256": "9720a0dede53bd654fc6704b4251499f1bf1d853b56cd52f75b465b7956716bc",
+        "rev_sha256": "14750cd64e968a2fb452e3ec021314fa183870960e475d9f19e9e0251e2e7a95",
+        "classification": "UNCHANGED_SEMANTIC"
+      },
+      {
+        "id": "W50",
+        "class": "net.minecraft.world.chunk.NibbleArray",
+        "method": "<init>",
+        "descriptor": "()V",
+        "classification": "UNCHANGED_EXACT",
+        "clean_sha256": "b5556356777ea7c17ecfd1ceec588da0aa8e183ee5305a16438215eaf297285f",
+        "rev_sha256": "b5556356777ea7c17ecfd1ceec588da0aa8e183ee5305a16438215eaf297285f"
+      },
+      {
+        "id": "W51",
+        "class": "net.minecraft.world.chunk.NibbleArray",
+        "method": "<init>",
+        "descriptor": "([B)V",
+        "classification": "UNCHANGED_EXACT",
+        "clean_sha256": "b5556356777ea7c17ecfd1ceec588da0aa8e183ee5305a16438215eaf297285f",
+        "rev_sha256": "b5556356777ea7c17ecfd1ceec588da0aa8e183ee5305a16438215eaf297285f"
+      },
+      {
+        "id": "W52",
+        "class": "net.minecraft.world.chunk.NibbleArray",
+        "method": "func_76581_a",
+        "descriptor": "(IIII)V",
+        "classification": "UNCHANGED_EXACT",
+        "clean_sha256": "b5556356777ea7c17ecfd1ceec588da0aa8e183ee5305a16438215eaf297285f",
+        "rev_sha256": "b5556356777ea7c17ecfd1ceec588da0aa8e183ee5305a16438215eaf297285f"
+      },
+      {
+        "id": "W53",
+        "class": "net.minecraft.world.chunk.NibbleArray",
+        "method": "func_177482_a",
+        "descriptor": "(II)V",
+        "classification": "UNCHANGED_EXACT",
+        "clean_sha256": "b5556356777ea7c17ecfd1ceec588da0aa8e183ee5305a16438215eaf297285f",
+        "rev_sha256": "b5556356777ea7c17ecfd1ceec588da0aa8e183ee5305a16438215eaf297285f"
+      },
+      {
+        "id": "W54",
+        "class": "net.minecraft.util.BitArray",
+        "method": "func_188141_a",
+        "descriptor": "(II)V",
+        "classification": "UNCHANGED_EXACT",
+        "clean_sha256": "d967a3fc91e099fd8d1ad4b3655cf90950ebb43f181344e1b4d5a5a3fb69be35",
+        "rev_sha256": "d967a3fc91e099fd8d1ad4b3655cf90950ebb43f181344e1b4d5a5a3fb69be35"
+      },
+      {
+        "id": "W55",
+        "class": "net.minecraft.util.BitArray",
+        "method": "<init>",
+        "descriptor": "(II)V",
+        "classification": "UNCHANGED_EXACT",
+        "clean_sha256": "d967a3fc91e099fd8d1ad4b3655cf90950ebb43f181344e1b4d5a5a3fb69be35",
+        "rev_sha256": "d967a3fc91e099fd8d1ad4b3655cf90950ebb43f181344e1b4d5a5a3fb69be35"
+      },
+      {
+        "id": "W56",
+        "class": "net.minecraft.world.gen.ChunkProviderServer",
+        "method": "loadChunk",
+        "descriptor": "(IILjava/lang/Runnable;)Lnet/minecraft/world/chunk/Chunk;",
+        "clean_sha256": "6eec9a968581e993495d79b9410e37d3e6b70da5b7de08ae72b3475311f63914",
+        "rev_sha256": "1e8d500defa3c604e2808f24c157400b98813b6bef2886ba14756f30e3d3f758",
+        "classification": "UNCHANGED_SEMANTIC"
+      },
+      {
+        "id": "W57",
+        "class": "net.minecraft.world.gen.ChunkProviderServer",
+        "method": "func_186025_d",
+        "descriptor": "(II)Lnet/minecraft/world/chunk/Chunk;",
+        "clean_sha256": "6eec9a968581e993495d79b9410e37d3e6b70da5b7de08ae72b3475311f63914",
+        "rev_sha256": "1e8d500defa3c604e2808f24c157400b98813b6bef2886ba14756f30e3d3f758",
+        "classification": "UNCHANGED_SEMANTIC"
+      },
+      {
+        "id": "W58",
+        "class": "net.minecraft.world.gen.ChunkProviderServer",
+        "method": "func_73156_b",
+        "descriptor": "()Z",
+        "clean_sha256": "6eec9a968581e993495d79b9410e37d3e6b70da5b7de08ae72b3475311f63914",
+        "rev_sha256": "1e8d500defa3c604e2808f24c157400b98813b6bef2886ba14756f30e3d3f758",
+        "classification": "REWRITTEN_METHOD",
+        "clean_instructions": 97,
+        "rev_instructions": 104
+      },
+      {
+        "id": "W59",
+        "class": "net.minecraftforge.common.chunkio.ChunkIOProvider",
+        "method": "run",
+        "descriptor": "()V",
+        "classification": "UNCHANGED_EXACT",
+        "clean_sha256": "e2c76022ef993b0079f62b6a0671a17fd4bf232fa5bf83e01cb66196e6af50d1",
+        "rev_sha256": "e2c76022ef993b0079f62b6a0671a17fd4bf232fa5bf83e01cb66196e6af50d1"
+      },
+      {
+        "id": "W60",
+        "class": "net.minecraftforge.common.chunkio.ChunkIOProvider",
+        "method": "syncCallback",
+        "descriptor": "()V",
+        "classification": "UNCHANGED_EXACT",
+        "clean_sha256": "e2c76022ef993b0079f62b6a0671a17fd4bf232fa5bf83e01cb66196e6af50d1",
+        "rev_sha256": "e2c76022ef993b0079f62b6a0671a17fd4bf232fa5bf83e01cb66196e6af50d1"
+      },
+      {
+        "id": "S01",
+        "class": "net.minecraft.server.MinecraftServer",
+        "method": "run",
+        "descriptor": "()V",
+        "clean_sha256": "97fa984df647eec377a38fb96798f7f6e22fecbb6ca7519d1a952e3c981a4d5b",
+        "rev_sha256": "f418709dcdc95e9f41852bd0790562fb6e3607eeac7a00360d67651f807869c2",
+        "classification": "UNCHANGED_SEMANTIC"
+      },
+      {
+        "id": "S02",
+        "class": "net.minecraft.network.play.server.SPacketChunkData",
+        "method": "<init>",
+        "descriptor": "(Lnet/minecraft/world/chunk/Chunk;I)V",
+        "clean_sha256": "9e8abff74ea6266a4793bfa03bbff9731d2c486c9ff34e5a67b81752ec063354",
+        "rev_sha256": "cd47b61bd752cdf736db3169dbb7591e301217d11a906c5da04448c5465c67d9",
+        "classification": "UNCHANGED_SEMANTIC"
+      },
+      {
+        "id": "S03",
+        "class": "net.minecraft.world.chunk.storage.AnvilChunkLoader",
+        "method": "loadChunk__Async",
+        "descriptor": "(Lnet/minecraft/world/World;II)[Ljava/lang/Object;",
+        "clean_sha256": "24fff9a48dec4d82d08caab7484b8b53587ff2110703763675707369dcd91595",
+        "rev_sha256": "b6d9d28d49043fe69b1d7551aaaca7b25f58a16fe93f9d668e6a849b7a021756",
+        "classification": "UNCHANGED_SEMANTIC"
+      },
+      {
+        "id": "S04",
+        "class": "net.minecraft.world.chunk.storage.AnvilChunkLoader",
+        "method": "checkedReadChunkFromNBT__Async",
+        "descriptor": "(Lnet/minecraft/world/World;IILnet/minecraft/nbt/NBTTagCompound;)[Ljava/lang/Object;",
+        "clean_sha256": "24fff9a48dec4d82d08caab7484b8b53587ff2110703763675707369dcd91595",
+        "rev_sha256": "b6d9d28d49043fe69b1d7551aaaca7b25f58a16fe93f9d668e6a849b7a021756",
+        "classification": "UNCHANGED_SEMANTIC"
+      },
+      {
+        "id": "S05",
+        "class": "net.minecraft.world.chunk.storage.AnvilChunkLoader",
+        "method": "func_75823_a",
+        "descriptor": "(Lnet/minecraft/world/World;Lnet/minecraft/nbt/NBTTagCompound;)Lnet/minecraft/world/chunk/Chunk;",
+        "clean_sha256": "24fff9a48dec4d82d08caab7484b8b53587ff2110703763675707369dcd91595",
+        "rev_sha256": "b6d9d28d49043fe69b1d7551aaaca7b25f58a16fe93f9d668e6a849b7a021756",
+        "classification": "REWRITTEN_METHOD",
+        "clean_instructions": 156,
+        "rev_instructions": 168
+      }
+    ]
+  },
+  "lifecycle_phase": "DEFERRED_TO_DEDICATED_SERVER_QUALIFICATION",
+  "production_authority": false,
+  "identity_mode": "CANONICAL"
+}

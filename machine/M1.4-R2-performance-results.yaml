@@ -1,0 +1,74 @@
+# M1.4-R2 HANDOFF-A equal-scope performance results.
+# class: DERIVED_FROM_MEASURED — every number below is computed directly from
+# machine/raw/M14R2-fullcorpus-deep.csv (96,000 samples; 24 fixtures x 2000
+# trials x {SCOPE-C Java, SCOPE-C-N-HA native}); per-fixture table mirrored at
+# machine/raw/M14R2-fullcorpus-deep-summary.csv.
+# Provenance: M14R2-PERF-DERIVED. Do not cite without its scope qualifications.
+schema_version: 1
+milestone: M1.4-R2
+date_derived: "2026-09-19"
+source:
+  provenance_id: M14R2-HANDOFF-A-FULLCORPUS
+  raw_artifact: machine/raw/M14R2-fullcorpus-deep.csv
+  raw_artifact_sha256: 78df8d0032ce2d972d4ded089eb56d7ea0f3140abfe7a05dfba84a91a7e45ef9
+  git_commit_of_source: c7e8b91c1ea8bb945012048cab93d6f3a0b173fe
+method:
+  scope_comparison: "SCOPE-C (Java production path) vs SCOPE-C-N-HA (native production, HANDOFF-A)"
+  equal_scope: true
+  trials_per_fixture_per_impl: 2000
+  warmup: "500 iters/fixture (per benchmark harness; see M14R2-HANDOFF-A-FULLCORPUS)"
+  percentile: "nearest-rank on sorted within-fixture samples; pooled = all eligible-fixture samples merged"
+aggregate_eligible_class: # fixtures with predicted wire size >= 8192 bytes (eligibility gate)
+  fixtures: 21
+  samples_per_impl: 42000
+  java_p50_us: 6.70
+  java_p90_us: 10.30
+  java_p99_us: 13.20
+  native_p50_us: 4.70
+  native_p90_us: 6.90
+  native_p99_us: 13.90
+  p50_reduction_pct: 29.9
+  p99_reduction_pct: -5.3   # NEGATIVE: native p99 tail is ~5% WORSE pooled
+ineligible_class: # below 8192-byte gate; routed to Java by M1_NATIVE_MIN_WIRE_BYTES
+  fixtures: 3               # det0 (319B), det2 (4133B), det3 (4640B)
+  note: >
+    Native path measured slower on all three (p50 delta -12.5% to -144.4%);
+    the eligibility gate correctly excludes them. FP=0, FN=0 on this corpus.
+per_fixture_p50_us: # sorted by payload bytes; delta_pct = (java-native)/java at p50
+  # fixture,  bytes,  java_p50, native_p50, p50_delta, java_p99, native_p99, p99_delta
+  - {fixture: det7,     bytes: 9267,  java_p50: 2.60, native_p50: 2.50, p50_delta_pct: 3.8,  java_p99: 3.20,  native_p99: 3.60,  p99_delta_pct: -12.5}
+  - {fixture: det4,     bytes: 13643, java_p50: 3.90, native_p50: 3.10, p50_delta_pct: 20.5, java_p99: 5.40,  native_p99: 3.80,  p99_delta_pct: 29.6}
+  - {fixture: det6,     bytes: 14404, java_p50: 4.10, native_p50: 3.50, p50_delta_pct: 14.6, java_p99: 5.50,  native_p99: 5.10,  p99_delta_pct: 7.3}
+  - {fixture: sweep4_3, bytes: 15175, java_p50: 3.70, native_p50: 2.70, p50_delta_pct: 27.0, java_p99: 4.30,  native_p99: 3.20,  p99_delta_pct: 25.6}
+  - {fixture: det5,     bytes: 16419, java_p50: 4.20, native_p50: 3.40, p50_delta_pct: 19.0, java_p99: 8.60,  native_p99: 14.30, p99_delta_pct: -66.3}
+  - {fixture: sweep1_1, bytes: 18042, java_p50: 5.20, native_p50: 3.90, p50_delta_pct: 25.0, java_p99: 9.20,  native_p99: 7.10,  p99_delta_pct: 22.8}
+  - {fixture: sweep4_2, bytes: 19548, java_p50: 4.80, native_p50: 3.20, p50_delta_pct: 33.3, java_p99: 5.30,  native_p99: 3.80,  p99_delta_pct: 28.3}
+  - {fixture: sweep2_0, bytes: 14422, java_p50: 3.70, native_p50: 2.80, p50_delta_pct: 24.3, java_p99: 5.30,  native_p99: 3.30,  p99_delta_pct: 37.7}
+  - {fixture: sweep1_0, bytes: 26269, java_p50: 7.10, native_p50: 5.50, p50_delta_pct: 22.5, java_p99: 10.40, native_p99: 7.50,  p99_delta_pct: 27.9}
+  - {fixture: sweep8_1, bytes: 25692, java_p50: 5.80, native_p50: 4.00, p50_delta_pct: 31.0, java_p99: 6.40,  native_p99: 4.70,  p99_delta_pct: 26.6}
+  - {fixture: sweep2_1, bytes: 26715, java_p50: 6.20, native_p50: 4.60, p50_delta_pct: 25.8, java_p99: 6.70,  native_p99: 5.90,  p99_delta_pct: 11.9}
+  - {fixture: det1,     bytes: 38312, java_p50: 10.70, native_p50: 7.10, p50_delta_pct: 33.6, java_p99: 14.90, native_p99: 24.40, p99_delta_pct: -63.8}
+  - {fixture: sweep8_2, bytes: 28294, java_p50: 6.90, native_p50: 4.60, p50_delta_pct: 33.3, java_p99: 7.50,  native_p99: 5.40,  p99_delta_pct: 28.0}
+  - {fixture: sweep8_3, bytes: 30296, java_p50: 6.90, native_p50: 4.70, p50_delta_pct: 31.9, java_p99: 7.50,  native_p99: 8.10,  p99_delta_pct: -8.0}
+  - {fixture: sweep1_2, bytes: 31416, java_p50: 7.80, native_p50: 5.80, p50_delta_pct: 25.6, java_p99: 10.30, native_p99: 7.10,  p99_delta_pct: 31.1}
+  - {fixture: sweep2_2, bytes: 31894, java_p50: 7.70, native_p50: 5.00, p50_delta_pct: 35.1, java_p99: 9.50,  native_p99: 9.50,  p99_delta_pct: 0.0}
+  - {fixture: sweep8_0, bytes: 32913, java_p50: 7.90, native_p50: 5.10, p50_delta_pct: 35.4, java_p99: 9.40,  native_p99: 6.50,  p99_delta_pct: 30.9}
+  - {fixture: sweep2_3, bytes: 37026, java_p50: 8.90, native_p50: 5.90, p50_delta_pct: 33.7, java_p99: 9.70,  native_p99: 6.80,  p99_delta_pct: 29.9}
+  - {fixture: sweep4_1, bytes: 40636, java_p50: 9.70, native_p50: 6.10, p50_delta_pct: 37.1, java_p99: 18.60, native_p99: 7.00,  p99_delta_pct: 62.4}
+  - {fixture: sweep1_3, bytes: 44199, java_p50: 10.50, native_p50: 7.10, p50_delta_pct: 32.4, java_p99: 18.30, native_p99: 23.30, p99_delta_pct: -27.3}
+  - {fixture: sweep4_0, bytes: 23958, java_p50: 6.60, native_p50: 5.20, p50_delta_pct: 21.2, java_p99: 11.80, native_p99: 12.00, p99_delta_pct: -1.7}
+per_fixture_ineligible: # measured but EXCLUDED from native by the 8192-byte gate
+  - {fixture: det0, bytes: 319,  java_p50: 0.90, native_p50: 2.20, p50_delta_pct: -144.4}
+  - {fixture: det2, bytes: 4133, java_p50: 1.60, native_p50: 1.90, p50_delta_pct: -18.7}
+  - {fixture: det3, bytes: 4640, java_p50: 1.60, native_p50: 1.80, p50_delta_pct: -12.5}
+claim_scope_qualifications:
+  - "29.9% is the reduction of the POOLED MEDIAN packet-path time of the eligible fixture class in this offline corpus. It is NOT a whole-server speedup and implies nothing about MSPT/TPS."
+  - "It is NOT >=25% on every eligible fixture: per-fixture p50 delta ranges 3.8% (det7) to 37.1% (sweep4_1); 7 of 21 eligible fixtures are below 25%."
+  - "Tail behavior is mixed: pooled p99 is ~5% WORSE for native; 8 of 21 eligible fixtures regress at p99 (worst det5 -66.3%). Latency-sensitive evaluation must weigh p99, not only p50."
+  - "The 8192-byte eligibility threshold is validated ONLY on this 24-fixture corpus (TP=21/FP=0/TN=3/FN=0). Generalization to arbitrary packs/worlds is untested."
+  - "Same-machine, same-run, equal-scope comparison (see docs/engineering/m1-benchmark-scopes.md). Cross-scope comparisons (e.g. vs vanilla ctor ~72us) are invalid."
+gate_status:
+  GATE-PERF-MICRO: "PASS at p50 on eligible fixtures (native p50 2.50-7.10us, all < 8.5us, all beat Java same-run). p99 mixed — see qualifications. Gate text unchanged."
+  GATE-PERF-SERVER: "OPEN — no whole-server MSPT/TPS measurement performed"
+  GATE-PERF-ALLOC: "OPEN — allocation-churn reduction not measured"
+  GATE-PERF-REGRESS: "OPEN — no cross-target TPS/cadence/GC-pause regression campaign performed"

@@ -1,0 +1,1080 @@
+{
+  "schema": "H17_ALLOCATOR_RESULTS_V1",
+  "status": "PASS",
+  "classification": "BOUNDED_IN_MEMORY_PIPELINE_EXPERIMENT_NO_PRODUCTION_SELECTION",
+  "completed_utc": "2026-09-27T02:46:12.866555+00:00",
+  "production_allocator_changed": false,
+  "root_manifests_changed_by_stage": false,
+  "live_server_claim": false,
+  "receipt_sha256": "81e057e504ce9cc7fb3960a0633ff5181fe605da259d85a3906f84636a0a1e08",
+  "receipt": "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h17-final-02\\receipt.json",
+  "counts": {
+    "rust_integration_tests": 36,
+    "compile_fail_lifetime_tests": 6,
+    "python_process_controls": 6,
+    "build_tool_commands": 18,
+    "native_processes": 42,
+    "measured_processes": 36,
+    "measured_rows": 216,
+    "warmup_rows": 108,
+    "measured_publication_destructors": 1728,
+    "all_timed_publication_destructors": 2592,
+    "cross_backend_compressed_artifacts_per_backend": 16,
+    "source_inputs": 74,
+    "registry_packages": 27
+  },
+  "startup_requested_retention": {
+    "same_thread_bytes_per_process": 0,
+    "cross_thread_bytes_per_process": 48,
+    "attribution": "UNKNOWN",
+    "measured_net_requested_growth_bytes": 0,
+    "quiescent_workload_end_totals": "Every raw run retains after_input_drop_counts/memory. This precedes JSON construction and process teardown; startup bytes are not subtracted."
+  },
+  "bounds": {
+    "native_process_memory_mib": 256,
+    "native_timeout_s": 45,
+    "active_processes": 1,
+    "each_output_stream_bytes": 1048576
+  },
+  "statistics": [
+    {
+      "backend": "system",
+      "scratch": "vec",
+      "delivery": "same",
+      "samples": 18,
+      "batch_chunks": 8,
+      "median_wall_ns": 9642450.0,
+      "p95_observed_nearest_rank_ns": 10273300,
+      "p99_observed_nearest_rank_ns": 10273300,
+      "max_wall_ns": 10273300,
+      "median_allocated_bytes": 14463404.0,
+      "median_private_commit_bytes": 2658304.0,
+      "max_working_set_bytes": 6979584,
+      "campaign_including_warmup_cpu_ns": 265625000
+    },
+    {
+      "backend": "system",
+      "scratch": "vec",
+      "delivery": "cross",
+      "samples": 18,
+      "batch_chunks": 8,
+      "median_wall_ns": 9486800.0,
+      "p95_observed_nearest_rank_ns": 14191200,
+      "p99_observed_nearest_rank_ns": 14191200,
+      "max_wall_ns": 14191200,
+      "median_allocated_bytes": 14464332.0,
+      "median_private_commit_bytes": 2545664.0,
+      "max_working_set_bytes": 7188480,
+      "campaign_including_warmup_cpu_ns": 281250000
+    },
+    {
+      "backend": "system",
+      "scratch": "arena",
+      "delivery": "same",
+      "samples": 18,
+      "batch_chunks": 8,
+      "median_wall_ns": 9555700.0,
+      "p95_observed_nearest_rank_ns": 10939400,
+      "p99_observed_nearest_rank_ns": 10939400,
+      "max_wall_ns": 10939400,
+      "median_allocated_bytes": 15085212.0,
+      "median_private_commit_bytes": 2699264.0,
+      "max_working_set_bytes": 6955008,
+      "campaign_including_warmup_cpu_ns": 250000000
+    },
+    {
+      "backend": "system",
+      "scratch": "arena",
+      "delivery": "cross",
+      "samples": 18,
+      "batch_chunks": 8,
+      "median_wall_ns": 9657150.0,
+      "p95_observed_nearest_rank_ns": 11430000,
+      "p99_observed_nearest_rank_ns": 11430000,
+      "max_wall_ns": 11430000,
+      "median_allocated_bytes": 15086140.0,
+      "median_private_commit_bytes": 2594816.0,
+      "max_working_set_bytes": 7217152,
+      "campaign_including_warmup_cpu_ns": 265625000
+    },
+    {
+      "backend": "mimalloc",
+      "scratch": "vec",
+      "delivery": "same",
+      "samples": 18,
+      "batch_chunks": 8,
+      "median_wall_ns": 7671450.0,
+      "p95_observed_nearest_rank_ns": 10053500,
+      "p99_observed_nearest_rank_ns": 10053500,
+      "max_wall_ns": 10053500,
+      "median_allocated_bytes": 14463404.0,
+      "median_private_commit_bytes": 23789568.0,
+      "max_working_set_bytes": 11448320,
+      "campaign_including_warmup_cpu_ns": 203125000
+    },
+    {
+      "backend": "mimalloc",
+      "scratch": "vec",
+      "delivery": "cross",
+      "samples": 18,
+      "batch_chunks": 8,
+      "median_wall_ns": 7503950.0,
+      "p95_observed_nearest_rank_ns": 8631300,
+      "p99_observed_nearest_rank_ns": 8631300,
+      "max_wall_ns": 8631300,
+      "median_allocated_bytes": 14464332.0,
+      "median_private_commit_bytes": 33251328.0,
+      "max_working_set_bytes": 14127104,
+      "campaign_including_warmup_cpu_ns": 156250000
+    },
+    {
+      "backend": "mimalloc",
+      "scratch": "arena",
+      "delivery": "same",
+      "samples": 18,
+      "batch_chunks": 8,
+      "median_wall_ns": 7596500.0,
+      "p95_observed_nearest_rank_ns": 9046100,
+      "p99_observed_nearest_rank_ns": 9046100,
+      "max_wall_ns": 9046100,
+      "median_allocated_bytes": 15085212.0,
+      "median_private_commit_bytes": 23822336.0,
+      "max_working_set_bytes": 11997184,
+      "campaign_including_warmup_cpu_ns": 218750000
+    },
+    {
+      "backend": "mimalloc",
+      "scratch": "arena",
+      "delivery": "cross",
+      "samples": 18,
+      "batch_chunks": 8,
+      "median_wall_ns": 7862200.0,
+      "p95_observed_nearest_rank_ns": 11322500,
+      "p99_observed_nearest_rank_ns": 11322500,
+      "max_wall_ns": 11322500,
+      "median_allocated_bytes": 15086140.0,
+      "median_private_commit_bytes": 56360960.0,
+      "max_working_set_bytes": 20078592,
+      "campaign_including_warmup_cpu_ns": 234375000
+    },
+    {
+      "backend": "rpmalloc",
+      "scratch": "vec",
+      "delivery": "same",
+      "samples": 18,
+      "batch_chunks": 8,
+      "median_wall_ns": 7544750.0,
+      "p95_observed_nearest_rank_ns": 10924200,
+      "p99_observed_nearest_rank_ns": 10924200,
+      "max_wall_ns": 10924200,
+      "median_allocated_bytes": 14463404.0,
+      "median_private_commit_bytes": 11870208.0,
+      "max_working_set_bytes": 12623872,
+      "campaign_including_warmup_cpu_ns": 218750000
+    },
+    {
+      "backend": "rpmalloc",
+      "scratch": "vec",
+      "delivery": "cross",
+      "samples": 18,
+      "batch_chunks": 8,
+      "median_wall_ns": 7776550.0,
+      "p95_observed_nearest_rank_ns": 10990100,
+      "p99_observed_nearest_rank_ns": 10990100,
+      "max_wall_ns": 10990100,
+      "median_allocated_bytes": 14464332.0,
+      "median_private_commit_bytes": 16064512.0,
+      "max_working_set_bytes": 16273408,
+      "campaign_including_warmup_cpu_ns": 218750000
+    },
+    {
+      "backend": "rpmalloc",
+      "scratch": "arena",
+      "delivery": "same",
+      "samples": 18,
+      "batch_chunks": 8,
+      "median_wall_ns": 7758450.0,
+      "p95_observed_nearest_rank_ns": 9831600,
+      "p99_observed_nearest_rank_ns": 9831600,
+      "max_wall_ns": 9831600,
+      "median_allocated_bytes": 15085212.0,
+      "median_private_commit_bytes": 11866112.0,
+      "max_working_set_bytes": 12521472,
+      "campaign_including_warmup_cpu_ns": 203125000
+    },
+    {
+      "backend": "rpmalloc",
+      "scratch": "arena",
+      "delivery": "cross",
+      "samples": 18,
+      "batch_chunks": 8,
+      "median_wall_ns": 7714600.0,
+      "p95_observed_nearest_rank_ns": 10235900,
+      "p99_observed_nearest_rank_ns": 10235900,
+      "max_wall_ns": 10235900,
+      "median_allocated_bytes": 15086140.0,
+      "median_private_commit_bytes": 16072704.0,
+      "max_working_set_bytes": 16019456,
+      "campaign_including_warmup_cpu_ns": 234375000
+    }
+  ],
+  "decisions": {
+    "system": "KEEP_CURRENT_PRODUCTION_DEFAULT_PENDING_LIVE_EVIDENCE",
+    "mimalloc": "EXPERIMENT_ONLY_LOWER_OBSERVED_MEDIAN_WITH_HIGHER_PRIVATE_COMMIT",
+    "rpmalloc": "EXPERIMENT_ONLY_LOWER_OBSERVED_MEDIAN_WITH_HIGHER_PRIVATE_COMMIT_AND_WINDOWS_LINK_BURDEN",
+    "jemalloc": "STUDY_AVOID_CURRENT_MSVC_RUST_WRAPPER_NO_FAKE_TIMING",
+    "bumpalo": "BOUNDED_SCRATCH_ONLY_NO_CONSISTENT_WIN_HERE"
+  },
+  "limitations": [
+    "Authored fixture schedule executing actual kernels; not a captured server allocation trace",
+    "No JNI, network, region disk I/O, live server, lifecycle authority or allocator integration",
+    "Pure allocator fragmentation and usable allocation sizes remain unknown",
+    "Instrumented requested-layout high water is not simultaneous backend live memory",
+    "Small-sample p95 and p99 are both observed maxima, not population tails",
+    "No uninstrumented throughput or long-duration retention result",
+    "First-use 48-byte requested retention remains explicitly unattributed"
+  ],
+  "retained_history": [
+    "fixture skylight assumption divergence",
+    "rpmalloc missing Advapi32 imports session diagnostic; raw initial log unavailable",
+    "runner explicit cl.exe lacked SDK INCLUDE; raw build failure retained",
+    "all-warmup-zero counter assumption failed on first-use 48 bytes; raw rows retained"
+  ],
+  "archive": [
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/build-job-controls.log.txt",
+      "sha256": "fd7a06c9c690486588ec4444e7fabaaf6913097fbf1b4b8fc9281cff6e50fa6d",
+      "bytes": 109
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/capacity-mimalloc.stderr.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/capacity-mimalloc.stdout.log.txt",
+      "sha256": "5717cce10e767730229cb366d61d677103e6231e45c873b029e5e2237ad29626",
+      "bytes": 147
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/capacity-rpmalloc.stderr.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/capacity-rpmalloc.stdout.log.txt",
+      "sha256": "716f2167f7c757edc89170738685347764ac30b431559901ee0b2f43926e75fb",
+      "bytes": 146
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/capacity-system.stderr.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/capacity-system.stdout.log.txt",
+      "sha256": "3e9b65e2b3fe0ad84407b5493ffa1432c26f2f566e41cf71e4495386a918cdc6",
+      "bytes": 138
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/clippy-mimalloc.log.txt",
+      "sha256": "d4d7c8dae8afd248a410bb7a3e69915542bf562cdff53845c495d8d1405a9519",
+      "bytes": 2006
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/clippy-rpmalloc.log.txt",
+      "sha256": "4afc41d69cfa2a87f88b6bd0587180e38fac5d53bf75a56174e1ee6b727fb834",
+      "bytes": 2036
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/clippy-system.log.txt",
+      "sha256": "f1d1bf8f9f7273761150187f8674f3d079156fcf672589ee896a4d1526e92bbf",
+      "bytes": 1939
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/correctness-mimalloc.stderr.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/correctness-mimalloc.stdout.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/correctness-rpmalloc.stderr.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/correctness-rpmalloc.stdout.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/correctness-system.stderr.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/correctness-system.stdout.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/fmt.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/measure-0-mimalloc-arena-cross.json",
+      "sha256": "101b763054acfda4d891f8682880de0bed38d87f9b1f0c43d0284db1ecc958c9",
+      "bytes": 14377
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/measure-0-mimalloc-arena-cross.stderr.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/measure-0-mimalloc-arena-cross.stdout.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/measure-0-mimalloc-arena-same.json",
+      "sha256": "d665216c62966b742c9df71549458bfb40442f239217558b4f875a9670f5dba0",
+      "bytes": 14376
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/measure-0-mimalloc-arena-same.stderr.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/measure-0-mimalloc-arena-same.stdout.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/measure-0-mimalloc-vec-cross.json",
+      "sha256": "25b7840ccd305bd01bff373ac201052e543604d8ab8cdfac95678f805b0444d5",
+      "bytes": 14316
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/measure-0-mimalloc-vec-cross.stderr.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/measure-0-mimalloc-vec-cross.stdout.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/measure-0-mimalloc-vec-same.json",
+      "sha256": "e47863f784c12bc61ded51a547f8376a32463e79fec1edbd01882aeec86cef9b",
+      "bytes": 14322
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/measure-0-mimalloc-vec-same.stderr.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/measure-0-mimalloc-vec-same.stdout.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/measure-0-rpmalloc-arena-cross.json",
+      "sha256": "652e100b6a0497139fc1e24c20e093cfde78ff6007f6da34f4c9c796a29bebf4",
+      "bytes": 14376
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/measure-0-rpmalloc-arena-cross.stderr.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/measure-0-rpmalloc-arena-cross.stdout.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/measure-0-rpmalloc-arena-same.json",
+      "sha256": "0e324c983f341a59d76d68f019bd6afea85e0f15bb23ec2a911b36b9d8354920",
+      "bytes": 14375
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/measure-0-rpmalloc-arena-same.stderr.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/measure-0-rpmalloc-arena-same.stdout.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/measure-0-rpmalloc-vec-cross.json",
+      "sha256": "ae2c8eac098ccff56926cefa376382dcc4df86524fa3cd64127fb64e8a0ef805",
+      "bytes": 14330
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/measure-0-rpmalloc-vec-cross.stderr.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/measure-0-rpmalloc-vec-cross.stdout.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/measure-0-rpmalloc-vec-same.json",
+      "sha256": "1626766871307fb5bbf2dd46a4be786306f642755b0894d1e2c283d3ccfea6f7",
+      "bytes": 14329
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/measure-0-rpmalloc-vec-same.stderr.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/measure-0-rpmalloc-vec-same.stdout.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/measure-0-system-arena-cross.json",
+      "sha256": "f0546e143054992aed648314b9124cbf26c2d39cbcdeea53167b43b91bf61304",
+      "bytes": 14325
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/measure-0-system-arena-cross.stderr.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/measure-0-system-arena-cross.stdout.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/measure-0-system-arena-same.json",
+      "sha256": "597bcbeb5f9d7fc4804fa57d723ca68758baabed2c83a2e8225d6852bba0f9b8",
+      "bytes": 14319
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/measure-0-system-arena-same.stderr.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/measure-0-system-arena-same.stdout.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/measure-0-system-vec-cross.json",
+      "sha256": "7879818f15e099e8692fcdaf40acabd9147e50f54333adcd63528803172a3042",
+      "bytes": 14284
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/measure-0-system-vec-cross.stderr.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/measure-0-system-vec-cross.stdout.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/measure-0-system-vec-same.json",
+      "sha256": "c8e223bc6b507a811d71a82e4461cdbd1955574c33971c65bc3ba4e1f0580b67",
+      "bytes": 14284
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/measure-0-system-vec-same.stderr.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/measure-0-system-vec-same.stdout.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/measure-1-mimalloc-arena-cross.json",
+      "sha256": "a7f79649ef4d5925e83a95609a40e6e2c709ac63a916fb7ec0673413dc55ee43",
+      "bytes": 14371
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/measure-1-mimalloc-arena-cross.stderr.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/measure-1-mimalloc-arena-cross.stdout.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/measure-1-mimalloc-arena-same.json",
+      "sha256": "9f5fff7627148951af9a4e118c283a91a98627b1b813d16f526ec977c409ae65",
+      "bytes": 14376
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/measure-1-mimalloc-arena-same.stderr.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/measure-1-mimalloc-arena-same.stdout.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/measure-1-mimalloc-vec-cross.json",
+      "sha256": "c953114987ce22539a6684025b9d76c231130ec034b6637918e1c6f96f02b5d1",
+      "bytes": 14323
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/measure-1-mimalloc-vec-cross.stderr.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/measure-1-mimalloc-vec-cross.stdout.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/measure-1-mimalloc-vec-same.json",
+      "sha256": "5e7bdb939fb46769198a7776efde16b9bf478e98865a76d5f02ebdf9a2ff8538",
+      "bytes": 14322
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/measure-1-mimalloc-vec-same.stderr.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/measure-1-mimalloc-vec-same.stdout.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/measure-1-rpmalloc-arena-cross.json",
+      "sha256": "8cbca2952a6e7d3783fc075105618398a72dfec5dc8733235fd01a1889ac1ca6",
+      "bytes": 14376
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/measure-1-rpmalloc-arena-cross.stderr.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/measure-1-rpmalloc-arena-cross.stdout.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/measure-1-rpmalloc-arena-same.json",
+      "sha256": "a324045026fb6352f7e3f58d1d0b8d0000ab0d99219291d92a498a8e5f3e982d",
+      "bytes": 14368
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/measure-1-rpmalloc-arena-same.stderr.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/measure-1-rpmalloc-arena-same.stdout.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/measure-1-rpmalloc-vec-cross.json",
+      "sha256": "c53e75bd9af6b91ffa06eae1cadc0e037d4f02dbb410b55985934057af82fc12",
+      "bytes": 14322
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/measure-1-rpmalloc-vec-cross.stderr.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/measure-1-rpmalloc-vec-cross.stdout.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/measure-1-rpmalloc-vec-same.json",
+      "sha256": "a82bbd1c0696ea212c58296db338b2573bca077eff4323d9213f42b2b630ca43",
+      "bytes": 14321
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/measure-1-rpmalloc-vec-same.stderr.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/measure-1-rpmalloc-vec-same.stdout.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/measure-1-system-arena-cross.json",
+      "sha256": "0fb933bbc6afa52eec0379c7c69ecbf9f8777d1cc4ed9aba7420a4c349c58e42",
+      "bytes": 14331
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/measure-1-system-arena-cross.stderr.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/measure-1-system-arena-cross.stdout.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/measure-1-system-arena-same.json",
+      "sha256": "b3cd1035113dfd343e63873b18f70193e74eb15a48a943d705684f82929373f0",
+      "bytes": 14324
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/measure-1-system-arena-same.stderr.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/measure-1-system-arena-same.stdout.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/measure-1-system-vec-cross.json",
+      "sha256": "80a2392821b3013da57d3bdc4c46813844af5d96f66aebb162825f288367576f",
+      "bytes": 14284
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/measure-1-system-vec-cross.stderr.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/measure-1-system-vec-cross.stdout.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/measure-1-system-vec-same.json",
+      "sha256": "968ae6d449bf680982c003d6607aa67849601a5505ba1dc4d8e2a0245de65535",
+      "bytes": 14273
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/measure-1-system-vec-same.stderr.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/measure-1-system-vec-same.stdout.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/measure-2-mimalloc-arena-cross.json",
+      "sha256": "fde64488507ecc9b18d8a45f9cb06e86823c9c2299d1a888d4682c732c34d8b0",
+      "bytes": 14387
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/measure-2-mimalloc-arena-cross.stderr.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/measure-2-mimalloc-arena-cross.stdout.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/measure-2-mimalloc-arena-same.json",
+      "sha256": "c14f01d4bba6a3b21b8dbfe40b25165b44125921c1540980ccbf08b5791cd0ba",
+      "bytes": 14369
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/measure-2-mimalloc-arena-same.stderr.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/measure-2-mimalloc-arena-same.stdout.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/measure-2-mimalloc-vec-cross.json",
+      "sha256": "1f696e53728bf07b96c6e9e24e5f336be9997d19dfa6537741a610040476a597",
+      "bytes": 14316
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/measure-2-mimalloc-vec-cross.stderr.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/measure-2-mimalloc-vec-cross.stdout.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/measure-2-mimalloc-vec-same.json",
+      "sha256": "db431ef0c0341ef7073e4920c45a5eeec48494091896c18cf63c0a1c80630c59",
+      "bytes": 14330
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/measure-2-mimalloc-vec-same.stderr.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/measure-2-mimalloc-vec-same.stdout.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/measure-2-rpmalloc-arena-cross.json",
+      "sha256": "fc8eddfbfa7616f95fe4cecdc3bd09ff13d01c5cdef3a92e23850f3a7eaac8ce",
+      "bytes": 14377
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/measure-2-rpmalloc-arena-cross.stderr.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/measure-2-rpmalloc-arena-cross.stdout.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/measure-2-rpmalloc-arena-same.json",
+      "sha256": "d4f4923439ce4eeda1f9563874d0ff213e31b6c45f89a51d6806a17583995dbf",
+      "bytes": 14369
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/measure-2-rpmalloc-arena-same.stderr.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/measure-2-rpmalloc-arena-same.stdout.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/measure-2-rpmalloc-vec-cross.json",
+      "sha256": "908ff6da46838cac9108e64065b34907af7634a76833948d16f2937492f08d7d",
+      "bytes": 14322
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/measure-2-rpmalloc-vec-cross.stderr.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/measure-2-rpmalloc-vec-cross.stdout.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/measure-2-rpmalloc-vec-same.json",
+      "sha256": "b44e92c31eb295a0c3dc438a5fdaa0c7611c1f8eb0acd51b587fc203e4b87457",
+      "bytes": 14328
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/measure-2-rpmalloc-vec-same.stderr.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/measure-2-rpmalloc-vec-same.stdout.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/measure-2-system-arena-cross.json",
+      "sha256": "574894b09e4785d0bae003f939f80dfbbfde9f18651b825d5ee5d96eb91d0b81",
+      "bytes": 14329
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/measure-2-system-arena-cross.stderr.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/measure-2-system-arena-cross.stdout.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/measure-2-system-arena-same.json",
+      "sha256": "4130071417f2bf86c72ab8bac5b8db3e970ee44a0aca18eadb6eb40f0796fbd9",
+      "bytes": 14330
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/measure-2-system-arena-same.stderr.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/measure-2-system-arena-same.stdout.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/measure-2-system-vec-cross.json",
+      "sha256": "642658a90da84b0b777218bed282baaf57b50456f1222e9fb62a730b98ca8679",
+      "bytes": 14284
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/measure-2-system-vec-cross.stderr.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/measure-2-system-vec-cross.stdout.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/measure-2-system-vec-same.json",
+      "sha256": "6e1af9ed6c769c127282d6fa3d1f7d0bc5e8a5c7c1abbe0106673fd065c32144",
+      "bytes": 14280
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/measure-2-system-vec-same.stderr.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/measure-2-system-vec-same.stdout.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/metadata.log.txt",
+      "sha256": "3e61d58769cf785ff98bbc0c7f1b2c3432e4a05f289ddba63dde04ceecf63907",
+      "bytes": 131794
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/receipt.json",
+      "sha256": "81e057e504ce9cc7fb3960a0633ff5181fe605da259d85a3906f84636a0a1e08",
+      "bytes": 928761
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/release-mimalloc.log.txt",
+      "sha256": "b207baf9640fb3904c4dad1211d498fa1a1cf2354e42870ef9408c10db72d429",
+      "bytes": 2077
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/release-rpmalloc.log.txt",
+      "sha256": "dda27120dac0b7b34e1f0d639062442139e16abd392f665030a2b355a9ee9066",
+      "bytes": 2139
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/release-system.log.txt",
+      "sha256": "e5dcf254c5cc01c1d06b7ef97c4fead509203fe5ba042f9bdae6cbc1b466493f",
+      "bytes": 1924
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/resolve-cargo-clippy.log.txt",
+      "sha256": "26f09df4e33bf098ad9fb2f35d1fce728c2b509fef8c47af1c745973b28b296d",
+      "bytes": 85
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/resolve-cargo.log.txt",
+      "sha256": "d70a6681283a709db0b4154a538f41c781608f69fb5bfbfa66dac449b697a95c",
+      "bytes": 78
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/resolve-clippy-driver.log.txt",
+      "sha256": "934b599a01bd8f7d5338d12d97fc793d1af3427b7f706b93d8eb18819ce01b01",
+      "bytes": 86
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/resolve-rustc.log.txt",
+      "sha256": "54234bc009f7bc295608f8bb882e03677001147f42f05ce19606c17d2db6473b",
+      "bytes": 78
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/resolve-rustfmt.log.txt",
+      "sha256": "0e07fc57cf9821aa13e5d361fdaa13fcb14ecb9c7db0284d9b66cb63d44a5beb",
+      "bytes": 80
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/rustc-version.log.txt",
+      "sha256": "c45e612575abeef05e99e88eb1e7aea52cddab9ad70d4f65ad20eaa65e92a9cf",
+      "bytes": 194
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/tests-mimalloc.log.txt",
+      "sha256": "4cca3596080d99c3b87bd13daf10727186b2d3aaeabb20d1ef6eade13b86fcc8",
+      "bytes": 3858
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/tests-rpmalloc.log.txt",
+      "sha256": "3c9f0a7aa4d28ee1603b62eacde6d5b864ef6918b86c1c1db7515526b999fa17",
+      "bytes": 3920
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/tests-system.log.txt",
+      "sha256": "5ae4ada62cfb247059bc3823192de4de6b2ec7038d63f94070fa81faf17aac8b",
+      "bytes": 3699
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/correctness-system/result.json",
+      "sha256": "e3f9f2e9eb7be3b49e1d8d99e83e86c3954d3b9f3a71ee1d29556d79407bb75d",
+      "bytes": 355
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/correctness-mimalloc/result.json",
+      "sha256": "479cf553fd0b5d70e0ab2968a6a752c24c6ba417ae219d9a06c2f24b309d6c23",
+      "bytes": 364
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/correctness-rpmalloc/result.json",
+      "sha256": "d94dc57fd5f2e4e4174bf855b53728341b6932be4b061f41c7fc40ca44035961",
+      "bytes": 363
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/authored-fixture-outputs/packet-0.zlib",
+      "sha256": "a2dab83fc9fee2f439d9a7bdad3aed0cddcdfc87a505f6830f6c21ee37e96256",
+      "bytes": 2232
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/authored-fixture-outputs/packet-1.zlib",
+      "sha256": "91f36fdd4b2c434567dcd3ce16ff928d74738bcfd057b529542331197fb4238d",
+      "bytes": 3901
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/authored-fixture-outputs/packet-2.zlib",
+      "sha256": "27a5a31fe237d08243e64ebf0080cc6451904d3a07813cc4bd55b55801095af2",
+      "bytes": 3850
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/authored-fixture-outputs/packet-3.zlib",
+      "sha256": "ec00ea3b214aa757c5da4d1b6766bd85df6e1f086b70bbe18be4787024333648",
+      "bytes": 3716
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/authored-fixture-outputs/packet-4.zlib",
+      "sha256": "d2af4e8b283d7e0d7454ad3eaffec06c749602e93b8c573a5238b73e30c1775e",
+      "bytes": 3383
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/authored-fixture-outputs/packet-5.zlib",
+      "sha256": "27ec5878aa56e717cc167b7d5a6b47827428618b14d15cfd2c87d7a365164a64",
+      "bytes": 2228
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/authored-fixture-outputs/packet-6.zlib",
+      "sha256": "c9634790eda7967849589e6a205e21c3fb9679d514f9863daa0ebc3eb0e1b2b8",
+      "bytes": 3888
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/authored-fixture-outputs/packet-7.zlib",
+      "sha256": "a8ed534b0e0b015ac3a0aee05396a5533af04da262f1f6f77a8989c348cefd68",
+      "bytes": 3852
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/authored-fixture-outputs/persistence-0.zlib",
+      "sha256": "467af6388637fd08a36828e4ffc4f60676386619c69971d7547835ef38c4fc43",
+      "bytes": 2577
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/authored-fixture-outputs/persistence-1.zlib",
+      "sha256": "ae39518054c4385bde825bed53cfd7b48738cdc0d0e6edad1513a55ba5c3dd6a",
+      "bytes": 2630
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/authored-fixture-outputs/persistence-2.zlib",
+      "sha256": "5195bb1edcd0af8ae0103fc79214f0fa8f1f1e74e1d4dafd3b231c4ea763bb3c",
+      "bytes": 2935
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/authored-fixture-outputs/persistence-3.zlib",
+      "sha256": "d09d86bd6911746b66618678a73ba0b41505c16dc87c53b989d9e5baaaab80bf",
+      "bytes": 3229
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/authored-fixture-outputs/persistence-4.zlib",
+      "sha256": "9afec2432c9ee1d0d81e51626cc3cdfc87fc03b9226b6429b20a82592c1749e7",
+      "bytes": 2583
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/authored-fixture-outputs/persistence-5.zlib",
+      "sha256": "e024ecda7b0a3d40dfb0220b1f43d3fa24ab3b69cd349b5238584711a707c70a",
+      "bytes": 2630
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/authored-fixture-outputs/persistence-6.zlib",
+      "sha256": "77ebfb2dd8fd1e02c6361c97ddecf7480f5a1a41304248da4b808c0b101bd5c7",
+      "bytes": 2937
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/authored-fixture-outputs/persistence-7.zlib",
+      "sha256": "16d1724b3867e7f7cb9991feff4601a4dfbc958df08cfacb4149695684c802dc",
+      "bytes": 3227
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/history/h17-correctness-01-receipt.json",
+      "sha256": "0134029c1a0adaa7d913f86e8064e1b668fa975173d34b580eba087fcee2b142",
+      "bytes": 198608
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/history/h17-correctness-01-tests-rpmalloc.log.txt",
+      "sha256": "7fa386dfd81a419b1c84391a0d8ea76e5e6f438a4706a94f4ce00fa9907836e2",
+      "bytes": 8965
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/history/h17-correctness-02-receipt.json",
+      "sha256": "8f23b173caf7c943d1430e160395eab94d7077a57679b3b58b2e0df58f5725f9",
+      "bytes": 227902
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/history/h17-correctness-03-receipt.json",
+      "sha256": "79ca2df4ae48678bd7c553a46209b789edb25cde99b618f3c2cad69a58aad213",
+      "bytes": 234661
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/history/h17-final-01-receipt.json",
+      "sha256": "76fb7127a3bc9e7ed6adc2ce97c1456c6dcc7bbc83e59c061400d83c8365e9aa",
+      "bytes": 238578
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/history/h17-final-01-measure-0-system-vec-cross.json",
+      "sha256": "15c743606195506ae9ffc09e57a3dc8eeadc54a4660fbafc60e0ff72831291e4",
+      "bytes": 14281
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/history/h17-final-01-measure-0-system-vec-same.json",
+      "sha256": "681c884cdb06d717cac1bffd81ac29f5078a95e318ca6b5cd91b8d90644c732a",
+      "bytes": 14274
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/history/h17-first-divergence.json",
+      "sha256": "51d8b77ffde088e540598355e2552df8403e57e00c09e434b3224ff997b63aec",
+      "bytes": 598
+    },
+    {
+      "path": "machine/architecture-hardening/h17-allocator-evidence/final02/history/h17-rpmalloc-link-development.json",
+      "sha256": "8702679bac95f117124c513c056e9d85bc13f5b059648861c8448d0ee016ec85",
+      "bytes": 672
+    }
+  ]
+}

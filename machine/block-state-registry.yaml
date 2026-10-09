@@ -1,0 +1,37 @@
+# Minecraft 1.12.2 Global Block State Registry Specification
+version: "1.12.2"
+
+registry_fields:
+  identity_map: "net.minecraft.block.Block.BLOCK_STATE_IDS"
+  type: "net.minecraft.util.ObjectIntIdentityMap<IBlockState>"
+  backing_data_structure:
+    forward: "IdentityHashMap<IBlockState, Integer>"
+    reverse: "ArrayList<IBlockState> (O(1) indexed lookup by state ID)"
+
+state_id_bit_layout:
+  block_id:
+    bits: 12
+    shift: 0
+    mask: "0x0FFF (4095)"
+    description: "Numeric block ID from Block.REGISTRY (capped by GameData.MAX_BLOCK_ID = 4095)"
+  metadata:
+    bits: 4
+    shift: 12
+    mask: "0xF (15)"
+    description: "4-bit block metadata (0..15)"
+  formula_pack_vanilla: "blockId + (meta << 12)"
+  formula_pack_forge_slavemap: "(blockId << 4) | meta"
+  lossless_u16_guarantee:
+    max_state_id: 65535 # 0xFFFF
+    fits_in_u16: true
+    proof: "MAX_BLOCK_ID = 4095 (12 bits) and MAX_META = 15 (4 bits); (4095 << 4) | 15 = 65535 == 0xFFFF, strictly saturating u16"
+
+lifecycle_and_immutability:
+  freeze_point: "net.minecraftforge.fml.common.registry.GameData.freezeData() at end of Forge Loader initialization"
+  mutation_during_gameplay: false
+  thread_safety_during_gameplay: "Read-only thread-safe after freeze"
+  modded_registration: "Mod blocks assigned IDs >= 256 dynamically during FML pre-init, frozen before server socket bind"
+  extended_states:
+    class: "net.minecraftforge.common.property.IExtendedBlockState"
+    stored_in_storage: false
+    description: "Client/render transient wrapper; stripped to getClean() vanilla state before storage insertion"

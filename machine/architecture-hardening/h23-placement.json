@@ -1,0 +1,2507 @@
+{
+  "schema": "H23_INDEPENDENT_PLACEMENT_REVIEW_V1",
+  "status": "CONSERVATIVE_VALIDATOR_CONTROLS_PASS_RUNTIME_RELATION_INCOMPLETE",
+  "root_receipt_sha256": "43e26cb25407d906a3afe63e92bacf23eab0ee39759ee6982cc704d1957ea69f",
+  "production_authority": false,
+  "profile_requalification": false,
+  "validation": {
+    "unit_tests": 18,
+    "actual_classfile_mutations": 27,
+    "clean_missing_call_controls": 66,
+    "fixture_parser_agreements": 29,
+    "clean_parser_agreements": 24,
+    "adapter_controls": [
+      {
+        "case": "positive",
+        "status": "PASS",
+        "witness_sha256": "5c34f3f3df7e927766e21ef78dfc3888ac5e32b5e8495fce5e076b7d21b3bb3c"
+      },
+      {
+        "case": "wrong-observation",
+        "status": "FAIL",
+        "witness_sha256": "86924f6d305cdcf1d943af7c72dc1ab85dcf666ed7b8021d94b4755531777825"
+      },
+      {
+        "case": "clean-incomplete",
+        "status": "INCOMPLETE",
+        "witness_sha256": "1032f6053ce84c0a52d9d49ec5ab735eb1d0edec6e2fdb2d9beafa71a866dca0"
+      }
+    ],
+    "site_status_counts": {
+      "INCOMPLETE": 31,
+      "PASS": 35
+    },
+    "unhooked_frame_rewrite_methods": 86,
+    "unsupported_frame_details": 89
+  },
+  "retained_evidence": [
+    {
+      "source": "target/writer-placement-v2/35f7ee72f7874d56b36145ce95df1514/campaign.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/35f7ee72f7874d56b36145ce95df1514/campaign.json",
+      "sha256": "0b73cf2aeed56c1ae1f04ba5ae7915eb6a89a763d7ed92f3dacbcb9d82f082f3"
+    },
+    {
+      "source": "target/writer-placement-v2/35f7ee72f7874d56b36145ce95df1514/clean/audit.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/35f7ee72f7874d56b36145ce95df1514/clean/audit.json",
+      "sha256": "850e89afb7bd048df69253d576349b1cdccc66dd87ff1d1cf0ce8a9b0ab1223d"
+    },
+    {
+      "source": "target/writer-placement-v2/35f7ee72f7874d56b36145ce95df1514/clean/post/batch-0000-dump.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/35f7ee72f7874d56b36145ce95df1514/clean/post/batch-0000-dump.process.json",
+      "sha256": "5881f3a879ae351e5dff1b6e0a82b1ab06c9731a035b6a48ec40ed6a731c1ef6"
+    },
+    {
+      "source": "target/writer-placement-v2/35f7ee72f7874d56b36145ce95df1514/clean/post/batch-0000-dump.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/35f7ee72f7874d56b36145ce95df1514/clean/post/batch-0000-dump.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/35f7ee72f7874d56b36145ce95df1514/clean/post/batch-0000-identity.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/35f7ee72f7874d56b36145ce95df1514/clean/post/batch-0000-identity.process.json",
+      "sha256": "a99399938d74038419bb4d6826b46e333945ea5231de8433c5661f94b690c837"
+    },
+    {
+      "source": "target/writer-placement-v2/35f7ee72f7874d56b36145ce95df1514/clean/post/batch-0000-identity.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/35f7ee72f7874d56b36145ce95df1514/clean/post/batch-0000-identity.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/35f7ee72f7874d56b36145ce95df1514/clean/post/batch-0000-identity.stdout",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/35f7ee72f7874d56b36145ce95df1514/clean/post/batch-0000-identity.stdout.txt",
+      "sha256": "909a32e85f44ccce73b5be65b1c9fd5d68449fa1de6e9a8294b8393687c37cc9"
+    },
+    {
+      "source": "target/writer-placement-v2/35f7ee72f7874d56b36145ce95df1514/clean/post/batch-0000-rust.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/35f7ee72f7874d56b36145ce95df1514/clean/post/batch-0000-rust.process.json",
+      "sha256": "61c30b790fbd1d77c1c4de1d9cc4d26acaea9e833dae7c1659a33ef3def9d1fb"
+    },
+    {
+      "source": "target/writer-placement-v2/35f7ee72f7874d56b36145ce95df1514/clean/post/batch-0000-rust.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/35f7ee72f7874d56b36145ce95df1514/clean/post/batch-0000-rust.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/35f7ee72f7874d56b36145ce95df1514/clean/post/batch-0008-dump.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/35f7ee72f7874d56b36145ce95df1514/clean/post/batch-0008-dump.process.json",
+      "sha256": "7bda7ba0b042c0b9390d7d2af0e88e40ed23b3e10dde574b5aa76041f08ba49b"
+    },
+    {
+      "source": "target/writer-placement-v2/35f7ee72f7874d56b36145ce95df1514/clean/post/batch-0008-dump.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/35f7ee72f7874d56b36145ce95df1514/clean/post/batch-0008-dump.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/35f7ee72f7874d56b36145ce95df1514/clean/post/batch-0008-identity.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/35f7ee72f7874d56b36145ce95df1514/clean/post/batch-0008-identity.process.json",
+      "sha256": "1a3f5e1675a2a30da0a452f1e49a9c85bf61ea64d98ad8a248af626464f20d94"
+    },
+    {
+      "source": "target/writer-placement-v2/35f7ee72f7874d56b36145ce95df1514/clean/post/batch-0008-identity.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/35f7ee72f7874d56b36145ce95df1514/clean/post/batch-0008-identity.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/35f7ee72f7874d56b36145ce95df1514/clean/post/batch-0008-identity.stdout",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/35f7ee72f7874d56b36145ce95df1514/clean/post/batch-0008-identity.stdout.txt",
+      "sha256": "fe31ccc13d8b026375d9fa6478f082c9a1060b57c3a59b4a3c93d35dffc260b2"
+    },
+    {
+      "source": "target/writer-placement-v2/35f7ee72f7874d56b36145ce95df1514/clean/post/batch-0008-rust.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/35f7ee72f7874d56b36145ce95df1514/clean/post/batch-0008-rust.process.json",
+      "sha256": "943a677278f8a0bae9c7b2e34e1a42a87eeabd26c28681be2eead0e9da5a75c3"
+    },
+    {
+      "source": "target/writer-placement-v2/35f7ee72f7874d56b36145ce95df1514/clean/post/batch-0008-rust.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/35f7ee72f7874d56b36145ce95df1514/clean/post/batch-0008-rust.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/35f7ee72f7874d56b36145ce95df1514/clean/pre/batch-0000-dump.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/35f7ee72f7874d56b36145ce95df1514/clean/pre/batch-0000-dump.process.json",
+      "sha256": "82325d55356c7a5bf68a522b2a2d2aedbc6d5c443ed7890fbf712f949aec2901"
+    },
+    {
+      "source": "target/writer-placement-v2/35f7ee72f7874d56b36145ce95df1514/clean/pre/batch-0000-dump.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/35f7ee72f7874d56b36145ce95df1514/clean/pre/batch-0000-dump.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/35f7ee72f7874d56b36145ce95df1514/clean/pre/batch-0000-identity.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/35f7ee72f7874d56b36145ce95df1514/clean/pre/batch-0000-identity.process.json",
+      "sha256": "6fde040332a4235da9fc8b36144348d94a420aaf8ad25a0c19e6857506bd83f4"
+    },
+    {
+      "source": "target/writer-placement-v2/35f7ee72f7874d56b36145ce95df1514/clean/pre/batch-0000-identity.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/35f7ee72f7874d56b36145ce95df1514/clean/pre/batch-0000-identity.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/35f7ee72f7874d56b36145ce95df1514/clean/pre/batch-0000-identity.stdout",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/35f7ee72f7874d56b36145ce95df1514/clean/pre/batch-0000-identity.stdout.txt",
+      "sha256": "d175c84312dbfae9086519fc0a02226c55861bf656e6df3b560dc62c8283bc49"
+    },
+    {
+      "source": "target/writer-placement-v2/35f7ee72f7874d56b36145ce95df1514/clean/pre/batch-0000-rust.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/35f7ee72f7874d56b36145ce95df1514/clean/pre/batch-0000-rust.process.json",
+      "sha256": "d2dd609a7a4667e07cf118e0c8af539ef8eb62e88d9b929773b54851c9d9fd6e"
+    },
+    {
+      "source": "target/writer-placement-v2/35f7ee72f7874d56b36145ce95df1514/clean/pre/batch-0000-rust.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/35f7ee72f7874d56b36145ce95df1514/clean/pre/batch-0000-rust.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/35f7ee72f7874d56b36145ce95df1514/clean/pre/batch-0008-dump.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/35f7ee72f7874d56b36145ce95df1514/clean/pre/batch-0008-dump.process.json",
+      "sha256": "f1247d311367df1c5e74951ad129e1a82bd76e036aeaaf039357b60ee55f0d78"
+    },
+    {
+      "source": "target/writer-placement-v2/35f7ee72f7874d56b36145ce95df1514/clean/pre/batch-0008-dump.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/35f7ee72f7874d56b36145ce95df1514/clean/pre/batch-0008-dump.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/35f7ee72f7874d56b36145ce95df1514/clean/pre/batch-0008-identity.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/35f7ee72f7874d56b36145ce95df1514/clean/pre/batch-0008-identity.process.json",
+      "sha256": "57dc95d08fb080755d9dd5c08ab648b28d0a68ede8d399d730b0c47c7f354131"
+    },
+    {
+      "source": "target/writer-placement-v2/35f7ee72f7874d56b36145ce95df1514/clean/pre/batch-0008-identity.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/35f7ee72f7874d56b36145ce95df1514/clean/pre/batch-0008-identity.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/35f7ee72f7874d56b36145ce95df1514/clean/pre/batch-0008-identity.stdout",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/35f7ee72f7874d56b36145ce95df1514/clean/pre/batch-0008-identity.stdout.txt",
+      "sha256": "ea05586cd652253622d5ac6f679308bbe3eab62ac32e7854eb9b402b37dd936c"
+    },
+    {
+      "source": "target/writer-placement-v2/35f7ee72f7874d56b36145ce95df1514/clean/pre/batch-0008-rust.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/35f7ee72f7874d56b36145ce95df1514/clean/pre/batch-0008-rust.process.json",
+      "sha256": "6260439c441566dbe1ada10a6d305d29438a71409a4a026551163c6818a26239"
+    },
+    {
+      "source": "target/writer-placement-v2/35f7ee72f7874d56b36145ce95df1514/clean/pre/batch-0008-rust.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/35f7ee72f7874d56b36145ce95df1514/clean/pre/batch-0008-rust.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/35f7ee72f7874d56b36145ce95df1514/clean-incomplete-witness-audit/audit.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/35f7ee72f7874d56b36145ce95df1514/clean-incomplete-witness-audit/audit.json",
+      "sha256": "8caf8bfbf8d7ce137a2befc9e45f0a94f5b55419f91654dbac100dfff7ba2f56"
+    },
+    {
+      "source": "target/writer-placement-v2/35f7ee72f7874d56b36145ce95df1514/clean-incomplete-witness-audit/post/batch-0000-dump.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/35f7ee72f7874d56b36145ce95df1514/clean-incomplete-witness-audit/post/batch-0000-dump.process.json",
+      "sha256": "d6d6eea321f10ecbac07f7c25f5a5bee8661ff26ac8375684fe7ecf84d02abcf"
+    },
+    {
+      "source": "target/writer-placement-v2/35f7ee72f7874d56b36145ce95df1514/clean-incomplete-witness-audit/post/batch-0000-dump.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/35f7ee72f7874d56b36145ce95df1514/clean-incomplete-witness-audit/post/batch-0000-dump.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/35f7ee72f7874d56b36145ce95df1514/clean-incomplete-witness-audit/post/batch-0000-identity.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/35f7ee72f7874d56b36145ce95df1514/clean-incomplete-witness-audit/post/batch-0000-identity.process.json",
+      "sha256": "c19ea17086e057797bda97937a3187874b7f5b7031e73b4f250d87ad99d3f1fc"
+    },
+    {
+      "source": "target/writer-placement-v2/35f7ee72f7874d56b36145ce95df1514/clean-incomplete-witness-audit/post/batch-0000-identity.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/35f7ee72f7874d56b36145ce95df1514/clean-incomplete-witness-audit/post/batch-0000-identity.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/35f7ee72f7874d56b36145ce95df1514/clean-incomplete-witness-audit/post/batch-0000-identity.stdout",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/35f7ee72f7874d56b36145ce95df1514/clean-incomplete-witness-audit/post/batch-0000-identity.stdout.txt",
+      "sha256": "909a32e85f44ccce73b5be65b1c9fd5d68449fa1de6e9a8294b8393687c37cc9"
+    },
+    {
+      "source": "target/writer-placement-v2/35f7ee72f7874d56b36145ce95df1514/clean-incomplete-witness-audit/post/batch-0000-rust.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/35f7ee72f7874d56b36145ce95df1514/clean-incomplete-witness-audit/post/batch-0000-rust.process.json",
+      "sha256": "cea69d1fd3efd8fbf24486fd639ea0bf1b14aeca1760a8d41e46a87626e59b11"
+    },
+    {
+      "source": "target/writer-placement-v2/35f7ee72f7874d56b36145ce95df1514/clean-incomplete-witness-audit/post/batch-0000-rust.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/35f7ee72f7874d56b36145ce95df1514/clean-incomplete-witness-audit/post/batch-0000-rust.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/35f7ee72f7874d56b36145ce95df1514/clean-incomplete-witness-audit/post/batch-0008-dump.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/35f7ee72f7874d56b36145ce95df1514/clean-incomplete-witness-audit/post/batch-0008-dump.process.json",
+      "sha256": "3cdefa00febb77c56d993fd4a85003489ae34b6297ac06ab3a8c9a7c232dc891"
+    },
+    {
+      "source": "target/writer-placement-v2/35f7ee72f7874d56b36145ce95df1514/clean-incomplete-witness-audit/post/batch-0008-dump.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/35f7ee72f7874d56b36145ce95df1514/clean-incomplete-witness-audit/post/batch-0008-dump.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/35f7ee72f7874d56b36145ce95df1514/clean-incomplete-witness-audit/post/batch-0008-identity.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/35f7ee72f7874d56b36145ce95df1514/clean-incomplete-witness-audit/post/batch-0008-identity.process.json",
+      "sha256": "3248f84259e80c88ce6a5acadea1a8853e7d219de39c79960e494c071412ace1"
+    },
+    {
+      "source": "target/writer-placement-v2/35f7ee72f7874d56b36145ce95df1514/clean-incomplete-witness-audit/post/batch-0008-identity.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/35f7ee72f7874d56b36145ce95df1514/clean-incomplete-witness-audit/post/batch-0008-identity.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/35f7ee72f7874d56b36145ce95df1514/clean-incomplete-witness-audit/post/batch-0008-identity.stdout",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/35f7ee72f7874d56b36145ce95df1514/clean-incomplete-witness-audit/post/batch-0008-identity.stdout.txt",
+      "sha256": "fe31ccc13d8b026375d9fa6478f082c9a1060b57c3a59b4a3c93d35dffc260b2"
+    },
+    {
+      "source": "target/writer-placement-v2/35f7ee72f7874d56b36145ce95df1514/clean-incomplete-witness-audit/post/batch-0008-rust.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/35f7ee72f7874d56b36145ce95df1514/clean-incomplete-witness-audit/post/batch-0008-rust.process.json",
+      "sha256": "b68e7a5403983fe99ff90c9e738637667a1158ce4aa5b999efc3a65a7eec04ad"
+    },
+    {
+      "source": "target/writer-placement-v2/35f7ee72f7874d56b36145ce95df1514/clean-incomplete-witness-audit/post/batch-0008-rust.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/35f7ee72f7874d56b36145ce95df1514/clean-incomplete-witness-audit/post/batch-0008-rust.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/35f7ee72f7874d56b36145ce95df1514/clean-incomplete-witness-audit/pre/batch-0000-dump.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/35f7ee72f7874d56b36145ce95df1514/clean-incomplete-witness-audit/pre/batch-0000-dump.process.json",
+      "sha256": "ab7f257309b158379e03390a7e631a8eaf96879b6794da39c67f0d1d639256b8"
+    },
+    {
+      "source": "target/writer-placement-v2/35f7ee72f7874d56b36145ce95df1514/clean-incomplete-witness-audit/pre/batch-0000-dump.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/35f7ee72f7874d56b36145ce95df1514/clean-incomplete-witness-audit/pre/batch-0000-dump.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/35f7ee72f7874d56b36145ce95df1514/clean-incomplete-witness-audit/pre/batch-0000-identity.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/35f7ee72f7874d56b36145ce95df1514/clean-incomplete-witness-audit/pre/batch-0000-identity.process.json",
+      "sha256": "a87ca6fe435d02ea50f16ea0db0add849375506efdeee001551c6be4227750e9"
+    },
+    {
+      "source": "target/writer-placement-v2/35f7ee72f7874d56b36145ce95df1514/clean-incomplete-witness-audit/pre/batch-0000-identity.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/35f7ee72f7874d56b36145ce95df1514/clean-incomplete-witness-audit/pre/batch-0000-identity.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/35f7ee72f7874d56b36145ce95df1514/clean-incomplete-witness-audit/pre/batch-0000-identity.stdout",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/35f7ee72f7874d56b36145ce95df1514/clean-incomplete-witness-audit/pre/batch-0000-identity.stdout.txt",
+      "sha256": "d175c84312dbfae9086519fc0a02226c55861bf656e6df3b560dc62c8283bc49"
+    },
+    {
+      "source": "target/writer-placement-v2/35f7ee72f7874d56b36145ce95df1514/clean-incomplete-witness-audit/pre/batch-0000-rust.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/35f7ee72f7874d56b36145ce95df1514/clean-incomplete-witness-audit/pre/batch-0000-rust.process.json",
+      "sha256": "5f32db2ecd4baeccadb57d41b986632a7663bc3dbb0b3493031fce1dd283d116"
+    },
+    {
+      "source": "target/writer-placement-v2/35f7ee72f7874d56b36145ce95df1514/clean-incomplete-witness-audit/pre/batch-0000-rust.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/35f7ee72f7874d56b36145ce95df1514/clean-incomplete-witness-audit/pre/batch-0000-rust.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/35f7ee72f7874d56b36145ce95df1514/clean-incomplete-witness-audit/pre/batch-0008-dump.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/35f7ee72f7874d56b36145ce95df1514/clean-incomplete-witness-audit/pre/batch-0008-dump.process.json",
+      "sha256": "088f988f45b685fd1d97798bd17703a5b938a163df1867ea58c742bea022ea6b"
+    },
+    {
+      "source": "target/writer-placement-v2/35f7ee72f7874d56b36145ce95df1514/clean-incomplete-witness-audit/pre/batch-0008-dump.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/35f7ee72f7874d56b36145ce95df1514/clean-incomplete-witness-audit/pre/batch-0008-dump.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/35f7ee72f7874d56b36145ce95df1514/clean-incomplete-witness-audit/pre/batch-0008-identity.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/35f7ee72f7874d56b36145ce95df1514/clean-incomplete-witness-audit/pre/batch-0008-identity.process.json",
+      "sha256": "0756cca533f322b2931ea1819b7cd2c46d59c1bfdf9def97fe0b8d16005e00dc"
+    },
+    {
+      "source": "target/writer-placement-v2/35f7ee72f7874d56b36145ce95df1514/clean-incomplete-witness-audit/pre/batch-0008-identity.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/35f7ee72f7874d56b36145ce95df1514/clean-incomplete-witness-audit/pre/batch-0008-identity.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/35f7ee72f7874d56b36145ce95df1514/clean-incomplete-witness-audit/pre/batch-0008-identity.stdout",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/35f7ee72f7874d56b36145ce95df1514/clean-incomplete-witness-audit/pre/batch-0008-identity.stdout.txt",
+      "sha256": "ea05586cd652253622d5ac6f679308bbe3eab62ac32e7854eb9b402b37dd936c"
+    },
+    {
+      "source": "target/writer-placement-v2/35f7ee72f7874d56b36145ce95df1514/clean-incomplete-witness-audit/pre/batch-0008-rust.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/35f7ee72f7874d56b36145ce95df1514/clean-incomplete-witness-audit/pre/batch-0008-rust.process.json",
+      "sha256": "06ee886a2517248d6c4c3669597eb7324ab7289a6d10e431e786fed6e96f62b5"
+    },
+    {
+      "source": "target/writer-placement-v2/35f7ee72f7874d56b36145ce95df1514/clean-incomplete-witness-audit/pre/batch-0008-rust.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/35f7ee72f7874d56b36145ce95df1514/clean-incomplete-witness-audit/pre/batch-0008-rust.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/35f7ee72f7874d56b36145ce95df1514/clean-incomplete-witness.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/35f7ee72f7874d56b36145ce95df1514/clean-incomplete-witness.json",
+      "sha256": "879ec31c3791b63a6d0656325161faed9410c91652554dfc064204a745356869"
+    },
+    {
+      "source": "target/writer-placement-v2/35f7ee72f7874d56b36145ce95df1514/fixture-controls.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/35f7ee72f7874d56b36145ce95df1514/fixture-controls.json",
+      "sha256": "eb460e45dbc957b50cacd48e0dd13a5543999d6c7572dd0d350e14c88ada3585"
+    },
+    {
+      "source": "target/writer-placement-v2/35f7ee72f7874d56b36145ce95df1514/fixture-dumps/batch-0000-dump.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/35f7ee72f7874d56b36145ce95df1514/fixture-dumps/batch-0000-dump.process.json",
+      "sha256": "689a2a7d5234c86832ede743fd59f67577806437bf633322b61372b8904709ce"
+    },
+    {
+      "source": "target/writer-placement-v2/35f7ee72f7874d56b36145ce95df1514/fixture-dumps/batch-0000-dump.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/35f7ee72f7874d56b36145ce95df1514/fixture-dumps/batch-0000-dump.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/35f7ee72f7874d56b36145ce95df1514/fixture-dumps/batch-0000-identity.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/35f7ee72f7874d56b36145ce95df1514/fixture-dumps/batch-0000-identity.process.json",
+      "sha256": "f00226975201facad6a2f5571438899bf0e12e95be857dbddacfcbdda0240a60"
+    },
+    {
+      "source": "target/writer-placement-v2/35f7ee72f7874d56b36145ce95df1514/fixture-dumps/batch-0000-identity.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/35f7ee72f7874d56b36145ce95df1514/fixture-dumps/batch-0000-identity.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/35f7ee72f7874d56b36145ce95df1514/fixture-dumps/batch-0000-identity.stdout",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/35f7ee72f7874d56b36145ce95df1514/fixture-dumps/batch-0000-identity.stdout.txt",
+      "sha256": "ce307467e20d83f8fe1c8774583ec80e1756585c4bb72633afb48b2028036d67"
+    },
+    {
+      "source": "target/writer-placement-v2/35f7ee72f7874d56b36145ce95df1514/fixture-dumps/batch-0000-rust.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/35f7ee72f7874d56b36145ce95df1514/fixture-dumps/batch-0000-rust.process.json",
+      "sha256": "ba98f0a91dda66be95568849e8a1fe53ebaba98f0f11233483085343ab3fe1e3"
+    },
+    {
+      "source": "target/writer-placement-v2/35f7ee72f7874d56b36145ce95df1514/fixture-dumps/batch-0000-rust.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/35f7ee72f7874d56b36145ce95df1514/fixture-dumps/batch-0000-rust.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/35f7ee72f7874d56b36145ce95df1514/fixture-dumps/batch-0008-dump.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/35f7ee72f7874d56b36145ce95df1514/fixture-dumps/batch-0008-dump.process.json",
+      "sha256": "538653d33ced76280245c5da291a6e790620b0431e11a12b5a1bc70f32b0bcbf"
+    },
+    {
+      "source": "target/writer-placement-v2/35f7ee72f7874d56b36145ce95df1514/fixture-dumps/batch-0008-dump.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/35f7ee72f7874d56b36145ce95df1514/fixture-dumps/batch-0008-dump.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/35f7ee72f7874d56b36145ce95df1514/fixture-dumps/batch-0008-identity.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/35f7ee72f7874d56b36145ce95df1514/fixture-dumps/batch-0008-identity.process.json",
+      "sha256": "6ab10fee2fb7f7f49b67f446092688d2cea2b585dbe99b7ae8ce945e67b3b631"
+    },
+    {
+      "source": "target/writer-placement-v2/35f7ee72f7874d56b36145ce95df1514/fixture-dumps/batch-0008-identity.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/35f7ee72f7874d56b36145ce95df1514/fixture-dumps/batch-0008-identity.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/35f7ee72f7874d56b36145ce95df1514/fixture-dumps/batch-0008-identity.stdout",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/35f7ee72f7874d56b36145ce95df1514/fixture-dumps/batch-0008-identity.stdout.txt",
+      "sha256": "37f6574f6ff4555ae9adfcc19b1acaa5ad57134bb1d25f777556b9cf8f40e39a"
+    },
+    {
+      "source": "target/writer-placement-v2/35f7ee72f7874d56b36145ce95df1514/fixture-dumps/batch-0008-rust.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/35f7ee72f7874d56b36145ce95df1514/fixture-dumps/batch-0008-rust.process.json",
+      "sha256": "4543ec150510a61486b4219dcebb12c34828acd2df5431287dfb74289aba94aa"
+    },
+    {
+      "source": "target/writer-placement-v2/35f7ee72f7874d56b36145ce95df1514/fixture-dumps/batch-0008-rust.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/35f7ee72f7874d56b36145ce95df1514/fixture-dumps/batch-0008-rust.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/35f7ee72f7874d56b36145ce95df1514/fixture-dumps/batch-0016-dump.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/35f7ee72f7874d56b36145ce95df1514/fixture-dumps/batch-0016-dump.process.json",
+      "sha256": "79c0eb5ecd1211d0b17dcce45ff523fe1be52722862842446f69626b80ce2f49"
+    },
+    {
+      "source": "target/writer-placement-v2/35f7ee72f7874d56b36145ce95df1514/fixture-dumps/batch-0016-dump.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/35f7ee72f7874d56b36145ce95df1514/fixture-dumps/batch-0016-dump.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/35f7ee72f7874d56b36145ce95df1514/fixture-dumps/batch-0016-identity.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/35f7ee72f7874d56b36145ce95df1514/fixture-dumps/batch-0016-identity.process.json",
+      "sha256": "6ddc493687bed843d0b3b509adf6eff2535935d04a07c3cc04e93e8ae208ee7f"
+    },
+    {
+      "source": "target/writer-placement-v2/35f7ee72f7874d56b36145ce95df1514/fixture-dumps/batch-0016-identity.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/35f7ee72f7874d56b36145ce95df1514/fixture-dumps/batch-0016-identity.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/35f7ee72f7874d56b36145ce95df1514/fixture-dumps/batch-0016-identity.stdout",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/35f7ee72f7874d56b36145ce95df1514/fixture-dumps/batch-0016-identity.stdout.txt",
+      "sha256": "6dec8a07316cc45179e285bf6063a60487d688f8aa5bd32aaa92b0039f3ee04a"
+    },
+    {
+      "source": "target/writer-placement-v2/35f7ee72f7874d56b36145ce95df1514/fixture-dumps/batch-0016-rust.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/35f7ee72f7874d56b36145ce95df1514/fixture-dumps/batch-0016-rust.process.json",
+      "sha256": "44bab01f9ac9fdc10853181d6dfc9bc354fe2d278c4255e56d64a79094927698"
+    },
+    {
+      "source": "target/writer-placement-v2/35f7ee72f7874d56b36145ce95df1514/fixture-dumps/batch-0016-rust.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/35f7ee72f7874d56b36145ce95df1514/fixture-dumps/batch-0016-rust.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/35f7ee72f7874d56b36145ce95df1514/fixture-dumps/batch-0024-dump.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/35f7ee72f7874d56b36145ce95df1514/fixture-dumps/batch-0024-dump.process.json",
+      "sha256": "92d67ac6f7a26a15b9507b4aa6a3638314022520d489e866058a2e77fc2c45e8"
+    },
+    {
+      "source": "target/writer-placement-v2/35f7ee72f7874d56b36145ce95df1514/fixture-dumps/batch-0024-dump.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/35f7ee72f7874d56b36145ce95df1514/fixture-dumps/batch-0024-dump.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/35f7ee72f7874d56b36145ce95df1514/fixture-dumps/batch-0024-identity.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/35f7ee72f7874d56b36145ce95df1514/fixture-dumps/batch-0024-identity.process.json",
+      "sha256": "d9ff616571f95c304100ca6d72876ccfb606ef785b31ef5eeaddbf2d87021218"
+    },
+    {
+      "source": "target/writer-placement-v2/35f7ee72f7874d56b36145ce95df1514/fixture-dumps/batch-0024-identity.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/35f7ee72f7874d56b36145ce95df1514/fixture-dumps/batch-0024-identity.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/35f7ee72f7874d56b36145ce95df1514/fixture-dumps/batch-0024-identity.stdout",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/35f7ee72f7874d56b36145ce95df1514/fixture-dumps/batch-0024-identity.stdout.txt",
+      "sha256": "27b4ce4e87c6a7a6a813baf20a9b0bdc340b63e4577c95c6590f4bec98cf69fe"
+    },
+    {
+      "source": "target/writer-placement-v2/35f7ee72f7874d56b36145ce95df1514/fixture-dumps/batch-0024-rust.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/35f7ee72f7874d56b36145ce95df1514/fixture-dumps/batch-0024-rust.process.json",
+      "sha256": "5f2ae01ba94ee9ccf78db4016cf5630e3bbf1edb447825845b1e433bf07cc149"
+    },
+    {
+      "source": "target/writer-placement-v2/35f7ee72f7874d56b36145ce95df1514/fixture-dumps/batch-0024-rust.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/35f7ee72f7874d56b36145ce95df1514/fixture-dumps/batch-0024-rust.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/35f7ee72f7874d56b36145ce95df1514/fixture-plan.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/35f7ee72f7874d56b36145ce95df1514/fixture-plan.json",
+      "sha256": "a1ae963aa2898ab1d2642818d2374b70e3e72099c89389b6136155b4a759cdfa"
+    },
+    {
+      "source": "target/writer-placement-v2/35f7ee72f7874d56b36145ce95df1514/hooks.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/35f7ee72f7874d56b36145ce95df1514/hooks.json",
+      "sha256": "9e7f66cc31a2698a594f258987cb58098c82374b40ab45203d73665a2fa08627"
+    },
+    {
+      "source": "target/writer-placement-v2/35f7ee72f7874d56b36145ce95df1514/logs/adapter-clean-incomplete.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/35f7ee72f7874d56b36145ce95df1514/logs/adapter-clean-incomplete.process.json",
+      "sha256": "44b090339e0bdf022cef69b562d3d1d208e87f9037c5289ca73cf5c663f8b23c"
+    },
+    {
+      "source": "target/writer-placement-v2/35f7ee72f7874d56b36145ce95df1514/logs/adapter-clean-incomplete.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/35f7ee72f7874d56b36145ce95df1514/logs/adapter-clean-incomplete.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/35f7ee72f7874d56b36145ce95df1514/logs/adapter-clean-incomplete.stdout",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/35f7ee72f7874d56b36145ce95df1514/logs/adapter-clean-incomplete.stdout.txt",
+      "sha256": "be0a273140d33e8bafa1d6925dac59b149d47480b9d1b9c3121ac451367e0e51"
+    },
+    {
+      "source": "target/writer-placement-v2/35f7ee72f7874d56b36145ce95df1514/logs/adapter-positive.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/35f7ee72f7874d56b36145ce95df1514/logs/adapter-positive.process.json",
+      "sha256": "ef4558ce4a2cc876e13d41b0ef1d05be18d6285a45860495f885987120ce2e13"
+    },
+    {
+      "source": "target/writer-placement-v2/35f7ee72f7874d56b36145ce95df1514/logs/adapter-positive.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/35f7ee72f7874d56b36145ce95df1514/logs/adapter-positive.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/35f7ee72f7874d56b36145ce95df1514/logs/adapter-positive.stdout",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/35f7ee72f7874d56b36145ce95df1514/logs/adapter-positive.stdout.txt",
+      "sha256": "24e0b5cccee957a4c377062a583f65de85c2dc5f5e01d727e49ca18f6fc7b1cb"
+    },
+    {
+      "source": "target/writer-placement-v2/35f7ee72f7874d56b36145ce95df1514/logs/adapter-wrong-observation.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/35f7ee72f7874d56b36145ce95df1514/logs/adapter-wrong-observation.process.json",
+      "sha256": "313c02f5c454148b5181e9996a5846d64060b123dced3b7fd45f9a565f65ed54"
+    },
+    {
+      "source": "target/writer-placement-v2/35f7ee72f7874d56b36145ce95df1514/logs/adapter-wrong-observation.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/35f7ee72f7874d56b36145ce95df1514/logs/adapter-wrong-observation.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/35f7ee72f7874d56b36145ce95df1514/logs/adapter-wrong-observation.stdout",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/35f7ee72f7874d56b36145ce95df1514/logs/adapter-wrong-observation.stdout.txt",
+      "sha256": "3fb0a0b276133f62bde051af588b047b67b9779072d59ac943e73c46bd5d708d"
+    },
+    {
+      "source": "target/writer-placement-v2/35f7ee72f7874d56b36145ce95df1514/logs/compile.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/35f7ee72f7874d56b36145ce95df1514/logs/compile.process.json",
+      "sha256": "f6a1f98411592d734453f5a1eb97ec789289511c2dae0313ddcb6100d49f66d6"
+    },
+    {
+      "source": "target/writer-placement-v2/35f7ee72f7874d56b36145ce95df1514/logs/compile.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/35f7ee72f7874d56b36145ce95df1514/logs/compile.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/35f7ee72f7874d56b36145ce95df1514/logs/compile.stdout",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/35f7ee72f7874d56b36145ce95df1514/logs/compile.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/35f7ee72f7874d56b36145ce95df1514/logs/generate.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/35f7ee72f7874d56b36145ce95df1514/logs/generate.process.json",
+      "sha256": "aab7806a4fdaa1bd2da5896a326b9575c021360a823e514f8697d7cd3df237b9"
+    },
+    {
+      "source": "target/writer-placement-v2/35f7ee72f7874d56b36145ce95df1514/logs/generate.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/35f7ee72f7874d56b36145ce95df1514/logs/generate.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/35f7ee72f7874d56b36145ce95df1514/logs/generate.stdout",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/35f7ee72f7874d56b36145ce95df1514/logs/generate.stdout.txt",
+      "sha256": "f3b00ce1f5edce3b538e4789fe1c6ddd4adeb26d134d49fea663a6a8def7058e"
+    },
+    {
+      "source": "target/writer-placement-v2/35f7ee72f7874d56b36145ce95df1514/logs/unit-tests.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/35f7ee72f7874d56b36145ce95df1514/logs/unit-tests.process.json",
+      "sha256": "18a9e98fc139310dcf6d312bcf76ba9a17a5d485c6c94081afebd21626053f1d"
+    },
+    {
+      "source": "target/writer-placement-v2/35f7ee72f7874d56b36145ce95df1514/logs/unit-tests.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/35f7ee72f7874d56b36145ce95df1514/logs/unit-tests.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/35f7ee72f7874d56b36145ce95df1514/logs/unit-tests.stdout",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/35f7ee72f7874d56b36145ce95df1514/logs/unit-tests.stdout.txt",
+      "sha256": "b5a691f17b164013ba1ae33ec4070b499056393a0e594885ec5190e092b3eace"
+    },
+    {
+      "source": "target/writer-placement-v2/35f7ee72f7874d56b36145ce95df1514/positive-witness-audit/audit.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/35f7ee72f7874d56b36145ce95df1514/positive-witness-audit/audit.json",
+      "sha256": "1ed343a808aa18a2416d27cbb1d1629a3bb78a44e4f57011d9b90a36b49e244d"
+    },
+    {
+      "source": "target/writer-placement-v2/35f7ee72f7874d56b36145ce95df1514/positive-witness-audit/post/batch-0000-dump.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/35f7ee72f7874d56b36145ce95df1514/positive-witness-audit/post/batch-0000-dump.process.json",
+      "sha256": "7572787f60c00e09375d834b16e9f9987dcc62adb32b2c9316dd407cd8369c32"
+    },
+    {
+      "source": "target/writer-placement-v2/35f7ee72f7874d56b36145ce95df1514/positive-witness-audit/post/batch-0000-dump.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/35f7ee72f7874d56b36145ce95df1514/positive-witness-audit/post/batch-0000-dump.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/35f7ee72f7874d56b36145ce95df1514/positive-witness-audit/post/batch-0000-identity.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/35f7ee72f7874d56b36145ce95df1514/positive-witness-audit/post/batch-0000-identity.process.json",
+      "sha256": "01462cb9dcbd14d901dbd322a0951fa0d901f6d0832caccffd2735591e89dce7"
+    },
+    {
+      "source": "target/writer-placement-v2/35f7ee72f7874d56b36145ce95df1514/positive-witness-audit/post/batch-0000-identity.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/35f7ee72f7874d56b36145ce95df1514/positive-witness-audit/post/batch-0000-identity.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/35f7ee72f7874d56b36145ce95df1514/positive-witness-audit/post/batch-0000-identity.stdout",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/35f7ee72f7874d56b36145ce95df1514/positive-witness-audit/post/batch-0000-identity.stdout.txt",
+      "sha256": "e9e2e937f8389861131c48ddae50914a4aff0637d151ca7bbe693d4d162a10db"
+    },
+    {
+      "source": "target/writer-placement-v2/35f7ee72f7874d56b36145ce95df1514/positive-witness-audit/post/batch-0000-rust.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/35f7ee72f7874d56b36145ce95df1514/positive-witness-audit/post/batch-0000-rust.process.json",
+      "sha256": "369b132f4299376c100e607c6b2f27dfe1d65ebd496bb49827063dfa9c7bf649"
+    },
+    {
+      "source": "target/writer-placement-v2/35f7ee72f7874d56b36145ce95df1514/positive-witness-audit/post/batch-0000-rust.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/35f7ee72f7874d56b36145ce95df1514/positive-witness-audit/post/batch-0000-rust.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/35f7ee72f7874d56b36145ce95df1514/positive-witness-audit/pre/batch-0000-dump.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/35f7ee72f7874d56b36145ce95df1514/positive-witness-audit/pre/batch-0000-dump.process.json",
+      "sha256": "fb205f3de74a4c6e615b409355ea50bcb81dccf8131409ab9bacc8d25be6b6fd"
+    },
+    {
+      "source": "target/writer-placement-v2/35f7ee72f7874d56b36145ce95df1514/positive-witness-audit/pre/batch-0000-dump.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/35f7ee72f7874d56b36145ce95df1514/positive-witness-audit/pre/batch-0000-dump.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/35f7ee72f7874d56b36145ce95df1514/positive-witness-audit/pre/batch-0000-identity.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/35f7ee72f7874d56b36145ce95df1514/positive-witness-audit/pre/batch-0000-identity.process.json",
+      "sha256": "481ac6def9acc7dfca520ec446a1b874550ddd892e36cf4175ee83656d3682fc"
+    },
+    {
+      "source": "target/writer-placement-v2/35f7ee72f7874d56b36145ce95df1514/positive-witness-audit/pre/batch-0000-identity.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/35f7ee72f7874d56b36145ce95df1514/positive-witness-audit/pre/batch-0000-identity.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/35f7ee72f7874d56b36145ce95df1514/positive-witness-audit/pre/batch-0000-identity.stdout",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/35f7ee72f7874d56b36145ce95df1514/positive-witness-audit/pre/batch-0000-identity.stdout.txt",
+      "sha256": "0fbd2992b34251b7d103488b8ba4b748906ef61586b6a7fdfe69418479cdf47d"
+    },
+    {
+      "source": "target/writer-placement-v2/35f7ee72f7874d56b36145ce95df1514/positive-witness-audit/pre/batch-0000-rust.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/35f7ee72f7874d56b36145ce95df1514/positive-witness-audit/pre/batch-0000-rust.process.json",
+      "sha256": "70c4435961b587bd2c74f63d6c6493658063f9f1d3aaccea183917f17af02179"
+    },
+    {
+      "source": "target/writer-placement-v2/35f7ee72f7874d56b36145ce95df1514/positive-witness-audit/pre/batch-0000-rust.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/35f7ee72f7874d56b36145ce95df1514/positive-witness-audit/pre/batch-0000-rust.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/35f7ee72f7874d56b36145ce95df1514/positive-witness.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/35f7ee72f7874d56b36145ce95df1514/positive-witness.json",
+      "sha256": "5289813bd3c266c172d4bb80a4cc4cf3c633d3d48c1c05c98dd205b9ad1336a0"
+    },
+    {
+      "source": "target/writer-placement-v2/35f7ee72f7874d56b36145ce95df1514/wrong-observation-witness-audit/audit.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/35f7ee72f7874d56b36145ce95df1514/wrong-observation-witness-audit/audit.json",
+      "sha256": "b8b225d9e3315eaaf59cbd2b02a9bf5780303b57c4deefb082cbc5d76cfb9c92"
+    },
+    {
+      "source": "target/writer-placement-v2/35f7ee72f7874d56b36145ce95df1514/wrong-observation-witness-audit/post/batch-0000-dump.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/35f7ee72f7874d56b36145ce95df1514/wrong-observation-witness-audit/post/batch-0000-dump.process.json",
+      "sha256": "7825f693d7071dd15b80b4c28131331481f88c77b56fab8736c15815ed26e3c5"
+    },
+    {
+      "source": "target/writer-placement-v2/35f7ee72f7874d56b36145ce95df1514/wrong-observation-witness-audit/post/batch-0000-dump.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/35f7ee72f7874d56b36145ce95df1514/wrong-observation-witness-audit/post/batch-0000-dump.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/35f7ee72f7874d56b36145ce95df1514/wrong-observation-witness-audit/post/batch-0000-identity.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/35f7ee72f7874d56b36145ce95df1514/wrong-observation-witness-audit/post/batch-0000-identity.process.json",
+      "sha256": "1687e481d77f3950c6b52b89fb000ef43ada8788ac914ce31f57b84736f7aa02"
+    },
+    {
+      "source": "target/writer-placement-v2/35f7ee72f7874d56b36145ce95df1514/wrong-observation-witness-audit/post/batch-0000-identity.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/35f7ee72f7874d56b36145ce95df1514/wrong-observation-witness-audit/post/batch-0000-identity.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/35f7ee72f7874d56b36145ce95df1514/wrong-observation-witness-audit/post/batch-0000-identity.stdout",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/35f7ee72f7874d56b36145ce95df1514/wrong-observation-witness-audit/post/batch-0000-identity.stdout.txt",
+      "sha256": "e9e2e937f8389861131c48ddae50914a4aff0637d151ca7bbe693d4d162a10db"
+    },
+    {
+      "source": "target/writer-placement-v2/35f7ee72f7874d56b36145ce95df1514/wrong-observation-witness-audit/post/batch-0000-rust.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/35f7ee72f7874d56b36145ce95df1514/wrong-observation-witness-audit/post/batch-0000-rust.process.json",
+      "sha256": "ec1d5a5561733e1098b3fced49edce6e0b264ddb522f4686ad97651c036ef1e2"
+    },
+    {
+      "source": "target/writer-placement-v2/35f7ee72f7874d56b36145ce95df1514/wrong-observation-witness-audit/post/batch-0000-rust.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/35f7ee72f7874d56b36145ce95df1514/wrong-observation-witness-audit/post/batch-0000-rust.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/35f7ee72f7874d56b36145ce95df1514/wrong-observation-witness-audit/pre/batch-0000-dump.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/35f7ee72f7874d56b36145ce95df1514/wrong-observation-witness-audit/pre/batch-0000-dump.process.json",
+      "sha256": "d562addd05dd3431a92067275d5beb0f25ae4426623d2bd23e832792e8e7665d"
+    },
+    {
+      "source": "target/writer-placement-v2/35f7ee72f7874d56b36145ce95df1514/wrong-observation-witness-audit/pre/batch-0000-dump.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/35f7ee72f7874d56b36145ce95df1514/wrong-observation-witness-audit/pre/batch-0000-dump.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/35f7ee72f7874d56b36145ce95df1514/wrong-observation-witness-audit/pre/batch-0000-identity.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/35f7ee72f7874d56b36145ce95df1514/wrong-observation-witness-audit/pre/batch-0000-identity.process.json",
+      "sha256": "8605d7d7405eff1370a318d1982133ed0e8aba4b9b9d3ed6657ce0be72c24735"
+    },
+    {
+      "source": "target/writer-placement-v2/35f7ee72f7874d56b36145ce95df1514/wrong-observation-witness-audit/pre/batch-0000-identity.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/35f7ee72f7874d56b36145ce95df1514/wrong-observation-witness-audit/pre/batch-0000-identity.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/35f7ee72f7874d56b36145ce95df1514/wrong-observation-witness-audit/pre/batch-0000-identity.stdout",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/35f7ee72f7874d56b36145ce95df1514/wrong-observation-witness-audit/pre/batch-0000-identity.stdout.txt",
+      "sha256": "0fbd2992b34251b7d103488b8ba4b748906ef61586b6a7fdfe69418479cdf47d"
+    },
+    {
+      "source": "target/writer-placement-v2/35f7ee72f7874d56b36145ce95df1514/wrong-observation-witness-audit/pre/batch-0000-rust.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/35f7ee72f7874d56b36145ce95df1514/wrong-observation-witness-audit/pre/batch-0000-rust.process.json",
+      "sha256": "9f160fd7aa3880d869f093a40e35327971ff5e09aceac0ff125b47d62512e4ae"
+    },
+    {
+      "source": "target/writer-placement-v2/35f7ee72f7874d56b36145ce95df1514/wrong-observation-witness-audit/pre/batch-0000-rust.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/35f7ee72f7874d56b36145ce95df1514/wrong-observation-witness-audit/pre/batch-0000-rust.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/35f7ee72f7874d56b36145ce95df1514/wrong-observation-witness.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/35f7ee72f7874d56b36145ce95df1514/wrong-observation-witness.json",
+      "sha256": "545cb9c3b15b80a6cd02378bc681557b7b71ad0bd15d5899063f08c870522774"
+    },
+    {
+      "source": "target/writer-placement-v2/aa2733085eed4a6fbb9534ed4ffa4666/campaign.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/aa2733085eed4a6fbb9534ed4ffa4666/campaign.json",
+      "sha256": "6f29ac4846004902f92b01fb853e6aa7f890b6263c86f6d12719b30c33b81929"
+    },
+    {
+      "source": "target/writer-placement-v2/aa2733085eed4a6fbb9534ed4ffa4666/clean/audit.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/aa2733085eed4a6fbb9534ed4ffa4666/clean/audit.json",
+      "sha256": "6ce5a042c64d54675503d779996ca1da5560f700b020d5dd1f62b75d4e78976d"
+    },
+    {
+      "source": "target/writer-placement-v2/aa2733085eed4a6fbb9534ed4ffa4666/clean/post/batch-0000-dump.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/aa2733085eed4a6fbb9534ed4ffa4666/clean/post/batch-0000-dump.process.json",
+      "sha256": "d00639319c42599761373344680bd038abd9611e9549f7af001ad680e9d6c1b0"
+    },
+    {
+      "source": "target/writer-placement-v2/aa2733085eed4a6fbb9534ed4ffa4666/clean/post/batch-0000-dump.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/aa2733085eed4a6fbb9534ed4ffa4666/clean/post/batch-0000-dump.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/aa2733085eed4a6fbb9534ed4ffa4666/clean/post/batch-0000-identity.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/aa2733085eed4a6fbb9534ed4ffa4666/clean/post/batch-0000-identity.process.json",
+      "sha256": "87c8cced7dc5b36253d72dd9b5777ec37cd36dda30c1e8e39e63079f0560e92d"
+    },
+    {
+      "source": "target/writer-placement-v2/aa2733085eed4a6fbb9534ed4ffa4666/clean/post/batch-0000-identity.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/aa2733085eed4a6fbb9534ed4ffa4666/clean/post/batch-0000-identity.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/aa2733085eed4a6fbb9534ed4ffa4666/clean/post/batch-0000-identity.stdout",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/aa2733085eed4a6fbb9534ed4ffa4666/clean/post/batch-0000-identity.stdout.txt",
+      "sha256": "909a32e85f44ccce73b5be65b1c9fd5d68449fa1de6e9a8294b8393687c37cc9"
+    },
+    {
+      "source": "target/writer-placement-v2/aa2733085eed4a6fbb9534ed4ffa4666/clean/post/batch-0000-rust.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/aa2733085eed4a6fbb9534ed4ffa4666/clean/post/batch-0000-rust.process.json",
+      "sha256": "c1100cd5ad455ff66f93d882fcacb01f81c0f5e5af212b43e039b6505d97b599"
+    },
+    {
+      "source": "target/writer-placement-v2/aa2733085eed4a6fbb9534ed4ffa4666/clean/post/batch-0000-rust.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/aa2733085eed4a6fbb9534ed4ffa4666/clean/post/batch-0000-rust.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/aa2733085eed4a6fbb9534ed4ffa4666/clean/post/batch-0008-dump.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/aa2733085eed4a6fbb9534ed4ffa4666/clean/post/batch-0008-dump.process.json",
+      "sha256": "4ab24c7524471cabfc0e961c609ca6b88ea07c55a755997e000ad8195495677a"
+    },
+    {
+      "source": "target/writer-placement-v2/aa2733085eed4a6fbb9534ed4ffa4666/clean/post/batch-0008-dump.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/aa2733085eed4a6fbb9534ed4ffa4666/clean/post/batch-0008-dump.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/aa2733085eed4a6fbb9534ed4ffa4666/clean/post/batch-0008-identity.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/aa2733085eed4a6fbb9534ed4ffa4666/clean/post/batch-0008-identity.process.json",
+      "sha256": "c8a6b662615d5eb5dc0e017a9f53087030ae717675e8be9fbf799e9976995aaf"
+    },
+    {
+      "source": "target/writer-placement-v2/aa2733085eed4a6fbb9534ed4ffa4666/clean/post/batch-0008-identity.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/aa2733085eed4a6fbb9534ed4ffa4666/clean/post/batch-0008-identity.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/aa2733085eed4a6fbb9534ed4ffa4666/clean/post/batch-0008-identity.stdout",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/aa2733085eed4a6fbb9534ed4ffa4666/clean/post/batch-0008-identity.stdout.txt",
+      "sha256": "fe31ccc13d8b026375d9fa6478f082c9a1060b57c3a59b4a3c93d35dffc260b2"
+    },
+    {
+      "source": "target/writer-placement-v2/aa2733085eed4a6fbb9534ed4ffa4666/clean/post/batch-0008-rust.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/aa2733085eed4a6fbb9534ed4ffa4666/clean/post/batch-0008-rust.process.json",
+      "sha256": "77c7d6393633c0f4edd9c351fb5eb7e704da1e8c038099e85b15713b47be9ad1"
+    },
+    {
+      "source": "target/writer-placement-v2/aa2733085eed4a6fbb9534ed4ffa4666/clean/post/batch-0008-rust.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/aa2733085eed4a6fbb9534ed4ffa4666/clean/post/batch-0008-rust.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/aa2733085eed4a6fbb9534ed4ffa4666/clean/pre/batch-0000-dump.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/aa2733085eed4a6fbb9534ed4ffa4666/clean/pre/batch-0000-dump.process.json",
+      "sha256": "2a1caf50e8b47a2462f6a01ef69e117383244052b85216bcb5dfd3928d3ff102"
+    },
+    {
+      "source": "target/writer-placement-v2/aa2733085eed4a6fbb9534ed4ffa4666/clean/pre/batch-0000-dump.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/aa2733085eed4a6fbb9534ed4ffa4666/clean/pre/batch-0000-dump.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/aa2733085eed4a6fbb9534ed4ffa4666/clean/pre/batch-0000-identity.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/aa2733085eed4a6fbb9534ed4ffa4666/clean/pre/batch-0000-identity.process.json",
+      "sha256": "2fae34ac9e48988ca23988f7cc84389b3bddff6f5c4a4995d766ca9e6a25f497"
+    },
+    {
+      "source": "target/writer-placement-v2/aa2733085eed4a6fbb9534ed4ffa4666/clean/pre/batch-0000-identity.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/aa2733085eed4a6fbb9534ed4ffa4666/clean/pre/batch-0000-identity.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/aa2733085eed4a6fbb9534ed4ffa4666/clean/pre/batch-0000-identity.stdout",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/aa2733085eed4a6fbb9534ed4ffa4666/clean/pre/batch-0000-identity.stdout.txt",
+      "sha256": "d175c84312dbfae9086519fc0a02226c55861bf656e6df3b560dc62c8283bc49"
+    },
+    {
+      "source": "target/writer-placement-v2/aa2733085eed4a6fbb9534ed4ffa4666/clean/pre/batch-0000-rust.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/aa2733085eed4a6fbb9534ed4ffa4666/clean/pre/batch-0000-rust.process.json",
+      "sha256": "0e0c49be1afe5f4708c438357810a310e2362d4f7e403a7e2e1039aff283bc92"
+    },
+    {
+      "source": "target/writer-placement-v2/aa2733085eed4a6fbb9534ed4ffa4666/clean/pre/batch-0000-rust.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/aa2733085eed4a6fbb9534ed4ffa4666/clean/pre/batch-0000-rust.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/aa2733085eed4a6fbb9534ed4ffa4666/clean/pre/batch-0008-dump.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/aa2733085eed4a6fbb9534ed4ffa4666/clean/pre/batch-0008-dump.process.json",
+      "sha256": "11ed4db4b2c4fbdb3ce55fb2248d418a6358af76c680266a5de4e4922f1c176d"
+    },
+    {
+      "source": "target/writer-placement-v2/aa2733085eed4a6fbb9534ed4ffa4666/clean/pre/batch-0008-dump.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/aa2733085eed4a6fbb9534ed4ffa4666/clean/pre/batch-0008-dump.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/aa2733085eed4a6fbb9534ed4ffa4666/clean/pre/batch-0008-identity.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/aa2733085eed4a6fbb9534ed4ffa4666/clean/pre/batch-0008-identity.process.json",
+      "sha256": "44d436107c171ae99058108355462df1f3bab606232fa35573446b5e90451765"
+    },
+    {
+      "source": "target/writer-placement-v2/aa2733085eed4a6fbb9534ed4ffa4666/clean/pre/batch-0008-identity.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/aa2733085eed4a6fbb9534ed4ffa4666/clean/pre/batch-0008-identity.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/aa2733085eed4a6fbb9534ed4ffa4666/clean/pre/batch-0008-identity.stdout",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/aa2733085eed4a6fbb9534ed4ffa4666/clean/pre/batch-0008-identity.stdout.txt",
+      "sha256": "ea05586cd652253622d5ac6f679308bbe3eab62ac32e7854eb9b402b37dd936c"
+    },
+    {
+      "source": "target/writer-placement-v2/aa2733085eed4a6fbb9534ed4ffa4666/clean/pre/batch-0008-rust.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/aa2733085eed4a6fbb9534ed4ffa4666/clean/pre/batch-0008-rust.process.json",
+      "sha256": "1882fc93e9b0e9204091a47b6a5d3ba1c1485e2ee059aa2f5ec14fac496b3485"
+    },
+    {
+      "source": "target/writer-placement-v2/aa2733085eed4a6fbb9534ed4ffa4666/clean/pre/batch-0008-rust.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/aa2733085eed4a6fbb9534ed4ffa4666/clean/pre/batch-0008-rust.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/aa2733085eed4a6fbb9534ed4ffa4666/fixture-controls.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/aa2733085eed4a6fbb9534ed4ffa4666/fixture-controls.json",
+      "sha256": "eb460e45dbc957b50cacd48e0dd13a5543999d6c7572dd0d350e14c88ada3585"
+    },
+    {
+      "source": "target/writer-placement-v2/aa2733085eed4a6fbb9534ed4ffa4666/fixture-dumps/batch-0000-dump.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/aa2733085eed4a6fbb9534ed4ffa4666/fixture-dumps/batch-0000-dump.process.json",
+      "sha256": "4ec827f3827a4485afa464d0ef863187f0d6c8ff7e9a4cdbd7535ed13b148d22"
+    },
+    {
+      "source": "target/writer-placement-v2/aa2733085eed4a6fbb9534ed4ffa4666/fixture-dumps/batch-0000-dump.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/aa2733085eed4a6fbb9534ed4ffa4666/fixture-dumps/batch-0000-dump.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/aa2733085eed4a6fbb9534ed4ffa4666/fixture-dumps/batch-0000-identity.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/aa2733085eed4a6fbb9534ed4ffa4666/fixture-dumps/batch-0000-identity.process.json",
+      "sha256": "48d348b1c65bb8638f1641caa9aaec41bfaa814a5f50c3ff24e1dd97fa255cd3"
+    },
+    {
+      "source": "target/writer-placement-v2/aa2733085eed4a6fbb9534ed4ffa4666/fixture-dumps/batch-0000-identity.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/aa2733085eed4a6fbb9534ed4ffa4666/fixture-dumps/batch-0000-identity.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/aa2733085eed4a6fbb9534ed4ffa4666/fixture-dumps/batch-0000-identity.stdout",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/aa2733085eed4a6fbb9534ed4ffa4666/fixture-dumps/batch-0000-identity.stdout.txt",
+      "sha256": "ce307467e20d83f8fe1c8774583ec80e1756585c4bb72633afb48b2028036d67"
+    },
+    {
+      "source": "target/writer-placement-v2/aa2733085eed4a6fbb9534ed4ffa4666/fixture-dumps/batch-0000-rust.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/aa2733085eed4a6fbb9534ed4ffa4666/fixture-dumps/batch-0000-rust.process.json",
+      "sha256": "3112db128a0c79d7b5213fd6e362be47ef65ad2db6624b84086840c9cb01ce13"
+    },
+    {
+      "source": "target/writer-placement-v2/aa2733085eed4a6fbb9534ed4ffa4666/fixture-dumps/batch-0000-rust.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/aa2733085eed4a6fbb9534ed4ffa4666/fixture-dumps/batch-0000-rust.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/aa2733085eed4a6fbb9534ed4ffa4666/fixture-dumps/batch-0008-dump.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/aa2733085eed4a6fbb9534ed4ffa4666/fixture-dumps/batch-0008-dump.process.json",
+      "sha256": "6cbc1adc7da96f66339d383c3bb10f2eaba11c8e7e7ef5446a81f1e592db84ca"
+    },
+    {
+      "source": "target/writer-placement-v2/aa2733085eed4a6fbb9534ed4ffa4666/fixture-dumps/batch-0008-dump.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/aa2733085eed4a6fbb9534ed4ffa4666/fixture-dumps/batch-0008-dump.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/aa2733085eed4a6fbb9534ed4ffa4666/fixture-dumps/batch-0008-identity.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/aa2733085eed4a6fbb9534ed4ffa4666/fixture-dumps/batch-0008-identity.process.json",
+      "sha256": "b04ed508937b7a0a9cc01727c36c4b47ccc35642278ff3dbbb9afb849cdfc6e4"
+    },
+    {
+      "source": "target/writer-placement-v2/aa2733085eed4a6fbb9534ed4ffa4666/fixture-dumps/batch-0008-identity.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/aa2733085eed4a6fbb9534ed4ffa4666/fixture-dumps/batch-0008-identity.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/aa2733085eed4a6fbb9534ed4ffa4666/fixture-dumps/batch-0008-identity.stdout",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/aa2733085eed4a6fbb9534ed4ffa4666/fixture-dumps/batch-0008-identity.stdout.txt",
+      "sha256": "37f6574f6ff4555ae9adfcc19b1acaa5ad57134bb1d25f777556b9cf8f40e39a"
+    },
+    {
+      "source": "target/writer-placement-v2/aa2733085eed4a6fbb9534ed4ffa4666/fixture-dumps/batch-0008-rust.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/aa2733085eed4a6fbb9534ed4ffa4666/fixture-dumps/batch-0008-rust.process.json",
+      "sha256": "5cb385e2c0a6884d980564f89997ddf88a11b8a801269c4718094e261062f4a6"
+    },
+    {
+      "source": "target/writer-placement-v2/aa2733085eed4a6fbb9534ed4ffa4666/fixture-dumps/batch-0008-rust.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/aa2733085eed4a6fbb9534ed4ffa4666/fixture-dumps/batch-0008-rust.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/aa2733085eed4a6fbb9534ed4ffa4666/fixture-dumps/batch-0016-dump.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/aa2733085eed4a6fbb9534ed4ffa4666/fixture-dumps/batch-0016-dump.process.json",
+      "sha256": "9357533dc32ffe9ab13b6613a3bf95535db6b9f4c16cf1e85339effc56f9d9e9"
+    },
+    {
+      "source": "target/writer-placement-v2/aa2733085eed4a6fbb9534ed4ffa4666/fixture-dumps/batch-0016-dump.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/aa2733085eed4a6fbb9534ed4ffa4666/fixture-dumps/batch-0016-dump.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/aa2733085eed4a6fbb9534ed4ffa4666/fixture-dumps/batch-0016-identity.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/aa2733085eed4a6fbb9534ed4ffa4666/fixture-dumps/batch-0016-identity.process.json",
+      "sha256": "c52785c85fc1a488c403f5105904c07638b37c60e914442b837cce6cf3225e11"
+    },
+    {
+      "source": "target/writer-placement-v2/aa2733085eed4a6fbb9534ed4ffa4666/fixture-dumps/batch-0016-identity.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/aa2733085eed4a6fbb9534ed4ffa4666/fixture-dumps/batch-0016-identity.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/aa2733085eed4a6fbb9534ed4ffa4666/fixture-dumps/batch-0016-identity.stdout",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/aa2733085eed4a6fbb9534ed4ffa4666/fixture-dumps/batch-0016-identity.stdout.txt",
+      "sha256": "6dec8a07316cc45179e285bf6063a60487d688f8aa5bd32aaa92b0039f3ee04a"
+    },
+    {
+      "source": "target/writer-placement-v2/aa2733085eed4a6fbb9534ed4ffa4666/fixture-dumps/batch-0016-rust.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/aa2733085eed4a6fbb9534ed4ffa4666/fixture-dumps/batch-0016-rust.process.json",
+      "sha256": "047188078044edf460d79e23c20c820c175dba514490405b29cc989bb103e5cc"
+    },
+    {
+      "source": "target/writer-placement-v2/aa2733085eed4a6fbb9534ed4ffa4666/fixture-dumps/batch-0016-rust.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/aa2733085eed4a6fbb9534ed4ffa4666/fixture-dumps/batch-0016-rust.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/aa2733085eed4a6fbb9534ed4ffa4666/fixture-dumps/batch-0024-dump.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/aa2733085eed4a6fbb9534ed4ffa4666/fixture-dumps/batch-0024-dump.process.json",
+      "sha256": "25812f3a629304ce8b77be63ceed9c96c5ced79d2bad9a54e7af59d56db9d5be"
+    },
+    {
+      "source": "target/writer-placement-v2/aa2733085eed4a6fbb9534ed4ffa4666/fixture-dumps/batch-0024-dump.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/aa2733085eed4a6fbb9534ed4ffa4666/fixture-dumps/batch-0024-dump.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/aa2733085eed4a6fbb9534ed4ffa4666/fixture-dumps/batch-0024-identity.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/aa2733085eed4a6fbb9534ed4ffa4666/fixture-dumps/batch-0024-identity.process.json",
+      "sha256": "e0e2227dc7da41c9a982966da4264c1cfd0fcfc8b1aefee59ae1f513c9837f76"
+    },
+    {
+      "source": "target/writer-placement-v2/aa2733085eed4a6fbb9534ed4ffa4666/fixture-dumps/batch-0024-identity.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/aa2733085eed4a6fbb9534ed4ffa4666/fixture-dumps/batch-0024-identity.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/aa2733085eed4a6fbb9534ed4ffa4666/fixture-dumps/batch-0024-identity.stdout",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/aa2733085eed4a6fbb9534ed4ffa4666/fixture-dumps/batch-0024-identity.stdout.txt",
+      "sha256": "27b4ce4e87c6a7a6a813baf20a9b0bdc340b63e4577c95c6590f4bec98cf69fe"
+    },
+    {
+      "source": "target/writer-placement-v2/aa2733085eed4a6fbb9534ed4ffa4666/fixture-dumps/batch-0024-rust.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/aa2733085eed4a6fbb9534ed4ffa4666/fixture-dumps/batch-0024-rust.process.json",
+      "sha256": "b138d0692e555dd0ec97996aa9ebe4adf138971baa0666716f7a0dec1ea1481d"
+    },
+    {
+      "source": "target/writer-placement-v2/aa2733085eed4a6fbb9534ed4ffa4666/fixture-dumps/batch-0024-rust.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/aa2733085eed4a6fbb9534ed4ffa4666/fixture-dumps/batch-0024-rust.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/aa2733085eed4a6fbb9534ed4ffa4666/hooks.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/aa2733085eed4a6fbb9534ed4ffa4666/hooks.json",
+      "sha256": "9e7f66cc31a2698a594f258987cb58098c82374b40ab45203d73665a2fa08627"
+    },
+    {
+      "source": "target/writer-placement-v2/aa2733085eed4a6fbb9534ed4ffa4666/logs/compile.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/aa2733085eed4a6fbb9534ed4ffa4666/logs/compile.process.json",
+      "sha256": "7217f370338d6c678ec351d3245dd3bbe01f79dbb56aea975815e84c63a8713e"
+    },
+    {
+      "source": "target/writer-placement-v2/aa2733085eed4a6fbb9534ed4ffa4666/logs/compile.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/aa2733085eed4a6fbb9534ed4ffa4666/logs/compile.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/aa2733085eed4a6fbb9534ed4ffa4666/logs/compile.stdout",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/aa2733085eed4a6fbb9534ed4ffa4666/logs/compile.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/aa2733085eed4a6fbb9534ed4ffa4666/logs/generate.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/aa2733085eed4a6fbb9534ed4ffa4666/logs/generate.process.json",
+      "sha256": "5471983786095e8dd117cef8c666f2816f567f9db7605a5b34168cf4cdb92a15"
+    },
+    {
+      "source": "target/writer-placement-v2/aa2733085eed4a6fbb9534ed4ffa4666/logs/generate.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/aa2733085eed4a6fbb9534ed4ffa4666/logs/generate.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/aa2733085eed4a6fbb9534ed4ffa4666/logs/generate.stdout",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/aa2733085eed4a6fbb9534ed4ffa4666/logs/generate.stdout.txt",
+      "sha256": "f3b00ce1f5edce3b538e4789fe1c6ddd4adeb26d134d49fea663a6a8def7058e"
+    },
+    {
+      "source": "target/writer-placement-v2/aa2733085eed4a6fbb9534ed4ffa4666/logs/unit-tests.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/aa2733085eed4a6fbb9534ed4ffa4666/logs/unit-tests.process.json",
+      "sha256": "957dcc855b5f760e8b1528177ca60c87a5dd78808bd8cf90401cc65706248860"
+    },
+    {
+      "source": "target/writer-placement-v2/aa2733085eed4a6fbb9534ed4ffa4666/logs/unit-tests.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/aa2733085eed4a6fbb9534ed4ffa4666/logs/unit-tests.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/aa2733085eed4a6fbb9534ed4ffa4666/logs/unit-tests.stdout",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/aa2733085eed4a6fbb9534ed4ffa4666/logs/unit-tests.stdout.txt",
+      "sha256": "a42a3f4fe294b149b0d9edb3c0c53fdd3feaeafa07f0c8e6329d260bf62165dc"
+    },
+    {
+      "source": "target/writer-placement-v2/ac033f76df5044329dfcbf371283911a/campaign.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/ac033f76df5044329dfcbf371283911a/campaign.json",
+      "sha256": "2c800d0b2029c45f96e285c238c327489169bf7a96fe367addd3f6f68c268f24"
+    },
+    {
+      "source": "target/writer-placement-v2/ac033f76df5044329dfcbf371283911a/clean/audit.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/ac033f76df5044329dfcbf371283911a/clean/audit.json",
+      "sha256": "4c80eaa310f4322c529c10f06704ed347e974f50bed2b77d722b781da76b17da"
+    },
+    {
+      "source": "target/writer-placement-v2/ac033f76df5044329dfcbf371283911a/clean/post/batch-0000-dump.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/ac033f76df5044329dfcbf371283911a/clean/post/batch-0000-dump.process.json",
+      "sha256": "27447b6b28c486489653f9cc768511aff93fb58c9ff3e033e1b50700d6c93386"
+    },
+    {
+      "source": "target/writer-placement-v2/ac033f76df5044329dfcbf371283911a/clean/post/batch-0000-dump.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/ac033f76df5044329dfcbf371283911a/clean/post/batch-0000-dump.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/ac033f76df5044329dfcbf371283911a/clean/post/batch-0000-identity.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/ac033f76df5044329dfcbf371283911a/clean/post/batch-0000-identity.process.json",
+      "sha256": "f6cc94283e7be2c2d0749da1944fa8920aeb7cea13566086a327bc7583403686"
+    },
+    {
+      "source": "target/writer-placement-v2/ac033f76df5044329dfcbf371283911a/clean/post/batch-0000-identity.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/ac033f76df5044329dfcbf371283911a/clean/post/batch-0000-identity.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/ac033f76df5044329dfcbf371283911a/clean/post/batch-0000-identity.stdout",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/ac033f76df5044329dfcbf371283911a/clean/post/batch-0000-identity.stdout.txt",
+      "sha256": "909a32e85f44ccce73b5be65b1c9fd5d68449fa1de6e9a8294b8393687c37cc9"
+    },
+    {
+      "source": "target/writer-placement-v2/ac033f76df5044329dfcbf371283911a/clean/post/batch-0000-rust.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/ac033f76df5044329dfcbf371283911a/clean/post/batch-0000-rust.process.json",
+      "sha256": "494e08ac888499579b97330c40f2c4ea8f070213429af8985d8134f576a72d64"
+    },
+    {
+      "source": "target/writer-placement-v2/ac033f76df5044329dfcbf371283911a/clean/post/batch-0000-rust.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/ac033f76df5044329dfcbf371283911a/clean/post/batch-0000-rust.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/ac033f76df5044329dfcbf371283911a/clean/post/batch-0008-dump.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/ac033f76df5044329dfcbf371283911a/clean/post/batch-0008-dump.process.json",
+      "sha256": "fe6b5e0d9b1c65d16497aad2fffa47a60f7e804e18e80dda50875275237949c6"
+    },
+    {
+      "source": "target/writer-placement-v2/ac033f76df5044329dfcbf371283911a/clean/post/batch-0008-dump.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/ac033f76df5044329dfcbf371283911a/clean/post/batch-0008-dump.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/ac033f76df5044329dfcbf371283911a/clean/post/batch-0008-identity.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/ac033f76df5044329dfcbf371283911a/clean/post/batch-0008-identity.process.json",
+      "sha256": "7bc7ff3f9e58a6bb6d1001ec4818bc036d8f49693ed3b873e68e3224dc0106e6"
+    },
+    {
+      "source": "target/writer-placement-v2/ac033f76df5044329dfcbf371283911a/clean/post/batch-0008-identity.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/ac033f76df5044329dfcbf371283911a/clean/post/batch-0008-identity.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/ac033f76df5044329dfcbf371283911a/clean/post/batch-0008-identity.stdout",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/ac033f76df5044329dfcbf371283911a/clean/post/batch-0008-identity.stdout.txt",
+      "sha256": "fe31ccc13d8b026375d9fa6478f082c9a1060b57c3a59b4a3c93d35dffc260b2"
+    },
+    {
+      "source": "target/writer-placement-v2/ac033f76df5044329dfcbf371283911a/clean/post/batch-0008-rust.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/ac033f76df5044329dfcbf371283911a/clean/post/batch-0008-rust.process.json",
+      "sha256": "937b50eb206234dd073c6846b5ce601b7781bab06445f64e12b6ddd620269fff"
+    },
+    {
+      "source": "target/writer-placement-v2/ac033f76df5044329dfcbf371283911a/clean/post/batch-0008-rust.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/ac033f76df5044329dfcbf371283911a/clean/post/batch-0008-rust.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/ac033f76df5044329dfcbf371283911a/clean/pre/batch-0000-dump.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/ac033f76df5044329dfcbf371283911a/clean/pre/batch-0000-dump.process.json",
+      "sha256": "180824ed56e2e7c55c8d17c8375e883a235b85f11c2516f120ea54a48d937f2e"
+    },
+    {
+      "source": "target/writer-placement-v2/ac033f76df5044329dfcbf371283911a/clean/pre/batch-0000-dump.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/ac033f76df5044329dfcbf371283911a/clean/pre/batch-0000-dump.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/ac033f76df5044329dfcbf371283911a/clean/pre/batch-0000-identity.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/ac033f76df5044329dfcbf371283911a/clean/pre/batch-0000-identity.process.json",
+      "sha256": "7fc872a9798735dbd07dea3322fb352b500ece7106dd36eb9f07908ba3bc112a"
+    },
+    {
+      "source": "target/writer-placement-v2/ac033f76df5044329dfcbf371283911a/clean/pre/batch-0000-identity.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/ac033f76df5044329dfcbf371283911a/clean/pre/batch-0000-identity.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/ac033f76df5044329dfcbf371283911a/clean/pre/batch-0000-identity.stdout",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/ac033f76df5044329dfcbf371283911a/clean/pre/batch-0000-identity.stdout.txt",
+      "sha256": "d175c84312dbfae9086519fc0a02226c55861bf656e6df3b560dc62c8283bc49"
+    },
+    {
+      "source": "target/writer-placement-v2/ac033f76df5044329dfcbf371283911a/clean/pre/batch-0000-rust.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/ac033f76df5044329dfcbf371283911a/clean/pre/batch-0000-rust.process.json",
+      "sha256": "3823103f6ae8dc668dcb4568871e12bbcb479a2b9091e70667cf365e4c871901"
+    },
+    {
+      "source": "target/writer-placement-v2/ac033f76df5044329dfcbf371283911a/clean/pre/batch-0000-rust.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/ac033f76df5044329dfcbf371283911a/clean/pre/batch-0000-rust.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/ac033f76df5044329dfcbf371283911a/clean/pre/batch-0008-dump.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/ac033f76df5044329dfcbf371283911a/clean/pre/batch-0008-dump.process.json",
+      "sha256": "4f6b53b9128289a8efe5515e06a0a7a21a88f900e5a95034489073dcac28286c"
+    },
+    {
+      "source": "target/writer-placement-v2/ac033f76df5044329dfcbf371283911a/clean/pre/batch-0008-dump.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/ac033f76df5044329dfcbf371283911a/clean/pre/batch-0008-dump.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/ac033f76df5044329dfcbf371283911a/clean/pre/batch-0008-identity.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/ac033f76df5044329dfcbf371283911a/clean/pre/batch-0008-identity.process.json",
+      "sha256": "7b08288ef701eaf369cddce03df819fb429a7dcdfeca63b42bdc8cb92c77a120"
+    },
+    {
+      "source": "target/writer-placement-v2/ac033f76df5044329dfcbf371283911a/clean/pre/batch-0008-identity.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/ac033f76df5044329dfcbf371283911a/clean/pre/batch-0008-identity.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/ac033f76df5044329dfcbf371283911a/clean/pre/batch-0008-identity.stdout",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/ac033f76df5044329dfcbf371283911a/clean/pre/batch-0008-identity.stdout.txt",
+      "sha256": "ea05586cd652253622d5ac6f679308bbe3eab62ac32e7854eb9b402b37dd936c"
+    },
+    {
+      "source": "target/writer-placement-v2/ac033f76df5044329dfcbf371283911a/clean/pre/batch-0008-rust.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/ac033f76df5044329dfcbf371283911a/clean/pre/batch-0008-rust.process.json",
+      "sha256": "eadd638b0dfbb1c7b8128e46a8f43d040d8a36a3d6edd2681b6d7295df444e72"
+    },
+    {
+      "source": "target/writer-placement-v2/ac033f76df5044329dfcbf371283911a/clean/pre/batch-0008-rust.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/ac033f76df5044329dfcbf371283911a/clean/pre/batch-0008-rust.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/ac033f76df5044329dfcbf371283911a/clean-incomplete-witness-audit/audit.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/ac033f76df5044329dfcbf371283911a/clean-incomplete-witness-audit/audit.json",
+      "sha256": "c7c827d9fa6c3e49c60238c250bf9c02eff93af89b0a3dd07efa626ff6d9ab90"
+    },
+    {
+      "source": "target/writer-placement-v2/ac033f76df5044329dfcbf371283911a/clean-incomplete-witness-audit/post/batch-0000-dump.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/ac033f76df5044329dfcbf371283911a/clean-incomplete-witness-audit/post/batch-0000-dump.process.json",
+      "sha256": "9485b6ec09c27d347594c4b8be5ca173d83e152e51d2eafd33063151eb24b18c"
+    },
+    {
+      "source": "target/writer-placement-v2/ac033f76df5044329dfcbf371283911a/clean-incomplete-witness-audit/post/batch-0000-dump.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/ac033f76df5044329dfcbf371283911a/clean-incomplete-witness-audit/post/batch-0000-dump.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/ac033f76df5044329dfcbf371283911a/clean-incomplete-witness-audit/post/batch-0000-identity.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/ac033f76df5044329dfcbf371283911a/clean-incomplete-witness-audit/post/batch-0000-identity.process.json",
+      "sha256": "92c4cc853b7beacefcd8e668f62e5aff5e4184e75816fb43ffcb1f6d5cfe3086"
+    },
+    {
+      "source": "target/writer-placement-v2/ac033f76df5044329dfcbf371283911a/clean-incomplete-witness-audit/post/batch-0000-identity.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/ac033f76df5044329dfcbf371283911a/clean-incomplete-witness-audit/post/batch-0000-identity.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/ac033f76df5044329dfcbf371283911a/clean-incomplete-witness-audit/post/batch-0000-identity.stdout",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/ac033f76df5044329dfcbf371283911a/clean-incomplete-witness-audit/post/batch-0000-identity.stdout.txt",
+      "sha256": "909a32e85f44ccce73b5be65b1c9fd5d68449fa1de6e9a8294b8393687c37cc9"
+    },
+    {
+      "source": "target/writer-placement-v2/ac033f76df5044329dfcbf371283911a/clean-incomplete-witness-audit/post/batch-0000-rust.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/ac033f76df5044329dfcbf371283911a/clean-incomplete-witness-audit/post/batch-0000-rust.process.json",
+      "sha256": "5d2545567f757c29033ca45dce857fe3b2ed514ab9743da8be9a1dee0937598b"
+    },
+    {
+      "source": "target/writer-placement-v2/ac033f76df5044329dfcbf371283911a/clean-incomplete-witness-audit/post/batch-0000-rust.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/ac033f76df5044329dfcbf371283911a/clean-incomplete-witness-audit/post/batch-0000-rust.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/ac033f76df5044329dfcbf371283911a/clean-incomplete-witness-audit/post/batch-0008-dump.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/ac033f76df5044329dfcbf371283911a/clean-incomplete-witness-audit/post/batch-0008-dump.process.json",
+      "sha256": "be362d06538c94da78c8a4f8e60f4e6a5075c17e9cea653de7fd414b57ad6aca"
+    },
+    {
+      "source": "target/writer-placement-v2/ac033f76df5044329dfcbf371283911a/clean-incomplete-witness-audit/post/batch-0008-dump.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/ac033f76df5044329dfcbf371283911a/clean-incomplete-witness-audit/post/batch-0008-dump.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/ac033f76df5044329dfcbf371283911a/clean-incomplete-witness-audit/post/batch-0008-identity.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/ac033f76df5044329dfcbf371283911a/clean-incomplete-witness-audit/post/batch-0008-identity.process.json",
+      "sha256": "402cc5fa814da5baf1712960b299882e10cf2c4c978cc3caad7956e496af118b"
+    },
+    {
+      "source": "target/writer-placement-v2/ac033f76df5044329dfcbf371283911a/clean-incomplete-witness-audit/post/batch-0008-identity.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/ac033f76df5044329dfcbf371283911a/clean-incomplete-witness-audit/post/batch-0008-identity.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/ac033f76df5044329dfcbf371283911a/clean-incomplete-witness-audit/post/batch-0008-identity.stdout",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/ac033f76df5044329dfcbf371283911a/clean-incomplete-witness-audit/post/batch-0008-identity.stdout.txt",
+      "sha256": "fe31ccc13d8b026375d9fa6478f082c9a1060b57c3a59b4a3c93d35dffc260b2"
+    },
+    {
+      "source": "target/writer-placement-v2/ac033f76df5044329dfcbf371283911a/clean-incomplete-witness-audit/post/batch-0008-rust.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/ac033f76df5044329dfcbf371283911a/clean-incomplete-witness-audit/post/batch-0008-rust.process.json",
+      "sha256": "8dc087f76a3c486021369cdf2d3810b08b61dd3fe9f67db8c1c67185fcf12ea1"
+    },
+    {
+      "source": "target/writer-placement-v2/ac033f76df5044329dfcbf371283911a/clean-incomplete-witness-audit/post/batch-0008-rust.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/ac033f76df5044329dfcbf371283911a/clean-incomplete-witness-audit/post/batch-0008-rust.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/ac033f76df5044329dfcbf371283911a/clean-incomplete-witness-audit/pre/batch-0000-dump.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/ac033f76df5044329dfcbf371283911a/clean-incomplete-witness-audit/pre/batch-0000-dump.process.json",
+      "sha256": "3ede0f8b0459535758ad7b660ae0f3e68039db93b53467146889eca337eaf6f4"
+    },
+    {
+      "source": "target/writer-placement-v2/ac033f76df5044329dfcbf371283911a/clean-incomplete-witness-audit/pre/batch-0000-dump.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/ac033f76df5044329dfcbf371283911a/clean-incomplete-witness-audit/pre/batch-0000-dump.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/ac033f76df5044329dfcbf371283911a/clean-incomplete-witness-audit/pre/batch-0000-identity.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/ac033f76df5044329dfcbf371283911a/clean-incomplete-witness-audit/pre/batch-0000-identity.process.json",
+      "sha256": "68e1601a1dbbfc8a7110b9a05f701b568929fcfddf98d0be1bba8d9073de08c3"
+    },
+    {
+      "source": "target/writer-placement-v2/ac033f76df5044329dfcbf371283911a/clean-incomplete-witness-audit/pre/batch-0000-identity.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/ac033f76df5044329dfcbf371283911a/clean-incomplete-witness-audit/pre/batch-0000-identity.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/ac033f76df5044329dfcbf371283911a/clean-incomplete-witness-audit/pre/batch-0000-identity.stdout",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/ac033f76df5044329dfcbf371283911a/clean-incomplete-witness-audit/pre/batch-0000-identity.stdout.txt",
+      "sha256": "d175c84312dbfae9086519fc0a02226c55861bf656e6df3b560dc62c8283bc49"
+    },
+    {
+      "source": "target/writer-placement-v2/ac033f76df5044329dfcbf371283911a/clean-incomplete-witness-audit/pre/batch-0000-rust.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/ac033f76df5044329dfcbf371283911a/clean-incomplete-witness-audit/pre/batch-0000-rust.process.json",
+      "sha256": "1283c24e1be6aca823186d2866006c4ee347bc88acdee54c2f266b685634e815"
+    },
+    {
+      "source": "target/writer-placement-v2/ac033f76df5044329dfcbf371283911a/clean-incomplete-witness-audit/pre/batch-0000-rust.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/ac033f76df5044329dfcbf371283911a/clean-incomplete-witness-audit/pre/batch-0000-rust.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/ac033f76df5044329dfcbf371283911a/clean-incomplete-witness-audit/pre/batch-0008-dump.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/ac033f76df5044329dfcbf371283911a/clean-incomplete-witness-audit/pre/batch-0008-dump.process.json",
+      "sha256": "7ed35c9f0ba36a871ec644d022b60abc201f84da2b879c62b160d9901144055b"
+    },
+    {
+      "source": "target/writer-placement-v2/ac033f76df5044329dfcbf371283911a/clean-incomplete-witness-audit/pre/batch-0008-dump.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/ac033f76df5044329dfcbf371283911a/clean-incomplete-witness-audit/pre/batch-0008-dump.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/ac033f76df5044329dfcbf371283911a/clean-incomplete-witness-audit/pre/batch-0008-identity.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/ac033f76df5044329dfcbf371283911a/clean-incomplete-witness-audit/pre/batch-0008-identity.process.json",
+      "sha256": "cd3ba50fc598c9655161da3d09610165ccf312b3d56140f05f017c447922e75e"
+    },
+    {
+      "source": "target/writer-placement-v2/ac033f76df5044329dfcbf371283911a/clean-incomplete-witness-audit/pre/batch-0008-identity.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/ac033f76df5044329dfcbf371283911a/clean-incomplete-witness-audit/pre/batch-0008-identity.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/ac033f76df5044329dfcbf371283911a/clean-incomplete-witness-audit/pre/batch-0008-identity.stdout",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/ac033f76df5044329dfcbf371283911a/clean-incomplete-witness-audit/pre/batch-0008-identity.stdout.txt",
+      "sha256": "ea05586cd652253622d5ac6f679308bbe3eab62ac32e7854eb9b402b37dd936c"
+    },
+    {
+      "source": "target/writer-placement-v2/ac033f76df5044329dfcbf371283911a/clean-incomplete-witness-audit/pre/batch-0008-rust.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/ac033f76df5044329dfcbf371283911a/clean-incomplete-witness-audit/pre/batch-0008-rust.process.json",
+      "sha256": "29b4828e9158a76dfd0f987eca566fe146a80cd5205a084a8564a8a7bc04a1d5"
+    },
+    {
+      "source": "target/writer-placement-v2/ac033f76df5044329dfcbf371283911a/clean-incomplete-witness-audit/pre/batch-0008-rust.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/ac033f76df5044329dfcbf371283911a/clean-incomplete-witness-audit/pre/batch-0008-rust.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/ac033f76df5044329dfcbf371283911a/clean-incomplete-witness.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/ac033f76df5044329dfcbf371283911a/clean-incomplete-witness.json",
+      "sha256": "30e093a0bb9624add7bed784ae40bfa35a0f553404be76cfb275cec36bf33615"
+    },
+    {
+      "source": "target/writer-placement-v2/ac033f76df5044329dfcbf371283911a/fixture-controls.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/ac033f76df5044329dfcbf371283911a/fixture-controls.json",
+      "sha256": "eb460e45dbc957b50cacd48e0dd13a5543999d6c7572dd0d350e14c88ada3585"
+    },
+    {
+      "source": "target/writer-placement-v2/ac033f76df5044329dfcbf371283911a/fixture-dumps/batch-0000-dump.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/ac033f76df5044329dfcbf371283911a/fixture-dumps/batch-0000-dump.process.json",
+      "sha256": "ceb8d19c36bbf3a5205fea05dd22ad89ee14395610e3ecef396ece6c952f6334"
+    },
+    {
+      "source": "target/writer-placement-v2/ac033f76df5044329dfcbf371283911a/fixture-dumps/batch-0000-dump.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/ac033f76df5044329dfcbf371283911a/fixture-dumps/batch-0000-dump.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/ac033f76df5044329dfcbf371283911a/fixture-dumps/batch-0000-identity.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/ac033f76df5044329dfcbf371283911a/fixture-dumps/batch-0000-identity.process.json",
+      "sha256": "01808ea33298b35330e1361ac4471cea857b8054b3aa38c80ea4c73fa6551f20"
+    },
+    {
+      "source": "target/writer-placement-v2/ac033f76df5044329dfcbf371283911a/fixture-dumps/batch-0000-identity.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/ac033f76df5044329dfcbf371283911a/fixture-dumps/batch-0000-identity.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/ac033f76df5044329dfcbf371283911a/fixture-dumps/batch-0000-identity.stdout",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/ac033f76df5044329dfcbf371283911a/fixture-dumps/batch-0000-identity.stdout.txt",
+      "sha256": "ce307467e20d83f8fe1c8774583ec80e1756585c4bb72633afb48b2028036d67"
+    },
+    {
+      "source": "target/writer-placement-v2/ac033f76df5044329dfcbf371283911a/fixture-dumps/batch-0000-rust.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/ac033f76df5044329dfcbf371283911a/fixture-dumps/batch-0000-rust.process.json",
+      "sha256": "c6b23d712271d271355ded1297a947952ebc638cf2bde225a6a291ac974c9fc6"
+    },
+    {
+      "source": "target/writer-placement-v2/ac033f76df5044329dfcbf371283911a/fixture-dumps/batch-0000-rust.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/ac033f76df5044329dfcbf371283911a/fixture-dumps/batch-0000-rust.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/ac033f76df5044329dfcbf371283911a/fixture-dumps/batch-0008-dump.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/ac033f76df5044329dfcbf371283911a/fixture-dumps/batch-0008-dump.process.json",
+      "sha256": "c375605425bfca78815ced90fc51e51a7bc676f17f65fbc166257836024eb725"
+    },
+    {
+      "source": "target/writer-placement-v2/ac033f76df5044329dfcbf371283911a/fixture-dumps/batch-0008-dump.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/ac033f76df5044329dfcbf371283911a/fixture-dumps/batch-0008-dump.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/ac033f76df5044329dfcbf371283911a/fixture-dumps/batch-0008-identity.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/ac033f76df5044329dfcbf371283911a/fixture-dumps/batch-0008-identity.process.json",
+      "sha256": "18edc9c445c5f6a1e1e57763c6a676f32d30eebde7ecf87cc63ba1e107fc439d"
+    },
+    {
+      "source": "target/writer-placement-v2/ac033f76df5044329dfcbf371283911a/fixture-dumps/batch-0008-identity.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/ac033f76df5044329dfcbf371283911a/fixture-dumps/batch-0008-identity.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/ac033f76df5044329dfcbf371283911a/fixture-dumps/batch-0008-identity.stdout",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/ac033f76df5044329dfcbf371283911a/fixture-dumps/batch-0008-identity.stdout.txt",
+      "sha256": "37f6574f6ff4555ae9adfcc19b1acaa5ad57134bb1d25f777556b9cf8f40e39a"
+    },
+    {
+      "source": "target/writer-placement-v2/ac033f76df5044329dfcbf371283911a/fixture-dumps/batch-0008-rust.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/ac033f76df5044329dfcbf371283911a/fixture-dumps/batch-0008-rust.process.json",
+      "sha256": "56ddd9e809b17f64f490678b191d6034fe6af254d1c304bec4438cb493b354b2"
+    },
+    {
+      "source": "target/writer-placement-v2/ac033f76df5044329dfcbf371283911a/fixture-dumps/batch-0008-rust.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/ac033f76df5044329dfcbf371283911a/fixture-dumps/batch-0008-rust.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/ac033f76df5044329dfcbf371283911a/fixture-dumps/batch-0016-dump.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/ac033f76df5044329dfcbf371283911a/fixture-dumps/batch-0016-dump.process.json",
+      "sha256": "6d16d367c36acb653a24a66d3f0b71a013ecf5f614af2449cfb456f40fc6f1ef"
+    },
+    {
+      "source": "target/writer-placement-v2/ac033f76df5044329dfcbf371283911a/fixture-dumps/batch-0016-dump.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/ac033f76df5044329dfcbf371283911a/fixture-dumps/batch-0016-dump.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/ac033f76df5044329dfcbf371283911a/fixture-dumps/batch-0016-identity.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/ac033f76df5044329dfcbf371283911a/fixture-dumps/batch-0016-identity.process.json",
+      "sha256": "078167fff91f49ee03aea1a9d3c3391887b4584079e83c1ec2c16d70124ae0d6"
+    },
+    {
+      "source": "target/writer-placement-v2/ac033f76df5044329dfcbf371283911a/fixture-dumps/batch-0016-identity.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/ac033f76df5044329dfcbf371283911a/fixture-dumps/batch-0016-identity.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/ac033f76df5044329dfcbf371283911a/fixture-dumps/batch-0016-identity.stdout",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/ac033f76df5044329dfcbf371283911a/fixture-dumps/batch-0016-identity.stdout.txt",
+      "sha256": "6dec8a07316cc45179e285bf6063a60487d688f8aa5bd32aaa92b0039f3ee04a"
+    },
+    {
+      "source": "target/writer-placement-v2/ac033f76df5044329dfcbf371283911a/fixture-dumps/batch-0016-rust.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/ac033f76df5044329dfcbf371283911a/fixture-dumps/batch-0016-rust.process.json",
+      "sha256": "1f5158e3f2536530abb4f157290215d3a3641bdaf6bf08e42ca9b9d950b707c9"
+    },
+    {
+      "source": "target/writer-placement-v2/ac033f76df5044329dfcbf371283911a/fixture-dumps/batch-0016-rust.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/ac033f76df5044329dfcbf371283911a/fixture-dumps/batch-0016-rust.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/ac033f76df5044329dfcbf371283911a/fixture-dumps/batch-0024-dump.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/ac033f76df5044329dfcbf371283911a/fixture-dumps/batch-0024-dump.process.json",
+      "sha256": "6861466a451efa567b708136324451c19bd6bb9dcd89ca89509d71995c48be3b"
+    },
+    {
+      "source": "target/writer-placement-v2/ac033f76df5044329dfcbf371283911a/fixture-dumps/batch-0024-dump.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/ac033f76df5044329dfcbf371283911a/fixture-dumps/batch-0024-dump.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/ac033f76df5044329dfcbf371283911a/fixture-dumps/batch-0024-identity.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/ac033f76df5044329dfcbf371283911a/fixture-dumps/batch-0024-identity.process.json",
+      "sha256": "2544f54705e2ac9ff46f4f8995eb02ee2142aafac1143532e1815f6f9b949766"
+    },
+    {
+      "source": "target/writer-placement-v2/ac033f76df5044329dfcbf371283911a/fixture-dumps/batch-0024-identity.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/ac033f76df5044329dfcbf371283911a/fixture-dumps/batch-0024-identity.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/ac033f76df5044329dfcbf371283911a/fixture-dumps/batch-0024-identity.stdout",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/ac033f76df5044329dfcbf371283911a/fixture-dumps/batch-0024-identity.stdout.txt",
+      "sha256": "27b4ce4e87c6a7a6a813baf20a9b0bdc340b63e4577c95c6590f4bec98cf69fe"
+    },
+    {
+      "source": "target/writer-placement-v2/ac033f76df5044329dfcbf371283911a/fixture-dumps/batch-0024-rust.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/ac033f76df5044329dfcbf371283911a/fixture-dumps/batch-0024-rust.process.json",
+      "sha256": "9dff2da46244df75317453ea130b23d76bbecd686745cd88fce36c781469b74e"
+    },
+    {
+      "source": "target/writer-placement-v2/ac033f76df5044329dfcbf371283911a/fixture-dumps/batch-0024-rust.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/ac033f76df5044329dfcbf371283911a/fixture-dumps/batch-0024-rust.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/ac033f76df5044329dfcbf371283911a/fixture-plan.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/ac033f76df5044329dfcbf371283911a/fixture-plan.json",
+      "sha256": "a1ae963aa2898ab1d2642818d2374b70e3e72099c89389b6136155b4a759cdfa"
+    },
+    {
+      "source": "target/writer-placement-v2/ac033f76df5044329dfcbf371283911a/hooks.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/ac033f76df5044329dfcbf371283911a/hooks.json",
+      "sha256": "9e7f66cc31a2698a594f258987cb58098c82374b40ab45203d73665a2fa08627"
+    },
+    {
+      "source": "target/writer-placement-v2/ac033f76df5044329dfcbf371283911a/logs/adapter-clean-incomplete.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/ac033f76df5044329dfcbf371283911a/logs/adapter-clean-incomplete.process.json",
+      "sha256": "672ce45a7447678f1859f47f45ad9ef16574b38bc00079b19cebefee3bc10c1c"
+    },
+    {
+      "source": "target/writer-placement-v2/ac033f76df5044329dfcbf371283911a/logs/adapter-clean-incomplete.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/ac033f76df5044329dfcbf371283911a/logs/adapter-clean-incomplete.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/ac033f76df5044329dfcbf371283911a/logs/adapter-clean-incomplete.stdout",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/ac033f76df5044329dfcbf371283911a/logs/adapter-clean-incomplete.stdout.txt",
+      "sha256": "4ece0056a5f10feeead186bfecbd061233f75c771963d95cd7ab27698dc7d7a7"
+    },
+    {
+      "source": "target/writer-placement-v2/ac033f76df5044329dfcbf371283911a/logs/adapter-positive.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/ac033f76df5044329dfcbf371283911a/logs/adapter-positive.process.json",
+      "sha256": "6133e6ae37b6bb652edf2d3214e7516d1f023839bf5a789521cd08ed7f64decd"
+    },
+    {
+      "source": "target/writer-placement-v2/ac033f76df5044329dfcbf371283911a/logs/adapter-positive.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/ac033f76df5044329dfcbf371283911a/logs/adapter-positive.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/ac033f76df5044329dfcbf371283911a/logs/adapter-positive.stdout",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/ac033f76df5044329dfcbf371283911a/logs/adapter-positive.stdout.txt",
+      "sha256": "55d9ab5f926ef92c29dc3bb022df5833debca48ddd05eed1a3e22c4ac618e89e"
+    },
+    {
+      "source": "target/writer-placement-v2/ac033f76df5044329dfcbf371283911a/logs/adapter-wrong-observation.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/ac033f76df5044329dfcbf371283911a/logs/adapter-wrong-observation.process.json",
+      "sha256": "a1f3acb29f5de467beadd9041fc02795b69fc85d58dadccbc098353b5926959c"
+    },
+    {
+      "source": "target/writer-placement-v2/ac033f76df5044329dfcbf371283911a/logs/adapter-wrong-observation.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/ac033f76df5044329dfcbf371283911a/logs/adapter-wrong-observation.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/ac033f76df5044329dfcbf371283911a/logs/adapter-wrong-observation.stdout",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/ac033f76df5044329dfcbf371283911a/logs/adapter-wrong-observation.stdout.txt",
+      "sha256": "436042ec4578141bae4dbf04718c90c4eaa5944f99135d1a23c161ea2ae9a3eb"
+    },
+    {
+      "source": "target/writer-placement-v2/ac033f76df5044329dfcbf371283911a/logs/compile.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/ac033f76df5044329dfcbf371283911a/logs/compile.process.json",
+      "sha256": "52bb363830d1da160179d59c6cd7702c0ed03bf48f88b9d8434b8c42479908ba"
+    },
+    {
+      "source": "target/writer-placement-v2/ac033f76df5044329dfcbf371283911a/logs/compile.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/ac033f76df5044329dfcbf371283911a/logs/compile.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/ac033f76df5044329dfcbf371283911a/logs/compile.stdout",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/ac033f76df5044329dfcbf371283911a/logs/compile.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/ac033f76df5044329dfcbf371283911a/logs/generate.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/ac033f76df5044329dfcbf371283911a/logs/generate.process.json",
+      "sha256": "5681f652f330ef84ac98a11249063d7f3d28adf50eb097b356a02324604d97b2"
+    },
+    {
+      "source": "target/writer-placement-v2/ac033f76df5044329dfcbf371283911a/logs/generate.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/ac033f76df5044329dfcbf371283911a/logs/generate.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/ac033f76df5044329dfcbf371283911a/logs/generate.stdout",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/ac033f76df5044329dfcbf371283911a/logs/generate.stdout.txt",
+      "sha256": "f3b00ce1f5edce3b538e4789fe1c6ddd4adeb26d134d49fea663a6a8def7058e"
+    },
+    {
+      "source": "target/writer-placement-v2/ac033f76df5044329dfcbf371283911a/logs/unit-tests.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/ac033f76df5044329dfcbf371283911a/logs/unit-tests.process.json",
+      "sha256": "53b5ad14da20a6765f23af82ae7637910902f83ced37ea21e5b651fa37b975b1"
+    },
+    {
+      "source": "target/writer-placement-v2/ac033f76df5044329dfcbf371283911a/logs/unit-tests.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/ac033f76df5044329dfcbf371283911a/logs/unit-tests.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/ac033f76df5044329dfcbf371283911a/logs/unit-tests.stdout",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/ac033f76df5044329dfcbf371283911a/logs/unit-tests.stdout.txt",
+      "sha256": "1ea821f1842b0e9fb35652cef9438bb080453732165299d1da688bd05d66ecd1"
+    },
+    {
+      "source": "target/writer-placement-v2/ac033f76df5044329dfcbf371283911a/positive-witness-audit/audit.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/ac033f76df5044329dfcbf371283911a/positive-witness-audit/audit.json",
+      "sha256": "e3cf8deeac58c8e54587328bf3803b429a7d0a1aa0c36a43a5a243c2bfd80557"
+    },
+    {
+      "source": "target/writer-placement-v2/ac033f76df5044329dfcbf371283911a/positive-witness-audit/post/batch-0000-dump.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/ac033f76df5044329dfcbf371283911a/positive-witness-audit/post/batch-0000-dump.process.json",
+      "sha256": "801098393c45ac6d05811218b32cb69a1020019470161551009828c18189a096"
+    },
+    {
+      "source": "target/writer-placement-v2/ac033f76df5044329dfcbf371283911a/positive-witness-audit/post/batch-0000-dump.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/ac033f76df5044329dfcbf371283911a/positive-witness-audit/post/batch-0000-dump.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/ac033f76df5044329dfcbf371283911a/positive-witness-audit/post/batch-0000-identity.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/ac033f76df5044329dfcbf371283911a/positive-witness-audit/post/batch-0000-identity.process.json",
+      "sha256": "d6ef0d5a0b85d519b1735c5ae8dbf30b54c28017d9b8c198cd787d73947d4738"
+    },
+    {
+      "source": "target/writer-placement-v2/ac033f76df5044329dfcbf371283911a/positive-witness-audit/post/batch-0000-identity.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/ac033f76df5044329dfcbf371283911a/positive-witness-audit/post/batch-0000-identity.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/ac033f76df5044329dfcbf371283911a/positive-witness-audit/post/batch-0000-identity.stdout",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/ac033f76df5044329dfcbf371283911a/positive-witness-audit/post/batch-0000-identity.stdout.txt",
+      "sha256": "e9e2e937f8389861131c48ddae50914a4aff0637d151ca7bbe693d4d162a10db"
+    },
+    {
+      "source": "target/writer-placement-v2/ac033f76df5044329dfcbf371283911a/positive-witness-audit/post/batch-0000-rust.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/ac033f76df5044329dfcbf371283911a/positive-witness-audit/post/batch-0000-rust.process.json",
+      "sha256": "6d7a72ef85252ae8f1c2fe56ef8f62843c7afff6adc319c8af28f2ccfeb5926b"
+    },
+    {
+      "source": "target/writer-placement-v2/ac033f76df5044329dfcbf371283911a/positive-witness-audit/post/batch-0000-rust.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/ac033f76df5044329dfcbf371283911a/positive-witness-audit/post/batch-0000-rust.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/ac033f76df5044329dfcbf371283911a/positive-witness-audit/pre/batch-0000-dump.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/ac033f76df5044329dfcbf371283911a/positive-witness-audit/pre/batch-0000-dump.process.json",
+      "sha256": "671645b0c97293fea64c64e9a700c8dd88c554e7522e87b4fe9f8bca0ae025e7"
+    },
+    {
+      "source": "target/writer-placement-v2/ac033f76df5044329dfcbf371283911a/positive-witness-audit/pre/batch-0000-dump.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/ac033f76df5044329dfcbf371283911a/positive-witness-audit/pre/batch-0000-dump.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/ac033f76df5044329dfcbf371283911a/positive-witness-audit/pre/batch-0000-identity.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/ac033f76df5044329dfcbf371283911a/positive-witness-audit/pre/batch-0000-identity.process.json",
+      "sha256": "e8f3203dc4a75982a36944b896a4aae0d0557fb2605996f586bd7595e8758c09"
+    },
+    {
+      "source": "target/writer-placement-v2/ac033f76df5044329dfcbf371283911a/positive-witness-audit/pre/batch-0000-identity.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/ac033f76df5044329dfcbf371283911a/positive-witness-audit/pre/batch-0000-identity.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/ac033f76df5044329dfcbf371283911a/positive-witness-audit/pre/batch-0000-identity.stdout",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/ac033f76df5044329dfcbf371283911a/positive-witness-audit/pre/batch-0000-identity.stdout.txt",
+      "sha256": "0fbd2992b34251b7d103488b8ba4b748906ef61586b6a7fdfe69418479cdf47d"
+    },
+    {
+      "source": "target/writer-placement-v2/ac033f76df5044329dfcbf371283911a/positive-witness-audit/pre/batch-0000-rust.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/ac033f76df5044329dfcbf371283911a/positive-witness-audit/pre/batch-0000-rust.process.json",
+      "sha256": "d40ad3816411ff28af367bb623209e6d5097ecdb02f7318f9d101d44def53d05"
+    },
+    {
+      "source": "target/writer-placement-v2/ac033f76df5044329dfcbf371283911a/positive-witness-audit/pre/batch-0000-rust.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/ac033f76df5044329dfcbf371283911a/positive-witness-audit/pre/batch-0000-rust.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/ac033f76df5044329dfcbf371283911a/positive-witness.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/ac033f76df5044329dfcbf371283911a/positive-witness.json",
+      "sha256": "bcb51dc635be915489247144f5816fc9ad84d40f44612af6e35d336083f5d39d"
+    },
+    {
+      "source": "target/writer-placement-v2/ac033f76df5044329dfcbf371283911a/wrong-observation-witness-audit/audit.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/ac033f76df5044329dfcbf371283911a/wrong-observation-witness-audit/audit.json",
+      "sha256": "af91b402833b200d345eeb88389183206328f7b9a26b848098f3423d148a4936"
+    },
+    {
+      "source": "target/writer-placement-v2/ac033f76df5044329dfcbf371283911a/wrong-observation-witness-audit/post/batch-0000-dump.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/ac033f76df5044329dfcbf371283911a/wrong-observation-witness-audit/post/batch-0000-dump.process.json",
+      "sha256": "bdfe3ac455595e13b08128c9159a544372369cad68051d98874a1ab2377ec331"
+    },
+    {
+      "source": "target/writer-placement-v2/ac033f76df5044329dfcbf371283911a/wrong-observation-witness-audit/post/batch-0000-dump.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/ac033f76df5044329dfcbf371283911a/wrong-observation-witness-audit/post/batch-0000-dump.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/ac033f76df5044329dfcbf371283911a/wrong-observation-witness-audit/post/batch-0000-identity.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/ac033f76df5044329dfcbf371283911a/wrong-observation-witness-audit/post/batch-0000-identity.process.json",
+      "sha256": "e4e5d594842d460c7fcb56bfc01f502820164618fd41935652acce3126055d4a"
+    },
+    {
+      "source": "target/writer-placement-v2/ac033f76df5044329dfcbf371283911a/wrong-observation-witness-audit/post/batch-0000-identity.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/ac033f76df5044329dfcbf371283911a/wrong-observation-witness-audit/post/batch-0000-identity.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/ac033f76df5044329dfcbf371283911a/wrong-observation-witness-audit/post/batch-0000-identity.stdout",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/ac033f76df5044329dfcbf371283911a/wrong-observation-witness-audit/post/batch-0000-identity.stdout.txt",
+      "sha256": "e9e2e937f8389861131c48ddae50914a4aff0637d151ca7bbe693d4d162a10db"
+    },
+    {
+      "source": "target/writer-placement-v2/ac033f76df5044329dfcbf371283911a/wrong-observation-witness-audit/post/batch-0000-rust.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/ac033f76df5044329dfcbf371283911a/wrong-observation-witness-audit/post/batch-0000-rust.process.json",
+      "sha256": "d8756b80f299e8438230d57d18d9eb2f19ff6a96e7baef6713c6fa8dbd44f4ba"
+    },
+    {
+      "source": "target/writer-placement-v2/ac033f76df5044329dfcbf371283911a/wrong-observation-witness-audit/post/batch-0000-rust.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/ac033f76df5044329dfcbf371283911a/wrong-observation-witness-audit/post/batch-0000-rust.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/ac033f76df5044329dfcbf371283911a/wrong-observation-witness-audit/pre/batch-0000-dump.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/ac033f76df5044329dfcbf371283911a/wrong-observation-witness-audit/pre/batch-0000-dump.process.json",
+      "sha256": "8738d6de41a724a338852d0a4106bce686c83537fce16f8377c7438a9229775b"
+    },
+    {
+      "source": "target/writer-placement-v2/ac033f76df5044329dfcbf371283911a/wrong-observation-witness-audit/pre/batch-0000-dump.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/ac033f76df5044329dfcbf371283911a/wrong-observation-witness-audit/pre/batch-0000-dump.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/ac033f76df5044329dfcbf371283911a/wrong-observation-witness-audit/pre/batch-0000-identity.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/ac033f76df5044329dfcbf371283911a/wrong-observation-witness-audit/pre/batch-0000-identity.process.json",
+      "sha256": "fa7e977c621dc2e32a1dff9db9e68452474b57325c49ff279efd2db0acd54907"
+    },
+    {
+      "source": "target/writer-placement-v2/ac033f76df5044329dfcbf371283911a/wrong-observation-witness-audit/pre/batch-0000-identity.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/ac033f76df5044329dfcbf371283911a/wrong-observation-witness-audit/pre/batch-0000-identity.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/ac033f76df5044329dfcbf371283911a/wrong-observation-witness-audit/pre/batch-0000-identity.stdout",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/ac033f76df5044329dfcbf371283911a/wrong-observation-witness-audit/pre/batch-0000-identity.stdout.txt",
+      "sha256": "0fbd2992b34251b7d103488b8ba4b748906ef61586b6a7fdfe69418479cdf47d"
+    },
+    {
+      "source": "target/writer-placement-v2/ac033f76df5044329dfcbf371283911a/wrong-observation-witness-audit/pre/batch-0000-rust.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/ac033f76df5044329dfcbf371283911a/wrong-observation-witness-audit/pre/batch-0000-rust.process.json",
+      "sha256": "af7e93125d8e559914011a6f6a79b98632f28a015ba18fddc980bc9ac885df42"
+    },
+    {
+      "source": "target/writer-placement-v2/ac033f76df5044329dfcbf371283911a/wrong-observation-witness-audit/pre/batch-0000-rust.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/ac033f76df5044329dfcbf371283911a/wrong-observation-witness-audit/pre/batch-0000-rust.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/ac033f76df5044329dfcbf371283911a/wrong-observation-witness.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/ac033f76df5044329dfcbf371283911a/wrong-observation-witness.json",
+      "sha256": "af2a94133a8273d40575477caa0475016ca6cfd4922d468b3480aaa69e486090"
+    },
+    {
+      "source": "target/writer-placement-v2/root-reviewed-01/campaign.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/root-reviewed-01/campaign.json",
+      "sha256": "43e26cb25407d906a3afe63e92bacf23eab0ee39759ee6982cc704d1957ea69f"
+    },
+    {
+      "source": "target/writer-placement-v2/root-reviewed-01/clean/audit.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/root-reviewed-01/clean/audit.json",
+      "sha256": "2018f399f2084af94bae0050c41a178378bcd63d3218e6905a5c4035b0dd8f0d"
+    },
+    {
+      "source": "target/writer-placement-v2/root-reviewed-01/clean/post/batch-0000-dump.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/root-reviewed-01/clean/post/batch-0000-dump.process.json",
+      "sha256": "a0cf061049362532a1a36b3e37d624826ddba8ed7d5ea421fd0a5e2fc9f66b49"
+    },
+    {
+      "source": "target/writer-placement-v2/root-reviewed-01/clean/post/batch-0000-dump.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/root-reviewed-01/clean/post/batch-0000-dump.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/root-reviewed-01/clean/post/batch-0000-identity.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/root-reviewed-01/clean/post/batch-0000-identity.process.json",
+      "sha256": "3e722f153cdafb9c6bbaf23c03595211ed58d7985e6edc2262ef8d3341621ebc"
+    },
+    {
+      "source": "target/writer-placement-v2/root-reviewed-01/clean/post/batch-0000-identity.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/root-reviewed-01/clean/post/batch-0000-identity.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/root-reviewed-01/clean/post/batch-0000-identity.stdout",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/root-reviewed-01/clean/post/batch-0000-identity.stdout.txt",
+      "sha256": "909a32e85f44ccce73b5be65b1c9fd5d68449fa1de6e9a8294b8393687c37cc9"
+    },
+    {
+      "source": "target/writer-placement-v2/root-reviewed-01/clean/post/batch-0000-rust.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/root-reviewed-01/clean/post/batch-0000-rust.process.json",
+      "sha256": "64f3f994ceee4958bcd5ce7feac801b778ebabd1cf16685cef1bc82eeb395349"
+    },
+    {
+      "source": "target/writer-placement-v2/root-reviewed-01/clean/post/batch-0000-rust.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/root-reviewed-01/clean/post/batch-0000-rust.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/root-reviewed-01/clean/post/batch-0008-dump.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/root-reviewed-01/clean/post/batch-0008-dump.process.json",
+      "sha256": "ba43f254934830127178bb37ab1818ba724c829eee7964abe334958fafed818c"
+    },
+    {
+      "source": "target/writer-placement-v2/root-reviewed-01/clean/post/batch-0008-dump.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/root-reviewed-01/clean/post/batch-0008-dump.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/root-reviewed-01/clean/post/batch-0008-identity.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/root-reviewed-01/clean/post/batch-0008-identity.process.json",
+      "sha256": "53b00c42a59c639852b71b7d73d23e96b1c4ff487161cfe177c98db8d12742b2"
+    },
+    {
+      "source": "target/writer-placement-v2/root-reviewed-01/clean/post/batch-0008-identity.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/root-reviewed-01/clean/post/batch-0008-identity.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/root-reviewed-01/clean/post/batch-0008-identity.stdout",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/root-reviewed-01/clean/post/batch-0008-identity.stdout.txt",
+      "sha256": "fe31ccc13d8b026375d9fa6478f082c9a1060b57c3a59b4a3c93d35dffc260b2"
+    },
+    {
+      "source": "target/writer-placement-v2/root-reviewed-01/clean/post/batch-0008-rust.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/root-reviewed-01/clean/post/batch-0008-rust.process.json",
+      "sha256": "16d182c4967307f27c70397103754b6e16ede1b17308c31c02e94530ed2152bc"
+    },
+    {
+      "source": "target/writer-placement-v2/root-reviewed-01/clean/post/batch-0008-rust.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/root-reviewed-01/clean/post/batch-0008-rust.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/root-reviewed-01/clean/pre/batch-0000-dump.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/root-reviewed-01/clean/pre/batch-0000-dump.process.json",
+      "sha256": "f22d2e50479a359c67a21894f26564deb5763f7049649beab4ebea322a796c33"
+    },
+    {
+      "source": "target/writer-placement-v2/root-reviewed-01/clean/pre/batch-0000-dump.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/root-reviewed-01/clean/pre/batch-0000-dump.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/root-reviewed-01/clean/pre/batch-0000-identity.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/root-reviewed-01/clean/pre/batch-0000-identity.process.json",
+      "sha256": "37ad8134060caf73959d94ff779622f15554e0435f4503df136850ea43e5e16f"
+    },
+    {
+      "source": "target/writer-placement-v2/root-reviewed-01/clean/pre/batch-0000-identity.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/root-reviewed-01/clean/pre/batch-0000-identity.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/root-reviewed-01/clean/pre/batch-0000-identity.stdout",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/root-reviewed-01/clean/pre/batch-0000-identity.stdout.txt",
+      "sha256": "d175c84312dbfae9086519fc0a02226c55861bf656e6df3b560dc62c8283bc49"
+    },
+    {
+      "source": "target/writer-placement-v2/root-reviewed-01/clean/pre/batch-0000-rust.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/root-reviewed-01/clean/pre/batch-0000-rust.process.json",
+      "sha256": "b2319219e302f222506badb0e6d97751e7a91aa48cfc9fe99591013f368cd857"
+    },
+    {
+      "source": "target/writer-placement-v2/root-reviewed-01/clean/pre/batch-0000-rust.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/root-reviewed-01/clean/pre/batch-0000-rust.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/root-reviewed-01/clean/pre/batch-0008-dump.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/root-reviewed-01/clean/pre/batch-0008-dump.process.json",
+      "sha256": "be5458866c25f99340373621a954b79e5004a6acea2f01eecc17bd356956108f"
+    },
+    {
+      "source": "target/writer-placement-v2/root-reviewed-01/clean/pre/batch-0008-dump.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/root-reviewed-01/clean/pre/batch-0008-dump.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/root-reviewed-01/clean/pre/batch-0008-identity.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/root-reviewed-01/clean/pre/batch-0008-identity.process.json",
+      "sha256": "42674392c175c4be51100618d9a251398ff5fd82fd1939d0f0027171d8b2869a"
+    },
+    {
+      "source": "target/writer-placement-v2/root-reviewed-01/clean/pre/batch-0008-identity.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/root-reviewed-01/clean/pre/batch-0008-identity.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/root-reviewed-01/clean/pre/batch-0008-identity.stdout",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/root-reviewed-01/clean/pre/batch-0008-identity.stdout.txt",
+      "sha256": "ea05586cd652253622d5ac6f679308bbe3eab62ac32e7854eb9b402b37dd936c"
+    },
+    {
+      "source": "target/writer-placement-v2/root-reviewed-01/clean/pre/batch-0008-rust.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/root-reviewed-01/clean/pre/batch-0008-rust.process.json",
+      "sha256": "4eec2a515d0601706b18bc6677d8b9aa27027547613f9365f9afc1009aeee939"
+    },
+    {
+      "source": "target/writer-placement-v2/root-reviewed-01/clean/pre/batch-0008-rust.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/root-reviewed-01/clean/pre/batch-0008-rust.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/root-reviewed-01/clean-incomplete-witness-audit/audit.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/root-reviewed-01/clean-incomplete-witness-audit/audit.json",
+      "sha256": "cf1f52a7c2ff8c168bf676da48bcf52cfcf3739cbd61ba1dfcfa01c07a8e366b"
+    },
+    {
+      "source": "target/writer-placement-v2/root-reviewed-01/clean-incomplete-witness-audit/post/batch-0000-dump.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/root-reviewed-01/clean-incomplete-witness-audit/post/batch-0000-dump.process.json",
+      "sha256": "3a97f82383152afad61c3baeced32e57c735c6784426930844a70b4e6f48deb8"
+    },
+    {
+      "source": "target/writer-placement-v2/root-reviewed-01/clean-incomplete-witness-audit/post/batch-0000-dump.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/root-reviewed-01/clean-incomplete-witness-audit/post/batch-0000-dump.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/root-reviewed-01/clean-incomplete-witness-audit/post/batch-0000-identity.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/root-reviewed-01/clean-incomplete-witness-audit/post/batch-0000-identity.process.json",
+      "sha256": "4a472ac9d10aca3b62b96413cccac71f39615082d599c4431df23215048a6ec4"
+    },
+    {
+      "source": "target/writer-placement-v2/root-reviewed-01/clean-incomplete-witness-audit/post/batch-0000-identity.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/root-reviewed-01/clean-incomplete-witness-audit/post/batch-0000-identity.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/root-reviewed-01/clean-incomplete-witness-audit/post/batch-0000-identity.stdout",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/root-reviewed-01/clean-incomplete-witness-audit/post/batch-0000-identity.stdout.txt",
+      "sha256": "909a32e85f44ccce73b5be65b1c9fd5d68449fa1de6e9a8294b8393687c37cc9"
+    },
+    {
+      "source": "target/writer-placement-v2/root-reviewed-01/clean-incomplete-witness-audit/post/batch-0000-rust.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/root-reviewed-01/clean-incomplete-witness-audit/post/batch-0000-rust.process.json",
+      "sha256": "5faa22661f20b006288892078557ec7c01235eb6191c054d8106ba82f20704f5"
+    },
+    {
+      "source": "target/writer-placement-v2/root-reviewed-01/clean-incomplete-witness-audit/post/batch-0000-rust.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/root-reviewed-01/clean-incomplete-witness-audit/post/batch-0000-rust.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/root-reviewed-01/clean-incomplete-witness-audit/post/batch-0008-dump.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/root-reviewed-01/clean-incomplete-witness-audit/post/batch-0008-dump.process.json",
+      "sha256": "43b89850e756fdb26934c3b9eae73161f9bfcc55ee4ffca178983add99e951ed"
+    },
+    {
+      "source": "target/writer-placement-v2/root-reviewed-01/clean-incomplete-witness-audit/post/batch-0008-dump.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/root-reviewed-01/clean-incomplete-witness-audit/post/batch-0008-dump.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/root-reviewed-01/clean-incomplete-witness-audit/post/batch-0008-identity.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/root-reviewed-01/clean-incomplete-witness-audit/post/batch-0008-identity.process.json",
+      "sha256": "c874bb85b204976ac42df98cb1daa1fdf0892fc4dec1a5abd597b413a89d39ff"
+    },
+    {
+      "source": "target/writer-placement-v2/root-reviewed-01/clean-incomplete-witness-audit/post/batch-0008-identity.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/root-reviewed-01/clean-incomplete-witness-audit/post/batch-0008-identity.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/root-reviewed-01/clean-incomplete-witness-audit/post/batch-0008-identity.stdout",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/root-reviewed-01/clean-incomplete-witness-audit/post/batch-0008-identity.stdout.txt",
+      "sha256": "fe31ccc13d8b026375d9fa6478f082c9a1060b57c3a59b4a3c93d35dffc260b2"
+    },
+    {
+      "source": "target/writer-placement-v2/root-reviewed-01/clean-incomplete-witness-audit/post/batch-0008-rust.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/root-reviewed-01/clean-incomplete-witness-audit/post/batch-0008-rust.process.json",
+      "sha256": "8a4caed1f43f3ed490fe97bfe2a6bfbba8047dc9a776e8db790840f42ccb509c"
+    },
+    {
+      "source": "target/writer-placement-v2/root-reviewed-01/clean-incomplete-witness-audit/post/batch-0008-rust.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/root-reviewed-01/clean-incomplete-witness-audit/post/batch-0008-rust.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/root-reviewed-01/clean-incomplete-witness-audit/pre/batch-0000-dump.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/root-reviewed-01/clean-incomplete-witness-audit/pre/batch-0000-dump.process.json",
+      "sha256": "381f5a563d407e44c7204a86916a8b7cb31d1c84843aff129b5fff2f3b682d63"
+    },
+    {
+      "source": "target/writer-placement-v2/root-reviewed-01/clean-incomplete-witness-audit/pre/batch-0000-dump.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/root-reviewed-01/clean-incomplete-witness-audit/pre/batch-0000-dump.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/root-reviewed-01/clean-incomplete-witness-audit/pre/batch-0000-identity.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/root-reviewed-01/clean-incomplete-witness-audit/pre/batch-0000-identity.process.json",
+      "sha256": "5316e624981264e6082a679ab8e5ec7eab6cf5e165d9f4149eb2228df8928ec7"
+    },
+    {
+      "source": "target/writer-placement-v2/root-reviewed-01/clean-incomplete-witness-audit/pre/batch-0000-identity.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/root-reviewed-01/clean-incomplete-witness-audit/pre/batch-0000-identity.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/root-reviewed-01/clean-incomplete-witness-audit/pre/batch-0000-identity.stdout",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/root-reviewed-01/clean-incomplete-witness-audit/pre/batch-0000-identity.stdout.txt",
+      "sha256": "d175c84312dbfae9086519fc0a02226c55861bf656e6df3b560dc62c8283bc49"
+    },
+    {
+      "source": "target/writer-placement-v2/root-reviewed-01/clean-incomplete-witness-audit/pre/batch-0000-rust.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/root-reviewed-01/clean-incomplete-witness-audit/pre/batch-0000-rust.process.json",
+      "sha256": "8ecdfa998045c63d4fd30404d4063115b2601e51c68ab2d15fb31a3f616b497e"
+    },
+    {
+      "source": "target/writer-placement-v2/root-reviewed-01/clean-incomplete-witness-audit/pre/batch-0000-rust.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/root-reviewed-01/clean-incomplete-witness-audit/pre/batch-0000-rust.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/root-reviewed-01/clean-incomplete-witness-audit/pre/batch-0008-dump.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/root-reviewed-01/clean-incomplete-witness-audit/pre/batch-0008-dump.process.json",
+      "sha256": "8fcb80b8c175a1e53994a85a943f73347109913589900b0abef1988a57b6d095"
+    },
+    {
+      "source": "target/writer-placement-v2/root-reviewed-01/clean-incomplete-witness-audit/pre/batch-0008-dump.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/root-reviewed-01/clean-incomplete-witness-audit/pre/batch-0008-dump.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/root-reviewed-01/clean-incomplete-witness-audit/pre/batch-0008-identity.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/root-reviewed-01/clean-incomplete-witness-audit/pre/batch-0008-identity.process.json",
+      "sha256": "2e7893623c71500b8c874dc98177a5a1b999c4efd1dab36b9e4afee81de8029f"
+    },
+    {
+      "source": "target/writer-placement-v2/root-reviewed-01/clean-incomplete-witness-audit/pre/batch-0008-identity.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/root-reviewed-01/clean-incomplete-witness-audit/pre/batch-0008-identity.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/root-reviewed-01/clean-incomplete-witness-audit/pre/batch-0008-identity.stdout",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/root-reviewed-01/clean-incomplete-witness-audit/pre/batch-0008-identity.stdout.txt",
+      "sha256": "ea05586cd652253622d5ac6f679308bbe3eab62ac32e7854eb9b402b37dd936c"
+    },
+    {
+      "source": "target/writer-placement-v2/root-reviewed-01/clean-incomplete-witness-audit/pre/batch-0008-rust.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/root-reviewed-01/clean-incomplete-witness-audit/pre/batch-0008-rust.process.json",
+      "sha256": "9b34f1ae6affd6d15cca33ab30f54d8690c30eb34e6b3b1e7d6bc257eba63997"
+    },
+    {
+      "source": "target/writer-placement-v2/root-reviewed-01/clean-incomplete-witness-audit/pre/batch-0008-rust.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/root-reviewed-01/clean-incomplete-witness-audit/pre/batch-0008-rust.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/root-reviewed-01/clean-incomplete-witness.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/root-reviewed-01/clean-incomplete-witness.json",
+      "sha256": "1032f6053ce84c0a52d9d49ec5ab735eb1d0edec6e2fdb2d9beafa71a866dca0"
+    },
+    {
+      "source": "target/writer-placement-v2/root-reviewed-01/fixture-controls.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/root-reviewed-01/fixture-controls.json",
+      "sha256": "eb460e45dbc957b50cacd48e0dd13a5543999d6c7572dd0d350e14c88ada3585"
+    },
+    {
+      "source": "target/writer-placement-v2/root-reviewed-01/fixture-dumps/batch-0000-dump.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/root-reviewed-01/fixture-dumps/batch-0000-dump.process.json",
+      "sha256": "953a291f419cd4e5bf4eb3ae9086722681a39494a2c8f919faceec9815ccc0c1"
+    },
+    {
+      "source": "target/writer-placement-v2/root-reviewed-01/fixture-dumps/batch-0000-dump.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/root-reviewed-01/fixture-dumps/batch-0000-dump.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/root-reviewed-01/fixture-dumps/batch-0000-identity.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/root-reviewed-01/fixture-dumps/batch-0000-identity.process.json",
+      "sha256": "e10415d69fef0ab74d0c8319a949275b3ccdf69de37a227b0c7edcebcc63f3ae"
+    },
+    {
+      "source": "target/writer-placement-v2/root-reviewed-01/fixture-dumps/batch-0000-identity.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/root-reviewed-01/fixture-dumps/batch-0000-identity.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/root-reviewed-01/fixture-dumps/batch-0000-identity.stdout",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/root-reviewed-01/fixture-dumps/batch-0000-identity.stdout.txt",
+      "sha256": "ce307467e20d83f8fe1c8774583ec80e1756585c4bb72633afb48b2028036d67"
+    },
+    {
+      "source": "target/writer-placement-v2/root-reviewed-01/fixture-dumps/batch-0000-rust.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/root-reviewed-01/fixture-dumps/batch-0000-rust.process.json",
+      "sha256": "bb66bbf8596069bf7b0086eb34548c45ff534637c404696ddafe37e1c7ce1378"
+    },
+    {
+      "source": "target/writer-placement-v2/root-reviewed-01/fixture-dumps/batch-0000-rust.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/root-reviewed-01/fixture-dumps/batch-0000-rust.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/root-reviewed-01/fixture-dumps/batch-0008-dump.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/root-reviewed-01/fixture-dumps/batch-0008-dump.process.json",
+      "sha256": "685b117e51cfb4fd8c9c8fa41c46b19e168db8842c44d52ccc8417837cc77205"
+    },
+    {
+      "source": "target/writer-placement-v2/root-reviewed-01/fixture-dumps/batch-0008-dump.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/root-reviewed-01/fixture-dumps/batch-0008-dump.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/root-reviewed-01/fixture-dumps/batch-0008-identity.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/root-reviewed-01/fixture-dumps/batch-0008-identity.process.json",
+      "sha256": "3771e526243332d762e17f4c12546d57280b8df595bd0a39dd6e5f692845fdbe"
+    },
+    {
+      "source": "target/writer-placement-v2/root-reviewed-01/fixture-dumps/batch-0008-identity.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/root-reviewed-01/fixture-dumps/batch-0008-identity.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/root-reviewed-01/fixture-dumps/batch-0008-identity.stdout",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/root-reviewed-01/fixture-dumps/batch-0008-identity.stdout.txt",
+      "sha256": "37f6574f6ff4555ae9adfcc19b1acaa5ad57134bb1d25f777556b9cf8f40e39a"
+    },
+    {
+      "source": "target/writer-placement-v2/root-reviewed-01/fixture-dumps/batch-0008-rust.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/root-reviewed-01/fixture-dumps/batch-0008-rust.process.json",
+      "sha256": "cff4bc4220c9100e3b81e2999831868a9e689e037629855c91104c257bdf1908"
+    },
+    {
+      "source": "target/writer-placement-v2/root-reviewed-01/fixture-dumps/batch-0008-rust.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/root-reviewed-01/fixture-dumps/batch-0008-rust.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/root-reviewed-01/fixture-dumps/batch-0016-dump.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/root-reviewed-01/fixture-dumps/batch-0016-dump.process.json",
+      "sha256": "ff33dc0ba596bffa61cc7327c28364fc050ba788d41f5d1d66e0623b3aee7f48"
+    },
+    {
+      "source": "target/writer-placement-v2/root-reviewed-01/fixture-dumps/batch-0016-dump.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/root-reviewed-01/fixture-dumps/batch-0016-dump.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/root-reviewed-01/fixture-dumps/batch-0016-identity.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/root-reviewed-01/fixture-dumps/batch-0016-identity.process.json",
+      "sha256": "94b357a2be065eb647143bb3a37557bd2f50076a6d7a16545f5256019ba67e0e"
+    },
+    {
+      "source": "target/writer-placement-v2/root-reviewed-01/fixture-dumps/batch-0016-identity.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/root-reviewed-01/fixture-dumps/batch-0016-identity.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/root-reviewed-01/fixture-dumps/batch-0016-identity.stdout",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/root-reviewed-01/fixture-dumps/batch-0016-identity.stdout.txt",
+      "sha256": "6dec8a07316cc45179e285bf6063a60487d688f8aa5bd32aaa92b0039f3ee04a"
+    },
+    {
+      "source": "target/writer-placement-v2/root-reviewed-01/fixture-dumps/batch-0016-rust.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/root-reviewed-01/fixture-dumps/batch-0016-rust.process.json",
+      "sha256": "bb83e536ae835db5b297bc62b5a66ba9b776e95b2fcfcf8f28cc45ff8f807826"
+    },
+    {
+      "source": "target/writer-placement-v2/root-reviewed-01/fixture-dumps/batch-0016-rust.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/root-reviewed-01/fixture-dumps/batch-0016-rust.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/root-reviewed-01/fixture-dumps/batch-0024-dump.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/root-reviewed-01/fixture-dumps/batch-0024-dump.process.json",
+      "sha256": "571c999c72b2c31fcb11460f63134489b3eed77eeecfcb50790ad1ce544697dc"
+    },
+    {
+      "source": "target/writer-placement-v2/root-reviewed-01/fixture-dumps/batch-0024-dump.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/root-reviewed-01/fixture-dumps/batch-0024-dump.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/root-reviewed-01/fixture-dumps/batch-0024-identity.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/root-reviewed-01/fixture-dumps/batch-0024-identity.process.json",
+      "sha256": "54adde3da543da40f4cf03725b8fd99d23877f8cca8095bea1067b47b78c75ba"
+    },
+    {
+      "source": "target/writer-placement-v2/root-reviewed-01/fixture-dumps/batch-0024-identity.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/root-reviewed-01/fixture-dumps/batch-0024-identity.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/root-reviewed-01/fixture-dumps/batch-0024-identity.stdout",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/root-reviewed-01/fixture-dumps/batch-0024-identity.stdout.txt",
+      "sha256": "27b4ce4e87c6a7a6a813baf20a9b0bdc340b63e4577c95c6590f4bec98cf69fe"
+    },
+    {
+      "source": "target/writer-placement-v2/root-reviewed-01/fixture-dumps/batch-0024-rust.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/root-reviewed-01/fixture-dumps/batch-0024-rust.process.json",
+      "sha256": "d19e278842098635399bde6358b4bef081e6e3f5e20b945921f90ca4fb650225"
+    },
+    {
+      "source": "target/writer-placement-v2/root-reviewed-01/fixture-dumps/batch-0024-rust.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/root-reviewed-01/fixture-dumps/batch-0024-rust.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/root-reviewed-01/fixture-plan.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/root-reviewed-01/fixture-plan.json",
+      "sha256": "a1ae963aa2898ab1d2642818d2374b70e3e72099c89389b6136155b4a759cdfa"
+    },
+    {
+      "source": "target/writer-placement-v2/root-reviewed-01/hooks.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/root-reviewed-01/hooks.json",
+      "sha256": "9e7f66cc31a2698a594f258987cb58098c82374b40ab45203d73665a2fa08627"
+    },
+    {
+      "source": "target/writer-placement-v2/root-reviewed-01/logs/adapter-clean-incomplete.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/root-reviewed-01/logs/adapter-clean-incomplete.process.json",
+      "sha256": "ca3353e08258292578a7fa64bf8d407e448af936273aa7dd55688b5d4b9918eb"
+    },
+    {
+      "source": "target/writer-placement-v2/root-reviewed-01/logs/adapter-clean-incomplete.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/root-reviewed-01/logs/adapter-clean-incomplete.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/root-reviewed-01/logs/adapter-clean-incomplete.stdout",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/root-reviewed-01/logs/adapter-clean-incomplete.stdout.txt",
+      "sha256": "72d6a222703e20cb7866522ac533722c01f3a9480a2ff061ce6dda5a32c63513"
+    },
+    {
+      "source": "target/writer-placement-v2/root-reviewed-01/logs/adapter-positive.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/root-reviewed-01/logs/adapter-positive.process.json",
+      "sha256": "34012a809882163c251b170582926c32ba37400e46e18345755f4a62127dd2da"
+    },
+    {
+      "source": "target/writer-placement-v2/root-reviewed-01/logs/adapter-positive.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/root-reviewed-01/logs/adapter-positive.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/root-reviewed-01/logs/adapter-positive.stdout",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/root-reviewed-01/logs/adapter-positive.stdout.txt",
+      "sha256": "f9e57a5993fc83e78e045afa5054396cecefced1bbdf80755df795b39b870329"
+    },
+    {
+      "source": "target/writer-placement-v2/root-reviewed-01/logs/adapter-wrong-observation.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/root-reviewed-01/logs/adapter-wrong-observation.process.json",
+      "sha256": "1517473a189f640418dd31271ee250b5c36cb91547f2277b5e02cffc16fd50cf"
+    },
+    {
+      "source": "target/writer-placement-v2/root-reviewed-01/logs/adapter-wrong-observation.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/root-reviewed-01/logs/adapter-wrong-observation.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/root-reviewed-01/logs/adapter-wrong-observation.stdout",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/root-reviewed-01/logs/adapter-wrong-observation.stdout.txt",
+      "sha256": "e79d91004992445bb600c9d9f76fa2dafc99847d389e9e84826e0d7b9936929b"
+    },
+    {
+      "source": "target/writer-placement-v2/root-reviewed-01/logs/compile.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/root-reviewed-01/logs/compile.process.json",
+      "sha256": "75d795a6575b681972f242e9c0f573038f93d525631b87134c02f095d5331476"
+    },
+    {
+      "source": "target/writer-placement-v2/root-reviewed-01/logs/compile.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/root-reviewed-01/logs/compile.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/root-reviewed-01/logs/compile.stdout",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/root-reviewed-01/logs/compile.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/root-reviewed-01/logs/generate.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/root-reviewed-01/logs/generate.process.json",
+      "sha256": "69772734453678b48f206f780d237fc6ada29147f692dd4c39057a42695dc6fa"
+    },
+    {
+      "source": "target/writer-placement-v2/root-reviewed-01/logs/generate.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/root-reviewed-01/logs/generate.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/root-reviewed-01/logs/generate.stdout",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/root-reviewed-01/logs/generate.stdout.txt",
+      "sha256": "f3b00ce1f5edce3b538e4789fe1c6ddd4adeb26d134d49fea663a6a8def7058e"
+    },
+    {
+      "source": "target/writer-placement-v2/root-reviewed-01/logs/unit-tests.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/root-reviewed-01/logs/unit-tests.process.json",
+      "sha256": "190e266f230f92a5591c730fd5c1609ddc3efc4560172d46e2aa7c8fed32c236"
+    },
+    {
+      "source": "target/writer-placement-v2/root-reviewed-01/logs/unit-tests.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/root-reviewed-01/logs/unit-tests.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/root-reviewed-01/logs/unit-tests.stdout",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/root-reviewed-01/logs/unit-tests.stdout.txt",
+      "sha256": "6822d1140ab3bf1c54256950c3cea11f6ea05776370a75e19955ad1f5834d2c5"
+    },
+    {
+      "source": "target/writer-placement-v2/root-reviewed-01/positive-witness-audit/audit.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/root-reviewed-01/positive-witness-audit/audit.json",
+      "sha256": "d52940613e397cc1dd6679250128be927ce78da9896e6d254da587409967fafb"
+    },
+    {
+      "source": "target/writer-placement-v2/root-reviewed-01/positive-witness-audit/post/batch-0000-dump.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/root-reviewed-01/positive-witness-audit/post/batch-0000-dump.process.json",
+      "sha256": "5b7c1b520361d38ee19aa194ca7a0bf79a0f5ea29c163c1556126646d2773eee"
+    },
+    {
+      "source": "target/writer-placement-v2/root-reviewed-01/positive-witness-audit/post/batch-0000-dump.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/root-reviewed-01/positive-witness-audit/post/batch-0000-dump.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/root-reviewed-01/positive-witness-audit/post/batch-0000-identity.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/root-reviewed-01/positive-witness-audit/post/batch-0000-identity.process.json",
+      "sha256": "a0646a4d92642c289316dde73a0c2e8ec00cbecbedf1f51fd8807c9a64978f62"
+    },
+    {
+      "source": "target/writer-placement-v2/root-reviewed-01/positive-witness-audit/post/batch-0000-identity.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/root-reviewed-01/positive-witness-audit/post/batch-0000-identity.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/root-reviewed-01/positive-witness-audit/post/batch-0000-identity.stdout",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/root-reviewed-01/positive-witness-audit/post/batch-0000-identity.stdout.txt",
+      "sha256": "e9e2e937f8389861131c48ddae50914a4aff0637d151ca7bbe693d4d162a10db"
+    },
+    {
+      "source": "target/writer-placement-v2/root-reviewed-01/positive-witness-audit/post/batch-0000-rust.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/root-reviewed-01/positive-witness-audit/post/batch-0000-rust.process.json",
+      "sha256": "4a41253f0a8881e82aad26834a7cd260c48dbd2dbd3e6ca5050547622c502fda"
+    },
+    {
+      "source": "target/writer-placement-v2/root-reviewed-01/positive-witness-audit/post/batch-0000-rust.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/root-reviewed-01/positive-witness-audit/post/batch-0000-rust.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/root-reviewed-01/positive-witness-audit/pre/batch-0000-dump.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/root-reviewed-01/positive-witness-audit/pre/batch-0000-dump.process.json",
+      "sha256": "85e0a3ab2d338e335c5b50eae5c48cb482bac22281b10081c8fb4ca1f9ea19e1"
+    },
+    {
+      "source": "target/writer-placement-v2/root-reviewed-01/positive-witness-audit/pre/batch-0000-dump.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/root-reviewed-01/positive-witness-audit/pre/batch-0000-dump.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/root-reviewed-01/positive-witness-audit/pre/batch-0000-identity.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/root-reviewed-01/positive-witness-audit/pre/batch-0000-identity.process.json",
+      "sha256": "6cd2a94ede63a858df325142dbdc2a84fc2eb6a16529eb982d977d211917c9f2"
+    },
+    {
+      "source": "target/writer-placement-v2/root-reviewed-01/positive-witness-audit/pre/batch-0000-identity.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/root-reviewed-01/positive-witness-audit/pre/batch-0000-identity.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/root-reviewed-01/positive-witness-audit/pre/batch-0000-identity.stdout",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/root-reviewed-01/positive-witness-audit/pre/batch-0000-identity.stdout.txt",
+      "sha256": "0fbd2992b34251b7d103488b8ba4b748906ef61586b6a7fdfe69418479cdf47d"
+    },
+    {
+      "source": "target/writer-placement-v2/root-reviewed-01/positive-witness-audit/pre/batch-0000-rust.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/root-reviewed-01/positive-witness-audit/pre/batch-0000-rust.process.json",
+      "sha256": "83d36c9b2e3a79cc6f21d650fffd99c214cb69ab8e49edc62a83da97cd2cd829"
+    },
+    {
+      "source": "target/writer-placement-v2/root-reviewed-01/positive-witness-audit/pre/batch-0000-rust.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/root-reviewed-01/positive-witness-audit/pre/batch-0000-rust.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/root-reviewed-01/positive-witness.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/root-reviewed-01/positive-witness.json",
+      "sha256": "5c34f3f3df7e927766e21ef78dfc3888ac5e32b5e8495fce5e076b7d21b3bb3c"
+    },
+    {
+      "source": "target/writer-placement-v2/root-reviewed-01/wrong-observation-witness-audit/audit.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/root-reviewed-01/wrong-observation-witness-audit/audit.json",
+      "sha256": "f3fa4b67df3342731defdbc50e5e99179be683b326793cc2482a0ebae85e1c0a"
+    },
+    {
+      "source": "target/writer-placement-v2/root-reviewed-01/wrong-observation-witness-audit/post/batch-0000-dump.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/root-reviewed-01/wrong-observation-witness-audit/post/batch-0000-dump.process.json",
+      "sha256": "bb02c76ebf9f069193d8d6b2dc76e46da223f666d5c0f188fd46691b225aae44"
+    },
+    {
+      "source": "target/writer-placement-v2/root-reviewed-01/wrong-observation-witness-audit/post/batch-0000-dump.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/root-reviewed-01/wrong-observation-witness-audit/post/batch-0000-dump.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/root-reviewed-01/wrong-observation-witness-audit/post/batch-0000-identity.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/root-reviewed-01/wrong-observation-witness-audit/post/batch-0000-identity.process.json",
+      "sha256": "1627ffd7abd4be878740b2f328d9c84924d0d63d0349504958bf857348ec350b"
+    },
+    {
+      "source": "target/writer-placement-v2/root-reviewed-01/wrong-observation-witness-audit/post/batch-0000-identity.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/root-reviewed-01/wrong-observation-witness-audit/post/batch-0000-identity.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/root-reviewed-01/wrong-observation-witness-audit/post/batch-0000-identity.stdout",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/root-reviewed-01/wrong-observation-witness-audit/post/batch-0000-identity.stdout.txt",
+      "sha256": "e9e2e937f8389861131c48ddae50914a4aff0637d151ca7bbe693d4d162a10db"
+    },
+    {
+      "source": "target/writer-placement-v2/root-reviewed-01/wrong-observation-witness-audit/post/batch-0000-rust.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/root-reviewed-01/wrong-observation-witness-audit/post/batch-0000-rust.process.json",
+      "sha256": "ac89180781979947c4c4cb917e992b738ff96c6b0c30da4af61c49803af9490f"
+    },
+    {
+      "source": "target/writer-placement-v2/root-reviewed-01/wrong-observation-witness-audit/post/batch-0000-rust.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/root-reviewed-01/wrong-observation-witness-audit/post/batch-0000-rust.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/root-reviewed-01/wrong-observation-witness-audit/pre/batch-0000-dump.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/root-reviewed-01/wrong-observation-witness-audit/pre/batch-0000-dump.process.json",
+      "sha256": "0d20580c7b0bf302048dafe002e434e8676b17adc5cfefa3f49c8f229c6602f3"
+    },
+    {
+      "source": "target/writer-placement-v2/root-reviewed-01/wrong-observation-witness-audit/pre/batch-0000-dump.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/root-reviewed-01/wrong-observation-witness-audit/pre/batch-0000-dump.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/root-reviewed-01/wrong-observation-witness-audit/pre/batch-0000-identity.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/root-reviewed-01/wrong-observation-witness-audit/pre/batch-0000-identity.process.json",
+      "sha256": "2f4811ba2937a0ec779f1ea447150f075b2db2569d8fda0da81812b46eb15ad3"
+    },
+    {
+      "source": "target/writer-placement-v2/root-reviewed-01/wrong-observation-witness-audit/pre/batch-0000-identity.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/root-reviewed-01/wrong-observation-witness-audit/pre/batch-0000-identity.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/root-reviewed-01/wrong-observation-witness-audit/pre/batch-0000-identity.stdout",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/root-reviewed-01/wrong-observation-witness-audit/pre/batch-0000-identity.stdout.txt",
+      "sha256": "0fbd2992b34251b7d103488b8ba4b748906ef61586b6a7fdfe69418479cdf47d"
+    },
+    {
+      "source": "target/writer-placement-v2/root-reviewed-01/wrong-observation-witness-audit/pre/batch-0000-rust.process.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/root-reviewed-01/wrong-observation-witness-audit/pre/batch-0000-rust.process.json",
+      "sha256": "49d0460d8fb5c5586faf130e645ed84ac27fbe6972bccd48749c6fd6797303a1"
+    },
+    {
+      "source": "target/writer-placement-v2/root-reviewed-01/wrong-observation-witness-audit/pre/batch-0000-rust.stderr",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/root-reviewed-01/wrong-observation-witness-audit/pre/batch-0000-rust.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "target/writer-placement-v2/root-reviewed-01/wrong-observation-witness.json",
+      "retained": "machine/architecture-hardening/h23-placement-evidence/root-reviewed-01/wrong-observation-witness.json",
+      "sha256": "86924f6d305cdcf1d943af7c72dc1ab85dcf666ed7b8021d94b4755531777825"
+    }
+  ],
+  "artifact_inventory_sha256": "928e07e085482e00357d39a75b099d2247299e5efb90deac0687bbebda2079a0",
+  "limits": [
+    "Actual JVM verification and qualified hierarchy relation for frame rewrites remain unproved",
+    "66 hook static structures checked;35 complete conservative site proofs,31 blocked by frame metadata",
+    "86 unhooked method rewrites and89 hooked frame details retained without normalization",
+    "No live writer/lifecycle closure or coherent capture claim",
+    "Full runtime classfiles/parser dumps remain local target-only and are hash-inventoried"
+  ]
+}

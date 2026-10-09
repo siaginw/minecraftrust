@@ -1,0 +1,21 @@
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.08s
+     Running unittests src\lib.rs (target\debug\deps\metrics-97799a02af332d30.exe)
+
+running 8 tests
+test tests::sum_overflow_is_explicit_not_a_smaller_transfer ... ok
+test tests::fixed_operation_ids_are_unique_and_in_range ... ok
+test tests::contained_panic_invalidates_normal_path_copy_and_allocation_proofs ... ok
+test tests::unwind_records_an_unknown_failed_observation ... ok
+test tests::partial_accounting_never_becomes_a_complete_total ... ok
+test tests::concurrent_known_and_unknown_observations_keep_separate_counts ... ok
+test tests::operation_ids_never_contribute_to_bytes_and_unknown_is_not_zero ... ok
+test tests::explicit_zero_and_unobserved_are_distinct ... ok
+
+test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests metrics
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+

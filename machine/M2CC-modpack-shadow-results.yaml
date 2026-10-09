@@ -1,0 +1,52 @@
+# M2CC modpack SHADOW campaign (operator authorization 2026-09-20).
+# class: MEASURED. Provenance: M2CC-MODPACK-SHADOW. SHADOW ONLY - Java output
+# authoritative throughout; no ON_EXPERIMENTAL transmission. M1 OFF in all runs.
+schema_version: 1
+date: "2026-09-20"
+environment:
+  packs: {C: "FTB Revelation 3.4.0, Forge 14.23.5.2846, 193 mods (FoamFix 0.10.5 + Phosphor 0.2.7 active)", D: "SevTech Ages 3.2.3, Forge 14.23.5.2860, 262 mods (FoamFix 0.10.10 active, no Phosphor)"}
+  builds: {coremod: "3297b2f9e82663a9 (with m2c shutdown dump)", dll: "0acb7469a74d9531 (superset of M1 exports)"}
+  java: "Temurin jdk-8.0.504.1-hotspot"; machine: "Siagi host (AMD Ryzen 7 7800X3D, Windows 11)"
+  run_command: "bash tools/m2cc-pack-run.sh <C|D> SHADOW <label> <secs> [paranoid]; bots: python tools/targeta_client.py <label> [host] [port] (+TP-hop walk session for D)"
+revelation_target_c:
+  shadow_run: {sessions: "1 TP-hop corridor walk (400s) + 25 login sessions", chunk_packets: 11025, client_errors: 0,
+               shadow_packets: 87567, matches: 87567, mismatches: 0, fallbacks: 0, native_errors: 0,
+               ctx_created: 26, ctx_freed: 26, transform: TRANSFORMED_SUCCESS}
+  paranoid_run: {sessions: 10, shadow_packets: 9390, matches: 9390, mismatches: 0, fallbacks: 0,
+                 ctx_created: 10, ctx_freed: 10, client_errors: 0,
+                 leak_events: 1, leak_attribution: "ElecCore WindowManager baseline (elec332 frames; ZERO m2c/rustcraft frames in the leak stack) - same pack-baseline leak reproduced with M1 disabled in M1J/M1H; NOT M2-C-attributable"}
+sevtech_target_d:
+  shadow_run: {sessions: "1 TP-hop corridor walk (300s hold; server window expired before the planned 25-bot batch - actual workload reported, not stretched)", chunk_packets: 16951,
+               client_errors: "1 (ConnectionError: closed @ shutdown - server stop during session end; not M2C-attributable, decode clean for all 16951 received chunks)",
+               shadow_packets: 45454, matches: 45454, mismatches: 0, fallbacks: 0, native_errors: 0,
+               ctx_created: 2, ctx_freed: 2, transform: TRANSFORMED_SUCCESS}
+  paranoid_run: {sessions: 8, shadow_packets: 3848, matches: 3848, mismatches: 0, fallbacks: 0,
+                 ctx_created: 8, ctx_freed: 8, client_errors: 0, leak_events: 0}
+totals:
+  comparisons: 146259  # 87567 + 9390 + 45454 + 3848
+  mismatches: 0
+  native_errors: 0
+  fallbacks: 0
+  m2c_attributable_leaks: 0
+  context_imbalance: 0  # created == freed in every single run
+pipeline_compatibility: # runtime-observed, not inferred from boot success
+  encoder_concrete_class: "com.rustcraft.bridge.NativeCompressionEncoder installed BY vanilla NetworkManager code path (transform rewrites only the construction site); the vanilla cast to NettyCompressionEncoder exercised by every threshold-touch"
+  mod_handler_at_compress: "NONE observed on either pack - no mod wraps/replaces the compress seam in Revelation or SevTech; if one did, vanilla's own cast (not our code) governs and our transformer never touches an occupied slot"
+  threshold_behavior: "threshold set at login (vanilla default 256); m2c_threshold_changes=0 across all runs (vanilla never calls the update path mid-session in these packs); sub-threshold packets took vanilla super() verbatim (framing verified by client decode of every packet, 0 decode errors)"
+  threshold_coverage: "eligible >=256B packets: 146,259 shadowed; sub-threshold path exercised continuously (every keepalive/chat below threshold) - authoritative Java framing, decoded correctly by the bot throughout"
+  pipeline_mutation_after_login: "none observed affecting the compress slot (mod config-sync channels use FML|HS plugin channeling, not pipeline handler swaps)"
+timing_observation: # NETWORK-WORKER THROUGHPUT ONLY - not TPS/MSPT/whole-server
+  revelation: {bytes_in: 1537256476, java_ns: 25994463600, rust_ns: 11152424600, rust_vs_java: "0.43x (rust ~2.3x faster complete-path)", java_out_bytes: 210435268, rust_out_bytes: 215433962, size_delta_pct: +2.4}
+  sevtech: {bytes_in: 1367314041, java_ns: 17687008200, rust_ns: 7597409600, rust_vs_java: "0.43x", java_out_bytes: 102969464, rust_out_bytes: 104482120, size_delta_pct: +1.5}
+  rate_note: "Revelation walk-session window ~400s streaming ~1.54GB eligible plaintext => ~3.8 MB/s eligible, ~219 shadow comparisons/s average"
+stop_conditions: "NONE triggered - no plaintext mismatch, no M2C-attributable decode error, no lifecycle corruption, no context leak, no framing corruption, no threshold failure, no pipeline conflict"
+recommendation: APPROVE_BOUNDED_ON_EXPERIMENTAL_TARGET_A
+reasoning: >
+  Both packs exceeded the 10k-comparison target with zero mismatches,
+  zero fallbacks, zero native errors, balanced contexts in every run, and
+  no M2C-attributable leak (the single Revelation paranoid leak event is
+  the previously-established ElecCore pack baseline, frame-attributed).
+  Pipeline compatibility holds at the vanilla seam with no mod conflict
+  observed on either pack. Next bounded step per ladder: ON_EXPERIMENTAL
+  on clean-Forge Target A first (as the directive suggests), then pack
+  ON_EXPERIMENTAL by operator approval.

@@ -1,0 +1,30 @@
+D:\minecraftrust-astra-hardening\tools\forge-capture\src\com\rustcraft\livetransformer\LiveTransformerVerification.java:16: warning: Unsafe is internal proprietary API and may be removed in a future release
+import sun.misc.Unsafe;
+               ^
+D:\minecraftrust-astra-hardening\tools\forge-capture\src\com\rustcraft\livetransformer\ExtractorScopeVerification.java:18: warning: Unsafe is internal proprietary API and may be removed in a future release
+import sun.misc.Unsafe;
+               ^
+D:\minecraftrust-astra-hardening\tools\forge-capture\src\com\rustcraft\livetransformer\LiveTransformerVerification.java:356: warning: Unsafe is internal proprietary API and may be removed in a future release
+    private static final Unsafe MEMORY = unsafe();
+                         ^
+D:\minecraftrust-astra-hardening\tools\forge-capture\src\com\rustcraft\livetransformer\LiveTransformerVerification.java:360: warning: Unsafe is internal proprietary API and may be removed in a future release
+    private static Unsafe unsafe() {
+                   ^
+D:\minecraftrust-astra-hardening\tools\forge-capture\src\com\rustcraft\livetransformer\LiveTransformerVerification.java:362: warning: Unsafe is internal proprietary API and may be removed in a future release
+            Field f = Unsafe.class.getDeclaredField("theUnsafe");
+                      ^
+D:\minecraftrust-astra-hardening\tools\forge-capture\src\com\rustcraft\livetransformer\LiveTransformerVerification.java:364: warning: Unsafe is internal proprietary API and may be removed in a future release
+            return (Unsafe) f.get(null);
+                    ^
+D:\minecraftrust-astra-hardening\tools\forge-capture\src\com\rustcraft\livetransformer\ExtractorScopeVerification.java:158: warning: Unsafe is internal proprietary API and may be removed in a future release
+    private static Unsafe memory() throws Exception {
+                   ^
+D:\minecraftrust-astra-hardening\tools\forge-capture\src\com\rustcraft\livetransformer\ExtractorScopeVerification.java:159: warning: Unsafe is internal proprietary API and may be removed in a future release
+        Field field = Unsafe.class.getDeclaredField("theUnsafe"); field.setAccessible(true); return (Unsafe) field.get(null);
+                      ^
+D:\minecraftrust-astra-hardening\tools\forge-capture\src\com\rustcraft\livetransformer\ExtractorScopeVerification.java:159: warning: Unsafe is internal proprietary API and may be removed in a future release
+        Field field = Unsafe.class.getDeclaredField("theUnsafe"); field.setAccessible(true); return (Unsafe) field.get(null);
+                                                                                                     ^
+Note: Some input files use unchecked or unsafe operations.
+Note: Recompile with -Xlint:unchecked for details.
+9 warnings

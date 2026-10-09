@@ -1,0 +1,76 @@
+# M3.0 spawn-index offline prototype (operator authorization 2026-09-20).
+# OFFLINE ONLY: no live server, no coremod, no SHADOW, no defaults changed.
+# class: MEASURED. Provenance: M30-PROTOTYPE.
+schema_version: 1
+date: "2026-09-20"
+builds:
+  dll: {sha256_prefix: 714864f9bd301329, note: "superset: M1 + M2C + NEW spawn-index JNI exports (create/freeRaw/insert/updateBox/remove/query/stats); M1/M2C exports untouched"}
+  crates: {spatial_index: "crates/spatial-index (LongKeyBuckets: long-key->bucket-of-ids, negative/huge coords, bounded, 4/4 tests)", spawn_index: "crates/spawn-index (SpawnIndex: region grid 512-block cells, ranked first-match parity, insert/replace/update_box/remove/query/stats; 7/7 tests incl. 20k randomized differential vs linear)"}
+directive_1_mutation_lifecycle: # verified by disassembly (machine/raw/diag/mapgenstructure-disasm.txt + scatteredfeature)
+  creation: "ctor: empty Long2ObjectOpenHashMap(1024)"
+  insertion: "NBT/world-load bulk puts (initializeStructureData from MapGenStructureData .dat) + generation-time appends (containsKey-guarded put; no replacement path in vanilla)"
+  save_reload: "MapGenStructureData persisted per feature as world/data/<Feature>.dat (GZIP NBT, data->Features->[cx,cz]->{BB,Children,...}); map rebuilt wholesale on world reload; instance dies with its WorldServer/generator"
+  replacement: "none in vanilla (containsKey guard); replace API provided for safety"
+  bbox_recalc: "StructureStart bounding boxes mutate after insertion during generation (func_175787_b class) -> update_box API required and provided"
+  component_mutation: "components fixed post-generation in practice; staged as flat boxes at insert"
+  invalidation_removal: "NO remove/clear anywhere in vanilla MapGenStructure; tombstone API provided for completeness"
+  is_valid: "base StructureStart.func_75069_d = CONSTANT TRUE (disassembled: iconst_1; ireturn); .dat entries commonly omit Valid -> runtime-valid"
+  mod_surface: "BOPMapGenScatteredFeature does NOT touch field_75053_d (disassembled; customizes lists/placement only, inherits the vanilla query path); zero mods reference func_177458_a (M3J census). Field is protected -> a rogue mod could write it; integration must hook the map seam (SHADOW-phase design note)"
+  verdict: "INDEX MAINTAINABLE through explicit observable events (bulk-load / append / box-update). NOT COMPATIBILITY_BLOCKED."
+directive_2_query_semantics: # verified by disassembly of func_175797_c
+  exact_query: "for start in map.values() (fastutil iteration order): if !isValid() skip; if !start.BB.contains(Vec3i pos) skip; if ANY component.BB.contains(pos) return start (FIRST MATCH); after loop -> null"
+  caller: "MapGenScatteredFeature.func_175798_a (per spawn attempt) and MapGenStructure.func_175796_a (isInsideStructure) per CGO/CPS func_177458_a (getPossibleCreatures)"
+  parity_construction: "ranks = positions in the ACTUAL Long2ObjectOpenHashMap iteration order; all three implementations scan candidates in rank order -> first-match ordering identical by construction"
+  biome_lists: "NOT cached (directive 2 caution): biome/provider fallback stays Java in any future integration"
+implementations:
+  A_REFERENCE_LINEAR: "exact replica over the real fastutil map (harness uses the actual server jar's Long2ObjectOpenHashMap)"
+  B_JAVA_INDEX: "same region-grid algorithm in pure Java (HashMap<Long,ArrayList<Start>>, buckets rank-sorted at build)"
+  C_RUST_INDEX: "JNI into crates/spawn-index via typed-address FFI (components staged through a native-order direct IntBuffer)"
+datasets: # seeds recorded in harness; real files hash-pinned
+  synthetic: "temple 0/1/16/256/4096 (sparse), dense 32768 (post-dedupe 32461, overlapping), huge 2048 (2000-10000-block boxes), negative 4096 (coords -60M), all deterministic; chunk-key dedupe mirrors vanilla put semantics"
+  real: "extracted from targetC world/data: Temple 11, Village 24, Mineshaft 379, Monument 4, Stronghold 3 starts (GZIP NBT parsed via vanilla CompressedStreamTools; provenance hashes in raw output). Chunk-NBT Starts absent in the bot-corridor worlds (empty compounds) - the .dat path is the real source"
+parity: # directive 6
+  result: "TOTAL_PARITY_MISMATCHES = 0 across ALL 13 datasets (8 synthetic + 5 real); ~215k total queries; identical selected start (rank) including null/miss semantics and first-match ordering"
+effectiveness: # directive 7 (NOT converted to MSPT)
+  real_mineshaft_379: {linear_avg_candidates: 379.0, indexed_avg: 3.30, p50: "3 vs 379", p95: "8", skip_factor: "114.9x"}
+  real_temple_11: {linear_avg: 11.0, indexed_avg: 0.60, skip_factor: "18.2x"}
+  syn_4096_sparse: {linear_avg: 4033.2, indexed_avg: 0.60, skip_factor: "6714.8x"}
+  syn_32768_dense: {linear_avg: 31850.4, indexed_avg: 14.58, p95: 32, skip_factor: "2184.3x"}
+  syn_2048_huge: {linear_avg: 2016.2, indexed_avg: 0.61, skip_factor: "3287.2x"}
+  syn_4096_negative: {skip_factor: "6729.4x"}
+  memory: "rust index approx 0.67 MB for 4096 starts; 15 MB for the extreme huge-box set (368,911 regions - pathological, real structure boxes never span that many regions); 1.2 MB for real Mineshaft 379"
+  query_rate_evidence: "M3J: the spawn-query cluster was 12.2% ServerThread presence at high query rate (per spawn attempt per loaded chunk per tick class) - per-query reduction measured here; live ServerThread translation requires the SHADOW phase (out of scope)"
+benchmark: # directive 8; identical corpora, warmed; per-query ns
+  syn_4096: {linear_median_ns: 14500, java_ix_median_ns: 100, rust_ix_median_ns: 100, note: "java_ix ~= rust_ix"}
+  syn_32768_dense: {linear: 251400, java_ix: 200, rust_ix: 200}
+  syn_2048_huge: {linear: 6000, java_ix: 300, rust_ix: 100, note: "rust wins the build 2.1x (46.1ms vs 95.0ms) and queries here"}
+  real_mineshaft_379: {linear: 1200, java_ix: 100, rust_ix: 100}
+  build_cost: "java 162us vs rust 705us for 379 starts (JNI per-insert overhead dominates small builds); rust 1.38ms vs java 2.16ms at 4096 (batched inserts would improve; measured as-is per directive)"
+  jni_contribution: "rust query medians 100-200 ns INCLUDING JNI - the crossing is comparable to one boxed-java map lookup; JNI does not dominate"
+java_vs_rust_conclusion: >
+  The indexed ALGORITHM captures essentially all of the query-time benefit
+  in Java: java_ix medians match rust_ix (100-200 ns) on every realistic
+  dataset, both 12-1257x faster than linear. Rust wins appear only in
+  pathological build-heavy shapes (huge-box build 2.1x faster, queries 3x)
+  and lose small builds (per-insert JNI). No packed-layout/SIMD/parallelism
+  advantage is material at these bucket sizes.
+collision_reuse: # directive 10 - analysis only, nothing implemented
+  reusable_pieces: "LongKeyBuckets (long-key->ids) and the region-key packing are directly reusable for section-occupancy bitsets; the deterministic small-bucket pattern fits"
+  differing_invalidation: "collision needs per-setBlockState COUNTER updates (Lithium model, high-frequency writes); structures use generation-event APPENDS (low-frequency) - the invalidation SEMANTICS differ; only the primitive container is shared, not an engine"
+  verdict: "reuse is REAL but at the utility-crate level only - consistent with the M3R recommendation (specialized index + shared utility, no shared engine)"
+classification: ALGORITHM_ONLY
+classification_reasoning: >
+  Parity is perfect and the algorithm is a measured win (114.9x candidate
+  reduction on the largest real map; 12-1257x wall-clock query speedup),
+  but the Java implementation of the SAME index captures nearly all of
+  it; Rust adds ~equal queries, mixed builds, and no unique architectural
+  advantage at realistic scales. Per the directive's own decision rule
+  this is ALGORITHM_ONLY, not RUST_STRONG. The M3 live-server value case
+  (removing the 12.2% ServerThread cluster) is achievable with EITHER
+  implementation; per the PRIMARY PROJECT RULE (Rust is the optimization
+  layer, but Java-patch-for-its-own-sake is out of scope), the honest
+  recommendation is to PARK the native spawn index and NOT port the
+  algorithm to Java either (that would be a Java performance patch),
+  UNLESS the operator explicitly wants a Java-side engine patch.
+recommendation: "PARK the native M3-SPAWN-QUERY-INDEX (ALGORITHM_ONLY verdict; algorithm validated, native value not justified at realistic scale). No live SHADOW integration. Assets retained: crates/spatial-index utility (tested, reusable), crates/spawn-index + JNI surface (parity-proven), the verified mutation/query-semantics disassembly, and the extraction tooling - any future consumer can revive the work. M3 status returns to UNSELECTED pending either (a) operator direction to pursue Java-side engine patches (explicitly out of the project's current charter) or (b) a new native candidate with real Rust leverage."
+stop: "No live integration, no coremod changes, no SHADOW, no defaults changed. Offline evidence only."

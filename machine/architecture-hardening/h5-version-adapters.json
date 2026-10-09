@@ -1,0 +1,573 @@
+{
+  "schema_version": 2,
+  "kind": "H5_H5_1_VERSION_NEUTRAL_CORE_AND_1_12_X",
+  "implementation_status": "ROOT_WORKSPACE_ARCHITECTURE_AND_FIXTURES_VALIDATED",
+  "validation_status": "PASS",
+  "production_authority": false,
+  "existing_consumers_migrated": false,
+  "root_workspace_integrated": true,
+  "receipt": "machine/architecture-hardening/h5-version-adapters-evidence/h5-version-adapters-464a948fc9/receipt.json",
+  "receipt_sha256": "83f7d0d4e14be10e56250115f98c96061a76f0ffa92c8a7432c49f5b8d102dea",
+  "source_binding_count": 26,
+  "source_bindings_match_current": true,
+  "primary_source_review": "versions/mc_1_12_x/fixtures/primary-source-review.json",
+  "primary_source_review_sha256": "7223c6392398927dbec6cc376f4550253e5318eb510c3c9e6e4b3a5668a71251",
+  "primary_source_commit": "2157a992b9eaf07a292101f1823dfca725e6aea8",
+  "versions": [
+    {
+      "release": "1.12.1",
+      "protocol": 338,
+      "data_version": 1241,
+      "keepalive": "signed 32-bit VarInt"
+    },
+    {
+      "release": "1.12.2",
+      "protocol": 340,
+      "data_version": 1343,
+      "keepalive": "signed 64-bit big-endian integer"
+    }
+  ],
+  "command_test_counts": {
+    "core-tests": 13,
+    "adapter-tests": 11
+  },
+  "counts_note": "Each command total derived only from that command raw test-result lines. Core13 =11 integration +2 compile-fail doctests; adapter11 =11 integration; no cross-command double counting.",
+  "java_fixture_oracle_checks": 18,
+  "static_position_vectors": 3,
+  "dispatch_examples": {
+    "338": "PASS 4096 states",
+    "340": "PASS 4096 states",
+    "339": "EXPECTED_REJECTION UnsupportedProtocol"
+  },
+  "remaining_wiring": [
+    "CI must invoke fixture runner (Java oracle, dispatch examples and compile-fail docs) in addition to root workspace library tests.",
+    "Qualified registry mapping extraction and H4/H6 epoch/evidence binding",
+    "Existing core-types/legacy native-chunk consumer migration",
+    "Complete chunk/palette/wire serialization adapters",
+    "World-format/Anvil NBT implementation",
+    "Loader/mod-runtime integration",
+    "Runtime evidence for actual1.12.1 sessions; no gameplay support claim"
+  ],
+  "unchanged": [
+    "accepted core-types/protocol/native-chunk/FFI consumers",
+    "M4 production gate",
+    "MCK6",
+    "compression backend",
+    "defaults",
+    "historical exact-writer classification"
+  ],
+  "performance": "UNMEASURED: architecture avoids required per-block version dispatch, but no speedup or allocation result is claimed.",
+  "retained_artifacts": [
+    {
+      "original_path": "target/architecture-hardening/h5-version-adapters-464a948fc9/adapter-clippy.log",
+      "retained_path": "machine/architecture-hardening/h5-version-adapters-evidence/h5-version-adapters-464a948fc9/adapter-clippy.log.txt",
+      "sha256": "e842371cbff53c1fbebf4f1e59d8a5aeda90d916e880f1708b6994adbc9cb43c"
+    },
+    {
+      "original_path": "target/architecture-hardening/h5-version-adapters-464a948fc9/adapter-fmt.log",
+      "retained_path": "machine/architecture-hardening/h5-version-adapters-evidence/h5-version-adapters-464a948fc9/adapter-fmt.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/architecture-hardening/h5-version-adapters-464a948fc9/adapter-tests.log",
+      "retained_path": "machine/architecture-hardening/h5-version-adapters-evidence/h5-version-adapters-464a948fc9/adapter-tests.log.txt",
+      "sha256": "afe0e84fda53fb1448abc5adcf601b421df6a6844ab3b9ff0e8397041fa8acba"
+    },
+    {
+      "original_path": "target/architecture-hardening/h5-version-adapters-464a948fc9/cargo-version.log",
+      "retained_path": "machine/architecture-hardening/h5-version-adapters-evidence/h5-version-adapters-464a948fc9/cargo-version.log.txt",
+      "sha256": "9950bbb2d5c3417b1a068f0e81f6d3cac991a363193bdf2a22d447f5acf8b503"
+    },
+    {
+      "original_path": "target/architecture-hardening/h5-version-adapters-464a948fc9/core-clippy.log",
+      "retained_path": "machine/architecture-hardening/h5-version-adapters-evidence/h5-version-adapters-464a948fc9/core-clippy.log.txt",
+      "sha256": "7650083098cb43e70d2853e7b7bf9c493283f18f45a398b1e6570e0075e4b065"
+    },
+    {
+      "original_path": "target/architecture-hardening/h5-version-adapters-464a948fc9/core-fmt.log",
+      "retained_path": "machine/architecture-hardening/h5-version-adapters-evidence/h5-version-adapters-464a948fc9/core-fmt.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/architecture-hardening/h5-version-adapters-464a948fc9/core-tests.log",
+      "retained_path": "machine/architecture-hardening/h5-version-adapters-evidence/h5-version-adapters-464a948fc9/core-tests.log.txt",
+      "sha256": "0ea2adbf7e83dd4238d7d14e6d1aa215e79d7fed88eab24bc0e58f7900610cb3"
+    },
+    {
+      "original_path": "target/architecture-hardening/h5-version-adapters-464a948fc9/diff-check.log",
+      "retained_path": "machine/architecture-hardening/h5-version-adapters-evidence/h5-version-adapters-464a948fc9/diff-check.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/architecture-hardening/h5-version-adapters-464a948fc9/dispatch-338.log",
+      "retained_path": "machine/architecture-hardening/h5-version-adapters-evidence/h5-version-adapters-464a948fc9/dispatch-338.log.txt",
+      "sha256": "4148b68a25c79a6d735ea8a53f69ef35db854e706916203abaeaa9581d586c7d"
+    },
+    {
+      "original_path": "target/architecture-hardening/h5-version-adapters-464a948fc9/dispatch-339.log",
+      "retained_path": "machine/architecture-hardening/h5-version-adapters-evidence/h5-version-adapters-464a948fc9/dispatch-339.log.txt",
+      "sha256": "e99eeef800d849729410da19fda8c915e4f63c0aa4be1b0ff2a7aee4e12e9f87"
+    },
+    {
+      "original_path": "target/architecture-hardening/h5-version-adapters-464a948fc9/dispatch-340.log",
+      "retained_path": "machine/architecture-hardening/h5-version-adapters-evidence/h5-version-adapters-464a948fc9/dispatch-340.log.txt",
+      "sha256": "a075bb1c07602b2280d9471de213a1c744f9a83e253010f0c04a51e7bee299b8"
+    },
+    {
+      "original_path": "target/architecture-hardening/h5-version-adapters-464a948fc9/java-compile.log",
+      "retained_path": "machine/architecture-hardening/h5-version-adapters-evidence/h5-version-adapters-464a948fc9/java-compile.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/architecture-hardening/h5-version-adapters-464a948fc9/java-oracle.log",
+      "retained_path": "machine/architecture-hardening/h5-version-adapters-evidence/h5-version-adapters-464a948fc9/java-oracle.log.txt",
+      "sha256": "489aa0fe8afa3c58138406a832dd899fdb51f32640a7e86d2f214b7aab35e5cb"
+    },
+    {
+      "original_path": "target/architecture-hardening/h5-version-adapters-464a948fc9/java-version.log",
+      "retained_path": "machine/architecture-hardening/h5-version-adapters-evidence/h5-version-adapters-464a948fc9/java-version.log.txt",
+      "sha256": "9d65a43706f49fcfdbcece91e737f759110493e82fd1c4886cf49104c2017b0e"
+    },
+    {
+      "original_path": "target/architecture-hardening/h5-version-adapters-464a948fc9/rustc-version.log",
+      "retained_path": "machine/architecture-hardening/h5-version-adapters-evidence/h5-version-adapters-464a948fc9/rustc-version.log.txt",
+      "sha256": "c45e612575abeef05e99e88eb1e7aea52cddab9ad70d4f65ad20eaa65e92a9cf"
+    },
+    {
+      "original_path": "target/architecture-hardening/h5-version-adapters-464a948fc9/receipt.json",
+      "retained_path": "machine/architecture-hardening/h5-version-adapters-evidence/h5-version-adapters-464a948fc9/receipt.json",
+      "sha256": "83f7d0d4e14be10e56250115f98c96061a76f0ffa92c8a7432c49f5b8d102dea"
+    },
+    {
+      "original_path": "target/architecture-hardening/h5-root-final/adapter-clippy.log",
+      "retained_path": "machine/architecture-hardening/h5-version-adapters-evidence/h5-root-final/adapter-clippy.log.txt",
+      "sha256": "e842371cbff53c1fbebf4f1e59d8a5aeda90d916e880f1708b6994adbc9cb43c"
+    },
+    {
+      "original_path": "target/architecture-hardening/h5-root-final/adapter-fmt.log",
+      "retained_path": "machine/architecture-hardening/h5-version-adapters-evidence/h5-root-final/adapter-fmt.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/architecture-hardening/h5-root-final/adapter-tests.log",
+      "retained_path": "machine/architecture-hardening/h5-version-adapters-evidence/h5-root-final/adapter-tests.log.txt",
+      "sha256": "f27a5a61c3ccabf0fc0616971c98e1df93f8cf1be274fbbf07265be00fec3fe8"
+    },
+    {
+      "original_path": "target/architecture-hardening/h5-root-final/cargo-version.log",
+      "retained_path": "machine/architecture-hardening/h5-version-adapters-evidence/h5-root-final/cargo-version.log.txt",
+      "sha256": "9950bbb2d5c3417b1a068f0e81f6d3cac991a363193bdf2a22d447f5acf8b503"
+    },
+    {
+      "original_path": "target/architecture-hardening/h5-root-final/core-clippy.log",
+      "retained_path": "machine/architecture-hardening/h5-version-adapters-evidence/h5-root-final/core-clippy.log.txt",
+      "sha256": "7650083098cb43e70d2853e7b7bf9c493283f18f45a398b1e6570e0075e4b065"
+    },
+    {
+      "original_path": "target/architecture-hardening/h5-root-final/core-fmt.log",
+      "retained_path": "machine/architecture-hardening/h5-version-adapters-evidence/h5-root-final/core-fmt.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/architecture-hardening/h5-root-final/core-tests.log",
+      "retained_path": "machine/architecture-hardening/h5-version-adapters-evidence/h5-root-final/core-tests.log.txt",
+      "sha256": "fb118bab0cf801e48caf5da07b238d51135a0ca7a54eae5099ada18816cbde5c"
+    },
+    {
+      "original_path": "target/architecture-hardening/h5-root-final/diff-check.log",
+      "retained_path": "machine/architecture-hardening/h5-version-adapters-evidence/h5-root-final/diff-check.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/architecture-hardening/h5-root-final/dispatch-338.log",
+      "retained_path": "machine/architecture-hardening/h5-version-adapters-evidence/h5-root-final/dispatch-338.log.txt",
+      "sha256": "709ff2fce6a10f897214578840a1797cfc076d2e485d8b279b38e9dbfaf7b39b"
+    },
+    {
+      "original_path": "target/architecture-hardening/h5-root-final/dispatch-339.log",
+      "retained_path": "machine/architecture-hardening/h5-version-adapters-evidence/h5-root-final/dispatch-339.log.txt",
+      "sha256": "6df55d5e1b5463fbc1c69510cc0a0797dac00184869e7a651b0e722427c69ff0"
+    },
+    {
+      "original_path": "target/architecture-hardening/h5-root-final/dispatch-340.log",
+      "retained_path": "machine/architecture-hardening/h5-version-adapters-evidence/h5-root-final/dispatch-340.log.txt",
+      "sha256": "2d9aa3cd45a3d6092b24d3b2d9988140747e1d70f5d064a3ef1ab7121db9b405"
+    },
+    {
+      "original_path": "target/architecture-hardening/h5-root-final/java-compile.log",
+      "retained_path": "machine/architecture-hardening/h5-version-adapters-evidence/h5-root-final/java-compile.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/architecture-hardening/h5-root-final/java-oracle.log",
+      "retained_path": "machine/architecture-hardening/h5-version-adapters-evidence/h5-root-final/java-oracle.log.txt",
+      "sha256": "489aa0fe8afa3c58138406a832dd899fdb51f32640a7e86d2f214b7aab35e5cb"
+    },
+    {
+      "original_path": "target/architecture-hardening/h5-root-final/java-version.log",
+      "retained_path": "machine/architecture-hardening/h5-version-adapters-evidence/h5-root-final/java-version.log.txt",
+      "sha256": "9d65a43706f49fcfdbcece91e737f759110493e82fd1c4886cf49104c2017b0e"
+    },
+    {
+      "original_path": "target/architecture-hardening/h5-root-final/receipt.json",
+      "retained_path": "machine/architecture-hardening/h5-version-adapters-evidence/h5-root-final/receipt.json",
+      "sha256": "aaf8666e7e44670f409f76d57193f1f6020e1169c02e668644491e1156532e6f"
+    },
+    {
+      "original_path": "target/architecture-hardening/h5-root-final/rustc-version.log",
+      "retained_path": "machine/architecture-hardening/h5-version-adapters-evidence/h5-root-final/rustc-version.log.txt",
+      "sha256": "c45e612575abeef05e99e88eb1e7aea52cddab9ad70d4f65ad20eaa65e92a9cf"
+    },
+    {
+      "original_path": "target/architecture-hardening/h5-workspace-regressions/cargo-version.stderr",
+      "retained_path": "machine/architecture-hardening/h5-version-adapters-evidence/h5-workspace-regressions/cargo-version.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/architecture-hardening/h5-workspace-regressions/cargo-version.stdout",
+      "retained_path": "machine/architecture-hardening/h5-version-adapters-evidence/h5-workspace-regressions/cargo-version.stdout.txt",
+      "sha256": "86c2d07f9968fd3174d9cff8c60a4d4323fba3166d5dc6dd36f0987a50677d70"
+    },
+    {
+      "original_path": "target/architecture-hardening/h5-workspace-regressions/clippy.stderr",
+      "retained_path": "machine/architecture-hardening/h5-version-adapters-evidence/h5-workspace-regressions/clippy.stderr.txt",
+      "sha256": "9df24e1a7703d5e6f2c9ab96e132d02ba22683737f0d488f8b712a8f9ee9ac25"
+    },
+    {
+      "original_path": "target/architecture-hardening/h5-workspace-regressions/clippy.stdout",
+      "retained_path": "machine/architecture-hardening/h5-version-adapters-evidence/h5-workspace-regressions/clippy.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/architecture-hardening/h5-workspace-regressions/format.stderr",
+      "retained_path": "machine/architecture-hardening/h5-version-adapters-evidence/h5-workspace-regressions/format.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/architecture-hardening/h5-workspace-regressions/format.stdout",
+      "retained_path": "machine/architecture-hardening/h5-version-adapters-evidence/h5-workspace-regressions/format.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/architecture-hardening/h5-workspace-regressions/receipt.json",
+      "retained_path": "machine/architecture-hardening/h5-version-adapters-evidence/h5-workspace-regressions/receipt.json",
+      "sha256": "123d926477aaa332f2eb243f04af8fefb64c4456d63e0860ed02188bd8487b3a"
+    },
+    {
+      "original_path": "target/architecture-hardening/h5-workspace-regressions/release-ffi.stderr",
+      "retained_path": "machine/architecture-hardening/h5-version-adapters-evidence/h5-workspace-regressions/release-ffi.stderr.txt",
+      "sha256": "03710904d64d576c421df6b702a7a5cd8f5aa8a54cbbd9d4e42fd224c38e03b4"
+    },
+    {
+      "original_path": "target/architecture-hardening/h5-workspace-regressions/release-ffi.stdout",
+      "retained_path": "machine/architecture-hardening/h5-version-adapters-evidence/h5-workspace-regressions/release-ffi.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/architecture-hardening/h5-workspace-regressions/resolve-cargo-clippy.stderr",
+      "retained_path": "machine/architecture-hardening/h5-version-adapters-evidence/h5-workspace-regressions/resolve-cargo-clippy.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/architecture-hardening/h5-workspace-regressions/resolve-cargo-clippy.stdout",
+      "retained_path": "machine/architecture-hardening/h5-version-adapters-evidence/h5-workspace-regressions/resolve-cargo-clippy.stdout.txt",
+      "sha256": "26f09df4e33bf098ad9fb2f35d1fce728c2b509fef8c47af1c745973b28b296d"
+    },
+    {
+      "original_path": "target/architecture-hardening/h5-workspace-regressions/resolve-cargo.stderr",
+      "retained_path": "machine/architecture-hardening/h5-version-adapters-evidence/h5-workspace-regressions/resolve-cargo.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/architecture-hardening/h5-workspace-regressions/resolve-cargo.stdout",
+      "retained_path": "machine/architecture-hardening/h5-version-adapters-evidence/h5-workspace-regressions/resolve-cargo.stdout.txt",
+      "sha256": "d70a6681283a709db0b4154a538f41c781608f69fb5bfbfa66dac449b697a95c"
+    },
+    {
+      "original_path": "target/architecture-hardening/h5-workspace-regressions/resolve-clippy-driver.stderr",
+      "retained_path": "machine/architecture-hardening/h5-version-adapters-evidence/h5-workspace-regressions/resolve-clippy-driver.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/architecture-hardening/h5-workspace-regressions/resolve-clippy-driver.stdout",
+      "retained_path": "machine/architecture-hardening/h5-version-adapters-evidence/h5-workspace-regressions/resolve-clippy-driver.stdout.txt",
+      "sha256": "934b599a01bd8f7d5338d12d97fc793d1af3427b7f706b93d8eb18819ce01b01"
+    },
+    {
+      "original_path": "target/architecture-hardening/h5-workspace-regressions/resolve-rustc.stderr",
+      "retained_path": "machine/architecture-hardening/h5-version-adapters-evidence/h5-workspace-regressions/resolve-rustc.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/architecture-hardening/h5-workspace-regressions/resolve-rustc.stdout",
+      "retained_path": "machine/architecture-hardening/h5-version-adapters-evidence/h5-workspace-regressions/resolve-rustc.stdout.txt",
+      "sha256": "54234bc009f7bc295608f8bb882e03677001147f42f05ce19606c17d2db6473b"
+    },
+    {
+      "original_path": "target/architecture-hardening/h5-workspace-regressions/resolve-rustfmt.stderr",
+      "retained_path": "machine/architecture-hardening/h5-version-adapters-evidence/h5-workspace-regressions/resolve-rustfmt.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/architecture-hardening/h5-workspace-regressions/resolve-rustfmt.stdout",
+      "retained_path": "machine/architecture-hardening/h5-version-adapters-evidence/h5-workspace-regressions/resolve-rustfmt.stdout.txt",
+      "sha256": "0e07fc57cf9821aa13e5d361fdaa13fcb14ecb9c7db0284d9b66cb63d44a5beb"
+    },
+    {
+      "original_path": "target/architecture-hardening/h5-workspace-regressions/rustc-version.stderr",
+      "retained_path": "machine/architecture-hardening/h5-version-adapters-evidence/h5-workspace-regressions/rustc-version.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "target/architecture-hardening/h5-workspace-regressions/rustc-version.stdout",
+      "retained_path": "machine/architecture-hardening/h5-version-adapters-evidence/h5-workspace-regressions/rustc-version.stdout.txt",
+      "sha256": "c45e612575abeef05e99e88eb1e7aea52cddab9ad70d4f65ad20eaa65e92a9cf"
+    },
+    {
+      "original_path": "target/architecture-hardening/h5-workspace-regressions/tests.stderr",
+      "retained_path": "machine/architecture-hardening/h5-version-adapters-evidence/h5-workspace-regressions/tests.stderr.txt",
+      "sha256": "b5157dbb5cb99b50509f03b8a376e4aa6c3e562596f3c94e247c81959f9d46ae"
+    },
+    {
+      "original_path": "target/architecture-hardening/h5-workspace-regressions/tests.stdout",
+      "retained_path": "machine/architecture-hardening/h5-version-adapters-evidence/h5-workspace-regressions/tests.stdout.txt",
+      "sha256": "443945fe5412602a158f85fbf6eebfe510b6d0919018b3d0c6adae255f5467df"
+    },
+    {
+      "original_path": "target/architecture-hardening/h5-workspace-regressions/workspace-lib.stderr",
+      "retained_path": "machine/architecture-hardening/h5-version-adapters-evidence/h5-workspace-regressions/workspace-lib.stderr.txt",
+      "sha256": "6a91330b273fb4bf3a60bbbca0e7d38a86afc8d76392c86bf37a23a1fc795d75"
+    },
+    {
+      "original_path": "target/architecture-hardening/h5-workspace-regressions/workspace-lib.stdout",
+      "retained_path": "machine/architecture-hardening/h5-version-adapters-evidence/h5-workspace-regressions/workspace-lib.stdout.txt",
+      "sha256": "c945187aae6c060adf1effa09ee3eb3035072f80bbbe6c735ecb9334e9598bfb"
+    },
+    {
+      "original_path": "target/architecture-hardening/h5-clean-regressions/foundation-compile.log",
+      "retained_path": "machine/architecture-hardening/h5-version-adapters-evidence/h5-clean-regressions/foundation-compile.log.txt",
+      "sha256": "eee59f1a92762de17bd7517f87fdc097d91d90aea34fe6d6744c3ac4b5438d89"
+    },
+    {
+      "original_path": "target/architecture-hardening/h5-clean-regressions/live-profile.log",
+      "retained_path": "machine/architecture-hardening/h5-version-adapters-evidence/h5-clean-regressions/live-profile.log.txt",
+      "sha256": "342df991bdc2ef121c31a94b9bcf8ed94f98d38d299967c80c6c4d0f60ad9ab3"
+    },
+    {
+      "original_path": "target/architecture-hardening/h5-clean-regressions/live-transformer-and-capture.log",
+      "retained_path": "machine/architecture-hardening/h5-version-adapters-evidence/h5-clean-regressions/live-transformer-and-capture.log.txt",
+      "sha256": "cec8090567c16ba89e3476ec779452798b055380a9d127fe4174756151f2bc0b"
+    },
+    {
+      "original_path": "target/architecture-hardening/h5-clean-regressions/LiveCaptureAdmissionTest.log",
+      "retained_path": "machine/architecture-hardening/h5-version-adapters-evidence/h5-clean-regressions/LiveCaptureAdmissionTest.log.txt",
+      "sha256": "3096765b240308f3490eaf420b849b5d978b4e154712c57b3bbd76dcd063a3c3"
+    },
+    {
+      "original_path": "target/architecture-hardening/h5-clean-regressions/LiveChunkBindingsTest.log",
+      "retained_path": "machine/architecture-hardening/h5-version-adapters-evidence/h5-clean-regressions/LiveChunkBindingsTest.log.txt",
+      "sha256": "4ca621f4c2367ec5eaf2dd0c6c0261f340eb77be1f095320b6c2b637d5705dc7"
+    },
+    {
+      "original_path": "target/architecture-hardening/h5-clean-regressions/LiveWriterGateTest.log",
+      "retained_path": "machine/architecture-hardening/h5-version-adapters-evidence/h5-clean-regressions/LiveWriterGateTest.log.txt",
+      "sha256": "3ed2073ebf524dd2f352edb0b001202199ee50c2e98e978aaf3f14d7c099dc49"
+    },
+    {
+      "original_path": "target/architecture-hardening/h5-clean-regressions/LiveWriterProtocolEndToEndTest.log",
+      "retained_path": "machine/architecture-hardening/h5-version-adapters-evidence/h5-clean-regressions/LiveWriterProtocolEndToEndTest.log.txt",
+      "sha256": "aa3ba017aa043ec016104b45f26afda3b930e025f9d3caf3c404d2d08c28ab97"
+    },
+    {
+      "original_path": "target/architecture-hardening/h5-clean-regressions/post-hook-verification.json",
+      "retained_path": "machine/architecture-hardening/h5-version-adapters-evidence/h5-clean-regressions/post-hook-verification.json",
+      "sha256": "376b5446288d4d810852633eaa9bea92c049047d096aa12cae704298ba3e341a"
+    },
+    {
+      "original_path": "target/architecture-hardening/h5-clean-regressions/post-hook-verify.log",
+      "retained_path": "machine/architecture-hardening/h5-version-adapters-evidence/h5-clean-regressions/post-hook-verify.log.txt",
+      "sha256": "84ae16e7f0f795c85a1f197d80174d67a135a607dffca72cb54ae4f5eec3d2be"
+    },
+    {
+      "original_path": "target/architecture-hardening/h5-clean-regressions/PrivateBuildTicketsTest.log",
+      "retained_path": "machine/architecture-hardening/h5-version-adapters-evidence/h5-clean-regressions/PrivateBuildTicketsTest.log.txt",
+      "sha256": "33c9c3ce5b9d645ea4711de9782cbfc821753fa48297a5024f2b1c9fc9e2a545"
+    },
+    {
+      "original_path": "target/architecture-hardening/h5-clean-regressions/receipt.json",
+      "retained_path": "machine/architecture-hardening/h5-version-adapters-evidence/h5-clean-regressions/receipt.json",
+      "sha256": "6da0e31fea80bb33fee24971d19a0273191d9bb03f8ad071c42ce322b841d92c"
+    },
+    {
+      "original_path": "target/architecture-hardening/h5-clean-regressions/tooling.log",
+      "retained_path": "machine/architecture-hardening/h5-version-adapters-evidence/h5-clean-regressions/tooling.log.txt",
+      "sha256": "278ea98217c1b347937fd42ed51c431fb51ca4bc0f6279308ee8ff120699d900"
+    },
+    {
+      "original_path": "target/architecture-hardening/h5-historical-revelation/historical-profile-no-class-fallback.json",
+      "retained_path": "machine/architecture-hardening/h5-version-adapters-evidence/h5-historical-revelation/historical-profile-no-class-fallback.json",
+      "sha256": "9bdc9a91a67ff1697faba3c46fddd6357827107c73dc73ab5e9058287b3c1bd0"
+    },
+    {
+      "original_path": "target/architecture-hardening/h5-historical-revelation/receipt.json",
+      "retained_path": "machine/architecture-hardening/h5-version-adapters-evidence/h5-historical-revelation/receipt.json",
+      "sha256": "6b916e9b10b719f26076a9800c644d846b223febf57858d1345070c9fbe60d80"
+    },
+    {
+      "original_path": "target/architecture-hardening/h5-historical-revelation/worker-config.json",
+      "retained_path": "machine/architecture-hardening/h5-version-adapters-evidence/h5-historical-revelation/worker-config.json",
+      "sha256": "b2723b8126ad83047db1f122ed944a0e41d14f19e26883739316cdba2669a32f"
+    }
+  ],
+  "superseded_evidence": [
+    {
+      "receipt": "machine/architecture-hardening/h5-version-adapters-evidence/h5-version-adapters-cfb7483dc7/receipt.json",
+      "receipt_sha256": "ac24e95471900fd714f749a1853b4667d7967c99222c96801dc54d1bb22af4d8",
+      "reason": "Initial standalone pre-review result. Superseded by root-workspace integration, exact qualified identity contract and before/after actual toolchain binding. Original raw files preserved unchanged.",
+      "limitations": "Initial receipt hashed three proxy/JDK executables before only; old docs overclaimed before/after tool identity. No retroactive after-run proof.",
+      "retained_artifacts": [
+        {
+          "original_path": "target/architecture-hardening/h5-version-adapters-cfb7483dc7/adapter-clippy.log",
+          "retained_path": "machine/architecture-hardening/h5-version-adapters-evidence/h5-version-adapters-cfb7483dc7/adapter-clippy.log.txt",
+          "sha256": "89c5cb22569f6488dba8de28728dc2a3dec06c180944d456bac2a419997a4080"
+        },
+        {
+          "original_path": "target/architecture-hardening/h5-version-adapters-cfb7483dc7/adapter-fmt.log",
+          "retained_path": "machine/architecture-hardening/h5-version-adapters-evidence/h5-version-adapters-cfb7483dc7/adapter-fmt.log.txt",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "original_path": "target/architecture-hardening/h5-version-adapters-cfb7483dc7/adapter-tests.log",
+          "retained_path": "machine/architecture-hardening/h5-version-adapters-evidence/h5-version-adapters-cfb7483dc7/adapter-tests.log.txt",
+          "sha256": "3dff2f92d58434b0a2373036bae2705edfe18cbf1de46e7a5e715387c9808640"
+        },
+        {
+          "original_path": "target/architecture-hardening/h5-version-adapters-cfb7483dc7/cargo-version.log",
+          "retained_path": "machine/architecture-hardening/h5-version-adapters-evidence/h5-version-adapters-cfb7483dc7/cargo-version.log.txt",
+          "sha256": "9950bbb2d5c3417b1a068f0e81f6d3cac991a363193bdf2a22d447f5acf8b503"
+        },
+        {
+          "original_path": "target/architecture-hardening/h5-version-adapters-cfb7483dc7/core-clippy.log",
+          "retained_path": "machine/architecture-hardening/h5-version-adapters-evidence/h5-version-adapters-cfb7483dc7/core-clippy.log.txt",
+          "sha256": "d829592a8f58195467d92d5765a93715ed26bac72be48355d648eca1706f7dea"
+        },
+        {
+          "original_path": "target/architecture-hardening/h5-version-adapters-cfb7483dc7/core-fmt.log",
+          "retained_path": "machine/architecture-hardening/h5-version-adapters-evidence/h5-version-adapters-cfb7483dc7/core-fmt.log.txt",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "original_path": "target/architecture-hardening/h5-version-adapters-cfb7483dc7/core-tests.log",
+          "retained_path": "machine/architecture-hardening/h5-version-adapters-evidence/h5-version-adapters-cfb7483dc7/core-tests.log.txt",
+          "sha256": "c404c0787a504d76dd9751aefeee5592949be8a3fbf5b1663ec9df0ca2581658"
+        },
+        {
+          "original_path": "target/architecture-hardening/h5-version-adapters-cfb7483dc7/diff-check.log",
+          "retained_path": "machine/architecture-hardening/h5-version-adapters-evidence/h5-version-adapters-cfb7483dc7/diff-check.log.txt",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "original_path": "target/architecture-hardening/h5-version-adapters-cfb7483dc7/dispatch-338.log",
+          "retained_path": "machine/architecture-hardening/h5-version-adapters-evidence/h5-version-adapters-cfb7483dc7/dispatch-338.log.txt",
+          "sha256": "22e17b78a49cbdb833004a05e10492bce2fc4bd8b6cbd5f7ef6d9c35bc0d60ed"
+        },
+        {
+          "original_path": "target/architecture-hardening/h5-version-adapters-cfb7483dc7/dispatch-339.log",
+          "retained_path": "machine/architecture-hardening/h5-version-adapters-evidence/h5-version-adapters-cfb7483dc7/dispatch-339.log.txt",
+          "sha256": "fa59647b81fd027fafe794780c7ae7eef5882be03e2cd1af95f5b6799ddc005f"
+        },
+        {
+          "original_path": "target/architecture-hardening/h5-version-adapters-cfb7483dc7/dispatch-340.log",
+          "retained_path": "machine/architecture-hardening/h5-version-adapters-evidence/h5-version-adapters-cfb7483dc7/dispatch-340.log.txt",
+          "sha256": "41bfb043f0a19c75476bfc72db735b3776447f8fd7870fcbd502779c9eece7ef"
+        },
+        {
+          "original_path": "target/architecture-hardening/h5-version-adapters-cfb7483dc7/java-compile.log",
+          "retained_path": "machine/architecture-hardening/h5-version-adapters-evidence/h5-version-adapters-cfb7483dc7/java-compile.log.txt",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "original_path": "target/architecture-hardening/h5-version-adapters-cfb7483dc7/java-oracle.log",
+          "retained_path": "machine/architecture-hardening/h5-version-adapters-evidence/h5-version-adapters-cfb7483dc7/java-oracle.log.txt",
+          "sha256": "489aa0fe8afa3c58138406a832dd899fdb51f32640a7e86d2f214b7aab35e5cb"
+        },
+        {
+          "original_path": "target/architecture-hardening/h5-version-adapters-cfb7483dc7/java-version.log",
+          "retained_path": "machine/architecture-hardening/h5-version-adapters-evidence/h5-version-adapters-cfb7483dc7/java-version.log.txt",
+          "sha256": "9d65a43706f49fcfdbcece91e737f759110493e82fd1c4886cf49104c2017b0e"
+        },
+        {
+          "original_path": "target/architecture-hardening/h5-version-adapters-cfb7483dc7/rustc-version.log",
+          "retained_path": "machine/architecture-hardening/h5-version-adapters-evidence/h5-version-adapters-cfb7483dc7/rustc-version.log.txt",
+          "sha256": "c45e612575abeef05e99e88eb1e7aea52cddab9ad70d4f65ad20eaa65e92a9cf"
+        },
+        {
+          "original_path": "target/architecture-hardening/h5-version-adapters-cfb7483dc7/receipt.json",
+          "retained_path": "machine/architecture-hardening/h5-version-adapters-evidence/h5-version-adapters-cfb7483dc7/receipt.json",
+          "sha256": "ac24e95471900fd714f749a1853b4667d7967c99222c96801dc54d1bb22af4d8"
+        }
+      ]
+    }
+  ],
+  "tool_binding_count": 16,
+  "tool_hashes_before_after_equal": true,
+  "tool_scope": "Listed rustup proxies and resolved Rust toolchain executables, Python/Git, Java executables and JDK runtime files. Not all linker/SDK/system libraries or environment inputs.",
+  "workspace_changes": "Root Cargo.toml/Cargo.lock register the two packages; their standalone workspace markers/local lockfiles removed. Existing consumers keep legacy types.",
+  "resource_identity_review": {
+    "path": "versions/mc_1_12_x/fixtures/resource-location-review.json",
+    "sha256": "8fc0854115bcfa342bd0678e636132daf41fa9e2bd01e7df66d36bc30be0248e",
+    "decision": "Opaque exact qualified UTF-8 text; adapter/extraction normalization and admission required. Unpaired Java UTF-16 surrogates unsupported: reject rather than replace or add future lossless representation."
+  },
+  "root_workspace_lib_tests": 88,
+  "root_capability_regression_tests": 28,
+  "root_release_ffi": {
+    "path": "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h5-workspace-regressions\\build\\release\\rustcraft_ffi.dll",
+    "sha256": "ebe7731e9d7386b80abe2fa7836e541f238dbdd8f5eac85d50e218b5fa587919",
+    "bytes": 427008
+  },
+  "fresh_clean_legacy_regression": {
+    "tooling_tests": 25,
+    "foundation_assertions": 201,
+    "capture_groups": {
+      "t7_real_spacket_captured": "PASS (sealed + enqueued through transformed hooks)",
+      "t8_native_replay": "PASS (mask=1 javaLen=4358 rustLen=4358 byteEqual=true)",
+      "t9_java_output_unchanged": "PASS (captured body == plain rebuild body == native body)"
+    },
+    "loaded_dll": {
+      "path": "D:\\minecraftrust-astra-hardening\\target\\release\\rustcraft_ffi.dll",
+      "sha256": "7db5025ff7c09e6249f7000749a5cdb374681f0d4cb530047be667ccaab5abb2"
+    },
+    "qualification_scope": "LEGACY_CLEAN_REGRESSION_NOT_FRESH_V2_CERTIFICATE; active H3 DLL unchanged, separately built root release FFI was not loaded"
+  },
+  "root_review": [
+    {
+      "name": "h5-root-final",
+      "status": "PASS",
+      "receipt": "machine/architecture-hardening/h5-version-adapters-evidence/h5-root-final/receipt.json",
+      "sha256": "aaf8666e7e44670f409f76d57193f1f6020e1169c02e668644491e1156532e6f"
+    },
+    {
+      "name": "h5-workspace-regressions",
+      "status": "PASS",
+      "receipt": "machine/architecture-hardening/h5-version-adapters-evidence/h5-workspace-regressions/receipt.json",
+      "sha256": "123d926477aaa332f2eb243f04af8fefb64c4456d63e0860ed02188bd8487b3a"
+    },
+    {
+      "name": "h5-clean-regressions",
+      "status": "PASS",
+      "receipt": "machine/architecture-hardening/h5-version-adapters-evidence/h5-clean-regressions/receipt.json",
+      "sha256": "6da0e31fea80bb33fee24971d19a0273191d9bb03f8ad071c42ce322b841d92c"
+    },
+    {
+      "name": "h5-historical-revelation",
+      "status": "PASS",
+      "receipt": "machine/architecture-hardening/h5-version-adapters-evidence/h5-historical-revelation/receipt.json",
+      "sha256": "6b916e9b10b719f26076a9800c644d846b223febf57858d1345070c9fbe60d80"
+    }
+  ],
+  "historical_revelation_regression": {
+    "classes": 129,
+    "controls": 10,
+    "scope": "Preserved V1 corpus only; no new live server or V2 qualification; control09 checks a pinned real-mod hash without actual substitution"
+  }
+}

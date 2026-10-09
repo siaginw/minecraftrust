@@ -1,0 +1,65 @@
+targets:
+  TARGET_A_CONTROL:
+    name: Minecraft 1.12.2 + Forge 14.23.5.2860 Clean
+    type: CONTROL
+    forge_version: 14.23.5.2860
+    minecraft_version: 1.12.2
+    java_version: 1.8.0_504 (Temurin HotSpot 64-bit)
+    mod_count: 0
+    coremod_count: 0
+    mixin_count: 0
+    at_file_count: 0
+    jvm_flags: -Xms4G -Xmx4G -XX:+UseG1GC -XX:MaxGCPauseMillis=20
+    ram_gb: 4
+    world_seed: 403938725
+    acquisition: Direct Forge MDK / Installer clean bootstrap
+  TARGET_B_MINIMAL:
+    name: Minimal Mod Corpus (5 Anchor Mods)
+    type: MINIMAL_CORPUS
+    forge_version: 14.23.5.2860
+    minecraft_version: 1.12.2
+    java_version: 1.8.0_504 (Temurin HotSpot 64-bit)
+    mod_count: 8
+    anchor_mods:
+    - Thermal Expansion 5.5.7.1 (CoFH Core 4.6.6.20, Thermal Foundation 2.6.7.1)
+    - Applied Energistics 2 rv6-stable-7
+    - Tinkers' Construct 2.13.0.183 (Mantle 1.3.3.55)
+    - Iron Chests 7.0.72.847
+    - JourneyMap 5.7.1
+    coremod_count: 1
+    mixin_count: 0
+    at_file_count: 2
+    jvm_flags: -Xms4G -Xmx4G -XX:+UseG1GC -XX:MaxGCPauseMillis=20
+    ram_gb: 4
+    world_seed: 403938725
+    acquisition: CurseForge / Maven direct binary dependency resolution
+  TARGET_C_PRIMARY:
+    name: FTB Revelation 3.4.0
+    type: PRIMARY_LARGE_PACK
+    forge_version: 14.23.5.2860
+    minecraft_version: 1.12.2
+    java_version: 1.8.0_504 (Temurin HotSpot 64-bit)
+    mod_count: 212
+    coremod_count: 18
+    mixin_count: 0
+    at_file_count: 14
+    jvm_flags: -Xms6G -Xmx6G -XX:+UseG1GC -XX:MaxGCPauseMillis=20 -XX:+UnlockExperimentalVMOptions
+      -XX:G1NewSizePercent=20
+    ram_gb: 6
+    world_seed: 403938725
+    acquisition: Feed The Beast App / CurseForge server pack archive
+  TARGET_D_SECONDARY:
+    name: 'SevTech: Ages 3.2.3'
+    type: SECONDARY_STRESS_PACK
+    forge_version: 14.23.5.2860
+    minecraft_version: 1.12.2
+    java_version: 1.8.0_504 (Temurin HotSpot 64-bit)
+    mod_count: 274
+    coremod_count: 26
+    mixin_count: 4
+    at_file_count: 19
+    jvm_flags: -Xms8G -Xmx8G -XX:+UseG1GC -XX:MaxGCPauseMillis=20 -XX:+UnlockExperimentalVMOptions
+      -XX:G1NewSizePercent=25
+    ram_gb: 8
+    world_seed: 403938725
+    acquisition: CurseForge server pack archive with staging script manifests
