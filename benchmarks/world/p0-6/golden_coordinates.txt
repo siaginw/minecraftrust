@@ -1,0 +1,20 @@
+# Golden Coordinate Test Corpus (Minecraft 1.12.2 / Protocol 340)
+# format: TYPE | input_args | packed_hex | expected_unpacked_or_result
+BLOCKPOS | 0,0,0 | 0x0000000000000000 | unpack=0,0,0 | chunk=0,0 | local=0,0,0 | sec=0 | ckey=0x0000000000000000 | chash=1455762653
+BLOCKPOS | 1,1,1 | 0x0000004004000001 | unpack=1,1,1 | chunk=0,0 | local=1,1,1 | sec=0 | ckey=0x0000000000000000 | chash=1455762653
+BLOCKPOS | -1,-1,-1 | 0xffffffffffffffff | unpack=-1,-1,-1 | chunk=-1,-1 | local=15,15,15 | sec=-1 | ckey=0xffffffffffffffff | chash=843918461
+BLOCKPOS | 15,64,15 | 0x000003c10000000f | unpack=15,64,15 | chunk=0,0 | local=15,0,15 | sec=4 | ckey=0x0000000000000000 | chash=1455762653
+BLOCKPOS | 16,64,16 | 0x0000040100000010 | unpack=16,64,16 | chunk=1,1 | local=0,0,0 | sec=4 | ckey=0x0000000100000001 | chash=1444552729
+BLOCKPOS | -15,64,-15 | 0xfffffc4103fffff1 | unpack=-15,64,-15 | chunk=-1,-1 | local=1,0,1 | sec=4 | ckey=0xffffffffffffffff | chash=843918461
+BLOCKPOS | -16,64,-16 | 0xfffffc0103fffff0 | unpack=-16,64,-16 | chunk=-1,-1 | local=0,0,0 | sec=4 | ckey=0xffffffffffffffff | chash=843918461
+BLOCKPOS | -17,64,-17 | 0xfffffbc103ffffef | unpack=-17,64,-17 | chunk=-2,-2 | local=15,0,15 | sec=4 | ckey=0xfffffffefffffffe | chash=839786617
+BLOCKPOS | -31,64,-31 | 0xfffff84103ffffe1 | unpack=-31,64,-31 | chunk=-2,-2 | local=1,0,1 | sec=4 | ckey=0xfffffffefffffffe | chash=839786617
+BLOCKPOS | -32,64,-32 | 0xfffff80103ffffe0 | unpack=-32,64,-32 | chunk=-2,-2 | local=0,0,0 | sec=4 | ckey=0xfffffffefffffffe | chash=839786617
+BLOCKPOS | -33,64,-33 | 0xfffff7c103ffffdf | unpack=-33,64,-33 | chunk=-3,-3 | local=15,0,15 | sec=4 | ckey=0xfffffffdfffffffd | chash=845786225
+BLOCKPOS | 30000000,255,30000000 | 0x7270e003fdc9c380 | unpack=30000000,255,30000000 | chunk=1875000,1875000 | local=0,15,0 | sec=15 | ckey=0x001c9c38001c9c38 | chash=1675055229
+BLOCKPOS | -30000000,0,-30000000 | 0x8d8f200002363c80 | unpack=-30000000,0,-30000000 | chunk=-1875000,-1875000 | local=0,0,0 | sec=0 | ckey=0xffe363c8ffe363c8 | chash=1628966109
+BLOCKPOS | 33554431,2047,33554431 | 0x7fffffdffdffffff | unpack=33554431,2047,33554431 | chunk=2097151,2097151 | local=15,15,15 | sec=127 | ckey=0x001fffff001fffff | chash=369962109
+BLOCKPOS | -33554432,-2048,-33554432 | 0x8000002002000000 | unpack=-33554432,-2048,-33554432 | chunk=-2097152,-2097152 | local=0,0,0 | sec=-128 | ckey=0xffe00000ffe00000 | chash=-167432995
+BLOCKPOS | 100,256,200 | 0x00001904000000c8 | unpack=100,256,200 | chunk=6,12 | local=4,0,8 | sec=16 | ckey=0x0000000c00000006 | chash=1417429323
+BLOCKPOS | 100,-1,200 | 0x0000193ffc0000c8 | unpack=100,-1,200 | chunk=6,12 | local=4,15,8 | sec=-1 | ckey=0x0000000c00000006 | chash=1417429323
+BLOCKPOS | 512,128,512 | 0x0000800200000200 | unpack=512,128,512 | chunk=32,32 | local=0,0,0 | sec=8 | ckey=0x0000002000000020 | chash=1491380509

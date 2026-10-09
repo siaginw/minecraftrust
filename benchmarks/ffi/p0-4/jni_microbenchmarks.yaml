@@ -1,0 +1,349 @@
+environment:
+  jvm: "Java 8 Temurin (jdk-8.0.504.1-hotspot)"
+  arch: "x86_64"
+  os: "Windows 11"
+  compiler: "rustc 1.94.0 -O"
+baseline_overhead:
+  noop_call_ns:
+    mean: 28.19
+    p50: 0
+    p95: 100
+    p99: 100
+    min: 0
+    max: 2100
+mechanisms:
+  A_byte_array_region_copy:
+    size_2_kib:
+      payload_bytes: 2048
+      iterations: 25000
+      latency_ns:
+        mean: 60.93
+        p50: 100
+        p95: 100
+        p99: 100
+        min: 0
+        max: 4100
+      throughput_mb_s: 32054.18
+    size_8_kib:
+      payload_bytes: 8192
+      iterations: 25000
+      latency_ns:
+        mean: 82.95
+        p50: 100
+        p95: 100
+        p99: 100
+        min: 0
+        max: 4300
+      throughput_mb_s: 94180.97
+    size_32_kib:
+      payload_bytes: 32768
+      iterations: 25000
+      latency_ns:
+        mean: 508.57
+        p50: 500
+        p95: 600
+        p99: 600
+        min: 400
+        max: 18200
+      throughput_mb_s: 61447.04
+    size_64_kib:
+      payload_bytes: 65536
+      iterations: 25000
+      latency_ns:
+        mean: 990.71
+        p50: 1000
+        p95: 1000
+        p99: 1100
+        min: 900
+        max: 3900
+      throughput_mb_s: 63085.94
+    size_256_kib:
+      payload_bytes: 262144
+      iterations: 10000
+      latency_ns:
+        mean: 3704.21
+        p50: 3700
+        p95: 3800
+        p99: 3800
+        min: 3500
+        max: 8200
+      throughput_mb_s: 67490.77
+    size_1024_kib:
+      payload_bytes: 1048576
+      iterations: 10000
+      latency_ns:
+        mean: 17394.35
+        p50: 17200
+        p95: 17900
+        p99: 21900
+        min: 16700
+        max: 36200
+      throughput_mb_s: 57489.93
+  B_byte_array_critical_pin:
+    size_2_kib:
+      payload_bytes: 2048
+      iterations: 25000
+      latency_ns:
+        mean: 64.03
+        p50: 100
+        p95: 100
+        p99: 100
+        min: 0
+        max: 6500
+      throughput_mb_s: 30504.23
+    size_8_kib:
+      payload_bytes: 8192
+      iterations: 25000
+      latency_ns:
+        mean: 87.68
+        p50: 100
+        p95: 100
+        p99: 100
+        min: 0
+        max: 200
+      throughput_mb_s: 89102.42
+    size_32_kib:
+      payload_bytes: 32768
+      iterations: 25000
+      latency_ns:
+        mean: 187.56
+        p50: 200
+        p95: 200
+        p99: 200
+        min: 100
+        max: 900
+      throughput_mb_s: 166613.35
+    size_64_kib:
+      payload_bytes: 65536
+      iterations: 25000
+      latency_ns:
+        mean: 463.68
+        p50: 500
+        p95: 500
+        p99: 500
+        min: 400
+        max: 4800
+      throughput_mb_s: 134791.24
+    size_256_kib:
+      payload_bytes: 262144
+      iterations: 10000
+      latency_ns:
+        mean: 1729.61
+        p50: 1700
+        p95: 1800
+        p99: 1800
+        min: 1600
+        max: 4700
+      throughput_mb_s: 144541.25
+    size_1024_kib:
+      payload_bytes: 1048576
+      iterations: 10000
+      latency_ns:
+        mean: 7631.34
+        p50: 7600
+        p95: 7700
+        p99: 10700
+        min: 7400
+        max: 29200
+      throughput_mb_s: 131038.59
+  C_direct_byte_buffer:
+    size_2_kib:
+      payload_bytes: 2048
+      iterations: 25000
+      latency_ns:
+        mean: 37.20
+        p50: 0
+        p95: 100
+        p99: 100
+        min: 0
+        max: 5200
+      throughput_mb_s: 52509.01
+    size_8_kib:
+      payload_bytes: 8192
+      iterations: 25000
+      latency_ns:
+        mean: 58.69
+        p50: 100
+        p95: 100
+        p99: 100
+        min: 0
+        max: 200
+      throughput_mb_s: 133110.13
+    size_32_kib:
+      payload_bytes: 32768
+      iterations: 25000
+      latency_ns:
+        mean: 187.52
+        p50: 200
+        p95: 200
+        p99: 200
+        min: 100
+        max: 12800
+      throughput_mb_s: 166652.45
+    size_64_kib:
+      payload_bytes: 65536
+      iterations: 25000
+      latency_ns:
+        mean: 463.37
+        p50: 500
+        p95: 500
+        p99: 500
+        min: 400
+        max: 5100
+      throughput_mb_s: 134881.99
+    size_256_kib:
+      payload_bytes: 262144
+      iterations: 10000
+      latency_ns:
+        mean: 1730.55
+        p50: 1700
+        p95: 1800
+        p99: 1800
+        min: 1600
+        max: 12300
+      throughput_mb_s: 144462.74
+    size_1024_kib:
+      payload_bytes: 1048576
+      iterations: 10000
+      latency_ns:
+        mean: 7950.43
+        p50: 7900
+        p95: 8000
+        p99: 10800
+        min: 7700
+        max: 20600
+      throughput_mb_s: 125779.36
+  D_rust_alloc_direct_buffer:
+    size_2_kib:
+      payload_bytes: 2048
+      iterations: 25000
+      latency_ns:
+        mean: 141.01
+        p50: 100
+        p95: 200
+        p99: 300
+        min: 100
+        max: 12100
+      throughput_mb_s: 13851.16
+    size_8_kib:
+      payload_bytes: 8192
+      iterations: 25000
+      latency_ns:
+        mean: 141.83
+        p50: 100
+        p95: 200
+        p99: 300
+        min: 100
+        max: 2900
+      throughput_mb_s: 55084.33
+    size_32_kib:
+      payload_bytes: 32768
+      iterations: 25000
+      latency_ns:
+        mean: 140.43
+        p50: 100
+        p95: 200
+        p99: 300
+        min: 100
+        max: 4700
+      throughput_mb_s: 222533.97
+    size_64_kib:
+      payload_bytes: 65536
+      iterations: 25000
+      latency_ns:
+        mean: 132.83
+        p50: 100
+        p95: 200
+        p99: 300
+        min: 100
+        max: 2600
+      throughput_mb_s: 470519.15
+    size_256_kib:
+      payload_bytes: 262144
+      iterations: 10000
+      latency_ns:
+        mean: 133.03
+        p50: 100
+        p95: 200
+        p99: 200
+        min: 100
+        max: 2600
+      throughput_mb_s: 1879275.35
+    size_1024_kib:
+      payload_bytes: 1048576
+      iterations: 10000
+      latency_ns:
+        mean: 136.56
+        p50: 100
+        p95: 200
+        p99: 300
+        min: 100
+        max: 4600
+      throughput_mb_s: 7322788.52
+  E_persistent_native_handle:
+    size_2_kib:
+      payload_bytes: 2048
+      iterations: 25000
+      latency_ns:
+        mean: 43.28
+        p50: 0
+        p95: 100
+        p99: 100
+        min: 0
+        max: 10400
+      throughput_mb_s: 45127.66
+    size_8_kib:
+      payload_bytes: 8192
+      iterations: 25000
+      latency_ns:
+        mean: 70.85
+        p50: 100
+        p95: 100
+        p99: 100
+        min: 0
+        max: 200
+      throughput_mb_s: 110265.06
+    size_32_kib:
+      payload_bytes: 32768
+      iterations: 25000
+      latency_ns:
+        mean: 235.47
+        p50: 200
+        p95: 300
+        p99: 300
+        min: 200
+        max: 4200
+      throughput_mb_s: 132714.42
+    size_64_kib:
+      payload_bytes: 65536
+      iterations: 25000
+      latency_ns:
+        mean: 460.25
+        p50: 500
+        p95: 500
+        p99: 500
+        min: 400
+        max: 1900
+      throughput_mb_s: 135796.35
+    size_256_kib:
+      payload_bytes: 262144
+      iterations: 10000
+      latency_ns:
+        mean: 1833.74
+        p50: 1800
+        p95: 2100
+        p99: 2200
+        min: 1600
+        max: 66100
+      throughput_mb_s: 136333.40
+    size_1024_kib:
+      payload_bytes: 1048576
+      iterations: 10000
+      latency_ns:
+        mean: 8662.71
+        p50: 8600
+        p95: 8800
+        p99: 12600
+        min: 8200
+        max: 24300
+      throughput_mb_s: 115437.32

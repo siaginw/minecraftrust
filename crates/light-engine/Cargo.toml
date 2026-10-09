@@ -1,0 +1,19 @@
+[package]
+name = "light-engine"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[lib]
+name = "light_engine"
+crate-type = ["rlib"]
+
+[dependencies]
+
+[features]
+debug-prop = []
+# legacy-propagate: pre-OPT-ALG-001 plain-key algorithm (A/B matrix)
+legacy-propagate = []
+# vec-head-fifo: OPT-LIGHT-001 candidate — REJECTED on whole-job A/B
+# (0-3%, within noise); kept opt-in for reproducibility.
+vec-head-fifo = []

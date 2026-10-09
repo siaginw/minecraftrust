@@ -1,0 +1,380 @@
+environment:
+  jvm: "Java 8 Temurin (jdk-8.0.504.1-hotspot)"
+  arch: "x86_64"
+  os: "Windows 11"
+  compiler: "rustc 1.94.0 -O"
+  methodology: "batched inner loops (10-1000 iters per sample) to defeat 100ns timer floor, full memory scan"
+baseline_overhead:
+  noop_call_ns:
+    mean: 8.46
+    p50: 4.30
+    p95: 19.00
+    p99: 20.60
+    min: 4.10
+    max: 27.60
+mechanisms:
+  A_byte_array_region_copy:
+    size_2_kib:
+      payload_bytes: 2048
+      batch_size: 200
+      samples: 200
+      latency_ns:
+        mean: 289.34
+        p50: 240.00
+        p95: 259.50
+        p99: 275.50
+        min: 238.00
+        max: 8965.00
+      throughput_mb_s: 6750.33
+    size_8_kib:
+      payload_bytes: 8192
+      batch_size: 200
+      samples: 200
+      latency_ns:
+        mean: 920.90
+        p50: 909.50
+        p95: 937.00
+        p99: 1421.50
+        min: 904.00
+        max: 1435.50
+      throughput_mb_s: 8483.57
+    size_32_kib:
+      payload_bytes: 32768
+      batch_size: 50
+      samples: 150
+      latency_ns:
+        mean: 3902.95
+        p50: 3898.00
+        p95: 3972.00
+        p99: 4004.00
+        min: 3874.00
+        max: 4044.00
+      throughput_mb_s: 8006.77
+    size_64_kib:
+      payload_bytes: 65536
+      batch_size: 50
+      samples: 150
+      latency_ns:
+        mean: 7774.75
+        p50: 7782.00
+        p95: 7876.00
+        p99: 7940.00
+        min: 7698.00
+        max: 7944.00
+      throughput_mb_s: 8038.85
+    size_256_kib:
+      payload_bytes: 262144
+      batch_size: 10
+      samples: 100
+      latency_ns:
+        mean: 31205.20
+        p50: 30960.00
+        p95: 32410.00
+        p99: 38650.00
+        min: 30780.00
+        max: 38650.00
+      throughput_mb_s: 8011.49
+    size_1024_kib:
+      payload_bytes: 1048576
+      batch_size: 5
+      samples: 50
+      latency_ns:
+        mean: 126515.60
+        p50: 124840.00
+        p95: 141340.00
+        p99: 150960.00
+        min: 123300.00
+        max: 150960.00
+      throughput_mb_s: 7904.16
+  B_byte_array_critical_pin:
+    size_2_kib:
+      payload_bytes: 2048
+      batch_size: 200
+      samples: 200
+      latency_ns:
+        mean: 269.30
+        p50: 225.50
+        p95: 245.00
+        p99: 281.00
+        min: 218.00
+        max: 8953.50
+      throughput_mb_s: 7252.73
+    size_8_kib:
+      payload_bytes: 8192
+      batch_size: 200
+      samples: 200
+      latency_ns:
+        mean: 876.79
+        p50: 858.00
+        p95: 1057.00
+        p99: 1109.50
+        min: 849.00
+        max: 1394.50
+      throughput_mb_s: 8910.32
+    size_32_kib:
+      payload_bytes: 32768
+      batch_size: 50
+      samples: 150
+      latency_ns:
+        mean: 3342.65
+        p50: 3338.00
+        p95: 3414.00
+        p99: 3532.00
+        min: 3320.00
+        max: 3582.00
+      throughput_mb_s: 9348.86
+    size_64_kib:
+      payload_bytes: 65536
+      batch_size: 50
+      samples: 150
+      latency_ns:
+        mean: 6853.93
+        p50: 6790.00
+        p95: 7002.00
+        p99: 8856.00
+        min: 6622.00
+        max: 9642.00
+      throughput_mb_s: 9118.85
+    size_256_kib:
+      payload_bytes: 262144
+      batch_size: 10
+      samples: 100
+      latency_ns:
+        mean: 27349.70
+        p50: 26980.00
+        p95: 27870.00
+        p99: 37390.00
+        min: 26960.00
+        max: 37390.00
+      throughput_mb_s: 9140.87
+    size_1024_kib:
+      payload_bytes: 1048576
+      batch_size: 5
+      samples: 50
+      latency_ns:
+        mean: 108156.40
+        p50: 107900.00
+        p95: 109340.00
+        p99: 109820.00
+        min: 107320.00
+        max: 109820.00
+      throughput_mb_s: 9245.87
+  C_direct_byte_buffer:
+    size_2_kib:
+      payload_bytes: 2048
+      batch_size: 200
+      samples: 200
+      latency_ns:
+        mean: 222.14
+        p50: 220.00
+        p95: 241.00
+        p99: 261.00
+        min: 219.50
+        max: 330.50
+      throughput_mb_s: 8792.51
+    size_8_kib:
+      payload_bytes: 8192
+      batch_size: 200
+      samples: 200
+      latency_ns:
+        mean: 856.06
+        p50: 853.00
+        p95: 877.00
+        p99: 892.50
+        min: 848.00
+        max: 944.50
+      throughput_mb_s: 9126.11
+    size_32_kib:
+      payload_bytes: 32768
+      batch_size: 50
+      samples: 150
+      latency_ns:
+        mean: 3378.60
+        p50: 3370.00
+        p95: 3460.00
+        p99: 3494.00
+        min: 3318.00
+        max: 3504.00
+      throughput_mb_s: 9249.39
+    size_64_kib:
+      payload_bytes: 65536
+      batch_size: 50
+      samples: 150
+      latency_ns:
+        mean: 9476.47
+        p50: 10356.00
+        p95: 10960.00
+        p99: 12470.00
+        min: 6688.00
+        max: 12536.00
+      throughput_mb_s: 6595.29
+    size_256_kib:
+      payload_bytes: 262144
+      batch_size: 10
+      samples: 100
+      latency_ns:
+        mean: 26957.70
+        p50: 26700.00
+        p95: 27220.00
+        p99: 36600.00
+        min: 26680.00
+        max: 36600.00
+      throughput_mb_s: 9273.79
+    size_1024_kib:
+      payload_bytes: 1048576
+      batch_size: 5
+      samples: 50
+      latency_ns:
+        mean: 107900.00
+        p50: 107920.00
+        p95: 108760.00
+        p99: 109540.00
+        min: 107360.00
+        max: 109540.00
+      throughput_mb_s: 9267.84
+  D_rust_alloc_direct_buffer:
+    size_2_kib:
+      payload_bytes: 2048
+      batch_size: 200
+      samples: 200
+      latency_ns:
+        mean: 145.05
+        p50: 126.00
+        p95: 212.50
+        p99: 408.00
+        min: 117.50
+        max: 877.00
+      throughput_mb_s: 13465.18
+    size_8_kib:
+      payload_bytes: 8192
+      batch_size: 200
+      samples: 200
+      latency_ns:
+        mean: 127.95
+        p50: 121.50
+        p95: 180.50
+        p99: 194.50
+        min: 113.00
+        max: 233.00
+      throughput_mb_s: 61060.20
+    size_32_kib:
+      payload_bytes: 32768
+      batch_size: 50
+      samples: 150
+      latency_ns:
+        mean: 117.45
+        p50: 116.00
+        p95: 128.00
+        p99: 156.00
+        min: 106.00
+        max: 156.00
+      throughput_mb_s: 266063.12
+    size_64_kib:
+      payload_bytes: 65536
+      batch_size: 50
+      samples: 150
+      latency_ns:
+        mean: 118.43
+        p50: 116.00
+        p95: 148.00
+        p99: 156.00
+        min: 104.00
+        max: 164.00
+      throughput_mb_s: 527752.76
+    size_256_kib:
+      payload_bytes: 262144
+      batch_size: 10
+      samples: 100
+      latency_ns:
+        mean: 121.80
+        p50: 110.00
+        p95: 180.00
+        p99: 350.00
+        min: 100.00
+        max: 350.00
+      throughput_mb_s: 2052545.16
+    size_1024_kib:
+      payload_bytes: 1048576
+      batch_size: 5
+      samples: 50
+      latency_ns:
+        mean: 123.20
+        p50: 120.00
+        p95: 160.00
+        p99: 180.00
+        min: 100.00
+        max: 180.00
+      throughput_mb_s: 8116883.12
+  E_persistent_native_handle:
+    size_2_kib:
+      payload_bytes: 2048
+      batch_size: 200
+      samples: 200
+      latency_ns:
+        mean: 262.01
+        p50: 215.50
+        p95: 231.50
+        p99: 278.00
+        min: 211.50
+        max: 9025.50
+      throughput_mb_s: 7454.46
+    size_8_kib:
+      payload_bytes: 8192
+      batch_size: 200
+      samples: 200
+      latency_ns:
+        mean: 862.80
+        p50: 847.50
+        p95: 1051.50
+        p99: 1073.50
+        min: 837.00
+        max: 1177.50
+      throughput_mb_s: 9054.80
+    size_32_kib:
+      payload_bytes: 32768
+      batch_size: 50
+      samples: 150
+      latency_ns:
+        mean: 3431.40
+        p50: 3394.00
+        p95: 3550.00
+        p99: 4222.00
+        min: 3374.00
+        max: 4302.00
+      throughput_mb_s: 9107.07
+    size_64_kib:
+      payload_bytes: 65536
+      batch_size: 50
+      samples: 150
+      latency_ns:
+        mean: 6777.37
+        p50: 6752.00
+        p95: 6832.00
+        p99: 7022.00
+        min: 6742.00
+        max: 8316.00
+      throughput_mb_s: 9221.86
+    size_256_kib:
+      payload_bytes: 262144
+      batch_size: 10
+      samples: 100
+      latency_ns:
+        mean: 27141.60
+        p50: 27090.00
+        p95: 27520.00
+        p99: 29480.00
+        min: 26950.00
+        max: 29480.00
+      throughput_mb_s: 9210.95
+    size_1024_kib:
+      payload_bytes: 1048576
+      batch_size: 5
+      samples: 50
+      latency_ns:
+        mean: 108798.40
+        p50: 107520.00
+        p95: 120580.00
+        p99: 128700.00
+        min: 106880.00
+        max: 128700.00
+      throughput_mb_s: 9191.31

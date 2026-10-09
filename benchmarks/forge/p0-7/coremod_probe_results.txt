@@ -1,0 +1,16 @@
+--- Part 1: Controlled CoreMod Transformation Probes ---
+PROBE A [Method Head Injection]: Injected tickCounter increment at head of setBlock
+PROBE B [Method Return Injection]: Injected +1 return modifier before IRETURN
+PROBE C [Method Replacement]: Completely replaced getBlock body with direct return index
+PROBE D [Field Widening]: Changed blockStateStorage from private (2) to public (1)
+PROBE E [Interface Addition]: Added INativeSectionMarker and synthesized isNativeBacking() returning true
+VERIFICATION [CoreMod Probes A-E Execution]: PASS (ticks=1, getVal=42, chk=100, isMarker=true)
+--- Part 2: Native-Backed Java Façade Compatibility Probes ---
+FACADE TEST 1 [Off-Heap State Round-Trip]: PASS (expected=777, actual=777)
+FACADE TEST 2 [Reflection Access to Handle]: PASS (addr=0x23af456fa50, reflected=0x23af456fa50)
+FACADE TEST 3 [Façade Subclassing & Polymorphism]: PASS (subVal=888, extraState=42)
+FACADE TEST 4 [Reference Identity Preservation]: PASS (ref1 == ref2: true)
+FACADE TEST 5 [ASM Interception against Native-Backed Façade]: PASS (val=999)
+HAZARD VERDICT: Java Façades CAN survive standard ASM method injection, return interception, and reflection.
+FATAL HAZARD: CoreMods that assume direct field array access (e.g. `GETFIELD Target.blockStateStorage`) FAIL if field is removed or replaced with native pointer.
+COMPATIBILITY CEILING: A native-backed façade must retain shadow Java field arrays OR use ASM to rewrite external GETFIELD/PUTFIELD to accessor methods.

@@ -1,0 +1,33 @@
+workload_name: workload_f_mixed
+server_type: forge_14.23.5.2860
+duration_s: 20
+time_span_ms: 20000
+tick_span: 400
+measured_tps: 20.0
+mean_mspt: 50.0
+gc_stats:
+  young_gcs: 12
+  young_pause_ms: 66.76
+  full_gcs: 2
+  full_pause_ms: 77.25
+  total_pause_ms: 144.02
+top_subsystems:
+  levels: 96.89
+  world: 91.35
+  entities: 75.32
+  regular: 56.84
+  tick: 54.36
+  blockEntities: 17.68
+  ai: 9.77
+  newAi: 9.65
+  tickBlocks: 5.79
+  minecraft:hopper: 5.42
+  goalSelector: 5.18
+  pollingChunks: 4.91
+  entityBaseTick: 4.34
+  forcedChunkLoading: 3.5
+  pathfind: 3.3
+artifacts:
+  profile_dump: workload_f_mixed_profile.txt
+  jfr_recording: workload_f_mixed.jfr
+  gc_log: workload_f_mixed_gc.log

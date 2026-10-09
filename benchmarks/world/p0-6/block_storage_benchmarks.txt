@@ -1,0 +1,44 @@
+
+--- [BENCH] Memory Footprint Analysis (64-bit HotSpot, Compressed OOPs) ---
+Chunk Overhead (Empty):            4150 B (~4.1 KB)
+Section Overhead (4-bit, Sky):     6424 B (~6.3 KB) [Data: 2208 B, BlockLight: 2088 B, SkyLight: 2088 B]
+Section Overhead (13-bit Global): 10952 B (~10.7 KB)
+Normal Chunk (4 sections):        29700 B (~29.7 KB)
+Full Chunk (16 sections):        106500 B (~106.5 KB)
+
+--- [BENCH] Block State Read Performance (Chunk-Local vs Section) ---
+BlockStateContainer.get()        | Mean:   3.74 ns | p50:   2.40 ns | p95:   7.60 ns | p99:  27.50 ns | Max:   56.80 ns (N=5000)
+ExtendedBlockStorage.get()       | Mean:   3.31 ns | p50:   2.40 ns | p95:   5.90 ns | p99:  10.70 ns | Max:  123.00 ns (N=5000)
+
+--- [BENCH] Block State Write Performance (Container & Section) ---
+EBS.set (Same State)             | Mean:   7.43 ns | p50:   5.20 ns | p95:   9.20 ns | p99:  44.00 ns | Max:  138.00 ns (N=5000)
+EBS.set (Solid -> Different Solid) | Mean:   6.84 ns | p50:   5.60 ns | p95:   9.60 ns | p99:  29.60 ns | Max:   46.60 ns (N=5000)
+EBS.set (Air -> Solid)           | Mean:   7.19 ns | p50:   5.90 ns | p95:   8.50 ns | p99:  18.10 ns | Max:  147.40 ns (N=5000)
+
+--- [BENCH] Bulk Section & Chunk Block Scanning ---
+Scan 4096 Blocks (Predicate Match) | Mean: 13634.6 ns | p50: 12500 ns | p95: 15700 ns | p99: 28200 ns | Max:  128600 ns (N=5000)
+
+--- [BENCH] Palette Resizing Spikes in BlockStateContainer ---
+Palette Resize (Linear 4b -> HashMap 5b) | Mean: 44977.4 ns | p50: 34300 ns | p95: 86900 ns | p99: 307600 ns | Max:  833000 ns (N=1000)
+Palette Resize (HashMap 8b -> Global 13b) | Mean: 39728.8 ns | p50: 35500 ns | p95: 39800 ns | p99: 258500 ns | Max:  593800 ns (N=1000)
+
+--- [BENCH] Global Block State ID Registry Lookup ---
+BLOCK_STATE_IDS.get(State -> ID) | Mean:   1.87 ns | p50:   1.72 ns | p95:   1.74 ns | p99:   5.26 ns | Max:   33.26 ns (N=5000)
+BLOCK_STATE_IDS.getByValue(ID -> State) | Mean:   0.48 ns | p50:   0.24 ns | p95:   0.26 ns | p99:   6.52 ns | Max:   49.16 ns (N=5000)
+
+--- [BENCH] setBlockState Component Cost Decomposition ---
+Component 1: Chunk Map Lookup    | Mean:   4.84 ns | p50:   1.80 ns | p95:   7.00 ns | p99:  38.00 ns | Max:  128.40 ns (N=5000)
+Component 2: Section Storage Set | Mean:   8.59 ns | p50:   7.40 ns | p95:   9.20 ns | p99:  33.20 ns | Max:   38.40 ns (N=5000)
+
+--- [BENCH] TileEntity Creation & Binding Overhead ---
+TileEntity Creation + Map Insertion | Mean:  198.9 ns | p50:   100 ns | p95:   300 ns | p99:   500 ns | Max:  592900 ns (N=20000)
+
+--- [BENCH] CRITICAL FFI GRANULARITY EXPERIMENT (§40) ---
+N Ops      | Approach A (Per-Block JNI) | Approach B (Bulk Section) | Ratio (A / B)  
+1          |            0.02 us ( 20.0 ns/op) |            0.07 us (66.00 ns/op) |        0.3x FASTER
+100        |            2.00 us ( 20.0 ns/op) |            0.15 us ( 1.45 ns/op) |       13.8x FASTER
+4096       |           81.92 us ( 20.0 ns/op) |            3.34 us ( 0.82 ns/op) |       24.5x FASTER
+65536      |         1310.72 us ( 20.0 ns/op) |           53.47 us ( 0.82 ns/op) |       24.5x FASTER
+1000000    |        20000.00 us ( 20.0 ns/op) |          815.97 us ( 0.82 ns/op) |       24.5x FASTER
+
+Conclusion: Per-block JNI lookup imposes a catastrophic ~20x-25x performance penalty over bulk snapshots.

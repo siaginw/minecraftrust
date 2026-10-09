@@ -1,0 +1,21 @@
+[package]
+name = "compression"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[dependencies]
+buffers = { workspace = true }
+# Pinned backend: zlib-rs (pure-Rust zlib), NOT the default miniz_oxide and
+# NOT a C zlib-ng wrapper. Effective backend asserted at runtime in tests
+# (flate2::backend()) and recorded in every harness output.
+flate2 = { version = "=1.1.10", features = ["zlib-rs"], default-features = false }
+
+
+[dev-dependencies]
+# Bench-only alternative backends for the corpus matrix (never enabled in the
+# production dependency graph; the runtime backend stays pinned to zlib-rs).
+miniz_oxide = "0.8"
+
+[features]
+bench-libdeflater = []

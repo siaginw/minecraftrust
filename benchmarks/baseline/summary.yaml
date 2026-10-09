@@ -1,0 +1,51 @@
+# Baseline Telemetry & Profiling Summary (Forge 14.23.5.2860 Idle Server)
+timestamp: "2026-09-17T08:35:55-05:00"
+environment:
+  jvm: "OpenJDK 64-Bit Server VM (Temurin 1.8.0_504-b01)"
+  os: "Windows 11 amd64 10.0"
+  memory: "-Xms1G -Xmx1G"
+  gc: "ParallelGC"
+
+workload:
+  state: "steady_state_idle"
+  players: 0
+  dimensions_loaded: [0, -1, 1]
+  spawn_chunks_loaded_dim0: 625
+  profiled_duration_ms: 30998
+  profiled_ticks: 620
+  measured_tps: 20.00
+  mean_tick_duration_ms: 2.14
+
+gc_statistics:
+  boot_young_gcs: 11
+  boot_young_gc_avg_duration_ms: 5.1
+  boot_full_metadata_gcs: 2
+  boot_full_metadata_gc_durations_ms: [13.5, 71.7]
+  steady_state_gcs_during_30s_window: 0
+  steady_state_heap_used_pct: 39
+
+profiler_hierarchy_pct:
+  levels: 94.51
+  entities_regular: 44.00
+  tick_pending_scheduled: 25.93
+  tick_blocks_random: 6.38
+  entity_tracker: 3.10
+  players: 1.66
+  chunk_source_unloads: 1.54
+  tile_entities_block_entities: 1.04
+  village: 0.76
+  snooper: 0.66
+  chunk_map: 0.62
+  dim_unloading: 0.55
+  command_functions: 0.40
+  mob_spawner: 0.33
+  connection_network: 0.29
+  jobs_task_queue: 0.22
+  portal_forcer: 0.21
+  tickables: 0.06
+  tallying: 0.05
+
+artifacts:
+  jfr_recording: "benchmarks/baseline/baseline_idle.jfr"
+  gc_log: "benchmarks/baseline/gc.log"
+  raw_profiler_dump: "benchmarks/baseline/profile-results-2026-09-17_08.35.55.txt"

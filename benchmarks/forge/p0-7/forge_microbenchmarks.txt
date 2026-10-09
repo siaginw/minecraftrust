@@ -1,0 +1,35 @@
+
+--- 1. EventBus Post Latency & Scaling ---
+EventBus.post() [   0 listeners]: RawDispatch:    27.54 ns/post ( 27.54 ns/listener) | +Alloc:    26.41 ns (alloc delta:  -1.14 ns)
+EventBus.post() [   1 listeners]: RawDispatch:    15.41 ns/post ( 15.41 ns/listener) | +Alloc:    11.51 ns (alloc delta:  -3.90 ns)
+EventBus.post() [  10 listeners]: RawDispatch:    20.78 ns/post (  2.08 ns/listener) | +Alloc:    21.83 ns (alloc delta:  +1.05 ns)
+EventBus.post() [ 100 listeners]: RawDispatch:   131.30 ns/post (  1.31 ns/listener) | +Alloc:   114.25 ns (alloc delta: -17.04 ns)
+EventBus.post() [1000 listeners]: RawDispatch:  1742.21 ns/post (  1.74 ns/listener) | +Alloc:  1553.30 ns (alloc delta: -188.91 ns)
+EventBus.post() Canceled Bailout (1 canceler + 100 skipped):  1025.80 ns/post
+
+--- 2. Capability Dispatcher Query Latency & Provider Scaling ---
+CapabilityDispatcher [ 0 providers]: hasCapability:   7.57 ns/op | getCapability:   2.91 ns/op
+CapabilityDispatcher [ 1 providers]: hasCapability:  20.21 ns/op | getCapability:  20.29 ns/op
+CapabilityDispatcher [ 2 providers]: hasCapability:  16.20 ns/op | getCapability:   1.53 ns/op
+CapabilityDispatcher [ 5 providers]: hasCapability:  18.17 ns/op | getCapability:  18.93 ns/op
+CapabilityDispatcher [10 providers]: hasCapability:   3.68 ns/op | getCapability:   3.94 ns/op
+CapabilityDispatcher [20 providers]: hasCapability:   7.37 ns/op | getCapability:   7.65 ns/op
+Capability Sided Queries (5 providers): SidedHit (North):   6.20 ns/op | SidedMiss (South):   9.23 ns/op
+
+--- 3. OreDictionary Algorithmic Model Performance ---
+OreDictionary [  100 entries]: getOreID (Hit):  15.08 ns | getOreID (Miss):  21.52 ns | getOres:  16.30 ns
+OreDictionary [ 1000 entries]: getOreID (Hit):  14.39 ns | getOreID (Miss):   1.62 ns | getOres:  60.13 ns
+OreDictionary [ 5000 entries]: getOreID (Hit):  31.37 ns | getOreID (Miss):  22.69 ns | getOres:  59.05 ns
+OreDictionary [10000 entries]: getOreID (Hit):   3.87 ns | getOreID (Miss):   1.62 ns | getOres:   4.08 ns
+
+--- 4. Recipe Matching Performance (Linear Registry Scan) ---
+Recipe Scan [  500 recipes]: BestCase (First):    22.67 ns | AvgCase (Mid):   226.65 ns | WorstCase (Miss):   317.18 ns
+Recipe Scan [ 1000 recipes]: BestCase (First):    19.76 ns | AvgCase (Mid):   529.60 ns | WorstCase (Miss):   118.02 ns
+Recipe Scan [ 5000 recipes]: BestCase (First):     1.77 ns | AvgCase (Mid):   576.13 ns | WorstCase (Miss):   834.22 ns
+Recipe Scan [10000 recipes]: BestCase (First):     1.80 ns | AvgCase (Mid):   663.01 ns | WorstCase (Miss):  1173.39 ns
+
+--- 5. Java Façade vs Direct Field Access ---
+Direct Java Array Field Read:       3.85 ns/op
+Coarse Native Memory Handle Read:   1.45 ns/op
+Delta (Native Handle Overhead):     -2.40 ns/op (vs simulated per-block JNI 18.5 ns)
+Verdict: Coarse native handle adds negligible in-JVM overhead; per-block JNI adds 18.5 ns crossing penalty.

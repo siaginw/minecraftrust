@@ -1,0 +1,33 @@
+workload_name: workload_b_loaded_world
+server_type: forge_14.23.5.2860
+duration_s: 20
+time_span_ms: 20001
+tick_span: 400
+measured_tps: 20.0
+mean_mspt: 50.002
+gc_stats:
+  young_gcs: 12
+  young_pause_ms: 75.6
+  full_gcs: 2
+  full_pause_ms: 65.16
+  total_pause_ms: 140.76
+top_subsystems:
+  levels: 96.45
+  world: 90.07
+  entities: 72.47
+  regular: 69.93
+  tick: 67.41
+  ai: 8.84
+  newAi: 8.7
+  tickBlocks: 6.87
+  pollingChunks: 5.81
+  entityBaseTick: 5.36
+  forcedChunkLoading: 4.27
+  travel: 3.96
+  navigation: 3.34
+  goalSelector: 2.84
+  tracker: 2.34
+artifacts:
+  profile_dump: workload_b_loaded_world_profile.txt
+  jfr_recording: workload_b_loaded_world.jfr
+  gc_log: workload_b_loaded_world_gc.log

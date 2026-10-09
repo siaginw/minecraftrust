@@ -1,0 +1,33 @@
+workload_name: workload_a_idle
+server_type: forge_14.23.5.2860
+duration_s: 20
+time_span_ms: 19999
+tick_span: 400
+measured_tps: 20.0
+mean_mspt: 49.998
+gc_stats:
+  young_gcs: 12
+  young_pause_ms: 64.57
+  full_gcs: 2
+  full_pause_ms: 65.48
+  total_pause_ms: 130.05
+top_subsystems:
+  levels: 96.25
+  world: 90.41
+  entities: 73.12
+  regular: 70.51
+  tick: 67.58
+  ai: 7.02
+  newAi: 6.87
+  tickBlocks: 6.32
+  pollingChunks: 5.43
+  entityBaseTick: 5.35
+  forcedChunkLoading: 4.01
+  travel: 3.49
+  navigation: 3.35
+  tracker: 3.24
+  livingEntityBaseTick: 2.32
+artifacts:
+  profile_dump: workload_a_idle_profile.txt
+  jfr_recording: workload_a_idle.jfr
+  gc_log: workload_a_idle_gc.log

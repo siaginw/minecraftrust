@@ -1,0 +1,37 @@
+[07:25:51] [main/INFO]: [STDOUT]: === P0-5 Network Benchmarks Start ===
+[07:25:51] [main/INFO]: [STDOUT]: 
+--- [BENCH] VarInt Encode / Decode (Batched 1000 ops/sample) ---
+VarInt Encode (per op)         | Mean:   4.81 ns | p50:   4.30 ns | p95:   5.70 ns | p99:  21.70 ns | Max:  144.70 ns (Batches=5000)
+VarInt Decode (per op)         | Mean:   4.78 ns | p50:   4.40 ns | p95:   5.50 ns | p99:  13.00 ns | Max:  112.30 ns (Batches=5000)
+[07:25:51] [main/INFO]: [STDOUT]: 
+--- [BENCH] VarInt21 Framing Prepend / Split (Batched 1000 ops/sample) ---
+Frame Prepend (per op)         | Mean:  13.94 ns | p50:  11.20 ns | p95:  39.00 ns | p99:  39.80 ns | Max:   83.20 ns (Batches=3000)
+Frame Split (per op)           | Mean:   8.27 ns | p50:   5.20 ns | p95:  32.20 ns | p99:  34.00 ns | Max:  759.80 ns (Batches=3000)
+[07:25:51] [main/INFO]: [STDOUT]: 
+--- [BENCH] PacketBuffer Serialization Primitives ---
+String (16 chars)              | Mean:  137.5 ns | p50:   100 ns | p95:   200 ns | p99:   200 ns | Max:   15500 ns (N=50000)
+UUID                           | Mean:   32.2 ns | p50:     0 ns | p95:   100 ns | p99:   100 ns | Max:  120000 ns (N=50000)
+BlockPos                       | Mean:   39.6 ns | p50:     0 ns | p95:   100 ns | p99:   100 ns | Max:   13400 ns (N=50000)
+NBT Compound                   | Mean:  367.7 ns | p50:   400 ns | p95:   500 ns | p99:   600 ns | Max:   22300 ns (N=50000)
+ItemStack                      | Mean:  160.6 ns | p50:   200 ns | p95:   200 ns | p99:   300 ns | Max:   62600 ns (N=50000)
+ResourceLocation               | Mean:  226.0 ns | p50:   200 ns | p95:   300 ns | p99:   300 ns | Max:   21400 ns (N=50000)
+[07:25:52] [main/INFO]: [STDOUT]: 
+--- [BENCH] Network Compression (JDK Deflater / Inflater) ---
+Payload    64 B (Ratio: 0.31) -> Compress: Mean: 1526.8 ns, p50: 1400 ns, p95: 1500 ns, p99: 2300 ns | Decompress: Mean: 247.6 ns, p50:  200 ns, p95:  300 ns, p99:  300 ns
+Payload   256 B (Ratio: 0.21) -> Compress: Mean: 5635.4 ns, p50: 5500 ns, p95: 5600 ns, p99: 7300 ns | Decompress: Mean: 497.6 ns, p50:  500 ns, p95:  500 ns, p99:  500 ns
+Payload  1024 B (Ratio: 0.07) -> Compress: Mean: 9236.5 ns, p50: 8800 ns, p95: 11800 ns, p99: 14400 ns | Decompress: Mean: 842.6 ns, p50:  800 ns, p95: 1100 ns, p99: 1300 ns
+Payload  8192 B (Ratio: 0.02) -> Compress: Mean: 39878.0 ns, p50: 39700 ns, p95: 40900 ns, p99: 49200 ns | Decompress: Mean: 5344.7 ns, p50: 5300 ns, p95: 5500 ns, p99: 6600 ns
+Payload 32768 B (Ratio: 0.01) -> Compress: Mean: 147124.4 ns, p50: 141600 ns, p95: 174000 ns, p99: 252800 ns | Decompress: Mean: 18165.4 ns, p50: 17400 ns, p95: 19900 ns, p99: 37300 ns
+Payload 64512 B (Ratio: 0.01) -> Compress: Mean: 288555.4 ns, p50: 279100 ns, p95: 369800 ns, p99: 388000 ns | Decompress: Mean: 34694.0 ns, p50: 33300 ns, p95: 45900 ns, p99: 49500 ns
+[07:25:55] [main/INFO]: [STDOUT]: 
+--- [BENCH] Network Encryption (AES/CFB8/NoPadding) ---
+Payload    64 B -> Encrypt (57.5 MB/s): Mean: 1060.7 ns, p50: 1000 ns, p95: 1200 ns, p99: 1400 ns | Decrypt: Mean: 1062.0 ns, p50: 1000 ns, p95: 1300 ns, p99: 1600 ns
+Payload   256 B -> Encrypt (61.1 MB/s): Mean: 3993.7 ns, p50: 3900 ns, p95: 4100 ns, p99: 5900 ns | Decrypt: Mean: 4012.3 ns, p50: 4000 ns, p95: 4100 ns, p99: 5100 ns
+Payload  1024 B -> Encrypt (61.2 MB/s): Mean: 15950.2 ns, p50: 15700 ns, p95: 17200 ns, p99: 18400 ns | Decrypt: Mean: 16078.0 ns, p50: 15800 ns, p95: 17400 ns, p99: 19200 ns
+Payload  8192 B -> Encrypt (61.6 MB/s): Mean: 126887.6 ns, p50: 124500 ns, p95: 136500 ns, p99: 150800 ns | Decrypt: Mean: 127946.4 ns, p50: 125300 ns, p95: 139100 ns, p99: 155100 ns
+Payload 32768 B -> Encrypt (62.3 MB/s): Mean: 501333.7 ns, p50: 498100 ns, p95: 513200 ns, p99: 570300 ns | Decrypt: Mean: 505307.1 ns, p50: 501700 ns, p95: 517900 ns, p99: 584800 ns
+[07:26:11] [main/INFO]: [STDOUT]: 
+--- [BENCH] Login RSA 1024-bit Handshake Cost ---
+RSA 1024 KeyGen                | Mean: 15313129.0 ns | p50: 12899600 ns | p95: 33392300 ns | p99: 62409900 ns | Max: 62409900 ns (N=100)
+RSA 1024 Decrypt (Server login step) | Mean: 542107.0 ns | p50: 492100 ns | p95: 870500 ns | p99: 1604700 ns | Max: 1604700 ns (N=100)
+[07:26:13] [main/INFO]: [STDOUT]: === P0-5 Network Benchmarks Complete ===

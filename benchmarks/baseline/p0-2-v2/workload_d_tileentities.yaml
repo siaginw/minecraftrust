@@ -1,0 +1,56 @@
+workload: "workload_d_tileentities"
+benchmark_type: "AUTHORITATIVE BASELINE"
+status: "COMPLETED"
+environment:
+  os: "Windows 11 10.0 (amd64)"
+  available_processors: 16
+  java_version: "1.8.0_504 (Temurin)"
+  jvm_name: "OpenJDK 64-Bit Server VM (25.504-b01)"
+  jvm_input_arguments: [-javaagent:D:\minecraftrust\tools\bench-agent.jar, -Dbench.workload=workload_d_tileentities, -Dbench.type=AUTHORITATIVE BASELINE, -Dbench.warmup=20, -Dbench.duration=25, -Dbench.output=D:\minecraftrust\benchmarks\baseline\p0-2-v2, -Xms1G, -Xmx1G]
+methodology:
+  probe: "JavaAgent Bytecode Instrumentation on MinecraftServer.tick()"
+  clock: "System.nanoTime()"
+  warmup_seconds: 20
+  measurement_seconds: 25
+  actual_measurement_seconds: 25.02
+  total_measured_ticks: 500
+  jvm_uptime_at_measurement_start_seconds: 20
+  jvm_uptime_at_measurement_end_seconds: 49
+cadence:
+  tps: 19.99
+  wall_cadence_mean_ms: 50.07
+  wall_cadence_p50_ms: 50.02
+  wall_cadence_p95_ms: 54.77
+  wall_cadence_p99_ms: 55.91
+compute_mspt:
+  mean: 0.178
+  median_p50: 0.032
+  p90: 0.053
+  p95: 0.078
+  p99: 0.149
+  p99_9: 34.407
+  min: 0.020
+  max: 38.115
+  stddev: 2.184
+deadline_analysis:
+  missed_50ms_deadlines: 0
+  ticks_over_25ms: 2
+  ticks_over_40ms: 0
+  ticks_over_50ms: 0
+  ticks_over_100ms: 0
+  ticks_over_250ms: 0
+gc_and_memory:
+  boot_phase:
+    young_gc_count: 11
+    young_gc_pause_ms: 59
+    full_gc_count: 2
+    full_gc_pause_ms: 76
+  measurement_phase:
+    young_gc_count: 0
+    young_gc_pause_ms: 0
+    full_gc_count: 0
+    full_gc_pause_ms: 0
+    heap_before_bytes: 257789472
+    heap_after_bytes: 274276296
+    heap_before_mb: 245.85
+    heap_after_mb: 261.57

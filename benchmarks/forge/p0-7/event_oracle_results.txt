@@ -1,0 +1,5 @@
+TEST 1 [Priority & FIFO Order]: PASS | Actual: HIGHEST -> HIGH -> NORMAL_A -> NORMAL_B -> LOW -> LOWEST
+TEST 2 [Cancellation Semantics]: PASS | CanceledReturn: true | Sequence: HIGHEST_CANCELS -> NORMAL_RECEIVES_CANCELED -> LOWEST_RECEIVES_CANCELED
+TEST 3 [Event.Result Mutation]: PASS | Observed: ALLOW
+TEST 4 [Inheritance Ordering]: PASS | Actual: CHILD_LISTENER -> PARENT_LISTENER
+TEST 5 [Unregister]: PASS | InvocationsAfterUnregister: 0

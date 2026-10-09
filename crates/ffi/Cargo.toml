@@ -1,0 +1,38 @@
+[package]
+name = "ffi"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[lib]
+name = "rustcraft_ffi"
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+compression = { workspace = true }
+core-types = { workspace = true }
+contracts = { workspace = true }
+metrics = { workspace = true }
+chunk-packet = { workspace = true }
+spawn-index = { workspace = true }
+spatial-index = { workspace = true }
+worldgen-noise = { workspace = true }
+native-chunk = { workspace = true }
+region-io = { workspace = true }
+light-engine = { path = "../light-engine" }
+
+[dev-dependencies]
+nbt = { path = "../nbt" }
+region-io = { path = "../region-io" }
+native-chunk = { path = "../native-chunk" }
+proptest = { version = "=1.11.0", default-features = false, features = ["std"] }
+flate2 = { version = "=1.1.10", features = ["zlib-rs"], default-features = false }
+
+[features]
+# A/B matrix features for the P0 kernel optimizations:
+# legacy-overlay: pre-OPT-LIGHT-002 SipHash overlay (A/B matrix reproduction)
+legacy-overlay = []
+# legacy-access: pre-OPT-LIGHT-003 direct registry path (A/B matrix)
+legacy-access = []
+# legacy-propagate: pre-OPT-ALG-001 plain-key kernel (A/B matrix)
+legacy-propagate = ["light-engine/legacy-propagate"]

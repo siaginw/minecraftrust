@@ -1,0 +1,77 @@
+rust_nbt_codec:
+  implementation: "crates/nbt (NbtDecoder / NbtEncoder)"
+  sample_chunks: 847
+  total_uncompressed_mb: 75.42
+  parse_ms:
+    mean: 0.0594
+    p50: 0.0128
+    p95: 0.2712
+    p99: 0.4158
+    max: 0.6090
+  parse_throughput_mb_s: 1500.35
+  serialize_ms:
+    mean: 0.0369
+    p50: 0.0070
+    p95: 0.1822
+    p99: 0.2999
+    max: 0.4488
+  serialize_throughput_mb_s: 1296.10
+  zero_alloc_cursor_level_lookup_us:
+    mean: 3.368
+    p50: 2.100
+    p95: 10.500
+    p99: 15.100
+  semantic_workloads:
+    itemstack:
+      bytes: 118
+      tree_build_us: 0.52
+      decode_us: 1.00
+      encode_us: 0.68
+      cursor_us: 0.013
+    entity:
+      bytes: 277
+      tree_build_us: 0.62
+      decode_us: 1.47
+      encode_us: 1.67
+      cursor_us: 0.130
+    tileentity:
+      bytes: 152
+      tree_build_us: 0.80
+      decode_us: 1.21
+      encode_us: 0.70
+      cursor_us: 0.032
+    player:
+      bytes: 455
+      tree_build_us: 1.04
+      decode_us: 2.53
+      encode_us: 1.76
+      cursor_us: 0.106
+    worldinfo:
+      bytes: 181
+      tree_build_us: 0.49
+      decode_us: 1.14
+      encode_us: 0.81
+      cursor_us: 0.039
+  size_classes:
+    16k_to_256k:
+      count: 847
+      avg_bytes: 50195
+      mean_us: 43.68
+      p50_us: 8.50
+  deep_nesting:
+    depth_50:
+      bytes: 394
+      mean_us: 5.54
+      p50_us: 5.40
+    depth_100:
+      bytes: 794
+      mean_us: 11.53
+      p50_us: 11.00
+    depth_200:
+      bytes: 1694
+      mean_us: 23.83
+      p50_us: 22.50
+    depth_500:
+      bytes: 4394
+      mean_us: 58.79
+      p50_us: 55.90

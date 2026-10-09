@@ -1,0 +1,12 @@
+[package]
+name = "native-observability"
+version = "0.1.0"
+edition = "2021"
+license = "MIT OR Apache-2.0"
+publish = false
+
+[workspace]
+
+[dependencies]
+hdrhistogram = { version = "=7.5.4", default-features = false }
+metrics = { path = "../metrics" }

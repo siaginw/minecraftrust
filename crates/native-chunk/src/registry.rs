@@ -1,0 +1,487 @@
+//! Thread-safe native chunk registry and generation handle tracking.
+
+use crate::chunk::{ChunkLifecycle, NativeChunk};
+use std::collections::HashMap;
+use std::sync::atomic::{AtomicU64, Ordering};
+use std::sync::{Arc, RwLock};
+
+/// M4.2A E: allocation/retention accounting, process-wide.
+pub static STATS_SECTIONS_ALLOCATED: AtomicU64 = AtomicU64::new(0);
+pub static STATS_SECTIONS_RELEASED: AtomicU64 = AtomicU64::new(0);
+pub static STATS_CHUNKS_EVICTED: AtomicU64 = AtomicU64::new(0);
+
+/// Bytes attributable to one resident section (see memory_model example).
+pub const SECTION_RESIDENT_BYTES: u64 = 12368;
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub struct ChunkKey {
+    /// Owning dimension id. Without it, the same (cx, cz) in two dimensions
+    /// alias one native chunk (M4.2A C1).
+    pub dim: i32,
+    pub cx: i32,
+    pub cz: i32,
+}
+
+impl ChunkKey {
+    #[inline(always)]
+    pub fn new(dim: i32, cx: i32, cz: i32) -> Self {
+        Self { dim, cx, cz }
+    }
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub struct ChunkHandle {
+    pub key: ChunkKey,
+    pub generation_id: u64,
+}
+
+pub struct ChunkRegistry {
+    chunks: RwLock<HashMap<ChunkKey, Arc<RwLock<NativeChunk>>>>,
+    next_generation: RwLock<u64>,
+}
+
+impl Default for ChunkRegistry {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
+impl ChunkRegistry {
+    pub fn new() -> Self {
+        Self {
+            chunks: RwLock::new(HashMap::new()),
+            next_generation: RwLock::new(1),
+        }
+    }
+
+    /// Allocates the next generation ID for chunk lifecycle tracking.
+    pub fn next_generation_id(&self) -> u64 {
+        let mut gen = self.next_generation.write().unwrap();
+        let id = *gen;
+        *gen += 1;
+        id
+    }
+
+    /// Stores a newly generated NativeChunk, returning its generation handle.
+    pub fn insert(&self, chunk: NativeChunk) -> ChunkHandle {
+        let key = ChunkKey::new(chunk.dim, chunk.cx, chunk.cz);
+        let gen_id = chunk.generation_id;
+        let new_sections = chunk_active_sections(&chunk) as u64;
+        let mut map = self.chunks.write().unwrap();
+        if let Some(old) = map.get(&key) {
+            // replacing a live chunk releases its sections
+            STATS_SECTIONS_RELEASED.fetch_add(
+                old.read().unwrap().active_section_count() as u64,
+                Ordering::Relaxed,
+            );
+        }
+        STATS_SECTIONS_ALLOCATED.fetch_add(new_sections, Ordering::Relaxed);
+        map.insert(key, Arc::new(RwLock::new(chunk)));
+        ChunkHandle {
+            key,
+            generation_id: gen_id,
+        }
+    }
+
+    /// Retrieves an Arc reference to the NativeChunk if the generation matches and state is valid.
+    pub fn get(&self, handle: &ChunkHandle) -> Option<Arc<RwLock<NativeChunk>>> {
+        let map = self.chunks.read().unwrap();
+        if let Some(chunk_arc) = map.get(&handle.key) {
+            let chunk = chunk_arc.read().unwrap();
+            if chunk.generation_id == handle.generation_id
+                && chunk.lifecycle != ChunkLifecycle::Invalidated
+            {
+                return Some(Arc::clone(chunk_arc));
+            }
+        }
+        None
+    }
+
+    /// Marks chunk as invalidated upon Java/mod mutations.
+    pub fn invalidate(&self, key: ChunkKey) -> bool {
+        let map = self.chunks.read().unwrap();
+        if let Some(chunk_arc) = map.get(&key) {
+            let mut chunk = chunk_arc.write().unwrap();
+            chunk.set_lifecycle(ChunkLifecycle::Invalidated);
+            return true;
+        }
+        false
+    }
+
+    /// Marks a chunk as mutated (versioned snapshot model): bumps
+    /// mutation_generation and transitions ActiveNative -> Dirty.
+    /// Unlike invalidate(), the native data stays present-but-stale
+    /// until a refresh; consumers holding an old snapshot token detect it.
+    pub fn mark_mutation(&self, key: ChunkKey) -> bool {
+        let map = self.chunks.read().unwrap();
+        if let Some(chunk_arc) = map.get(&key) {
+            let mut chunk = chunk_arc.write().unwrap();
+            chunk.mark_mutation();
+            return true;
+        }
+        false
+    }
+
+    /// Section-granular dirty mark (M4.1 refresh model). Returns the new
+    /// dirty mask, or -1 if the chunk is not registered.
+    pub fn mark_section_mutation(&self, key: ChunkKey, section_y: u8) -> Option<u16> {
+        let map = self.chunks.read().unwrap();
+        if let Some(chunk_arc) = map.get(&key) {
+            let mut chunk = chunk_arc.write().unwrap();
+            chunk.mark_section_mutation(section_y);
+            return Some(chunk.dirty_mask());
+        }
+        None
+    }
+
+    /// Refreshes one section in place from a Java-side snapshot.
+    /// Returns the remaining dirty mask, or None if not registered.
+    pub fn refresh_section(
+        &self,
+        key: ChunkKey,
+        section_y: u8,
+        states: &[u32; 4096],
+        block_light: Option<&[u8; 2048]>,
+        sky_light: Option<&[u8; 2048]>,
+    ) -> Option<u16> {
+        let map = self.chunks.read().unwrap();
+        if let Some(chunk_arc) = map.get(&key) {
+            let mut chunk = chunk_arc.write().unwrap();
+            chunk.refresh_section(section_y, states, block_light, sky_light);
+            return Some(chunk.dirty_mask());
+        }
+        None
+    }
+
+    /// Read-only view of the backing map (FFI internals).
+    pub fn chunks_map(
+        &self,
+    ) -> &std::sync::RwLock<
+        std::collections::HashMap<ChunkKey, std::sync::Arc<std::sync::RwLock<NativeChunk>>>,
+    > {
+        &self.chunks
+    }
+
+    /// Current per-section dirty mask for a registered chunk.
+    pub fn dirty_mask(&self, key: ChunkKey) -> Option<u16> {
+        let map = self.chunks.read().unwrap();
+        map.get(&key).map(|arc| arc.read().unwrap().dirty_mask())
+    }
+
+    /// Evicts an unloading chunk from native registry.
+    pub fn remove(&self, key: ChunkKey) -> Option<Arc<RwLock<NativeChunk>>> {
+        let mut map = self.chunks.write().unwrap();
+        if let Some(arc) = map.remove(&key) {
+            STATS_SECTIONS_RELEASED.fetch_add(
+                arc.read().unwrap().active_section_count() as u64,
+                Ordering::Relaxed,
+            );
+            STATS_CHUNKS_EVICTED.fetch_add(1, Ordering::Relaxed);
+            Some(arc)
+        } else {
+            None
+        }
+    }
+
+    /// Current generation id for a live (non-invalidated) chunk, or 0.
+    /// Consumer entry point when only coordinates are known (M4.2A C2).
+    pub fn find_generation(&self, key: ChunkKey) -> u64 {
+        let map = self.chunks.read().unwrap();
+        match map.get(&key) {
+            Some(arc) => {
+                let c = arc.read().unwrap();
+                if c.lifecycle == crate::chunk::ChunkLifecycle::Invalidated {
+                    0
+                } else {
+                    c.generation_id
+                }
+            }
+            None => 0,
+        }
+    }
+
+    /// Retention accounting: (current_chunks, current_sections, retained_bytes_estimate).
+    pub fn retention(&self) -> (u64, u64, u64) {
+        let map = self.chunks.read().unwrap();
+        let mut sections = 0u64;
+        for arc in map.values() {
+            sections += arc.read().unwrap().active_section_count() as u64;
+        }
+        (
+            map.len() as u64,
+            sections,
+            sections * SECTION_RESIDENT_BYTES,
+        )
+    }
+
+    /// Returns count of registered chunks.
+    pub fn count(&self) -> usize {
+        let map = self.chunks.read().unwrap();
+        map.len()
+    }
+
+    /// Clears all native chunks with release accounting (M4.2D lifecycle).
+    /// Caller must guarantee no active readers hold handles that will be
+    /// re-acquired afterwards; in-flight Arc readers keep their chunk alive
+    /// until their read completes.
+    pub fn clear(&self) {
+        let mut map = self.chunks.write().unwrap();
+        for arc in map.values() {
+            STATS_SECTIONS_RELEASED.fetch_add(
+                arc.read().unwrap().active_section_count() as u64,
+                Ordering::Relaxed,
+            );
+        }
+        map.clear();
+    }
+
+    /// Current generation of a registered, non-invalidated chunk
+    /// (zero-stage touched-generation model, goal §11).
+    pub fn chunk_generation(&self, key: ChunkKey) -> Option<u64> {
+        let map = self.chunks.read().unwrap();
+        if let Some(arc) = map.get(&key) {
+            let chunk = arc.read().unwrap();
+            if chunk.lifecycle != ChunkLifecycle::Invalidated {
+                return Some(chunk.generation_id);
+            }
+        }
+        None
+    }
+
+    /// Authoritative block-light read (zero-stage LightWorld, goal §6).
+    pub fn get_block_light(&self, key: ChunkKey, x: usize, y: usize, z: usize) -> Option<u8> {
+        let map = self.chunks.read().unwrap();
+        if let Some(arc) = map.get(&key) {
+            let chunk = arc.read().unwrap();
+            if chunk.lifecycle != ChunkLifecycle::Invalidated {
+                return Some(chunk.get_block_light(x, y, z));
+            }
+        }
+        None
+    }
+
+    /// Authoritative block-light write (zero-stage commit, goal §12).
+    pub fn set_block_light(&self, key: ChunkKey, x: usize, y: usize, z: usize, v: u8) -> bool {
+        let map = self.chunks.read().unwrap();
+        if let Some(arc) = map.get(&key) {
+            let mut chunk = arc.write().unwrap();
+            if chunk.lifecycle != ChunkLifecycle::Invalidated {
+                chunk.set_block_light(x, y, z, v);
+                return true;
+            }
+        }
+        false
+    }
+
+    /// Authoritative getBlockState on registered chunk under read lock.
+    pub fn get_block_state(&self, key: ChunkKey, x: usize, y: usize, z: usize) -> Option<u32> {
+        let map = self.chunks.read().unwrap();
+        if let Some(arc) = map.get(&key) {
+            let chunk = arc.read().unwrap();
+            if chunk.lifecycle != ChunkLifecycle::Invalidated {
+                return Some(chunk.get_block_state(x, y, z));
+            }
+        }
+        None
+    }
+
+    /// Authoritative setBlockState on registered chunk under write lock.
+    pub fn set_block_state(
+        &self,
+        key: ChunkKey,
+        x: usize,
+        y: usize,
+        z: usize,
+        new_state: u32,
+    ) -> Option<crate::chunk::BlockMutationResult> {
+        let map = self.chunks.read().unwrap();
+        if let Some(arc) = map.get(&key) {
+            let mut chunk = arc.write().unwrap();
+            if chunk.lifecycle != ChunkLifecycle::Invalidated {
+                return Some(chunk.set_block_state(x, y, z, new_state));
+            }
+        }
+        None
+    }
+
+    /// §2/§6 state-ownership MIRROR (mutation-seam path): one Java semantic
+    /// state write lands as ONE native transition — cell write, heightmap
+    /// maintenance, section dirty bit, and a SINGLE mutation-version advance
+    /// — under one lock acquisition. Returns Some(changed); None when the
+    /// chunk is not registered (worldgen pre-registration: onLoad fullSync
+    /// covers it) or invalidated (reload took a new generation).
+    pub fn mirror_block_state(
+        &self,
+        key: ChunkKey,
+        x: usize,
+        y: usize,
+        z: usize,
+        new_state: u32,
+    ) -> Option<bool> {
+        let map = self.chunks.read().unwrap();
+        let arc = map.get(&key)?;
+        let mut chunk = arc.write().unwrap();
+        if chunk.lifecycle == ChunkLifecycle::Invalidated {
+            return None;
+        }
+        Some(chunk.mirror_block_state_cell(x, y, z, new_state))
+    }
+
+    /// OPT-LIGHT-003 harness: current Arc for a chunk key (identity =
+    /// whatever the registry holds NOW; callers caching it must compare
+    /// the chunk's generation_id for staleness — §23).
+    pub fn chunk_arc(&self, key: ChunkKey) -> Option<Arc<RwLock<NativeChunk>>> {
+        let map = self.chunks.read().unwrap();
+        map.get(&key).cloned()
+    }
+
+    /// Retrieves pointer to section Y's states array under read lock.
+    pub fn get_section_state_pointer(&self, key: ChunkKey, section_y: usize) -> usize {
+        let map = self.chunks.read().unwrap();
+        if let Some(arc) = map.get(&key) {
+            let chunk = arc.read().unwrap();
+            if chunk.lifecycle != ChunkLifecycle::Invalidated {
+                return chunk.get_section_state_pointer(section_y);
+            }
+        }
+        0
+    }
+
+    /// Fills array of 16 section state pointers under read lock.
+    pub fn get_section_state_pointers(&self, key: ChunkKey, out: &mut [usize; 16]) -> bool {
+        let map = self.chunks.read().unwrap();
+        if let Some(arc) = map.get(&key) {
+            let chunk = arc.read().unwrap();
+            if chunk.lifecycle != ChunkLifecycle::Invalidated {
+                chunk.get_section_state_pointers(out);
+                return true;
+            }
+        }
+        false
+    }
+
+    /// Retrieves pointer to section Y's block_light array under read lock.
+    pub fn get_section_block_light_pointer(&self, key: ChunkKey, section_y: usize) -> usize {
+        let map = self.chunks.read().unwrap();
+        if let Some(arc) = map.get(&key) {
+            let chunk = arc.read().unwrap();
+            if chunk.lifecycle != ChunkLifecycle::Invalidated {
+                return chunk.get_section_block_light_pointer(section_y);
+            }
+        }
+        0
+    }
+
+    /// Retrieves pointer to section Y's sky_light array under read lock.
+    pub fn get_section_sky_light_pointer(&self, key: ChunkKey, section_y: usize) -> usize {
+        let map = self.chunks.read().unwrap();
+        if let Some(arc) = map.get(&key) {
+            let chunk = arc.read().unwrap();
+            if chunk.lifecycle != ChunkLifecycle::Invalidated {
+                return chunk.get_section_sky_light_pointer(section_y);
+            }
+        }
+        0
+    }
+
+    /// Fills arrays of 16 block light and 16 sky light pointers under read lock.
+    pub fn get_section_light_pointers(
+        &self,
+        key: ChunkKey,
+        out_block_light: &mut [usize; 16],
+        out_sky_light: &mut [usize; 16],
+    ) -> bool {
+        let map = self.chunks.read().unwrap();
+        if let Some(arc) = map.get(&key) {
+            let chunk = arc.read().unwrap();
+            if chunk.lifecycle != ChunkLifecycle::Invalidated {
+                chunk.get_section_light_pointers(out_block_light, out_sky_light);
+                return true;
+            }
+        }
+        false
+    }
+
+    /// Retrieves biome ID at (x, z) under read lock.
+    pub fn get_biome(&self, key: ChunkKey, x: usize, z: usize) -> Option<u8> {
+        let map = self.chunks.read().unwrap();
+        if let Some(arc) = map.get(&key) {
+            let chunk = arc.read().unwrap();
+            if chunk.lifecycle != ChunkLifecycle::Invalidated {
+                return Some(chunk.get_biome(x, z));
+            }
+        }
+        None
+    }
+
+    /// Sets biome ID at (x, z) under write lock.
+    pub fn set_biome(&self, key: ChunkKey, x: usize, z: usize, biome_id: u8) -> bool {
+        let map = self.chunks.read().unwrap();
+        if let Some(arc) = map.get(&key) {
+            let mut chunk = arc.write().unwrap();
+            if chunk.lifecycle != ChunkLifecycle::Invalidated {
+                return chunk.set_biome(x, z, biome_id);
+            }
+        }
+        false
+    }
+
+    /// Retrieves direct pointer to chunk's [u8; 256] biomes array under read lock.
+    pub fn get_biomes_pointer(&self, key: ChunkKey) -> usize {
+        let map = self.chunks.read().unwrap();
+        if let Some(arc) = map.get(&key) {
+            let chunk = arc.read().unwrap();
+            if chunk.lifecycle != ChunkLifecycle::Invalidated {
+                return chunk.get_biomes_pointer();
+            }
+        }
+        0
+    }
+
+    /// Retrieves height at column (x, z) under read lock.
+    pub fn get_height(&self, key: ChunkKey, x: usize, z: usize) -> Option<u16> {
+        let map = self.chunks.read().unwrap();
+        if let Some(arc) = map.get(&key) {
+            let chunk = arc.read().unwrap();
+            if chunk.lifecycle != ChunkLifecycle::Invalidated {
+                return Some(chunk.get_height(x, z));
+            }
+        }
+        None
+    }
+
+    /// Retrieves direct pointer to chunk's [u16; 256] heightmap array under read lock.
+    pub fn get_heightmap_pointer(&self, key: ChunkKey) -> usize {
+        let map = self.chunks.read().unwrap();
+        if let Some(arc) = map.get(&key) {
+            let chunk = arc.read().unwrap();
+            if chunk.lifecycle != ChunkLifecycle::Invalidated {
+                return chunk.get_heightmap_pointer();
+            }
+        }
+        0
+    }
+
+    /// Recomputes height at (x, z) under write lock.
+    pub fn recompute_height(&self, key: ChunkKey, x: usize, z: usize) -> Option<u16> {
+        let map = self.chunks.read().unwrap();
+        if let Some(arc) = map.get(&key) {
+            let mut chunk = arc.write().unwrap();
+            if chunk.lifecycle != ChunkLifecycle::Invalidated {
+                return Some(chunk.recompute_height(x, z));
+            }
+        }
+        None
+    }
+}
+
+fn chunk_active_sections(c: &NativeChunk) -> usize {
+    c.sections.iter().filter(|s| s.is_some()).count()
+}
+
+impl NativeChunk {
+    /// Number of resident (allocated) sections.
+    pub fn active_section_count(&self) -> usize {
+        chunk_active_sections(self)
+    }
+}
