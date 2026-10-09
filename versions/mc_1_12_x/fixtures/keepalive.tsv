@@ -1,0 +1,19 @@
+# release|direction|signed_decimal_token|packet_body_hex (packet ID + payload; no frame)
+1.12.1|toClient|0|1f00
+1.12.1|toClient|127|1f7f
+1.12.1|toClient|128|1f8001
+1.12.1|toClient|300|1fac02
+1.12.1|toClient|2147483647|1fffffffff07
+1.12.1|toServer|-1|0bffffffff0f
+1.12.1|toServer|-2147483648|0b8080808008
+1.12.1|toServer|-2147483647|0b8180808008
+1.12.2|toClient|0|1f0000000000000000
+1.12.2|toClient|127|1f000000000000007f
+1.12.2|toClient|128|1f0000000000000080
+1.12.2|toClient|300|1f000000000000012c
+1.12.2|toClient|2147483647|1f000000007fffffff
+1.12.2|toServer|-1|0bffffffffffffffff
+1.12.2|toServer|-2147483648|0bffffffff80000000
+1.12.2|toServer|2147483648|0b0000000080000000
+1.12.2|toClient|9223372036854775807|1f7fffffffffffffff
+1.12.2|toServer|-9223372036854775808|0b8000000000000000

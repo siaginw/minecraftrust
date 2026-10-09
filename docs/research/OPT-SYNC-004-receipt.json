@@ -1,0 +1,70 @@
+{
+ "ab_perentry_vs_bulk": {
+  "packed_bulk_dv4": {
+   "extract_us_per_s": 24,
+   "note": "live packed path",
+   "register_ms": 254
+  },
+  "per_entry_reflective_dv2": {
+   "extract_us_per_s": 151,
+   "note": "forced by the broken init \u2014 the ONLY path that ever ran",
+   "register_ms": 638
+  },
+  "verdict": "bulk/packed wins \u221284% extraction, \u221260% whole-registration \u2014 the OPT-SYNC-003 'bulk palette candidate' question is settled empirically by this A/B on the real workload (the candidate was ALREADY implemented but dead)",
+  "workload": "identical Gate A STANDARD campaign"
+ },
+ "fixes": [
+  "initFastExtract(liveContainer) \u2014 classes derived from container.getClass()/field.getType()",
+  "palette table addresses a dedicated BACKING ThreadLocal buffer (the IntBuffer produced by asIntBuffer() is a VIEW object \u2014 casting it (or its rewind() self-return) to ByteBuffer is impossible: sibling classes under Buffer)"
+ ],
+ "gate_c": "dv4 PASS 940ms single-run (vs 658 median fast-cluster of the dead-path era; distribution reset \u2014 follow-up under the NEW live-path distribution)",
+ "gate_c_live_path_distribution": {
+  "conclusion": "candidate improves typical extraction massively and STABILIZES it: dead-path slow runs blew up EXTRACTION itself (589/817 us/s); live-path slow runs leave extraction at 24-25 us/s and inflate the outer chunk envelope instead. Slow frequency 1/4 live vs 2/5 dead (small-n, exploratory label). Uncertainty: the chunk-envelope slow mechanism (precheck/absent/scan or scheduling) is the NEW profiling target; dv4-C 268us/s first-run extraction is warmup-suspect and unconfirmed.",
+  "runs": {
+   "dv4-C": "940ms extract=268us/s (first-ever live packed run \u2014 warmup-suspect, single)",
+   "s004-C-live1": "208ms extract=24us/s PASS mism=0 DV=3051 committed=34568",
+   "s004-C-live2": "207ms extract=25us/s PASS mism=0 DV=2992 committed=45341",
+   "s004-C-live3": "1611ms extract=24us/s PASS mism=0 DV=3004 committed=11200 SLOW RUN: phases identical to fast runs (extract 73ms, jni 48, validate 30) \u2014 the inflation sits in the CHUNK-level envelope (chunk_MS 1590 vs 188; per-chunk reflection/precheck-nibble-scans/absent-mark JNI/biomes), NOT in extraction"
+  }
+ },
+ "independence_chain": {
+  "A_reference": "per-cell M_GET_STATE.invoke + M_REG_GET_ID.invoke (registry per cell; NOT the packed decoder, NOT GID_CACHE, NOT a Rust facade)",
+  "B_packed": "words+palette-table decode (the transfer under test)",
+  "C_native": "readbackSection JNI read-back of installed storage",
+  "coherence": "all three captured in refreshAndValidateSection on one thread from the same storage object; dualVerify re-reads for stability and rejects in-flight mutation as DUAL_MUTATION_INFLIGHT (invalid evidence, not a mismatch)",
+  "result": "DV_RUNS=3252(A)/3016(C) gate arrivals, ~406/377 full comparisons at 1-in-8, 0 divergences; readback full-rate mismatch=0"
+ },
+ "negative_test": "corrupted-ID private copy -> independent comparator flags exactly the corrupted cell; packed==native-wrong case passes transfer and fails independent (logic fixture)",
+ "opt_id": "OPT-SYNC-004",
+ "researched_at": "2026-10-09",
+ "root_cause_dual_verify_zero": [
+  "probe patch never persisted (assert-abort) \u2014 dv1 counter was decl-only",
+  "REAL: initFastExtract Class.forName cross-loader failure (system loader vs LaunchClassLoader) \u2014 packed + fastExtract dead on every section since OPT-SYNC-002 shipped",
+  "SECOND: the palette-table argument expression address((ByteBuffer) packedPal.rewind()) threw ClassCastException, aborting fullSync per chunk (dv3: FULL_SYNCS=0, registerChunk swallowed it into lastError). Precise mechanism (git-recovered 4c2dec3:1006-1009): packedPal was created by ByteBuffer.asIntBuffer(), so the OBJECT is an IntBuffer VIEW (runtime type: the package-private ByteBufferAsIntBuffer class); rewind() returns that same view object, and an IntBuffer view is a SIBLING of ByteBuffer under Buffer \u2014 never an instance of it, so the cast must fail at runtime. The erased Buffer return type of rewind() only explains why the compiler ACCEPTED the cast, not why it ran hot; the fix addresses the BACKING ByteBuffer (the view exposes no ByteBuffer facade over the same memory). dv3 logs hold only the truncated lastError string (no runtime-type text): construction site recovered from git, not from a saved stack."
+ ],
+ "run_reconciliation": {
+  "note": "six-vs-five-run descriptions reconciled: the OPT-SYNC-003 Gate C series is FIVE matched runs (o3c-C-1..5); the six-run counts in prose included the earlier exploratory o3c-A-attrib attribution run (Gate A) \u2014 no runs created for bookkeeping.",
+  "runs": {
+   "dv-probe-A": "2026-10-09T15:20:05 PASS \u2014 decl-only probe (patch abort artifact; superseded)",
+   "dv2-probe-A": "2026-10T15:24:56 PASS \u2014 REAL probe: packed=false first gate (root cause A)",
+   "dv3-A": "2026-10-09T15:29:53 PASS \u2014 CCE discovery (FULL_SYNCS=0)",
+   "dv3-C": "2026-10-09T15:36:15 PASS \u2014 C with cross-loader fix only",
+   "dv4-A": "2026-10-09T15:37:40 PASS \u2014 live packed path: 254ms/3252, DV chain green",
+   "dv4-C": "2026-10-09T15:44:00 PASS \u2014 live packed path: 940ms/3016 single-run (distribution reset)",
+   "o3c-A-attrib": "2026-10-09T14:48:41 PASS \u2014 Gate A attribution (638ms outer; phase gaps closed)",
+   "o3c-C-1": "2026-10-09T14:36:09 PASS \u2014 C fast cluster 566ms",
+   "o3c-C-2": "2026-10-09T14:41:45 PASS \u2014 C slow cluster 1901ms (extract 589 us/s)",
+   "o3c-C-3": "2026-10-09T14:47:04 PASS \u2014 C fast 588ms",
+   "o3c-C-4": "2026-10-09T14:54:16 PASS \u2014 C fast 658ms",
+   "o3c-C-5": "2026-10-09T14:59:40 PASS \u2014 C slow 3051ms (extract 817 us/s)",
+   "sync002-A-profile": "2026-10-09T12:37:54 PASS \u2014 OPT-SYNC-002 phase-profile baseline (per-cell fallback era, 885ms/3252)"
+  }
+ },
+ "schema": 1,
+ "units_and_labels": {
+  "register_ms_totals": "208/207/940/1611 ms = REGISTER_NANOS/1e6: the SUMMED wall time of ALL ~630 registerChunk calls in the run (isRegistered guard + registerShell JNI + one first-touch fullSync each). Not a single operation; excludes dirty refreshes (DIRTY_REFRESHES=0 in all four runs) and the rest of the campaign.",
+  "timer_nesting": "REGISTER_NANOS >= PHASE_CHUNKSYNC_NS (fullSync wall, handleChunk+pushBiomes span) >= { PHASE_EXTRACT_NS [includes dualVerify sampling + light arraycopy], PHASE_STAGE_NS, PHASE_JNI_NS, PHASE_VALIDATE_NS [includes a fresh 20KiB direct readback buffer per section], PHASE_ABSENT_NS }. PHASE_PRECHECK_NS measured an empty span on the absent branch (instrumentation bug; corrected in OPT-SYNC-005). Sections are counted at SECTIONS_REFRESHED (~3000) + SYNC_SKIPPED (~7100) of 16*630 section visits.",
+  "us_per_s_meaning": "PHASE_EXTRACT_NS / 1000 / SECTIONS_REFRESHED = microseconds of extraction wall PER REFRESHED SECTION (the \"/s\" label is per-SECTION, not per-second)",
+  "work_comparability": "REGISTERS 634/638/628/630, SECTIONS_REFRESHED 3016/3051/2992/3004, SYNC_SKIPPED 7128/7157/7056/7076 across dv4-C/live1/live2/live3: the four totals cover COMPARABLE sync work; COMMITTED_CELLS (mutation workload) varied independently (24153/34568/45341/11200) and the slow run had the FEWEST committed cells."
+ }
+}

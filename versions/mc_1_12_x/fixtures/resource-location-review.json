@@ -1,0 +1,55 @@
+{
+  "schema_version": 1,
+  "reviewed_utc": "2026-09-27T01:08:23.144176+00:00",
+  "scope": "Facts from existing qualified Clean Forge 1.12.2 class disassembly; no Minecraft code executed in this review; no claim for every modded subclass or 1.12.1 runtime.",
+  "primary_documentation": {
+    "url": "https://docs.minecraftforge.net/en/1.12.x/concepts/resources/",
+    "review_method": "Read via web tool; direct raw-byte fetch returned HTTP403, so no content hash is claimed.",
+    "supports": "Namespace/path shape and lowercase resource conventions; not the complete constructor acceptance grammar."
+  },
+  "local_class": {
+    "path": "target/architecture-hardening/h3-clean-regressions-final/baseline/qualification/transformed/net/minecraft/util/ResourceLocation.class",
+    "sha256": "2eb8a3072b8f7acda1cc42e249bf2cca53b832daeb6437a11aa45bc254d7aaf5"
+  },
+  "source_runtime_receipt": {
+    "path": "target/architecture-hardening/h3-clean-regressions-final/baseline/forge-runtime-result.json",
+    "sha256": "cfcd95910f689035999cd873354e7a3ba82f73ca934210a9adb30ce13cb64c6c"
+  },
+  "qualification_receipt": {
+    "path": "target/architecture-hardening/h3-clean-regressions-final/baseline/qualification/qualification.json",
+    "sha256": "a6e4b368644b2c3bee2fcdd6a0e67e3bf40f9e183f099da67337c270a667eb92"
+  },
+  "inspection": {
+    "argv": [
+      "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\bin\\javap.exe",
+      "-c",
+      "-p",
+      "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h3-clean-regressions-final\\baseline\\qualification\\transformed\\net\\minecraft\\util\\ResourceLocation.class"
+    ],
+    "class_and_javap_hashes_before": {
+      "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h3-clean-regressions-final\\baseline\\qualification\\transformed\\net\\minecraft\\util\\ResourceLocation.class": "2eb8a3072b8f7acda1cc42e249bf2cca53b832daeb6437a11aa45bc254d7aaf5",
+      "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\bin\\javap.exe": "00202e7f91304036a8dc1dd4c1bad03040502d3febff7fa8028cd6b7d6bc858a"
+    },
+    "class_and_javap_hashes_after": {
+      "D:\\minecraftrust-astra-hardening\\target\\architecture-hardening\\h3-clean-regressions-final\\baseline\\qualification\\transformed\\net\\minecraft\\util\\ResourceLocation.class": "2eb8a3072b8f7acda1cc42e249bf2cca53b832daeb6437a11aa45bc254d7aaf5",
+      "D:\\rustcraft-toolchains\\temurin8\\jdk8u504-b01\\bin\\javap.exe": "00202e7f91304036a8dc1dd4c1bad03040502d3febff7fa8028cd6b7d6bc858a"
+    },
+    "exit_code": 0,
+    "stdout_path": "target/architecture-hardening/h5-resource-location-review/javap.stdout",
+    "stdout_sha256": "27025d2652a18273f1b245982101bd6cc5530fcb5021958e9ca1821819b1daf7",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "observed_constructor_facts": [
+    "Protected constructor uses StringUtils.isEmpty(namespace); empty/null namespace becomes minecraft, otherwise namespace.toLowerCase(Locale.ROOT).",
+    "Path is passed through String.toLowerCase(Locale.ROOT); the bytecode has no ASCII character whitelist or empty-path rejection.",
+    "The one-string splitter initializes namespace=minecraft, splits at the first colon, always takes suffix as path if a colon exists, and replaces namespace with prefix only when colon index is greater than one.",
+    "Both components are case-folded in this observed version; the prior mixed-case retention suspicion was not confirmed.",
+    "No admission claim follows from constructor representability; resource loading and registry rules remain separate."
+  ],
+  "core_decision": "Store exact qualified UTF-8 text with namespace/path accessors. Require separator only; no implicit lowercasing, defaulting, trimming, modern character whitelist or filesystem interpretation. Version-specific extractor/adapter admits names before registry construction.",
+  "limitations": [
+    "No class or Minecraft binary is redistributed by this record; raw disassembly remains in local target evidence.",
+    "UTF-8 cannot represent unpaired Java UTF-16 surrogates. Future extraction must explicitly reject them rather than replacement-normalize, or introduce lossless code-unit identities.",
+    "Existing qualified class is observational evidence; public crate tests do not require this external runtime artifact."
+  ]
+}

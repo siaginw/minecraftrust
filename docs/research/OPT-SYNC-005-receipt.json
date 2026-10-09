@@ -1,0 +1,94 @@
+{
+ "opt_id": "OPT-SYNC-005",
+ "task": "attribute the chunk-level synchronization cost outside packed extraction; select the next evidence-backed optimization or stop",
+ "researched_at": "2026-10-09",
+ "schema": 1,
+ "revision": {
+  "start": "0f95b80",
+  "end": "see final commit of this change",
+  "jar_c_sha256_16": "01df8a4e1821f159 (built == diag2-staged)",
+  "dll_sha256_16": "252498ee6db5ce35 (unchanged from OPT-SYNC-004 closeout; no FFI change)"
+ },
+ "inputs": {
+  "prior_evidence": "OPT-SYNC-004 receipt gate_c_live_path_distribution: 208/207/940/1611 ms totals; slow run's extra ~1.4s outside section-phase timers; PRECHECK timer read 0 (instrumentation gap)",
+  "code_recovered": "dv3-era CCE construction from git 4c2dec3:1006-1009 (asIntBuffer view) — saved logs hold only the truncated lastError string, no runtime-type stack"
+ },
+ "units_and_totals_correction": {
+  "us_per_s": "PHASE_EXTRACT_NS / 1000 / SECTIONS_REFRESHED = microseconds of extraction wall PER REFRESHED SECTION ('/s' meant per-section, not per-second)",
+  "totals_208_207_940_1611": "REGISTER_NANOS/1e6: SUMMED wall of ALL ~630 registerChunk calls (isRegistered guard + registerShell JNI + one first-touch fullSync each); registration ops only (DIRTY_REFRESHES=0 in all runs); not a single operation and not the campaign",
+  "nesting": "REGISTER_NANOS >= PHASE_CHUNKSYNC_NS >= section phases; PHASE_EXTRACT_NS includes the dualVerify sampling and light arraycopy; PHASE_VALIDATE_NS includes a fresh 20 KiB direct readback buffer per section",
+  "cce_root_cause": "packedPal was built by ByteBuffer.asIntBuffer(): the OBJECT is an IntBuffer VIEW (package-private ByteBufferAsIntBuffer); rewind() returns that same view, and IntBuffer is a SIBLING of ByteBuffer under Buffer — the cast can never succeed. The erased Buffer return type of rewind() only explains why the cast compiled, not why it failed at runtime. Fix addresses the BACKING ByteBuffer.",
+  "applied_to": "docs/research/OPT-SYNC-004-receipt.json (units_and_labels block + corrected root_cause/fixes wording)"
+ },
+ "instrumentation": {
+  "shape": "one op = one refreshChunkNow call (wall from entry incl. lock acquire) with per-op CPU (ThreadMXBean), allocated bytes (com.sun.management.ThreadMXBean), GC count/pause deltas (GarbageCollectorMXBeans); mutually exclusive children: CH_TRACKER (FULLY_SYNCED map + takeWork/versionOf), CH_RESOLVE (chunkCoords/dimOf/findGeneration/initReflection/storage invoke — every site), BIOMES_WALL, SEC_TOTAL (whole refreshAndValidateSection) with children SEC_ALLOC, PRECHECK (FIXED: now wraps the real isNativeDefaultSection), EXTRACT (with DV_VERIFY sub-timer), STAGE, JNI, VALIDATE, ABSENT; REG_SHELL in registerChunk",
+  "precheck_fix": "PHASE_PRECHECK_NS previously accumulated an EMPTY span (ab0-pc0) on the absent branch — the 'zero on a broken timer' trap; it now times the real isNativeDefaultSection scan on present sections",
+  "trace": "[sync-op-trace] bounded JSON lines (first 8 ops per reason per JVM) with opId {dim,cx,cz,gen} + reason registration|dirty-refresh + per-phase microseconds + op/sec unaccounted",
+  "overhead": "diag2 REGISTER 219.9ms vs s004-C-live1/2 208.8/207.6 on identical work counts = +11ms (~5%): nanoTime adds + per-op cpu/alloc/gc sampling. Accepted for attribution runs; counters are cheap to keep",
+  "validation": "traces parse as JSON; counters monotone; accounting closes (below)"
+ },
+ "runs": {
+  "s005-C-diag1": {
+   "shape": "Gate C, default teleport rounds (4) — richer corpus; NOT work-count comparable to the s004 series",
+   "verdict": "REGION_WRITE_CAMPAIGN_PASSED (mode=OFF, light ON_EXPERIMENTAL, world-registry)",
+   "counts": "ops=1760 regs=1760 refreshed=8591 skipped=19569 mism=0 dv_diverge=0",
+   "ms": "REGISTER=591.4 SHELL=49.7 OP_WALL=531.2 CPU=468.8(88%) ALLOC=1037MB GCpause=0.0 | TRACKER=2.3 RESOLVE=9.7 BIOMES=11.5 SEC_TOTAL=494.4 opUnacc=13.2(2.5%) | SEC_ALLOC=27.9 PRECHECK=9.4 EXTRACT=221.6(DV=139.0) STAGE=1.9 JNI=137.4 VALIDATE=78.6 ABSENT=5.8 secUnacc=12.1(2.4%)"
+  },
+  "s005-C-diag2": {
+   "shape": "Gate C, --teleport-rounds 0 — work counts MATCH the s004 live series (628/2992/7056 vs 638/3051/7157)",
+   "verdict": "REGION_WRITE_CAMPAIGN_PASSED",
+   "counts": "ops=628 regs=628 refreshed=2992 skipped=7056 mism=0 dv_diverge=0",
+   "ms": "REGISTER=219.9 SHELL=16.5 OP_WALL=195.0 CPU=218.8(112%, quantization) ALLOC=365MB GCpause=0.0 | TRACKER=1.2 RESOLVE=4.2 BIOMES=7.4 SEC_TOTAL=176.3 opUnacc=5.8(3.0%) | SEC_ALLOC=11.0 PRECHECK=4.2 EXTRACT=71.6(DV=41.6) STAGE=0.8 JNI=49.4 VALIDATE=30.0 ABSENT=4.4 secUnacc=5.0(2.8%)",
+   "per_section_us": "extract=23.9 dv=13.9 jni=16.5 validate=10.0"
+  }
+ },
+ "attribution_conclusions": {
+  "chunk_envelope_resolved": "the op is CPU-BOUND (CPU/wall 0.88-1.12 across both runs; GC pauses inside ops = 0; no lock-wait signature). 93% of op wall is section work; the per-chunk envelope (resolve+tracker+biomes+loop) is 4-7% and shell 8%",
+  "composition_pct_of_op_wall_diag2": "EXTRACT 36.7 (of which DV_VERIFY 21.3) | JNI 25.3 | VALIDATE 15.4 | SEC_ALLOC 5.7 | BIOMES 3.8 | ABSENT 2.2 | PRECHECK 2.2 | RESOLVE 2.2 | TRACKER 0.6 | unaccounted 3.0",
+  "slow_run_variability": "CAUSE_UNRESOLVED_WITHIN_BUDGET — 2/2 diagnostic runs landed in the fast cluster (219.9ms); budget forbids launching until a slow run appears. What IS excluded: MORE_WORK (work counts matched in the s004 series), in-op GC (0 pauses), lock-wait/scheduling as the DOMINANT steady-state mode (CPU~=wall). If it recurs, OP_CPU vs OP_WALL + OP_GC_PAUSE now discriminate CPU-stall (deopt/page-fault/direct-malloc contention) vs wait on the first occurrence. Frequency remains an exploratory 1-of-4 observation, not a recurring distribution",
+  "cpu_quantization_note": "per-op ThreadMXBean CPU on Windows quantizes (~15.6ms tick); per-run sums are directional (88%/112% bracket the truth), per-op CPU values in traces are not meaningful below the tick"
+ },
+ "classification": {
+  "REPEATED_AVOIDABLE_WORK": "confirmed, steady-state: (a) isNativeDefaultSection calls storage.getClass().getMethod(\"func_76663_a\")+setAccessible PER CALL — no Method cache (PRECHECK 4.2ms/9.4ms); (b) per-section fresh int[4096]+byte[2048]x2 scratch (SEC_ALLOC 11.0/27.9ms); (c) fresh allocateDirect(20480) readback buffer per refreshed section inside VALIDATE (~30-40% of 30.0/78.6ms, est. — bounded in bake-off); (d) chunk resolution runs 3x per fullSync op (refreshChunkNow + fullSync + handleChunk/pushBiomes) — 2/3 removable (RESOLVE 4.2/9.7ms)",
+  "MORE_WORK": "ruled out for the s004 series (REGISTERS/SECTIONS/SKIPPED matched; COMMITTED_CELLS varied independently and the slow run had the FEWEST)",
+  "LOCK_OR_IO_WAIT": "ruled out as steady-state mode (CPU~=wall, refreshLock uncontended in-run: only M4PacketCompare shares it, FLUSH_CYCLES=0)",
+  "RUNTIME_NOISE": "candidate for the historical slow runs only — unresolved within budget (see above)",
+  "EXCESS_BOUNDARY_CALLS": "REJECTED as headline: refresh/readback crossings carry proportional memcpy/expansion work; markSectionAbsent x7056 costs only 4.4ms (~0.6us/call)",
+  "MEASUREMENT_BUG": "historic, fixed this task: PRECHECK empty-span timer; 'us/s' label"
+ },
+ "next_target_ranking": {
+  "protected_verification": "DV sampling (41.6/139.0ms) + readback validate (30.0/78.6ms) = 37% of op wall — contractually required (independent verification), NOT an optimization target; vehicle swap (MethodHandle) is evidence-WEAK on JDK8 (see research) — parked unless the bake-off settles it",
+  "largest_removable": "allocation/reflection-hygiene cluster ~28ms of 220ms (~13-14% of registration wall): TL-reused readback buffer + per-thread section scratch + cached isEmpty Method + single-resolve-per-op",
+  "verdict": "measurable, plausibly removable, zero semantic surface — justifies ONE bounded OPT item (OPT-SYNC-006 candidate); NOT implemented in this task"
+ },
+ "external_research": {
+  "jdk8_reflection_vs_methodhandle": [
+   "https://pvs-studio.com/en/blog/posts/java/1266/ — MH invokeExact ~2x faster than reflection AFTER warmup (benchmark-dependent)",
+   "https://gist.github.com/raphw/881e1745996f9d314ab0 — raphw JMH: exact invocation beats reflection mainly with primitive signatures (boxing kills it; our M_REG_GET_ID returns boxed Integer)",
+   "https://timefold.ai/blog/java-reflection-but-much-faster — on OpenJDK 8 specifically MH measured ~136% SLOWER than reflection vs direct; MH shines on newer JDKs",
+   "https://hazelcast.com/blog/turbocharging-java-reflection-performance-with-methodhandle/ — accessibility moved to creation time; design rationale"
+  ],
+  "jni_batching": [
+   "https://stackoverflow.com/questions/13973035/what-is-the-quantitative-overhead-of-making-a-jni-call — ~10ns-few-us per call depending on marshalling/JIT",
+   "https://developer.ibm.com/articles/j-jni — minimize crossings; bulk via direct buffers / GetPrimitiveArrayCritical",
+   "https://arxiv.org/html/1412.6765v1 — JNI calls not inlined; per-call work must amortize the boundary",
+   "https://medium.com/wix-engineering/a-java-exploring-jni-performance-via-decoding-base64-4388683102a2 — ~20% JNI overhead in a decode task; batching reduces it"
+  ],
+  "engine_practice": [
+   "https://github.com/PaperMC/starlight — light sections tied directly to ChunkAccess; no per-sync independent verification in production (trust + tests)",
+   "https://github.com/Minestom/wiki (world/chunk-management.md) + https://javadoc.minestom.net DynamicChunk — per-section palette storage, codec trusted",
+   "conclusion: per-cell independent verification is a RustCraft-authority requirement, not an engine norm — its cost is the price of the authority claim; only the EXECUTION VEHICLE is debatable"
+  ]
+ },
+ "bakeoff_design": {
+  "corpus": "capture refreshAndValidateSection inputs (packed words+bits+palette+lights+absent flags) from one live Gate C run at the section seam; smallest adapter added to docs/research/RUST_ENGINE_BENCHMARK_HARNESS.md (the OPT-SYNC-002/004 harness pattern); same captured inputs replayed per candidate",
+  "candidates": "C0 = current implementation (baseline) | C1 = allocation/reflection-hygiene pack (ThreadLocal readback buffer reuse, per-thread scratch arrays, cached isEmpty Method, single resolve per op) | C2 = C1 + MethodHandle invokeExact DV vehicle (research says REJECT on JDK8 — included to settle empirically, expected outcome REJECT-with-evidence)",
+  "equal_work_contract": "all candidates run the SAME DV sampling rate, the SAME readback full-compare, identical mismatch gates and fallback policy; no validation/notification/publication removed",
+  "metrics": "complete-op wall+CPU, per-phase timers, OP_ALLOC_BYTES, JNI call count, retained memory, and semantic equality: SECTIONS_VALIDATION_MISMATCH=0, DUAL_VERIFY_DIVERGE=0, readback digest identical to C0",
+  "promotion": "live Gate C server A/B (repo rule: promotion requires the live before/after), digest equality precedes performance"
+ },
+ "run_reconciliation": {
+  "s005-C-diag1": "2026-10-09T17:2x PASS — attribution diagnostic (teleports on; 1760 ops)",
+  "s005-C-diag2": "2026-10-09T17:4x PASS — work-count-matched to the s004 live series (teleports off; 628 ops)"
+ }
+}

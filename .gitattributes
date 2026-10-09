@@ -1,0 +1,85 @@
+# These bytes are identities in immutable SYNTHETIC fixtures. Preserve them on
+# every checkout; never normalize bytes in the fixture hash verifier.
+tools/testing/packet_decoder.py text eol=lf
+tools/testing/generate_synthetic_fixtures.py text eol=lf
+tests/fixtures/issue1-capture/* text eol=lf
+
+# The Clean Forge profile pins the exact committed source bytes for these
+# foundation classes. Keep those bytes stable with core.autocrlf=true too.
+tools/bridge/src/com/rustcraft/bridge/capture/LiveWriterGate.java text eol=lf
+tools/bridge/src/com/rustcraft/bridge/capture/PrivateBuildTickets.java text eol=lf
+tools/bridge/src/com/rustcraft/bridge/capture/LiveChunkBindings.java text eol=lf
+
+# The generated plan pins the hook-manifest digest, so the manifest and the profile
+# that carries the pin must check out byte-identically everywhere. Under
+# core.autocrlf they did not, which made the pinned value a function of the
+# checker's line endings rather than of the commit. tools/testing/text_digest.py
+# normalizes as well, so the pin is correct even where these attributes are ignored.
+tools/live-capture/required-live-writer-hooks.json text eol=lf
+tools/live-capture/live-shadow-profile.json text eol=lf
+tools/live-capture/revelation-live-shadow-profile.json text eol=lf
+tools/testing/text_digest.py text eol=lf
+tools/live-capture/derive_rev_profile.py text eol=lf
+
+# Raw validation artifacts are hashed as captured, including line endings and
+# command-emitted trailing blank lines. Do not normalize or lint their whitespace.
+machine/architecture-hardening/h22-5-replay-evidence/** -text -whitespace
+machine/architecture-hardening/h3-telemetry-evidence/** -text -whitespace
+machine/architecture-hardening/h4-capability-evidence/** -text -whitespace
+machine/architecture-hardening/h22-5-state-diff-evidence/** -text -whitespace
+machine/architecture-hardening/h22-5-gpu-evidence/** -text -whitespace
+machine/architecture-hardening/h22-5-jni-evidence/** -text -whitespace
+machine/architecture-hardening/h5-version-adapters-evidence/** -text -whitespace
+machine/architecture-hardening/h6-retained-state-evidence/** -text -whitespace
+machine/architecture-hardening/h7-loom-evidence/** -text -whitespace
+tools/loom-lifecycle-models/third-party/** -text -whitespace
+machine/architecture-hardening/h11-entity-storage-evidence/** -text -whitespace
+tools/entity-storage-experiment/third-party/** -text -whitespace
+machine/architecture-hardening/h9-nbt-region-evidence/** -text -whitespace
+tools/nbt-region-experiment/licenses/** -text -whitespace
+tools/jni-lifecycle-prototype/third-party/** -text -whitespace
+tools/gpu-offline-experiment/hash-prospector-UNLICENSE -text
+machine/architecture-hardening/h12-scheduler-evidence/** -text -whitespace
+# Preserve the exact new source bytes bound by the offline scheduler receipt.
+crates/semantic-scheduler-prototype/** -text
+docs/architecture/semantic-scheduler.md -text
+crates/semantic-scheduler-prototype/examples/boundaries.rs whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+crates/semantic-scheduler-prototype/mechanisms-research.json whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+machine/architecture-hardening/h8-section-packet-cache-evidence/** -text -whitespace
+tools/section-packet-cache-experiment/** -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+docs/research/section-packet-cache-experiment.md -text
+machine/architecture-hardening/h10-worldgen-fusion-evidence/** -text -whitespace
+tools/worldgen-fusion-experiment/** -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+docs/research/worldgen-fusion.md -text
+machine/architecture-hardening/h23-plan-v2-evidence/** -text -whitespace
+tools/writer-plan-v2-tests/** -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+tools/live-capture/generate_live_writer_plan.py -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+tools/bridge/src/com/rustcraft/coremod/LiveWriterPlan.java -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+tools/bridge/src/com/rustcraft/coremod/LiveHookSupport.java -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+machine/architecture-hardening/h22-5-storage-evidence/** -text -whitespace
+tools/offline-storage-experiment/** -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+tools/offline-storage-experiment/third-party/** -text -whitespace
+docs/research/offline-storage-experiment.md -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+machine/architecture-hardening/h14-packet-buffer-evidence/** -text -whitespace
+tools/packet-buffer-pipeline-experiment/** -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+tools/packet-buffer-pipeline-experiment/third-party/** -text -whitespace
+machine/architecture-hardening/h23-fresh-observation-evidence/** -text -whitespace
+tools/fresh-forge-observer/** -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+docs/engineering/fresh-forge-observer.md -text
+machine/architecture-hardening/h23-placement-evidence/** -text -whitespace
+tools/writer-placement-v2/** -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+docs/engineering/v2-writer-placement.md -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+machine/architecture-hardening/h15-observability-evidence/** -text -whitespace
+crates/native-observability/** -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+tools/observability/** -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+docs/architecture/observability.md -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+machine/architecture-hardening/h13-light-collision-evidence/** -text -whitespace
+tools/lighting-collision-experiment/** -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+tools/lighting-collision-experiment/third-party/** -text -whitespace
+machine/architecture-hardening/h23-hotspot-verification-evidence/** -text -whitespace
+tools/hotspot-verification-proof/** -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+docs/engineering/hotspot-verification-proof.md -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+machine/architecture-hardening/h17-allocator-evidence/** -text -whitespace
+tools/allocator-experiment/** -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+tools/allocator-experiment/licenses/** -text -whitespace
+docs/research/allocator-experiment.md -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
