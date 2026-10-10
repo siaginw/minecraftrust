@@ -526,9 +526,13 @@ def main():
                          "keep running — labeled ablation, not a valid "
                          "full-stack performance config")
     ap.add_argument("--ablate-light", action="store_true",
-                    help="OPT-FS-002 diagnostic: light experiment off "
-                         "(vanilla/Phosphor owns all light; attribution "
-                         "ablation, labeled)")
+                    help="OPT-FS-002/004 diagnostic: sets lightMode=SHADOW "
+                         "— tests OWNERSHIP ONLY (Java owns light) while "
+                         "the shadow comparator keeps shadow-computing "
+                         "every job (~2k jobs/30k cells per run); NOT a "
+                         "light-machinery-off switch (no such flag exists; "
+                         "omitting lightExperiment entirely would also skip "
+                         "light-transformer registration)")
     ap.add_argument("--ablate-region-write", action="store_true",
                     help="OPT-FS-002 diagnostic: vanilla region writes "
                          "(attribution ablation, labeled)")

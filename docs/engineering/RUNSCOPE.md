@@ -30,6 +30,10 @@ python tools/runscope/rustcraft_runscope.py waitfor --file server.log \
 # First lifecycle divergence between two boots (the §11 hunt, one command):
 python tools/runscope/rustcraft_runscope.py bootdiff <logA> <logB>
 
+# server.log contains binary content (mod banners/class dumps): plain grep
+# SILENTLY misses matches — always `grep -a` (the FS-003 bypass-proof line
+# was "missing" for three tool calls until -a found it)
+
 # Environment check BEFORE a boot (heavy builds / port / disk):
 python tools/runscope/rustcraft_runscope.py preflight --port 25565
 
