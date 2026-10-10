@@ -40,6 +40,7 @@ public final class ChunkMutationTracker {
     public static final AtomicLong MIRROR_SID_UNRESOLVED = new AtomicLong();
     public static final AtomicLong MIRROR_NOOP_OR_UNREGISTERED = new AtomicLong();
     private static volatile java.lang.reflect.Method POS_X, POS_Z;
+    static volatile java.lang.reflect.Method POS_Y; // OPT-FS-002 test-visible
     public static final AtomicLong HOOK_LIGHT_SETS = new AtomicLong();
     public static final AtomicLong HOOK_STORAGE_REPLACED = new AtomicLong();
     public static final AtomicLong HOOK_BIOME_CHANGED = new AtomicLong();
@@ -464,9 +465,16 @@ public final class ChunkMutationTracker {
 
     private static int blockPosY(Object pos) {
         try {
-            Method m = pos.getClass().getMethod("func_177956_o");
-            m.setAccessible(true);
-            return (Integer) m.invoke(pos);
+            // OPT-FS-002: this was a PER-CALL getMethod+setAccessible (the
+            // OPT-SYNC-006-C1 bug class) on one of the hottest hooks in the
+            // system (onLightSet — ~34k calls/run; setAccessible's security
+            // path allocates and shows as intern/getCallerClass windows in
+            // the allocation sampler). Cache like POS_X/POS_Z.
+            if (POS_Y == null) {
+                POS_Y = pos.getClass().getMethod("func_177956_o");
+                POS_Y.setAccessible(true);
+            }
+            return (Integer) POS_Y.invoke(pos);
         } catch (Throwable t) {
             return 0;
         }

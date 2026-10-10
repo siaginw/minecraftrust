@@ -166,3 +166,25 @@ regression is NOT closed**: after the fix the rust arm still runs ~2–3×
 java's streaming MSPT; the next measured bucket is LaunchClassLoader
 transformer churn (~20 GB/run) → OPT-FS-002. Receipt:
 `docs/research/OPT-FS-001-receipt.json`.
+
+## Follow-up 2 (2026-10-09, OPT-FS-002): transformer premise refuted; authorities exonerated of the allocation storm; one local fix below noise
+
+- The FS-002 lead (defineClass/ZipFile/ASM ~20GB) is NORMAL Forge+mod
+  classloading: the clean-Java arm allocates ~70GB at boot too;
+  LaunchWrapper transforms each class exactly once; ~121 classes load
+  during streaming. RustCraft's boot delta is +15–18GB (extra passes +
+  agent + registration) — a cold-start cost, already labeled separately.
+- Authority ablations (diagnostic, labeled): region-write OFF → streaming
+  19.5GB; light SHADOW → 22.1GB (vs 21.4GB full). Neither composed
+  authority is the ~20GB streaming allocation storm. The mutations-phase
+  MSPT gap IS attributed to the light composition (SHADOW 6.8ms ≈ Java
+  4.8–6.3 vs 8.2–11.7 ON; CPU-bound, not allocation-bound).
+- One real defect fixed (blockPosY per-call reflection on the hottest
+  hook — 17.4× locally, ~4.7ms/run) — kept, but fs-fix3/4 vs fs-fix1/2
+  show NO measurable end-to-end change (before-spread 12.2–21.1 swamps
+  it). Honest verdict: the fix is correct and cheap, not a benchmark win.
+- Remaining gap vs clean Java unchanged (~2–3× streaming MSPT). Next
+  bounded experiment: staged build with the always-injected writer-gate
+  brackets + observation capture property-disabled, to name or eliminate
+  the integration layer as the streaming allocation source.
+  Receipt: `docs/research/OPT-FS-002-receipt.json`.

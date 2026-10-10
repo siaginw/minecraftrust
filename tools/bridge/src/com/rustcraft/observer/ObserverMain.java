@@ -101,6 +101,7 @@ public final class ObserverMain {
                 Thread server = null;
                 long prev = 0;
                 boolean prevValid = false;
+                long beat = 0;
                 while (true) {
                     try {
                         if (server == null || !server.isAlive()) {
@@ -129,15 +130,25 @@ public final class ObserverMain {
                                     }
                                 }
                                 String key = top + " || " + rust;
+                                // [bytes, count, firstMs, lastMs] — the
+                                // analyzer phase-joins by wall clock
                                 long[] agg = allocSites.computeIfAbsent(
-                                        key, k -> new long[2]);
-                                agg[0] += d;
-                                agg[1]++;
+                                        key, k -> new long[4]);
+                                long now = System.currentTimeMillis();
+                                synchronized (agg) {
+                                    agg[0] += d;
+                                    agg[1]++;
+                                    if (agg[2] == 0) agg[2] = now;
+                                    agg[3] = now;
+                                }
                             }
                             prev = a;
                             prevValid = true;
                         }
                         Thread.sleep(1);
+                        if ((++beat & 8191) == 0) {
+                            dumpSites(gameDir, allocSites, false);
+                        }
                     } catch (InterruptedException e) {
                         return;
                     } catch (Throwable t) {
@@ -149,31 +160,11 @@ public final class ObserverMain {
             }, "rustcraft-observer-allocdiag");
             allocSamplerThread.setDaemon(true);
             allocSamplerThread.start();
-            Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-                try {
-                    java.util.List<String> lines = new java.util.ArrayList<>();
-                    long tot = 0;
-                    for (java.util.Map.Entry<String, long[]> e
-                            : allocSites.entrySet()) {
-                        lines.add(e.getValue()[0] + "\t" + e.getValue()[1]
-                                + "\t" + e.getKey());
-                        tot += e.getValue()[0];
-                    }
-                    java.util.Collections.sort(lines,
-                            (x, y) -> Long.compare(
-                                    Long.parseLong(y.split("\t")[0]),
-                                    Long.parseLong(x.split("\t")[0])));
-                    try (PrintWriter pw = new PrintWriter(new File(
-                            gameDir, "observer-alloc-sites.txt"), "UTF-8")) {
-                        pw.println("# total attributed bytes: " + tot
-                                + " (1ms delta sampling; attribution is "
-                                + "statistical)");
-                        for (String l : lines) {
-                            pw.println(l);
-                        }
-                    }
-                } catch (Throwable ignore) { }
-            }, "rustcraft-observer-allocdiag-dump"));
+            System.out.println("[observer] alloc sampler ACTIVE"
+                    + " (1ms delta sampling; diagnostic run)");
+            Runtime.getRuntime().addShutdownHook(new Thread(() ->
+                    dumpSites(gameDir, allocSites, true),
+                    "rustcraft-observer-allocdiag-dump"));
         }
 
         Object server = null;
@@ -288,6 +279,54 @@ public final class ObserverMain {
 
     private static String j(long t, String kind, String fields) {
         return "{\"t\":" + t + ",\"kind\":\"" + kind + "\"," + fields + "}";
+    }
+
+    /** dump the allocation-site aggregation; called periodically from the
+     * sampler loop (overwrite) and once at shutdown — the shutdown-hook
+     * path proved unreliable (an exception in the Server Shutdown Thread
+     * silently killed the dump in fs-attr3/fs-attr4), so the periodic
+     * dump is the primary and the hook the fallback. Failures print to
+     * stderr, never swallowed. */
+    private static void dumpSites(File gameDir,
+            java.util.concurrent.ConcurrentHashMap<String, long[]> sites,
+            boolean finalDump) {
+        try {
+            java.util.List<long[]> vals = new java.util.ArrayList<>();
+            java.util.List<String> keys = new java.util.ArrayList<>();
+            long tot = 0;
+            for (java.util.Map.Entry<String, long[]> e : sites.entrySet()) {
+                keys.add(e.getKey());
+                vals.add(e.getValue());
+                tot += e.getValue()[0];
+            }
+            Integer[] order = new Integer[keys.size()];
+            for (int i = 0; i < order.length; i++) order[i] = i;
+            final java.util.List<long[]> v = vals;
+            java.util.Arrays.sort(order, (x, y) ->
+                    Long.compare(v.get(y)[0], v.get(x)[0]));
+            java.io.File f = new java.io.File(gameDir,
+                    "observer-alloc-sites.txt");
+            java.io.File tmp = new java.io.File(gameDir,
+                    "observer-alloc-sites.tmp");
+            try (PrintWriter pw = new PrintWriter(tmp, "UTF-8")) {
+                pw.println("# total attributed bytes: " + tot
+                        + " (1ms delta sampling; attribution is statistical"
+                        + (finalDump ? "; final" : "; periodic") + ")");
+                for (int idx : order) {
+                    long[] a = vals.get(idx);
+                    pw.println(a[0] + "\t" + a[1] + "\t" + a[2] + "\t"
+                            + a[3] + "\t" + keys.get(idx));
+                }
+            }
+            if (!tmp.renameTo(f)) {
+                f.delete();
+                if (!tmp.renameTo(f)) {
+                    System.err.println("[observer] alloc-sites rename failed");
+                }
+            }
+        } catch (Throwable t) {
+            System.err.println("[observer] alloc-sites dump failed: " + t);
+        }
     }
 
     private static String escape(String s) {

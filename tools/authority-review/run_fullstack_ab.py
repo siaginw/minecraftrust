@@ -63,6 +63,10 @@ ROUTE_DWELL_S = 1.6
 # set by --profile-jfr (module-level so run_arm sees it)
 PROFILE_JFR = False
 OBSERVER_PROPS = None
+# OPT-FS-002 §9 diagnostic ablation: OFF = vanilla region writes (labeled
+# attribution run — NOT an equivalent-configuration performance result)
+REGION_WRITE_MODE = "ON_EXPERIMENTAL"
+LIGHT_MODE = "ON_EXPERIMENTAL"
 
 
 def sha16(p: Path) -> str:
@@ -159,13 +163,13 @@ def build_argv(server: Path, out_dir: Path, arm: str, port: int,
             # audit-baseline full-stack composition (packet/compression
             # authorities deliberately OFF — labeled subset)
             "-Drustcraft.regionWriteExperiment=true",
-            "-Drustcraft.regionWriteMode=ON_EXPERIMENTAL",
+            "-Drustcraft.regionWriteMode=" + REGION_WRITE_MODE,
             "-Drustcraft.regionWriteMirror=" + str(out_dir / "region-mirror"),
             "-Drustcraft.regionReadExperiment=true",
             "-Drustcraft.regionReadMode=ON_EXPERIMENTAL",
             "-Drustcraft.regionMetricsFile=" + str(out_dir / "region-metrics.txt"),
             "-Drustcraft.lightExperiment=true",
-            "-Drustcraft.lightMode=ON_EXPERIMENTAL",
+            "-Drustcraft.lightMode=" + LIGHT_MODE,
             "-Drustcraft.lightCompareFlag=" + str(out_dir / "light-compare.flag"),
             "-Drustcraft.worldRegistry=true",
             "-Dminecraftrust.m4.coherency=true",
@@ -514,6 +518,13 @@ def main():
     ap.add_argument("--port", type=int, required=True)
     ap.add_argument("--output", type=Path, required=True)
     ap.add_argument("--username", default=None)
+    ap.add_argument("--ablate-light", action="store_true",
+                    help="OPT-FS-002 diagnostic: light experiment off "
+                         "(vanilla/Phosphor owns all light; attribution "
+                         "ablation, labeled)")
+    ap.add_argument("--ablate-region-write", action="store_true",
+                    help="OPT-FS-002 diagnostic: vanilla region writes "
+                         "(attribution ablation, labeled)")
     ap.add_argument("--jvm-prop", action="append", default=None,
                     help="Extra -D for the server JVM (repeatable; same "
                          "flag name as run_region_write_campaign)")
@@ -526,7 +537,11 @@ def main():
                          "(allocation+CPU events; overhead reported; NOT "
                          "a performance-result run)")
     args = ap.parse_args()
-    global PROFILE_JFR, OBSERVER_PROPS
+    global PROFILE_JFR, OBSERVER_PROPS, REGION_WRITE_MODE
+    if args.ablate_region_write:
+        REGION_WRITE_MODE = "OFF"
+    if args.ablate_light:
+        LIGHT_MODE = "SHADOW"
     PROFILE_JFR = args.profile_jfr
     OBSERVER_PROPS = list(args.observer_prop or []) +         list(args.jvm_prop or [])
     username = args.username or f"FS{args.arm.upper()[:2]}"

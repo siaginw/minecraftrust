@@ -152,3 +152,40 @@ Reuses the OPT-SYNC-005 survey; only the four implementation-relevant primaries 
 4. JNI boundary: 005 survey (SO/IBM/arXiv/Wix) — per-call floor 10ns–µs; refresh/readback crossings carry proportional work; not the target here.
 
 No new dependencies. C1 is local-only; C2 is local-only (java.lang.invoke, JDK8-bundled).
+
+## OPT-FS-002 — transformer/classload attribution + Pumpkin reference (researched 2026-10-09)
+
+Upstream facts (primary sources):
+- LaunchWrapper LegacyLauncher @ a4801b7 (LaunchClassLoader.java): transformers run
+  EXACTLY ONCE per class (transformed Class cached in cachedClasses keyed by
+  transformedName); raw bytes cached (resourceCache + negativeResourceCache);
+  classLoaderExceptions delegate to parent, transformerExceptions skip
+  transformation. No repeated-transform or repeated-defineClass defect is
+  available to fix; exclusions change which transformers execute (different
+  justification than a local fast path).
+- Pumpkin (tagged release 0.2.0+26.3-26.51, 20 Sep — latest; distinct from
+  Nightly/Canary rolling builds; prior review pinned commit 204a94e):
+  - PR #2335 (merged 2026-07-11, output-preserving, fixed-seed parity tests):
+    (a) memoize structure placements keyed by start chunk + seed — "context
+    only built on a cache miss"; (b) light-propagator maps aliased to FxHash;
+    (c) REMOVE a hashed shadow cache + batched write buffer over light
+    storage — storage array is the single source of truth (65→22ms lighting
+    stage; 2-3.3× on gen benchmarks).
+  - packet_encoder.rs @ 204a94e: persistent scratch Vecs (clear + capacity
+    hint, never per-packet alloc), persistent flate2 Compress reused via
+    reset() (rebuilt only on level change), below-threshold packets skip
+    zlib entirely, fixed stack array for VarInt headers.
+  Applicability: the patterns (memoize stable inputs; make storage the single
+  source of truth instead of per-event shadow bookkeeping; reuse per-caller
+  scratch; skip irrelevant work by predicate) map onto Java-side hot paths.
+  Pumpkin itself is a from-scratch engine with no Forge/mod compatibility
+  constraint — no crate or code is importable for a LaunchWrapper/Forge
+  transformer problem; no Rust dependency is warranted for a Java-path cost.
+
+Measured reality that reframed the target (receipt OPT-FS-002): the Java arm
+allocates ~70GB at boot too — the defineClass/ZipFile/ASM bucket is NORMAL
+Forge+mod classloading (51,192 classes at boot; only ~121 classes load during
+streaming). RustCraft's boot delta is +15-18GB (extra transformer passes +
+agent + registration). The remaining rust-specific regression is the
+STREAMING-phase server-thread allocation delta (~20GB vs 1.2GB) — attribution
+in progress via the phase-aware sampler.

@@ -505,8 +505,33 @@ public final class LiveWriterHooks {
                     + " -> " + throwable);
         }
         diagnoseTokenMismatch(scope.token, scope.token.operation);
-        session.gate.endWrite(scope.token, throwable);
+        try {
+            session.gate.endWrite(scope.token, throwable);
+        } catch (RuntimeException violation) {
+            // OPT-FS-001 follow-up: endWrite's imbalance check IS the
+            // enforcement (disqualify + throw, budget-independent) — but it
+            // fires BEFORE checkFlip, so with the routine introspection
+            // budgeted out the first REAL mismatch would leave no token-
+            // stack evidence. Dump once here, then rethrow unchanged.
+            dumpEndWriteViolation(scope.token, violation);
+            throw violation;
+        }
         checkFlip("writerEnd " + scope.token.operation);
+    }
+
+    /** one-shot, zero-cost on the success path: the token stack at the
+     * first REAL endWrite violation (complements the budgeted pre-check) */
+    private static void dumpEndWriteViolation(LiveWriterGate.WriteToken token,
+                                              RuntimeException violation) {
+        if (disqualificationDumped) return;
+        disqualificationDumped = true;
+        try {
+            System.err.println("[live-capture] endWrite VIOLATION op="
+                    + token.operation + ": " + violation);
+            for (StackTraceElement e : Thread.currentThread().getStackTrace()) {
+                System.err.println("  at " + e);
+            }
+        } catch (Throwable ignore) { }
     }
 
     /**

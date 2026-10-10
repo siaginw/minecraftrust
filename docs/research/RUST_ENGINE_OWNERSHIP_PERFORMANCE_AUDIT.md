@@ -214,3 +214,20 @@ has a named next bucket: LaunchClassLoader transformer churn (~20GB/run) —
 OPT-FS-002. Instrumentation retained: fsAlloc brackets in LightAuthorityHook
 (aggregate counters), observer allocSampler (`-Drustcraft.observer.
 allocSampler=true`, diagnostic only), `analyze_fs_profile.py`.
+
+## OPT-FS-002 (2026-10-09) — CLOSED: premise refuted, authorities exonerated, local fix below noise
+
+Receipt `docs/research/OPT-FS-002-receipt.json`. The FS-002 lead
+(defineClass/ASM ~20GB) is normal Forge classloading (java arm ~70GB at
+boot too; transform-once; ~121 streaming classes). Authority ablations:
+region-write OFF 19.5GB / light SHADOW 22.1GB vs 21.4GB full — neither is
+the streaming allocation storm; mutations MSPT attributed to the light
+composition (SHADOW 6.8ms ≈ java). blockPosY per-call reflection fixed
+(17.4× local) — no measurable end-to-end effect (before-spread swamps
+4.7ms/run); correctness identical. FS-001's budget-verification gap
+closed (dumpEndWriteViolation one-shot; enforcement confirmed
+budget-independent). Gap vs clean Java unchanged (~2–3× streaming).
+Next: OPT-FS-003 — the always-injected hook/gate/observation layer
+(staged property-disable diagnostic). Instrument caveat recorded: the 1ms
+sampler captures ~10-15% of streaming bytes (bursty alloc + safepoint
+bias).

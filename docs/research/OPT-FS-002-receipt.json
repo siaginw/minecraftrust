@@ -1,0 +1,56 @@
+{
+ "attribution": {
+  "ablations": {
+   "conclusion": "the ~20GB streaming allocation delta persists under every authority ablation; remaining rust-specific surface = the ALWAYS-INJECTED hook/gate/observation layer (writer brackets, session capture, world-registry/sync/mirrors stayed on in all ablations) + the ablations' own hooks",
+   "fs-ablate1_region_write_OFF": "streaming 19.5GB \u2014 write authority ~1.8GB (~9%), EXONERATED",
+   "fs-ablate2_light_SHADOW": "streaming 22.1GB \u2014 light authority EXONERATED for allocation",
+   "fs-attr6_full_stack": "streaming 21.4GB alloc (sampler on)",
+   "mutations_phase_mspt": "ATTRIBUTED to light composition: light SHADOW 6.8ms ~= clean java 4.8-6.3 vs 8.2-11.7 ON (CPU-bound: zero-stage jobs + mirrors per setblock), while mutations ALLOC is light-independent (~6.3GB either way)"
+  },
+  "fs002_original_premise": "REFUTED \u2014 the ~20GB defineClass/ZipFile/ASM bucket is NORMAL Forge+mod classloading: the java arm allocates ~70GB at boot too; LaunchWrapper runs transformers EXACTLY ONCE per class (cachedClasses; resourceCache; source a4801b7); only ~121 classes load during streaming (JFR ClassLoadingStatistics); rust boot delta is +15-18GB (extra passes+agent+registration) \u2014 a boot cost, not the streaming storm",
+  "instrument_limits": "the 1ms delta+stack sampler captures only ~10-15% of streaming-phase bytes (bursty allocation + safepoint-sample bias; capture windows show mod/vanilla frames with no rustcraft frames); JFR TLAB sampling inert (standing AGENTS rule); GC pauses ~equal across arms (~30s/phase both \u2014 not the delta); srv_cpu 2x java under streaming"
+ },
+ "clean_java_gap": "unchanged: streaming 12.2-21.1 vs java 6.35-7.53 (~2-3x); mutations ON 8.2-11.7 vs java 4.8-6.3 (light-composition CPU); boot +30-70s",
+ "fix": "ChunkMutationTracker.blockPosY: PER-CALL getMethod+setAccessible on the hottest hook (onLightSet ~34k/run; the OPT-SYNC-006-C1 bug class; the setAccessible security path shows as intern/getCallerClass windows) \u2014 now cached like POS_X/POS_Z. BlockPosYRegression (build gate): 146ns -> 8ns per call (17.4x), behavioral equality proven",
+ "fs001_followup_check": {
+  "enforcement": "VERIFIED budget-independent: LiveWriterGate.endWrite performs its own imbalance check (stack.peek()!=token -> disqualify(HOOK_PROTOCOL_BROKEN) + throw) \u2014 unaffected by DIAGNOSE_BUDGET",
+  "evidence_gap_closed": "endWrite throws BEFORE checkFlip, so a first REAL mismatch after budget exhaustion would have left no token-stack evidence; added one-shot dumpEndWriteViolation (zero cost on success) that dumps then rethrows unchanged"
+ },
+ "measurement": {
+  "after": [
+   "fs-fix3",
+   "fs-fix4 (this build: blockPosY + FS-001 evidence gap + observer fixes)"
+  ],
+  "before": [
+   "fs-fix1",
+   "fs-fix2 (build c28f12c-era)"
+  ],
+  "mutations": "mean 11.7/8.2 -> 9.9/11.2 (overlapping); alloc 6576/6057 -> 5585/5583MB",
+  "streaming": "mean MSPT before 21.1/12.2 -> after 13.0/12.9; alloc 21085/20307 -> 18748/19752MB (-3-4%); proc cpu 351/311 -> 313/309s",
+  "verdict": "NO MEASURABLE END-TO-END IMPROVEMENT \u2014 the before-spread (12.2-21.1) swamps the projected 4.7ms/run; the fix is kept (correct, precedented, locally 17.4x) and honestly reported as below measurement noise. Correctness identical: mism=0, dvdiv=0, 67/67 confirms, 169 packets, light/write counters in family"
+ },
+ "next_action": "ONE bounded experiment: a staged diagnostic build with the always-injected writer-gate brackets + observation capture DISABLED by property (hooks return original bytes path / no session), measuring streaming alloc \u2014 either names the integration layer as the storm or eliminates it; if eliminated too, the storm is mod-behavior-amplified-by-presence (e.g., relight volume differences) and needs a java-arm sampler control run to subtract the mod baseline",
+ "opt_id": "OPT-FS-002",
+ "research": {
+  "applicability_note": "Pumpkin is a from-scratch engine without Forge/mod compatibility constraints \u2014 its numbers do not predict this workload (standing rule)",
+  "launchwrapper": "LegacyLauncher a4801b7: transform-once + caches; exclusions would change which transformers execute (not justified)",
+  "pumpkin": "tagged release 0.2.0+26.3-26.51 (20 Sep; distinct from Nightly/Canary); PR #2335 (merged 2026-07-11): memoize-by-stable-input, FxHash aliasing, REMOVE shadow cache over storage (single source of truth); packet_encoder.rs @204a94e: persistent scratch Vecs (clear+capacity-hint), compressor reset() reuse, below-threshold skip, stack-array VarInt. Patterns applicable to Java hot paths; NO crate/code importable for a Forge transformer problem; no Rust dependency warranted"
+ },
+ "researched_at": "2026-10-09",
+ "revision": {
+  "end": "this commit",
+  "start": "f540ac9 (reference c28f12c)"
+ },
+ "runs": {
+  "fs-ablate1": "region-write OFF ablation",
+  "fs-ablate2": "light SHADOW ablation",
+  "fs-attr3": "tooling-fail boot (dump hook silent)",
+  "fs-attr4": "sampler active, dump failed AIOOBE (long[2] creator missed by an edit)",
+  "fs-attr5": "dump failed same bug; periodic dump wired",
+  "fs-attr6": "GOOD phase-joined attribution (starved capture; mod/vanilla frames)",
+  "fs-fix3": "after-fix confirmation 1",
+  "fs-fix4": "after-fix confirmation 2"
+ },
+ "status": "ATTRIBUTED_REFUTED_AND_LOCAL_FIX_NOT_MEASURABLE",
+ "task": "attribute the remaining full-stack allocation/MSPT regression (post-FS-001); Pumpkin-informed bounded attempt"
+}

@@ -494,6 +494,28 @@ def main():
     if res.returncode != 0:
         print("SYNCLEASE REGRESSION FAILED:\n" + res.stderr, file=sys.stderr)
         return res.returncode if res.returncode > 0 else 1
+
+    # OPT-FS-002 §4: blockPosY caching regression + offline cost quantifier
+    bpy_src = ROOT / "tools" / "bridge" / "test" / "com" / "rustcraft" \
+        / "bridge" / "BlockPosYRegression.java"
+    res = subprocess.run(
+        [str(JAVAC), "-encoding", "UTF-8", "-source", "8", "-target", "8",
+         "-nowarn", "-cp", str(BUILD_DIR), "-d", str(test_build),
+         str(bpy_src)],
+        capture_output=True, text=True)
+    if res.returncode != 0:
+        print("BLOCKPOSY REGRESSION COMPILE ERROR:\n" + res.stderr,
+              file=sys.stderr)
+        return res.returncode
+    res = subprocess.run(
+        [str(JDK8 / "bin" / "java.exe"), "-cp",
+         str(test_build) + ";" + str(BUILD_DIR),
+         "com.rustcraft.bridge.BlockPosYRegression"],
+        capture_output=True, text=True)
+    sys.stdout.write(res.stdout)
+    if res.returncode != 0:
+        print("BLOCKPOSY REGRESSION FAILED:\n" + res.stderr, file=sys.stderr)
+        return res.returncode if res.returncode > 0 else 1
     return 0
 
 
