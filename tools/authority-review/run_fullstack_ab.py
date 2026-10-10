@@ -63,6 +63,7 @@ ROUTE_DWELL_S = 1.6
 # set by --profile-jfr (module-level so run_arm sees it)
 PROFILE_JFR = False
 OBSERVER_PROPS = None
+MINIMAL_AUTHORITIES = False
 # OPT-FS-002 §9 diagnostic ablation: OFF = vanilla region writes (labeled
 # attribution run — NOT an equivalent-configuration performance result)
 REGION_WRITE_MODE = "ON_EXPERIMENTAL"
@@ -149,37 +150,52 @@ def build_argv(server: Path, out_dir: Path, arm: str, port: int,
     tweakers = []
     if arm == "rust":
         argv += ["-javaagent:" + str(server / "rustcraft-campaign.jar")]
-        argv += [
-            "-Dfml.queryResult=confirm",
-            "-Drustcraft.liveWriterDiagnostic=true",
-            f"-Drustcraft.session.processId=fullstack-{arm}-{port}",
-            f"-Drustcraft.session.transformationSessionId=fs-{arm}-{port}",
-            "-Drustcraft.srgJar=" + str(SRG_JAR),
-            "-Drustcraft.observationDir=" + str(server / "observation"),
-            "-Drustcraft.liveShadowScope=OVERWORLD_PER_CHUNK",
-            "-Drustcraft.liveShadowDll=" + str(server / "rustcraft_ffi.dll"),
-            "-Drustcraft.liveShadowJournal=" + str(out_dir / "shadow-journal.jsonl"),
-            "-Drustcraft.packetAuthorityReceiptOut="
-            + str(out_dir / "packet-authority-receipt.json"),
-            "-Drustcraft.profile=FORGE_2846_FTB_REVELATION_3_4_0_SERVER_"
-            "TRANSFORMED_OFFLINE_V1",
-            # audit-baseline full-stack composition (packet/compression
-            # authorities deliberately OFF — labeled subset)
-            "-Drustcraft.regionWriteExperiment=true",
-            "-Drustcraft.regionWriteMode=" + REGION_WRITE_MODE,
-            "-Drustcraft.regionWriteMirror=" + str(out_dir / "region-mirror"),
-            "-Drustcraft.regionReadExperiment=true",
-            "-Drustcraft.regionReadMode=ON_EXPERIMENTAL",
-            "-Drustcraft.regionMetricsFile=" + str(out_dir / "region-metrics.txt"),
-            "-Drustcraft.lightExperiment=true",
-            "-Drustcraft.lightMode=" + LIGHT_MODE,
-            "-Drustcraft.lightCompareFlag=" + str(out_dir / "light-compare.flag"),
-            "-Drustcraft.worldRegistry=true",
-            "-Dminecraftrust.m4.coherency=true",
-            "-Drustcraft.chunkStateAuthorityExperiment=true",
-            "-Drustcraft.chunkStateAuthorityCap=2000",
-            "-DRUSTCRAFT_ZS_DEBUG=1",
-        ]
+        if MINIMAL_AUTHORITIES:
+            argv += ["-Dfml.queryResult=confirm",
+                     "-Drustcraft.liveWriterDiagnostic=true",
+                     f"-Drustcraft.session.processId=m1-{port}",
+                     f"-Drustcraft.session.transformationSessionId=m1-{port}",
+                     "-Drustcraft.srgJar=" + str(SRG_JAR),
+                     "-Drustcraft.observationDir=" + str(server / "observation"),
+                     "-Drustcraft.liveShadowScope=OVERWORLD_PER_CHUNK",
+                     "-Drustcraft.liveShadowDll=" + str(server / "rustcraft_ffi.dll"),
+                     "-Drustcraft.liveShadowJournal=" + str(out_dir / "shadow-journal.jsonl"),
+                     "-Drustcraft.profile=FORGE_2846_FTB_REVELATION_3_4_0_SERVER_"
+                     "TRANSFORMED_OFFLINE_V1",
+                "-Drustcraft.packetAuthorityReceiptOut="
+                + str(out_dir / "packet-authority-receipt.json")]
+        else:
+            argv += [
+                "-Dfml.queryResult=confirm",
+                "-Drustcraft.liveWriterDiagnostic=true",
+                f"-Drustcraft.session.processId=fullstack-{arm}-{port}",
+                f"-Drustcraft.session.transformationSessionId=fs-{arm}-{port}",
+                "-Drustcraft.srgJar=" + str(SRG_JAR),
+                "-Drustcraft.observationDir=" + str(server / "observation"),
+                "-Drustcraft.liveShadowScope=OVERWORLD_PER_CHUNK",
+                "-Drustcraft.liveShadowDll=" + str(server / "rustcraft_ffi.dll"),
+                "-Drustcraft.liveShadowJournal=" + str(out_dir / "shadow-journal.jsonl"),
+                "-Drustcraft.packetAuthorityReceiptOut="
+                + str(out_dir / "packet-authority-receipt.json"),
+                "-Drustcraft.profile=FORGE_2846_FTB_REVELATION_3_4_0_SERVER_"
+                "TRANSFORMED_OFFLINE_V1",
+                # audit-baseline full-stack composition (packet/compression
+                # authorities deliberately OFF — labeled subset)
+                "-Drustcraft.regionWriteExperiment=true",
+                "-Drustcraft.regionWriteMode=" + REGION_WRITE_MODE,
+                "-Drustcraft.regionWriteMirror=" + str(out_dir / "region-mirror"),
+                "-Drustcraft.regionReadExperiment=true",
+                "-Drustcraft.regionReadMode=ON_EXPERIMENTAL",
+                "-Drustcraft.regionMetricsFile=" + str(out_dir / "region-metrics.txt"),
+                "-Drustcraft.lightExperiment=true",
+                "-Drustcraft.lightMode=" + LIGHT_MODE,
+                "-Drustcraft.lightCompareFlag=" + str(out_dir / "light-compare.flag"),
+                "-Drustcraft.worldRegistry=true",
+                "-Dminecraftrust.m4.coherency=true",
+                "-Drustcraft.chunkStateAuthorityExperiment=true",
+                "-Drustcraft.chunkStateAuthorityCap=2000",
+                "-DRUSTCRAFT_ZS_DEBUG=1",
+            ]
         tweakers.append(RUSTCRAFT_TWEAKER)
     else:
         argv += ["-Dfml.queryResult=confirm"]
@@ -521,6 +537,14 @@ def main():
     ap.add_argument("--port", type=int, required=True)
     ap.add_argument("--output", type=Path, required=True)
     ap.add_argument("--username", default=None)
+    ap.add_argument("--minimal-authorities", action="store_true",
+                    help="Drop ALL authority properties (light/regionRW/"
+                         "regionRead/worldRegistry/chunkState) — the "
+                         "qualified-capture shape: the writer pre-hook "
+                         "pins were derived from a discovery chain with "
+                         "NO rustcraft transformers, so any authority "
+                         "transformer registered before the writers "
+                         "changes the bytes and fails identity by design")
     ap.add_argument("--m1-packets", action="store_true",
                     help="M1 (rewrite ladder): bounded Rust packet authority "
                          "+ True Direct Netty emission (directNettyExperiment "
@@ -557,7 +581,8 @@ def main():
                          "a performance-result run)")
     args = ap.parse_args()
     global PROFILE_JFR, OBSERVER_PROPS, REGION_WRITE_MODE
-    global JVM_PROPS_EXTRA, LIGHT_MODE
+    global JVM_PROPS_EXTRA, LIGHT_MODE, MINIMAL_AUTHORITIES
+    MINIMAL_AUTHORITIES = args.minimal_authorities
     if args.ablate_region_write:
         REGION_WRITE_MODE = "OFF"
     if args.ablate_light:

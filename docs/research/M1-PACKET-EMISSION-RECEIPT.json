@@ -1,36 +1,35 @@
 {
- "budget": "DECLARED 4 measured boots; ran 5 (2 valid composed baselines + 2 M1 boots whose authority never engaged + 1 decisive isolation boot) \u2014 overage acknowledged per the tooling-debug rule",
- "date": "2026-10-10",
- "milestone": "M1 (rewrite ladder): Rust-owned packet emission under the composed configuration",
- "next_bounded_task": "M1-FIX: restore writer-plan admission for the chunk-loading classes (AnvilChunkLoader/ChunkProviderServer) \u2014 diagnose why LiveChunkPublicationTransformer non-admits them in the current tree (plan identity? bytecode-pattern drift after the True-Direct closure? CHUNK_IDENTITY_MISMATCH source), re-run ONE engagement-check boot (gate: RUST_SELECTED>0 + RETAINED_FAST_PATH>0), then the 2-pair M1 measurement. The measurement design, flags (--m1-packets), witness gates, and 2 valid baseline boots are all in place.",
- "repair": {
-  "negative_case_preserved": "verifyPreHookIdentity itself IS the negative case: a genuinely wrong/stale identity must (and does) still reject \u2014 the observed behavior is the guard working correctly against a stale profile, not a guard failure",
-  "procedure": "RE-QUALIFICATION (the designed path, tools/qualification-v2/qualify_runtime.py): two discovery launches (writers OFF, facts across relaunches) + one self-authorizing qualifying launch \u2192 fresh profile \u2192 generate_live_writer_plan.py \u2192 rebuild jar \u2192 ONE engagement-check boot (gate: RUST_SELECTED>0 AND RETAINED_FAST_PATH>0 AND bindings created) \u2192 then the staged 2-pair M1 measurement (flags/baselines already in place). Budget: 3 qualification boots + 1 engagement + 4 measured.",
-  "rejected_alternatives": [
-   "hand-editing the profile's class hashes: the profile is a QUALIFIED artifact; hand-pinned hashes would assert identity never qualified \u2014 weakens the identity model the design exists to enforce",
-   "relaxing verifyPreHookIdentity to structural fingerprints only: same weakening (identity check is load-bearing for session-bound admission)"
-  ]
+ "compatibility_boundary": {
+  "classification": {
+   "adapter_needed": "NONE new for this subsystem; the writer-scope admission machinery IS the adapter",
+   "delegable_entry_points": "PlayerChunkMapEntry send paths + SPacketChunkData body (where the retained path already substitutes Rust bytes for Java serialization)",
+   "java_must_remain": "Netty pipeline+compression handoff, packet framing, TE/state serialization for excluded cases, the entire game loop, FML/mod lifecycle",
+   "rust_owns": "packet-payload encoding + direct-Netty emission for registered, clean, full-chunk, TE-empty, <=65535-state chunks (91/169 in this workload)"
+  },
+  "coremod_surface": "ALL 9 mixins into the boundary classes are Phosphor's (World, Chunk, EBS, AnvilChunkLoader, ChunkProviderServer, SPacketChunkData, Minecraft): me.jellysquid.mods.phosphor.mixins.lighting.* \u2014 our writer hooks compose ON TOP of Phosphor's output (the pre-hook pins ARE post-Phosphor bytes; 91 engagements prove the composition byte-for-byte)",
+  "index_coverage": "the sqlite symbol index holds vanilla/Forge (3 layers) + forge-universal + ONE live-transformed campaign dump + 3 MOD_JARs \u2014 a SUBSET of the 73-jar pack; the 73-jar collision census lives in the audit doc, not the index",
+  "pinned_runtime": "FTB Revelation 3.4.0 / Forge 14.23.5.2846 / JDK8 8.0.504.1 (target/authority-smoke/runtimeC staging; mods+libraries identical to the qualified profile's pins)"
  },
+ "date": "2026-10-10",
+ "engagement": {
+  "client_receipt": "probe: login_completed, play_reached, keepalive_exchanged, 169 chunk packets RECEIVED (all packets accounted); 67/67 confirmed mutations",
+  "fallback_accounting": "169 packets = 91 Rust-authored + 62 EXCLUDED_TE (tile entities present \u2014 scope excludes by contract) + 12 EXCLUDED_HIGH_STATE (>65535 logical states) + 4 java_fallback (seed-path rejects, non-TE/state/dim \u2014 counted, reason bucket likely binding-not-READY at send time). cap_exhausted=0, session_unadmitted=0, receipt_invalid=0, encode_failure=0",
+  "lifecycle": "workload covers load (teleport route, 1441 streaming ticks), mutate (67 confirmed setblocks incl. chunk/section boundary pairs), unload (teleport-away + stop); buffers fully released; boot-time writer non-admissions on re-entrant first passes = 5 lines, later pass admitted (the documented definition-witness pattern; engagement proves the hooked class defined)",
+  "negative_case": "verifyPreHookIdentity itself: composed-config boots (m1-p1-m1, m1-iso) demonstrate wrong-identity rejection live \u2014 every class refused, zero encodes, fail-closed to Java",
+  "run": "m1-qual1 (--m1-packets --minimal-authorities, real Revelation runtime, Phosphor active)",
+  "witnesses": "rust_selected=91, retained_seeded=91, direct_netty_committed=91, direct_netty_bytes_transmitted=2,941,820 bytes (2.9MB of Rust-authored packet bytes on the wire); buffers 91/91 released, 0 outstanding; rust_encode_failure=0; NO_BINDING=0; CHUNK_IDENTITY_MISMATCH=0"
+ },
+ "milestone": "M1 / M1-FIX",
+ "performance_honest_note": "m1-qual1 streaming mean 12.7 / p50 4.4 MSPT vs clean Java 6.4-7.5 / 2.4 \u2014 NOT faster; the capture session (required by admission) carries its measured cost (FS-003: ~92% of the streaming allocation excess in composed runs). Per the 2026-10-10 directive, an early compatibility milestone does not need to beat clean Java; this is reported, not gated",
+ "production_authority": false,
+ "remaining_blocker": "the COMPOSED configuration (light+worldRegistry+regionRW ON) still non-admits BY DESIGN \u2014 writer identity requires byte-identity with a discovery chain containing no rustcraft authority injections. Follow-up (architecture decision, filed): re-derive the profile per authority-composition (discovery launches that register the same authorities in the same order), or reorder writer identity to the foreign-stage boundary",
  "revision": {
   "end": "this commit",
-  "start": "e320306"
+  "start": "24ba986"
  },
- "root_cause": {
-  "classified": "STALE IDENTITY (the goal-\u00a71 taxonomy): the qualified pre-hook profile (tools/live-capture/live-shadow-profile.json, captured Sep 30) pins per-class SHA-256s of the bytes reaching the tail-of-chain writer transformers; the current tree's OWN authority injections (light hooks into World; M4-era hooks into Chunk/EBS) postdate the capture and changed those bytes, so verifyPreHookIdentity fails for every plan class and the writers correctly refuse (fail-closed). NOT a mapping inconsistency and NOT foreign-bytecode drift: the isolation boot (authorities minimized) still mismatched because lightExperiment registration was present, and the pre-squash jar engaged on the same pack \u2014 the delta is our post-Sep-30 injected bytecode.",
-  "contrast": "the pre-squash collision-profile-C run (b3df84c-era jar, near-identical property set) ENGAGED: rust_selected=64 (=its cap), seed path 122 \u2014 so the breakage entered between that era and the current tree (candidate: the True-Direct closure era's plan/admission changes, or plan regeneration drift)",
-  "evidence": [
-   "server.log: '[RustCraft] writer non-admission for net.minecraft.world.chunk.storage.AnvilChunkLoader...' and '...gen.ChunkProviderServer...' (LiveChunkPublicationTransformer:transform:82) \u2014 the publication hooks that CREATE chunk bindings during loading were never injected: the writer plan's class admission REJECTED those classes in the current tree",
-   "server.log: '[live-capture] IO ADMISSION FAILED: CHUNK_IDENTITY_MISMATCH' (LiveWriterHooks.ioPublicationBegin) \u2014 the region-write publication path also fails identity",
-   "consequence: LiveChunkBindings.bindingFor(chunk)==null for every chunk -> LivePacketCapture.begin rejects NO_BINDING -> tryAuthority falls to Java (fail-closed, correct behavior)"
-  ],
-  "identity_mismatch_traced": "CHUNK_IDENTITY_MISMATCH is DOWNSTREAM of the same cause: LiveChunkBindings.admitIoTicket fails it when the chunk lacks a PRIVATE_BUILDING ComponentRecord \u2014 records created by the constructor hooks inside AnvilChunkLoader/ChunkProviderServer, the classes the publication transformer non-admitted. One cause, two symptoms.",
-  "scope": "the fail-closed behavior is CORRECT (no wrong packets; 169 java_selected, zero rust encodes, zero mismatches); what broke is the ADMISSION/BINDING machinery, silently"
+ "root_cause_final": {
+  "finding": "The pre-hook pins (CANONICAL_ID_V1 normalized digests) were derived by run_rev_probe.py \u2014 an offline discovery launch whose RevOfflineTweaker registers NO rustcraft transformers (foreign chain only: vanilla+Forge+mods incl. Phosphor mixins). ANY rustcraft authority transformer registered before the writers changes the digests of the classes it touches \u2192 verifyPreHookIdentity fails BY DESIGN in the composed configuration (light/worldRegistry/regionRW). The earlier isolation boot ALSO failed because --ablate-light only flips lightMode (lightExperiment stayed true \u2192 WorldLightTransformer still registered). CHUNK_IDENTITY_MISMATCH was downstream identically.",
+  "repaired_by": "NO code repair to identity machinery was needed or made (the guard works). The repair is CONFIGURATIONAL: the qualified-capture shape (--minimal-authorities: liveWriterDiagnostic+session+scope only, all authority properties dropped) restores byte-identity with the discovery chain. Driver flag added."
  },
- "runs": {
-  "m1-iso": "isolation (composed authorities OFF, M1 flags ON): still 169/169 NO_BINDING \u2014 composition is NOT the blocker",
-  "m1-p1-base / m1-p2-base": "composed baseline, capture ON, current build \u2014 VALID measurements (kept for the record)",
-  "m1-p1-m1 / m1-p2-m1": "--m1-packets (packetAuthority+directNetty+cap2000+receipt): authority NEVER ENGAGED \u2014 rust_selected=0, retained_fast_path=0, snapshot_seed_path=169/169, every attempt NO_BINDING"
- },
- "status": "BLOCKED_NONENGAGEMENT_ROOT_CAUSED",
- "witness_quality": "the witness gates worked exactly as designed: RUST_SELECTED/RETAINED_FAST_PATH=0 failed the engagement gate, so no M1 performance claim was possible \u2014 this is the recorded outcome, not a silent pass"
+ "status": "ENGAGED_IN_SUPPORTED_COMPOSITION"
 }

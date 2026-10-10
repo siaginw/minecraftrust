@@ -43,13 +43,23 @@ performance is reported per milestone but is not an early gate.
 ## Milestone ladder
 
 - **M0** (FS-004): DONE — closed the light-ownership branch.
-- **M1 — packet emission ownership**: BLOCKED on M1-FIX (P0). Root cause
-  root-caused to a STALE pre-hook profile (Sep-30 capture predates the
-  current tree's injections; writer transformers correctly fail closed;
-  CHUNK_IDENTITY_MISMATCH downstream of the same cause). Repair =
-  the designed re-qualification flow (3 boots) + engagement check +
-  the staged 2-pair measurement. Receipt:
-  M1-PACKET-EMISSION-RECEIPT.json.
+- **M1 — packet emission ownership: ENGAGED (2026-10-10)** in the
+  supported (qualified-capture) composition: `--m1-packets
+  --minimal-authorities`. m1-qual1 proves the full path — writer hooks
+  admitted on Phosphor-mixin'd bytes, bindings formed, native state
+  checked, Rust encoded + directly emitted 91/169 packets (2.9 MB on the
+  wire), client received all 169; every fallback accounted. Root cause
+  of the earlier non-engagement was NOT profile staleness: the pins are
+  derived from a foreign-only discovery chain, so ANY authority
+  transformer registered before the writers breaks identity BY DESIGN.
+  Open follow-up: composed-config (authorities ON) engagement needs
+  per-composition profile re-derivation or a foreign-stage identity
+  boundary (architecture decision). Receipt:
+  M1-PACKET-EMISSION-RECEIPT.json (boundary + classification inside).
+- **M1 next**: the boundary classification lives in the receipt (Rust
+  owns payload encoding + direct emission for the eligible slice; Java
+  keeps framing/pipeline/TE/state serialization/game loop; NO new
+  adapter needed).
 - **M1-BOUNDARY** (with M1): pin modpack/Forge/mod identities; map the
   packet subsystem's class surface (refs, reflection, coremod targets,
   callbacks); classify Java-must-stay / delegable / adapter-needs.
