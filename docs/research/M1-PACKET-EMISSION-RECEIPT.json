@@ -3,17 +3,27 @@
  "date": "2026-10-10",
  "milestone": "M1 (rewrite ladder): Rust-owned packet emission under the composed configuration",
  "next_bounded_task": "M1-FIX: restore writer-plan admission for the chunk-loading classes (AnvilChunkLoader/ChunkProviderServer) \u2014 diagnose why LiveChunkPublicationTransformer non-admits them in the current tree (plan identity? bytecode-pattern drift after the True-Direct closure? CHUNK_IDENTITY_MISMATCH source), re-run ONE engagement-check boot (gate: RUST_SELECTED>0 + RETAINED_FAST_PATH>0), then the 2-pair M1 measurement. The measurement design, flags (--m1-packets), witness gates, and 2 valid baseline boots are all in place.",
+ "repair": {
+  "negative_case_preserved": "verifyPreHookIdentity itself IS the negative case: a genuinely wrong/stale identity must (and does) still reject \u2014 the observed behavior is the guard working correctly against a stale profile, not a guard failure",
+  "procedure": "RE-QUALIFICATION (the designed path, tools/qualification-v2/qualify_runtime.py): two discovery launches (writers OFF, facts across relaunches) + one self-authorizing qualifying launch \u2192 fresh profile \u2192 generate_live_writer_plan.py \u2192 rebuild jar \u2192 ONE engagement-check boot (gate: RUST_SELECTED>0 AND RETAINED_FAST_PATH>0 AND bindings created) \u2192 then the staged 2-pair M1 measurement (flags/baselines already in place). Budget: 3 qualification boots + 1 engagement + 4 measured.",
+  "rejected_alternatives": [
+   "hand-editing the profile's class hashes: the profile is a QUALIFIED artifact; hand-pinned hashes would assert identity never qualified \u2014 weakens the identity model the design exists to enforce",
+   "relaxing verifyPreHookIdentity to structural fingerprints only: same weakening (identity check is load-bearing for session-bound admission)"
+  ]
+ },
  "revision": {
   "end": "this commit",
   "start": "e320306"
  },
  "root_cause": {
+  "classified": "STALE IDENTITY (the goal-\u00a71 taxonomy): the qualified pre-hook profile (tools/live-capture/live-shadow-profile.json, captured Sep 30) pins per-class SHA-256s of the bytes reaching the tail-of-chain writer transformers; the current tree's OWN authority injections (light hooks into World; M4-era hooks into Chunk/EBS) postdate the capture and changed those bytes, so verifyPreHookIdentity fails for every plan class and the writers correctly refuse (fail-closed). NOT a mapping inconsistency and NOT foreign-bytecode drift: the isolation boot (authorities minimized) still mismatched because lightExperiment registration was present, and the pre-squash jar engaged on the same pack \u2014 the delta is our post-Sep-30 injected bytecode.",
   "contrast": "the pre-squash collision-profile-C run (b3df84c-era jar, near-identical property set) ENGAGED: rust_selected=64 (=its cap), seed path 122 \u2014 so the breakage entered between that era and the current tree (candidate: the True-Direct closure era's plan/admission changes, or plan regeneration drift)",
   "evidence": [
    "server.log: '[RustCraft] writer non-admission for net.minecraft.world.chunk.storage.AnvilChunkLoader...' and '...gen.ChunkProviderServer...' (LiveChunkPublicationTransformer:transform:82) \u2014 the publication hooks that CREATE chunk bindings during loading were never injected: the writer plan's class admission REJECTED those classes in the current tree",
    "server.log: '[live-capture] IO ADMISSION FAILED: CHUNK_IDENTITY_MISMATCH' (LiveWriterHooks.ioPublicationBegin) \u2014 the region-write publication path also fails identity",
    "consequence: LiveChunkBindings.bindingFor(chunk)==null for every chunk -> LivePacketCapture.begin rejects NO_BINDING -> tryAuthority falls to Java (fail-closed, correct behavior)"
   ],
+  "identity_mismatch_traced": "CHUNK_IDENTITY_MISMATCH is DOWNSTREAM of the same cause: LiveChunkBindings.admitIoTicket fails it when the chunk lacks a PRIVATE_BUILDING ComponentRecord \u2014 records created by the constructor hooks inside AnvilChunkLoader/ChunkProviderServer, the classes the publication transformer non-admitted. One cause, two symptoms.",
   "scope": "the fail-closed behavior is CORRECT (no wrong packets; 169 java_selected, zero rust encodes, zero mismatches); what broke is the ADMISSION/BINDING machinery, silently"
  },
  "runs": {
