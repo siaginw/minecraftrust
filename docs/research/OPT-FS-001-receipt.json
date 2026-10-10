@@ -1,0 +1,53 @@
+{
+ "before_after": {
+  "after": [
+   "fs-fix1",
+   "fs-fix2"
+  ],
+  "before": [
+   "fs1r",
+   "fs2r",
+   "fs3r (the benchmark's measured rust runs; same frozen config+workload)"
+  ],
+  "note": "MSPT fell ~51% while heap fell only ~18%: the reflective introspection was CPU-expensive (synchronized reflection, getCallerClass, intern) beyond its bytes",
+  "phase_a_p50": "12.69-14.50 -> 5.60-6.76 (halved)",
+  "phase_a_p95": "37.21-233.23 -> 11.48-14.72 (tail collapse)",
+  "phase_a_streaming_mspt_mean": "before 30.29/36.02/36.59 -> after 21.13/12.23 (mean reduction 51%; NO overlap: after-max 21.1 < before-min 30.3)",
+  "phase_b_mspt_mean": "17.36/24.10/23.06 -> 11.73/8.23 (54%)",
+  "phase_c_mspt_mean": "84.62-192.88 -> 30.68/37.55; save GC 13-17 -> 6-7",
+  "srv_alloc_streaming": "23831/25633/25938MB -> 21085/20307MB (-18%; remaining is the class-transformer bucket + normal mod churn)",
+  "work_equivalence": "169 chunk packets all runs; confirms 67/67 (fs1r's 42/67 pre-existing caveat); mism=0, dvdiv=0, light committed 31.7-34.7k, region writes 1.2k ok / 0 fail, boot 178-218s unchanged band"
+ },
+ "classification": {
+  "buildTable/zsOut per job": "REQUIRED_COHERENCE_OR_ADMISSION (real per-job work; 2ms/job measured; candidate for a future bounded table cache + output-buffer lease \u2014 NOT this task)",
+  "clean-java gap remaining": "after the fix, rust streaming MSPT 12.2-21.1 vs java 6.35-7.53 \u2014 still ~2-3x; the regression is NOT closed",
+  "defineClass/ASM bucket": "UNKNOWN-adjacent (transformer-amplified lazy classload; needs its own attribution before any change)",
+  "diagnoseTokenMismatch": "REDUNDANT_TELEMETRY (campaign-evidence diagnostic running per-call in production composition) \u2014 removed after budget, evidence value preserved"
+ },
+ "fix": "DIAGNOSE_BUDGET=64 latch in LiveWriterHooks: the diagnostic still runs for the first 64 writer operations (where imbalance evidence manifests) then stops; no change to authority coverage, verification, fallback, or publication semantics",
+ "method": [
+  "integrity: observer srv_alloc = same-thread interval deltas summed per phase (never cumulative/overlapping); fs1r partial-work footnote resolved (42/67 confirms, labeled in report+table)",
+  "JFR profiled reproduction (fs-prof1): profile-template TLAB sampling nearly inert on this JDK8 build (1MB sampled vs 26GB actual); ExecutionSample stacks pointed at LightAuthorityHook but sample-rate bias suspected",
+  "op-scoped counters (fs-attr1): onCheckLight EXONERATED for the heap storm \u2014 2,199 entries x 519KB = 1.14GB total, 7.2s of 65s phase; buildTable = 228KB heap + ~2ms per admitted job (2,042 jobs; 4MB DIRECT zsOut per job = ~8GB direct churn \u2014 real but not the heap driver); sync path exonerated (OP_ALLOC 34MB, REGISTER 192ms)",
+  "1ms delta+stack allocation sampler in the observer (diagnostic-gated; fs-attr2): 128GB total attributed; ~52GB in windows topped by LiveWriterHooks.diagnoseTokenMismatch:521-523 (sun.reflect getCallerClass 34.6GB, String.intern 9.9GB, Field.get 7.4GB) \u2014 writerEnd ran its FULL reflective gate introspection on EVERY bracketed region-file operation, guarded only by a never-true-on-healthy-servers latch",
+  "second bucket (unfixed, separate): ClassLoader.defineClass1 8.3GB + ZipFile/ASM/Inflater ~12GB \u2014 LaunchClassLoader transformer-amplified lazy class loading during streaming; present-but-smaller in clean Java (FML remaps there too); NOT addressed in this task"
+ ],
+ "next_action": "OPT-FS-002 candidate: the LaunchClassLoader transformer-churn bucket (~20GB/run) \u2014 attribute which transformer chain pass allocates on lazy classload during streaming, then bound it (e.g., plan-scoped skip of already-seen non-target classes)",
+ "opt_id": "OPT-FS-001",
+ "researched_at": "2026-10-09",
+ "revision": {
+  "end": "this commit chain",
+  "start": "d862d5b"
+ },
+ "root_cause": "LiveWriterHooks.diagnoseTokenMismatch \u2014 campaign-evidence diagnostic (reflective token-stack introspection: getDeclaredField+setAccessible+2x getMethod+invoke+ArrayList copy) executed unconditionally per writerEnd at file-stream frequency under composition; ~52GB attributed + dominating reflection CPU (getCallerClass/intern)",
+ "runs": {
+  "fs-attr1": "op-scoped counter boot (onCheckLight/buildTable/mirrorBatch brackets)",
+  "fs-attr2": "1ms allocSampler boot (128GB attributed; top sites table: observer-alloc-sites.txt)",
+  "fs-fix1": "after-fix run 1",
+  "fs-fix2": "after-fix run 2 (confirm)",
+  "fs-prof1": "JFR profiled reproduction (storm confirmed 26.2GB; sampling limits documented)"
+ },
+ "sampler_validation": "allocSampler is diagnostic-gated (-Drustcraft.observer.allocSampler=true; default OFF; getStackTrace safepoint cost confined to diagnostic runs); attribution is statistical (1ms windows) \u2014 stated on every dump",
+ "status": "FIX_MEASURED_BENEFIT",
+ "task": "attribute the composed-configuration allocation/CPU regression (full-stack A/B: streaming 4.8-5.2x MSPT vs clean Java, ~20x srv-thread alloc)"
+}

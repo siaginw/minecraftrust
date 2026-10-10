@@ -513,9 +513,23 @@ public final class LiveWriterHooks {
      * Campaign evidence: reflectively inspects the gate's thread-local token
      * stack before an end; when the top is not this token, records the whole
      * stack contents so the imbalance is preserved before disqualification.
+     *
+     * OPT-FS-001 (2026-10-09): this ran its FULL reflective introspection on
+     * EVERY writerEnd (getDeclaredField + setAccessible + two Method lookups
+     * + invoke + an ArrayList copy of the token stack) — guarded only by
+     * "a disqualification was already dumped", which never becomes true on a
+     * healthy server. Under full-stack composition the writer brackets fire
+     * at file-stream frequency and this diagnostic became the dominant
+     * server-thread allocation site (~52 GB attributed per run by 1ms delta
+     * sampling; receipt OPT-FS-001). The evidence value of the diagnostic is
+     * the FIRST mismatch — it is now budgeted to the first 64 calls, which
+     * still covers the earliest writer operations where imbalance manifests.
      */
+    private static final java.util.concurrent.atomic.AtomicInteger DIAGNOSE_BUDGET =
+            new java.util.concurrent.atomic.AtomicInteger(64);
     private static void diagnoseTokenMismatch(LiveWriterGate.WriteToken token, String operation) {
         if (disqualificationDumped) return;
+        if (DIAGNOSE_BUDGET.decrementAndGet() < 0) return;
         try {
             Class<?> gateClass = LiveWriterGate.class;
             Field field = gateClass.getDeclaredField("openTokens");

@@ -139,3 +139,30 @@ python tools/authority-review/analyze_fullstack_ab.py <java-dir> <rust-dir> --pa
 
 Raw artifacts: `target/authority-review/fs1j fs1r fs2r fs2j fs3j fs3r`
 (+ smokes `sAB-smoke-*`), machine receipt `target/authority-review/fs-analysis.json`.
+
+## Follow-up (2026-10-09, OPT-FS-001): dominant attribution + one bounded fix
+
+**What caused the excess allocations, and what changed?** The dominant
+server-thread cost under composition was `LiveWriterHooks.diagnoseTokenMismatch`
+— a campaign-evidence diagnostic that reflectively introspected the writer
+gate's token stack on EVERY bracketed region-file operation (guarded only by
+a never-true-on-healthy-servers latch). ~52 GB/run attributed by a 1 ms
+delta+stack sampler (`fs-attr2`), plus the reflection CPU. Budgeted to its
+first 64 calls (evidence value preserved):
+
+| Rust arm | before (fs1r/2r/3r) | after (fs-fix1/2) |
+|---|---|---|
+| Streaming mean MSPT | 30.3 / 36.0 / 36.6 | **21.1 / 12.2 (−51%)** |
+| Streaming p95 | 37–233 | **11.5–14.7** |
+| Mutations mean MSPT | 17.4 / 24.1 / 23.1 | **11.7 / 8.2 (−54%)** |
+| Save mean MSPT | 84.6–192.9 | **30.7 / 37.6** |
+| Streaming srv-thread alloc | 23.8–25.9 GB | 20.3–21.1 GB (−18%) |
+| Correctness | mism=0, 67/67 confirms | identical |
+
+Also attributed and exonerated along the way: onCheckLight (1.14 GB/7.2 s
+total — the JFR sample share was safepoint-biased), buildTable+zsOut (real
+2 ms/job admission work), the C2 sync path (34 MB). **The clean-Java
+regression is NOT closed**: after the fix the rust arm still runs ~2–3×
+java's streaming MSPT; the next measured bucket is LaunchClassLoader
+transformer churn (~20 GB/run) → OPT-FS-002. Receipt:
+`docs/research/OPT-FS-001-receipt.json`.

@@ -198,3 +198,19 @@ The prior audit-baseline table's single-run "java" arm (shadow-loaded) is
 superseded. Next measured target: OPT-FS-001 (attribution of the
 composition allocation storm) — the whole-composition cost currently
 dominates every subsystem-level win in this file.
+
+## OPT-FS-001 (2026-10-09) — CLOSED FIX_MEASURED_BENEFIT: the composition storm was a per-call campaign diagnostic
+
+Attribution chain (receipt `docs/research/OPT-FS-001-receipt.json`): JFR
+profiled reproduction → op-scoped counters (onCheckLight/buildTable/sync
+exonerated: 1.14GB+7.2s total vs the 24GB phase) → 1ms delta+stack sampler
+in the observer (diagnostic-gated) named `LiveWriterHooks
+.diagnoseTokenMismatch`: unconditional reflective token-stack introspection
+per writerEnd at file-stream frequency, ~52GB/run attributed. Budgeted to 64
+calls: streaming MSPT −51% (30.3–36.6 → 12.2–21.1, clean separation),
+mutations −54%, saves de-tailed, allocation −18%; correctness and authority
+execution identical. The remaining clean-Java gap (~2–3× streaming MSPT)
+has a named next bucket: LaunchClassLoader transformer churn (~20GB/run) —
+OPT-FS-002. Instrumentation retained: fsAlloc brackets in LightAuthorityHook
+(aggregate counters), observer allocSampler (`-Drustcraft.observer.
+allocSampler=true`, diagnostic only), `analyze_fs_profile.py`.
