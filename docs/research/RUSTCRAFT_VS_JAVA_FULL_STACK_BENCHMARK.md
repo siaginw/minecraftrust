@@ -217,3 +217,28 @@ experiment (writer-gate enforcement absent by design) — the composed
 benchmark result above stands unchanged; the capture layer is part of
 RustCraft's qualified-campaign shape and its cost belonged to Arm B.
 Receipt: `docs/research/OPT-FS-003-receipt.json`.
+
+## Follow-up 4 (2026-10-10, OPT-FS-004 / rewrite-ladder M0): residual MSPT gap is NOT the light authority
+
+One boot (declared budget): no-capture + light SHADOW, sampler off, work
+comparable (169 packets, 67/67, mism=0). Scope discovery: SHADOW keeps the
+shadow comparator running (2,044 jobs, 30,000 shadow-computed cells) — it
+tests ownership, not machinery.
+
+| config | light owner | capture | stream mean | p50 | p95 | alloc |
+|---|---|---|---|---|---|---|
+| clean Java ×3 | Java | — | 6.3–7.5 | 2.4 | 5.2–6.1 | 1.2–1.3 GB |
+| full stack | Rust | ON | 14.9 | 6.7 | 13.8 | 19.9 GB |
+| nocap ×2 | Rust | OFF | 8.4 / 14.0 | 4.6 / 5.1 | 8.5 / 10.9 | 1.6–1.8 GB |
+| **m0** | **Java (shadow)** | OFF | **10.3** | **4.2** | **8.3** | 1.7 GB |
+
+Verdicts: allocation attribution is closed and light-insensitive (capture
+off ⇒ ≈ Java + ~0.4 GB integration residual, either light mode). The MSPT
+light hypothesis is **refuted** — p50 4.2–5.1 vs Java 2.4 and p95 ~1.5–1.8×
+persist identically with Java owning light; the residual is a diffuse
+per-tick floor in the always-on integration surface plus a boot-variance
+mode (nocap means span 8.4–14.0 — n=1 per config cannot decompose the mean
+further). SHADOW costs the same as ON (shadow-compute is not free; Rust
+ownership is not slower than Java's here). Receipt:
+`docs/research/OPT-FS-004-receipt.json`. Rewrite ladder: M1 (network/packet
+emission) stands as the next step.

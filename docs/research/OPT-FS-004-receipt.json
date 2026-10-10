@@ -1,0 +1,30 @@
+{
+ "budget": "DECLARED 1 boot; ran 1 (fs4-m0)",
+ "next": "M1 per the ladder, OR a paired N-run integration-floor decomposition if closing the composed-stack gap takes priority over extending Rust ownership",
+ "opt_id": "OPT-FS-004",
+ "researched_at": "2026-10-10",
+ "results_streaming": {
+  "clean_java_x3": "mean 6.3-7.5 / p50 2.4 / p95 5.2-6.1 / alloc 1228-1276MB",
+  "fs4_m0_shadow": "mean 10.3 / p50 4.2 / p95 8.3 / alloc 1657MB",
+  "full_stack_capture_on": "mean 14.9 / p50 6.7 / p95 13.8 / alloc 19938MB",
+  "nocap_rust_light_on_x2": "mean 8.4, 14.0 / p50 4.6, 5.1 / p95 8.5, 10.9 / alloc 1582-1774MB"
+ },
+ "revision": {
+  "end": "this commit",
+  "start": "2685294"
+ },
+ "rewrite_ladder_implication": "M0 closes the 'maybe light is the MSPT culprit' branch. The composed stack (capture off) sits at p50 1.75-2.1x java on streaming; the program's viability now rests on (a) making the integration surface cheaper (hook consolidation \u2014 candidates measured but sum small, needs paired design) and/or (b) M1 (network/packet emission \u2014 no coremod exposure, proven components) showing a real win. M1 stands as the next ladder step.",
+ "run": {
+  "bypass_proof": "'session SKIPPED' in server.log; work comparable: regs=628, pkt=169, conf=67/67, mism=0, dvdiv=0",
+  "fs4_m0": "no-capture + lightMode=SHADOW, allocSampler OFF (clean-MSPT comparable to the sampler-free java baseline)",
+  "scope_discovery": "SHADOW does NOT stop Rust light work: the shadow comparator admitted 2044 jobs and computed 30000 cells (Java owns + Rust shadow-computes per job). --ablate-light tests OWNERSHIP, not machinery \u2014 same scope class as the FS-002 correction"
+ },
+ "status": "ATTRIBUTED_SCOPE_LIMITED",
+ "task": "M0 of the rewrite ladder: is the residual streaming MSPT gap (with capture off) the light-authority path?",
+ "verdicts": {
+  "allocation": "CLOSED and light-INSENSITIVE: capture off => 1.6-1.8GB regardless of light mode (ON or SHADOW), ~0.4GB above java = integration surface. FS-003's finding is robust.",
+  "arithmetic_note": "known per-path costs (sync 0.19s + shadow jobs ~0.08s + tracker hooks ~0.07s) sum to well under the observed +2.5s tick-time delta across the phase \u2014 the floor's exact composition is UNRESOLVED at n=1; a paired N-run design would be required to decompose it",
+  "mspt_light_hypothesis": "REFUTED: the p50 floor (4.2-5.1 vs java 2.4 = 1.75-2.1x) and the p95 (8.3-10.9 vs 5.2-6.1 = ~1.5-1.8x) persist IDENTICALLY with Java owning light. The light authority is not the residual MSPT cause. (Also: SHADOW costs the same as ON => shadow-compute is not free, and Rust ownership is not slower than Java ownership on this workload.)",
+  "mspt_residual": "The remaining gap is a diffuse per-tick floor in the ALWAYS-ON INTEGRATION SURFACE (mutation-tracker hooks on ~34k light sets, registry sync, region hooks, observer) PLUS a boot-state variance mode (nocap runs span mean 8.4-14.0; n=1 per config cannot decompose the mean further \u2014 the spread guard applies)"
+ }
+}

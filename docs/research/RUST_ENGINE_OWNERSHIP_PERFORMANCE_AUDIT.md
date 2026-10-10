@@ -250,3 +250,19 @@ The composed benchmark verdict stands unchanged (isolation experiment,
 writer-gate enforcement absent by design). FS-002 receipt scope-corrected:
 light SHADOW kept the light machinery running in observation mode; the
 write ablation was valid including its transformer.
+
+## OPT-FS-004 (2026-10-10) — CLOSED ATTRIBUTED (scope-limited): residual MSPT gap is NOT the light authority
+
+M0 of the rewrite ladder, one declared boot (receipt
+`docs/research/OPT-FS-004-receipt.json`): no-capture + light SHADOW
+(bypass + work-comparability proven). SHADOW keeps the shadow comparator
+running — it tests ownership, not machinery. Result: allocation is closed
+and light-insensitive (capture off ⇒ 1.6–1.8 GB ≈ Java + ~0.4 GB, either
+light mode); the MSPT light hypothesis is refuted — the p50 floor
+(4.2–5.1 vs Java 2.4) and p95 (~1.5–1.8×) persist identically with Java
+owning light, and SHADOW costs the same as ON (shadow-compute not free;
+Rust ownership not slower). The residual is a diffuse per-tick
+integration-surface floor plus a boot-variance mode (nocap means span
+8.4–14.0; known per-path costs sum far below the observed delta — exact
+composition unresolved at n=1). Rewrite ladder unchanged: M1
+(network/packet emission) is next.
