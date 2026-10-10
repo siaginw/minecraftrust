@@ -178,6 +178,15 @@ that never fires on a healthy server (same receipt).
   and scan results; documents under `docs/research/` cite them. Receipts
   pin provenance by run ID + artifact sha256-16 — git SHAs are secondary
   context only (history rewrites must not orphan evidence).
+- Scripted edits to tracked source files go through the Edit tool or
+  `runscope patch` (verified occurrence counts, atomic write,
+  postconditions) — never python heredocs: escape mangling has repeatedly
+  produced silently-partial edits that printed success (worst case: a
+  hot-path fix that didn't land, costing two diagnostic boots).
+  Heredocs are for throwaway analysis only.
+- Diagnostic boots get a DECLARED budget in the receipt before the first
+  one, and tooling-debug boots count against it (three of eight FS-002
+  boots were tooling waste).
 - `PRODUCTION_AUTHORITY` stays false unless a dedicated milestone proves
   otherwise. Networking is PARKED; NBT semantic authority is BLOCKED (H9).
 - Validation before push: `cargo fmt --check`, `cargo clippy --workspace

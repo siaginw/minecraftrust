@@ -172,6 +172,28 @@ def build_observer_only(out_jar: Path) -> int:
     if res.returncode != 0:
         print("MSPT-DEDUP REGRESSION FAILED:\n" + res.stderr, file=sys.stderr)
         return res.returncode if res.returncode > 0 else 1
+    # retro FS-002: standalone validation must exercise the POPULATED data
+    # path (an empty-map dump test missed the a[2] read; cost two boots)
+    dump_src = ROOT / "tools" / "bridge" / "test" / "com" / "rustcraft" \
+        / "observer" / "ObserverDumpRegression.java"
+    res = subprocess.run(
+        [str(JAVAC), "-encoding", "UTF-8", "-source", "8", "-target", "8",
+         "-nowarn", "-cp", str(build), "-d", str(tb), str(dump_src)],
+        capture_output=True, text=True)
+    if res.returncode != 0:
+        print("OBSERVER-DUMP REGRESSION COMPILE ERROR:\n" + res.stderr,
+              file=sys.stderr)
+        return res.returncode
+    res = subprocess.run(
+        [str(JDK8 / "bin" / "java.exe"), "-cp",
+         str(tb) + ";" + str(build),
+         "com.rustcraft.observer.ObserverDumpRegression"],
+        capture_output=True, text=True)
+    sys.stdout.write(res.stdout)
+    if res.returncode != 0:
+        print("OBSERVER-DUMP REGRESSION FAILED:\n" + res.stderr,
+              file=sys.stderr)
+        return res.returncode if res.returncode > 0 else 1
     print(f"[OK] Successfully built {out_jar} "
           f"({out_jar.stat().st_size:,} bytes) — observer only, "
           f"no transformers, no RustCraft classes")

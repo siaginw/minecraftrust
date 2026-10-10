@@ -196,11 +196,67 @@ def pair_summary(a: dict, b: dict):
     return out
 
 
+def group_comparison(results, split_at=None):
+    """Pooled arms with a spread guard (retro FS-002): when a group's
+    internal spread exceeds the mean delta, more runs are needed before
+    claiming an effect — print SPREAD_EXCEEDS_DELTA rather than letting a
+    favorable mean stand alone (fs-fix1/2 spread 12.2-21.1 MSPT swamped
+    every plausible fix effect). split_at=N compares the first N runs
+    ("before") against the rest ("after") — the same-arm rust-before/
+    rust-after case."""
+    import statistics as st
+    if split_at is not None and 0 < split_at < len(results):
+        arms = {"before": results[:split_at], "after": results[split_at:]}
+    else:
+        arms = {}
+        for r in results:
+            arms.setdefault(r.get("arm"), []).append(r)
+    names = sorted(arms)
+    out = {"groups": {k: len(v) for k, v in arms.items()}}
+    if len(names) < 2:
+        out["note"] = "group comparison needs two groups (both arms, or " \
+                      "--split N for before/after)"
+        return out
+    ga, gb = names[0], names[1]
+    phases = set.intersection(*[set(r["phases"]) for r in results])
+    comp = {}
+    for phase in sorted(phases):
+        for metric in ("mspt_mean", "mspt_p95", "srv_alloc_mb",
+                       "proc_cpu_s", "duration_s"):
+            jv = [r["phases"][phase].get(metric) for r in arms[ga]]
+            rv = [r["phases"][phase].get(metric) for r in arms[gb]]
+            jv = [v for v in jv if isinstance(v, (int, float))]
+            rv = [v for v in rv if isinstance(v, (int, float))]
+            if not jv or not rv:
+                continue
+            jm, rm = st.mean(jv), st.mean(rv)
+            jspread = max(jv) - min(jv)
+            rspread = max(rv) - min(rv)
+            delta = abs(jm - rm)
+            comp[f"{phase}.{metric}"] = {
+                ga: [round(v, 3) for v in jv],
+                gb: [round(v, 3) for v in rv],
+                "mean_reduction": round((jm - rm) / jm, 4) if jm else None,
+                "mean_speedup": round(jm / rm, 4) if rm else None,
+                "spreads": {ga: round(jspread, 3),
+                            gb: round(rspread, 3)},
+                "verdict": ("SPREAD_EXCEEDS_DELTA — more runs needed "
+                            "before claiming an effect"
+                            if max(jspread, rspread) > delta
+                            else "delta_exceeds_spread"),
+            }
+    out["metrics"] = comp
+    return out
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("runs", nargs="+", type=Path)
     ap.add_argument("--pairs", action="store_true",
                     help="group consecutive (java, rust) runs into pairs")
+    ap.add_argument("--split", type=int, default=None,
+                    help="group comparison: first N runs = 'before', rest "
+                         "= 'after' (rust-before/rust-after case)")
     args = ap.parse_args()
     results = [analyze_run(r) for r in args.runs]
     print(json.dumps(results, indent=1))
@@ -214,6 +270,14 @@ def main():
                 pairs.append({"error": f"runs {i},{i+1} not java-then-rust"})
         print("=== PAIRS ===")
         print(json.dumps(pairs, indent=1))
+    # retro FS-002: pooled group comparison with the spread guard — run
+    # even without --pairs when both arms are present; --split forces the
+    # before/after grouping (rust-vs-rust)
+    arms = {r.get("arm") for r in results}
+    if args.split is not None or arms >= {"java", "rust"}:
+        print("=== GROUP COMPARISON (spread-guarded) ===")
+        print(json.dumps(group_comparison(results, split_at=args.split),
+                         indent=1))
     return 0
 
 

@@ -287,7 +287,7 @@ public final class ObserverMain {
      * silently killed the dump in fs-attr3/fs-attr4), so the periodic
      * dump is the primary and the hook the fallback. Failures print to
      * stderr, never swallowed. */
-    private static void dumpSites(File gameDir,
+    static void dumpSites(File gameDir,
             java.util.concurrent.ConcurrentHashMap<String, long[]> sites,
             boolean finalDump) {
         try {
@@ -322,6 +322,7 @@ public final class ObserverMain {
                 f.delete();
                 if (!tmp.renameTo(f)) {
                     System.err.println("[observer] alloc-sites rename failed");
+                    tmp.delete(); // retro: never leave the .tmp behind
                 }
             }
         } catch (Throwable t) {
