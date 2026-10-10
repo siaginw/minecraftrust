@@ -67,6 +67,7 @@ OBSERVER_PROPS = None
 # attribution run — NOT an equivalent-configuration performance result)
 REGION_WRITE_MODE = "ON_EXPERIMENTAL"
 LIGHT_MODE = "ON_EXPERIMENTAL"
+JVM_PROPS_EXTRA = []
 
 
 def sha16(p: Path) -> str:
@@ -518,6 +519,12 @@ def main():
     ap.add_argument("--port", type=int, required=True)
     ap.add_argument("--output", type=Path, required=True)
     ap.add_argument("--username", default=None)
+    ap.add_argument("--no-capture-session", action="store_true",
+                    help="OPT-FS-003 isolation experiment: skip the "
+                         "capture/observation session (rustcraft."
+                         "noCaptureSession=true) while all authorities "
+                         "keep running — labeled ablation, not a valid "
+                         "full-stack performance config")
     ap.add_argument("--ablate-light", action="store_true",
                     help="OPT-FS-002 diagnostic: light experiment off "
                          "(vanilla/Phosphor owns all light; attribution "
@@ -542,8 +549,10 @@ def main():
         REGION_WRITE_MODE = "OFF"
     if args.ablate_light:
         LIGHT_MODE = "SHADOW"
+    if args.no_capture_session:
+        JVM_PROPS_EXTRA.append("rustcraft.noCaptureSession=true")
     PROFILE_JFR = args.profile_jfr
-    OBSERVER_PROPS = list(args.observer_prop or []) +         list(args.jvm_prop or [])
+    OBSERVER_PROPS = list(args.observer_prop or []) +         list(args.jvm_prop or []) + JVM_PROPS_EXTRA
     username = args.username or f"FS{args.arm.upper()[:2]}"
     return run_arm(args.arm, args.port, args.output, username)
 

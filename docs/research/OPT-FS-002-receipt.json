@@ -1,17 +1,17 @@
 {
  "attribution": {
   "ablations": {
-   "conclusion": "the ~20GB streaming allocation delta persists under every authority ablation; remaining rust-specific surface = the ALWAYS-INJECTED hook/gate/observation layer (writer brackets, session capture, world-registry/sync/mirrors stayed on in all ablations) + the ablations' own hooks",
-   "fs-ablate1_region_write_OFF": "streaming 19.5GB \u2014 write authority ~1.8GB (~9%), EXONERATED",
-   "fs-ablate2_light_SHADOW": "streaming 22.1GB \u2014 light authority EXONERATED for allocation",
+   "fs-ablate1_region_write_OFF": "streaming 19.5GB (\u22129% vs attr6). SCOPE: the write-AUTHORITY transformer was not registered (registration gates on regionWriteExperiment) \u2014 write hooks + authority absent. Valid for the write path; the writer-gate capture brackets REMAINED (they register under liveWriterDiagnostic).",
+   "fs-ablate2_light_SHADOW": "streaming 22.1GB (+3% vs attr6). SCOPE CORRECTION (FS-003 \u00a71): SHADOW keeps the light TRANSFORMERS REGISTERED AND RUNNING in observation mode (registration gates on lightExperiment only; SHADOW vs ON changes ownership, not the presence of hooks/observation) \u2014 this ablated the light AUTHORITY, not the light machinery. The earlier 'light authority exonerated' wording overstated scope for allocation; it holds for the authority path only.",
    "fs-attr6_full_stack": "streaming 21.4GB alloc (sampler on)",
-   "mutations_phase_mspt": "ATTRIBUTED to light composition: light SHADOW 6.8ms ~= clean java 4.8-6.3 vs 8.2-11.7 ON (CPU-bound: zero-stage jobs + mirrors per setblock), while mutations ALLOC is light-independent (~6.3GB either way)"
+   "fs002_conclusion_corrected": "write-authority path and light-AUTHORITY path each leave the ~20GB streaming allocation essentially intact (\u22129%/+3%); NOT established: that all composed machinery was absent \u2014 the capture/observation session, writer brackets, world-registry/chunk hooks, and light-observation hooks ran in BOTH ablations (FS-003 isolates the capture layer; boot delta +15-18GB is separate and unattributed)."
   },
   "fs002_original_premise": "REFUTED \u2014 the ~20GB defineClass/ZipFile/ASM bucket is NORMAL Forge+mod classloading: the java arm allocates ~70GB at boot too; LaunchWrapper runs transformers EXACTLY ONCE per class (cachedClasses; resourceCache; source a4801b7); only ~121 classes load during streaming (JFR ClassLoadingStatistics); rust boot delta is +15-18GB (extra passes+agent+registration) \u2014 a boot cost, not the streaming storm",
   "instrument_limits": "the 1ms delta+stack sampler captures only ~10-15% of streaming-phase bytes (bursty allocation + safepoint-sample bias; capture windows show mod/vanilla frames with no rustcraft frames); JFR TLAB sampling inert (standing AGENTS rule); GC pauses ~equal across arms (~30s/phase both \u2014 not the delta); srv_cpu 2x java under streaming"
  },
  "clean_java_gap": "unchanged: streaming 12.2-21.1 vs java 6.35-7.53 (~2-3x); mutations ON 8.2-11.7 vs java 4.8-6.3 (light-composition CPU); boot +30-70s",
  "fix": "ChunkMutationTracker.blockPosY: PER-CALL getMethod+setAccessible on the hottest hook (onLightSet ~34k/run; the OPT-SYNC-006-C1 bug class; the setAccessible security path shows as intern/getCallerClass windows) \u2014 now cached like POS_X/POS_Z. BlockPosYRegression (build gate): 146ns -> 8ns per call (17.4x), behavioral equality proven",
+ "fix_effect_note": "blockPosY method-cache: locally 17.4x, projected 4.7ms CPU/run; fs-fix3/4 vs fs-fix1/2 showed no measurable end-to-end change (before-spread 12.2-21.1 MSPT exceeds any plausible effect at n=2).",
  "fs001_followup_check": {
   "enforcement": "VERIFIED budget-independent: LiveWriterGate.endWrite performs its own imbalance check (stack.peek()!=token -> disqualify(HOOK_PROTOCOL_BROKEN) + throw) \u2014 unaffected by DIAGNOSE_BUDGET",
   "evidence_gap_closed": "endWrite throws BEFORE checkFlip, so a first REAL mismatch after budget exhaustion would have left no token-stack evidence; added one-shot dumpEndWriteViolation (zero cost on success) that dumps then rethrows unchanged"

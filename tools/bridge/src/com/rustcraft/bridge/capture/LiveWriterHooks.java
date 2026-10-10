@@ -222,9 +222,24 @@ public final class LiveWriterHooks {
     // Session lifecycle (diagnostic only)
     // ------------------------------------------------------------------
 
-    /** Production entry: the qualified MinecraftServer.run bootstrap hook. */
+    /** Production entry: the qualified MinecraftServer.run bootstrap hook.
+     * OPT-FS-003 capture-only ablation switch: rustcraft.noCaptureSession=true
+     * leaves every authority transformer registered and running (light,
+     * registry, region rw, packet observation counters) but starts no
+     * capture session — writerBegin/writerEnd take their null-session
+     * NOOP fast paths (verified first-line bypasses, before any gate work
+     * or allocation). This isolates the OPTIONAL capture/observation
+     * layer; it is NOT a valid full-stack performance configuration
+     * (writer-gate enforcement absent by design). */
     public static void diagnosticSessionStart() {
         if (session != null) return; // one session per JVM; never reset
+        if (Boolean.getBoolean("rustcraft.noCaptureSession")) {
+            System.out.println("[live-capture] session SKIPPED "
+                    + "(rustcraft.noCaptureSession=true; capture-only "
+                    + "ablation — authorities unaffected)");
+            return;
+        }
+        System.out.println("[live-capture] session STARTING (capture/observation layer active)");
         ClassLoader bridgeLoader = LiveWriterHooks.class.getClassLoader();
         ClassLoader runtimeLoader = Thread.currentThread().getContextClassLoader();
         // Explicit historical Clean policy only, UNLESS Phase D explicitly

@@ -231,3 +231,22 @@ Next: OPT-FS-003 — the always-injected hook/gate/observation layer
 (staged property-disable diagnostic). Instrument caveat recorded: the 1ms
 sampler captures ~10-15% of streaming bytes (bursty alloc + safepoint
 bias).
+
+## OPT-FS-003 (2026-10-09) — CLOSED ATTRIBUTED: the streaming allocation excess IS the optional capture/observation session
+
+Receipt `docs/research/OPT-FS-003-receipt.json`. New switch
+`rustcraft.noCaptureSession` skips the capture session at bootstrap while
+every authority stays registered and running (switch-map finding: the
+authorities all register under liveWriterDiagnostic; the SESSION is the
+independently-skippable layer; writerBegin/End null-session NOOP bypasses
+verified first-line). Isolation pair + confirmation: streaming allocation
+19.9 GB → 1.6/1.8 GB (−92%, ≈ clean Java 1.2–1.3 GB), mutations −92%,
+saves −97%, with comparable work (registrations, light commits in family,
+mism=0, 169 packets, 67/67 confirmed mutations). MSPT improves only
+partially (14.9 → 8.4/14.0 vs Java 6.4–7.5) — allocation and MSPT are
+separate outcomes; the residual MSPT gap matches the FS-002
+light-composition attribution (→ OPT-FS-004: one no-capture+SHADOW boot).
+The composed benchmark verdict stands unchanged (isolation experiment,
+writer-gate enforcement absent by design). FS-002 receipt scope-corrected:
+light SHADOW kept the light machinery running in observation mode; the
+write ablation was valid including its transformer.

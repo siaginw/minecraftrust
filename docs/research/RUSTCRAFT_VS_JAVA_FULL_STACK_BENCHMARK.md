@@ -188,3 +188,32 @@ transformer churn (~20 GB/run) → OPT-FS-002. Receipt:
   brackets + observation capture property-disabled, to name or eliminate
   the integration layer as the streaming allocation source.
   Receipt: `docs/research/OPT-FS-002-receipt.json`.
+
+## Follow-up 3 (2026-10-09, OPT-FS-003): the streaming allocation excess is the optional capture/observation session
+
+Isolation experiment (`rustcraft.noCaptureSession=true`, new switch: skips
+the capture session at bootstrap while EVERY authority stays registered and
+running — bypass proven by `session SKIPPED` log line; work comparable:
+same registrations, light commits in family, mism=0, 169 packets, 67/67
+confirmed mutations):
+
+| config | stream alloc | stream MSPT | mut alloc | mut MSPT | save alloc |
+|---|---|---|---|---|---|
+| capture ON (control) | 19.9 GB | 14.9 | 6.3 GB | 13.4 | 2.7 GB |
+| capture OFF | **1.6 GB** | 8.4 | 0.5 GB | 8.8 | 0.09 GB |
+| capture OFF (confirm) | **1.8 GB** | 14.0* | 0.5 GB | 9.8 | 0.09 GB |
+| clean Java (reference) | 1.2–1.3 GB | 6.4–7.5 | 0.4 GB | 4.8–6.3 | 0.07–0.08 GB |
+
+*slow-boot variance mode; allocation stable across both.
+
+**Allocation attribution is now complete: ~92% of the streaming allocation
+excess (and ~97% of the save-phase excess) is the diagnostic capture/observation
+layer — NOT the engine, authorities, or sync.** With capture off, RustCraft's
+streaming allocation is ≈ clean Java's (residual ~0.3–0.5 GB = integration
+hooks + authorities). MSPT is a separate outcome and only partially improves:
+a ~1.3–2× MSPT gap remains (8.4–14.0 vs 6.4–7.5), consistent with the
+mutations-phase light-composition attribution. Scope: this is an isolation
+experiment (writer-gate enforcement absent by design) — the composed
+benchmark result above stands unchanged; the capture layer is part of
+RustCraft's qualified-campaign shape and its cost belonged to Arm B.
+Receipt: `docs/research/OPT-FS-003-receipt.json`.

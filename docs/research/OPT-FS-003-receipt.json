@@ -1,0 +1,36 @@
+{
+ "budget": "DECLARED 2 diagnostic boots; ran 3 (control + ablation + the goal-required confirmation) \u2014 noted overage with justification",
+ "experiment": {
+  "bypass_proof": "server.log: '[live-capture] session SKIPPED' in both ablation runs vs 'session STARTING' in control (binary-safe grep required)",
+  "design": "capture-only ablation: rustcraft.noCaptureSession=true (new switch; one early-return in diagnosticSessionStart) with ALL authorities registered and running; matched control on the same build, same sampler, same frozen world/workload",
+  "work_comparability": "regs 628/629/632; light admitted 2071/2036, committed 33.8k/39.3k (historical family 22.9-40.3k); mism=0 dvdiv=0; 169 chunk packets every run; 67/67 confirmed mutations; streaming ticks 1415/1368"
+ },
+ "fix": "the noCaptureSession switch IS the bounded deliverable (minimal, default-off, production campaigns unchanged); making per-event capture cheaper internally is architecture work \u2014 documented as a proposal, not attempted",
+ "next_decision": "OPT-FS-004 (one boot): with capture off, run light-SHADOW to test whether the REMAINING streaming MSPT gap (~1.3-2x java) is light-composition CPU (the mutations-phase attribution says yes for that phase); separately, the +15-18GB boot allocation delta remains unattributed",
+ "opt_id": "OPT-FS-003",
+ "researched_at": "2026-10-09",
+ "results": {
+  "capture_OFF": "stream 1582MB / 8.4 MSPT; mutations 528MB / 8.8; save 87MB",
+  "capture_OFF_confirm": "stream 1774MB / 14.0 MSPT (slow-boot variance mode; allocation stable); mutations 518MB / 9.8; save 88MB",
+  "capture_ON_ctl": "stream 19938MB / 14.9 MSPT; mutations 6346MB / 13.4; save 2653MB",
+  "clean_java_reference": "stream 1228-1276MB / 6.35-7.53 MSPT; mutations 364-427MB / 4.79-6.30; save 71-80MB",
+  "verdict": "THE STREAMING ALLOCATION EXCESS IS THE OPTIONAL CAPTURE/OBSERVATION SESSION: -92% streaming, -92% mutations, -97% save allocation with every authority still executing; capture-off allocation ~= clean Java (~1.6-1.8GB vs 1.2-1.3GB; residual ~0.3-0.5GB = integration hooks + authorities). MSPT is a SEPARATE outcome and only partially improved: 14.9 -> 8.4/14.0 (spread = the known slow-boot mode) vs java 6.4-7.5 \u2014 a ~1.3-2x MSPT gap remains"
+ },
+ "revision": {
+  "end": "this commit",
+  "start": "7b45d33 (reference 30c43dd)"
+ },
+ "scope_limits": [
+  "isolation experiment, NOT a valid full-stack performance configuration (writer-gate enforcement absent by design; the composed benchmark result stands unchanged \u2014 RustCraft's enabled observation cost belongs to Arm B per the FS-001 rule)",
+  "an unchanged/cleared claim extends only to bypassed paths: capture session, writer brackets, comparison queue, observation journal; NOT to the always-on registry/sync/mirror hooks (cleared only up to the ~0.3-0.5GB residual)",
+  "light_committed 33.8k vs 39.3k is run-family variance (commands confirmed 67/67 both arms), not a workload change"
+ ],
+ "status": "ATTRIBUTED",
+ "switch_map": {
+  "capture_session": "starts at server bootstrap via diagnosticSessionStart (injected into MinecraftServer.run); writerBegin/writerEnd null-session NOOP fast paths are FIRST-LINE bypasses before any allocation (verified)",
+  "lightExperiment/lightMode": "SHADOW keeps light transformers registered+running in observation mode (FS-002 ablate2 scope-corrected: authority off, machinery on)",
+  "liveWriterDiagnostic": "gates the ENTIRE authority-registration block (light/region-rw/region-read/world-registry/writer transformers) \u2014 NOT a capture-only switch",
+  "regionWriteExperiment": "false = write transformer never registered (FS-002 ablate1 was valid for the write path INCLUDING its hooks)"
+ },
+ "task": "isolate how much of the remaining streaming excess comes from optional observation vs required integration vs extra MC/mod work"
+}
