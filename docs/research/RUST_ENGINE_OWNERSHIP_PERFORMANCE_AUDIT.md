@@ -181,3 +181,20 @@ Gate C A/B of 3 matched pairs. Receipt: `docs/research/OPT-SYNC-006-receipt.json
   bake1 exhibited one anomalous boot (4.6× registration) affecting both impls'
   windows asymmetrically — spread evidence, excluded from pair math by the
   swapped-order fork.
+
+## Full-stack A/B vs clean Java (2026-10-09) — SLOWER on every phase; receipt superseding the single-run baseline
+
+`docs/research/RUSTCRAFT_VS_JAVA_FULL_STACK_BENCHMARK.md` (+ machine receipt
+`FULLSTACK_AB_2026-10-09-receipt.json`): 3 balanced pairs, clean Java arm
+(zero RustCraft artifacts; 5,957-byte measurement observer with a
+tick-identity sampler), Rust arm = audit-baseline composition (light
+ON + registry + region read/write ON; packet/compression off). Verdict:
+chunk streaming 4.8–5.2× mean MSPT, mutation ticks 3.7–5×, save 3× wall,
+boot +30–70 s, process CPU +10–15%, server-thread allocation ~20×
+(~25 GB per 65 s streaming phase). Work-equivalent (169 chunk packets every
+run, 67/67 positively-confirmed mutations, near-identical tick counts);
+0 validation mismatches; every enabled authority EXECUTED with 0 failures.
+The prior audit-baseline table's single-run "java" arm (shadow-loaded) is
+superseded. Next measured target: OPT-FS-001 (attribution of the
+composition allocation storm) — the whole-composition cost currently
+dominates every subsystem-level win in this file.

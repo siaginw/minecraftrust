@@ -1,0 +1,51 @@
+{
+ "answer": "NO \u2014 slower on every measured phase (streaming 3.7-5.2x mean MSPT, mutations 2.8-5.0x, save 3x wall, boot +30-70s, cpu +10-15%, srv-thread alloc ~20x); work-equivalent (169 chunk packets and 67/67 confirmed mutations in clean runs); 0 validation mismatches; all enabled authorities executed (packet/compression off by audit-default).",
+ "artifacts": {
+  "campaign_jar_C_sha16": "0f24f872c74f6429",
+  "dll_sha16": "252498ee6db5ce35",
+  "observer_jar_sha16": "d555c6f5a7e1652a"
+ },
+ "next_target": "OPT-FS-001: attribute the ~380MB/s server-thread allocation storm during streaming under full-stack composition (new signature: not the sync path \u2014 OPT-SYNC-006 leases eliminated that churn)",
+ "notes": [
+  "java arm carries ZERO rustcraft artifacts (no javaagent/coremod/DLL) \u2014 only the 5,957-byte observer (no transformers)",
+  "probe verdict FAIL on disconnect-during-hold is the long-hold artifact; join-evidence fields authoritative (login/play/keepalive/chunk_packets all true)",
+  "1.12.2 console command feedback is silent for setblock/testforblock successes AND failures \u2014 confirmation uses the positive armor-stand execute-detect-say channel (CONFIRM lines)",
+  "prior baseline (audit-baseline doc) used a shadow-loaded java arm single-run \u2014 superseded by this clean-arm 3-pair benchmark"
+ ],
+ "opt_id": "FULLSTACK-AB-2026-10-09",
+ "pairs": [
+  [
+   "fs1j (java)",
+   "fs1r (rust)"
+  ],
+  [
+   "fs2r (rust)",
+   "fs2j (java)"
+  ],
+  [
+   "fs3j (java)",
+   "fs3r (rust)"
+  ]
+ ],
+ "question": "Is current RustCraft faster than normal Java/Forge/Revelation?",
+ "revision": "98745e7 (start) -> this commit",
+ "runs": {
+  "fs1j": "java MEASURED boot=160 pkt=169 conf=67/67 A_mean=6.91 B_mean=6.24 C_wall=1.5s",
+  "fs1r": "rust MEASURED boot=192 pkt=169 conf=42/67 (PARTIAL-WORK caveat: commands late vs busy ticks; phase-B numbers labeled) A_mean=36.02 B_mean=17.36 C_wall=4.5s regs=637 light=36343 wr_ok=1111 mism=0",
+  "fs2j": "java MEASURED boot=150 conf=67/67 A_mean=6.35 B_mean=4.79 C_wall=1.5s",
+  "fs2r": "rust MEASURED boot=224 conf=67/67 A_mean=30.29 B_mean=24.10 C_wall=4.5s regs=651 light=33300 wr_ok=1252 mism=0",
+  "fs3j": "java MEASURED boot=156 conf=67/67 A_mean=7.53 B_mean=6.30 C_wall=1.5s",
+  "fs3r": "rust MEASURED boot=206 conf=67/67 A_mean=36.59 B_mean=23.06 C_wall=4.5s regs=629 light=40272 wr_ok=1195 mism=0"
+ },
+ "sampler_validation": "MsptDedupRegression 9/9 at build (no recount, no lag phantoms, ring wrap, uninitialized skip); observer attaches via live object graph (no Class.forName); phases time-joined wall-clock",
+ "verdicts": {
+  "allocation": "SLOWER (~20x server-thread bytes during streaming: 23.8-25.9GB vs 1.23-1.28GB)",
+  "boot_cold_start": "SLOWER (+30-70s; labeled separately, never pooled)",
+  "chunk_streaming": "SLOWER (rust/java 4.8-5.2x mean MSPT, 5.3-6.1x p50, all 3 pairs)",
+  "cpu": "SLOWER (+10-15% process CPU during streaming)",
+  "gc": "NO_CLEAR_DIFFERENCE (counts/pauses comparable)",
+  "mutation_ticks": "SLOWER (3.7-5.0x clean pairs; pair1 rust partial-work labeled)",
+  "save_flush": "SLOWER (3.0x wall, 3.7-5.8x mean MSPT)",
+  "work_equivalence": "169 chunk packets every run; 67/67 confirmed mutations in clean runs; tick counts near-identical within pairs"
+ }
+}

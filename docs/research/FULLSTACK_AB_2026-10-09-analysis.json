@@ -1,0 +1,1129 @@
+[
+ {
+  "run": "target\\authority-review\\fs1j",
+  "arm": "java",
+  "verdict": "MEASURED",
+  "boot_s": 160.1,
+  "probe_evidence": {
+   "chunk_packets": 169,
+   "keepalive_exchanged": true,
+   "login_completed": true,
+   "note": "probe verdict FAIL on disconnect-during-hold is the expected artifact of holding until the benchmark's server stop; join evidence fields are authoritative here",
+   "play_reached": true
+  },
+  "commands": 73,
+  "confirmed_cells": 67,
+  "expected_cells": 67,
+  "anchor": [
+   195,
+   68,
+   284
+  ],
+  "phases": {
+   "probe": {
+    "intervals": 13,
+    "ticks": 108,
+    "mspt_mean": 16.321874074074074,
+    "mspt_p50": 4.8385,
+    "mspt_p95": 15.4613,
+    "mspt_p99": 241.9588,
+    "mspt_max": 872.6409,
+    "over_50": 3,
+    "over_100": 2,
+    "proc_cpu_s": 26.421875,
+    "srv_cpu_s": 0.828125,
+    "srv_alloc_mb": 262.432688,
+    "gc_n": 7,
+    "gc_ms": 2790,
+    "heap_max_used_mb": 1002.358888,
+    "heap_max_committed_mb": 2535.456768,
+    "duration_s": 5.005
+   },
+   "phase_a_streaming": {
+    "intervals": 217,
+    "ticks": 1319,
+    "mspt_mean": 6.911321228203184,
+    "mspt_p50": 2.4178,
+    "mspt_p95": 5.3507,
+    "mspt_p99": 226.4996,
+    "mspt_max": 919.8096,
+    "over_50": 16,
+    "over_100": 15,
+    "proc_cpu_s": 271.484375,
+    "srv_cpu_s": 4.140625,
+    "srv_alloc_mb": 1235.806528,
+    "gc_n": 168,
+    "gc_ms": 31325,
+    "heap_max_used_mb": 902.12176,
+    "heap_max_committed_mb": 3278.897152,
+    "duration_s": 65.618
+   },
+   "phase_b_mutations": {
+    "intervals": 87,
+    "ticks": 538,
+    "mspt_mean": 6.239448698884758,
+    "mspt_p50": 1.55,
+    "mspt_p95": 3.1022,
+    "mspt_p99": 209.9758,
+    "mspt_max": 457.1677,
+    "over_50": 9,
+    "over_100": 9,
+    "proc_cpu_s": 107.125,
+    "srv_cpu_s": 1.140625,
+    "srv_alloc_mb": 364.104728,
+    "gc_n": 95,
+    "gc_ms": 12631,
+    "heap_max_used_mb": 900.1908,
+    "heap_max_committed_mb": 3356.491776,
+    "duration_s": 27.018
+   },
+   "phase_c_save": {
+    "intervals": 5,
+    "ticks": 28,
+    "mspt_mean": 31.086475,
+    "mspt_p50": 1.6295,
+    "mspt_p95": 390.2272,
+    "mspt_p99": 436.9588,
+    "mspt_max": 436.9588,
+    "over_50": 2,
+    "over_100": 2,
+    "proc_cpu_s": 6.5625,
+    "srv_cpu_s": 0.515625,
+    "srv_alloc_mb": 71.09088,
+    "gc_n": 6,
+    "gc_ms": 646,
+    "heap_max_used_mb": 876.822872,
+    "heap_max_committed_mb": 3354.394624,
+    "duration_s": 1.504
+   }
+  }
+ },
+ {
+  "run": "target\\authority-review\\fs1r",
+  "arm": "rust",
+  "verdict": "MEASURED",
+  "boot_s": 192.2,
+  "probe_evidence": {
+   "chunk_packets": 169,
+   "keepalive_exchanged": true,
+   "login_completed": true,
+   "note": "probe verdict FAIL on disconnect-during-hold is the expected artifact of holding until the benchmark's server stop; join evidence fields are authoritative here",
+   "play_reached": true
+  },
+  "commands": 73,
+  "confirmed_cells": 42,
+  "expected_cells": 67,
+  "anchor": [
+   193,
+   65,
+   278
+  ],
+  "phases": {
+   "probe": {
+    "intervals": 10,
+    "ticks": 42,
+    "mspt_mean": 128.23324047619047,
+    "mspt_p50": 29.5155,
+    "mspt_p95": 769.0216,
+    "mspt_p99": 1554.2609,
+    "mspt_max": 1554.2609,
+    "over_50": 8,
+    "over_100": 4,
+    "proc_cpu_s": 32.015625,
+    "srv_cpu_s": 2.25,
+    "srv_alloc_mb": 1668.439144,
+    "gc_n": 8,
+    "gc_ms": 3186,
+    "heap_max_used_mb": 1692.979224,
+    "heap_max_committed_mb": 3252.158464,
+    "duration_s": 5.006
+   },
+   "phase_a_streaming": {
+    "intervals": 193,
+    "ticks": 1200,
+    "mspt_mean": 36.02283466666666,
+    "mspt_p50": 14.043,
+    "mspt_p95": 52.6084,
+    "mspt_p99": 488.1943,
+    "mspt_max": 3177.2524,
+    "over_50": 62,
+    "over_100": 57,
+    "proc_cpu_s": 312.234375,
+    "srv_cpu_s": 22.78125,
+    "srv_alloc_mb": 23830.591048,
+    "gc_n": 182,
+    "gc_ms": 33505,
+    "heap_max_used_mb": 1862.65196,
+    "heap_max_committed_mb": 4128.243712,
+    "duration_s": 65.615
+   },
+   "phase_b_mutations": {
+    "intervals": 87,
+    "ticks": 513,
+    "mspt_mean": 17.36307933723197,
+    "mspt_p50": 10.4548,
+    "mspt_p95": 20.6719,
+    "mspt_p99": 247.0295,
+    "mspt_max": 293.1489,
+    "over_50": 12,
+    "over_100": 12,
+    "proc_cpu_s": 114.0,
+    "srv_cpu_s": 6.859375,
+    "srv_alloc_mb": 6495.245688,
+    "gc_n": 94,
+    "gc_ms": 12916,
+    "heap_max_used_mb": 1580.358616,
+    "heap_max_committed_mb": 4125.097984,
+    "duration_s": 27.019
+   },
+   "phase_c_save": {
+    "intervals": 16,
+    "ticks": 22,
+    "mspt_mean": 192.87699545454544,
+    "mspt_p50": 8.4742,
+    "mspt_p95": 1317.9486,
+    "mspt_p99": 1491.987,
+    "mspt_max": 1491.987,
+    "over_50": 3,
+    "over_100": 3,
+    "proc_cpu_s": 19.3125,
+    "srv_cpu_s": 2.609375,
+    "srv_alloc_mb": 2995.196016,
+    "gc_n": 17,
+    "gc_ms": 1860,
+    "heap_max_used_mb": 1567.578936,
+    "heap_max_committed_mb": 4129.292288,
+    "duration_s": 4.509
+   }
+  },
+  "witnesses": {
+   "world_registry": 637,
+   "sections_refreshed": 3038,
+   "validation_mismatch": 0,
+   "dv_diverge": 0,
+   "light_admitted": 1867,
+   "light_committed": 36343,
+   "light_fallbacks": 144,
+   "mirror_published": 36343,
+   "mirror_committed": 36343,
+   "region_reads_selected": 632,
+   "region_reads_success": 632,
+   "region_write_entries": 1111,
+   "region_write_rust_ok": 1111,
+   "region_write_rust_failed": 0,
+   "region_write_vanilla_fallbacks": 0
+  }
+ },
+ {
+  "run": "target\\authority-review\\fs2r",
+  "arm": "rust",
+  "verdict": "MEASURED",
+  "boot_s": 224.1,
+  "probe_evidence": {
+   "chunk_packets": 169,
+   "keepalive_exchanged": true,
+   "login_completed": true,
+   "note": "probe verdict FAIL on disconnect-during-hold is the expected artifact of holding until the benchmark's server stop; join evidence fields are authoritative here",
+   "play_reached": true
+  },
+  "commands": 73,
+  "confirmed_cells": 67,
+  "expected_cells": 67,
+  "anchor": [
+   196,
+   69,
+   285
+  ],
+  "phases": {
+   "probe": {
+    "intervals": 9,
+    "ticks": 34,
+    "mspt_mean": 146.1909911764706,
+    "mspt_p50": 29.4214,
+    "mspt_p95": 787.2555,
+    "mspt_p99": 1337.3634,
+    "mspt_max": 1337.3634,
+    "over_50": 8,
+    "over_100": 4,
+    "proc_cpu_s": 27.046875,
+    "srv_cpu_s": 1.921875,
+    "srv_alloc_mb": 1641.405616,
+    "gc_n": 8,
+    "gc_ms": 3039,
+    "heap_max_used_mb": 1588.731488,
+    "heap_max_committed_mb": 3230.662656,
+    "duration_s": 5.005
+   },
+   "phase_a_streaming": {
+    "intervals": 204,
+    "ticks": 1339,
+    "mspt_mean": 30.286098581030622,
+    "mspt_p50": 12.6852,
+    "mspt_p95": 37.2128,
+    "mspt_p99": 584.0441,
+    "mspt_max": 2446.4628,
+    "over_50": 60,
+    "over_100": 56,
+    "proc_cpu_s": 296.984375,
+    "srv_cpu_s": 22.546875,
+    "srv_alloc_mb": 25633.244568,
+    "gc_n": 209,
+    "gc_ms": 31555,
+    "heap_max_used_mb": 1890.043312,
+    "heap_max_committed_mb": 3304.062976,
+    "duration_s": 65.613
+   },
+   "phase_b_mutations": {
+    "intervals": 89,
+    "ticks": 539,
+    "mspt_mean": 24.097040074211503,
+    "mspt_p50": 10.258,
+    "mspt_p95": 17.904,
+    "mspt_p99": 262.2342,
+    "mspt_max": 2033.1546,
+    "over_50": 13,
+    "over_100": 13,
+    "proc_cpu_s": 118.4375,
+    "srv_cpu_s": 7.75,
+    "srv_alloc_mb": 8713.65752,
+    "gc_n": 91,
+    "gc_ms": 13156,
+    "heap_max_used_mb": 1662.475048,
+    "heap_max_committed_mb": 3301.441536,
+    "duration_s": 27.018
+   },
+   "phase_c_save": {
+    "intervals": 17,
+    "ticks": 32,
+    "mspt_mean": 131.9433,
+    "mspt_p50": 10.252,
+    "mspt_p95": 1096.9311,
+    "mspt_p99": 1492.0495,
+    "mspt_max": 1492.0495,
+    "over_50": 3,
+    "over_100": 3,
+    "proc_cpu_s": 16.515625,
+    "srv_cpu_s": 2.890625,
+    "srv_alloc_mb": 3634.7818,
+    "gc_n": 16,
+    "gc_ms": 1565,
+    "heap_max_used_mb": 1903.905904,
+    "heap_max_committed_mb": 3306.684416,
+    "duration_s": 4.508
+   }
+  },
+  "witnesses": {
+   "world_registry": 651,
+   "sections_refreshed": 3092,
+   "validation_mismatch": 0,
+   "dv_diverge": 0,
+   "light_admitted": 2046,
+   "light_committed": 33300,
+   "light_fallbacks": 171,
+   "mirror_published": 33300,
+   "mirror_committed": 33300,
+   "region_reads_selected": 641,
+   "region_reads_success": 641,
+   "region_write_entries": 1252,
+   "region_write_rust_ok": 1252,
+   "region_write_rust_failed": 0,
+   "region_write_vanilla_fallbacks": 0
+  }
+ },
+ {
+  "run": "target\\authority-review\\fs2j",
+  "arm": "java",
+  "verdict": "MEASURED",
+  "boot_s": 150.1,
+  "probe_evidence": {
+   "chunk_packets": 169,
+   "keepalive_exchanged": true,
+   "login_completed": true,
+   "note": "probe verdict FAIL on disconnect-during-hold is the expected artifact of holding until the benchmark's server stop; join evidence fields are authoritative here",
+   "play_reached": true
+  },
+  "commands": 73,
+  "confirmed_cells": 67,
+  "expected_cells": 67,
+  "anchor": [
+   195,
+   68,
+   277
+  ],
+  "phases": {
+   "probe": {
+    "intervals": 12,
+    "ticks": 130,
+    "mspt_mean": 51.20581923076924,
+    "mspt_p50": 5.3695,
+    "mspt_p95": 28.325,
+    "mspt_p99": 1035.4209,
+    "mspt_max": 3553.7267,
+    "over_50": 5,
+    "over_100": 4,
+    "proc_cpu_s": 28.578125,
+    "srv_cpu_s": 1.25,
+    "srv_alloc_mb": 330.232912,
+    "gc_n": 11,
+    "gc_ms": 2879,
+    "heap_max_used_mb": 1142.6562,
+    "heap_max_committed_mb": 3264.741376,
+    "duration_s": 5.005
+   },
+   "phase_a_streaming": {
+    "intervals": 226,
+    "ticks": 1315,
+    "mspt_mean": 6.3453904182509495,
+    "mspt_p50": 2.3865,
+    "mspt_p95": 5.1769,
+    "mspt_p99": 207.0176,
+    "mspt_max": 720.4522,
+    "over_50": 16,
+    "over_100": 15,
+    "proc_cpu_s": 264.390625,
+    "srv_cpu_s": 4.0,
+    "srv_alloc_mb": 1275.777736,
+    "gc_n": 239,
+    "gc_ms": 29498,
+    "heap_max_used_mb": 941.8768,
+    "heap_max_committed_mb": 3308.781568,
+    "duration_s": 65.614
+   },
+   "phase_b_mutations": {
+    "intervals": 93,
+    "ticks": 541,
+    "mspt_mean": 4.791555822550832,
+    "mspt_p50": 2.0309,
+    "mspt_p95": 3.6288,
+    "mspt_p99": 24.9386,
+    "mspt_max": 571.1974,
+    "over_50": 5,
+    "over_100": 5,
+    "proc_cpu_s": 98.734375,
+    "srv_cpu_s": 1.375,
+    "srv_alloc_mb": 426.556976,
+    "gc_n": 93,
+    "gc_ms": 11671,
+    "heap_max_used_mb": 901.051224,
+    "heap_max_committed_mb": 3321.888768,
+    "duration_s": 27.021
+   },
+   "phase_c_save": {
+    "intervals": 6,
+    "ticks": 31,
+    "mspt_mean": 22.87765161290323,
+    "mspt_p50": 1.9643,
+    "mspt_p95": 197.1388,
+    "mspt_p99": 232.2092,
+    "mspt_max": 232.2092,
+    "over_50": 3,
+    "over_100": 3,
+    "proc_cpu_s": 1.6875,
+    "srv_cpu_s": 0.6875,
+    "srv_alloc_mb": 78.364904,
+    "gc_n": 3,
+    "gc_ms": 23,
+    "heap_max_used_mb": 901.567224,
+    "heap_max_committed_mb": 3319.791616,
+    "duration_s": 1.503
+   }
+  }
+ },
+ {
+  "run": "target\\authority-review\\fs3j",
+  "arm": "java",
+  "verdict": "MEASURED",
+  "boot_s": 156.1,
+  "probe_evidence": {
+   "chunk_packets": 169,
+   "keepalive_exchanged": true,
+   "login_completed": true,
+   "note": "probe verdict FAIL on disconnect-during-hold is the expected artifact of holding until the benchmark's server stop; join evidence fields are authoritative here",
+   "play_reached": true
+  },
+  "commands": 73,
+  "confirmed_cells": 67,
+  "expected_cells": 67,
+  "anchor": [
+   196,
+   68,
+   283
+  ],
+  "phases": {
+   "probe": {
+    "intervals": 10,
+    "ticks": 102,
+    "mspt_mean": 28.316953921568626,
+    "mspt_p50": 5.3906,
+    "mspt_p95": 25.5661,
+    "mspt_p99": 977.0054,
+    "mspt_max": 1026.0985,
+    "over_50": 4,
+    "over_100": 3,
+    "proc_cpu_s": 36.703125,
+    "srv_cpu_s": 0.875,
+    "srv_alloc_mb": 267.058864,
+    "gc_n": 10,
+    "gc_ms": 3272,
+    "heap_max_used_mb": 1053.098904,
+    "heap_max_committed_mb": 3247.439872,
+    "duration_s": 5.005
+   },
+   "phase_a_streaming": {
+    "intervals": 222,
+    "ticks": 1320,
+    "mspt_mean": 7.532333560606061,
+    "mspt_p50": 2.4031,
+    "mspt_p95": 6.0784,
+    "mspt_p99": 216.8126,
+    "mspt_max": 819.278,
+    "over_50": 25,
+    "over_100": 24,
+    "proc_cpu_s": 264.5,
+    "srv_cpu_s": 4.578125,
+    "srv_alloc_mb": 1227.948656,
+    "gc_n": 236,
+    "gc_ms": 29793,
+    "heap_max_used_mb": 956.52296,
+    "heap_max_committed_mb": 3310.87872,
+    "duration_s": 65.618
+   },
+   "phase_b_mutations": {
+    "intervals": 92,
+    "ticks": 530,
+    "mspt_mean": 6.295622264150944,
+    "mspt_p50": 1.8302,
+    "mspt_p95": 3.6035,
+    "mspt_p99": 213.5191,
+    "mspt_max": 613.1112,
+    "over_50": 7,
+    "over_100": 7,
+    "proc_cpu_s": 102.515625,
+    "srv_cpu_s": 1.390625,
+    "srv_alloc_mb": 423.486112,
+    "gc_n": 93,
+    "gc_ms": 11673,
+    "heap_max_used_mb": 906.762672,
+    "heap_max_committed_mb": 3312.451584,
+    "duration_s": 27.021
+   },
+   "phase_c_save": {
+    "intervals": 6,
+    "ticks": 30,
+    "mspt_mean": 22.729233333333337,
+    "mspt_p50": 1.5378,
+    "mspt_p95": 209.8826,
+    "mspt_p99": 227.1365,
+    "mspt_max": 227.1365,
+    "over_50": 3,
+    "over_100": 3,
+    "proc_cpu_s": 6.8125,
+    "srv_cpu_s": 0.671875,
+    "srv_alloc_mb": 79.864128,
+    "gc_n": 6,
+    "gc_ms": 639,
+    "heap_max_used_mb": 896.729296,
+    "heap_max_committed_mb": 3309.830144,
+    "duration_s": 1.505
+   }
+  }
+ },
+ {
+  "run": "target\\authority-review\\fs3r",
+  "arm": "rust",
+  "verdict": "MEASURED",
+  "boot_s": 206.1,
+  "probe_evidence": {
+   "chunk_packets": 169,
+   "keepalive_exchanged": true,
+   "login_completed": true,
+   "note": "probe verdict FAIL on disconnect-during-hold is the expected artifact of holding until the benchmark's server stop; join evidence fields are authoritative here",
+   "play_reached": true
+  },
+  "commands": 73,
+  "confirmed_cells": 67,
+  "expected_cells": 67,
+  "anchor": [
+   197,
+   70,
+   284
+  ],
+  "phases": {
+   "probe": {
+    "intervals": 10,
+    "ticks": 8,
+    "mspt_mean": 493.466725,
+    "mspt_p50": 158.2126,
+    "mspt_p95": 2400.8229,
+    "mspt_p99": 2400.8229,
+    "mspt_max": 2400.8229,
+    "over_50": 7,
+    "over_100": 5,
+    "proc_cpu_s": 32.125,
+    "srv_cpu_s": 1.3125,
+    "srv_alloc_mb": 993.169224,
+    "gc_n": 5,
+    "gc_ms": 3397,
+    "heap_max_used_mb": 1485.0184,
+    "heap_max_committed_mb": 3089.104896,
+    "duration_s": 5.004
+   },
+   "phase_a_streaming": {
+    "intervals": 197,
+    "ticks": 1329,
+    "mspt_mean": 36.59373348382242,
+    "mspt_p50": 14.5003,
+    "mspt_p95": 233.2251,
+    "mspt_p99": 488.7349,
+    "mspt_max": 3161.1446,
+    "over_50": 72,
+    "over_100": 70,
+    "proc_cpu_s": 311.078125,
+    "srv_cpu_s": 24.359375,
+    "srv_alloc_mb": 25938.107408,
+    "gc_n": 148,
+    "gc_ms": 33016,
+    "heap_max_used_mb": 1764.652376,
+    "heap_max_committed_mb": 4066.902016,
+    "duration_s": 65.614
+   },
+   "phase_b_mutations": {
+    "intervals": 88,
+    "ticks": 536,
+    "mspt_mean": 23.060711753731344,
+    "mspt_p50": 9.7957,
+    "mspt_p95": 19.8033,
+    "mspt_p99": 312.1118,
+    "mspt_max": 1481.2167,
+    "over_50": 17,
+    "over_100": 16,
+    "proc_cpu_s": 116.140625,
+    "srv_cpu_s": 7.34375,
+    "srv_alloc_mb": 7922.19516,
+    "gc_n": 92,
+    "gc_ms": 12682,
+    "heap_max_used_mb": 1775.498432,
+    "heap_max_committed_mb": 4069.523456,
+    "duration_s": 27.023
+   },
+   "phase_c_save": {
+    "intervals": 16,
+    "ticks": 50,
+    "mspt_mean": 84.62269599999999,
+    "mspt_p50": 10.027,
+    "mspt_p95": 1029.4057,
+    "mspt_p99": 1402.1992,
+    "mspt_max": 1402.1992,
+    "over_50": 4,
+    "over_100": 4,
+    "proc_cpu_s": 13.796875,
+    "srv_cpu_s": 3.03125,
+    "srv_alloc_mb": 3768.19656,
+    "gc_n": 13,
+    "gc_ms": 1211,
+    "heap_max_used_mb": 1938.58068,
+    "heap_max_committed_mb": 4067.950592,
+    "duration_s": 4.506
+   }
+  },
+  "witnesses": {
+   "world_registry": 629,
+   "sections_refreshed": 2998,
+   "validation_mismatch": 0,
+   "dv_diverge": 0,
+   "light_admitted": 2026,
+   "light_committed": 40272,
+   "light_fallbacks": 135,
+   "mirror_published": 40272,
+   "mirror_committed": 40272,
+   "region_reads_selected": 629,
+   "region_reads_success": 629,
+   "region_write_entries": 1195,
+   "region_write_rust_ok": 1195,
+   "region_write_rust_failed": 0,
+   "region_write_vanilla_fallbacks": 0
+  }
+ }
+]
+=== PAIRS ===
+[
+ {
+  "pair": [
+   "target\\authority-review\\fs1j",
+   "target\\authority-review\\fs1r"
+  ],
+  "phase_a_streaming": {
+   "duration_s": {
+    "java": 65.618,
+    "rust": 65.615,
+    "reduction": 0.0,
+    "speedup": 1.0
+   },
+   "mspt_mean": {
+    "java": 6.911321228203184,
+    "rust": 36.02283466666666,
+    "reduction": -4.2121,
+    "speedup": 0.1919
+   },
+   "mspt_p95": {
+    "java": 5.3507,
+    "rust": 52.6084
+   },
+   "mspt_p99": {
+    "java": 226.4996,
+    "rust": 488.1943
+   },
+   "proc_cpu_s": {
+    "java": 271.484375,
+    "rust": 312.234375,
+    "reduction": -0.1501,
+    "speedup": 0.8695
+   },
+   "srv_cpu_s": {
+    "java": 4.140625,
+    "rust": 22.78125,
+    "reduction": -4.5019,
+    "speedup": 0.1818
+   },
+   "srv_alloc_mb": {
+    "java": 1235.806528,
+    "rust": 23830.591048
+   },
+   "ticks": {
+    "java": 1319,
+    "rust": 1200
+   },
+   "over_50": {
+    "java": 16,
+    "rust": 62
+   },
+   "over_100": {
+    "java": 15,
+    "rust": 57
+   },
+   "gc_n": {
+    "java": 168,
+    "rust": 182
+   },
+   "gc_ms": {
+    "java": 31325,
+    "rust": 33505
+   }
+  },
+  "phase_b_mutations": {
+   "duration_s": {
+    "java": 27.018,
+    "rust": 27.019,
+    "reduction": -0.0,
+    "speedup": 1.0
+   },
+   "mspt_mean": {
+    "java": 6.239448698884758,
+    "rust": 17.36307933723197,
+    "reduction": -1.7828,
+    "speedup": 0.3594
+   },
+   "mspt_p95": {
+    "java": 3.1022,
+    "rust": 20.6719
+   },
+   "mspt_p99": {
+    "java": 209.9758,
+    "rust": 247.0295
+   },
+   "proc_cpu_s": {
+    "java": 107.125,
+    "rust": 114.0,
+    "reduction": -0.0642,
+    "speedup": 0.9397
+   },
+   "srv_cpu_s": {
+    "java": 1.140625,
+    "rust": 6.859375,
+    "reduction": -5.0137,
+    "speedup": 0.1663
+   },
+   "srv_alloc_mb": {
+    "java": 364.104728,
+    "rust": 6495.245688
+   },
+   "ticks": {
+    "java": 538,
+    "rust": 513
+   },
+   "over_50": {
+    "java": 9,
+    "rust": 12
+   },
+   "over_100": {
+    "java": 9,
+    "rust": 12
+   },
+   "gc_n": {
+    "java": 95,
+    "rust": 94
+   },
+   "gc_ms": {
+    "java": 12631,
+    "rust": 12916
+   }
+  },
+  "phase_c_save": {
+   "duration_s": {
+    "java": 1.504,
+    "rust": 4.509,
+    "reduction": -1.998,
+    "speedup": 0.3336
+   },
+   "mspt_mean": {
+    "java": 31.086475,
+    "rust": 192.87699545454544,
+    "reduction": -5.2045,
+    "speedup": 0.1612
+   },
+   "mspt_p95": {
+    "java": 390.2272,
+    "rust": 1317.9486
+   },
+   "mspt_p99": {
+    "java": 436.9588,
+    "rust": 1491.987
+   },
+   "proc_cpu_s": {
+    "java": 6.5625,
+    "rust": 19.3125,
+    "reduction": -1.9429,
+    "speedup": 0.3398
+   },
+   "srv_cpu_s": {
+    "java": 0.515625,
+    "rust": 2.609375,
+    "reduction": -4.0606,
+    "speedup": 0.1976
+   },
+   "srv_alloc_mb": {
+    "java": 71.09088,
+    "rust": 2995.196016
+   },
+   "ticks": {
+    "java": 28,
+    "rust": 22
+   },
+   "over_50": {
+    "java": 2,
+    "rust": 3
+   },
+   "over_100": {
+    "java": 2,
+    "rust": 3
+   },
+   "gc_n": {
+    "java": 6,
+    "rust": 17
+   },
+   "gc_ms": {
+    "java": 646,
+    "rust": 1860
+   }
+  },
+  "probe": {
+   "duration_s": {
+    "java": 5.005,
+    "rust": 5.006,
+    "reduction": -0.0002,
+    "speedup": 0.9998
+   },
+   "mspt_mean": {
+    "java": 16.321874074074074,
+    "rust": 128.23324047619047,
+    "reduction": -6.8565,
+    "speedup": 0.1273
+   },
+   "mspt_p95": {
+    "java": 15.4613,
+    "rust": 769.0216
+   },
+   "mspt_p99": {
+    "java": 241.9588,
+    "rust": 1554.2609
+   },
+   "proc_cpu_s": {
+    "java": 26.421875,
+    "rust": 32.015625,
+    "reduction": -0.2117,
+    "speedup": 0.8253
+   },
+   "srv_cpu_s": {
+    "java": 0.828125,
+    "rust": 2.25,
+    "reduction": -1.717,
+    "speedup": 0.3681
+   },
+   "srv_alloc_mb": {
+    "java": 262.432688,
+    "rust": 1668.439144
+   },
+   "ticks": {
+    "java": 108,
+    "rust": 42
+   },
+   "over_50": {
+    "java": 3,
+    "rust": 8
+   },
+   "over_100": {
+    "java": 2,
+    "rust": 4
+   },
+   "gc_n": {
+    "java": 7,
+    "rust": 8
+   },
+   "gc_ms": {
+    "java": 2790,
+    "rust": 3186
+   }
+  }
+ },
+ {
+  "error": "runs 2,3 not java-then-rust"
+ },
+ {
+  "pair": [
+   "target\\authority-review\\fs3j",
+   "target\\authority-review\\fs3r"
+  ],
+  "phase_a_streaming": {
+   "duration_s": {
+    "java": 65.618,
+    "rust": 65.614,
+    "reduction": 0.0001,
+    "speedup": 1.0001
+   },
+   "mspt_mean": {
+    "java": 7.532333560606061,
+    "rust": 36.59373348382242,
+    "reduction": -3.8582,
+    "speedup": 0.2058
+   },
+   "mspt_p95": {
+    "java": 6.0784,
+    "rust": 233.2251
+   },
+   "mspt_p99": {
+    "java": 216.8126,
+    "rust": 488.7349
+   },
+   "proc_cpu_s": {
+    "java": 264.5,
+    "rust": 311.078125,
+    "reduction": -0.1761,
+    "speedup": 0.8503
+   },
+   "srv_cpu_s": {
+    "java": 4.578125,
+    "rust": 24.359375,
+    "reduction": -4.3208,
+    "speedup": 0.1879
+   },
+   "srv_alloc_mb": {
+    "java": 1227.948656,
+    "rust": 25938.107408
+   },
+   "ticks": {
+    "java": 1320,
+    "rust": 1329
+   },
+   "over_50": {
+    "java": 25,
+    "rust": 72
+   },
+   "over_100": {
+    "java": 24,
+    "rust": 70
+   },
+   "gc_n": {
+    "java": 236,
+    "rust": 148
+   },
+   "gc_ms": {
+    "java": 29793,
+    "rust": 33016
+   }
+  },
+  "phase_b_mutations": {
+   "duration_s": {
+    "java": 27.021,
+    "rust": 27.023,
+    "reduction": -0.0001,
+    "speedup": 0.9999
+   },
+   "mspt_mean": {
+    "java": 6.295622264150944,
+    "rust": 23.060711753731344,
+    "reduction": -2.663,
+    "speedup": 0.273
+   },
+   "mspt_p95": {
+    "java": 3.6035,
+    "rust": 19.8033
+   },
+   "mspt_p99": {
+    "java": 213.5191,
+    "rust": 312.1118
+   },
+   "proc_cpu_s": {
+    "java": 102.515625,
+    "rust": 116.140625,
+    "reduction": -0.1329,
+    "speedup": 0.8827
+   },
+   "srv_cpu_s": {
+    "java": 1.390625,
+    "rust": 7.34375,
+    "reduction": -4.2809,
+    "speedup": 0.1894
+   },
+   "srv_alloc_mb": {
+    "java": 423.486112,
+    "rust": 7922.19516
+   },
+   "ticks": {
+    "java": 530,
+    "rust": 536
+   },
+   "over_50": {
+    "java": 7,
+    "rust": 17
+   },
+   "over_100": {
+    "java": 7,
+    "rust": 16
+   },
+   "gc_n": {
+    "java": 93,
+    "rust": 92
+   },
+   "gc_ms": {
+    "java": 11673,
+    "rust": 12682
+   }
+  },
+  "phase_c_save": {
+   "duration_s": {
+    "java": 1.505,
+    "rust": 4.506,
+    "reduction": -1.994,
+    "speedup": 0.334
+   },
+   "mspt_mean": {
+    "java": 22.729233333333337,
+    "rust": 84.62269599999999,
+    "reduction": -2.7231,
+    "speedup": 0.2686
+   },
+   "mspt_p95": {
+    "java": 209.8826,
+    "rust": 1029.4057
+   },
+   "mspt_p99": {
+    "java": 227.1365,
+    "rust": 1402.1992
+   },
+   "proc_cpu_s": {
+    "java": 6.8125,
+    "rust": 13.796875,
+    "reduction": -1.0252,
+    "speedup": 0.4938
+   },
+   "srv_cpu_s": {
+    "java": 0.671875,
+    "rust": 3.03125,
+    "reduction": -3.5116,
+    "speedup": 0.2216
+   },
+   "srv_alloc_mb": {
+    "java": 79.864128,
+    "rust": 3768.19656
+   },
+   "ticks": {
+    "java": 30,
+    "rust": 50
+   },
+   "over_50": {
+    "java": 3,
+    "rust": 4
+   },
+   "over_100": {
+    "java": 3,
+    "rust": 4
+   },
+   "gc_n": {
+    "java": 6,
+    "rust": 13
+   },
+   "gc_ms": {
+    "java": 639,
+    "rust": 1211
+   }
+  },
+  "probe": {
+   "duration_s": {
+    "java": 5.005,
+    "rust": 5.004,
+    "reduction": 0.0002,
+    "speedup": 1.0002
+   },
+   "mspt_mean": {
+    "java": 28.316953921568626,
+    "rust": 493.466725,
+    "reduction": -16.4265,
+    "speedup": 0.0574
+   },
+   "mspt_p95": {
+    "java": 25.5661,
+    "rust": 2400.8229
+   },
+   "mspt_p99": {
+    "java": 977.0054,
+    "rust": 2400.8229
+   },
+   "proc_cpu_s": {
+    "java": 36.703125,
+    "rust": 32.125,
+    "reduction": 0.1247,
+    "speedup": 1.1425
+   },
+   "srv_cpu_s": {
+    "java": 0.875,
+    "rust": 1.3125,
+    "reduction": -0.5,
+    "speedup": 0.6667
+   },
+   "srv_alloc_mb": {
+    "java": 267.058864,
+    "rust": 993.169224
+   },
+   "ticks": {
+    "java": 102,
+    "rust": 8
+   },
+   "over_50": {
+    "java": 4,
+    "rust": 7
+   },
+   "over_100": {
+    "java": 3,
+    "rust": 5
+   },
+   "gc_n": {
+    "java": 10,
+    "rust": 5
+   },
+   "gc_ms": {
+    "java": 3272,
+    "rust": 3397
+   }
+  }
+ }
+]

@@ -113,6 +113,71 @@ def export_check_self_test():
     return 0
 
 
+def build_observer_only(out_jar: Path) -> int:
+    """FULL-STACK BENCHMARK Arm A: a jar containing ONLY the measurement
+    observer (tweaker + sampler; no coremod manifest, no transformers,
+    no RustCraft classes) so the Java reference pays no hidden RustCraft
+    costs. Runs the MsptDedupRegression as its build gate."""
+    rt = ROOT / "target" / "authority-smoke" / "runtimeC"
+    lw = rt / "libraries" / "net" / "minecraft" / "launchwrapper" / "1.12" \
+        / "launchwrapper-1.12.jar"
+    if not JAVAC.exists():
+        print(f"ERROR: javac not found at {JAVAC}", file=sys.stderr)
+        return 1
+    build = ROOT / "target" / "observer-build"
+    if build.exists():
+        shutil.rmtree(build)
+    build.mkdir(parents=True)
+    srcs = [
+        ROOT / "tools/bridge/src/com/rustcraft/observer/"
+        "MeasurementObserverTweaker.java",
+        ROOT / "tools/bridge/src/com/rustcraft/observer/ObserverMain.java",
+    ]
+    res = subprocess.run(
+        [str(JAVAC), "-encoding", "UTF-8", "-source", "8", "-target", "8",
+         "-nowarn", "-cp", str(lw), "-d", str(build)] +
+        [str(s) for s in srcs],
+        capture_output=True, text=True)
+    if res.returncode != 0:
+        print("OBSERVER COMPILE ERROR:\n" + res.stderr, file=sys.stderr)
+        return res.returncode
+    res = subprocess.run(
+        [str(JDK8 / "bin" / "jar.exe"), "cf", str(out_jar),
+         "-C", str(build), "com"],
+        capture_output=True, text=True)
+    if res.returncode != 0:
+        print("OBSERVER JAR ERROR:\n" + res.stderr, file=sys.stderr)
+        return res.returncode
+    # §7 gate: the tick-identity semantics are unit-tested at build time
+    test_src = ROOT / "tools" / "bridge" / "test" / "com" / "rustcraft" \
+        / "observer" / "MsptDedupRegression.java"
+    tb = ROOT / "target" / "observer-test-classes"
+    if tb.exists():
+        shutil.rmtree(tb)
+    tb.mkdir(parents=True)
+    res = subprocess.run(
+        [str(JAVAC), "-encoding", "UTF-8", "-source", "8", "-target", "8",
+         "-nowarn", "-cp", str(build), "-d", str(tb), str(test_src)],
+        capture_output=True, text=True)
+    if res.returncode != 0:
+        print("MSPT-DEDUP REGRESSION COMPILE ERROR:\n" + res.stderr,
+              file=sys.stderr)
+        return res.returncode
+    res = subprocess.run(
+        [str(JDK8 / "bin" / "java.exe"), "-cp",
+         str(tb) + ";" + str(build),
+         "com.rustcraft.observer.MsptDedupRegression"],
+        capture_output=True, text=True)
+    sys.stdout.write(res.stdout)
+    if res.returncode != 0:
+        print("MSPT-DEDUP REGRESSION FAILED:\n" + res.stderr, file=sys.stderr)
+        return res.returncode if res.returncode > 0 else 1
+    print(f"[OK] Successfully built {out_jar} "
+          f"({out_jar.stat().st_size:,} bytes) — observer only, "
+          f"no transformers, no RustCraft classes")
+    return 0
+
+
 def main():
     parser = argparse.ArgumentParser(description="Build RustCraft campaign coremod jar")
     parser.add_argument("--target", choices=["A", "C"], default="C",
@@ -125,10 +190,18 @@ def main():
                         help="Alternative LiveWriterPlan.java file")
     parser.add_argument("--export-self-test", action="store_true",
                         help="Run the §19 negative self-test and exit")
+    parser.add_argument("--observer-only", type=Path, default=None,
+                        help="Build ONLY the measurement observer jar "
+                             "(clean-Java-reference Arm A: ITweaker with no "
+                             "transformers + tick-identity MSPT sampler) and "
+                             "exit")
     args = parser.parse_args()
 
     if args.export_self_test:
         return export_check_self_test()
+
+    if args.observer_only is not None:
+        return build_observer_only(args.observer_only)
 
     # retro 2026-10-09: --target C must imply the -C artifact name — the
     # runner stages rustcraft-campaign-C.jar for Gate C, and a plain
@@ -214,6 +287,8 @@ def main():
     cp = f"{forge};{SRG_JAR};{asm};{lw};{notch_jar}"
 
     sources = [
+        ROOT / "tools/bridge/src/com/rustcraft/observer/MeasurementObserverTweaker.java",
+        ROOT / "tools/bridge/src/com/rustcraft/observer/ObserverMain.java",
         ROOT / "tools/bridge/src/com/rustcraft/coremod/LiveShadowCoreMod.java",
         ROOT / "tools/bridge/src/com/rustcraft/coremod/RustCraftCoreMod.java",
         ROOT / "tools/bridge/src/com/rustcraft/coremod/FrameShadowHookTransformer.java",
