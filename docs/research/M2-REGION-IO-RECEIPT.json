@@ -1,0 +1,49 @@
+{
+ "boundary": {
+  "copies_removed_on_native_write": "the vanilla body's own compression+sector-alloc+file-write (skipped on Rust admission: 1178/1178 in run A)",
+  "java_remains": [
+   "NBT PRODUCTION from game state (AnvilChunkLoader.serialize -> byte[]) \u2014 the compatibility boundary: mods can hook Chunk/TE NBT (journeymap, NotEnoughIDs reference AnvilChunkLoader)",
+   "NBT INTERPRETATION on load (CompressedStreamTools reads the DataInputStream Rust supplies)",
+   "mod save/load callbacks, world-level flush orchestration, RegionFile construction"
+  ],
+  "rust_owns": [
+   "WRITE: payload staging (Java byte[] -> direct buffer), compression, sector allocation, region metadata update, file write (regionWriteEntry ON mode returns true -> vanilla body SKIPPED)",
+   "READ: file read, sector lookup, header parse, decompression (regionRead returns DataInputStream over Rust bytes -> vanilla body SKIPPED)",
+   "handle lifecycle: native engine open/close per RegionFile; generation tickets; external-writer detection"
+  ],
+  "transfers_remaining": "one Java heap byte[] -> direct-buffer copy per write (st.stage); one decompressed byte[] -> ByteArrayInputStream per read",
+  "why_this_boundary": "NBT is the mod-visible contract (TE data, mod-owned tags Rust must not interpret); bytes below NBT are format-fixed (vanilla region format)"
+ },
+ "budget": "DECLARED 3 lifecycle boots; ran 5 (2 tooling failures: driver args plumbing NameError; jvm-prop ordering lost to -D last-wins \u2014 both fixed, counted)",
+ "compat_index": {
+  "coverage": "211 MOD_JAR artifacts indexed (the runtimeC 193-jar set resolved + prior entries), 150,678 classes, 36 mixins; append-mode DDL/meta crashes fixed (3 fixes: DDL guard, INSERT OR REPLACE x2); mods_dir spec documented in tools/symbols/README.md",
+  "region_boundary_touchers": "type-refs: journeymap + NotEnoughIDs reference AnvilChunkLoader; NO mod directly types RegionFile; mixins into the region boundary: Phosphor only (AnvilChunkLoader, Chunk, EBS, ChunkProviderServer, SPacketChunkData, World) \u2014 the indexed surface, not claimed total",
+  "workload_66_67": "67 vs 66 expected cells = anchor-shift geometry (probe login scatter moved the platform one block; one op-cell coincided with a platform cell in the dedup dict), same 73 commands \u2014 equivalent logical workload"
+ },
+ "date": "2026-10-10",
+ "lifecycle_proof": {
+  "A_m2_save": "composed config (all authorities + packet + capture): entryCalls=1178 rustAdmitted=1178 rustOk=1178 rustFailed=0 vanillaFallbacks=0 errors=0 \u2014 EVERY region write went through Rust; 92/169 packets Rust-authored; 67/67 confirms; mism=0 dvdiv=0; graceful stop (3x save-all)",
+  "B1_m2_reload_native": "FRESH PROCESS, same world dir (new --reuse-world-from staging): readSelected=628 readSuccess=628 readFailure=0 javaReadFallback=0 \u2014 native loads of the Rust-written chunks; world semantically intact (67/67 confirms on the SAME workload, mism=0, dvdiv=0, 91/169 packets Rust-authored); NOT cache-served (fresh JVM, fresh native registry)",
+  "B2_m2_reload_oracle": "FRESH PROCESS, same world, readMode=SHADOW: the VANILLA Java reader runs on the Rust-written files and Rust shadow-compares byte-for-byte: readSelected=630 readSuccess=630 shadowCompared=630 shadowMismatch=0 \u2014 the Java reference reader accepts every Rust-written record with ZERO byte mismatches; 67/67 confirms; all composed authorities engaged",
+  "mod_data": "the byte-exact shadow comparison covers the FULL chunk record incl. tile-entity NBT and mod-owned tags (Rust does not interpret NBT \u2014 byte equality is the required preservation proof); the mutated chunks carried torch/glowstone/stone states reloaded correctly (67/67 confirms on reload)"
+ },
+ "milestone": "M2 \u2014 region I/O end-to-end",
+ "overlapping_hooks_W05_W18": {
+  "behavioral_evidence": "composed runs: worldLightCells=153-249 with 0 mismatches + CheckLightAuthority ON_EXPERIMENTAL engaged (lightAuthCommitted 26k-37k) in the SAME methods \u2014 both hooks coexist and the writer gate stays sound; W18/ChunkMutation on Chunk.func_76631_c: mutation tracker marks flow with 0 coherence errors across all runs",
+  "order": "[foreign][writers][authorities]: W05 (writer bracket on World.func_180500_c) injects on foreign bytes; WorldLightTransformer then injects its shadow call into the SAME method \u2014 final order: light-shadow call innermost (injected at HEAD after the writer bracket was placed), writer bracket outermost"
+ },
+ "performance_reported_not_gated": "stream mean/p50 MSPT: save 20.8/6.2, native-reload 16.5/6.2, oracle-reload 17.8/6.1 (capture session ON, required by packet admission; mutations 8.5-9.3). vs clean Java 6.4-7.5/2.4 \u2014 not faster; this is the composed+enforcement configuration, honestly labeled",
+ "production_authority": false,
+ "remaining_limitations": [
+  "one Java->direct heap copy per write and one byte[] wrap per read remain (measured small; removing them = NBT-boundary crossing, NOT in M2)",
+  "the capture session's allocation cost rides along (FS-003; admission requires it)",
+  "read SHADOW oracle is byte-equality on the decompressed record \u2014 semantic NBT equality is implied by byte equality, not separately re-derived",
+  "index coverage is the indexed surface; coremod ASM writers not indexed remain uninspected (bounded claim)"
+ ],
+ "revision": {
+  "end": "this commit",
+  "start": "da86dba"
+ },
+ "status": "NATIVE_PERSISTENCE_AND_RELOAD_PROVEN",
+ "tiered_ordering_repair": "TieredOrderingRegression now a build gate (tier invariant, late-append re-encounter lemma, no-op, deferClass arming, defer-on-repair source contract); the guard gained name-level classifyWriter/classifyAuthority for offline testing"
+}

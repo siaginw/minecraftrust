@@ -97,7 +97,7 @@ class Phases:
                              encoding="utf-8")
 
 
-def stage_server(out_dir: Path, arm: str, port: int):
+def stage_server(out_dir: Path, arm: str, port: int, reuse_world_from=None):
     server = out_dir / "server"
     if server.exists():
         shutil.rmtree(server)
@@ -126,7 +126,7 @@ def stage_server(out_dir: Path, arm: str, port: int):
         f"server-port={port}", "allow-flight=true",
     ]) + "\n")
     world_hash = None
-    world_src = RT / "world"
+    world_src = reuse_world_from or (RT / "world")
     if world_src.is_dir():
         shutil.copytree(world_src, server / "world")
         world_hash = tree_hash(server / "world")
@@ -139,8 +139,6 @@ def build_argv(server: Path, out_dir: Path, arm: str, port: int,
           str(server / FORGE_JAR), str(server / VANILLA_JAR)]
     cp += [str(p) for p in sorted((server / "libraries").rglob("*.jar"))]
     argv = [str(JAVA), "-Xmx6G"]
-    for jp in (observer_props or []):
-        argv.append("-D" + jp)
     if profile_jfr is not None:
         # OPT-FS-001 §5: diagnostic allocation/CPU profile (NOT a
         # performance-result run — overhead reported separately)
@@ -201,6 +199,11 @@ def build_argv(server: Path, out_dir: Path, arm: str, port: int,
         argv += ["-Dfml.queryResult=confirm"]
         tweakers.append(FML_TWEAKER)
     tweakers.append(OBSERVER_TWEAKER)
+    # user -D props go LAST: JVM -D is last-wins, and these must be able
+    # to override any mode property the main block set (the M2 oracle boot's
+    # regionReadMode=SHADOW silently lost to ON_EXPERIMENTAL before this)
+    for jp in (observer_props or []):
+        argv.append("-D" + jp)
     argv += ["-cp", os.pathsep.join(cp), "net.minecraft.launchwrapper.Launch"]
     for t in tweakers:
         argv += ["--tweakClass", t]
@@ -274,13 +277,15 @@ def route_waypoints(anchor):
     return pts
 
 
-def run_arm(arm: str, port: int, out_dir: Path, username: str) -> int:
+def run_arm(arm: str, port: int, out_dir: Path, username: str,
+            reuse_world_from=None) -> int:
     # the JVM runs with cwd=server: every path handed to it (-cp,
     # --gameDir, -D file props) must be absolute
     out_dir = out_dir.resolve()
     out_dir.mkdir(parents=True, exist_ok=True)
     (out_dir / "region-mirror").mkdir(exist_ok=True)
-    server, stage_info = stage_server(out_dir, arm, port)
+    server, stage_info = stage_server(out_dir, arm, port,
+                                       reuse_world_from=reuse_world_from)
     jfr_file = out_dir / "server-profile.jfr"
     argv = build_argv(server, out_dir, arm, port,
                       profile_jfr=jfr_file if PROFILE_JFR else None,
@@ -537,6 +542,11 @@ def main():
     ap.add_argument("--port", type=int, required=True)
     ap.add_argument("--output", type=Path, required=True)
     ap.add_argument("--username", default=None)
+    ap.add_argument("--reuse-world-from", type=Path, default=None,
+                    help="M2 lifecycle: stage the world from a previous "
+                         "run's server/world instead of the pristine "
+                         "template — enables fresh-process reload on the "
+                         "exact saved state")
     ap.add_argument("--minimal-authorities", action="store_true",
                     help="Drop ALL authority properties (light/regionRW/"
                          "regionRead/worldRegistry/chunkState) — the "
@@ -600,7 +610,8 @@ def main():
     PROFILE_JFR = args.profile_jfr
     OBSERVER_PROPS = list(args.observer_prop or []) +         list(args.jvm_prop or []) + JVM_PROPS_EXTRA
     username = args.username or f"FS{args.arm.upper()[:2]}"
-    return run_arm(args.arm, args.port, args.output, username)
+    return run_arm(args.arm, args.port, args.output, username,
+                   reuse_world_from=args.reuse_world_from)
 
 
 if __name__ == "__main__":

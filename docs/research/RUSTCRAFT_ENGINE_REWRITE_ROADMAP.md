@@ -108,5 +108,20 @@ identity note: CANONICAL_ID_V1 proves structural equality of the
 foreign-stage bytecode modulo ordering — not raw-byte equality.
 Receipt: `docs/research/M1-COMPOSE-RECEIPT.json`.
 
-**Ladder: M1 COMPLETE (minimal + composed). Next: M2 (region I/O
-end-to-end).**
+**Ladder: M1 COMPLETE (minimal + composed).**
+
+- **M2 — region I/O end-to-end: PROVEN (2026-10-10)**. Native persistence
+  AND fresh-process reload demonstrated: run A wrote EVERY region record
+  through Rust (1178/1178, 0 fallbacks) in the composed configuration;
+  fresh-process reload B1 loaded the Rust-written chunks natively
+  (628/628, 0 failures, 67/67 workload confirms on the same world); reload
+  B2 ran the VANILLA Java reader on the Rust-written files with a
+  byte-for-byte shadow oracle: 630 compared, 0 mismatches. Boundary: Rust
+  owns staging+compression+sector-alloc+file-write (write) and
+  file-read+lookup+decompression (read); Java keeps NBT production/
+  interpretation (the mod-visible contract). Receipt:
+  M2-REGION-IO-RECEIPT.json. Performance reported not gated (stream
+  16.5-20.8 mean MSPT in the composed+capture configuration).
+- **Next: M3 — world tick/game-loop ownership behind patchable shells**
+  (preceded by the exhaustive coremod-touch census from the now-expanded
+  symbol index: 211 mod artifacts / 36 mixins indexed).

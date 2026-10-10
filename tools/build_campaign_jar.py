@@ -538,6 +538,29 @@ def main():
     if res.returncode != 0:
         print("BLOCKPOSY REGRESSION FAILED:\n" + res.stderr, file=sys.stderr)
         return res.returncode if res.returncode > 0 else 1
+
+    # retro M1-COMPOSE: tiered-ordering semantics (re-encounter invariant)
+    tor_src = ROOT / "tools" / "bridge" / "test" / "com" / "rustcraft" \
+        / "coremod" / "TieredOrderingRegression.java"
+    res = subprocess.run(
+        [str(JAVAC), "-encoding", "UTF-8", "-source", "8", "-target", "8",
+         "-nowarn", "-cp", str(BUILD_DIR), "-d", str(test_build),
+         str(tor_src)],
+        capture_output=True, text=True)
+    if res.returncode != 0:
+        print("TIERED-ORDERING REGRESSION COMPILE ERROR:\n" + res.stderr,
+              file=sys.stderr)
+        return res.returncode
+    res = subprocess.run(
+        [str(JDK8 / "bin" / "java.exe"), "-cp",
+         str(test_build) + ";" + str(BUILD_DIR),
+         "com.rustcraft.coremod.TieredOrderingRegression"],
+        capture_output=True, text=True, cwd=str(ROOT))
+    sys.stdout.write(res.stdout)
+    if res.returncode != 0:
+        print("TIERED-ORDERING REGRESSION FAILED:\n" + res.stderr,
+              file=sys.stderr)
+        return res.returncode if res.returncode > 0 else 1
     return 0
 
 

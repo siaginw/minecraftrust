@@ -28,6 +28,7 @@ Full command reference, layer model, naming model, and honesty notes:
 | `symbol_index/schema.py` | SQLite DDL |
 | `symbol_index/sources.py` | default source discovery (Gradle caches + target dirs) |
 | `sources.json` | committed source configuration (candidate paths, provenance notes) |
+| `mods_dir` spec | a sources entry `{"name": ..., "format": "mods_dir", "paths": [<dir>], "layer": "MOD_JAR"}` — the dir is walked for `*.jar`; the spec MUST also carry the `mappings` block from the built-in `sources.json` (a mods-only spec file refuses: "member canonicalization would be dishonest"); build with `--append` (now fixed: append mode no longer re-runs the DDL) or `--incremental` |
 | `tests/test_symbols.py` | unit tests (synthetic class files; no Minecraft assets needed) |
 
 ## Principles

@@ -239,17 +239,23 @@ class Builder:
         if incremental and not only_layers:
             return self._build_incremental(resolved_sources)
         con = self.con
-        con.executescript(schema.DDL)
+        # append mode: the schema already exists — re-running the DDL
+        # crashed on 'table meta already exists' (the M1-COMPOSE mods-set
+        # expansion attempt); guard both executescript sites
+        fresh = con.execute(
+            "SELECT COUNT(*) FROM sqlite_master WHERE type='table' "
+            "AND name='meta'").fetchone()[0] == 0
+        if fresh:
+            con.executescript(schema.DDL)
         now = time.strftime("%Y-%m-%dT%H:%M:%S")
-        con.execute("INSERT INTO meta VALUES ('schema_version', ?)",
-                    (schema.SCHEMA_VERSION,))
-        con.execute("INSERT INTO meta VALUES ('tool_version', ?)",
-                    (_TOOL_VERSION,))
-        con.execute("INSERT INTO meta VALUES ('built_at', ?)", (now,))
-        con.execute("INSERT INTO meta VALUES ('mc_version', ?)",
-                    (resolved_sources.get("mc_version", "?"),))
+        con.executemany(
+            "INSERT OR REPLACE INTO meta VALUES (?,?)",
+            [("schema_version", schema.SCHEMA_VERSION),
+             ("tool_version", _TOOL_VERSION),
+             ("built_at", now),
+             ("mc_version", resolved_sources.get("mc_version", "?"))])
         mappings_digest = self._mappings_digest(resolved_sources)
-        con.execute("INSERT INTO meta VALUES ('mappings_digest', ?)",
+        con.execute("INSERT OR REPLACE INTO meta VALUES ('mappings_digest', ?)",
                     (mappings_digest,))
 
         for src in resolved_sources.get("mappings", []):
@@ -564,7 +570,7 @@ class Builder:
 
     def _record_sources_json(self, resolved_sources):
         self.con.execute(
-            "INSERT INTO meta VALUES ('sources', ?)",
+            "INSERT OR REPLACE INTO meta VALUES ('sources', ?)",
             (json.dumps(resolved_sources, indent=1),))
 
     # ------------------------------------------------------------------

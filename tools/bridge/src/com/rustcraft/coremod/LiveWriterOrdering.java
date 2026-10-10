@@ -200,14 +200,22 @@ public final class LiveWriterOrdering {
     }
 
     static boolean isWriter(Object transformer) {
-        String actual = transformer.getClass().getName();
-        for (String writer : WRITER_CLASSES) if (writer.equals(actual)) return true;
+        return classifyWriter(transformer.getClass().getName());
+    }
+
+    /** name-level classification (package-visible for the offline
+     * regression; the Object forms delegate here) */
+    static boolean classifyWriter(String className) {
+        for (String writer : WRITER_CLASSES) if (writer.equals(className)) return true;
         return false;
     }
 
     static boolean isAuthority(Object transformer) {
-        String actual = transformer.getClass().getName();
-        for (String authority : AUTHORITY_CLASSES) if (authority.equals(actual)) return true;
+        return classifyAuthority(transformer.getClass().getName());
+    }
+
+    static boolean classifyAuthority(String className) {
+        for (String authority : AUTHORITY_CLASSES) if (authority.equals(className)) return true;
         return false;
     }
 

@@ -192,7 +192,13 @@ that never fires on a healthy server (same receipt).
   Heredocs are for throwaway analysis only.
 - Diagnostic boots get a DECLARED budget in the receipt before the first
   one, and tooling-debug boots count against it (three of eight FS-002
-  boots were tooling waste).
+  boots were tooling waste). Milestone engagement/confirmation boots are
+  declared the same way.
+- An identity/admission failure is not attributed until the DERIVATION
+  path of the expected value is cited (which tool produced the pin, from
+  which transformation chain): the M1 "stale profile" diagnosis was
+  invented without reading the probe that derives the pins, and the real
+  cause (discovery-vs-runtime chain mismatch) was one file-read away.
 - `PRODUCTION_AUTHORITY` stays false unless a dedicated milestone proves
   otherwise. Networking is PARKED; NBT semantic authority is BLOCKED (H9).
 - Validation before push: `cargo fmt --check`, `cargo clippy --workspace
