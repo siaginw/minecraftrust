@@ -154,6 +154,21 @@ by performance work. The loop's standing entry points:
 target/optimization-research receipt) — PROFILE → SELECT → RESEARCH →
 BAKE-OFF → PROMOTE → LIVE A/B → REPROFILE, re-profiling after every win.
 
+Allocation attribution on the pinned JDK8 build trusts ONLY the
+observer's 1ms delta+stack sampler
+(`-Drustcraft.observer.allocSampler=true`, diagnostic runs) and
+op-scoped `getThreadAllocatedBytes` brackets: JFR `profile`-template
+TLAB sampling is inert here (1MB sampled vs a 26GB storm) and
+execution-sample shares are safepoint-biased (they once pinned 80% on a
+site that owned 1GB of 24GB) — treat both as ordering hints, never
+causal evidence (receipt OPT-FS-001).
+
+Diagnostics on seam/hook paths must be BUDGETED or triggered by the
+condition they diagnose — never run-per-call behind a failure-only
+guard: `diagnoseTokenMismatch` ran its full reflective introspection on
+every writerEnd for ~52GB/run because its only early-exit was a latch
+that never fires on a healthy server (same receipt).
+
 ## Repo conventions
 
 - Rust workspace under `crates/`; JNI boundary only in `crates/ffi`.

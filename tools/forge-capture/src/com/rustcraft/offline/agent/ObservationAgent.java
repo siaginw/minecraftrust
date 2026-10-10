@@ -22,7 +22,14 @@ public final class ObservationAgent implements ClassFileTransformer {
                 || !(name.startsWith("net/minecraft/") || name.startsWith("net/minecraftforge/"))) return null;
         try {
             String transformedName = name.replace('/', '.');
-            Path out = Paths.get(System.getProperty("rustcraft.dumpDir"), name + ".class");
+            // retro 2026-10-09: with -Drustcraft.dumpDir unset, Paths.get(null,
+            // ...) on this JDK8 build coerces the null into a LITERAL "null"
+            // directory (proven empirically) — every transformed class landed
+            // under <cwd>/null/. When no dump root is configured, observe
+            // hashes in memory only; file dumps require the property.
+            String dumpDir = System.getProperty("rustcraft.dumpDir");
+            Path out = dumpDir == null ? null
+                    : Paths.get(dumpDir, name + ".class");
             String hash = sha256(bytes);
             synchronized (HASHES) {
                 String previous = HASHES.get(transformedName);
@@ -30,8 +37,10 @@ public final class ObservationAgent implements ClassFileTransformer {
                     throw new IllegalStateException("Conflicting definition " + transformedName);
                 }
                 if (previous == null) {
-                    Files.createDirectories(out.getParent());
-                    Files.write(out, bytes, StandardOpenOption.CREATE_NEW);
+                    if (out != null) {
+                        Files.createDirectories(out.getParent());
+                        Files.write(out, bytes, StandardOpenOption.CREATE_NEW);
+                    }
                     HASHES.put(transformedName, hash);
                     LOADERS.put(transformedName, loader.getClass().getName());
                 }

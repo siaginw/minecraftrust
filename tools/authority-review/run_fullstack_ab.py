@@ -386,7 +386,35 @@ def run_arm(arm: str, port: int, out_dir: Path, username: str) -> int:
                      f"say CONFIRM {name} {x} {y} {z}")
             time.sleep(1.0)
             # the say sender is the armor stand: "[Armor Stand] CONFIRM ..."
-            confirmed = count_in_new(jvm_log, off, rb"CONFIRM ")
+            # Retro 2026-10-09: confirmations can land late against busy
+            # ticks (fs1r/fs-prof1 recorded 42/67 — partial-work footnotes
+            # for completed work); retry the UNCONFIRMED cells once with a
+            # longer wait before recording, bounded and identical in both
+            # arms
+            def confirmed_cells_from(off):
+                got = set()
+                with jvm_log.open("rb") as f:
+                    f.seek(off)
+                    for line in f:
+                        m = re.search(
+                            rb"CONFIRM \S+ (-?\d+) (-?\d+) (-?\d+)", line)
+                        if m:
+                            got.add((m.group(1).decode(),
+                                     m.group(2).decode(),
+                                     m.group(3).decode()))
+                return got
+            off_confirm = off
+            confirmed = confirmed_cells_from(off_confirm)
+            if len(confirmed) < len(final_state):
+                missing = [c for c in final_state if c not in confirmed]
+                for (x, y, z) in missing:
+                    send(process,
+                         f"execute @e[type=armor_stand] {ax} {ay} {az} "
+                         f"detect {x} {y} {z} {final_state[(x, y, z)]} -1 "
+                         f"say CONFIRM {name} {x} {y} {z}")
+                time.sleep(2.5)
+                confirmed = confirmed_cells_from(off_confirm)
+            confirmed = len(confirmed)
             step_recd.append({"step": name, "cmds": len(cmds),
                               "confirmed": confirmed,
                               "expected_cells": len(final_state),
@@ -486,8 +514,12 @@ def main():
     ap.add_argument("--port", type=int, required=True)
     ap.add_argument("--output", type=Path, required=True)
     ap.add_argument("--username", default=None)
+    ap.add_argument("--jvm-prop", action="append", default=None,
+                    help="Extra -D for the server JVM (repeatable; same "
+                         "flag name as run_region_write_campaign)")
     ap.add_argument("--observer-prop", action="append", default=None,
-                    help="Extra -D for the observer (repeatable; e.g. "
+                    help="Alias of --jvm-prop (kept for the OPT-FS-001 "
+                         "invocations; e.g. "
                          "rustcraft.observer.allocSampler=true)")
     ap.add_argument("--profile-jfr", action="store_true",
                     help="OPT-FS-001 diagnostic: JFR profile recording "
@@ -496,7 +528,7 @@ def main():
     args = ap.parse_args()
     global PROFILE_JFR, OBSERVER_PROPS
     PROFILE_JFR = args.profile_jfr
-    OBSERVER_PROPS = args.observer_prop
+    OBSERVER_PROPS = list(args.observer_prop or []) +         list(args.jvm_prop or [])
     username = args.username or f"FS{args.arm.upper()[:2]}"
     return run_arm(args.arm, args.port, args.output, username)
 
