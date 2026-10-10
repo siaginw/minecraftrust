@@ -102,3 +102,17 @@ measured reality check stands: the composed stack is currently SLOWER than
 clean Java (FS-001/002/003 receipts), so each ownership flip must prove a
 measured win at its milestone or the program should stop. M0 is cheap and
 decides the first real target.
+
+### M1 status (2026-10-10): BLOCKED — packet-authority admission broken in the current tree
+
+The M1 measurement attempt (driver `--m1-packets`, witness gates active)
+found the bounded packet authority CANNOT ENGAGE: rust_selected=0 with
+169/169 packets rejected NO_BINDING — under the composed configuration
+AND in isolation. Root cause (log-evidenced): `writer non-admission` for
+AnvilChunkLoader/ChunkProviderServer — the publication hooks that create
+chunk bindings were never injected — plus `IO ADMISSION FAILED:
+CHUNK_IDENTITY_MISMATCH`. The pre-squash jar engaged (rust_selected=64 at
+cap on the same property set), so this is a regression of the
+admission/binding machinery, fail-closed and silent in effect. Fix filed
+as M1-FIX (P0); measurement design + valid baselines are staged for the
+rerun. Receipt: `docs/research/M1-PACKET-EMISSION-RECEIPT.json`.

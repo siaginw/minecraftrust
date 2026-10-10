@@ -1,0 +1,26 @@
+{
+ "budget": "DECLARED 4 measured boots; ran 5 (2 valid composed baselines + 2 M1 boots whose authority never engaged + 1 decisive isolation boot) \u2014 overage acknowledged per the tooling-debug rule",
+ "date": "2026-10-10",
+ "milestone": "M1 (rewrite ladder): Rust-owned packet emission under the composed configuration",
+ "next_bounded_task": "M1-FIX: restore writer-plan admission for the chunk-loading classes (AnvilChunkLoader/ChunkProviderServer) \u2014 diagnose why LiveChunkPublicationTransformer non-admits them in the current tree (plan identity? bytecode-pattern drift after the True-Direct closure? CHUNK_IDENTITY_MISMATCH source), re-run ONE engagement-check boot (gate: RUST_SELECTED>0 + RETAINED_FAST_PATH>0), then the 2-pair M1 measurement. The measurement design, flags (--m1-packets), witness gates, and 2 valid baseline boots are all in place.",
+ "revision": {
+  "end": "this commit",
+  "start": "e320306"
+ },
+ "root_cause": {
+  "contrast": "the pre-squash collision-profile-C run (b3df84c-era jar, near-identical property set) ENGAGED: rust_selected=64 (=its cap), seed path 122 \u2014 so the breakage entered between that era and the current tree (candidate: the True-Direct closure era's plan/admission changes, or plan regeneration drift)",
+  "evidence": [
+   "server.log: '[RustCraft] writer non-admission for net.minecraft.world.chunk.storage.AnvilChunkLoader...' and '...gen.ChunkProviderServer...' (LiveChunkPublicationTransformer:transform:82) \u2014 the publication hooks that CREATE chunk bindings during loading were never injected: the writer plan's class admission REJECTED those classes in the current tree",
+   "server.log: '[live-capture] IO ADMISSION FAILED: CHUNK_IDENTITY_MISMATCH' (LiveWriterHooks.ioPublicationBegin) \u2014 the region-write publication path also fails identity",
+   "consequence: LiveChunkBindings.bindingFor(chunk)==null for every chunk -> LivePacketCapture.begin rejects NO_BINDING -> tryAuthority falls to Java (fail-closed, correct behavior)"
+  ],
+  "scope": "the fail-closed behavior is CORRECT (no wrong packets; 169 java_selected, zero rust encodes, zero mismatches); what broke is the ADMISSION/BINDING machinery, silently"
+ },
+ "runs": {
+  "m1-iso": "isolation (composed authorities OFF, M1 flags ON): still 169/169 NO_BINDING \u2014 composition is NOT the blocker",
+  "m1-p1-base / m1-p2-base": "composed baseline, capture ON, current build \u2014 VALID measurements (kept for the record)",
+  "m1-p1-m1 / m1-p2-m1": "--m1-packets (packetAuthority+directNetty+cap2000+receipt): authority NEVER ENGAGED \u2014 rust_selected=0, retained_fast_path=0, snapshot_seed_path=169/169, every attempt NO_BINDING"
+ },
+ "status": "BLOCKED_NONENGAGEMENT_ROOT_CAUSED",
+ "witness_quality": "the witness gates worked exactly as designed: RUST_SELECTED/RETAINED_FAST_PATH=0 failed the engagement gate, so no M1 performance claim was possible \u2014 this is the recorded outcome, not a silent pass"
+}

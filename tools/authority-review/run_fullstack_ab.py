@@ -159,6 +159,8 @@ def build_argv(server: Path, out_dir: Path, arm: str, port: int,
             "-Drustcraft.liveShadowScope=OVERWORLD_PER_CHUNK",
             "-Drustcraft.liveShadowDll=" + str(server / "rustcraft_ffi.dll"),
             "-Drustcraft.liveShadowJournal=" + str(out_dir / "shadow-journal.jsonl"),
+            "-Drustcraft.packetAuthorityReceiptOut="
+            + str(out_dir / "packet-authority-receipt.json"),
             "-Drustcraft.profile=FORGE_2846_FTB_REVELATION_3_4_0_SERVER_"
             "TRANSFORMED_OFFLINE_V1",
             # audit-baseline full-stack composition (packet/compression
@@ -519,6 +521,12 @@ def main():
     ap.add_argument("--port", type=int, required=True)
     ap.add_argument("--output", type=Path, required=True)
     ap.add_argument("--username", default=None)
+    ap.add_argument("--m1-packets", action="store_true",
+                    help="M1 (rewrite ladder): bounded Rust packet authority "
+                         "+ True Direct Netty emission (directNettyExperiment "
+                         "+ packetAuthorityExperiment, cap 2000, closure "
+                         "receipt verified). Requires the capture session "
+                         "(admission) — keep it ON in both comparison arms")
     ap.add_argument("--no-capture-session", action="store_true",
                     help="OPT-FS-003 isolation experiment: skip the "
                          "capture/observation session (rustcraft."
@@ -549,12 +557,21 @@ def main():
                          "a performance-result run)")
     args = ap.parse_args()
     global PROFILE_JFR, OBSERVER_PROPS, REGION_WRITE_MODE
+    global JVM_PROPS_EXTRA, LIGHT_MODE
     if args.ablate_region_write:
         REGION_WRITE_MODE = "OFF"
     if args.ablate_light:
         LIGHT_MODE = "SHADOW"
     if args.no_capture_session:
         JVM_PROPS_EXTRA.append("rustcraft.noCaptureSession=true")
+    if args.m1_packets:
+        JVM_PROPS_EXTRA += [
+            "rustcraft.packetAuthorityExperiment=true",
+            "rustcraft.packetAuthorityCap=2000",
+            "rustcraft.directNettyExperiment=true",
+            "rustcraft.packetAuthorityReceipt="
+            "C:/rustcraft/target/authority-review/closure-input-receipt.json",
+        ]
     PROFILE_JFR = args.profile_jfr
     OBSERVER_PROPS = list(args.observer_prop or []) +         list(args.jvm_prop or []) + JVM_PROPS_EXTRA
     username = args.username or f"FS{args.arm.upper()[:2]}"
