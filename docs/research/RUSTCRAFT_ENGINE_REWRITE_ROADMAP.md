@@ -74,3 +74,39 @@ performance is reported per milestone but is not an early gate.
 Digest/parity evidence, bounded authority, engagement witnesses (a
 shadow-produced body is NOT a Rust-transmitted packet),
 PRODUCTION_AUTHORITY=false until a dedicated milestone closes it.
+
+## M1-COMPOSE (2026-10-10): COMPOSED ENGAGEMENT PROVEN — all subsystems + packet path in one configuration
+
+Mechanism (goal-§2 option 2, safe ordering change): the transformer chain
+is now tiered **[foreign][writers][authorities]**. The writers' qualified
+pre-hook pins bind to the foreign stage (the discovery probe registers no
+RustCraft transformers), so the writers transform BEFORE any owned
+authority pass injects into the same classes. Implementation: writers
+register first among our transformers; `LiveWriterOrdering` maintains the
+three tiers, and its repair only ever moves late-appended foreign entries
+back into the foreign prefix (writers/authorities shift later, never
+before the live iterator — the first attempt's mid-pass rotation hazard
+boot-failed and is the recorded negative). No new profile; no weakened
+identity; the discovery/runtime chain asymmetry resolved by ORDER.
+
+Proof (m1c-compose2): packet authority **92/169 packets Rust-authored
+(2.98 MB transmitted, buffers 92/92 released)** + registry 646 chunks /
+3,070 sections (0 mismatches, 0 divergences) + light 2,070 jobs / 30,619
+cells (mirror==committed) + region-write 1,228 entries — zero NO_BINDING,
+zero CHUNK_IDENTITY_MISMATCH, 169/169 packets delivered, 66/66 mutations
+confirmed. Performance (reported, not gated): streaming 22.5/7.5 MSPT
+mean/p50, 24 GB alloc (capture session on — FS-003 stands).
+
+**Diagnosis superseded**: the M1-FIX "stale pre-hook profile" explanation
+is corrected — the profile was never stale; the failure was a
+discovery-vs-runtime TRANSFORMATION-CHAIN MISMATCH (discovery chain has
+no RustCraft transformers; the composed runtime registered authorities
+before the writers). **Boundary correction**: the nine Phosphor mixins
+are what the current index records — NOT the entire compatibility
+surface (73-jar census + unindexed coremods are additional). Canonical
+identity note: CANONICAL_ID_V1 proves structural equality of the
+foreign-stage bytecode modulo ordering — not raw-byte equality.
+Receipt: `docs/research/M1-COMPOSE-RECEIPT.json`.
+
+**Ladder: M1 COMPLETE (minimal + composed). Next: M2 (region I/O
+end-to-end).**

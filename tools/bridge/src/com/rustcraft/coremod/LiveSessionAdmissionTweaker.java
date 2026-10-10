@@ -93,6 +93,36 @@ public final class LiveSessionAdmissionTweaker implements ITweaker {
             // the true entry buffer of this launch.
             System.out.println("[RustCraft] live session admission tweaker: entry observer "
                     + com.rustcraft.qualification.LoaderTransformChain.installAtFront(cl));
+            // M1-COMPOSE: the WRITERS register FIRST among our own
+            // transformers, and the ordering guard maintains
+            // [foreign][writers][authorities]. The writers' qualified
+            // pre-hook pins bind to FOREIGN-stage bytes (the discovery
+            // probe registers no RustCraft transformers), so they must
+            // transform before any owned authority pass injects into the
+            // same classes. The authority passes are method-gated (no
+            // class-digest admission) with disjoint hook sites; where a
+            // method is shared (W05/WorldLight on func_180500_c,
+            // W18/ChunkMutation on func_76631_c) both injections survive
+            // and only in-method ordering flips. The guard's initial
+            // state must already be tiered by this registration order —
+            // its repair only ever moves late-appended foreign entries
+            // back into the foreign prefix (writers/authorities shift
+            // LATER, never before the live iterator).
+            for (String name : new String[] {
+                    "com.rustcraft.coremod.SPacketChunkDataTransformer",
+                    "com.rustcraft.coremod.LiveChunkOwnershipTransformer",
+                    "com.rustcraft.coremod.LiveChunkPublicationTransformer"}) {
+                cl.registerTransformer(name);
+            }
+            // Single-copy outbound boundary (self-gating: with the boundary
+            // disabled the transformers return every class unmodified).
+            // Registered INSIDE the writer block and counted in the ordering
+            // guard's writer set, so the tier topology is stable from birth
+            // and the qualified writers see byte-identical inputs.
+            if (com.rustcraft.bridge.SingleCopyPipeline.enabled()) {
+                cl.registerTransformer("com.rustcraft.coremod.NetworkManagerSingleCopyTransformer");
+                cl.registerTransformer("com.rustcraft.coremod.NettyPacketEncoderCounterTransformer");
+            }
             // Compression authority (M2C, default OFF) + the passive corpus
             // tap (rustcraft.compressionCorpus): the transformer rewrites only
             // the NettyCompressionEncoder construction site inside
@@ -255,23 +285,9 @@ public final class LiveSessionAdmissionTweaker implements ITweaker {
                             + "state push transformer registered");
                 }
             }
-            // The writers register now; their first invocation places them at
-            // the chain tail after every foreign transformer has registered.
-            for (String name : new String[] {
-                    "com.rustcraft.coremod.SPacketChunkDataTransformer",
-                    "com.rustcraft.coremod.LiveChunkOwnershipTransformer",
-                    "com.rustcraft.coremod.LiveChunkPublicationTransformer"}) {
-                cl.registerTransformer(name);
-            }
-            // Single-copy outbound boundary (self-gating: with the boundary
-            // disabled the transformers return every class unmodified).
-            // Registered INSIDE the writer block and counted in the ordering
-            // guard's writer set, so the tail topology is stable from birth
-            // and the qualified writers see byte-identical inputs.
-            if (com.rustcraft.bridge.SingleCopyPipeline.enabled()) {
-                cl.registerTransformer("com.rustcraft.coremod.NetworkManagerSingleCopyTransformer");
-                cl.registerTransformer("com.rustcraft.coremod.NettyPacketEncoderCounterTransformer");
-            }
+            // M1-COMPOSE: the writers now register at the TOP of our own
+            // block (see the tiered-topology comment there); nothing to
+            // do here — this slot formerly held their registration.
 
             registerEvidenceFlushHook(sessionBound);
             // Cross-language fixture harvest (diagnostic only, real chunk).

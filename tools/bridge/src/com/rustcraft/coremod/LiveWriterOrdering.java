@@ -52,6 +52,27 @@ public final class LiveWriterOrdering {
             "com.rustcraft.coremod.NettyPacketEncoderCounterTransformer",
     };
 
+    /** M1-COMPOSE: RustCraft AUTHORITY transformers (light/registry/region/
+     * compression). They are deliberately placed AFTER the writers in the
+     * chain: the writers' qualified pre-hook pins bind to the FOREIGN-stage
+     * bytes (the discovery probe registers no RustCraft transformers), so
+     * the writers must transform before any owned pass injects into the
+     * same classes. The authority passes are method-gated (no class-digest
+     * admission) and their hook sites are disjoint from the writer sites —
+     * where they share a method (W05/WorldLightTransformer on
+     * func_180500_c; W18/ChunkMutationTransformer on func_76631_c) both
+     * injections are preserved, only their in-method ordering flips. */
+    private static final String[] AUTHORITY_CLASSES = {
+            "com.rustcraft.coremod.NetworkManagerCompressionTransformer",
+            "com.rustcraft.coremod.RegionFileAuthorityTransformer",
+            "com.rustcraft.coremod.PhosphorLightTransformer",
+            "com.rustcraft.coremod.WorldLightTransformer",
+            "com.rustcraft.coremod.CheckLightAuthorityTransformer",
+            "com.rustcraft.coremod.RegionFileReadTransformer",
+            "com.rustcraft.coremod.ChunkMutationTransformer",
+            "com.rustcraft.coremod.ChunkStateAuthorityTransformer",
+    };
+
     private static volatile String measured = "NOT_YET_MEASURED";
     /** The launch target: the first class launchwrapper loads AFTER every
      *  tweak has registered. Classes before it are bootstrap classes the
@@ -127,21 +148,36 @@ public final class LiveWriterOrdering {
                 }
                 boolean already = ours == liveSize;
                 if (!already) {
+                    // M1-COMPOSE tiered topology [foreign][writers]
+                    // [authorities]: stable partition, foreign first.
                     already = true;
-                    int tail = liveSize - ours;
-                    for (int i = 0; i < tail; i++)
-                        if (isWriter(live.get(i))) already = false;
-                    for (int i = tail; i < liveSize; i++)
-                        if (!isWriter(live.get(i))) already = false;
+                    int i = 0;
+                    while (i < liveSize
+                            && !isWriter(live.get(i)) && !isAuthority(live.get(i))) i++;
+                    int wStart = i;
+                    while (i < liveSize && isWriter(live.get(i))) i++;
+                    int wEnd = i;
+                    if (wEnd == wStart) already = false; // writers not contiguous
+                    while (i < liveSize && isAuthority(live.get(i))) i++;
+                    if (i != liveSize) already = false;   // misplaced entries after
                 }
                 if (already) return false;
                 if (live.size() != liveSize)
                     return true; // foreign registration mid-guard: retry next call
                 List<Object> order = new ArrayList<Object>(live);
-                List<Object> tail = new ArrayList<Object>();
-                for (int i = order.size() - 1; i >= 0; i--)
-                    if (isWriter(order.get(i))) tail.add(0, order.remove(i));
-                order.addAll(tail);
+                List<Object> foreign = new ArrayList<Object>();
+                List<Object> writers = new ArrayList<Object>();
+                List<Object> authorities = new ArrayList<Object>();
+                for (Object t : order) {
+                    if (isWriter(t)) writers.add(t);
+                    else if (isAuthority(t)) authorities.add(t);
+                    else foreign.add(t);
+                }
+                order = new ArrayList<Object>(foreign.size()
+                        + writers.size() + authorities.size());
+                order.addAll(foreign);
+                order.addAll(writers);
+                order.addAll(authorities);
                 for (int i = 0; i < order.size(); i++)
                     if (live.get(i) != order.get(i)) live.set(i, order.get(i));
                 StringBuilder names = new StringBuilder();
@@ -149,8 +185,8 @@ public final class LiveWriterOrdering {
                     if (i > 0) names.append(',');
                     names.append(live.get(i).getClass().getName());
                 }
-                measured = "MOVED_TO_LAST " + names;
-                return true; // stale position: defer, the tail visit processes
+                measured = "MOVED_TO_TIERED " + names;
+                return true; // stale position: defer, the tiered visit processes
             }
         } catch (Throwable failure) {
             measured = "UNAVAILABLE: " + failure;
@@ -166,6 +202,12 @@ public final class LiveWriterOrdering {
     static boolean isWriter(Object transformer) {
         String actual = transformer.getClass().getName();
         for (String writer : WRITER_CLASSES) if (writer.equals(actual)) return true;
+        return false;
+    }
+
+    static boolean isAuthority(Object transformer) {
+        String actual = transformer.getClass().getName();
+        for (String authority : AUTHORITY_CLASSES) if (authority.equals(actual)) return true;
         return false;
     }
 

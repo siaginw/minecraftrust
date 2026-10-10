@@ -1,0 +1,34 @@
+{
+ "boundary_claims_correction": "The nine Phosphor mixins are the mixins the CURRENT INDEX has RECORDED against the boundary classes \u2014 not the entire compatibility surface. The 73-jar census (audit \u00a76) and any unindexed coremod transformers (ASM classwriters, access transformers) are additional surface; M2 boundary work must expand the index before claiming totality.",
+ "canonical_identity_note": "CANONICAL_ID_V1 (canonicalSha256) normalizes: sorted interfaces/fields/methods, label-stripped instruction listing (describe() per opcode), sorted try-catch types. It establishes STRUCTURAL equality of the foreign-stage bytecode modulo ordering \u2014 NOT raw-byte equality and NOT semantic proof. A successful match proves the writer input is structurally the qualified foreign stage; the per-hook fingerprints then anchor the exact insertion points.",
+ "date": "2026-10-10",
+ "diagnosis_correction": "SUPERSEDED: the earlier 'stale pre-hook profile' explanation is wrong. The profile was never stale \u2014 the observed failure was a DISCOVERY-VS-RUNTIME TRANSFORMATION-CHAIN MISMATCH: the discovery probe (RevOfflineTweaker) registers NO RustCraft transformers while the composed runtime registered the authorities BEFORE the writers, so the writer input bytes legitimately differed from the qualified foreign stage. Both prior receipts' 'stale' wording is corrected here.",
+ "engagement_proof": {
+  "client": "169/169 packets received; 66/66 mutations confirmed; probe clean",
+  "light": "admitted=2070, committed=30619, MIRROR_PUBLISHED==COMMITTED (30619)",
+  "negative_case": "the pre-reorder composed boots remain the live negative demonstration: any authority-before-writer order fails identity and the writers fail closed (zero encodes)",
+  "packet": "rust_selected=92, direct_netty_committed=92, direct_netty_bytes_transmitted=2,979,340; buffers 92/92 released, 0 outstanding; every packet accounted: 92 Rust + 64 EXCLUDED_TE + 9 EXCLUDED_HIGH_STATE + 4 seed-fallbacks = 169",
+  "region_write": "rustAdmitted=1228; region read active (readSelected counters in family with prior runs)",
+  "registry_sync": "REGISTERS=646, SECTIONS_REFRESHED=3070, SECTIONS_VALIDATION_MISMATCH=0, DUAL_VERIFY_DIVERGE=0",
+  "run": "m1c-compose2 (one declared boot; first attempt m1c-compose1 failed boot \u2014 the mid-pass rotation hazard, diagnosed and fixed, counted against budget)"
+ },
+ "index_coverage_honesty": "sqlite index: vanilla/Forge layers + ONE live-transformed dump + 3 MOD_JARs (unchanged). Expansion to the 193-jar runtimeC mods set was ATTEMPTED and did not complete for TOOLING reasons, recorded exactly: (1) bare mods_dir spec refused without mappings (by-design guard); (2) the built-in sources spec + mods_dir via --append crashed on 'table meta already exists' (append-mode DDL bug); (3) --incremental with the extended spec resolved the OLD mod paths only (spec-merge miss \u2014 my override did not take; the builder needs a docs'd mods_dir entry format). Index restored from backup rustcraft-symbols.sqlite.bak-m1compose; NO index corruption. Filed as tooling debt; the boundary claim below stands corrected regardless: the 9 Phosphor mixins are the INDEXED surface, not the entire one.",
+ "mechanism": {
+  "chosen": "SAFE ORDERING CHANGE among RustCraft-owned passes (goal-\u00a72 option 2): chain tiered [foreign][WRITERS][authorities]. The writers' qualified pre-hook pins bind to FOREIGN-stage bytes (the discovery probe registers no RustCraft transformers), so the writers transform BEFORE any owned authority pass injects into the same classes. No new profile, no checkpoint redesign, no weakened identity.",
+  "hook-site_interaction": "authority transformers are method-gated (no class-digest admission), hook sites disjoint from writer sites EXCEPT W05/WorldLightTransformer (World.func_180500_c) and W18/ChunkMutationTransformer (Chunk.func_76631_c) \u2014 both injections survive; only in-method ordering flips; correctness gates verify",
+  "implementation": "(a) LiveSessionAdmissionTweaker registers the writer block (SPacketChunkData + Ownership + Publication + single-copy pair) FIRST among our transformers; (b) LiveWriterOrdering maintains the three-tier order: initial state tiered BY REGISTRATION (the invariant); the per-invocation repair only ever moves late-appended foreign entries back into the foreign prefix, so writers/authorities shift LATER, never before the live iterator (the old mid-pass-rotation hazard \u2014 first attempt boot-failed with a stranded launch target \u2014 eliminated by construction)",
+  "what_the_pins_now_mean": "unchanged: the pins still bind the writers to the foreign stage; the authority injections happen AFTER, on writer-hooked bytes \u2014 the composed discovery/runtime asymmetry is resolved by ORDER, not by re-derivation"
+ },
+ "milestone": "M1-COMPOSE",
+ "performance_reported_not_gated": "streaming mean 22.5 / p50 7.5 MSPT; mutations 9.7/5.1; save 42.6/4.3; streaming srv-alloc 24.0GB (capture session ON \u2014 required by admission; FS-003 attribution stands). Slower than clean Java; per the 2026-10-10 directive this is evidence, not a gate.",
+ "revision": {
+  "end": "this commit",
+  "start": "be91de3"
+ },
+ "status": "COMPOSED_ENGAGEMENT_PROVEN",
+ "target_configuration": {
+  "effective": "lightExperiment=ON_EXPERIMENTAL; worldRegistry+chunkStateAuthority(cap 2000); regionWrite=ON_EXPERIMENTAL; regionRead=ON_EXPERIMENTAL; liveWriterDiagnostic+session (capture ON); packetAuthorityExperiment + directNettyExperiment + cap 2000; C2 sync default; observer (measurement)",
+  "name": "composed-full-stack + bounded packet authority",
+  "work_each_subsystem_executes": "registry: chunk registration + C2 section sync + 3-way verification; light: zero-stage block-light jobs + Java mirror publication; region-write: Rust-authored entry writes; region-read: Rust reads; packet: Rust-authored SPacketChunkData payloads via True Direct Netty emission for the eligible slice"
+ }
+}
