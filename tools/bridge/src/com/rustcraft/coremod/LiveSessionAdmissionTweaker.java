@@ -601,6 +601,11 @@ public final class LiveSessionAdmissionTweaker implements ITweaker {
                     System.out.println("[RustCraft-RegionWrite] transformer status="
                             + com.rustcraft.coremod.RegionFileAuthorityTransformer.transformCount
                             + " " + com.rustcraft.coremod.RegionFileAuthorityTransformer.lastTransformStatus);
+                    // M2 §1: the tiered-topology guard's measured placement
+                    // (computed since M1-COMPOSE but never surfaced — the
+                    // invocation/deferral sequence was unobservable)
+                    System.out.println("[RustCraft-RegionWrite] writer ordering measured: "
+                            + com.rustcraft.coremod.LiveWriterOrdering.measuredOrder());
                 }, "rustcraft-region-write-metrics"));
             }
         } catch (Throwable failure) {

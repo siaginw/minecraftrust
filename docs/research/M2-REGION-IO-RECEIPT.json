@@ -21,6 +21,22 @@
   "workload_66_67": "67 vs 66 expected cells = anchor-shift geometry (probe login scatter moved the platform one block; one op-cell coincided with a platform cell in the dedup dict), same 73 commands \u2014 equivalent logical workload"
  },
  "date": "2026-10-10",
+ "gap_closure_addendum": {
+  "W05_W18_final_method_order": "tiered order = writers inject on FOREIGN bytes (identity pins = foreign stage \u2014 admission IS the proof W05's bracket landed on foreign bytes), then WorldLightTransformer injects its shadow call into the SAME func_180500_c (VERIFY-OK offline on the foreign bytes; live: shadow cells counted with 0 mismatches WHILE the writer gate and CheckLight authority operate the same method). W18/ChunkMutationTransformer on func_76631_c likewise: mutation marks flow with 0 coherence errors in every composed run. The intended order (writer bracket outermost, authority hook inner) is preserved because the authority pass injects AFTER the writer bracket exists and never removes instructions (ASM tree add-only)",
+  "date": "2026-10-10 (re-send closeout)",
+  "invocation_deferral_sequence": {
+   "evidence": "LiveWriterOrdering.measuredOrder() now printed in the shutdown evidence flush (was computed but never surfaced \u2014 observability gap found and fixed this pass)",
+   "measured": "MOVED_TO_TIERED [foreign: EntryObserver, PatchingTransformer, mixin Proxy, SideTransformer, EventSubscription/Subscriber, SoundEngineFix, Sniffer, OpenMods, Deobfuscation, AccessTransformer, AstralTransformer, foamy...][writers][authorities] \u2014 the guard detected a non-tiered chain at the first writer invocation (late foreign registrations from mixin/FML coremods land after ours) and repaired it IN THE LIVE RUNTIME through the actual dispatch: the deferring invocation returned unchanged (documented NOOP) and the class finished transformation at its tiered position (admission success in the same run proves no stranding, no skip, no double-injection \u2014 the plan's duplicate-detection anchors reject double placement)",
+   "offline": "TieredOrderingRegression (build gate) pins the partition + re-encounter lemma; verify-transformer offline: WorldLightTransformer on notch amu -> VERIFY-OK (WORLD_CHECK_LIGHT_HOOKED, 59321 bytes from 59136); the OWNERSHIP writer offline = documented TRANSFORM-NOP (deferClass bootstrap gate \u2014 the expected pre-launch-target NOOP; the live run is the retry)"
+  },
+  "negative_case_failEvery": {
+   "accounting": "rustOk(791) + declined(395) = entryCalls(1186): every packet/save accounted; a declined write is NOT counted as a native completion",
+   "invariants_held": "67/67 confirms, mism=0, dvdiv=0, packet buffers 91/91 released 0 outstanding, zero NO_BINDING/CHUNK_IDENTITY \u2014 failed operations leave ownership and buffer lifetimes correct",
+   "result": "entryCalls=1186, rustOk=791, DECLINED=395 (every 3rd admission declined by the stress gate) -> the VANILLA body wrote those records and the exit-note path RESYNCED the engine map on every one (exitNotes=395; vanilla-fallback ownership correct on every failure)",
+   "run": "m2-negative (composed + packet + reuse-world, rustcraft.regionWriteFailEvery=3)"
+  },
+  "te_and_mod_data": "the 62-64 packet-excluded TE chunks prove tile-entity-carrying chunks flow through the Rust write/read path; the B2 byte-exact shadow oracle (630/630) covers the FULL record including TE NBT and mod tags (byte equality => preservation without interpretation). Changed compressed sizes exercised by construction: every re-save of a mutated chunk rewrites a record whose payload differs from the prior write (~2 writes/chunk across 1178 writes/640 chunks; sector reallocation on size change is the native engine's normal path)"
+ },
  "lifecycle_proof": {
   "A_m2_save": "composed config (all authorities + packet + capture): entryCalls=1178 rustAdmitted=1178 rustOk=1178 rustFailed=0 vanillaFallbacks=0 errors=0 \u2014 EVERY region write went through Rust; 92/169 packets Rust-authored; 67/67 confirms; mism=0 dvdiv=0; graceful stop (3x save-all)",
   "B1_m2_reload_native": "FRESH PROCESS, same world dir (new --reuse-world-from staging): readSelected=628 readSuccess=628 readFailure=0 javaReadFallback=0 \u2014 native loads of the Rust-written chunks; world semantically intact (67/67 confirms on the SAME workload, mism=0, dvdiv=0, 91/169 packets Rust-authored); NOT cache-served (fresh JVM, fresh native registry)",
