@@ -133,6 +133,12 @@ Read-only, stdlib-only, `--json` for agents. Check catalog + evidence:
 `docs/engineering/RUNSCOPE.md`. Lint findings are diagnostic hints with
 cited incidents — a clean lint is not a correctness proof.
 
+REA (Reverse Engineer Anything) is registered in `.mcp.json` (native-binary
+and process-behavior analysis; pinned rea-agents 5.0.0). It has NO JVM/jar
+tools — for 1.12.2/Forge/mod bytecode keep using `tools/symbols` +
+runscope. Setup receipt + the Rust-rewrite architecture assessment:
+`docs/research/REA_SETUP_AND_RUSTCRAFT_REWRITE_ASSESSMENT.md`.
+
 ## Optimization policy (mandatory for every OPT-* item)
 
 PROFILE first; then EXTERNAL RESEARCH before implementing: search
