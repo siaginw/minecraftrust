@@ -117,12 +117,55 @@ public final class LightAuthorityHook {
 
     private static final java.util.Random RNG = new java.util.Random();
 
+    // ==== OPT-FS-001 diagnostic attribution counters (bounded, aggregate;
+    // removed-or-kept decision after attribution; allocation brackets use
+    // getThreadAllocatedBytes deltas — ~100ns each, counted as overhead) ====
+    public static final java.util.concurrent.atomic.AtomicLong CK_ENTRIES = new java.util.concurrent.atomic.AtomicLong();
+    public static final java.util.concurrent.atomic.AtomicLong CK_EARLY = new java.util.concurrent.atomic.AtomicLong();
+    public static final java.util.concurrent.atomic.AtomicLong CK_TOTAL_NS = new java.util.concurrent.atomic.AtomicLong();
+    public static final java.util.concurrent.atomic.AtomicLong CK_TOTAL_ALLOC = new java.util.concurrent.atomic.AtomicLong();
+    public static final java.util.concurrent.atomic.AtomicLong BT_CALLS = new java.util.concurrent.atomic.AtomicLong();
+    public static final java.util.concurrent.atomic.AtomicLong BT_NS = new java.util.concurrent.atomic.AtomicLong();
+    public static final java.util.concurrent.atomic.AtomicLong BT_ALLOC = new java.util.concurrent.atomic.AtomicLong();
+    public static final java.util.concurrent.atomic.AtomicLong MB_CALLS = new java.util.concurrent.atomic.AtomicLong();
+    public static final java.util.concurrent.atomic.AtomicLong MB_ALLOC = new java.util.concurrent.atomic.AtomicLong();
+    private static final com.sun.management.ThreadMXBean FS_TMX =
+            (java.lang.management.ManagementFactory.getThreadMXBean()
+                    instanceof com.sun.management.ThreadMXBean)
+                    ? (com.sun.management.ThreadMXBean)
+                        java.lang.management.ManagementFactory.getThreadMXBean()
+                    : null;
+    // RUNSCOPE-JUSTIFIED: diagnostic sampler — 0 marks UNMEASURED on
+    // unsupported JVMs, never a semantic value
+    private static long fsAlloc() {
+        try {
+            return FS_TMX != null
+                    ? FS_TMX.getThreadAllocatedBytes(Thread.currentThread().getId())
+                    : 0L;
+        } catch (Throwable t) {
+            return 0L;
+        }
+    }
+
     private LightAuthorityHook() { }
 
     /** Injected at checkLight HEAD. -1 = original body; else the boolean
      *  value checkLight should return (Rust owned BLOCK + SKY handled). */
     public static int onCheckLight(Object world, Object pos) {
         if (!ENABLED || !ON) return -1;
+        long fsT0 = System.nanoTime();
+        long fsA0 = fsAlloc();
+        CK_ENTRIES.incrementAndGet();
+        try {
+            return onCheckLightInner(world, pos);
+        } finally {
+            CK_TOTAL_NS.addAndGet(System.nanoTime() - fsT0);
+            long da = fsAlloc() - fsA0;
+            if (da > 0) CK_TOTAL_ALLOC.addAndGet(da);
+        }
+    }
+
+    private static int onCheckLightInner(Object world, Object pos) {
         try {
             ensureSurface(world, pos);
             // §14: replicate vanilla's own loaded guard exactly
@@ -551,6 +594,8 @@ public final class LightAuthorityHook {
     private static void mirrorBatch(Object world, int dim,
             java.nio.ByteBuffer diff, int rc) {
         long t0 = System.nanoTime();
+        long mbA0 = fsAlloc();
+        MB_CALLS.incrementAndGet();
         int sections = 0;
         long fallbackCells = 0;
         // last-section cache: the kernel's diff is sorted by world
@@ -656,6 +701,8 @@ public final class LightAuthorityHook {
         MIRROR_BATCH_NS.addAndGet(System.nanoTime() - t0);
         MIRROR_SECTIONS.addAndGet(sections);
         MIRROR_FALLBACK_CELLS.addAndGet(fallbackCells);
+        long mbDa = fsAlloc() - mbA0;
+        if (mbDa > 0) MB_ALLOC.addAndGet(mbDa);
     }
 
     static int liveStateTableSids() {
@@ -667,6 +714,19 @@ public final class LightAuthorityHook {
     }
 
     private static java.nio.ByteBuffer buildTable() {
+        long bt0 = System.nanoTime();
+        long ba0 = fsAlloc();
+        BT_CALLS.incrementAndGet();
+        try {
+            return buildTableInner();
+        } finally {
+            BT_NS.addAndGet(System.nanoTime() - bt0);
+            long da = fsAlloc() - ba0;
+            if (da > 0) BT_ALLOC.addAndGet(da);
+        }
+    }
+
+    private static java.nio.ByteBuffer buildTableInner() {
         int sids = liveStateTableSids();
         java.nio.ByteBuffer t = java.nio.ByteBuffer
                 .allocateDirect(sids * 3)

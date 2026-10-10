@@ -60,6 +60,9 @@ RUSTCRAFT_TWEAKER = "com.rustcraft.coremod.LiveSessionAdmissionTweaker"
 ROUTE_RADII = (48, 96, 144, 96, 48)
 ROUTE_POINTS = 8
 ROUTE_DWELL_S = 1.6
+# set by --profile-jfr (module-level so run_arm sees it)
+PROFILE_JFR = False
+OBSERVER_PROPS = None
 
 
 def sha16(p: Path) -> str:
@@ -124,11 +127,20 @@ def stage_server(out_dir: Path, arm: str, port: int):
     return server, {"files_copied": copied, "world_hash": world_hash}
 
 
-def build_argv(server: Path, out_dir: Path, arm: str, port: int):
+def build_argv(server: Path, out_dir: Path, arm: str, port: int,
+               profile_jfr: Path = None, observer_props=None):
     cp = [str(server / "rustcraft-observer.jar"),
           str(server / FORGE_JAR), str(server / VANILLA_JAR)]
     cp += [str(p) for p in sorted((server / "libraries").rglob("*.jar"))]
     argv = [str(JAVA), "-Xmx6G"]
+    for jp in (observer_props or []):
+        argv.append("-D" + jp)
+    if profile_jfr is not None:
+        # OPT-FS-001 §5: diagnostic allocation/CPU profile (NOT a
+        # performance-result run — overhead reported separately)
+        argv += ["-XX:+FlightRecorder",
+                 "-XX:StartFlightRecording=settings=profile,"
+                 f"filename={profile_jfr},dumponexit=true"]
     tweakers = []
     if arm == "rust":
         argv += ["-javaagent:" + str(server / "rustcraft-campaign.jar")]
@@ -246,7 +258,10 @@ def run_arm(arm: str, port: int, out_dir: Path, username: str) -> int:
     out_dir.mkdir(parents=True, exist_ok=True)
     (out_dir / "region-mirror").mkdir(exist_ok=True)
     server, stage_info = stage_server(out_dir, arm, port)
-    argv = build_argv(server, out_dir, arm, port)
+    jfr_file = out_dir / "server-profile.jfr"
+    argv = build_argv(server, out_dir, arm, port,
+                      profile_jfr=jfr_file if PROFILE_JFR else None,
+                      observer_props=OBSERVER_PROPS)
     (out_dir / "launch.json").write_text(json.dumps(
         {"argv": argv, "arm": arm}, indent=2) + "\n", encoding="utf-8")
     (out_dir / "runner-argv.json").write_text(json.dumps(
@@ -471,7 +486,17 @@ def main():
     ap.add_argument("--port", type=int, required=True)
     ap.add_argument("--output", type=Path, required=True)
     ap.add_argument("--username", default=None)
+    ap.add_argument("--observer-prop", action="append", default=None,
+                    help="Extra -D for the observer (repeatable; e.g. "
+                         "rustcraft.observer.allocSampler=true)")
+    ap.add_argument("--profile-jfr", action="store_true",
+                    help="OPT-FS-001 diagnostic: JFR profile recording "
+                         "(allocation+CPU events; overhead reported; NOT "
+                         "a performance-result run)")
     args = ap.parse_args()
+    global PROFILE_JFR, OBSERVER_PROPS
+    PROFILE_JFR = args.profile_jfr
+    OBSERVER_PROPS = args.observer_prop
     username = args.username or f"FS{args.arm.upper()[:2]}"
     return run_arm(args.arm, args.port, args.output, username)
 

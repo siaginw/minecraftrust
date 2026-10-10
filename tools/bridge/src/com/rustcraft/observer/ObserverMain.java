@@ -74,6 +74,8 @@ public final class ObserverMain {
     }
 
     private static void run(File gameDir) {
+        final boolean allocSampler = Boolean.getBoolean(
+                "rustcraft.observer.allocSampler");
         final java.lang.management.ThreadMXBean tmx =
                 ManagementFactory.getThreadMXBean();
         final com.sun.management.ThreadMXBean tmxa =
@@ -86,6 +88,93 @@ public final class ObserverMain {
                 ManagementFactory.getGarbageCollectorMXBeans();
         final java.lang.management.MemoryMXBean memx =
                 ManagementFactory.getMemoryMXBean();
+
+        // OPT-FS-001 §9 diagnostic: attribute server-thread allocation RATE
+        // to stack tops by 1ms delta sampling (off-thread; the getStackTrace
+        // safepoint cost lands in this diagnostic run only, never in a
+        // performance-result run). Aggregated in-JVM; dumped at exit.
+        final java.util.concurrent.ConcurrentHashMap<String, long[]>
+                allocSites = new java.util.concurrent.ConcurrentHashMap<>();
+        Thread allocSamplerThread = null;
+        if (allocSampler && tmxa != null) {
+            allocSamplerThread = new Thread(() -> {
+                Thread server = null;
+                long prev = 0;
+                boolean prevValid = false;
+                while (true) {
+                    try {
+                        if (server == null || !server.isAlive()) {
+                            for (Thread t : Thread.getAllStackTraces().keySet()) {
+                                if ("Server thread".equals(t.getName())) {
+                                    server = t;
+                                    break;
+                                }
+                            }
+                        }
+                        if (server != null && server.isAlive()) {
+                            long a = tmxa.getThreadAllocatedBytes(
+                                    server.getId());
+                            if (prevValid && a > prev) {
+                                long d = a - prev;
+                                StackTraceElement[] st = server.getStackTrace();
+                                String top = st.length > 0
+                                        ? st[0].toString() : "?";
+                                // deepest rustcraft frame for context
+                                String rust = "-";
+                                for (StackTraceElement f : st) {
+                                    if (f.getClassName()
+                                            .startsWith("com.rustcraft")) {
+                                        rust = f.toString();
+                                        break;
+                                    }
+                                }
+                                String key = top + " || " + rust;
+                                long[] agg = allocSites.computeIfAbsent(
+                                        key, k -> new long[2]);
+                                agg[0] += d;
+                                agg[1]++;
+                            }
+                            prev = a;
+                            prevValid = true;
+                        }
+                        Thread.sleep(1);
+                    } catch (InterruptedException e) {
+                        return;
+                    } catch (Throwable t) {
+                        try { Thread.sleep(50); } catch (InterruptedException e) {
+                            return;
+                        }
+                    }
+                }
+            }, "rustcraft-observer-allocdiag");
+            allocSamplerThread.setDaemon(true);
+            allocSamplerThread.start();
+            Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+                try {
+                    java.util.List<String> lines = new java.util.ArrayList<>();
+                    long tot = 0;
+                    for (java.util.Map.Entry<String, long[]> e
+                            : allocSites.entrySet()) {
+                        lines.add(e.getValue()[0] + "\t" + e.getValue()[1]
+                                + "\t" + e.getKey());
+                        tot += e.getValue()[0];
+                    }
+                    java.util.Collections.sort(lines,
+                            (x, y) -> Long.compare(
+                                    Long.parseLong(y.split("\t")[0]),
+                                    Long.parseLong(x.split("\t")[0])));
+                    try (PrintWriter pw = new PrintWriter(new File(
+                            gameDir, "observer-alloc-sites.txt"), "UTF-8")) {
+                        pw.println("# total attributed bytes: " + tot
+                                + " (1ms delta sampling; attribution is "
+                                + "statistical)");
+                        for (String l : lines) {
+                            pw.println(l);
+                        }
+                    }
+                } catch (Throwable ignore) { }
+            }, "rustcraft-observer-allocdiag-dump"));
+        }
 
         Object server = null;
         Field tickTimes = null;
