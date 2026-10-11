@@ -522,16 +522,23 @@ def run_arm(arm: str, port: int, out_dir: Path, username: str,
         receipt["mutation_steps"] = step_recd
         receipt["confirmed_cells"] = total_confirmed
         receipt["expected_cells"] = total_expected
-        # M3-A lifecycle stage: a 128-step water staircase (640 tick
-        # chains ~= 32s at tickRate 5) started here is STILL FLOWING at
-        # the shutdown save — the on-disk world (lc1 lesson: phase-C saves
-        # are only ~3s in, but the SHUTDOWN save is what the region file
-        # retains) then carries TileTicks: pending ticks in the Java
-        # mirror, maintained through Rust's drain decisions, persisted at
-        # the boundary. The reload boot adopts these and completes the
-        # flow through the authority. az+4 avoids the probed m3a cells.
-        stair = [(ax + 2 - k, ay + 8 - k, az + 4) for k in range(128)]
-        for k, (x, y, z) in enumerate(stair):
+        # M3-A lifecycle stage: a descending water staircase started here
+        # is STILL FLOWING at the shutdown save — the on-disk world (lc1
+        # lesson: phase-C saves are only ~3s in, but the SHUTDOWN save is
+        # what the region file retains) then carries TileTicks: pending
+        # ticks in the Java mirror, maintained through Rust's drain
+        # decisions, persisted at the boundary. The reload boot adopts
+        # these and completes the flow through the authority.
+        # +80 x in x: OUTSIDE the working volume — lc3's platform_remove
+        # missed a cell because the lc2 staircase's stone crossed the
+        # reused world's platform area. Steps clamp at y>=1: lc2's
+        # commands below y=1 failed silently (~76 of 128 materialized —
+        # still enough to outlast the run tail; the duration scales with
+        # anchor depth).
+        base_x, base_y, stair_z = ax + 80, ay + 8, az + 4
+        steps = min(128, base_y - 1)
+        stair = [(base_x - k, base_y - k, stair_z) for k in range(steps)]
+        for (x, y, z) in stair:
             send(process, f"setblock {x} {y} {z} minecraft:stone")
             commands += 1
         send(process, f"setblock {stair[0][0]} {stair[0][1] + 1} {stair[0][2]} "

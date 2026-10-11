@@ -3,15 +3,14 @@
   "title": "First authoritative tick responsibility in Rust: the WorldServer pending-block-tick scheduler",
   "date": "2026-10-10",
   "provenance": {
-    "final_on_run": { "id": "m3a-on17", "receipt_sha256_16": "3a6b9601bf3b67c4", "metrics_sha256_16": "c59d3420d5748db4", "log_sha256_16": "e9a45167fb72cf6a" },
-    "shadow_reference_run": { "id": "m3a-shadow6", "receipt_sha256_16": "c272ea133b74a09f", "metrics_sha256_16": "60ff66d6a4dd076d", "log_sha256_16": "613a43486bd26104" },
+    "final_on_run": { "id": "m3a-on17", "receipt_sha256_16": "3a6b9601bf3b67c4", "metrics_sha256_16": "c59d3420d5748db4", "log_sha256_16": "e9a45167fb72cf6a", "run_campaign_jar_sha256_16": "e30622f9f7640e9d", "run_dll_sha256_16": "df13ddb7c194b174" },
+    "shadow_reference_run": { "id": "m3a-shadow6", "receipt_sha256_16": "c272ea133b74a09f", "metrics_sha256_16": "60ff66d6a4dd076d", "log_sha256_16": "613a43486bd26104", "run_campaign_jar_sha256_16": "e30622f9f7640e9d", "run_dll_sha256_16": "df13ddb7c194b174" },
     "displacement_negative_run": { "id": "m3a-on14", "receipt_sha256_16": "423189c51edbf6f4" },
     "blocker_chain_runs": { "m3a-on15": "65900f8ae7319a52" },
-    "lifecycle_save_run": { "id": "m3a-lc2", "receipt_sha256_16": "8e1e92e9fb3ee4aa", "metrics_sha256_16": "80221ea26e74fe79" },
-    "lifecycle_reload_run": { "id": "m3a-lc3", "receipt_sha256_16": "2fbb8c21f525f928", "metrics_sha256_16": "068d27a7db396096" },
-    "deliberate_negative_run": { "id": "m3a-neg1", "receipt_sha256_16": "fbeb49551004f8f4", "metrics_sha256_16": "d5f88092347a2837" },
-    "campaign_jar_sha256_16": "fa13442d2670fdee",
-    "rustcraft_ffi_dll_sha256_16": "82eec19ca431d4c7",
+    "lifecycle_save_run": { "id": "m3a-lc2", "receipt_sha256_16": "8e1e92e9fb3ee4aa", "metrics_sha256_16": "80221ea26e74fe79", "run_campaign_jar_sha256_16": "fa13442d2670fdee", "run_dll_sha256_16": "9049d0ed0441fe05" },
+    "lifecycle_reload_run": { "id": "m3a-lc3", "receipt_sha256_16": "2fbb8c21f525f928", "metrics_sha256_16": "068d27a7db396096", "run_campaign_jar_sha256_16": "fa13442d2670fdee", "run_dll_sha256_16": "9049d0ed0441fe05" },
+    "deliberate_negative_run": { "id": "m3a-neg1", "receipt_sha256_16": "fbeb49551004f8f4", "metrics_sha256_16": "d5f88092347a2837", "run_campaign_jar_sha256_16": "fa13442d2670fdee", "run_dll_sha256_16": "9049d0ed0441fe05" },
+    "note_build_hashes": "every run carries its OWN run-effective jar/DLL hashes (captured at staging) — a single global build hash was ambiguous across the day's jar/DLL rebuilds (on17/shadow6 ran e30622f9/df13ddb7, the gap-closure runs fa13442d/9049d0ed); print fresh ones with tools/runscope/run_provenance.py",
     "config": "composed runtime: light ON_EXPERIMENTAL + worldRegistry + chunkStateAuthority + regionWrite/Read ON + packetAuthority + directNetty + capture session + tickAuthorityMode"
   },
 
@@ -58,7 +57,7 @@
       "shadow6 (rebuild-before-compare, every call): 6233 / 0 / 0 — clean"
     ],
     "persistence_lifecycle": {
-      "save_run_m3a_lc2": "a 128-step water staircase (640 tick chains ~= 32s) started at phase-B end is still flowing at the shutdown save: 639 enqueued / 616 executed / 0 errors, and the on-disk world carries 39 TileTicks — 25 water ticks in the staircase tail chunks (11,17)/(12,17) plus MOD entries (buildcraftcore:spring) — pending state persisted through the ownership boundary (the Java mirror, maintained by Rust's drain decisions, is what getPendingBlockUpdates serializes)",
+      "save_run_m3a_lc2": "a descending water staircase (128 setblock commands; those below y=1 fail silently, ~76 steps materialized — still ~19s of tick chains, outlasting the ~14.5s run tail) started at phase-B end is still flowing at the shutdown save: 639 enqueued / 616 executed / 0 errors, and the on-disk world carries 39 TileTicks in region r.0.0 — 25 water ticks in the staircase tail chunks (11,17)/(12,17) plus MOD entries (buildcraftcore:spring) — pending state persisted through the ownership boundary (the Java mirror, maintained by Rust's drain decisions, is what getPendingBlockUpdates serializes). The driver now clamps steps to valid y and places the staircase outside the working volume (lc3's platform_remove miss was staircase interference on the reused world)",
       "reload_run_m3a_lc3": "fresh process on the lc2 world (rustcraft.tickAuthorityMode=ON): tickAdopted=24 shortly after boot (persisted pending ticks adopted through the boundary; the remainder re-admitted via the chunk-load enqueue path), 406 enqueued / 415 executed / 0 errors; the reload-final world has ZERO TileTicks in the staircase chunks and 741 settled water blocks — the persisted work executed to completion through the authority",
       "lc1_lesson": "the first save attempt (16-step staircase) taught the witness target: the on-disk region reflects the SHUTDOWN save, not the phase-C save-alls (those land ~3s in); a flow that completes before shutdown leaves no TileTicks. lc3's one missed cell (platform_remove 24/25) is scenario interference — the lc2 staircase's stone steps crossed the reused world's platform area; the m3a tick step itself confirmed 2/2"
     },
