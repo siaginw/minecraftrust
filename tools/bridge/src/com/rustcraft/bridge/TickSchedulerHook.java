@@ -57,6 +57,11 @@ public final class TickSchedulerHook {
             System.getProperty("rustcraft.tickAuthorityMode", "OFF");
     public static final boolean ENABLED = !"OFF".equals(MODE);
     public static final boolean SHADOW = "SHADOW".equals(MODE);
+    /** negative-boot injection: fail (disable the authority) once this many
+     * callbacks have executed — 0 = off. The M2 failEvery pattern applied
+     * to the mid-execution boundary (goal §3: no restart, no repeats). */
+    public static final int FAIL_AFTER_EXEC =
+            Integer.getInteger("rustcraft.tickFailAfterExec", 0);
     public static volatile boolean DISABLED_BY_FAILURE = false;
 
     public static final AtomicLong TICKS_ENQUEUED = new AtomicLong();
@@ -513,6 +518,18 @@ public final class TickSchedulerHook {
             Object rand = F_RAND.get(ws);
             for (long[] rec : collected) {
                 for (int i = 0; i < rec.length; i += 7) {
+                    // negative-boot injection (rustcraft.tickFailAfterExec):
+                    // fail MID-EXECUTION, before this entry's mirror removal,
+                    // so the already-executed callbacks stay consumed (never
+                    // re-run by the resuming vanilla loop) and the remaining
+                    // entries stay intact in the tree for vanilla to run
+                    // exactly once — the goal §3 continuation boundary
+                    if (FAIL_AFTER_EXEC > 0
+                            && TICKS_EXECUTED.get() >= FAIL_AFTER_EXEC) {
+                        fail("injected: failAfterExec=" + FAIL_AFTER_EXEC
+                                + " (executed=" + TICKS_EXECUTED.get() + ")");
+                        return false;
+                    }
                     int x = (int) rec[i + 3];
                     int y = (int) rec[i + 4];
                     int z = (int) rec[i + 5];

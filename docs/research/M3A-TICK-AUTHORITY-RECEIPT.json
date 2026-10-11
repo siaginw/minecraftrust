@@ -7,7 +7,10 @@
     "shadow_reference_run": { "id": "m3a-shadow6", "receipt_sha256_16": "c272ea133b74a09f", "metrics_sha256_16": "60ff66d6a4dd076d", "log_sha256_16": "613a43486bd26104" },
     "displacement_negative_run": { "id": "m3a-on14", "receipt_sha256_16": "423189c51edbf6f4" },
     "blocker_chain_runs": { "m3a-on15": "65900f8ae7319a52" },
-    "campaign_jar_sha256_16": "e30622f9f7640e9d",
+    "lifecycle_save_run": { "id": "m3a-lc2", "receipt_sha256_16": "8e1e92e9fb3ee4aa", "metrics_sha256_16": "80221ea26e74fe79" },
+    "lifecycle_reload_run": { "id": "m3a-lc3", "receipt_sha256_16": "2fbb8c21f525f928", "metrics_sha256_16": "068d27a7db396096" },
+    "deliberate_negative_run": { "id": "m3a-neg1", "receipt_sha256_16": "fbeb49551004f8f4", "metrics_sha256_16": "d5f88092347a2837" },
+    "campaign_jar_sha256_16": "fa13442d2670fdee",
     "rustcraft_ffi_dll_sha256_16": "82eec19ca431d4c7",
     "config": "composed runtime: light ON_EXPERIMENTAL + worldRegistry + chunkStateAuthority + regionWrite/Read ON + packetAuthority + directNetty + capture session + tickAuthorityMode"
   },
@@ -53,7 +56,17 @@
       "shadow4 (restore-drained-batch design): 5570 compares / 1824 count+order mismatches — the vanilla body executes and drains the tree each tick while a restore leaves Rust holding stale entries",
       "shadow5 (rebuild-after-compare): 6335 / 83 — residual = time-only drift on re-scheduled entries (count-equal adopt fast path cannot see it)",
       "shadow6 (rebuild-before-compare, every call): 6233 / 0 / 0 — clean"
-    ]
+    ],
+    "persistence_lifecycle": {
+      "save_run_m3a_lc2": "a 128-step water staircase (640 tick chains ~= 32s) started at phase-B end is still flowing at the shutdown save: 639 enqueued / 616 executed / 0 errors, and the on-disk world carries 39 TileTicks — 25 water ticks in the staircase tail chunks (11,17)/(12,17) plus MOD entries (buildcraftcore:spring) — pending state persisted through the ownership boundary (the Java mirror, maintained by Rust's drain decisions, is what getPendingBlockUpdates serializes)",
+      "reload_run_m3a_lc3": "fresh process on the lc2 world (rustcraft.tickAuthorityMode=ON): tickAdopted=24 shortly after boot (persisted pending ticks adopted through the boundary; the remainder re-admitted via the chunk-load enqueue path), 406 enqueued / 415 executed / 0 errors; the reload-final world has ZERO TileTicks in the staircase chunks and 741 settled water blocks — the persisted work executed to completion through the authority",
+      "lc1_lesson": "the first save attempt (16-step staircase) taught the witness target: the on-disk region reflects the SHUTDOWN save, not the phase-C save-alls (those land ~3s in); a flow that completes before shutdown leaves no TileTicks. lc3's one missed cell (platform_remove 24/25) is scenario interference — the lc2 staircase's stone steps crossed the reused world's platform area; the m3a tick step itself confirmed 2/2"
+    },
+    "deliberate_negative_m3a_neg1": {
+      "injection": "rustcraft.tickFailAfterExec=5 — the authority disables itself mid-execution once 5 callbacks have run, BEFORE the 6th entry's mirror removal (goal §3 boundary)",
+      "result": "tickExecuted=5 EXACTLY; tickMirrorRemovals=6 (the 5 executed + 1 stale-consumed — precisely what Rust handled); the 7th drained entry stayed intact in the Java tree and was executed ONCE by the resuming vanilla body; tickDisabledByFailure=true with tickLastError='injected: failAfterExec=5 (executed=5)'; tickHookErrors=0 (a clean disable, not an error path); entry hooks keep counting and fall through (1157 admissions, 6 enqueued pre-disable)",
+      "no_restart_no_repeats": "both scenario CONFIRMs fired through the vanilla body after fail-closed (sand rested once, water flowed once); 69/69 mutation cells; composed witnesses green with the authority disabled mid-run (packets 92, region 1180/1180/0, registry 628/0 missing, light 2370/0 mis)"
+    }
   },
 
   "compatibility": {
@@ -87,33 +100,34 @@
     "code": [
       "crates/native-chunk/src/tick_scheduler.rs — queue core (new)",
       "crates/ffi/src/native_chunk.rs — 5 JNI exports (new)",
-      "tools/bridge/src/com/rustcraft/bridge/TickSchedulerHook.java — ownership boundary hook (new)",
+      "tools/bridge/src/com/rustcraft/bridge/TickSchedulerHook.java — ownership boundary hook (new; gap-closure adds the rustcraft.tickFailAfterExec mid-execution injection)",
       "tools/bridge/src/com/rustcraft/coremod/TickAuthorityTransformer.java — head injections on updateBlockTick + tickUpdates, fail-closed anchors (new)",
       "tools/bridge/src/com/rustcraft/coremod/LiveWriterOrdering.java — classifyAuthority entry",
       "tools/bridge/src/com/rustcraft/coremod/LiveSessionAdmissionTweaker.java — registration + counter dump",
       "tools/bridge/test/com/rustcraft/coremod/TieredOrderingRegression.java — authority-recognition pin",
-      "tools/authority-review/run_fullstack_ab.py — --m3-ticks SHADOW|ON + deterministic scheduled-tick scenario (landing pad + flowing_water + falling sand)"
+      "tools/authority-review/run_fullstack_ab.py — --m3-ticks SHADOW|ON, --m3-fail-after-exec N, deterministic scheduled-tick scenario (landing pad + flowing_water + falling sand) and the 128-step lifecycle water staircase before phase C"
     ],
-    "gates": "cargo fmt --check OK; cargo clippy --workspace --release: no errors (pre-existing warnings only); cargo test --workspace --release: all green incl. 5 new tick_scheduler tests; runscope lint 0 fatal; runscope expect 9/9; offline transformer probe TICK_AUTHORITY_HOOKED changed=true on raw notch bytes",
+    "gates": "cargo fmt --check OK; cargo clippy --workspace --release: no errors; cargo test --workspace --release: 71/71 suites green incl. 5 tick_scheduler tests; runscope lint 0 fatal; runscope expect 9/9; offline transformer probe TICK_AUTHORITY_HOOKED changed=true on raw notch bytes; runner refuses stale jar/DLL boots (fc7ce4e)",
     "boot_ledger": {
-      "declared_budget": "3-4 diagnostic boots",
-      "actual": "~19 (m3a-on1..on17 + m3a-shadow1..6, one aborted mid-diagnosis)",
-      "overage_causes": [
-        "on1-on12 (pre-session-continuation): silent flow stop — initReflect's uncounted null-return paths (root cause: func_175707_a resolved with one arg against a two-arg method); fixed by REFLECT_FAIL counters naming every member + the 2-arg fix",
+      "declared_budget_m3a_core": "3-4 diagnostic boots",
+      "actual_m3a_core": "~19 (m3a-on1..on17 + m3a-shadow1..6, one aborted mid-diagnosis)",
+      "declared_budget_gap_closure": "3 boots (lifecycle-save, reload, deliberate negative)",
+      "actual_gap_closure": "4 (m3a-lc1..lc3 + m3a-neg1) — the +1 was lc1: the witness targeted the phase-C saves, but the on-disk region reflects the SHUTDOWN save, so a 16-step flow that completes before shutdown leaves no TileTicks; diagnosed from phase timing + the empty scan, resized to 128 steps",
+      "core_overage_causes": [
+        "on1-on12: silent flow stop — initReflect's uncounted null-return paths (root cause: func_175707_a resolved with one arg against a two-arg method); fixed by REFLECT_FAIL counters naming every member + the 2-arg fix",
         "on13: setAccessible ordered after first field use (regression in the rewrite) — named by the new counter within 90s",
         "on14: FoamFix FoamyBlockState parameter-type mismatch (mod-compat discovery)",
         "on15: IdentityHashMap keyed by boxed Integer — get() missed every lookup",
         "shadow4/5: shadow reference design iterations (stale-entry restore, then time-drift)",
-        "shadow5(relaunch): jar rebuild failed but grep|head masked the exit code — stale jar + wedged runner; killed"
+        "shadow5(relaunch): jar rebuild failed but grep|head masked the exit code — stale jar + wedged runner; killed (now impossible: the runner refuses stale builds)"
       ],
       "lesson": "three of the late defects were in NEW code written under the assumption the hard part was behind; the named-counter discipline (every silent path counts and names itself) converted each remaining boot into a single-shot diagnosis"
     },
     "not_done": [
-      "dimension lifecycle: tickClear on world unload is exported and unit-tested but not yet driven by a world-unload hook (no live witness)",
-      "negative boot (tickDrain native failure -> fail-closed resume) is proven only by the on14 accident, not by a deliberate failEvery injection",
-      "load-side adoption (chunk NBT -> queue on chunk load) relies on the per-tickUpdates heal (adoptMissing / rebuildFromTree), not a chunk-load event; fresh-process reload with pending ticks is not separately witnessed",
+      "world-unload tickClear witness (tickClear is exported + unit-tested; a dedicated-server world unload that would drive it is rare — save/reload lifecycle IS witnessed)",
+      "chunk-load-side adoption is witnessed end-to-end (lc2/lc3) but as the per-tickUpdates heal + chunk-load enqueue path, not a dedicated chunk-load event hook",
       "PRODUCTION_AUTHORITY remains false"
     ],
-    "next": "M3-B candidates: entity tick scheduling, random block ticks (func_180495_p-adjacent) — or the M3-A residuals above; recommend the negative boot + lifecycle witness before widening"
+    "next": "M3-B candidates: random block ticks and entity tick scheduling behind the same patchable-shell discipline; the goal's own lifecycle/failure requirements for M3-A are now all witnessed"
   }
 }

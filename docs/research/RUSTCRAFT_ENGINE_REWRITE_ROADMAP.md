@@ -162,9 +162,27 @@ sits in the authorities tier (measured chain position 40; on16's
 foreign-prefix landing at position 3 was the classifier gap —
 `TieredOrderingRegression` now pins every authority name).
 
-Residuals (declared, not blocking): world-unload `tickClear` witness,
-deliberate negative-boot injection, chunk-load-side adoption event,
-PRODUCTION_AUTHORITY=false. Receipt:
-`docs/research/M3A-TICK-AUTHORITY-RECEIPT.json` (incl. the honest
-boot ledger: ~19 boots vs a 3-4 declared budget, every overage
-attached to its diagnosed defect).
+**Gap closure (same day, goal re-send)**: the three §3/§4 requirements
+the first pass declared open are now witnessed. **Persistence
+lifecycle** (m3a-lc2 → m3a-lc3): a 128-step water staircase still
+flowing at shutdown persisted 39 TileTicks through the boundary —
+including `buildcraftcore:spring` MOD pending ticks — and the
+fresh-process reload adopted them (`tickAdopted=24`), executed the
+flow to completion (reload-final world: 0 leftover TileTicks, 741
+settled water blocks), 0 errors. **Deliberate negative**
+(m3a-neg1, `rustcraft.tickFailAfterExec=5`): the authority disabled
+itself mid-execution at exactly 5 callbacks, the 6th+ entries stayed
+intact in the Java tree and ran ONCE via the resuming vanilla body —
+no restart, no repeats — with 69/69 scenario cells and all composed
+witnesses green. lc1's lesson (the on-disk region reflects the
+SHUTDOWN save, not the phase-C save-alls) is in the receipt. Residuals
+reduced to: world-unload `tickClear` live witness (exported +
+unit-tested; save/reload IS witnessed) and PRODUCTION_AUTHORITY=false.
+
+**Ladder: M3-A COMPLETE. M3 remains in progress** (next candidates:
+random block ticks, entity tick scheduling).
+
+Receipt: `docs/research/M3A-TICK-AUTHORITY-RECEIPT.json` (incl. the
+honest boot ledger: ~19 core boots vs a declared 3-4 plus 4
+gap-closure boots vs a declared 3 — every overage attached to its
+diagnosed defect).

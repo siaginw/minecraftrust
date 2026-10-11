@@ -522,6 +522,22 @@ def run_arm(arm: str, port: int, out_dir: Path, username: str,
         receipt["mutation_steps"] = step_recd
         receipt["confirmed_cells"] = total_confirmed
         receipt["expected_cells"] = total_expected
+        # M3-A lifecycle stage: a 128-step water staircase (640 tick
+        # chains ~= 32s at tickRate 5) started here is STILL FLOWING at
+        # the shutdown save — the on-disk world (lc1 lesson: phase-C saves
+        # are only ~3s in, but the SHUTDOWN save is what the region file
+        # retains) then carries TileTicks: pending ticks in the Java
+        # mirror, maintained through Rust's drain decisions, persisted at
+        # the boundary. The reload boot adopts these and completes the
+        # flow through the authority. az+4 avoids the probed m3a cells.
+        stair = [(ax + 2 - k, ay + 8 - k, az + 4) for k in range(128)]
+        for k, (x, y, z) in enumerate(stair):
+            send(process, f"setblock {x} {y} {z} minecraft:stone")
+            commands += 1
+        send(process, f"setblock {stair[0][0]} {stair[0][1] + 1} {stair[0][2]} "
+                      f"minecraft:flowing_water")
+        commands += 1
+        time.sleep(1.5)
         time.sleep(2.0)
 
         # --- PHASE C: saves ---
@@ -649,6 +665,10 @@ def main():
     ap.add_argument("--m3-ticks", choices=["SHADOW", "ON"], default=None,
                     help="M3-A: scheduled-tick scheduler authority mode "
                          "(rustcraft.tickAuthorityMode)")
+    ap.add_argument("--m3-fail-after-exec", type=int, default=0,
+                    help="M3-A negative boot: disable the tick authority "
+                         "once N callbacks have executed "
+                         "(rustcraft.tickFailAfterExec)")
     ap.add_argument("--minimal-authorities", action="store_true",
                     help="Drop ALL authority properties (light/regionRW/"
                          "regionRead/worldRegistry/chunkState) — the "
@@ -703,6 +723,9 @@ def main():
         JVM_PROPS_EXTRA.append("rustcraft.noCaptureSession=true")
     if args.m3_ticks:
         JVM_PROPS_EXTRA.append("rustcraft.tickAuthorityMode=" + args.m3_ticks)
+    if args.m3_fail_after_exec:
+        JVM_PROPS_EXTRA.append("rustcraft.tickFailAfterExec="
+                               + str(args.m3_fail_after_exec))
     if args.m1_packets:
         JVM_PROPS_EXTRA += [
             "rustcraft.packetAuthorityExperiment=true",
