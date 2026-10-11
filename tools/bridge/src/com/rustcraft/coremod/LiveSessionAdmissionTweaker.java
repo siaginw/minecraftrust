@@ -139,6 +139,16 @@ public final class LiveSessionAdmissionTweaker implements ITweaker {
                     || Boolean.getBoolean("rustcraft.rustCompressionShadow")) {
                 cl.registerTransformer("com.rustcraft.coremod.NetworkManagerCompressionTransformer");
             }
+            // M3-A: scheduled-tick scheduler authority (authorities tier).
+            // Self-gates on rustcraft.tickAuthorityMode; head injections on
+            // WorldServer.updateBlockTick + tickUpdates, fail-closed.
+            if (!"OFF".equalsIgnoreCase(System.getProperty(
+                    "rustcraft.tickAuthorityMode", "OFF"))) {
+                cl.registerTransformer(
+                        "com.rustcraft.coremod.TickAuthorityTransformer");
+                System.out.println("[RustCraft-Tick] scheduler authority registered:"
+                        + " mode=" + System.getProperty("rustcraft.tickAuthorityMode"));
+            }
             // LIVE region write authority (RUST_REGION_WRITE_AUTHORITY,
             // default OFF): rewrites only the RegionFile write/close seams and
             // self-gates on rustcraft.regionWriteExperiment. Registered with
@@ -333,6 +343,55 @@ public final class LiveSessionAdmissionTweaker implements ITweaker {
                             StringBuilder sb = new StringBuilder();
                             sb.append(com.rustcraft.bridge.RustRegionReadHook.snapshotLines());
                             sb.append(com.rustcraft.bridge.RustRegionWriteHook.snapshotLines());
+                            // M3-A: tick scheduler authority counters (only
+                            // meaningful when the authority registered)
+                            sb.append("tickEntryUpdateTick=")
+                                    .append(com.rustcraft.bridge.TickSchedulerHook.ENTRY_UPDATE_TICK.get())
+                                    .append("\ntickEntryTickUpdates=")
+                                    .append(com.rustcraft.bridge.TickSchedulerHook.ENTRY_TICK_UPDATES.get())
+                                    .append("\ntickReflectFail=")
+                                    .append(com.rustcraft.bridge.TickSchedulerHook.REFLECT_FAIL.get())
+                                    .append("\ntickDimFail=")
+                                    .append(com.rustcraft.bridge.TickSchedulerHook.DIM_FAIL.get())
+                                    .append("\ntickTimeFail=")
+                                    .append(com.rustcraft.bridge.TickSchedulerHook.TIME_FAIL.get())
+                                    .append("\ntickSkipRestore=")
+                                    .append(com.rustcraft.bridge.TickSchedulerHook.TICKS_SKIP_RESTORE.get())
+                                    .append("\ntickSkipUnloaded=")
+                                    .append(com.rustcraft.bridge.TickSchedulerHook.TICKS_SKIP_UNLOADED.get())
+                                    .append("\ntickEnqueued=")
+                                    .append(com.rustcraft.bridge.TickSchedulerHook.TICKS_ENQUEUED.get())
+                                    .append("\ntickDedupSkipped=")
+                                    .append(com.rustcraft.bridge.TickSchedulerHook.TICKS_DEDUP_SKIPPED.get())
+                                    .append("\ntickDrained=")
+                                    .append(com.rustcraft.bridge.TickSchedulerHook.TICKS_DRAINED.get())
+                                    .append("\ntickExecuted=")
+                                    .append(com.rustcraft.bridge.TickSchedulerHook.TICKS_EXECUTED.get())
+                                    .append("\ntickRescheduled=")
+                                    .append(com.rustcraft.bridge.TickSchedulerHook.TICKS_RESCHEDULED.get())
+                                    .append("\ntickStaleConsumed=")
+                                    .append(com.rustcraft.bridge.TickSchedulerHook.TICKS_STALE_CONSUMED.get())
+                                    .append("\ntickNativeDrains=")
+                                    .append(com.rustcraft.bridge.TickSchedulerHook.NATIVE_DRAINS.get())
+                                    .append("\ntickMirrorRemovals=")
+                                    .append(com.rustcraft.bridge.TickSchedulerHook.MIRROR_REMOVALS.get())
+                                    .append("\ntickAdopted=")
+                                    .append(com.rustcraft.bridge.TickSchedulerHook.ADOPTED.get())
+                                    .append("\ntickHookErrors=")
+                                    .append(com.rustcraft.bridge.TickSchedulerHook.ERRORS.get())
+                                    .append("\ntickShadowCompares=")
+                                    .append(com.rustcraft.bridge.TickSchedulerHook.SHADOW_COMPARES.get())
+                                    .append("\ntickShadowOrderMismatch=")
+                                    .append(com.rustcraft.bridge.TickSchedulerHook.SHADOW_ORDER_MISMATCH.get())
+                                    .append("\ntickShadowCountMismatch=")
+                                    .append(com.rustcraft.bridge.TickSchedulerHook.SHADOW_COUNT_MISMATCH.get())
+                                    .append("\ntickStatus=")
+                                    .append(com.rustcraft.coremod.TickAuthorityTransformer.lastStatus)
+                                    .append("\ntickDisabledByFailure=")
+                                    .append(com.rustcraft.bridge.TickSchedulerHook.DISABLED_BY_FAILURE)
+                                    .append("\ntickLastError=")
+                                    .append(com.rustcraft.bridge.TickSchedulerHook.LAST_ERROR)
+                                    .append("\n");
                             sb.append("worldLightCells=")
                                     .append(com.rustcraft.bridge.WorldLightHook.CELLS.get())
                                     .append("\nworldLightMis=")

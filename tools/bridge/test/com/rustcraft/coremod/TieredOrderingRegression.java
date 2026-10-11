@@ -61,6 +61,9 @@ public final class TieredOrderingRegression {
         // 5. classification
         check(LiveWriterOrdering.classifyWriter("com.rustcraft.coremod.LiveChunkPublicationTransformer"), "writer class recognized");
         check(LiveWriterOrdering.classifyAuthority("com.rustcraft.coremod.WorldLightTransformer"), "authority class recognized");
+        // M3-A: an unclassified authority lands in the foreign prefix live
+        // (on16 measured chain) — the regression must pin every authority
+        check(LiveWriterOrdering.classifyAuthority("com.rustcraft.coremod.TickAuthorityTransformer"), "tick authority class recognized");
         check(!LiveWriterOrdering.classifyWriter("com.rustcraft.coremod.WorldLightTransformer"), "authority is not a writer");
         check(!LiveWriterOrdering.classifyAuthority("foreignX"), "foreign is neither");
 

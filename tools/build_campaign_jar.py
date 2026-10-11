@@ -36,7 +36,13 @@ CRITICAL_EXPORTS = [
     b"Java_com_rustcraft_bridge_LightBatchCtx_closeRaw",
     b"Java_com_rustcraft_bridge_RegionReadCtx_closeRaw",
     b"Java_com_rustcraft_bridge_RegionWriteCtx_closeRaw",
-]
+
+        b"Java_com_rustcraft_bridge_TickSchedulerHook_tickEnqueue",
+        b"Java_com_rustcraft_bridge_TickSchedulerHook_tickDrain",
+        b"Java_com_rustcraft_bridge_TickSchedulerHook_tickAdopt",
+        b"Java_com_rustcraft_bridge_TickSchedulerHook_tickPendingCount",
+        b"Java_com_rustcraft_bridge_TickSchedulerHook_tickClear",
+    ]
 
 
 def verify_critical_exports(dll_bytes):
@@ -377,6 +383,8 @@ def main():
         ROOT / "tools/bridge/src/com/rustcraft/bridge/LightAuthorityBridge.java",
         ROOT / "tools/bridge/src/com/rustcraft/bridge/LightAuthorityHook.java",
         ROOT / "tools/bridge/src/com/rustcraft/coremod/CheckLightAuthorityTransformer.java",
+        ROOT / "tools/bridge/src/com/rustcraft/coremod/TickAuthorityTransformer.java",
+        ROOT / "tools/bridge/src/com/rustcraft/bridge/TickSchedulerHook.java",
         ROOT / "tools/bridge/src/com/rustcraft/bridge/LightBatchCtx.java",
         ROOT / "tools/bridge/src/com/rustcraft/bridge/WorldLightHook.java",
         ROOT / "tools/bridge/src/com/rustcraft/coremod/WorldLightTransformer.java",

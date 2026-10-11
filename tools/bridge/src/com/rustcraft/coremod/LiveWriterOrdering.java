@@ -71,6 +71,10 @@ public final class LiveWriterOrdering {
             "com.rustcraft.coremod.RegionFileReadTransformer",
             "com.rustcraft.coremod.ChunkMutationTransformer",
             "com.rustcraft.coremod.ChunkStateAuthorityTransformer",
+            // M3-A: without this entry the guard classified the tick
+            // authority as foreign and moved it into the foreign prefix
+            // (on16 measured chain, position 3 — before deobf)
+            "com.rustcraft.coremod.TickAuthorityTransformer",
     };
 
     private static volatile String measured = "NOT_YET_MEASURED";
