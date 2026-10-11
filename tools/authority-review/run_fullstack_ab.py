@@ -75,6 +75,23 @@ def sha16(p: Path) -> str:
     return hashlib.sha256(p.read_bytes()).hexdigest()[:16]
 
 
+def _refuse_stale_build(arm: str) -> None:
+    """Boot gate the caller cannot skip: the runscope preflight stale-jar
+    and stale-DLL checks, run inline before staging. The m3a-shadow5
+    incident: a failed jar rebuild piped through `grep|head` still booted
+    the stale jar and wedged — the runner itself must refuse (the shell
+    chain's exit code is not a gate)."""
+    if arm != "rust":
+        return
+    from runscope.preflight import _stale_dll_check, _stale_jar_check
+    blockers = [b for b in (_stale_jar_check(str(ROOT), "C"),
+                            _stale_dll_check(str(ROOT))) if b]
+    if blockers:
+        for b in blockers:
+            print(f"[fullstack-{arm}] REFUSING TO BOOT: {b}", file=sys.stderr)
+        raise SystemExit(2)
+
+
 def now_ms() -> int:
     return int(time.time() * 1000)
 
@@ -284,6 +301,7 @@ def run_arm(arm: str, port: int, out_dir: Path, username: str,
     out_dir = out_dir.resolve()
     out_dir.mkdir(parents=True, exist_ok=True)
     (out_dir / "region-mirror").mkdir(exist_ok=True)
+    _refuse_stale_build(arm)
     server, stage_info = stage_server(out_dir, arm, port,
                                        reuse_world_from=reuse_world_from)
     jfr_file = out_dir / "server-profile.jfr"
@@ -574,11 +592,47 @@ def finish(process, log_handle, out_dir, receipt, phases, probe_thread=None,
         pass
     log_handle.close()
     receipt["exit_code"] = rc
+    receipt["final_metrics"] = _final_metrics(out_dir)
     (out_dir / "fullstack-run.json").write_text(
         json.dumps(receipt, indent=1, sort_keys=True) + "\n", encoding="utf-8")
     print(f"[fullstack-{receipt['arm']}] verdict={receipt['verdict']} "
           f"exit={rc} -> {out_dir / 'fullstack-run.json'}")
     return 0 if receipt["verdict"] == "MEASURED" else 1
+
+
+def _final_metrics(out_dir: Path) -> dict:
+    """Self-contained receipts (M3-A retro): the final region-metrics
+    snapshot (every authority counter by name — tick, light, registry,
+    mirror state) plus the composed-witness log markers, parsed once
+    here so post-run analysis never has to rediscover key names or
+    re-grep the server log."""
+    metrics = {}
+    mf = out_dir / "region-metrics.txt"
+    try:
+        for line in mf.read_text(encoding="utf-8", errors="replace").splitlines():
+            if "=" in line:
+                k, _, v = line.partition("=")
+                try:
+                    metrics[k] = int(v)
+                except ValueError:
+                    metrics[k] = v
+    except OSError:
+        pass
+    witnesses = {"packets_rust_committed": 0, "region_rust_selected": 0,
+                 "region_rust_committed": 0, "region_rust_failed": 0}
+    try:
+        log = (out_dir / "server.log").read_text(encoding="utf-8",
+                                                 errors="replace")
+        witnesses["packets_rust_committed"] = log.count(
+            "RUST_AUTHORITY_COMMIT] packet")
+        for m in re.finditer(r"rustSelected=(\d+) rustCommitted=(\d+) "
+                             r"rustFailed=(\d+)", log):
+            witnesses["region_rust_selected"] += int(m.group(1))
+            witnesses["region_rust_committed"] += int(m.group(2))
+            witnesses["region_rust_failed"] += int(m.group(3))
+    except OSError:
+        pass
+    return {"region_metrics": metrics, "witnesses": witnesses}
 
 
 def main():

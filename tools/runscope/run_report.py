@@ -553,10 +553,15 @@ def render_report(r):
             ph = a["phases_ms"]
             ap("         phases_ms: " + " ".join(
                 "%s=%.1f" % (p[:-3].lower(), ph[p]) for p in sorted(ph)))
-        ap("  reduction=%.1f%%  speedup=%.3fx  REGISTER=%.0fms  "
+        # speedup is None in the degenerate one-arm-zero shape (a fullstack
+        # run can carry BAKE0_ keys with arm1 never admitted) — render n/a
+        # instead of crashing the whole report on it (m3a-on16)
+        ap("  reduction=%.1f%%  speedup=%s  REGISTER=%.0fms  "
            "stage_ratio=%s" % (
-               bo["reduction_pct"], bo["speedup_x"], bo["register_ms"],
-               bo["stage_ratio"]))
+               bo["reduction_pct"],
+               ("%.3fx" % bo["speedup_x"]) if bo["speedup_x"] is not None
+               else "n/a (arm1 total=0)",
+               bo["register_ms"], bo["stage_ratio"]))
         if bo["timing_suspect"]:
             ap("  [PAIR-ANOMALY] arm TIMING suspect (slow-boot signature; "
                "do NOT trust arm deltas — rerun swapped; correctness "

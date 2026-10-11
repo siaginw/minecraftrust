@@ -55,19 +55,34 @@ never touches campaigns): `python tools/symbols/rustcraft_symbols.py build`
 SHA cache; use a `"mods_dir"` spec to index a whole mod pack). Self-test:
 `python tools/symbols/self_test.py`. Ground truth lives there:
 `checkLightFor` = `func_180500_c`; `func_175638_a` = `getRawLight` — never
-assume mappings from memory. `live-diff`/`forge-changes` warn on
+assume mappings from memory, and never assume method SEMANTICS from
+memory either: when replacing a vanilla method, dump its real body
+(`symbols body`, or javap on the campaign's server jar) first — branch
+structure, constants, call arity, and which else-branch re-schedules vs
+drops. M3-A shipped four wrong-from-memory tick semantics (65536 is a
+drain-count cap not a time horizon; the loaded check is
+`isAreaLoaded(pos, pos)`; unloaded requeues while stale consumes) that
+each cost a boot. `live-diff`/`forge-changes` warn on
 Forge-version provenance mismatch (goal §31); `--strict-provenance` makes
 it fatal. Full command reference:
 `docs/engineering/BYTECODE_SYMBOL_INDEX.md`.
 The index is navigation evidence only — authority claims still need
 campaign receipts.
 
+Hook reflection rule (the FoamFix trap, m3a-on14): parameter types for
+a reflective `Method.invoke` resolution come from the DECLARING
+class's own declared methods, never from the live runtime object's
+class — mods replace implementation classes (FoamFix's
+`FoamyBlockState`) while the declared parameter types stay. Same
+family as the cross-loader `Class.forName` ban below.
+
 ## Pre-boot lint + run evidence (use before/after every campaign boot)
 
 Before building/booting a campaign, run the static bridge/hook consistency
 lint — it catches the bug classes that already cost boots (JNI native/export
 name mismatches behind swallowed catches, big-endian ByteBuffers feeding the
-LE Rust kernel, cross-loader `Class.forName`, EnumSkyBlock ordinal gates):
+LE Rust kernel, cross-loader `Class.forName`, EnumSkyBlock ordinal gates,
+IdentityHashMaps keyed by boxed primitives):
 
 ```bash
 python tools/runscope/rustcraft_runscope.py lint     # fatal findings => fix first

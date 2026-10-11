@@ -626,6 +626,38 @@ def check_reflection_accessor(java_roots):
     return findings
 
 
+def check_identity_map_boxing(java_roots):
+    """Flag an IdentityHashMap keyed by a boxed primitive — identity
+    semantics on boxes make get(new Integer(k)) miss every lookup unless
+    the exact same box instance is reused. The m3a-on15 trap: BLOCK_BY_ID
+    was Map<Integer,Object> = new IdentityHashMap<>() and blockById
+    missed every entry, so every drained tick fail-closed to re-schedule
+    (executed=0 for a full boot). Use HashMap when the key is a value."""
+    findings = []
+    boxed = (r"(?:java\.lang\.)?(?:Integer|Long|Short|Byte|"
+             r"Character|Boolean|Float|Double)")
+    decl_re = re.compile(
+        # Map<BOXED, ...> var = new IdentityHashMap — the key gap excludes
+        # '<' so a boxed type nested in the VALUE generics (Map<Object,
+        # Map<Long,...>> keyed by Object: correct use) cannot match, and
+        # excluding '=' / ';' means it cannot cross a statement boundary
+        r"Map\s*<\s*%s\s*,[^=;<>]*>\s*[\w.\[\]]+\s*=\s*(?:final\s+)?new\s+"
+        r"(?:java\.util\.)?IdentityHashMap"
+        r"|IdentityHashMap\s*<\s*%s\s*," % (boxed, boxed))
+    for path, src, _pkg, _cls, offline in _java_units(java_roots):
+        if offline:
+            continue
+        for m in decl_re.finditer(src):
+            line = src.count("\n", 0, m.start()) + 1
+            findings.append(Finding(
+                "identity-map-boxing", "warning", path, line,
+                "IdentityHashMap keyed by a boxed primitive — get() with a "
+                "fresh box misses every lookup (m3a-on15: blockById always "
+                "null, zero executions for a full boot); use HashMap for "
+                "value keys, identity semantics only for object keys"))
+    return findings
+
+
 DEFAULT_JAVA_ROOTS = ["tools/bridge/src", "tools/spawn-interop/src",
                       "tools/worldgen-interop/src"]
 DEFAULT_RUST_ROOTS = ["crates/ffi/src"]
@@ -644,6 +676,7 @@ def run_lint(repo_root, java_roots=None, rust_roots=None):
     findings += check_cross_loader_forname(jroots)
     findings += check_ordinal_gate(jroots)
     findings += check_reflection_accessor(jroots)
+    findings += check_identity_map_boxing(jroots)
     findings += check_sentinel_degradation(jroots)
     findings += check_transformer_frames(jroots)
     findings += check_seam_format(jroots, rroots)
