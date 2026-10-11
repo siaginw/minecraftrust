@@ -1841,3 +1841,119 @@ pub unsafe extern "system" fn Java_com_rustcraft_bridge_OutboundFrameCtx_frameEn
     })
     .unwrap_or(-2)
 }
+
+// ===================== M3-A: authoritative tick scheduler =====================
+
+/// Admission decision (dedup = vanilla hashSet.contains((pos, block))).
+/// `time` is the ABSOLUTE scheduledTime (vanilla
+/// setScheduledTime(totalWorldTime + delay)). Returns seq, or -1 when
+/// (pos, block) is already pending.
+#[no_mangle]
+pub unsafe extern "system" fn Java_com_rustcraft_bridge_TickSchedulerHook_tickEnqueue(
+    _env: *mut c_void,
+    _clazz: *mut c_void,
+    dim: i32,
+    x: i32,
+    y: i32,
+    z: i32,
+    block: i32,
+    time: i64,
+    priority: i32,
+) -> i64 {
+    let outcome = catch_unwind(std::panic::AssertUnwindSafe(|| {
+        native_chunk::tick_scheduler::enqueue(dim, x, y, z, block, time, priority)
+    }));
+    outcome.unwrap_or(-2)
+}
+
+/// Eligibility + ordering decision: up to `out_cap_entries` entries with
+/// time <= horizon (INCLUSIVE), in (time, priority, seq) order, removed
+/// from the queue. Records are 7 x LE i64 (seq, time, priority, x, y, z,
+/// block) written to out_addr. Returns the entry count (negative = error).
+#[no_mangle]
+pub unsafe extern "system" fn Java_com_rustcraft_bridge_TickSchedulerHook_tickDrain(
+    _env: *mut c_void,
+    _clazz: *mut c_void,
+    dim: i32,
+    horizon: i64,
+    out_addr: i64,
+    out_cap_entries: i32,
+) -> i32 {
+    let outcome = catch_unwind(std::panic::AssertUnwindSafe(|| {
+        if out_addr == 0 || out_cap_entries <= 0 {
+            return -4i32;
+        }
+        let out =
+            std::slice::from_raw_parts_mut(out_addr as *mut i64, out_cap_entries as usize * 7);
+        let mut batch = Vec::new();
+        native_chunk::tick_scheduler::drain(dim, horizon, out_cap_entries as usize, &mut batch);
+        let n = batch.len().min(out_cap_entries as usize);
+        // capacity underflow: hand back what fits; the rest stays drained
+        // ONLY if fully written — safest is to refuse when over capacity
+        if batch.len() > out_cap_entries as usize {
+            // re-adopt what did not fit so no decision is lost
+            native_chunk::tick_scheduler::adopt(dim, &batch[n..]);
+        }
+        for (i, e) in batch[..n].iter().enumerate() {
+            let r = e.to_record();
+            out[i * 7..i * 7 + 7].copy_from_slice(&r);
+            for v in &mut out[i * 7..i * 7 + 7] {
+                *v = v.to_le();
+            }
+        }
+        n as i32
+    }));
+    outcome.unwrap_or(-99)
+}
+
+/// Reconcile/adoption path: bulk insert of entries not already pending.
+/// in_buf = packed 7 x LE i64 records. Returns inserted count.
+#[no_mangle]
+pub unsafe extern "system" fn Java_com_rustcraft_bridge_TickSchedulerHook_tickAdopt(
+    _env: *mut c_void,
+    _clazz: *mut c_void,
+    dim: i32,
+    in_addr: i64,
+    in_len_i64: i32,
+) -> i32 {
+    let outcome = catch_unwind(std::panic::AssertUnwindSafe(|| {
+        if in_addr == 0 || in_len_i64 <= 0 || in_len_i64 % 7 != 0 {
+            return -4i32;
+        }
+        let raw = std::slice::from_raw_parts(in_addr as *const i64, in_len_i64 as usize);
+        let mut entries = Vec::with_capacity(raw.len() / 7);
+        for c in raw.chunks(7) {
+            let mut r = [0i64; 7];
+            for (i, v) in c.iter().enumerate() {
+                r[i] = i64::from_le(*v);
+            }
+            entries.push(native_chunk::tick_scheduler::TickEntry::from_record(&r));
+        }
+        native_chunk::tick_scheduler::adopt(dim, &entries)
+    }));
+    outcome.unwrap_or(-99)
+}
+
+#[no_mangle]
+pub unsafe extern "system" fn Java_com_rustcraft_bridge_TickSchedulerHook_tickPendingCount(
+    _env: *mut c_void,
+    _clazz: *mut c_void,
+    dim: i32,
+) -> i64 {
+    let outcome = catch_unwind(std::panic::AssertUnwindSafe(|| {
+        native_chunk::tick_scheduler::pending_count(dim)
+    }));
+    outcome.unwrap_or(-1)
+}
+
+#[no_mangle]
+pub unsafe extern "system" fn Java_com_rustcraft_bridge_TickSchedulerHook_tickClear(
+    _env: *mut c_void,
+    _clazz: *mut c_void,
+    dim: i32,
+) -> i64 {
+    let outcome = catch_unwind(std::panic::AssertUnwindSafe(|| {
+        native_chunk::tick_scheduler::clear(dim)
+    }));
+    outcome.unwrap_or(-1)
+}

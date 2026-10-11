@@ -2,6 +2,7 @@ pub mod chunk;
 pub mod packet_snapshot;
 pub mod registry;
 pub mod section;
+pub mod tick_scheduler;
 
 pub use chunk::{
     BlockMutationResult, ChunkLifecycle, NativeChunk, PacketEncodeResult, BIOME_ARRAY_SIZE,
