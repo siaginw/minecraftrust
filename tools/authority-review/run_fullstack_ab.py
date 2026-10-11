@@ -449,6 +449,51 @@ def run_arm(arm: str, port: int, out_dir: Path, username: str,
                               "require_delta": require_delta})
             phases.note(step=name, confirmed=confirmed,
                         expected=len(final_state))
+        # M3-A scheduled-tick scenario: water flow + falling sand both go
+        # through WorldServer.updateBlockTick (func_175654_a) — the seam
+        # the tick authority owns. Deterministic staging: a landing pad
+        # one below the sand and a cleared cell below the water, so the
+        # resting/flow positions are known regardless of prior steps.
+        m3a_off = log_size(jvm_log)
+        for (x, y, z, blk) in (
+            (ax - 2, ay + 2, az - 2, "stone"),    # sand lands here (ay+3)
+            (ax + 2, ay + 2, az + 2, "air"),      # water flows down here
+        ):
+            send(process, f"setblock {x} {y} {z} minecraft:{blk}")
+            commands += 1
+        time.sleep(0.5)
+        for (x, y, z, blk) in (
+            (ax + 2, ay + 3, az + 2, "flowing_water"),  # DYNAMIC liquid: a
+            # setblock'ed static water source never self-flows in 1.12
+            # (verified on the shadow4 saved world: id 9 inert above air,
+            # vanilla executing); buckets place flowing_water
+            (ax - 2, ay + 4, az - 2, "sand"),    # falls via tick
+        ):
+            send(process, f"setblock {x} {y} {z} minecraft:{blk}")
+            commands += 1
+        time.sleep(4.0)
+        # water flow evidence: 1.12 saves all water as block id 9 with
+        # LEVEL meta (0=source, 8=falling) — "flowing_water" (id 8) never
+        # appears in state; the below cell after a real scheduled-tick flow
+        # reads water meta 8 (verified on the shadow6 saved world)
+        send(process,
+             f"execute @e[type=armor_stand] {ax} {ay} {az} "
+             f"detect {ax + 2} {ay + 2} {az + 2} minecraft:water 8 "
+             f"say CONFIRM m3a_water_flow")
+        send(process,
+             f"execute @e[type=armor_stand] {ax} {ay} {az} "
+             f"detect {ax - 2} {ay + 3} {az - 2} minecraft:sand -1 "
+             f"say CONFIRM m3a_sand_resting")
+        send(process,
+             f"execute @e[type=armor_stand] {ax} {ay} {az} "
+             f"detect {ax - 2} {ay + 4} {az - 2} minecraft:sand -1 "
+             f"say CONFIRM m3a_sand_pending")
+        time.sleep(2.0)
+        m3a_sand = count_in_new(jvm_log, m3a_off, rb"CONFIRM ")
+        step_recd.append({"step": "m3a_scheduled_ticks", "cmds": 4,
+                          "confirmed": m3a_sand, "expected_cells": 2,
+                          "require_delta": False})
+        phases.note(step="m3a_scheduled_ticks", confirmed=m3a_sand)
         send(process, "kill @e[type=armor_stand]")
         total_confirmed = sum(s["confirmed"] for s in step_recd)
         total_expected = sum(s["expected_cells"] for s in step_recd)
@@ -547,6 +592,9 @@ def main():
                          "run's server/world instead of the pristine "
                          "template — enables fresh-process reload on the "
                          "exact saved state")
+    ap.add_argument("--m3-ticks", choices=["SHADOW", "ON"], default=None,
+                    help="M3-A: scheduled-tick scheduler authority mode "
+                         "(rustcraft.tickAuthorityMode)")
     ap.add_argument("--minimal-authorities", action="store_true",
                     help="Drop ALL authority properties (light/regionRW/"
                          "regionRead/worldRegistry/chunkState) — the "
@@ -599,6 +647,8 @@ def main():
         LIGHT_MODE = "SHADOW"
     if args.no_capture_session:
         JVM_PROPS_EXTRA.append("rustcraft.noCaptureSession=true")
+    if args.m3_ticks:
+        JVM_PROPS_EXTRA.append("rustcraft.tickAuthorityMode=" + args.m3_ticks)
     if args.m1_packets:
         JVM_PROPS_EXTRA += [
             "rustcraft.packetAuthorityExperiment=true",

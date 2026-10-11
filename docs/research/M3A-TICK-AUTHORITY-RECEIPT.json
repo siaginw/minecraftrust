@@ -1,0 +1,119 @@
+{
+  "milestone": "M3-A",
+  "title": "First authoritative tick responsibility in Rust: the WorldServer pending-block-tick scheduler",
+  "date": "2026-10-10",
+  "provenance": {
+    "final_on_run": { "id": "m3a-on17", "receipt_sha256_16": "3a6b9601bf3b67c4", "metrics_sha256_16": "c59d3420d5748db4", "log_sha256_16": "e9a45167fb72cf6a" },
+    "shadow_reference_run": { "id": "m3a-shadow6", "receipt_sha256_16": "c272ea133b74a09f", "metrics_sha256_16": "60ff66d6a4dd076d", "log_sha256_16": "613a43486bd26104" },
+    "displacement_negative_run": { "id": "m3a-on14", "receipt_sha256_16": "423189c51edbf6f4" },
+    "blocker_chain_runs": { "m3a-on15": "65900f8ae7319a52" },
+    "campaign_jar_sha256_16": "e30622f9f7640e9d",
+    "rustcraft_ffi_dll_sha256_16": "82eec19ca431d4c7",
+    "config": "composed runtime: light ON_EXPERIMENTAL + worldRegistry + chunkStateAuthority + regionWrite/Read ON + packetAuthority + directNetty + capture session + tickAuthorityMode"
+  },
+
+  "ownership": {
+    "responsibility": "WorldServer pending-block-tick scheduler (ScheduledTickUpdate queue, func_175654_a admission / func_72955_a drain)",
+    "rust_owns": [
+      "persistent per-dimension queue state (BTreeMap keyed by (time, priority, seq) = NextTickListEntry.compareTo, ground-truthed from notch bytecode)",
+      "admission decisions: (pos, block) dedup (vanilla hashSet.contains equivalent); absolute scheduledTime = totalWorldTime + delay (deterministic, no jitter)",
+      "eligibility: scheduledTime <= totalWorldTime (INCLUSIVE; runAllPending drops the predicate)",
+      "per-call drain cap: min(queue, 65536) (the 65536 constant is a COUNT cap, not a time horizon — memory said otherwise, bytecode settled it)",
+      "drain ordering and removal; collect-then-execute (vanilla drains all eligible before executing any, so same-call re-schedules never re-execute)",
+      "drop-on-stale decision (material==AIR or block-changed: consume, no requeue)"
+    ],
+    "java_executes": [
+      "Block.updateTick (func_180650_b) — all vanilla+mod block behavior fires from Java",
+      "updateBlockTick's vanilla body — maintains the Java TreeSet/HashSet mirror (save-side getPendingBlockUpdates -> chunk NBT TileTicks; mod reads stay byte-identical)",
+      "unloaded-area requeue via scheduleUpdate(pos, block, 0) (vanilla offsets 349-361)"
+    ],
+    "displaced_java_branch": "WorldServer.tickUpdates' cleaning + ticking loop never executes in ON mode (head hook returns the vanilla semantic result via the LAST_HANDLED handshake)",
+    "displacement_proof": "m3a-on14: with the executor fail-closed per entry (FoamFix state-class resolution failure, pre-fix), the falling-sand probe froze at its origin (CONFIRM m3a_sand_pending) — the vanilla loop did not rescue it; nothing else executes ticks when the authority handles and declines",
+    "rust_implementation": "crates/native-chunk/src/tick_scheduler.rs (BTreeMap queue + dedup set; 5 unit tests incl. compareTo order, inclusive horizon, count cap, adopt re-seq + collision guard); JNI: crates/ffi/src/native_chunk.rs tickEnqueue/tickDrain/tickAdopt/tickPendingCount/tickClear",
+    "ground_truth_method": "javap on notch oo.a(Z)Z / oo.a(Let;Laow;II)V / anf (minecraft_server.1.12.2.jar from the m3a-on12 campaign server) + symbol-index SRG verification of every reflected member"
+  },
+
+  "behavior": {
+    "on_run_m3a_on17": {
+      "tickEntryUpdateTick": 289, "tickEntryTickUpdates": 6737,
+      "tickEnqueued": 205, "tickDedupSkipped": 84,
+      "tickDrained": 204, "tickExecuted": 201, "tickStaleConsumed": 3, "tickRescheduled": 0,
+      "tickMirrorRemovals": 204, "tickNativeDrains": 2243, "tickAdopted": 2,
+      "tickHookErrors": 0, "tickReflectFail": 0, "tickDisabledByFailure": false,
+      "scenario": "m3a_scheduled_ticks 2/2 confirmed (CONFIRM m3a_water_flow + CONFIRM m3a_sand_resting): flowing water spread and sand fell THROUGH the Rust-owned decision loop",
+      "overall": "69/69 mutation cells confirmed, exit 0"
+    },
+    "shadow_reference_m3a_shadow6": {
+      "tickShadowCompares": 6233, "tickShadowOrderMismatch": 0, "tickShadowCountMismatch": 0,
+      "tickHookErrors": 0,
+      "design": "SHADOW = isolated decision comparison: the queue is rebuilt FROM the mirror every call (queue := tree exactly), Rust's drain order/count compared against the vanilla TreeSet decision (first min(size,65536) entries with time <= now in compareTo order), never executed, no double effects/RNG",
+      "scenario": "sand_resting confirmed under vanilla execution (behavior parity with ON arm)"
+    },
+    "shadow_iteration_evidence": [
+      "shadow4 (restore-drained-batch design): 5570 compares / 1824 count+order mismatches — the vanilla body executes and drains the tree each tick while a restore leaves Rust holding stale entries",
+      "shadow5 (rebuild-after-compare): 6335 / 83 — residual = time-only drift on re-scheduled entries (count-equal adopt fast path cannot see it)",
+      "shadow6 (rebuild-before-compare, every call): 6233 / 0 / 0 — clean"
+    ]
+  },
+
+  "compatibility": {
+    "census": "no WorldServer mixins in the 219-mod pack; tickUpdates overridden only in mod wrapper worlds (EnderIO PickupWorld, JustEnoughResources DummyWorld, MCMultiPart MCMPWorldWrapper) that do not touch the WorldServer queue; mods funnel through scheduleUpdate -> updateBlockTick (the hooked choke point)",
+    "foamfix_finding": "FoamFix replaces blockstates with pl.asie.foamfix.common.FoamyBlockState: its DECLARED type is still IBlockState but the concrete class's direct interfaces do not expose it. Parameter-type matching for Block.updateTick must take the signature from Block's own declared methods; a live-class getMethod misses (on14: NoSuchMethodException on every entry, named by the per-path counter). updateTick invoked reflectively against the declared IBlockState parameter accepts the FoamyBlockState instance (assignable)",
+    "vanilla_semantics_pinned_from_bytecode": [
+      "admission gate isBlockLoaded(pos) (func_175667_e): no entry when the chunk is not loaded",
+      "scheduledUpdatesAreImmediate (field_72999_e) short-circuit: inline execution / delay=1 / abort — hook skips enqueue and heals via mirror rebuild",
+      "AIR-material quirk: entry admitted with scheduledTime=0, priority=0 (setters skipped)",
+      "loaded check in the drain is isAreaLoaded(pos, pos) — TWO BlockPos args (func_175707_a), the constants are add(0,0,0) not the remembered ±8",
+      "unloaded -> scheduleUpdate(pos, block, 0) requeue; AIR/block-changed -> silent consume (the reverse of what memory said)",
+      "DEBUG_ALL_BLOCK_STATES early return (func_76067_t == WorldType.field_180272_g) replicated",
+      "tree/set size assertion ('TickNextTick list out of synch') enforced as a mirror invariant (fail-closed)"
+    ],
+    "fail_closed": "any Throwable in the native path disables the authority permanently (DISABLED_BY_FAILURE); the vanilla body resumes; already-executed callbacks never re-run; declared divergence: a Throwable INSIDE a mod's updateTick (vanilla crashes via ReportedException) degrades to skip-entry-no-crash with the authority handing control back"
+  },
+
+  "composition": {
+    "tiered_transformer_chain": "TickAuthorityTransformer registered in the authorities tier; measured chain position 40 (after the writers SPacketChunkData/LiveChunkOwnership/LiveChunkPublication at 37-39) — fixed from on16 where an unclassified authority landed in the foreign prefix at position 3 (LiveWriterOrdering.classifyAuthority learned the name; TieredOrderingRegression pins it)",
+    "on17_witnesses": {
+      "m1_packets": "92 packets Rust-authored and committed to wire (RUST_AUTHORITY_COMMIT), 169/169 delivered, probe login+play OK",
+      "m2_region": "rustSelected=1182 rustCommitted=1182 rustFailed=0 (sum over per-file provenance lines)",
+      "registry": "worldRegistryRegisters=634, worldRegistryMissing=0",
+      "light": "lightAuthAdmitted=2276, worldLightMis=0",
+      "chunk_state": "mirrorStateSets=620, widthRejects=0, zsRepairs=0"
+    },
+    "boot_witness": "Done (20.9s); no ANCHOR_MISS; transformer status TICK_AUTHORITY_HOOKED"
+  },
+
+  "delivery": {
+    "code": [
+      "crates/native-chunk/src/tick_scheduler.rs — queue core (new)",
+      "crates/ffi/src/native_chunk.rs — 5 JNI exports (new)",
+      "tools/bridge/src/com/rustcraft/bridge/TickSchedulerHook.java — ownership boundary hook (new)",
+      "tools/bridge/src/com/rustcraft/coremod/TickAuthorityTransformer.java — head injections on updateBlockTick + tickUpdates, fail-closed anchors (new)",
+      "tools/bridge/src/com/rustcraft/coremod/LiveWriterOrdering.java — classifyAuthority entry",
+      "tools/bridge/src/com/rustcraft/coremod/LiveSessionAdmissionTweaker.java — registration + counter dump",
+      "tools/bridge/test/com/rustcraft/coremod/TieredOrderingRegression.java — authority-recognition pin",
+      "tools/authority-review/run_fullstack_ab.py — --m3-ticks SHADOW|ON + deterministic scheduled-tick scenario (landing pad + flowing_water + falling sand)"
+    ],
+    "gates": "cargo fmt --check OK; cargo clippy --workspace --release: no errors (pre-existing warnings only); cargo test --workspace --release: all green incl. 5 new tick_scheduler tests; runscope lint 0 fatal; runscope expect 9/9; offline transformer probe TICK_AUTHORITY_HOOKED changed=true on raw notch bytes",
+    "boot_ledger": {
+      "declared_budget": "3-4 diagnostic boots",
+      "actual": "~19 (m3a-on1..on17 + m3a-shadow1..6, one aborted mid-diagnosis)",
+      "overage_causes": [
+        "on1-on12 (pre-session-continuation): silent flow stop — initReflect's uncounted null-return paths (root cause: func_175707_a resolved with one arg against a two-arg method); fixed by REFLECT_FAIL counters naming every member + the 2-arg fix",
+        "on13: setAccessible ordered after first field use (regression in the rewrite) — named by the new counter within 90s",
+        "on14: FoamFix FoamyBlockState parameter-type mismatch (mod-compat discovery)",
+        "on15: IdentityHashMap keyed by boxed Integer — get() missed every lookup",
+        "shadow4/5: shadow reference design iterations (stale-entry restore, then time-drift)",
+        "shadow5(relaunch): jar rebuild failed but grep|head masked the exit code — stale jar + wedged runner; killed"
+      ],
+      "lesson": "three of the late defects were in NEW code written under the assumption the hard part was behind; the named-counter discipline (every silent path counts and names itself) converted each remaining boot into a single-shot diagnosis"
+    },
+    "not_done": [
+      "dimension lifecycle: tickClear on world unload is exported and unit-tested but not yet driven by a world-unload hook (no live witness)",
+      "negative boot (tickDrain native failure -> fail-closed resume) is proven only by the on14 accident, not by a deliberate failEvery injection",
+      "load-side adoption (chunk NBT -> queue on chunk load) relies on the per-tickUpdates heal (adoptMissing / rebuildFromTree), not a chunk-load event; fresh-process reload with pending ticks is not separately witnessed",
+      "PRODUCTION_AUTHORITY remains false"
+    ],
+    "next": "M3-B candidates: entity tick scheduling, random block ticks (func_180495_p-adjacent) — or the M3-A residuals above; recommend the negative boot + lifecycle witness before widening"
+  }
+}

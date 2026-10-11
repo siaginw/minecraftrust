@@ -125,3 +125,46 @@ Receipt: `docs/research/M1-COMPOSE-RECEIPT.json`.
 - **Next: M3 — world tick/game-loop ownership behind patchable shells**
   (preceded by the exhaustive coremod-touch census from the now-expanded
   symbol index: 211 mod artifacts / 36 mixins indexed).
+
+## M3-A (2026-10-10): SCHEDULED-TICK SCHEDULER AUTHORITY PROVEN
+
+The first authoritative tick responsibility lives in Rust. The
+WorldServer pending-block-tick scheduler (admission `func_175654_a`,
+drain `func_72955_a`) is owned by
+`crates/native-chunk/src/tick_scheduler.rs` + `TickSchedulerHook`:
+Rust owns queue state, admission dedup, eligibility
+(`scheduledTime <= totalWorldTime`), the per-call drain cap
+(`min(queue, 65536)` — a COUNT cap, not a time horizon; bytecode
+overturned memory), ordering (= `NextTickListEntry.compareTo`),
+removal, and stale-drop; Java executes `Block.updateTick` and keeps
+the TreeSet mirror for save-side reads. The vanilla tickUpdates loop
+is displaced in ON mode — behaviorally proven by the on14 negative
+(executor fail-closed froze falling sand; the vanilla loop did not
+rescue it).
+
+Proof (composed runtime, all M1/M2 gates live): **m3a-on17** — 205
+enqueued / 204 drained / 201 executed / 0 errors, `m3a_water_flow` +
+`m3a_sand_resting` confirmed through the Rust decision loop, 69/69
+mutation cells, packets 92 committed, region 1182/1182, registry
+634/0 missing, light 2276 admitted / 0 mis. **m3a-shadow6** (reference
+path): 6,233 decision compares, **0 order / 0 count mismatches** —
+the queue is rebuilt from the mirror each call and Rust's drain
+decision equals the Java TreeSet's exactly.
+
+Compat findings pinned: FoamFix's `FoamyBlockState` (declared-type
+matching for reflective invokes must come from Block's own methods,
+not the live state class); vanilla admission gates
+(`isBlockLoaded(pos)`, `scheduledUpdatesAreImmediate` inline path,
+AIR-material time=0/prio=0 quirk); unloaded→requeue(0) vs
+stale→consume (the reverse of common memory); the loaded check is
+2-arg `isAreaLoaded(pos, pos)`. Tier contract: the tick authority
+sits in the authorities tier (measured chain position 40; on16's
+foreign-prefix landing at position 3 was the classifier gap —
+`TieredOrderingRegression` now pins every authority name).
+
+Residuals (declared, not blocking): world-unload `tickClear` witness,
+deliberate negative-boot injection, chunk-load-side adoption event,
+PRODUCTION_AUTHORITY=false. Receipt:
+`docs/research/M3A-TICK-AUTHORITY-RECEIPT.json` (incl. the honest
+boot ledger: ~19 boots vs a 3-4 declared budget, every overage
+attached to its diagnosed defect).
